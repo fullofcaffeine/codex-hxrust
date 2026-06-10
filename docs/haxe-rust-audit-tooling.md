@@ -3,7 +3,7 @@
 **Date:** 2026-06-10  
 **Bead:** `HXCX-1.6` / `codex-hxrust-wx3.6`  
 **Source refs:** `codex-hxrust-port-plan.md`, `../haxe.rust/docs/workflow.md`  
-**Decision:** Use scriptable pin audit/update commands before accepting haxe.rust drift.
+**Decision:** Work directly in the sibling `../haxe.rust` compiler repo, then use scriptable pin audit/update commands before accepting that compiler commit as the codex-hxrust known-good pin.
 
 ## Commands
 
@@ -19,7 +19,7 @@ Skip network fetch and report from the local remote-tracking branch:
 experiments/codex-hxrust/scripts/audit-haxe-rust.sh --no-fetch
 ```
 
-Update the pin only through the gated updater:
+Update the codex-hxrust known-good pin only through the gated updater:
 
 ```bash
 experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh <candidate-sha>
@@ -33,7 +33,7 @@ experiments/codex-hxrust/scripts/sync-haxe-rust-pin-hx.sh
 
 ## Pin Surfaces
 
-`reference/haxe-rust.pin.json` is the source of truth. `experiments/codex-hxrust/src/codexhx/HaxeRustPin.hx` is a scaffold mirror used by doctor output so generated binaries can report the compiler/runtime pin without parsing local files.
+`reference/haxe-rust.pin.json` is the codex-hxrust known-good consumer pin. The source of truth for compiler code and compiler Beads is `../haxe.rust`. `experiments/codex-hxrust/src/codexhx/HaxeRustPin.hx` is a scaffold mirror used by doctor output so generated binaries can report the compiler/runtime pin without parsing local files.
 
 When the pin changes, update both by running `update-haxe-rust-pin.sh`; do not hand-edit only one side.
 

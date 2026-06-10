@@ -14,7 +14,7 @@ Local external checkouts remain the live references:
 | --- | --- | --- |
 | Upstream Codex | `../codex` | Product/protocol/runtime baseline |
 | Cafex/Cafetera Codex fork | `../fullofcaffeine/deps/codex` | Later adapter seams and fixture oracle |
-| haxe.rust | `../haxe.rust` | Compiler/runtime backend source |
+| haxe.rust | `../haxe.rust` | Authoritative sibling compiler/runtime backend source |
 
 This repo records pins, manifests, fixture selections, Haxe source, harness code, and generated-output policy. It should not become a mirror of the external repositories.
 
@@ -80,14 +80,14 @@ It is not for copied source trees. If a later task needs a source snapshot for o
 
 Do not vendor upstream Codex or Cafex. They are product/reference repositories, not dependencies of the Haxe compiler build.
 
-Do not vendor haxe.rust yet. Use a local path pin to `../haxe.rust` until G1 proves the scaffold and `HXCX-0.6` chooses between:
+Do not vendor haxe.rust. Use the sibling repository at `../haxe.rust` as the authoritative compiler worktree and record known-good commits in `reference/haxe-rust.pin.json`. Revisit vendoring only if a later reproducibility decision explicitly requires one of:
 
 - external pinned checkout
 - git submodule
 - git subtree/vendor copy
 - package/release artifact
 
-The current preference is external pinned checkout first, then submodule if reproducibility needs become painful. A subtree/vendor copy should be the last choice because it makes upstream compiler merges noisier.
+The current preference is direct sibling-repo work plus known-good pins. A subtree/vendor copy should be the last choice because it makes compiler evolution noisier and risks Codex-specific coupling.
 
 ## Generated Output Policy
 
@@ -137,4 +137,4 @@ This metadata should live beside generated manifests or fixture indexes, not ins
 
 Copying `../codex` now would make drift management worse and would blur whether the Haxe code is following upstream Codex or a stale local snapshot.
 
-Copying `../haxe.rust` now would turn compiler development into repo maintenance before we have a scaffold. The safer first move is to pin and audit it, then vendor only if reproducibility or CI requires it.
+Copying `../haxe.rust` would turn compiler development into repo maintenance and risks Codex-specific compiler changes. The safer path is direct generic compiler work in the sibling repo, then pin and validate here.

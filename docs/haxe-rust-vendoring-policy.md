@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-10  
 **Bead:** `HXCX-0.6` / `codex-hxrust-r46.6`  
-**Decision:** Use `../haxe.rust` as an external pinned checkout for G1. Do not vendor or submodule haxe.rust until the scaffold proves the build shape and CI/reproducibility needs are concrete.
+**Decision:** Use `../haxe.rust` as a sibling compiler repository and record known-good consumer commits in this repo. Do not vendor or submodule haxe.rust unless a later reproducibility decision explicitly changes this.
 
 ## Current Pin
 
@@ -17,7 +17,7 @@ Source: `reference/haxe-rust.pin.json`
 | Package | `reflaxe.rust` `1.0.0` |
 | License | `GPL-3.0` |
 
-The current checkout is the compiler/runtime backend for the experiment, not source owned by `codex-hxrust`.
+The current checkout is the compiler/runtime backend for the experiment, not source owned by `codex-hxrust`. Compiler fixes are made directly in `../haxe.rust`; this repo records the pin and pressure-test mapping.
 
 Current local patch record: `reference/haxe-rust-local-patches.v1.json`.
 
@@ -37,9 +37,10 @@ Latest audit note: `reference/haxe-rust-audit-2026-06-10.md`.
 1. Keep `reference/haxe-rust.pin.json` as the pin of record.
 2. In G1, the scaffold doctor must read the pin and verify that `../haxe.rust` exists at the expected commit.
 3. Generated builds should use a path reference to `../haxe.rust` during local development.
-4. CI can initially clone/check out haxe.rust beside this repo using the pin JSON.
-5. If CI setup becomes too fragile, switch to a submodule through a new bead and update this policy.
-6. Do not subtree/copy haxe.rust unless we need an offline/frozen release artifact and have completed license review.
+4. Work directly in `../haxe.rust` for compiler/runtime fixes; keep those fixes generic and commit/push that repository directly.
+5. After haxe.rust gates pass, update this repo's pin and rerun codex-hxrust gates.
+6. CI can clone/check out haxe.rust beside this repo using the pin JSON.
+7. Do not subtree/copy haxe.rust unless we need an offline/frozen release artifact and have completed license review.
 
 ## Upstream Audit Cadence
 

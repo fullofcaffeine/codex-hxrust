@@ -1,0 +1,6396 @@
+{
+  "schema": "codex-hxrust.haxe-rust-beads-import.v1",
+  "date": "2026-06-10",
+  "source": {
+    "repo": "../haxe.rust",
+    "beadsFile": "../haxe.rust/.beads/issues.jsonl",
+    "remote": "git@github.com:fullofcaffeine/reflaxe.rust.git",
+    "branch": "main"
+  },
+  "decision": {
+    "repoLayout": "sibling_repo",
+    "importMode": "curated_mirror",
+    "rule": "Keep haxe.rust authoritative and generic; codex-hxrust records pressure-test mapping and known-good pins."
+  },
+  "counts": {
+    "total": 535,
+    "open": 1,
+    "inProgress": 0,
+    "closed": 533,
+    "tombstone": 1,
+    "epics": 95,
+    "tasks": 408,
+    "features": 23,
+    "bugs": 6
+  },
+  "actionableMapping": [
+    {
+      "codexBead": "codex-hxrust-rat.5",
+      "title": "Upstream or replace haxe.rust CallStack exceptionToString patch",
+      "haxeRustRefs": [
+        "haxe.rust-oo3.60",
+        "haxe.rust-oo3.61"
+      ],
+      "priority": "P1",
+      "rationale": "Current codex-hxrust gates need a local workaround, but haxe.rust milestone history says the general compiler/std contract should keep typed Exception formatting."
+    },
+    {
+      "codexBead": "codex-hxrust-rat.6",
+      "title": "Make haxe.rust propagate Cargo failure exit status",
+      "haxeRustRefs": [],
+      "priority": "P2",
+      "rationale": "Discovered by codex-hxrust harnesses; create a new generic haxe.rust fixture/task when implementing."
+    },
+    {
+      "codexBead": "codex-hxrust-rat.7",
+      "title": "Improve nullable scalar lowering in simple expressions",
+      "haxeRustRefs": [],
+      "priority": "P2",
+      "rationale": "Discovered by codex-hxrust protocol IDs; create a new generic haxe.rust fixture/task when implementing."
+    },
+    {
+      "codexBead": "codex-hxrust-rat.8",
+      "title": "Fix generic enum codegen for typed parse results",
+      "haxeRustRefs": [
+        "haxe.rust-oo3.5.1"
+      ],
+      "priority": "P2",
+      "rationale": "Related to enum codegen milestone history, but current generic payload regression needs a new focused haxe.rust fixture."
+    },
+    {
+      "codexBead": "codex-hxrust-rat.9",
+      "title": "Improve enum value borrow ergonomics for helper calls",
+      "haxeRustRefs": [],
+      "priority": "P2",
+      "rationale": "Discovered by codex-hxrust JSON boundary work; create a new generic haxe.rust fixture/task when implementing."
+    }
+  ],
+  "issues": [
+    {
+      "sourceId": "haxe.rust-02n",
+      "title": "Milestone 24 — Portable performance convergence (array iteration + optimizer planner)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-02n.1",
+      "title": "m24.1 Contract-first tests for array iteration lowering",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-02n",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-02n.2",
+      "title": "m24.2 Add hxrt borrowed array iterator primitives",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-02n",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-02n.3",
+      "title": "m24.3 Compiler array-loop safety analysis + lowering switch",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-02n",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-02n.4",
+      "title": "m24.4 Optimizer plan report artifact + docs",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-02n",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-03e",
+      "title": "Add portable stdlib allowlist sync command",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "stdlib",
+        "tooling"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-0gb",
+      "title": "Add hard parity-gap budget guard for portable stdlib candidates",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-0no",
+      "title": "Improve windows smoke CI diagnostics",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-137",
+      "title": "Finalize portable native-import policy",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-14g",
+      "title": "Add hxrt feature provenance mapping (module/define/dependency edge)",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [
+        "architecture",
+        "family",
+        "runtime"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-14w",
+      "title": "Upload portable stdlib candidate artifact in main CI test job",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "observability",
+        "stdlib"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-15w",
+      "title": "Docs: surface profile_storyboard native parity quick check",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-1un",
+      "title": "CI: fix rustfmt regression in hxrt string split_hx",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "bug",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-1w4",
+      "title": "Language: Null/Option coercions + optional args",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-23y",
+      "title": "sys.FileSystem parity + sys.FileStat",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2et",
+      "title": "sys.thread core primitives",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2o1",
+      "title": "post-1.0: sustained production quality",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2o1.1",
+      "title": "post-1.0: weekly CI evidence cadence",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-2o1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2o1.2",
+      "title": "post-1.0: cross-platform sys regression watchlist",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-2o1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2o1.3",
+      "title": "post-1.0: docs sync guard discipline",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-2o1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2w4",
+      "title": "Post-cutover terminology cleanup (Rusty/idiomatic drift)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2xe",
+      "title": "Portable stdlib parity execution (policy to enforceable coverage)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2xe.1",
+      "title": "Add canonical portable stdlib allowlist artifact + guard",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "guard",
+        "portable",
+        "stdlib"
+      ],
+      "parent": "haxe.rust-2xe",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2xe.2",
+      "title": "Align v1 stdlib notes with current nullable Sys.getEnv and parity policy",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "portable",
+        "stdlib"
+      ],
+      "parent": "haxe.rust-2xe",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-2xe.3",
+      "title": "Expand Tier1 upstream sweep with Sys baseline modules",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": "haxe.rust-2xe",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-310",
+      "title": "Add profile_storyboard native baseline parity checker",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-3lz",
+      "title": "Eliminate remaining haxe_crypto_smoke Rust lint warnings via codegen (postfix local unop + path-aware mut + unused local underscore)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-3r8",
+      "title": "v1: core APIs for upstream std (Std/Type/Reflect/Math)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "feature",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-3zp",
+      "title": "Reduce metal ERaw fallback hotspots (Sys + haxe.ds.* + chat_loopback)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "metal",
+        "performance",
+        "tests"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-4jb",
+      "title": "v1.0: full Haxe stdlib parity (sys target)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "feature",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-4qr",
+      "title": "Guard against deprecated profile/async define drift",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-4t9",
+      "title": "Compiler: opt-in emit upstream std modules (haxe/*)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "feature",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-54y",
+      "title": "CI closeout and artifact determinism confirmation",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-58d",
+      "title": "Milestone 25 — Metal-clean fallback burn-down",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-58d.1",
+      "title": "m25.1 Add array-loop optimizer telemetry (applied/skipped reasons)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-58d",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-58d.2",
+      "title": "m25.2 Add CI assertion for array-loop telemetry in optimizer report",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-58d",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-5ub",
+      "title": "v1: codegen fixes for upstream std (assign expr, mut, keywords, optional args)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-5uh",
+      "title": "Milestone 15: Rusty profile (v1.0)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-5uh.1",
+      "title": "Rusty profile: spec + docs",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-5uh",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-5uh.2",
+      "title": "Rusty profile: borrow-first std surfaces",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-5uh",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-5uh.3",
+      "title": "Rusty profile: interop boundary patterns",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-5uh",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-5uh.4",
+      "title": "Rusty profile: showcase example",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-5uh",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-652",
+      "title": "Run upstream stdlib Tier2 sweep in weekly evidence CI",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "stdlib",
+        "weekly"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-69l",
+      "title": "sys.ssl parity",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-6ny",
+      "title": "Document tier2 upstream stdlib sweep expectations in AGENTS",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "chore",
+      "labels": [
+        "docs",
+        "stdlib"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-6s7",
+      "title": "DRY: unify tui_todo examples",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "chore",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-6tx",
+      "title": "Stdlib: Array API helpers (map/filter/find)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-730",
+      "title": "Remove rust_async_preview alias support and docs references",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-735",
+      "title": "Snapshots: add haxe.crypto/json/serializer smoke",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-75v",
+      "title": "Fix diverging-return lowering root cause (no Rust unreachable-expression warnings)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "lowering",
+        "regression",
+        "tests"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-7kf",
+      "title": "Snapshots: add first variant (tui_todo rusty)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-7v5",
+      "title": "Approach C + stdlib governance closure (post-audit)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-7ws",
+      "title": "Portable stdlib Tier1 expansion tranche C",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-7ws.1",
+      "title": "Promote tranche-C verified modules to Tier1 allowlist and sweep",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": "haxe.rust-7ws",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-7wz",
+      "title": "Document metal-first reference example and parity workflow",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-7z7",
+      "title": "Include stdlib candidate parity evidence in weekly CI workflow",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "docs",
+        "stdlib"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-8on",
+      "title": "Stdlib: haxe.ds.List (minimal)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-8z8",
+      "title": "Spike: align reflaxe.rust to family portable|metal contract after haxe.go canonicalization",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [
+        "architecture",
+        "family",
+        "metal",
+        "portable",
+        "spike"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-9cm",
+      "title": "Language: modulo and bitwise operators",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-9i2",
+      "title": "(Milestone) Rusty profile v1.0",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-9i2.1",
+      "title": "Rusty: profile contract and docs",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-9i2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-9i2.2",
+      "title": "Rusty: borrowing surfaces",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-9i2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-9i2.3",
+      "title": "Rusty: collections and iterators",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-9i2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-9i2.4",
+      "title": "Rusty: showcase + tests",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-9i2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-9ih",
+      "title": "Codegen: classes (struct/impl/new)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "classes",
+        "codegen",
+        "m3"
+      ],
+      "parent": "haxe.rust-oo3.4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-a3z",
+      "title": "TUI harness: scripted scenarios + Rust assertions",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-cu0",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-a68",
+      "title": "Run profile_storyboard native parity check in harness",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-agl",
+      "title": "Local issue",
+      "status": "tombstone",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "open_haxe_rust_issue_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ahu",
+      "title": "v1.0: Windows CI smoke (build + basic tests)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ai4",
+      "title": "sys.io.Process implementation",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-al0",
+      "title": "Finalize Sys.getEnv portable null semantics",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-awu",
+      "title": "Capability taxonomy alignment note (Rust to family)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-b0h",
+      "title": "Harden stdlib candidate guard for no-Haxe pre-toolchain CI phase",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-b4f",
+      "title": "Guard against removed report define/artifact drift",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-b8s",
+      "title": "Add upstream stdlib candidate audit for parity expansion",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-be5",
+      "title": "Portable stdlib Tier1 expansion tranche B",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-be5.1",
+      "title": "Add tranche-B Tier1 modules and deterministic haxe.Http sweep resolution",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": "haxe.rust-be5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-bq2",
+      "title": "sys.io.File parity: read/write/append/update/copy + FileInput/FileOutput/FileSeek",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-byi",
+      "title": "Cross-repo shared allowlist and conformance suite integration tracker",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-bzq",
+      "title": "Add family portable|metal contract fixture checks for report artifacts",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "family",
+        "tests"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-c0l",
+      "title": "Add CI guard for metal fallback-count regressions",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "metal",
+        "reports"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-c7e",
+      "title": "TUI runtime: UI DSL + renderer",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-cu0",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-cex",
+      "title": "Remove pre-1.0 hard-cutover compatibility rule at 1.0",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-cfh",
+      "title": "v1.0: docs refresh (runtime + stdlib parity)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ci1",
+      "title": "Release: do not skip CI on release commits",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-cig",
+      "title": "m26.2 Anchor pass-level metal/no-hxrt diagnostics to module source",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-co1",
+      "title": "Reduce remaining metal fallback hotspots (rust.* helpers + async snapshots)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-cof",
+      "title": "Finalize stdlib provenance governance",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-cq1",
+      "title": "Rename remaining rusty_* snapshot cases to rust_*",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "cleanup",
+        "naming",
+        "profiles",
+        "tests"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-cu0",
+      "title": "Demo 2 — advanced TUI todo harness",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-d3p",
+      "title": "v1.0: Idiomatic Rust output",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-d3p.1",
+      "title": "Idiom: Flatten string concatenation chains",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-d3p",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-d3p.2",
+      "title": "Idiom: World-class HaxeDoc for std overrides",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-d3p",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-d3p.3",
+      "title": "Idiom: Reduce clone/borrow noise in hot paths",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-d3p",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ddh",
+      "title": "sys.net: Host/Socket/UdpSocket/Address",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-demo1",
+      "title": "Demo 1 — ratatui todo TUI (scripted + interactive)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-demo1.1",
+      "title": "Compiler: Array<T> → Vec<T> support",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-demo1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-demo1.2",
+      "title": "Compiler: loops (while/for)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-demo1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-demo1.3",
+      "title": "Demo: Haxe-driven todo state + ratatui renderer",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-demo1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-demo1.4",
+      "title": "Tests: stdout snapshot support",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-demo1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-demo2",
+      "title": "Showcase apps: TUI todo + harness",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-demo2.1",
+      "title": "Rusty TUI loop without Vec->Array clone",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-demo2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-demo2.2",
+      "title": "Document TUI testing pattern",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-demo2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-dpt",
+      "title": "v1.0: eliminate unresolved monomorph warnings in std hot paths",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-e2j",
+      "title": "sys.db parity (Sqlite + Mysql)",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-e6g",
+      "title": "Fix Rust return lowering for diverging expressions (no return todo)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-f63",
+      "title": "v1.0: String nullability + representation",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "feature",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-g4u",
+      "title": "Milestone 23 — Contract hardening + Oracle delta closeout",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-g4u.1",
+      "title": "m23.1 Contract-first test: metal forbids String=null",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-g4u",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-g4u.2",
+      "title": "m23.2 Implement strict non-null string contract",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-g4u",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-g4u.3",
+      "title": "m23.3 Strict boundary source classification hardening",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-g4u",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-g4u.4",
+      "title": "m23.4 Source-accurate policy diagnostics",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-g4u",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-g4u.5",
+      "title": "m23.5 Docs + README + PRD drift alignment",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-g4u",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-g4u.6",
+      "title": "m23.6 CI/documentation guardrails + full harness",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-g4u",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-h8f",
+      "title": "Add deterministic Tier2 sync workflow (tier1+extras)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "stdlib",
+        "tooling"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-hss",
+      "title": "Triage portable stdlib candidate audit gaps into parity backlog",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "planning",
+        "portable",
+        "stdlib"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-hss.1",
+      "title": "Promote likely-portable stdlib candidates tranche A into Tier2",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": "haxe.rust-hss",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-hss.1.1",
+      "title": "Fix Std upstream-stdlib include failure under rust_emit_upstream_std",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "bug",
+        "compiler",
+        "portable",
+        "stdlib"
+      ],
+      "parent": "haxe.rust-hss.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-hss.2",
+      "title": "Promote likely-portable stdlib candidates tranche B into Tier2",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": "haxe.rust-hss",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-hss.3",
+      "title": "Track macro-display and target-adapter stdlib candidate buckets",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "planning",
+        "portable",
+        "stdlib"
+      ],
+      "parent": "haxe.rust-hss",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-i87",
+      "title": "sys.thread pools + EventLoop",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-idiom2",
+      "title": "Idiomatic output polish (v1)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-idiom2.1",
+      "title": "Constructor arg clone elision",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-idiom2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-in3",
+      "title": "Publish family-alignment docs index links and deviation notes",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "family"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-izy",
+      "title": "Ensure Tier2 sweep covers stdlib provenance ledger modules",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-j4o",
+      "title": "Rust AST: struct/impl + printer",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ast",
+        "classes",
+        "m3",
+        "printer"
+      ],
+      "parent": "haxe.rust-oo3.4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju2",
+      "title": "Backfill Approach C standardization tracking",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5",
+      "title": "Milestone 16: Idiomatic output + ownership ergonomics (v1.0)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.1",
+      "title": "Idiomatic output: clone/borrow hygiene pass",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.10",
+      "title": "Borrow-friendly slice views for Array<T>",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.2",
+      "title": "Idiomatic output: control-flow emission cleanup",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.3",
+      "title": "Idiomatic output: array semantics roadmap",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.4",
+      "title": "Idiomatic output: warning-free deny_warnings baseline",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.5",
+      "title": "Array runtime: hxrt::array::Array<T>",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.6",
+      "title": "Array semantics: aliasing snapshots",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.7",
+      "title": "Array bridging: Array<T> <-> rust.Vec<T>",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.8",
+      "title": "Clone elision pass for reusable values",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ju5.9",
+      "title": "Array API coverage (push/pop/insert/remove/etc)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-ju5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-kg6",
+      "title": "Rename async_preview_retry snapshot to async_retry",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-kqs",
+      "title": "CI: sync snapshot goldens after hxrt formatting change",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "bug",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-kz6",
+      "title": "v1.0: upstream stdlib sweep harness",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-l6g",
+      "title": "v1 docs update: stdlib parity is in-scope",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-m43",
+      "title": "Rename rusty_v1_smoke snapshot to metal_v1_smoke",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "cleanup",
+        "naming",
+        "profiles",
+        "tests"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-m8y",
+      "title": "Eliminate profile_storyboard MetalRuntime ERaw fallback",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-n8v",
+      "title": "Dev hooks: gitleaks pre-commit + source guards",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-n9x",
+      "title": "Bytes: throw typed haxe.io.Error",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-nhw",
+      "title": "Alignment spikes: haxe.rust convergence with the haxe.go family contract model",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-nhw.1",
+      "title": "Spike: contract capability lane terminology convergence with haxe.go",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-nhw",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-nhw.2",
+      "title": "Spike: iterator portability strategy for MapKeyValueIterator and direct keyValueIterator ownership",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-nhw",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-nhw.3",
+      "title": "Spike: contract runtime optimizer report schema parity with haxe.go",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-nhw",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-nhw.4",
+      "title": "Spike: family boundary for rust_no_hxrt and other rust-specific no-runtime lanes",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-nhw",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-o6q",
+      "title": "Example app: persistence (config dir JSON + migrations)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-cu0",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oj7",
+      "title": "Portable stdlib parity scale-up with tiered sweep",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oj7.1",
+      "title": "Add tier-aware upstream stdlib sweep runner and tier2 list",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": "haxe.rust-oj7",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-omi",
+      "title": "Promote override-aligned passing modules into Tier1 sweep (tranche D)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo10",
+      "title": "Milestone 14: v1.0 stdlib + language coverage",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo10.1",
+      "title": "Language: function values / closures baseline",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo10.2",
+      "title": "Stdlib: haxe.ds.* tier2 (maps/sets)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo10.3",
+      "title": "Stdlib: Lambda/Itertools-style helpers",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo10.4",
+      "title": "Language: abstracts + @:from/@:to conversions",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo10.5",
+      "title": "Language: generics and monomorphization strategy",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo11",
+      "title": "Language gaps: remaining typed-expr support",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo11.1",
+      "title": "Language: instance method values (obj.method)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-oo11",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo11.2",
+      "title": "Language: compound assignment on instance fields",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-oo11",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo12",
+      "title": "Language gaps (phase 2)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo12.1",
+      "title": "Language: compound assignment on array indexing",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-oo12",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo13",
+      "title": "Anonymous objects (structural types)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo13.1",
+      "title": "Language: object declarations and anonymous field access",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-oo13",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3",
+      "title": "Roadmap: reflaxe.rust milestones (0–10)",
+      "status": "open",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "roadmap_epic_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.1",
+      "title": "Milestone 0 — Project skeleton + compiler registration",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [
+        "bootstrap",
+        "m0",
+        "milestone"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.1.1",
+      "title": "Scaffold haxelib layout + build entrypoints",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "m0",
+        "skeleton"
+      ],
+      "parent": "haxe.rust-oo3.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.1.2",
+      "title": "Implement CompilerBootstrap.Start (classpath + gating)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "m0",
+        "macros"
+      ],
+      "parent": "haxe.rust-oo3.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.1.3",
+      "title": "Implement CompilerInit.Start (compiler registration)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "m0",
+        "macros"
+      ],
+      "parent": "haxe.rust-oo3.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.1.4",
+      "title": "Add RustInjection.__rust__ macro shim",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "injection",
+        "m0"
+      ],
+      "parent": "haxe.rust-oo3.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.1.5",
+      "title": "Emit stub output so rust_output gets files",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "m0",
+        "output"
+      ],
+      "parent": "haxe.rust-oo3.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.10",
+      "title": "Milestone 9 — Rust-native API layer (crate interop + ergonomics)",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "epic",
+      "labels": [
+        "cargo",
+        "m9",
+        "milestone",
+        "native"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.11",
+      "title": "Milestone 10 — Performance + idiomatic mode optimizations",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "epic",
+      "labels": [
+        "idiomatic",
+        "m10",
+        "milestone",
+        "perf"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.12",
+      "title": "Milestone 11 — Conformance harness + family std unification",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.12.1",
+      "title": "Port semantic diff runner + fixtures from reflaxe.go",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.12",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.12.2",
+      "title": "Port lane diff suite (metal islands) from reflaxe.go",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.12",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.12.3",
+      "title": "Adopt family/reflaxe.family.std + family_std_pin.json in reflaxe.rust",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.12",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.12.4",
+      "title": "Add Tier1 API-surface compile smoke generator (catch Bytes-style gaps)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.12",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.12.5",
+      "title": "Fix provenance ledger governance: divergence must be declared + linked to tests",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.12",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.13",
+      "title": "Milestone 12 — Core language semantics parity (root-cause fixes)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.13.1",
+      "title": "Fix OO dispatch: remove todo! stubs in base trait impls",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.13",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.13.2",
+      "title": "Support this.method function values (FClosure receiver=this)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.13",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.13.3",
+      "title": "Implement correct closure capture semantics for mutated captured locals",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.13",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.13.4",
+      "title": "Remove stdlib workarounds caused by missing function-value support (restore upstream patterns)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.13",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.13.5",
+      "title": "Fix generic function type-parameter lowering in emitted Rust signatures",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.13",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.14",
+      "title": "Milestone 13 — Tier1 stdlib correctness (portable is non-negotiable)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.14.1",
+      "title": "Implement full haxe.io.Bytes API in hxrt + std binding",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.14",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.14.2",
+      "title": "Implement full haxe.Int64 API",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.14",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.14.3",
+      "title": "Implement Json.stringify replacer support end-to-end",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.14",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.14.4",
+      "title": "Fix sys.Http: request bodies/multipart + remove null workaround",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.14",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.14.5",
+      "title": "Implement sys.ssl.Socket.addSNICertificate (SNI cert switching)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.14",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.14.6",
+      "title": "Implement haxe.iterators.MapKeyValueIterator (remove throw)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.14",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.15",
+      "title": "Milestone 14 — Metal hardening (no semantic drift) + perf + deterministic reports",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.15.1",
+      "title": "Add CI gate: semantic lane diff must pass (portable vs @:haxeMetal)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.15",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.15.2",
+      "title": "Strengthen metal cleanliness: keep MetalRestrictionsPass meaningful + report baseline checks",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.15",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.15.3",
+      "title": "Extend perf benchmarks: Bytes/Json/Int64 microbenches + thresholds",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.15",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.15.4",
+      "title": "Deterministic artifact gate: semantic diff JSON + runtime plan + contract report pinned",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.15",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.15.5",
+      "title": "Fix portable native-import diagnostics to ignore framework-only native helper bindings",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.15",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.16",
+      "title": "Milestone 15 — Tier2 + target-specific stdlib packages",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.16.1",
+      "title": "Add CI gate: Tier2 compile sweep stays green",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.16",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.16.2",
+      "title": "Publish feature support matrix + per-package status (portable vs target-specific)",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.16",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.17",
+      "title": "R&D: cross-target portable Result/Option shim via reflaxe.std (Rust/Go/Elixir/JS)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.18",
+      "title": "Milestone 16 — reflaxe.std adoption (portable idiom layer) + family split alignment",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.18.1",
+      "title": "Define rust-side adoption contract for reflaxe.std (portable API vs native rust.* boundary)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.18",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.18.2",
+      "title": "Add contract-first conformance fixtures for portable Option/Result (Some/None, Ok/Err)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.18",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.18.3",
+      "title": "Lower portable reflaxe.std Option/Result to native Rust Option/Result without semantic drift",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.18",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.18.4",
+      "title": "Add explicit migration adapters between reflaxe.std portable APIs and rust.* native APIs",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.18",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.18.5",
+      "title": "Emit deterministic reflaxe.std adoption artifacts (family pin + lane/profile reports) in CI",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.18",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.18.6",
+      "title": "Track cross-repo execution plan handoff (haxe.go host, haxe.elixir formal lanes, JS/genes consumers)",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.18",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.19",
+      "title": "Spike: scoped raw __rust__ authority metadata aligned with haxe.go low-level abstraction escape hatch",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.2",
+      "title": "Milestone 1 — Rust AST + printer + OutputIterator hello world",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [
+        "ast",
+        "m1",
+        "milestone",
+        "output"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.2.1",
+      "title": "Define minimal RustAST node set",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "ast",
+        "m1"
+      ],
+      "parent": "haxe.rust-oo3.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.2.2",
+      "title": "Implement RustASTPrinter (deterministic formatting)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "m1",
+        "printer"
+      ],
+      "parent": "haxe.rust-oo3.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.2.3",
+      "title": "Implement RustOutputIterator (Cargo project + .rs files)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "cargo",
+        "m1",
+        "output"
+      ],
+      "parent": "haxe.rust-oo3.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.2.4",
+      "title": "End-to-end hello-world compile + cargo build smoke",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "m1",
+        "smoke"
+      ],
+      "parent": "haxe.rust-oo3.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.20",
+      "title": "Milestone 26 — Release-evidence hardening + truth-in-claims correction",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [
+        "milestone",
+        "release-hardening",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.20.1",
+      "title": "Truth-in-claims audit: README + 1.0 docs + support matrix",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "evidence",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.20",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.20.2",
+      "title": "Tracker integrity: fix progress-sync source of truth and generated status drift",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "docs",
+        "thinking:xhigh",
+        "tracking"
+      ],
+      "parent": "haxe.rust-oo3.20",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.20.3",
+      "title": "Semantic hardening A: exceptions, reflection, and Dynamic boundary contracts",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "semantics",
+        "tests",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.20",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.20.4",
+      "title": "Semantic hardening B: sys.process, sys.net, and sys.thread risk contracts",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "semantics",
+        "sys",
+        "tests",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.20",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.20.5",
+      "title": "CI evidence hardening: publish compile-coverage vs semantic-coverage summary",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "evidence",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.20",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.21",
+      "title": "Milestone 27 — Performance convergence hardening + benchmark signal quality",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [
+        "milestone",
+        "perf",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.21.1",
+      "title": "Perf signal audit: validate json/bytes/int64 benchmark trust and hotspot attribution",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.21",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.21.2",
+      "title": "Qualify hot_loop_inproc perf warning after signal hardening",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.21",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.21.3",
+      "title": "Close portable-vs-metal bytes convergence gap",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.21",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.21.4",
+      "title": "Refresh perf docs, baselines, and CI evidence after convergence fixes",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "perf",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.21",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.22",
+      "title": "Milestone 28 — Broad production-readiness review + GA decision gate",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [
+        "ga-review",
+        "milestone",
+        "production",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.22.1",
+      "title": "Classify remaining broad-production caveats as blockers vs explicit defers",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "ga-review",
+        "production",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.22",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.22.2",
+      "title": "Align public entrypoint docs with the audited release truth",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "ga-review",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.22",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.22.3",
+      "title": "Freeze post-review performance posture and next justified hotspot scope",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ga-review",
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.22",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.22.4",
+      "title": "Freeze portable idiom and reflaxe.std boundary for GA truth",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "family",
+        "ga-review",
+        "std",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.22",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.22.5",
+      "title": "Publish GA decision record and seed the next executable milestone",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "ga-review",
+        "release",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.22",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.23",
+      "title": "Milestone 29 — Release closeout + semver/public packaging decision",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [
+        "milestone",
+        "release",
+        "semver",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.23.1",
+      "title": "Decide and document 1.0 vs continued 0.x posture",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "release",
+        "semver",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.23",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.23.2",
+      "title": "Align package metadata and release workflow with the semver decision",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "packaging",
+        "release",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.23",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.23.3",
+      "title": "Align public release language with the semver/public-packaging decision",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "release",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.23",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.24",
+      "title": "Milestone 30 — JSON boundary convergence + portable near-native lowering",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [
+        "json",
+        "milestone",
+        "perf",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.24.1",
+      "title": "Profile and lock the JSON hotspot contract (bench + semantic safety)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "perf",
+        "semantics",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.24",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.24.2",
+      "title": "Reduce metal JSON runtime overhead against the pure Rust baseline",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "json",
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.24",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.24.3",
+      "title": "Reduce portable JSON boundary overhead without semantic drift",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "perf",
+        "portable",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.24",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.24.4",
+      "title": "Refresh JSON perf baselines, docs, and evidence artifacts",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "perf",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.24",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.25",
+      "title": "Milestone 31 — Adoption UX + portable-near-native guidance",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "adoption",
+        "docs",
+        "milestone",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.25.1",
+      "title": "Freeze post-1.0 portable-near-native guidance and boundary language",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "family",
+        "perf",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.25",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.25.2",
+      "title": "Restructure landing docs by audience/profile and trim historical clutter",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "thinking:high",
+        "ux"
+      ],
+      "parent": "haxe.rust-oo3.25",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.25.3",
+      "title": "Strengthen examples onboarding with profile-first paths and why/when guidance",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "examples",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.25",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.25.4",
+      "title": "Add docs navigation/link integrity guard for entrypoint pages",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "docs",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.25",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.25.5",
+      "title": "Publish portable-vs-metal authoring guidance for near-native Rust expectations",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "perf",
+        "profiles",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.25",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.26",
+      "title": "Milestone 32 — Concurrency posture hardening + async/threading evidence",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "concurrency",
+        "milestone",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.26.1",
+      "title": "Freeze canonical concurrency posture across async/threading docs",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "concurrency",
+        "docs",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.26",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.26.2",
+      "title": "Strengthen MainLoop / EntryPoint / EventLoop target-side evidence and caveat wording",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "tests",
+        "thinking:high",
+        "threading"
+      ],
+      "parent": "haxe.rust-oo3.26",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.26.3",
+      "title": "Consolidate thread-pool and EventLoop examples into clearer regression evidence",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "examples",
+        "thinking:medium",
+        "threading"
+      ],
+      "parent": "haxe.rust-oo3.26",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.26.4",
+      "title": "Decide async preview exit criteria and align docs/tests with the current async contract",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "async",
+        "docs",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.26",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.26.5",
+      "title": "Publish concurrency evidence rollup in support docs and confidence summary",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "concurrency",
+        "docs",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.26",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.27",
+      "title": "Milestone 33 — Platform-sensitive systems hardening + environment evidence",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "milestone",
+        "platform",
+        "systems",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.27.1",
+      "title": "Freeze canonical platform-sensitive systems posture across support docs",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "systems",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.27",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.27.2",
+      "title": "Strengthen sys.Http target-side evidence and contract wording",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "http",
+        "tests",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.27",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.27.3",
+      "title": "Strengthen TLS/SSL proof depth and environment caveat wording",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ssl",
+        "tests",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.27",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.27.4",
+      "title": "Clarify sys.db environment contract and tighten evidence path",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "db",
+        "docs",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.27",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.27.5",
+      "title": "Publish systems evidence rollup in support docs and semantic confidence summary",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "docs",
+        "systems",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.27",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.28",
+      "title": "Milestone 34 — Async stabilization + entrypoint contract",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "async",
+        "milestone",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.28.1",
+      "title": "Freeze canonical async contract and preview-exit criteria",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "async",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.28",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.28.2",
+      "title": "Support async receiver semantics beyond static-only methods",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "async",
+        "compiler",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.28",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.28.3",
+      "title": "Establish a stable async entrypoint boundary",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "async",
+        "compiler",
+        "runtime",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.28",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.28.4",
+      "title": "Refresh async evidence, examples, and docs after contract stabilization",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "async",
+        "docs",
+        "tests",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.28",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.29",
+      "title": "Milestone 35 — Typed catch subclass parity + exception boundary closeout",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "exceptions",
+        "milestone",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.29.1",
+      "title": "Freeze typed-catch subclass contract and add failing fixtures",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "exceptions",
+        "tests",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.29",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.29.2",
+      "title": "Implement subclass-aware typed catch matching for trait-object/class payloads",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "exceptions",
+        "runtime",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.29",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.29.3",
+      "title": "Refresh exception docs/evidence after typed-catch parity closes",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "evidence",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.29",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.3",
+      "title": "Milestone 2 — Typed expression coverage (core subset)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "expressions",
+        "m2",
+        "milestone"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.3.1",
+      "title": "Expressions: literals + locals + assignments",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "expr",
+        "m2"
+      ],
+      "parent": "haxe.rust-oo3.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.3.2",
+      "title": "Expressions: unary + binary ops",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "m2",
+        "ops"
+      ],
+      "parent": "haxe.rust-oo3.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.3.3",
+      "title": "Control flow: blocks, if/else, return",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "control",
+        "m2"
+      ],
+      "parent": "haxe.rust-oo3.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.3.4",
+      "title": "Calls: function calls, method calls, simple field access",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "calls",
+        "m2"
+      ],
+      "parent": "haxe.rust-oo3.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.3.5",
+      "title": "Snapshot test harness for generated Rust",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "m2",
+        "snapshot",
+        "tests"
+      ],
+      "parent": "haxe.rust-oo3.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.30",
+      "title": "Milestone 36 — Function-value contract truth + mutable callback parity",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "function-values",
+        "milestone",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.30.1",
+      "title": "Audit function-value capture/mutation contract and add decisive fixtures",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "function-values",
+        "semantics",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.30",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.30.2",
+      "title": "Implement remaining mutable-callback / function-value gap if audit proves one",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "function-values",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.30",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.30.3",
+      "title": "Refresh function-value docs/evidence after contract audit",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "evidence",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.30",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.31",
+      "title": "Milestone 37 — Concurrency contract hardening for MainLoop / EntryPoint",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "concurrency",
+        "milestone",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.31.1",
+      "title": "Audit MainLoop / EntryPoint scheduler contract and define target-side proof boundaries",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "concurrency",
+        "semantics",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.31",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.31.2",
+      "title": "Implement remaining MainLoop / EntryPoint scheduler parity gaps if the audit proves one",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "concurrency",
+        "runtime",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.31",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.31.3",
+      "title": "Refresh concurrency docs/evidence after scheduler contract audit",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "concurrency",
+        "docs",
+        "evidence",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.31",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.32",
+      "title": "Milestone 38 — JSON boundary performance hardening without semantic drift",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [
+        "json",
+        "milestone",
+        "perf",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.32.1",
+      "title": "Audit JSON boundary attribution and lock the optimization target slice",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "json",
+        "perf",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.32",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.32.2",
+      "title": "Reduce avoidable hxrt JSON runtime overhead on the plain parse/stringify path",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "json",
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.32",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.32.3",
+      "title": "Tighten compiler lowering around haxe.Json boundary values if the audit proves it worthwhile",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "json",
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.32",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.32.4",
+      "title": "Refresh JSON perf docs, baselines, and evidence after the hotspot tranche",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "json",
+        "perf",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.32",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.33",
+      "title": "Milestone 39 — Thread-pool and deeper scheduler parity hardening",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "concurrency",
+        "milestone",
+        "thinking:xhigh",
+        "threading"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.33.1",
+      "title": "Audit thread-pool and deeper EventLoop scheduler contracts",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "concurrency",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.33",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.33.2",
+      "title": "Implement remaining scheduler/thread-pool root fixes proven by the audit",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "concurrency",
+        "semantics",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.33",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.33.3",
+      "title": "Add target-side proof fixtures for thread-pool and deeper scheduler behavior",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "concurrency",
+        "tests",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.33",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.33.4",
+      "title": "Refresh concurrency docs and evidence after scheduler/thread-pool hardening",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "evidence",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.33",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.34",
+      "title": "Milestone 40 — Systems and environment proof-depth hardening",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "environment",
+        "milestone",
+        "systems",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.34.1",
+      "title": "Audit remaining systems/environment proof buckets and choose the narrowest justified hardening slice",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "evidence",
+        "systems",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3.34",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.34.2",
+      "title": "Add the narrowest justified systems/environment proof artifact from the audit",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "systems",
+        "tests",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.34",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.34.3",
+      "title": "Refresh systems/environment posture docs and semantic-confidence evidence",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "evidence",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.34",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.35",
+      "title": "Stabilize PR perf gate for environment-sensitive int64/chat buckets",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.36",
+      "title": "Milestone 41 — JSON boundary near-native convergence (portable-preserving)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "json",
+        "milestone",
+        "perf",
+        "thinking:xhigh"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.36.1",
+      "title": "Audit JSON boundary attribution and lock the first safe optimization slice",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "json",
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.36",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.36.2",
+      "title": "Optimize hxrt JSON string boundary to remove avoidable HxString/String churn",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "json",
+        "perf",
+        "runtime",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.36",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.36.3",
+      "title": "Reduce JSON lowering overhead for common anon payload construction",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "json",
+        "perf",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3.36",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.36.4",
+      "title": "Refresh JSON perf docs, baselines, and evidence after convergence changes",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "json",
+        "perf",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3.36",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.37",
+      "title": "Milestone 42 — Generated Rust warning hygiene + output polish",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [
+        "codegen",
+        "milestone",
+        "thinking:xhigh",
+        "warnings"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.37.1",
+      "title": "Audit and reproduce remaining generated Rust warnings",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "codegen",
+        "thinking:high",
+        "warnings"
+      ],
+      "parent": "haxe.rust-oo3.37",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.37.2",
+      "title": "Fix deferred-local mutability inference for warning-clean output",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "codegen",
+        "thinking:high",
+        "warnings"
+      ],
+      "parent": "haxe.rust-oo3.37",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.37.3",
+      "title": "Add warning-clean regression coverage for deferred locals",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "tests",
+        "thinking:high",
+        "warnings"
+      ],
+      "parent": "haxe.rust-oo3.37",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.37.4",
+      "title": "Validate full harness and record xhigh second-pass review",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "thinking:xhigh",
+        "validation"
+      ],
+      "parent": "haxe.rust-oo3.37",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.38",
+      "title": "Fix CI RustSec + Rust 1.96 clippy failures",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "rust-tooling",
+        "security",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.39",
+      "title": "CI harness observability: emit per-phase timing for snapshots/examples",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "harness",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.4",
+      "title": "Milestone 3 — Data model: classes, fields, constructors, methods",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "classes",
+        "m3",
+        "milestone"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.40",
+      "title": "CI harness runtime: parallelize snapshot case execution safely",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "harness",
+        "performance",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.41",
+      "title": "CI harness runtime: add metal policy case timing",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "harness",
+        "thinking:medium",
+        "timing"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.42",
+      "title": "CI harness runtime: consolidate duplicate metal fallback policy compiles",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "harness",
+        "metal-policy",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.43",
+      "title": "CI harness runtime: reuse equivalent example compiles",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "examples",
+        "harness",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.44",
+      "title": "CI metal policy runtime: consolidate same-command report artifact checks",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "harness",
+        "metal-policy",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.45",
+      "title": "CI snapshot runtime: tune GitHub snapshot parallelism",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "harness",
+        "snapshots",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.46",
+      "title": "CI harness runtime: skip duplicate package smoke after dedicated CI step",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "harness",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.47",
+      "title": "CI harness runtime: make harness stages selectable for workflow splitting",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "harness",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.48",
+      "title": "CI harness runtime: split monolithic harness workflow into parallel shards",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "harness",
+        "thinking:high",
+        "workflow"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.49",
+      "title": "Document split CI harness topology and evidence artifacts",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "docs",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.5",
+      "title": "Milestone 4 — Enums + switch → match",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [
+        "enums",
+        "m4",
+        "milestone",
+        "switch"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.5.1",
+      "title": "Enums: emit Rust enums (variants + tuple args)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.5",
+      "importRole": "codex_pressure_gap_related"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.5.2",
+      "title": "Switch: lower switch to match (with fallback)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.5.3",
+      "title": "Enums: compile enum values + patterns",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.5.4",
+      "title": "Snapshots: enums + switch",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo3.5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.50",
+      "title": "Docs onboarding polish: first-run, profile choice, and production path",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "onboarding",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.51",
+      "title": "Docs install path polish: lix release install to first scaffolded app",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "install",
+        "onboarding",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.52",
+      "title": "Docs release-history consistency: mark GA gate as superseded by semver posture",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "release",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.53",
+      "title": "Guard install and production onboarding navigation links",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "docs",
+        "onboarding",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.54",
+      "title": "Guard release-history docs against stale current-status drift",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "docs",
+        "release",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.55",
+      "title": "Docs core-language contract cleanup: function values and inherited method shims",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "semantics",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.56",
+      "title": "Refresh array and handle docs for thread-safe HxRef runtime",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "runtime",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.57",
+      "title": "Clarify historical GA caveat and v1 gap wording",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "release-truth",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.58",
+      "title": "Remove stale async preview wording from constructor diagnostic",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "async",
+        "ci",
+        "diagnostics",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.59",
+      "title": "Refresh Lambda count optional predicate docs",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "stdlib",
+        "thinking:low"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.6",
+      "title": "Milestone 5 — Interfaces + inheritance (portable semantics first)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [
+        "inheritance",
+        "interfaces",
+        "m5",
+        "milestone"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.6.1",
+      "title": "Interfaces: trait emission + type mapping",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "codegen",
+        "interfaces",
+        "m5"
+      ],
+      "parent": "haxe.rust-oo3.6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.6.2",
+      "title": "Inheritance: base traits + dynamic dispatch",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "codegen",
+        "inheritance",
+        "m5"
+      ],
+      "parent": "haxe.rust-oo3.6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.6.3",
+      "title": "Polymorphic field accessors",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "inheritance",
+        "interfaces",
+        "m5"
+      ],
+      "parent": "haxe.rust-oo3.6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.6.4",
+      "title": "RTTI: __hx_type_id() + minimal isOfType hook",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [
+        "m5",
+        "rtti"
+      ],
+      "parent": "haxe.rust-oo3.6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.6.5",
+      "title": "Snapshots: interfaces + inheritance",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "m5",
+        "tests"
+      ],
+      "parent": "haxe.rust-oo3.6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.60",
+      "title": "Restore CallStack exception string contract",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "exceptions",
+        "stdlib",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "codex_pressure_gap_related"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.61",
+      "title": "Restore CallStack after reintroduced local stub",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "exceptions",
+        "stdlib",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "codex_pressure_gap_related"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.62",
+      "title": "Docs onboarding polish: tighten first-project path and navigation",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "onboarding",
+        "thinking:low"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.63",
+      "title": "Docs template polish: align generated app README with onboarding path",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "onboarding",
+        "template",
+        "thinking:low"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.64",
+      "title": "Guard tracked generated example artifacts",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "docs",
+        "onboarding",
+        "thinking:medium"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.65",
+      "title": "Docs example polish: add hello README",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "examples",
+        "onboarding",
+        "thinking:low"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.7",
+      "title": "Milestone 6 — Exceptions and try/catch",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [
+        "exceptions",
+        "m6",
+        "milestone"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.8",
+      "title": "Milestone 7 — Haxe stdlib Tier 1 support",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [
+        "m7",
+        "milestone",
+        "stdlib"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.9",
+      "title": "Milestone 8 — sys package and IO",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "epic",
+      "labels": [
+        "io",
+        "m8",
+        "milestone",
+        "sys"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4",
+      "title": "Roadmap — v1.0: Rusty profile + idiomatic polish + lix",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "idiomatic",
+        "lix",
+        "rusty",
+        "v1.0"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.1",
+      "title": "Rusty profile — owned Rust types + borrow-scoped APIs",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "profile",
+        "rusty",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.1.1",
+      "title": "Rusty profile: define API + ownership/borrow rules",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "design",
+        "rusty",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.1.2",
+      "title": "Rusty profile: rust.Vec<T> (std wrapper + compiler mapping)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [
+        "rusty",
+        "std",
+        "v1.0",
+        "vec"
+      ],
+      "parent": "haxe.rust-oo4.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.1.3",
+      "title": "Rusty profile: rust.Option<T> + rust.Result<T,E>",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [
+        "option",
+        "result",
+        "rusty",
+        "std",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.1.4",
+      "title": "Rusty profile: borrow-scoped helpers (withRef/withMut)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "feature",
+      "labels": [
+        "borrow",
+        "rusty",
+        "std",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.1.5",
+      "title": "Rusty profile: snapshots + demo coverage",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "rusty",
+        "tests",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.1.6",
+      "title": "Rusty profile: rust.HashMap<K,V>",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "feature",
+      "labels": [
+        "hashmap",
+        "rusty",
+        "std",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.2",
+      "title": "Idiomatic output — cleanup + naming strategy",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [
+        "idiomatic",
+        "profile",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.2.1",
+      "title": "Idiomatic output: precedence-aware expression printing",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "idiomatic",
+        "printer",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.2.2",
+      "title": "Idiomatic output: remove unreachable match wildcard arms",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "idiomatic",
+        "match",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.2.3",
+      "title": "Idiomatic output: RustNaming module + collision rules",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "idiomatic",
+        "naming",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.2.4",
+      "title": "Idiomatic output: broaden mut inference + reduce warnings",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [
+        "idiomatic",
+        "mut",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.3",
+      "title": "Tooling — lix workflow + GitHub-only releases",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [
+        "ci",
+        "lix",
+        "release",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.3.1",
+      "title": "Tooling: add npm+lix dev setup",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "lix",
+        "tooling",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.3.2",
+      "title": "Tooling: snapshot harness prefers lix haxe when present",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "lix",
+        "tests",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo4.3.3",
+      "title": "Tooling: CI uses lix; releases GitHub-only",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "lix",
+        "release",
+        "v1.0"
+      ],
+      "parent": "haxe.rust-oo4.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5",
+      "title": "v1 Hardening: Hygiene + Runtime Parity + Security",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.1",
+      "title": "Compiler hygiene: warnings + output polish",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.1.1",
+      "title": "Use type-usage to avoid unused imports",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.1.2",
+      "title": "Reduce unused mut in idiomatic output",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.1.3",
+      "title": "Portable style warnings policy",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.1.4",
+      "title": "Optional deny-warnings mode",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.2",
+      "title": "Rusty runtime + stdlib parity",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.2.1",
+      "title": "Rusty string surface (Str/String)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.2.2",
+      "title": "Rusty slices + iterators",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.2.3",
+      "title": "Rusty path/fs/time primitives",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.2.4",
+      "title": "Rusty error model helpers",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.3",
+      "title": "CI security guardrails",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-oo5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.3.1",
+      "title": "CI: gitleaks secret scanning",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.3.2",
+      "title": "CI: dependency review",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo5.3.3",
+      "title": "CI: CodeQL analysis",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo5.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo6",
+      "title": "Milestone 10: performance + ownership ergonomics",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo6.1",
+      "title": "Reduce clone-heavy match lowering",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo6.2",
+      "title": "Rusty iteration ergonomics (Vec/Slice)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo6.3",
+      "title": "Reduce String/Array cloning hot paths",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-oo6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo7",
+      "title": "Milestone 11: Rusty profile v1.0",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo7.1",
+      "title": "Rusty: ownership/borrowing surface",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo7.2",
+      "title": "Rusty: iterators and IntoIterator",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo7.3",
+      "title": "Rusty: error/result ergonomics",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo7.4",
+      "title": "Rusty: idiomatic output polish",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo8",
+      "title": "Milestone 12: Ratatui interactive todo showcase",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo8.1",
+      "title": "tui: framework wrapper layer (no __rust__)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo8.2",
+      "title": "tui_todo: interactive + headless modes",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo9",
+      "title": "Milestone 13: Rust tooling + workflow (v1.0)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo9.1",
+      "title": "CI: cargo fmt + clippy on workspace",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo9.2",
+      "title": "CI: RustSec audit (cargo-audit) + schedule",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo9.3",
+      "title": "Docs: end-to-end Rust workflow knobs",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo9.4",
+      "title": "Template: lix-based example project scaffold",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ooq",
+      "title": "Fix hooks dynamic-guard drift by centralizing Dynamic boundary literal",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "compiler",
+        "policy",
+        "tests"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oub",
+      "title": "v1: nullable ref runtime wrappers (HxRef/HxDynRef/HxString/Array)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "feature",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qeb",
+      "title": "Lowering: class instances (HxRef field/method)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "borrow",
+        "classes",
+        "lowering",
+        "m3"
+      ],
+      "parent": "haxe.rust-oo3.4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qjs",
+      "title": "Promote compileable modules from remaining candidate set",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "portable",
+        "stdlib",
+        "test"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9",
+      "title": "Portable Performance Convergence (portable→metal→pure Rust)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "ci",
+        "compiler",
+        "metal",
+        "perf",
+        "portable",
+        "runtime"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.1",
+      "title": "R1 (0–30d): borrowed array iteration fast path",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "array",
+        "compiler",
+        "perf",
+        "portable",
+        "runtime"
+      ],
+      "parent": "haxe.rust-qo9",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.1.1",
+      "title": "P0: Add hxrt Array borrowed-iteration API",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "array",
+        "p0",
+        "perf",
+        "runtime"
+      ],
+      "parent": "haxe.rust-qo9.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.1.2",
+      "title": "P0: Add array-mutation-in-loop analyzer + TFor fast path",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "array",
+        "compiler",
+        "p0",
+        "perf",
+        "tests"
+      ],
+      "parent": "haxe.rust-qo9.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.1.3",
+      "title": "P0: Portable convergence benchmark cases + assertions",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "bench",
+        "ci",
+        "p0",
+        "perf"
+      ],
+      "parent": "haxe.rust-qo9.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.2",
+      "title": "R2 (31–60d): real borrow-tightening and clone-elision",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "compiler",
+        "metal",
+        "passes",
+        "perf",
+        "portable"
+      ],
+      "parent": "haxe.rust-qo9",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.2.1",
+      "title": "P1: Implement real BorrowScopeTighteningPass rewrites",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "p1",
+        "passes",
+        "perf"
+      ],
+      "parent": "haxe.rust-qo9.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.2.2",
+      "title": "P1: Expand CloneElisionPass beyond literal-only cases",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "p1",
+        "passes",
+        "perf",
+        "tests"
+      ],
+      "parent": "haxe.rust-qo9.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.2.3",
+      "title": "P1: Reuse safe optimization subset in portable lane",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "metal",
+        "p1",
+        "perf",
+        "portable"
+      ],
+      "parent": "haxe.rust-qo9.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.3",
+      "title": "R3 (61–90d): optimizer planner reports + enforced perf gates",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [
+        "ci",
+        "metal",
+        "perf",
+        "planner",
+        "portable",
+        "reporting"
+      ],
+      "parent": "haxe.rust-qo9",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.3.1",
+      "title": "P0: Add rust_optimizer_plan_report artifacts",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "compiler",
+        "determinism",
+        "p0",
+        "reporting"
+      ],
+      "parent": "haxe.rust-qo9.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.3.2",
+      "title": "P1: Enforce PR and nightly perf gates for convergence",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "gates",
+        "p1",
+        "perf"
+      ],
+      "parent": "haxe.rust-qo9.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.3.3",
+      "title": "P1: Codify benchmark protocol (median/MAD, run counts)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [
+        "ci",
+        "docs",
+        "p1",
+        "perf"
+      ],
+      "parent": "haxe.rust-qo9.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-qo9.4",
+      "title": "P2: Explore hxrt cell single-thread fast mode",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "p2",
+        "perf",
+        "runtime",
+        "spike"
+      ],
+      "parent": "haxe.rust-qo9",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-r9t",
+      "title": "TUI runtime: richer events (Key/Resize/Tick)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-cu0",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rir",
+      "title": "Spike: assess explicit auto profile vs portable|metal contracts",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [
+        "architecture",
+        "oracle",
+        "profiles",
+        "spike"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rp4",
+      "title": "v1.0: Bytes completeness + tests",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rp4.1",
+      "title": "Bytes: hxrt implementation",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-rp4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rp4.2",
+      "title": "Bytes: compiler intrinsics",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-rp4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rp4.3",
+      "title": "Bytes: snapshot + cargo tests",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-rp4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rusty1",
+      "title": "Rusty borrow-first polish",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rusty1.1",
+      "title": "VecTools borrow-first len/get",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-rusty1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rusty1.2",
+      "title": "Compiler: detect implicit Ref casts",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-rusty1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rxp",
+      "title": "sys.Http implementation",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-rys",
+      "title": "CI harness artifact cleanup lifecycle",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-s79",
+      "title": "Family hardening: fail fast on sibling target override collisions",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "area:bootstrap",
+        "area:family-hardening",
+        "area:stdlib",
+        "thinking:high"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-sc5",
+      "title": "CI: run full harness via scripts (snapshots + all examples incl. tui_todo)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-scy",
+      "title": "m26.1 Route contract diagnostics to user source positions",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-sem2",
+      "title": "Semantic correctness: equality + Array search",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-sem2.1",
+      "title": "Haxe equality semantics for class/Array",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-sem2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-sem2.2",
+      "title": "Array.contains/indexOf/remove for object arrays",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-sem2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-t42",
+      "title": "Fix cleanup race in windows smoke artifact pruning",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "bug",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-t8e",
+      "title": "Emit profile contract report artifacts for portable|metal builds",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [
+        "architecture",
+        "family",
+        "profiles"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-tdn",
+      "title": "Docs closeout for contract, capabilities, and lanes language",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u37",
+      "title": "(Milestone) Portable v1.0",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u37.1",
+      "title": "Portable: anonymous object semantics",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-u37",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u37.2",
+      "title": "Portable: reflect + dynamic field access",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-u37",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u37.3",
+      "title": "Portable: sys + IO parity",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-u37",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u37.4",
+      "title": "Portable: stability and docs",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-u37",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u38",
+      "title": "(Milestone) Compiler v1.0",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u38.1",
+      "title": "Rusty: v1.0 profile hardening",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-u38",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u38.2",
+      "title": "Classes: support super(args) in constructors",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "feature",
+      "labels": [],
+      "parent": "haxe.rust-u38",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u39",
+      "title": "v1: inheritance super + inherited methods",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u39.1",
+      "title": "Synthesize inherited base methods",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u39.2",
+      "title": "Implement super.field and super.method",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u39.3",
+      "title": "Add/update snapshots for super+inherit",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u39.4",
+      "title": "Document inheritance and super semantics",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u40",
+      "title": "v1: properties and non-physical fields",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u40.1",
+      "title": "Only emit physical fields in structs",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u40.2",
+      "title": "Lower property reads/writes to accessors",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u40.3",
+      "title": "Add snapshot for properties",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u40.4",
+      "title": "Docs/lessons",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u41",
+      "title": "v1: @:rustImpl trait impl emission",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u41.1",
+      "title": "Compiler: parse + emit @:rustImpl",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u41.2",
+      "title": "Tests: snapshot for @:rustImpl",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u41.3",
+      "title": "Docs: interop @:rustImpl",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u42",
+      "title": "v1: Rusty profile readiness",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u42.1",
+      "title": "Snapshot: Rusty v1 smoke",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-u42",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u42.2",
+      "title": "CI: smoke-run Rusty examples",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-u42",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u42.3",
+      "title": "Docs/HaxeDoc: polish Rusty surfaces",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-u42",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u43",
+      "title": "v1: idiomatic output polish",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u43.1",
+      "title": "Harness: optional clippy on generated crates",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-u43",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u43.2",
+      "title": "Codegen: reduce needless mut bindings",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-u43",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-u43.3",
+      "title": "Codegen: string clone elision pass",
+      "status": "closed",
+      "priority": 3,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-u43",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-ujt",
+      "title": "Fix TReturn(TBlock) lowering in expression/lambda contexts",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "bug",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1",
+      "title": "Milestone v1.0: stable Haxe→Rust (portable + rusty)",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1.1",
+      "title": "Write v1.0 support matrix + upgrade guide",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1.2",
+      "title": "Complete Array API + semantics",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1.3",
+      "title": "Std.string + Dynamic formatting parity",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1.4",
+      "title": "CI/release hardening for v1.0",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1g",
+      "title": "Close remaining v1 surface gaps",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1g.1",
+      "title": "Support catch (e:Dynamic) as catch-all",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1g",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1g.2",
+      "title": "Support ++/-- on instance fields",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1g",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1i",
+      "title": "P1 Idiomatic output v1.x — reduce noise + improve ownership",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1i.1",
+      "title": "Idiomatic output: reduce unused_mut + parens noise",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1i",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1i.2",
+      "title": "Idiomatic output: improve String/borrow strategy",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1i",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1i.3",
+      "title": "Idiomatic output: prelude/use statements",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1i",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1r",
+      "title": "P1 Rusty profile v1.x — scope + hardening",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1r.1",
+      "title": "Rusty profile: document contract + build flags",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1r",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1r.2",
+      "title": "Rusty profile: unify rust.* core types",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1r",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-v1r.3",
+      "title": "Rusty profile: expand example coverage",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-v1r",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vrd",
+      "title": "TUI runtime: animations/effects",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-cu0",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl",
+      "title": "Roadmap: post-1.0 milestones 17-22",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.1",
+      "title": "Milestone 17: Modular compiler architecture",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-vvl",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.1.1",
+      "title": "17.1 Extract compiler context objects (build/class/func)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.1.2",
+      "title": "17.2 Split compiler into analyze/lower/emit module layout",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.1.3",
+      "title": "17.3 Implement AST pass runner and non-stub transformer",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.1.4",
+      "title": "17.4 Snapshot/harness stabilization after refactor",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.1",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.2",
+      "title": "Milestone 18: hxrt feature gating + dependency slimming",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-vvl",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.2.1",
+      "title": "18.1 Add hxrt Cargo feature graph and cfg-gated modules",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.2.2",
+      "title": "18.2 Infer hxrt features from used Haxe types/modules",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.2.3",
+      "title": "18.3 Emit feature-aware hxrt dependency in generated Cargo.toml",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.2.4",
+      "title": "18.4 Add override defines for hxrt feature selection",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.2",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.3",
+      "title": "Milestone 19: Profile contracts + pass pipelines",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-vvl",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.3.1",
+      "title": "19.1 Profile-driven pass sets (portable/idiomatic/rusty/metal)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.3.2",
+      "title": "19.2 Add profile differentiation snapshots",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.3.3",
+      "title": "19.3 Enforce profile contracts with diagnostics",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.3.4",
+      "title": "19.4 Remove stale POC markers and align docs",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.3",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.4",
+      "title": "Milestone 20: Concurrency 2.0",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-vvl",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.4.1",
+      "title": "20.1 Stabilize async flag surface (rust_async + deprecation)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.4.2",
+      "title": "20.2 Add rust.concurrent API layer (channel/task/locks)",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.4.3",
+      "title": "20.3 Add async task helpers and optional runtime adapters",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.4.4",
+      "title": "20.4 Add Send/Sync diagnostics analyzer",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.4.5",
+      "title": "20.5 Normalize lambda explicit-return lowering to avoid Rust unreachable-expression warnings",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.5",
+      "title": "Milestone 21: Metal credibility + minimal runtime",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-vvl",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.5.1",
+      "title": "21.1 Define and enforce Metal subset",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.5.2",
+      "title": "21.2 Implement rust_no_hxrt minimal-runtime mode",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.5.3",
+      "title": "21.3 Improve actionable metal diagnostics",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.5.4",
+      "title": "21.4 Add no-hxrt tests/docs and benchmark hooks",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.5",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.6",
+      "title": "Milestone 22: Metal islands + autopilot report",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [],
+      "parent": "haxe.rust-vvl",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.6.1",
+      "title": "22.1 Implement metal viability analyzer",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.6.2",
+      "title": "22.2 Emit deterministic metal_report.md/json artifacts",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.6.3",
+      "title": "22.3 Add @:rustMetal islands and strict island checks",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.6.4",
+      "title": "22.4 Map viability blockers into actionable issue classes",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl.6",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-vvl.7",
+      "title": "Remove pre-1.0 hard-cutover compatibility rule at stable release",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-vvl",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-wi5",
+      "title": "Enforce MetalRestrictionsPass for @:rustMetal islands in portable pass pipeline",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "compiler",
+        "metal",
+        "tests"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-x3h",
+      "title": "Example app: multi-screen todo/productivity TUI",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-cu0",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-x7e",
+      "title": "Compiler: resolve pos file paths (avoid misclassifying upstream std as user)",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "bug",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-xml",
+      "title": "DRY snapshots: support variants",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "chore",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-xth",
+      "title": "Emit hxrt runtime plan report artifacts with selected features",
+      "status": "closed",
+      "priority": 4,
+      "issueType": "task",
+      "labels": [
+        "architecture",
+        "family",
+        "runtime"
+      ],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-yqn",
+      "title": "v1.0: Rusty profile",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "epic",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-yqn.1",
+      "title": "Rusty: Document core types + injection rules",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-yqn",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-yqn.2",
+      "title": "Rusty: Cargo metadata + extern crate ergonomics",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-yqn",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-yqn.3",
+      "title": "Rusty: Expand rust.* surface + snapshots",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": "haxe.rust-yqn",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-z2h",
+      "title": "Migrate repo build configs from rust_async_preview to rust_async",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-zch",
+      "title": "Tests: class snapshot + example",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "classes",
+        "m3",
+        "snapshots",
+        "tests"
+      ],
+      "parent": "haxe.rust-oo3.4",
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-zhs",
+      "title": "Threading model: make Haxe values thread-safe",
+      "status": "closed",
+      "priority": 0,
+      "issueType": "task",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-zw5",
+      "title": "Harden Windows smoke diagnostics and loopback timeout handling",
+      "status": "closed",
+      "priority": 1,
+      "issueType": "bug",
+      "labels": [],
+      "parent": null,
+      "importRole": "historical_reference"
+    }
+  ]
+}
