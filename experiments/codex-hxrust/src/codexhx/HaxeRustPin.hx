@@ -6,7 +6,7 @@ class HaxeRustPin {
     public static inline final localPath:String = "../haxe.rust";
     public static inline final remote:String = "git@github.com:fullofcaffeine/reflaxe.rust.git";
     public static inline final branch:String = "main";
-    public static inline final commit:String = "0849fcf1a556cb86615cfcdf635165ba82fec8da";
+    public static inline final commit:String = "bc945b3263e24f95c3b99d86e87dc281e0b713b2";
     public static inline final packageName:String = "reflaxe.rust";
     public static inline final packageVersion:String = "1.0.0";
     public static inline final license:String = "GPL-3.0";

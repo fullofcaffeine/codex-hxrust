@@ -86,3 +86,22 @@ experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 0849fcf1a556cb86615cfcd
 ```
 
 The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+
+## Follow-Up Audit After Cargo Failure Propagation Fix On 2026-06-10
+
+**Pin before audit:** `0849fcf1a556cb86615cfcdf635165ba82fec8da`  
+**Pin after audit:** `bc945b3263e24f95c3b99d86e87dc281e0b713b2`
+
+Additional upstream commit accepted:
+
+- `bc945b32` Propagate Cargo failures from Haxe builds
+
+This resolves the codex-hxrust pressure gap where a generated Cargo failure could be printed while the parent `haxe` process still exited successfully. haxe.rust now reports a compiler error when the configured Cargo command returns non-zero, and haxe.rust carries a generic cargo-failure propagation regression in its CI harness.
+
+Gate run:
+
+```bash
+experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh bc945b3263e24f95c3b99d86e87dc281e0b713b2
+```
+
+The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
