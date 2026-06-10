@@ -1,0 +1,18 @@
+{
+  "name": "codex-hxrust",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Codex-to-Haxe/haxe.rust pressure-test experiment.",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "lix": "^15.12.4"
+  },
+  "scripts": {
+    "postinstall": "lix download",
+    "hx:portable": "cd experiments/codex-hxrust && haxe hxml/portable.hxml",
+    "hx:metal": "cd experiments/codex-hxrust && haxe hxml/metal.hxml",
+    "hx:portable:codegen": "cd experiments/codex-hxrust && haxe hxml/portable.codegen.hxml",
+    "hx:metal:codegen": "cd experiments/codex-hxrust && haxe hxml/metal.codegen.hxml",
+    "test:generated-cargo": "bash experiments/codex-hxrust/scripts/check-generated-cargo.sh"
+  }
+}

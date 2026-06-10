@@ -9,6 +9,16 @@
 
 `reference/haxe-rust.pin.json` records the known-good compiler commit for this experiment. It is not an upstream merge queue. When compiler work is needed, work directly in `../haxe.rust`, commit and push there, then update the pin here after validation.
 
+## Local Dependency Resolution
+
+Use lix scoped libraries for day-to-day local Haxe builds in this repo:
+
+- `.haxerc` pins Haxe `4.3.7` and enables scoped library resolution.
+- `haxe_libraries/reflaxe.rust.hxml` points `-lib reflaxe.rust` at `../haxe.rust/src` and `../haxe.rust/std`.
+- `haxe_libraries/reflaxe.hxml` points `-lib reflaxe` at `../haxe.rust/vendor/reflaxe/src`.
+
+This avoids global `haxelib dev` drift while keeping `../haxe.rust` as the authoritative compiler checkout. Do not treat lix as a substitute for haxelib release validation: haxe.rust package/dev-haxelib smoke gates still need to pass for compiler changes because published consumers resolve through haxelib.
+
 ## Compiler Generality Rule
 
 haxe.rust must remain a general Haxe-to-Rust compiler/runtime backend. Do not add Codex-specific code, source paths, DTO assumptions, fixture names, or behavior to haxe.rust.
@@ -28,7 +38,7 @@ When codex-hxrust exposes a compiler limitation:
 
 Current actionable codex-hxrust compiler-gap Beads:
 
-- `codex-hxrust-rat.5` maps to haxe.rust CallStack milestone history (`haxe.rust-oo3.60`, `haxe.rust-oo3.61`).
+- `codex-hxrust-rat.5` maps to haxe.rust CallStack milestone history (`haxe.rust-oo3.60`, `haxe.rust-oo3.61`, `haxe.rust-oo3.66`) and is resolved by the pinned haxe.rust dev-haxelib std ownership fix.
 - `codex-hxrust-rat.6` needs a new generic haxe.rust fixture for Cargo failure exit propagation.
 - `codex-hxrust-rat.7` needs a new generic haxe.rust fixture for nullable scalar lowering.
 - `codex-hxrust-rat.8` relates to enum codegen history (`haxe.rust-oo3.5.1`) and needs a new generic enum payload fixture.

@@ -66,3 +66,23 @@ experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 1f91e9e67f5fc04eca1806a
 ```
 
 The updater first failed while the local `CallStack.cross.hx` workaround was absent, then passed after restoring the recorded local patch. The successful updater run executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+
+## Follow-Up Audit After haxe.rust Direct Fix On 2026-06-10
+
+**Pin before audit:** `1f91e9e67f5fc04eca1806aa04e2cd50c2b2033d`  
+**Pin after audit:** `0849fcf1a556cb86615cfcdf635165ba82fec8da`
+
+Additional upstream commits accepted:
+
+- `765b6487` Fix dev haxelib std ownership
+- `0849fcf1` Format std ArrayTools
+
+The CallStack workaround recorded in `reference/haxe-rust-local-patches.v1.json` is now resolved upstream. The fix keeps `std/haxe/CallStack.cross.hx` typed as `Exception`, mirrors haxe.rust std top-level entries under `src/` for dev haxelib consumers, and adds haxe.rust package-smoke coverage for both packaged and dev checkout flows.
+
+Gate run:
+
+```bash
+experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 0849fcf1a556cb86615cfcdf635165ba82fec8da
+```
+
+The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.

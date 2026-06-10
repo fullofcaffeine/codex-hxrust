@@ -1,0 +1,8 @@
+# Vendored Reflaxe framework from the sibling haxe.rust checkout.
+#
+# Paths use SCOPE_DIR so scoped lix resolution works from any subdirectory
+# inside codex-hxrust.
+
+-cp ${SCOPE_DIR}/../haxe.rust/vendor/reflaxe/src/
+
+-D reflaxe=4.0.0-beta

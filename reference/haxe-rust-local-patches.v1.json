@@ -2,22 +2,26 @@
   "schema": "codex-hxrust.haxe-rust-local-patches.v1",
   "date": "2026-06-10",
   "basePin": "reference/haxe-rust.pin.json",
-  "observedBaseCommit": "1f91e9e67f5fc04eca1806aa04e2cd50c2b2033d",
+  "observedBaseCommit": "0849fcf1a556cb86615cfcdf635165ba82fec8da",
   "patches": [
     {
       "id": "hxrust-callstack-exception-dynamic-scaffold",
       "path": "../haxe.rust/std/haxe/CallStack.cross.hx",
-      "status": "local-working-tree-patch",
+      "status": "resolved-upstream",
       "reason": "External codex-hxrust scaffold check profiles generated haxe_call_stack_call_stack_impl_.rs with an unresolved root Exception type when CallStack.exceptionToString used Exception directly.",
-      "change": "Use Dynamic and deterministic placeholder output for target-local exceptionToString until haxe.rust owns a fuller stack/exception integration fix.",
+      "change": "Replaced the local Dynamic workaround with a generic haxe.rust fix: dev haxelib checkouts now mirror std top-level entries under src/ so haxe.rust's haxe.Exception override is visible on the initial classpath, and CallStack.exceptionToString keeps the typed haxe.Exception contract.",
       "validation": [
+        "KEEP_ARTIFACTS=0 scripts/ci/package-smoke.sh in ../haxe.rust",
+        "test/run-snapshots.sh --case string_null_print_concat --no-diff in ../haxe.rust",
+        "test/run-snapshots.sh --case exceptions_try_catch --no-diff in ../haxe.rust",
         "haxe hxml/portable.hxml",
         "haxe hxml/metal.hxml",
         "haxe hxml/portable.codegen.hxml",
         "haxe hxml/metal.codegen.hxml",
         "experiments/codex-hxrust/scripts/check-generated-cargo.sh"
       ],
-      "followUp": "Upstream or replace this patch in haxe.rust before treating the pin as clean."
+      "resolvedBy": "0849fcf1a556cb86615cfcdf635165ba82fec8da",
+      "followUp": "No active local patch remains for this issue; keep this historical record until the next patch-ledger cleanup."
     }
   ]
 }

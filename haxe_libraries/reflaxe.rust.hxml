@@ -1,0 +1,14 @@
+# Reflaxe.Rust sibling checkout configuration.
+#
+# This mirrors the haxe.rust repo-local lix setup while keeping haxe.rust as
+# the authoritative sibling repository. It is for deterministic local builds;
+# haxelib/package smoke gates still protect released consumer behavior.
+
+-cp ${SCOPE_DIR}/../haxe.rust/src/
+-cp ${SCOPE_DIR}/../haxe.rust/std/
+
+-lib reflaxe
+
+-D reflaxe.rust=1.0.0
+--macro reflaxe.rust.CompilerBootstrap.Start()
+--macro reflaxe.rust.CompilerInit.Start()

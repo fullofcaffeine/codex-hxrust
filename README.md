@@ -11,6 +11,19 @@ The strategy is upstream-first:
 
 This is not a forked copy of Codex or haxe.rust. External repositories stay external and are tracked through pin files under `reference/`.
 
+## Local Haxe Tooling
+
+This repo uses lix-style scoped Haxe libraries for local development:
+
+```bash
+npm install
+npm run hx:portable
+npm run hx:metal
+npm run test:generated-cargo
+```
+
+`haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `experiments/codex-hxrust/scripts/check-generated-cargo.sh` green.
+
 ## Repository Status
 
 Current completed gates:
@@ -53,7 +66,7 @@ Recorded pins:
 | `reference/upstream-codex.pin.json` | Upstream Codex baseline |
 | `reference/cafex-codex.pin.json` | Cafex fork baseline |
 | `reference/haxe-rust.pin.json` | haxe.rust backend pin |
-| `reference/haxe-rust-local-patches.v1.json` | Local haxe.rust patches required by current gates |
+| `reference/haxe-rust-local-patches.v1.json` | Historical local haxe.rust patch ledger; currently records the resolved CallStack workaround |
 
 Do not vendor whole source trees into this repo unless a later Bead explicitly changes the policy.
 

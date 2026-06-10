@@ -15,6 +15,6 @@ repomix-output*.xml.zip
 
 # Haxe/Rust transient caches that may appear during local experiments
 .haxelib/
+node_modules/
 target/
 Cargo.lock.tmp
-
