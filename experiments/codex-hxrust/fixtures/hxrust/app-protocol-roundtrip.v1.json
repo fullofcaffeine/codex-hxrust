@@ -1,0 +1,294 @@
+{
+  "schema": "codex-hxrust.app-protocol-fixture.v1",
+  "source": "../codex/codex-rs/app-server-protocol/schema/json/v2",
+  "items": [
+    {
+      "id": "thread-start-request",
+      "kind": "request",
+      "method": "thread/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "thread/start",
+        "params": {
+          "cwd": "/tmp/codex-hxrust",
+          "model": "gpt-5.2-codex",
+          "modelProvider": "openai",
+          "ephemeral": true,
+          "sessionStartSource": "startup",
+          "threadSource": "codex-hxrust"
+        }
+      }
+    },
+    {
+      "id": "thread-start-response",
+      "kind": "response",
+      "method": "thread/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "thread": {
+            "id": "thread-00000000-0000-4000-8000-000000000001",
+            "sessionId": "00000000-0000-4000-8000-000000000001",
+            "cliVersion": "0.0.0-hxrust",
+            "createdAt": "2026-06-10T00:00:00Z",
+            "updatedAt": "2026-06-10T00:00:00Z",
+            "cwd": "/tmp/codex-hxrust",
+            "ephemeral": true,
+            "modelProvider": "openai",
+            "preview": "Port Codex through haxe.rust",
+            "source": "codex-hxrust",
+            "status": {
+              "type": "idle"
+            },
+            "turns": []
+          }
+        }
+      }
+    },
+    {
+      "id": "turn-start-request",
+      "kind": "request",
+      "method": "turn/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "turn/start",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "clientUserMessageId": "client-msg-1",
+          "input": [
+            {
+              "type": "text",
+              "text": "hello codex"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "turn-start-response",
+      "kind": "response",
+      "method": "turn/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+          "turn": {
+            "id": "turn-1",
+            "status": "inProgress",
+            "itemsView": "full",
+            "items": []
+          }
+        }
+      }
+    },
+    {
+      "id": "turn-interrupt-request",
+      "kind": "request",
+      "method": "turn/interrupt",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "turn/interrupt",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1"
+        }
+      }
+    },
+    {
+      "id": "turn-interrupt-response",
+      "kind": "response",
+      "method": "turn/interrupt",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {}
+      }
+    },
+    {
+      "id": "thread-read-request",
+      "kind": "request",
+      "method": "thread/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "read-1",
+        "method": "thread/read",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "includeTurns": true
+        }
+      }
+    },
+    {
+      "id": "thread-read-response",
+      "kind": "response",
+      "method": "thread/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "read-1",
+        "result": {
+          "thread": {
+            "id": "thread-00000000-0000-4000-8000-000000000001",
+            "sessionId": "00000000-0000-4000-8000-000000000001",
+            "cliVersion": "0.0.0-hxrust",
+            "createdAt": "2026-06-10T00:00:00Z",
+            "updatedAt": "2026-06-10T00:00:01Z",
+            "cwd": "/tmp/codex-hxrust",
+            "ephemeral": true,
+            "modelProvider": "openai",
+            "preview": "hello codex",
+            "source": "codex-hxrust",
+            "status": {
+              "type": "idle"
+            },
+            "turns": [
+              {
+                "id": "turn-1",
+                "status": "completed",
+                "itemsView": "full",
+                "items": [
+                  {
+                    "type": "userMessage",
+                    "id": "item-user-1",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "hello codex"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "agentMessage",
+                    "id": "item-agent-1",
+                    "text": "hello from haxe.rust"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-started-notification",
+      "kind": "notification",
+      "method": "thread/started",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/started",
+        "params": {
+          "thread": {
+            "id": "thread-00000000-0000-4000-8000-000000000001",
+            "sessionId": "00000000-0000-4000-8000-000000000001",
+            "cliVersion": "0.0.0-hxrust",
+            "createdAt": "2026-06-10T00:00:00Z",
+            "updatedAt": "2026-06-10T00:00:00Z",
+            "cwd": "/tmp/codex-hxrust",
+            "ephemeral": true,
+            "modelProvider": "openai",
+            "preview": "Port Codex through haxe.rust",
+            "source": "codex-hxrust",
+            "status": {
+              "type": "idle"
+            },
+            "turns": []
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-status-changed-notification",
+      "kind": "notification",
+      "method": "thread/status/changed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/status/changed",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "status": {
+            "type": "active",
+            "activeFlags": ["turnRunning"]
+          }
+        }
+      }
+    },
+    {
+      "id": "turn-started-notification",
+      "kind": "notification",
+      "method": "turn/started",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "turn/started",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turn": {
+            "id": "turn-1",
+            "status": "inProgress",
+            "itemsView": "full",
+            "items": []
+          }
+        }
+      }
+    },
+    {
+      "id": "turn-completed-notification",
+      "kind": "notification",
+      "method": "turn/completed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "turn/completed",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turn": {
+            "id": "turn-1",
+            "status": "completed",
+            "itemsView": "full",
+            "items": [
+              {
+                "type": "agentMessage",
+                "id": "item-agent-1",
+                "text": "hello from haxe.rust"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "error-notification",
+      "kind": "notification",
+      "method": "error",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "error",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "willRetry": false,
+          "error": {
+            "message": "turn rollback failed",
+            "codexErrorInfo": "threadRollbackFailed"
+          }
+        }
+      }
+    },
+    {
+      "id": "jsonrpc-error",
+      "kind": "error",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": 99,
+        "error": {
+          "code": -32602,
+          "message": "invalid params",
+          "data": {
+            "field": "threadId"
+          }
+        }
+      }
+    }
+  ]
+}

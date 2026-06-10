@@ -41,3 +41,28 @@ The first attempted update failed before the workaround was reapplied, proving t
 ## Deferred Gates
 
 G2 DTO/schema fixtures, G3 headless runtime fixtures, and G5 Cafex adapter fixtures do not exist yet. Future runtime-affecting haxe.rust pin updates must route through those gates once available.
+
+## Follow-Up Audit Later On 2026-06-10
+
+**Pin before audit:** `ba76e4861b0b3a30e8f572cc2bd159e0e004973e`  
+**Pin after audit:** `1f91e9e67f5fc04eca1806aa04e2cd50c2b2033d`
+
+Additional upstream commits accepted:
+
+- `d04f63f3` Record CallStack worktree restoration
+- `bb0af8d2` Polish first-project onboarding docs
+- `e739a13f` Polish generated app README
+- `76b63b07` Guard tracked generated artifacts
+- `1f91e9e6` Add hello example README
+
+Classified area from `experiments/codex-hxrust/scripts/audit-haxe-rust.sh`:
+
+- cargo/dependency/toolchain
+
+Gate run:
+
+```bash
+experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 1f91e9e67f5fc04eca1806aa04e2cd50c2b2033d
+```
+
+The updater first failed while the local `CallStack.cross.hx` workaround was absent, then passed after restoring the recorded local patch. The successful updater run executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.

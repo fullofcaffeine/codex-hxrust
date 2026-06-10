@@ -10,6 +10,8 @@ Profile policy for the scaffold:
 | `metal.hxml` | Generate metal Rust and run `cargo check`. |
 | `protocol-ids.hxml` | Compile the G2.1 protocol ID harness through portable haxe.rust. |
 | `json-boundary.hxml` | Compile the G2.2 JSON boundary harness through portable haxe.rust. |
+| `config-profile.hxml` | Compile the G2.3 config/profile DTO harness through portable haxe.rust. |
+| `app-protocol.hxml` | Compile the G2.4 app-server protocol subset harness through portable haxe.rust. |
 
 `rust_output` paths are deterministic:
 

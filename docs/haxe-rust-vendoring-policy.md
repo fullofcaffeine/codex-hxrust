@@ -13,7 +13,7 @@ Source: `reference/haxe-rust.pin.json`
 | Local path | `../haxe.rust` |
 | Remote | `git@github.com:fullofcaffeine/reflaxe.rust.git` |
 | Branch | `main` |
-| Commit | `ba76e4861b0b3a30e8f572cc2bd159e0e004973e` |
+| Commit | `1f91e9e67f5fc04eca1806aa04e2cd50c2b2033d` |
 | Package | `reflaxe.rust` `1.0.0` |
 | License | `GPL-3.0` |
 
@@ -43,7 +43,7 @@ Latest audit note: `reference/haxe-rust-audit-2026-06-10.md`.
 
 ## Upstream Audit Cadence
 
-Run an audit before changing the pin, and at least weekly while active compiler work is happening.
+Run an audit before changing the pin, and at least weekly while active compiler work is happening. During active HXCX milestone work, also run it whenever haxe.rust limitations are discovered or a local haxe.rust patch is restored/changed.
 
 Scripted audit:
 
