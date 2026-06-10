@@ -1,0 +1,29 @@
+# Harness
+
+Fixture harness work starts here.
+
+Initial fixture-run schema:
+
+```json
+{
+  "schema": "codex-hxrust.fixture-run.v1",
+  "id": "upstream.basic-one-turn",
+  "source": "upstream-codex",
+  "kind": "sse-sequence",
+  "input": {
+    "events": []
+  },
+  "expect": {
+    "notifications": [],
+    "state": {}
+  }
+}
+```
+
+Keep harness inputs credential-free.
+
+Current harnesses:
+
+- `check-doctor-json.sh` regenerates portable and metal crates, runs each generated binary, and validates the doctor JSON shape with `fixtures/hxrust/doctor-shape.v1.jq`.
+- `check-protocol-ids.sh` runs the Haxe ID round-trip harness and compiles the same harness through haxe.rust.
+- `check-json-boundary.sh` validates typed JSON boundary helpers and the serde bridge facade.

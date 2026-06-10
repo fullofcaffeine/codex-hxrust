@@ -1,0 +1,118 @@
+{
+  "schema": "codex-hxrust.fixture-sources.v1",
+  "date": "2026-06-10",
+  "baseDecision": "upstream_codex_first_cafex_adapter_later",
+  "harnessInputFormat": "codex-hxrust.fixture-run.v1",
+  "sources": [
+    {
+      "id": "upstream-app-server-json-schema",
+      "owner": "upstream-codex",
+      "pin": "reference/upstream-codex.pin.json",
+      "path": "../codex/codex-rs/app-server-protocol/schema/json",
+      "kind": "json-schema-tree",
+      "stage": "M2",
+      "count": 258,
+      "priority": "primary"
+    },
+    {
+      "id": "upstream-app-server-typescript-schema",
+      "owner": "upstream-codex",
+      "pin": "reference/upstream-codex.pin.json",
+      "path": "../codex/codex-rs/app-server-protocol/schema/typescript",
+      "kind": "typescript-schema-tree",
+      "stage": "M2",
+      "count": 557,
+      "priority": "secondary"
+    },
+    {
+      "id": "upstream-app-server-schema-fixture-generator",
+      "owner": "upstream-codex",
+      "pin": "reference/upstream-codex.pin.json",
+      "path": "../codex/codex-rs/app-server-protocol/src/schema_fixtures.rs",
+      "kind": "rust-generator-source",
+      "stage": "M2",
+      "priority": "primary"
+    },
+    {
+      "id": "upstream-core-responses-test-harness",
+      "owner": "upstream-codex",
+      "pin": "reference/upstream-codex.pin.json",
+      "path": "../codex/codex-rs/core/tests/common/responses.rs",
+      "kind": "rust-test-helper-source",
+      "stage": "M3",
+      "priority": "primary"
+    },
+    {
+      "id": "upstream-core-snapshots",
+      "owner": "upstream-codex",
+      "pin": "reference/upstream-codex.pin.json",
+      "path": "../codex/codex-rs/core/tests/suite/snapshots",
+      "kind": "insta-snapshot-tree",
+      "stage": "M3",
+      "count": 36,
+      "priority": "secondary"
+    },
+    {
+      "id": "upstream-tool-json-schema-policy",
+      "owner": "upstream-codex",
+      "pin": "reference/upstream-codex.pin.json",
+      "path": "../codex/codex-rs/tools/tests/fixtures/json_schema_policy",
+      "kind": "json-fixture-tree",
+      "stage": "M4",
+      "count": 6,
+      "priority": "secondary"
+    },
+    {
+      "id": "cafex-contract-tests",
+      "owner": "cafetera-codex",
+      "pin": "reference/cafex-codex.pin.json",
+      "path": "../fullofcaffeine/tools/cafetera/modules/codex/tests/contract",
+      "kind": "node-contract-tree",
+      "stage": "M5",
+      "count": 93,
+      "priority": "primary"
+    },
+    {
+      "id": "cafex-runtime-dto-conformance",
+      "owner": "cafetera-codex",
+      "pin": "reference/cafex-codex.pin.json",
+      "path": "../fullofcaffeine/tools/cafetera/modules/codex/tests/fixtures/cafex-runtime-dto-conformance.v1.json",
+      "kind": "json-fixture",
+      "schemaId": "cafetera.codex.runtime-dto-conformance-fixture.v1",
+      "stage": "M5",
+      "priority": "primary"
+    },
+    {
+      "id": "cafex-fork-seam-ledger",
+      "owner": "cafetera-codex",
+      "pin": "reference/cafex-codex.pin.json",
+      "path": "../fullofcaffeine/tools/cafetera/modules/codex/tests/fixtures/cafex-fork-seam-ledger.v1.json",
+      "kind": "json-fixture",
+      "schemaId": "cafetera.codex.cafex-fork-seam-ledger.v1",
+      "stage": "M5",
+      "priority": "primary"
+    }
+  ],
+  "unsupportedOrMissing": [
+    {
+      "id": "upstream-basic-one-turn-json-fixture",
+      "status": "missing",
+      "followUp": "Create credential-free fixture in M3 using upstream SSE event names."
+    },
+    {
+      "id": "cafex-adapter-before-upstream-core",
+      "status": "unsupported",
+      "followUp": "Keep Cafex fixtures inactive until M5 adapter work."
+    },
+    {
+      "id": "live-provider-traffic",
+      "status": "unsupported",
+      "followUp": "Use mock SSE/JSONL only."
+    },
+    {
+      "id": "full-app-server-schema-tree-first-pass",
+      "status": "too-broad",
+      "followUp": "Use selected M2 subset before expanding."
+    }
+  ]
+}

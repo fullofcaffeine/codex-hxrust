@@ -1,0 +1,8 @@
+-cp src
+-lib reflaxe.rust
+-D reflaxe_rust_profile=metal
+-D rust_metal_allow_fallback
+-D rust_output=generated/metal
+-D rust_crate=codex_hxrust_metal
+-D rust_no_build
+-main Main

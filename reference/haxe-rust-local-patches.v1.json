@@ -1,0 +1,23 @@
+{
+  "schema": "codex-hxrust.haxe-rust-local-patches.v1",
+  "date": "2026-06-10",
+  "basePin": "reference/haxe-rust.pin.json",
+  "observedBaseCommit": "ba76e4861b0b3a30e8f572cc2bd159e0e004973e",
+  "patches": [
+    {
+      "id": "hxrust-callstack-exception-dynamic-scaffold",
+      "path": "../haxe.rust/std/haxe/CallStack.cross.hx",
+      "status": "local-working-tree-patch",
+      "reason": "External codex-hxrust scaffold check profiles generated haxe_call_stack_call_stack_impl_.rs with an unresolved root Exception type when CallStack.exceptionToString used Exception directly.",
+      "change": "Use Dynamic and deterministic placeholder output for target-local exceptionToString until haxe.rust owns a fuller stack/exception integration fix.",
+      "validation": [
+        "haxe hxml/portable.hxml",
+        "haxe hxml/metal.hxml",
+        "haxe hxml/portable.codegen.hxml",
+        "haxe hxml/metal.codegen.hxml",
+        "experiments/codex-hxrust/scripts/check-generated-cargo.sh"
+      ],
+      "followUp": "Upstream or replace this patch in haxe.rust before treating the pin as clean."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "codex-hxrust.reference-pin.v1",
+  "name": "upstream-codex",
+  "role": "core_product_protocol_runtime_baseline",
+  "localPath": "../codex",
+  "remote": "https://github.com/openai/codex.git",
+  "branch": "main",
+  "commit": "2704ecea9a1d52ece2429da4ed5775000b59164d",
+  "license": "Apache-2.0",
+  "usage": "Implement upstream Codex DTOs, protocol/config/app-server subsets, and headless runtime semantics first."
+}

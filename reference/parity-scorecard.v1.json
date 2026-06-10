@@ -1,0 +1,74 @@
+{
+  "schema": "codex-hxrust.parity-scorecard.v1",
+  "date": "2026-06-10",
+  "decisionOutcomes": [
+    "helper-only",
+    "sidecar/headless",
+    "cafex-adapter-candidate",
+    "broader-replacement-candidate",
+    "stop"
+  ],
+  "gates": [
+    {
+      "gate": "G0",
+      "milestone": "M0",
+      "name": "Inventory and oracle",
+      "decision": "continue-to-scaffold-or-stop"
+    },
+    {
+      "gate": "G1",
+      "milestone": "M1",
+      "name": "Scaffold and compiler gates",
+      "decision": "continue-to-dto-parity-or-helper-only"
+    },
+    {
+      "gate": "G2",
+      "milestone": "M2",
+      "name": "Upstream protocol and DTO parity",
+      "decision": "continue-to-headless-runtime-or-helper-only"
+    },
+    {
+      "gate": "G3",
+      "milestone": "M3",
+      "name": "Headless one-turn runtime",
+      "decision": "continue-to-tool-state-or-sidecar-only"
+    },
+    {
+      "gate": "G4",
+      "milestone": "M4",
+      "name": "Native tool and state capability",
+      "decision": "continue-to-cafex-adapter-or-headless-only"
+    },
+    {
+      "gate": "G5",
+      "milestone": "M5",
+      "name": "Cafex adapter compatibility",
+      "decision": "target-selected-adapter-replacement-or-sidecar-only"
+    },
+    {
+      "gate": "G6",
+      "milestone": "M6",
+      "name": "Replacement review",
+      "decision": "choose-final-rollout-mode"
+    },
+    {
+      "gate": "G7",
+      "milestone": "M7",
+      "name": "haxe.rust production capability",
+      "decision": "upstream-freeze-or-stop"
+    }
+  ],
+  "hardKillCriteria": [
+    "haxe.rust cannot generate/build a minimal portable and metal scaffold",
+    "generated Rust output is too non-deterministic for CI validation",
+    "upstream app-server envelopes require pervasive Dynamic or raw Rust",
+    "credential-free one-turn fixture requires real model credentials",
+    "process/sandbox/mutation cannot fail closed by default",
+    "Cafex behavior leaks into upstream core before M5",
+    "licensing blocks intended distribution",
+    "required haxe.rust changes cannot be upstreamed, pinned, or carried safely",
+    "unsupported surfaces cannot produce structured errors",
+    "parity requires copying whole source trees instead of focused pins/manifests/fixtures"
+  ],
+  "decisionRecordTemplate": "docs/templates/gate-decision-record.md"
+}

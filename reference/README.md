@@ -1,0 +1,14 @@
+# Reference Pins
+
+This directory records small provenance artifacts for external repositories used by the codex-hxrust experiment.
+
+It should contain pins, manifests, fixture indexes, and drift reports. It should not contain copied upstream source trees.
+
+Current external references:
+
+- `upstream-codex.pin.json`: mainstream OpenAI Codex baseline.
+- `cafex-codex.pin.json`: Cafex/Cafetera fork used for later adapter seams.
+- `haxe-rust.pin.json`: haxe.rust compiler/runtime backend used by the experiment.
+- `haxe-rust-local-patches.v1.json`: local haxe.rust working-tree patches needed by current gates.
+- `fixture-sources.v1.json`: fixture family inventory and initial harness source map.
+- `parity-scorecard.v1.json`: machine-readable gate and kill-criteria summary.

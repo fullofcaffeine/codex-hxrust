@@ -1,0 +1,20 @@
+# macOS/editor noise
+.DS_Store
+*.swp
+*.swo
+
+# Local build products
+experiments/codex-hxrust/generated/*
+!experiments/codex-hxrust/generated/.gitignore
+!experiments/codex-hxrust/generated/README.md
+
+# Logs and local scratch archives
+*.log
+repomix-output*.xml
+repomix-output*.xml.zip
+
+# Haxe/Rust transient caches that may appear during local experiments
+.haxelib/
+target/
+Cargo.lock.tmp
+

@@ -1,0 +1,16 @@
+{
+  "schema": "codex-hxrust.reference-pin.v1",
+  "name": "haxe-rust",
+  "role": "haxe_to_rust_compiler_runtime_backend",
+  "localPath": "../haxe.rust",
+  "remote": "git@github.com:fullofcaffeine/reflaxe.rust.git",
+  "branch": "main",
+  "commit": "ba76e4861b0b3a30e8f572cc2bd159e0e004973e",
+  "packageName": "reflaxe.rust",
+  "packageVersion": "1.0.0",
+  "license": "GPL-3.0",
+  "vendoringDecision": "external_pinned_checkout_for_G1",
+  "policy": "docs/haxe-rust-vendoring-policy.md",
+  "localPatches": "reference/haxe-rust-local-patches.v1.json",
+  "usage": "Use as an external pinned checkout for G1. Revisit submodule only if CI/reproducibility needs require it; avoid subtree/vendor copy unless a frozen release bundle is explicitly approved."
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "codex-hxrust.reference-pin.v1",
+  "name": "cafex-codex",
+  "role": "later_adapter_seams_and_fixture_oracle",
+  "localPath": "../fullofcaffeine/deps/codex",
+  "remote": "git@github.com:fullofcaffeine/codex-caf.git",
+  "upstreamRemote": "https://github.com/openai/codex.git",
+  "branch": "caf/mounted/rust-v0.124.0-autonomy",
+  "commit": "d7379d6c66b02e43640346158e8d145595231d43",
+  "license": "Apache-2.0",
+  "usage": "Inventory Cafex seams now; implement as an adapter/conformance layer after the upstream-shaped Haxe core exists."
+}
