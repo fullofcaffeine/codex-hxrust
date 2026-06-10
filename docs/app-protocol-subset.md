@@ -44,7 +44,7 @@ Codex turn errors follow upstream intent for selected `codexErrorInfo` variants:
 
 ## Fingerprint
 
-`codexhx.protocol.app.AppProtocol.schemaFingerprintJson()` emits a deterministic subset fingerprint. HXCX-2.5 owns replacing or supplementing this with golden schema fingerprint/diff coverage against upstream generated schemas.
+`codexhx.protocol.app.AppProtocol.schemaFingerprintJson()` emits a deterministic subset fingerprint. The upstream schema golden is maintained at `reference/app-protocol-schema-fingerprints.v1.json` and checked by `experiments/codex-hxrust/harness/check-schema-fingerprints.sh`.
 
 ## Gate
 

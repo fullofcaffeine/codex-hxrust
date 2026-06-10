@@ -11,4 +11,5 @@ Current external references:
 - `haxe-rust.pin.json`: haxe.rust compiler/runtime backend used by the experiment.
 - `haxe-rust-local-patches.v1.json`: local haxe.rust working-tree patches needed by current gates.
 - `fixture-sources.v1.json`: fixture family inventory and initial harness source map.
+- `app-protocol-schema-fingerprints.v1.json`: accepted upstream app-server schema subset fingerprint for the G2 protocol gate.
 - `parity-scorecard.v1.json`: machine-readable gate and kill-criteria summary.

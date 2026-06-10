@@ -112,7 +112,7 @@ Track these gaps before claiming parity:
 | Gap | Status | Follow-up |
 | --- | --- | --- |
 | No standalone upstream one-turn JSON fixture | Missing | Create credential-free `basic-one-turn` harness fixture in M3 using upstream SSE event names |
-| No upstream Haxe DTO golden files | Missing | Generate Haxe-side schema fingerprint output in M2 |
+| No upstream Haxe DTO golden files | Covered for first app-protocol subset | `reference/app-protocol-schema-fingerprints.v1.json` and `harness/check-schema-fingerprints.sh`; expand beyond the first M2 subset as DTO coverage grows |
 | No copied fixture manifest under `experiments/` yet | Expected | Create in `HXCX-1.1` scaffold; do not copy fixtures in G0 |
 | Cafex fixtures are adapter-only | Intentional | Keep them inactive until M5 |
 | Full TUI fixtures | Unsupported for first core | Keep `oss-story.jsonl` and TUI snapshots as later evidence |

@@ -29,3 +29,4 @@ Current harnesses:
 - `check-json-boundary.sh` validates typed JSON boundary helpers and the serde bridge facade.
 - `check-config-profile.sh` validates the upstream-first config/profile DTO subset, redacted diagnostics, and unsupported field reporting.
 - `check-app-protocol.sh` validates the upstream app-server protocol subset, fixture round trips, deterministic error behavior, and schema fingerprint emission.
+- `check-schema-fingerprints.sh` compares the selected upstream app-server schema subset with the accepted golden fingerprint and writes a diff report under `generated/reports/`.
