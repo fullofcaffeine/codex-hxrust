@@ -19,10 +19,10 @@ Current completed gates:
 - `HXCX-1`: haxe.rust scaffold, portable/metal build profiles, locked generated Cargo gates, interop policy, doctor binary, haxe.rust audit tooling
 - `HXCX-2.1`: protocol ID/newtype slice
 - `HXCX-2.2`: typed JSON boundary and serde bridge facade
+- `HXCX-2.3`: upstream-first config/profile DTO subset with redacted diagnostics
 
 Next likely work:
 
-- `HXCX-2.3`: config/profile DTO subset
 - `HXCX-2.4`: protocol event/request/response subset
 - `HXCX-7.x`: upstream haxe.rust fixes discovered by the pressure test
 
@@ -94,6 +94,7 @@ From the repo root:
 experiments/codex-hxrust/harness/check-doctor-json.sh
 experiments/codex-hxrust/harness/check-protocol-ids.sh
 experiments/codex-hxrust/harness/check-json-boundary.sh
+experiments/codex-hxrust/harness/check-config-profile.sh
 experiments/codex-hxrust/scripts/check-generated-cargo.sh
 jq empty reference/*.json
 ```
@@ -106,7 +107,8 @@ Generated Rust is build output. Clean generated crates after validation unless a
 rm -rf experiments/codex-hxrust/generated/portable \
        experiments/codex-hxrust/generated/metal \
        experiments/codex-hxrust/generated/protocol-ids \
-       experiments/codex-hxrust/generated/json-boundary
+       experiments/codex-hxrust/generated/json-boundary \
+       experiments/codex-hxrust/generated/config-profile
 ```
 
 ## Current Scaffold
@@ -127,6 +129,8 @@ Protocol work currently includes:
 - JSON-RPC/MCP-style `RequestId`
 - typed JSON parse/field helpers under `codexhx.protocol.json`
 - deterministic JSON error code/path/message mapping
+- upstream-shaped config/profile DTO parsing under `codexhx.config`
+- redacted config diagnostic JSON with unsupported field listing
 
 ## Policy Highlights
 

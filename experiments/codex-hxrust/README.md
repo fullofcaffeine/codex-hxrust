@@ -44,8 +44,10 @@ This G1 scaffold is intentionally tiny. It provides:
 - harness tree
 - portable and metal hxml seeds
 - minimal root `Main` doctor entrypoint
+- protocol ID and JSON boundary harnesses
+- config/profile DTO subset harness
 
-`HXCX-1.2` owns making portable and metal profile checks green. `HXCX-1.3` owns the generated Cargo gate script for locked checks/tests. `HXCX-1.5` owns the minimal doctor JSON binary and shape harness.
+`HXCX-1.2` owns making portable and metal profile checks green. `HXCX-1.3` owns the generated Cargo gate script for locked checks/tests. `HXCX-1.5` owns the minimal doctor JSON binary and shape harness. `HXCX-2.x` owns upstream-shaped protocol, JSON, config, and runtime DTO slices.
 
 Native interop rules are documented in `../../docs/interop-boundary-policy.md`: app code stays pure Haxe; owned Rust wrappers require typed Haxe facades and fail-closed tests.
 
@@ -60,6 +62,9 @@ npx haxe hxml/metal.codegen.hxml
 npx haxe hxml/metal.hxml
 scripts/check-generated-cargo.sh
 harness/check-doctor-json.sh
+harness/check-protocol-ids.sh
+harness/check-json-boundary.sh
+harness/check-config-profile.sh
 ```
 
 The `*.codegen.hxml` files use `-D rust_no_build`; the main profile hxmls run haxe.rust's first `cargo check`; the script regenerates both crates and then runs locked Cargo checks/tests.

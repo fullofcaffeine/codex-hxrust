@@ -1,0 +1,18 @@
+{
+  "schema": "codex-hxrust.config-profile.v1",
+  "profileName": "dev-fast",
+  "model": "gpt-5.2-codex",
+  "modelProviderId": "openai",
+  "reasoningEffort": "high",
+  "approvalPolicy": "on-request",
+  "sandboxMode": "workspace-write",
+  "webSearchEnabled": true,
+  "imageGenerationEnabled": false,
+  "developerInstructions": "Prefer upstream Codex semantics before Cafex adapters.",
+  "writableRoots": [
+    "/tmp/codex-hxrust"
+  ],
+  "openaiApiKey": "sk-test-secret",
+  "cafexJailProfile": "future-adapter",
+  "unsupportedBestEffort": "listed-by-diagnostics"
+}
