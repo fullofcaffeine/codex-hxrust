@@ -40,7 +40,7 @@ Current actionable codex-hxrust compiler-gap Beads:
 
 - `codex-hxrust-rat.5` maps to haxe.rust CallStack milestone history (`haxe.rust-oo3.60`, `haxe.rust-oo3.61`, `haxe.rust-oo3.66`) and is resolved by the pinned haxe.rust dev-haxelib std ownership fix.
 - `codex-hxrust-rat.6` maps to haxe.rust Cargo handoff regression `haxe.rust-oo3.67` and is resolved by the pinned Cargo failure propagation fix.
-- `codex-hxrust-rat.7` needs a new generic haxe.rust fixture for nullable scalar lowering.
+- `codex-hxrust-rat.7` maps to haxe.rust nullable scalar regression coverage `haxe.rust-oo3.68` and is resolved by the pinned `nullable_scalar_charcode` snapshot.
 - `codex-hxrust-rat.8` relates to enum codegen history (`haxe.rust-oo3.5.1`) and needs a new generic enum payload fixture.
 - `codex-hxrust-rat.9` needs a new generic haxe.rust fixture for enum value borrowing/reuse.
 

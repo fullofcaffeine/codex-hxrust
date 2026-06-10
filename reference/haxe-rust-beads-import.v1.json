@@ -13,13 +13,13 @@
     "rule": "Keep haxe.rust authoritative and generic; codex-hxrust records pressure-test mapping and known-good pins."
   },
   "counts": {
-    "total": 535,
+    "total": 536,
     "open": 1,
     "inProgress": 0,
-    "closed": 533,
+    "closed": 534,
     "tombstone": 1,
     "epics": 95,
-    "tasks": 408,
+    "tasks": 409,
     "features": 23,
     "bugs": 6
   },
@@ -44,9 +44,11 @@
     {
       "codexBead": "codex-hxrust-rat.7",
       "title": "Improve nullable scalar lowering in simple expressions",
-      "haxeRustRefs": [],
+      "haxeRustRefs": [
+        "haxe.rust-oo3.68"
+      ],
       "priority": "P2",
-      "rationale": "Discovered by codex-hxrust protocol IDs; create a new generic haxe.rust fixture/task when implementing."
+      "rationale": "Discovered by codex-hxrust protocol IDs; resolved by the generic haxe.rust nullable_scalar_charcode snapshot that locks Null<Int> stringification/comparisons and String.charCodeAt Option comparisons."
     },
     {
       "codexBead": "codex-hxrust-rat.8",
@@ -6391,6 +6393,23 @@
       "labels": [],
       "parent": null,
       "importRole": "historical_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.68",
+      "title": "Fix nullable scalar narrowing and charCodeAt comparisons",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "codegen",
+        "codex-pressure",
+        "nullable",
+        "regression",
+        "string",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "codex_pressure_resolved"
     }
   ]
 }
