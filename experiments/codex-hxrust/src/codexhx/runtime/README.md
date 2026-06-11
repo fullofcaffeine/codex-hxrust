@@ -29,5 +29,17 @@ Future real-provider requirements:
 - `completed` when a `response_completed` event is observed and no failure event is present.
 - `failed` when provider start or parser errors occur, or when a model `response_failed` event is observed.
 - `incomplete` when the stream parses but has no terminal model event.
+- `cancelled` when `OneTurnInterruptPolicy` requests cancellation at a safe checkpoint.
 
 Provider and parser failures are returned as `OneTurnSessionOutcome.failure(...)` with a single structured `session_error` event. Later transcript/state-store work should consume this outcome instead of adding another error channel.
+
+## Cancellation
+
+HXCX-3.6 cancellation is modeled by `OneTurnInterruptPolicy`.
+
+Current safe checkpoints are:
+
+- before provider start, which returns a `cancelled` outcome with no stream id and no provider process/path to clean up;
+- after N parsed model events, which calls `ModelClient.cancelStream(handle)`, appends a terminal `session_cancelled` event, and returns partial assistant text.
+
+Partial transcripts are intentional: events observed before the checkpoint are preserved in order, then `session_cancelled` terminates the transcript. Request prompts and credentials still do not enter transcript/state artifacts. In mock mode there is no native child process; the provider tracks only active stream ids, and the cancellation harness asserts that the cancelled stream id is no longer active.

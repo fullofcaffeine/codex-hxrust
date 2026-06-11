@@ -53,6 +53,10 @@ class MockModelProvider implements ModelClient {
         return ModelStreamCancelOutcome.success(handle.streamId);
     }
 
+    public function hasActiveStream(streamId:String):Bool {
+        return activeStreamIndex(streamId) >= 0;
+    }
+
     function activeStreamIndex(streamId:String):Int {
         var i = 0;
         while (i < activeStreams.length) {

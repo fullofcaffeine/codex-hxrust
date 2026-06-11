@@ -1,0 +1,3 @@
+{"errorCode":"","errorMessage":"","itemId":"","kind":"response_created","responseId":"resp-1","text":"","totalTokens":0}
+{"errorCode":"","errorMessage":"","itemId":"","kind":"assistant_delta","responseId":"","text":"Hello","totalTokens":0}
+{"errorCode":"cancelled","errorMessage":"session cancelled at safe checkpoint","itemId":"","kind":"session_cancelled","responseId":"","text":"","totalTokens":0}

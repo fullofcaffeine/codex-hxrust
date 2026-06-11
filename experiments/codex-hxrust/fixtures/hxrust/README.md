@@ -10,3 +10,5 @@ Current fixtures:
 - `app-protocol-roundtrip.v1.json` covers the selected upstream app-server protocol request, response, notification, transcript, and error payload subset.
 - `mock-one-turn-transcript.v1.jsonl` is the deterministic transcript artifact for the mock one-turn runtime run.
 - `mock-one-turn-state.v1.json` is the deterministic state summary artifact for the same run.
+- `mock-one-turn-cancel-transcript.v1.jsonl` is the deterministic partial transcript artifact for a cancelled mock one-turn runtime run.
+- `mock-one-turn-cancel-state.v1.json` is the deterministic state summary artifact for the same cancelled run.

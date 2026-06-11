@@ -6,6 +6,14 @@ import haxe.json.Value;
 
 class MockModelStreamParser {
     public static function parseSse(stream:String):ModelStreamParseOutcome {
+        return parseSseInternal(stream, -1);
+    }
+
+    public static function parseSsePrefix(stream:String, maxEvents:Int):ModelStreamParseOutcome {
+        return parseSseInternal(stream, maxEvents);
+    }
+
+    static function parseSseInternal(stream:String, maxEvents:Int):ModelStreamParseOutcome {
         final events:Array<ModelStreamEvent> = [];
         var assistantText = "";
         var blockEvent = "";
@@ -14,6 +22,7 @@ class MockModelStreamParser {
         var blockLine = 0;
         var sawBlockContent = false;
         var failure:ModelStreamParseOutcome = null;
+        var stoppedAtEventLimit = false;
 
         function flushBlock():Void {
             if (failure != null || !sawBlockContent) {
@@ -58,6 +67,9 @@ class MockModelStreamParser {
                     assistantText = assistantText + event.text;
                 }
             }
+            if (maxEvents >= 0 && events.length >= maxEvents) {
+                stoppedAtEventLimit = true;
+            }
 
             blockEvent = "";
             dataLines.resize(0);
@@ -69,6 +81,7 @@ class MockModelStreamParser {
         final normalized = StringTools.replace(stream, "\r\n", "\n");
         final lines = normalized.split("\n");
         for (line in lines) {
+            if (stoppedAtEventLimit) break;
             final trimmed = StringTools.trim(line);
             if (trimmed.length == 0) {
                 flushBlock();
@@ -87,7 +100,7 @@ class MockModelStreamParser {
             blockLine = blockLine + 1;
         }
 
-        flushBlock();
+        if (!stoppedAtEventLimit) flushBlock();
         if (failure != null) return failure;
         return ModelStreamParseOutcome.success(events, assistantText);
     }

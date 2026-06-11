@@ -32,6 +32,12 @@ class OneTurnSessionOutcome {
         return new OneTurnSessionOutcome(false, "failed", streamId, "", [new ModelStreamEvent("session_error", "", "", "", code, message, 0)], code, path, message);
     }
 
+    public static function cancelled(streamId:String, events:Array<ModelStreamEvent>, assistantText:String):OneTurnSessionOutcome {
+        final cancelledEvents = events.copy();
+        cancelledEvents.push(new ModelStreamEvent("session_cancelled", "", "", "", "cancelled", "session cancelled at safe checkpoint", 0));
+        return new OneTurnSessionOutcome(true, "cancelled", streamId, assistantText, cancelledEvents, "", "", "");
+    }
+
     public function canonicalEventsJson():String {
         final parts:Array<String> = [];
         for (event in events) {

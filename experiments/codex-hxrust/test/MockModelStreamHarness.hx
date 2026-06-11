@@ -2,6 +2,7 @@ import codexhx.runtime.model.MockModelProvider;
 import codexhx.runtime.model.MockModelStreamParser;
 import codexhx.runtime.model.ModelStreamParseOutcome;
 import codexhx.runtime.model.ModelStreamRequest;
+import codexhx.runtime.session.OneTurnInterruptPolicy;
 import codexhx.runtime.session.OneTurnSessionOutcome;
 import codexhx.runtime.session.OneTurnSessionRunner;
 import codexhx.state.TranscriptStateStore;
@@ -13,6 +14,7 @@ class MockModelStreamHarness {
         parsesBasicOneTurnFixture();
         mockProviderStartsAndCancelsFixtureStream();
         runsOneTurnSessionToDeterministicTerminalState();
+        cancelsOneTurnSessionAtSafeCheckpoint();
         writesTranscriptAndStateArtifacts();
         reportsSessionErrorsAsStructuredEvents();
         reportsMalformedStreamsDeterministically();
@@ -56,6 +58,38 @@ class MockModelStreamHarness {
         assertEquals("mock-stream-1", outcome.streamId);
         assertEquals("Hello world", outcome.assistantText);
         assertEquals(expected, outcome.canonicalEventsJson());
+    }
+
+    static function cancelsOneTurnSessionAtSafeCheckpoint():Void {
+        final baseDir = "generated/mock-model-cancel-state";
+        resetStateDir(baseDir);
+
+        final provider = new MockModelProvider("fixtures/upstream/mock-model-basic-one-turn.sse");
+        final outcome = expectSession(OneTurnSessionRunner.runWithInterrupt(provider, new ModelStreamRequest("req-cancel-1", "mock-model", "Say hello"),
+            OneTurnInterruptPolicy.afterEvents(2)));
+        assertEquals("cancelled", outcome.terminalState);
+        assertEquals("mock-stream-1", outcome.streamId);
+        assertEquals("Hello", outcome.assistantText);
+        assertEquals("3", Std.string(outcome.events.length));
+        assertEquals("session_cancelled", outcome.events[2].kind);
+        assertEquals("cancelled", outcome.events[2].errorCode);
+        assertFalse(provider.hasActiveStream(outcome.streamId), "cancelled mock stream should not remain active");
+
+        final written = TranscriptStateStore.writeOneTurn(baseDir, outcome);
+        assertTrue(written.ok, "cancel state write should succeed");
+        final expectedTranscript = File.getContent("fixtures/hxrust/mock-one-turn-cancel-transcript.v1.jsonl");
+        final expectedState = File.getContent("fixtures/hxrust/mock-one-turn-cancel-state.v1.json");
+        final actualTranscript = File.getContent(written.transcriptPath);
+        final actualState = File.getContent(written.statePath);
+        assertEquals(expectedTranscript, actualTranscript);
+        assertEquals(expectedState, actualState);
+        assertNotContains(actualTranscript + actualState, "Say hello");
+
+        final lateProvider = new MockModelProvider("fixtures/upstream/mock-model-basic-one-turn.sse");
+        final lateOutcome = expectSession(OneTurnSessionRunner.runWithInterrupt(lateProvider, new ModelStreamRequest("req-cancel-late", "mock-model", "Say hello"),
+            OneTurnInterruptPolicy.afterEvents(99)));
+        assertEquals("completed", lateOutcome.terminalState);
+        assertEquals("5", Std.string(lateOutcome.events.length));
     }
 
     static function writesTranscriptAndStateArtifacts():Void {
