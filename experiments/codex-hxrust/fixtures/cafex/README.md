@@ -14,3 +14,4 @@ Current fixtures:
 - `caf-mode-unsupported-request.v1.json` and `caf-mode-unsupported-receipt.v1.json` cover explicit unsupported mode refusal.
 - `caf-continuity-metadata-resume.v1.json` and `caf-continuity-metadata-fresh.v1.json` cover explicit successor/predecessor metadata parsing.
 - `caf-continuity-session-receipt.v1.json` and `caf-continuity-turn-receipt-fresh.v1.json` cover receipts written from parsed continuity metadata.
+- `cafetera-contract-subset-report.v1.json` records the HXCX-5.5 selected Cafetera contract subset pass/fail/gap classification and explicitly avoids any production replacement claim.

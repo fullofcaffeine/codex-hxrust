@@ -36,3 +36,4 @@ Current harnesses:
 - `check-caf-bridge.sh` validates the HXCX-5.2 Caf effort/wake directory bridge, request consumption, pretty JSON receipts, idempotent duplicate scans, and explicit unsupported mode refusal.
 - `check-caf-continuity.sh` validates the HXCX-5.4 Caf successor/predecessor metadata parser, continuity receipt fixtures, deterministic invalid metadata, and explicit no-hidden-inference behavior.
 - `check-goals.sh` validates the HXCX-5.3 goal DTO, in-memory state transitions, model-facing goal tool subset, and explicit unsupported goal behavior.
+- `check-cafetera-contract-subset.sh` runs the HXCX-5.5 selected Cafetera Codex module contract subset against hxrust-backed harnesses and emits a pass/fail/gap report without making a production replacement claim.

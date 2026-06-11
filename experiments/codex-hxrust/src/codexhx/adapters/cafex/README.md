@@ -67,3 +67,17 @@ Effort requests currently accept `medium`, `high`, and the `xhigh` alias family 
 - Receipts: `CAF_CODEX_EFFORT_RECEIPTS_DIR`, then `CAF_CODEX_WAKE_RECEIPTS_DIR`.
 
 The live native TUI applies effort by sending app events for the next turn. This Haxe slice records the same receipt contract only; wiring those events into the eventual TUI/runtime adapter remains a later Cafex milestone.
+
+## Contract Subset Report
+
+`CafeteraContractSubsetReport` implements the HXCX-5.5 selected Cafetera Codex module contract report.
+
+The report covers only the fixture-backed receipts, bridge, goal, and continuity harnesses that currently compile and run through hxrust. Unsupported live-production surfaces are classified separately:
+
+- `unsupported_full_cafetera_cli`
+- `unsupported_live_tui_runtime`
+- `unsupported_native_restart_cutover`
+- `unsupported_mode_apply_runtime`
+- `unsupported_live_model_runtime`
+
+The report always keeps `productionReplacement: false`, `replacementClaim: none`, and scope `fixture-backed hxrust subset only`.
