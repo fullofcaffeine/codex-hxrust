@@ -63,8 +63,8 @@ jq -e --slurpfile t "$TOOL_REGISTRY" '
 jq -e --slurpfile u "$UPSTREAM_REPROS" '
   (.reusableArtifacts[] | select(.id == "haxe_rust_pressure_fixes").paths | index("reference/haxe-rust-upstream-repros.v1.json") != null)
   and (.resolvedFollowUpBeads | any(.id == "codex-hxrust-rat.2"))
-  and (.brewConversionNotes[] | select(.target == "haxe_rust_upstream_issues").note | test("two generic haxe.rust expected-failure fixtures"))
-  and $u[0].summary.totalRepros == 2
+  and (.brewConversionNotes[] | select(.target == "haxe_rust_upstream_issues").note | test("one generic haxe.rust expected-failure fixture"))
+  and $u[0].summary.totalRepros == 1
 ' "$ARCHIVE" >/dev/null
 
 jq -e '

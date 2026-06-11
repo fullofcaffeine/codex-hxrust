@@ -61,7 +61,6 @@ harness/check-replacement-go-no-go.sh
 - Plan-checkpoint continuation guard.
 - Live TUI and credentialed model runtime.
 - `haxe.io.Path.directory` lowering.
-- `String.lastIndexOf` lowering.
 - License/distribution for bundled or binary release.
 
 ## Security And Licensing Notes
@@ -82,7 +81,7 @@ harness/check-replacement-go-no-go.sh
 | Process/sandbox/mutation cannot fail closed | pass | M4 fail-closed gates exist. |
 | Cafex behavior leaks into upstream core | pass | Cafex remains under adapter modules. |
 | Licensing blocks intended distribution | accepted blocker | Blocks release/bundling, not local experiment. |
-| Required haxe.rust changes cannot be upstreamed | yellow | Seven pressure gaps resolved upstream; three gaps need follow-up. |
+| Required haxe.rust changes cannot be upstreamed | yellow | Nine pressure gaps resolved upstream; one stdlib gap needs follow-up. |
 | Unsupported surfaces cannot produce structured errors | yellow | Some live runtime surfaces are still unsupported rather than fully diagnosed. |
 | Parity requires copying whole source trees | pass | External pins and focused fixtures are used. |
 
@@ -97,7 +96,7 @@ harness/check-replacement-go-no-go.sh
 
 ## Follow-Up Beads
 
-- `codex-hxrust-rat.2`: create upstreamable haxe.rust fixtures/issues for remaining gaps.
+- None open.
 - `codex-hxrust-rat.4`: write post-experiment decision/archive record.
 
 ## Rollback / Downgrade Path

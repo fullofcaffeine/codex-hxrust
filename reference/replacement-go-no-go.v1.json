@@ -33,10 +33,10 @@
   "measuredInputs": {
     "pressureGaps": {
       "total": 10,
-      "resolvedUpstream": 8,
+      "resolvedUpstream": 9,
       "openUpstream": 0,
-      "localWorkaround": 2,
-      "upstreamRepros": 2,
+      "localWorkaround": 1,
+      "upstreamRepros": 1,
       "rawRustEscapeMatches": 0
     },
     "cafexSeamLedger": {
@@ -67,7 +67,6 @@
     "plan-checkpoint continuation guard",
     "live TUI and credentialed model runtime",
     "haxe.io.Path.directory lowering",
-    "String.lastIndexOf lowering",
     "license/distribution for bundled or binary release"
   ],
   "securityLicensingNotes": [
@@ -102,7 +101,7 @@
   "noGoCriteriaForBroadReplacement": [
     "Seven Cafex seam rows remain unsupported.",
     "Cafetera contract subset has five gaps and no production replacement claim.",
-    "haxe.rust stdlib-lowering caveats remain unresolved or unaccepted.",
+    "The haxe.io.Path.directory stdlib-lowering caveat remains unresolved or unaccepted.",
     "License/distribution review is unresolved.",
     "No broad upstream test parity or rollback drill evidence exists."
   ],

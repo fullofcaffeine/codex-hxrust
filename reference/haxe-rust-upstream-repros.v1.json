@@ -21,9 +21,9 @@
     ]
   },
   "summary": {
-    "totalRepros": 2,
-    "expectedCargoFailures": 2,
-    "openHaxeRustBeads": 2,
+    "totalRepros": 1,
+    "expectedCargoFailures": 1,
+    "openHaxeRustBeads": 1,
     "codexSpecificContextRemoved": true
   },
   "repros": [
@@ -38,18 +38,6 @@
       "expectedFailureSignature": "haxe_io_path|Path::directory|could not find",
       "upstreamableContract": "haxe.io.Path.directory should lower to a buildable Rust helper/runtime path, or the compiler should fail with a deterministic unsupported diagnostic.",
       "codexhxUse": "Adapter code keeps small local string/path helpers until haxe.rust-lj8 closes."
-    },
-    {
-      "id": "string_last_index_of",
-      "pressureGapId": "string-last-index-of-lowering",
-      "status": "expected_cargo_failure",
-      "haxeRustBead": "haxe.rust-7s4",
-      "haxeRustFixturePath": "test/repro/upstream_open_gaps/string_last_index_of",
-      "entrypoint": "Main.hx",
-      "compileFile": "compile.hxml",
-      "expectedFailureSignature": "lastIndexOf|no method named",
-      "upstreamableContract": "String.lastIndexOf, including the optional start index, should lower to buildable Rust with Haxe-compatible semantics or a deterministic unsupported diagnostic.",
-      "codexhxUse": "Adapter code keeps forward-scan helper logic until haxe.rust-7s4 closes."
     }
   ]
 }

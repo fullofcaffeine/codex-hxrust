@@ -24,8 +24,7 @@ jq -e '
 
 jq -e --slurpfile p "$PRESSURE" '
   ([.repros[].pressureGapId] | sort) == [
-    "path-directory-lowering",
-    "string-last-index-of-lowering"
+    "path-directory-lowering"
   ]
   and all(.repros[]; (.haxeRustFixturePath | startswith("test/repro/upstream_open_gaps/")))
   and all(.repros[]; (.entrypoint == "Main.hx" and .compileFile == "compile.hxml"))

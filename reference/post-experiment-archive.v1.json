@@ -92,7 +92,7 @@
         "experiments/codex-hxrust/harness/check-haxe-rust-upstream-repros.sh",
         "reference/haxe-rust-beads-import.v1.json"
       ],
-      "reuse": "Use as the conversion map from codexhx pressure findings to generic haxe.rust issues and fixtures; remaining stdlib-lowering gaps have expected-failure repros in ../haxe.rust, while nullable interface values are resolved upstream."
+      "reuse": "Use as the conversion map from codexhx pressure findings to generic haxe.rust issues and fixtures; the remaining haxe.io.Path.directory stdlib-lowering gap has an expected-failure repro in ../haxe.rust, while nullable interface values and String.lastIndexOf are resolved upstream."
     }
   ],
   "abandonedOrDeferredPaths": [
@@ -126,7 +126,7 @@
   "resolvedFollowUpBeads": [
     {
       "id": "codex-hxrust-rat.2",
-      "purpose": "Created upstreamable haxe.rust fixtures/issues for nullable interface values and stdlib path/string workarounds; nullable interface values later moved to a passing upstream snapshot."
+      "purpose": "Created upstreamable haxe.rust fixtures/issues for nullable interface values, haxe.io.Path.directory, and String.lastIndexOf; nullable interface values and String.lastIndexOf later moved to passing upstream snapshots."
     },
     {
       "id": "codex-hxrust-rat.4",
@@ -148,7 +148,7 @@
     },
     {
       "target": "haxe_rust_upstream_issues",
-      "note": "Remaining compiler work now has two generic haxe.rust expected-failure fixtures; nullable interface values are resolved upstream, and codexhx stdlib workaround dependencies stay local until the linked haxe.rust beads close."
+      "note": "Remaining compiler work now has one generic haxe.rust expected-failure fixture for haxe.io.Path.directory; nullable interface values and String.lastIndexOf are resolved upstream, and the codexhx path workaround dependency stays local until the linked haxe.rust bead closes."
     },
     {
       "target": "operator_rollout",

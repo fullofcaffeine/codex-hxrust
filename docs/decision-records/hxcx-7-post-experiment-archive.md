@@ -46,12 +46,12 @@ harness/check-post-experiment-archive.sh
 
 ## Follow-Up Beads
 
-- `codex-hxrust-rat.2`: create upstreamable haxe.rust fixtures/issues for nullable interface values and path/string stdlib workarounds; nullable interface values later resolved upstream in haxe.rust `b3e38c31`.
+- `codex-hxrust-rat.2`: create upstreamable haxe.rust fixtures/issues for nullable interface values, `haxe.io.Path.directory`, and `String.lastIndexOf`; nullable interface values later resolved upstream in haxe.rust `b3e38c31`, and String.lastIndexOf later resolved upstream in haxe.rust `916f1534`.
 
 ## Brew Conversion Notes
 
 - Selected adapter-slice review: convert Cafex adapter harness outputs into Brew/Cafetera acceptance evidence only per named slice.
-- haxe.rust upstream issues: keep the two remaining expected-failure fixtures for path/string stdlib workarounds until the linked haxe.rust beads close.
+- haxe.rust upstream issues: keep the remaining expected-failure fixture for the `haxe.io.Path.directory` stdlib workaround until the linked haxe.rust bead closes.
 - Operator rollout: any Cafetera workflow wiring must consume operator-runbook disable/rollback rules and cannot change defaults without a new decision record.
 - State backend: keep JSONL for fixture evidence; add a SQLite/sqlx or equivalent persistence spike before any persistent state replacement claim.
 - Tool registry: keep lookup fixtures; add real MCP transport/resource/OAuth/execution gates before any MCP parity claim.

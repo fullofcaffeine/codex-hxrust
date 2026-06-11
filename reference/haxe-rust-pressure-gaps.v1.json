@@ -6,10 +6,10 @@
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
     "totalGaps": 10,
-    "resolvedUpstream": 8,
+    "resolvedUpstream": 9,
     "openUpstream": 0,
-    "localWorkaround": 2,
-    "upstreamRepros": 2,
+    "localWorkaround": 1,
+    "upstreamRepros": 1,
     "severity": {
       "high": 7,
       "medium": 3,
@@ -206,28 +206,22 @@
     },
     {
       "id": "string-last-index-of-lowering",
-      "status": "local_workaround",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "cafex_adapter",
-      "codexBead": "codex-hxrust-rat.1",
+      "codexBead": "codex-hxrust-2l3",
       "haxeRustRefs": [
         "haxe.rust-7s4"
       ],
-      "upstreamRepro": {
-        "ledger": "reference/haxe-rust-upstream-repros.v1.json",
-        "fixture": "../haxe.rust/test/repro/upstream_open_gaps/string_last_index_of",
-        "runner": "../haxe.rust/scripts/ci/check-upstream-open-gap-repros.sh",
-        "currentResult": "expected_cargo_failure"
-      },
-      "resolvedBy": null,
+      "resolvedBy": "916f1534",
       "reproduction": "Caf receipt/bridge filename handling needed last separator lookup, but String.lastIndexOf lowering was not reliable enough for the adapter slice.",
-      "workaround": "Use simple forward scans or bounded helper logic in codexhx adapter code instead of depending on String.lastIndexOf.",
+      "workaround": "Resolved upstream: String.lastIndexOf lowers through hxrt::string::last_index_of with optional start-index semantics; adapter code can use native String.lastIndexOf when the local helper is retired.",
       "validation": [
-        "experiments/codex-hxrust/harness/check-caf-receipts.sh",
-        "experiments/codex-hxrust/harness/check-caf-continuity.sh",
-        "experiments/codex-hxrust/harness/check-haxe-rust-upstream-repros.sh"
-      ],
-      "followUp": "Generic haxe.rust expected-failure repro exists; keep local helper workaround until haxe.rust-7s4 closes or gains an accepted unsupported diagnostic."
+        "string_last_index_of snapshot in ../haxe.rust",
+        "std_string_dynamic snapshot in ../haxe.rust",
+        "hxrt last_index_of unit test in ../haxe.rust",
+        "experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 916f1534"
+      ]
     }
   ]
 }
