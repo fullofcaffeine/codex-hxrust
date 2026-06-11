@@ -13,13 +13,13 @@
     "rule": "Keep haxe.rust authoritative and generic; codex-hxrust records pressure-test mapping and known-good pins."
   },
   "counts": {
-    "total": 536,
+    "total": 537,
     "open": 1,
     "inProgress": 0,
-    "closed": 534,
+    "closed": 535,
     "tombstone": 1,
     "epics": 95,
-    "tasks": 409,
+    "tasks": 410,
     "features": 23,
     "bugs": 6
   },
@@ -54,10 +54,11 @@
       "codexBead": "codex-hxrust-rat.8",
       "title": "Fix generic enum codegen for typed parse results",
       "haxeRustRefs": [
-        "haxe.rust-oo3.5.1"
+        "haxe.rust-oo3.5.1",
+        "haxe.rust-oo3.69"
       ],
       "priority": "P2",
-      "rationale": "Related to enum codegen milestone history, but current generic payload regression needs a new focused haxe.rust fixture."
+      "rationale": "Related to enum codegen milestone history; resolved by haxe.rust-oo3.69 with a focused generic_enum_payload snapshot and generic enum type-parameter lowering."
     },
     {
       "codexBead": "codex-hxrust-rat.9",
@@ -6406,6 +6407,23 @@
         "nullable",
         "regression",
         "string",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "codex_pressure_resolved"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.69",
+      "title": "Fix generic enum payload codegen",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "codegen",
+        "codex-pressure",
+        "enum",
+        "generics",
+        "regression",
         "thinking:high"
       ],
       "parent": "haxe.rust-oo3",

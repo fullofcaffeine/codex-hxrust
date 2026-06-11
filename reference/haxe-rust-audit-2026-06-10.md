@@ -145,3 +145,23 @@ experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 6a673bb43624a0d4327fa67
 ```
 
 The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+
+## Follow-Up Audit After Generic Enum Payload Fix On 2026-06-10
+
+**Pin before audit:** `6a673bb43624a0d4327fa6709fb24f7e971dd121`
+
+**Pin after audit:** `f521fdb242a7de5f2194633deef6caa3392bafe9`
+
+Additional upstream commit accepted:
+
+- `f521fdb2` Fix generic enum payload codegen
+
+This resolves the codex-hxrust pressure gap where generic Haxe enum payloads such as `IdParseResult<T>` could emit Rust with unbound type parameters. haxe.rust now threads enum type parameters through Rust enum declarations and `TEnum` use-site type rendering, with a generic `generic_enum_payload` snapshot.
+
+Gate run:
+
+```bash
+experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh f521fdb242a7de5f2194633deef6caa3392bafe9
+```
+
+The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The protocol ID harness also passed against the new pin.
