@@ -1,0 +1,174 @@
+{
+  "schema": "codex-hxrust.migration-modes.v1",
+  "bead": "HXCX-6.2",
+  "generatedAt": "2026-06-11T00:00:00Z",
+  "decisionRecordFeed": "HXCX-6.3",
+  "principles": {
+    "completionIsModeSpecific": true,
+    "upstreamTestsNecessaryForBroadReplacement": true,
+    "upstreamTestsSufficientForBroadReplacement": false,
+    "noModeBypassesContracts": true,
+    "defaultRecommendation": "sidecar_or_selected_adapter_slice"
+  },
+  "modes": [
+    {
+      "id": "helper_only",
+      "title": "Helper-only",
+      "claim": "codexhx is tooling: DTOs, codecs, schema fingerprints, fixture transforms, reports, and haxe.rust pressure tests. It does not run Codex turns.",
+      "entryCriteria": [
+        "G1 compiler scaffold and doctor gates pass for portable and metal profiles.",
+        "Any used upstream/Cafex schemas have fixture or fingerprint evidence.",
+        "No runtime, process, sandbox, model, or TUI authority is exposed."
+      ],
+      "exitCriteria": [
+        "All helper outputs are reproducible from pinned upstream or Cafex sources.",
+        "Unsupported runtime surfaces are documented as not applicable.",
+        "Generated Rust remains disposable and is not presented as a runtime artifact."
+      ],
+      "completionGate": [
+        "Every helper surface has a committed fixture, fingerprint, or report.",
+        "Every skipped upstream test is classified as outside helper-only scope.",
+        "No user-facing command can imply runtime replacement."
+      ],
+      "rollbackPath": [
+        "Remove helper commands from the calling workflow or revert the single helper package/pin.",
+        "Keep upstream Codex/Cafex runtime unchanged.",
+        "Delete generated outputs; do not migrate persistent state."
+      ],
+      "operatorImpact": [
+        "No production runtime behavior changes.",
+        "Operators may see additional reports or diagnostics only when helper commands are invoked."
+      ],
+      "developerImpact": [
+        "Developers maintain Haxe fixtures and haxe.rust pins.",
+        "Compiler gaps found here are filed as generic haxe.rust issues."
+      ],
+      "contractRequirements": [
+        "Schema fingerprints must match the pinned source or be intentionally accepted in a decision record.",
+        "Fixture transforms must be deterministic and credential-free."
+      ],
+      "contractBypassAllowed": false
+    },
+    {
+      "id": "sidecar_headless",
+      "title": "Sidecar/headless",
+      "claim": "codexhx can run selected credential-free or controlled headless Codex-compatible flows beside upstream Codex.",
+      "entryCriteria": [
+        "Helper-only completion gate is green.",
+        "G2 upstream protocol/DTO subset and G3 headless one-turn gates pass.",
+        "Native tool/state gates used by the sidecar fail closed by default.",
+        "Unsupported commands return structured errors."
+      ],
+      "exitCriteria": [
+        "Selected headless workflows pass fixture parity in Haxe and generated Cargo gates.",
+        "State and transcript artifacts are normalized and replayable.",
+        "The sidecar can be disabled without changing upstream Codex runtime behavior."
+      ],
+      "completionGate": [
+        "Every sidecar command has start/status/transcript/error fixture evidence.",
+        "Provider/model behavior is mockable or controlled; no basic gate requires live credentials.",
+        "Every skipped upstream runtime test is mapped to unsupported, native, or future work."
+      ],
+      "rollbackPath": [
+        "Disable the sidecar integration flag or remove the sidecar binary from the caller path.",
+        "Route traffic back to upstream Codex/Cafex.",
+        "Preserve sidecar state for diagnostics, then delete it after handoff if no migration is required."
+      ],
+      "operatorImpact": [
+        "Operators get a separate process or command surface with its own structured diagnostics.",
+        "Failure should fall back to upstream Codex/Cafex rather than partially continuing inside codexhx."
+      ],
+      "developerImpact": [
+        "Developers maintain protocol adapters, runtime fixtures, state normalization, and generated Cargo gates.",
+        "Unsupported live UI and host-effect surfaces stay explicit."
+      ],
+      "contractRequirements": [
+        "App-server/debug JSONL protocol shape must match selected upstream contracts.",
+        "Tool, sandbox, process, and state wrappers must fail closed before mutation is enabled."
+      ],
+      "contractBypassAllowed": false
+    },
+    {
+      "id": "selected_adapter_slice",
+      "title": "Selected adapter-slice replacement",
+      "claim": "codexhx may replace named Cafex adapter slices while upstream Codex or the Cafex fork still owns the remaining runtime.",
+      "entryCriteria": [
+        "Sidecar/headless completion gate is green for the slice dependencies.",
+        "G5 Cafex contract subset passes for every selected slice.",
+        "The Cafex hxrust seam ledger marks every selected row supported and every unselected row unsupported, native, or out of scope.",
+        "The HXCX-6.1 friction comparison shows positive maintenance value for the selected slice."
+      ],
+      "exitCriteria": [
+        "Each selected slice has contract fixtures, rollback commands, operator diagnostics, and owner sign-off.",
+        "No selected slice depends on an unsupported live TUI, restart, queue, sandbox, or credentialed-provider path unless that path is a typed native boundary.",
+        "Cafex fork behavior can be restored without data loss."
+      ],
+      "completionGate": [
+        "Every selected seam-ledger row is supported with implementation, fixture, and harness evidence.",
+        "Every adjacent unselected seam has a fail-closed diagnostic or explicit native owner.",
+        "Cafetera contract tests for the selected slice are passing or have accepted not-applicable records."
+      ],
+      "rollbackPath": [
+        "Flip the selected slice routing back to the Cafex fork implementation.",
+        "Retain generated receipts/state snapshots for comparison.",
+        "Do not delete Cafex fork patch support until at least one replacement-review record accepts the slice."
+      ],
+      "operatorImpact": [
+        "Operators may run mixed ownership: codexhx for selected adapter files/receipts, Cafex fork for live runtime.",
+        "Diagnostics must identify which runtime owns each failed request."
+      ],
+      "developerImpact": [
+        "Developers maintain the adapter boundary and contract fixtures for each selected slice.",
+        "New haxe.rust limitations are fixed in haxe.rust generically, not with codexhx-only compiler behavior."
+      ],
+      "contractRequirements": [
+        "Cafex request/receipt schemas and newline/pretty JSON conventions must remain exact.",
+        "Unknown schemas and unsupported live operations must fail closed.",
+        "Adapter code must not leak Cafex-only behavior into upstream-shaped core modules."
+      ],
+      "contractBypassAllowed": false
+    },
+    {
+      "id": "broad_replacement",
+      "title": "Broader replacement candidate",
+      "claim": "codexhx can replace larger Codex/Cafex runtime surfaces for an explicitly bounded distribution.",
+      "entryCriteria": [
+        "Selected adapter-slice completion gate is green for all replacement dependencies.",
+        "All upstream tests for the claimed surface pass, are ported with equivalent assertions, or have accepted not-applicable records.",
+        "All Cafex seam-ledger rows are supported, explicitly native, or accepted as out of scope in a decision record.",
+        "Security, licensing, distribution, rollback, haxe.rust production-readiness, and support-cost reviews are complete."
+      ],
+      "exitCriteria": [
+        "No unclassified upstream test gaps remain for the claimed surface.",
+        "No unclassified Cafex seam gaps remain for the claimed surface.",
+        "Operators can disable or roll back the replacement without orphaned state or unclear ownership.",
+        "haxe.rust updates are pinned, reproducible, and upstreamable."
+      ],
+      "completionGate": [
+        "Upstream tests passing is necessary but not sufficient.",
+        "The unsupported-surface ledger for the claimed rollout mode is empty or each remaining item has an accepted native/adapted boundary.",
+        "Operational drills prove rollback, diagnostics, and state preservation.",
+        "Decision records accept residual security/licensing/support risks."
+      ],
+      "rollbackPath": [
+        "Pin and retain the last known-good upstream Codex/Cafex runtime for immediate restoration.",
+        "Keep state migration reversible or run in shadow mode until reverse migration is proven.",
+        "Disable codexhx routing globally before attempting partial repair."
+      ],
+      "operatorImpact": [
+        "Operators depend on codexhx for runtime behavior inside the claimed surface.",
+        "Runbooks must cover version pins, diagnostics, rollback, and mixed-version state."
+      ],
+      "developerImpact": [
+        "Developers maintain broad parity against upstream Codex and Cafex plus haxe.rust production gates.",
+        "Upstream drift and compiler drift become release-blocking risks."
+      ],
+      "contractRequirements": [
+        "Upstream protocol, app-server, config, runtime, tools, state, and security contracts must be green for the claimed surface.",
+        "Cafex/Cafetera contracts must be green or explicitly native/adapted.",
+        "No contract may be skipped by routing around codexhx without a decision record."
+      ],
+      "contractBypassAllowed": false
+    }
+  ]
+}

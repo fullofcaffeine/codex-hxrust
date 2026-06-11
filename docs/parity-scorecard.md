@@ -27,6 +27,8 @@
 | G6 | M6 replacement review | Is rollout/revert/support risk acceptable? | Choose helper/sidecar/adapter/replacement mode |
 | G7 | M7 haxe.rust report | Are compiler gaps upstreamable and production-sustainable? | File upstream work, freeze, or stop |
 
+G6 rollout mode criteria are detailed in `docs/migration-modes-rollout.md` and the checked fixture `reference/migration-modes.v1.json`. Upstream tests passing is necessary for broad replacement, but completion is mode-specific and requires no unclassified gaps for the selected mode.
+
 ## Scorecard
 
 Each area receives one of:
