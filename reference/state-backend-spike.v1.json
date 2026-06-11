@@ -1,0 +1,111 @@
+{
+  "schema": "codex-hxrust.state-backend-spike.v1",
+  "bead": "HXCX-4.4",
+  "date": "2026-06-11",
+  "gate": "G4",
+  "owner": "Marcelo Serpa",
+  "decision": {
+    "currentExperimentBackend": "jsonl_plain_files",
+    "replacementGateRequirement": "sqlite_or_equivalent_required_for_persistent_goal_runtime_or_app_server_state_replacement",
+    "productionStateMigrationImplied": false,
+    "summary": "Keep JSONL/plain-file state for credential-free fixture and headless evidence. Require SQLite/sqlx or equivalent production persistence parity before any slice claims persistent goal, runtime, or app-server state replacement."
+  },
+  "jsonl": {
+    "ownedSurfaces": [
+      {
+        "id": "one_turn_transcript",
+        "artifact": "experiments/codex-hxrust/src/codexhx/state/TranscriptStateStore.hx",
+        "shape": "transcript.jsonl"
+      },
+      {
+        "id": "one_turn_state_summary",
+        "artifact": "experiments/codex-hxrust/src/codexhx/state/TranscriptStateStore.hx",
+        "shape": "state.json"
+      },
+      {
+        "id": "cancelled_transcript_state",
+        "artifact": "experiments/codex-hxrust/fixtures/hxrust/mock-one-turn-cancel-state.v1.json",
+        "shape": "partial transcript plus terminal cancellation"
+      },
+      {
+        "id": "headless_adapter_transcript",
+        "artifact": "experiments/codex-hxrust/harness/check-headless-jsonl-adapter.sh",
+        "shape": "credential-free command JSONL"
+      }
+    ],
+    "strengths": [
+      "human-inspectable fixture output",
+      "deterministic git-diffable artifacts",
+      "easy reset by deleting experiment output directories",
+      "credential-free current state surface",
+      "no native database packaging burden for helper/headless mode"
+    ],
+    "limitations": [
+      "no multi-writer or cross-process transaction guarantee",
+      "no indexed relational query support for goals, threads, or app-server views",
+      "no production schema migration framework",
+      "no compatibility claim for upstream or Cafex SQLite files",
+      "no lock, backup, compaction, or corruption-recovery policy beyond structured JSON parse errors",
+      "no durable atomic batch across transcript, state, goal, and tool records"
+    ]
+  },
+  "sqliteSqlx": {
+    "requiredFor": [
+      "persistent goal parity",
+      "app-server state method parity",
+      "concurrent multi-session runtime state",
+      "schema migrations and downgrade behavior",
+      "backup and rollback drills",
+      "upstream or Cafex SQLite compatibility such as goals_1.sqlite"
+    ],
+    "wrapperCost": {
+      "estimate": "medium_high",
+      "minimumFollowUpBeads": 2,
+      "tasklets": [
+        "select sqlx, rusqlite, or another native Rust owner with license and async/blocking review",
+        "design a typed Haxe facade that isolates native persistence behind generic haxe.rust externs",
+        "add schema fingerprints, migration IDs, current-version checks, and downgrade behavior",
+        "export deterministic JSON evidence from database rows for fixture comparison",
+        "normalize locked, missing, corrupt, permission, and migration errors into stable diagnostics",
+        "define single-writer or pooled concurrency and transaction ownership",
+        "document backup and rollback before mutation",
+        "compare goals_1.sqlite or any runtime database contract against upstream/Cafex pins before use"
+      ]
+    }
+  },
+  "replacementGate": {
+    "helperOnly": "jsonl_plain_files_sufficient",
+    "sidecarHeadless": "jsonl_plain_files_sufficient_for_fixture_backed_credential_free_state",
+    "selectedAdapterSlice": "jsonl_sufficient_unless_slice_claims_persistent_goal_runtime_or_app_server_state_parity",
+    "broadReplacement": "sqlite_or_equivalent_persistence_parity_required_before_review"
+  },
+  "noProductionMigration": {
+    "implied": false,
+    "rules": [
+      "do not rewrite existing upstream or Cafex SQLite state",
+      "do not import production state into codexhx by default",
+      "do not delete or compact production state from codexhx",
+      "require a later migration decision record and rollback drill before any production state mutation"
+    ]
+  },
+  "evidence": {
+    "stateReadme": "experiments/codex-hxrust/src/codexhx/state/README.md",
+    "goalStateReadme": "experiments/codex-hxrust/src/codexhx/state/goals/README.md",
+    "parityScorecard": "docs/parity-scorecard.md",
+    "g6Decision": "reference/replacement-go-no-go.v1.json"
+  },
+  "followUp": [
+    {
+      "id": "codex-hxrust-hpu.5",
+      "purpose": "Add MCP/tool registry compatibility skeleton."
+    },
+    {
+      "id": "future-haxe-rust-sqlite-native-boundary-spike",
+      "purpose": "Create a generic haxe.rust SQLite/native-boundary pressure test before codexhx depends on persistent database semantics."
+    },
+    {
+      "id": "future-codexhx-sqlite-state-adapter",
+      "purpose": "Implement codexhx SQLite state adapter only after the generic compiler/native wrapper spike is accepted."
+    }
+  ]
+}

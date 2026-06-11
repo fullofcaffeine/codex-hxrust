@@ -22,3 +22,5 @@ Explicitly not implemented in this slice:
 - thread preview side effects
 
 Those remain upstream/Cafex conformance work for later milestones.
+
+Per `docs/state-backend-spike.md`, SQLite/sqlx is a replacement gate for persistent goal parity. This in-memory subset may support helper/headless and selected fixture-backed adapter work, but it must not be described as production goal persistence.

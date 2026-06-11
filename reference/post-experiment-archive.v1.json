@@ -53,11 +53,22 @@
       "paths": [
         "reference/migration-modes.v1.json",
         "reference/operator-runbook.v1.json",
+        "reference/state-backend-spike.v1.json",
         "reference/replacement-go-no-go.v1.json",
         "reference/haxe-rust-production-readiness.v1.json",
         "reference/haxe-rust-pressure-gaps.v1.json"
       ],
       "reuse": "Keep as the evidence bundle for HXCX-6/HXCX-7 and future replacement review."
+    },
+    {
+      "id": "state_backend_decision",
+      "kind": "reference",
+      "paths": [
+        "docs/state-backend-spike.md",
+        "reference/state-backend-spike.v1.json",
+        "experiments/codex-hxrust/harness/check-state-backend-spike.sh"
+      ],
+      "reuse": "Keep JSONL/plain-file state for fixture evidence; require SQLite/sqlx or equivalent persistence before persistent state replacement."
     },
     {
       "id": "haxe_rust_pressure_fixes",
@@ -103,10 +114,6 @@
       "purpose": "Create upstreamable haxe.rust fixtures/issues for nullable interface values and stdlib path/string workarounds."
     },
     {
-      "id": "codex-hxrust-hpu.4",
-      "purpose": "Decide JSONL versus SQLite state backend before any stronger runtime replacement claim."
-    },
-    {
       "id": "codex-hxrust-hpu.5",
       "purpose": "Add MCP/tool registry compatibility skeleton for future tool parity."
     }
@@ -125,12 +132,17 @@
       "note": "Any Cafetera workflow wiring should consume operator-runbook disable/rollback rules and must not change defaults without a new decision record."
     },
     {
+      "target": "state_backend",
+      "note": "Keep JSONL/plain files for fixture evidence; add SQLite/sqlx or equivalent persistence proof before persistent goal/runtime/app-server replacement claims."
+    },
+    {
       "target": "archive_bundle",
       "note": "Preserve docs, reference ledgers, fixtures, and harnesses; do not preserve generated Rust as source."
     }
   ],
   "finalChecks": [
     "experiments/codex-hxrust/harness/check-replacement-go-no-go.sh",
+    "experiments/codex-hxrust/harness/check-state-backend-spike.sh",
     "experiments/codex-hxrust/harness/check-haxe-rust-production-readiness.sh",
     "experiments/codex-hxrust/harness/check-haxe-rust-pressure-gaps.sh"
   ]

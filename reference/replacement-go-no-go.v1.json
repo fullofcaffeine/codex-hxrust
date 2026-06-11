@@ -23,6 +23,7 @@
     "frictionComparison": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json",
     "migrationModes": "reference/migration-modes.v1.json",
     "operatorRunbook": "reference/operator-runbook.v1.json",
+    "stateBackendSpike": "reference/state-backend-spike.v1.json",
     "productionReadiness": "reference/haxe-rust-production-readiness.v1.json",
     "cafexSeamLedger": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
     "cafeteraContractSubset": "experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json"
@@ -70,9 +71,17 @@
   "securityLicensingNotes": [
     "Process execution, sandbox permission, diagnostics redaction, and mutation paths remain fail-closed fixture-backed surfaces.",
     "Real OS sandbox enforcement and live host-effect ownership remain native/future boundaries.",
+    "JSONL/plain-file state is accepted only for current fixture-backed helper/headless evidence; persistent state replacement requires SQLite/sqlx or equivalent production persistence parity.",
     "haxe.rust is GPL-3.0; upstream Codex and Cafex are Apache-2.0. Local experiment may continue, but release/bundling requires license review.",
     "No production default may change without a later decision record and rollback drill."
   ],
+  "stateBackendDecision": {
+    "source": "reference/state-backend-spike.v1.json",
+    "currentExperimentBackend": "jsonl_plain_files",
+    "selectedSliceRule": "JSONL is sufficient unless the named slice claims persistent goal, runtime, or app-server state parity.",
+    "broadReplacementRequirement": "SQLite/sqlx or equivalent production persistence parity is required before broad replacement review.",
+    "productionStateMigrationImplied": false
+  },
   "goCriteriaForSelectedSlice": [
     "Selected seam-ledger rows are supported with implementation, fixture, and harness evidence.",
     "Adjacent unsupported seams have fail-closed diagnostics or explicit native owner.",
@@ -90,7 +99,6 @@
   "followUpBeads": [
     "codex-hxrust-rat.2",
     "codex-hxrust-rat.4",
-    "codex-hxrust-hpu.4",
     "codex-hxrust-hpu.5"
   ],
   "rollbackDowngradePath": [

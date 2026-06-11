@@ -13,6 +13,7 @@ Current external references:
 - `haxe-rust-beads-import.v1.json`: compact imported reference map of the haxe.rust Beads ledger and codex-hxrust compiler-gap mappings.
 - `haxe-rust-pressure-gaps.v1.json`: HXCX-7.1 compiler/runtime/interop pressure-gap ledger with reproduction, severity, workaround, source-area, and raw Rust escape-pressure counts.
 - `haxe-rust-production-readiness.v1.json`: HXCX-7.3 haxe.rust capability scorecard and evidence-backed go/no-go recommendation for replacement review.
+- `state-backend-spike.v1.json`: HXCX-4.4 JSONL versus SQLite state backend decision with replacement-gate and no-production-migration rules.
 - `replacement-go-no-go.v1.json`: HXCX-6.3 G6 replacement decision selecting selected adapter-slice mode and rejecting broad replacement for current evidence.
 - `post-experiment-archive.v1.json`: HXCX-7.4 archive record preserving reusable outputs, deferred paths, and follow-up conversion notes.
 - `fixture-sources.v1.json`: fixture family inventory and initial harness source map.

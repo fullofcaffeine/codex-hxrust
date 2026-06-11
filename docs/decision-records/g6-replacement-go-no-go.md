@@ -34,6 +34,7 @@ harness/check-replacement-go-no-go.sh
 | `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json` | selected slices only | hxrust reduces rebase friction only for supported fixture-backed rows. |
 | `reference/migration-modes.v1.json` | selected adapter-slice allowed | Upstream tests are necessary but not sufficient for broad replacement. |
 | `reference/operator-runbook.v1.json` | production default disabled | Rollback, disable, distribution, and diagnostics are documented. |
+| `reference/state-backend-spike.v1.json` | JSONL accepted for current experiment; SQLite required for persistent state replacement | No production state migration is implied. |
 | `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | 7 supported, 7 unsupported, 1 review-only | Unsupported surfaces are explicit. |
 | `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` | 4 covered/pass, 5 gaps | No production replacement claim. |
 
@@ -44,7 +45,7 @@ harness/check-replacement-go-no-go.sh
 | build | green | generated Cargo gates and pin workflow exist | keep pin updates gated |
 | protocol | green | protocol/JSON/schema fixtures are active | expand upstream parity as scope grows |
 | runtime | yellow | credential-free headless runtime works | live model/TUI/restart stay unsupported |
-| tools/state | yellow | process, sandbox, diagnostics, apply-patch gates fail closed | JSONL vs SQLite and MCP skeleton remain open |
+| tools/state | yellow | process, sandbox, diagnostics, apply-patch gates fail closed; JSONL state is accepted for current fixtures | SQLite remains a gate for persistent state replacement; MCP skeleton remains open |
 | Cafex adapter | yellow | selected receipt/bridge/goal/continuity fixtures pass | 7 seam rows unsupported |
 | security | yellow | fail-closed wrappers and diagnostics redaction exist | real OS sandbox and production drills remain |
 | licensing | red-for-release | haxe.rust GPL-3.0, Codex/Cafex Apache-2.0 | review before bundling or binary distribution |
@@ -89,6 +90,7 @@ harness/check-replacement-go-no-go.sh
 
 - Selected adapter-slice work may still uncover generic haxe.rust compiler gaps.
 - Helper/headless success does not imply live TUI/model/runtime ownership.
+- JSONL state evidence does not imply persistent goal/runtime/app-server state parity; SQLite/sqlx or equivalent production persistence remains required for that claim.
 - License/distribution review is deferred but blocks any release.
 - Cafex fork remains required for unsupported live runtime seams.
 
@@ -96,7 +98,6 @@ harness/check-replacement-go-no-go.sh
 
 - `codex-hxrust-rat.2`: create upstreamable haxe.rust fixtures/issues for remaining gaps.
 - `codex-hxrust-rat.4`: write post-experiment decision/archive record.
-- `codex-hxrust-hpu.4`: finish JSONL versus SQLite state backend decision.
 - `codex-hxrust-hpu.5`: add MCP/tool registry compatibility skeleton.
 
 ## Rollback / Downgrade Path

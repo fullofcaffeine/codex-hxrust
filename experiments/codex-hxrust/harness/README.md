@@ -36,6 +36,7 @@ Current harnesses:
 - `check-apply-patch-dry-run.sh` validates the HXCX-4.1 apply-patch dry-run wrapper, deterministic error cases, safe relative-path policy, and mutation-disabled default.
 - `check-process-exec.sh` validates the HXCX-4.2 process exec wrapper, exact approval policy, denied-command no-exec proof, deterministic stdout/stderr truncation, and exit-code mapping.
 - `check-sandbox-gate.sh` validates the HXCX-4.3 fail-closed sandbox permission gate, unsupported-platform denial, policy decisions, absent bypass path, and security-review fixture.
+- `check-state-backend-spike.sh` validates the HXCX-4.4 JSONL versus SQLite state backend decision, JSONL limitations, SQLite/sqlx wrapper cost estimate, replacement-gate rule, and no-production-migration guard.
 - `check-caf-receipts.sh` validates the HXCX-5.1 Caf session/turn receipt writer, absent-env no-ops, pretty JSON fixtures, overwrite behavior, and unsupported source failures.
 - `check-caf-bridge.sh` validates the HXCX-5.2 Caf effort/wake directory bridge, request consumption, pretty JSON receipts, idempotent duplicate scans, and explicit unsupported mode refusal.
 - `check-caf-continuity.sh` validates the HXCX-5.4 Caf successor/predecessor metadata parser, continuity receipt fixtures, deterministic invalid metadata, and explicit no-hidden-inference behavior.

@@ -6,6 +6,7 @@ REPO_ROOT="$(cd "$ROOT/../.." && pwd)"
 ARCHIVE="${REPO_ROOT}/reference/post-experiment-archive.v1.json"
 G6="${REPO_ROOT}/reference/replacement-go-no-go.v1.json"
 READINESS="${REPO_ROOT}/reference/haxe-rust-production-readiness.v1.json"
+STATE_BACKEND="${REPO_ROOT}/reference/state-backend-spike.v1.json"
 
 jq -e '
   .schema == "codex-hxrust.post-experiment-archive.v1"
@@ -32,9 +33,17 @@ jq -e --slurpfile r "$READINESS" '
 jq -e '
   (.reusableArtifacts | length) >= 5
   and (.abandonedOrDeferredPaths | length) >= 5
-  and (.followUpBeads | length) >= 3
+  and (.followUpBeads | length) >= 2
   and (.brewConversionNotes | length) >= 4
   and (.finalChecks | index("experiments/codex-hxrust/harness/check-replacement-go-no-go.sh") != null)
+  and (.finalChecks | index("experiments/codex-hxrust/harness/check-state-backend-spike.sh") != null)
+' "$ARCHIVE" >/dev/null
+
+jq -e --slurpfile s "$STATE_BACKEND" '
+  (.reusableArtifacts[] | select(.id == "state_backend_decision").paths | index("reference/state-backend-spike.v1.json") != null)
+  and ((.followUpBeads | any(.id == "codex-hxrust-hpu.4")) | not)
+  and (.brewConversionNotes[] | select(.target == "state_backend").note | test("SQLite"))
+  and $s[0].decision.productionStateMigrationImplied == false
 ' "$ARCHIVE" >/dev/null
 
 jq -e '

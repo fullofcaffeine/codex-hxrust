@@ -30,6 +30,7 @@ harness/check-post-experiment-archive.sh
 | Native tool/security harnesses | apply-patch dry-run, process exec, sandbox gate, diagnostics | Fail-closed host-effect and diagnostic proof. |
 | Cafex adapter harnesses | receipts, bridge, continuity, goals, contract subset | Selected adapter-slice evidence only. |
 | Decision ledgers | migration modes, operator runbook, G6 decision, readiness, pressure gaps | Evidence bundle for future replacement review. |
+| State backend decision | JSONL versus SQLite spike | JSONL is reusable for fixture evidence; SQLite remains required for persistent state replacement. |
 | haxe.rust pressure findings | direct workflow, pressure gap ledger, beads import | Generic compiler issue/fixture conversion map. |
 
 ## Abandoned Or Deferred Paths
@@ -45,7 +46,6 @@ harness/check-post-experiment-archive.sh
 ## Follow-Up Beads
 
 - `codex-hxrust-rat.2`: create upstreamable haxe.rust fixtures/issues for nullable interface values and path/string stdlib workarounds.
-- `codex-hxrust-hpu.4`: decide JSONL versus SQLite state backend.
 - `codex-hxrust-hpu.5`: add MCP/tool registry compatibility skeleton.
 
 ## Brew Conversion Notes
@@ -53,6 +53,7 @@ harness/check-post-experiment-archive.sh
 - Selected adapter-slice review: convert Cafex adapter harness outputs into Brew/Cafetera acceptance evidence only per named slice.
 - haxe.rust upstream issues: convert remaining compiler work into generic haxe.rust fixtures before codexhx depends on it.
 - Operator rollout: any Cafetera workflow wiring must consume operator-runbook disable/rollback rules and cannot change defaults without a new decision record.
+- State backend: keep JSONL for fixture evidence; add a SQLite/sqlx or equivalent persistence spike before any persistent state replacement claim.
 - Archive bundle: preserve docs, reference ledgers, fixtures, and harnesses; do not preserve generated Rust as source.
 
 ## Final Notes

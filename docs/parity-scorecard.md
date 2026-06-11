@@ -89,7 +89,7 @@ Each area receives one of:
 | Process wrapper | Exec is denied by default and requires explicit approval config. | Any fixture can run arbitrary commands by default. |
 | Apply-patch wrapper | Dry-run apply-patch works before mutation is allowed. | Mutation is required before dry-run parity exists. |
 | Sandbox gate | Unsupported sandbox platforms fail closed with structured errors. | Unsupported platform silently runs without sandbox policy. |
-| State backend | JSONL or SQLite spike has clear ownership and migration story. | State cannot be inspected, replayed, or safely reset. |
+| State backend | JSONL/plain files have clear experiment ownership; SQLite/sqlx or equivalent production persistence is a replacement gate for persistent state parity. | State cannot be inspected, replayed, safely reset, or bounded away from production migration. |
 | Diagnostics | Tool output truncation, exit codes, and errors are fixture-comparable. | Tool results differ across runs without documented normalization. |
 
 ### G5: Cafex Adapter Compatibility
@@ -154,5 +154,7 @@ Required fields:
 No gate should be marked green without at least one committed artifact or repeatable command.
 
 The G6 replacement decision is recorded in `docs/decision-records/g6-replacement-go-no-go.md` and checked by `reference/replacement-go-no-go.v1.json`.
+
+The HXCX-4.4 state backend decision is recorded in `docs/state-backend-spike.md` and checked by `reference/state-backend-spike.v1.json`.
 
 The HXCX-7 archive decision is recorded in `docs/decision-records/hxcx-7-post-experiment-archive.md` and checked by `reference/post-experiment-archive.v1.json`.

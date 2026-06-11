@@ -11,6 +11,14 @@ Pure state transitions and transcript/store abstractions live here.
 
 Filesystem, SQLite, or host-specific persistence should enter through explicit adapters.
 
+The current backend decision is recorded in `../../../../../docs/state-backend-spike.md` and checked by `../../harness/check-state-backend-spike.sh`.
+
+Summary:
+
+- JSONL/plain-file state is sufficient for current helper, headless, and credential-free fixture evidence.
+- SQLite/sqlx or equivalent production persistence parity is required before any slice claims persistent goal, runtime, or app-server state replacement.
+- No production state migration is implied by the current experiment.
+
 ## TranscriptStateStore
 
 `TranscriptStateStore` is the HXCX-3.5 minimal persistence slice for a one-turn runtime run.
