@@ -27,13 +27,14 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/plan/delta");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "command/exec/outputDelta");
+        assertContains(fingerprintJson, "process/outputDelta");
         assertContains(fingerprintJson, "items:agentMessage,plan,userMessage");
     }
 
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("22", Std.string(items.length));
+        assertEquals("23", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -56,7 +57,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("13", Std.string(notifications));
+        assertEquals("14", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -90,6 +91,11 @@ class AppProtocolHarness {
         assertFalse(invalidCommandStream.ok, "unknown command exec stream must fail");
         assertEquals("invalid_command_exec_stream", invalidCommandStream.errorCode);
         assertEquals("$.message.params.stream", invalidCommandStream.errorPath);
+
+        final invalidProcessStream = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"process-invalid-stream\",\"kind\":\"notification\",\"method\":\"process/outputDelta\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"process/outputDelta\",\"params\":{\"processHandle\":\"proc-1\",\"stream\":\"combined\",\"deltaBase64\":\"AQI=\",\"capReached\":false}}}")));
+        assertFalse(invalidProcessStream.ok, "unknown process output stream must fail");
+        assertEquals("invalid_process_output_stream", invalidProcessStream.errorCode);
+        assertEquals("$.message.params.stream", invalidProcessStream.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

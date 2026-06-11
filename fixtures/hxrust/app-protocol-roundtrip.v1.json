@@ -426,6 +426,21 @@
       }
     },
     {
+      "id": "process-output-delta-notification",
+      "kind": "notification",
+      "method": "process/outputDelta",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "process/outputDelta",
+        "params": {
+          "processHandle": "proc-1",
+          "stream": "stdout",
+          "deltaBase64": "AQI=",
+          "capReached": false
+        }
+      }
+    },
+    {
       "id": "error-notification",
       "kind": "notification",
       "method": "error",

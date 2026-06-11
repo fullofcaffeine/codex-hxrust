@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:e84c723c3ed9c5d9bbdcd321e048c55e247350a7986be5afe84eb7496779bfd5",
+  "fingerprint": "sha256:42c01abe5856d931c9a6d97c1b44321a445d9805b55589f6787d3910e65fe1bb",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -169,6 +169,22 @@
         "required:itemId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "ProcessOutputDeltaNotification",
+      "sourcePath": "v2/ProcessOutputDeltaNotification.json",
+      "sha256": "2aa524d50e3e506c5d2efbf0f59ef30451078730635bc41423f80fd0b0906dc4",
+      "fields": [
+        "definition:ProcessOutputStream",
+        "property:capReached",
+        "property:deltaBase64",
+        "property:processHandle",
+        "property:stream",
+        "required:capReached",
+        "required:deltaBase64",
+        "required:processHandle",
+        "required:stream"
       ]
     },
     {
