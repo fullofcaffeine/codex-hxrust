@@ -1,0 +1,19 @@
+{
+  "schema": "cafetera.codex.effort-apply.v1",
+  "requestId": "effort-1",
+  "taskId": "f12e-test",
+  "clientId": "codex",
+  "runId": "run-1",
+  "laneId": "run-1",
+  "processId": 4242,
+  "continuityGenerationId": "generation-1",
+  "targetModel": "gpt-5.4",
+  "targetEffort": "xhigh",
+  "policyId": "caf.codex.gpt-5.4.high-xhigh.v1",
+  "status": "queued_next_turn",
+  "applyPhase": "next_turn",
+  "writtenAt": "2026-06-10T00:00:02Z",
+  "model": "gpt-5.4",
+  "effort": "xhigh",
+  "persisted": false
+}

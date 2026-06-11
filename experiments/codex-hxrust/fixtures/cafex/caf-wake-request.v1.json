@@ -1,0 +1,20 @@
+{
+  "schema": "caf-client-wake-request.v1",
+  "requestId": "wake-1",
+  "runId": "run-1",
+  "continuityGenerationId": "generation-1",
+  "ownerClientId": "codex",
+  "delegateClientId": "oracle",
+  "waitId": "delegate",
+  "prompt": "Resume after Oracle same-process wake proof.",
+  "humanPromptRequired": false,
+  "interruptionDisposition": "answer_resume",
+  "threadId": "conversation-1",
+  "resumeThreadGoalOnWake": true,
+  "resumeThreadGoalStatus": "active",
+  "goalResumeAuthority": "caf_agent_bridge_oracle_wait",
+  "ralphRunId": "ralph-run-1",
+  "activationPolicyDigest": "sha256:activation-1",
+  "targetClosureRef": "target-closure:wake-1",
+  "targetClosureDigest": "sha256:target-closure-1"
+}

@@ -28,3 +28,24 @@ Known haxe.rust gaps discovered during this slice and worked around locally:
 
 - `haxe.rust-lj8`: `haxe.io.Path.directory` lowering.
 - `haxe.rust-7s4`: `String.lastIndexOf` lowering.
+
+## Effort And Wake Bridge
+
+`CafBridgeProcessor` implements the HXCX-5.2 directory bridge subset from `../fullofcaffeine/deps/codex/codex-rs/tui/src/caf_effort_control.rs`.
+
+The bridge is adapter-local. It consumes Cafex request files from a request directory and writes deterministic receipt files to a receipt directory; it does not add Cafex-specific behavior to upstream-shaped core Codex modules.
+
+Supported request schemas:
+
+- `cafetera.codex.effort-apply-request.v1` writes `cafetera.codex.effort-apply.v1`.
+- `caf-client-wake-request.v1` writes `caf-client-wake-receipt.v1` with `status: consumed`.
+- `cafetera.codex.mode-apply-request.v1` writes `cafetera.codex.mode-apply.v1` with `status: refused` and `refusalReason: unsupported_mode_apply`.
+
+Effort requests currently accept `medium`, `high`, and the `xhigh` alias family used by Cafex native Codex. Missing model/effort and invalid effort values write refused receipts. Unknown schemas are skipped, and existing receipt paths are skipped so repeated scans are idempotent.
+
+`processOnceFromEnv` follows the native env fallback shape:
+
+- Requests: `CAF_CODEX_EFFORT_REQUESTS_DIR`, then `CAF_CODEX_WAKE_REQUESTS_DIR`.
+- Receipts: `CAF_CODEX_EFFORT_RECEIPTS_DIR`, then `CAF_CODEX_WAKE_RECEIPTS_DIR`.
+
+The live native TUI applies effort by sending app events for the next turn. This Haxe slice records the same receipt contract only; wiring those events into the eventual TUI/runtime adapter remains a later Cafex milestone.

@@ -15,6 +15,7 @@ Profile policy for the scaffold:
 | `mock-model-stream.hxml` | Compile the HXCX-3.1/HXCX-3.6 mock model stream parser, fixture provider, one-turn state machine, cancellation, and transcript/state store harness through portable haxe.rust. |
 | `headless-jsonl-adapter.hxml` | Compile the HXCX-3.4 command JSONL app-server/debug adapter harness through portable haxe.rust. |
 | `caf-receipts.hxml` | Compile the HXCX-5.1 Caf session/turn receipt adapter harness through portable haxe.rust. |
+| `caf-bridge.hxml` | Compile the HXCX-5.2 Caf effort/wake bridge harness through portable haxe.rust. |
 
 `rust_output` paths are deterministic:
 

@@ -1,0 +1,13 @@
+{
+  "schema": "cafetera.codex.effort-apply-request.v1",
+  "requestId": "effort-invalid",
+  "taskId": "f12e-test",
+  "clientId": "codex",
+  "runId": "run-1",
+  "laneId": "run-1",
+  "processId": 4242,
+  "continuityGenerationId": "generation-1",
+  "model": "gpt-5.4",
+  "effort": "low",
+  "policyId": "caf.codex.gpt-5.4.high-xhigh.v1"
+}
