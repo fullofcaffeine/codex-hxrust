@@ -152,7 +152,10 @@ class HeadlessJsonlAdapter {
     function appThreadStart(requestIdJson:String):Array<String> {
         started = true;
         currentStatus = "idle";
-        return [jsonRpcResponse(requestIdJson, "{\"thread\":" + threadJson(false) + "}")];
+        return [
+            jsonRpcResponse(requestIdJson, "{\"thread\":" + threadJson(false) + "}"),
+            jsonRpcNotification("thread/started", "{\"thread\":" + threadJson(false) + "}")
+        ];
     }
 
     function appTurnStart(requestIdJson:String, request:Value):Array<String> {
@@ -170,8 +173,18 @@ class HeadlessJsonlAdapter {
         final prompt = textInput(params.objectValue);
         if (!prompt.ok) return [jsonRpcError(requestIdJson, -32602, prompt.value, prompt.errorMessage)];
 
-        runTurn(requestIdJson, prompt.value);
-        return [jsonRpcResponse(requestIdJson, "{\"turn\":" + turnJson(true) + "}")];
+        beginTurn(prompt.value);
+        final outputs = [
+            threadStatusChangedNotification(activeThreadStatusJson()),
+            jsonRpcNotification("turn/started", "{\"threadId\":\"" + threadId + "\",\"turn\":" + turnJsonWithStatus("inProgress", false) + "}")
+        ];
+
+        completeTurn(requestIdJson, prompt.value);
+
+        outputs.push(jsonRpcNotification("turn/completed", "{\"threadId\":\"" + threadId + "\",\"turn\":" + turnJson(true) + "}"));
+        outputs.push(threadStatusChangedNotification(threadStatusJson()));
+        outputs.push(jsonRpcResponse(requestIdJson, "{\"turn\":" + turnJson(true) + "}"));
+        return outputs;
     }
 
     function appTurnInterrupt(requestIdJson:String, request:Value):Array<String> {
@@ -215,11 +228,18 @@ class HeadlessJsonlAdapter {
     }
 
     function runTurn(requestId:String, prompt:String):Void {
+        beginTurn(prompt);
+        completeTurn(requestId, prompt);
+    }
+
+    function beginTurn(prompt:String):Void {
         currentStatus = "active";
         currentTurnId = "turn-" + Std.string(nextTurnNumber);
         nextTurnNumber = nextTurnNumber + 1;
         lastPrompt = prompt;
+    }
 
+    function completeTurn(requestId:String, prompt:String):Void {
         final outcome = OneTurnSessionRunner.run(provider, new ModelStreamRequest(requestId, "mock-model", prompt));
         lastOutcome = outcome;
         currentStatus = outcome.terminalState;
@@ -232,12 +252,20 @@ class HeadlessJsonlAdapter {
 
     function threadStatusJson():String {
         if (!started) return "{\"type\":\"notLoaded\"}";
-        if (currentStatus == "active") return "{\"activeFlags\":[],\"type\":\"active\"}";
+        if (currentStatus == "active") return activeThreadStatusJson();
         return "{\"type\":\"idle\"}";
     }
 
+    function activeThreadStatusJson():String {
+        return "{\"activeFlags\":[\"turnRunning\"],\"type\":\"active\"}";
+    }
+
     function turnJson(includeItems:Bool):String {
-        return "{\"id\":" + quote(currentTurnId) + ",\"items\":" + (includeItems ? turnItemsJson() : "[]") + ",\"status\":" + quote(appTurnStatus()) + "}";
+        return turnJsonWithStatus(appTurnStatus(), includeItems);
+    }
+
+    function turnJsonWithStatus(status:String, includeItems:Bool):String {
+        return "{\"id\":" + quote(currentTurnId) + ",\"items\":" + (includeItems ? turnItemsJson() : "[]") + ",\"status\":" + quote(status) + "}";
     }
 
     function turnItemsJson():String {
@@ -267,6 +295,14 @@ class HeadlessJsonlAdapter {
 
     function jsonRpcResponse(requestIdJson:String, resultJson:String):String {
         return "{\"id\":" + requestIdJson + ",\"jsonrpc\":\"2.0\",\"result\":" + resultJson + "}";
+    }
+
+    function jsonRpcNotification(method:String, paramsJson:String):String {
+        return "{\"jsonrpc\":\"2.0\",\"method\":" + quote(method) + ",\"params\":" + paramsJson + "}";
+    }
+
+    function threadStatusChangedNotification(statusJson:String):String {
+        return jsonRpcNotification("thread/status/changed", "{\"status\":" + statusJson + ",\"threadId\":\"" + threadId + "\"}");
     }
 
     function jsonRpcError(requestIdJson:String, code:Int, errorCode:String, message:String):String {

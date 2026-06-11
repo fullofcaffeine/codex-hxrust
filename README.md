@@ -35,10 +35,11 @@ Current completed gates:
 - `HXCX-2.1`: protocol ID/newtype slice
 - `HXCX-2.2`: typed JSON boundary and serde bridge facade
 - `HXCX-2.3`: upstream-first config/profile DTO subset with redacted diagnostics
+- `HXCX-3.6`: headless JSONL adapter emits fixture-backed upstream app-server lifecycle notifications
 
 Next likely work:
 
-- `HXCX-3.5`: upstream app-server method parity for the headless JSONL adapter
+- continue the next upstream/raw Codex protocol, runtime, app-server, tool, or state parity slice from `bd ready`
 - `HXCX-7.x`: upstream haxe.rust fixes discovered by the pressure test
 
 Use Beads for the live queue:

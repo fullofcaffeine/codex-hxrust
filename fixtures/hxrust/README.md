@@ -27,3 +27,5 @@ Current fixtures:
 - `mock-one-turn-cancel-state.v1.json` is the deterministic state summary artifact for the same cancelled run.
 - `headless-jsonl-adapter-input.v1.jsonl` drives the HXCX-3.4 start/submit/status/transcript adapter fixture.
 - `headless-jsonl-adapter-output.v1.jsonl` is the canonical JSONL response/event transcript expected from that fixture.
+- `headless-jsonl-app-server-input.v1.jsonl` drives the upstream-shaped JSON-RPC app-server fixture for `thread/start`, `turn/start`, `thread/read`, and fail-closed completed-turn interrupt.
+- `headless-jsonl-app-server-output.v1.jsonl` is the canonical JSONL stream with app-server responses plus `thread/started`, `thread/status/changed`, `turn/started`, and `turn/completed` notifications.

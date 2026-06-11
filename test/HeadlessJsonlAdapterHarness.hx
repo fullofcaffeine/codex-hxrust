@@ -29,6 +29,10 @@ class HeadlessJsonlAdapterHarness {
         final actual = adapter.dispatchJsonl(input);
         assertEquals(expected, actual);
         assertNotContains(actual, "\"prompt\"");
+        assertContains(actual, "\"method\":\"thread/started\"");
+        assertContains(actual, "\"method\":\"thread/status/changed\"");
+        assertContains(actual, "\"method\":\"turn/started\"");
+        assertContains(actual, "\"method\":\"turn/completed\"");
         assertCanonicalJsonl(actual);
     }
 
@@ -83,5 +87,9 @@ class HeadlessJsonlAdapterHarness {
 
     static function assertNotContains(haystack:String, needle:String):Void {
         if (haystack.indexOf(needle) >= 0) throw "expected `" + haystack + "` not to contain `" + needle + "`";
+    }
+
+    static function assertContains(haystack:String, needle:String):Void {
+        if (haystack.indexOf(needle) < 0) throw "expected `" + haystack + "` to contain `" + needle + "`";
     }
 }
