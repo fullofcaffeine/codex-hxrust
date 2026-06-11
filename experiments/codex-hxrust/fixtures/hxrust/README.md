@@ -12,3 +12,5 @@ Current fixtures:
 - `mock-one-turn-state.v1.json` is the deterministic state summary artifact for the same run.
 - `mock-one-turn-cancel-transcript.v1.jsonl` is the deterministic partial transcript artifact for a cancelled mock one-turn runtime run.
 - `mock-one-turn-cancel-state.v1.json` is the deterministic state summary artifact for the same cancelled run.
+- `headless-jsonl-adapter-input.v1.jsonl` drives the HXCX-3.4 start/submit/status/transcript adapter fixture.
+- `headless-jsonl-adapter-output.v1.jsonl` is the canonical JSONL response/event transcript expected from that fixture.

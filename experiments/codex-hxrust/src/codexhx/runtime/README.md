@@ -43,3 +43,14 @@ Current safe checkpoints are:
 - after N parsed model events, which calls `ModelClient.cancelStream(handle)`, appends a terminal `session_cancelled` event, and returns partial assistant text.
 
 Partial transcripts are intentional: events observed before the checkpoint are preserved in order, then `session_cancelled` terminates the transcript. Request prompts and credentials still do not enter transcript/state artifacts. In mock mode there is no native child process; the provider tracks only active stream ids, and the cancellation harness asserts that the cancelled stream id is no longer active.
+
+## Headless JSONL Adapter
+
+`codexhx.runtime.app.HeadlessJsonlAdapter` is the HXCX-3.4 app-server/debug-client comparison boundary. It consumes one JSON command per line and emits deterministic JSONL responses/events for the supported headless subset:
+
+- `start` initializes the fixed mock thread/session and returns idle status.
+- `submit` runs the one-turn mock runtime and records the latest turn outcome.
+- `status` reports the current terminal/runtime status.
+- `transcript` emits one `transcript_event` line per runtime event, followed by a summary response.
+
+Unsupported commands fail closed with `unsupported_command`. The adapter remains credential-free and fixture-backed; it is not a live app-server transport, and it should stay a thin protocol adapter over the pure runtime state machine.

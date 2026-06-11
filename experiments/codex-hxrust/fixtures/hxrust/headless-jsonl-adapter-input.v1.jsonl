@@ -1,0 +1,5 @@
+{"command":"start","id":"cmd-start"}
+{"command":"submit","id":"cmd-submit","prompt":"Say hello"}
+{"command":"status","id":"cmd-status"}
+{"command":"transcript","id":"cmd-transcript"}
+{"command":"tool/call","id":"cmd-unsupported"}

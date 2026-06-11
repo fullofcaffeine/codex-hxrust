@@ -13,6 +13,7 @@ Profile policy for the scaffold:
 | `config-profile.hxml` | Compile the G2.3 config/profile DTO harness through portable haxe.rust. |
 | `app-protocol.hxml` | Compile the G2.4 app-server protocol subset harness through portable haxe.rust. |
 | `mock-model-stream.hxml` | Compile the HXCX-3.1/HXCX-3.6 mock model stream parser, fixture provider, one-turn state machine, cancellation, and transcript/state store harness through portable haxe.rust. |
+| `headless-jsonl-adapter.hxml` | Compile the HXCX-3.4 command JSONL app-server/debug adapter harness through portable haxe.rust. |
 
 `rust_output` paths are deterministic:
 
