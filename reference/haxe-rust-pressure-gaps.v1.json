@@ -6,10 +6,10 @@
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
     "totalGaps": 10,
-    "resolvedUpstream": 7,
-    "openUpstream": 1,
+    "resolvedUpstream": 8,
+    "openUpstream": 0,
     "localWorkaround": 2,
-    "upstreamRepros": 3,
+    "upstreamRepros": 2,
     "severity": {
       "high": 7,
       "medium": 3,
@@ -162,27 +162,22 @@
     },
     {
       "id": "nullable-interface-values",
-      "status": "open_upstream",
+      "status": "resolved_upstream",
       "severity": "high",
       "sourceArea": "runtime_model_session",
-      "codexBead": "codex-hxrust-e9i",
+      "codexBead": "codex-hxrust-50g",
       "haxeRustRefs": [
         "haxe.rust-bm6"
       ],
-      "upstreamRepro": {
-        "ledger": "reference/haxe-rust-upstream-repros.v1.json",
-        "fixture": "../haxe.rust/test/repro/upstream_open_gaps/nullable_interface_null",
-        "runner": "../haxe.rust/scripts/ci/check-upstream-open-gap-repros.sh",
-        "currentResult": "expected_cargo_failure"
-      },
-      "resolvedBy": null,
-      "reproduction": "Passing a literal null to an interface-typed parameter still needs a generic nullable trait-object representation/lowering decision.",
-      "workaround": "codex-hxrust treats ModelClient as a required non-null dependency and fails construction/configuration before a nullable interface crosses the boundary.",
+      "resolvedBy": "b3e38c31",
+      "reproduction": "Passing a literal null to an interface-typed parameter needed a generic nullable trait-object representation/lowering decision.",
+      "workaround": "Resolved upstream: Null<Interface> and Null<polymorphic-base> lower to nullable HxDynRef<dyn Trait> handles; codex-hxrust can remove this as a compiler-gap workaround when the consuming ModelClient boundary needs nullable injection.",
       "validation": [
-        "experiments/codex-hxrust/harness/check-mock-model-stream.sh",
-        "experiments/codex-hxrust/harness/check-haxe-rust-upstream-repros.sh"
-      ],
-      "followUp": "Generic haxe.rust expected-failure repro exists; keep this tracked until haxe.rust-bm6 closes or gains an accepted unsupported diagnostic."
+        "nullable_interface_null snapshot in ../haxe.rust",
+        "interface_basic snapshot in ../haxe.rust",
+        "interface_null_compare snapshot in ../haxe.rust",
+        "experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh b3e38c31"
+      ]
     },
     {
       "id": "path-directory-lowering",

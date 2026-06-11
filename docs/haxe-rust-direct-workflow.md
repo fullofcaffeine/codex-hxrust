@@ -45,7 +45,7 @@ Current actionable codex-hxrust compiler-gap Beads:
 - `codex-hxrust-rat.9` maps to haxe.rust enum reuse regression `haxe.rust-oo3.71` and is resolved by the pinned `enum_reuse_helper_calls` snapshot.
 - HXCX-3.1 mock model stream parsing exposed haxe.rust try/catch tail-return regression `haxe.rust-oo3.72`; the pinned `try_catch_tail_nonvoid` snapshot resolves it and lets codex-hxrust use direct `try/catch` returns without a local shape workaround.
 - HXCX-3.3 one-turn state-machine work exposed haxe.rust interface-null comparison regression `haxe.rust-wg5`; the pinned `interface_null_compare` snapshot resolves non-null interface handle comparisons against `null`.
-- HXCX-3.3 also exposed open haxe.rust nullable interface value regression `haxe.rust-bm6`; codex-hxrust treats `ModelClient` as a required non-null dependency until the generic nullable trait-object representation/lowering lands.
+- HXCX-3.3 also exposed haxe.rust nullable interface value regression `haxe.rust-bm6`; the generic nullable trait-object representation/lowering landed in haxe.rust `b3e38c31` and is now tracked as resolved upstream.
 
 The HXCX-7.1 pressure-gap rollup lives in `docs/haxe-rust-pressure-gap-ledger.md` and `reference/haxe-rust-pressure-gaps.v1.json`; it is checked by `experiments/codex-hxrust/harness/check-haxe-rust-pressure-gaps.sh`.
 

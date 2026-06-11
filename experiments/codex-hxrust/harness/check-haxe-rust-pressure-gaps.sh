@@ -55,10 +55,10 @@ raw_matches=$({ rg --count-matches '__rust__|rust\.metal\.Code|@:rustAllowRaw|@:
 
 jq -e '
   .rawRustPressure.rawEscapeMatches == 0
-  and (.gaps[] | select(.id == "nullable-interface-values").status == "open_upstream")
+  and (.gaps[] | select(.id == "nullable-interface-values").status == "resolved_upstream")
+  and (.gaps[] | select(.id == "nullable-interface-values").resolvedBy == "b3e38c31")
   and (.gaps[] | select(.id == "path-directory-lowering").status == "local_workaround")
   and (.gaps[] | select(.id == "string-last-index-of-lowering").status == "local_workaround")
-  and (.gaps[] | select(.id == "nullable-interface-values").upstreamRepro.fixture | test("nullable_interface_null"))
   and (.gaps[] | select(.id == "path-directory-lowering").upstreamRepro.fixture | test("path_directory"))
   and (.gaps[] | select(.id == "string-last-index-of-lowering").upstreamRepro.fixture | test("string_last_index_of"))
 ' "$LEDGER" >/dev/null

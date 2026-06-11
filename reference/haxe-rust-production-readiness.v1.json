@@ -8,11 +8,11 @@
     "broadReplacement": "no_go",
     "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
     "requiredBeforeBroadReplacement": [
-      "Resolve or explicitly accept the open nullable-interface value gap.",
       "Fix or explicitly accept the generic haxe.rust repros for the Cafex path/string stdlib workarounds.",
       "Complete license/distribution review for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts.",
       "Reduce or explicitly native-own the 7 unsupported Cafex seam rows.",
-      "Run replacement rollback drills from the operator runbook."
+      "Run replacement rollback drills from the operator runbook.",
+      "Add broader live runtime parity evidence for model/provider, TUI, queue, restart, and checkpoint ownership."
     ]
   },
   "evidence": {
@@ -29,14 +29,13 @@
     {
       "dimension": "language",
       "score": "yellow_green",
-      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, try/catch returns, and reusable enum values now pass through haxe.rust after generic upstream fixes.",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, and reusable enum values now pass through haxe.rust after generic upstream fixes.",
       "strengths": [
-        "7 of 10 pressure gaps are resolved upstream.",
+        "8 of 10 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
         "No raw Rust escape matches exist in current app/test Haxe source."
       ],
       "caveats": [
-        "Nullable interface values remain open upstream.",
         "Some stdlib path/string patterns still use local workarounds even though generic repro fixtures now exist."
       ],
       "evidenceRefs": [
@@ -73,7 +72,7 @@
       ],
       "caveats": [
         "Future metal/native boundaries still need real host-effect implementations.",
-        "Nullable trait-object representation remains a compiler interop gap."
+        "Stdlib path/string lowering still requires local adapter workarounds."
       ],
       "evidenceRefs": [
         "docs/haxe-rust-direct-workflow.md",
@@ -126,7 +125,7 @@
       "score": "yellow_green",
       "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while Cafex live runtime seams are unsupported.",
       "strengths": [
-        "7 pressure gaps resolved upstream rather than carried as private compiler hacks.",
+        "8 pressure gaps resolved upstream rather than carried as private compiler hacks.",
         "Friction comparison supports selected adapter slices and review tooling.",
         "Operator rollback and migration-mode policies are checked."
       ],
@@ -166,12 +165,12 @@
   "measuredInputs": {
     "pressureGaps": {
       "total": 10,
-      "resolvedUpstream": 7,
-      "openUpstream": 1,
+      "resolvedUpstream": 8,
+      "openUpstream": 0,
       "localWorkaround": 2,
       "rawRustEscapeMatches": 0,
       "sourceFilesScanned": 92,
-      "upstreamRepros": 3
+      "upstreamRepros": 2
     },
     "cafeteraContractSubset": {
       "covered": 4,

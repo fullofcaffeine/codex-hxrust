@@ -140,9 +140,9 @@ Additional upstream commit accepted:
 
 This resolves the codex-hxrust pressure gap where comparing a non-null interface/trait-object value against `null` could lower to generic pointer equality against an untyped `Default::default()`. haxe.rust now lowers interface/polymorphic null-literal comparisons by evaluating the non-null side and returning the correct constant result, with an `interface_null_compare` snapshot and stdout proof.
 
-Remaining related gap:
+Related gap resolved later:
 
-- `haxe.rust-bm6` tracks the broader nullable interface value contract. Passing a literal `null` to an interface-typed parameter still needs a generic nullable trait-object representation/lowering decision, so codex-hxrust keeps `ModelClient` as a required non-null dependency for now.
+- `haxe.rust-bm6` tracked the broader nullable interface value contract after this audit. It was resolved later by haxe.rust `b3e38c31`, which moved the generic nullable interface fixture to a passing snapshot and allowed codex-hxrust to mark nullable interface values as resolved upstream.
 
 Gate runs:
 

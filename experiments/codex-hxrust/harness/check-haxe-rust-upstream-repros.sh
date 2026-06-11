@@ -24,7 +24,6 @@ jq -e '
 
 jq -e --slurpfile p "$PRESSURE" '
   ([.repros[].pressureGapId] | sort) == [
-    "nullable-interface-values",
     "path-directory-lowering",
     "string-last-index-of-lowering"
   ]

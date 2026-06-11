@@ -6,8 +6,8 @@
 ## Purpose
 
 This record closes the loop from the HXCX-7.1 pressure-gap ledger to generic
-haxe.rust fixtures. The remaining compiler gaps now have minimal, standalone
-Haxe inputs in `../haxe.rust` that can run without Codex, Cafetera, Cafex,
+haxe.rust fixtures. The remaining compiler gaps have minimal, standalone Haxe
+inputs in `../haxe.rust` that can run without Codex, Cafetera, Cafex,
 credentials, or local paths.
 
 Machine-readable fixture:
@@ -25,9 +25,14 @@ harness/check-haxe-rust-upstream-repros.sh
 
 | Gap | haxe.rust bead | Fixture | Current result |
 | --- | --- | --- | --- |
-| Nullable interface null values | `haxe.rust-bm6` | `../haxe.rust/test/repro/upstream_open_gaps/nullable_interface_null` | expected Cargo failure |
 | `haxe.io.Path.directory` lowering | `haxe.rust-lj8` | `../haxe.rust/test/repro/upstream_open_gaps/path_directory` | expected Cargo failure |
 | `String.lastIndexOf` lowering | `haxe.rust-7s4` | `../haxe.rust/test/repro/upstream_open_gaps/string_last_index_of` | expected Cargo failure |
+
+Resolved upstream:
+
+- Nullable interface null values (`haxe.rust-bm6`) moved to the passing
+  `../haxe.rust/test/snapshot/nullable_interface_null` snapshot in
+  `b3e38c31`.
 
 The haxe.rust runner is:
 
@@ -36,7 +41,7 @@ cd ../haxe.rust
 bash scripts/ci/check-upstream-open-gap-repros.sh
 ```
 
-It currently expects the three Rust build failures and checks their signatures.
+It currently expects the two Rust build failures and checks their signatures.
 When a compiler fix lands, the corresponding repro should move into a passing
 snapshot or semantic-diff case and the linked haxe.rust bead can close.
 
