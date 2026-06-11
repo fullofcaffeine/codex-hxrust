@@ -41,13 +41,13 @@
     },
     "cafexSeamLedger": {
       "rows": 15,
-      "supported": 7,
-      "unsupported": 7,
+      "supported": 8,
+      "unsupported": 6,
       "reviewOnly": 1
     },
     "cafeteraContractSubset": {
-      "covered": 4,
-      "passed": 4,
+      "covered": 5,
+      "passed": 5,
       "failed": 0,
       "gaps": 5,
       "productionReplacement": false
@@ -61,7 +61,6 @@
   "unsupportedSurfaces": [
     "active-lane capability advertisement",
     "queue reconcile runtime bridge",
-    "Caf goal-apply request bridge",
     "live mode apply runtime",
     "restart apply runtime bridge",
     "plan-checkpoint continuation guard",
@@ -98,7 +97,7 @@
     "Any haxe.rust compiler gap is generic, upstreamable, and tracked outside codexhx-specific compiler behavior."
   ],
   "noGoCriteriaForBroadReplacement": [
-    "Seven Cafex seam rows remain unsupported.",
+    "Six Cafex seam rows remain unsupported.",
     "Cafetera contract subset has five gaps and no production replacement claim.",
     "Broad haxe.rust parity beyond selected fixture-backed pressure slices is not established.",
     "License/distribution review is unresolved.",

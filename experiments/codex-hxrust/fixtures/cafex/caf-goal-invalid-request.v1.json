@@ -1,0 +1,15 @@
+{
+  "schema": "cafetera.codex.goal-apply-request.v1",
+  "requestId": "goal-invalid",
+  "taskId": "f12e-goal",
+  "clientId": "codex",
+  "runId": "run-1",
+  "laneId": "run-1",
+  "threadId": "thread-goal-1",
+  "continuityGenerationId": "generation-1",
+  "action": "set_objective",
+  "requestedNativeGoalStatus": "active",
+  "effectiveNativeGoalStatus": "active",
+  "nativeGoalCompletionClosesBrew": false,
+  "brewCompletionAuthority": true
+}

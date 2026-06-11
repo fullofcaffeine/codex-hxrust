@@ -26,8 +26,8 @@
   },
   "summary": {
     "rows": 15,
-    "supported": 7,
-    "unsupported": 7,
+    "supported": 8,
+    "unsupported": 6,
     "reviewOnly": 1
   },
   "rows": [
@@ -266,18 +266,31 @@
       "sourceSeam": "goal-apply-runtime-bridge",
       "patchClass": "fork_only_caf_adapter",
       "owner": "@cafetera/codex plus cafetera.ralph",
-      "supportLevel": "unsupported",
-      "replacementStatus": "unsupported_deferred",
-      "hxrustImplementation": [],
-      "fixtures": [],
-      "harnesses": [],
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafBridgeProcessor.goalReceipt",
+        "codexhx.state.goals.ThreadGoalStore"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-goal-apply-request.v1.json",
+        "fixtures/cafex/caf-goal-apply-receipt.v1.json",
+        "fixtures/cafex/caf-goal-clear-request.v1.json",
+        "fixtures/cafex/caf-goal-clear-receipt.v1.json",
+        "fixtures/cafex/caf-goal-invalid-request.v1.json",
+        "fixtures/cafex/caf-goal-invalid-receipt.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-bridge.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
       "schemaIds": [
         "cafetera.codex.goal-apply-request.v1",
         "cafetera.codex.goal-apply.v1",
         "cafetera.ralph.codex-goal-bridge.v1"
       ],
-      "unsupportedReason": "Only the minimal thread goal lifecycle/tool subset is implemented; Caf goal-apply request parsing and receipt generation are not.",
-      "replacementReviewNote": "Do not treat HXCX-5.3 goal lifecycle support as replacement for the Caf/Ralph apply bridge."
+      "unsupportedReason": null,
+      "replacementReviewNote": "Fixture-supported for Caf/Ralph request parsing, Brew-authority guards, ThreadGoalStore application, clear-boundary receipts, and fail-closed invalid requests. Live app-server/TUI persistence remains outside this row."
     },
     {
       "id": "live-mode-apply-runtime",

@@ -12,6 +12,9 @@ Current fixtures:
 - `caf-effort-invalid-request.v1.json` and `caf-effort-invalid-receipt.v1.json` cover fail-closed invalid effort handling.
 - `caf-wake-request.v1.json` and `caf-wake-receipt.v1.json` cover the same-process wake request/consumed receipt subset.
 - `caf-mode-unsupported-request.v1.json` and `caf-mode-unsupported-receipt.v1.json` cover explicit unsupported mode refusal.
+- `caf-goal-apply-request.v1.json` and `caf-goal-apply-receipt.v1.json` cover a Caf/Ralph goal-apply request applied through `ThreadGoalStore`.
+- `caf-goal-clear-request.v1.json` and `caf-goal-clear-receipt.v1.json` cover a close-boundary clear request while preserving Brew completion authority.
+- `caf-goal-invalid-request.v1.json` and `caf-goal-invalid-receipt.v1.json` cover fail-closed invalid goal request handling.
 - `caf-continuity-metadata-resume.v1.json` and `caf-continuity-metadata-fresh.v1.json` cover explicit successor/predecessor metadata parsing.
 - `caf-continuity-session-receipt.v1.json` and `caf-continuity-turn-receipt-fresh.v1.json` cover receipts written from parsed continuity metadata.
 - `cafetera-contract-subset-report.v1.json` records the HXCX-5.5 selected Cafetera contract subset pass/fail/gap classification and explicitly avoids any production replacement claim.

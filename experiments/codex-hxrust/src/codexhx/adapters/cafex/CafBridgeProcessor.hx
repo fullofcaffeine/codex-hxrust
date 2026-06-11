@@ -1,7 +1,10 @@
 package codexhx.adapters.cafex;
 
 import codexhx.protocol.JsonScalar;
+import codexhx.protocol.goals.ThreadGoal;
+import codexhx.protocol.goals.ThreadGoalStatus;
 import codexhx.protocol.json.CodexJson;
+import codexhx.state.goals.ThreadGoalStore;
 import haxe.json.Value;
 import sys.FileSystem;
 import sys.io.File;
@@ -13,6 +16,8 @@ class CafBridgeProcessor {
     static inline final wakeReceiptSchema = "caf-client-wake-receipt.v1";
     static inline final modeRequestSchema = "cafetera.codex.mode-apply-request.v1";
     static inline final modeReceiptSchema = "cafetera.codex.mode-apply.v1";
+    static inline final goalRequestSchema = "cafetera.codex.goal-apply-request.v1";
+    static inline final goalReceiptSchema = "cafetera.codex.goal-apply.v1";
 
     public static function processOnce(requestsDir:String, receiptsDir:String, writtenAt:String):CafBridgeProcessOutcome {
         if (requestsDir.length == 0) return CafBridgeProcessOutcome.success(0, 0);
@@ -82,8 +87,8 @@ class CafBridgeProcessor {
     }
 
     public static function processOnceFromEnv(writtenAt:String):CafBridgeProcessOutcome {
-        final requestsDir = firstEnv("CAF_CODEX_EFFORT_REQUESTS_DIR", "CAF_CODEX_WAKE_REQUESTS_DIR");
-        final receiptsDir = firstEnv("CAF_CODEX_EFFORT_RECEIPTS_DIR", "CAF_CODEX_WAKE_RECEIPTS_DIR");
+        final requestsDir = firstEnv("CAF_CODEX_EFFORT_REQUESTS_DIR", "CAF_CODEX_WAKE_REQUESTS_DIR", "CAF_CODEX_GOAL_REQUESTS_DIR");
+        final receiptsDir = firstEnv("CAF_CODEX_EFFORT_RECEIPTS_DIR", "CAF_CODEX_WAKE_RECEIPTS_DIR", "CAF_CODEX_GOAL_RECEIPTS_DIR");
         return processOnce(requestsDir, receiptsDir, writtenAt);
     }
 
@@ -95,6 +100,8 @@ class CafBridgeProcessor {
                 StringRead.success(wakeReceipt(requestId, request, writtenAt));
             case modeRequestSchema:
                 StringRead.success(modeUnsupportedReceipt(requestId, request, writtenAt));
+            case goalRequestSchema:
+                StringRead.success(goalReceipt(requestId, request, writtenAt));
             case _:
                 StringRead.failure();
         }
@@ -186,12 +193,126 @@ class CafBridgeProcessor {
             + "}\n";
     }
 
+    static function goalReceipt(requestId:String, request:Value, writtenAt:String):String {
+        final actionRead = readString(request, "action");
+        final action = actionRead.ok && actionRead.value.length > 0 ? actionRead.value : "set_objective";
+        final requestedStatus = firstNestedString(request, "requestedNativeGoalStatus", "goalRequest", "requestedNativeGoalStatus");
+        final effectiveStatus = firstNestedString(request, "effectiveNativeGoalStatus", "goalRequest", "effectiveNativeGoalStatus");
+        final normalizedStatus = normalizeGoalStatus(effectiveStatus.ok ? effectiveStatus.value : (requestedStatus.ok ? requestedStatus.value : "active"));
+        final threadId = firstNestedString(request, "threadId", "goalRequest", "threadId");
+        final objective = firstNestedString(request, "objective", "goalObjective", "objective");
+        final nativeClosesBrew = readBool(request, "nativeGoalCompletionClosesBrew");
+        final brewAuthority = readBool(request, "brewCompletionAuthority");
+
+        var status = "applied";
+        var applyPhase = action == "clear" ? "immediate" : "next_turn";
+        var refusalReason = "";
+        var goal:ThreadGoal = null;
+        var cleared = false;
+
+        if (threadId.value.length == 0) {
+            status = "refused";
+            applyPhase = "none";
+            refusalReason = "missing_thread_id";
+        } else if (!nativeClosesBrew.ok || nativeClosesBrew.value) {
+            status = "refused";
+            applyPhase = "none";
+            refusalReason = "invalid_native_goal_completion_authority";
+        } else if (!brewAuthority.ok || !brewAuthority.value) {
+            status = "refused";
+            applyPhase = "none";
+            refusalReason = "missing_brew_completion_authority";
+        } else if (action == "clear") {
+            final store = new ThreadGoalStore(threadId.value);
+            final operation = store.clear();
+            cleared = operation.cleared;
+        } else if (action == "set_objective") {
+            if (objective.value.length == 0) {
+                status = "refused";
+                applyPhase = "none";
+                refusalReason = "missing_objective";
+            } else if (normalizedStatus.length == 0) {
+                status = "refused";
+                applyPhase = "none";
+                refusalReason = "invalid_native_goal_status";
+            } else {
+                final store = new ThreadGoalStore(threadId.value);
+                final operation = store.setObjective(objective.value, normalizedStatus, 0);
+                if (operation.ok) {
+                    goal = operation.goal;
+                } else {
+                    status = "refused";
+                    applyPhase = "none";
+                    refusalReason = operation.errorCode;
+                }
+            }
+        } else {
+            status = "refused";
+            applyPhase = "none";
+            refusalReason = "unsupported_goal_action";
+        }
+
+        var json = "{\n"
+            + "  \"schema\": " + quote(goalReceiptSchema) + ",\n"
+            + "  \"requestId\": " + quote(requestId) + ",\n"
+            + optionalStringLine(request, "deliveryKey", "deliveryKey", true)
+            + optionalStringLine(request, "taskId", "taskId", true)
+            + optionalStringLine(request, "closedTaskId", "closedTaskId", true)
+            + optionalStringLine(request, "clientId", "clientId", true)
+            + optionalStringLine(request, "runId", "runId", true)
+            + optionalStringLine(request, "laneId", "laneId", true)
+            + optionalNumberLine(request, "processId", "processId", true)
+            + optionalStringLine(request, "continuityGenerationId", "continuityGenerationId", true)
+            + "  \"action\": " + quote(action) + ",\n"
+            + optionalReadStringLine(requestedStatus, "requestedNativeGoalStatus", true)
+            + optionalReadStringLine(effectiveStatus, "effectiveNativeGoalStatus", true)
+            + optionalStringLine(request, "targetClosureRef", "targetClosureRef", true)
+            + optionalStringLine(request, "targetClosureDigest", "targetClosureDigest", true)
+            + optionalStringLine(request, "boundaryKind", "boundaryKind", true)
+            + optionalStringLine(request, "nextLegalActionAfterBoundary", "nextLegalActionAfterBoundary", true)
+            + "  \"nativeGoalCompletionClosesBrew\": false,\n"
+            + "  \"brewCompletionAuthority\": true,\n"
+            + "  \"status\": " + quote(status) + ",\n"
+            + "  \"applyPhase\": " + quote(applyPhase) + ",\n"
+            + "  \"writtenAt\": " + quote(writtenAt);
+
+        if (status == "applied") {
+            if (goal != null) {
+                json = json + ",\n"
+                    + "  \"threadId\": " + quote(goal.threadId) + ",\n"
+                    + "  \"nativeGoal\": " + goal.appJson();
+            } else {
+                json = json + ",\n"
+                    + "  \"threadId\": " + quote(threadId.value) + ",\n"
+                    + "  \"cleared\": " + (cleared ? "true" : "false");
+            }
+        } else {
+            json = json + ",\n"
+                + "  \"refusalReason\": " + quote(refusalReason);
+        }
+
+        return json + "\n}\n";
+    }
+
     static function normalizeEffort(value:String):String {
         final trimmed = StringTools.trim(value);
         return switch trimmed {
             case "medium": "medium";
             case "high": "high";
             case "xhigh" | "x-high" | "extra_high" | "extra-high" | "extra high" | "extended": "xhigh";
+            case _: "";
+        }
+    }
+
+    static function normalizeGoalStatus(value:String):String {
+        final trimmed = StringTools.trim(value);
+        return switch trimmed {
+            case "active": ThreadGoalStatus.Active;
+            case "paused": ThreadGoalStatus.Paused;
+            case "blocked": ThreadGoalStatus.Blocked;
+            case "usageLimited" | "usage_limited" | "usage-limited": ThreadGoalStatus.UsageLimited;
+            case "budgetLimited" | "budget_limited" | "budget-limited": ThreadGoalStatus.BudgetLimited;
+            case "complete" | "completed": ThreadGoalStatus.Complete;
             case _: "";
         }
     }
@@ -222,6 +343,11 @@ class CafBridgeProcessor {
         return "  " + quote(targetName) + ": " + number(value.value) + (comma ? ",\n" : "\n");
     }
 
+    static function optionalReadStringLine(value:StringRead, targetName:String, comma:Bool):String {
+        if (!value.ok) return "";
+        return "  " + quote(targetName) + ": " + quote(value.value) + (comma ? ",\n" : "\n");
+    }
+
     static function readString(object:Value, name:String):StringRead {
         return switch object {
             case JObject(keys, values):
@@ -250,6 +376,20 @@ class CafBridgeProcessor {
         }
     }
 
+    static function readBool(object:Value, name:String):BoolRead {
+        return switch object {
+            case JObject(keys, values):
+                final i = fieldIndex(keys, name);
+                if (i < 0) return BoolRead.failure();
+                switch values[i] {
+                    case JBool(value): BoolRead.success(value);
+                    case _: BoolRead.failure();
+                }
+            case _:
+                BoolRead.failure();
+        }
+    }
+
     static function requestIdFor(object:Value, entry:String):String {
         final requestId = readString(object, "requestId");
         if (requestId.ok && requestId.value.length > 0) return requestId.value;
@@ -257,11 +397,15 @@ class CafBridgeProcessor {
         return entry;
     }
 
-    static function firstEnv(first:String, second:String):String {
+    static function firstEnv(first:String, second:String, ?third:String):String {
         final firstValue = Sys.getEnv(first);
         if (firstValue != null && firstValue.length > 0) return firstValue;
         final secondValue = Sys.getEnv(second);
-        if (secondValue != null) return secondValue;
+        if (secondValue != null && secondValue.length > 0) return secondValue;
+        if (third != null) {
+            final thirdValue = Sys.getEnv(third);
+            if (thirdValue != null) return thirdValue;
+        }
         return "";
     }
 
@@ -350,5 +494,23 @@ class NumberRead {
 
     public static function failure():NumberRead {
         return new NumberRead(false, 0);
+    }
+}
+
+class BoolRead {
+    public final ok:Bool;
+    public final value:Bool;
+
+    function new(ok:Bool, value:Bool) {
+        this.ok = ok;
+        this.value = value;
+    }
+
+    public static function success(value:Bool):BoolRead {
+        return new BoolRead(true, value);
+    }
+
+    public static function failure():BoolRead {
+        return new BoolRead(false, false);
     }
 }

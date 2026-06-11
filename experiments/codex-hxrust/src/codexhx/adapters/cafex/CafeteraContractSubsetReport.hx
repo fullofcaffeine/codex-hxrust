@@ -89,6 +89,23 @@ class CafeteraContractSubsetReport {
                 "Validates app/server goal JSON, in-memory lifecycle transitions, token usage accounting, model-facing goal tools, and explicit unsupported tool/status behavior."
             ),
             new CafeteraContractSubsetContract(
+                "hxcx-8.1-caf-goal-apply-bridge",
+                "HXCX-8.1",
+                "pass",
+                "fixture_pass",
+                "Caf goal-apply request and receipt bridge",
+                "harness/check-caf-bridge.sh",
+                [
+                    "fixtures/cafex/caf-goal-apply-request.v1.json",
+                    "fixtures/cafex/caf-goal-apply-receipt.v1.json",
+                    "fixtures/cafex/caf-goal-clear-request.v1.json",
+                    "fixtures/cafex/caf-goal-clear-receipt.v1.json",
+                    "fixtures/cafex/caf-goal-invalid-request.v1.json",
+                    "fixtures/cafex/caf-goal-invalid-receipt.v1.json"
+                ],
+                "Validates Caf/Ralph goal-apply request parsing, Brew completion authority guards, ThreadGoalStore application, clear-boundary receipts, invalid request refusal, and idempotent duplicate scans."
+            ),
+            new CafeteraContractSubsetContract(
                 "hxcx-5.4-caf-continuity-metadata",
                 "HXCX-5.4",
                 "pass",

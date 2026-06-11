@@ -100,7 +100,7 @@ Each area receives one of:
 | Adapter boundary | Cafex code lives under explicit adapter modules over upstream-shaped core. | Cafex fork-only behavior leaks into core protocol/runtime modules. |
 | Receipts | Selected session/turn/active-lane receipts match fixture schemas and newline/pretty JSON conventions. | Receipt shape cannot match Cafex contracts without corrupting upstream core. |
 | Effort/mode | Request validation, lifecycle receipt, and next-turn state changes pass selected contracts. | Effort/mode updates require live TUI ownership before headless adapter proof exists. |
-| Goals | Minimal goal apply DTO/state semantics pass selected contracts. | Goal behavior cannot be separated from TUI/app-server persistence. |
+| Goals | Minimal goal DTO/state semantics and the Caf/Ralph goal-apply request/receipt bridge pass selected contracts. | Goal behavior cannot be separated from TUI/app-server persistence. |
 | Wake/restart | DTOs and receipt validation pass; live process behavior remains wrapped/fail-closed. | Restart/wake requires unsafe process takeover before wrapper policy exists. |
 | Seam ledger | Every supported/unsupported Cafex delta maps to a row. | Unsupported seam is silently omitted. |
 

@@ -1,0 +1,20 @@
+{
+  "schema": "cafetera.codex.goal-apply-request.v1",
+  "requestId": "goal-1",
+  "deliveryKey": "sha256:goal-1-delivery",
+  "taskId": "f12e-goal",
+  "clientId": "codex",
+  "runId": "run-1",
+  "laneId": "run-1",
+  "processId": 4242,
+  "threadId": "thread-goal-1",
+  "continuityGenerationId": "generation-1",
+  "action": "set_objective",
+  "requestedNativeGoalStatus": "active",
+  "effectiveNativeGoalStatus": "active",
+  "objective": "Pursue Caf/Ralph target closure through native Codex goal state.",
+  "targetClosureRef": "target-closure:goal-1",
+  "targetClosureDigest": "sha256:goal-1",
+  "nativeGoalCompletionClosesBrew": false,
+  "brewCompletionAuthority": true
+}

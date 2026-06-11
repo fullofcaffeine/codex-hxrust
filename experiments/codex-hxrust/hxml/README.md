@@ -19,7 +19,7 @@ Profile policy for the scaffold:
 | `process-exec.hxml` | Compile the HXCX-4.2 exact-approval process exec wrapper harness through portable haxe.rust. |
 | `sandbox-gate.hxml` | Compile the HXCX-4.3 fail-closed sandbox permission gate harness through portable haxe.rust. |
 | `caf-receipts.hxml` | Compile the HXCX-5.1 Caf session/turn receipt adapter harness through portable haxe.rust. |
-| `caf-bridge.hxml` | Compile the HXCX-5.2 Caf effort/wake bridge harness through portable haxe.rust. |
+| `caf-bridge.hxml` | Compile the HXCX-5.2/HXCX-8.1 Caf effort/wake/goal bridge harness through portable haxe.rust. |
 | `caf-continuity.hxml` | Compile the HXCX-5.4 Caf successor/predecessor continuity metadata harness through portable haxe.rust. |
 | `goals.hxml` | Compile the HXCX-5.3 goal DTO/state/tool harness through portable haxe.rust. |
 

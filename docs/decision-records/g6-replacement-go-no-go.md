@@ -36,8 +36,8 @@ harness/check-replacement-go-no-go.sh
 | `reference/operator-runbook.v1.json` | production default disabled | Rollback, disable, distribution, and diagnostics are documented. |
 | `reference/state-backend-spike.v1.json` | JSONL accepted for current experiment; SQLite required for persistent state replacement | No production state migration is implied. |
 | `reference/tool-registry-skeleton.v1.json` | registry lookup accepted; real MCP transport unsupported | Unsupported MCP operations fail closed. |
-| `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | 7 supported, 7 unsupported, 1 review-only | Unsupported surfaces are explicit. |
-| `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` | 4 covered/pass, 5 gaps | No production replacement claim. |
+| `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | 8 supported, 6 unsupported, 1 review-only | Unsupported surfaces are explicit. |
+| `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` | 5 covered/pass, 5 gaps | No production replacement claim. |
 
 ## Scorecard
 
@@ -47,7 +47,7 @@ harness/check-replacement-go-no-go.sh
 | protocol | green | protocol/JSON/schema fixtures are active | expand upstream parity as scope grows |
 | runtime | yellow | credential-free headless runtime works | live model/TUI/restart stay unsupported |
 | tools/state | yellow | process, sandbox, diagnostics, apply-patch gates fail closed; JSONL state and registry lookup are accepted for current fixtures | SQLite remains a gate for persistent state replacement; real MCP transport remains open |
-| Cafex adapter | yellow | selected receipt/bridge/goal/continuity fixtures pass | 7 seam rows unsupported |
+| Cafex adapter | yellow | selected receipt/bridge/goal/continuity fixtures pass | 6 seam rows unsupported |
 | security | yellow | fail-closed wrappers and diagnostics redaction exist | real OS sandbox and production drills remain |
 | licensing | red-for-release | haxe.rust GPL-3.0, Codex/Cafex Apache-2.0 | review before bundling or binary distribution |
 
@@ -55,7 +55,6 @@ harness/check-replacement-go-no-go.sh
 
 - Active-lane capability advertisement.
 - Queue reconcile runtime bridge.
-- Caf goal-apply request bridge.
 - Live mode apply runtime.
 - Restart apply runtime bridge.
 - Plan-checkpoint continuation guard.
@@ -80,7 +79,7 @@ harness/check-replacement-go-no-go.sh
 | Process/sandbox/mutation cannot fail closed | pass | M4 fail-closed gates exist. |
 | Cafex behavior leaks into upstream core | pass | Cafex remains under adapter modules. |
 | Licensing blocks intended distribution | accepted blocker | Blocks release/bundling, not local experiment. |
-| Required haxe.rust changes cannot be upstreamed | yellow | Nine pressure gaps resolved upstream; one stdlib gap needs follow-up. |
+| Required haxe.rust changes cannot be upstreamed | pass | Ten pressure gaps resolved upstream; no open expected-failure repros remain. |
 | Unsupported surfaces cannot produce structured errors | yellow | Some live runtime surfaces are still unsupported rather than fully diagnosed. |
 | Parity requires copying whole source trees | pass | External pins and focused fixtures are used. |
 

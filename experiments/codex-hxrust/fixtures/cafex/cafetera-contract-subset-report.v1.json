@@ -6,8 +6,8 @@
   "productionReplacement": false,
   "replacementClaim": "none",
   "summary": {
-    "covered": 4,
-    "passed": 4,
+    "covered": 5,
+    "passed": 5,
     "failed": 0,
     "gaps": 5
   },
@@ -41,6 +41,16 @@
       "harness": "harness/check-goals.sh",
       "sourceFixtures": ["fixtures/hxrust/thread-goal-active.v1.json", "fixtures/hxrust/thread-goal-transition.v1.jsonl", "fixtures/hxrust/goal-tool-output.v1.jsonl"],
       "notes": "Validates app/server goal JSON, in-memory lifecycle transitions, token usage accounting, model-facing goal tools, and explicit unsupported tool/status behavior."
+    },
+    {
+      "id": "hxcx-8.1-caf-goal-apply-bridge",
+      "bead": "HXCX-8.1",
+      "status": "pass",
+      "classification": "fixture_pass",
+      "contract": "Caf goal-apply request and receipt bridge",
+      "harness": "harness/check-caf-bridge.sh",
+      "sourceFixtures": ["fixtures/cafex/caf-goal-apply-request.v1.json", "fixtures/cafex/caf-goal-apply-receipt.v1.json", "fixtures/cafex/caf-goal-clear-request.v1.json", "fixtures/cafex/caf-goal-clear-receipt.v1.json", "fixtures/cafex/caf-goal-invalid-request.v1.json", "fixtures/cafex/caf-goal-invalid-receipt.v1.json"],
+      "notes": "Validates Caf/Ralph goal-apply request parsing, Brew completion authority guards, ThreadGoalStore application, clear-boundary receipts, invalid request refusal, and idempotent duplicate scans."
     },
     {
       "id": "hxcx-5.4-caf-continuity-metadata",

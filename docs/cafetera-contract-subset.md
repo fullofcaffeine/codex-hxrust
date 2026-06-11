@@ -14,6 +14,7 @@ Covered contracts:
 - `HXCX-5.2`: Caf effort, wake, and unsupported mode directory bridge via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
 - `HXCX-5.3`: Minimal Caf goal DTO, in-memory state, and goal tools via `experiments/codex-hxrust/harness/check-goals.sh`.
 - `HXCX-5.4`: Wake/restart successor and predecessor continuity metadata via `experiments/codex-hxrust/harness/check-caf-continuity.sh`.
+- `HXCX-8.1`: Caf/Ralph goal-apply request and receipt bridge via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
 
 Each covered contract is classified as `fixture_pass` only. That means the selected fixture and adapter behavior passed under hxrust; it does not mean the generated binary can replace production Codex or Cafetera yet.
 
@@ -47,7 +48,7 @@ Run from `experiments/codex-hxrust`:
 harness/check-cafetera-contract-subset.sh
 ```
 
-The gate runs the four underlying Cafex/hxrust harnesses, then validates and regenerates the contract subset report through:
+The gate runs the underlying Cafex/hxrust harnesses, then validates and regenerates the contract subset report through:
 
 - Haxe interpreter harness
 - haxe.rust generation through `hxml/cafetera-contract-subset.hxml`

@@ -66,15 +66,15 @@ The hxrust path has a smaller native-Codex rebase surface for supported rows, bu
 | Metric | Count | Meaning |
 | --- | ---: | --- |
 | Seam ledger rows | 15 | Replacement review rows tracked locally. |
-| Supported rows | 7 | Fixture-backed hxrust behavior exists. |
-| Unsupported rows | 7 | Known gaps that still block broad replacement. |
+| Supported rows | 8 | Fixture-backed hxrust behavior exists. |
+| Unsupported rows | 6 | Known gaps that still block broad replacement. |
 | Review-only rows | 1 | Governance evidence, not runtime behavior. |
 | Haxe files in compared wrapper/tool/goal surface | 25 | Implementation surface we maintain instead of replaying those slices as Rust fork patches. |
-| Cafex fixture files | 18 | Adapter fixture burden in `fixtures/cafex`. |
+| Cafex fixture files | 24 | Adapter fixture burden in `fixtures/cafex`. |
 | Experiment gates | 19 | Current proof surface for generated Haxe/Rust behavior. |
 | Generated Rust committed | 0 | Generated output remains disposable; gates must regenerate/prove behavior. |
 
-Supported hxrust rows cover deterministic receipt writing, continuity metadata, effort/wake bridge fixtures, explicit mode refusal, and the minimal thread-goal lifecycle. Unsupported rows still include active-lane advertisement, queue reconcile, live mode/restart/goal apply, plan checkpoint continuation guard, and live TUI/model runtime.
+Supported hxrust rows cover deterministic receipt writing, continuity metadata, effort/wake/goal bridge fixtures, explicit mode refusal, and the minimal thread-goal lifecycle. Unsupported rows still include active-lane advertisement, queue reconcile, live mode/restart, plan-checkpoint continuation guard, and live TUI/model runtime.
 
 ## Rebase-Friction Result
 
@@ -85,7 +85,7 @@ Evidence supports this limited claim:
 Evidence does not support a broad replacement claim:
 
 - The source Cafex patch still spans 45 unique native paths, with 25 under `tui`.
-- hxrust has 7 unsupported replacement rows, all in live runtime or UI-owned behavior.
+- hxrust has 6 unsupported replacement rows, all in live runtime or UI-owned behavior.
 - Generated Rust is not the maintenance artifact; Haxe source plus fixtures are. That shifts work, it does not erase work.
 - The Cafetera contract subset already says `productionReplacement == false`.
 
@@ -93,6 +93,6 @@ Evidence does not support a broad replacement claim:
 
 Feed `HXCX-6.3` with this recommendation:
 
-Use hxrust for sidecar/helper and selected adapter slices first. Do not position it as a full Cafex replacement until either the 7 unsupported rows are implemented generically or the replacement review explicitly decides those rows remain native.
+Use hxrust for sidecar/helper and selected adapter slices first. Do not position it as a full Cafex replacement until either the 6 unsupported rows are implemented generically or the replacement review explicitly decides those rows remain native.
 
 Any haxe.rust limitations discovered while reducing the unsupported rows should be filed and fixed in haxe.rust as general compiler capability, not as codexhx-specific compiler behavior.

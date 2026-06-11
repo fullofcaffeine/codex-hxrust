@@ -28,18 +28,24 @@ class CafBridgeHarness {
         copyFixture("caf-effort-invalid-request.v1.json", requestsDir + "/effort-invalid.json");
         copyFixture("caf-wake-request.v1.json", requestsDir + "/wake-1.json");
         copyFixture("caf-mode-unsupported-request.v1.json", requestsDir + "/mode-unsupported.json");
+        copyFixture("caf-goal-apply-request.v1.json", requestsDir + "/goal-1.json");
+        copyFixture("caf-goal-clear-request.v1.json", requestsDir + "/goal-clear.json");
+        copyFixture("caf-goal-invalid-request.v1.json", requestsDir + "/goal-invalid.json");
         File.saveContent(requestsDir + "/ignored.json", "{\n  \"schema\": \"caf-client-session.v1\",\n  \"requestId\": \"ignored\"\n}\n");
 
         final first = CafBridgeProcessor.processOnce(requestsDir, receiptsDir, writtenAt);
-        assertOutcome(first, true, 4, 1);
+        assertOutcome(first, true, 7, 1);
         assertReceipt("caf-effort-receipt.v1.json", receiptsDir + "/effort-1.json");
         assertReceipt("caf-effort-invalid-receipt.v1.json", receiptsDir + "/effort-invalid.json");
         assertReceipt("caf-wake-receipt.v1.json", receiptsDir + "/wake-1.json");
         assertReceipt("caf-mode-unsupported-receipt.v1.json", receiptsDir + "/mode-unsupported.json");
+        assertReceipt("caf-goal-apply-receipt.v1.json", receiptsDir + "/goal-1.json");
+        assertReceipt("caf-goal-clear-receipt.v1.json", receiptsDir + "/goal-clear.json");
+        assertReceipt("caf-goal-invalid-receipt.v1.json", receiptsDir + "/goal-invalid.json");
         assertFalse(FileSystem.exists(receiptsDir + "/ignored.json"), "unknown Caf schema should not write a receipt");
 
         final second = CafBridgeProcessor.processOnce(requestsDir, receiptsDir, writtenAt);
-        assertOutcome(second, true, 0, 5);
+        assertOutcome(second, true, 0, 8);
         assertReceipt("caf-effort-receipt.v1.json", receiptsDir + "/effort-1.json");
     }
 
@@ -78,11 +84,17 @@ class CafBridgeHarness {
         deleteIfExists(baseDir + "/requests/effort-invalid.json");
         deleteIfExists(baseDir + "/requests/wake-1.json");
         deleteIfExists(baseDir + "/requests/mode-unsupported.json");
+        deleteIfExists(baseDir + "/requests/goal-1.json");
+        deleteIfExists(baseDir + "/requests/goal-clear.json");
+        deleteIfExists(baseDir + "/requests/goal-invalid.json");
         deleteIfExists(baseDir + "/requests/ignored.json");
         deleteIfExists(baseDir + "/receipts/effort-1.json");
         deleteIfExists(baseDir + "/receipts/effort-invalid.json");
         deleteIfExists(baseDir + "/receipts/wake-1.json");
         deleteIfExists(baseDir + "/receipts/mode-unsupported.json");
+        deleteIfExists(baseDir + "/receipts/goal-1.json");
+        deleteIfExists(baseDir + "/receipts/goal-clear.json");
+        deleteIfExists(baseDir + "/receipts/goal-invalid.json");
         deleteIfExists(baseDir + "/receipts/ignored.json");
     }
 

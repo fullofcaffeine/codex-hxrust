@@ -99,7 +99,7 @@
     {
       "id": "broad_replacement_now",
       "status": "abandoned_for_current_phase",
-      "reason": "G6 rejected broad replacement because Cafex has 7 unsupported seams, contract subset has 5 gaps, and distribution/licensing is unresolved."
+      "reason": "G6 rejected broad replacement because Cafex has 6 unsupported seams, contract subset has 5 live/runtime gaps, and distribution/licensing is unresolved."
     },
     {
       "id": "production_default_change",
