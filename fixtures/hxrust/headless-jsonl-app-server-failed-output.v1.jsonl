@@ -1,0 +1,11 @@
+{"id":"app-thread-start-failed","jsonrpc":"2.0","result":{"thread":{"id":"thread-1","sessionId":"session-1","status":{"type":"idle"},"turns":[]}}}
+{"jsonrpc":"2.0","method":"thread/started","params":{"thread":{"id":"thread-1","sessionId":"session-1","status":{"type":"idle"},"turns":[]}}}
+{"jsonrpc":"2.0","method":"thread/status/changed","params":{"status":{"activeFlags":["turnRunning"],"type":"active"},"threadId":"thread-1"}}
+{"jsonrpc":"2.0","method":"turn/started","params":{"threadId":"thread-1","turn":{"id":"turn-1","items":[],"status":"inProgress"}}}
+{"jsonrpc":"2.0","method":"item/started","params":{"item":{"content":[{"text":"Trigger failure","type":"text"}],"id":"user-turn-1","type":"userMessage"},"startedAtMs":1000,"threadId":"thread-1","turnId":"turn-1"}}
+{"jsonrpc":"2.0","method":"item/completed","params":{"completedAtMs":2000,"item":{"content":[{"text":"Trigger failure","type":"text"}],"id":"user-turn-1","type":"userMessage"},"threadId":"thread-1","turnId":"turn-1"}}
+{"jsonrpc":"2.0","method":"error","params":{"error":{"additionalDetails":"internal_server_error","codexErrorInfo":"internalServerError","message":"upstream mock failure"},"threadId":"thread-1","turnId":"turn-1","willRetry":false}}
+{"jsonrpc":"2.0","method":"turn/completed","params":{"threadId":"thread-1","turn":{"id":"turn-1","items":[{"content":[{"text":"Trigger failure","type":"text"}],"id":"user-turn-1","type":"userMessage"}],"status":"failed"}}}
+{"jsonrpc":"2.0","method":"thread/status/changed","params":{"status":{"type":"idle"},"threadId":"thread-1"}}
+{"id":"app-turn-start-failed","jsonrpc":"2.0","result":{"turn":{"id":"turn-1","items":[{"content":[{"text":"Trigger failure","type":"text"}],"id":"user-turn-1","type":"userMessage"}],"status":"failed"}}}
+{"id":"app-thread-read-failed","jsonrpc":"2.0","result":{"thread":{"id":"thread-1","sessionId":"session-1","status":{"type":"idle"},"turns":[{"id":"turn-1","items":[{"content":[{"text":"Trigger failure","type":"text"}],"id":"user-turn-1","type":"userMessage"}],"status":"failed"}]}}}

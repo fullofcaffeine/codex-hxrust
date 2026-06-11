@@ -60,4 +60,6 @@ HXCX-3.5 extends the same boundary with upstream app-server JSON-RPC method enve
 - `thread/read` returns the selected `ThreadReadResponse` subset and includes turns only when `includeTurns` is true.
 - `turn/interrupt` validates `threadId` and `turnId`; because this harness is synchronous, completed, idle, and not-started turns fail closed instead of claiming live cancellation.
 
+Failed mock turns emit the selected upstream `error` server notification with `threadId`, `turnId`, `willRetry`, and `TurnError`, then record the terminal turn status as `failed` for `thread/read`.
+
 Unsupported commands fail closed with `unsupported_command`. The adapter remains credential-free and fixture-backed; it is not a live app-server transport, and it should stay a thin protocol adapter over the pure runtime state machine.

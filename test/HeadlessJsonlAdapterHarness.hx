@@ -8,6 +8,7 @@ class HeadlessJsonlAdapterHarness {
     static function main():Void {
         runsFixtureScript();
         runsUpstreamAppServerFixtureScript();
+        runsFailedAppServerTurnFixtureScript();
         reportsUnsupportedRequests();
         reportsDeterministicInterruptErrors();
     }
@@ -35,6 +36,19 @@ class HeadlessJsonlAdapterHarness {
         assertContains(actual, "\"method\":\"turn/completed\"");
         assertContains(actual, "\"method\":\"item/started\"");
         assertContains(actual, "\"method\":\"item/completed\"");
+        assertCanonicalJsonl(actual);
+    }
+
+    static function runsFailedAppServerTurnFixtureScript():Void {
+        final adapter = new HeadlessJsonlAdapter("fixtures/upstream/mock-model-failed-turn.sse");
+        final input = File.getContent("fixtures/hxrust/headless-jsonl-app-server-failed-input.v1.jsonl");
+        final expected = File.getContent("fixtures/hxrust/headless-jsonl-app-server-failed-output.v1.jsonl");
+        final actual = adapter.dispatchJsonl(input);
+        assertEquals(expected, actual);
+        assertContains(actual, "\"method\":\"error\"");
+        assertContains(actual, "\"willRetry\":false");
+        assertContains(actual, "\"status\":\"failed\"");
+        assertContains(actual, "\"codexErrorInfo\":\"internalServerError\"");
         assertCanonicalJsonl(actual);
     }
 

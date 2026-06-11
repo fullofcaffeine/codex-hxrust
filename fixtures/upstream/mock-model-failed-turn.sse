@@ -1,0 +1,6 @@
+event: response.created
+data: {"type":"response.created","response":{"id":"resp-failed-1"}}
+
+event: response.failed
+data: {"type":"response.failed","response":{"id":"resp-failed-1","error":{"code":"internal_server_error","message":"upstream mock failure"}}}
+

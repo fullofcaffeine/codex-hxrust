@@ -1,0 +1,3 @@
+{"jsonrpc":"2.0","id":"app-thread-start-failed","method":"thread/start","params":{}}
+{"jsonrpc":"2.0","id":"app-turn-start-failed","method":"turn/start","params":{"threadId":"thread-1","input":[{"type":"text","text":"Trigger failure","text_elements":[]}]}}
+{"jsonrpc":"2.0","id":"app-thread-read-failed","method":"thread/read","params":{"threadId":"thread-1","includeTurns":true}}

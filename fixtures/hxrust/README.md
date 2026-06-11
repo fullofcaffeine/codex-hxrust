@@ -29,3 +29,4 @@ Current fixtures:
 - `headless-jsonl-adapter-output.v1.jsonl` is the canonical JSONL response/event transcript expected from that fixture.
 - `headless-jsonl-app-server-input.v1.jsonl` drives the upstream-shaped JSON-RPC app-server fixture for `thread/start`, `turn/start`, `thread/read`, and fail-closed completed-turn interrupt.
 - `headless-jsonl-app-server-output.v1.jsonl` is the canonical JSONL stream with app-server responses plus `thread/started`, `thread/status/changed`, `turn/started`, and `turn/completed` notifications.
+- `headless-jsonl-app-server-failed-input.v1.jsonl` and `headless-jsonl-app-server-failed-output.v1.jsonl` cover the credential-free failed-turn app-server path and its upstream-shaped `error` notification.

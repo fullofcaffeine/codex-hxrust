@@ -185,8 +185,13 @@ class HeadlessJsonlAdapter {
 
         outputs.push(itemStartedNotification(userItemJson()));
         outputs.push(itemCompletedNotification(userItemJson()));
-        outputs.push(itemStartedNotification(agentItemJson()));
-        outputs.push(itemCompletedNotification(agentItemJson()));
+        if (hasAgentItem()) {
+            outputs.push(itemStartedNotification(agentItemJson()));
+            outputs.push(itemCompletedNotification(agentItemJson()));
+        }
+        if (lastOutcome.terminalState == "failed") {
+            outputs.push(errorNotification(false));
+        }
         outputs.push(jsonRpcNotification("turn/completed", "{\"threadId\":\"" + threadId + "\",\"turn\":" + turnJson(true) + "}"));
         outputs.push(threadStatusChangedNotification(threadStatusJson()));
         outputs.push(jsonRpcResponse(requestIdJson, "{\"turn\":" + turnJson(true) + "}"));
@@ -276,11 +281,17 @@ class HeadlessJsonlAdapter {
 
     function turnItemsJson():String {
         if (lastOutcome == null) return "[]";
-        return "[" + userItemJson() + "," + agentItemJson() + "]";
+        final items = [userItemJson()];
+        if (hasAgentItem()) items.push(agentItemJson());
+        return "[" + items.join(",") + "]";
     }
 
     function userItemJson():String {
         return "{\"content\":[{\"text\":" + quote(lastPrompt) + ",\"type\":\"text\"}],\"id\":\"user-" + currentTurnId + "\",\"type\":\"userMessage\"}";
+    }
+
+    function hasAgentItem():Bool {
+        return lastOutcome != null && lastOutcome.assistantText.length > 0;
     }
 
     function agentItemJson():String {
@@ -326,6 +337,54 @@ class HeadlessJsonlAdapter {
     function itemCompletedNotification(itemJson:String):String {
         return jsonRpcNotification("item/completed", "{\"completedAtMs\":" + Std.string(itemCompletedAtMs) + ",\"item\":" + itemJson
             + ",\"threadId\":\"" + threadId + "\",\"turnId\":" + quote(currentTurnId) + "}");
+    }
+
+    function errorNotification(willRetry:Bool):String {
+        return jsonRpcNotification("error", "{\"error\":" + turnErrorJson() + ",\"threadId\":\"" + threadId + "\",\"turnId\":" + quote(currentTurnId)
+            + ",\"willRetry\":" + bool(willRetry) + "}");
+    }
+
+    function turnErrorJson():String {
+        final code = failedErrorCode();
+        return "{\"additionalDetails\":" + (code.length == 0 ? "null" : quote(code)) + ",\"codexErrorInfo\":" + quote(codexErrorInfo(code))
+            + ",\"message\":" + quote(failedErrorMessage()) + "}";
+    }
+
+    function failedErrorCode():String {
+        if (lastOutcome == null) return "other";
+        if (lastOutcome.errorCode.length > 0) return lastOutcome.errorCode;
+        for (event in lastOutcome.events) {
+            if (event.kind == "response_failed" && event.errorCode.length > 0) return event.errorCode;
+        }
+        return "other";
+    }
+
+    function failedErrorMessage():String {
+        if (lastOutcome == null) return "turn failed";
+        if (lastOutcome.errorMessage.length > 0) return lastOutcome.errorMessage;
+        for (event in lastOutcome.events) {
+            if (event.kind == "response_failed" && event.errorMessage.length > 0) return event.errorMessage;
+        }
+        return "turn failed";
+    }
+
+    function codexErrorInfo(code:String):String {
+        return switch code {
+            case "internal_server_error" | "internalServerError":
+                "internalServerError";
+            case "server_overloaded" | "serverOverloaded":
+                "serverOverloaded";
+            case "usage_limit_exceeded" | "usageLimitExceeded":
+                "usageLimitExceeded";
+            case "context_window_exceeded" | "contextWindowExceeded":
+                "contextWindowExceeded";
+            case "unauthorized":
+                "unauthorized";
+            case "bad_request" | "badRequest":
+                "badRequest";
+            case _:
+                "other";
+        }
     }
 
     function jsonRpcError(requestIdJson:String, code:Int, errorCode:String, message:String):String {
