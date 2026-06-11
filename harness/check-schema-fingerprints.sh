@@ -33,6 +33,7 @@ selected_schemas=(
   "ThreadStatusChangedNotification:v2/ThreadStatusChangedNotification.json"
   "TurnStartedNotification:v2/TurnStartedNotification.json"
   "TurnCompletedNotification:v2/TurnCompletedNotification.json"
+  "TurnPlanUpdatedNotification:v2/TurnPlanUpdatedNotification.json"
   "ItemStartedNotification:v2/ItemStartedNotification.json"
   "AgentMessageDeltaNotification:v2/AgentMessageDeltaNotification.json"
   "PlanDeltaNotification:v2/PlanDeltaNotification.json"

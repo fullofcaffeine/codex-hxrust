@@ -12,6 +12,7 @@ class AppProtocolHarness {
         emitsSchemaFingerprint();
         roundTripsFixture();
         mapsErrorsDeterministically();
+        validatesPlanUpdates();
     }
 
     static function emitsSchemaFingerprint():Void {
@@ -20,6 +21,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "\"fingerprint\":\"" + AppProtocol.schemaFingerprint() + "\"");
         assertContains(fingerprintJson, "thread/start");
         assertContains(fingerprintJson, "turn/completed");
+        assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "item/completed");
         assertContains(fingerprintJson, "item/agentMessage/delta");
         assertContains(fingerprintJson, "item/plan/delta");
@@ -30,7 +32,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("20", Std.string(items.length));
+        assertEquals("21", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -53,7 +55,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("11", Std.string(notifications));
+        assertEquals("12", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -69,6 +71,19 @@ class AppProtocolHarness {
         assertFalse(unsupported.ok, "image input must fail in this text-only subset");
         assertEquals("unsupported_user_input", unsupported.errorCode);
         assertEquals("$.message.params.input[0].type", unsupported.errorPath);
+    }
+
+    static function validatesPlanUpdates():Void {
+        final nullExplanation = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"plan-null-explanation\",\"kind\":\"notification\",\"method\":\"turn/plan/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"turn/plan/updated\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"explanation\":null,\"plan\":[{\"step\":\"one\",\"status\":\"pending\"}]}}}")));
+        assertTrue(nullExplanation.ok, "plan update should allow null explanation");
+
+        final missingExplanation = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"plan-missing-explanation\",\"kind\":\"notification\",\"method\":\"turn/plan/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"turn/plan/updated\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"plan\":[{\"step\":\"one\",\"status\":\"completed\"}]}}}")));
+        assertTrue(missingExplanation.ok, "plan update should allow missing explanation");
+
+        final invalidStatus = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"plan-invalid-status\",\"kind\":\"notification\",\"method\":\"turn/plan/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"turn/plan/updated\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"plan\":[{\"step\":\"one\",\"status\":\"blocked\"}]}}}")));
+        assertFalse(invalidStatus.ok, "unknown plan status must fail");
+        assertEquals("invalid_plan_step_status", invalidStatus.errorCode);
+        assertEquals("$.message.params.plan[0].status", invalidStatus.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

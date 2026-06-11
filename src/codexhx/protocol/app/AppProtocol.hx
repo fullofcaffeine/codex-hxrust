@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "rawResponseItem/completed", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:error,item/agentMessage/delta,item/plan/delta,item/completed,item/started,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-006";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "rawResponseItem/completed", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:error,item/agentMessage/delta,item/plan/delta,item/completed,item/started,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-007";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -146,6 +146,8 @@ class AppProtocol {
                 final turn = requiredObjectField(params.keys, params.values, "turn", "$.message.params.turn");
                 if (!turn.ok) return turn.toOutcome();
                 validateTurn(turn, "$.message.params.turn");
+            case "turn/plan/updated":
+                validateTurnPlanUpdatedNotification(params);
             case "item/started":
                 validateItemNotification(params, true);
             case "item/agentMessage/delta":
@@ -317,6 +319,40 @@ class AppProtocol {
         return success(if (started) "notification:item/started" else "notification:item/completed");
     }
 
+    static function validateTurnPlanUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredString(params.keys, params.values, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final explanationIndex = fieldIndex(params.keys, "explanation");
+        if (explanationIndex >= 0) {
+            switch params.values[explanationIndex] {
+                case JString(_) | JNull:
+                case _:
+                    return fail("expected_nullable_string", "$.message.params.explanation", "expected JSON string or null");
+            }
+        }
+        final plan = requiredArray(params.keys, params.values, "plan", "$.message.params.plan");
+        if (!plan.ok) return plan.toOutcome();
+        return validateTurnPlanSteps(plan.values, "$.message.params.plan");
+    }
+
+    static function validateTurnPlanSteps(entries:Array<Value>, path:String):AppProtocolParseOutcome {
+        var i = 0;
+        while (i < entries.length) {
+            final stepPath = path + "[" + Std.string(i) + "]";
+            final step = requireObject(entries[i], stepPath);
+            if (!step.ok) return step.toOutcome();
+            final text = requiredString(step.keys, step.values, "step", stepPath + ".step");
+            if (!text.ok) return text.toOutcome();
+            final status = requiredString(step.keys, step.values, "status", stepPath + ".status");
+            if (!status.ok) return status.toOutcome();
+            if (!validPlanStepStatus(status.value)) return fail("invalid_plan_step_status", stepPath + ".status", "unsupported plan step status");
+            i = i + 1;
+        }
+        return success("notification:turn/plan/updated");
+    }
+
     static function validateAgentMessageDeltaNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
         final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
         if (!threadId.ok) return threadId.toOutcome();
@@ -420,6 +456,10 @@ class AppProtocol {
 
     static function validTurnStatus(value:String):Bool {
         return value == "inProgress" || value == "completed" || value == "interrupted" || value == "failed";
+    }
+
+    static function validPlanStepStatus(value:String):Bool {
+        return value == "pending" || value == "inProgress" || value == "completed";
     }
 
     static function success(summary:String):AppProtocolParseOutcome {

@@ -268,6 +268,34 @@
       }
     },
     {
+      "id": "turn-plan-updated-notification",
+      "kind": "notification",
+      "method": "turn/plan/updated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "turn/plan/updated",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "explanation": "Tracking the Codex haxe.rust port",
+          "plan": [
+            {
+              "step": "Admit upstream app-server protocol fixtures",
+              "status": "completed"
+            },
+            {
+              "step": "Wire headless runtime parity",
+              "status": "inProgress"
+            },
+            {
+              "step": "Return to Cafex adapter work",
+              "status": "pending"
+            }
+          ]
+        }
+      }
+    },
+    {
       "id": "item-started-notification",
       "kind": "notification",
       "method": "item/started",

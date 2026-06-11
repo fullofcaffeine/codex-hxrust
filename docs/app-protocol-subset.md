@@ -21,6 +21,7 @@ Included server notifications:
 - `thread/status/changed`
 - `turn/started`
 - `turn/completed`
+- `turn/plan/updated`
 - `item/started`
 - `item/agentMessage/delta`
 - `item/plan/delta`
@@ -35,9 +36,11 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, experimental plan delta notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
+
+`turn/plan/updated` is the upstream update-plan/checklist notification. Its `explanation` may be missing, `null`, or a string, and each plan step status must be `pending`, `inProgress`, or `completed`.
 
 ## Error Policy
 

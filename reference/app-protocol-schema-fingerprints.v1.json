@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:19cc8cca13961aedde4b93d4b45358ec6e7100d85c22e357be9ea575b2659371",
+  "fingerprint": "sha256:62b8c6d3149ae8d8afab69fb76aa1407fadb83dcddc6fedcdc05f6d4754ec623",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -473,6 +473,22 @@
       "sourcePath": "v2/TurnInterruptResponse.json",
       "sha256": "06e70e8d7e6a13fa301dfc650a2aa685f44a3cbf8767ce22b4797e35a59e6a8c",
       "fields": []
+    },
+    {
+      "id": "TurnPlanUpdatedNotification",
+      "sourcePath": "v2/TurnPlanUpdatedNotification.json",
+      "sha256": "faf449e884d5750dec6310ee9a7bda606fc795d1d28258126eefac29d5a78cf0",
+      "fields": [
+        "definition:TurnPlanStep",
+        "definition:TurnPlanStepStatus",
+        "property:explanation",
+        "property:plan",
+        "property:threadId",
+        "property:turnId",
+        "required:plan",
+        "required:threadId",
+        "required:turnId"
+      ]
     },
     {
       "id": "TurnStartParams",
