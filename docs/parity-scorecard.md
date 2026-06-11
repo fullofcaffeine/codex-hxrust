@@ -31,6 +31,8 @@ G6 rollout mode criteria are detailed in `docs/migration-modes-rollout.md` and t
 
 G6 operator notes are detailed in `docs/operator-runbook.md` and the checked fixture `reference/operator-runbook.v1.json`. The current production default remains disabled until a decision record changes it.
 
+G7 haxe.rust production-readiness evidence is summarized in `docs/haxe-rust-production-readiness.md` and checked by `reference/haxe-rust-production-readiness.v1.json`.
+
 ## Scorecard
 
 Each area receives one of:

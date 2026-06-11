@@ -46,3 +46,4 @@ Current harnesses:
 - `check-migration-modes.sh` validates the HXCX-6.2 migration-mode policy for helper-only, sidecar/headless, selected adapter-slice, and broader replacement rollout criteria.
 - `check-operator-runbook.sh` validates the HXCX-6.4 operator runbook for rollback commands, distribution artifact shape, diagnostics, and the no-production-default-change guard.
 - `check-haxe-rust-pressure-gaps.sh` validates the HXCX-7.1 haxe.rust pressure-gap ledger, status/severity/source-area counts, and current raw Rust escape pressure in app/test Haxe source.
+- `check-haxe-rust-production-readiness.sh` validates the HXCX-7.3 haxe.rust production-readiness scorecard and cross-checks measured inputs against pressure-gap, contract, seam, runbook, and pin ledgers.

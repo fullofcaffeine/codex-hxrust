@@ -1,0 +1,204 @@
+{
+  "schema": "codex-hxrust.haxe-rust-production-readiness.v1",
+  "bead": "HXCX-7.3",
+  "generatedAt": "2026-06-11T00:00:00Z",
+  "decisionRecordFeed": "HXCX-6.3",
+  "recommendation": {
+    "mode": "conditional_go_for_helper_sidecar_and_selected_adapter_slices",
+    "broadReplacement": "no_go",
+    "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
+    "requiredBeforeBroadReplacement": [
+      "Resolve or explicitly accept the open nullable-interface value gap.",
+      "Create generic haxe.rust reproductions or fixes for the Cafex path/string stdlib workarounds.",
+      "Complete license/distribution review for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts.",
+      "Reduce or explicitly native-own the 7 unsupported Cafex seam rows.",
+      "Run replacement rollback drills from the operator runbook."
+    ]
+  },
+  "evidence": {
+    "pressureGaps": "reference/haxe-rust-pressure-gaps.v1.json",
+    "cafeteraContractSubset": "experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json",
+    "cafexSeamLedger": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
+    "frictionComparison": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json",
+    "migrationModes": "reference/migration-modes.v1.json",
+    "operatorRunbook": "reference/operator-runbook.v1.json",
+    "haxeRustPin": "reference/haxe-rust.pin.json"
+  },
+  "scorecard": [
+    {
+      "dimension": "language",
+      "score": "yellow_green",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, try/catch returns, and reusable enum values now pass through haxe.rust after generic upstream fixes.",
+      "strengths": [
+        "7 of 10 pressure gaps are resolved upstream.",
+        "Protocol and JSON fixtures run through generated Cargo gates.",
+        "No raw Rust escape matches exist in current app/test Haxe source."
+      ],
+      "caveats": [
+        "Nullable interface values remain open upstream.",
+        "Some stdlib path/string patterns still use local workarounds."
+      ],
+      "evidenceRefs": [
+        "reference/haxe-rust-pressure-gaps.v1.json",
+        "docs/haxe-rust-pressure-gap-ledger.md"
+      ]
+    },
+    {
+      "dimension": "runtime",
+      "score": "yellow",
+      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, and headless JSONL adapter slices are viable, but live model/TUI/restart ownership is outside current proof.",
+      "strengths": [
+        "Headless runtime fixtures pass without model credentials.",
+        "Cancellation and transcript/state artifacts are deterministic.",
+        "Operator runbook keeps production default disabled."
+      ],
+      "caveats": [
+        "Live model/provider traffic is not covered.",
+        "Live TUI, queue, restart, and plan-checkpoint ownership remain unsupported Cafex rows."
+      ],
+      "evidenceRefs": [
+        "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
+        "reference/operator-runbook.v1.json"
+      ]
+    },
+    {
+      "dimension": "interop",
+      "score": "yellow_green",
+      "rationale": "The project has kept interop typed and narrow: generated Rust is disposable, haxe.rust stays external, and app/test Haxe source has no raw Rust snippets.",
+      "strengths": [
+        "Raw Rust escape pressure is 0 matches across 92 Haxe source/test files.",
+        "haxe.rust fixes are generic and made in ../haxe.rust.",
+        "Pin update workflow is scripted and gated."
+      ],
+      "caveats": [
+        "Future metal/native boundaries still need real host-effect implementations.",
+        "Nullable trait-object representation remains a compiler interop gap."
+      ],
+      "evidenceRefs": [
+        "docs/haxe-rust-direct-workflow.md",
+        "docs/interop-boundary-policy.md",
+        "reference/haxe-rust-pressure-gaps.v1.json"
+      ]
+    },
+    {
+      "dimension": "security",
+      "score": "yellow",
+      "rationale": "Process execution, sandbox policy, diagnostics redaction, and mutation controls fail closed in fixture gates, but real platform sandbox enforcement and production operational drills are not complete.",
+      "strengths": [
+        "Process exec wrapper denies by default.",
+        "Sandbox gate fails closed for unsupported platforms.",
+        "Diagnostics redaction has fixture coverage."
+      ],
+      "caveats": [
+        "Real OS sandbox enforcement remains a native boundary.",
+        "No production default has changed.",
+        "Security/licensing review is still required before distribution."
+      ],
+      "evidenceRefs": [
+        "docs/process-exec-wrapper.md",
+        "docs/sandbox-permission-gate.md",
+        "docs/diagnostics-redaction.md",
+        "reference/operator-runbook.v1.json"
+      ]
+    },
+    {
+      "dimension": "performance",
+      "score": "yellow",
+      "rationale": "Generated Rust builds and fixture checks are repeatable, and the profile policy aims for idiomatic output across portable/metal profiles, but no runtime performance benchmark suite exists yet.",
+      "strengths": [
+        "Generated Cargo checks/tests run under locked gates.",
+        "Portable-first profile policy avoids premature raw-Rust rewrites.",
+        "Generated output is not committed as source."
+      ],
+      "caveats": [
+        "No throughput/latency benchmark covers headless turns, tools, or adapters.",
+        "Clippy/fmt are advisory rather than required.",
+        "Metal-native performance claims need future focused benchmarks."
+      ],
+      "evidenceRefs": [
+        "docs/generated-cargo-ci-gates.md",
+        "docs/build-profile-policy.md"
+      ]
+    },
+    {
+      "dimension": "maintenance",
+      "score": "yellow_green",
+      "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while Cafex live runtime seams are unsupported.",
+      "strengths": [
+        "7 pressure gaps resolved upstream rather than carried as private compiler hacks.",
+        "Friction comparison supports selected adapter slices and review tooling.",
+        "Operator rollback and migration-mode policies are checked."
+      ],
+      "caveats": [
+        "Two local stdlib workarounds need generic haxe.rust repros.",
+        "Cafex has 7 unsupported seam rows.",
+        "haxe.rust/Codex/Cafex drift must continue through pin and fixture gates."
+      ],
+      "evidenceRefs": [
+        "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json",
+        "reference/migration-modes.v1.json",
+        "reference/operator-runbook.v1.json"
+      ]
+    },
+    {
+      "dimension": "licensing_distribution",
+      "score": "red_for_release",
+      "rationale": "haxe.rust is GPL-3.0 while upstream Codex and Cafex pins are Apache-2.0; the experiment can continue locally, but release/bundling obligations are not reviewed.",
+      "strengths": [
+        "haxe.rust remains an external checkout, not bundled.",
+        "Generated Rust is build output and not committed.",
+        "Operator runbook blocks production default changes before decision review."
+      ],
+      "caveats": [
+        "Binary or bundled distribution needs license review.",
+        "Generated artifact obligations are unresolved.",
+        "Vendoring haxe.rust is deferred unless a later reproducibility decision and license review accept it."
+      ],
+      "evidenceRefs": [
+        "reference/haxe-rust.pin.json",
+        "reference/upstream-codex.pin.json",
+        "reference/cafex-codex.pin.json",
+        "docs/haxe-rust-vendoring-policy.md"
+      ]
+    }
+  ],
+  "measuredInputs": {
+    "pressureGaps": {
+      "total": 10,
+      "resolvedUpstream": 7,
+      "openUpstream": 1,
+      "localWorkaround": 2,
+      "rawRustEscapeMatches": 0,
+      "sourceFilesScanned": 92
+    },
+    "cafeteraContractSubset": {
+      "covered": 4,
+      "passed": 4,
+      "failed": 0,
+      "gaps": 5,
+      "productionReplacement": false
+    },
+    "cafexSeamLedger": {
+      "rows": 15,
+      "supported": 7,
+      "unsupported": 7,
+      "reviewOnly": 1,
+      "productionReplacement": false
+    },
+    "operatorRunbook": {
+      "productionDefaultChanged": false,
+      "currentProductionDefault": "disabled"
+    },
+    "licenses": {
+      "haxeRust": "GPL-3.0",
+      "upstreamCodex": "Apache-2.0",
+      "cafexCodex": "Apache-2.0"
+    }
+  },
+  "feedsReplacementReview": [
+    "Recommend HXCX-6.3 select helper-only, sidecar/headless, or selected adapter-slice mode.",
+    "Do not select broad replacement from current evidence.",
+    "Keep unsupported surfaces explicit and fail-closed.",
+    "Treat license/distribution as a release blocker, not a local-experiment blocker."
+  ]
+}
