@@ -48,3 +48,4 @@ Current harnesses:
 - `check-haxe-rust-pressure-gaps.sh` validates the HXCX-7.1 haxe.rust pressure-gap ledger, status/severity/source-area counts, and current raw Rust escape pressure in app/test Haxe source.
 - `check-haxe-rust-production-readiness.sh` validates the HXCX-7.3 haxe.rust production-readiness scorecard and cross-checks measured inputs against pressure-gap, contract, seam, runbook, and pin ledgers.
 - `check-replacement-go-no-go.sh` validates the HXCX-6.3 G6 replacement decision record against readiness, friction, seam, contract, and operator runbook evidence.
+- `check-post-experiment-archive.sh` validates the HXCX-7.4 post-experiment archive, reusable artifacts, abandoned/deferred paths, and Brew conversion notes against the G6 decision.

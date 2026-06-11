@@ -154,3 +154,5 @@ Required fields:
 No gate should be marked green without at least one committed artifact or repeatable command.
 
 The G6 replacement decision is recorded in `docs/decision-records/g6-replacement-go-no-go.md` and checked by `reference/replacement-go-no-go.v1.json`.
+
+The HXCX-7 archive decision is recorded in `docs/decision-records/hxcx-7-post-experiment-archive.md` and checked by `reference/post-experiment-archive.v1.json`.

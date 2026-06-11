@@ -14,6 +14,7 @@ Current external references:
 - `haxe-rust-pressure-gaps.v1.json`: HXCX-7.1 compiler/runtime/interop pressure-gap ledger with reproduction, severity, workaround, source-area, and raw Rust escape-pressure counts.
 - `haxe-rust-production-readiness.v1.json`: HXCX-7.3 haxe.rust capability scorecard and evidence-backed go/no-go recommendation for replacement review.
 - `replacement-go-no-go.v1.json`: HXCX-6.3 G6 replacement decision selecting selected adapter-slice mode and rejecting broad replacement for current evidence.
+- `post-experiment-archive.v1.json`: HXCX-7.4 archive record preserving reusable outputs, deferred paths, and follow-up conversion notes.
 - `fixture-sources.v1.json`: fixture family inventory and initial harness source map.
 - `app-protocol-schema-fingerprints.v1.json`: accepted upstream app-server schema subset fingerprint for the G2 protocol gate.
 - `parity-scorecard.v1.json`: machine-readable gate and kill-criteria summary.

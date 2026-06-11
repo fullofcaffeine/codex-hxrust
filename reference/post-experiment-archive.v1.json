@@ -1,0 +1,137 @@
+{
+  "schema": "codex-hxrust.post-experiment-archive.v1",
+  "bead": "HXCX-7.4",
+  "date": "2026-06-11",
+  "owner": "Marcelo Serpa",
+  "sourceDecision": "reference/replacement-go-no-go.v1.json",
+  "outcome": {
+    "selectedMode": "selected_adapter_slice",
+    "broadReplacement": "not_supported_by_current_evidence",
+    "productionDefaultChanged": false,
+    "currentProductionDefault": "disabled",
+    "summary": "Archive this phase as a bounded success: codexhx is useful as a haxe.rust production pressure test and may continue toward named fixture-backed adapter slices, but broad Codex/Cafex replacement is deferred."
+  },
+  "reusableArtifacts": [
+    {
+      "id": "protocol_json_runtime_harnesses",
+      "kind": "test_harness",
+      "paths": [
+        "experiments/codex-hxrust/harness/check-protocol-ids.sh",
+        "experiments/codex-hxrust/harness/check-json-boundary.sh",
+        "experiments/codex-hxrust/harness/check-app-protocol.sh",
+        "experiments/codex-hxrust/harness/check-mock-model-stream.sh",
+        "experiments/codex-hxrust/harness/check-headless-jsonl-adapter.sh"
+      ],
+      "reuse": "Keep as upstream-shaped fixture gates for helper/headless work."
+    },
+    {
+      "id": "native_tool_security_harnesses",
+      "kind": "test_harness",
+      "paths": [
+        "experiments/codex-hxrust/harness/check-apply-patch-dry-run.sh",
+        "experiments/codex-hxrust/harness/check-process-exec.sh",
+        "experiments/codex-hxrust/harness/check-sandbox-gate.sh",
+        "experiments/codex-hxrust/harness/check-diagnostics.sh"
+      ],
+      "reuse": "Keep as fail-closed host-effect and diagnostics proof surfaces."
+    },
+    {
+      "id": "cafex_adapter_harnesses",
+      "kind": "test_harness",
+      "paths": [
+        "experiments/codex-hxrust/harness/check-caf-receipts.sh",
+        "experiments/codex-hxrust/harness/check-caf-bridge.sh",
+        "experiments/codex-hxrust/harness/check-caf-continuity.sh",
+        "experiments/codex-hxrust/harness/check-goals.sh",
+        "experiments/codex-hxrust/harness/check-cafetera-contract-subset.sh"
+      ],
+      "reuse": "Use as selected adapter-slice evidence; do not treat as broad replacement proof."
+    },
+    {
+      "id": "decision_ledgers",
+      "kind": "reference",
+      "paths": [
+        "reference/migration-modes.v1.json",
+        "reference/operator-runbook.v1.json",
+        "reference/replacement-go-no-go.v1.json",
+        "reference/haxe-rust-production-readiness.v1.json",
+        "reference/haxe-rust-pressure-gaps.v1.json"
+      ],
+      "reuse": "Keep as the evidence bundle for HXCX-6/HXCX-7 and future replacement review."
+    },
+    {
+      "id": "haxe_rust_pressure_fixes",
+      "kind": "upstream_compiler_feedback",
+      "paths": [
+        "docs/haxe-rust-direct-workflow.md",
+        "docs/haxe-rust-pressure-gap-ledger.md",
+        "reference/haxe-rust-beads-import.v1.json"
+      ],
+      "reuse": "Use as the conversion map from codexhx pressure findings to generic haxe.rust issues and fixtures."
+    }
+  ],
+  "abandonedOrDeferredPaths": [
+    {
+      "id": "broad_replacement_now",
+      "status": "abandoned_for_current_phase",
+      "reason": "G6 rejected broad replacement because Cafex has 7 unsupported seams, contract subset has 5 gaps, and distribution/licensing is unresolved."
+    },
+    {
+      "id": "production_default_change",
+      "status": "deferred",
+      "reason": "Operator runbook and G6 decision keep production routing disabled until a later decision record and rollback drill."
+    },
+    {
+      "id": "live_tui_model_restart_runtime",
+      "status": "deferred",
+      "reason": "Live TUI, credentialed model, queue, plan checkpoint, and restart ownership are unsupported seam rows."
+    },
+    {
+      "id": "bundled_or_binary_distribution",
+      "status": "deferred",
+      "reason": "haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts requires license review before release."
+    },
+    {
+      "id": "codex_specific_compiler_hacks",
+      "status": "abandoned",
+      "reason": "Compiler fixes must remain generic haxe.rust work; current pressure fixes were upstreamed generically."
+    }
+  ],
+  "followUpBeads": [
+    {
+      "id": "codex-hxrust-rat.2",
+      "purpose": "Create upstreamable haxe.rust fixtures/issues for nullable interface values and stdlib path/string workarounds."
+    },
+    {
+      "id": "codex-hxrust-hpu.4",
+      "purpose": "Decide JSONL versus SQLite state backend before any stronger runtime replacement claim."
+    },
+    {
+      "id": "codex-hxrust-hpu.5",
+      "purpose": "Add MCP/tool registry compatibility skeleton for future tool parity."
+    }
+  ],
+  "brewConversionNotes": [
+    {
+      "target": "selected_adapter_slice_review",
+      "note": "Convert reusable Cafex adapter harness outputs into Brew/Cafetera acceptance evidence only per named slice."
+    },
+    {
+      "target": "haxe_rust_upstream_issues",
+      "note": "Convert remaining compiler work into generic haxe.rust fixtures before adding any codexhx dependency on the behavior."
+    },
+    {
+      "target": "operator_rollout",
+      "note": "Any Cafetera workflow wiring should consume operator-runbook disable/rollback rules and must not change defaults without a new decision record."
+    },
+    {
+      "target": "archive_bundle",
+      "note": "Preserve docs, reference ledgers, fixtures, and harnesses; do not preserve generated Rust as source."
+    }
+  ],
+  "finalChecks": [
+    "experiments/codex-hxrust/harness/check-replacement-go-no-go.sh",
+    "experiments/codex-hxrust/harness/check-haxe-rust-production-readiness.sh",
+    "experiments/codex-hxrust/harness/check-haxe-rust-pressure-gaps.sh"
+  ]
+}
