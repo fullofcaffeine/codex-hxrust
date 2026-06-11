@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,error,externalAgentConfig/import/completed,fs/changed,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-029";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,error,externalAgentConfig/import/completed,fs/changed,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-030";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -186,6 +186,8 @@ class AppProtocol {
                 validateRemoteControlStatusChangedNotification(params);
             case "model/rerouted":
                 validateModelReroutedNotification(params);
+            case "model/verification":
+                validateModelVerificationNotification(params);
             case "externalAgentConfig/import/completed":
                 validateExternalAgentConfigImportCompletedNotification(params);
             case "fs/changed":
@@ -713,6 +715,28 @@ class AppProtocol {
         return success("notification:model/rerouted");
     }
 
+    static function validateModelVerificationNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredString(params.keys, params.values, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final verifications = requiredArray(params.keys, params.values, "verifications", "$.message.params.verifications");
+        if (!verifications.ok) return verifications.toOutcome();
+
+        var i = 0;
+        while (i < verifications.values.length) {
+            switch verifications.values[i] {
+                case JString(value):
+                    if (!validModelVerification(value)) return fail("invalid_model_verification", "$.message.params.verifications[" + Std.string(i) + "]", "unsupported model verification");
+                case _:
+                    return fail("expected_string", "$.message.params.verifications[" + Std.string(i) + "]", "expected JSON string");
+            }
+            i = i + 1;
+        }
+
+        return success("notification:model/verification");
+    }
+
     static function validateExternalAgentConfigImportCompletedNotification(_params:ProtocolObjectField):AppProtocolParseOutcome {
         return success("notification:externalAgentConfig/import/completed");
     }
@@ -1059,6 +1083,10 @@ class AppProtocol {
 
     static function validModelRerouteReason(value:String):Bool {
         return value == "highRiskCyberActivity";
+    }
+
+    static function validModelVerification(value:String):Bool {
+        return value == "trustedAccessForCyber";
     }
 
     static function validCommandExecOutputStream(value:String):Bool {

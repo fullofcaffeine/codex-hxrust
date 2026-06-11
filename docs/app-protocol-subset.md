@@ -41,6 +41,7 @@ Included server notifications:
 - `app/list/updated`
 - `remoteControl/status/changed`
 - `model/rerouted`
+- `model/verification`
 - `externalAgentConfig/import/completed`
 - `fs/changed`
 - `item/completed`
@@ -58,7 +59,7 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, model reroute notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -103,6 +104,8 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `remoteControl/status/changed` reports remote-control connection status and identity. The selected subset validates `installationId`, `serverName`, `status` as `disabled`, `connecting`, `connected`, or `errored`, and optional nullable `environmentId`.
 
 `model/rerouted` reports model reroute decisions. The selected subset validates `threadId`, `turnId`, `fromModel`, `toModel`, and `reason` as the upstream `ModelRerouteReason` enum.
+
+`model/verification` reports model verification metadata. The selected subset validates `threadId`, `turnId`, and `verifications` as an array of upstream `ModelVerification` enum values.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 

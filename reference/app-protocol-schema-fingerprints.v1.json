@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:a2a01e8b2ef3168921f510914b4e3ae1d23ea39f6a8c31a1521db7f24180e879",
+  "fingerprint": "sha256:fdc24d2f98471c238d65ca3876de99e2b07edfbfd1549c6997e76bc178b787b3",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -329,6 +329,20 @@
         "required:threadId",
         "required:toModel",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "ModelVerificationNotification",
+      "sourcePath": "v2/ModelVerificationNotification.json",
+      "sha256": "7dadca7074bfd9205fba31e3598155f2db6858983fc22756450306b638e2141f",
+      "fields": [
+        "definition:ModelVerification",
+        "property:threadId",
+        "property:turnId",
+        "property:verifications",
+        "required:threadId",
+        "required:turnId",
+        "required:verifications"
       ]
     },
     {
