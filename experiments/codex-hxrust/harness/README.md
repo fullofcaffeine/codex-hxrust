@@ -32,6 +32,7 @@ Current harnesses:
 - `check-schema-fingerprints.sh` compares the selected upstream app-server schema subset with the accepted golden fingerprint and writes a diff report under `generated/reports/`.
 - `check-mock-model-stream.sh` validates the credential-free upstream-shaped mock SSE stream parser, fixture-backed model provider start/cancel boundary, one-turn session terminal state, cancellation checkpoints, structured session errors, deterministic malformed-stream errors, golden internal runtime event output, transcript/state fixture output, secret-free persistence, and corrupt state handling.
 - `check-headless-jsonl-adapter.sh` validates the HXCX-3.4 command JSONL adapter for start, submit, status, transcript, canonical JSONL output, and explicit unsupported-command errors.
+- `check-apply-patch-dry-run.sh` validates the HXCX-4.1 apply-patch dry-run wrapper, deterministic error cases, safe relative-path policy, and mutation-disabled default.
 - `check-caf-receipts.sh` validates the HXCX-5.1 Caf session/turn receipt writer, absent-env no-ops, pretty JSON fixtures, overwrite behavior, and unsupported source failures.
 - `check-caf-bridge.sh` validates the HXCX-5.2 Caf effort/wake directory bridge, request consumption, pretty JSON receipts, idempotent duplicate scans, and explicit unsupported mode refusal.
 - `check-caf-continuity.sh` validates the HXCX-5.4 Caf successor/predecessor metadata parser, continuity receipt fixtures, deterministic invalid metadata, and explicit no-hidden-inference behavior.

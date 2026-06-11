@@ -7,6 +7,8 @@ Current fixtures:
 - `thread-goal-active.v1.json` validates the HXCX-5.3 `ThreadGoal` DTO shape.
 - `thread-goal-transition.v1.jsonl` validates the HXCX-5.3 in-memory goal lifecycle slice.
 - `goal-tool-output.v1.jsonl` validates the HXCX-5.3 `get_goal`, `create_goal`, and `update_goal` tool subset.
+- `apply-patch-dry-run-input.v1.patch` covers add, update, and delete hunks without mutating the filesystem.
+- `apply-patch-dry-run-output.v1.jsonl` covers successful dry-run output plus deterministic mutation-disabled, invalid-header, and unsafe-path failures.
 
 haxe.rust capability and compiler smoke fixtures go here if the port needs local copies.
 

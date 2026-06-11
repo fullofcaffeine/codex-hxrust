@@ -1,0 +1,11 @@
+*** Begin Patch
+*** Add File: docs/new-tool-note.md
++# New Tool Note
++This is fixture content.
+*** Update File: src/Main.hx
+@@
+-old value
++new value
+ context value
+*** Delete File: tmp/obsolete.txt
+*** End Patch
