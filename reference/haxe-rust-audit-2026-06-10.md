@@ -87,6 +87,26 @@ experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 0849fcf1a556cb86615cfcd
 
 The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
 
+## Follow-Up Audit After Enum Reuse Helper Call Fix On 2026-06-10
+
+**Pin before audit:** `0b2f196e2b3e8742efe79febe002e97f0924802d`
+
+**Pin after audit:** `1a394f41a1ee019350faee6d592d21d2c5dc20bd`
+
+Additional upstream commit accepted:
+
+- `1a394f41` Fix enum value reuse across helper calls
+
+This resolves the codex-hxrust pressure gap where a parsed JSON-like enum value could be moved by the first helper call and become unusable for a second helper call. haxe.rust now treats Haxe enum values as reusable cloneable values and clones reusable enum locals for typed by-value helper calls, with an `enum_reuse_helper_calls` snapshot.
+
+Gate run:
+
+```bash
+experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 1a394f41a1ee019350faee6d592d21d2c5dc20bd
+```
+
+The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+
 ## Follow-Up Audit After Cargo Failure Propagation Fix On 2026-06-10
 
 **Pin before audit:** `0849fcf1a556cb86615cfcdf635165ba82fec8da`  

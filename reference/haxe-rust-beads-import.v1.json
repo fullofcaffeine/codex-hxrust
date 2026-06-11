@@ -13,13 +13,13 @@
     "rule": "Keep haxe.rust authoritative and generic; codex-hxrust records pressure-test mapping and known-good pins."
   },
   "counts": {
-    "total": 537,
+    "total": 539,
     "open": 1,
     "inProgress": 0,
-    "closed": 535,
+    "closed": 537,
     "tombstone": 1,
     "epics": 95,
-    "tasks": 410,
+    "tasks": 412,
     "features": 23,
     "bugs": 6
   },
@@ -63,9 +63,11 @@
     {
       "codexBead": "codex-hxrust-rat.9",
       "title": "Improve enum value borrow ergonomics for helper calls",
-      "haxeRustRefs": [],
+      "haxeRustRefs": [
+        "haxe.rust-oo3.71"
+      ],
       "priority": "P2",
-      "rationale": "Discovered by codex-hxrust JSON boundary work; create a new generic haxe.rust fixture/task when implementing."
+      "rationale": "Resolved by haxe.rust-oo3.71 with the generic enum_reuse_helper_calls snapshot and reusable enum local clone lowering for by-value helper calls."
     }
   ],
   "issues": [
@@ -6423,6 +6425,37 @@
         "codex-pressure",
         "enum",
         "generics",
+        "regression",
+        "thinking:high"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "codex_pressure_resolved"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.70",
+      "title": "Document portable-first Rust profile framing",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "docs",
+        "profiles",
+        "thinking:low"
+      ],
+      "parent": "haxe.rust-oo3",
+      "importRole": "profile_policy_reference"
+    },
+    {
+      "sourceId": "haxe.rust-oo3.71",
+      "title": "Fix enum value reuse across helper calls",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "borrow",
+        "codex-pressure",
+        "codegen",
+        "enum",
         "regression",
         "thinking:high"
       ],
