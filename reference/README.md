@@ -14,6 +14,7 @@ Current external references:
 - `haxe-rust-pressure-gaps.v1.json`: HXCX-7.1 compiler/runtime/interop pressure-gap ledger with reproduction, severity, workaround, source-area, and raw Rust escape-pressure counts.
 - `haxe-rust-upstream-repros.v1.json`: HXCX-7.2 map from remaining haxe.rust pressure gaps to generic upstream repro fixtures and expected-failure runner evidence in `../haxe.rust`.
 - `haxe-rust-production-readiness.v1.json`: HXCX-7.3 haxe.rust capability scorecard and evidence-backed go/no-go recommendation for replacement review.
+- `haxe-rust-performance-convergence-plan.v1.json`: HXCX-7.5 portable/metal convergence plan with benchmark criteria, codexhx profile split, and haxe.rust Bead links.
 - `state-backend-spike.v1.json`: HXCX-4.4 JSONL versus SQLite state backend decision with replacement-gate and no-production-migration rules.
 - `tool-registry-skeleton.v1.json`: HXCX-4.5 MCP/tool registry skeleton scope, DTO list, fixture lookup evidence, and real-MCP replacement gate.
 - `replacement-go-no-go.v1.json`: HXCX-6.3 G6 replacement decision selecting selected adapter-slice mode and rejecting broad replacement for current evidence.

@@ -103,7 +103,7 @@
     {
       "dimension": "performance",
       "score": "yellow",
-      "rationale": "Generated Rust builds and fixture checks are repeatable, and the profile policy aims for idiomatic output across portable/metal profiles, but no runtime performance benchmark suite exists yet.",
+      "rationale": "Generated Rust builds and fixture checks are repeatable, and HXCX-7.5 defines how codexhx pressure should become generic haxe.rust portable/metal convergence benchmarks, but codexhx does not yet have a production runtime performance suite.",
       "strengths": [
         "Generated Cargo checks/tests run under locked gates.",
         "Portable-first profile policy avoids premature raw-Rust rewrites.",
@@ -116,7 +116,9 @@
       ],
       "evidenceRefs": [
         "docs/generated-cargo-ci-gates.md",
-        "docs/build-profile-policy.md"
+        "docs/build-profile-policy.md",
+        "docs/haxe-rust-performance-convergence-plan.md",
+        "reference/haxe-rust-performance-convergence-plan.v1.json"
       ]
     },
     {

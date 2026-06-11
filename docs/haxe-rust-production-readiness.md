@@ -39,7 +39,7 @@ haxe.rust has handled the current pressure test better than a toy compiler would
 | Runtime | `yellow` | Credential-free headless runtime slices are viable; live model, TUI, restart, and plan-checkpoint ownership are not covered. |
 | Interop | `yellow_green` | Typed Haxe boundaries are holding; current app/test source has zero raw Rust escape matches. |
 | Security | `yellow` | Process, sandbox, diagnostics, and mutation controls fail closed in fixtures; real platform enforcement and production drills remain. |
-| Performance | `yellow` | Locked generated Cargo gates are repeatable; no benchmark suite supports performance claims yet. |
+| Performance | `yellow` | Locked generated Cargo gates are repeatable, and HXCX-7.5 defines the portable/metal convergence benchmark plan; codexhx still has no production runtime benchmark suite. |
 | Maintenance | `yellow_green` | Fixes have been upstreamable and checked; broad replacement remains too expensive with current unsupported seams. |
 | Licensing/distribution | `red_for_release` | Local experiment is acceptable, but binary/bundled release needs license review. |
 

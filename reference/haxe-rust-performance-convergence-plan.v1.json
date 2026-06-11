@@ -1,0 +1,92 @@
+{
+  "schema": "codex-hxrust.haxe-rust-performance-convergence-plan.v1",
+  "date": "2026-06-11",
+  "bead": "HXCX-7.5",
+  "codexIssue": "codex-hxrust-yt7",
+  "compilerFollowUps": [
+    {
+      "id": "haxe.rust-oo3.73",
+      "title": "Define consumer-runtime portable/metal benchmark corpus",
+      "status": "open",
+      "scope": "generic haxe.rust benchmark planning; no downstream product names"
+    }
+  ],
+  "linkedCompilerEvidence": [
+    "haxe.rust-qo9",
+    "haxe.rust-oo3.24",
+    "haxe.rust-oo3.25.1",
+    "haxe.rust-oo3.36"
+  ],
+  "architecture": {
+    "defaultContract": "portable",
+    "nativeOptInContract": "metal",
+    "qualityGoal": "metal-like performance whenever haxe.rust can prove Haxe semantics are preserved",
+    "forbidden": [
+      "Codex-specific compiler behavior",
+      "silent portable-to-metal contract switching",
+      "performance shortcuts that change observable Haxe semantics"
+    ]
+  },
+  "benchmarkCriteria": [
+    {
+      "family": "dto_codecs",
+      "defaultContract": "portable",
+      "paritySignal": "generated Rust shape, clone/temp count, cargo check/test"
+    },
+    {
+      "family": "json_schema_validation",
+      "defaultContract": "portable",
+      "paritySignal": "existing haxe.rust JSON benchmark plus semantic fixtures",
+      "portableMetalTargetMax": 1.12
+    },
+    {
+      "family": "pure_state_reducers",
+      "defaultContract": "portable",
+      "paritySignal": "portable/metal runtime ratio on hot state loops",
+      "portableMetalTargetMax": 1.05
+    },
+    {
+      "family": "process_tool_boundaries",
+      "defaultContract": "metal",
+      "paritySignal": "typed host boundary shape and no raw app injection"
+    },
+    {
+      "family": "async_runtime_surfaces",
+      "defaultContract": "metal",
+      "paritySignal": "metal generated behavior plus no-runtime lower-bound when applicable"
+    },
+    {
+      "family": "native_persistence_boundaries",
+      "defaultContract": "metal",
+      "paritySignal": "typed boundary correctness before performance claims"
+    }
+  ],
+  "codexhxPortableFirstSlices": [
+    "protocol_ids",
+    "dto_payloads",
+    "codecs",
+    "fixtures",
+    "schema_protocol_validation",
+    "config_profile_parsing",
+    "redacted_diagnostics",
+    "pure_state_transitions",
+    "goal_dtos",
+    "credential_free_jsonl_fixture_adapters"
+  ],
+  "codexhxMetalNowSlices": [
+    "process_tool_execution_wrappers",
+    "sandbox_filesystem_enforcement",
+    "live_app_server_transport",
+    "stream_cancellation_async_runtime",
+    "native_persistence_boundaries",
+    "reduced_no_hxrt_runtime_experiments",
+    "measured_hot_paths_without_clean_portable_lowering"
+  ],
+  "decisionRule": [
+    "Choose the codexhx source contract first.",
+    "Use metal for Rust-native host/runtime/tool behavior now.",
+    "Keep portable for Haxe-semantics DTO, codec, fixture, validation, config, and pure state surfaces.",
+    "Reduce portable-vs-metal performance gaps to generic haxe.rust fixtures or benchmarks.",
+    "Link future gaps from codexhx Beads to haxe.rust Beads."
+  ]
+}
