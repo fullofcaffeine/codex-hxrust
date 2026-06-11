@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:414b7fcc46c1b6b98238449c71d1e97325b0cd343dca1706188e67d04aaa7dc0",
+  "fingerprint": "sha256:e0fcc63c85c27b851ad8f8b2512d6d29a23112dc33086b0c035bcedf8c420e5c",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -242,6 +242,23 @@
         "property:threadId",
         "property:turnId",
         "required:item",
+        "required:threadId",
+        "required:turnId"
+      ]
+    },
+    {
+      "id": "TerminalInteractionNotification",
+      "sourcePath": "v2/TerminalInteractionNotification.json",
+      "sha256": "27927cb1c4a31b59d615f0ce3cda5a8f22f32d7bdbcb2b274741cb64d8892d47",
+      "fields": [
+        "property:itemId",
+        "property:processId",
+        "property:stdin",
+        "property:threadId",
+        "property:turnId",
+        "required:itemId",
+        "required:processId",
+        "required:stdin",
         "required:threadId",
         "required:turnId"
       ]

@@ -42,6 +42,7 @@ selected_schemas=(
   "ProcessOutputDeltaNotification:v2/ProcessOutputDeltaNotification.json"
   "ProcessExitedNotification:v2/ProcessExitedNotification.json"
   "CommandExecutionOutputDeltaNotification:v2/CommandExecutionOutputDeltaNotification.json"
+  "TerminalInteractionNotification:v2/TerminalInteractionNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"
