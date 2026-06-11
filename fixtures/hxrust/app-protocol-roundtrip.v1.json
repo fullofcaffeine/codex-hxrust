@@ -426,6 +426,21 @@
       }
     },
     {
+      "id": "command-execution-output-delta-notification",
+      "kind": "notification",
+      "method": "item/commandExecution/outputDelta",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/commandExecution/outputDelta",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "item-command-1",
+          "delta": "line one\n"
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

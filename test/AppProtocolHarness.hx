@@ -25,6 +25,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/completed");
         assertContains(fingerprintJson, "item/agentMessage/delta");
         assertContains(fingerprintJson, "item/plan/delta");
+        assertContains(fingerprintJson, "item/commandExecution/outputDelta");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "command/exec/outputDelta");
         assertContains(fingerprintJson, "process/outputDelta");
@@ -35,7 +36,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("24", Std.string(items.length));
+        assertEquals("25", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -58,7 +59,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("15", Std.string(notifications));
+        assertEquals("16", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -102,6 +103,11 @@ class AppProtocolHarness {
         assertFalse(invalidProcessExit.ok, "process cap flags must be booleans");
         assertEquals("expected_bool", invalidProcessExit.errorCode);
         assertEquals("$.message.params.stdoutCapReached", invalidProcessExit.errorPath);
+
+        final invalidCommandExecutionDelta = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-execution-invalid-delta\",\"kind\":\"notification\",\"method\":\"item/commandExecution/outputDelta\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"item/commandExecution/outputDelta\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"delta\":7}}}")));
+        assertFalse(invalidCommandExecutionDelta.ok, "command execution delta must be a string");
+        assertEquals("expected_string", invalidCommandExecutionDelta.errorCode);
+        assertEquals("$.message.params.delta", invalidCommandExecutionDelta.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

@@ -40,7 +40,7 @@ Implemented G2.4 app-server protocol subset:
 
 - Requests: `thread/start`, `turn/start`, `turn/interrupt`, and `thread/read`.
 - Responses: thread, turn, interrupt-empty, and transcript-bearing read payloads.
-- Notifications: `thread/started`, `thread/status/changed`, `turn/started`, `turn/completed`, `turn/plan/updated`, `item/started`, `item/agentMessage/delta`, `item/plan/delta`, `item/completed`, `rawResponseItem/completed`, `command/exec/outputDelta`, `process/outputDelta`, `process/exited`, and `error`.
+- Notifications: `thread/started`, `thread/status/changed`, `turn/started`, `turn/completed`, `turn/plan/updated`, `item/started`, `item/agentMessage/delta`, `item/plan/delta`, `item/commandExecution/outputDelta`, `item/completed`, `rawResponseItem/completed`, `command/exec/outputDelta`, `process/outputDelta`, `process/exited`, and `error`.
 - Transcript item subset: text `userMessage`, `agentMessage`, and completed `plan` items.
 - Errors: JSON-RPC error payloads and Codex `codexErrorInfo` turn-status behavior for the selected subset.
 - Schema fingerprint emission is exposed through `app/AppProtocol.schemaFingerprintJson()`.
