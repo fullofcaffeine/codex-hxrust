@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/caf-active-lane
+-D rust_crate=codex_hxrust_caf_active_lane
+-D rust_cargo_subcommand=check
+-main CafActiveLaneHarness

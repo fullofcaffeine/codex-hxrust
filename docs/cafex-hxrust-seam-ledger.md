@@ -41,12 +41,12 @@ Every row has a fork-strategy patch class: `upstreamable_seam`, `fork_only_caf_a
 | Wake request/receipt | `fork_only_caf_adapter` | `CafBridgeProcessor` | `check-caf-bridge.sh` | `supported_fixture` |
 | Minimal thread goal lifecycle | `fork_only_caf_adapter` | `ThreadGoal`, `ThreadGoalStore`, `GoalToolHandler` | `check-goals.sh` | `supported_fixture` |
 | Caf goal-apply request bridge | `fork_only_caf_adapter` | `CafBridgeProcessor`, `ThreadGoalStore` | `check-caf-bridge.sh`, `check-cafetera-contract-subset.sh` | `supported_fixture` |
+| Active-lane capability advertisement | `fork_only_caf_adapter` | `CafActiveLaneWriter`, `CafActiveLaneEnv`, `CafNativeLiveStatus` | `check-caf-active-lane.sh`, `check-cafetera-contract-subset.sh` | `supported_fixture` |
 
 ## Unsupported Rows
 
 | Delta | Patch class | Reason |
 | --- | --- | --- |
-| Active-lane capability advertisement | `fork_only_caf_adapter` | No active-lane DTO, native live-status DTO, pid proof, or runtime capability advertisement exists yet. |
 | Queue reconcile runtime bridge | `fork_only_caf_adapter` | hxrust does not own live pending-input queues or plan-checkpoint queue mutation yet. |
 | Live mode apply runtime | `fork_only_caf_adapter` | Current mode support is an explicit fail-closed refusal, not a live collaboration-mode transition. |
 | Restart apply runtime bridge | `fork_only_caf_adapter` | Continuity metadata is covered, but restart request validation, receipts, inherited env, pid handoff, and exec are not. |
@@ -67,3 +67,4 @@ The ledger preserves the HXCX-5.5 boundary:
 - Supported rows mean fixture-backed hxrust compatibility only.
 - Unsupported rows are explicit so replacement review cannot silently omit a Cafex seam.
 - Minimal goal lifecycle support remains separate from the Caf/Ralph `goal-apply-request` bridge: HXCX-5.3 proves core goal DTO/tool flow, while HXCX-8.1 proves request/receipt adapter behavior. Live app-server/TUI persistence is still outside both rows.
+- Active-lane support covers deterministic capability DTO writing and fail-closed PID proof only; live process/TUI ownership remains a later runtime boundary.

@@ -6,8 +6,8 @@
   "productionReplacement": false,
   "replacementClaim": "none",
   "summary": {
-    "covered": 5,
-    "passed": 5,
+    "covered": 6,
+    "passed": 6,
     "failed": 0,
     "gaps": 5
   },
@@ -51,6 +51,16 @@
       "harness": "harness/check-caf-bridge.sh",
       "sourceFixtures": ["fixtures/cafex/caf-goal-apply-request.v1.json", "fixtures/cafex/caf-goal-apply-receipt.v1.json", "fixtures/cafex/caf-goal-clear-request.v1.json", "fixtures/cafex/caf-goal-clear-receipt.v1.json", "fixtures/cafex/caf-goal-invalid-request.v1.json", "fixtures/cafex/caf-goal-invalid-receipt.v1.json"],
       "notes": "Validates Caf/Ralph goal-apply request parsing, Brew completion authority guards, ThreadGoalStore application, clear-boundary receipts, invalid request refusal, and idempotent duplicate scans."
+    },
+    {
+      "id": "hxcx-8.2-caf-active-lane-capability",
+      "bead": "HXCX-8.2",
+      "status": "pass",
+      "classification": "fixture_pass",
+      "contract": "Caf active-lane capability and native live-status DTO writer",
+      "harness": "harness/check-caf-active-lane.sh",
+      "sourceFixtures": ["fixtures/cafex/caf-active-lane.v1.json", "fixtures/cafex/caf-active-lane-no-native-status.v1.json"],
+      "notes": "Validates deterministic active-lane capability advertisement, runtime request/receipt/control schema lists, optional native live-status DTO, run-id selection, wake directories, and fail-closed owner/native PID proof."
     },
     {
       "id": "hxcx-5.4-caf-continuity-metadata",

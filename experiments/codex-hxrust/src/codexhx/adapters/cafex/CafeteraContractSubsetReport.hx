@@ -106,6 +106,19 @@ class CafeteraContractSubsetReport {
                 "Validates Caf/Ralph goal-apply request parsing, Brew completion authority guards, ThreadGoalStore application, clear-boundary receipts, invalid request refusal, and idempotent duplicate scans."
             ),
             new CafeteraContractSubsetContract(
+                "hxcx-8.2-caf-active-lane-capability",
+                "HXCX-8.2",
+                "pass",
+                "fixture_pass",
+                "Caf active-lane capability and native live-status DTO writer",
+                "harness/check-caf-active-lane.sh",
+                [
+                    "fixtures/cafex/caf-active-lane.v1.json",
+                    "fixtures/cafex/caf-active-lane-no-native-status.v1.json"
+                ],
+                "Validates deterministic active-lane capability advertisement, runtime request/receipt/control schema lists, optional native live-status DTO, run-id selection, wake directories, and fail-closed owner/native PID proof."
+            ),
+            new CafeteraContractSubsetContract(
                 "hxcx-5.4-caf-continuity-metadata",
                 "HXCX-5.4",
                 "pass",

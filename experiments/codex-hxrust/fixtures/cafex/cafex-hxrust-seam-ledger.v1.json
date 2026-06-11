@@ -26,8 +26,8 @@
   },
   "summary": {
     "rows": 15,
-    "supported": 8,
-    "unsupported": 6,
+    "supported": 9,
+    "unsupported": 5,
     "reviewOnly": 1
   },
   "rows": [
@@ -230,17 +230,27 @@
       "sourceSeam": "caf-runtime-active-lane-capabilities",
       "patchClass": "fork_only_caf_adapter",
       "owner": "@cafetera/codex",
-      "supportLevel": "unsupported",
-      "replacementStatus": "unsupported_deferred",
-      "hxrustImplementation": [],
-      "fixtures": [],
-      "harnesses": [],
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafActiveLaneWriter",
+        "codexhx.adapters.cafex.CafActiveLaneEnv",
+        "codexhx.adapters.cafex.CafNativeLiveStatus"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-active-lane.v1.json",
+        "fixtures/cafex/caf-active-lane-no-native-status.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-active-lane.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
       "schemaIds": [
         "cafetera.codex.active-lane.v1",
         "cafetera.codex.native-live-status.v1"
       ],
-      "unsupportedReason": "No hxrust active-lane DTO, native live-status DTO, pid proof, or runtime capability advertisement exists yet.",
-      "replacementReviewNote": "Required before any adapter replacement claim that depends on Caf sending lane-sensitive native requests."
+      "unsupportedReason": null,
+      "replacementReviewNote": "Fixture-supported for deterministic active-lane capability advertisement, optional native live-status DTO, run-id selection, wake directories, and fail-closed owner/native PID proof. Live TUI/process ownership remains outside this row."
     },
     {
       "id": "queue-reconcile-runtime-bridge",

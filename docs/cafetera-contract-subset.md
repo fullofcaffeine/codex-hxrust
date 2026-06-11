@@ -15,6 +15,7 @@ Covered contracts:
 - `HXCX-5.3`: Minimal Caf goal DTO, in-memory state, and goal tools via `experiments/codex-hxrust/harness/check-goals.sh`.
 - `HXCX-5.4`: Wake/restart successor and predecessor continuity metadata via `experiments/codex-hxrust/harness/check-caf-continuity.sh`.
 - `HXCX-8.1`: Caf/Ralph goal-apply request and receipt bridge via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
+- `HXCX-8.2`: Caf active-lane capability and native live-status DTO writer via `experiments/codex-hxrust/harness/check-caf-active-lane.sh`.
 
 Each covered contract is classified as `fixture_pass` only. That means the selected fixture and adapter behavior passed under hxrust; it does not mean the generated binary can replace production Codex or Cafetera yet.
 

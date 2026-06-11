@@ -21,7 +21,7 @@ class CafeteraContractSubsetHarness {
         assertContains(report, "\"schema\": \"codex-hxrust.cafetera-contract-subset-report.v1\"");
         assertContains(report, "\"productionReplacement\": false");
         assertContains(report, "\"replacementClaim\": \"none\"");
-        assertContains(report, "\"passed\": 5");
+        assertContains(report, "\"passed\": 6");
         assertContains(report, "\"failed\": 0");
         assertContains(report, "\"gaps\": 5");
         assertContains(report, "\"classification\": \"fixture_pass\"");

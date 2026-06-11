@@ -145,3 +145,4 @@ This inventory unblocks:
 - `HXCX-2.2` typed JSON boundary policy
 - `HXCX-3.1` mock stream parser
 - `HXCX-5.5` Cafetera contract subset
+- `HXCX-8.2` Caf active-lane capability advertisement fixtures

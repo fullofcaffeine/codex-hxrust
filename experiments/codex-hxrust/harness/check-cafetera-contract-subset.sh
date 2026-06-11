@@ -7,6 +7,7 @@ cd "$ROOT"
 harness/check-caf-receipts.sh
 harness/check-caf-bridge.sh
 harness/check-goals.sh
+harness/check-caf-active-lane.sh
 harness/check-caf-continuity.sh
 
 rm -rf generated/cafetera-contract-subset

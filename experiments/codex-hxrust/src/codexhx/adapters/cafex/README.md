@@ -69,11 +69,30 @@ Effort requests currently accept `medium`, `high`, and the `xhigh` alias family 
 
 The live native TUI applies effort/goal changes by sending app events and persisting native runtime state. This Haxe slice records the receipt and in-memory goal-store contract only; wiring live app-server/TUI persistence into the eventual runtime adapter remains a later Cafex milestone.
 
+## Active Lane
+
+`CafActiveLaneWriter` implements the HXCX-8.2 active-lane capability advertisement subset from Cafex native Codex.
+
+Env-owned inputs are represented by `CafActiveLaneEnv`:
+
+- `CAF_CODEX_ACTIVE_LANE_PATH`
+- `CAF_CODEX_PID`
+- `CAF_CODEX_RUN_ID`
+- `CAF_CODEX_SUCCESSOR_RUN_ID`
+- `CAF_CODEX_CONTINUITY_GENERATION_ID`
+- `CAF_CODEX_WAKE_REQUESTS_DIR`
+- `CAF_CODEX_WAKE_RECEIPTS_DIR`
+- `CAF_CODEX_PENDING_INPUT_SNAPSHOT_PATH`
+
+The writer emits deterministic `cafetera.codex.active-lane.v1` JSON with the native runtime request, receipt, and control schema advertisements. It can embed optional `cafetera.codex.native-live-status.v1` DTO data through `CafNativeLiveStatus`.
+
+The slice fails closed when the active-lane path, run id, owner PID, wake request directory, or wake receipt directory is missing. If both run-id env values are present they must match, and `CAF_CODEX_PID` must parse as a positive integer equal to the observed native process id supplied by the caller. Live TUI/process ownership is intentionally not claimed here.
+
 ## Contract Subset Report
 
 `CafeteraContractSubsetReport` implements the HXCX-5.5 selected Cafetera Codex module contract report.
 
-The report covers only the fixture-backed receipts, bridge, goal, and continuity harnesses that currently compile and run through hxrust. Unsupported live-production surfaces are classified separately:
+The report covers only the fixture-backed receipts, bridge, goal, active-lane, and continuity harnesses that currently compile and run through hxrust. Unsupported live-production surfaces are classified separately:
 
 - `unsupported_full_cafetera_cli`
 - `unsupported_live_tui_runtime`

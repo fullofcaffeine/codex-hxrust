@@ -15,6 +15,8 @@ Current fixtures:
 - `caf-goal-apply-request.v1.json` and `caf-goal-apply-receipt.v1.json` cover a Caf/Ralph goal-apply request applied through `ThreadGoalStore`.
 - `caf-goal-clear-request.v1.json` and `caf-goal-clear-receipt.v1.json` cover a close-boundary clear request while preserving Brew completion authority.
 - `caf-goal-invalid-request.v1.json` and `caf-goal-invalid-receipt.v1.json` cover fail-closed invalid goal request handling.
+- `caf-active-lane.v1.json` covers deterministic `cafetera.codex.active-lane.v1` capability advertisement with embedded native live status.
+- `caf-active-lane-no-native-status.v1.json` covers the same active-lane capability advertisement without optional native live status.
 - `caf-continuity-metadata-resume.v1.json` and `caf-continuity-metadata-fresh.v1.json` cover explicit successor/predecessor metadata parsing.
 - `caf-continuity-session-receipt.v1.json` and `caf-continuity-turn-receipt-fresh.v1.json` cover receipts written from parsed continuity metadata.
 - `cafetera-contract-subset-report.v1.json` records the HXCX-5.5 selected Cafetera contract subset pass/fail/gap classification and explicitly avoids any production replacement claim.

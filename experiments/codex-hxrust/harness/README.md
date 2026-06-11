@@ -40,6 +40,7 @@ Current harnesses:
 - `check-tool-registry.sh` validates the HXCX-4.5 tool registry DTOs, fixture lookup, MCP unsupported-feature errors, future real-MCP scope, and generated Rust gate.
 - `check-caf-receipts.sh` validates the HXCX-5.1 Caf session/turn receipt writer, absent-env no-ops, pretty JSON fixtures, overwrite behavior, and unsupported source failures.
 - `check-caf-bridge.sh` validates the HXCX-5.2/HXCX-8.1 Caf effort/wake/goal directory bridge, request consumption, pretty JSON receipts, idempotent duplicate scans, explicit unsupported mode refusal, and fail-closed invalid goal requests.
+- `check-caf-active-lane.sh` validates the HXCX-8.2 Caf active-lane capability writer, optional native live status, run-id selection, wake directories, generated Cargo output, and fail-closed owner/native PID proof.
 - `check-caf-continuity.sh` validates the HXCX-5.4 Caf successor/predecessor metadata parser, continuity receipt fixtures, deterministic invalid metadata, and explicit no-hidden-inference behavior.
 - `check-goals.sh` validates the HXCX-5.3 goal DTO, in-memory state transitions, model-facing goal tool subset, and explicit unsupported goal behavior.
 - `check-cafetera-contract-subset.sh` runs the HXCX-5.5 selected Cafetera Codex module contract subset against hxrust-backed harnesses and emits a pass/fail/gap report without making a production replacement claim.

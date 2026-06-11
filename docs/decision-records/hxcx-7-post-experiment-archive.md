@@ -28,7 +28,7 @@ harness/check-post-experiment-archive.sh
 | --- | --- | --- |
 | Protocol/JSON/runtime harnesses | protocol IDs, JSON boundary, app protocol, mock stream, headless JSONL | Upstream-shaped helper/headless parity gates. |
 | Native tool/security harnesses | apply-patch dry-run, process exec, sandbox gate, diagnostics | Fail-closed host-effect and diagnostic proof. |
-| Cafex adapter harnesses | receipts, bridge, continuity, goals, contract subset | Selected adapter-slice evidence only. |
+| Cafex adapter harnesses | receipts, bridge, active-lane, continuity, goals, contract subset | Selected adapter-slice evidence only. |
 | Decision ledgers | migration modes, operator runbook, G6 decision, readiness, pressure gaps | Evidence bundle for future replacement review. |
 | State backend decision | JSONL versus SQLite spike | JSONL is reusable for fixture evidence; SQLite remains required for persistent state replacement. |
 | Tool registry skeleton | MCP/tool registry lookup fixtures | Registry metadata is reusable; real MCP transport remains deferred. |
