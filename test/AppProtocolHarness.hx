@@ -22,6 +22,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/start");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
+        assertContains(fingerprintJson, "turn/moderationMetadata");
         assertContains(fingerprintJson, "thread/compacted");
         assertContains(fingerprintJson, "item/completed");
         assertContains(fingerprintJson, "item/agentMessage/delta");
@@ -55,7 +56,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("44", Std.string(items.length));
+        assertEquals("45", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -78,7 +79,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("35", Std.string(notifications));
+        assertEquals("36", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -147,6 +148,11 @@ class AppProtocolHarness {
         assertFalse(invalidContextCompactedTurnId.ok, "context compacted turn id must be a string");
         assertEquals("expected_string", invalidContextCompactedTurnId.errorCode);
         assertEquals("$.message.params.turnId", invalidContextCompactedTurnId.errorPath);
+
+        final missingModerationMetadata = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"turn-moderation-missing-metadata\",\"kind\":\"notification\",\"method\":\"turn/moderationMetadata\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"turn/moderationMetadata\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\"}}}")));
+        assertFalse(missingModerationMetadata.ok, "turn moderation metadata must be present");
+        assertEquals("missing_field", missingModerationMetadata.errorCode);
+        assertEquals("$.message.params.metadata", missingModerationMetadata.errorPath);
 
         final invalidTerminalInteraction = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-execution-invalid-terminal-stdin\",\"kind\":\"notification\",\"method\":\"item/commandExecution/terminalInteraction\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"item/commandExecution/terminalInteraction\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"processId\":\"proc-1\",\"stdin\":false}}}")));
         assertFalse(invalidTerminalInteraction.ok, "terminal interaction stdin must be a string");

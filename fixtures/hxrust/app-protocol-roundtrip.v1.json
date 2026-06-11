@@ -309,6 +309,23 @@
       }
     },
     {
+      "id": "turn-moderation-metadata-notification",
+      "kind": "notification",
+      "method": "turn/moderationMetadata",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "turn/moderationMetadata",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "metadata": {
+            "category": "cyber",
+            "score": 0.25
+          }
+        }
+      }
+    },
+    {
       "id": "item-started-notification",
       "kind": "notification",
       "method": "item/started",

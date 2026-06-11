@@ -61,6 +61,7 @@ selected_schemas=(
   "ContextCompactedNotification:v2/ContextCompactedNotification.json"
   "ModelReroutedNotification:v2/ModelReroutedNotification.json"
   "ModelVerificationNotification:v2/ModelVerificationNotification.json"
+  "TurnModerationMetadataNotification:v2/TurnModerationMetadataNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

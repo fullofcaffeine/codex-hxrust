@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:fdc24d2f98471c238d65ca3876de99e2b07edfbfd1549c6997e76bc178b787b3",
+  "fingerprint": "sha256:b3bd30cc390c9327865a806f9c9c1096301c6ac7be9bc4795c88dd49c76f63bb",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -806,6 +806,19 @@
       "sourcePath": "v2/TurnInterruptResponse.json",
       "sha256": "06e70e8d7e6a13fa301dfc650a2aa685f44a3cbf8767ce22b4797e35a59e6a8c",
       "fields": []
+    },
+    {
+      "id": "TurnModerationMetadataNotification",
+      "sourcePath": "v2/TurnModerationMetadataNotification.json",
+      "sha256": "80df55c5e69ec306df6d01b6e78024c3fa8a40cc3f022bfa1d441c8a56f67035",
+      "fields": [
+        "property:metadata",
+        "property:threadId",
+        "property:turnId",
+        "required:metadata",
+        "required:threadId",
+        "required:turnId"
+      ]
     },
     {
       "id": "TurnPlanUpdatedNotification",
