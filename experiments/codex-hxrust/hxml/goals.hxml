@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/goals
+-D rust_crate=codex_hxrust_goals
+-D rust_cargo_subcommand=check
+-main GoalHarness

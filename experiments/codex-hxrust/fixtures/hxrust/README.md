@@ -1,5 +1,13 @@
 # haxe.rust Fixtures
 
+Current fixtures:
+
+- `doctor-shape.v1.jq` validates the minimal doctor command shape.
+- `headless-jsonl-adapter-input.v1.jsonl` and `headless-jsonl-adapter-output.v1.jsonl` validate the debug JSONL adapter.
+- `thread-goal-active.v1.json` validates the HXCX-5.3 `ThreadGoal` DTO shape.
+- `thread-goal-transition.v1.jsonl` validates the HXCX-5.3 in-memory goal lifecycle slice.
+- `goal-tool-output.v1.jsonl` validates the HXCX-5.3 `get_goal`, `create_goal`, and `update_goal` tool subset.
+
 haxe.rust capability and compiler smoke fixtures go here if the port needs local copies.
 
 The haxe.rust source remains an external pinned checkout.

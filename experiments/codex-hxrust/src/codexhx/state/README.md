@@ -1,5 +1,12 @@
 # State
 
+State helpers for the pure-Haxe Codex experiment live here.
+
+Current slices:
+
+- `TranscriptStateStore` writes and loads deterministic one-turn transcript/state artifacts.
+- `goals/ThreadGoalStore` owns the HXCX-5.3 in-memory thread-goal lifecycle subset.
+
 Pure state transitions and transcript/store abstractions live here.
 
 Filesystem, SQLite, or host-specific persistence should enter through explicit adapters.

@@ -1,0 +1,6 @@
+{"step":"create","goal":{"threadId":"thread-goal-1","objective":"Ship Caf goal flow","status":"active","tokenBudget":12,"tokensUsed":0,"timeUsedSeconds":0,"createdAt":1781049600,"updatedAt":1781049600}}
+{"step":"pause","goal":{"threadId":"thread-goal-1","objective":"Ship Caf goal flow","status":"paused","tokenBudget":12,"tokensUsed":0,"timeUsedSeconds":0,"createdAt":1781049600,"updatedAt":1781049610}}
+{"step":"edit","goal":{"threadId":"thread-goal-1","objective":"Ship Caf goal flow in Haxe","status":"active","tokenBudget":12,"tokensUsed":0,"timeUsedSeconds":0,"createdAt":1781049600,"updatedAt":1781049620}}
+{"step":"usage","goal":{"threadId":"thread-goal-1","objective":"Ship Caf goal flow in Haxe","status":"active","tokenBudget":12,"tokensUsed":5,"timeUsedSeconds":3,"createdAt":1781049600,"updatedAt":1781049630}}
+{"step":"complete","goal":{"threadId":"thread-goal-1","objective":"Ship Caf goal flow in Haxe","status":"complete","tokenBudget":12,"tokensUsed":5,"timeUsedSeconds":3,"createdAt":1781049600,"updatedAt":1781049640}}
+{"step":"clear","cleared":true}
