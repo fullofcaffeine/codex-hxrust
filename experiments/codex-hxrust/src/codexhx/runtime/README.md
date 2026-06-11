@@ -53,4 +53,11 @@ Partial transcripts are intentional: events observed before the checkpoint are p
 - `status` reports the current terminal/runtime status.
 - `transcript` emits one `transcript_event` line per runtime event, followed by a summary response.
 
+HXCX-3.5 extends the same boundary with upstream app-server JSON-RPC method envelopes:
+
+- `thread/start` initializes the fixed mock thread/session and returns the selected `ThreadStartResponse` subset.
+- `turn/start` accepts text-only `UserInput` entries, runs the credential-free one-turn runtime, and returns the selected `TurnStartResponse` subset.
+- `thread/read` returns the selected `ThreadReadResponse` subset and includes turns only when `includeTurns` is true.
+- `turn/interrupt` validates `threadId` and `turnId`; because this harness is synchronous, completed, idle, and not-started turns fail closed instead of claiming live cancellation.
+
 Unsupported commands fail closed with `unsupported_command`. The adapter remains credential-free and fixture-backed; it is not a live app-server transport, and it should stay a thin protocol adapter over the pure runtime state machine.

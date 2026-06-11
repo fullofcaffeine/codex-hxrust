@@ -1,0 +1,4 @@
+{"id":"app-thread-start","jsonrpc":"2.0","result":{"thread":{"id":"thread-1","sessionId":"session-1","status":{"type":"idle"},"turns":[]}}}
+{"id":"app-turn-start","jsonrpc":"2.0","result":{"turn":{"id":"turn-1","items":[{"content":[{"text":"Say hello","type":"text"}],"id":"user-turn-1","type":"userMessage"},{"id":"agent-turn-1","text":"Hello world","type":"agentMessage"}],"status":"completed"}}}
+{"id":"app-thread-read","jsonrpc":"2.0","result":{"thread":{"id":"thread-1","sessionId":"session-1","status":{"type":"idle"},"turns":[{"id":"turn-1","items":[{"content":[{"text":"Say hello","type":"text"}],"id":"user-turn-1","type":"userMessage"},{"id":"agent-turn-1","text":"Hello world","type":"agentMessage"}],"status":"completed"}]}}}
+{"error":{"code":-32000,"data":{"errorCode":"turn_not_active"},"message":"no active turn to interrupt"},"id":"app-turn-interrupt-completed","jsonrpc":"2.0"}

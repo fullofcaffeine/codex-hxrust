@@ -1,0 +1,4 @@
+{"jsonrpc":"2.0","id":"app-thread-start","method":"thread/start","params":{}}
+{"jsonrpc":"2.0","id":"app-turn-start","method":"turn/start","params":{"threadId":"thread-1","input":[{"type":"text","text":"Say hello","text_elements":[]}]}}
+{"jsonrpc":"2.0","id":"app-thread-read","method":"thread/read","params":{"threadId":"thread-1","includeTurns":true}}
+{"jsonrpc":"2.0","id":"app-turn-interrupt-completed","method":"turn/interrupt","params":{"threadId":"thread-1","turnId":"turn-1"}}
