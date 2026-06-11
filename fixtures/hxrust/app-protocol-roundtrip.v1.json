@@ -457,6 +457,22 @@
       }
     },
     {
+      "id": "reasoning-text-delta-notification",
+      "kind": "notification",
+      "method": "item/reasoning/textDelta",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/reasoning/textDelta",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "reasoning-1",
+          "contentIndex": 0,
+          "delta": "Inspecting the upstream protocol shape."
+        }
+      }
+    },
+    {
       "id": "command-execution-output-delta-notification",
       "kind": "notification",
       "method": "item/commandExecution/outputDelta",

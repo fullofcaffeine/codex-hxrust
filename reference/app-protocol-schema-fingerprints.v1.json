@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:6e186be41b205244c2f0895203cab722928f1ceed8d345f7d99dbdec5ff010af",
+  "fingerprint": "sha256:894352b91713dd11f1fdbe7124820bde9a15eccf3a31c2b094221a954106c0b6",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -405,6 +405,23 @@
         "required:delta",
         "required:itemId",
         "required:summaryIndex",
+        "required:threadId",
+        "required:turnId"
+      ]
+    },
+    {
+      "id": "ReasoningTextDeltaNotification",
+      "sourcePath": "v2/ReasoningTextDeltaNotification.json",
+      "sha256": "28a93128851dbe15280a9d4b29d9ef820585a5dcb10fca688b82fdbe033bcc02",
+      "fields": [
+        "property:contentIndex",
+        "property:delta",
+        "property:itemId",
+        "property:threadId",
+        "property:turnId",
+        "required:contentIndex",
+        "required:delta",
+        "required:itemId",
         "required:threadId",
         "required:turnId"
       ]
