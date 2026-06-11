@@ -107,6 +107,27 @@ experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 1a394f41a1ee019350faee6
 
 The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
 
+## Follow-Up Audit After Try/Catch Tail Return Fix On 2026-06-10
+
+**Pin before audit:** `1a394f41a1ee019350faee6d592d21d2c5dc20bd`
+
+**Pin after audit:** `551a00bf08cdaecf3b8b3c499b1d80c86506fa81`
+
+Additional upstream commit accepted:
+
+- `551a00bf` Fix try catch tail return lowering
+
+This resolves the codex-hxrust mock model stream parser pressure gap where a non-Void helper with a top-level `try/catch` and return-value branches lowered to a Rust `match` statement with a trailing semicolon. haxe.rust now recognizes a final top-level `try/catch` typed as `Void` by Haxe as a valid tail expression for non-Void function bodies, with a `try_catch_tail_nonvoid` snapshot. codex-hxrust removed the local `parseJson` assignment workaround and now uses direct `try/catch` returns.
+
+Gate runs:
+
+```bash
+experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 551a00bf08cdaecf3b8b3c499b1d80c86506fa81
+experiments/codex-hxrust/harness/check-mock-model-stream.sh
+```
+
+The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The mock model stream harness also passed through Haxe interp, haxe.rust generation, and generated Cargo `check`/`test`/`run`.
+
 ## Follow-Up Audit After Cargo Failure Propagation Fix On 2026-06-10
 
 **Pin before audit:** `0849fcf1a556cb86615cfcdf635165ba82fec8da`  

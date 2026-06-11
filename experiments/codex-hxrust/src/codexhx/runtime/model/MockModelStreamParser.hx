@@ -184,13 +184,11 @@ class MockModelStreamParser {
     }
 
     static function parseJson(text:String, path:String):JsonParseOutcome {
-        var outcome = JsonParseOutcome.failure("invalid_json", path, "invalid JSON data");
         try {
-            outcome = CodexJson.parse(text);
+            return CodexJson.parse(text);
         } catch (e:Dynamic) {
-            outcome = JsonParseOutcome.failure("invalid_json", path, "invalid JSON data");
+            return JsonParseOutcome.failure("invalid_json", path, "invalid JSON data");
         }
-        return outcome;
     }
 
     static function one(event:ModelStreamEvent):ModelStreamParseOutcome {
