@@ -23,6 +23,8 @@
 6. Locked Cargo checks/tests are run by `experiments/codex-hxrust/scripts/check-generated-cargo.sh`.
 7. Generated output remains build output and is ignored by `experiments/codex-hxrust/generated/.gitignore`.
 
+Architecture framing: portable by default, Rust-native by opt-in, metal-like performance whenever haxe.rust can prove Haxe semantics are preserved. In codex-hxrust, start with portable for pure Codex data surfaces; choose metal when the source contract itself needs Rust-native authority, stricter boundary enforcement, async/process integration, or reduced-runtime behavior.
+
 ## Scaffold Caveat
 
 The temporary G1 `Main` is intentionally a no-op. Earlier trace/print smoke output pulled in the generated CallStack helper, which currently references a root `Exception` type when this project builds outside the haxe.rust example tree. `HXCX-1.5` owns clean doctor JSON output and should either use a known-good haxe.rust output path or document/file the upstream compiler fix.

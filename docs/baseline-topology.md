@@ -10,7 +10,7 @@
 | --- | --- | --- | --- |
 | Upstream Codex | `../codex` | `main` at `2704ecea9a`; dirty only from untracked repomix outputs | `https://github.com/openai/codex.git` |
 | Cafex/Cafetera Codex fork | `../fullofcaffeine/deps/codex` | `caf/mounted/rust-v0.124.0-autonomy` at `d7379d6c66`; clean | `git@github.com:fullofcaffeine/codex-caf.git`, with upstream `https://github.com/openai/codex.git` |
-| haxe.rust | `../haxe.rust` | `main` at `f521fdb242a7de5f2194633deef6caa3392bafe9`; clean except untracked `repomix-output.haxe-rust.xml.zip` | `git@github.com:fullofcaffeine/reflaxe.rust.git` |
+| haxe.rust | `../haxe.rust` | `main` at `0b2f196e2b3e8742efe79febe002e97f0924802d`; clean except untracked `repomix-output.haxe-rust.xml.zip` | `git@github.com:fullofcaffeine/reflaxe.rust.git` |
 
 ## Toolchain Facts
 
@@ -160,6 +160,7 @@ Profile contracts:
 - `metal` is the Rust-first contract for strict boundaries, performance-sensitive paths, typed native interop, async, process/tool wrappers, and sandbox interfaces.
 - `idiomatic` is not a profile selector; it is the generated-Rust quality goal for both `portable` and `metal`.
 - `@:haxeMetal` islands can enforce metal-clean checks inside a portable build.
+- Architecture framing: portable by default, Rust-native by opt-in, metal-like performance whenever haxe.rust can prove Haxe semantics are preserved.
 
 Build/workflow facts:
 

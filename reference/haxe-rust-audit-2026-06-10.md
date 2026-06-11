@@ -165,3 +165,23 @@ experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh f521fdb242a7de5f2194633
 ```
 
 The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The protocol ID harness also passed against the new pin.
+
+## Follow-Up Audit After Portable-First Profile Framing On 2026-06-10
+
+**Pin before audit:** `f521fdb242a7de5f2194633deef6caa3392bafe9`
+
+**Pin after audit:** `0b2f196e2b3e8742efe79febe002e97f0924802d`
+
+Additional upstream commit accepted:
+
+- `0b2f196e` Clarify portable-first profile framing
+
+This docs-only haxe.rust update aligns Rust profile wording with the family framing: portable by default, Rust-native by opt-in, and metal-like performance whenever the compiler can prove Haxe semantics are preserved. codex-hxrust mirrors that policy in `AGENTS.md`, build-profile policy, and baseline topology docs.
+
+Gate run:
+
+```bash
+experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 0b2f196e2b3e8742efe79febe002e97f0924802d
+```
+
+The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.

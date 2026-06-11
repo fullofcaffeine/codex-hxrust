@@ -38,6 +38,8 @@ Use haxe.rust's supported profile selectors precisely:
 - `metal` is the Rust-semantics-first contract for typed native boundaries, async/process/tool wrappers, sandbox/state integration, measured hot paths, and reduced/no-HXRT runtime experiments.
 - `idiomatic` is **not** a profile selector. It is an output-quality goal for both contracts: readable Rust, warning-clean code, avoidable clone/temp reduction, and native Rust representations where the active semantic contract permits them.
 
+Use the architecture framing: portable by default, Rust-native by opt-in, metal-like performance whenever haxe.rust can prove Haxe semantics are preserved. Do not describe portable as the slow/safe lane or metal as the only "real Rust" lane.
+
 When documenting plans, say "idiomatic portable output" or "idiomatic metal output" if needed; do not introduce `portable+idiomatic`, `idiomatic`, or `rusty` as build/profile lanes.
 
 ## Landing the Plane (Session Completion)
