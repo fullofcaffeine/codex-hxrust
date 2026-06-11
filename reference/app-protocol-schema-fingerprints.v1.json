@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:b4aad0d08b65b3b303e7bc5ba4d2d95af069483adaa27bd6344256a4fd5aaf88",
+  "fingerprint": "sha256:a2a01e8b2ef3168921f510914b4e3ae1d23ea39f6a8c31a1521db7f24180e879",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -310,6 +310,24 @@
         "required:itemId",
         "required:message",
         "required:threadId",
+        "required:turnId"
+      ]
+    },
+    {
+      "id": "ModelReroutedNotification",
+      "sourcePath": "v2/ModelReroutedNotification.json",
+      "sha256": "eb5b5f6d4b35d8f19b576e7daf0eb749bb73add94bad25995f2255161332dc60",
+      "fields": [
+        "definition:ModelRerouteReason",
+        "property:fromModel",
+        "property:reason",
+        "property:threadId",
+        "property:toModel",
+        "property:turnId",
+        "required:fromModel",
+        "required:reason",
+        "required:threadId",
+        "required:toModel",
         "required:turnId"
       ]
     },

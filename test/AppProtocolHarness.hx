@@ -40,6 +40,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "account/rateLimits/updated");
         assertContains(fingerprintJson, "app/list/updated");
         assertContains(fingerprintJson, "remoteControl/status/changed");
+        assertContains(fingerprintJson, "model/rerouted");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -53,7 +54,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("42", Std.string(items.length));
+        assertEquals("43", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -76,7 +77,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("33", Std.string(notifications));
+        assertEquals("34", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -245,6 +246,11 @@ class AppProtocolHarness {
         assertFalse(invalidRemoteControlEnvironment.ok, "remote control environmentId must be a string or null when present");
         assertEquals("expected_nullable_string", invalidRemoteControlEnvironment.errorCode);
         assertEquals("$.message.params.environmentId", invalidRemoteControlEnvironment.errorPath);
+
+        final invalidModelRerouteReason = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"model-rerouted-invalid-reason\",\"kind\":\"notification\",\"method\":\"model/rerouted\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"model/rerouted\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"fromModel\":\"gpt-5\",\"toModel\":\"gpt-5-safe\",\"reason\":\"policy\"}}}")));
+        assertFalse(invalidModelRerouteReason.ok, "model reroute reason must be a known enum value");
+        assertEquals("invalid_model_reroute_reason", invalidModelRerouteReason.errorCode);
+        assertEquals("$.message.params.reason", invalidModelRerouteReason.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

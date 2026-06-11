@@ -743,6 +743,22 @@
       }
     },
     {
+      "id": "model-rerouted-notification",
+      "kind": "notification",
+      "method": "model/rerouted",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "model/rerouted",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "fromModel": "gpt-5",
+          "toModel": "gpt-5-safe",
+          "reason": "highRiskCyberActivity"
+        }
+      }
+    },
+    {
       "id": "external-agent-config-import-completed-notification",
       "kind": "notification",
       "method": "externalAgentConfig/import/completed",

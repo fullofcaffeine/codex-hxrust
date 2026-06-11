@@ -59,6 +59,7 @@ selected_schemas=(
   "ReasoningSummaryPartAddedNotification:v2/ReasoningSummaryPartAddedNotification.json"
   "ReasoningTextDeltaNotification:v2/ReasoningTextDeltaNotification.json"
   "ContextCompactedNotification:v2/ContextCompactedNotification.json"
+  "ModelReroutedNotification:v2/ModelReroutedNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"
