@@ -19,6 +19,7 @@ Included server notifications:
 
 - `thread/started`
 - `thread/status/changed`
+- `thread/compacted`
 - `turn/started`
 - `turn/completed`
 - `turn/plan/updated`
@@ -56,7 +57,7 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -65,6 +66,8 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `item/reasoning/summaryPartAdded` announces a new reasoning summary part. The selected subset validates `threadId`, `turnId`, `itemId`, and integer `summaryIndex`.
 
 `item/reasoning/textDelta` streams text for a reasoning content part. The selected subset validates `threadId`, `turnId`, `itemId`, integer `contentIndex`, and text `delta`.
+
+`thread/compacted` is a deprecated context-compaction notification. Upstream recommends using the `ContextCompaction` item type instead; the selected subset keeps protocol parity by validating `threadId` and `turnId`.
 
 `turn/plan/updated` is the upstream update-plan/checklist notification. Its `explanation` may be missing, `null`, or a string, and each plan step status must be `pending`, `inProgress`, or `completed`.
 

@@ -22,6 +22,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/start");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
+        assertContains(fingerprintJson, "thread/compacted");
         assertContains(fingerprintJson, "item/completed");
         assertContains(fingerprintJson, "item/agentMessage/delta");
         assertContains(fingerprintJson, "item/plan/delta");
@@ -52,7 +53,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("41", Std.string(items.length));
+        assertEquals("42", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -75,7 +76,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("32", Std.string(notifications));
+        assertEquals("33", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -139,6 +140,11 @@ class AppProtocolHarness {
         assertFalse(invalidReasoningContentIndex.ok, "reasoning text content index must be an integer");
         assertEquals("expected_integer", invalidReasoningContentIndex.errorCode);
         assertEquals("$.message.params.contentIndex", invalidReasoningContentIndex.errorPath);
+
+        final invalidContextCompactedTurnId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"context-compacted-invalid-turn\",\"kind\":\"notification\",\"method\":\"thread/compacted\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/compacted\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":7}}}")));
+        assertFalse(invalidContextCompactedTurnId.ok, "context compacted turn id must be a string");
+        assertEquals("expected_string", invalidContextCompactedTurnId.errorCode);
+        assertEquals("$.message.params.turnId", invalidContextCompactedTurnId.errorPath);
 
         final invalidTerminalInteraction = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-execution-invalid-terminal-stdin\",\"kind\":\"notification\",\"method\":\"item/commandExecution/terminalInteraction\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"item/commandExecution/terminalInteraction\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"processId\":\"proc-1\",\"stdin\":false}}}")));
         assertFalse(invalidTerminalInteraction.ok, "terminal interaction stdin must be a string");

@@ -221,6 +221,19 @@
       }
     },
     {
+      "id": "thread-compacted-notification",
+      "kind": "notification",
+      "method": "thread/compacted",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/compacted",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1"
+        }
+      }
+    },
+    {
       "id": "turn-started-notification",
       "kind": "notification",
       "method": "turn/started",
