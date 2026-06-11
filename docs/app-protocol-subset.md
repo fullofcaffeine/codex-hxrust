@@ -27,6 +27,7 @@ Included server notifications:
 - `item/plan/delta`
 - `item/commandExecution/outputDelta`
 - `item/commandExecution/terminalInteraction`
+- `item/fileChange/outputDelta`
 - `item/completed`
 - `rawResponseItem/completed`
 - `command/exec/outputDelta`
@@ -41,7 +42,7 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, item command execution deltas and terminal interactions, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, item command execution deltas and terminal interactions, deprecated file-change output deltas, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -56,6 +57,8 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `item/commandExecution/outputDelta` is turn-item scoped command output. The selected subset validates `threadId`, `turnId`, `itemId`, and text `delta`.
 
 `item/commandExecution/terminalInteraction` records terminal stdin sent to a command execution item. The selected subset validates `threadId`, `turnId`, `itemId`, `processId`, and text `stdin`.
+
+`item/fileChange/outputDelta` is a deprecated legacy notification for apply_patch textual output. Upstream no longer emits it, but the selected subset validates `threadId`, `turnId`, `itemId`, and text `delta` for schema parity.
 
 ## Error Policy
 

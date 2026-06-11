@@ -457,6 +457,21 @@
       }
     },
     {
+      "id": "file-change-output-delta-notification",
+      "kind": "notification",
+      "method": "item/fileChange/outputDelta",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/fileChange/outputDelta",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "item-file-change-1",
+          "delta": "patch output\n"
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

@@ -20,7 +20,7 @@ The haxe.rust source remains an external pinned checkout.
 Current fixtures:
 
 - `doctor-shape.v1.jq` asserts the minimal scaffold doctor JSON shape for portable and metal generated binaries.
-- `app-protocol-roundtrip.v1.json` covers the selected upstream app-server protocol request, response, notification, transcript, completed plan item, plan update, streaming delta, item command execution output delta, terminal interaction, command/process output delta, process exit, and error payload subset.
+- `app-protocol-roundtrip.v1.json` covers the selected upstream app-server protocol request, response, notification, transcript, completed plan item, plan update, streaming delta, item command execution output delta, terminal interaction, deprecated file-change output delta, command/process output delta, process exit, and error payload subset.
 - `mock-one-turn-transcript.v1.jsonl` is the deterministic transcript artifact for the mock one-turn runtime run.
 - `mock-one-turn-state.v1.json` is the deterministic state summary artifact for the same run.
 - `mock-one-turn-cancel-transcript.v1.jsonl` is the deterministic partial transcript artifact for a cancelled mock one-turn runtime run.

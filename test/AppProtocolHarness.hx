@@ -27,6 +27,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/plan/delta");
         assertContains(fingerprintJson, "item/commandExecution/outputDelta");
         assertContains(fingerprintJson, "item/commandExecution/terminalInteraction");
+        assertContains(fingerprintJson, "item/fileChange/outputDelta");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "command/exec/outputDelta");
         assertContains(fingerprintJson, "process/outputDelta");
@@ -37,7 +38,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("26", Std.string(items.length));
+        assertEquals("27", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -60,7 +61,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("17", Std.string(notifications));
+        assertEquals("18", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -114,6 +115,11 @@ class AppProtocolHarness {
         assertFalse(invalidTerminalInteraction.ok, "terminal interaction stdin must be a string");
         assertEquals("expected_string", invalidTerminalInteraction.errorCode);
         assertEquals("$.message.params.stdin", invalidTerminalInteraction.errorPath);
+
+        final invalidFileChangeDelta = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"file-change-invalid-delta\",\"kind\":\"notification\",\"method\":\"item/fileChange/outputDelta\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"item/fileChange/outputDelta\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"delta\":false}}}")));
+        assertFalse(invalidFileChangeDelta.ok, "file change delta must be a string");
+        assertEquals("expected_string", invalidFileChangeDelta.errorCode);
+        assertEquals("$.message.params.delta", invalidFileChangeDelta.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {
