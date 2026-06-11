@@ -442,6 +442,21 @@
       }
     },
     {
+      "id": "reasoning-summary-part-added-notification",
+      "kind": "notification",
+      "method": "item/reasoning/summaryPartAdded",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/reasoning/summaryPartAdded",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "reasoning-1",
+          "summaryIndex": 1
+        }
+      }
+    },
+    {
       "id": "command-execution-output-delta-notification",
       "kind": "notification",
       "method": "item/commandExecution/outputDelta",

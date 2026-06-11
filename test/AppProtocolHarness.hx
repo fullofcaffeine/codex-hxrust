@@ -26,6 +26,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/agentMessage/delta");
         assertContains(fingerprintJson, "item/plan/delta");
         assertContains(fingerprintJson, "item/reasoning/summaryTextDelta");
+        assertContains(fingerprintJson, "item/reasoning/summaryPartAdded");
         assertContains(fingerprintJson, "item/commandExecution/outputDelta");
         assertContains(fingerprintJson, "item/commandExecution/terminalInteraction");
         assertContains(fingerprintJson, "item/fileChange/outputDelta");
@@ -50,7 +51,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("39", Std.string(items.length));
+        assertEquals("40", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -73,7 +74,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("30", Std.string(notifications));
+        assertEquals("31", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -127,6 +128,11 @@ class AppProtocolHarness {
         assertFalse(invalidReasoningSummaryIndex.ok, "reasoning summary index must be an integer");
         assertEquals("expected_integer", invalidReasoningSummaryIndex.errorCode);
         assertEquals("$.message.params.summaryIndex", invalidReasoningSummaryIndex.errorPath);
+
+        final invalidReasoningSummaryPartIndex = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"reasoning-summary-part-invalid-index\",\"kind\":\"notification\",\"method\":\"item/reasoning/summaryPartAdded\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"item/reasoning/summaryPartAdded\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"summaryIndex\":1.5}}}")));
+        assertFalse(invalidReasoningSummaryPartIndex.ok, "reasoning summary part index must be an integer");
+        assertEquals("expected_integer", invalidReasoningSummaryPartIndex.errorCode);
+        assertEquals("$.message.params.summaryIndex", invalidReasoningSummaryPartIndex.errorPath);
 
         final invalidTerminalInteraction = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-execution-invalid-terminal-stdin\",\"kind\":\"notification\",\"method\":\"item/commandExecution/terminalInteraction\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"item/commandExecution/terminalInteraction\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"processId\":\"proc-1\",\"stdin\":false}}}")));
         assertFalse(invalidTerminalInteraction.ok, "terminal interaction stdin must be a string");
