@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:bd4a3063e9db33916361047b8fa61f553a40996c665a3bf746d61dfa0d7cb68b",
+  "fingerprint": "sha256:3434f4d239a51d42ceb34daaefc99c6f27bd09c294d948405bd164164255dadd",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -213,6 +213,20 @@
         "property:success",
         "required:name",
         "required:success"
+      ]
+    },
+    {
+      "id": "McpServerStatusUpdatedNotification",
+      "sourcePath": "v2/McpServerStatusUpdatedNotification.json",
+      "sha256": "a1b2112bb1e84562c00b7d4fef94d1f4c32bc16fe85147160c3ba9c9741f3c2b",
+      "fields": [
+        "definition:McpServerStartupState",
+        "property:error",
+        "property:name",
+        "property:status",
+        "property:threadId",
+        "required:name",
+        "required:status"
       ]
     },
     {

@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/completed,item/started,mcpServer/oauthLogin/completed,process/exited,process/outputDelta,rawResponseItem/completed,serverRequest/resolved,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-017";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,process/exited,process/outputDelta,rawResponseItem/completed,serverRequest/resolved,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-018";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -166,6 +166,8 @@ class AppProtocol {
                 validateMcpToolCallProgressNotification(params);
             case "mcpServer/oauthLogin/completed":
                 validateMcpServerOauthLoginCompletedNotification(params);
+            case "mcpServer/startupStatus/updated":
+                validateMcpServerStatusUpdatedNotification(params);
             case "rawResponseItem/completed":
                 validateRawResponseItemCompletedNotification(params);
             case "serverRequest/resolved":
@@ -536,6 +538,32 @@ class AppProtocol {
         return success("notification:mcpServer/oauthLogin/completed");
     }
 
+    static function validateMcpServerStatusUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final name = requiredString(params.keys, params.values, "name", "$.message.params.name");
+        if (!name.ok) return name.toOutcome();
+        final status = requiredString(params.keys, params.values, "status", "$.message.params.status");
+        if (!status.ok) return status.toOutcome();
+        if (!validMcpServerStartupStatus(status.value)) return fail("invalid_mcp_server_startup_status", "$.message.params.status", "unsupported MCP server startup status");
+
+        final threadIdIndex = fieldIndex(params.keys, "threadId");
+        if (threadIdIndex >= 0) {
+            switch params.values[threadIdIndex] {
+                case JString(_) | JNull:
+                case _:
+                    return fail("expected_nullable_string", "$.message.params.threadId", "expected JSON string or null");
+            }
+        }
+        final errorIndex = fieldIndex(params.keys, "error");
+        if (errorIndex >= 0) {
+            switch params.values[errorIndex] {
+                case JString(_) | JNull:
+                case _:
+                    return fail("expected_nullable_string", "$.message.params.error", "expected JSON string or null");
+            }
+        }
+        return success("notification:mcpServer/startupStatus/updated");
+    }
+
     static function validateCommandExecOutputDeltaNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
         final processId = requiredString(params.keys, params.values, "processId", "$.message.params.processId");
         if (!processId.ok) return processId.toOutcome();
@@ -649,6 +677,10 @@ class AppProtocol {
 
     static function validPlanStepStatus(value:String):Bool {
         return value == "pending" || value == "inProgress" || value == "completed";
+    }
+
+    static function validMcpServerStartupStatus(value:String):Bool {
+        return value == "starting" || value == "ready" || value == "failed" || value == "cancelled";
     }
 
     static function validCommandExecOutputStream(value:String):Bool {

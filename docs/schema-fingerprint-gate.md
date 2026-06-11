@@ -20,7 +20,7 @@ The gate fails if:
 The first M2 subset covers:
 
 - request params/responses for `thread/start`, `turn/start`, `turn/interrupt`, and `thread/read`
-- notifications for `thread/started`, `thread/status/changed`, `turn/started`, `turn/completed`, `turn/plan/updated`, `item/started`, `item/agentMessage/delta`, `item/plan/delta`, `item/commandExecution/outputDelta`, `item/commandExecution/terminalInteraction`, `item/fileChange/outputDelta`, `item/fileChange/patchUpdated`, `item/mcpToolCall/progress`, `mcpServer/oauthLogin/completed`, `item/completed`, `rawResponseItem/completed`, `serverRequest/resolved`, `command/exec/outputDelta`, `process/outputDelta`, `process/exited`, and `error`
+- notifications for `thread/started`, `thread/status/changed`, `turn/started`, `turn/completed`, `turn/plan/updated`, `item/started`, `item/agentMessage/delta`, `item/plan/delta`, `item/commandExecution/outputDelta`, `item/commandExecution/terminalInteraction`, `item/fileChange/outputDelta`, `item/fileChange/patchUpdated`, `item/mcpToolCall/progress`, `mcpServer/oauthLogin/completed`, `mcpServer/startupStatus/updated`, `item/completed`, `rawResponseItem/completed`, `serverRequest/resolved`, `command/exec/outputDelta`, `process/outputDelta`, `process/exited`, and `error`
 - `JSONRPCError`
 
 `rawResponseItem/completed` is tracked through its standalone v2 schema file because upstream excludes that server notification from the combined JSON export.

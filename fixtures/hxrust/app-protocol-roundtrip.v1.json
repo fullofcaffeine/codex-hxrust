@@ -552,6 +552,21 @@
       }
     },
     {
+      "id": "mcp-server-startup-status-updated-notification",
+      "kind": "notification",
+      "method": "mcpServer/startupStatus/updated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "mcpServer/startupStatus/updated",
+        "params": {
+          "threadId": null,
+          "name": "github",
+          "status": "failed",
+          "error": "failed to launch"
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

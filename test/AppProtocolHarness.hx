@@ -31,6 +31,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/fileChange/patchUpdated");
         assertContains(fingerprintJson, "item/mcpToolCall/progress");
         assertContains(fingerprintJson, "mcpServer/oauthLogin/completed");
+        assertContains(fingerprintJson, "mcpServer/startupStatus/updated");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "serverRequest/resolved");
         assertContains(fingerprintJson, "command/exec/outputDelta");
@@ -42,7 +43,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("31", Std.string(items.length));
+        assertEquals("32", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -65,7 +66,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("22", Std.string(notifications));
+        assertEquals("23", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -149,6 +150,16 @@ class AppProtocolHarness {
         assertFalse(invalidMcpOauthError.ok, "MCP OAuth error must be a string or null when present");
         assertEquals("expected_nullable_string", invalidMcpOauthError.errorCode);
         assertEquals("$.message.params.error", invalidMcpOauthError.errorPath);
+
+        final invalidMcpServerStatus = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"mcp-server-invalid-status\",\"kind\":\"notification\",\"method\":\"mcpServer/startupStatus/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"mcpServer/startupStatus/updated\",\"params\":{\"name\":\"github\",\"status\":\"paused\"}}}")));
+        assertFalse(invalidMcpServerStatus.ok, "MCP server startup status must be a known enum value");
+        assertEquals("invalid_mcp_server_startup_status", invalidMcpServerStatus.errorCode);
+        assertEquals("$.message.params.status", invalidMcpServerStatus.errorPath);
+
+        final invalidMcpServerThreadId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"mcp-server-invalid-thread\",\"kind\":\"notification\",\"method\":\"mcpServer/startupStatus/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"mcpServer/startupStatus/updated\",\"params\":{\"threadId\":7,\"name\":\"github\",\"status\":\"ready\"}}}")));
+        assertFalse(invalidMcpServerThreadId.ok, "MCP server threadId must be a string or null when present");
+        assertEquals("expected_nullable_string", invalidMcpServerThreadId.errorCode);
+        assertEquals("$.message.params.threadId", invalidMcpServerThreadId.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {
