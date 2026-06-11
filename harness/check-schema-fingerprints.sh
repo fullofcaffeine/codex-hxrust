@@ -38,6 +38,7 @@ selected_schemas=(
   "AgentMessageDeltaNotification:v2/AgentMessageDeltaNotification.json"
   "PlanDeltaNotification:v2/PlanDeltaNotification.json"
   "RawResponseItemCompletedNotification:v2/RawResponseItemCompletedNotification.json"
+  "CommandExecOutputDeltaNotification:v2/CommandExecOutputDeltaNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

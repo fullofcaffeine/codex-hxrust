@@ -411,6 +411,21 @@
       }
     },
     {
+      "id": "command-exec-output-delta-notification",
+      "kind": "notification",
+      "method": "command/exec/outputDelta",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "command/exec/outputDelta",
+        "params": {
+          "processId": "proc-1",
+          "stream": "stdout",
+          "deltaBase64": "AQI=",
+          "capReached": false
+        }
+      }
+    },
+    {
       "id": "error-notification",
       "kind": "notification",
       "method": "error",

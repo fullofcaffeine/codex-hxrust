@@ -26,13 +26,14 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/agentMessage/delta");
         assertContains(fingerprintJson, "item/plan/delta");
         assertContains(fingerprintJson, "rawResponseItem/completed");
+        assertContains(fingerprintJson, "command/exec/outputDelta");
         assertContains(fingerprintJson, "items:agentMessage,plan,userMessage");
     }
 
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("21", Std.string(items.length));
+        assertEquals("22", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -55,7 +56,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("12", Std.string(notifications));
+        assertEquals("13", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -84,6 +85,11 @@ class AppProtocolHarness {
         assertFalse(invalidStatus.ok, "unknown plan status must fail");
         assertEquals("invalid_plan_step_status", invalidStatus.errorCode);
         assertEquals("$.message.params.plan[0].status", invalidStatus.errorPath);
+
+        final invalidCommandStream = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-invalid-stream\",\"kind\":\"notification\",\"method\":\"command/exec/outputDelta\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"command/exec/outputDelta\",\"params\":{\"processId\":\"proc-1\",\"stream\":\"combined\",\"deltaBase64\":\"AQI=\",\"capReached\":false}}}")));
+        assertFalse(invalidCommandStream.ok, "unknown command exec stream must fail");
+        assertEquals("invalid_command_exec_stream", invalidCommandStream.errorCode);
+        assertEquals("$.message.params.stream", invalidCommandStream.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

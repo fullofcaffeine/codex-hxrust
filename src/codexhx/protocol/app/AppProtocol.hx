@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "rawResponseItem/completed", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:error,item/agentMessage/delta,item/plan/delta,item/completed,item/started,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-007";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "rawResponseItem/completed", "command/exec/outputDelta", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:command/exec/outputDelta,error,item/agentMessage/delta,item/plan/delta,item/completed,item/started,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-008";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -156,6 +156,8 @@ class AppProtocol {
                 validatePlanDeltaNotification(params);
             case "rawResponseItem/completed":
                 validateRawResponseItemCompletedNotification(params);
+            case "command/exec/outputDelta":
+                validateCommandExecOutputDeltaNotification(params);
             case "item/completed":
                 validateItemNotification(params, false);
             case "error":
@@ -389,6 +391,19 @@ class AppProtocol {
         return success("notification:rawResponseItem/completed");
     }
 
+    static function validateCommandExecOutputDeltaNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final processId = requiredString(params.keys, params.values, "processId", "$.message.params.processId");
+        if (!processId.ok) return processId.toOutcome();
+        final stream = requiredString(params.keys, params.values, "stream", "$.message.params.stream");
+        if (!stream.ok) return stream.toOutcome();
+        if (!validCommandExecOutputStream(stream.value)) return fail("invalid_command_exec_stream", "$.message.params.stream", "unsupported command exec output stream");
+        final deltaBase64 = requiredString(params.keys, params.values, "deltaBase64", "$.message.params.deltaBase64");
+        if (!deltaBase64.ok) return deltaBase64.toOutcome();
+        final capReached = requiredBool(params.keys, params.values, "capReached", "$.message.params.capReached");
+        if (!capReached.ok) return capReached.toOutcome();
+        return success("notification:command/exec/outputDelta");
+    }
+
     static function validateRawResponseItem(item:ProtocolObjectField, path:String):AppProtocolParseOutcome {
         final itemType = requiredString(item.keys, item.values, "type", path + ".type");
         if (!itemType.ok) return itemType.toOutcome();
@@ -460,6 +475,10 @@ class AppProtocol {
 
     static function validPlanStepStatus(value:String):Bool {
         return value == "pending" || value == "inProgress" || value == "completed";
+    }
+
+    static function validCommandExecOutputStream(value:String):Bool {
+        return value == "stdout" || value == "stderr";
     }
 
     static function success(summary:String):AppProtocolParseOutcome {
