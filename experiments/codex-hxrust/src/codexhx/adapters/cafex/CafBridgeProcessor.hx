@@ -18,6 +18,8 @@ class CafBridgeProcessor {
     static inline final modeReceiptSchema = "cafetera.codex.mode-apply.v1";
     static inline final goalRequestSchema = "cafetera.codex.goal-apply-request.v1";
     static inline final goalReceiptSchema = "cafetera.codex.goal-apply.v1";
+    static inline final queueReconcileRequestSchema = "cafetera.codex.queue-reconcile-request.v1";
+    static inline final queueReconcileReceiptSchema = "cafetera.codex.queue-reconcile-receipt.v1";
 
     public static function processOnce(requestsDir:String, receiptsDir:String, writtenAt:String):CafBridgeProcessOutcome {
         if (requestsDir.length == 0) return CafBridgeProcessOutcome.success(0, 0);
@@ -87,8 +89,8 @@ class CafBridgeProcessor {
     }
 
     public static function processOnceFromEnv(writtenAt:String):CafBridgeProcessOutcome {
-        final requestsDir = firstEnv("CAF_CODEX_EFFORT_REQUESTS_DIR", "CAF_CODEX_WAKE_REQUESTS_DIR", "CAF_CODEX_GOAL_REQUESTS_DIR");
-        final receiptsDir = firstEnv("CAF_CODEX_EFFORT_RECEIPTS_DIR", "CAF_CODEX_WAKE_RECEIPTS_DIR", "CAF_CODEX_GOAL_RECEIPTS_DIR");
+        final requestsDir = firstEnv("CAF_CODEX_EFFORT_REQUESTS_DIR", "CAF_CODEX_WAKE_REQUESTS_DIR", "CAF_CODEX_GOAL_REQUESTS_DIR", "CAF_CODEX_QUEUE_RECONCILE_REQUESTS_DIR");
+        final receiptsDir = firstEnv("CAF_CODEX_EFFORT_RECEIPTS_DIR", "CAF_CODEX_WAKE_RECEIPTS_DIR", "CAF_CODEX_GOAL_RECEIPTS_DIR", "CAF_CODEX_QUEUE_RECONCILE_RECEIPTS_DIR");
         return processOnce(requestsDir, receiptsDir, writtenAt);
     }
 
@@ -102,6 +104,8 @@ class CafBridgeProcessor {
                 StringRead.success(modeUnsupportedReceipt(requestId, request, writtenAt));
             case goalRequestSchema:
                 StringRead.success(goalReceipt(requestId, request, writtenAt));
+            case queueReconcileRequestSchema:
+                StringRead.success(queueReconcileReceipt(requestId, request, writtenAt));
             case _:
                 StringRead.failure();
         }
@@ -294,6 +298,35 @@ class CafBridgeProcessor {
         return json + "\n}\n";
     }
 
+    static function queueReconcileReceipt(requestId:String, request:Value, writtenAt:String):String {
+        return "{\n"
+            + "  \"schema\": " + quote(queueReconcileReceiptSchema) + ",\n"
+            + "  \"requestId\": " + quote(requestId) + ",\n"
+            + optionalStringLine(request, "taskId", "taskId", true)
+            + optionalStringLine(request, "clientId", "clientId", true)
+            + optionalStringLine(request, "source", "source", true)
+            + optionalStringLine(request, "runId", "runId", true)
+            + optionalStringLine(request, "laneId", "laneId", true)
+            + optionalNumberLine(request, "processId", "processId", true)
+            + optionalStringLine(request, "continuityGenerationId", "continuityGenerationId", true)
+            + "  \"status\": \"queued_next_turn\",\n"
+            + "  \"applyPhase\": \"next_turn\",\n"
+            + optionalStringLine(request, "deliveryDecision", "deliveryDecision", true)
+            + optionalStringLine(request, "deliveryDecisionReason", "deliveryDecisionReason", true)
+            + optionalStringLine(request, "checkpointGeneration", "checkpointGeneration", true)
+            + optionalStringLine(request, "checkpointBasisDigest", "checkpointBasisDigest", true)
+            + optionalStringLine(request, "observedGeneration", "observedGeneration", true)
+            + optionalStringLine(request, "observedBasisDigest", "observedBasisDigest", true)
+            + "  \"countsAvailable\": false,\n"
+            + "  \"droppedCount\": 0,\n"
+            + "  \"keptCount\": 0,\n"
+            + "  \"deferredCount\": 0,\n"
+            + "  \"sourceQueueIds\": [],\n"
+            + "  \"runtimeQueueMutation\": \"not_claimed_by_hxrust_fixture\",\n"
+            + "  \"writtenAt\": " + quote(writtenAt)
+            + "\n}\n";
+    }
+
     static function normalizeEffort(value:String):String {
         final trimmed = StringTools.trim(value);
         return switch trimmed {
@@ -397,14 +430,18 @@ class CafBridgeProcessor {
         return entry;
     }
 
-    static function firstEnv(first:String, second:String, ?third:String):String {
+    static function firstEnv(first:String, second:String, ?third:String, ?fourth:String):String {
         final firstValue = Sys.getEnv(first);
         if (firstValue != null && firstValue.length > 0) return firstValue;
         final secondValue = Sys.getEnv(second);
         if (secondValue != null && secondValue.length > 0) return secondValue;
         if (third != null) {
             final thirdValue = Sys.getEnv(third);
-            if (thirdValue != null) return thirdValue;
+            if (thirdValue != null && thirdValue.length > 0) return thirdValue;
+        }
+        if (fourth != null) {
+            final fourthValue = Sys.getEnv(fourth);
+            if (fourthValue != null && fourthValue.length > 0) return fourthValue;
         }
         return "";
     }

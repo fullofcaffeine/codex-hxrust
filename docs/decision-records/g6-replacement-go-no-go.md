@@ -36,8 +36,8 @@ harness/check-replacement-go-no-go.sh
 | `reference/operator-runbook.v1.json` | production default disabled | Rollback, disable, distribution, and diagnostics are documented. |
 | `reference/state-backend-spike.v1.json` | JSONL accepted for current experiment; SQLite required for persistent state replacement | No production state migration is implied. |
 | `reference/tool-registry-skeleton.v1.json` | registry lookup accepted; real MCP transport unsupported | Unsupported MCP operations fail closed. |
-| `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | 9 supported, 5 unsupported, 1 review-only | Unsupported surfaces are explicit. |
-| `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` | 6 covered/pass, 5 gaps | No production replacement claim. |
+| `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | 10 supported, 4 unsupported, 1 review-only | Unsupported surfaces are explicit. |
+| `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` | 7 covered/pass, 5 gaps | No production replacement claim. |
 
 ## Scorecard
 
@@ -47,13 +47,13 @@ harness/check-replacement-go-no-go.sh
 | protocol | green | protocol/JSON/schema fixtures are active | expand upstream parity as scope grows |
 | runtime | yellow | credential-free headless runtime works | live model/TUI/restart stay unsupported |
 | tools/state | yellow | process, sandbox, diagnostics, apply-patch gates fail closed; JSONL state and registry lookup are accepted for current fixtures | SQLite remains a gate for persistent state replacement; real MCP transport remains open |
-| Cafex adapter | yellow | selected receipt/bridge/goal/active-lane/continuity fixtures pass | 5 seam rows unsupported |
+| Cafex adapter | yellow | selected receipt/bridge/goal/active-lane/continuity/queue-reconcile rail fixtures pass | 4 seam rows and live queue mutation remain unsupported |
 | security | yellow | fail-closed wrappers and diagnostics redaction exist | real OS sandbox and production drills remain |
 | licensing | red-for-release | haxe.rust GPL-3.0, Codex/Cafex Apache-2.0 | review before bundling or binary distribution |
 
 ## Unsupported Surfaces
 
-- Queue reconcile runtime bridge.
+- Live pending-input queue mutation.
 - Live mode apply runtime.
 - Restart apply runtime bridge.
 - Plan-checkpoint continuation guard.

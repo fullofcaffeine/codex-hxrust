@@ -96,8 +96,8 @@
   "hxrustBurden": {
     "seamLedgerRows": {
       "total": 15,
-      "supported": 9,
-      "unsupported": 5,
+      "supported": 10,
+      "unsupported": 4,
       "reviewOnly": 1
     },
     "seamPatchClasses": [
@@ -115,7 +115,7 @@
       }
     ],
     "haxeSourceFilesInComparedSurface": 33,
-    "cafexFixtureFiles": 26,
+    "cafexFixtureFiles": 28,
     "experimentGateScripts": 29,
     "generatedRustCommitted": false,
     "burdenSignals": [
@@ -125,12 +125,12 @@
     ]
   },
   "comparison": {
-    "supportedSliceResult": "For receipt writing, continuity metadata, active-lane capability advertisement, effort/wake/goal bridge fixtures, explicit mode refusal, and minimal goal lifecycle, hxrust can reduce Codex upstream-rebase friction by replacing fork replay with Haxe fixture and generator gates.",
-    "unsupportedSliceResult": "For queue reconcile, live mode/restart, plan checkpoint guard, and live TUI/model runtime, hxrust does not yet reduce fork friction because no generic runtime ownership exists.",
+    "supportedSliceResult": "For receipt writing, continuity metadata, active-lane capability advertisement, effort/wake/goal/queue-reconcile bridge fixtures, explicit mode refusal, and minimal goal lifecycle, hxrust can reduce Codex upstream-rebase friction by replacing fork replay with Haxe fixture and generator gates.",
+    "unsupportedSliceResult": "For live mode/restart, plan checkpoint guard, and live TUI/model runtime, hxrust does not yet reduce fork friction because no generic runtime ownership exists.",
     "netResult": "The hxrust path is maintenance-positive for selected adapter slices and review tooling, but not yet a broad Cafex replacement.",
     "decisionInputs": [
       "HXCX-6.3 should evaluate a sidecar/helper or selected-adapter-slice go/no-go, not a full production replacement.",
-      "Any future replacement claim must first reduce the 5 unsupported rows or explicitly decide they stay native.",
+      "Any future replacement claim must first reduce the 4 unsupported rows, account for live queue mutation, or explicitly decide those surfaces stay native.",
       "haxe.rust limitations discovered while expanding unsupported rows should be filed in Beads and fixed generically, never as codexhx-specific compiler behavior."
     ]
   }

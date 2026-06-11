@@ -6,8 +6,8 @@
   "productionReplacement": false,
   "replacementClaim": "none",
   "summary": {
-    "covered": 6,
-    "passed": 6,
+    "covered": 7,
+    "passed": 7,
     "failed": 0,
     "gaps": 5
   },
@@ -51,6 +51,16 @@
       "harness": "harness/check-caf-bridge.sh",
       "sourceFixtures": ["fixtures/cafex/caf-goal-apply-request.v1.json", "fixtures/cafex/caf-goal-apply-receipt.v1.json", "fixtures/cafex/caf-goal-clear-request.v1.json", "fixtures/cafex/caf-goal-clear-receipt.v1.json", "fixtures/cafex/caf-goal-invalid-request.v1.json", "fixtures/cafex/caf-goal-invalid-receipt.v1.json"],
       "notes": "Validates Caf/Ralph goal-apply request parsing, Brew completion authority guards, ThreadGoalStore application, clear-boundary receipts, invalid request refusal, and idempotent duplicate scans."
+    },
+    {
+      "id": "hxcx-8.3-caf-queue-reconcile-bridge",
+      "bead": "HXCX-8.3",
+      "status": "pass",
+      "classification": "fixture_pass",
+      "contract": "Caf queue-reconcile request and receipt bridge rails",
+      "harness": "harness/check-caf-bridge.sh",
+      "sourceFixtures": ["fixtures/cafex/caf-queue-reconcile-request.v1.json", "fixtures/cafex/caf-queue-reconcile-receipt.v1.json"],
+      "notes": "Validates queue-reconcile request scanning, deterministic receipt writing, Brew delivery-decision field preservation, and explicit no-claim runtime queue mutation metadata."
     },
     {
       "id": "hxcx-8.2-caf-active-lane-capability",

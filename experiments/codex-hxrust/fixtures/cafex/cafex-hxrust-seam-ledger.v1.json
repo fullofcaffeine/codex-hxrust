@@ -26,8 +26,8 @@
   },
   "summary": {
     "rows": 15,
-    "supported": 9,
-    "unsupported": 5,
+    "supported": 10,
+    "unsupported": 4,
     "reviewOnly": 1
   },
   "rows": [
@@ -258,17 +258,25 @@
       "sourceSeam": "queue-reconcile-runtime-bridge",
       "patchClass": "fork_only_caf_adapter",
       "owner": "@cafetera/codex",
-      "supportLevel": "unsupported",
-      "replacementStatus": "unsupported_deferred",
-      "hxrustImplementation": [],
-      "fixtures": [],
-      "harnesses": [],
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture_rails_only",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafBridgeProcessor.queueReconcileReceipt"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-queue-reconcile-request.v1.json",
+        "fixtures/cafex/caf-queue-reconcile-receipt.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-bridge.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
       "schemaIds": [
         "cafetera.codex.queue-reconcile-request.v1",
         "cafetera.codex.queue-reconcile-receipt.v1"
       ],
-      "unsupportedReason": "The hxrust runtime does not own live pending-input queues or plan-checkpoint queue mutation yet.",
-      "replacementReviewNote": "Needs a headless semantic queue model before any native wrapper or TUI queue mutation path."
+      "unsupportedReason": null,
+      "replacementReviewNote": "Fixture-supported for deterministic queue-reconcile request/receipt rails and Brew delivery-decision field preservation. Live pending-input queues, visible-plan capture, and TUI queue mutation remain outside the hxrust claim."
     },
     {
       "id": "caf-goal-apply-request-bridge",

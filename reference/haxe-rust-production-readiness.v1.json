@@ -10,9 +10,9 @@
     "requiredBeforeBroadReplacement": [
       "Broaden haxe.rust parity evidence beyond selected helper/headless/adapter pressure fixtures.",
       "Complete license/distribution review for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts.",
-      "Reduce or explicitly native-own the 5 unsupported Cafex seam rows.",
+      "Reduce or explicitly native-own the 4 unsupported Cafex seam rows.",
       "Run replacement rollback drills from the operator runbook.",
-      "Add broader live runtime parity evidence for model/provider, TUI, queue, restart, and checkpoint ownership."
+      "Add broader live runtime parity evidence for model/provider, TUI, restart, and checkpoint ownership."
     ]
   },
   "evidence": {
@@ -54,7 +54,7 @@
       ],
       "caveats": [
         "Live model/provider traffic is not covered.",
-        "Live TUI, queue, restart, and plan-checkpoint ownership remain unsupported Cafex rows."
+        "Live TUI, restart, and plan-checkpoint ownership remain unsupported Cafex rows."
       ],
       "evidenceRefs": [
         "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
@@ -129,7 +129,7 @@
         "Operator rollback and migration-mode policies are checked."
       ],
       "caveats": [
-        "Cafex has 5 unsupported seam rows.",
+        "Cafex has 4 unsupported seam rows.",
         "haxe.rust/Codex/Cafex drift must continue through pin and fixture gates."
       ],
       "evidenceRefs": [
@@ -171,16 +171,16 @@
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {
-      "covered": 6,
-      "passed": 6,
+      "covered": 7,
+      "passed": 7,
       "failed": 0,
       "gaps": 5,
       "productionReplacement": false
     },
     "cafexSeamLedger": {
       "rows": 15,
-      "supported": 9,
-      "unsupported": 5,
+      "supported": 10,
+      "unsupported": 4,
       "reviewOnly": 1,
       "productionReplacement": false
     },

@@ -106,6 +106,19 @@ class CafeteraContractSubsetReport {
                 "Validates Caf/Ralph goal-apply request parsing, Brew completion authority guards, ThreadGoalStore application, clear-boundary receipts, invalid request refusal, and idempotent duplicate scans."
             ),
             new CafeteraContractSubsetContract(
+                "hxcx-8.3-caf-queue-reconcile-bridge",
+                "HXCX-8.3",
+                "pass",
+                "fixture_pass",
+                "Caf queue-reconcile request and receipt bridge rails",
+                "harness/check-caf-bridge.sh",
+                [
+                    "fixtures/cafex/caf-queue-reconcile-request.v1.json",
+                    "fixtures/cafex/caf-queue-reconcile-receipt.v1.json"
+                ],
+                "Validates queue-reconcile request scanning, deterministic receipt writing, Brew delivery-decision field preservation, and explicit no-claim runtime queue mutation metadata."
+            ),
+            new CafeteraContractSubsetContract(
                 "hxcx-8.2-caf-active-lane-capability",
                 "HXCX-8.2",
                 "pass",

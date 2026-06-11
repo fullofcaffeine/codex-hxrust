@@ -31,10 +31,11 @@ class CafBridgeHarness {
         copyFixture("caf-goal-apply-request.v1.json", requestsDir + "/goal-1.json");
         copyFixture("caf-goal-clear-request.v1.json", requestsDir + "/goal-clear.json");
         copyFixture("caf-goal-invalid-request.v1.json", requestsDir + "/goal-invalid.json");
+        copyFixture("caf-queue-reconcile-request.v1.json", requestsDir + "/queue-reconcile-1.json");
         File.saveContent(requestsDir + "/ignored.json", "{\n  \"schema\": \"caf-client-session.v1\",\n  \"requestId\": \"ignored\"\n}\n");
 
         final first = CafBridgeProcessor.processOnce(requestsDir, receiptsDir, writtenAt);
-        assertOutcome(first, true, 7, 1);
+        assertOutcome(first, true, 8, 1);
         assertReceipt("caf-effort-receipt.v1.json", receiptsDir + "/effort-1.json");
         assertReceipt("caf-effort-invalid-receipt.v1.json", receiptsDir + "/effort-invalid.json");
         assertReceipt("caf-wake-receipt.v1.json", receiptsDir + "/wake-1.json");
@@ -42,10 +43,11 @@ class CafBridgeHarness {
         assertReceipt("caf-goal-apply-receipt.v1.json", receiptsDir + "/goal-1.json");
         assertReceipt("caf-goal-clear-receipt.v1.json", receiptsDir + "/goal-clear.json");
         assertReceipt("caf-goal-invalid-receipt.v1.json", receiptsDir + "/goal-invalid.json");
+        assertReceipt("caf-queue-reconcile-receipt.v1.json", receiptsDir + "/queue-reconcile-1.json");
         assertFalse(FileSystem.exists(receiptsDir + "/ignored.json"), "unknown Caf schema should not write a receipt");
 
         final second = CafBridgeProcessor.processOnce(requestsDir, receiptsDir, writtenAt);
-        assertOutcome(second, true, 0, 8);
+        assertOutcome(second, true, 0, 9);
         assertReceipt("caf-effort-receipt.v1.json", receiptsDir + "/effort-1.json");
     }
 
@@ -87,6 +89,7 @@ class CafBridgeHarness {
         deleteIfExists(baseDir + "/requests/goal-1.json");
         deleteIfExists(baseDir + "/requests/goal-clear.json");
         deleteIfExists(baseDir + "/requests/goal-invalid.json");
+        deleteIfExists(baseDir + "/requests/queue-reconcile-1.json");
         deleteIfExists(baseDir + "/requests/ignored.json");
         deleteIfExists(baseDir + "/receipts/effort-1.json");
         deleteIfExists(baseDir + "/receipts/effort-invalid.json");
@@ -95,6 +98,7 @@ class CafBridgeHarness {
         deleteIfExists(baseDir + "/receipts/goal-1.json");
         deleteIfExists(baseDir + "/receipts/goal-clear.json");
         deleteIfExists(baseDir + "/receipts/goal-invalid.json");
+        deleteIfExists(baseDir + "/receipts/queue-reconcile-1.json");
         deleteIfExists(baseDir + "/receipts/ignored.json");
     }
 

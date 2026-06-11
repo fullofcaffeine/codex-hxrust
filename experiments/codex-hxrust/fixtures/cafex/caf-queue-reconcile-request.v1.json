@@ -1,0 +1,17 @@
+{
+  "schema": "cafetera.codex.queue-reconcile-request.v1",
+  "requestId": "queue-reconcile-1",
+  "taskId": "f12e-cafex3444c",
+  "clientId": "codex",
+  "source": "caf.codex.queue-reconcile",
+  "runId": "run-1",
+  "laneId": "run-1",
+  "processId": 4242,
+  "continuityGenerationId": "generation-1",
+  "deliveryDecision": "stale_suppressed",
+  "deliveryDecisionReason": "closed_checkpoint_suppressed",
+  "checkpointGeneration": "checkpoint-generation-1",
+  "checkpointBasisDigest": "sha256:checkpoint-basis-1",
+  "observedGeneration": "checkpoint-generation-2",
+  "observedBasisDigest": "sha256:checkpoint-basis-2"
+}

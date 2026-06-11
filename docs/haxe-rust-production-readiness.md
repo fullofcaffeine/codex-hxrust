@@ -28,7 +28,7 @@ No-go for broad Codex/Cafex replacement today.
 haxe.rust has handled the current pressure test better than a toy compiler would: all ten pressure gaps were resolved upstream, app/test Haxe source has zero raw Rust escape matches, and the helper/headless/Cafex fixture slices compile through generated Cargo gates. But broad replacement still has hard caveats:
 
 - selected-slice compiler pressure is clean, but broader haxe.rust parity beyond these fixtures is not established;
-- Cafex has five unsupported seam-ledger rows;
+- Cafex has four unsupported seam-ledger rows;
 - license/distribution review is unresolved for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts;
 - no production default has changed, and rollback drills remain decision-review work.
 
@@ -37,7 +37,7 @@ haxe.rust has handled the current pressure test better than a toy compiler would
 | Dimension | Score | Readiness read |
 | --- | --- | --- |
 | Language | `yellow_green` | DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, and reusable enum values are viable after generic upstream fixes. |
-| Runtime | `yellow` | Credential-free headless runtime slices are viable; live model, TUI, restart, queue, and plan-checkpoint ownership are not covered. |
+| Runtime | `yellow` | Credential-free headless runtime slices are viable; live model, TUI, restart, and plan-checkpoint ownership are not covered. |
 | Interop | `yellow_green` | Typed Haxe boundaries are holding; current app/test source has zero raw Rust escape matches. |
 | Security | `yellow` | Process, sandbox, diagnostics, and mutation controls fail closed in fixtures; real platform enforcement and production drills remain. |
 | Performance | `yellow` | Locked generated Cargo gates are repeatable; no benchmark suite supports performance claims yet. |
@@ -51,8 +51,8 @@ haxe.rust has handled the current pressure test better than a toy compiler would
 | haxe.rust pressure gaps | 10 total, 10 resolved upstream, 0 open upstream, 0 local workarounds |
 | Generic upstream repros for remaining gaps | 0 expected-failure fixtures in `../haxe.rust` |
 | Raw Rust escape pressure | 0 matches across 92 Haxe source/test files |
-| Cafetera contract subset | 6 covered, 6 passed, 0 failed, 5 gaps |
-| Cafex seam ledger | 15 rows, 9 supported, 5 unsupported, 1 review-only |
+| Cafetera contract subset | 7 covered, 7 passed, 0 failed, 5 gaps |
+| Cafex seam ledger | 15 rows, 10 supported, 4 unsupported, 1 review-only |
 | Production replacement claim | false |
 | Production default | disabled |
 | haxe.rust license | GPL-3.0 |
