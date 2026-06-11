@@ -10,6 +10,7 @@ Current fixtures:
 - `apply-patch-dry-run-input.v1.patch` covers add, update, and delete hunks without mutating the filesystem.
 - `apply-patch-dry-run-output.v1.jsonl` covers successful dry-run output plus deterministic mutation-disabled, invalid-header, and unsafe-path failures.
 - `process-exec-output.v1.jsonl` validates denied-by-default process execution, exact approval, sandbox marker proof, stdout/stderr truncation, and non-zero exit mapping.
+- `sandbox-gate-output.v1.jsonl` validates unsupported-platform fail-closed behavior, sandbox policy decisions, absent bypass path, and security-sensitive denials.
 
 haxe.rust capability and compiler smoke fixtures go here if the port needs local copies.
 
