@@ -6,8 +6,23 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:57246b66364e5facf7fdf7f05b240ca14bfa9b7b60e364c58848b463f300fde7",
+  "fingerprint": "sha256:40cfe6bcc0b67675f180e5809d8b8fb1f531a5b55c243b1bbb66290cfe9c492b",
   "schemas": [
+    {
+      "id": "AccountRateLimitsUpdatedNotification",
+      "sourcePath": "v2/AccountRateLimitsUpdatedNotification.json",
+      "sha256": "54427d3dd4dfbc03f0342443bd7cb59cbf63f1026649d8db579b7f7cb862132e",
+      "fields": [
+        "definition:CreditsSnapshot",
+        "definition:PlanType",
+        "definition:RateLimitReachedType",
+        "definition:RateLimitSnapshot",
+        "definition:RateLimitWindow",
+        "definition:SpendControlLimitSnapshot",
+        "property:rateLimits",
+        "required:rateLimits"
+      ]
+    },
     {
       "id": "AccountUpdatedNotification",
       "sourcePath": "v2/AccountUpdatedNotification.json",

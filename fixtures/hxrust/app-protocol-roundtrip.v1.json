@@ -580,6 +580,40 @@
       }
     },
     {
+      "id": "account-rate-limits-updated-notification",
+      "kind": "notification",
+      "method": "account/rateLimits/updated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "account/rateLimits/updated",
+        "params": {
+          "rateLimits": {
+            "limitId": "limit-1",
+            "limitName": "Team usage",
+            "primary": {
+              "usedPercent": 80,
+              "resetsAt": 1767225600,
+              "windowDurationMins": 10080
+            },
+            "secondary": null,
+            "credits": {
+              "hasCredits": true,
+              "unlimited": false,
+              "balance": "42.50"
+            },
+            "individualLimit": {
+              "limit": "100.00",
+              "remainingPercent": 20,
+              "resetsAt": 1767225600,
+              "used": "80.00"
+            },
+            "planType": "team",
+            "rateLimitReachedType": "workspace_owner_usage_limit_reached"
+          }
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

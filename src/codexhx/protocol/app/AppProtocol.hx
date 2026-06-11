@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/updated,command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,process/exited,process/outputDelta,rawResponseItem/completed,serverRequest/resolved,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-019";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,process/exited,process/outputDelta,rawResponseItem/completed,serverRequest/resolved,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-020";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -170,6 +170,8 @@ class AppProtocol {
                 validateMcpServerStatusUpdatedNotification(params);
             case "account/updated":
                 validateAccountUpdatedNotification(params);
+            case "account/rateLimits/updated":
+                validateAccountRateLimitsUpdatedNotification(params);
             case "rawResponseItem/completed":
                 validateRawResponseItemCompletedNotification(params);
             case "serverRequest/resolved":
@@ -592,6 +594,123 @@ class AppProtocol {
         return success("notification:account/updated");
     }
 
+    static function validateAccountRateLimitsUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final rateLimits = requiredObjectField(params.keys, params.values, "rateLimits", "$.message.params.rateLimits");
+        if (!rateLimits.ok) return rateLimits.toOutcome();
+        final snapshotResult = validateRateLimitSnapshot(rateLimits, "$.message.params.rateLimits");
+        if (!snapshotResult.ok) return snapshotResult;
+        return success("notification:account/rateLimits/updated");
+    }
+
+    static function validateRateLimitSnapshot(snapshot:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final limitId = validateOptionalNullableString(snapshot, "limitId", path + ".limitId");
+        if (!limitId.ok) return limitId;
+        final limitName = validateOptionalNullableString(snapshot, "limitName", path + ".limitName");
+        if (!limitName.ok) return limitName;
+
+        final primary = validateOptionalRateLimitWindow(snapshot, "primary", path + ".primary");
+        if (!primary.ok) return primary;
+        final secondary = validateOptionalRateLimitWindow(snapshot, "secondary", path + ".secondary");
+        if (!secondary.ok) return secondary;
+        final credits = validateOptionalCreditsSnapshot(snapshot, "credits", path + ".credits");
+        if (!credits.ok) return credits;
+        final individualLimit = validateOptionalSpendControlLimitSnapshot(snapshot, "individualLimit", path + ".individualLimit");
+        if (!individualLimit.ok) return individualLimit;
+        final planType = validateOptionalAccountPlanType(snapshot, "planType", path + ".planType");
+        if (!planType.ok) return planType;
+        final reachedType = validateOptionalRateLimitReachedType(snapshot, "rateLimitReachedType", path + ".rateLimitReachedType");
+        if (!reachedType.ok) return reachedType;
+
+        return success("rate-limits:snapshot");
+    }
+
+    static function validateOptionalRateLimitWindow(snapshot:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(snapshot.keys, name);
+        if (i < 0) return success("rate-limits:missing-window");
+        return switch snapshot.values[i] {
+            case JNull:
+                success("rate-limits:null-window");
+            case JObject(keys, values):
+                final usedPercent = requiredNumber(keys, values, "usedPercent", path + ".usedPercent");
+                if (!usedPercent.ok) return usedPercent.toOutcome();
+                final window = ProtocolObjectField.success(keys, values);
+                final resetsAt = validateOptionalNullableNumber(window, "resetsAt", path + ".resetsAt");
+                if (!resetsAt.ok) return resetsAt;
+                final windowDuration = validateOptionalNullableNumber(window, "windowDurationMins", path + ".windowDurationMins");
+                if (!windowDuration.ok) return windowDuration;
+                success("rate-limits:window");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalCreditsSnapshot(snapshot:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(snapshot.keys, name);
+        if (i < 0) return success("rate-limits:missing-credits");
+        return switch snapshot.values[i] {
+            case JNull:
+                success("rate-limits:null-credits");
+            case JObject(keys, values):
+                final hasCredits = requiredBool(keys, values, "hasCredits", path + ".hasCredits");
+                if (!hasCredits.ok) return hasCredits.toOutcome();
+                final unlimited = requiredBool(keys, values, "unlimited", path + ".unlimited");
+                if (!unlimited.ok) return unlimited.toOutcome();
+                final credits = ProtocolObjectField.success(keys, values);
+                final balance = validateOptionalNullableString(credits, "balance", path + ".balance");
+                if (!balance.ok) return balance;
+                success("rate-limits:credits");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalSpendControlLimitSnapshot(snapshot:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(snapshot.keys, name);
+        if (i < 0) return success("rate-limits:missing-spend-control");
+        return switch snapshot.values[i] {
+            case JNull:
+                success("rate-limits:null-spend-control");
+            case JObject(keys, values):
+                final limit = requiredString(keys, values, "limit", path + ".limit");
+                if (!limit.ok) return limit.toOutcome();
+                final remainingPercent = requiredNumber(keys, values, "remainingPercent", path + ".remainingPercent");
+                if (!remainingPercent.ok) return remainingPercent.toOutcome();
+                final resetsAt = requiredNumber(keys, values, "resetsAt", path + ".resetsAt");
+                if (!resetsAt.ok) return resetsAt.toOutcome();
+                final used = requiredString(keys, values, "used", path + ".used");
+                if (!used.ok) return used.toOutcome();
+                success("rate-limits:spend-control");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalAccountPlanType(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("account:missing-plan-type");
+        return switch object.values[i] {
+            case JNull:
+                success("account:null-plan-type");
+            case JString(value):
+                if (!validAccountPlanType(value)) fail("invalid_account_plan_type", path, "unsupported account plan type") else success("account:plan-type");
+            case _:
+                fail("expected_nullable_string", path, "expected JSON string or null");
+        }
+    }
+
+    static function validateOptionalRateLimitReachedType(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("rate-limits:missing-reached-type");
+        return switch object.values[i] {
+            case JNull:
+                success("rate-limits:null-reached-type");
+            case JString(value):
+                if (!validRateLimitReachedType(value)) fail("invalid_rate_limit_reached_type", path, "unsupported rate limit reached type") else success("rate-limits:reached-type");
+            case _:
+                fail("expected_nullable_string", path, "expected JSON string or null");
+        }
+    }
+
     static function validateCommandExecOutputDeltaNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
         final processId = requiredString(params.keys, params.values, "processId", "$.message.params.processId");
         if (!processId.ok) return processId.toOutcome();
@@ -719,6 +838,10 @@ class AppProtocol {
         return value == "free" || value == "go" || value == "plus" || value == "pro" || value == "prolite" || value == "team" || value == "self_serve_business_usage_based" || value == "business" || value == "enterprise_cbp_usage_based" || value == "enterprise" || value == "edu" || value == "unknown";
     }
 
+    static function validRateLimitReachedType(value:String):Bool {
+        return value == "rate_limit_reached" || value == "workspace_owner_credits_depleted" || value == "workspace_member_credits_depleted" || value == "workspace_owner_usage_limit_reached" || value == "workspace_member_usage_limit_reached";
+    }
+
     static function validCommandExecOutputStream(value:String):Bool {
         return value == "stdout" || value == "stderr";
     }
@@ -768,6 +891,28 @@ class AppProtocol {
         return switch values[i] {
             case JBool(value): ProtocolBoolField.success(value);
             case _: ProtocolBoolField.failure("expected_bool", path, "expected JSON boolean");
+        }
+    }
+
+    static function validateOptionalNullableString(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-string:missing");
+        return switch object.values[i] {
+            case JString(_) | JNull:
+                success("nullable-string");
+            case _:
+                fail("expected_nullable_string", path, "expected JSON string or null");
+        }
+    }
+
+    static function validateOptionalNullableNumber(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-number:missing");
+        return switch object.values[i] {
+            case JNumber(_) | JNull:
+                success("nullable-number");
+            case _:
+                fail("expected_nullable_number", path, "expected JSON number or null");
         }
     }
 

@@ -33,6 +33,7 @@ Included server notifications:
 - `mcpServer/oauthLogin/completed`
 - `mcpServer/startupStatus/updated`
 - `account/updated`
+- `account/rateLimits/updated`
 - `item/completed`
 - `rawResponseItem/completed`
 - `serverRequest/resolved`
@@ -48,7 +49,7 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -77,6 +78,8 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `mcpServer/startupStatus/updated` reports MCP server startup state changes. The selected subset validates `name`, `status` as `starting`, `ready`, `failed`, or `cancelled`, plus optional nullable `threadId` and `error`.
 
 `account/updated` reports account authentication and plan state. The selected subset accepts missing or null `authMode` and `planType`; string values must match the upstream auth and plan enums.
+
+`account/rateLimits/updated` reports sparse rolling rate-limit updates. The selected subset validates the required `rateLimits` object plus optional nullable limit metadata, primary/secondary windows, credits, individual spend-control limits, plan type, and rate-limit-reached type.
 
 ## Error Policy
 

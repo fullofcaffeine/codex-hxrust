@@ -33,6 +33,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "mcpServer/oauthLogin/completed");
         assertContains(fingerprintJson, "mcpServer/startupStatus/updated");
         assertContains(fingerprintJson, "account/updated");
+        assertContains(fingerprintJson, "account/rateLimits/updated");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "serverRequest/resolved");
         assertContains(fingerprintJson, "command/exec/outputDelta");
@@ -44,7 +45,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("33", Std.string(items.length));
+        assertEquals("34", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -67,7 +68,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("24", Std.string(notifications));
+        assertEquals("25", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -176,6 +177,21 @@ class AppProtocolHarness {
         assertFalse(invalidAccountPlanShape.ok, "account plan type must be a string or null when present");
         assertEquals("expected_nullable_string", invalidAccountPlanShape.errorCode);
         assertEquals("$.message.params.planType", invalidAccountPlanShape.errorPath);
+
+        final missingRateLimitWindowUsed = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-rate-limits-missing-window-used\",\"kind\":\"notification\",\"method\":\"account/rateLimits/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"account/rateLimits/updated\",\"params\":{\"rateLimits\":{\"primary\":{}}}}}")));
+        assertFalse(missingRateLimitWindowUsed.ok, "rate limit windows must include usedPercent");
+        assertEquals("missing_field", missingRateLimitWindowUsed.errorCode);
+        assertEquals("$.message.params.rateLimits.primary.usedPercent", missingRateLimitWindowUsed.errorPath);
+
+        final invalidRateLimitReachedType = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-rate-limits-invalid-reached\",\"kind\":\"notification\",\"method\":\"account/rateLimits/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"account/rateLimits/updated\",\"params\":{\"rateLimits\":{\"rateLimitReachedType\":\"soft_limit\"}}}}")));
+        assertFalse(invalidRateLimitReachedType.ok, "rate limit reached type must be a known enum value");
+        assertEquals("invalid_rate_limit_reached_type", invalidRateLimitReachedType.errorCode);
+        assertEquals("$.message.params.rateLimits.rateLimitReachedType", invalidRateLimitReachedType.errorPath);
+
+        final invalidRateLimitWindowReset = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-rate-limits-invalid-reset\",\"kind\":\"notification\",\"method\":\"account/rateLimits/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"account/rateLimits/updated\",\"params\":{\"rateLimits\":{\"primary\":{\"usedPercent\":50,\"resetsAt\":\"soon\"}}}}}")));
+        assertFalse(invalidRateLimitWindowReset.ok, "rate limit resetsAt must be numeric or null when present");
+        assertEquals("expected_nullable_number", invalidRateLimitWindowReset.errorCode);
+        assertEquals("$.message.params.rateLimits.primary.resetsAt", invalidRateLimitWindowReset.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {
