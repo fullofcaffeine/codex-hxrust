@@ -1,0 +1,69 @@
+# Cafex Hxrust Seam Ledger
+
+**Date:** 2026-06-10
+**Bead:** `HXCX-5.6` / `codex-hxrust-6h4.6`
+**Source:** Cafetera `cafex-fork-seam-ledger-v1`
+
+## Purpose
+
+This ledger maps Cafex fork seams to the current hxrust adapter state. It is for replacement review, not a production replacement claim.
+
+Machine-readable fixture:
+
+`experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json`
+
+Validation gate:
+
+```bash
+cd experiments/codex-hxrust
+harness/check-cafex-seam-ledger.sh
+```
+
+## Support Levels
+
+| Level | Meaning |
+| --- | --- |
+| `supported` | There is hxrust implementation plus fixture and harness evidence. |
+| `unsupported` | The seam is known, but hxrust does not implement it yet; `unsupportedReason` is required. |
+| `review_only` | The row supports governance/replacement review but is not runtime behavior. |
+
+Every row has a fork-strategy patch class: `upstreamable_seam`, `fork_only_caf_adapter`, or `temporary_sync_shim`.
+
+## Supported Rows
+
+| Delta | Patch class | Implementation | Evidence | Replacement status |
+| --- | --- | --- | --- | --- |
+| Caf session receipt | `fork_only_caf_adapter` | `CafReceiptWriter` | `check-caf-receipts.sh`, `check-caf-continuity.sh` | `supported_fixture` |
+| Caf turn receipt | `fork_only_caf_adapter` | `CafReceiptWriter` | `check-caf-receipts.sh`, `check-caf-continuity.sh` | `supported_fixture` |
+| Continuity metadata | `fork_only_caf_adapter` | `CafContinuityEnv` | `check-caf-continuity.sh` | `supported_fixture` |
+| Effort apply bridge | `fork_only_caf_adapter` | `CafBridgeProcessor` | `check-caf-bridge.sh` | `supported_fixture` |
+| Mode apply refusal | `fork_only_caf_adapter` | `CafBridgeProcessor` | `check-caf-bridge.sh` | `supported_refusal_fixture` |
+| Wake request/receipt | `fork_only_caf_adapter` | `CafBridgeProcessor` | `check-caf-bridge.sh` | `supported_fixture` |
+| Minimal thread goal lifecycle | `fork_only_caf_adapter` | `ThreadGoal`, `ThreadGoalStore`, `GoalToolHandler` | `check-goals.sh` | `supported_fixture` |
+
+## Unsupported Rows
+
+| Delta | Patch class | Reason |
+| --- | --- | --- |
+| Active-lane capability advertisement | `fork_only_caf_adapter` | No active-lane DTO, native live-status DTO, pid proof, or runtime capability advertisement exists yet. |
+| Queue reconcile runtime bridge | `fork_only_caf_adapter` | hxrust does not own live pending-input queues or plan-checkpoint queue mutation yet. |
+| Caf goal-apply request bridge | `fork_only_caf_adapter` | HXCX-5.3 covers minimal goal lifecycle only, not Caf/Ralph goal-apply request parsing and receipts. |
+| Live mode apply runtime | `fork_only_caf_adapter` | Current mode support is an explicit fail-closed refusal, not a live collaboration-mode transition. |
+| Restart apply runtime bridge | `fork_only_caf_adapter` | Continuity metadata is covered, but restart request validation, receipts, inherited env, pid handoff, and exec are not. |
+| Plan-checkpoint continuation guard | `fork_only_caf_adapter` | hxrust does not own visible-plan capture, pending input queues, or pre-model continuation eligibility hooks. |
+| Live TUI and credentialed model runtime | `fork_only_caf_adapter` | Current gates are credential-free fixture/generated-Cargo proofs only. |
+
+## Review-Only Row
+
+| Delta | Patch class | Use |
+| --- | --- | --- |
+| Fork lineage and upstream sync replay governance | `upstreamable_seam` | Carries replacement-review governance evidence and update workflow refs; it is not runtime behavior. |
+
+## Replacement Boundary
+
+The ledger preserves the HXCX-5.5 boundary:
+
+- `productionReplacement` remains `false`.
+- Supported rows mean fixture-backed hxrust compatibility only.
+- Unsupported rows are explicit so replacement review cannot silently omit a Cafex seam.
+- Minimal goal lifecycle support is deliberately separate from the unsupported Caf/Ralph `goal-apply-request` bridge.
