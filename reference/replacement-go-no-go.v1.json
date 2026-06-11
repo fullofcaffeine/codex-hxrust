@@ -1,0 +1,103 @@
+{
+  "schema": "codex-hxrust.replacement-go-no-go.v1",
+  "bead": "HXCX-6.3",
+  "gate": "G6",
+  "milestone": "M6",
+  "date": "2026-06-11",
+  "owner": "Marcelo Serpa",
+  "decision": {
+    "selectedMode": "selected_adapter_slice",
+    "allowedModes": [
+      "helper_only",
+      "sidecar_headless",
+      "selected_adapter_slice"
+    ],
+    "rejectedModes": [
+      "broader_replacement_candidate"
+    ],
+    "productionDefaultChanged": false,
+    "currentProductionDefault": "disabled",
+    "summary": "Proceed only with helper/headless work and named, fixture-backed adapter-slice candidates. Do not pursue broad Codex/Cafex replacement from current evidence."
+  },
+  "evidence": {
+    "frictionComparison": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json",
+    "migrationModes": "reference/migration-modes.v1.json",
+    "operatorRunbook": "reference/operator-runbook.v1.json",
+    "productionReadiness": "reference/haxe-rust-production-readiness.v1.json",
+    "cafexSeamLedger": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
+    "cafeteraContractSubset": "experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json"
+  },
+  "measuredInputs": {
+    "pressureGaps": {
+      "total": 10,
+      "resolvedUpstream": 7,
+      "openUpstream": 1,
+      "localWorkaround": 2,
+      "rawRustEscapeMatches": 0
+    },
+    "cafexSeamLedger": {
+      "rows": 15,
+      "supported": 7,
+      "unsupported": 7,
+      "reviewOnly": 1
+    },
+    "cafeteraContractSubset": {
+      "covered": 4,
+      "passed": 4,
+      "failed": 0,
+      "gaps": 5,
+      "productionReplacement": false
+    },
+    "licenses": {
+      "haxeRust": "GPL-3.0",
+      "upstreamCodex": "Apache-2.0",
+      "cafexCodex": "Apache-2.0"
+    }
+  },
+  "unsupportedSurfaces": [
+    "active-lane capability advertisement",
+    "queue reconcile runtime bridge",
+    "Caf goal-apply request bridge",
+    "live mode apply runtime",
+    "restart apply runtime bridge",
+    "plan-checkpoint continuation guard",
+    "live TUI and credentialed model runtime",
+    "nullable interface values in haxe.rust",
+    "haxe.io.Path.directory lowering",
+    "String.lastIndexOf lowering",
+    "license/distribution for bundled or binary release"
+  ],
+  "securityLicensingNotes": [
+    "Process execution, sandbox permission, diagnostics redaction, and mutation paths remain fail-closed fixture-backed surfaces.",
+    "Real OS sandbox enforcement and live host-effect ownership remain native/future boundaries.",
+    "haxe.rust is GPL-3.0; upstream Codex and Cafex are Apache-2.0. Local experiment may continue, but release/bundling requires license review.",
+    "No production default may change without a later decision record and rollback drill."
+  ],
+  "goCriteriaForSelectedSlice": [
+    "Selected seam-ledger rows are supported with implementation, fixture, and harness evidence.",
+    "Adjacent unsupported seams have fail-closed diagnostics or explicit native owner.",
+    "Cafetera contract subset for the selected slice passes or has accepted not-applicable records.",
+    "Operator rollback path is documented and tested for the slice.",
+    "Any haxe.rust compiler gap is generic, upstreamable, and tracked outside codexhx-specific compiler behavior."
+  ],
+  "noGoCriteriaForBroadReplacement": [
+    "Seven Cafex seam rows remain unsupported.",
+    "Cafetera contract subset has five gaps and no production replacement claim.",
+    "haxe.rust nullable-interface and stdlib-lowering caveats remain unresolved or unaccepted.",
+    "License/distribution review is unresolved.",
+    "No broad upstream test parity or rollback drill evidence exists."
+  ],
+  "followUpBeads": [
+    "codex-hxrust-rat.2",
+    "codex-hxrust-rat.4",
+    "codex-hxrust-hpu.4",
+    "codex-hxrust-hpu.5"
+  ],
+  "rollbackDowngradePath": [
+    "Keep production routing disabled.",
+    "Use helper-only mode if selected adapter-slice evidence regresses.",
+    "Route live Cafetera/Cafex workflows back to upstream Codex or the Cafex fork.",
+    "Revert any experimental integration commit and run bd sync plus git push.",
+    "Delete generated output directories; do not migrate production state."
+  ]
+}

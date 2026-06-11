@@ -152,3 +152,5 @@ Required fields:
 - approver/owner
 
 No gate should be marked green without at least one committed artifact or repeatable command.
+
+The G6 replacement decision is recorded in `docs/decision-records/g6-replacement-go-no-go.md` and checked by `reference/replacement-go-no-go.v1.json`.
