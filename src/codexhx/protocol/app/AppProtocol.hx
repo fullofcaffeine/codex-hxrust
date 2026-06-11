@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "rawResponseItem/completed", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/plan/delta,item/completed,item/started,process/exited,process/outputDelta,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-013";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "rawResponseItem/completed", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/plan/delta,item/completed,item/started,process/exited,process/outputDelta,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-014";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -160,6 +160,8 @@ class AppProtocol {
                 validateTerminalInteractionNotification(params);
             case "item/fileChange/outputDelta":
                 validateFileChangeOutputDeltaNotification(params);
+            case "item/fileChange/patchUpdated":
+                validateFileChangePatchUpdatedNotification(params);
             case "rawResponseItem/completed":
                 validateRawResponseItemCompletedNotification(params);
             case "command/exec/outputDelta":
@@ -425,6 +427,59 @@ class AppProtocol {
         final delta = requiredString(params.keys, params.values, "delta", "$.message.params.delta");
         if (!delta.ok) return delta.toOutcome();
         return success("notification:item/fileChange/outputDelta");
+    }
+
+    static function validateFileChangePatchUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredString(params.keys, params.values, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final itemId = requiredString(params.keys, params.values, "itemId", "$.message.params.itemId");
+        if (!itemId.ok) return itemId.toOutcome();
+        final changes = requiredArray(params.keys, params.values, "changes", "$.message.params.changes");
+        if (!changes.ok) return changes.toOutcome();
+        return validateFileUpdateChanges(changes.values, "$.message.params.changes");
+    }
+
+    static function validateFileUpdateChanges(entries:Array<Value>, path:String):AppProtocolParseOutcome {
+        var i = 0;
+        while (i < entries.length) {
+            final changePath = path + "[" + Std.string(i) + "]";
+            final change = requireObject(entries[i], changePath);
+            if (!change.ok) return change.toOutcome();
+            final diff = requiredString(change.keys, change.values, "diff", changePath + ".diff");
+            if (!diff.ok) return diff.toOutcome();
+            final kind = requiredObjectField(change.keys, change.values, "kind", changePath + ".kind");
+            if (!kind.ok) return kind.toOutcome();
+            final kindResult = validatePatchChangeKind(kind, changePath + ".kind");
+            if (!kindResult.ok) return kindResult;
+            final filePath = requiredString(change.keys, change.values, "path", changePath + ".path");
+            if (!filePath.ok) return filePath.toOutcome();
+            i = i + 1;
+        }
+        return success("notification:item/fileChange/patchUpdated");
+    }
+
+    static function validatePatchChangeKind(kind:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final kindType = requiredString(kind.keys, kind.values, "type", path + ".type");
+        if (!kindType.ok) return kindType.toOutcome();
+
+        return switch kindType.value {
+            case "add" | "delete":
+                success("patch-change-kind:" + kindType.value);
+            case "update":
+                final movePathIndex = fieldIndex(kind.keys, "move_path");
+                if (movePathIndex >= 0) {
+                    switch kind.values[movePathIndex] {
+                        case JString(_) | JNull:
+                        case _:
+                            return fail("expected_nullable_string", path + ".move_path", "expected JSON string or null");
+                    }
+                }
+                success("patch-change-kind:update");
+            case _:
+                fail("invalid_patch_change_kind", path + ".type", "unsupported patch change kind");
+        }
     }
 
     static function validateRawResponseItemCompletedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {

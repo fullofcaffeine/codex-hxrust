@@ -472,6 +472,44 @@
       }
     },
     {
+      "id": "file-change-patch-updated-notification",
+      "kind": "notification",
+      "method": "item/fileChange/patchUpdated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/fileChange/patchUpdated",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "item-file-change-1",
+          "changes": [
+            {
+              "path": "src/Main.hx",
+              "kind": {
+                "type": "update",
+                "move_path": null
+              },
+              "diff": "@@ -1 +1 @@\n-class Main {}\n+class Main { static function main() {} }\n"
+            },
+            {
+              "path": "docs/new.md",
+              "kind": {
+                "type": "add"
+              },
+              "diff": "+hello\n"
+            },
+            {
+              "path": "old.txt",
+              "kind": {
+                "type": "delete"
+              },
+              "diff": "-old\n"
+            }
+          ]
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

@@ -28,6 +28,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/commandExecution/outputDelta");
         assertContains(fingerprintJson, "item/commandExecution/terminalInteraction");
         assertContains(fingerprintJson, "item/fileChange/outputDelta");
+        assertContains(fingerprintJson, "item/fileChange/patchUpdated");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "command/exec/outputDelta");
         assertContains(fingerprintJson, "process/outputDelta");
@@ -38,7 +39,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("27", Std.string(items.length));
+        assertEquals("28", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -61,7 +62,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("18", Std.string(notifications));
+        assertEquals("19", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -120,6 +121,16 @@ class AppProtocolHarness {
         assertFalse(invalidFileChangeDelta.ok, "file change delta must be a string");
         assertEquals("expected_string", invalidFileChangeDelta.errorCode);
         assertEquals("$.message.params.delta", invalidFileChangeDelta.errorPath);
+
+        final invalidPatchChangeKind = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"file-change-invalid-kind\",\"kind\":\"notification\",\"method\":\"item/fileChange/patchUpdated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"item/fileChange/patchUpdated\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"changes\":[{\"path\":\"a.txt\",\"kind\":{\"type\":\"rename\"},\"diff\":\"@@\"}]}}}")));
+        assertFalse(invalidPatchChangeKind.ok, "patch change kind must be add, delete, or update");
+        assertEquals("invalid_patch_change_kind", invalidPatchChangeKind.errorCode);
+        assertEquals("$.message.params.changes[0].kind.type", invalidPatchChangeKind.errorPath);
+
+        final invalidPatchMovePath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"file-change-invalid-move-path\",\"kind\":\"notification\",\"method\":\"item/fileChange/patchUpdated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"item/fileChange/patchUpdated\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"changes\":[{\"path\":\"a.txt\",\"kind\":{\"type\":\"update\",\"move_path\":7},\"diff\":\"@@\"}]}}}")));
+        assertFalse(invalidPatchMovePath.ok, "update move_path must be a string or null");
+        assertEquals("expected_nullable_string", invalidPatchMovePath.errorCode);
+        assertEquals("$.message.params.changes[0].kind.move_path", invalidPatchMovePath.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

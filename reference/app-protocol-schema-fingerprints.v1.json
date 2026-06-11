@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:c23000dd544c50b544ab6ca2741922906bc7e89d830dfb34b58855a93b1f4910",
+  "fingerprint": "sha256:6abf4781283c8713a3e01e35f2e32dac2b74e56784f656da7a08196a67167487",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -82,6 +82,23 @@
         "property:threadId",
         "property:turnId",
         "required:delta",
+        "required:itemId",
+        "required:threadId",
+        "required:turnId"
+      ]
+    },
+    {
+      "id": "FileChangePatchUpdatedNotification",
+      "sourcePath": "v2/FileChangePatchUpdatedNotification.json",
+      "sha256": "1f855fc8876fa1771c711431db1e75df75ba9dec6aa5c448f6e98599ba2f6fdc",
+      "fields": [
+        "definition:FileUpdateChange",
+        "definition:PatchChangeKind",
+        "property:changes",
+        "property:itemId",
+        "property:threadId",
+        "property:turnId",
+        "required:changes",
         "required:itemId",
         "required:threadId",
         "required:turnId"
