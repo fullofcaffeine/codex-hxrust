@@ -16,11 +16,11 @@
       "id": "protocol_json_runtime_harnesses",
       "kind": "test_harness",
       "paths": [
-        "experiments/codex-hxrust/harness/check-protocol-ids.sh",
-        "experiments/codex-hxrust/harness/check-json-boundary.sh",
-        "experiments/codex-hxrust/harness/check-app-protocol.sh",
-        "experiments/codex-hxrust/harness/check-mock-model-stream.sh",
-        "experiments/codex-hxrust/harness/check-headless-jsonl-adapter.sh"
+        "harness/check-protocol-ids.sh",
+        "harness/check-json-boundary.sh",
+        "harness/check-app-protocol.sh",
+        "harness/check-mock-model-stream.sh",
+        "harness/check-headless-jsonl-adapter.sh"
       ],
       "reuse": "Keep as upstream-shaped fixture gates for helper/headless work."
     },
@@ -28,10 +28,10 @@
       "id": "native_tool_security_harnesses",
       "kind": "test_harness",
       "paths": [
-        "experiments/codex-hxrust/harness/check-apply-patch-dry-run.sh",
-        "experiments/codex-hxrust/harness/check-process-exec.sh",
-        "experiments/codex-hxrust/harness/check-sandbox-gate.sh",
-        "experiments/codex-hxrust/harness/check-diagnostics.sh"
+        "harness/check-apply-patch-dry-run.sh",
+        "harness/check-process-exec.sh",
+        "harness/check-sandbox-gate.sh",
+        "harness/check-diagnostics.sh"
       ],
       "reuse": "Keep as fail-closed host-effect and diagnostics proof surfaces."
     },
@@ -39,11 +39,11 @@
       "id": "cafex_adapter_harnesses",
       "kind": "test_harness",
       "paths": [
-        "experiments/codex-hxrust/harness/check-caf-receipts.sh",
-        "experiments/codex-hxrust/harness/check-caf-bridge.sh",
-        "experiments/codex-hxrust/harness/check-caf-continuity.sh",
-        "experiments/codex-hxrust/harness/check-goals.sh",
-        "experiments/codex-hxrust/harness/check-cafetera-contract-subset.sh"
+        "harness/check-caf-receipts.sh",
+        "harness/check-caf-bridge.sh",
+        "harness/check-caf-continuity.sh",
+        "harness/check-goals.sh",
+        "harness/check-cafetera-contract-subset.sh"
       ],
       "reuse": "Use as selected adapter-slice evidence; do not treat as broad replacement proof."
     },
@@ -67,7 +67,7 @@
       "paths": [
         "docs/state-backend-spike.md",
         "reference/state-backend-spike.v1.json",
-        "experiments/codex-hxrust/harness/check-state-backend-spike.sh"
+        "harness/check-state-backend-spike.sh"
       ],
       "reuse": "Keep JSONL/plain-file state for fixture evidence; require SQLite/sqlx or equivalent persistence before persistent state replacement."
     },
@@ -77,7 +77,7 @@
       "paths": [
         "docs/mcp-tool-registry-skeleton.md",
         "reference/tool-registry-skeleton.v1.json",
-        "experiments/codex-hxrust/harness/check-tool-registry.sh"
+        "harness/check-tool-registry.sh"
       ],
       "reuse": "Keep registry lookup fixtures; require real MCP transport/resource/OAuth/execution gates before MCP parity claims."
     },
@@ -89,7 +89,7 @@
         "docs/haxe-rust-pressure-gap-ledger.md",
         "docs/haxe-rust-upstream-repros.md",
         "reference/haxe-rust-upstream-repros.v1.json",
-        "experiments/codex-hxrust/harness/check-haxe-rust-upstream-repros.sh",
+        "harness/check-haxe-rust-upstream-repros.sh",
         "reference/haxe-rust-beads-import.v1.json"
       ],
       "reuse": "Use as the conversion map from codexhx pressure findings to generic haxe.rust issues and fixtures; all codexhx pressure gaps are now resolved upstream, including nullable interface values, String.lastIndexOf, and haxe.io.Path.directory."
@@ -168,11 +168,11 @@
     }
   ],
   "finalChecks": [
-    "experiments/codex-hxrust/harness/check-replacement-go-no-go.sh",
-    "experiments/codex-hxrust/harness/check-state-backend-spike.sh",
-    "experiments/codex-hxrust/harness/check-tool-registry.sh",
-    "experiments/codex-hxrust/harness/check-haxe-rust-upstream-repros.sh",
-    "experiments/codex-hxrust/harness/check-haxe-rust-production-readiness.sh",
-    "experiments/codex-hxrust/harness/check-haxe-rust-pressure-gaps.sh"
+    "harness/check-replacement-go-no-go.sh",
+    "harness/check-state-backend-spike.sh",
+    "harness/check-tool-registry.sh",
+    "harness/check-haxe-rust-upstream-repros.sh",
+    "harness/check-haxe-rust-production-readiness.sh",
+    "harness/check-haxe-rust-pressure-gaps.sh"
   ]
 }

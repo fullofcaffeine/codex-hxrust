@@ -9,10 +9,10 @@
   },
   "scripts": {
     "postinstall": "lix download",
-    "hx:portable": "cd experiments/codex-hxrust && haxe hxml/portable.hxml",
-    "hx:metal": "cd experiments/codex-hxrust && haxe hxml/metal.hxml",
-    "hx:portable:codegen": "cd experiments/codex-hxrust && haxe hxml/portable.codegen.hxml",
-    "hx:metal:codegen": "cd experiments/codex-hxrust && haxe hxml/metal.codegen.hxml",
-    "test:generated-cargo": "bash experiments/codex-hxrust/scripts/check-generated-cargo.sh"
+    "hx:portable": "haxe hxml/portable.hxml",
+    "hx:metal": "haxe hxml/metal.hxml",
+    "hx:portable:codegen": "haxe hxml/portable.codegen.hxml",
+    "hx:metal:codegen": "haxe hxml/metal.codegen.hxml",
+    "test:generated-cargo": "bash scripts/check-generated-cargo.sh"
   }
 }

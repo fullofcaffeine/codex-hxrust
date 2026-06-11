@@ -10,7 +10,7 @@
     "artifactShape": [
       {
         "id": "source_and_fixtures",
-        "path": "experiments/codex-hxrust",
+        "path": ".",
         "contents": [
           "Haxe source",
           "hxml profiles",
@@ -35,7 +35,7 @@
       },
       {
         "id": "generated_rust",
-        "path": "experiments/codex-hxrust/generated",
+        "path": "generated",
         "contents": [
           "portable generated crate",
           "metal generated crate"
@@ -52,17 +52,17 @@
       }
     ],
     "packageCommands": [
-      "cd experiments/codex-hxrust && npx haxe hxml/portable.codegen.hxml",
-      "cd experiments/codex-hxrust && npx haxe hxml/metal.codegen.hxml",
-      "cd experiments/codex-hxrust && scripts/check-generated-cargo.sh"
+      "npx haxe hxml/portable.codegen.hxml",
+      "npx haxe hxml/metal.codegen.hxml",
+      "scripts/check-generated-cargo.sh"
     ]
   },
   "run": {
     "localSmokeCommands": [
-      "cd experiments/codex-hxrust && harness/check-doctor-json.sh",
-      "cd experiments/codex-hxrust && harness/check-headless-jsonl-adapter.sh",
-      "cd experiments/codex-hxrust && harness/check-cafetera-contract-subset.sh",
-      "cd experiments/codex-hxrust && harness/check-migration-modes.sh"
+      "harness/check-doctor-json.sh",
+      "harness/check-headless-jsonl-adapter.sh",
+      "harness/check-cafetera-contract-subset.sh",
+      "harness/check-migration-modes.sh"
     ],
     "cafeteraIntegrationStatus": "not_enabled_by_default",
     "defaultEnablementRule": "Do not route Cafetera workflows to codexhx unless HXCX-6.3 or a later decision record selects a rollout mode."
@@ -89,13 +89,13 @@
       "git push"
     ],
     "generatedOutputCleanup": [
-      "rm -rf experiments/codex-hxrust/generated/portable",
-      "rm -rf experiments/codex-hxrust/generated/metal"
+      "rm -rf generated/portable",
+      "rm -rf generated/metal"
     ],
     "pinRollback": [
       "git revert <pin-update-commit>",
-      "experiments/codex-hxrust/scripts/audit-haxe-rust.sh",
-      "cd experiments/codex-hxrust && scripts/check-generated-cargo.sh"
+      "scripts/audit-haxe-rust.sh",
+      "scripts/check-generated-cargo.sh"
     ],
     "statePolicy": "Do not migrate or delete production state in this experiment. Preserve sidecar/generated state for diagnostics before cleanup."
   },
@@ -103,22 +103,22 @@
     "operatorChecks": [
       {
         "id": "doctor",
-        "command": "cd experiments/codex-hxrust && harness/check-doctor-json.sh",
+        "command": "harness/check-doctor-json.sh",
         "purpose": "Verify haxe.rust pin, profile, generated binary output shape, and local toolchain metadata."
       },
       {
         "id": "diagnostics_redaction",
-        "command": "cd experiments/codex-hxrust && harness/check-diagnostics.sh",
+        "command": "harness/check-diagnostics.sh",
         "purpose": "Verify secret redaction and failure-report fixture ids."
       },
       {
         "id": "friction_comparison",
-        "command": "cd experiments/codex-hxrust && harness/check-friction-comparison.sh",
+        "command": "harness/check-friction-comparison.sh",
         "purpose": "Verify replacement-review evidence still matches local Cafex patch and seam ledgers."
       },
       {
         "id": "migration_modes",
-        "command": "cd experiments/codex-hxrust && harness/check-migration-modes.sh",
+        "command": "harness/check-migration-modes.sh",
         "purpose": "Verify rollout mode criteria still forbid contract bypasses."
       }
     ],

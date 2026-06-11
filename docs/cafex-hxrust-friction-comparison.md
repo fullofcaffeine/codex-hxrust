@@ -10,12 +10,11 @@ This document estimates whether the hxrust path reduces maintenance compared wit
 
 Machine-readable fixture:
 
-`experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json`
+`fixtures/cafex/cafex-hxrust-friction-comparison.v1.json`
 
 Validation gate:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-friction-comparison.sh
 ```
 
@@ -25,8 +24,8 @@ harness/check-friction-comparison.sh
 | --- | --- |
 | `../fullofcaffeine/tools/cafetera/modules/codex/tests/fixtures/cafex-fork-seam-ledger.v1.json` | Source Cafex fork seam families and patch-class intent. |
 | `../fullofcaffeine/tools/cafetera/modules/codex/runtime/patches/0001-cafex-runtime-0.135.patch` | Current consolidated Cafex runtime patch stack. |
-| `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | hxrust supported/unsupported mapping against Cafex seams. |
-| `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` | Contract subset result and explicit non-replacement boundary. |
+| `fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | hxrust supported/unsupported mapping against Cafex seams. |
+| `fixtures/cafex/cafetera-contract-subset-report.v1.json` | Contract subset result and explicit non-replacement boundary. |
 
 ## Cafex Patch Surface
 

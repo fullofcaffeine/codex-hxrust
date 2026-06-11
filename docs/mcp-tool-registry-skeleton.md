@@ -12,7 +12,6 @@ Machine-readable record:
 Validation gate:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-tool-registry.sh
 ```
 

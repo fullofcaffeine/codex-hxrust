@@ -30,7 +30,7 @@ Add hunks may contain only `+` lines. Delete hunks may not contain body lines. U
 
 ## Gate
 
-Run from `experiments/codex-hxrust`:
+Run from `.`:
 
 ```bash
 harness/check-apply-patch-dry-run.sh

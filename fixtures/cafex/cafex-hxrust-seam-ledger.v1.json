@@ -1,0 +1,422 @@
+{
+  "schema": "codex-hxrust.cafex-hxrust-seam-ledger.v1",
+  "generatedAt": "2026-06-10T00:00:07Z",
+  "bead": "HXCX-5.6",
+  "sourceLedger": {
+    "schema": "cafetera.codex.cafex-fork-seam-ledger.v1",
+    "taskId": "f12e-cafexcc4e6",
+    "docRef": "tools/cafetera/modules/codex/docs/ref/cafex-fork-seam-ledger-v1.md",
+    "fixtureRef": "tools/cafetera/modules/codex/tests/fixtures/cafex-fork-seam-ledger.v1.json"
+  },
+  "policy": {
+    "semanticAuthority": "cml_haxe_graph_receipts_brew_modules",
+    "hxrustAuthority": "adapter_implementation_and_fixture_evidence_only",
+    "productionReplacement": false,
+    "replacementReviewUse": "Map Cafex fork seams to current hxrust implementation, fixture coverage, owners, patch classes, and explicit unsupported reasons.",
+    "allowedPatchClasses": [
+      "upstreamable_seam",
+      "fork_only_caf_adapter",
+      "temporary_sync_shim"
+    ],
+    "supportLevels": [
+      "supported",
+      "unsupported",
+      "review_only"
+    ]
+  },
+  "summary": {
+    "rows": 15,
+    "supported": 10,
+    "unsupported": 4,
+    "reviewOnly": 1
+  },
+  "rows": [
+    {
+      "id": "caf-session-receipt",
+      "title": "Caf session receipt",
+      "sourceSeam": "restart-wake-session-continuity",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafReceiptWriter.maybeWriteSessionReceipt",
+        "codexhx.adapters.cafex.CafReceiptEnv"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-session-receipt-resume.v1.json",
+        "fixtures/cafex/caf-continuity-session-receipt.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-receipts.sh",
+        "harness/check-caf-continuity.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "caf-client-session.v1"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Fixture-supported for deterministic receipt writing; live runtime ownership proof remains outside this row."
+    },
+    {
+      "id": "caf-turn-receipt",
+      "title": "Caf turn receipt",
+      "sourceSeam": "restart-wake-session-continuity",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafReceiptWriter.maybeWriteTurnReceipt",
+        "codexhx.adapters.cafex.CafReceiptEnv"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-turn-receipt-startup.v1.json",
+        "fixtures/cafex/caf-continuity-turn-receipt-fresh.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-receipts.sh",
+        "harness/check-caf-continuity.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "caf-client-turn.v1"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Fixture-supported for deterministic turn receipt shape and source validation."
+    },
+    {
+      "id": "caf-continuity-metadata",
+      "title": "Successor and predecessor continuity metadata",
+      "sourceSeam": "restart-wake-session-continuity",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafContinuityEnv",
+        "codexhx.adapters.cafex.CafContinuityEnvParseOutcome"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-continuity-metadata-resume.v1.json",
+        "fixtures/cafex/caf-continuity-metadata-fresh.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-continuity.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "CAF_CODEX_SUCCESSOR_RUN_ID",
+        "CAF_CODEX_PREDECESSOR_SESSION"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Supported as explicit metadata parsing and receipt input; no hidden process-liveness inference."
+    },
+    {
+      "id": "caf-effort-apply-bridge",
+      "title": "Effort apply request and receipt bridge",
+      "sourceSeam": "effort-mode-runtime-bridge",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafBridgeProcessor.processOnce",
+        "codexhx.adapters.cafex.CafBridgeProcessOutcome"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-effort-request.v1.json",
+        "fixtures/cafex/caf-effort-receipt.v1.json",
+        "fixtures/cafex/caf-effort-invalid-request.v1.json",
+        "fixtures/cafex/caf-effort-invalid-receipt.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-bridge.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "cafetera.codex.effort-apply-request.v1",
+        "cafetera.codex.effort-apply.v1"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Supported for directory request scan, accepted effort aliases, malformed effort refusal, and deterministic receipt writing."
+    },
+    {
+      "id": "caf-mode-apply-bridge-rails",
+      "title": "Mode apply next-turn bridge rails",
+      "sourceSeam": "effort-mode-runtime-bridge",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture_rails_only",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafBridgeProcessor.processOnce"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-mode-plan-request.v1.json",
+        "fixtures/cafex/caf-mode-plan-receipt.v1.json",
+        "fixtures/cafex/caf-mode-default-request.v1.json",
+        "fixtures/cafex/caf-mode-default-receipt.v1.json",
+        "fixtures/cafex/caf-mode-unsupported-request.v1.json",
+        "fixtures/cafex/caf-mode-unsupported-receipt.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-bridge.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "cafetera.codex.mode-apply-request.v1",
+        "cafetera.codex.mode-apply.v1"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Supported for plan/default request scanning, alias normalization, next-turn receipts, plan-checkpoint boundary metadata, and invalid-mode refusal. Current-turn/native TUI mode mutation remains a separate unsupported row."
+    },
+    {
+      "id": "caf-wake-request-receipt",
+      "title": "Same-process wake request and consumed receipt",
+      "sourceSeam": "restart-wake-session-continuity",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafBridgeProcessor.processOnce"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-wake-request.v1.json",
+        "fixtures/cafex/caf-wake-receipt.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-bridge.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "caf-client-wake-request.v1",
+        "caf-client-wake-receipt.v1"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Supported for request/receipt compatibility only; live queued continuation dispatch is not claimed."
+    },
+    {
+      "id": "caf-goal-thread-lifecycle",
+      "title": "Minimal thread goal DTO, state, and tool flow",
+      "sourceSeam": "goal-apply-runtime-bridge",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex plus cafetera.ralph",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.protocol.goals.ThreadGoal",
+        "codexhx.state.goals.ThreadGoalStore",
+        "codexhx.tools.goals.GoalToolHandler"
+      ],
+      "fixtures": [
+        "fixtures/hxrust/thread-goal-active.v1.json",
+        "fixtures/hxrust/thread-goal-transition.v1.jsonl",
+        "fixtures/hxrust/goal-tool-output.v1.jsonl"
+      ],
+      "harnesses": [
+        "harness/check-goals.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "thread_goal",
+        "get_goal",
+        "create_goal",
+        "update_goal"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Supported for minimal goal lifecycle semantics. This is not yet the Caf goal-apply request/receipt bridge."
+    },
+    {
+      "id": "active-lane-capability-advertisement",
+      "title": "Native active-lane capability and runtime receipt advertisement",
+      "sourceSeam": "caf-runtime-active-lane-capabilities",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafActiveLaneWriter",
+        "codexhx.adapters.cafex.CafActiveLaneEnv",
+        "codexhx.adapters.cafex.CafNativeLiveStatus"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-active-lane.v1.json",
+        "fixtures/cafex/caf-active-lane-no-native-status.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-active-lane.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "cafetera.codex.active-lane.v1",
+        "cafetera.codex.native-live-status.v1"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Fixture-supported for deterministic active-lane capability advertisement, optional native live-status DTO, run-id selection, wake directories, and fail-closed owner/native PID proof. Live TUI/process ownership remains outside this row."
+    },
+    {
+      "id": "queue-reconcile-runtime-bridge",
+      "title": "Checkpoint queue reconcile request and receipt bridge",
+      "sourceSeam": "queue-reconcile-runtime-bridge",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture_rails_only",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafBridgeProcessor.queueReconcileReceipt"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-queue-reconcile-request.v1.json",
+        "fixtures/cafex/caf-queue-reconcile-receipt.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-bridge.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "cafetera.codex.queue-reconcile-request.v1",
+        "cafetera.codex.queue-reconcile-receipt.v1"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Fixture-supported for deterministic queue-reconcile request/receipt rails and Brew delivery-decision field preservation. Live pending-input queues, visible-plan capture, and TUI queue mutation remain outside the hxrust claim."
+    },
+    {
+      "id": "caf-goal-apply-request-bridge",
+      "title": "Caf goal-apply request and receipt bridge",
+      "sourceSeam": "goal-apply-runtime-bridge",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex plus cafetera.ralph",
+      "supportLevel": "supported",
+      "replacementStatus": "supported_fixture",
+      "hxrustImplementation": [
+        "codexhx.adapters.cafex.CafBridgeProcessor.goalReceipt",
+        "codexhx.state.goals.ThreadGoalStore"
+      ],
+      "fixtures": [
+        "fixtures/cafex/caf-goal-apply-request.v1.json",
+        "fixtures/cafex/caf-goal-apply-receipt.v1.json",
+        "fixtures/cafex/caf-goal-clear-request.v1.json",
+        "fixtures/cafex/caf-goal-clear-receipt.v1.json",
+        "fixtures/cafex/caf-goal-invalid-request.v1.json",
+        "fixtures/cafex/caf-goal-invalid-receipt.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-bridge.sh",
+        "harness/check-cafetera-contract-subset.sh"
+      ],
+      "schemaIds": [
+        "cafetera.codex.goal-apply-request.v1",
+        "cafetera.codex.goal-apply.v1",
+        "cafetera.ralph.codex-goal-bridge.v1"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Fixture-supported for Caf/Ralph request parsing, Brew-authority guards, ThreadGoalStore application, clear-boundary receipts, and fail-closed invalid requests. Live app-server/TUI persistence remains outside this row."
+    },
+    {
+      "id": "live-mode-apply-runtime",
+      "title": "Live collaboration mode apply runtime transition",
+      "sourceSeam": "effort-mode-runtime-bridge",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "unsupported",
+      "replacementStatus": "unsupported_deferred",
+      "hxrustImplementation": [],
+      "fixtures": [
+        "fixtures/cafex/caf-mode-plan-receipt.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-caf-bridge.sh"
+      ],
+      "schemaIds": [
+        "cafetera.codex.mode-apply-request.v1",
+        "cafetera.codex.mode-apply.v1"
+      ],
+      "unsupportedReason": "Mode apply bridge rails emit next-turn receipts for supported modes, but no live collaboration-mode state transition is implemented.",
+      "replacementReviewNote": "Supported next-turn receipts are useful for typed lane integration but do not satisfy current-turn/native TUI mode replacement."
+    },
+    {
+      "id": "restart-apply-runtime-bridge",
+      "title": "Restart apply request, receipt, and process cutover",
+      "sourceSeam": "restart-wake-session-continuity",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "unsupported",
+      "replacementStatus": "unsupported_deferred",
+      "hxrustImplementation": [],
+      "fixtures": [],
+      "harnesses": [],
+      "schemaIds": [
+        "cafetera.codex.restart-apply-request.v1",
+        "cafetera.codex.restart-apply.v1"
+      ],
+      "unsupportedReason": "Continuity metadata is covered, but hxrust does not implement restart request validation, receipt generation, inherited env, pid handoff, or process exec.",
+      "replacementReviewNote": "Replacement review must keep restart cutover behind a host/native boundary until process ownership exists."
+    },
+    {
+      "id": "plan-checkpoint-continuation-guard",
+      "title": "Plan-checkpoint stale continuation guard and proof receipts",
+      "sourceSeam": "plan-checkpoint-continuation-guard",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex plus cafetera.brew",
+      "supportLevel": "unsupported",
+      "replacementStatus": "unsupported_deferred",
+      "hxrustImplementation": [],
+      "fixtures": [],
+      "harnesses": [],
+      "schemaIds": [
+        "cafetera.brew.plan-checkpoint-status.v1",
+        "cafetera.brew.plan-checkpoint-delivery-decision.v1",
+        "cafetera.codex.native-current-turn-plan-proof.v1",
+        "cafetera.codex.plan-checkpoint-accept-execution.v1"
+      ],
+      "unsupportedReason": "The hxrust runtime does not yet own visible-plan capture, pending input queues, or pre-model continuation eligibility hooks.",
+      "replacementReviewNote": "Must remain deferred until the Haxe runtime has queue ownership or a narrow native wrapper contract."
+    },
+    {
+      "id": "credentialed-live-model-and-tui-runtime",
+      "title": "Live TUI event loop and credentialed model runtime",
+      "sourceSeam": "caf-runtime-active-lane-capabilities",
+      "patchClass": "fork_only_caf_adapter",
+      "owner": "@cafetera/codex",
+      "supportLevel": "unsupported",
+      "replacementStatus": "unsupported_deferred",
+      "hxrustImplementation": [],
+      "fixtures": [],
+      "harnesses": [],
+      "schemaIds": [
+        "native_tui_event_loop",
+        "live_model_provider"
+      ],
+      "unsupportedReason": "Current gates are credential-free fixture and generated-Cargo proofs; no live TUI loop or networked model provider is implemented.",
+      "replacementReviewNote": "This preserves the HXCX-5.5 no-production-replacement boundary."
+    },
+    {
+      "id": "fork-lineage-upstream-sync",
+      "title": "Fork lineage and upstream sync replay governance",
+      "sourceSeam": "fork-lineage-upstream-sync",
+      "patchClass": "upstreamable_seam",
+      "owner": "@cafetera/codex",
+      "supportLevel": "review_only",
+      "replacementStatus": "review_artifact_available",
+      "hxrustImplementation": [
+        "docs/haxe-rust-direct-workflow.md",
+        "docs/haxe-rust-vendoring-policy.md",
+        "scripts/update-haxe-rust-pin.sh"
+      ],
+      "fixtures": [
+        "fixtures/cafex/cafex-hxrust-seam-ledger.v1.json"
+      ],
+      "harnesses": [
+        "harness/check-cafex-seam-ledger.sh"
+      ],
+      "schemaIds": [
+        "caf-fork-lineage.v1",
+        "caf-fork-sync-receipt.v1"
+      ],
+      "unsupportedReason": null,
+      "replacementReviewNote": "Governance row only: it supports replacement review, not runtime behavior."
+    }
+  ]
+}

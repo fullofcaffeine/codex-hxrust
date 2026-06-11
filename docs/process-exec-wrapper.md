@@ -31,7 +31,7 @@ The test harness uses generated scripts under `generated/process-exec-sandbox`. 
 
 ## Gate
 
-Run from `experiments/codex-hxrust`:
+Run from `.`:
 
 ```bash
 harness/check-process-exec.sh

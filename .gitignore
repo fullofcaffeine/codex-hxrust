@@ -4,9 +4,9 @@
 *.swo
 
 # Local build products
-experiments/codex-hxrust/generated/*
-!experiments/codex-hxrust/generated/.gitignore
-!experiments/codex-hxrust/generated/README.md
+generated/*
+!generated/.gitignore
+!generated/README.md
 
 # Logs and local scratch archives
 *.log

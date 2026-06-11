@@ -10,12 +10,11 @@ This ledger maps Cafex fork seams to the current hxrust adapter state. It is for
 
 Machine-readable fixture:
 
-`experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json`
+`fixtures/cafex/cafex-hxrust-seam-ledger.v1.json`
 
 Validation gate:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-cafex-seam-ledger.sh
 ```
 

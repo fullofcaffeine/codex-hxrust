@@ -18,7 +18,7 @@
         "haxe hxml/metal.hxml",
         "haxe hxml/portable.codegen.hxml",
         "haxe hxml/metal.codegen.hxml",
-        "experiments/codex-hxrust/scripts/check-generated-cargo.sh"
+        "scripts/check-generated-cargo.sh"
       ],
       "resolvedBy": "0849fcf1a556cb86615cfcdf635165ba82fec8da",
       "followUp": "No active local patch remains for this issue; keep this historical record until the next patch-ledger cleanup."

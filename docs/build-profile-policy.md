@@ -8,10 +8,10 @@
 
 | Profile | HXML | haxe.rust contract | Cargo behavior | Output |
 | --- | --- | --- | --- | --- |
-| Portable codegen | `experiments/codex-hxrust/hxml/portable.codegen.hxml` | `portable` | `rust_no_build` | `generated/portable` |
-| Portable check | `experiments/codex-hxrust/hxml/portable.hxml` | `portable` | `rust_cargo_subcommand=check` | `generated/portable` |
-| Metal codegen | `experiments/codex-hxrust/hxml/metal.codegen.hxml` | `metal` with explicit fallback allowed during scaffold | `rust_no_build` | `generated/metal` |
-| Metal check | `experiments/codex-hxrust/hxml/metal.hxml` | `metal` with explicit fallback allowed during scaffold | `rust_cargo_subcommand=check` | `generated/metal` |
+| Portable codegen | `hxml/portable.codegen.hxml` | `portable` | `rust_no_build` | `generated/portable` |
+| Portable check | `hxml/portable.hxml` | `portable` | `rust_cargo_subcommand=check` | `generated/portable` |
+| Metal codegen | `hxml/metal.codegen.hxml` | `metal` with explicit fallback allowed during scaffold | `rust_no_build` | `generated/metal` |
+| Metal check | `hxml/metal.hxml` | `metal` with explicit fallback allowed during scaffold | `rust_cargo_subcommand=check` | `generated/metal` |
 
 ## Policy
 
@@ -20,8 +20,8 @@
 3. `idiomatic` is an output-quality goal for both contracts, not a build profile. Prefer phrases like "idiomatic portable output" or "idiomatic metal output" when describing codegen quality.
 4. Codegen-only profiles are for fast local feedback and deterministic generated-output inspection.
 5. Check profiles are the first build gate and must succeed before DTO/runtime work is considered active.
-6. Locked Cargo checks/tests are run by `experiments/codex-hxrust/scripts/check-generated-cargo.sh`.
-7. Generated output remains build output and is ignored by `experiments/codex-hxrust/generated/.gitignore`.
+6. Locked Cargo checks/tests are run by `scripts/check-generated-cargo.sh`.
+7. Generated output remains build output and is ignored by `generated/.gitignore`.
 
 Architecture framing: portable by default, Rust-native by opt-in, metal-like performance whenever haxe.rust can prove Haxe semantics are preserved. In codex-hxrust, start with portable for pure Codex data surfaces; choose metal when the source contract itself needs Rust-native authority, stricter boundary enforcement, async/process integration, or reduced-runtime behavior.
 
@@ -31,7 +31,7 @@ The temporary G1 `Main` is intentionally a no-op. Earlier trace/print smoke outp
 
 ## Commands
 
-From `experiments/codex-hxrust/`:
+From ``:
 
 ```bash
 haxe hxml/portable.codegen.hxml

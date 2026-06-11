@@ -14,22 +14,22 @@
     "ownedSurfaces": [
       {
         "id": "one_turn_transcript",
-        "artifact": "experiments/codex-hxrust/src/codexhx/state/TranscriptStateStore.hx",
+        "artifact": "src/codexhx/state/TranscriptStateStore.hx",
         "shape": "transcript.jsonl"
       },
       {
         "id": "one_turn_state_summary",
-        "artifact": "experiments/codex-hxrust/src/codexhx/state/TranscriptStateStore.hx",
+        "artifact": "src/codexhx/state/TranscriptStateStore.hx",
         "shape": "state.json"
       },
       {
         "id": "cancelled_transcript_state",
-        "artifact": "experiments/codex-hxrust/fixtures/hxrust/mock-one-turn-cancel-state.v1.json",
+        "artifact": "fixtures/hxrust/mock-one-turn-cancel-state.v1.json",
         "shape": "partial transcript plus terminal cancellation"
       },
       {
         "id": "headless_adapter_transcript",
-        "artifact": "experiments/codex-hxrust/harness/check-headless-jsonl-adapter.sh",
+        "artifact": "harness/check-headless-jsonl-adapter.sh",
         "shape": "credential-free command JSONL"
       }
     ],
@@ -89,8 +89,8 @@
     ]
   },
   "evidence": {
-    "stateReadme": "experiments/codex-hxrust/src/codexhx/state/README.md",
-    "goalStateReadme": "experiments/codex-hxrust/src/codexhx/state/goals/README.md",
+    "stateReadme": "src/codexhx/state/README.md",
+    "goalStateReadme": "src/codexhx/state/goals/README.md",
     "parityScorecard": "docs/parity-scorecard.md",
     "g6Decision": "reference/replacement-go-no-go.v1.json"
   },

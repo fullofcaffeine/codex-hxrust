@@ -250,38 +250,29 @@ Create an experiment module/repo skeleton that builds a minimal generated Rust b
 Suggested layout:
 
 ```text
-experiments/codex-hxrust/
-  README.md
-  prd.md
-  .beads/
-  hxml/
-    portable.hxml
-    metal.hxml
+hxml/
+  portable.hxml
+  metal.hxml
+src/
+  codexhx/
+    Main.hx
+    protocol/
+    config/
+    runtime/
+    state/
+    tools/
+    adapters/
+      cafex/
+native/
   src/
-    codexhx/
-      Main.hx
-      protocol/
-      config/
-      runtime/
-      state/
-      tools/
-      caf/
-  native/
-    Cargo.toml
-    src/
-      tokio_bridge.rs
-      serde_bridge.rs
-      process_bridge.rs
-      sandbox_bridge.rs
-  fixtures/
-    upstream/
-    cafex/
-    hxrust/
-  harness/
-    compare-fixtures.mjs
-    run-hxrust.mjs
-  generated/
-    .gitignore
+fixtures/
+  upstream/
+  cafex/
+  hxrust/
+harness/
+scripts/
+generated/
+  .gitignore
 ```
 
 Rules:
@@ -920,7 +911,7 @@ The companion file `codex-hxrust-beads-backlog.seed.jsonl` contains epics and ta
 
 ## 17. Open questions
 
-1. **Repository ownership:** should the experiment live in Cafetera under `tools/cafetera/modules/codex-hxrust`, in the `haxe.rust` repo as a stress-test app, or in a separate bridge repo?
+1. **Repository ownership:** resolved by `docs/repository-layout.md`; this separate `codex-hxrust` repo owns the port, with root-level Haxe package directories and sibling reference checkouts.
 2. **Replacement target:** is the first target `deps/codex`, the compose runtime copy, a sidecar binary, or a Cafetera module adapter?
 3. **Schema source of truth:** should Haxe DTOs be generated from Codex Rust schema fixtures, or manually mirrored with fixture checks?
 4. **State backend:** JSONL first is simpler; SQLite/sqlx parity may be required for replacement.

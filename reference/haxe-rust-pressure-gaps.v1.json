@@ -33,8 +33,8 @@
       "untyped"
     ],
     "scannedRoots": [
-      "experiments/codex-hxrust/src",
-      "experiments/codex-hxrust/test"
+      "src",
+      "test"
     ],
     "policy": "No raw Rust escapes are used in app/test Haxe source for the current pressure-test surface."
   },
@@ -55,7 +55,7 @@
       "workaround": "Historical local CallStack.cross.hx Dynamic workaround; now removed and recorded as resolved-upstream.",
       "validation": [
         "KEEP_ARTIFACTS=0 scripts/ci/package-smoke.sh in ../haxe.rust",
-        "experiments/codex-hxrust/scripts/check-generated-cargo.sh"
+        "scripts/check-generated-cargo.sh"
       ]
     },
     {
@@ -72,7 +72,7 @@
       "workaround": "Keep generated Cargo gates in codex-hxrust even after the compiler fix; the upstream fix now propagates Cargo failure as a Haxe compiler error.",
       "validation": [
         "scripts/ci/check-cargo-failure-propagation.sh in ../haxe.rust",
-        "experiments/codex-hxrust/scripts/check-generated-cargo.sh"
+        "scripts/check-generated-cargo.sh"
       ]
     },
     {
@@ -89,7 +89,7 @@
       "workaround": "Generic nullable_scalar_charcode snapshot now covers the Haxe patterns; keep local DTO code straightforward and avoid raw Rust.",
       "validation": [
         "nullable_scalar_charcode snapshot in ../haxe.rust",
-        "experiments/codex-hxrust/harness/check-protocol-ids.sh"
+        "harness/check-protocol-ids.sh"
       ]
     },
     {
@@ -106,7 +106,7 @@
       "workaround": "Resolved by generic enum type-parameter lowering; codex-hxrust can use generic result enums where useful.",
       "validation": [
         "generic_enum_payload snapshot in ../haxe.rust",
-        "experiments/codex-hxrust/harness/check-protocol-ids.sh"
+        "harness/check-protocol-ids.sh"
       ]
     },
     {
@@ -123,7 +123,7 @@
       "workaround": "Compiler now treats Haxe enum values as reusable cloneable values for typed by-value helper calls.",
       "validation": [
         "enum_reuse_helper_calls snapshot in ../haxe.rust",
-        "experiments/codex-hxrust/harness/check-json-boundary.sh"
+        "harness/check-json-boundary.sh"
       ]
     },
     {
@@ -140,7 +140,7 @@
       "workaround": "The local parseJson shape workaround was removed after the generic try_catch_tail_nonvoid fix landed.",
       "validation": [
         "try_catch_tail_nonvoid snapshot in ../haxe.rust",
-        "experiments/codex-hxrust/harness/check-mock-model-stream.sh"
+        "harness/check-mock-model-stream.sh"
       ]
     },
     {
@@ -157,7 +157,7 @@
       "workaround": "Compiler now evaluates non-null interface/null-literal comparisons to the correct constant result.",
       "validation": [
         "interface_null_compare snapshot in ../haxe.rust",
-        "experiments/codex-hxrust/harness/check-mock-model-stream.sh"
+        "harness/check-mock-model-stream.sh"
       ]
     },
     {
@@ -176,7 +176,7 @@
         "nullable_interface_null snapshot in ../haxe.rust",
         "interface_basic snapshot in ../haxe.rust",
         "interface_null_compare snapshot in ../haxe.rust",
-        "experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh b3e38c31"
+        "scripts/update-haxe-rust-pin.sh b3e38c31"
       ]
     },
     {
@@ -195,7 +195,7 @@
         "path_directory snapshot in ../haxe.rust",
         "std_string_dynamic snapshot in ../haxe.rust",
         "hxrt path::directory unit test in ../haxe.rust",
-        "experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 39f20b9e"
+        "scripts/update-haxe-rust-pin.sh 39f20b9e"
       ]
     },
     {
@@ -214,7 +214,7 @@
         "string_last_index_of snapshot in ../haxe.rust",
         "std_string_dynamic snapshot in ../haxe.rust",
         "hxrt last_index_of unit test in ../haxe.rust",
-        "experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 916f1534"
+        "scripts/update-haxe-rust-pin.sh 916f1534"
       ]
     }
   ]

@@ -30,16 +30,16 @@ The script records both per-schema hashes and field labels such as `property:thr
 Normal validation:
 
 ```bash
-experiments/codex-hxrust/harness/check-schema-fingerprints.sh
+harness/check-schema-fingerprints.sh
 ```
 
 Accept a reviewed upstream drift:
 
 ```bash
-ACCEPT_SCHEMA_FINGERPRINT=1 experiments/codex-hxrust/harness/check-schema-fingerprints.sh
+ACCEPT_SCHEMA_FINGERPRINT=1 harness/check-schema-fingerprints.sh
 ```
 
-The script writes transient reports under `experiments/codex-hxrust/generated/reports/`:
+The script writes transient reports under `generated/reports/`:
 
 - `app-protocol-schema-fingerprints.actual.v1.json`
 - `app-protocol-schema-diff.v1.json`

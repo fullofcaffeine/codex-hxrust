@@ -26,4 +26,4 @@ Unknown top-level fields are listed in sorted order in `unsupportedFields`. They
 
 ## Fixture
 
-The canonical HXCX-2.3 fixture is `experiments/codex-hxrust/fixtures/hxrust/config-profile-basic.v1.json`. It intentionally includes Cafex-oriented and unknown fields to verify that upstream-first DTO parsing preserves a clear adapter backlog without accepting those fields as implemented behavior.
+The canonical HXCX-2.3 fixture is `fixtures/hxrust/config-profile-basic.v1.json`. It intentionally includes Cafex-oriented and unknown fields to verify that upstream-first DTO parsing preserves a clear adapter backlog without accepting those fields as implemented behavior.

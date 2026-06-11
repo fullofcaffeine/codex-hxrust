@@ -47,8 +47,8 @@
     }
   ],
   "fixtures": {
-    "lookup": "experiments/codex-hxrust/fixtures/hxrust/tool-registry-lookup.v1.jsonl",
-    "unsupportedMcp": "experiments/codex-hxrust/fixtures/hxrust/tool-registry-unsupported-mcp.v1.jsonl"
+    "lookup": "fixtures/hxrust/tool-registry-lookup.v1.jsonl",
+    "unsupportedMcp": "fixtures/hxrust/tool-registry-unsupported-mcp.v1.jsonl"
   },
   "futureRealMcpScope": [
     "stdio and streamable HTTP MCP client startup",
@@ -66,10 +66,10 @@
     "broadReplacement": "real_mcp_transport_and_app_server_parity_required"
   },
   "evidence": [
-    "experiments/codex-hxrust/src/codexhx/tools/registry/ToolRegistry.hx",
-    "experiments/codex-hxrust/src/codexhx/tools/registry/ToolRegistryEntry.hx",
-    "experiments/codex-hxrust/test/ToolRegistryHarness.hx",
-    "experiments/codex-hxrust/harness/check-tool-registry.sh",
+    "src/codexhx/tools/registry/ToolRegistry.hx",
+    "src/codexhx/tools/registry/ToolRegistryEntry.hx",
+    "test/ToolRegistryHarness.hx",
+    "harness/check-tool-registry.sh",
     "docs/mcp-tool-registry-skeleton.md"
   ]
 }

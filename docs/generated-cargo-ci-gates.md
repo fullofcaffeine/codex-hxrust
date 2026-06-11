@@ -9,12 +9,12 @@
 From the repository root:
 
 ```bash
-experiments/codex-hxrust/scripts/check-generated-cargo.sh
+scripts/check-generated-cargo.sh
 ```
 
 The script is intentionally local-CI friendly:
 
-1. It changes into `experiments/codex-hxrust/`.
+1. It changes into ``.
 2. It removes each generated crate directory before rebuilding.
 3. It runs the profile hxml, which invokes haxe.rust and its first `cargo check`.
 4. It verifies that `Cargo.toml` and `Cargo.lock` exist.
@@ -39,11 +39,11 @@ This gate must not require model credentials. The current scaffold entrypoint is
 Developers can opt into advisory runs with:
 
 ```bash
-HXCX_RUN_FMT=1 HXCX_RUN_CLIPPY=1 experiments/codex-hxrust/scripts/check-generated-cargo.sh
+HXCX_RUN_FMT=1 HXCX_RUN_CLIPPY=1 scripts/check-generated-cargo.sh
 ```
 
 Promote either advisory check to required CI only after the generator output is stable enough that failures identify actionable regressions in Haxe source or haxe.rust.
 
 ## Generated Output
 
-Generated Rust remains build output. Clean `experiments/codex-hxrust/generated/portable` and `experiments/codex-hxrust/generated/metal` after local validation unless a later bead explicitly asks for generated snapshots.
+Generated Rust remains build output. Clean `generated/portable` and `generated/metal` after local validation unless a later bead explicitly asks for generated snapshots.

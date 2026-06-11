@@ -22,7 +22,6 @@ Machine-readable fixture:
 Validation gate:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-replacement-go-no-go.sh
 ```
 
@@ -31,13 +30,13 @@ harness/check-replacement-go-no-go.sh
 | Artifact / command | Result | Notes |
 | --- | --- | --- |
 | `reference/haxe-rust-production-readiness.v1.json` | conditional go / broad no-go | haxe.rust is viable for helper, headless, and selected adapter slices; broad replacement is not ready. |
-| `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json` | selected slices only | hxrust reduces rebase friction only for supported fixture-backed rows. |
+| `fixtures/cafex/cafex-hxrust-friction-comparison.v1.json` | selected slices only | hxrust reduces rebase friction only for supported fixture-backed rows. |
 | `reference/migration-modes.v1.json` | selected adapter-slice allowed | Upstream tests are necessary but not sufficient for broad replacement. |
 | `reference/operator-runbook.v1.json` | production default disabled | Rollback, disable, distribution, and diagnostics are documented. |
 | `reference/state-backend-spike.v1.json` | JSONL accepted for current experiment; SQLite required for persistent state replacement | No production state migration is implied. |
 | `reference/tool-registry-skeleton.v1.json` | registry lookup accepted; real MCP transport unsupported | Unsupported MCP operations fail closed. |
-| `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | 10 supported, 4 unsupported, 1 review-only | Unsupported surfaces are explicit. |
-| `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` | 8 covered/pass, 5 gaps | No production replacement claim. |
+| `fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | 10 supported, 4 unsupported, 1 review-only | Unsupported surfaces are explicit. |
+| `fixtures/cafex/cafetera-contract-subset-report.v1.json` | 8 covered/pass, 5 gaps | No production replacement claim. |
 
 ## Scorecard
 

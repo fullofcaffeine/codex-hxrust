@@ -49,7 +49,7 @@ Run an audit before changing the pin, and at least weekly while active compiler 
 Scripted audit:
 
 ```bash
-experiments/codex-hxrust/scripts/audit-haxe-rust.sh
+scripts/audit-haxe-rust.sh
 ```
 
 Suggested manual audit:
@@ -88,10 +88,10 @@ Before G1 exists, a pin update is allowed only for a blocking compiler bug or ag
 In G1 and later, update through:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh <candidate-sha>
+scripts/update-haxe-rust-pin.sh <candidate-sha>
 ```
 
-The updater runs `experiments/codex-hxrust/scripts/check-generated-cargo.sh` before editing the pin and resyncs the Haxe doctor mirror at `experiments/codex-hxrust/src/codexhx/HaxeRustPin.hx`.
+The updater runs `scripts/check-generated-cargo.sh` before editing the pin and resyncs the Haxe doctor mirror at `src/codexhx/HaxeRustPin.hx`.
 
 ## Future Tooling Shape
 

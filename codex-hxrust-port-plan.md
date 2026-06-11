@@ -66,7 +66,7 @@ Recommended phases:
 3. **Periodic upstream check phase:** add a repeatable `haxe.rust` upstream audit command that fetches `origin/main`, reports commits since the pinned SHA, runs the relevant haxe.rust validation subset, and opens/updates a bead when merge work is needed.
 4. **Merge policy:** update the pin only after `codex-hxrust` G1/G2 gates remain green. Runtime-affecting haxe.rust changes must also rerun headless and Cafex seam fixtures once those gates exist.
 
-The current audit/update commands live in `experiments/codex-hxrust/scripts/audit-haxe-rust.sh` and `experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh`.
+The current audit/update commands live in `scripts/audit-haxe-rust.sh` and `scripts/update-haxe-rust-pin.sh`.
 
 This keeps the experiment reproducible without freezing it away from upstream compiler fixes.
 
@@ -107,35 +107,31 @@ Primary beads:
 - `HXCX-1.5` doctor JSON binary
 - `HXCX-1.6` haxe.rust pin/update tooling
 
-Suggested layout:
+Current flattened layout:
 
 ```text
-experiments/codex-hxrust/
-  README.md
-  hxml/
-    portable.hxml
-    metal.hxml
-  src/codexhx/
-    Main.hx
-    protocol/
-    config/
-    runtime/
-    state/
-    tools/
-    adapters/
-      cafex/
-  native/
-    src/
-      serde_bridge.rs
-      process_bridge.rs
-      sandbox_bridge.rs
-      tokio_bridge.rs
-  fixtures/
-    upstream/
+README.md
+hxml/
+  portable.hxml
+  metal.hxml
+src/codexhx/
+  Main.hx
+  protocol/
+  config/
+  runtime/
+  state/
+  tools/
+  adapters/
     cafex/
-    hxrust/
-  harness/
-  generated/
+native/
+  src/
+fixtures/
+  upstream/
+  cafex/
+  hxrust/
+harness/
+scripts/
+generated/
 ```
 
 Deliverables:

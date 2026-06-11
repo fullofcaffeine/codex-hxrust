@@ -47,10 +47,10 @@ Current actionable codex-hxrust compiler-gap Beads:
 - HXCX-3.3 one-turn state-machine work exposed haxe.rust interface-null comparison regression `haxe.rust-wg5`; the pinned `interface_null_compare` snapshot resolves non-null interface handle comparisons against `null`.
 - HXCX-3.3 also exposed haxe.rust nullable interface value regression `haxe.rust-bm6`; the generic nullable trait-object representation/lowering landed in haxe.rust `b3e38c31` and is now tracked as resolved upstream.
 
-The HXCX-7.1 pressure-gap rollup lives in `docs/haxe-rust-pressure-gap-ledger.md` and `reference/haxe-rust-pressure-gaps.v1.json`; it is checked by `experiments/codex-hxrust/harness/check-haxe-rust-pressure-gaps.sh`.
+The HXCX-7.1 pressure-gap rollup lives in `docs/haxe-rust-pressure-gap-ledger.md` and `reference/haxe-rust-pressure-gaps.v1.json`; it is checked by `harness/check-haxe-rust-pressure-gaps.sh`.
 
 ## Validation Expectations
 
 haxe.rust work follows `../haxe.rust/AGENTS.md`: contract-first tests, root-cause compiler/runtime fixes, no temporary workarounds, and `thinking:*` labels on active Beads.
 
-codex-hxrust pin updates must run the affected fixture gates plus `experiments/codex-hxrust/scripts/check-generated-cargo.sh` before commit.
+codex-hxrust pin updates must run the affected fixture gates plus `scripts/check-generated-cargo.sh` before commit.

@@ -20,14 +20,14 @@
 ## Gates Run
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 5a218a9b585b833f02c792097cd0e5204d1a9d1c
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh ba76e4861b0b3a30e8f572cc2bd159e0e004973e
+scripts/update-haxe-rust-pin.sh 5a218a9b585b833f02c792097cd0e5204d1a9d1c
+scripts/update-haxe-rust-pin.sh ba76e4861b0b3a30e8f572cc2bd159e0e004973e
 ```
 
 Each successful updater run executed:
 
 ```bash
-experiments/codex-hxrust/scripts/check-generated-cargo.sh
+scripts/check-generated-cargo.sh
 ```
 
 That regenerated portable and metal crates, then ran `cargo check --locked` and `cargo test --locked` for each generated crate.
@@ -55,17 +55,17 @@ Additional upstream commits accepted:
 - `76b63b07` Guard tracked generated artifacts
 - `1f91e9e6` Add hello example README
 
-Classified area from `experiments/codex-hxrust/scripts/audit-haxe-rust.sh`:
+Classified area from `scripts/audit-haxe-rust.sh`:
 
 - cargo/dependency/toolchain
 
 Gate run:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 1f91e9e67f5fc04eca1806aa04e2cd50c2b2033d
+scripts/update-haxe-rust-pin.sh 1f91e9e67f5fc04eca1806aa04e2cd50c2b2033d
 ```
 
-The updater first failed while the local `CallStack.cross.hx` workaround was absent, then passed after restoring the recorded local patch. The successful updater run executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+The updater first failed while the local `CallStack.cross.hx` workaround was absent, then passed after restoring the recorded local patch. The successful updater run executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
 
 ## Follow-Up Audit After haxe.rust Direct Fix On 2026-06-10
 
@@ -82,10 +82,10 @@ The CallStack workaround recorded in `reference/haxe-rust-local-patches.v1.json`
 Gate run:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 0849fcf1a556cb86615cfcdf635165ba82fec8da
+scripts/update-haxe-rust-pin.sh 0849fcf1a556cb86615cfcdf635165ba82fec8da
 ```
 
-The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+The updater executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
 
 ## Follow-Up Audit After Enum Reuse Helper Call Fix On 2026-06-10
 
@@ -102,10 +102,10 @@ This resolves the codex-hxrust pressure gap where a parsed JSON-like enum value 
 Gate run:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 1a394f41a1ee019350faee6d592d21d2c5dc20bd
+scripts/update-haxe-rust-pin.sh 1a394f41a1ee019350faee6d592d21d2c5dc20bd
 ```
 
-The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+The updater executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
 
 ## Follow-Up Audit After Try/Catch Tail Return Fix On 2026-06-10
 
@@ -122,11 +122,11 @@ This resolves the codex-hxrust mock model stream parser pressure gap where a non
 Gate runs:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 551a00bf08cdaecf3b8b3c499b1d80c86506fa81
-experiments/codex-hxrust/harness/check-mock-model-stream.sh
+scripts/update-haxe-rust-pin.sh 551a00bf08cdaecf3b8b3c499b1d80c86506fa81
+harness/check-mock-model-stream.sh
 ```
 
-The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The mock model stream harness also passed through Haxe interp, haxe.rust generation, and generated Cargo `check`/`test`/`run`.
+The updater executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The mock model stream harness also passed through Haxe interp, haxe.rust generation, and generated Cargo `check`/`test`/`run`.
 
 ## Follow-Up Audit After Interface Null Comparison Fix On 2026-06-10
 
@@ -147,11 +147,11 @@ Related gap resolved later:
 Gate runs:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh e10eae4d197a2ff7d1518536db9aaa4f76d4e9e4
-experiments/codex-hxrust/harness/check-mock-model-stream.sh
+scripts/update-haxe-rust-pin.sh e10eae4d197a2ff7d1518536db9aaa4f76d4e9e4
+harness/check-mock-model-stream.sh
 ```
 
-The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The mock model stream harness passed on the supported non-null model client boundary.
+The updater executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The mock model stream harness passed on the supported non-null model client boundary.
 
 ## Follow-Up Audit After Cargo Failure Propagation Fix On 2026-06-10
 
@@ -167,10 +167,10 @@ This resolves the codex-hxrust pressure gap where a generated Cargo failure coul
 Gate run:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh bc945b3263e24f95c3b99d86e87dc281e0b713b2
+scripts/update-haxe-rust-pin.sh bc945b3263e24f95c3b99d86e87dc281e0b713b2
 ```
 
-The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+The updater executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
 
 ## Follow-Up Audit After Nullable Scalar Regression Coverage On 2026-06-10
 
@@ -187,10 +187,10 @@ This resolves the codex-hxrust pressure gap for `Null<Int>` stringification/comp
 Gate run:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 729599493d350bc8d926b61890eb320acf155b6b
+scripts/update-haxe-rust-pin.sh 729599493d350bc8d926b61890eb320acf155b6b
 ```
 
-The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+The updater executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
 
 ## Follow-Up Audit After Profile Language Clarification On 2026-06-10
 
@@ -207,10 +207,10 @@ This docs-only haxe.rust update clarifies that `portable|metal` are semantic con
 Gate run:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 6a673bb43624a0d4327fa6709fb24f7e971dd121
+scripts/update-haxe-rust-pin.sh 6a673bb43624a0d4327fa6709fb24f7e971dd121
 ```
 
-The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+The updater executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
 
 ## Follow-Up Audit After Generic Enum Payload Fix On 2026-06-10
 
@@ -227,10 +227,10 @@ This resolves the codex-hxrust pressure gap where generic Haxe enum payloads suc
 Gate run:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh f521fdb242a7de5f2194633deef6caa3392bafe9
+scripts/update-haxe-rust-pin.sh f521fdb242a7de5f2194633deef6caa3392bafe9
 ```
 
-The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The protocol ID harness also passed against the new pin.
+The updater executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The protocol ID harness also passed against the new pin.
 
 ## Follow-Up Audit After Portable-First Profile Framing On 2026-06-10
 
@@ -247,7 +247,7 @@ This docs-only haxe.rust update aligns Rust profile wording with the family fram
 Gate run:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 0b2f196e2b3e8742efe79febe002e97f0924802d
+scripts/update-haxe-rust-pin.sh 0b2f196e2b3e8742efe79febe002e97f0924802d
 ```
 
-The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+The updater executed `scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.

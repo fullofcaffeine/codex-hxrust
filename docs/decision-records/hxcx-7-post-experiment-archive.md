@@ -18,7 +18,6 @@ Machine-readable archive:
 Validation gate:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-post-experiment-archive.sh
 ```
 

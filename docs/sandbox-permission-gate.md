@@ -40,7 +40,7 @@ The decision JSON includes `enforced: false` for every row in this slice. That i
 
 ## Gate
 
-Run from `experiments/codex-hxrust`:
+Run from `.`:
 
 ```bash
 harness/check-sandbox-gate.sh

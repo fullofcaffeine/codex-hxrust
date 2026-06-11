@@ -37,7 +37,7 @@ The current runtime feature flags are:
 
 ## Gates
 
-Run from `experiments/codex-hxrust`:
+Run from `.`:
 
 ```bash
 harness/check-doctor-json.sh

@@ -30,6 +30,14 @@ When the Codex port exposes a haxe.rust limitation:
 
 Treat haxe.rust fixes as first-class compiler contributions, not one-off local hacks hidden inside `codex-hxrust`.
 
+## External Reference Checkouts
+
+`../codex` is the mainstream Codex reference checkout. Use it to inspect upstream directory structure, protocol schemas, runtime behavior, tests, and fixtures while keeping this port upstream-first.
+
+The Cafex/Cafetera Codex fork lives under `../fullofcaffeine` (for example `../fullofcaffeine/deps/codex` and Cafetera module paths). Treat those paths as later adapter-parity reference material and inspiration only.
+
+Do not edit, commit, or push changes in `../codex` or Cafex/Cafetera repositories from this project. If a fixture or schema is needed here, copy the narrow artifact into `fixtures/{upstream,cafex,hxrust}/` and record its provenance under `reference/`.
+
 ## Work Selection Priority
 
 Keep Beads ordered so mainstream/raw Codex parity work is ready before Cafex adapter expansion. Use priorities and dependencies to make `bd ready` reflect the intended sequence: upstream/raw Codex protocol, runtime, app-server, tool, and state parity slices should outrank later Cafex/Cafetera adapter tasks.

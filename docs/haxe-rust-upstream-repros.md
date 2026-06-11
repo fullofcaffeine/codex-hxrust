@@ -17,7 +17,6 @@ Machine-readable fixture:
 Validation gate:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-haxe-rust-upstream-repros.sh
 ```
 

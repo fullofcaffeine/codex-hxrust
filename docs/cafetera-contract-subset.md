@@ -10,20 +10,20 @@ This gate runs selected Cafex/Cafetera-facing contracts through the Haxe interpr
 
 Covered contracts:
 
-- `HXCX-5.1`: Caf session and turn receipt writer via `experiments/codex-hxrust/harness/check-caf-receipts.sh`.
-- `HXCX-5.2`: Caf effort, wake, and invalid mode directory bridge via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
-- `HXCX-5.3`: Minimal Caf goal DTO, in-memory state, and goal tools via `experiments/codex-hxrust/harness/check-goals.sh`.
-- `HXCX-5.4`: Wake/restart successor and predecessor continuity metadata via `experiments/codex-hxrust/harness/check-caf-continuity.sh`.
-- `HXCX-8.1`: Caf/Ralph goal-apply request and receipt bridge via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
-- `HXCX-8.2`: Caf active-lane capability and native live-status DTO writer via `experiments/codex-hxrust/harness/check-caf-active-lane.sh`.
-- `HXCX-8.3`: Caf queue-reconcile request and receipt bridge rails via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
-- `HXCX-8.4`: Caf mode-apply request and next-turn receipt bridge rails via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
+- `HXCX-5.1`: Caf session and turn receipt writer via `harness/check-caf-receipts.sh`.
+- `HXCX-5.2`: Caf effort, wake, and invalid mode directory bridge via `harness/check-caf-bridge.sh`.
+- `HXCX-5.3`: Minimal Caf goal DTO, in-memory state, and goal tools via `harness/check-goals.sh`.
+- `HXCX-5.4`: Wake/restart successor and predecessor continuity metadata via `harness/check-caf-continuity.sh`.
+- `HXCX-8.1`: Caf/Ralph goal-apply request and receipt bridge via `harness/check-caf-bridge.sh`.
+- `HXCX-8.2`: Caf active-lane capability and native live-status DTO writer via `harness/check-caf-active-lane.sh`.
+- `HXCX-8.3`: Caf queue-reconcile request and receipt bridge rails via `harness/check-caf-bridge.sh`.
+- `HXCX-8.4`: Caf mode-apply request and next-turn receipt bridge rails via `harness/check-caf-bridge.sh`.
 
 Each covered contract is classified as `fixture_pass` only. That means the selected fixture and adapter behavior passed under hxrust; it does not mean the generated binary can replace production Codex or Cafetera yet.
 
 ## Gap Classification
 
-Unsupported failures are recorded in `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` and regenerated under `experiments/codex-hxrust/generated/reports/cafetera-contract-subset.v1.json`.
+Unsupported failures are recorded in `fixtures/cafex/cafetera-contract-subset-report.v1.json` and regenerated under `generated/reports/cafetera-contract-subset.v1.json`.
 
 Current gap classifications:
 
@@ -45,7 +45,7 @@ Do not use this gate as a production replacement claim. It is a compatibility an
 
 ## Gate
 
-Run from `experiments/codex-hxrust`:
+Run from `.`:
 
 ```bash
 harness/check-cafetera-contract-subset.sh

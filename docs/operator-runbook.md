@@ -15,7 +15,6 @@ Machine-readable fixture:
 Validation gate:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-operator-runbook.sh
 ```
 
@@ -34,7 +33,6 @@ No production default may change until `HXCX-6.3` or a later decision record sel
 Local smoke checks:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-doctor-json.sh
 harness/check-headless-jsonl-adapter.sh
 harness/check-cafetera-contract-subset.sh
@@ -44,7 +42,6 @@ harness/check-migration-modes.sh
 Build/regenerate checks:
 
 ```bash
-cd experiments/codex-hxrust
 npx haxe hxml/portable.codegen.hxml
 npx haxe hxml/metal.codegen.hxml
 scripts/check-generated-cargo.sh
@@ -82,16 +79,15 @@ git push
 For generated output cleanup:
 
 ```bash
-rm -rf experiments/codex-hxrust/generated/portable
-rm -rf experiments/codex-hxrust/generated/metal
+rm -rf generated/portable
+rm -rf generated/metal
 ```
 
 For a haxe.rust pin rollback:
 
 ```bash
 git revert <pin-update-commit>
-experiments/codex-hxrust/scripts/audit-haxe-rust.sh
-cd experiments/codex-hxrust
+scripts/audit-haxe-rust.sh
 scripts/check-generated-cargo.sh
 ```
 
@@ -105,9 +101,9 @@ State policy:
 
 | Artifact | Path | Status |
 | --- | --- | --- |
-| Source and fixtures | `experiments/codex-hxrust` | Repo source only. |
+| Source and fixtures | `.` | Repo source only. |
 | Pins and decision inputs | `reference` | Repo source only. |
-| Generated Rust | `experiments/codex-hxrust/generated` | Build output, not committed. |
+| Generated Rust | `generated` | Build output, not committed. |
 | haxe.rust compiler | `../haxe.rust` | External pinned checkout, not bundled. |
 
 Before any binary or bundled release, complete the license/distribution review called out in `docs/haxe-rust-vendoring-policy.md`.
@@ -116,10 +112,10 @@ Before any binary or bundled release, complete the license/distribution review c
 
 | Check | Command | Purpose |
 | --- | --- | --- |
-| Doctor | `cd experiments/codex-hxrust && harness/check-doctor-json.sh` | Verify haxe.rust pin, profile, generated binary output shape, and local toolchain metadata. |
-| Diagnostics redaction | `cd experiments/codex-hxrust && harness/check-diagnostics.sh` | Verify secret redaction and failure-report fixture IDs. |
-| Friction comparison | `cd experiments/codex-hxrust && harness/check-friction-comparison.sh` | Verify replacement-review evidence still matches the local Cafex patch and seam ledgers. |
-| Migration modes | `cd experiments/codex-hxrust && harness/check-migration-modes.sh` | Verify rollout mode criteria still forbid contract bypasses. |
+| Doctor | `harness/check-doctor-json.sh` | Verify haxe.rust pin, profile, generated binary output shape, and local toolchain metadata. |
+| Diagnostics redaction | `harness/check-diagnostics.sh` | Verify secret redaction and failure-report fixture IDs. |
+| Friction comparison | `harness/check-friction-comparison.sh` | Verify replacement-review evidence still matches the local Cafex patch and seam ledgers. |
+| Migration modes | `harness/check-migration-modes.sh` | Verify rollout mode criteria still forbid contract bypasses. |
 
 Failure handoff:
 

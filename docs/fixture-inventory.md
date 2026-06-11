@@ -10,7 +10,7 @@ Selected harness input format:
 
 - `reference/fixture-sources.v1.json` records fixture families, owners, paths, stage, and expected use.
 - Upstream app-server schemas are consumed in-place from `../codex/codex-rs/app-server-protocol/schema/{json,typescript}` during G0/G1.
-- Runtime event fixtures should be represented as JSONL or SSE-event JSON arrays once copied into `experiments/codex-hxrust/fixtures/upstream/`.
+- Runtime event fixtures should be represented as JSONL or SSE-event JSON arrays once copied into `fixtures/upstream/`.
 - Cafex adapter fixtures stay in-place until M5; copied snapshots must include source path, source commit, and schema id.
 
 The first harness should accept this shape:
@@ -44,7 +44,7 @@ Owner: upstream Codex / `../codex`, pinned by `reference/upstream-codex.pin.json
 | App-server fixture generator | `../codex/codex-rs/app-server-protocol/src/schema_fixtures.rs` | generator source | M2 primary | Regenerate/compare schema fixture trees |
 | App-server fixture tests | `../codex/codex-rs/app-server-protocol/tests/schema_fixtures.rs` | test contract | M2 primary | Defines expected fixture diff semantics |
 | Protocol source types | `../codex/codex-rs/protocol/src` | Rust source | M2 primary | Core IDs, config types, openai model DTOs |
-| Core SSE/mock response harness | `../codex/codex-rs/core/tests/common/responses.rs`; local fixture `experiments/codex-hxrust/fixtures/upstream/mock-model-basic-one-turn.sse` | Rust test helpers plus credential-free SSE fixture | M3 active | Event names, mock stream structure, request-body invariants |
+| Core SSE/mock response harness | `../codex/codex-rs/core/tests/common/responses.rs`; local fixture `fixtures/upstream/mock-model-basic-one-turn.sse` | Rust test helpers plus credential-free SSE fixture | M3 active | Event names, mock stream structure, request-body invariants |
 | Core test harness | `../codex/codex-rs/core/tests/common/test_codex.rs` | Rust test helpers | M3 secondary | Session setup and headless runtime expectations |
 | Core snapshot files | `../codex/codex-rs/core/tests/suite/snapshots` | 36 `.snap` files | M3 secondary | Context compaction, pending input, model-visible layout, realtime request shapes |
 | TUI story fixture | `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl` | 1 JSONL file | later | TUI replay only; not part of upstream-first headless core |
@@ -82,12 +82,12 @@ Owner: Cafetera Codex module / `../fullofcaffeine/tools/cafetera/modules/codex`,
 | --- | --- | --- | --- | --- |
 | Cafex contract tests | `../fullofcaffeine/tools/cafetera/modules/codex/tests/contract` | 93 `.mjs` files | M5 primary | Adapter acceptance contracts, especially receipts/restart/effort/wake/goals |
 | Fork seam ledger | `../fullofcaffeine/tools/cafetera/modules/codex/tests/fixtures/cafex-fork-seam-ledger.v1.json` | schema `cafetera.codex.cafex-fork-seam-ledger.v1`, task `f12e-cafexcc4e6` | M5 primary | Supported/unsupported Cafex seam ledger |
-| Hxrust Cafex seam ledger | `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | schema `codex-hxrust.cafex-hxrust-seam-ledger.v1`, bead `HXCX-5.6` | M5 primary | Maps Cafex fork seams to hxrust implementation, fixtures, patch classes, and replacement status |
-| Hxrust Cafex friction comparison | `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json` | schema `codex-hxrust.cafex-hxrust-friction-comparison.v1`, bead `HXCX-6.1` | M6 primary | Counts Cafex patch-stack surface versus hxrust wrapper/fixture/gate burden and feeds the replacement decision record |
-| Apply-patch dry-run | `experiments/codex-hxrust/fixtures/hxrust/apply-patch-dry-run-output.v1.jsonl` | schema `codex-hxrust.apply-patch-dry-run.v1`, bead `HXCX-4.1` | M4 primary | Validates dry-run operation counting, mutation-disabled default, and deterministic wrapper errors |
-| Process exec wrapper | `experiments/codex-hxrust/fixtures/hxrust/process-exec-output.v1.jsonl` | schema `codex-hxrust.process-exec.v1`, bead `HXCX-4.2` | M4 primary | Validates denied-by-default execution, exact approval, sandbox marker proof, stdout/stderr truncation, and exit-code mapping |
-| Sandbox permission gate | `experiments/codex-hxrust/fixtures/hxrust/sandbox-gate-output.v1.jsonl` | schema `codex-hxrust.sandbox-gate-decision.v1`, bead `HXCX-4.3` | M4 primary | Validates fail-closed unsupported platforms, sandbox policy decisions, absent bypass path, and security denials |
-| Diagnostics redaction | `experiments/codex-hxrust/fixtures/hxrust/diagnostics-output.v1.jsonl` | schemas `codex-hxrust.diagnostic-log.v1`, `codex-hxrust.failure-report.v1`, bead `HXCX-4.6` | M4 primary | Validates configured secret redaction and fixture IDs in failure reports |
+| Hxrust Cafex seam ledger | `fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | schema `codex-hxrust.cafex-hxrust-seam-ledger.v1`, bead `HXCX-5.6` | M5 primary | Maps Cafex fork seams to hxrust implementation, fixtures, patch classes, and replacement status |
+| Hxrust Cafex friction comparison | `fixtures/cafex/cafex-hxrust-friction-comparison.v1.json` | schema `codex-hxrust.cafex-hxrust-friction-comparison.v1`, bead `HXCX-6.1` | M6 primary | Counts Cafex patch-stack surface versus hxrust wrapper/fixture/gate burden and feeds the replacement decision record |
+| Apply-patch dry-run | `fixtures/hxrust/apply-patch-dry-run-output.v1.jsonl` | schema `codex-hxrust.apply-patch-dry-run.v1`, bead `HXCX-4.1` | M4 primary | Validates dry-run operation counting, mutation-disabled default, and deterministic wrapper errors |
+| Process exec wrapper | `fixtures/hxrust/process-exec-output.v1.jsonl` | schema `codex-hxrust.process-exec.v1`, bead `HXCX-4.2` | M4 primary | Validates denied-by-default execution, exact approval, sandbox marker proof, stdout/stderr truncation, and exit-code mapping |
+| Sandbox permission gate | `fixtures/hxrust/sandbox-gate-output.v1.jsonl` | schema `codex-hxrust.sandbox-gate-decision.v1`, bead `HXCX-4.3` | M4 primary | Validates fail-closed unsupported platforms, sandbox policy decisions, absent bypass path, and security denials |
+| Diagnostics redaction | `fixtures/hxrust/diagnostics-output.v1.jsonl` | schemas `codex-hxrust.diagnostic-log.v1`, `codex-hxrust.failure-report.v1`, bead `HXCX-4.6` | M4 primary | Validates configured secret redaction and fixture IDs in failure reports |
 | Runtime DTO conformance | `../fullofcaffeine/tools/cafetera/modules/codex/tests/fixtures/cafex-runtime-dto-conformance.v1.json` | schema `cafetera.codex.runtime-dto-conformance-fixture.v1` | M5 primary | DTO compatibility, unknown-field/additive behavior, fail-closed unsupported schemas |
 | Boundary fixture gate | `../fullofcaffeine/tools/cafetera/modules/codex/tests/fixtures/cafex-boundary-rust-fixture-gate.v1.json` | schema `cafetera.codex.cafex-boundary-rust-fixture-gate.v1`, task `f12e-cafexe37c5` | M5 secondary | Native boundary evidence and rust-role policy |
 | App wrapper control surface | `../fullofcaffeine/tools/cafetera/modules/codex/tests/fixtures/codex-app-wrapper-control-surface.v1.json` | schema `cafetera.codex.app-wrapper-control-surface-profile.fixture.v1`, task `f12e-codexf6ec7` | M5 secondary | Wrapper capability expectations |
@@ -119,7 +119,7 @@ Track these gaps before claiming parity:
 | --- | --- | --- |
 | No standalone upstream one-turn JSON fixture | Resolved for M3 seed | `mock-model-basic-one-turn.sse` covers created, text delta, assistant message done, and completed events using upstream SSE event names |
 | No upstream Haxe DTO golden files | Covered for first app-protocol subset | `reference/app-protocol-schema-fingerprints.v1.json` and `harness/check-schema-fingerprints.sh`; expand beyond the first M2 subset as DTO coverage grows |
-| No copied fixture manifest under `experiments/` yet | Expected | Create in `HXCX-1.1` scaffold; do not copy fixtures in G0 |
+| Local fixture tree | Active | Keep copied fixture subsets under `fixtures/{upstream,cafex,hxrust}/` and record provenance under `reference/` |
 | Cafex fixtures are adapter-only | Intentional | Keep them inactive until M5 |
 | Full TUI fixtures | Unsupported for first core | Keep `oss-story.jsonl` and TUI snapshots as later evidence |
 | Live model/provider traffic | Unsupported | Use mock SSE/JSONL only |
@@ -131,7 +131,7 @@ Track these gaps before claiming parity:
 When a fixture moves from reference to local copy:
 
 1. Copy only the smallest useful fixture, not whole source directories.
-2. Put it under `experiments/codex-hxrust/fixtures/{upstream,cafex,hxrust}/`.
+2. Put it under `fixtures/{upstream,cafex,hxrust}/`.
 3. Add manifest metadata: source pin name, source path, source commit, copy date, schema id if any, owner, stage, and oracle purpose.
 4. Keep generated fixtures reproducible from source whenever possible.
 5. Do not edit copied upstream fixtures by hand; create Haxe-specific expected-output fixtures separately.

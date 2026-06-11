@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-10  
 **Bead:** `HXCX-0.5` / `codex-hxrust-r46.5`  
-**Decision:** Keep `codex-hxrust` as the owner repo for the Haxe port experiment. Do not copy upstream Codex, Cafex, or haxe.rust wholesale into this repo during G0/G1.
+**Decision:** Keep `codex-hxrust` as the owner repo for the Haxe port. The Haxe package scaffold lives at the repository root. Do not copy upstream Codex, Cafex, or haxe.rust wholesale into this repo during G0/G1.
 
 ## Base Rule
 
@@ -13,14 +13,14 @@ Local external checkouts remain the live references:
 | Source | Local path | Role |
 | --- | --- | --- |
 | Upstream Codex | `../codex` | Product/protocol/runtime baseline |
-| Cafex/Cafetera Codex fork | `../fullofcaffeine/deps/codex` | Later adapter seams and fixture oracle |
+| Cafex/Cafetera Codex fork | `../fullofcaffeine/deps/codex` and related `../fullofcaffeine` paths | Later adapter seams and fixture oracle |
 | haxe.rust | `../haxe.rust` | Authoritative sibling compiler/runtime backend source |
 
 This repo records pins, manifests, fixture selections, Haxe source, harness code, and generated-output policy. It should not become a mirror of the external repositories.
 
 ## Top-Level Layout
 
-Recommended starting layout:
+Current layout:
 
 ```text
 codex-hxrust/
@@ -40,29 +40,27 @@ codex-hxrust/
     haxe-rust.pin.json
   vendor/
     README.md
-  experiments/
-    codex-hxrust/
-      README.md
-      hxml/
-      src/codexhx/
-        Main.hx
-        protocol/
-        config/
-        runtime/
-        state/
-        tools/
-        adapters/
-          cafex/
-      native/
-      fixtures/
-        upstream/
-        cafex/
-        hxrust/
-      harness/
-      generated/
+  hxml/
+  src/codexhx/
+    Main.hx
+    protocol/
+    config/
+    runtime/
+    state/
+    tools/
+    adapters/
+      cafex/
+  native/
+  fixtures/
+    upstream/
+    cafex/
+    hxrust/
+  harness/
+  scripts/
+  generated/
 ```
 
-Only `docs/`, `reference/`, and `vendor/README.md` are created in G0. The `experiments/codex-hxrust/` scaffold belongs to `HXCX-1.1`.
+The original G1 scaffold was nested while the experiment was being proven out; it is now flattened so package paths, hxmls, fixtures, harnesses, scripts, and generated output are first-class repo-root directories.
 
 ## Reference Policy
 
@@ -80,7 +78,7 @@ It is not for copied source trees. If a later task needs a source snapshot for o
 
 `vendor/` is intentionally empty except for `vendor/README.md` during G0/G1.
 
-Do not vendor upstream Codex or Cafex. They are product/reference repositories, not dependencies of the Haxe compiler build.
+Do not vendor upstream Codex or Cafex. They are product/reference repositories, not dependencies of the Haxe compiler build. `../codex` and `../fullofcaffeine` are read-only from this project; inspect them for structure, schemas, tests, and fixtures, but make no edits there.
 
 Do not vendor haxe.rust. Use the sibling repository at `../haxe.rust` as the authoritative compiler worktree and record known-good commits in `reference/haxe-rust.pin.json`. Revisit vendoring only if a later reproducibility decision explicitly requires one of:
 
@@ -97,8 +95,8 @@ Generated Rust is build output, not authored source.
 
 Rules:
 
-1. Haxe source under `experiments/codex-hxrust/src/` is authoritative.
-2. Generated Rust under `experiments/codex-hxrust/generated/` may be produced locally and in CI.
+1. Haxe source under `src/` is authoritative.
+2. Generated Rust under `generated/` may be produced locally and in CI.
 3. Generated Rust should not be manually edited.
 4. Generated Rust should not be committed by default unless a later bead explicitly decides to check in golden generated snapshots for review/debugging.
 5. Any checked-in generated snapshot must record the haxe.rust pin, Haxe version, Rust version, hxml profile, and generation command.
@@ -117,7 +115,7 @@ Initial fixture references should be path-based and pinned:
 | Cafex runtime patch evidence | `../fullofcaffeine/tools/cafetera/modules/codex/runtime/patches/0001-cafex-runtime-0.135.patch` |
 | haxe.rust docs/evidence | `../haxe.rust/docs/` |
 
-When a fixture is copied into this repo, place it under `experiments/codex-hxrust/fixtures/{upstream,cafex,hxrust}/` and add a manifest entry with source path, source SHA, copy date, and intended oracle.
+When a fixture is copied into this repo, place it under `fixtures/{upstream,cafex,hxrust}/` and add a manifest entry with source path, source SHA, copy date, and intended oracle.
 
 ## Brew Conversion Metadata
 

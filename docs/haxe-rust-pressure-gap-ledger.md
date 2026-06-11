@@ -19,7 +19,6 @@ Follow-up upstream repro map:
 Validation gate:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-haxe-rust-pressure-gaps.sh
 ```
 
@@ -36,7 +35,7 @@ harness/check-haxe-rust-pressure-gaps.sh
 | Raw Rust escape matches in current app/test Haxe source | 0 |
 | Haxe source/test files scanned | 92 |
 
-Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAllowRaw`, `@:rust...`, or `untyped` escapes are present under `experiments/codex-hxrust/src` or `experiments/codex-hxrust/test`.
+Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAllowRaw`, `@:rust...`, or `untyped` escapes are present under `src` or `test`.
 
 ## Source Areas
 

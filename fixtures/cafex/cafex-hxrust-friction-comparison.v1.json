@@ -1,0 +1,137 @@
+{
+  "schema": "codex-hxrust.cafex-hxrust-friction-comparison.v1",
+  "bead": "HXCX-6.1",
+  "generatedAt": "2026-06-10T00:00:09Z",
+  "decisionRecordFeed": "HXCX-6.3",
+  "summary": {
+    "productionReplacement": false,
+    "recommendation": "Use hxrust for sidecar/helper and selected adapter slices only; keep the Cafex fork path for unsupported live runtime seams until HXCX-6.3 accepts a narrower replacement gate.",
+    "rebaseFrictionClaim": "Evidence supports reduced upstream-rebase friction only for fixture-backed supported rows. Unsupported live runtime rows still require native fork patches or future generic hxrust capability work."
+  },
+  "evidence": {
+    "cafexForkLedger": "../../fullofcaffeine/tools/cafetera/modules/codex/tests/fixtures/cafex-fork-seam-ledger.v1.json",
+    "cafexRuntimePatch": "../../fullofcaffeine/tools/cafetera/modules/codex/runtime/patches/0001-cafex-runtime-0.135.patch",
+    "hxrustSeamLedger": "cafex-hxrust-seam-ledger.v1.json",
+    "cafeteraContractSubsetReport": "cafetera-contract-subset-report.v1.json"
+  },
+  "cafexPatchStack": {
+    "runtimePatchFiles": 1,
+    "uniqueTouchedPaths": 45,
+    "patchDeltaLines": {
+      "added": 6157,
+      "deleted": 144,
+      "total": 6301
+    },
+    "pathAreas": [
+      {
+        "area": "core",
+        "uniqueTouchedPaths": 15,
+        "maintenanceSignal": "session, runtime, state, tools, registry, and native conformance tests"
+      },
+      {
+        "area": "tui",
+        "uniqueTouchedPaths": 25,
+        "maintenanceSignal": "live composer, queue, plan checkpoint, slash command, status, and UI tests"
+      },
+      {
+        "area": "cli",
+        "uniqueTouchedPaths": 1,
+        "maintenanceSignal": "entrypoint integration"
+      },
+      {
+        "area": "other",
+        "uniqueTouchedPaths": 4,
+        "maintenanceSignal": "Cargo lock plus adjacent crates touched by runtime composition"
+      }
+    ],
+    "seamFamilies": 7,
+    "seamPatchClasses": [
+      {
+        "patchClass": "fork_only_caf_adapter",
+        "count": 6
+      },
+      {
+        "patchClass": "upstreamable_seam",
+        "count": 1
+      },
+      {
+        "patchClass": "temporary_sync_shim",
+        "count": 0
+      }
+    ],
+    "classification": [
+      {
+        "class": "runtime_capability_and_receipts",
+        "sourceSeams": [
+          "caf-runtime-active-lane-capabilities",
+          "restart-wake-session-continuity"
+        ],
+        "friction": "native schema advertisement and receipt semantics must be replayed against upstream runtime changes"
+      },
+      {
+        "class": "live_tui_queue_and_plan_flow",
+        "sourceSeams": [
+          "queue-reconcile-runtime-bridge",
+          "plan-checkpoint-continuation-guard"
+        ],
+        "friction": "live composer, pending-input, and checkpoint hooks sit in high-churn TUI paths"
+      },
+      {
+        "class": "goal_effort_mode_runtime_bridges",
+        "sourceSeams": [
+          "goal-apply-runtime-bridge",
+          "effort-mode-runtime-bridge"
+        ],
+        "friction": "Caf request/receipt semantics cross state, session handling, and user-visible control surfaces"
+      },
+      {
+        "class": "fork_lineage_governance",
+        "sourceSeams": [
+          "fork-lineage-upstream-sync"
+        ],
+        "friction": "upstream sync policy is review evidence rather than runtime behavior"
+      }
+    ]
+  },
+  "hxrustBurden": {
+    "seamLedgerRows": {
+      "total": 15,
+      "supported": 10,
+      "unsupported": 4,
+      "reviewOnly": 1
+    },
+    "seamPatchClasses": [
+      {
+        "patchClass": "fork_only_caf_adapter",
+        "count": 14
+      },
+      {
+        "patchClass": "upstreamable_seam",
+        "count": 1
+      },
+      {
+        "patchClass": "temporary_sync_shim",
+        "count": 0
+      }
+    ],
+    "haxeSourceFilesInComparedSurface": 33,
+    "cafexFixtureFiles": 32,
+    "experimentGateScripts": 29,
+    "generatedRustCommitted": false,
+    "burdenSignals": [
+      "Wrapper semantics move out of the Codex Rust fork, but become Haxe implementation, fixture, and harness maintenance.",
+      "Generated Rust is intentionally disposable; parity must be proven by Haxe fixtures and generated Cargo gates rather than committed generated output.",
+      "Unsupported live runtime rows remain explicit so hxrust cannot silently claim replacement coverage."
+    ]
+  },
+  "comparison": {
+    "supportedSliceResult": "For receipt writing, continuity metadata, active-lane capability advertisement, effort/wake/mode/goal/queue-reconcile bridge fixtures, and minimal goal lifecycle, hxrust can reduce Codex upstream-rebase friction by replacing fork replay with Haxe fixture and generator gates.",
+    "unsupportedSliceResult": "For live mode/restart, plan checkpoint guard, and live TUI/model runtime, hxrust does not yet reduce fork friction because no generic runtime ownership exists.",
+    "netResult": "The hxrust path is maintenance-positive for selected adapter slices and review tooling, but not yet a broad Cafex replacement.",
+    "decisionInputs": [
+      "HXCX-6.3 should evaluate a sidecar/helper or selected-adapter-slice go/no-go, not a full production replacement.",
+      "Any future replacement claim must first reduce the 4 unsupported rows, account for live queue mutation, or explicitly decide those surfaces stay native.",
+      "haxe.rust limitations discovered while expanding unsupported rows should be filed in Beads and fixed generically, never as codexhx-specific compiler behavior."
+    ]
+  }
+}

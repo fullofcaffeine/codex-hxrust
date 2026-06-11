@@ -18,9 +18,9 @@
   "evidence": {
     "pressureGaps": "reference/haxe-rust-pressure-gaps.v1.json",
     "upstreamRepros": "reference/haxe-rust-upstream-repros.v1.json",
-    "cafeteraContractSubset": "experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json",
-    "cafexSeamLedger": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
-    "frictionComparison": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json",
+    "cafeteraContractSubset": "fixtures/cafex/cafetera-contract-subset-report.v1.json",
+    "cafexSeamLedger": "fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
+    "frictionComparison": "fixtures/cafex/cafex-hxrust-friction-comparison.v1.json",
     "migrationModes": "reference/migration-modes.v1.json",
     "operatorRunbook": "reference/operator-runbook.v1.json",
     "haxeRustPin": "reference/haxe-rust.pin.json"
@@ -57,7 +57,7 @@
         "Live TUI, restart, and plan-checkpoint ownership remain unsupported Cafex rows."
       ],
       "evidenceRefs": [
-        "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
+        "fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
         "reference/operator-runbook.v1.json"
       ]
     },
@@ -133,7 +133,7 @@
         "haxe.rust/Codex/Cafex drift must continue through pin and fixture gates."
       ],
       "evidenceRefs": [
-        "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json",
+        "fixtures/cafex/cafex-hxrust-friction-comparison.v1.json",
         "reference/migration-modes.v1.json",
         "reference/operator-runbook.v1.json"
       ]

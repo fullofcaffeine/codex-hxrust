@@ -10,30 +10,30 @@
 Audit upstream drift:
 
 ```bash
-experiments/codex-hxrust/scripts/audit-haxe-rust.sh
+scripts/audit-haxe-rust.sh
 ```
 
 Skip network fetch and report from the local remote-tracking branch:
 
 ```bash
-experiments/codex-hxrust/scripts/audit-haxe-rust.sh --no-fetch
+scripts/audit-haxe-rust.sh --no-fetch
 ```
 
 Update the codex-hxrust known-good pin only through the gated updater:
 
 ```bash
-experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh <candidate-sha>
+scripts/update-haxe-rust-pin.sh <candidate-sha>
 ```
 
 Resync the Haxe doctor mirror from the pin JSON:
 
 ```bash
-experiments/codex-hxrust/scripts/sync-haxe-rust-pin-hx.sh
+scripts/sync-haxe-rust-pin-hx.sh
 ```
 
 ## Pin Surfaces
 
-`reference/haxe-rust.pin.json` is the codex-hxrust known-good consumer pin. The source of truth for compiler code and compiler Beads is `../haxe.rust`. `experiments/codex-hxrust/src/codexhx/HaxeRustPin.hx` is a scaffold mirror used by doctor output so generated binaries can report the compiler/runtime pin without parsing local files.
+`reference/haxe-rust.pin.json` is the codex-hxrust known-good consumer pin. The source of truth for compiler code and compiler Beads is `../haxe.rust`. `src/codexhx/HaxeRustPin.hx` is a scaffold mirror used by doctor output so generated binaries can report the compiler/runtime pin without parsing local files.
 
 When the pin changes, update both by running `update-haxe-rust-pin.sh`; do not hand-edit only one side.
 
@@ -55,7 +55,7 @@ The affected-area classifier is conservative. Unknown changes should be treated 
 `update-haxe-rust-pin.sh` verifies that the candidate SHA exists in `../haxe.rust`, then runs:
 
 ```bash
-experiments/codex-hxrust/scripts/check-generated-cargo.sh
+scripts/check-generated-cargo.sh
 ```
 
 Only after the locked generated Cargo gate passes does it update `reference/haxe-rust.pin.json` and regenerate `HaxeRustPin.hx`.

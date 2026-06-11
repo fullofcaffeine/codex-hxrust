@@ -7,7 +7,7 @@
 
 ## Scope
 
-This policy applies to Haxe source under `experiments/codex-hxrust/src/`, native Rust wrapper source under `experiments/codex-hxrust/native/`, and generated Rust under `experiments/codex-hxrust/generated/`.
+This policy applies to Haxe source under `src/`, native Rust wrapper source under `native/`, and generated Rust under `generated/`.
 
 Generated Rust is build output and is never edited to satisfy this policy. If generated output needs a change, change Haxe source, wrapper source, haxe.rust configuration, or haxe.rust itself.
 
@@ -42,8 +42,8 @@ Every native wrapper needs both sides:
 
 | Side | Location | Responsibility |
 | --- | --- | --- |
-| Haxe extern/facade | `experiments/codex-hxrust/src/codexhx/native/` | Typed API, validation, structured errors, capability names |
-| Rust wrapper | `experiments/codex-hxrust/native/src/` | Host call, crate integration, fail-closed behavior |
+| Haxe extern/facade | `src/codexhx/native/` | Typed API, validation, structured errors, capability names |
+| Rust wrapper | `native/src/` | Host call, crate integration, fail-closed behavior |
 
 Wrapper names should match across Haxe and Rust. Example:
 
@@ -73,7 +73,7 @@ No wrapper is complete until it has an automated gate:
 5. Haxe fixture tests cover Codex-facing behavior and error mapping.
 6. Failure cases are tested before mutation is enabled.
 
-The generated Cargo gate lives at `experiments/codex-hxrust/scripts/check-generated-cargo.sh`.
+The generated Cargo gate lives at `scripts/check-generated-cargo.sh`.
 
 ## Security-Sensitive Wrappers
 

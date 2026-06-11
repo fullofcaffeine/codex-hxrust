@@ -24,7 +24,7 @@ npm run hx:metal
 npm run test:generated-cargo
 ```
 
-`haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `experiments/codex-hxrust/scripts/check-generated-cargo.sh` green.
+`haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `scripts/check-generated-cargo.sh` green.
 
 ## Repository Status
 
@@ -60,7 +60,7 @@ Expected sibling directories:
 | Path | Role |
 | --- | --- |
 | `../codex` | Mainstream upstream Codex source of truth |
-| `../fullofcaffeine/deps/codex` | Cafex/Cafetera fork used later for adapter parity |
+| `../fullofcaffeine/deps/codex` and related `../fullofcaffeine` paths | Cafex/Cafetera references used later for adapter parity |
 | `../haxe.rust` | External haxe.rust compiler/runtime checkout |
 
 Recorded pins:
@@ -72,7 +72,7 @@ Recorded pins:
 | `reference/haxe-rust.pin.json` | haxe.rust backend pin |
 | `reference/haxe-rust-local-patches.v1.json` | Historical local haxe.rust patch ledger; currently records the resolved CallStack workaround |
 
-Do not vendor whole source trees into this repo unless a later Bead explicitly changes the policy.
+Do not vendor whole source trees into this repo unless a later Bead explicitly changes the policy. `../codex` and `../fullofcaffeine` are read-only references for this project; inspect them freely, but make changes only in this repository or, for generic compiler work, in `../haxe.rust`.
 
 ## haxe.rust Improvement Workflow
 
@@ -93,14 +93,13 @@ AGENTS.md                         Agent rules and session completion workflow
 docs/                             Decisions, policies, topology, scorecards
 reference/                        Pins, manifests, audit notes, patch records
 vendor/                           Empty by policy during G0/G1
-experiments/codex-hxrust/
-  hxml/                           Haxe build profiles and harness hxmls
-  src/                            Haxe-authored port code
-  native/                         Narrow owned Rust wrapper area
-  fixtures/                       Local fixture subsets and jq assertions
-  harness/                        Credential-free validation scripts
-  scripts/                        Build/audit/update tooling
-  generated/                      haxe.rust output, ignored except README/.gitignore
+hxml/                             Haxe build profiles and harness hxmls
+src/                              Haxe-authored port code
+native/                           Narrow owned Rust wrapper area
+fixtures/                         Local fixture subsets and jq assertions
+harness/                          Credential-free validation scripts
+scripts/                          Build/audit/update tooling
+generated/                        haxe.rust output, ignored except README/.gitignore
 ```
 
 ## Build And Validation
@@ -108,11 +107,11 @@ experiments/codex-hxrust/
 From the repo root:
 
 ```bash
-experiments/codex-hxrust/harness/check-doctor-json.sh
-experiments/codex-hxrust/harness/check-protocol-ids.sh
-experiments/codex-hxrust/harness/check-json-boundary.sh
-experiments/codex-hxrust/harness/check-config-profile.sh
-experiments/codex-hxrust/scripts/check-generated-cargo.sh
+harness/check-doctor-json.sh
+harness/check-protocol-ids.sh
+harness/check-json-boundary.sh
+harness/check-config-profile.sh
+scripts/check-generated-cargo.sh
 jq empty reference/*.json
 ```
 
@@ -121,11 +120,11 @@ The gates are credential-free. They should not make model calls or mutate real C
 Generated Rust is build output. Clean generated crates after validation unless a Bead explicitly asks for a generated snapshot:
 
 ```bash
-rm -rf experiments/codex-hxrust/generated/portable \
-       experiments/codex-hxrust/generated/metal \
-       experiments/codex-hxrust/generated/protocol-ids \
-       experiments/codex-hxrust/generated/json-boundary \
-       experiments/codex-hxrust/generated/config-profile
+rm -rf generated/portable \
+       generated/metal \
+       generated/protocol-ids \
+       generated/json-boundary \
+       generated/config-profile
 ```
 
 ## Current Scaffold

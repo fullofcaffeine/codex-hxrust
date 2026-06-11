@@ -22,7 +22,7 @@
 Run:
 
 ```bash
-experiments/codex-hxrust/harness/check-json-boundary.sh
+harness/check-json-boundary.sh
 ```
 
 The harness validates:

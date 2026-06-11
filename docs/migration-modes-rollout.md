@@ -15,7 +15,6 @@ Machine-readable fixture:
 Validation gate:
 
 ```bash
-cd experiments/codex-hxrust
 harness/check-migration-modes.sh
 ```
 
