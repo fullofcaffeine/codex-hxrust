@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:ff1e4e1ec0c56481ce28950780d38da5d1a5550e27679615158464c3b3f6a881",
+  "fingerprint": "sha256:037c7cce9d68e63862cf8f604eb291c5bed96c6d082c5e8caf6c6d2765f49cad",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -138,6 +138,31 @@
         "property:id",
         "required:error",
         "required:id"
+      ]
+    },
+    {
+      "id": "RawResponseItemCompletedNotification",
+      "sourcePath": "v2/RawResponseItemCompletedNotification.json",
+      "sha256": "7680683c711d6934342c7f09c8745f7eedd2ae087d94c3ceda7c508a49a7bdf0",
+      "fields": [
+        "definition:AgentMessageInputContent",
+        "definition:ContentItem",
+        "definition:FunctionCallOutputBody",
+        "definition:FunctionCallOutputContentItem",
+        "definition:ImageDetail",
+        "definition:LocalShellAction",
+        "definition:LocalShellStatus",
+        "definition:MessagePhase",
+        "definition:ReasoningItemContent",
+        "definition:ReasoningItemReasoningSummary",
+        "definition:ResponseItem",
+        "definition:ResponsesApiWebSearchAction",
+        "property:item",
+        "property:threadId",
+        "property:turnId",
+        "required:item",
+        "required:threadId",
+        "required:turnId"
       ]
     },
     {

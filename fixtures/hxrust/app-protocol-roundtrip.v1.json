@@ -316,6 +316,29 @@
       }
     },
     {
+      "id": "raw-response-item-completed-notification",
+      "kind": "notification",
+      "method": "rawResponseItem/completed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "rawResponseItem/completed",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "item": {
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "hello from haxe.rust"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
       "id": "error-notification",
       "kind": "notification",
       "method": "error",

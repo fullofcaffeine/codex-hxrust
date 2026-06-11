@@ -190,6 +190,7 @@ class HeadlessJsonlAdapter {
             for (delta in agentMessageDeltas()) {
                 outputs.push(agentMessageDeltaNotification(delta));
             }
+            outputs.push(rawResponseItemCompletedNotification(rawAgentResponseItemJson()));
             outputs.push(itemCompletedNotification(agentItemJson()));
         }
         if (lastOutcome.terminalState == "failed") {
@@ -313,6 +314,11 @@ class HeadlessJsonlAdapter {
         return "{\"id\":\"agent-" + currentTurnId + "\",\"text\":" + quote(text) + ",\"type\":\"agentMessage\"}";
     }
 
+    function rawAgentResponseItemJson():String {
+        final text = lastOutcome == null ? "" : lastOutcome.assistantText;
+        return "{\"content\":[{\"text\":" + quote(text) + ",\"type\":\"output_text\"}],\"role\":\"assistant\",\"type\":\"message\"}";
+    }
+
     function appTurnStatus():String {
         return switch currentStatus {
             case "completed":
@@ -356,6 +362,11 @@ class HeadlessJsonlAdapter {
     function agentMessageDeltaNotification(delta:String):String {
         return jsonRpcNotification("item/agentMessage/delta", "{\"delta\":" + quote(delta) + ",\"itemId\":\"agent-" + currentTurnId
             + "\",\"threadId\":\"" + threadId + "\",\"turnId\":" + quote(currentTurnId) + "}");
+    }
+
+    function rawResponseItemCompletedNotification(itemJson:String):String {
+        return jsonRpcNotification("rawResponseItem/completed", "{\"item\":" + itemJson + ",\"threadId\":\"" + threadId + "\",\"turnId\":"
+            + quote(currentTurnId) + "}");
     }
 
     function errorNotification(willRetry:Bool):String {

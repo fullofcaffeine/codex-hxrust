@@ -36,6 +36,7 @@ class HeadlessJsonlAdapterHarness {
         assertContains(actual, "\"method\":\"turn/completed\"");
         assertContains(actual, "\"method\":\"item/started\"");
         assertContains(actual, "\"method\":\"item/agentMessage/delta\"");
+        assertContains(actual, "\"method\":\"rawResponseItem/completed\"");
         assertContains(actual, "\"method\":\"item/completed\"");
         assertCanonicalJsonl(actual);
     }

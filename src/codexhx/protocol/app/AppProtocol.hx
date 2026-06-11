@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "item/started", "item/completed", "item/agentMessage/delta", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:error,item/agentMessage/delta,item/completed,item/started,thread/started,thread/status/changed,turn/completed,turn/started|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-003";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "item/started", "item/completed", "item/agentMessage/delta", "rawResponseItem/completed", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:error,item/agentMessage/delta,item/completed,item/started,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/started|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-004";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -150,6 +150,8 @@ class AppProtocol {
                 validateItemNotification(params, true);
             case "item/agentMessage/delta":
                 validateAgentMessageDeltaNotification(params);
+            case "rawResponseItem/completed":
+                validateRawResponseItemCompletedNotification(params);
             case "item/completed":
                 validateItemNotification(params, false);
             case "error":
@@ -317,6 +319,48 @@ class AppProtocol {
         final delta = requiredString(params.keys, params.values, "delta", "$.message.params.delta");
         if (!delta.ok) return delta.toOutcome();
         return success("notification:item/agentMessage/delta");
+    }
+
+    static function validateRawResponseItemCompletedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredString(params.keys, params.values, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final item = requiredObjectField(params.keys, params.values, "item", "$.message.params.item");
+        if (!item.ok) return item.toOutcome();
+        final itemResult = validateRawResponseItem(item, "$.message.params.item");
+        if (!itemResult.ok) return itemResult;
+        return success("notification:rawResponseItem/completed");
+    }
+
+    static function validateRawResponseItem(item:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final itemType = requiredString(item.keys, item.values, "type", path + ".type");
+        if (!itemType.ok) return itemType.toOutcome();
+        if (itemType.value != "message") return fail("unsupported_raw_response_item", path + ".type", "only raw message response items are supported in this subset");
+
+        final role = requiredString(item.keys, item.values, "role", path + ".role");
+        if (!role.ok) return role.toOutcome();
+        final content = requiredArray(item.keys, item.values, "content", path + ".content");
+        if (!content.ok) return content.toOutcome();
+        return validateRawResponseContentArray(content.values, path + ".content");
+    }
+
+    static function validateRawResponseContentArray(entries:Array<Value>, path:String):AppProtocolParseOutcome {
+        var i = 0;
+        while (i < entries.length) {
+            final entryPath = path + "[" + Std.string(i) + "]";
+            final entry = requireObject(entries[i], entryPath);
+            if (!entry.ok) return entry.toOutcome();
+            final contentType = requiredString(entry.keys, entry.values, "type", entryPath + ".type");
+            if (!contentType.ok) return contentType.toOutcome();
+            if (contentType.value != "input_text" && contentType.value != "output_text") {
+                return fail("unsupported_raw_response_content", entryPath + ".type", "only raw text response content is supported in this subset");
+            }
+            final text = requiredString(entry.keys, entry.values, "text", entryPath + ".text");
+            if (!text.ok) return text.toOutcome();
+            i = i + 1;
+        }
+        return success("raw-response-content:text");
     }
 
     static function validateUserInputArray(entries:Array<Value>, path:String):AppProtocolParseOutcome {

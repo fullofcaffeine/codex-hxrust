@@ -24,6 +24,7 @@ Included server notifications:
 - `item/started`
 - `item/agentMessage/delta`
 - `item/completed`
+- `rawResponseItem/completed`
 - `error`
 
 Included response payloads:
@@ -33,7 +34,7 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage` and `agentMessage` items plus selected assistant text delta notifications.
+The fixture also covers transcript-bearing turns with text `userMessage` and `agentMessage` items, selected assistant text delta notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 ## Error Policy
 
