@@ -4,6 +4,8 @@ import codexhx.runtime.model.ModelStreamParseOutcome;
 import codexhx.runtime.model.ModelStreamRequest;
 import codexhx.runtime.session.OneTurnSessionOutcome;
 import codexhx.runtime.session.OneTurnSessionRunner;
+import codexhx.state.TranscriptStateStore;
+import sys.FileSystem;
 import sys.io.File;
 
 class MockModelStreamHarness {
@@ -11,6 +13,7 @@ class MockModelStreamHarness {
         parsesBasicOneTurnFixture();
         mockProviderStartsAndCancelsFixtureStream();
         runsOneTurnSessionToDeterministicTerminalState();
+        writesTranscriptAndStateArtifacts();
         reportsSessionErrorsAsStructuredEvents();
         reportsMalformedStreamsDeterministically();
     }
@@ -55,6 +58,35 @@ class MockModelStreamHarness {
         assertEquals(expected, outcome.canonicalEventsJson());
     }
 
+    static function writesTranscriptAndStateArtifacts():Void {
+        final baseDir = "generated/mock-model-state";
+        resetStateDir(baseDir);
+
+        final provider = new MockModelProvider("fixtures/upstream/mock-model-basic-one-turn.sse");
+        final outcome = expectSession(OneTurnSessionRunner.run(provider, new ModelStreamRequest("req-state-1", "mock-model", "Say hello")));
+        final written = TranscriptStateStore.writeOneTurn(baseDir, outcome);
+        assertTrue(written.ok, "state write should succeed");
+
+        final expectedTranscript = File.getContent("fixtures/hxrust/mock-one-turn-transcript.v1.jsonl");
+        final expectedState = File.getContent("fixtures/hxrust/mock-one-turn-state.v1.json");
+        final actualTranscript = File.getContent(written.transcriptPath);
+        final actualState = File.getContent(written.statePath);
+        assertEquals(expectedTranscript, actualTranscript);
+        assertEquals(expectedState, actualState);
+        assertNotContains(actualTranscript + actualState, "Say hello");
+
+        final loaded = TranscriptStateStore.loadState(written.statePath);
+        assertTrue(loaded.ok, "valid state should load");
+        assertEquals(expectedState, loaded.content);
+
+        final corruptPath = baseDir + "/corrupt-state.json";
+        File.saveContent(corruptPath, "{bad-json");
+        final corrupt = TranscriptStateStore.loadState(corruptPath);
+        assertFalse(corrupt.ok, "corrupt state should fail");
+        assertEquals("invalid_state_json", corrupt.errorCode);
+        assertEquals("$", corrupt.errorPath);
+    }
+
     static function reportsSessionErrorsAsStructuredEvents():Void {
         final provider = new MockModelProvider("fixtures/upstream/missing-model-stream.sse");
         final outcome = OneTurnSessionRunner.run(provider, new ModelStreamRequest("req-session-error", "mock-model", "Say hello"));
@@ -97,6 +129,26 @@ class MockModelStreamHarness {
         return outcome;
     }
 
+    static function resetStateDir(baseDir:String):Void {
+        if (!FileSystem.exists("generated")) {
+            FileSystem.createDirectory("generated");
+        }
+        if (!FileSystem.exists(baseDir)) {
+            FileSystem.createDirectory(baseDir);
+        }
+        deleteIfExists(baseDir + "/transcript.jsonl");
+        deleteIfExists(baseDir + "/transcript.jsonl.tmp");
+        deleteIfExists(baseDir + "/state.json");
+        deleteIfExists(baseDir + "/state.json.tmp");
+        deleteIfExists(baseDir + "/corrupt-state.json");
+    }
+
+    static function deleteIfExists(path:String):Void {
+        if (FileSystem.exists(path)) {
+            FileSystem.deleteFile(path);
+        }
+    }
+
     static function assertEquals(expected:String, actual:String):Void {
         if (expected != actual) throw "expected `" + expected + "`, got `" + actual + "`";
     }
@@ -107,5 +159,9 @@ class MockModelStreamHarness {
 
     static function assertFalse(value:Bool, message:String):Void {
         if (value) throw message;
+    }
+
+    static function assertNotContains(haystack:String, needle:String):Void {
+        if (haystack.indexOf(needle) >= 0) throw "expected `" + haystack + "` not to contain `" + needle + "`";
     }
 }

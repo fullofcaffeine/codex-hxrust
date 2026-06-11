@@ -1,0 +1,5 @@
+{"errorCode":"","errorMessage":"","itemId":"","kind":"response_created","responseId":"resp-1","text":"","totalTokens":0}
+{"errorCode":"","errorMessage":"","itemId":"","kind":"assistant_delta","responseId":"","text":"Hello","totalTokens":0}
+{"errorCode":"","errorMessage":"","itemId":"","kind":"assistant_delta","responseId":"","text":" world","totalTokens":0}
+{"errorCode":"","errorMessage":"","itemId":"msg-1","kind":"assistant_message","responseId":"","text":"Hello world","totalTokens":0}
+{"errorCode":"","errorMessage":"","itemId":"","kind":"response_completed","responseId":"resp-1","text":"","totalTokens":5}
