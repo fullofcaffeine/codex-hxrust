@@ -1,0 +1,215 @@
+{
+  "schema": "codex-hxrust.haxe-rust-pressure-gaps.v1",
+  "bead": "HXCX-7.1",
+  "generatedAt": "2026-06-11T00:00:00Z",
+  "decisionRecordFeed": "HXCX-7.3",
+  "summary": {
+    "totalGaps": 10,
+    "resolvedUpstream": 7,
+    "openUpstream": 1,
+    "localWorkaround": 2,
+    "severity": {
+      "high": 7,
+      "medium": 3,
+      "low": 0
+    },
+    "sourceAreas": {
+      "build_profile_tooling": 2,
+      "protocol_json_dto": 3,
+      "runtime_model_session": 3,
+      "cafex_adapter": 2
+    }
+  },
+  "rawRustPressure": {
+    "sourceFilesScanned": 92,
+    "rawEscapeMatches": 0,
+    "patterns": [
+      "__rust__",
+      "rust.metal.Code",
+      "@:rustAllowRaw",
+      "@:rust[A-Z]",
+      "untyped"
+    ],
+    "scannedRoots": [
+      "experiments/codex-hxrust/src",
+      "experiments/codex-hxrust/test"
+    ],
+    "policy": "No raw Rust escapes are used in app/test Haxe source for the current pressure-test surface."
+  },
+  "gaps": [
+    {
+      "id": "callstack-exception-dev-haxelib-std",
+      "status": "resolved_upstream",
+      "severity": "high",
+      "sourceArea": "build_profile_tooling",
+      "codexBead": "codex-hxrust-rat.5",
+      "haxeRustRefs": [
+        "haxe.rust-oo3.60",
+        "haxe.rust-oo3.61",
+        "haxe.rust-oo3.66"
+      ],
+      "resolvedBy": "0849fcf1a556cb86615cfcdf635165ba82fec8da",
+      "reproduction": "External codex-hxrust portable/metal profile builds generated CallStack Rust that referenced an unresolved root Exception type when the dev haxelib checkout did not expose haxe.rust std top-level entries.",
+      "workaround": "Historical local CallStack.cross.hx Dynamic workaround; now removed and recorded as resolved-upstream.",
+      "validation": [
+        "KEEP_ARTIFACTS=0 scripts/ci/package-smoke.sh in ../haxe.rust",
+        "experiments/codex-hxrust/scripts/check-generated-cargo.sh"
+      ]
+    },
+    {
+      "id": "cargo-failure-exit-status",
+      "status": "resolved_upstream",
+      "severity": "high",
+      "sourceArea": "build_profile_tooling",
+      "codexBead": "codex-hxrust-rat.6",
+      "haxeRustRefs": [
+        "haxe.rust-oo3.67"
+      ],
+      "resolvedBy": "bc945b3263e24f95c3b99d86e87dc281e0b713b2",
+      "reproduction": "Protocol-ID hxml printed generated Cargo errors while the parent haxe process exited successfully, so harnesses needed defensive Cargo checks.",
+      "workaround": "Keep generated Cargo gates in codex-hxrust even after the compiler fix; the upstream fix now propagates Cargo failure as a Haxe compiler error.",
+      "validation": [
+        "scripts/ci/check-cargo-failure-propagation.sh in ../haxe.rust",
+        "experiments/codex-hxrust/scripts/check-generated-cargo.sh"
+      ]
+    },
+    {
+      "id": "nullable-scalar-charcode",
+      "status": "resolved_upstream",
+      "severity": "medium",
+      "sourceArea": "protocol_json_dto",
+      "codexBead": "codex-hxrust-rat.7",
+      "haxeRustRefs": [
+        "haxe.rust-oo3.68"
+      ],
+      "resolvedBy": "729599493d350bc8d926b61890eb320acf155b6b",
+      "reproduction": "Protocol ID validation exposed Null<Int> stringification/comparison and String.charCodeAt Option comparison lowering errors.",
+      "workaround": "Generic nullable_scalar_charcode snapshot now covers the Haxe patterns; keep local DTO code straightforward and avoid raw Rust.",
+      "validation": [
+        "nullable_scalar_charcode snapshot in ../haxe.rust",
+        "experiments/codex-hxrust/harness/check-protocol-ids.sh"
+      ]
+    },
+    {
+      "id": "generic-enum-payload",
+      "status": "resolved_upstream",
+      "severity": "high",
+      "sourceArea": "protocol_json_dto",
+      "codexBead": "codex-hxrust-rat.8",
+      "haxeRustRefs": [
+        "haxe.rust-oo3.69"
+      ],
+      "resolvedBy": "f521fdb242a7de5f2194633deef6caa3392bafe9",
+      "reproduction": "Typed parse-result enums such as IdParseResult<T> generated Rust with unbound generic parameters.",
+      "workaround": "Resolved by generic enum type-parameter lowering; codex-hxrust can use generic result enums where useful.",
+      "validation": [
+        "generic_enum_payload snapshot in ../haxe.rust",
+        "experiments/codex-hxrust/harness/check-protocol-ids.sh"
+      ]
+    },
+    {
+      "id": "enum-reuse-helper-calls",
+      "status": "resolved_upstream",
+      "severity": "high",
+      "sourceArea": "protocol_json_dto",
+      "codexBead": "codex-hxrust-rat.9",
+      "haxeRustRefs": [
+        "haxe.rust-oo3.71"
+      ],
+      "resolvedBy": "1a394f41a1ee019350faee6d592d21d2c5dc20bd",
+      "reproduction": "JSON boundary helpers exposed Rust move errors when a parsed haxe.json.Value enum was passed to multiple helper calls.",
+      "workaround": "Compiler now treats Haxe enum values as reusable cloneable values for typed by-value helper calls.",
+      "validation": [
+        "enum_reuse_helper_calls snapshot in ../haxe.rust",
+        "experiments/codex-hxrust/harness/check-json-boundary.sh"
+      ]
+    },
+    {
+      "id": "try-catch-tail-nonvoid",
+      "status": "resolved_upstream",
+      "severity": "high",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-awo",
+      "haxeRustRefs": [
+        "haxe.rust-oo3.72"
+      ],
+      "resolvedBy": "551a00bf08cdaecf3b8b3c499b1d80c86506fa81",
+      "reproduction": "Mock model stream parsing exposed a non-Void helper with top-level try/catch return branches lowering to a Rust match statement with a trailing semicolon.",
+      "workaround": "The local parseJson shape workaround was removed after the generic try_catch_tail_nonvoid fix landed.",
+      "validation": [
+        "try_catch_tail_nonvoid snapshot in ../haxe.rust",
+        "experiments/codex-hxrust/harness/check-mock-model-stream.sh"
+      ]
+    },
+    {
+      "id": "interface-null-comparison",
+      "status": "resolved_upstream",
+      "severity": "high",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-e9i",
+      "haxeRustRefs": [
+        "haxe.rust-wg5"
+      ],
+      "resolvedBy": "e10eae4d197a2ff7d1518536db9aaa4f76d4e9e4",
+      "reproduction": "One-turn state-machine work exposed non-null interface/trait-object comparisons against null lowering to invalid generic pointer equality.",
+      "workaround": "Compiler now evaluates non-null interface/null-literal comparisons to the correct constant result.",
+      "validation": [
+        "interface_null_compare snapshot in ../haxe.rust",
+        "experiments/codex-hxrust/harness/check-mock-model-stream.sh"
+      ]
+    },
+    {
+      "id": "nullable-interface-values",
+      "status": "open_upstream",
+      "severity": "high",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-e9i",
+      "haxeRustRefs": [
+        "haxe.rust-bm6"
+      ],
+      "resolvedBy": null,
+      "reproduction": "Passing a literal null to an interface-typed parameter still needs a generic nullable trait-object representation/lowering decision.",
+      "workaround": "codex-hxrust treats ModelClient as a required non-null dependency and fails construction/configuration before a nullable interface crosses the boundary.",
+      "validation": [
+        "experiments/codex-hxrust/harness/check-mock-model-stream.sh"
+      ],
+      "followUp": "HXCX-7.2 should keep this as an upstream haxe.rust fixture/issue until haxe.rust-bm6 closes."
+    },
+    {
+      "id": "path-directory-lowering",
+      "status": "local_workaround",
+      "severity": "medium",
+      "sourceArea": "cafex_adapter",
+      "codexBead": "codex-hxrust-rat.1",
+      "haxeRustRefs": [
+        "haxe.rust-lj8"
+      ],
+      "resolvedBy": null,
+      "reproduction": "Caf receipt/bridge path handling needed directory extraction, but haxe.io.Path.directory lowering was not reliable enough for the adapter slice.",
+      "workaround": "Use small local string/path helpers in codexhx adapter code and avoid relying on haxe.io.Path.directory in the compiled Haxe-to-Rust path.",
+      "validation": [
+        "experiments/codex-hxrust/harness/check-caf-receipts.sh",
+        "experiments/codex-hxrust/harness/check-caf-bridge.sh"
+      ],
+      "followUp": "HXCX-7.2 should create a generic haxe.rust reproduction if this remains needed while expanding Cafex path-heavy slices."
+    },
+    {
+      "id": "string-last-index-of-lowering",
+      "status": "local_workaround",
+      "severity": "medium",
+      "sourceArea": "cafex_adapter",
+      "codexBead": "codex-hxrust-rat.1",
+      "haxeRustRefs": [
+        "haxe.rust-7s4"
+      ],
+      "resolvedBy": null,
+      "reproduction": "Caf receipt/bridge filename handling needed last separator lookup, but String.lastIndexOf lowering was not reliable enough for the adapter slice.",
+      "workaround": "Use simple forward scans or bounded helper logic in codexhx adapter code instead of depending on String.lastIndexOf.",
+      "validation": [
+        "experiments/codex-hxrust/harness/check-caf-receipts.sh",
+        "experiments/codex-hxrust/harness/check-caf-continuity.sh"
+      ],
+      "followUp": "HXCX-7.2 should create a generic haxe.rust reproduction if this remains needed while expanding string-heavy adapters."
+    }
+  ]
+}
