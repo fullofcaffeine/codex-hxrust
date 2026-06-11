@@ -87,6 +87,10 @@ The `../haxe.rust` checkout is part of the work surface. When the Codex port exp
 
 Current known haxe.rust pressure points are tracked under the `HXCX-7.x` Beads epic.
 
+## Profile Approach
+
+Use `metal` now where codexhx needs Rust-native runtime/tool behavior, stricter host-boundary semantics, or production-shaped performance. Keep `portable` for DTOs, codecs, fixtures, schema/protocol validation, config, and pure state. At the compiler level, haxe.rust portable output should converge toward metal-level Rust performance wherever the Rust lowering can preserve Haxe semantics.
+
 ## Layout
 
 ```text
