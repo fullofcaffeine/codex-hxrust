@@ -109,6 +109,7 @@ The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`
 ## Follow-Up Audit After Nullable Scalar Regression Coverage On 2026-06-10
 
 **Pin before audit:** `bc945b3263e24f95c3b99d86e87dc281e0b713b2`
+
 **Pin after audit:** `729599493d350bc8d926b61890eb320acf155b6b`
 
 Additional upstream commit accepted:
@@ -121,6 +122,26 @@ Gate run:
 
 ```bash
 experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 729599493d350bc8d926b61890eb320acf155b6b
+```
+
+The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.
+
+## Follow-Up Audit After Profile Language Clarification On 2026-06-10
+
+**Pin before audit:** `729599493d350bc8d926b61890eb320acf155b6b`
+
+**Pin after audit:** `6a673bb43624a0d4327fa6709fb24f7e971dd121`
+
+Additional upstream commit accepted:
+
+- `6a673bb4` Document idiomatic as cross-profile quality goal
+
+This docs-only haxe.rust update clarifies that `portable|metal` are semantic contracts, while "idiomatic" is the generated-Rust quality goal across both contracts. codex-hxrust mirrors that policy in `AGENTS.md`, build-profile policy, and baseline topology docs.
+
+Gate run:
+
+```bash
+experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 6a673bb43624a0d4327fa6709fb24f7e971dd121
 ```
 
 The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each.

@@ -10,7 +10,7 @@
 | --- | --- | --- | --- |
 | Upstream Codex | `../codex` | `main` at `2704ecea9a`; dirty only from untracked repomix outputs | `https://github.com/openai/codex.git` |
 | Cafex/Cafetera Codex fork | `../fullofcaffeine/deps/codex` | `caf/mounted/rust-v0.124.0-autonomy` at `d7379d6c66`; clean | `git@github.com:fullofcaffeine/codex-caf.git`, with upstream `https://github.com/openai/codex.git` |
-| haxe.rust | `../haxe.rust` | `main` at `729599493d350bc8d926b61890eb320acf155b6b`; clean except untracked `repomix-output.haxe-rust.xml.zip` | `git@github.com:fullofcaffeine/reflaxe.rust.git` |
+| haxe.rust | `../haxe.rust` | `main` at `6a673bb43624a0d4327fa6709fb24f7e971dd121`; clean except untracked `repomix-output.haxe-rust.xml.zip` | `git@github.com:fullofcaffeine/reflaxe.rust.git` |
 
 ## Toolchain Facts
 
@@ -158,6 +158,7 @@ Profile contracts:
 
 - `portable` is the default Haxe-portable contract and should be used first for DTOs, codecs, fixture transforms, schema fingerprints, config/profile data, and pure state transitions.
 - `metal` is the Rust-first contract for strict boundaries, performance-sensitive paths, typed native interop, async, process/tool wrappers, and sandbox interfaces.
+- `idiomatic` is not a profile selector; it is the generated-Rust quality goal for both `portable` and `metal`.
 - `@:haxeMetal` islands can enforce metal-clean checks inside a portable build.
 
 Build/workflow facts:
@@ -196,8 +197,9 @@ Evidence posture:
 2. Treat `protocol`, `app-server-protocol`, `state`, and Cafex receipt/goal/effort files as the first parity oracle surfaces.
 3. Use haxe.rust `portable` for all pure data surfaces until a concrete native/Rust-first need appears.
 4. Use haxe.rust `metal` only at explicit runtime boundaries: async model stream, process execution, sandbox policy, apply-patch wrapper, and state backend integration.
-5. Keep native Rust wrappers small, typed, fail-closed, and fixture-backed.
-6. Do not attempt TUI replacement in the first slice; only the effort/wake bridge behavior is relevant to early Cafex parity.
+5. Treat idiomatic Rust output as a quality bar across both contracts, not as a new build lane.
+6. Keep native Rust wrappers small, typed, fail-closed, and fixture-backed.
+7. Do not attempt TUI replacement in the first slice; only the effort/wake bridge behavior is relevant to early Cafex parity.
 
 ## Licensing Questions
 

@@ -17,10 +17,11 @@
 
 1. `portable` is the default contract for DTOs, schema fingerprints, config, fixtures, and pure state transitions.
 2. `metal` is reserved for runtime shell and native-boundary experiments.
-3. Codegen-only profiles are for fast local feedback and deterministic generated-output inspection.
-4. Check profiles are the first build gate and must succeed before DTO/runtime work is considered active.
-5. Locked Cargo checks/tests are run by `experiments/codex-hxrust/scripts/check-generated-cargo.sh`.
-6. Generated output remains build output and is ignored by `experiments/codex-hxrust/generated/.gitignore`.
+3. `idiomatic` is an output-quality goal for both contracts, not a build profile. Prefer phrases like "idiomatic portable output" or "idiomatic metal output" when describing codegen quality.
+4. Codegen-only profiles are for fast local feedback and deterministic generated-output inspection.
+5. Check profiles are the first build gate and must succeed before DTO/runtime work is considered active.
+6. Locked Cargo checks/tests are run by `experiments/codex-hxrust/scripts/check-generated-cargo.sh`.
+7. Generated output remains build output and is ignored by `experiments/codex-hxrust/generated/.gitignore`.
 
 ## Scaffold Caveat
 

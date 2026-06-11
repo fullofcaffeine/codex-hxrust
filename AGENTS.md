@@ -30,6 +30,16 @@ When the Codex port exposes a haxe.rust limitation:
 
 Treat haxe.rust fixes as first-class compiler contributions, not one-off local hacks hidden inside `codex-hxrust`.
 
+## haxe.rust Profile Language
+
+Use haxe.rust's supported profile selectors precisely:
+
+- `portable` is the Haxe-semantics-first contract and the default for DTOs, codecs, fixtures, config/profile parsing, and pure state transitions.
+- `metal` is the Rust-semantics-first contract for typed native boundaries, async/process/tool wrappers, sandbox/state integration, measured hot paths, and reduced/no-HXRT runtime experiments.
+- `idiomatic` is **not** a profile selector. It is an output-quality goal for both contracts: readable Rust, warning-clean code, avoidable clone/temp reduction, and native Rust representations where the active semantic contract permits them.
+
+When documenting plans, say "idiomatic portable output" or "idiomatic metal output" if needed; do not introduce `portable+idiomatic`, `idiomatic`, or `rusty` as build/profile lanes.
+
 ## Landing the Plane (Session Completion)
 
 **When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
