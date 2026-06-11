@@ -6,8 +6,19 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:3434f4d239a51d42ceb34daaefc99c6f27bd09c294d948405bd164164255dadd",
+  "fingerprint": "sha256:57246b66364e5facf7fdf7f05b240ca14bfa9b7b60e364c58848b463f300fde7",
   "schemas": [
+    {
+      "id": "AccountUpdatedNotification",
+      "sourcePath": "v2/AccountUpdatedNotification.json",
+      "sha256": "66c6dec15058cf0c6231f48db859b3e4257a6ca2b249db0a625e5314c6a8a911",
+      "fields": [
+        "definition:AuthMode",
+        "definition:PlanType",
+        "property:authMode",
+        "property:planType"
+      ]
+    },
     {
       "id": "AgentMessageDeltaNotification",
       "sourcePath": "v2/AgentMessageDeltaNotification.json",

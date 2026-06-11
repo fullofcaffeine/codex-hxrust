@@ -32,6 +32,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/mcpToolCall/progress");
         assertContains(fingerprintJson, "mcpServer/oauthLogin/completed");
         assertContains(fingerprintJson, "mcpServer/startupStatus/updated");
+        assertContains(fingerprintJson, "account/updated");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "serverRequest/resolved");
         assertContains(fingerprintJson, "command/exec/outputDelta");
@@ -43,7 +44,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("32", Std.string(items.length));
+        assertEquals("33", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -66,7 +67,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("23", Std.string(notifications));
+        assertEquals("24", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -160,6 +161,21 @@ class AppProtocolHarness {
         assertFalse(invalidMcpServerThreadId.ok, "MCP server threadId must be a string or null when present");
         assertEquals("expected_nullable_string", invalidMcpServerThreadId.errorCode);
         assertEquals("$.message.params.threadId", invalidMcpServerThreadId.errorPath);
+
+        final invalidAccountAuthMode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-invalid-auth-mode\",\"kind\":\"notification\",\"method\":\"account/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"account/updated\",\"params\":{\"authMode\":\"cookie\",\"planType\":\"pro\"}}}")));
+        assertFalse(invalidAccountAuthMode.ok, "account auth mode must be a known enum value");
+        assertEquals("invalid_account_auth_mode", invalidAccountAuthMode.errorCode);
+        assertEquals("$.message.params.authMode", invalidAccountAuthMode.errorPath);
+
+        final invalidAccountPlanType = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-invalid-plan-type\",\"kind\":\"notification\",\"method\":\"account/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"account/updated\",\"params\":{\"authMode\":null,\"planType\":\"ultimate\"}}}")));
+        assertFalse(invalidAccountPlanType.ok, "account plan type must be a known enum value");
+        assertEquals("invalid_account_plan_type", invalidAccountPlanType.errorCode);
+        assertEquals("$.message.params.planType", invalidAccountPlanType.errorPath);
+
+        final invalidAccountPlanShape = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-invalid-plan-shape\",\"kind\":\"notification\",\"method\":\"account/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"account/updated\",\"params\":{\"planType\":7}}}")));
+        assertFalse(invalidAccountPlanShape.ok, "account plan type must be a string or null when present");
+        assertEquals("expected_nullable_string", invalidAccountPlanShape.errorCode);
+        assertEquals("$.message.params.planType", invalidAccountPlanShape.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

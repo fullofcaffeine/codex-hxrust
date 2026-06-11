@@ -49,6 +49,7 @@ selected_schemas=(
   "McpToolCallProgressNotification:v2/McpToolCallProgressNotification.json"
   "McpServerOauthLoginCompletedNotification:v2/McpServerOauthLoginCompletedNotification.json"
   "McpServerStatusUpdatedNotification:v2/McpServerStatusUpdatedNotification.json"
+  "AccountUpdatedNotification:v2/AccountUpdatedNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

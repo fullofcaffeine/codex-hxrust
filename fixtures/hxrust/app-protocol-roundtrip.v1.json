@@ -567,6 +567,19 @@
       }
     },
     {
+      "id": "account-updated-notification",
+      "kind": "notification",
+      "method": "account/updated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "account/updated",
+        "params": {
+          "authMode": "chatgpt",
+          "planType": "pro"
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",
