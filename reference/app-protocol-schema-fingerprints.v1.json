@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:037c7cce9d68e63862cf8f604eb291c5bed96c6d082c5e8caf6c6d2765f49cad",
+  "fingerprint": "sha256:19cc8cca13961aedde4b93d4b45358ec6e7100d85c22e357be9ea575b2659371",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -138,6 +138,21 @@
         "property:id",
         "required:error",
         "required:id"
+      ]
+    },
+    {
+      "id": "PlanDeltaNotification",
+      "sourcePath": "v2/PlanDeltaNotification.json",
+      "sha256": "2c6ee96b49b2c732cdb205cd083303ffa5ec7aea992ae74d13ce42b37108a008",
+      "fields": [
+        "property:delta",
+        "property:itemId",
+        "property:threadId",
+        "property:turnId",
+        "required:delta",
+        "required:itemId",
+        "required:threadId",
+        "required:turnId"
       ]
     },
     {

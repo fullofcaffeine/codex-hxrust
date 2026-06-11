@@ -316,6 +316,21 @@
       }
     },
     {
+      "id": "plan-delta-notification",
+      "kind": "notification",
+      "method": "item/plan/delta",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/plan/delta",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "turn-1-plan",
+          "delta": "# Proposed plan\n"
+        }
+      }
+    },
+    {
       "id": "raw-response-item-completed-notification",
       "kind": "notification",
       "method": "rawResponseItem/completed",
