@@ -19,15 +19,15 @@ class CafActiveLaneWriter {
         if (runId.reason.length > 0) return CafReceiptWriteOutcome.skipped(runId.reason);
         if (env.ownerPid.length == 0) return CafReceiptWriteOutcome.skipped("missing_owner_pid");
 
-        final ownerPid = parsePositiveInt(env.ownerPid);
-        if (!ownerPid.ok) return CafReceiptWriteOutcome.skipped("invalid_owner_pid");
-        if (ownerPid.value != nativeProcessId) return CafReceiptWriteOutcome.skipped("owner_pid_mismatch");
+        final ownerPid = Std.parseInt(env.ownerPid);
+        if (ownerPid == null || ownerPid <= 0) return CafReceiptWriteOutcome.skipped("invalid_owner_pid");
+        if (ownerPid != nativeProcessId) return CafReceiptWriteOutcome.skipped("owner_pid_mismatch");
         if (env.wakeRequestsDir.length == 0) return CafReceiptWriteOutcome.skipped("missing_wake_requests_dir");
         if (env.wakeReceiptsDir.length == 0) return CafReceiptWriteOutcome.skipped("missing_wake_receipts_dir");
 
         try {
             ensureDirectory(directoryOf(env.activeLanePath));
-            File.saveContent(env.activeLanePath, activeLaneJson(env, runId.value, ownerPid.value, nativeProcessId, conversationId, nativeLiveStatus, writtenAt));
+            File.saveContent(env.activeLanePath, activeLaneJson(env, runId.value, ownerPid, nativeProcessId, conversationId, nativeLiveStatus, writtenAt));
         } catch (e:Dynamic) {
             return CafReceiptWriteOutcome.failure("active_lane_write_failed", "failed to write Caf active-lane receipt");
         }
@@ -124,36 +124,6 @@ class CafActiveLaneWriter {
         return "[" + out.join(", ") + "]";
     }
 
-    static function parsePositiveInt(value:String):IntRead {
-        if (value.length == 0) return IntRead.failure();
-        var out = 0;
-        var i = 0;
-        while (i < value.length) {
-            final digit = digitValue(value.charAt(i));
-            if (digit < 0) return IntRead.failure();
-            out = out * 10 + digit;
-            i = i + 1;
-        }
-        if (out <= 0) return IntRead.failure();
-        return IntRead.success(out);
-    }
-
-    static function digitValue(value:String):Int {
-        return switch value {
-            case "0": 0;
-            case "1": 1;
-            case "2": 2;
-            case "3": 3;
-            case "4": 4;
-            case "5": 5;
-            case "6": 6;
-            case "7": 7;
-            case "8": 8;
-            case "9": 9;
-            case _: -1;
-        }
-    }
-
     static function directoryOf(path:String):String {
         final normalized = StringTools.replace(path, "\\", "/");
         final parts = normalized.split("/");
@@ -217,23 +187,5 @@ class RunIdRead {
 
     public static function skipped(reason:String):RunIdRead {
         return new RunIdRead("", reason);
-    }
-}
-
-class IntRead {
-    public final ok:Bool;
-    public final value:Int;
-
-    function new(ok:Bool, value:Int) {
-        this.ok = ok;
-        this.value = value;
-    }
-
-    public static function success(value:Int):IntRead {
-        return new IntRead(true, value);
-    }
-
-    public static function failure():IntRead {
-        return new IntRead(false, 0);
     }
 }
