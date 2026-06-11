@@ -35,9 +35,9 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage` and `agentMessage` items, selected assistant text delta notifications, experimental plan delta notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, experimental plan delta notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
-`item/plan/delta` is admitted as the upstream streaming payload shape only. Completed plan items remain a later raw app-server parity slice.
+`item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
 ## Error Policy
 

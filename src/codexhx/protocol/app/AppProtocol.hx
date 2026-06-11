@@ -6,8 +6,8 @@ import haxe.json.Value;
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "rawResponseItem/completed", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:error,item/agentMessage/delta,item/plan/delta,item/completed,item/started,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/started|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-005";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:error,item/agentMessage/delta,item/plan/delta,item/completed,item/started,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-006";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -288,6 +288,12 @@ class AppProtocol {
                 final text = requiredString(item.keys, item.values, "text", path + ".text");
                 if (!text.ok) return text.toOutcome();
                 success("item:agentMessage");
+            case "plan":
+                final id = requiredString(item.keys, item.values, "id", path + ".id");
+                if (!id.ok) return id.toOutcome();
+                final text = requiredString(item.keys, item.values, "text", path + ".text");
+                if (!text.ok) return text.toOutcome();
+                success("item:plan");
             case _:
                 fail("unsupported_transcript_item", path + ".type", "unsupported transcript item type");
         }
