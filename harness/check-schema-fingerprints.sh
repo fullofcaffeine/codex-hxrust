@@ -52,6 +52,7 @@ selected_schemas=(
   "AccountUpdatedNotification:v2/AccountUpdatedNotification.json"
   "AccountRateLimitsUpdatedNotification:v2/AccountRateLimitsUpdatedNotification.json"
   "AppListUpdatedNotification:v2/AppListUpdatedNotification.json"
+  "RemoteControlStatusChangedNotification:v2/RemoteControlStatusChangedNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

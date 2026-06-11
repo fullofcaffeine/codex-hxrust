@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,process/exited,process/outputDelta,rawResponseItem/completed,serverRequest/resolved,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-021";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-022";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -174,6 +174,8 @@ class AppProtocol {
                 validateAccountRateLimitsUpdatedNotification(params);
             case "app/list/updated":
                 validateAppListUpdatedNotification(params);
+            case "remoteControl/status/changed":
+                validateRemoteControlStatusChangedNotification(params);
             case "rawResponseItem/completed":
                 validateRawResponseItemCompletedNotification(params);
             case "serverRequest/resolved":
@@ -621,6 +623,19 @@ class AppProtocol {
         return success("notification:app/list/updated");
     }
 
+    static function validateRemoteControlStatusChangedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final installationId = requiredString(params.keys, params.values, "installationId", "$.message.params.installationId");
+        if (!installationId.ok) return installationId.toOutcome();
+        final serverName = requiredString(params.keys, params.values, "serverName", "$.message.params.serverName");
+        if (!serverName.ok) return serverName.toOutcome();
+        final status = requiredString(params.keys, params.values, "status", "$.message.params.status");
+        if (!status.ok) return status.toOutcome();
+        if (!validRemoteControlStatus(status.value)) return fail("invalid_remote_control_status", "$.message.params.status", "unsupported remote control status");
+        final environmentId = validateOptionalNullableString(params, "environmentId", "$.message.params.environmentId");
+        if (!environmentId.ok) return environmentId;
+        return success("notification:remoteControl/status/changed");
+    }
+
     static function validateAppInfo(app:ProtocolObjectField, path:String):AppProtocolParseOutcome {
         final id = requiredString(app.keys, app.values, "id", path + ".id");
         if (!id.ok) return id.toOutcome();
@@ -936,6 +951,10 @@ class AppProtocol {
 
     static function validRateLimitReachedType(value:String):Bool {
         return value == "rate_limit_reached" || value == "workspace_owner_credits_depleted" || value == "workspace_member_credits_depleted" || value == "workspace_owner_usage_limit_reached" || value == "workspace_member_usage_limit_reached";
+    }
+
+    static function validRemoteControlStatus(value:String):Bool {
+        return value == "disabled" || value == "connecting" || value == "connected" || value == "errored";
     }
 
     static function validCommandExecOutputStream(value:String):Bool {

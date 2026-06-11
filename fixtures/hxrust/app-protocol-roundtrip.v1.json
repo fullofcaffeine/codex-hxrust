@@ -668,6 +668,21 @@
       }
     },
     {
+      "id": "remote-control-status-changed-notification",
+      "kind": "notification",
+      "method": "remoteControl/status/changed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "remoteControl/status/changed",
+        "params": {
+          "installationId": "install-1",
+          "serverName": "desktop",
+          "status": "connected",
+          "environmentId": null
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:fabbb94db3dd79929a70773936f354582f4e5587ff32b68c04104535e6fe1365",
+  "fingerprint": "sha256:9b3661c14baa61312606a19d968fd933aa492f951f8f9158d7a636ab1060c64a",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -357,6 +357,21 @@
         "required:item",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "RemoteControlStatusChangedNotification",
+      "sourcePath": "v2/RemoteControlStatusChangedNotification.json",
+      "sha256": "a257cb89f5b3d4c27c739be254624585ef328c56d133b2d762d94e47adc5e072",
+      "fields": [
+        "definition:RemoteControlConnectionStatus",
+        "property:environmentId",
+        "property:installationId",
+        "property:serverName",
+        "property:status",
+        "required:installationId",
+        "required:serverName",
+        "required:status"
       ]
     },
     {

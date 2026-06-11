@@ -35,6 +35,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "account/updated");
         assertContains(fingerprintJson, "account/rateLimits/updated");
         assertContains(fingerprintJson, "app/list/updated");
+        assertContains(fingerprintJson, "remoteControl/status/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "serverRequest/resolved");
         assertContains(fingerprintJson, "command/exec/outputDelta");
@@ -46,7 +47,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("35", Std.string(items.length));
+        assertEquals("36", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -69,7 +70,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("26", Std.string(notifications));
+        assertEquals("27", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -208,6 +209,16 @@ class AppProtocolHarness {
         assertFalse(invalidBranding.ok, "branding must include isDiscoverableApp when present");
         assertEquals("missing_field", invalidBranding.errorCode);
         assertEquals("$.message.params.data[0].branding.isDiscoverableApp", invalidBranding.errorPath);
+
+        final invalidRemoteControlStatus = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-invalid-status\",\"kind\":\"notification\",\"method\":\"remoteControl/status/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"remoteControl/status/changed\",\"params\":{\"installationId\":\"install-1\",\"serverName\":\"desktop\",\"status\":\"sleeping\"}}}")));
+        assertFalse(invalidRemoteControlStatus.ok, "remote control status must be a known enum value");
+        assertEquals("invalid_remote_control_status", invalidRemoteControlStatus.errorCode);
+        assertEquals("$.message.params.status", invalidRemoteControlStatus.errorPath);
+
+        final invalidRemoteControlEnvironment = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-invalid-environment\",\"kind\":\"notification\",\"method\":\"remoteControl/status/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"remoteControl/status/changed\",\"params\":{\"installationId\":\"install-1\",\"serverName\":\"desktop\",\"status\":\"connected\",\"environmentId\":7}}}")));
+        assertFalse(invalidRemoteControlEnvironment.ok, "remote control environmentId must be a string or null when present");
+        assertEquals("expected_nullable_string", invalidRemoteControlEnvironment.errorCode);
+        assertEquals("$.message.params.environmentId", invalidRemoteControlEnvironment.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {
