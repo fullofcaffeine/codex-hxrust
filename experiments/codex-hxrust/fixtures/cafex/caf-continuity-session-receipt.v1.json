@@ -1,0 +1,12 @@
+{
+  "schema": "caf-client-session.v1",
+  "clientId": "codex",
+  "runId": "codex-restart-successor-1",
+  "conversationId": "session-resumed-continuity",
+  "actualContinuityMode": "resume_same_conversation",
+  "continuityLoaded": true,
+  "state": "session_ready",
+  "source": "resume",
+  "writtenAt": "2026-06-10T00:00:04Z",
+  "predecessorSessionId": "session-predecessor-1"
+}

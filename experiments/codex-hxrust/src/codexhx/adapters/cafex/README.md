@@ -29,6 +29,24 @@ Known haxe.rust gaps discovered during this slice and worked around locally:
 - `haxe.rust-lj8`: `haxe.io.Path.directory` lowering.
 - `haxe.rust-7s4`: `String.lastIndexOf` lowering.
 
+## Continuity Metadata
+
+`CafContinuityEnv` implements the HXCX-5.4 successor/predecessor metadata parser.
+
+Inputs mirror the Cafex/native env names:
+
+- `CAF_CODEX_SESSION_RECEIPT_PATH`
+- `CAF_CODEX_TURN_RECEIPT_PATH`
+- `CAF_CODEX_SUCCESSOR_RUN_ID`
+- `CAF_CODEX_PREDECESSOR_SESSION`
+
+The parser trims values, requires an explicit successor run id, rejects path-like/control-character metadata, and derives continuity only from explicit predecessor metadata:
+
+- predecessor present -> `resume_same_conversation`, `continuityLoaded: true`, receipt source `resume`
+- predecessor absent -> `fresh_unlinked`, `continuityLoaded: false`, receipt source `startup`
+
+This keeps restart proof honest: receipt metadata is not inferred from process liveness, file paths, or side effects.
+
 ## Effort And Wake Bridge
 
 `CafBridgeProcessor` implements the HXCX-5.2 directory bridge subset from `../fullofcaffeine/deps/codex/codex-rs/tui/src/caf_effort_control.rs`.

@@ -34,4 +34,5 @@ Current harnesses:
 - `check-headless-jsonl-adapter.sh` validates the HXCX-3.4 command JSONL adapter for start, submit, status, transcript, canonical JSONL output, and explicit unsupported-command errors.
 - `check-caf-receipts.sh` validates the HXCX-5.1 Caf session/turn receipt writer, absent-env no-ops, pretty JSON fixtures, overwrite behavior, and unsupported source failures.
 - `check-caf-bridge.sh` validates the HXCX-5.2 Caf effort/wake directory bridge, request consumption, pretty JSON receipts, idempotent duplicate scans, and explicit unsupported mode refusal.
+- `check-caf-continuity.sh` validates the HXCX-5.4 Caf successor/predecessor metadata parser, continuity receipt fixtures, deterministic invalid metadata, and explicit no-hidden-inference behavior.
 - `check-goals.sh` validates the HXCX-5.3 goal DTO, in-memory state transitions, model-facing goal tool subset, and explicit unsupported goal behavior.

@@ -51,6 +51,7 @@ This G1 scaffold is intentionally tiny. It provides:
 - headless JSONL adapter harness for start/submit/status/transcript commands
 - Cafex session/turn receipt adapter harness
 - Cafex effort/wake directory bridge adapter harness
+- Cafex successor/predecessor continuity metadata harness
 - minimal mainstream goal DTO/state/tool harness
 
 `HXCX-1.2` owns making portable and metal profile checks green. `HXCX-1.3` owns the generated Cargo gate script for locked checks/tests. `HXCX-1.5` owns the minimal doctor JSON binary and shape harness. `HXCX-2.x` owns upstream-shaped protocol, JSON, config, and runtime DTO slices.
@@ -76,6 +77,7 @@ harness/check-schema-fingerprints.sh
 harness/check-headless-jsonl-adapter.sh
 harness/check-caf-receipts.sh
 harness/check-caf-bridge.sh
+harness/check-caf-continuity.sh
 harness/check-goals.sh
 ```
 

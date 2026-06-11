@@ -12,3 +12,5 @@ Current fixtures:
 - `caf-effort-invalid-request.v1.json` and `caf-effort-invalid-receipt.v1.json` cover fail-closed invalid effort handling.
 - `caf-wake-request.v1.json` and `caf-wake-receipt.v1.json` cover the same-process wake request/consumed receipt subset.
 - `caf-mode-unsupported-request.v1.json` and `caf-mode-unsupported-receipt.v1.json` cover explicit unsupported mode refusal.
+- `caf-continuity-metadata-resume.v1.json` and `caf-continuity-metadata-fresh.v1.json` cover explicit successor/predecessor metadata parsing.
+- `caf-continuity-session-receipt.v1.json` and `caf-continuity-turn-receipt-fresh.v1.json` cover receipts written from parsed continuity metadata.
