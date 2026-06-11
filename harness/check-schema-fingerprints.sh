@@ -51,6 +51,7 @@ selected_schemas=(
   "McpServerStatusUpdatedNotification:v2/McpServerStatusUpdatedNotification.json"
   "AccountUpdatedNotification:v2/AccountUpdatedNotification.json"
   "AccountRateLimitsUpdatedNotification:v2/AccountRateLimitsUpdatedNotification.json"
+  "AppListUpdatedNotification:v2/AppListUpdatedNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

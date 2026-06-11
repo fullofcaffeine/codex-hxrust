@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,process/exited,process/outputDelta,rawResponseItem/completed,serverRequest/resolved,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-020";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,process/exited,process/outputDelta,rawResponseItem/completed,serverRequest/resolved,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-021";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -172,6 +172,8 @@ class AppProtocol {
                 validateAccountUpdatedNotification(params);
             case "account/rateLimits/updated":
                 validateAccountRateLimitsUpdatedNotification(params);
+            case "app/list/updated":
+                validateAppListUpdatedNotification(params);
             case "rawResponseItem/completed":
                 validateRawResponseItemCompletedNotification(params);
             case "serverRequest/resolved":
@@ -602,6 +604,100 @@ class AppProtocol {
         return success("notification:account/rateLimits/updated");
     }
 
+    static function validateAppListUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final data = requiredArray(params.keys, params.values, "data", "$.message.params.data");
+        if (!data.ok) return data.toOutcome();
+
+        var i = 0;
+        while (i < data.values.length) {
+            final appPath = "$.message.params.data[" + Std.string(i) + "]";
+            final app = requireObject(data.values[i], appPath);
+            if (!app.ok) return app.toOutcome();
+            final appResult = validateAppInfo(app, appPath);
+            if (!appResult.ok) return appResult;
+            i = i + 1;
+        }
+
+        return success("notification:app/list/updated");
+    }
+
+    static function validateAppInfo(app:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final id = requiredString(app.keys, app.values, "id", path + ".id");
+        if (!id.ok) return id.toOutcome();
+        final name = requiredString(app.keys, app.values, "name", path + ".name");
+        if (!name.ok) return name.toOutcome();
+
+        for (field in ["description", "distributionChannel", "installUrl", "logoUrl", "logoUrlDark"]) {
+            final result = validateOptionalNullableString(app, field, path + "." + field);
+            if (!result.ok) return result;
+        }
+
+        final accessible = validateOptionalBool(app, "isAccessible", path + ".isAccessible");
+        if (!accessible.ok) return accessible;
+        final enabled = validateOptionalBool(app, "isEnabled", path + ".isEnabled");
+        if (!enabled.ok) return enabled;
+        final plugins = validateOptionalStringArray(app, "pluginDisplayNames", path + ".pluginDisplayNames", false);
+        if (!plugins.ok) return plugins;
+        final labels = validateOptionalStringMap(app, "labels", path + ".labels");
+        if (!labels.ok) return labels;
+        final branding = validateOptionalAppBranding(app, "branding", path + ".branding");
+        if (!branding.ok) return branding;
+        final metadata = validateOptionalAppMetadata(app, "appMetadata", path + ".appMetadata");
+        if (!metadata.ok) return metadata;
+
+        return success("app-list:app-info");
+    }
+
+    static function validateOptionalAppBranding(app:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(app.keys, name);
+        if (i < 0) return success("app-list:missing-branding");
+        return switch app.values[i] {
+            case JNull:
+                success("app-list:null-branding");
+            case JObject(keys, values):
+                final branding = ProtocolObjectField.success(keys, values);
+                final isDiscoverable = requiredBool(keys, values, "isDiscoverableApp", path + ".isDiscoverableApp");
+                if (!isDiscoverable.ok) return isDiscoverable.toOutcome();
+                for (field in ["category", "developer", "privacyPolicy", "termsOfService", "website"]) {
+                    final result = validateOptionalNullableString(branding, field, path + "." + field);
+                    if (!result.ok) return result;
+                }
+                success("app-list:branding");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalAppMetadata(app:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(app.keys, name);
+        if (i < 0) return success("app-list:missing-metadata");
+        return switch app.values[i] {
+            case JNull:
+                success("app-list:null-metadata");
+            case JObject(keys, values):
+                final metadata = ProtocolObjectField.success(keys, values);
+                for (field in ["developer", "firstPartyType", "seoDescription", "version", "versionId", "versionNotes"]) {
+                    final result = validateOptionalNullableString(metadata, field, path + "." + field);
+                    if (!result.ok) return result;
+                }
+                for (field in ["firstPartyRequiresInstall", "showInComposerWhenUnlinked"]) {
+                    final result = validateOptionalNullableBool(metadata, field, path + "." + field);
+                    if (!result.ok) return result;
+                }
+                for (field in ["categories", "subCategories"]) {
+                    final result = validateOptionalStringArray(metadata, field, path + "." + field, true);
+                    if (!result.ok) return result;
+                }
+                final review = validateOptionalNullableObject(metadata, "review", path + ".review");
+                if (!review.ok) return review;
+                final screenshots = validateOptionalArrayOrNull(metadata, "screenshots", path + ".screenshots");
+                if (!screenshots.ok) return screenshots;
+                success("app-list:metadata");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
     static function validateRateLimitSnapshot(snapshot:ProtocolObjectField, path:String):AppProtocolParseOutcome {
         final limitId = validateOptionalNullableString(snapshot, "limitId", path + ".limitId");
         if (!limitId.ok) return limitId;
@@ -913,6 +1009,94 @@ class AppProtocol {
                 success("nullable-number");
             case _:
                 fail("expected_nullable_number", path, "expected JSON number or null");
+        }
+    }
+
+    static function validateOptionalBool(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("bool:missing");
+        return switch object.values[i] {
+            case JBool(_):
+                success("bool");
+            case _:
+                fail("expected_bool", path, "expected JSON boolean");
+        }
+    }
+
+    static function validateOptionalNullableBool(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-bool:missing");
+        return switch object.values[i] {
+            case JBool(_) | JNull:
+                success("nullable-bool");
+            case _:
+                fail("expected_nullable_bool", path, "expected JSON boolean or null");
+        }
+    }
+
+    static function validateOptionalStringArray(object:ProtocolObjectField, name:String, path:String, nullable:Bool):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("string-array:missing");
+        return switch object.values[i] {
+            case JNull if (nullable):
+                success("string-array:null");
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    switch entries[entryIndex] {
+                        case JString(_):
+                        case _:
+                            return fail("expected_string", path + "[" + Std.string(entryIndex) + "]", "expected JSON string");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("string-array");
+            case _:
+                if (nullable) fail("expected_nullable_array", path, "expected JSON array or null") else fail("expected_array", path, "expected JSON array");
+        }
+    }
+
+    static function validateOptionalStringMap(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("string-map:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("string-map:null");
+            case JObject(keys, values):
+                var entryIndex = 0;
+                while (entryIndex < values.length) {
+                    switch values[entryIndex] {
+                        case JString(_):
+                        case _:
+                            return fail("expected_string", path + "." + keys[entryIndex], "expected JSON string");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("string-map");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalNullableObject(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-object:missing");
+        return switch object.values[i] {
+            case JObject(_, _) | JNull:
+                success("nullable-object");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalArrayOrNull(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-array:missing");
+        return switch object.values[i] {
+            case JArray(_) | JNull:
+                success("nullable-array");
+            case _:
+                fail("expected_nullable_array", path, "expected JSON array or null");
         }
     }
 

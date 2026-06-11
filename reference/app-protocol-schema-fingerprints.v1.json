@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:40cfe6bcc0b67675f180e5809d8b8fb1f531a5b55c243b1bbb66290cfe9c492b",
+  "fingerprint": "sha256:fabbb94db3dd79929a70773936f354582f4e5587ff32b68c04104535e6fe1365",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -47,6 +47,20 @@
         "required:itemId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "AppListUpdatedNotification",
+      "sourcePath": "v2/AppListUpdatedNotification.json",
+      "sha256": "1dcf8663e4cb9cae78f5e046171760fc91c39cddb20478983e4551c74611bbe5",
+      "fields": [
+        "definition:AppBranding",
+        "definition:AppInfo",
+        "definition:AppMetadata",
+        "definition:AppReview",
+        "definition:AppScreenshot",
+        "property:data",
+        "required:data"
       ]
     },
     {

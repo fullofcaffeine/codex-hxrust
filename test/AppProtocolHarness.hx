@@ -34,6 +34,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "mcpServer/startupStatus/updated");
         assertContains(fingerprintJson, "account/updated");
         assertContains(fingerprintJson, "account/rateLimits/updated");
+        assertContains(fingerprintJson, "app/list/updated");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "serverRequest/resolved");
         assertContains(fingerprintJson, "command/exec/outputDelta");
@@ -45,7 +46,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("34", Std.string(items.length));
+        assertEquals("35", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -68,7 +69,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("25", Std.string(notifications));
+        assertEquals("26", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -192,6 +193,21 @@ class AppProtocolHarness {
         assertFalse(invalidRateLimitWindowReset.ok, "rate limit resetsAt must be numeric or null when present");
         assertEquals("expected_nullable_number", invalidRateLimitWindowReset.errorCode);
         assertEquals("$.message.params.rateLimits.primary.resetsAt", invalidRateLimitWindowReset.errorPath);
+
+        final missingAppName = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"app-list-missing-name\",\"kind\":\"notification\",\"method\":\"app/list/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"app/list/updated\",\"params\":{\"data\":[{\"id\":\"app-1\"}]}}}")));
+        assertFalse(missingAppName.ok, "app list entries must include name");
+        assertEquals("missing_field", missingAppName.errorCode);
+        assertEquals("$.message.params.data[0].name", missingAppName.errorPath);
+
+        final invalidPluginDisplayName = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"app-list-invalid-plugin-name\",\"kind\":\"notification\",\"method\":\"app/list/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"app/list/updated\",\"params\":{\"data\":[{\"id\":\"app-1\",\"name\":\"App\",\"pluginDisplayNames\":[7]}]}}}")));
+        assertFalse(invalidPluginDisplayName.ok, "plugin display names must be strings");
+        assertEquals("expected_string", invalidPluginDisplayName.errorCode);
+        assertEquals("$.message.params.data[0].pluginDisplayNames[0]", invalidPluginDisplayName.errorPath);
+
+        final invalidBranding = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"app-list-invalid-branding\",\"kind\":\"notification\",\"method\":\"app/list/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"app/list/updated\",\"params\":{\"data\":[{\"id\":\"app-1\",\"name\":\"App\",\"branding\":{}}]}}}")));
+        assertFalse(invalidBranding.ok, "branding must include isDiscoverableApp when present");
+        assertEquals("missing_field", invalidBranding.errorCode);
+        assertEquals("$.message.params.data[0].branding.isDiscoverableApp", invalidBranding.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

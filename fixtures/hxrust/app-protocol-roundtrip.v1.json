@@ -614,6 +614,60 @@
       }
     },
     {
+      "id": "app-list-updated-notification",
+      "kind": "notification",
+      "method": "app/list/updated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "app/list/updated",
+        "params": {
+          "data": [
+            {
+              "id": "app-github",
+              "name": "GitHub",
+              "description": "Repository integration",
+              "distributionChannel": null,
+              "installUrl": "https://example.invalid/apps/github",
+              "isAccessible": true,
+              "isEnabled": true,
+              "labels": {
+                "category": "code"
+              },
+              "logoUrl": null,
+              "logoUrlDark": null,
+              "pluginDisplayNames": [
+                "GitHub"
+              ],
+              "branding": {
+                "isDiscoverableApp": true,
+                "category": "developer",
+                "developer": "OpenAI",
+                "privacyPolicy": null,
+                "termsOfService": null,
+                "website": "https://example.invalid"
+              },
+              "appMetadata": {
+                "categories": [
+                  "developer"
+                ],
+                "developer": "OpenAI",
+                "firstPartyRequiresInstall": null,
+                "firstPartyType": "integration",
+                "review": null,
+                "screenshots": null,
+                "seoDescription": "Work with repositories",
+                "showInComposerWhenUnlinked": false,
+                "subCategories": null,
+                "version": "1.0.0",
+                "versionId": "v1",
+                "versionNotes": null
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",
