@@ -8,6 +8,7 @@ Profile policy for the scaffold:
 | `portable.hxml` | Generate portable Rust and run `cargo check`. |
 | `metal.codegen.hxml` | Generate metal Rust only with `-D rust_no_build`. |
 | `metal.hxml` | Generate metal Rust and run `cargo check`. |
+| `diagnostics.hxml` | Compile the HXCX-4.6 diagnostics redaction and failure-report harness through portable haxe.rust. |
 | `protocol-ids.hxml` | Compile the G2.1 protocol ID harness through portable haxe.rust. |
 | `json-boundary.hxml` | Compile the G2.2 JSON boundary harness through portable haxe.rust. |
 | `config-profile.hxml` | Compile the G2.3 config/profile DTO harness through portable haxe.rust. |

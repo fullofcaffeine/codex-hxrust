@@ -31,6 +31,7 @@ codex-hxrust/
     baseline-topology.md
     cafex-delta-classification.md
     cafex-hxrust-seam-ledger.md
+    diagnostics-redaction.md
     repository-layout.md
   reference/
     README.md

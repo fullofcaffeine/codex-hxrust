@@ -11,6 +11,13 @@ class Doctor {
             + "\"name\":\"" + profileName() + "\","
             + "\"features\":" + profileFeaturesJson()
             + "},"
+            + "\"build\":{"
+            + "\"profile\":\"" + profileName() + "\","
+            + "\"features\":" + buildFeaturesJson()
+            + "},"
+            + "\"runtime\":{"
+            + "\"featureFlags\":" + runtimeFeatureFlagsJson()
+            + "},"
             + "\"toolchain\":{"
             + "\"haxe\":\"" + ToolchainInfo.haxeVersion + "\","
             + "\"rustc\":\"" + ToolchainInfo.rustcVersion + "\","
@@ -47,5 +54,19 @@ class Doctor {
         #else
         return "[]";
         #end
+    }
+
+    static function buildFeaturesJson():String {
+        return "[\"generated-rust-policy:do-not-edit\",\"portable-by-default\",\"rust-native-opt-in\"]";
+    }
+
+    static function runtimeFeatureFlagsJson():String {
+        return "["
+            + "\"headless-jsonl-adapter\","
+            + "\"apply-patch-dry-run\","
+            + "\"process-exec-approval\","
+            + "\"sandbox-permission-gate\","
+            + "\"diagnostics-redaction\""
+            + "]";
     }
 }

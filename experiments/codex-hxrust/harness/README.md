@@ -25,6 +25,7 @@ Keep harness inputs credential-free.
 Current harnesses:
 
 - `check-doctor-json.sh` regenerates portable and metal crates, runs each generated binary, and validates the doctor JSON shape with `fixtures/hxrust/doctor-shape.v1.jq`.
+- `check-diagnostics.sh` validates the HXCX-4.6 diagnostic log redaction and failure-report fixture IDs through Haxe, haxe.rust, and generated Cargo.
 - `check-protocol-ids.sh` runs the Haxe ID round-trip harness and compiles the same harness through haxe.rust.
 - `check-json-boundary.sh` validates typed JSON boundary helpers and the serde bridge facade.
 - `check-config-profile.sh` validates the upstream-first config/profile DTO subset, redacted diagnostics, and unsupported field reporting.
