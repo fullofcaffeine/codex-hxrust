@@ -1,0 +1,75 @@
+{
+  "schema": "codex-hxrust.tool-registry-skeleton.v1",
+  "bead": "HXCX-4.5",
+  "date": "2026-06-11",
+  "gate": "G4",
+  "owner": "Marcelo Serpa",
+  "decision": {
+    "realMcpTransportImplemented": false,
+    "parallelCafexActionRegistryAllowed": false,
+    "summary": "Add a minimal typed registry for fixture lookup and model-visible tool metadata. Real MCP transport, cache, OAuth, resources, elicitation, and execution remain future work."
+  },
+  "implementedDtos": [
+    "ToolKind",
+    "ToolRegistryEntry",
+    "ToolLookupOutcome",
+    "ToolCallOutcome",
+    "ToolRegistry"
+  ],
+  "implementedBehavior": [
+    "local function tool metadata",
+    "MCP tool metadata with raw server/tool identity preserved",
+    "dynamic tool metadata shaped after app-server DynamicToolSpec subset",
+    "sanitized model-visible name lookup",
+    "deterministic registry entry JSON",
+    "missing tool lookup error"
+  ],
+  "unsupportedMcpFeatures": [
+    {
+      "method": "mcpServerStatus/list",
+      "errorCode": "unsupported_mcp_server_status"
+    },
+    {
+      "method": "mcpServer/resource/read",
+      "errorCode": "unsupported_mcp_resource_read"
+    },
+    {
+      "method": "mcpServer/tool/call",
+      "errorCode": "unsupported_mcp_tool_call"
+    },
+    {
+      "method": "config/mcpServer/reload",
+      "errorCode": "unsupported_mcp_reload"
+    },
+    {
+      "method": "mcpServer/oauth/login",
+      "errorCode": "unsupported_mcp_oauth"
+    }
+  ],
+  "fixtures": {
+    "lookup": "experiments/codex-hxrust/fixtures/hxrust/tool-registry-lookup.v1.jsonl",
+    "unsupportedMcp": "experiments/codex-hxrust/fixtures/hxrust/tool-registry-unsupported-mcp.v1.jsonl"
+  },
+  "futureRealMcpScope": [
+    "stdio and streamable HTTP MCP client startup",
+    "initialize and tools/list protocol handling",
+    "per-server allow/deny filters",
+    "tool cache ownership and invalidation",
+    "resource and resource-template reads",
+    "OAuth credentials and host-owned app connectors",
+    "elicitation and review flows",
+    "live tool execution dispatch and app-server progress notifications"
+  ],
+  "replacementGate": {
+    "helperHeadless": "registry_lookup_allowed",
+    "selectedAdapterSlice": "lookup_allowed_transport_not_claimed",
+    "broadReplacement": "real_mcp_transport_and_app_server_parity_required"
+  },
+  "evidence": [
+    "experiments/codex-hxrust/src/codexhx/tools/registry/ToolRegistry.hx",
+    "experiments/codex-hxrust/src/codexhx/tools/registry/ToolRegistryEntry.hx",
+    "experiments/codex-hxrust/test/ToolRegistryHarness.hx",
+    "experiments/codex-hxrust/harness/check-tool-registry.sh",
+    "docs/mcp-tool-registry-skeleton.md"
+  ]
+}

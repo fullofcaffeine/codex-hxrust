@@ -10,6 +10,7 @@ SEAMS="${ROOT}/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json"
 CONTRACT="${ROOT}/fixtures/cafex/cafetera-contract-subset-report.v1.json"
 RUNBOOK="${REPO_ROOT}/reference/operator-runbook.v1.json"
 STATE_BACKEND="${REPO_ROOT}/reference/state-backend-spike.v1.json"
+TOOL_REGISTRY="${REPO_ROOT}/reference/tool-registry-skeleton.v1.json"
 
 jq -e '
   .schema == "codex-hxrust.replacement-go-no-go.v1"
@@ -61,6 +62,15 @@ jq -e --slurpfile s "$STATE_BACKEND" '
   and ($s[0].replacementGate.broadReplacement == "sqlite_or_equivalent_persistence_parity_required_before_review")
 ' "$DECISION" >/dev/null
 
+jq -e --slurpfile t "$TOOL_REGISTRY" '
+  .evidence.toolRegistrySkeleton == "reference/tool-registry-skeleton.v1.json"
+  and .toolRegistryDecision.source == "reference/tool-registry-skeleton.v1.json"
+  and .toolRegistryDecision.realMcpTransportImplemented == $t[0].decision.realMcpTransportImplemented
+  and .toolRegistryDecision.parallelCafexActionRegistryAllowed == $t[0].decision.parallelCafexActionRegistryAllowed
+  and (.toolRegistryDecision.broadReplacementRequirement | test("MCP"))
+  and ($t[0].replacementGate.broadReplacement == "real_mcp_transport_and_app_server_parity_required")
+' "$DECISION" >/dev/null
+
 jq -e --slurpfile f "$FRICTION" '
   $f[0].summary.productionReplacement == false
   and ($f[0].comparison.netResult | test("not yet a broad Cafex replacement"))
@@ -74,6 +84,7 @@ jq -e '
   and (.rollbackDowngradePath | length) >= 5
   and (.followUpBeads | index("codex-hxrust-rat.4") != null)
   and (.followUpBeads | index("codex-hxrust-hpu.4") == null)
+  and (.followUpBeads | index("codex-hxrust-hpu.5") == null)
 ' "$DECISION" >/dev/null
 
 echo "Replacement go/no-go decision passed."

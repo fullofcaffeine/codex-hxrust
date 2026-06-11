@@ -54,6 +54,7 @@
         "reference/migration-modes.v1.json",
         "reference/operator-runbook.v1.json",
         "reference/state-backend-spike.v1.json",
+        "reference/tool-registry-skeleton.v1.json",
         "reference/replacement-go-no-go.v1.json",
         "reference/haxe-rust-production-readiness.v1.json",
         "reference/haxe-rust-pressure-gaps.v1.json"
@@ -69,6 +70,16 @@
         "experiments/codex-hxrust/harness/check-state-backend-spike.sh"
       ],
       "reuse": "Keep JSONL/plain-file state for fixture evidence; require SQLite/sqlx or equivalent persistence before persistent state replacement."
+    },
+    {
+      "id": "tool_registry_skeleton",
+      "kind": "reference",
+      "paths": [
+        "docs/mcp-tool-registry-skeleton.md",
+        "reference/tool-registry-skeleton.v1.json",
+        "experiments/codex-hxrust/harness/check-tool-registry.sh"
+      ],
+      "reuse": "Keep registry lookup fixtures; require real MCP transport/resource/OAuth/execution gates before MCP parity claims."
     },
     {
       "id": "haxe_rust_pressure_fixes",
@@ -112,10 +123,6 @@
     {
       "id": "codex-hxrust-rat.2",
       "purpose": "Create upstreamable haxe.rust fixtures/issues for nullable interface values and stdlib path/string workarounds."
-    },
-    {
-      "id": "codex-hxrust-hpu.5",
-      "purpose": "Add MCP/tool registry compatibility skeleton for future tool parity."
     }
   ],
   "brewConversionNotes": [
@@ -136,6 +143,10 @@
       "note": "Keep JSONL/plain files for fixture evidence; add SQLite/sqlx or equivalent persistence proof before persistent goal/runtime/app-server replacement claims."
     },
     {
+      "target": "tool_registry",
+      "note": "Keep registry lookup fixtures; add real MCP transport, resource, OAuth, and execution gates before MCP parity claims."
+    },
+    {
       "target": "archive_bundle",
       "note": "Preserve docs, reference ledgers, fixtures, and harnesses; do not preserve generated Rust as source."
     }
@@ -143,6 +154,7 @@
   "finalChecks": [
     "experiments/codex-hxrust/harness/check-replacement-go-no-go.sh",
     "experiments/codex-hxrust/harness/check-state-backend-spike.sh",
+    "experiments/codex-hxrust/harness/check-tool-registry.sh",
     "experiments/codex-hxrust/harness/check-haxe-rust-production-readiness.sh",
     "experiments/codex-hxrust/harness/check-haxe-rust-pressure-gaps.sh"
   ]
