@@ -34,6 +34,7 @@ selected_schemas=(
   "TurnStartedNotification:v2/TurnStartedNotification.json"
   "TurnCompletedNotification:v2/TurnCompletedNotification.json"
   "ItemStartedNotification:v2/ItemStartedNotification.json"
+  "AgentMessageDeltaNotification:v2/AgentMessageDeltaNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

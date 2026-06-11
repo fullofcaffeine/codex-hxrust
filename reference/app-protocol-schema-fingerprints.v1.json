@@ -6,8 +6,23 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:24167826618931e2a4c02d15c61e179c0444c2b8569c3f9c8a068deb8b74850a",
+  "fingerprint": "sha256:ff1e4e1ec0c56481ce28950780d38da5d1a5550e27679615158464c3b3f6a881",
   "schemas": [
+    {
+      "id": "AgentMessageDeltaNotification",
+      "sourcePath": "v2/AgentMessageDeltaNotification.json",
+      "sha256": "0a4da13aefe3b5e912226e0a07fb969127ec0fb4c99d0bb3ca3ec0e8e20f1905",
+      "fields": [
+        "property:delta",
+        "property:itemId",
+        "property:threadId",
+        "property:turnId",
+        "required:delta",
+        "required:itemId",
+        "required:threadId",
+        "required:turnId"
+      ]
+    },
     {
       "id": "ErrorNotification",
       "sourcePath": "v2/ErrorNotification.json",

@@ -301,6 +301,21 @@
       }
     },
     {
+      "id": "agent-message-delta-notification",
+      "kind": "notification",
+      "method": "item/agentMessage/delta",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/agentMessage/delta",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "item-agent-1",
+          "delta": "hello"
+        }
+      }
+    },
+    {
       "id": "error-notification",
       "kind": "notification",
       "method": "error",

@@ -62,4 +62,6 @@ HXCX-3.5 extends the same boundary with upstream app-server JSON-RPC method enve
 
 Failed mock turns emit the selected upstream `error` server notification with `threadId`, `turnId`, `willRetry`, and `TurnError`, then record the terminal turn status as `failed` for `thread/read`.
 
+Successful mock turns emit selected assistant text deltas as upstream `item/agentMessage/delta` notifications between agent item start and completion. The completed turn and `thread/read` response still use the full deterministic agent message item.
+
 Unsupported commands fail closed with `unsupported_command`. The adapter remains credential-free and fixture-backed; it is not a live app-server transport, and it should stay a thin protocol adapter over the pure runtime state machine.

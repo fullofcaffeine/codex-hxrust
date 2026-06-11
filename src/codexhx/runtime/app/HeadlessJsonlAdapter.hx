@@ -187,6 +187,9 @@ class HeadlessJsonlAdapter {
         outputs.push(itemCompletedNotification(userItemJson()));
         if (hasAgentItem()) {
             outputs.push(itemStartedNotification(agentItemJson()));
+            for (delta in agentMessageDeltas()) {
+                outputs.push(agentMessageDeltaNotification(delta));
+            }
             outputs.push(itemCompletedNotification(agentItemJson()));
         }
         if (lastOutcome.terminalState == "failed") {
@@ -294,6 +297,17 @@ class HeadlessJsonlAdapter {
         return lastOutcome != null && lastOutcome.assistantText.length > 0;
     }
 
+    function agentMessageDeltas():Array<String> {
+        final deltas:Array<String> = [];
+        if (lastOutcome == null) return deltas;
+        for (event in lastOutcome.events) {
+            if (event.kind == "assistant_delta" && event.text.length > 0) {
+                deltas.push(event.text);
+            }
+        }
+        return deltas;
+    }
+
     function agentItemJson():String {
         final text = lastOutcome == null ? "" : lastOutcome.assistantText;
         return "{\"id\":\"agent-" + currentTurnId + "\",\"text\":" + quote(text) + ",\"type\":\"agentMessage\"}";
@@ -337,6 +351,11 @@ class HeadlessJsonlAdapter {
     function itemCompletedNotification(itemJson:String):String {
         return jsonRpcNotification("item/completed", "{\"completedAtMs\":" + Std.string(itemCompletedAtMs) + ",\"item\":" + itemJson
             + ",\"threadId\":\"" + threadId + "\",\"turnId\":" + quote(currentTurnId) + "}");
+    }
+
+    function agentMessageDeltaNotification(delta:String):String {
+        return jsonRpcNotification("item/agentMessage/delta", "{\"delta\":" + quote(delta) + ",\"itemId\":\"agent-" + currentTurnId
+            + "\",\"threadId\":\"" + threadId + "\",\"turnId\":" + quote(currentTurnId) + "}");
     }
 
     function errorNotification(willRetry:Bool):String {
