@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:c476791bde7c01b07598dbfdc0e8f51d9973c3c7b7659e43687584c7d6aadbe4",
+  "fingerprint": "sha256:bd4a3063e9db33916361047b8fa61f553a40996c665a3bf746d61dfa0d7cb68b",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -201,6 +201,18 @@
         "property:id",
         "required:error",
         "required:id"
+      ]
+    },
+    {
+      "id": "McpServerOauthLoginCompletedNotification",
+      "sourcePath": "v2/McpServerOauthLoginCompletedNotification.json",
+      "sha256": "8afd53f5d04e8edaf34e23059d0f0deefe4f71eb0409ab13a32485d1757ddbbe",
+      "fields": [
+        "property:error",
+        "property:name",
+        "property:success",
+        "required:name",
+        "required:success"
       ]
     },
     {

@@ -538,6 +538,20 @@
       }
     },
     {
+      "id": "mcp-server-oauth-login-completed-notification",
+      "kind": "notification",
+      "method": "mcpServer/oauthLogin/completed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "mcpServer/oauthLogin/completed",
+        "params": {
+          "name": "github",
+          "success": false,
+          "error": "authorization timed out"
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

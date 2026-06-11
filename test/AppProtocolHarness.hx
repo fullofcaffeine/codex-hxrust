@@ -30,6 +30,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/fileChange/outputDelta");
         assertContains(fingerprintJson, "item/fileChange/patchUpdated");
         assertContains(fingerprintJson, "item/mcpToolCall/progress");
+        assertContains(fingerprintJson, "mcpServer/oauthLogin/completed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "serverRequest/resolved");
         assertContains(fingerprintJson, "command/exec/outputDelta");
@@ -41,7 +42,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("30", Std.string(items.length));
+        assertEquals("31", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -64,7 +65,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("21", Std.string(notifications));
+        assertEquals("22", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -143,6 +144,11 @@ class AppProtocolHarness {
         assertFalse(invalidMcpProgressMessage.ok, "MCP progress message must be a string");
         assertEquals("expected_string", invalidMcpProgressMessage.errorCode);
         assertEquals("$.message.params.message", invalidMcpProgressMessage.errorPath);
+
+        final invalidMcpOauthError = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"mcp-oauth-invalid-error\",\"kind\":\"notification\",\"method\":\"mcpServer/oauthLogin/completed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"mcpServer/oauthLogin/completed\",\"params\":{\"name\":\"github\",\"success\":false,\"error\":7}}}")));
+        assertFalse(invalidMcpOauthError.ok, "MCP OAuth error must be a string or null when present");
+        assertEquals("expected_nullable_string", invalidMcpOauthError.errorCode);
+        assertEquals("$.message.params.error", invalidMcpOauthError.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {
