@@ -128,6 +128,31 @@ experiments/codex-hxrust/harness/check-mock-model-stream.sh
 
 The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The mock model stream harness also passed through Haxe interp, haxe.rust generation, and generated Cargo `check`/`test`/`run`.
 
+## Follow-Up Audit After Interface Null Comparison Fix On 2026-06-10
+
+**Pin before audit:** `551a00bf08cdaecf3b8b3c499b1d80c86506fa81`
+
+**Pin after audit:** `e10eae4d197a2ff7d1518536db9aaa4f76d4e9e4`
+
+Additional upstream commit accepted:
+
+- `e10eae4d` Fix interface null comparison lowering
+
+This resolves the codex-hxrust pressure gap where comparing a non-null interface/trait-object value against `null` could lower to generic pointer equality against an untyped `Default::default()`. haxe.rust now lowers interface/polymorphic null-literal comparisons by evaluating the non-null side and returning the correct constant result, with an `interface_null_compare` snapshot and stdout proof.
+
+Remaining related gap:
+
+- `haxe.rust-bm6` tracks the broader nullable interface value contract. Passing a literal `null` to an interface-typed parameter still needs a generic nullable trait-object representation/lowering decision, so codex-hxrust keeps `ModelClient` as a required non-null dependency for now.
+
+Gate runs:
+
+```bash
+experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh e10eae4d197a2ff7d1518536db9aaa4f76d4e9e4
+experiments/codex-hxrust/harness/check-mock-model-stream.sh
+```
+
+The updater executed `experiments/codex-hxrust/scripts/check-generated-cargo.sh`, regenerating portable and metal crates and running locked `cargo check`/`cargo test` for each. The mock model stream harness passed on the supported non-null model client boundary.
+
 ## Follow-Up Audit After Cargo Failure Propagation Fix On 2026-06-10
 
 **Pin before audit:** `0849fcf1a556cb86615cfcdf635165ba82fec8da`  

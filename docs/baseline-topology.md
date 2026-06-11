@@ -10,7 +10,7 @@
 | --- | --- | --- | --- |
 | Upstream Codex | `../codex` | `main` at `2704ecea9a`; dirty only from untracked repomix outputs | `https://github.com/openai/codex.git` |
 | Cafex/Cafetera Codex fork | `../fullofcaffeine/deps/codex` | `caf/mounted/rust-v0.124.0-autonomy` at `d7379d6c66`; clean | `git@github.com:fullofcaffeine/codex-caf.git`, with upstream `https://github.com/openai/codex.git` |
-| haxe.rust | `../haxe.rust` | `main` at `551a00bf08cdaecf3b8b3c499b1d80c86506fa81`; clean except untracked `repomix-output.haxe-rust.xml.zip` | `git@github.com:fullofcaffeine/reflaxe.rust.git` |
+| haxe.rust | `../haxe.rust` | `main` at `0f07a2403468a19892d21a39604c909b4722f9b2`; clean except untracked `repomix-output.haxe-rust.xml.zip` | `git@github.com:fullofcaffeine/reflaxe.rust.git` |
 
 ## Toolchain Facts
 

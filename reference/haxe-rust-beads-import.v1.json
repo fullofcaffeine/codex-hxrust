@@ -13,13 +13,13 @@
     "rule": "Keep haxe.rust authoritative and generic; codex-hxrust records pressure-test mapping and known-good pins."
   },
   "counts": {
-    "total": 541,
+    "total": 542,
     "open": 2,
     "inProgress": 0,
-    "closed": 538,
+    "closed": 539,
     "tombstone": 1,
     "epics": 95,
-    "tasks": 414,
+    "tasks": 415,
     "features": 23,
     "bugs": 6
   },
@@ -6481,6 +6481,23 @@
     {
       "sourceId": "haxe.rust-wg5",
       "title": "Fix interface null comparison lowering",
+      "status": "closed",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "codegen",
+        "codex-pressure",
+        "interface",
+        "null",
+        "regression",
+        "thinking:high"
+      ],
+      "parent": null,
+      "importRole": "codex_pressure_resolved"
+    },
+    {
+      "sourceId": "haxe.rust-bm6",
+      "title": "Support null literals for interface-typed values",
       "status": "open",
       "priority": 2,
       "issueType": "task",
