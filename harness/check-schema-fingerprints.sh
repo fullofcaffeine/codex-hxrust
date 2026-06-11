@@ -54,6 +54,7 @@ selected_schemas=(
   "AppListUpdatedNotification:v2/AppListUpdatedNotification.json"
   "RemoteControlStatusChangedNotification:v2/RemoteControlStatusChangedNotification.json"
   "ExternalAgentConfigImportCompletedNotification:v2/ExternalAgentConfigImportCompletedNotification.json"
+  "FsChangedNotification:v2/FsChangedNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

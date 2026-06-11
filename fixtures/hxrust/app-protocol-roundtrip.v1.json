@@ -693,6 +693,22 @@
       }
     },
     {
+      "id": "fs-changed-notification",
+      "kind": "notification",
+      "method": "fs/changed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "fs/changed",
+        "params": {
+          "watchId": "watch-1",
+          "changedPaths": [
+            "/tmp/codex-hxrust/src/Main.hx",
+            "/tmp/codex-hxrust/README.md"
+          ]
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

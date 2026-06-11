@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:6f3b15e22e15c3991868dfae4bbf24997b6ac3e9cf591a4e673ec6dca7204a62",
+  "fingerprint": "sha256:1ecc2ccdca72466144a9e5334883ded987dda8678a85d41a073aa6ed5fd7937d",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -148,6 +148,18 @@
         "required:itemId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "FsChangedNotification",
+      "sourcePath": "v2/FsChangedNotification.json",
+      "sha256": "b4eb615e516d029455d4fedf66aac0384ee9bc889afb06df56759d8b98a8e054",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:changedPaths",
+        "property:watchId",
+        "required:changedPaths",
+        "required:watchId"
       ]
     },
     {

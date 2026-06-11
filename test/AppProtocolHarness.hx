@@ -37,6 +37,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "app/list/updated");
         assertContains(fingerprintJson, "remoteControl/status/changed");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
+        assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "serverRequest/resolved");
         assertContains(fingerprintJson, "command/exec/outputDelta");
@@ -48,7 +49,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("37", Std.string(items.length));
+        assertEquals("38", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -71,7 +72,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("28", Std.string(notifications));
+        assertEquals("29", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -220,6 +221,11 @@ class AppProtocolHarness {
         assertFalse(invalidRemoteControlEnvironment.ok, "remote control environmentId must be a string or null when present");
         assertEquals("expected_nullable_string", invalidRemoteControlEnvironment.errorCode);
         assertEquals("$.message.params.environmentId", invalidRemoteControlEnvironment.errorPath);
+
+        final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
+        assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
+        assertEquals("expected_string", invalidFsChangedPath.errorCode);
+        assertEquals("$.message.params.changedPaths[0]", invalidFsChangedPath.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {
