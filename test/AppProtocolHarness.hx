@@ -20,12 +20,13 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "\"fingerprint\":\"" + AppProtocol.schemaFingerprint() + "\"");
         assertContains(fingerprintJson, "thread/start");
         assertContains(fingerprintJson, "turn/completed");
+        assertContains(fingerprintJson, "item/completed");
     }
 
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("14", Std.string(items.length));
+        assertEquals("16", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -48,7 +49,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("5", Std.string(notifications));
+        assertEquals("7", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 

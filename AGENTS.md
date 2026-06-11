@@ -56,6 +56,8 @@ Use haxe.rust's supported profile selectors precisely:
 
 Use the architecture framing: portable by default, Rust-native by opt-in, metal-like performance whenever haxe.rust can prove Haxe semantics are preserved. Do not describe portable as the slow/safe lane or metal as the only "real Rust" lane.
 
+For near-term codexhx runtime/tool boundaries, it is acceptable to choose `metal` when the slice needs Rust-native authority, stricter host-boundary semantics, or production-shaped performance now. When a slice would ideally be portable but needs metal for performance or backend maturity, track that as a generic haxe.rust convergence gap rather than encoding Codex-specific compiler behavior.
+
 When documenting plans, say "idiomatic portable output" or "idiomatic metal output" if needed; do not introduce `portable+idiomatic`, `idiomatic`, or `rusty` as build/profile lanes.
 
 ## Landing the Plane (Session Completion)

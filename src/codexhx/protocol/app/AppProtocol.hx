@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:error,thread/started,thread/status/changed,turn/completed,turn/started|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-10-001";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "item/started", "item/completed", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:error,item/completed,item/started,thread/started,thread/status/changed,turn/completed,turn/started|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-002";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -146,6 +146,10 @@ class AppProtocol {
                 final turn = requiredObjectField(params.keys, params.values, "turn", "$.message.params.turn");
                 if (!turn.ok) return turn.toOutcome();
                 validateTurn(turn, "$.message.params.turn");
+            case "item/started":
+                validateItemNotification(params, true);
+            case "item/completed":
+                validateItemNotification(params, false);
             case "error":
                 validateErrorNotification(params);
             case _:
@@ -281,6 +285,24 @@ class AppProtocol {
             case _:
                 fail("unsupported_transcript_item", path + ".type", "unsupported transcript item type");
         }
+    }
+
+    static function validateItemNotification(params:ProtocolObjectField, started:Bool):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredString(params.keys, params.values, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final item = requiredObjectField(params.keys, params.values, "item", "$.message.params.item");
+        if (!item.ok) return item.toOutcome();
+        final itemResult = validateTranscriptItem(item, "$.message.params.item");
+        if (!itemResult.ok) return itemResult;
+        final timestamp = if (started) {
+            requiredNumber(params.keys, params.values, "startedAtMs", "$.message.params.startedAtMs");
+        } else {
+            requiredNumber(params.keys, params.values, "completedAtMs", "$.message.params.completedAtMs");
+        }
+        if (!timestamp.ok) return timestamp.toOutcome();
+        return success(if (started) "notification:item/started" else "notification:item/completed");
     }
 
     static function validateUserInputArray(entries:Array<Value>, path:String):AppProtocolParseOutcome {

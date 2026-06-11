@@ -40,11 +40,17 @@ Use the local `../haxe.rust` repo as the compiler/runtime source during the expe
 Profile policy:
 
 - Use `portable` for DTOs, codecs, fixture transforms, schema fingerprints, config/profile data, and pure state transitions.
-- Use `metal` for runtime boundaries that need Rust-first async, process control, native paths, tool execution, and sandbox policy wrappers.
+- Use `metal` for near-term runtime boundaries that need Rust-first async, process control, native paths, tool execution, sandbox policy wrappers, or production-shaped performance before the portable lowering is mature enough.
 - Enable `rust_async` only in metal paths. Keep the supported entry shape: sync `main`, async helper returning `rust.async.Future<T>`, and `Async.blockOn(...)` at the boundary.
 - Prefer `reflaxe.std.Option/Result` for portable code where useful; use explicit `rust.*` APIs only in native-lane/metal code.
 - Keep app-level Haxe pure. Native Rust belongs in small wrapper modules bound with typed externs, `@:native`, `@:rustCargo`, and `@:rustExtraSrc`.
 - Follow `docs/interop-boundary-policy.md` for wrapper ownership, raw Rust restrictions, and fail-closed security-sensitive host effects.
+
+Performance direction:
+
+- Metal is the practical Rust-native lane for early production-bound runtime/tool work, not the only performance destination.
+- Portable output should converge toward metal-equivalent Rust performance wherever haxe.rust can prove Haxe semantics are preserved.
+- Any codexhx slice that uses metal mainly because portable output is currently too slow or too awkward should produce a generic haxe.rust fixture/benchmark and a linked HXCX-7/haxe.rust Beads item.
 
 Generated Rust policy:
 

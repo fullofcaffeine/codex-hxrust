@@ -25,13 +25,20 @@
 
 Architecture framing: portable by default, Rust-native by opt-in, metal-like performance whenever haxe.rust can prove Haxe semantics are preserved. In codex-hxrust, start with portable for pure Codex data surfaces; choose metal when the source contract itself needs Rust-native authority, stricter boundary enforcement, async/process integration, or reduced-runtime behavior.
 
+Performance stance:
+
+- Near-term production-shaped runtime, tool, process, sandbox, and native state boundaries may use `metal` first when Rust-native semantics are required now.
+- `portable` remains the preferred long-term authoring contract for Haxe-semantics code. haxe.rust should make portable output as performant and idiomatic as it can when the Rust lowering preserves Haxe behavior.
+- If codexhx pressure tests reveal a meaningful portable-vs-metal performance or code-shape gap, reduce it to a generic haxe.rust fixture/benchmark and track it under `HXCX-7.x` plus the haxe.rust Beads milestones.
+- Do not add Codex-specific compiler shortcuts to close a performance gap.
+
 ## Scaffold Caveat
 
 The temporary G1 `Main` is intentionally a no-op. Earlier trace/print smoke output pulled in the generated CallStack helper, which currently references a root `Exception` type when this project builds outside the haxe.rust example tree. `HXCX-1.5` owns clean doctor JSON output and should either use a known-good haxe.rust output path or document/file the upstream compiler fix.
 
 ## Commands
 
-From ``:
+From the repo root:
 
 ```bash
 haxe hxml/portable.codegen.hxml

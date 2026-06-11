@@ -11,6 +11,8 @@ import haxe.json.Value;
 class HeadlessJsonlAdapter {
     static inline final sessionId = "session-1";
     static inline final threadId = "thread-1";
+    static inline final itemStartedAtMs = 1000;
+    static inline final itemCompletedAtMs = 2000;
 
     final provider:MockModelProvider;
     var started:Bool;
@@ -181,6 +183,10 @@ class HeadlessJsonlAdapter {
 
         completeTurn(requestIdJson, prompt.value);
 
+        outputs.push(itemStartedNotification(userItemJson()));
+        outputs.push(itemCompletedNotification(userItemJson()));
+        outputs.push(itemStartedNotification(agentItemJson()));
+        outputs.push(itemCompletedNotification(agentItemJson()));
         outputs.push(jsonRpcNotification("turn/completed", "{\"threadId\":\"" + threadId + "\",\"turn\":" + turnJson(true) + "}"));
         outputs.push(threadStatusChangedNotification(threadStatusJson()));
         outputs.push(jsonRpcResponse(requestIdJson, "{\"turn\":" + turnJson(true) + "}"));
@@ -270,9 +276,16 @@ class HeadlessJsonlAdapter {
 
     function turnItemsJson():String {
         if (lastOutcome == null) return "[]";
-        final user = "{\"content\":[{\"text\":" + quote(lastPrompt) + ",\"type\":\"text\"}],\"id\":\"user-" + currentTurnId + "\",\"type\":\"userMessage\"}";
-        final agent = "{\"id\":\"agent-" + currentTurnId + "\",\"text\":" + quote(lastOutcome.assistantText) + ",\"type\":\"agentMessage\"}";
-        return "[" + user + "," + agent + "]";
+        return "[" + userItemJson() + "," + agentItemJson() + "]";
+    }
+
+    function userItemJson():String {
+        return "{\"content\":[{\"text\":" + quote(lastPrompt) + ",\"type\":\"text\"}],\"id\":\"user-" + currentTurnId + "\",\"type\":\"userMessage\"}";
+    }
+
+    function agentItemJson():String {
+        final text = lastOutcome == null ? "" : lastOutcome.assistantText;
+        return "{\"id\":\"agent-" + currentTurnId + "\",\"text\":" + quote(text) + ",\"type\":\"agentMessage\"}";
     }
 
     function appTurnStatus():String {
@@ -303,6 +316,16 @@ class HeadlessJsonlAdapter {
 
     function threadStatusChangedNotification(statusJson:String):String {
         return jsonRpcNotification("thread/status/changed", "{\"status\":" + statusJson + ",\"threadId\":\"" + threadId + "\"}");
+    }
+
+    function itemStartedNotification(itemJson:String):String {
+        return jsonRpcNotification("item/started", "{\"item\":" + itemJson + ",\"startedAtMs\":" + Std.string(itemStartedAtMs) + ",\"threadId\":\""
+            + threadId + "\",\"turnId\":" + quote(currentTurnId) + "}");
+    }
+
+    function itemCompletedNotification(itemJson:String):String {
+        return jsonRpcNotification("item/completed", "{\"completedAtMs\":" + Std.string(itemCompletedAtMs) + ",\"item\":" + itemJson
+            + ",\"threadId\":\"" + threadId + "\",\"turnId\":" + quote(currentTurnId) + "}");
     }
 
     function jsonRpcError(requestIdJson:String, code:Int, errorCode:String, message:String):String {

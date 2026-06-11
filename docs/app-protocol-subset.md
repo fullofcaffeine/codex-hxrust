@@ -21,6 +21,8 @@ Included server notifications:
 - `thread/status/changed`
 - `turn/started`
 - `turn/completed`
+- `item/started`
+- `item/completed`
 - `error`
 
 Included response payloads:

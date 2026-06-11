@@ -258,6 +258,49 @@
       }
     },
     {
+      "id": "item-started-notification",
+      "kind": "notification",
+      "method": "item/started",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/started",
+        "params": {
+          "item": {
+            "type": "userMessage",
+            "id": "item-user-1",
+            "content": [
+              {
+                "type": "text",
+                "text": "Port Codex through haxe.rust"
+              }
+            ]
+          },
+          "startedAtMs": 1000,
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1"
+        }
+      }
+    },
+    {
+      "id": "item-completed-notification",
+      "kind": "notification",
+      "method": "item/completed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/completed",
+        "params": {
+          "completedAtMs": 2000,
+          "item": {
+            "type": "agentMessage",
+            "id": "item-agent-1",
+            "text": "hello from haxe.rust"
+          },
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1"
+        }
+      }
+    },
+    {
       "id": "error-notification",
       "kind": "notification",
       "method": "error",
