@@ -28,9 +28,9 @@ harness/check-haxe-rust-pressure-gaps.sh
 | Metric | Count |
 | --- | ---: |
 | Total pressure gaps | 10 |
-| Resolved upstream | 9 |
+| Resolved upstream | 10 |
 | Open upstream | 0 |
-| Local workaround | 1 |
+| Local workaround | 0 |
 | High severity | 7 |
 | Medium severity | 3 |
 | Raw Rust escape matches in current app/test Haxe source | 0 |
@@ -45,7 +45,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | Build/profile/tooling | 2 | Dev haxelib std ownership and Cargo failure propagation blocked trustworthy profile gates. |
 | Protocol/JSON/DTO | 3 | Nullable scalar, generic enum payload, and enum reuse issues surfaced in protocol IDs and JSON helpers. |
 | Runtime/model/session | 3 | Try/catch tail returns and interface null behavior surfaced in mock stream and one-turn state-machine work. |
-| Cafex adapter | 2 | Path.directory still has a local workaround; String.lastIndexOf is now resolved upstream. |
+| Cafex adapter | 2 | Path.directory and String.lastIndexOf are now resolved upstream. |
 
 ## Gap List
 
@@ -59,7 +59,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | Try/catch tail return lowering | `resolved_upstream` | high | runtime/model/session | Resolved by haxe.rust `551a00bf`; local parseJson shape workaround removed. |
 | Interface null comparison | `resolved_upstream` | high | runtime/model/session | Resolved by haxe.rust `e10eae4d` with `interface_null_compare`. |
 | Nullable interface values | `resolved_upstream` | high | runtime/model/session | Resolved by haxe.rust `b3e38c31` with `nullable_interface_null`. |
-| `haxe.io.Path.directory` lowering | `local_workaround` | medium | Cafex adapter | Generic haxe.rust repro now exists; keep local string/path helpers until `haxe.rust-lj8` closes. |
+| `haxe.io.Path.directory` lowering | `resolved_upstream` | medium | Cafex adapter | Resolved by haxe.rust `39f20b9e` with `path_directory`. |
 | `String.lastIndexOf` lowering | `resolved_upstream` | medium | Cafex adapter | Resolved by haxe.rust `916f1534` with `string_last_index_of`. |
 
 ## Production Readiness Signal
@@ -70,6 +70,6 @@ The pressure test is encouraging but not clean enough for broad replacement:
 - The current codexhx source avoids raw Rust escape hatches.
 - Nullable interface values now have a generic upstream fix and passing snapshot.
 - String.lastIndexOf now has a generic upstream fix and passing snapshot.
-- One adapter stdlib-lowering workaround, `haxe.io.Path.directory`, still has a generic expected-failure repro and can be treated as haxe.rust backlog instead of codexhx-only craft.
+- haxe.io.Path.directory now has a generic upstream fix and passing snapshot.
 
-Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter pressure slices, but production readiness still depends on resolving or explicitly accepting the remaining stdlib-lowering gaps.
+Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter pressure slices, but production readiness still depends on live runtime, unsupported Cafex seam, licensing, and broader parity work.

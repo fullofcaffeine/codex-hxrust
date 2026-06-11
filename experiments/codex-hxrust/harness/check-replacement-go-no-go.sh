@@ -84,7 +84,7 @@ jq -e --slurpfile f "$FRICTION" '
 ' "$DECISION" >/dev/null
 
 jq -e '
-  (.unsupportedSurfaces | length) >= 9
+  (.unsupportedSurfaces | length) >= 8
   and (.securityLicensingNotes | length) >= 4
   and (.goCriteriaForSelectedSlice | length) >= 5
   and (.noGoCriteriaForBroadReplacement | length) >= 5

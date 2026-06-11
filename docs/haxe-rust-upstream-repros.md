@@ -25,7 +25,7 @@ harness/check-haxe-rust-upstream-repros.sh
 
 | Gap | haxe.rust bead | Fixture | Current result |
 | --- | --- | --- | --- |
-| `haxe.io.Path.directory` lowering | `haxe.rust-lj8` | `../haxe.rust/test/repro/upstream_open_gaps/path_directory` | expected Cargo failure |
+| None | n/a | n/a | n/a |
 
 Resolved upstream:
 
@@ -34,6 +34,8 @@ Resolved upstream:
   `b3e38c31`.
 - `String.lastIndexOf` lowering (`haxe.rust-7s4`) moved to the passing
   `../haxe.rust/test/snapshot/string_last_index_of` snapshot in `916f1534`.
+- `haxe.io.Path.directory` lowering (`haxe.rust-lj8`) moved to the passing
+  `../haxe.rust/test/snapshot/path_directory` snapshot in `39f20b9e`.
 
 The haxe.rust runner is:
 
@@ -42,13 +44,13 @@ cd ../haxe.rust
 bash scripts/ci/check-upstream-open-gap-repros.sh
 ```
 
-It currently expects one Rust build failure and checks its signature.
-When a compiler fix lands, the corresponding repro should move into a passing
-snapshot or semantic-diff case and the linked haxe.rust bead can close.
+It currently expects no Rust build failures. When a new compiler gap lands in
+this backlog, add the corresponding expected-failure repro and then move it into
+a passing snapshot or semantic-diff case when the linked haxe.rust bead closes.
 
 ## Scope Rules
 
 - Keep compiler fixes generic to haxe.rust; no codexhx-specific compiler code.
 - Keep Codex/Cafetera/Cafex context in codex-hxrust ledgers, not in haxe.rust fixture source.
-- Keep local codexhx workarounds until each haxe.rust bead closes or the gap is explicitly accepted.
-- Treat the current expected-failure runner as a backlog contract, not as production readiness proof.
+- Keep local codexhx workarounds only until each haxe.rust bead closes or the gap is explicitly accepted.
+- Treat the current zero-repro runner as a clean backlog contract, not as broad production readiness proof.

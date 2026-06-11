@@ -25,9 +25,9 @@ Conditional go for helper-only, sidecar/headless, and selected fixture-backed ad
 
 No-go for broad Codex/Cafex replacement today.
 
-haxe.rust has handled the current pressure test better than a toy compiler would: nine pressure gaps were resolved upstream, app/test Haxe source has zero raw Rust escape matches, and the helper/headless/Cafex fixture slices compile through generated Cargo gates. But broad replacement still has hard caveats:
+haxe.rust has handled the current pressure test better than a toy compiler would: all ten pressure gaps were resolved upstream, app/test Haxe source has zero raw Rust escape matches, and the helper/headless/Cafex fixture slices compile through generated Cargo gates. But broad replacement still has hard caveats:
 
-- the Cafex adapter `haxe.io.Path.directory` stdlib-lowering workaround has a generic haxe.rust expected-failure repro, but still needs a fix or explicit acceptance;
+- selected-slice compiler pressure is clean, but broader haxe.rust parity beyond these fixtures is not established;
 - Cafex has seven unsupported seam-ledger rows;
 - license/distribution review is unresolved for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts;
 - no production default has changed, and rollback drills remain decision-review work.
@@ -48,8 +48,8 @@ haxe.rust has handled the current pressure test better than a toy compiler would
 
 | Input | Current value |
 | --- | --- |
-| haxe.rust pressure gaps | 10 total, 9 resolved upstream, 0 open upstream, 1 local workaround |
-| Generic upstream repros for remaining gaps | 1 expected-failure fixture in `../haxe.rust` |
+| haxe.rust pressure gaps | 10 total, 10 resolved upstream, 0 open upstream, 0 local workarounds |
+| Generic upstream repros for remaining gaps | 0 expected-failure fixtures in `../haxe.rust` |
 | Raw Rust escape pressure | 0 matches across 92 Haxe source/test files |
 | Cafetera contract subset | 4 covered, 4 passed, 0 failed, 5 gaps |
 | Cafex seam ledger | 15 rows, 7 supported, 7 unsupported, 1 review-only |
@@ -60,7 +60,7 @@ haxe.rust has handled the current pressure test better than a toy compiler would
 
 ## Caveats
 
-- `haxe.io.Path.directory` has a generic haxe.rust fixture, but still needs a compiler/runtime fix or accepted unsupported diagnostic.
+- The current compiler proof is strongest for selected portable DTO/helper/headless/adapter code, not broad upstream parity.
 - The current proof is strongest for portable DTO/helper/headless code, not live native/metal runtime ownership.
 - Generated Rust quality is build-checked, but fmt/clippy and performance are not hard gates yet.
 - Distribution remains blocked until license obligations are reviewed.

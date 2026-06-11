@@ -60,7 +60,6 @@ harness/check-replacement-go-no-go.sh
 - Restart apply runtime bridge.
 - Plan-checkpoint continuation guard.
 - Live TUI and credentialed model runtime.
-- `haxe.io.Path.directory` lowering.
 - License/distribution for bundled or binary release.
 
 ## Security And Licensing Notes

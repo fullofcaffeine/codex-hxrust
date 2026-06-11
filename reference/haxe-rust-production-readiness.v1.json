@@ -8,7 +8,7 @@
     "broadReplacement": "no_go",
     "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
     "requiredBeforeBroadReplacement": [
-      "Fix or explicitly accept the generic haxe.rust repro for the Cafex haxe.io.Path.directory stdlib workaround.",
+      "Broaden haxe.rust parity evidence beyond selected helper/headless/adapter pressure fixtures.",
       "Complete license/distribution review for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts.",
       "Reduce or explicitly native-own the 7 unsupported Cafex seam rows.",
       "Run replacement rollback drills from the operator runbook.",
@@ -31,12 +31,12 @@
       "score": "yellow_green",
       "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, and reusable enum values now pass through haxe.rust after generic upstream fixes.",
       "strengths": [
-        "9 of 10 pressure gaps are resolved upstream.",
+        "10 of 10 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
         "No raw Rust escape matches exist in current app/test Haxe source."
       ],
       "caveats": [
-        "haxe.io.Path.directory still uses a local workaround even though a generic repro fixture exists."
+        "Current language proof is still fixture-backed and selected-slice scoped rather than broad upstream parity."
       ],
       "evidenceRefs": [
         "reference/haxe-rust-pressure-gaps.v1.json",
@@ -71,8 +71,7 @@
         "Pin update workflow is scripted and gated."
       ],
       "caveats": [
-        "Future metal/native boundaries still need real host-effect implementations.",
-        "haxe.io.Path.directory lowering still requires a local adapter workaround."
+        "Future metal/native boundaries still need real host-effect implementations."
       ],
       "evidenceRefs": [
         "docs/haxe-rust-direct-workflow.md",
@@ -125,12 +124,11 @@
       "score": "yellow_green",
       "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while Cafex live runtime seams are unsupported.",
       "strengths": [
-        "9 pressure gaps resolved upstream rather than carried as private compiler hacks.",
+        "10 pressure gaps resolved upstream rather than carried as private compiler hacks.",
         "Friction comparison supports selected adapter slices and review tooling.",
         "Operator rollback and migration-mode policies are checked."
       ],
       "caveats": [
-        "One local stdlib workaround has a generic haxe.rust repro, but the compiler/runtime fix remains open.",
         "Cafex has 7 unsupported seam rows.",
         "haxe.rust/Codex/Cafex drift must continue through pin and fixture gates."
       ],
@@ -165,12 +163,12 @@
   "measuredInputs": {
     "pressureGaps": {
       "total": 10,
-      "resolvedUpstream": 9,
+      "resolvedUpstream": 10,
       "openUpstream": 0,
-      "localWorkaround": 1,
+      "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
       "sourceFilesScanned": 92,
-      "upstreamRepros": 1
+      "upstreamRepros": 0
     },
     "cafeteraContractSubset": {
       "covered": 4,

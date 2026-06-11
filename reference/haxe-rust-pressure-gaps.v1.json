@@ -6,10 +6,10 @@
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
     "totalGaps": 10,
-    "resolvedUpstream": 9,
+    "resolvedUpstream": 10,
     "openUpstream": 0,
-    "localWorkaround": 1,
-    "upstreamRepros": 1,
+    "localWorkaround": 0,
+    "upstreamRepros": 0,
     "severity": {
       "high": 7,
       "medium": 3,
@@ -181,28 +181,22 @@
     },
     {
       "id": "path-directory-lowering",
-      "status": "local_workaround",
+      "status": "resolved_upstream",
       "severity": "medium",
       "sourceArea": "cafex_adapter",
-      "codexBead": "codex-hxrust-rat.1",
+      "codexBead": "codex-hxrust-x4j",
       "haxeRustRefs": [
         "haxe.rust-lj8"
       ],
-      "upstreamRepro": {
-        "ledger": "reference/haxe-rust-upstream-repros.v1.json",
-        "fixture": "../haxe.rust/test/repro/upstream_open_gaps/path_directory",
-        "runner": "../haxe.rust/scripts/ci/check-upstream-open-gap-repros.sh",
-        "currentResult": "expected_cargo_failure"
-      },
-      "resolvedBy": null,
+      "resolvedBy": "39f20b9e",
       "reproduction": "Caf receipt/bridge path handling needed directory extraction, but haxe.io.Path.directory lowering was not reliable enough for the adapter slice.",
-      "workaround": "Use small local string/path helpers in codexhx adapter code and avoid relying on haxe.io.Path.directory in the compiled Haxe-to-Rust path.",
+      "workaround": "Resolved upstream: haxe.io.Path.directory lowers through hxrt::path::directory with Haxe-compatible separator semantics; adapter code can use native Path.directory when the local helper is retired.",
       "validation": [
-        "experiments/codex-hxrust/harness/check-caf-receipts.sh",
-        "experiments/codex-hxrust/harness/check-caf-bridge.sh",
-        "experiments/codex-hxrust/harness/check-haxe-rust-upstream-repros.sh"
-      ],
-      "followUp": "Generic haxe.rust expected-failure repro exists; keep local helper workaround until haxe.rust-lj8 closes or gains an accepted unsupported diagnostic."
+        "path_directory snapshot in ../haxe.rust",
+        "std_string_dynamic snapshot in ../haxe.rust",
+        "hxrt path::directory unit test in ../haxe.rust",
+        "experiments/codex-hxrust/scripts/update-haxe-rust-pin.sh 39f20b9e"
+      ]
     },
     {
       "id": "string-last-index-of-lowering",

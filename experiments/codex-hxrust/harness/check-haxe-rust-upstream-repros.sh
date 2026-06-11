@@ -12,7 +12,7 @@ jq -e '
   and .bead == "HXCX-7.2"
   and .haxeRustRepo == "../haxe.rust"
   and .haxeRustRunner == "scripts/ci/check-upstream-open-gap-repros.sh"
-  and .runnerMode == "expected_cargo_failure_until_upstream_fix"
+  and .runnerMode == "no_open_expected_failure_repros"
   and .policy.compilerScope == "generic_haxe_to_rust"
   and .policy.codexSpecificCompilerCodeAllowed == false
   and .policy.fixturesCanRunOutsideCafetera == true
@@ -24,7 +24,6 @@ jq -e '
 
 jq -e --slurpfile p "$PRESSURE" '
   ([.repros[].pressureGapId] | sort) == [
-    "path-directory-lowering"
   ]
   and all(.repros[]; (.haxeRustFixturePath | startswith("test/repro/upstream_open_gaps/")))
   and all(.repros[]; (.entrypoint == "Main.hx" and .compileFile == "compile.hxml"))

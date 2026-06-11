@@ -57,10 +57,10 @@ jq -e '
   .rawRustPressure.rawEscapeMatches == 0
   and (.gaps[] | select(.id == "nullable-interface-values").status == "resolved_upstream")
   and (.gaps[] | select(.id == "nullable-interface-values").resolvedBy == "b3e38c31")
-  and (.gaps[] | select(.id == "path-directory-lowering").status == "local_workaround")
+  and (.gaps[] | select(.id == "path-directory-lowering").status == "resolved_upstream")
+  and (.gaps[] | select(.id == "path-directory-lowering").resolvedBy == "39f20b9e")
   and (.gaps[] | select(.id == "string-last-index-of-lowering").status == "resolved_upstream")
   and (.gaps[] | select(.id == "string-last-index-of-lowering").resolvedBy == "916f1534")
-  and (.gaps[] | select(.id == "path-directory-lowering").upstreamRepro.fixture | test("path_directory"))
 ' "$LEDGER" >/dev/null
 
 echo "haxe.rust pressure gap ledger passed."
