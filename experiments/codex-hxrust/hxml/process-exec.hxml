@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/process-exec
+-D rust_crate=codex_hxrust_process_exec
+-D rust_cargo_subcommand=check
+-main ProcessExecHarness

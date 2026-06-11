@@ -9,6 +9,7 @@ Current fixtures:
 - `goal-tool-output.v1.jsonl` validates the HXCX-5.3 `get_goal`, `create_goal`, and `update_goal` tool subset.
 - `apply-patch-dry-run-input.v1.patch` covers add, update, and delete hunks without mutating the filesystem.
 - `apply-patch-dry-run-output.v1.jsonl` covers successful dry-run output plus deterministic mutation-disabled, invalid-header, and unsafe-path failures.
+- `process-exec-output.v1.jsonl` validates denied-by-default process execution, exact approval, sandbox marker proof, stdout/stderr truncation, and non-zero exit mapping.
 
 haxe.rust capability and compiler smoke fixtures go here if the port needs local copies.
 
