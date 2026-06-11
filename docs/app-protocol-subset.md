@@ -29,6 +29,7 @@ Included server notifications:
 - `item/commandExecution/terminalInteraction`
 - `item/fileChange/outputDelta`
 - `item/fileChange/patchUpdated`
+- `item/mcpToolCall/progress`
 - `item/completed`
 - `rawResponseItem/completed`
 - `serverRequest/resolved`
@@ -44,7 +45,7 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, item command execution deltas and terminal interactions, file-change output and patch update notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -65,6 +66,8 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `item/fileChange/patchUpdated` reports apply_patch file update changes. The selected subset validates `threadId`, `turnId`, `itemId`, `changes`, each change `path`, `diff`, and patch `kind` with `add`, `delete`, or `update` plus optional nullable `move_path`.
 
 `serverRequest/resolved` reports that a thread-scoped server request has resolved. The selected subset validates `threadId` and `requestId`, accepting string or numeric request IDs.
+
+`item/mcpToolCall/progress` reports progress text for an MCP tool call item. The selected subset validates `threadId`, `turnId`, `itemId`, and text `message`.
 
 ## Error Policy
 

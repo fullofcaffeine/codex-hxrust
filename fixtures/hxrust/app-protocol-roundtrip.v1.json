@@ -523,6 +523,21 @@
       }
     },
     {
+      "id": "mcp-tool-call-progress-notification",
+      "kind": "notification",
+      "method": "item/mcpToolCall/progress",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "item/mcpToolCall/progress",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "item-mcp-1",
+          "message": "Calling MCP tool"
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

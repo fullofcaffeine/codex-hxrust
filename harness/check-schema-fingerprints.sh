@@ -46,6 +46,7 @@ selected_schemas=(
   "FileChangeOutputDeltaNotification:v2/FileChangeOutputDeltaNotification.json"
   "FileChangePatchUpdatedNotification:v2/FileChangePatchUpdatedNotification.json"
   "ServerRequestResolvedNotification:v2/ServerRequestResolvedNotification.json"
+  "McpToolCallProgressNotification:v2/McpToolCallProgressNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

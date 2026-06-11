@@ -29,6 +29,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/commandExecution/terminalInteraction");
         assertContains(fingerprintJson, "item/fileChange/outputDelta");
         assertContains(fingerprintJson, "item/fileChange/patchUpdated");
+        assertContains(fingerprintJson, "item/mcpToolCall/progress");
         assertContains(fingerprintJson, "rawResponseItem/completed");
         assertContains(fingerprintJson, "serverRequest/resolved");
         assertContains(fingerprintJson, "command/exec/outputDelta");
@@ -40,7 +41,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("29", Std.string(items.length));
+        assertEquals("30", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -63,7 +64,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("20", Std.string(notifications));
+        assertEquals("21", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -137,6 +138,11 @@ class AppProtocolHarness {
         assertFalse(invalidServerRequestId.ok, "server request id must be a string or number");
         assertEquals("expected_request_id", invalidServerRequestId.errorCode);
         assertEquals("$.message.params.requestId", invalidServerRequestId.errorPath);
+
+        final invalidMcpProgressMessage = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"mcp-progress-invalid-message\",\"kind\":\"notification\",\"method\":\"item/mcpToolCall/progress\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"item/mcpToolCall/progress\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"message\":7}}}")));
+        assertFalse(invalidMcpProgressMessage.ok, "MCP progress message must be a string");
+        assertEquals("expected_string", invalidMcpProgressMessage.errorCode);
+        assertEquals("$.message.params.message", invalidMcpProgressMessage.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

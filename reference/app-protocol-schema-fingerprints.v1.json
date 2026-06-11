@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:e60bc8025df6123da53045353f55988604c0cc00f1ae39ba4b8001e686c8f0aa",
+  "fingerprint": "sha256:c476791bde7c01b07598dbfdc0e8f51d9973c3c7b7659e43687584c7d6aadbe4",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -201,6 +201,21 @@
         "property:id",
         "required:error",
         "required:id"
+      ]
+    },
+    {
+      "id": "McpToolCallProgressNotification",
+      "sourcePath": "v2/McpToolCallProgressNotification.json",
+      "sha256": "f3e6937cc63261e482ea165f2002d330abdda9cf3d314c33b7b495ad437f7011",
+      "fields": [
+        "property:itemId",
+        "property:message",
+        "property:threadId",
+        "property:turnId",
+        "required:itemId",
+        "required:message",
+        "required:threadId",
+        "required:turnId"
       ]
     },
     {
