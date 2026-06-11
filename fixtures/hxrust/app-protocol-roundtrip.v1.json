@@ -441,6 +441,23 @@
       }
     },
     {
+      "id": "process-exited-notification",
+      "kind": "notification",
+      "method": "process/exited",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "process/exited",
+        "params": {
+          "processHandle": "proc-1",
+          "exitCode": 0,
+          "stdout": "out",
+          "stdoutCapReached": false,
+          "stderr": "err",
+          "stderrCapReached": true
+        }
+      }
+    },
+    {
       "id": "error-notification",
       "kind": "notification",
       "method": "error",

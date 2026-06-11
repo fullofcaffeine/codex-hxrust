@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "rawResponseItem/completed", "command/exec/outputDelta", "process/outputDelta", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:command/exec/outputDelta,error,item/agentMessage/delta,item/plan/delta,item/completed,item/started,process/outputDelta,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-009";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "rawResponseItem/completed", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:command/exec/outputDelta,error,item/agentMessage/delta,item/plan/delta,item/completed,item/started,process/exited,process/outputDelta,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-010";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -160,6 +160,8 @@ class AppProtocol {
                 validateCommandExecOutputDeltaNotification(params);
             case "process/outputDelta":
                 validateProcessOutputDeltaNotification(params);
+            case "process/exited":
+                validateProcessExitedNotification(params);
             case "item/completed":
                 validateItemNotification(params, false);
             case "error":
@@ -417,6 +419,22 @@ class AppProtocol {
         final capReached = requiredBool(params.keys, params.values, "capReached", "$.message.params.capReached");
         if (!capReached.ok) return capReached.toOutcome();
         return success("notification:process/outputDelta");
+    }
+
+    static function validateProcessExitedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final processHandle = requiredString(params.keys, params.values, "processHandle", "$.message.params.processHandle");
+        if (!processHandle.ok) return processHandle.toOutcome();
+        final exitCode = requiredNumber(params.keys, params.values, "exitCode", "$.message.params.exitCode");
+        if (!exitCode.ok) return exitCode.toOutcome();
+        final stdout = requiredString(params.keys, params.values, "stdout", "$.message.params.stdout");
+        if (!stdout.ok) return stdout.toOutcome();
+        final stdoutCapReached = requiredBool(params.keys, params.values, "stdoutCapReached", "$.message.params.stdoutCapReached");
+        if (!stdoutCapReached.ok) return stdoutCapReached.toOutcome();
+        final stderr = requiredString(params.keys, params.values, "stderr", "$.message.params.stderr");
+        if (!stderr.ok) return stderr.toOutcome();
+        final stderrCapReached = requiredBool(params.keys, params.values, "stderrCapReached", "$.message.params.stderrCapReached");
+        if (!stderrCapReached.ok) return stderrCapReached.toOutcome();
+        return success("notification:process/exited");
     }
 
     static function validateRawResponseItem(item:ProtocolObjectField, path:String):AppProtocolParseOutcome {

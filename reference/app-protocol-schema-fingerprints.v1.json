@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:42c01abe5856d931c9a6d97c1b44321a445d9805b55589f6787d3910e65fe1bb",
+  "fingerprint": "sha256:1a09a0eb9a29432e539353b674d8bcff153d1f7beb950e6f23832c754e32e076",
   "schemas": [
     {
       "id": "AgentMessageDeltaNotification",
@@ -169,6 +169,25 @@
         "required:itemId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "ProcessExitedNotification",
+      "sourcePath": "v2/ProcessExitedNotification.json",
+      "sha256": "9d7d3d41c0d46a9d530fa54488310bbd4e41ee9e90caa0d0b1bf1562c918e71f",
+      "fields": [
+        "property:exitCode",
+        "property:processHandle",
+        "property:stderr",
+        "property:stderrCapReached",
+        "property:stdout",
+        "property:stdoutCapReached",
+        "required:exitCode",
+        "required:processHandle",
+        "required:stderr",
+        "required:stderrCapReached",
+        "required:stdout",
+        "required:stdoutCapReached"
       ]
     },
     {
