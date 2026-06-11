@@ -30,6 +30,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "item/fileChange/outputDelta");
         assertContains(fingerprintJson, "item/fileChange/patchUpdated");
         assertContains(fingerprintJson, "rawResponseItem/completed");
+        assertContains(fingerprintJson, "serverRequest/resolved");
         assertContains(fingerprintJson, "command/exec/outputDelta");
         assertContains(fingerprintJson, "process/outputDelta");
         assertContains(fingerprintJson, "process/exited");
@@ -39,7 +40,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("28", Std.string(items.length));
+        assertEquals("29", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -62,7 +63,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("19", Std.string(notifications));
+        assertEquals("20", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -131,6 +132,11 @@ class AppProtocolHarness {
         assertFalse(invalidPatchMovePath.ok, "update move_path must be a string or null");
         assertEquals("expected_nullable_string", invalidPatchMovePath.errorCode);
         assertEquals("$.message.params.changes[0].kind.move_path", invalidPatchMovePath.errorPath);
+
+        final invalidServerRequestId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"server-request-invalid-id\",\"kind\":\"notification\",\"method\":\"serverRequest/resolved\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"serverRequest/resolved\",\"params\":{\"threadId\":\"thread-1\",\"requestId\":false}}}")));
+        assertFalse(invalidServerRequestId.ok, "server request id must be a string or number");
+        assertEquals("expected_request_id", invalidServerRequestId.errorCode);
+        assertEquals("$.message.params.requestId", invalidServerRequestId.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

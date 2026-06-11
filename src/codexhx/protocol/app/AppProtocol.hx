@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "rawResponseItem/completed", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/plan/delta,item/completed,item/started,process/exited,process/outputDelta,rawResponseItem/completed,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-014";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "turn/started", "turn/completed", "turn/plan/updated", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:command/exec/outputDelta,error,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/plan/delta,item/completed,item/started,process/exited,process/outputDelta,rawResponseItem/completed,serverRequest/resolved,thread/started,thread/status/changed,turn/completed,turn/plan/updated,turn/started|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-015";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -164,6 +164,8 @@ class AppProtocol {
                 validateFileChangePatchUpdatedNotification(params);
             case "rawResponseItem/completed":
                 validateRawResponseItemCompletedNotification(params);
+            case "serverRequest/resolved":
+                validateServerRequestResolvedNotification(params);
             case "command/exec/outputDelta":
                 validateCommandExecOutputDeltaNotification(params);
             case "process/outputDelta":
@@ -494,6 +496,14 @@ class AppProtocol {
         return success("notification:rawResponseItem/completed");
     }
 
+    static function validateServerRequestResolvedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final requestId = requiredRequestId(params.keys, params.values, "requestId", "$.message.params.requestId");
+        if (!requestId.ok) return requestId.toOutcome();
+        return success("notification:serverRequest/resolved");
+    }
+
     static function validateCommandExecOutputDeltaNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
         final processId = requiredString(params.keys, params.values, "processId", "$.message.params.processId");
         if (!processId.ok) return processId.toOutcome();
@@ -666,6 +676,15 @@ class AppProtocol {
         if (i < 0) return ProtocolValueField.failure("missing_field", path, "required id is missing");
         return switch values[i] {
             case JString(_) | JNumber(_): ProtocolValueField.success(values[i]);
+            case _: ProtocolValueField.failure("expected_request_id", path, "expected string or numeric request id");
+        }
+    }
+
+    static function requiredRequestId(keys:Array<String>, values:Array<Value>, name:String, path:String):ProtocolValueField {
+        final value = requiredValue(keys, values, name, path);
+        if (!value.ok) return value;
+        return switch value.value {
+            case JString(_) | JNumber(_): ProtocolValueField.success(value.value);
             case _: ProtocolValueField.failure("expected_request_id", path, "expected string or numeric request id");
         }
     }

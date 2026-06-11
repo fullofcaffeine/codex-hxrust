@@ -510,6 +510,19 @@
       }
     },
     {
+      "id": "server-request-resolved-notification",
+      "kind": "notification",
+      "method": "serverRequest/resolved",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "serverRequest/resolved",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "requestId": "request-1"
+        }
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

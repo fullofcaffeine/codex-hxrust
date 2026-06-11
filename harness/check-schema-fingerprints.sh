@@ -45,6 +45,7 @@ selected_schemas=(
   "TerminalInteractionNotification:v2/TerminalInteractionNotification.json"
   "FileChangeOutputDeltaNotification:v2/FileChangeOutputDeltaNotification.json"
   "FileChangePatchUpdatedNotification:v2/FileChangePatchUpdatedNotification.json"
+  "ServerRequestResolvedNotification:v2/ServerRequestResolvedNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"
