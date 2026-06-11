@@ -172,3 +172,5 @@ Contracts:
 4. Consider broader replacement only after upstream tests, Cafex seams, security/licensing, haxe.rust production readiness, and rollback drills all have evidence.
 
 No mode bypasses contracts. If a contract cannot be implemented yet, the mode must either fail closed, route to an explicit native owner, or record the unsupported surface before HXCX-6.3.
+
+Operator commands, distribution shape, diagnostics, and rollback details live in `docs/operator-runbook.md` and the checked fixture `reference/operator-runbook.v1.json`.

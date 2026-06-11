@@ -1,0 +1,131 @@
+{
+  "schema": "codex-hxrust.operator-runbook.v1",
+  "bead": "HXCX-6.4",
+  "generatedAt": "2026-06-11T00:00:00Z",
+  "decisionRecordRequiredBeforeDefaultChange": true,
+  "productionDefaultChanged": false,
+  "currentProductionDefault": "disabled",
+  "currentSupportedRunMode": "local_experiment_only",
+  "distribution": {
+    "artifactShape": [
+      {
+        "id": "source_and_fixtures",
+        "path": "experiments/codex-hxrust",
+        "contents": [
+          "Haxe source",
+          "hxml profiles",
+          "fixture directories",
+          "harness scripts",
+          "generated output directory placeholder"
+        ],
+        "distributionStatus": "repo_source_only"
+      },
+      {
+        "id": "pins_and_decision_inputs",
+        "path": "reference",
+        "contents": [
+          "upstream Codex pin",
+          "Cafex pin",
+          "haxe.rust pin",
+          "migration modes",
+          "operator runbook",
+          "replacement decision inputs"
+        ],
+        "distributionStatus": "repo_source_only"
+      },
+      {
+        "id": "generated_rust",
+        "path": "experiments/codex-hxrust/generated",
+        "contents": [
+          "portable generated crate",
+          "metal generated crate"
+        ],
+        "distributionStatus": "build_output_not_committed"
+      },
+      {
+        "id": "haxe_rust_compiler",
+        "path": "../haxe.rust",
+        "contents": [
+          "external pinned compiler/runtime checkout"
+        ],
+        "distributionStatus": "external_checkout_not_bundled"
+      }
+    ],
+    "packageCommands": [
+      "cd experiments/codex-hxrust && npx haxe hxml/portable.codegen.hxml",
+      "cd experiments/codex-hxrust && npx haxe hxml/metal.codegen.hxml",
+      "cd experiments/codex-hxrust && scripts/check-generated-cargo.sh"
+    ]
+  },
+  "run": {
+    "localSmokeCommands": [
+      "cd experiments/codex-hxrust && harness/check-doctor-json.sh",
+      "cd experiments/codex-hxrust && harness/check-headless-jsonl-adapter.sh",
+      "cd experiments/codex-hxrust && harness/check-cafetera-contract-subset.sh",
+      "cd experiments/codex-hxrust && harness/check-migration-modes.sh"
+    ],
+    "cafeteraIntegrationStatus": "not_enabled_by_default",
+    "defaultEnablementRule": "Do not route Cafetera workflows to codexhx unless HXCX-6.3 or a later decision record selects a rollout mode."
+  },
+  "disable": {
+    "currentPath": [
+      "Stop invoking codexhx harnesses or generated binaries from the caller workflow.",
+      "Remove any local experimental binary path from Cafetera wrapper configuration.",
+      "Route requests back to upstream Codex or the Cafex fork."
+    ],
+    "reservedFutureControls": [
+      {
+        "name": "CAF_CODEX_HXRUST_MODE",
+        "disabledValue": "disabled",
+        "note": "Reserved for a future Cafetera wrapper. It is not a production contract until a decision record accepts it."
+      }
+    ]
+  },
+  "rollback": {
+    "currentExperimentCommands": [
+      "git revert <codexhx-integration-commit>",
+      "git pull --rebase",
+      "bd sync",
+      "git push"
+    ],
+    "generatedOutputCleanup": [
+      "rm -rf experiments/codex-hxrust/generated/portable",
+      "rm -rf experiments/codex-hxrust/generated/metal"
+    ],
+    "pinRollback": [
+      "git revert <pin-update-commit>",
+      "experiments/codex-hxrust/scripts/audit-haxe-rust.sh",
+      "cd experiments/codex-hxrust && scripts/check-generated-cargo.sh"
+    ],
+    "statePolicy": "Do not migrate or delete production state in this experiment. Preserve sidecar/generated state for diagnostics before cleanup."
+  },
+  "diagnostics": {
+    "operatorChecks": [
+      {
+        "id": "doctor",
+        "command": "cd experiments/codex-hxrust && harness/check-doctor-json.sh",
+        "purpose": "Verify haxe.rust pin, profile, generated binary output shape, and local toolchain metadata."
+      },
+      {
+        "id": "diagnostics_redaction",
+        "command": "cd experiments/codex-hxrust && harness/check-diagnostics.sh",
+        "purpose": "Verify secret redaction and failure-report fixture ids."
+      },
+      {
+        "id": "friction_comparison",
+        "command": "cd experiments/codex-hxrust && harness/check-friction-comparison.sh",
+        "purpose": "Verify replacement-review evidence still matches local Cafex patch and seam ledgers."
+      },
+      {
+        "id": "migration_modes",
+        "command": "cd experiments/codex-hxrust && harness/check-migration-modes.sh",
+        "purpose": "Verify rollout mode criteria still forbid contract bypasses."
+      }
+    ],
+    "failureHandoff": [
+      "Record failing command, git commit, haxe.rust pin, upstream Codex pin, Cafex pin, and mode.",
+      "Attach redacted JSONL fixture output when available.",
+      "If failure affects live workflow ownership, route back to upstream Codex/Cafex before debugging codexhx."
+    ]
+  }
+}

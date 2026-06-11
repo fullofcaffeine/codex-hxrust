@@ -44,3 +44,4 @@ Current harnesses:
 - `check-cafex-seam-ledger.sh` validates the HXCX-5.6 Cafex hxrust seam ledger for patch classes, supported evidence, unsupported reasons, source seam coverage, and replacement-review usability.
 - `check-friction-comparison.sh` validates the HXCX-6.1 Cafex patch-stack versus hxrust burden comparison against the Cafetera seam ledger, Cafex runtime patch metrics, local hxrust seam ledger, fixture counts, and gate counts.
 - `check-migration-modes.sh` validates the HXCX-6.2 migration-mode policy for helper-only, sidecar/headless, selected adapter-slice, and broader replacement rollout criteria.
+- `check-operator-runbook.sh` validates the HXCX-6.4 operator runbook for rollback commands, distribution artifact shape, diagnostics, and the no-production-default-change guard.
