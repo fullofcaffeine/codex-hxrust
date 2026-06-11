@@ -30,6 +30,14 @@ When the Codex port exposes a haxe.rust limitation:
 
 Treat haxe.rust fixes as first-class compiler contributions, not one-off local hacks hidden inside `codex-hxrust`.
 
+## Work Selection Priority
+
+Keep Beads ordered so mainstream/raw Codex parity work is ready before Cafex adapter expansion. Use priorities and dependencies to make `bd ready` reflect the intended sequence: upstream/raw Codex protocol, runtime, app-server, tool, and state parity slices should outrank later Cafex/Cafetera adapter tasks.
+
+If a Cafex/Cafetera item floats to the top of the ready queue before its upstream-shaped core is strong enough, fix the queue first: reprioritize or dependency-gate the Cafex item and file/select the missing raw Codex slice. Do this as Beads hygiene, not as an ad hoc skip rule.
+
+Cafex work is a compatibility layer that comes after the upstream-shaped Haxe core is strong enough for the slice being claimed. Keep Cafex adapter changes under `codexhx.adapters.cafex` and related fixtures/docs, and do not let Cafex behavior leak into upstream-shaped core modules or into `../haxe.rust`.
+
 ## haxe.rust Profile Language
 
 Use haxe.rust's supported profile selectors precisely:

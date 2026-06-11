@@ -9,6 +9,8 @@ The strategy is upstream-first:
 3. Add Cafex/Cafetera compatibility later as an adapter/conformance layer.
 4. Treat haxe.rust limitations found during the port as upstreamable compiler/runtime work.
 
+When choosing new work, keep Beads prioritized so mainstream/raw Codex parity is ready first. Cafex tasks should sit later in the queue unless the user explicitly asks for Cafex compatibility or the required upstream-shaped core slice already exists.
+
 This is not a forked copy of Codex or haxe.rust. External repositories stay external and are tracked through pin files under `reference/`.
 
 ## Local Haxe Tooling
@@ -36,7 +38,7 @@ Current completed gates:
 
 Next likely work:
 
-- `HXCX-2.4`: protocol event/request/response subset
+- `HXCX-3.5`: upstream app-server method parity for the headless JSONL adapter
 - `HXCX-7.x`: upstream haxe.rust fixes discovered by the pressure test
 
 Use Beads for the live queue:
@@ -48,6 +50,8 @@ bd update <issue-id> --status in_progress
 bd close <issue-id>
 bd sync
 ```
+
+Maintain the ready queue so raw Codex parity tasks outrank Cafex adapter tasks. If a later Cafex item appears ahead of the intended core work, reprioritize or dependency-gate the Beads items before continuing.
 
 ## External Checkouts
 
@@ -148,6 +152,7 @@ Protocol work currently includes:
 ## Policy Highlights
 
 - Upstream Codex is the core baseline; Cafex comes later as an adapter.
+- Beads priorities and dependencies should encode that raw Codex parity comes before Cafex adapter expansion.
 - App-level Haxe code stays pure Haxe.
 - Native Rust is allowed only behind typed Haxe facades and owned wrapper modules.
 - Raw Rust app-code injection is banned by policy.
