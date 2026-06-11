@@ -26,6 +26,7 @@
     "stateBackendSpike": "reference/state-backend-spike.v1.json",
     "toolRegistrySkeleton": "reference/tool-registry-skeleton.v1.json",
     "productionReadiness": "reference/haxe-rust-production-readiness.v1.json",
+    "upstreamRepros": "reference/haxe-rust-upstream-repros.v1.json",
     "cafexSeamLedger": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
     "cafeteraContractSubset": "experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json"
   },
@@ -35,6 +36,7 @@
       "resolvedUpstream": 7,
       "openUpstream": 1,
       "localWorkaround": 2,
+      "upstreamRepros": 3,
       "rawRustEscapeMatches": 0
     },
     "cafexSeamLedger": {
@@ -105,9 +107,12 @@
     "License/distribution review is unresolved.",
     "No broad upstream test parity or rollback drill evidence exists."
   ],
-  "followUpBeads": [
+  "followUpBeads": [],
+  "resolvedFollowUpBeads": [
     "codex-hxrust-rat.2",
-    "codex-hxrust-rat.4"
+    "codex-hxrust-rat.4",
+    "codex-hxrust-hpu.4",
+    "codex-hxrust-hpu.5"
   ],
   "rollbackDowngradePath": [
     "Keep production routing disabled.",

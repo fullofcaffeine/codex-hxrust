@@ -11,6 +11,7 @@ RUNBOOK="${REPO_ROOT}/reference/operator-runbook.v1.json"
 HXRUST_PIN="${REPO_ROOT}/reference/haxe-rust.pin.json"
 UPSTREAM_PIN="${REPO_ROOT}/reference/upstream-codex.pin.json"
 CAFEX_PIN="${REPO_ROOT}/reference/cafex-codex.pin.json"
+UPSTREAM_REPROS="${REPO_ROOT}/reference/haxe-rust-upstream-repros.v1.json"
 
 jq -e '
   .schema == "codex-hxrust.haxe-rust-production-readiness.v1"
@@ -40,6 +41,13 @@ jq -e --slurpfile p "$PRESSURE" '
   and .measuredInputs.pressureGaps.localWorkaround == $p[0].summary.localWorkaround
   and .measuredInputs.pressureGaps.rawRustEscapeMatches == $p[0].rawRustPressure.rawEscapeMatches
   and .measuredInputs.pressureGaps.sourceFilesScanned == $p[0].rawRustPressure.sourceFilesScanned
+  and .measuredInputs.pressureGaps.upstreamRepros == $p[0].summary.upstreamRepros
+' "$REPORT" >/dev/null
+
+jq -e --slurpfile u "$UPSTREAM_REPROS" '
+  .evidence.upstreamRepros == "reference/haxe-rust-upstream-repros.v1.json"
+  and .measuredInputs.pressureGaps.upstreamRepros == $u[0].summary.totalRepros
+  and $u[0].summary.codexSpecificContextRemoved == true
 ' "$REPORT" >/dev/null
 
 jq -e --slurpfile c "$CONTRACT" '

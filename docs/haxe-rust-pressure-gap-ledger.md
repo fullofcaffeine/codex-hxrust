@@ -12,6 +12,10 @@ Machine-readable fixture:
 
 `reference/haxe-rust-pressure-gaps.v1.json`
 
+Follow-up upstream repro map:
+
+`reference/haxe-rust-upstream-repros.v1.json`
+
 Validation gate:
 
 ```bash
@@ -55,8 +59,8 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | Try/catch tail return lowering | `resolved_upstream` | high | runtime/model/session | Resolved by haxe.rust `551a00bf`; local parseJson shape workaround removed. |
 | Interface null comparison | `resolved_upstream` | high | runtime/model/session | Resolved by haxe.rust `e10eae4d` with `interface_null_compare`. |
 | Nullable interface values | `open_upstream` | high | runtime/model/session | Work around by requiring non-null `ModelClient`; haxe.rust-bm6 remains open. |
-| `haxe.io.Path.directory` lowering | `local_workaround` | medium | Cafex adapter | Use local string/path helpers; create generic haxe.rust repro in HXCX-7.2 if still needed. |
-| `String.lastIndexOf` lowering | `local_workaround` | medium | Cafex adapter | Use simple forward scans/helper logic; create generic haxe.rust repro in HXCX-7.2 if still needed. |
+| `haxe.io.Path.directory` lowering | `local_workaround` | medium | Cafex adapter | Generic haxe.rust repro now exists; keep local string/path helpers until `haxe.rust-lj8` closes. |
+| `String.lastIndexOf` lowering | `local_workaround` | medium | Cafex adapter | Generic haxe.rust repro now exists; keep forward-scan/helper logic until `haxe.rust-7s4` closes. |
 
 ## Production Readiness Signal
 
@@ -64,7 +68,7 @@ The pressure test is encouraging but not clean enough for broad replacement:
 
 - haxe.rust fixes have been generic and upstreamable so far.
 - The current codexhx source avoids raw Rust escape hatches.
-- One nullable-interface issue remains open upstream.
-- Two adapter stdlib-lowering workarounds still need generic haxe.rust reproductions before they can be treated as compiler backlog instead of codexhx local craft.
+- One nullable-interface issue remains open upstream with a generic expected-failure repro.
+- Two adapter stdlib-lowering workarounds now have generic expected-failure repros and can be treated as haxe.rust backlog instead of codexhx-only craft.
 
-Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter pressure slices, but production readiness still depends on resolving or accepting the open nullable-interface and stdlib-lowering gaps.
+Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter pressure slices, but production readiness still depends on resolving or explicitly accepting the open nullable-interface and stdlib-lowering gaps.

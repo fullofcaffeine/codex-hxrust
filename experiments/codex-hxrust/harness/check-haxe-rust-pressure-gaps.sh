@@ -13,6 +13,8 @@ jq -e '
   and .summary.resolvedUpstream == ([.gaps[] | select(.status == "resolved_upstream")] | length)
   and .summary.openUpstream == ([.gaps[] | select(.status == "open_upstream")] | length)
   and .summary.localWorkaround == ([.gaps[] | select(.status == "local_workaround")] | length)
+  and .summary.upstreamRepros == ([.gaps[] | select(.upstreamRepro != null)] | length)
+  and .upstreamReproLedger == "reference/haxe-rust-upstream-repros.v1.json"
 ' "$LEDGER" >/dev/null
 
 jq -e '
@@ -56,6 +58,9 @@ jq -e '
   and (.gaps[] | select(.id == "nullable-interface-values").status == "open_upstream")
   and (.gaps[] | select(.id == "path-directory-lowering").status == "local_workaround")
   and (.gaps[] | select(.id == "string-last-index-of-lowering").status == "local_workaround")
+  and (.gaps[] | select(.id == "nullable-interface-values").upstreamRepro.fixture | test("nullable_interface_null"))
+  and (.gaps[] | select(.id == "path-directory-lowering").upstreamRepro.fixture | test("path_directory"))
+  and (.gaps[] | select(.id == "string-last-index-of-lowering").upstreamRepro.fixture | test("string_last_index_of"))
 ' "$LEDGER" >/dev/null
 
 echo "haxe.rust pressure gap ledger passed."

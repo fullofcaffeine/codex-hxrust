@@ -87,9 +87,12 @@
       "paths": [
         "docs/haxe-rust-direct-workflow.md",
         "docs/haxe-rust-pressure-gap-ledger.md",
+        "docs/haxe-rust-upstream-repros.md",
+        "reference/haxe-rust-upstream-repros.v1.json",
+        "experiments/codex-hxrust/harness/check-haxe-rust-upstream-repros.sh",
         "reference/haxe-rust-beads-import.v1.json"
       ],
-      "reuse": "Use as the conversion map from codexhx pressure findings to generic haxe.rust issues and fixtures."
+      "reuse": "Use as the conversion map from codexhx pressure findings to generic haxe.rust issues and fixtures; remaining gaps have expected-failure repros in ../haxe.rust."
     }
   ],
   "abandonedOrDeferredPaths": [
@@ -119,10 +122,23 @@
       "reason": "Compiler fixes must remain generic haxe.rust work; current pressure fixes were upstreamed generically."
     }
   ],
-  "followUpBeads": [
+  "followUpBeads": [],
+  "resolvedFollowUpBeads": [
     {
       "id": "codex-hxrust-rat.2",
-      "purpose": "Create upstreamable haxe.rust fixtures/issues for nullable interface values and stdlib path/string workarounds."
+      "purpose": "Created upstreamable haxe.rust expected-failure fixtures/issues for nullable interface values and stdlib path/string workarounds."
+    },
+    {
+      "id": "codex-hxrust-rat.4",
+      "purpose": "Wrote the post-experiment decision record and reusable artifact archive."
+    },
+    {
+      "id": "codex-hxrust-hpu.4",
+      "purpose": "Recorded the JSONL versus SQLite state backend decision."
+    },
+    {
+      "id": "codex-hxrust-hpu.5",
+      "purpose": "Recorded the MCP/tool registry skeleton and replacement gate."
     }
   ],
   "brewConversionNotes": [
@@ -132,7 +148,7 @@
     },
     {
       "target": "haxe_rust_upstream_issues",
-      "note": "Convert remaining compiler work into generic haxe.rust fixtures before adding any codexhx dependency on the behavior."
+      "note": "Remaining compiler work now has generic haxe.rust expected-failure fixtures; keep codexhx dependencies behind local workarounds until the linked haxe.rust beads close."
     },
     {
       "target": "operator_rollout",
@@ -155,6 +171,7 @@
     "experiments/codex-hxrust/harness/check-replacement-go-no-go.sh",
     "experiments/codex-hxrust/harness/check-state-backend-spike.sh",
     "experiments/codex-hxrust/harness/check-tool-registry.sh",
+    "experiments/codex-hxrust/harness/check-haxe-rust-upstream-repros.sh",
     "experiments/codex-hxrust/harness/check-haxe-rust-production-readiness.sh",
     "experiments/codex-hxrust/harness/check-haxe-rust-pressure-gaps.sh"
   ]

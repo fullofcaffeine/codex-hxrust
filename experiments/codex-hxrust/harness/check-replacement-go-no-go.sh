@@ -11,6 +11,7 @@ CONTRACT="${ROOT}/fixtures/cafex/cafetera-contract-subset-report.v1.json"
 RUNBOOK="${REPO_ROOT}/reference/operator-runbook.v1.json"
 STATE_BACKEND="${REPO_ROOT}/reference/state-backend-spike.v1.json"
 TOOL_REGISTRY="${REPO_ROOT}/reference/tool-registry-skeleton.v1.json"
+UPSTREAM_REPROS="${REPO_ROOT}/reference/haxe-rust-upstream-repros.v1.json"
 
 jq -e '
   .schema == "codex-hxrust.replacement-go-no-go.v1"
@@ -28,8 +29,14 @@ jq -e --slurpfile r "$READINESS" '
   and .measuredInputs.pressureGaps.resolvedUpstream == $r[0].measuredInputs.pressureGaps.resolvedUpstream
   and .measuredInputs.pressureGaps.openUpstream == $r[0].measuredInputs.pressureGaps.openUpstream
   and .measuredInputs.pressureGaps.localWorkaround == $r[0].measuredInputs.pressureGaps.localWorkaround
+  and .measuredInputs.pressureGaps.upstreamRepros == $r[0].measuredInputs.pressureGaps.upstreamRepros
   and .measuredInputs.pressureGaps.rawRustEscapeMatches == $r[0].measuredInputs.pressureGaps.rawRustEscapeMatches
   and $r[0].recommendation.broadReplacement == "no_go"
+' "$DECISION" >/dev/null
+
+jq -e --slurpfile u "$UPSTREAM_REPROS" '
+  .evidence.upstreamRepros == "reference/haxe-rust-upstream-repros.v1.json"
+  and .measuredInputs.pressureGaps.upstreamRepros == $u[0].summary.totalRepros
 ' "$DECISION" >/dev/null
 
 jq -e --slurpfile s "$SEAMS" '
@@ -82,7 +89,9 @@ jq -e '
   and (.goCriteriaForSelectedSlice | length) >= 5
   and (.noGoCriteriaForBroadReplacement | length) >= 5
   and (.rollbackDowngradePath | length) >= 5
-  and (.followUpBeads | index("codex-hxrust-rat.4") != null)
+  and (.followUpBeads | index("codex-hxrust-rat.4") == null)
+  and (.resolvedFollowUpBeads | index("codex-hxrust-rat.2") != null)
+  and (.resolvedFollowUpBeads | index("codex-hxrust-rat.4") != null)
   and (.followUpBeads | index("codex-hxrust-hpu.4") == null)
   and (.followUpBeads | index("codex-hxrust-hpu.5") == null)
 ' "$DECISION" >/dev/null

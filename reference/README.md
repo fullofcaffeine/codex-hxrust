@@ -12,6 +12,7 @@ Current external references:
 - `haxe-rust-local-patches.v1.json`: local haxe.rust patch ledger. It currently records the resolved CallStack workaround for audit history; there are no active local haxe.rust patches required by current gates.
 - `haxe-rust-beads-import.v1.json`: compact imported reference map of the haxe.rust Beads ledger and codex-hxrust compiler-gap mappings.
 - `haxe-rust-pressure-gaps.v1.json`: HXCX-7.1 compiler/runtime/interop pressure-gap ledger with reproduction, severity, workaround, source-area, and raw Rust escape-pressure counts.
+- `haxe-rust-upstream-repros.v1.json`: HXCX-7.2 map from remaining haxe.rust pressure gaps to generic upstream repro fixtures and expected-failure runner evidence in `../haxe.rust`.
 - `haxe-rust-production-readiness.v1.json`: HXCX-7.3 haxe.rust capability scorecard and evidence-backed go/no-go recommendation for replacement review.
 - `state-backend-spike.v1.json`: HXCX-4.4 JSONL versus SQLite state backend decision with replacement-gate and no-production-migration rules.
 - `tool-registry-skeleton.v1.json`: HXCX-4.5 MCP/tool registry skeleton scope, DTO list, fixture lookup evidence, and real-MCP replacement gate.

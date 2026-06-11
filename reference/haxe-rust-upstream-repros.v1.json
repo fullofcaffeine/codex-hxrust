@@ -1,0 +1,67 @@
+{
+  "schema": "codex-hxrust.haxe-rust-upstream-repros.v1",
+  "bead": "HXCX-7.2",
+  "generatedAt": "2026-06-11T00:00:00Z",
+  "sourceLedger": "reference/haxe-rust-pressure-gaps.v1.json",
+  "haxeRustRepo": "../haxe.rust",
+  "haxeRustRunner": "scripts/ci/check-upstream-open-gap-repros.sh",
+  "runnerMode": "expected_cargo_failure_until_upstream_fix",
+  "policy": {
+    "compilerScope": "generic_haxe_to_rust",
+    "codexSpecificCompilerCodeAllowed": false,
+    "fixturesCanRunOutsideCafetera": true,
+    "fixtureSourceForbiddenTerms": [
+      "codexhx",
+      "Cafetera",
+      "Cafex",
+      "OPENAI_API_KEY",
+      "SECRET",
+      "TOKEN",
+      "/Users/"
+    ]
+  },
+  "summary": {
+    "totalRepros": 3,
+    "expectedCargoFailures": 3,
+    "openHaxeRustBeads": 3,
+    "codexSpecificContextRemoved": true
+  },
+  "repros": [
+    {
+      "id": "nullable_interface_null",
+      "pressureGapId": "nullable-interface-values",
+      "status": "expected_cargo_failure",
+      "haxeRustBead": "haxe.rust-bm6",
+      "haxeRustFixturePath": "test/repro/upstream_open_gaps/nullable_interface_null",
+      "entrypoint": "Main.hx",
+      "compileFile": "compile.hxml",
+      "expectedFailureSignature": "Default|dyn[[:space:]]+Service|Arc<dyn",
+      "upstreamableContract": "Passing literal null through Null<Interface> should not require Default for dyn Trait; a fixed compiler should compile this fixture or emit a deterministic unsupported diagnostic.",
+      "codexhxUse": "Model-client construction remains non-null locally until haxe.rust-bm6 closes."
+    },
+    {
+      "id": "path_directory",
+      "pressureGapId": "path-directory-lowering",
+      "status": "expected_cargo_failure",
+      "haxeRustBead": "haxe.rust-lj8",
+      "haxeRustFixturePath": "test/repro/upstream_open_gaps/path_directory",
+      "entrypoint": "Main.hx",
+      "compileFile": "compile.hxml",
+      "expectedFailureSignature": "haxe_io_path|Path::directory|could not find",
+      "upstreamableContract": "haxe.io.Path.directory should lower to a buildable Rust helper/runtime path, or the compiler should fail with a deterministic unsupported diagnostic.",
+      "codexhxUse": "Adapter code keeps small local string/path helpers until haxe.rust-lj8 closes."
+    },
+    {
+      "id": "string_last_index_of",
+      "pressureGapId": "string-last-index-of-lowering",
+      "status": "expected_cargo_failure",
+      "haxeRustBead": "haxe.rust-7s4",
+      "haxeRustFixturePath": "test/repro/upstream_open_gaps/string_last_index_of",
+      "entrypoint": "Main.hx",
+      "compileFile": "compile.hxml",
+      "expectedFailureSignature": "lastIndexOf|no method named",
+      "upstreamableContract": "String.lastIndexOf, including the optional start index, should lower to buildable Rust with Haxe-compatible semantics or a deterministic unsupported diagnostic.",
+      "codexhxUse": "Adapter code keeps forward-scan helper logic until haxe.rust-7s4 closes."
+    }
+  ]
+}

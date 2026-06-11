@@ -9,7 +9,7 @@
     "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
     "requiredBeforeBroadReplacement": [
       "Resolve or explicitly accept the open nullable-interface value gap.",
-      "Create generic haxe.rust reproductions or fixes for the Cafex path/string stdlib workarounds.",
+      "Fix or explicitly accept the generic haxe.rust repros for the Cafex path/string stdlib workarounds.",
       "Complete license/distribution review for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts.",
       "Reduce or explicitly native-own the 7 unsupported Cafex seam rows.",
       "Run replacement rollback drills from the operator runbook."
@@ -17,6 +17,7 @@
   },
   "evidence": {
     "pressureGaps": "reference/haxe-rust-pressure-gaps.v1.json",
+    "upstreamRepros": "reference/haxe-rust-upstream-repros.v1.json",
     "cafeteraContractSubset": "experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json",
     "cafexSeamLedger": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
     "frictionComparison": "experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-friction-comparison.v1.json",
@@ -36,7 +37,7 @@
       ],
       "caveats": [
         "Nullable interface values remain open upstream.",
-        "Some stdlib path/string patterns still use local workarounds."
+        "Some stdlib path/string patterns still use local workarounds even though generic repro fixtures now exist."
       ],
       "evidenceRefs": [
         "reference/haxe-rust-pressure-gaps.v1.json",
@@ -130,7 +131,7 @@
         "Operator rollback and migration-mode policies are checked."
       ],
       "caveats": [
-        "Two local stdlib workarounds need generic haxe.rust repros.",
+        "Two local stdlib workarounds have generic haxe.rust repros, but the compiler/runtime fixes remain open.",
         "Cafex has 7 unsupported seam rows.",
         "haxe.rust/Codex/Cafex drift must continue through pin and fixture gates."
       ],
@@ -169,7 +170,8 @@
       "openUpstream": 1,
       "localWorkaround": 2,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 92
+      "sourceFilesScanned": 92,
+      "upstreamRepros": 3
     },
     "cafeteraContractSubset": {
       "covered": 4,

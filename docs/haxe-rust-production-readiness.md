@@ -27,8 +27,8 @@ No-go for broad Codex/Cafex replacement today.
 
 haxe.rust has handled the current pressure test better than a toy compiler would: seven pressure gaps were resolved upstream, app/test Haxe source has zero raw Rust escape matches, and the helper/headless/Cafex fixture slices compile through generated Cargo gates. But broad replacement still has hard caveats:
 
-- one open nullable-interface value gap remains upstream;
-- two Cafex adapter stdlib-lowering workarounds need generic haxe.rust repros or fixes;
+- one open nullable-interface value gap remains upstream with a generic expected-failure repro;
+- two Cafex adapter stdlib-lowering workarounds now have generic haxe.rust expected-failure repros, but still need fixes or explicit acceptance;
 - Cafex has seven unsupported seam-ledger rows;
 - license/distribution review is unresolved for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts;
 - no production default has changed, and rollback drills remain decision-review work.
@@ -50,6 +50,7 @@ haxe.rust has handled the current pressure test better than a toy compiler would
 | Input | Current value |
 | --- | --- |
 | haxe.rust pressure gaps | 10 total, 7 resolved upstream, 1 open upstream, 2 local workarounds |
+| Generic upstream repros for remaining gaps | 3 expected-failure fixtures in `../haxe.rust` |
 | Raw Rust escape pressure | 0 matches across 92 Haxe source/test files |
 | Cafetera contract subset | 4 covered, 4 passed, 0 failed, 5 gaps |
 | Cafex seam ledger | 15 rows, 7 supported, 7 unsupported, 1 review-only |
@@ -61,7 +62,7 @@ haxe.rust has handled the current pressure test better than a toy compiler would
 ## Caveats
 
 - `haxe.rust-bm6` must resolve or be explicitly accepted before nullable interface values become a production-ready pattern.
-- `haxe.io.Path.directory` and `String.lastIndexOf` workarounds should become generic haxe.rust fixtures/issues in `HXCX-7.2`.
+- `haxe.io.Path.directory` and `String.lastIndexOf` workarounds have generic haxe.rust fixtures, but still need compiler/runtime fixes or accepted unsupported diagnostics.
 - The current proof is strongest for portable DTO/helper/headless code, not live native/metal runtime ownership.
 - Generated Rust quality is build-checked, but fmt/clippy and performance are not hard gates yet.
 - Distribution remains blocked until license obligations are reviewed.
