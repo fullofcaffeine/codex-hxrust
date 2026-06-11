@@ -683,6 +683,16 @@
       }
     },
     {
+      "id": "external-agent-config-import-completed-notification",
+      "kind": "notification",
+      "method": "externalAgentConfig/import/completed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "externalAgentConfig/import/completed",
+        "params": {}
+      }
+    },
+    {
       "id": "process-output-delta-notification",
       "kind": "notification",
       "method": "process/outputDelta",

@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:9b3661c14baa61312606a19d968fd933aa492f951f8f9158d7a636ab1060c64a",
+  "fingerprint": "sha256:6f3b15e22e15c3991868dfae4bbf24997b6ac3e9cf591a4e673ec6dca7204a62",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -111,6 +111,12 @@
         "required:turnId",
         "required:willRetry"
       ]
+    },
+    {
+      "id": "ExternalAgentConfigImportCompletedNotification",
+      "sourcePath": "v2/ExternalAgentConfigImportCompletedNotification.json",
+      "sha256": "2f2367c99ea4b926697eb1acda0c503ede0c6596a2eacb1f83874af55b73dd40",
+      "fields": []
     },
     {
       "id": "FileChangeOutputDeltaNotification",

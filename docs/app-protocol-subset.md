@@ -36,6 +36,7 @@ Included server notifications:
 - `account/rateLimits/updated`
 - `app/list/updated`
 - `remoteControl/status/changed`
+- `externalAgentConfig/import/completed`
 - `item/completed`
 - `rawResponseItem/completed`
 - `serverRequest/resolved`
@@ -51,7 +52,7 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental plan delta notifications, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, external agent config import completion, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -86,6 +87,8 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `app/list/updated` reports app metadata list refreshes. The selected subset validates the upstream `data` array, required app `id` and `name`, optional/defaulted booleans, labels, plugin display names, branding, and selected nullable app metadata fields.
 
 `remoteControl/status/changed` reports remote-control connection status and identity. The selected subset validates `installationId`, `serverName`, `status` as `disabled`, `connecting`, `connected`, or `errored`, and optional nullable `environmentId`.
+
+`externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 
 ## Error Policy
 
