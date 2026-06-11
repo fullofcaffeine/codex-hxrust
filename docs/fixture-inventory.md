@@ -44,7 +44,7 @@ Owner: upstream Codex / `../codex`, pinned by `reference/upstream-codex.pin.json
 | App-server fixture generator | `../codex/codex-rs/app-server-protocol/src/schema_fixtures.rs` | generator source | M2 primary | Regenerate/compare schema fixture trees |
 | App-server fixture tests | `../codex/codex-rs/app-server-protocol/tests/schema_fixtures.rs` | test contract | M2 primary | Defines expected fixture diff semantics |
 | Protocol source types | `../codex/codex-rs/protocol/src` | Rust source | M2 primary | Core IDs, config types, openai model DTOs |
-| Core SSE/mock response harness | `../codex/codex-rs/core/tests/common/responses.rs` | Rust test helpers | M3 primary | Event names, mock stream structure, request-body invariants |
+| Core SSE/mock response harness | `../codex/codex-rs/core/tests/common/responses.rs`; local fixture `experiments/codex-hxrust/fixtures/upstream/mock-model-basic-one-turn.sse` | Rust test helpers plus credential-free SSE fixture | M3 active | Event names, mock stream structure, request-body invariants |
 | Core test harness | `../codex/codex-rs/core/tests/common/test_codex.rs` | Rust test helpers | M3 secondary | Session setup and headless runtime expectations |
 | Core snapshot files | `../codex/codex-rs/core/tests/suite/snapshots` | 36 `.snap` files | M3 secondary | Context compaction, pending input, model-visible layout, realtime request shapes |
 | TUI story fixture | `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl` | 1 JSONL file | later | TUI replay only; not part of upstream-first headless core |
@@ -71,7 +71,7 @@ These are enough to start protocol IDs/newtypes, JSON-RPC envelope handling, thr
 Initial upstream M3 subset:
 
 1. Use `core/tests/common/responses.rs` as the source for SSE event constructors and request-body invariants.
-2. Create new, small JSON/SSE fixtures instead of copying all Rust tests.
+2. Create new, small JSON/SSE fixtures instead of copying all Rust tests. The first accepted M3 fixture is `mock-model-basic-one-turn.sse`, with normalized event golden `mock-model-basic-one-turn.events.golden.json`.
 3. Treat core snapshots as comparison inspiration, not hard-blocking parity until the Haxe runtime can emit equivalent artifacts.
 
 ## Cafex / Cafetera Fixtures
@@ -111,7 +111,7 @@ Track these gaps before claiming parity:
 
 | Gap | Status | Follow-up |
 | --- | --- | --- |
-| No standalone upstream one-turn JSON fixture | Missing | Create credential-free `basic-one-turn` harness fixture in M3 using upstream SSE event names |
+| No standalone upstream one-turn JSON fixture | Resolved for M3 seed | `mock-model-basic-one-turn.sse` covers created, text delta, assistant message done, and completed events using upstream SSE event names |
 | No upstream Haxe DTO golden files | Covered for first app-protocol subset | `reference/app-protocol-schema-fingerprints.v1.json` and `harness/check-schema-fingerprints.sh`; expand beyond the first M2 subset as DTO coverage grows |
 | No copied fixture manifest under `experiments/` yet | Expected | Create in `HXCX-1.1` scaffold; do not copy fixtures in G0 |
 | Cafex fixtures are adapter-only | Intentional | Keep them inactive until M5 |
