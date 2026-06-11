@@ -44,6 +44,7 @@ Current actionable codex-hxrust compiler-gap Beads:
 - `codex-hxrust-rat.8` maps to haxe.rust generic enum regression `haxe.rust-oo3.69` and is resolved by the pinned `generic_enum_payload` snapshot.
 - `codex-hxrust-rat.9` maps to haxe.rust enum reuse regression `haxe.rust-oo3.71` and is resolved by the pinned `enum_reuse_helper_calls` snapshot.
 - HXCX-3.1 mock model stream parsing exposed haxe.rust try/catch tail-return regression `haxe.rust-oo3.72`; the pinned `try_catch_tail_nonvoid` snapshot resolves it and lets codex-hxrust use direct `try/catch` returns without a local shape workaround.
+- HXCX-3.3 one-turn state-machine work exposed open haxe.rust interface-null comparison regression `haxe.rust-wg5`; codex-hxrust avoids an interface `client == null` check until the generic compiler fixture/fix lands.
 
 ## Validation Expectations
 

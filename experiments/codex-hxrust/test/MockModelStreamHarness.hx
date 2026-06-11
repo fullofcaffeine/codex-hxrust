@@ -2,12 +2,16 @@ import codexhx.runtime.model.MockModelProvider;
 import codexhx.runtime.model.MockModelStreamParser;
 import codexhx.runtime.model.ModelStreamParseOutcome;
 import codexhx.runtime.model.ModelStreamRequest;
+import codexhx.runtime.session.OneTurnSessionOutcome;
+import codexhx.runtime.session.OneTurnSessionRunner;
 import sys.io.File;
 
 class MockModelStreamHarness {
     static function main():Void {
         parsesBasicOneTurnFixture();
         mockProviderStartsAndCancelsFixtureStream();
+        runsOneTurnSessionToDeterministicTerminalState();
+        reportsSessionErrorsAsStructuredEvents();
         reportsMalformedStreamsDeterministically();
     }
 
@@ -41,6 +45,27 @@ class MockModelStreamHarness {
         assertEquals("stream_not_active", cancelledAgain.errorCode);
     }
 
+    static function runsOneTurnSessionToDeterministicTerminalState():Void {
+        final expected = StringTools.trim(File.getContent("fixtures/upstream/mock-model-basic-one-turn.events.golden.json"));
+        final provider = new MockModelProvider("fixtures/upstream/mock-model-basic-one-turn.sse");
+        final outcome = expectSession(OneTurnSessionRunner.run(provider, new ModelStreamRequest("req-session-1", "mock-model", "Say hello")));
+        assertEquals("completed", outcome.terminalState);
+        assertEquals("mock-stream-1", outcome.streamId);
+        assertEquals("Hello world", outcome.assistantText);
+        assertEquals(expected, outcome.canonicalEventsJson());
+    }
+
+    static function reportsSessionErrorsAsStructuredEvents():Void {
+        final provider = new MockModelProvider("fixtures/upstream/missing-model-stream.sse");
+        final outcome = OneTurnSessionRunner.run(provider, new ModelStreamRequest("req-session-error", "mock-model", "Say hello"));
+        assertFalse(outcome.ok, "missing provider fixture should fail");
+        assertEquals("failed", outcome.terminalState);
+        assertEquals("fixture_read_failed", outcome.errorCode);
+        assertEquals("1", Std.string(outcome.events.length));
+        assertEquals("session_error", outcome.events[0].kind);
+        assertEquals("fixture_read_failed", outcome.events[0].errorCode);
+    }
+
     static function reportsMalformedStreamsDeterministically():Void {
         final malformedLine = MockModelStreamParser.parseSse("event: response.created\nwat\n");
         assertFalse(malformedLine.ok, "malformed line should fail");
@@ -59,6 +84,13 @@ class MockModelStreamHarness {
     }
 
     static function expectParse(outcome:ModelStreamParseOutcome):ModelStreamParseOutcome {
+        if (!outcome.ok) {
+            throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+        }
+        return outcome;
+    }
+
+    static function expectSession(outcome:OneTurnSessionOutcome):OneTurnSessionOutcome {
         if (!outcome.ok) {
             throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
         }

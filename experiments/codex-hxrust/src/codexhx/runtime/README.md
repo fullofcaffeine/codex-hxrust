@@ -21,3 +21,13 @@ Future real-provider requirements:
 - Cancellation must close the underlying request when possible and return a stable result when the stream already ended.
 - Retry, rate-limit, and auth failures must map to typed outcomes before state-machine integration.
 - Real network harnesses must stay separate from credential-free fixture gates.
+
+## One-Turn Session State
+
+`codexhx.runtime.session.OneTurnSessionRunner` is the HXCX-3.3 state-machine slice. It starts a model stream through `ModelClient`, parses the raw SSE stream, preserves ordered model events, and returns a deterministic terminal state:
+
+- `completed` when a `response_completed` event is observed and no failure event is present.
+- `failed` when provider start or parser errors occur, or when a model `response_failed` event is observed.
+- `incomplete` when the stream parses but has no terminal model event.
+
+Provider and parser failures are returned as `OneTurnSessionOutcome.failure(...)` with a single structured `session_error` event. Later transcript/state-store work should consume this outcome instead of adding another error channel.

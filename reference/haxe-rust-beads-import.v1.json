@@ -13,13 +13,13 @@
     "rule": "Keep haxe.rust authoritative and generic; codex-hxrust records pressure-test mapping and known-good pins."
   },
   "counts": {
-    "total": 540,
-    "open": 1,
+    "total": 541,
+    "open": 2,
     "inProgress": 0,
     "closed": 538,
     "tombstone": 1,
     "epics": 95,
-    "tasks": 413,
+    "tasks": 414,
     "features": 23,
     "bugs": 6
   },
@@ -6477,6 +6477,23 @@
       ],
       "parent": "haxe.rust-oo3",
       "importRole": "codex_pressure_resolved"
+    },
+    {
+      "sourceId": "haxe.rust-wg5",
+      "title": "Fix interface null comparison lowering",
+      "status": "open",
+      "priority": 2,
+      "issueType": "task",
+      "labels": [
+        "codegen",
+        "codex-pressure",
+        "interface",
+        "null",
+        "regression",
+        "thinking:high"
+      ],
+      "parent": null,
+      "importRole": "codex_pressure_open"
     }
   ]
 }

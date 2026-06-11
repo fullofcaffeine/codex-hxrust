@@ -23,11 +23,17 @@ class MockModelProvider implements ModelClient {
             return ModelStreamStartOutcome.failure("missing_request_id", "model stream request id is required");
         }
 
+        final stream = try {
+            File.getContent(fixturePath);
+        } catch (e:Dynamic) {
+            return ModelStreamStartOutcome.failure("fixture_read_failed", "mock model fixture could not be read");
+        }
+
         final streamId = "mock-stream-" + Std.string(nextStreamNumber);
         nextStreamNumber = nextStreamNumber + 1;
         activeStreams.push(streamId);
         final handle = new ModelStreamHandle(providerName, streamId, request.requestId);
-        return ModelStreamStartOutcome.success(handle, File.getContent(fixturePath));
+        return ModelStreamStartOutcome.success(handle, stream);
     }
 
     public function cancelStream(handle:ModelStreamHandle):ModelStreamCancelOutcome {
