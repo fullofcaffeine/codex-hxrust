@@ -16,3 +16,4 @@ Current fixtures:
 - `caf-continuity-session-receipt.v1.json` and `caf-continuity-turn-receipt-fresh.v1.json` cover receipts written from parsed continuity metadata.
 - `cafetera-contract-subset-report.v1.json` records the HXCX-5.5 selected Cafetera contract subset pass/fail/gap classification and explicitly avoids any production replacement claim.
 - `cafex-hxrust-seam-ledger.v1.json` records the HXCX-5.6 Cafex fork seam to hxrust implementation/fixture/status mapping for replacement review.
+- `cafex-hxrust-friction-comparison.v1.json` records the HXCX-6.1 Cafex patch-stack versus hxrust burden count and the limited rebase-friction recommendation for HXCX-6.3.

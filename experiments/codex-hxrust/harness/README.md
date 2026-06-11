@@ -42,3 +42,4 @@ Current harnesses:
 - `check-goals.sh` validates the HXCX-5.3 goal DTO, in-memory state transitions, model-facing goal tool subset, and explicit unsupported goal behavior.
 - `check-cafetera-contract-subset.sh` runs the HXCX-5.5 selected Cafetera Codex module contract subset against hxrust-backed harnesses and emits a pass/fail/gap report without making a production replacement claim.
 - `check-cafex-seam-ledger.sh` validates the HXCX-5.6 Cafex hxrust seam ledger for patch classes, supported evidence, unsupported reasons, source seam coverage, and replacement-review usability.
+- `check-friction-comparison.sh` validates the HXCX-6.1 Cafex patch-stack versus hxrust burden comparison against the Cafetera seam ledger, Cafex runtime patch metrics, local hxrust seam ledger, fixture counts, and gate counts.
