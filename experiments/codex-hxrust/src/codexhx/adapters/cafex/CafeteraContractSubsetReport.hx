@@ -62,7 +62,7 @@ class CafeteraContractSubsetReport {
                 "HXCX-5.2",
                 "pass",
                 "fixture_pass",
-                "Caf effort, wake, and unsupported mode directory bridge",
+                "Caf effort, wake, and invalid mode directory bridge",
                 "harness/check-caf-bridge.sh",
                 [
                     "fixtures/cafex/caf-effort-request.v1.json",
@@ -72,7 +72,7 @@ class CafeteraContractSubsetReport {
                     "fixtures/cafex/caf-mode-unsupported-request.v1.json",
                     "fixtures/cafex/caf-mode-unsupported-receipt.v1.json"
                 ],
-                "Validates request scanning, accepted effort aliases, consumed wake receipts, refused mode receipts, malformed effort refusal, unknown schema skips, and idempotent duplicate scans."
+                "Validates request scanning, accepted effort aliases, consumed wake receipts, invalid mode refusal, malformed effort refusal, unknown schema skips, and idempotent duplicate scans."
             ),
             new CafeteraContractSubsetContract(
                 "hxcx-5.3-caf-goal-tool-flow",
@@ -117,6 +117,23 @@ class CafeteraContractSubsetReport {
                     "fixtures/cafex/caf-queue-reconcile-receipt.v1.json"
                 ],
                 "Validates queue-reconcile request scanning, deterministic receipt writing, Brew delivery-decision field preservation, and explicit no-claim runtime queue mutation metadata."
+            ),
+            new CafeteraContractSubsetContract(
+                "hxcx-8.4-caf-mode-apply-bridge-rails",
+                "HXCX-8.4",
+                "pass",
+                "fixture_pass",
+                "Caf mode-apply request and next-turn receipt bridge rails",
+                "harness/check-caf-bridge.sh",
+                [
+                    "fixtures/cafex/caf-mode-plan-request.v1.json",
+                    "fixtures/cafex/caf-mode-plan-receipt.v1.json",
+                    "fixtures/cafex/caf-mode-default-request.v1.json",
+                    "fixtures/cafex/caf-mode-default-receipt.v1.json",
+                    "fixtures/cafex/caf-mode-unsupported-request.v1.json",
+                    "fixtures/cafex/caf-mode-unsupported-receipt.v1.json"
+                ],
+                "Validates plan/default mode request scanning, accepted mode aliases, deterministic next-turn receipts, plan-checkpoint boundary field preservation, and explicit no-claim current-turn mutation metadata."
             ),
             new CafeteraContractSubsetContract(
                 "hxcx-8.2-caf-active-lane-capability",
@@ -176,8 +193,8 @@ class CafeteraContractSubsetReport {
                 "caf-mode-apply-runtime",
                 "gap",
                 "unsupported_mode_apply_runtime",
-                "Mode-apply requests are classified and refused; a live runtime mode transition is not implemented.",
-                "Preserve fail-closed behavior until a generic runtime mode surface exists."
+                "Mode-apply bridge rails emit next-turn receipts for supported modes, but live TUI/runtime collaboration-mode mutation is not implemented.",
+                "Implement a generic runtime mode state surface before claiming current-turn or native TUI mode replacement."
             ),
             new CafeteraContractSubsetGap(
                 "credentialed-live-model-runtime",

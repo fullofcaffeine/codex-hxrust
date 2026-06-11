@@ -21,13 +21,14 @@ class CafeteraContractSubsetHarness {
         assertContains(report, "\"schema\": \"codex-hxrust.cafetera-contract-subset-report.v1\"");
         assertContains(report, "\"productionReplacement\": false");
         assertContains(report, "\"replacementClaim\": \"none\"");
-        assertContains(report, "\"passed\": 7");
+        assertContains(report, "\"passed\": 8");
         assertContains(report, "\"failed\": 0");
         assertContains(report, "\"gaps\": 5");
         assertContains(report, "\"classification\": \"fixture_pass\"");
         assertContains(report, "\"classification\": \"unsupported_full_cafetera_cli\"");
         assertContains(report, "\"classification\": \"unsupported_live_tui_runtime\"");
         assertContains(report, "\"classification\": \"unsupported_native_restart_cutover\"");
+        assertContains(report, "\"id\": \"hxcx-8.4-caf-mode-apply-bridge-rails\"");
         assertContains(report, "\"classification\": \"unsupported_mode_apply_runtime\"");
         assertContains(report, "\"classification\": \"unsupported_live_model_runtime\"");
     }

@@ -70,11 +70,11 @@ The hxrust path has a smaller native-Codex rebase surface for supported rows, bu
 | Unsupported rows | 4 | Known gaps that still block broad replacement. |
 | Review-only rows | 1 | Governance evidence, not runtime behavior. |
 | Haxe files in compared wrapper/tool/goal surface | 33 | Implementation surface we maintain instead of replaying those slices as Rust fork patches. |
-| Cafex fixture files | 28 | Adapter fixture burden in `fixtures/cafex`. |
+| Cafex fixture files | 32 | Adapter fixture burden in `fixtures/cafex`. |
 | Experiment gates | 29 | Current proof surface for generated Haxe/Rust behavior. |
 | Generated Rust committed | 0 | Generated output remains disposable; gates must regenerate/prove behavior. |
 
-Supported hxrust rows cover deterministic receipt writing, continuity metadata, active-lane capability advertisement, effort/wake/goal/queue-reconcile bridge fixtures, explicit mode refusal, and the minimal thread-goal lifecycle. Unsupported rows still include live mode/restart, plan-checkpoint continuation guard, and live TUI/model runtime.
+Supported hxrust rows cover deterministic receipt writing, continuity metadata, active-lane capability advertisement, effort/wake/mode/goal/queue-reconcile bridge fixtures, invalid mode refusal, and the minimal thread-goal lifecycle. Unsupported rows still include live mode runtime mutation, restart, plan-checkpoint continuation guard, and live TUI/model runtime.
 
 ## Rebase-Friction Result
 

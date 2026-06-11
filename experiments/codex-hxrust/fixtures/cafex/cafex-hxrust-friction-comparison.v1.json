@@ -115,7 +115,7 @@
       }
     ],
     "haxeSourceFilesInComparedSurface": 33,
-    "cafexFixtureFiles": 28,
+    "cafexFixtureFiles": 32,
     "experimentGateScripts": 29,
     "generatedRustCommitted": false,
     "burdenSignals": [
@@ -125,7 +125,7 @@
     ]
   },
   "comparison": {
-    "supportedSliceResult": "For receipt writing, continuity metadata, active-lane capability advertisement, effort/wake/goal/queue-reconcile bridge fixtures, explicit mode refusal, and minimal goal lifecycle, hxrust can reduce Codex upstream-rebase friction by replacing fork replay with Haxe fixture and generator gates.",
+    "supportedSliceResult": "For receipt writing, continuity metadata, active-lane capability advertisement, effort/wake/mode/goal/queue-reconcile bridge fixtures, and minimal goal lifecycle, hxrust can reduce Codex upstream-rebase friction by replacing fork replay with Haxe fixture and generator gates.",
     "unsupportedSliceResult": "For live mode/restart, plan checkpoint guard, and live TUI/model runtime, hxrust does not yet reduce fork friction because no generic runtime ownership exists.",
     "netResult": "The hxrust path is maintenance-positive for selected adapter slices and review tooling, but not yet a broad Cafex replacement.",
     "decisionInputs": [

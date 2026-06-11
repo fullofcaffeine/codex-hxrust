@@ -11,11 +11,13 @@ This gate runs selected Cafex/Cafetera-facing contracts through the Haxe interpr
 Covered contracts:
 
 - `HXCX-5.1`: Caf session and turn receipt writer via `experiments/codex-hxrust/harness/check-caf-receipts.sh`.
-- `HXCX-5.2`: Caf effort, wake, and unsupported mode directory bridge via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
+- `HXCX-5.2`: Caf effort, wake, and invalid mode directory bridge via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
 - `HXCX-5.3`: Minimal Caf goal DTO, in-memory state, and goal tools via `experiments/codex-hxrust/harness/check-goals.sh`.
 - `HXCX-5.4`: Wake/restart successor and predecessor continuity metadata via `experiments/codex-hxrust/harness/check-caf-continuity.sh`.
 - `HXCX-8.1`: Caf/Ralph goal-apply request and receipt bridge via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
 - `HXCX-8.2`: Caf active-lane capability and native live-status DTO writer via `experiments/codex-hxrust/harness/check-caf-active-lane.sh`.
+- `HXCX-8.3`: Caf queue-reconcile request and receipt bridge rails via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
+- `HXCX-8.4`: Caf mode-apply request and next-turn receipt bridge rails via `experiments/codex-hxrust/harness/check-caf-bridge.sh`.
 
 Each covered contract is classified as `fixture_pass` only. That means the selected fixture and adapter behavior passed under hxrust; it does not mean the generated binary can replace production Codex or Cafetera yet.
 
@@ -28,7 +30,7 @@ Current gap classifications:
 - `unsupported_full_cafetera_cli`: the full Cafetera Codex module runner is not yet targeting a production hxrust binary.
 - `unsupported_live_tui_runtime`: receipt and bridge fixtures do not replace the native Codex TUI event loop.
 - `unsupported_native_restart_cutover`: continuity metadata is covered, but process fork/exec handoff is not.
-- `unsupported_mode_apply_runtime`: mode-apply requests are intentionally refused until a generic runtime mode surface exists.
+- `unsupported_mode_apply_runtime`: mode-apply bridge rails emit next-turn receipts for supported modes, but live TUI/runtime collaboration-mode mutation is not implemented.
 - `unsupported_live_model_runtime`: fixture gates stay credential-free and do not use live model credentials or network calls.
 
 ## Report Policy

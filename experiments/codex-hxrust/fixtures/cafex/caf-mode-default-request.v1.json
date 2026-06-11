@@ -1,0 +1,16 @@
+{
+  "schema": "cafetera.codex.mode-apply-request.v1",
+  "requestId": "mode-default",
+  "taskId": "manual-user-request",
+  "clientId": "codex",
+  "runId": "run-1",
+  "laneId": "run-1",
+  "processId": 4242,
+  "continuityGenerationId": "generation-1",
+  "mode": "default",
+  "requestedMode": "default",
+  "targetMode": "default",
+  "applyPhase": "next_turn",
+  "persist": false,
+  "policyId": "manual.user-request.mode.default"
+}

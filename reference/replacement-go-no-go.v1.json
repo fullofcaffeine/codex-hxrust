@@ -46,8 +46,8 @@
       "reviewOnly": 1
     },
     "cafeteraContractSubset": {
-      "covered": 7,
-      "passed": 7,
+      "covered": 8,
+      "passed": 8,
       "failed": 0,
       "gaps": 5,
       "productionReplacement": false
@@ -60,7 +60,7 @@
   },
   "unsupportedSurfaces": [
     "live pending-input queue mutation",
-    "live mode apply runtime",
+    "live mode apply runtime mutation",
     "restart apply runtime bridge",
     "plan-checkpoint continuation guard",
     "live TUI and credentialed model runtime",

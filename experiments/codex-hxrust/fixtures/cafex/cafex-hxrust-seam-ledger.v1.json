@@ -142,17 +142,21 @@
       "replacementReviewNote": "Supported for directory request scan, accepted effort aliases, malformed effort refusal, and deterministic receipt writing."
     },
     {
-      "id": "caf-mode-apply-refusal",
-      "title": "Mode apply fail-closed refusal",
+      "id": "caf-mode-apply-bridge-rails",
+      "title": "Mode apply next-turn bridge rails",
       "sourceSeam": "effort-mode-runtime-bridge",
       "patchClass": "fork_only_caf_adapter",
       "owner": "@cafetera/codex",
       "supportLevel": "supported",
-      "replacementStatus": "supported_refusal_fixture",
+      "replacementStatus": "supported_fixture_rails_only",
       "hxrustImplementation": [
         "codexhx.adapters.cafex.CafBridgeProcessor.processOnce"
       ],
       "fixtures": [
+        "fixtures/cafex/caf-mode-plan-request.v1.json",
+        "fixtures/cafex/caf-mode-plan-receipt.v1.json",
+        "fixtures/cafex/caf-mode-default-request.v1.json",
+        "fixtures/cafex/caf-mode-default-receipt.v1.json",
         "fixtures/cafex/caf-mode-unsupported-request.v1.json",
         "fixtures/cafex/caf-mode-unsupported-receipt.v1.json"
       ],
@@ -165,7 +169,7 @@
         "cafetera.codex.mode-apply.v1"
       ],
       "unsupportedReason": null,
-      "replacementReviewNote": "Supported only as explicit refusal with reason unsupported_mode_apply; live mode transition remains a separate unsupported row."
+      "replacementReviewNote": "Supported for plan/default request scanning, alias normalization, next-turn receipts, plan-checkpoint boundary metadata, and invalid-mode refusal. Current-turn/native TUI mode mutation remains a separate unsupported row."
     },
     {
       "id": "caf-wake-request-receipt",
@@ -320,7 +324,7 @@
       "replacementStatus": "unsupported_deferred",
       "hxrustImplementation": [],
       "fixtures": [
-        "fixtures/cafex/caf-mode-unsupported-receipt.v1.json"
+        "fixtures/cafex/caf-mode-plan-receipt.v1.json"
       ],
       "harnesses": [
         "harness/check-caf-bridge.sh"
@@ -329,8 +333,8 @@
         "cafetera.codex.mode-apply-request.v1",
         "cafetera.codex.mode-apply.v1"
       ],
-      "unsupportedReason": "Mode apply is intentionally fail-closed as unsupported_mode_apply; no live collaboration-mode state transition is implemented.",
-      "replacementReviewNote": "Supported refusal is useful for safety but does not satisfy mode replacement."
+      "unsupportedReason": "Mode apply bridge rails emit next-turn receipts for supported modes, but no live collaboration-mode state transition is implemented.",
+      "replacementReviewNote": "Supported next-turn receipts are useful for typed lane integration but do not satisfy current-turn/native TUI mode replacement."
     },
     {
       "id": "restart-apply-runtime-bridge",

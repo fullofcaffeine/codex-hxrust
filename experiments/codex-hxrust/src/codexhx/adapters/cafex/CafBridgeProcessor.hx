@@ -101,7 +101,7 @@ class CafBridgeProcessor {
             case wakeRequestSchema:
                 StringRead.success(wakeReceipt(requestId, request, writtenAt));
             case modeRequestSchema:
-                StringRead.success(modeUnsupportedReceipt(requestId, request, writtenAt));
+                StringRead.success(modeReceipt(requestId, request, writtenAt));
             case goalRequestSchema:
                 StringRead.success(goalReceipt(requestId, request, writtenAt));
             case queueReconcileRequestSchema:
@@ -175,6 +175,38 @@ class CafBridgeProcessor {
             + optionalStringLine(request, "delegateClientId", "delegateClientId", true)
             + optionalStringLine(request, "waitId", "waitId", true)
             + "  \"status\": \"consumed\",\n"
+            + "  \"writtenAt\": " + quote(writtenAt)
+            + "\n}\n";
+    }
+
+    static function modeReceipt(requestId:String, request:Value, writtenAt:String):String {
+        final modeRead = firstDirectString(request, "mode", "requestedMode", "targetMode");
+        final requestedMode = modeRead.ok ? modeRead.value : "";
+        final normalizedMode = normalizeMode(requestedMode);
+        if (normalizedMode.length == 0) return modeUnsupportedReceipt(requestId, request, writtenAt);
+
+        return "{\n"
+            + "  \"schema\": " + quote(modeReceiptSchema) + ",\n"
+            + "  \"requestId\": " + quote(requestId) + ",\n"
+            + optionalStringLine(request, "taskId", "taskId", true)
+            + optionalStringLine(request, "clientId", "clientId", true)
+            + optionalStringLine(request, "runId", "runId", true)
+            + optionalStringLine(request, "laneId", "laneId", true)
+            + optionalNumberLine(request, "processId", "processId", true)
+            + optionalStringLine(request, "conversationId", "conversationId", true)
+            + optionalStringLine(request, "continuityGenerationId", "continuityGenerationId", true)
+            + optionalStringLine(request, "policyId", "policyId", true)
+            + "  \"status\": \"queued_next_turn\",\n"
+            + "  \"applyPhase\": \"next_turn\",\n"
+            + "  \"mode\": " + quote(normalizedMode) + ",\n"
+            + "  \"requestedMode\": " + quote(normalizedMode) + ",\n"
+            + "  \"targetMode\": " + quote(normalizedMode) + ",\n"
+            + "  \"appliedMode\": " + quote(normalizedMode) + ",\n"
+            + optionalStringLine(request, "turnBoundaryPolicy", "turnBoundaryPolicy", true)
+            + optionalBoolLine(request, "interruptCurrentTurn", "interruptedCurrentTurn", true)
+            + "  \"continuationQueued\": " + bool(hasNonEmptyString(request, "continuationPrompt")) + ",\n"
+            + "  \"currentTurnMutationClaimed\": false,\n"
+            + "  \"runtimeModeMutation\": \"queued_not_applied_by_hxrust_fixture\",\n"
             + "  \"writtenAt\": " + quote(writtenAt)
             + "\n}\n";
     }
@@ -350,6 +382,15 @@ class CafBridgeProcessor {
         }
     }
 
+    static function normalizeMode(value:String):String {
+        final trimmed = StringTools.trim(value).toLowerCase();
+        return switch trimmed {
+            case "plan" | "planning" | "plan-mode" | "plan mode": "plan";
+            case "default" | "execute" | "execution": "default";
+            case _: "";
+        }
+    }
+
     static function firstNestedString(object:Value, field:String, nestedObject:String, nestedField:String):StringRead {
         final direct = readString(object, field);
         if (direct.ok) return direct;
@@ -364,6 +405,14 @@ class CafBridgeProcessor {
         }
     }
 
+    static function firstDirectString(object:Value, first:String, second:String, third:String):StringRead {
+        final firstValue = readString(object, first);
+        if (firstValue.ok) return firstValue;
+        final secondValue = readString(object, second);
+        if (secondValue.ok) return secondValue;
+        return readString(object, third);
+    }
+
     static function optionalStringLine(object:Value, sourceName:String, targetName:String, comma:Bool):String {
         final value = readString(object, sourceName);
         if (!value.ok) return "";
@@ -374,6 +423,12 @@ class CafBridgeProcessor {
         final value = readNumber(object, sourceName);
         if (!value.ok) return "";
         return "  " + quote(targetName) + ": " + number(value.value) + (comma ? ",\n" : "\n");
+    }
+
+    static function optionalBoolLine(object:Value, sourceName:String, targetName:String, comma:Bool):String {
+        final value = readBool(object, sourceName);
+        if (!value.ok) return "";
+        return "  " + quote(targetName) + ": " + bool(value.value) + (comma ? ",\n" : "\n");
     }
 
     static function optionalReadStringLine(value:StringRead, targetName:String, comma:Bool):String {
@@ -421,6 +476,11 @@ class CafBridgeProcessor {
             case _:
                 BoolRead.failure();
         }
+    }
+
+    static function hasNonEmptyString(object:Value, name:String):Bool {
+        final value = readString(object, name);
+        return value.ok && value.value.length > 0;
     }
 
     static function requestIdFor(object:Value, entry:String):String {
@@ -495,6 +555,10 @@ class CafBridgeProcessor {
         final intValue = Std.int(value);
         if (value == intValue) return Std.string(intValue);
         return Std.string(value);
+    }
+
+    static function bool(value:Bool):String {
+        return value ? "true" : "false";
     }
 }
 

@@ -51,7 +51,7 @@ haxe.rust has handled the current pressure test better than a toy compiler would
 | haxe.rust pressure gaps | 10 total, 10 resolved upstream, 0 open upstream, 0 local workarounds |
 | Generic upstream repros for remaining gaps | 0 expected-failure fixtures in `../haxe.rust` |
 | Raw Rust escape pressure | 0 matches across 92 Haxe source/test files |
-| Cafetera contract subset | 7 covered, 7 passed, 0 failed, 5 gaps |
+| Cafetera contract subset | 8 covered, 8 passed, 0 failed, 5 gaps |
 | Cafex seam ledger | 15 rows, 10 supported, 4 unsupported, 1 review-only |
 | Production replacement claim | false |
 | Production default | disabled |

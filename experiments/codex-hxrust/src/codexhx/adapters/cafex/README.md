@@ -49,7 +49,7 @@ This keeps restart proof honest: receipt metadata is not inferred from process l
 
 ## Effort And Wake Bridge
 
-`CafBridgeProcessor` implements the HXCX-5.2/HXCX-8.1 directory bridge subset from Cafex native Codex request and receipt lanes.
+`CafBridgeProcessor` implements the HXCX-5.2/HXCX-8.1/HXCX-8.4 directory bridge subset from Cafex native Codex request and receipt lanes.
 
 The bridge is adapter-local. It consumes Cafex request files from a request directory and writes deterministic receipt files to a receipt directory; it does not add Cafex-specific behavior to upstream-shaped core Codex modules.
 
@@ -57,17 +57,17 @@ Supported request schemas:
 
 - `cafetera.codex.effort-apply-request.v1` writes `cafetera.codex.effort-apply.v1`.
 - `caf-client-wake-request.v1` writes `caf-client-wake-receipt.v1` with `status: consumed`.
-- `cafetera.codex.mode-apply-request.v1` writes `cafetera.codex.mode-apply.v1` with `status: refused` and `refusalReason: unsupported_mode_apply`.
+- `cafetera.codex.mode-apply-request.v1` writes `cafetera.codex.mode-apply.v1` with `status: queued_next_turn` for `plan`/`default` modes and explicit no-claim current-turn mutation metadata. Invalid modes write refused receipts with `refusalReason: unsupported_mode_apply`.
 - `cafetera.codex.goal-apply-request.v1` writes `cafetera.codex.goal-apply.v1`, validates Brew completion authority, applies accepted objective requests through `ThreadGoalStore`, records clear-boundary receipts, and refuses invalid requests with a typed reason.
 
-Effort requests currently accept `medium`, `high`, and the `xhigh` alias family used by Cafex native Codex. Missing model/effort and invalid effort values write refused receipts. Unknown schemas are skipped, and existing receipt paths are skipped so repeated scans are idempotent.
+Effort requests currently accept `medium`, `high`, and the `xhigh` alias family used by Cafex native Codex. Mode requests accept `plan`/`planning` and `default`/`execute` aliases, preserve plan-checkpoint boundary metadata, and refuse invalid modes. Missing model/effort and invalid effort values write refused receipts. Unknown schemas are skipped, and existing receipt paths are skipped so repeated scans are idempotent.
 
 `processOnceFromEnv` follows the native env fallback shape:
 
-- Requests: `CAF_CODEX_EFFORT_REQUESTS_DIR`, then `CAF_CODEX_WAKE_REQUESTS_DIR`, then `CAF_CODEX_GOAL_REQUESTS_DIR`.
-- Receipts: `CAF_CODEX_EFFORT_RECEIPTS_DIR`, then `CAF_CODEX_WAKE_RECEIPTS_DIR`, then `CAF_CODEX_GOAL_RECEIPTS_DIR`.
+- Requests: `CAF_CODEX_EFFORT_REQUESTS_DIR`, then `CAF_CODEX_WAKE_REQUESTS_DIR`, then `CAF_CODEX_GOAL_REQUESTS_DIR`, then `CAF_CODEX_QUEUE_RECONCILE_REQUESTS_DIR`.
+- Receipts: `CAF_CODEX_EFFORT_RECEIPTS_DIR`, then `CAF_CODEX_WAKE_RECEIPTS_DIR`, then `CAF_CODEX_GOAL_RECEIPTS_DIR`, then `CAF_CODEX_QUEUE_RECONCILE_RECEIPTS_DIR`.
 
-The live native TUI applies effort/goal changes by sending app events and persisting native runtime state. This Haxe slice records the receipt and in-memory goal-store contract only; wiring live app-server/TUI persistence into the eventual runtime adapter remains a later Cafex milestone.
+The live native TUI applies effort/mode/goal changes by sending app events and persisting native runtime state. This Haxe slice records receipts, next-turn bridge rails, and the in-memory goal-store contract only; wiring live app-server/TUI persistence and current-turn mode mutation into the eventual runtime adapter remains a later Cafex milestone.
 
 ## Active Lane
 

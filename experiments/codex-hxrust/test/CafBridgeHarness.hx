@@ -27,6 +27,8 @@ class CafBridgeHarness {
         copyFixture("caf-effort-request.v1.json", requestsDir + "/effort-1.json");
         copyFixture("caf-effort-invalid-request.v1.json", requestsDir + "/effort-invalid.json");
         copyFixture("caf-wake-request.v1.json", requestsDir + "/wake-1.json");
+        copyFixture("caf-mode-plan-request.v1.json", requestsDir + "/mode-plan.json");
+        copyFixture("caf-mode-default-request.v1.json", requestsDir + "/mode-default.json");
         copyFixture("caf-mode-unsupported-request.v1.json", requestsDir + "/mode-unsupported.json");
         copyFixture("caf-goal-apply-request.v1.json", requestsDir + "/goal-1.json");
         copyFixture("caf-goal-clear-request.v1.json", requestsDir + "/goal-clear.json");
@@ -35,10 +37,12 @@ class CafBridgeHarness {
         File.saveContent(requestsDir + "/ignored.json", "{\n  \"schema\": \"caf-client-session.v1\",\n  \"requestId\": \"ignored\"\n}\n");
 
         final first = CafBridgeProcessor.processOnce(requestsDir, receiptsDir, writtenAt);
-        assertOutcome(first, true, 8, 1);
+        assertOutcome(first, true, 10, 1);
         assertReceipt("caf-effort-receipt.v1.json", receiptsDir + "/effort-1.json");
         assertReceipt("caf-effort-invalid-receipt.v1.json", receiptsDir + "/effort-invalid.json");
         assertReceipt("caf-wake-receipt.v1.json", receiptsDir + "/wake-1.json");
+        assertReceipt("caf-mode-plan-receipt.v1.json", receiptsDir + "/mode-plan.json");
+        assertReceipt("caf-mode-default-receipt.v1.json", receiptsDir + "/mode-default.json");
         assertReceipt("caf-mode-unsupported-receipt.v1.json", receiptsDir + "/mode-unsupported.json");
         assertReceipt("caf-goal-apply-receipt.v1.json", receiptsDir + "/goal-1.json");
         assertReceipt("caf-goal-clear-receipt.v1.json", receiptsDir + "/goal-clear.json");
@@ -47,7 +51,7 @@ class CafBridgeHarness {
         assertFalse(FileSystem.exists(receiptsDir + "/ignored.json"), "unknown Caf schema should not write a receipt");
 
         final second = CafBridgeProcessor.processOnce(requestsDir, receiptsDir, writtenAt);
-        assertOutcome(second, true, 0, 9);
+        assertOutcome(second, true, 0, 11);
         assertReceipt("caf-effort-receipt.v1.json", receiptsDir + "/effort-1.json");
     }
 
@@ -85,6 +89,8 @@ class CafBridgeHarness {
         deleteIfExists(baseDir + "/requests/effort-1.json");
         deleteIfExists(baseDir + "/requests/effort-invalid.json");
         deleteIfExists(baseDir + "/requests/wake-1.json");
+        deleteIfExists(baseDir + "/requests/mode-plan.json");
+        deleteIfExists(baseDir + "/requests/mode-default.json");
         deleteIfExists(baseDir + "/requests/mode-unsupported.json");
         deleteIfExists(baseDir + "/requests/goal-1.json");
         deleteIfExists(baseDir + "/requests/goal-clear.json");
@@ -94,6 +100,8 @@ class CafBridgeHarness {
         deleteIfExists(baseDir + "/receipts/effort-1.json");
         deleteIfExists(baseDir + "/receipts/effort-invalid.json");
         deleteIfExists(baseDir + "/receipts/wake-1.json");
+        deleteIfExists(baseDir + "/receipts/mode-plan.json");
+        deleteIfExists(baseDir + "/receipts/mode-default.json");
         deleteIfExists(baseDir + "/receipts/mode-unsupported.json");
         deleteIfExists(baseDir + "/receipts/goal-1.json");
         deleteIfExists(baseDir + "/receipts/goal-clear.json");

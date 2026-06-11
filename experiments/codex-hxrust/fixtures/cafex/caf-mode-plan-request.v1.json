@@ -1,0 +1,20 @@
+{
+  "schema": "cafetera.codex.mode-apply-request.v1",
+  "requestId": "mode-plan",
+  "taskId": "f12e-plan",
+  "clientId": "codex",
+  "runId": "run-1",
+  "laneId": "run-1",
+  "processId": 4242,
+  "conversationId": "conversation-1",
+  "continuityGenerationId": "generation-1",
+  "mode": "planning",
+  "requestedMode": "planning",
+  "targetMode": "plan",
+  "applyPhase": "next_turn",
+  "persist": false,
+  "policyId": "brew.task.f12e-plan.mode.plan",
+  "turnBoundaryPolicy": "plan_checkpoint",
+  "interruptCurrentTurn": false,
+  "continuationPrompt": "Plan first, then record checkpoint."
+}

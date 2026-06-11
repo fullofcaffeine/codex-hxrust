@@ -37,7 +37,7 @@ harness/check-replacement-go-no-go.sh
 | `reference/state-backend-spike.v1.json` | JSONL accepted for current experiment; SQLite required for persistent state replacement | No production state migration is implied. |
 | `reference/tool-registry-skeleton.v1.json` | registry lookup accepted; real MCP transport unsupported | Unsupported MCP operations fail closed. |
 | `experiments/codex-hxrust/fixtures/cafex/cafex-hxrust-seam-ledger.v1.json` | 10 supported, 4 unsupported, 1 review-only | Unsupported surfaces are explicit. |
-| `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` | 7 covered/pass, 5 gaps | No production replacement claim. |
+| `experiments/codex-hxrust/fixtures/cafex/cafetera-contract-subset-report.v1.json` | 8 covered/pass, 5 gaps | No production replacement claim. |
 
 ## Scorecard
 
@@ -54,7 +54,7 @@ harness/check-replacement-go-no-go.sh
 ## Unsupported Surfaces
 
 - Live pending-input queue mutation.
-- Live mode apply runtime.
+- Live mode apply runtime mutation.
 - Restart apply runtime bridge.
 - Plan-checkpoint continuation guard.
 - Live TUI and credentialed model runtime.
