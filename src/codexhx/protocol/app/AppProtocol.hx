@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,feedback/upload,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-045";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,feedback/upload,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-046";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -139,6 +139,12 @@ class AppProtocol {
                 validateFeedbackUploadResponse(result);
             case "command/exec":
                 validateCommandExecResponse(result);
+            case "command/exec/write":
+                validateEmptyObject(result, "$.message.result", "response:command/exec/write");
+            case "command/exec/terminate":
+                validateEmptyObject(result, "$.message.result", "response:command/exec/terminate");
+            case "command/exec/resize":
+                validateEmptyObject(result, "$.message.result", "response:command/exec/resize");
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -353,6 +359,12 @@ class AppProtocol {
                 validateFeedbackUploadParams(params);
             case "command/exec":
                 validateCommandExecParams(params);
+            case "command/exec/write":
+                validateCommandExecWriteParams(params);
+            case "command/exec/terminate":
+                validateCommandExecProcessOnlyParams(params, "params:command/exec/terminate");
+            case "command/exec/resize":
+                validateCommandExecResizeParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -1016,6 +1028,32 @@ class AppProtocol {
         return success("params:command/exec");
     }
 
+    static function validateCommandExecWriteParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final processId = requiredString(params.keys, params.values, "processId", "$.message.params.processId");
+        if (!processId.ok) return processId.toOutcome();
+        final deltaBase64 = validateOptionalNullableString(params, "deltaBase64", "$.message.params.deltaBase64");
+        if (!deltaBase64.ok) return deltaBase64;
+        final closeStdin = validateOptionalBool(params, "closeStdin", "$.message.params.closeStdin");
+        if (!closeStdin.ok) return closeStdin;
+        return success("params:command/exec/write");
+    }
+
+    static function validateCommandExecProcessOnlyParams(params:ProtocolObjectField, label:String):AppProtocolParseOutcome {
+        final processId = requiredString(params.keys, params.values, "processId", "$.message.params.processId");
+        if (!processId.ok) return processId.toOutcome();
+        return success(label);
+    }
+
+    static function validateCommandExecResizeParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final processId = requiredString(params.keys, params.values, "processId", "$.message.params.processId");
+        if (!processId.ok) return processId.toOutcome();
+        final size = requiredObjectField(params.keys, params.values, "size", "$.message.params.size");
+        if (!size.ok) return size.toOutcome();
+        final sizeResult = validateCommandExecTerminalSizeObject(size, "$.message.params.size");
+        if (!sizeResult.ok) return sizeResult;
+        return success("params:command/exec/resize");
+    }
+
     static function validateRequiredNonEmptyStringArray(values:Array<Value>, path:String):AppProtocolParseOutcome {
         if (values.length == 0) return fail("empty_array", path, "expected non-empty string array");
         var i = 0;
@@ -1037,16 +1075,20 @@ class AppProtocol {
             case JNull:
                 success("command-exec-size:null");
             case JObject(keys, values):
-                final rows = requiredUInt(keys, values, "rows", path + ".rows");
-                if (!rows.ok) return rows.toOutcome();
-                final cols = requiredUInt(keys, values, "cols", path + ".cols");
-                if (!cols.ok) return cols.toOutcome();
-                if (rows.value > 65535) return fail("expected_uint16", path + ".rows", "expected unsigned 16-bit JSON integer");
-                if (cols.value > 65535) return fail("expected_uint16", path + ".cols", "expected unsigned 16-bit JSON integer");
-                success("command-exec-size");
+                validateCommandExecTerminalSizeObject(ProtocolObjectField.success(keys, values), path);
             case _:
                 fail("expected_nullable_object", path, "expected JSON object or null");
         }
+    }
+
+    static function validateCommandExecTerminalSizeObject(size:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final rows = requiredUInt(size.keys, size.values, "rows", path + ".rows");
+        if (!rows.ok) return rows.toOutcome();
+        final cols = requiredUInt(size.keys, size.values, "cols", path + ".cols");
+        if (!cols.ok) return cols.toOutcome();
+        if (rows.value > 65535) return fail("expected_uint16", path + ".rows", "expected unsigned 16-bit JSON integer");
+        if (cols.value > 65535) return fail("expected_uint16", path + ".cols", "expected unsigned 16-bit JSON integer");
+        return success("command-exec-size");
     }
 
     static function validateOptionalCommandExecSandboxPolicy(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {

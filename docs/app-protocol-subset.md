@@ -24,6 +24,9 @@ Included client requests:
 - `account/sendAddCreditsNudgeEmail`
 - `feedback/upload`
 - `command/exec`
+- `command/exec/write`
+- `command/exec/terminate`
+- `command/exec/resize`
 
 Included server notifications:
 
@@ -96,8 +99,11 @@ Included response payloads:
 - `SendAddCreditsNudgeEmailResponse`
 - `FeedbackUploadResponse`
 - `CommandExecResponse`
+- `CommandExecWriteResponse`
+- `CommandExecTerminateResponse`
+- `CommandExecResizeResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read requests, add-credits nudge email requests, feedback upload requests, standalone command execution requests, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read requests, add-credits nudge email requests, feedback upload requests, standalone command execution requests and control requests, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -200,6 +206,8 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `feedback/upload` uploads user feedback. The selected subset validates required string `classification`, optional nullable `reason` and `threadId`, optional boolean `includeLogs`, optional nullable string-array `extraLogFiles`, optional nullable string map `tags`, and response `threadId`.
 
 `command/exec` runs a standalone argv-vector command under the server sandbox. The selected subset validates non-empty string `command`, optional nullable `processId`, `cwd`, and `permissionProfile`, optional boolean execution flags, nullable integer `outputBytesCap`/`timeoutMs`, nullable env maps with string/null values, nullable terminal size, sandbox policy variants, and response `exitCode`, `stdout`, and `stderr`. It also validates documented request invariants for process IDs required by TTY/streaming modes, incompatible output-cap and timeout settings, terminal size requiring TTY, and `sandboxPolicy`/`permissionProfile` exclusivity. The fixture is protocol-only and does not execute a real shell command.
+
+`command/exec/write`, `command/exec/terminate`, and `command/exec/resize` control a running standalone command process. The selected subset validates required string `processId`, optional nullable write `deltaBase64`, optional boolean `closeStdin`, resize terminal size rows/cols, and the empty object success responses. The fixture is protocol-only and does not write stdin, terminate, or resize a real process.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 

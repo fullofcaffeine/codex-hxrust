@@ -487,6 +487,81 @@
       }
     },
     {
+      "id": "command-exec-write-request",
+      "kind": "request",
+      "method": "command/exec/write",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "command-exec-write-1",
+        "method": "command/exec/write",
+        "params": {
+          "processId": "proc-fixture-1",
+          "deltaBase64": "Zml4dHVyZQo=",
+          "closeStdin": false
+        }
+      }
+    },
+    {
+      "id": "command-exec-write-response",
+      "kind": "response",
+      "method": "command/exec/write",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "command-exec-write-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "command-exec-terminate-request",
+      "kind": "request",
+      "method": "command/exec/terminate",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "command-exec-terminate-1",
+        "method": "command/exec/terminate",
+        "params": {
+          "processId": "proc-fixture-1"
+        }
+      }
+    },
+    {
+      "id": "command-exec-terminate-response",
+      "kind": "response",
+      "method": "command/exec/terminate",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "command-exec-terminate-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "command-exec-resize-request",
+      "kind": "request",
+      "method": "command/exec/resize",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "command-exec-resize-1",
+        "method": "command/exec/resize",
+        "params": {
+          "processId": "proc-fixture-1",
+          "size": {
+            "rows": 30,
+            "cols": 100
+          }
+        }
+      }
+    },
+    {
+      "id": "command-exec-resize-response",
+      "kind": "response",
+      "method": "command/exec/resize",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "command-exec-resize-1",
+        "result": {}
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

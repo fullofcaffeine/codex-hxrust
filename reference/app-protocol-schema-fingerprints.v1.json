@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:10b8813205dfced4540dec74dcd840ebd0a186a52ede4d8fdd030d26545a62f0",
+  "fingerprint": "sha256:6e3103a3c906c97ea696bd073100473f91a0021449ae1d57ba197fe66b0efa93",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -135,6 +135,24 @@
       ]
     },
     {
+      "id": "CommandExecResizeParams",
+      "sourcePath": "v2/CommandExecResizeParams.json",
+      "sha256": "e98f3496e2e41e764d475dcde9f5b46cb417014ec83369cca7433f9f3b956ad3",
+      "fields": [
+        "definition:CommandExecTerminalSize",
+        "property:processId",
+        "property:size",
+        "required:processId",
+        "required:size"
+      ]
+    },
+    {
+      "id": "CommandExecResizeResponse",
+      "sourcePath": "v2/CommandExecResizeResponse.json",
+      "sha256": "007b8ba5881b625e21164e2a0ca0f92c7efeccf5e28b9ef30bd67bfd2ad61cda",
+      "fields": []
+    },
+    {
       "id": "CommandExecResponse",
       "sourcePath": "v2/CommandExecResponse.json",
       "sha256": "f40282af0193d753edd4df784fd96054da3634ec41965619e8ffd27141a21191",
@@ -146,6 +164,38 @@
         "required:stderr",
         "required:stdout"
       ]
+    },
+    {
+      "id": "CommandExecTerminateParams",
+      "sourcePath": "v2/CommandExecTerminateParams.json",
+      "sha256": "aac0457aa0a677a5c787aa4dae9f8a15d301d76448192c7ec90a89fba1ca6059",
+      "fields": [
+        "property:processId",
+        "required:processId"
+      ]
+    },
+    {
+      "id": "CommandExecTerminateResponse",
+      "sourcePath": "v2/CommandExecTerminateResponse.json",
+      "sha256": "766a12c498d924430fe70ccc1c1b83c6f9b020c7e81cf282943f0b1ea8ba5384",
+      "fields": []
+    },
+    {
+      "id": "CommandExecWriteParams",
+      "sourcePath": "v2/CommandExecWriteParams.json",
+      "sha256": "e6e0786a3ed4c56305a097361c13e55f7f94a16cef354e17651c906d63aaa6ab",
+      "fields": [
+        "property:closeStdin",
+        "property:deltaBase64",
+        "property:processId",
+        "required:processId"
+      ]
+    },
+    {
+      "id": "CommandExecWriteResponse",
+      "sourcePath": "v2/CommandExecWriteResponse.json",
+      "sha256": "ea7f0b4a3f2a496e42c86c051ad8f193a08b6193ba678dcd420fbb714833c20c",
+      "fields": []
     },
     {
       "id": "CommandExecutionOutputDeltaNotification",

@@ -30,6 +30,9 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "account/sendAddCreditsNudgeEmail");
         assertContains(fingerprintJson, "feedback/upload");
         assertContains(fingerprintJson, "command/exec");
+        assertContains(fingerprintJson, "command/exec/write");
+        assertContains(fingerprintJson, "command/exec/terminate");
+        assertContains(fingerprintJson, "command/exec/resize");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -83,7 +86,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("82", Std.string(items.length));
+        assertEquals("88", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -104,8 +107,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("14", Std.string(requests));
-        assertEquals("14", Std.string(responses));
+        assertEquals("17", Std.string(requests));
+        assertEquals("17", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -510,6 +513,31 @@ class AppProtocolHarness {
         assertFalse(missingCommandExit.ok, "command/exec response must include exitCode");
         assertEquals("missing_field", missingCommandExit.errorCode);
         assertEquals("$.message.result.exitCode", missingCommandExit.errorPath);
+
+        final missingCommandWriteProcess = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-write-missing-process\",\"kind\":\"request\",\"method\":\"command/exec/write\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-write-1\",\"method\":\"command/exec/write\",\"params\":{\"deltaBase64\":\"AA==\"}}}")));
+        assertFalse(missingCommandWriteProcess.ok, "command/exec/write requires processId");
+        assertEquals("missing_field", missingCommandWriteProcess.errorCode);
+        assertEquals("$.message.params.processId", missingCommandWriteProcess.errorPath);
+
+        final invalidCommandWriteClose = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-write-invalid-close\",\"kind\":\"request\",\"method\":\"command/exec/write\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-write-1\",\"method\":\"command/exec/write\",\"params\":{\"processId\":\"proc-1\",\"closeStdin\":\"yes\"}}}")));
+        assertFalse(invalidCommandWriteClose.ok, "command/exec/write closeStdin must be a boolean");
+        assertEquals("expected_bool", invalidCommandWriteClose.errorCode);
+        assertEquals("$.message.params.closeStdin", invalidCommandWriteClose.errorPath);
+
+        final missingCommandTerminateProcess = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-terminate-missing-process\",\"kind\":\"request\",\"method\":\"command/exec/terminate\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-term-1\",\"method\":\"command/exec/terminate\",\"params\":{}}}")));
+        assertFalse(missingCommandTerminateProcess.ok, "command/exec/terminate requires processId");
+        assertEquals("missing_field", missingCommandTerminateProcess.errorCode);
+        assertEquals("$.message.params.processId", missingCommandTerminateProcess.errorPath);
+
+        final invalidCommandResizeRows = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-resize-invalid-rows\",\"kind\":\"request\",\"method\":\"command/exec/resize\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-resize-1\",\"method\":\"command/exec/resize\",\"params\":{\"processId\":\"proc-1\",\"size\":{\"rows\":70000,\"cols\":80}}}}")));
+        assertFalse(invalidCommandResizeRows.ok, "command/exec/resize rows must fit uint16");
+        assertEquals("expected_uint16", invalidCommandResizeRows.errorCode);
+        assertEquals("$.message.params.size.rows", invalidCommandResizeRows.errorPath);
+
+        final invalidCommandResizeResponse = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-resize-extra-response\",\"kind\":\"response\",\"method\":\"command/exec/resize\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-resize-1\",\"result\":{\"ok\":true}}}")));
+        assertFalse(invalidCommandResizeResponse.ok, "command/exec/resize response must be empty");
+        assertEquals("unexpected_field", invalidCommandResizeResponse.errorCode);
+        assertEquals("$.message.result.ok", invalidCommandResizeResponse.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
