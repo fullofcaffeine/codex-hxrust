@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:cda2ec4abe16c1a8ef02d25ed49803de1652393b29c405e09fd3a624b46f0791",
+  "fingerprint": "sha256:e7a5b5d2c5c9f09464baf1bd6173fcc68ba4be3082c3b29f0e12e51d76f1c231",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -632,6 +632,27 @@
         "definition:WebSearchAction",
         "property:thread",
         "required:thread"
+      ]
+    },
+    {
+      "id": "ThreadRealtimeClosedNotification",
+      "sourcePath": "v2/ThreadRealtimeClosedNotification.json",
+      "sha256": "3364ddc1779dce3617315766741aaa9da04cb5a560c714a8f77cc98cfd05dff4",
+      "fields": [
+        "property:reason",
+        "property:threadId",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadRealtimeErrorNotification",
+      "sourcePath": "v2/ThreadRealtimeErrorNotification.json",
+      "sha256": "d1ec73636604e5a7566429dc5a48d8701314709b60268e184d36765dc6617c4f",
+      "fields": [
+        "property:message",
+        "property:threadId",
+        "required:message",
+        "required:threadId"
       ]
     },
     {

@@ -998,6 +998,32 @@
       }
     },
     {
+      "id": "thread-realtime-error-notification",
+      "kind": "notification",
+      "method": "thread/realtime/error",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/realtime/error",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "message": "Realtime transport error."
+        }
+      }
+    },
+    {
+      "id": "thread-realtime-closed-notification",
+      "kind": "notification",
+      "method": "thread/realtime/closed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/realtime/closed",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "reason": null
+        }
+      }
+    },
+    {
       "id": "external-agent-config-import-completed-notification",
       "kind": "notification",
       "method": "externalAgentConfig/import/completed",

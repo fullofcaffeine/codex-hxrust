@@ -55,6 +55,8 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/realtime/transcript/done");
         assertContains(fingerprintJson, "thread/realtime/outputAudio/delta");
         assertContains(fingerprintJson, "thread/realtime/sdp");
+        assertContains(fingerprintJson, "thread/realtime/error");
+        assertContains(fingerprintJson, "thread/realtime/closed");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -68,7 +70,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("57", Std.string(items.length));
+        assertEquals("59", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -91,7 +93,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("48", Std.string(notifications));
+        assertEquals("50", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -350,6 +352,16 @@ class AppProtocolHarness {
         assertFalse(missingRealtimeSdp.ok, "realtime SDP notification must include sdp");
         assertEquals("missing_field", missingRealtimeSdp.errorCode);
         assertEquals("$.message.params.sdp", missingRealtimeSdp.errorPath);
+
+        final invalidRealtimeErrorMessage = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-error-invalid-message\",\"kind\":\"notification\",\"method\":\"thread/realtime/error\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/error\",\"params\":{\"threadId\":\"thread-1\",\"message\":7}}}")));
+        assertFalse(invalidRealtimeErrorMessage.ok, "realtime error message must be a string");
+        assertEquals("expected_string", invalidRealtimeErrorMessage.errorCode);
+        assertEquals("$.message.params.message", invalidRealtimeErrorMessage.errorPath);
+
+        final invalidRealtimeClosedReason = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-closed-invalid-reason\",\"kind\":\"notification\",\"method\":\"thread/realtime/closed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/closed\",\"params\":{\"threadId\":\"thread-1\",\"reason\":7}}}")));
+        assertFalse(invalidRealtimeClosedReason.ok, "realtime closed reason must be a string or null when present");
+        assertEquals("expected_nullable_string", invalidRealtimeClosedReason.errorCode);
+        assertEquals("$.message.params.reason", invalidRealtimeClosedReason.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

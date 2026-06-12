@@ -74,6 +74,8 @@ selected_schemas=(
   "ThreadRealtimeTranscriptDoneNotification:v2/ThreadRealtimeTranscriptDoneNotification.json"
   "ThreadRealtimeOutputAudioDeltaNotification:v2/ThreadRealtimeOutputAudioDeltaNotification.json"
   "ThreadRealtimeSdpNotification:v2/ThreadRealtimeSdpNotification.json"
+  "ThreadRealtimeErrorNotification:v2/ThreadRealtimeErrorNotification.json"
+  "ThreadRealtimeClosedNotification:v2/ThreadRealtimeClosedNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

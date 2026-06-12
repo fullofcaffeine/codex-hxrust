@@ -55,6 +55,8 @@ Included server notifications:
 - `thread/realtime/transcript/done`
 - `thread/realtime/outputAudio/delta`
 - `thread/realtime/sdp`
+- `thread/realtime/error`
+- `thread/realtime/closed`
 - `externalAgentConfig/import/completed`
 - `fs/changed`
 - `item/completed`
@@ -72,7 +74,7 @@ Included response payloads:
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -145,6 +147,10 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `thread/realtime/outputAudio/delta` is experimental upstream realtime audio output streaming. The selected subset validates required text `threadId`, required `audio.data`, optional nullable `audio.itemId`, unsigned integer `audio.numChannels` and `audio.sampleRate`, and optional nullable unsigned integer `audio.samplesPerChannel`.
 
 `thread/realtime/sdp` is experimental upstream WebRTC session description emission. The selected subset validates required text `threadId` and `sdp`.
+
+`thread/realtime/error` is experimental upstream realtime transport error reporting. The selected subset validates required text `threadId` and `message`.
+
+`thread/realtime/closed` is experimental upstream realtime transport closure reporting. The selected subset validates required text `threadId` plus optional nullable `reason`.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 
