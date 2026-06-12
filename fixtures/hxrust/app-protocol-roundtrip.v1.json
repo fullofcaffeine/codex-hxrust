@@ -792,6 +792,19 @@
       }
     },
     {
+      "id": "warning-notification",
+      "kind": "notification",
+      "method": "warning",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "warning",
+        "params": {
+          "message": "Using a fallback provider setting.",
+          "threadId": null
+        }
+      }
+    },
+    {
       "id": "external-agent-config-import-completed-notification",
       "kind": "notification",
       "method": "externalAgentConfig/import/completed",
