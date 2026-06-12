@@ -50,6 +50,16 @@ Cafex work is a compatibility layer that comes after the upstream-shaped Haxe co
 
 Use `docs/testing-strategy.md` as the testing policy. Haxe-authored tests that run through the Haxe interpreter and haxe.rust-generated Rust are the primary codexhx proof. Upstream Codex schemas, fixtures, and tests are contract inputs and oracle evidence; adapt them into Haxe-owned fixtures or differential public-behavior harnesses rather than treating upstream Rust-internal test success as sufficient. Generated Rust must remain build output and must not be manually edited to pass tests.
 
+## Haxe and Generated Rust Quality
+
+Write codexhx as top-quality, well-typed Haxe that adapts upstream Codex idioms into Haxe's type system instead of copying Rust shapes mechanically. Prefer Haxe-native abstractions that preserve the Codex architecture while making illegal states harder to represent.
+
+Avoid stringly typed code when a stronger representation is practical. Prefer concrete `typedef` schemas, classes, abstracts/newtypes, enum abstracts, typed enums, and GADT-style typed enum patterns where Haxe can express them. Use strings only at protocol, JSON, CLI, filesystem, or upstream compatibility boundaries; convert them into typed values as soon as they enter codexhx code.
+
+Use macros when they materially improve the abstraction: deriving repetitive protocol/schema validators, keeping fixtures and DTO definitions in sync, enforcing invariants at compile time, or reducing boilerplate that would otherwise invite drift. Do not use macros for cleverness alone; macro output should remain understandable, typed, and covered by interpreter plus generated-Rust tests.
+
+The generated Rust is a product surface. Haxe design choices should help haxe.rust emit readable, idiomatic, warning-clean, production-quality Rust with native representations and minimal hxrt/runtime involvement wherever the active semantic contract permits it. If high-quality Haxe still produces poor Rust, track and fix that as a generic haxe.rust compiler/runtime improvement rather than working around it with Codex-specific source contortions.
+
 ## haxe.rust Profile Language
 
 Use haxe.rust's supported profile selectors precisely:
