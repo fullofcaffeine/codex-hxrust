@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/usage/read,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-042";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-043";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -133,6 +133,8 @@ class AppProtocol {
                 validateGetAccountRateLimitsResponse(result);
             case "account/usage/read":
                 validateGetAccountTokenUsageResponse(result);
+            case "account/sendAddCreditsNudgeEmail":
+                validateSendAddCreditsNudgeEmailResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -341,6 +343,8 @@ class AppProtocol {
                 success("params:account/rateLimits/read");
             case "account/usage/read":
                 success("params:account/usage/read");
+            case "account/sendAddCreditsNudgeEmail":
+                validateSendAddCreditsNudgeEmailParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -912,6 +916,20 @@ class AppProtocol {
             case _:
                 fail("expected_nullable_array", path, "expected JSON array or null");
         }
+    }
+
+    static function validateSendAddCreditsNudgeEmailParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final creditType = requiredString(params.keys, params.values, "creditType", "$.message.params.creditType");
+        if (!creditType.ok) return creditType.toOutcome();
+        if (!validAddCreditsNudgeCreditType(creditType.value)) return fail("invalid_add_credits_nudge_credit_type", "$.message.params.creditType", "unsupported add-credits nudge credit type");
+        return success("params:account/sendAddCreditsNudgeEmail");
+    }
+
+    static function validateSendAddCreditsNudgeEmailResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final status = requiredString(result.keys, result.values, "status", "$.message.result.status");
+        if (!status.ok) return status.toOutcome();
+        if (!validAddCreditsNudgeEmailStatus(status.value)) return fail("invalid_add_credits_nudge_email_status", "$.message.result.status", "unsupported add-credits nudge email status");
+        return success("response:account/sendAddCreditsNudgeEmail");
     }
 
     static function validateAccountRateLimitsUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
@@ -1642,6 +1660,14 @@ class AppProtocol {
 
     static function validCancelLoginAccountStatus(value:String):Bool {
         return value == "canceled" || value == "notFound";
+    }
+
+    static function validAddCreditsNudgeCreditType(value:String):Bool {
+        return value == "credits" || value == "usage_limit";
+    }
+
+    static function validAddCreditsNudgeEmailStatus(value:String):Bool {
+        return value == "sent" || value == "cooldown_active";
     }
 
     static function success(summary:String):AppProtocolParseOutcome {

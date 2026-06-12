@@ -21,6 +21,7 @@ Included client requests:
 - `account/logout`
 - `account/rateLimits/read`
 - `account/usage/read`
+- `account/sendAddCreditsNudgeEmail`
 
 Included server notifications:
 
@@ -90,8 +91,9 @@ Included response payloads:
 - `LogoutAccountResponse`
 - `GetAccountRateLimitsResponse`
 - `GetAccountTokenUsageResponse`
+- `SendAddCreditsNudgeEmailResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read requests, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read requests, add-credits nudge email requests, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -188,6 +190,8 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `account/rateLimits/read` reads the current account rate-limit snapshot. Upstream models params as absent/undefined; the selected subset accepts missing, null, or empty object params and validates required `rateLimits` plus optional nullable `rateLimitsByLimitId` snapshots.
 
 `account/usage/read` reads account token usage. Upstream models params as absent/undefined; the selected subset accepts missing, null, or empty object params and validates required `summary` nullable integer fields plus optional nullable `dailyUsageBuckets` with `startDate` and integer `tokens`.
+
+`account/sendAddCreditsNudgeEmail` asks the app server to send an add-credits nudge email. The selected subset validates required request `creditType` as `credits` or `usage_limit`, and response `status` as `sent` or `cooldown_active`.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 

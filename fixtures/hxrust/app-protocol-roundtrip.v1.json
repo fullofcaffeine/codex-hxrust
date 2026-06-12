@@ -379,6 +379,31 @@
       }
     },
     {
+      "id": "account-send-add-credits-nudge-email-request",
+      "kind": "request",
+      "method": "account/sendAddCreditsNudgeEmail",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-add-credits-nudge-1",
+        "method": "account/sendAddCreditsNudgeEmail",
+        "params": {
+          "creditType": "credits"
+        }
+      }
+    },
+    {
+      "id": "account-send-add-credits-nudge-email-response",
+      "kind": "response",
+      "method": "account/sendAddCreditsNudgeEmail",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-add-credits-nudge-1",
+        "result": {
+          "status": "sent"
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

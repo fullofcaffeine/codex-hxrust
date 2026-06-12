@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:bf4a5d94eb0005f2cedcd0c6b05c287fdd1de56f0deabd90cea71ee49d953b11",
+  "fingerprint": "sha256:a10fffa662d60cce2902c5791fb8a0c84c6e90083f4bdb369bdf6d55be28066c",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -616,6 +616,26 @@
         "property:status",
         "required:installationId",
         "required:serverName",
+        "required:status"
+      ]
+    },
+    {
+      "id": "SendAddCreditsNudgeEmailParams",
+      "sourcePath": "v2/SendAddCreditsNudgeEmailParams.json",
+      "sha256": "f8ec4b79f34285a127a65abfeb62cdc5605c591640746f5bf4c05a9487402302",
+      "fields": [
+        "definition:AddCreditsNudgeCreditType",
+        "property:creditType",
+        "required:creditType"
+      ]
+    },
+    {
+      "id": "SendAddCreditsNudgeEmailResponse",
+      "sourcePath": "v2/SendAddCreditsNudgeEmailResponse.json",
+      "sha256": "ea5d596aaa4a54ba8fc6ba0ee115cedf6e43f5eef6037338eae67f7390940cd1",
+      "fields": [
+        "definition:AddCreditsNudgeEmailStatus",
+        "property:status",
         "required:status"
       ]
     },

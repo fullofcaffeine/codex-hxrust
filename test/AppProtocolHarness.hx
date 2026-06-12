@@ -27,6 +27,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "account/logout");
         assertContains(fingerprintJson, "account/rateLimits/read");
         assertContains(fingerprintJson, "account/usage/read");
+        assertContains(fingerprintJson, "account/sendAddCreditsNudgeEmail");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -80,7 +81,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("76", Std.string(items.length));
+        assertEquals("78", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -101,8 +102,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("11", Std.string(requests));
-        assertEquals("11", Std.string(responses));
+        assertEquals("12", Std.string(requests));
+        assertEquals("12", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -437,6 +438,16 @@ class AppProtocolHarness {
         assertFalse(invalidUsageBucketTokens.ok, "account usage bucket tokens must be an integer");
         assertEquals("expected_number", invalidUsageBucketTokens.errorCode);
         assertEquals("$.message.result.dailyUsageBuckets[0].tokens", invalidUsageBucketTokens.errorPath);
+
+        final invalidAddCreditsNudgeType = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-add-credits-nudge-invalid-type\",\"kind\":\"request\",\"method\":\"account/sendAddCreditsNudgeEmail\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"nudge-1\",\"method\":\"account/sendAddCreditsNudgeEmail\",\"params\":{\"creditType\":\"tokens\"}}}")));
+        assertFalse(invalidAddCreditsNudgeType.ok, "add-credits nudge creditType must be a known enum value");
+        assertEquals("invalid_add_credits_nudge_credit_type", invalidAddCreditsNudgeType.errorCode);
+        assertEquals("$.message.params.creditType", invalidAddCreditsNudgeType.errorPath);
+
+        final invalidAddCreditsNudgeStatus = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-add-credits-nudge-invalid-status\",\"kind\":\"response\",\"method\":\"account/sendAddCreditsNudgeEmail\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"nudge-1\",\"result\":{\"status\":\"queued\"}}}")));
+        assertFalse(invalidAddCreditsNudgeStatus.ok, "add-credits nudge response status must be a known enum value");
+        assertEquals("invalid_add_credits_nudge_email_status", invalidAddCreditsNudgeStatus.errorCode);
+        assertEquals("$.message.result.status", invalidAddCreditsNudgeStatus.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
