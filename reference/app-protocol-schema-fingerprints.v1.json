@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:27ed3916a56e8e1d2291381565e50daa3307ce5f897f0c355a58bea2bcb34b86",
+  "fingerprint": "sha256:0927b6f63e0e3e18d771de8bf95ac909d2c69ab2cfc10b37ec75d209f8d8d053",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -632,6 +632,43 @@
         "definition:WebSearchAction",
         "property:thread",
         "required:thread"
+      ]
+    },
+    {
+      "id": "ThreadRealtimeItemAddedNotification",
+      "sourcePath": "v2/ThreadRealtimeItemAddedNotification.json",
+      "sha256": "fb1750c38923b0b688aab5f449b41d4cfb16d34ef876d096fd422b664aeb1f5c",
+      "fields": [
+        "property:item",
+        "property:threadId",
+        "required:item",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadRealtimeStartedNotification",
+      "sourcePath": "v2/ThreadRealtimeStartedNotification.json",
+      "sha256": "527d37ae019f0d2253e530ba94bd90fe6d1d66dad90c473b05026357e7fe2fd2",
+      "fields": [
+        "definition:RealtimeConversationVersion",
+        "property:realtimeSessionId",
+        "property:threadId",
+        "property:version",
+        "required:threadId",
+        "required:version"
+      ]
+    },
+    {
+      "id": "ThreadRealtimeTranscriptDeltaNotification",
+      "sourcePath": "v2/ThreadRealtimeTranscriptDeltaNotification.json",
+      "sha256": "58b37a71b1ba062a18367d1f55d11aa147be2f7ae1b26f8217fbaa23f7992c1f",
+      "fields": [
+        "property:delta",
+        "property:role",
+        "property:threadId",
+        "required:delta",
+        "required:role",
+        "required:threadId"
       ]
     },
     {

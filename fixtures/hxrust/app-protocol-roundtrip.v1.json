@@ -901,6 +901,57 @@
       }
     },
     {
+      "id": "thread-realtime-started-notification",
+      "kind": "notification",
+      "method": "thread/realtime/started",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/realtime/started",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "version": "v2",
+          "realtimeSessionId": null
+        }
+      }
+    },
+    {
+      "id": "thread-realtime-item-added-notification",
+      "kind": "notification",
+      "method": "thread/realtime/itemAdded",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/realtime/itemAdded",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "item": {
+            "id": "rt-item-1",
+            "type": "message",
+            "role": "assistant",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "Realtime hello"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-realtime-transcript-delta-notification",
+      "kind": "notification",
+      "method": "thread/realtime/transcript/delta",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/realtime/transcript/delta",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "role": "assistant",
+          "delta": "Hello"
+        }
+      }
+    },
+    {
       "id": "external-agent-config-import-completed-notification",
       "kind": "notification",
       "method": "externalAgentConfig/import/completed",

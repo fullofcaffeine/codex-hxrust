@@ -49,6 +49,9 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "configWarning");
         assertContains(fingerprintJson, "fuzzyFileSearch/sessionUpdated");
         assertContains(fingerprintJson, "fuzzyFileSearch/sessionCompleted");
+        assertContains(fingerprintJson, "thread/realtime/started");
+        assertContains(fingerprintJson, "thread/realtime/itemAdded");
+        assertContains(fingerprintJson, "thread/realtime/transcript/delta");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -62,7 +65,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("51", Std.string(items.length));
+        assertEquals("54", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -85,7 +88,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("42", Std.string(notifications));
+        assertEquals("45", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -309,6 +312,21 @@ class AppProtocolHarness {
         assertFalse(missingFuzzyCompletedSession.ok, "fuzzy file search completion must include sessionId");
         assertEquals("missing_field", missingFuzzyCompletedSession.errorCode);
         assertEquals("$.message.params.sessionId", missingFuzzyCompletedSession.errorPath);
+
+        final invalidRealtimeVersion = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-started-invalid-version\",\"kind\":\"notification\",\"method\":\"thread/realtime/started\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/started\",\"params\":{\"threadId\":\"thread-1\",\"version\":\"v3\",\"realtimeSessionId\":null}}}")));
+        assertFalse(invalidRealtimeVersion.ok, "realtime started version must be v1 or v2");
+        assertEquals("invalid_realtime_conversation_version", invalidRealtimeVersion.errorCode);
+        assertEquals("$.message.params.version", invalidRealtimeVersion.errorPath);
+
+        final missingRealtimeItem = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-item-missing-item\",\"kind\":\"notification\",\"method\":\"thread/realtime/itemAdded\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/itemAdded\",\"params\":{\"threadId\":\"thread-1\"}}}")));
+        assertFalse(missingRealtimeItem.ok, "realtime itemAdded must include item");
+        assertEquals("missing_field", missingRealtimeItem.errorCode);
+        assertEquals("$.message.params.item", missingRealtimeItem.errorPath);
+
+        final invalidRealtimeTranscriptDelta = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-transcript-invalid-delta\",\"kind\":\"notification\",\"method\":\"thread/realtime/transcript/delta\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/transcript/delta\",\"params\":{\"threadId\":\"thread-1\",\"role\":\"assistant\",\"delta\":7}}}")));
+        assertFalse(invalidRealtimeTranscriptDelta.ok, "realtime transcript delta must be a string");
+        assertEquals("expected_string", invalidRealtimeTranscriptDelta.errorCode);
+        assertEquals("$.message.params.delta", invalidRealtimeTranscriptDelta.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
