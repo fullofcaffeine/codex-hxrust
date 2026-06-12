@@ -279,6 +279,106 @@
       }
     },
     {
+      "id": "account-logout-request",
+      "kind": "request",
+      "method": "account/logout",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-logout-1",
+        "method": "account/logout"
+      }
+    },
+    {
+      "id": "account-logout-response",
+      "kind": "response",
+      "method": "account/logout",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-logout-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "account-rate-limits-read-request",
+      "kind": "request",
+      "method": "account/rateLimits/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-rate-limits-1",
+        "method": "account/rateLimits/read"
+      }
+    },
+    {
+      "id": "account-rate-limits-read-response",
+      "kind": "response",
+      "method": "account/rateLimits/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-rate-limits-1",
+        "result": {
+          "rateLimits": {
+            "limitId": "codex",
+            "limitName": "Codex",
+            "primary": {
+              "usedPercent": 25,
+              "resetsAt": null,
+              "windowDurationMins": 300
+            },
+            "secondary": null,
+            "credits": {
+              "hasCredits": true,
+              "unlimited": false,
+              "balance": "42"
+            },
+            "individualLimit": null,
+            "planType": "pro",
+            "rateLimitReachedType": null
+          },
+          "rateLimitsByLimitId": {
+            "codex": {
+              "primary": {
+                "usedPercent": 25
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "account-usage-read-request",
+      "kind": "request",
+      "method": "account/usage/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-usage-1",
+        "method": "account/usage/read"
+      }
+    },
+    {
+      "id": "account-usage-read-response",
+      "kind": "response",
+      "method": "account/usage/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-usage-1",
+        "result": {
+          "summary": {
+            "lifetimeTokens": 1200,
+            "peakDailyTokens": 700,
+            "longestRunningTurnSec": null,
+            "currentStreakDays": 3,
+            "longestStreakDays": 5
+          },
+          "dailyUsageBuckets": [
+            {
+              "startDate": "2026-06-12",
+              "tokens": 700
+            }
+          ]
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

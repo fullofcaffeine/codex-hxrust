@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-041";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/usage/read,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-042";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -88,20 +88,8 @@ class AppProtocol {
         if (!method.ok) return method.toOutcome();
         if (method.value != fixtureMethod) return fail("method_mismatch", "$.message.method", "message method differs from fixture method");
 
-        final params = if (fixtureMethod == "windowsSandbox/readiness") {
-            final paramsIndex = fieldIndex(object.keys, "params");
-            if (paramsIndex < 0) {
-                ProtocolObjectField.success([], []);
-            } else {
-                switch object.values[paramsIndex] {
-                    case JNull:
-                        ProtocolObjectField.success([], []);
-                    case JObject(keys, values):
-                        ProtocolObjectField.success(keys, values);
-                    case _:
-                        ProtocolObjectField.failure("expected_nullable_object", "$.message.params", "expected JSON object, null, or missing params");
-                }
-            }
+        final params = if (acceptsOptionalEmptyParams(fixtureMethod)) {
+            optionalEmptyParams(object);
         } else {
             requiredObjectField(object.keys, object.values, "params", "$.message.params");
         }
@@ -139,6 +127,12 @@ class AppProtocol {
                 validateLoginAccountResponse(result);
             case "account/login/cancel":
                 validateCancelLoginAccountResponse(result);
+            case "account/logout":
+                validateEmptyObject(result, "$.message.result", "response:account/logout");
+            case "account/rateLimits/read":
+                validateGetAccountRateLimitsResponse(result);
+            case "account/usage/read":
+                validateGetAccountTokenUsageResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -283,6 +277,28 @@ class AppProtocol {
         return success("jsonrpc-error");
     }
 
+    static function acceptsOptionalEmptyParams(method:String):Bool {
+        return method == "windowsSandbox/readiness" || method == "account/logout" || method == "account/rateLimits/read" || method == "account/usage/read";
+    }
+
+    static function optionalEmptyParams(object:ProtocolObjectField):ProtocolObjectField {
+        final paramsIndex = fieldIndex(object.keys, "params");
+        if (paramsIndex < 0) return ProtocolObjectField.success([], []);
+        return switch object.values[paramsIndex] {
+            case JNull:
+                ProtocolObjectField.success([], []);
+            case JObject(keys, values):
+                ProtocolObjectField.success(keys, values);
+            case _:
+                ProtocolObjectField.failure("expected_nullable_object", "$.message.params", "expected JSON object, null, or missing params");
+        }
+    }
+
+    static function validateEmptyObject(object:ProtocolObjectField, path:String, label:String):AppProtocolParseOutcome {
+        if (object.keys.length != 0) return fail("unexpected_field", path + "." + object.keys[0], "expected empty JSON object");
+        return success(label);
+    }
+
     static function validateParams(method:String, params:ProtocolObjectField):AppProtocolParseOutcome {
         return switch method {
             case "thread/start":
@@ -319,6 +335,12 @@ class AppProtocol {
                 validateLoginAccountParams(params);
             case "account/login/cancel":
                 validateCancelLoginAccountParams(params);
+            case "account/logout":
+                success("params:account/logout");
+            case "account/rateLimits/read":
+                success("params:account/rateLimits/read");
+            case "account/usage/read":
+                success("params:account/usage/read");
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -817,6 +839,79 @@ class AppProtocol {
         final error = validateOptionalNullableString(params, "error", "$.message.params.error");
         if (!error.ok) return error;
         return success("notification:account/login/completed");
+    }
+
+    static function validateGetAccountRateLimitsResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final rateLimits = requiredObjectField(result.keys, result.values, "rateLimits", "$.message.result.rateLimits");
+        if (!rateLimits.ok) return rateLimits.toOutcome();
+        final rateLimitsResult = validateRateLimitSnapshot(rateLimits, "$.message.result.rateLimits");
+        if (!rateLimitsResult.ok) return rateLimitsResult;
+        final byLimitId = validateOptionalRateLimitSnapshotMap(result, "rateLimitsByLimitId", "$.message.result.rateLimitsByLimitId");
+        if (!byLimitId.ok) return byLimitId;
+        return success("response:account/rateLimits/read");
+    }
+
+    static function validateOptionalRateLimitSnapshotMap(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("rate-limits:missing-map");
+        return switch object.values[i] {
+            case JNull:
+                success("rate-limits:null-map");
+            case JObject(keys, values):
+                var entryIndex = 0;
+                while (entryIndex < values.length) {
+                    final snapshot = requireObject(values[entryIndex], path + "." + keys[entryIndex]);
+                    if (!snapshot.ok) return snapshot.toOutcome();
+                    final snapshotResult = validateRateLimitSnapshot(snapshot, path + "." + keys[entryIndex]);
+                    if (!snapshotResult.ok) return snapshotResult;
+                    entryIndex = entryIndex + 1;
+                }
+                success("rate-limits:map");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateGetAccountTokenUsageResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final summary = requiredObjectField(result.keys, result.values, "summary", "$.message.result.summary");
+        if (!summary.ok) return summary.toOutcome();
+        final summaryResult = validateAccountTokenUsageSummary(summary, "$.message.result.summary");
+        if (!summaryResult.ok) return summaryResult;
+        final buckets = validateOptionalNullableAccountTokenUsageBuckets(result, "dailyUsageBuckets", "$.message.result.dailyUsageBuckets");
+        if (!buckets.ok) return buckets;
+        return success("response:account/usage/read");
+    }
+
+    static function validateAccountTokenUsageSummary(summary:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        for (field in ["lifetimeTokens", "peakDailyTokens", "longestRunningTurnSec", "currentStreakDays", "longestStreakDays"]) {
+            final result = validateOptionalNullableInteger(summary, field, path + "." + field);
+            if (!result.ok) return result;
+        }
+        return success("account-token-usage:summary");
+    }
+
+    static function validateOptionalNullableAccountTokenUsageBuckets(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("account-token-usage:missing-buckets");
+        return switch object.values[i] {
+            case JNull:
+                success("account-token-usage:null-buckets");
+            case JArray(values):
+                var j = 0;
+                while (j < values.length) {
+                    final bucketPath = path + "[" + Std.string(j) + "]";
+                    final bucket = requireObject(values[j], bucketPath);
+                    if (!bucket.ok) return bucket.toOutcome();
+                    final startDate = requiredString(bucket.keys, bucket.values, "startDate", bucketPath + ".startDate");
+                    if (!startDate.ok) return startDate.toOutcome();
+                    final tokens = requiredInteger(bucket.keys, bucket.values, "tokens", bucketPath + ".tokens");
+                    if (!tokens.ok) return tokens.toOutcome();
+                    j = j + 1;
+                }
+                success("account-token-usage:buckets");
+            case _:
+                fail("expected_nullable_array", path, "expected JSON array or null");
+        }
     }
 
     static function validateAccountRateLimitsUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
@@ -1626,6 +1721,19 @@ class AppProtocol {
                 success("nullable-number");
             case _:
                 fail("expected_nullable_number", path, "expected JSON number or null");
+        }
+    }
+
+    static function validateOptionalNullableInteger(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-integer:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("nullable-integer:null");
+            case JNumber(value):
+                if (value % 1 != 0) fail("expected_integer", path, "expected JSON integer") else success("nullable-integer");
+            case _:
+                fail("expected_nullable_integer", path, "expected JSON integer or null");
         }
     }
 

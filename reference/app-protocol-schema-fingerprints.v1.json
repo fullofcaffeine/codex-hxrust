@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:4d318099c6bb19b026a8c05f13502a384245c15418cb8d12888f4522720c1d05",
+  "fingerprint": "sha256:bf4a5d94eb0005f2cedcd0c6b05c287fdd1de56f0deabd90cea71ee49d953b11",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -252,6 +252,34 @@
       ]
     },
     {
+      "id": "GetAccountRateLimitsResponse",
+      "sourcePath": "v2/GetAccountRateLimitsResponse.json",
+      "sha256": "ffc2af5f23e8f5a219fb22bafc2248739e13ba97736198a309785192eef146f2",
+      "fields": [
+        "definition:CreditsSnapshot",
+        "definition:PlanType",
+        "definition:RateLimitReachedType",
+        "definition:RateLimitSnapshot",
+        "definition:RateLimitWindow",
+        "definition:SpendControlLimitSnapshot",
+        "property:rateLimits",
+        "property:rateLimitsByLimitId",
+        "required:rateLimits"
+      ]
+    },
+    {
+      "id": "GetAccountTokenUsageResponse",
+      "sourcePath": "v2/GetAccountTokenUsageResponse.json",
+      "sha256": "bafeb78b53362369a53d748488d8850604f477e8799d41671d8703c9d7d1c8a8",
+      "fields": [
+        "definition:AccountTokenUsageDailyBucket",
+        "definition:AccountTokenUsageSummary",
+        "property:dailyUsageBuckets",
+        "property:summary",
+        "required:summary"
+      ]
+    },
+    {
       "id": "GuardianWarningNotification",
       "sourcePath": "v2/GuardianWarningNotification.json",
       "sha256": "edf09a9aee314fc6129789442a0ce3bd7cdd54f4c9fc79197d01a0c67901c8b0",
@@ -371,6 +399,12 @@
       "id": "LoginAccountResponse",
       "sourcePath": "v2/LoginAccountResponse.json",
       "sha256": "a56d4944be163c2c3fe10cd2708d3b42725adf624a3d3fd4f3cc88f7c6b44ac5",
+      "fields": []
+    },
+    {
+      "id": "LogoutAccountResponse",
+      "sourcePath": "v2/LogoutAccountResponse.json",
+      "sha256": "7526d103e8cd99bc1a986d138c303ead01bc2144fef10d570ffaae65ea8399c6",
       "fields": []
     },
     {

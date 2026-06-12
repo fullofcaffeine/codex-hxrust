@@ -24,6 +24,9 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "windowsSandbox/readiness");
         assertContains(fingerprintJson, "account/login/start");
         assertContains(fingerprintJson, "account/login/cancel");
+        assertContains(fingerprintJson, "account/logout");
+        assertContains(fingerprintJson, "account/rateLimits/read");
+        assertContains(fingerprintJson, "account/usage/read");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -77,7 +80,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("70", Std.string(items.length));
+        assertEquals("76", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -98,8 +101,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("8", Std.string(requests));
-        assertEquals("8", Std.string(responses));
+        assertEquals("11", Std.string(requests));
+        assertEquals("11", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -409,6 +412,31 @@ class AppProtocolHarness {
         assertFalse(invalidLoginCompletedError.ok, "account login completion error must be a string or null when present");
         assertEquals("expected_nullable_string", invalidLoginCompletedError.errorCode);
         assertEquals("$.message.params.error", invalidLoginCompletedError.errorPath);
+
+        final invalidLogoutParams = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-logout-invalid-params\",\"kind\":\"request\",\"method\":\"account/logout\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"logout-1\",\"method\":\"account/logout\",\"params\":7}}")));
+        assertFalse(invalidLogoutParams.ok, "logout params must be missing, null, or object-shaped");
+        assertEquals("expected_nullable_object", invalidLogoutParams.errorCode);
+        assertEquals("$.message.params", invalidLogoutParams.errorPath);
+
+        final invalidLogoutExtraResult = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-logout-extra-result\",\"kind\":\"response\",\"method\":\"account/logout\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"logout-1\",\"result\":{\"ok\":true}}}")));
+        assertFalse(invalidLogoutExtraResult.ok, "logout response must be an empty object");
+        assertEquals("unexpected_field", invalidLogoutExtraResult.errorCode);
+        assertEquals("$.message.result.ok", invalidLogoutExtraResult.errorPath);
+
+        final missingReadRateLimits = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-rate-limits-missing-rate-limits\",\"kind\":\"response\",\"method\":\"account/rateLimits/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"rates-1\",\"result\":{}}}")));
+        assertFalse(missingReadRateLimits.ok, "account rate limit read responses must include rateLimits");
+        assertEquals("missing_field", missingReadRateLimits.errorCode);
+        assertEquals("$.message.result.rateLimits", missingReadRateLimits.errorPath);
+
+        final invalidUsageSummaryInteger = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-usage-invalid-summary-integer\",\"kind\":\"response\",\"method\":\"account/usage/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"usage-1\",\"result\":{\"summary\":{\"lifetimeTokens\":1.5},\"dailyUsageBuckets\":null}}}")));
+        assertFalse(invalidUsageSummaryInteger.ok, "account usage summary integer fields must be integers or null");
+        assertEquals("expected_integer", invalidUsageSummaryInteger.errorCode);
+        assertEquals("$.message.result.summary.lifetimeTokens", invalidUsageSummaryInteger.errorPath);
+
+        final invalidUsageBucketTokens = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-usage-invalid-bucket-tokens\",\"kind\":\"response\",\"method\":\"account/usage/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"usage-1\",\"result\":{\"summary\":{},\"dailyUsageBuckets\":[{\"startDate\":\"2026-06-12\",\"tokens\":\"many\"}]}}}")));
+        assertFalse(invalidUsageBucketTokens.ok, "account usage bucket tokens must be an integer");
+        assertEquals("expected_number", invalidUsageBucketTokens.errorCode);
+        assertEquals("$.message.result.dailyUsageBuckets[0].tokens", invalidUsageBucketTokens.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
