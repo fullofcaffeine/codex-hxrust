@@ -33,6 +33,8 @@ G6 operator notes are detailed in `docs/operator-runbook.md` and the checked fix
 
 G7 haxe.rust production-readiness evidence is summarized in `docs/haxe-rust-production-readiness.md` and checked by `reference/haxe-rust-production-readiness.v1.json`.
 
+G2 upstream app-server request/notification gap sequencing is summarized in `docs/upstream-app-server-parity-audit.md`. That audit keeps raw mainstream Codex protocol parity ahead of Cafex adapter work and records the next request-family order after the initial app protocol subset.
+
 ## Scorecard
 
 Each area receives one of:
