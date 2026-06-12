@@ -20,6 +20,8 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "\"schema\":\"codex-hxrust.app-protocol-fingerprint.v1\"");
         assertContains(fingerprintJson, "\"fingerprint\":\"" + AppProtocol.schemaFingerprint() + "\"");
         assertContains(fingerprintJson, "thread/start");
+        assertContains(fingerprintJson, "windowsSandbox/setupStart");
+        assertContains(fingerprintJson, "windowsSandbox/readiness");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -57,6 +59,8 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/realtime/sdp");
         assertContains(fingerprintJson, "thread/realtime/error");
         assertContains(fingerprintJson, "thread/realtime/closed");
+        assertContains(fingerprintJson, "windows/worldWritableWarning");
+        assertContains(fingerprintJson, "windowsSandbox/setupCompleted");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -70,7 +74,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("59", Std.string(items.length));
+        assertEquals("65", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -91,9 +95,9 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("4", Std.string(requests));
-        assertEquals("4", Std.string(responses));
-        assertEquals("50", Std.string(notifications));
+        assertEquals("6", Std.string(requests));
+        assertEquals("6", Std.string(responses));
+        assertEquals("52", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -362,6 +366,26 @@ class AppProtocolHarness {
         assertFalse(invalidRealtimeClosedReason.ok, "realtime closed reason must be a string or null when present");
         assertEquals("expected_nullable_string", invalidRealtimeClosedReason.errorCode);
         assertEquals("$.message.params.reason", invalidRealtimeClosedReason.errorPath);
+
+        final invalidWindowsSetupMode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"windows-setup-invalid-mode\",\"kind\":\"request\",\"method\":\"windowsSandbox/setupStart\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"windows-1\",\"method\":\"windowsSandbox/setupStart\",\"params\":{\"mode\":\"admin\",\"cwd\":null}}}")));
+        assertFalse(invalidWindowsSetupMode.ok, "Windows sandbox setup mode must be an upstream enum value");
+        assertEquals("invalid_windows_sandbox_setup_mode", invalidWindowsSetupMode.errorCode);
+        assertEquals("$.message.params.mode", invalidWindowsSetupMode.errorPath);
+
+        final invalidWindowsReadiness = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"windows-readiness-invalid-status\",\"kind\":\"response\",\"method\":\"windowsSandbox/readiness\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"windows-readiness-1\",\"result\":{\"status\":\"unknown\"}}}")));
+        assertFalse(invalidWindowsReadiness.ok, "Windows sandbox readiness status must be an upstream enum value");
+        assertEquals("invalid_windows_sandbox_readiness", invalidWindowsReadiness.errorCode);
+        assertEquals("$.message.result.status", invalidWindowsReadiness.errorPath);
+
+        final invalidWindowsWarningExtraCount = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"windows-warning-invalid-extra-count\",\"kind\":\"notification\",\"method\":\"windows/worldWritableWarning\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"windows/worldWritableWarning\",\"params\":{\"samplePaths\":[\"C:\\\\\\\\codex\\\\\\\\tmp\"],\"extraCount\":-1,\"failedScan\":false}}}")));
+        assertFalse(invalidWindowsWarningExtraCount.ok, "Windows world-writable warning extraCount must be unsigned");
+        assertEquals("expected_uint", invalidWindowsWarningExtraCount.errorCode);
+        assertEquals("$.message.params.extraCount", invalidWindowsWarningExtraCount.errorPath);
+
+        final invalidWindowsSetupCompletedError = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"windows-setup-completed-invalid-error\",\"kind\":\"notification\",\"method\":\"windowsSandbox/setupCompleted\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"windowsSandbox/setupCompleted\",\"params\":{\"mode\":\"elevated\",\"success\":false,\"error\":7}}}")));
+        assertFalse(invalidWindowsSetupCompletedError.ok, "Windows sandbox setup completed error must be a string or null when present");
+        assertEquals("expected_nullable_string", invalidWindowsSetupCompletedError.errorCode);
+        assertEquals("$.message.params.error", invalidWindowsSetupCompletedError.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

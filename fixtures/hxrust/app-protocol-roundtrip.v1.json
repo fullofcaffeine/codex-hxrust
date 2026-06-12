@@ -178,6 +178,54 @@
       }
     },
     {
+      "id": "windows-sandbox-setup-start-request",
+      "kind": "request",
+      "method": "windowsSandbox/setupStart",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "windows-setup-1",
+        "method": "windowsSandbox/setupStart",
+        "params": {
+          "mode": "unelevated",
+          "cwd": "/tmp/codex-hxrust"
+        }
+      }
+    },
+    {
+      "id": "windows-sandbox-setup-start-response",
+      "kind": "response",
+      "method": "windowsSandbox/setupStart",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "windows-setup-1",
+        "result": {
+          "started": true
+        }
+      }
+    },
+    {
+      "id": "windows-sandbox-readiness-request",
+      "kind": "request",
+      "method": "windowsSandbox/readiness",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "windows-readiness-1",
+        "method": "windowsSandbox/readiness"
+      }
+    },
+    {
+      "id": "windows-sandbox-readiness-response",
+      "kind": "response",
+      "method": "windowsSandbox/readiness",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "windows-readiness-1",
+        "result": {
+          "status": "ready"
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",
@@ -1020,6 +1068,36 @@
         "params": {
           "threadId": "thread-00000000-0000-4000-8000-000000000001",
           "reason": null
+        }
+      }
+    },
+    {
+      "id": "windows-world-writable-warning-notification",
+      "kind": "notification",
+      "method": "windows/worldWritableWarning",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "windows/worldWritableWarning",
+        "params": {
+          "samplePaths": [
+            "C:\\\\codex\\\\tmp"
+          ],
+          "extraCount": 0,
+          "failedScan": false
+        }
+      }
+    },
+    {
+      "id": "windows-sandbox-setup-completed-notification",
+      "kind": "notification",
+      "method": "windowsSandbox/setupCompleted",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "windowsSandbox/setupCompleted",
+        "params": {
+          "mode": "unelevated",
+          "success": true,
+          "error": null
         }
       }
     },

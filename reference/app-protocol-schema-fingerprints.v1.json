@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:e7a5b5d2c5c9f09464baf1bd6173fcc68ba4be3082c3b29f0e12e51d76f1c231",
+  "fingerprint": "sha256:11634a0900fcd52fc82ed6900615e67a172d50c552ffb25e1ce5e7c0e8009b2a",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -1125,6 +1125,63 @@
         "property:message",
         "property:threadId",
         "required:message"
+      ]
+    },
+    {
+      "id": "WindowsSandboxReadinessResponse",
+      "sourcePath": "v2/WindowsSandboxReadinessResponse.json",
+      "sha256": "b7bb732761c422f735b4bed4ea0e2816bb9bb6901ceef9a36a888282a524c202",
+      "fields": [
+        "definition:WindowsSandboxReadiness",
+        "property:status",
+        "required:status"
+      ]
+    },
+    {
+      "id": "WindowsSandboxSetupCompletedNotification",
+      "sourcePath": "v2/WindowsSandboxSetupCompletedNotification.json",
+      "sha256": "e2fdf204f3399e86329da250c4622c0aeca9130adc5b5b8ac728419651aa4449",
+      "fields": [
+        "definition:WindowsSandboxSetupMode",
+        "property:error",
+        "property:mode",
+        "property:success",
+        "required:mode",
+        "required:success"
+      ]
+    },
+    {
+      "id": "WindowsSandboxSetupStartParams",
+      "sourcePath": "v2/WindowsSandboxSetupStartParams.json",
+      "sha256": "4e62b4d038fe13116fa3e9683f52eea7168f7e3f862963ac4f1e0f8d2df22a3c",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:WindowsSandboxSetupMode",
+        "property:cwd",
+        "property:mode",
+        "required:mode"
+      ]
+    },
+    {
+      "id": "WindowsSandboxSetupStartResponse",
+      "sourcePath": "v2/WindowsSandboxSetupStartResponse.json",
+      "sha256": "50efa558e8a524ea2f14e976d6b6f7052516dcb55407bd77d73c847adee15652",
+      "fields": [
+        "property:started",
+        "required:started"
+      ]
+    },
+    {
+      "id": "WindowsWorldWritableWarningNotification",
+      "sourcePath": "v2/WindowsWorldWritableWarningNotification.json",
+      "sha256": "a79d7ac1c33956892f3263e2b13d8a877c312c7360a297a76dcf6ca0afbcf44c",
+      "fields": [
+        "property:extraCount",
+        "property:failedScan",
+        "property:samplePaths",
+        "required:extraCount",
+        "required:failedScan",
+        "required:samplePaths"
       ]
     }
   ],

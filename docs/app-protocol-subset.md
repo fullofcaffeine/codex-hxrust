@@ -14,6 +14,8 @@ Included client requests:
 - `turn/start`
 - `turn/interrupt`
 - `thread/read`
+- `windowsSandbox/setupStart`
+- `windowsSandbox/readiness`
 
 Included server notifications:
 
@@ -57,6 +59,8 @@ Included server notifications:
 - `thread/realtime/sdp`
 - `thread/realtime/error`
 - `thread/realtime/closed`
+- `windows/worldWritableWarning`
+- `windowsSandbox/setupCompleted`
 - `externalAgentConfig/import/completed`
 - `fs/changed`
 - `item/completed`
@@ -73,8 +77,10 @@ Included response payloads:
 - `TurnStartResponse`
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
+- `WindowsSandboxSetupStartResponse`
+- `WindowsSandboxReadinessResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -151,6 +157,14 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `thread/realtime/error` is experimental upstream realtime transport error reporting. The selected subset validates required text `threadId` and `message`.
 
 `thread/realtime/closed` is experimental upstream realtime transport closure reporting. The selected subset validates required text `threadId` plus optional nullable `reason`.
+
+`windowsSandbox/setupStart` starts Windows sandbox setup. The selected subset validates `mode` as `elevated` or `unelevated`, optional nullable text `cwd`, and response boolean `started`.
+
+`windowsSandbox/readiness` reports Windows sandbox readiness. Upstream models params as absent/undefined; the selected subset accepts missing, null, or empty object params and validates response `status` as `ready`, `notConfigured`, or `updateRequired`.
+
+`windows/worldWritableWarning` reports world-writable Windows directories that cannot be sandbox-protected. The selected subset validates string-array `samplePaths`, unsigned integer `extraCount`, and boolean `failedScan`.
+
+`windowsSandbox/setupCompleted` reports Windows sandbox setup completion. The selected subset validates `mode`, boolean `success`, and optional nullable text `error`.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 
