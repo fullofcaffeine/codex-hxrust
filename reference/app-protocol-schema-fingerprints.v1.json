@@ -6,8 +6,19 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:11634a0900fcd52fc82ed6900615e67a172d50c552ffb25e1ce5e7c0e8009b2a",
+  "fingerprint": "sha256:4d318099c6bb19b026a8c05f13502a384245c15418cb8d12888f4522720c1d05",
   "schemas": [
+    {
+      "id": "AccountLoginCompletedNotification",
+      "sourcePath": "v2/AccountLoginCompletedNotification.json",
+      "sha256": "ef0c8de304a23ea7af506d42c6cb1a51fd3e4a622e88b80b0ca416e3b83a920f",
+      "fields": [
+        "property:error",
+        "property:loginId",
+        "property:success",
+        "required:success"
+      ]
+    },
     {
       "id": "AccountRateLimitsUpdatedNotification",
       "sourcePath": "v2/AccountRateLimitsUpdatedNotification.json",
@@ -61,6 +72,25 @@
         "definition:AppScreenshot",
         "property:data",
         "required:data"
+      ]
+    },
+    {
+      "id": "CancelLoginAccountParams",
+      "sourcePath": "v2/CancelLoginAccountParams.json",
+      "sha256": "36a861ed78cf1c0a60f9e93ccfc9715f0f2022d1a22ab0abb2e477272cfead60",
+      "fields": [
+        "property:loginId",
+        "required:loginId"
+      ]
+    },
+    {
+      "id": "CancelLoginAccountResponse",
+      "sourcePath": "v2/CancelLoginAccountResponse.json",
+      "sha256": "4296bf2e5d7d98168aac0b013e26b2ab6299dd92dc0ecb3cd7d883304a983962",
+      "fields": [
+        "definition:CancelLoginAccountStatus",
+        "property:status",
+        "required:status"
       ]
     },
     {
@@ -330,6 +360,18 @@
         "required:error",
         "required:id"
       ]
+    },
+    {
+      "id": "LoginAccountParams",
+      "sourcePath": "v2/LoginAccountParams.json",
+      "sha256": "328d4728c613c521b8991bc3ca9d94f49da07611ccdd51c7e2240d9c29a833e0",
+      "fields": []
+    },
+    {
+      "id": "LoginAccountResponse",
+      "sourcePath": "v2/LoginAccountResponse.json",
+      "sha256": "a56d4944be163c2c3fe10cd2708d3b42725adf624a3d3fd4f3cc88f7c6b44ac5",
+      "fields": []
     },
     {
       "id": "McpServerOauthLoginCompletedNotification",

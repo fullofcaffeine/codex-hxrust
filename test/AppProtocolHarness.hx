@@ -22,6 +22,8 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/start");
         assertContains(fingerprintJson, "windowsSandbox/setupStart");
         assertContains(fingerprintJson, "windowsSandbox/readiness");
+        assertContains(fingerprintJson, "account/login/start");
+        assertContains(fingerprintJson, "account/login/cancel");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -61,6 +63,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/realtime/closed");
         assertContains(fingerprintJson, "windows/worldWritableWarning");
         assertContains(fingerprintJson, "windowsSandbox/setupCompleted");
+        assertContains(fingerprintJson, "account/login/completed");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -74,7 +77,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("65", Std.string(items.length));
+        assertEquals("70", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -95,9 +98,9 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("6", Std.string(requests));
-        assertEquals("6", Std.string(responses));
-        assertEquals("52", Std.string(notifications));
+        assertEquals("8", Std.string(requests));
+        assertEquals("8", Std.string(responses));
+        assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -386,6 +389,26 @@ class AppProtocolHarness {
         assertFalse(invalidWindowsSetupCompletedError.ok, "Windows sandbox setup completed error must be a string or null when present");
         assertEquals("expected_nullable_string", invalidWindowsSetupCompletedError.errorCode);
         assertEquals("$.message.params.error", invalidWindowsSetupCompletedError.errorPath);
+
+        final invalidLoginType = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-login-invalid-type\",\"kind\":\"request\",\"method\":\"account/login/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"login-1\",\"method\":\"account/login/start\",\"params\":{\"type\":\"password\"}}}")));
+        assertFalse(invalidLoginType.ok, "account login type must be an upstream variant");
+        assertEquals("invalid_login_account_type", invalidLoginType.errorCode);
+        assertEquals("$.message.params.type", invalidLoginType.errorPath);
+
+        final missingDeviceCodeUserCode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-login-missing-user-code\",\"kind\":\"response\",\"method\":\"account/login/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"login-1\",\"result\":{\"type\":\"chatgptDeviceCode\",\"loginId\":\"login-1\",\"verificationUrl\":\"https://example.invalid/device\"}}}")));
+        assertFalse(missingDeviceCodeUserCode.ok, "device code login responses must include userCode");
+        assertEquals("missing_field", missingDeviceCodeUserCode.errorCode);
+        assertEquals("$.message.result.userCode", missingDeviceCodeUserCode.errorPath);
+
+        final invalidCancelLoginStatus = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-login-cancel-invalid-status\",\"kind\":\"response\",\"method\":\"account/login/cancel\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cancel-1\",\"result\":{\"status\":\"expired\"}}}")));
+        assertFalse(invalidCancelLoginStatus.ok, "cancel login status must be an upstream enum value");
+        assertEquals("invalid_cancel_login_account_status", invalidCancelLoginStatus.errorCode);
+        assertEquals("$.message.result.status", invalidCancelLoginStatus.errorPath);
+
+        final invalidLoginCompletedError = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-login-completed-invalid-error\",\"kind\":\"notification\",\"method\":\"account/login/completed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"account/login/completed\",\"params\":{\"success\":false,\"loginId\":null,\"error\":7}}}")));
+        assertFalse(invalidLoginCompletedError.ok, "account login completion error must be a string or null when present");
+        assertEquals("expected_nullable_string", invalidLoginCompletedError.errorCode);
+        assertEquals("$.message.params.error", invalidLoginCompletedError.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

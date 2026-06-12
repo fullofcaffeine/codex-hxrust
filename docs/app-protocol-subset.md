@@ -16,6 +16,8 @@ Included client requests:
 - `thread/read`
 - `windowsSandbox/setupStart`
 - `windowsSandbox/readiness`
+- `account/login/start`
+- `account/login/cancel`
 
 Included server notifications:
 
@@ -61,6 +63,7 @@ Included server notifications:
 - `thread/realtime/closed`
 - `windows/worldWritableWarning`
 - `windowsSandbox/setupCompleted`
+- `account/login/completed`
 - `externalAgentConfig/import/completed`
 - `fs/changed`
 - `item/completed`
@@ -79,8 +82,10 @@ Included response payloads:
 - `ThreadReadResponse`
 - `WindowsSandboxSetupStartResponse`
 - `WindowsSandboxReadinessResponse`
+- `LoginAccountResponse`
+- `CancelLoginAccountResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 
@@ -165,6 +170,12 @@ The fixture also covers transcript-bearing turns with text `userMessage`, `agent
 `windows/worldWritableWarning` reports world-writable Windows directories that cannot be sandbox-protected. The selected subset validates string-array `samplePaths`, unsigned integer `extraCount`, and boolean `failedScan`.
 
 `windowsSandbox/setupCompleted` reports Windows sandbox setup completion. The selected subset validates `mode`, boolean `success`, and optional nullable text `error`.
+
+`account/login/start` starts account login. The selected subset validates all upstream tagged variants: `apiKey` with required `apiKey`, `chatgpt` with optional boolean `codexStreamlinedLogin`, `chatgptDeviceCode`, and `chatgptAuthTokens` with required token/account strings plus optional nullable plan text. The fixture uses the credential-free `chatgptDeviceCode` variant.
+
+`account/login/cancel` cancels a pending account login. The selected subset validates request `loginId` and response `status` as `canceled` or `notFound`.
+
+`account/login/completed` reports completion of an account login. The selected subset validates required boolean `success` plus optional nullable `loginId` and `error`.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 

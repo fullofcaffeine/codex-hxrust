@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-040";
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel"];
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-041";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -135,6 +135,10 @@ class AppProtocol {
                 validateWindowsSandboxSetupStartResponse(result);
             case "windowsSandbox/readiness":
                 validateWindowsSandboxReadinessResponse(result);
+            case "account/login/start":
+                validateLoginAccountResponse(result);
+            case "account/login/cancel":
+                validateCancelLoginAccountResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -200,6 +204,8 @@ class AppProtocol {
                 validateMcpServerStatusUpdatedNotification(params);
             case "account/updated":
                 validateAccountUpdatedNotification(params);
+            case "account/login/completed":
+                validateAccountLoginCompletedNotification(params);
             case "account/rateLimits/updated":
                 validateAccountRateLimitsUpdatedNotification(params);
             case "app/list/updated":
@@ -309,6 +315,10 @@ class AppProtocol {
                 validateWindowsSandboxSetupStartParams(params);
             case "windowsSandbox/readiness":
                 success("params:windowsSandbox/readiness");
+            case "account/login/start":
+                validateLoginAccountParams(params);
+            case "account/login/cancel":
+                validateCancelLoginAccountParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -728,6 +738,85 @@ class AppProtocol {
         }
 
         return success("notification:account/updated");
+    }
+
+    static function validateLoginAccountParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final typeField = requiredString(params.keys, params.values, "type", "$.message.params.type");
+        if (!typeField.ok) return typeField.toOutcome();
+
+        return switch typeField.value {
+            case "apiKey":
+                final apiKey = requiredString(params.keys, params.values, "apiKey", "$.message.params.apiKey");
+                if (!apiKey.ok) return apiKey.toOutcome();
+                success("params:account/login/start:apiKey");
+            case "chatgpt":
+                final streamlined = validateOptionalBool(params, "codexStreamlinedLogin", "$.message.params.codexStreamlinedLogin");
+                if (!streamlined.ok) return streamlined;
+                success("params:account/login/start:chatgpt");
+            case "chatgptDeviceCode":
+                success("params:account/login/start:chatgptDeviceCode");
+            case "chatgptAuthTokens":
+                final accessToken = requiredString(params.keys, params.values, "accessToken", "$.message.params.accessToken");
+                if (!accessToken.ok) return accessToken.toOutcome();
+                final accountId = requiredString(params.keys, params.values, "chatgptAccountId", "$.message.params.chatgptAccountId");
+                if (!accountId.ok) return accountId.toOutcome();
+                final planType = validateOptionalNullableString(params, "chatgptPlanType", "$.message.params.chatgptPlanType");
+                if (!planType.ok) return planType;
+                success("params:account/login/start:chatgptAuthTokens");
+            case _:
+                fail("invalid_login_account_type", "$.message.params.type", "unsupported account login type");
+        }
+    }
+
+    static function validateLoginAccountResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final typeField = requiredString(result.keys, result.values, "type", "$.message.result.type");
+        if (!typeField.ok) return typeField.toOutcome();
+
+        return switch typeField.value {
+            case "apiKey":
+                success("response:account/login/start:apiKey");
+            case "chatgpt":
+                final loginId = requiredString(result.keys, result.values, "loginId", "$.message.result.loginId");
+                if (!loginId.ok) return loginId.toOutcome();
+                final authUrl = requiredString(result.keys, result.values, "authUrl", "$.message.result.authUrl");
+                if (!authUrl.ok) return authUrl.toOutcome();
+                success("response:account/login/start:chatgpt");
+            case "chatgptDeviceCode":
+                final loginId = requiredString(result.keys, result.values, "loginId", "$.message.result.loginId");
+                if (!loginId.ok) return loginId.toOutcome();
+                final verificationUrl = requiredString(result.keys, result.values, "verificationUrl", "$.message.result.verificationUrl");
+                if (!verificationUrl.ok) return verificationUrl.toOutcome();
+                final userCode = requiredString(result.keys, result.values, "userCode", "$.message.result.userCode");
+                if (!userCode.ok) return userCode.toOutcome();
+                success("response:account/login/start:chatgptDeviceCode");
+            case "chatgptAuthTokens":
+                success("response:account/login/start:chatgptAuthTokens");
+            case _:
+                fail("invalid_login_account_type", "$.message.result.type", "unsupported account login type");
+        }
+    }
+
+    static function validateCancelLoginAccountParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final loginId = requiredString(params.keys, params.values, "loginId", "$.message.params.loginId");
+        if (!loginId.ok) return loginId.toOutcome();
+        return success("params:account/login/cancel");
+    }
+
+    static function validateCancelLoginAccountResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final status = requiredString(result.keys, result.values, "status", "$.message.result.status");
+        if (!status.ok) return status.toOutcome();
+        if (!validCancelLoginAccountStatus(status.value)) return fail("invalid_cancel_login_account_status", "$.message.result.status", "unsupported account login cancel status");
+        return success("response:account/login/cancel");
+    }
+
+    static function validateAccountLoginCompletedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final successFlag = requiredBool(params.keys, params.values, "success", "$.message.params.success");
+        if (!successFlag.ok) return successFlag.toOutcome();
+        final loginId = validateOptionalNullableString(params, "loginId", "$.message.params.loginId");
+        if (!loginId.ok) return loginId;
+        final error = validateOptionalNullableString(params, "error", "$.message.params.error");
+        if (!error.ok) return error;
+        return success("notification:account/login/completed");
     }
 
     static function validateAccountRateLimitsUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
@@ -1454,6 +1543,10 @@ class AppProtocol {
 
     static function validWindowsSandboxReadiness(value:String):Bool {
         return value == "ready" || value == "notConfigured" || value == "updateRequired";
+    }
+
+    static function validCancelLoginAccountStatus(value:String):Bool {
+        return value == "canceled" || value == "notFound";
     }
 
     static function success(summary:String):AppProtocolParseOutcome {

@@ -226,6 +226,59 @@
       }
     },
     {
+      "id": "account-login-start-request",
+      "kind": "request",
+      "method": "account/login/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "login-start-1",
+        "method": "account/login/start",
+        "params": {
+          "type": "chatgptDeviceCode"
+        }
+      }
+    },
+    {
+      "id": "account-login-start-response",
+      "kind": "response",
+      "method": "account/login/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "login-start-1",
+        "result": {
+          "type": "chatgptDeviceCode",
+          "loginId": "login-00000000-0000-4000-8000-000000000001",
+          "verificationUrl": "https://example.invalid/device",
+          "userCode": "HX-RUST"
+        }
+      }
+    },
+    {
+      "id": "account-login-cancel-request",
+      "kind": "request",
+      "method": "account/login/cancel",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "login-cancel-1",
+        "method": "account/login/cancel",
+        "params": {
+          "loginId": "login-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "account-login-cancel-response",
+      "kind": "response",
+      "method": "account/login/cancel",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "login-cancel-1",
+        "result": {
+          "status": "canceled"
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",
@@ -1098,6 +1151,20 @@
           "mode": "unelevated",
           "success": true,
           "error": null
+        }
+      }
+    },
+    {
+      "id": "account-login-completed-notification",
+      "kind": "notification",
+      "method": "account/login/completed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "account/login/completed",
+        "params": {
+          "loginId": "login-00000000-0000-4000-8000-000000000001",
+          "success": false,
+          "error": "cancelled"
         }
       }
     },
