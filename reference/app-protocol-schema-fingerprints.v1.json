@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:41f36a0b0ac1f67c842539aac7623d90aa76b6a131801674e0a58aa58a5da3c6",
+  "fingerprint": "sha256:b8148bdf2fc724a84fa2eea1f0809651df1df6b971927b6e291c3d5d55f50d9c",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -210,6 +210,20 @@
         "required:itemId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "ConfigBatchWriteParams",
+      "sourcePath": "v2/ConfigBatchWriteParams.json",
+      "sha256": "3bc584a9fc259a45a0f8b416b8f14f20e97a2eeb1036e6feb7f441982443d77f",
+      "fields": [
+        "definition:ConfigEdit",
+        "definition:MergeStrategy",
+        "property:edits",
+        "property:expectedVersion",
+        "property:filePath",
+        "property:reloadUserConfig",
+        "required:edits"
       ]
     },
     {

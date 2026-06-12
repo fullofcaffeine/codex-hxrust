@@ -954,6 +954,50 @@
       }
     },
     {
+      "id": "config-batch-write-request",
+      "kind": "request",
+      "method": "config/batchWrite",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "config-batch-write-1",
+        "method": "config/batchWrite",
+        "params": {
+          "edits": [
+            {
+              "keyPath": "model",
+              "mergeStrategy": "replace",
+              "value": "gpt-5"
+            },
+            {
+              "keyPath": "tools.web_search",
+              "mergeStrategy": "upsert",
+              "value": {
+                "allowed_domains": ["example.com"]
+              }
+            }
+          ],
+          "filePath": "/Users/fixture/.codex/config.toml",
+          "expectedVersion": "2",
+          "reloadUserConfig": true
+        }
+      }
+    },
+    {
+      "id": "config-batch-write-response",
+      "kind": "response",
+      "method": "config/batchWrite",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "config-batch-write-1",
+        "result": {
+          "status": "ok",
+          "version": "3",
+          "filePath": "/Users/fixture/.codex/config.toml",
+          "overriddenMetadata": null
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

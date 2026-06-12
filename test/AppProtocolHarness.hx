@@ -41,6 +41,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "externalAgentConfig/detect");
         assertContains(fingerprintJson, "externalAgentConfig/import");
         assertContains(fingerprintJson, "config/value/write");
+        assertContains(fingerprintJson, "config/batchWrite");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -94,7 +95,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("104", Std.string(items.length));
+        assertEquals("106", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -115,8 +116,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("25", Std.string(requests));
-        assertEquals("25", Std.string(responses));
+        assertEquals("26", Std.string(requests));
+        assertEquals("26", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -666,6 +667,26 @@ class AppProtocolHarness {
         assertFalse(invalidConfigWriteOverridingLayer.ok, "config/value/write overriddenMetadata validates layer metadata");
         assertEquals("missing_field", invalidConfigWriteOverridingLayer.errorCode);
         assertEquals("$.message.result.overriddenMetadata.overridingLayer.name.dotCodexFolder", invalidConfigWriteOverridingLayer.errorPath);
+
+        final missingConfigBatchWriteEdits = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-batch-write-missing-edits\",\"kind\":\"request\",\"method\":\"config/batchWrite\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-batch-1\",\"method\":\"config/batchWrite\",\"params\":{}}}")));
+        assertFalse(missingConfigBatchWriteEdits.ok, "config/batchWrite requires edits");
+        assertEquals("missing_field", missingConfigBatchWriteEdits.errorCode);
+        assertEquals("$.message.params.edits", missingConfigBatchWriteEdits.errorPath);
+
+        final invalidConfigBatchWriteEditMerge = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-batch-write-invalid-merge\",\"kind\":\"request\",\"method\":\"config/batchWrite\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-batch-1\",\"method\":\"config/batchWrite\",\"params\":{\"edits\":[{\"keyPath\":\"model\",\"mergeStrategy\":\"merge\",\"value\":\"gpt-5\"}]}}}")));
+        assertFalse(invalidConfigBatchWriteEditMerge.ok, "config/batchWrite edits validate mergeStrategy");
+        assertEquals("invalid_config_merge_strategy", invalidConfigBatchWriteEditMerge.errorCode);
+        assertEquals("$.message.params.edits[0].mergeStrategy", invalidConfigBatchWriteEditMerge.errorPath);
+
+        final invalidConfigBatchWriteReload = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-batch-write-invalid-reload\",\"kind\":\"request\",\"method\":\"config/batchWrite\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-batch-1\",\"method\":\"config/batchWrite\",\"params\":{\"edits\":[],\"reloadUserConfig\":\"yes\"}}}")));
+        assertFalse(invalidConfigBatchWriteReload.ok, "config/batchWrite reloadUserConfig must be a boolean");
+        assertEquals("expected_bool", invalidConfigBatchWriteReload.errorCode);
+        assertEquals("$.message.params.reloadUserConfig", invalidConfigBatchWriteReload.errorPath);
+
+        final invalidConfigBatchWriteResponse = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-batch-write-invalid-response\",\"kind\":\"response\",\"method\":\"config/batchWrite\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-batch-1\",\"result\":{\"status\":\"ok\",\"version\":\"3\"}}}")));
+        assertFalse(invalidConfigBatchWriteResponse.ok, "config/batchWrite response requires filePath");
+        assertEquals("missing_field", invalidConfigBatchWriteResponse.errorCode);
+        assertEquals("$.message.result.filePath", invalidConfigBatchWriteResponse.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

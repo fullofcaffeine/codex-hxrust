@@ -54,6 +54,7 @@ selected_schemas=(
   "ConfigReadParams:v2/ConfigReadParams.json"
   "ConfigReadResponse:v2/ConfigReadResponse.json"
   "ConfigValueWriteParams:v2/ConfigValueWriteParams.json"
+  "ConfigBatchWriteParams:v2/ConfigBatchWriteParams.json"
   "ConfigWriteResponse:v2/ConfigWriteResponse.json"
   "ExternalAgentConfigDetectParams:v2/ExternalAgentConfigDetectParams.json"
   "ExternalAgentConfigDetectResponse:v2/ExternalAgentConfigDetectResponse.json"

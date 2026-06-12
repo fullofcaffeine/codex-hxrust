@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/read,config/value/write,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-052";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-053";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -160,6 +160,8 @@ class AppProtocol {
             case "externalAgentConfig/import":
                 validateEmptyObject(result, "$.message.result", "response:externalAgentConfig/import");
             case "config/value/write":
+                validateConfigWriteResponse(result);
+            case "config/batchWrite":
                 validateConfigWriteResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
@@ -397,6 +399,8 @@ class AppProtocol {
                 validateExternalAgentConfigImportParams(params);
             case "config/value/write":
                 validateConfigValueWriteParams(params);
+            case "config/batchWrite":
+                validateConfigBatchWriteParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -1166,18 +1170,48 @@ class AppProtocol {
     }
 
     static function validateConfigValueWriteParams(params:ProtocolObjectField):AppProtocolParseOutcome {
-        final keyPath = requiredString(params.keys, params.values, "keyPath", "$.message.params.keyPath");
-        if (!keyPath.ok) return keyPath.toOutcome();
-        final mergeStrategy = requiredString(params.keys, params.values, "mergeStrategy", "$.message.params.mergeStrategy");
-        if (!mergeStrategy.ok) return mergeStrategy.toOutcome();
-        if (!validConfigMergeStrategy(mergeStrategy.value)) return fail("invalid_config_merge_strategy", "$.message.params.mergeStrategy", "unsupported config merge strategy");
-        final value = requiredValue(params.keys, params.values, "value", "$.message.params.value");
-        if (!value.ok) return value.toOutcome();
+        final edit = validateConfigEdit(params, "$.message.params");
+        if (!edit.ok) return edit;
         final filePath = validateOptionalNullableString(params, "filePath", "$.message.params.filePath");
         if (!filePath.ok) return filePath;
         final expectedVersion = validateOptionalNullableString(params, "expectedVersion", "$.message.params.expectedVersion");
         if (!expectedVersion.ok) return expectedVersion;
         return success("params:config/value/write");
+    }
+
+    static function validateConfigBatchWriteParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final edits = requiredArray(params.keys, params.values, "edits", "$.message.params.edits");
+        if (!edits.ok) return edits.toOutcome();
+        var i = 0;
+        while (i < edits.values.length) {
+            final editPath = "$.message.params.edits[" + Std.string(i) + "]";
+            switch edits.values[i] {
+                case JObject(keys, values):
+                    final edit = validateConfigEdit(ProtocolObjectField.success(keys, values), editPath);
+                    if (!edit.ok) return edit;
+                case _:
+                    return fail("expected_object", editPath, "expected config edit object");
+            }
+            i = i + 1;
+        }
+        final filePath = validateOptionalNullableString(params, "filePath", "$.message.params.filePath");
+        if (!filePath.ok) return filePath;
+        final expectedVersion = validateOptionalNullableString(params, "expectedVersion", "$.message.params.expectedVersion");
+        if (!expectedVersion.ok) return expectedVersion;
+        final reloadUserConfig = validateOptionalBool(params, "reloadUserConfig", "$.message.params.reloadUserConfig");
+        if (!reloadUserConfig.ok) return reloadUserConfig;
+        return success("params:config/batchWrite");
+    }
+
+    static function validateConfigEdit(edit:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final keyPath = requiredString(edit.keys, edit.values, "keyPath", path + ".keyPath");
+        if (!keyPath.ok) return keyPath.toOutcome();
+        final mergeStrategy = requiredString(edit.keys, edit.values, "mergeStrategy", path + ".mergeStrategy");
+        if (!mergeStrategy.ok) return mergeStrategy.toOutcome();
+        if (!validConfigMergeStrategy(mergeStrategy.value)) return fail("invalid_config_merge_strategy", path + ".mergeStrategy", "unsupported config merge strategy");
+        final value = requiredValue(edit.keys, edit.values, "value", path + ".value");
+        if (!value.ok) return value.toOutcome();
+        return success("config-edit");
     }
 
     static function validateConfigWriteResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
