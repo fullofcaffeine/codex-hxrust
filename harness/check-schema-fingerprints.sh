@@ -65,6 +65,7 @@ selected_schemas=(
   "WarningNotification:v2/WarningNotification.json"
   "GuardianWarningNotification:v2/GuardianWarningNotification.json"
   "DeprecationNoticeNotification:v2/DeprecationNoticeNotification.json"
+  "ConfigWarningNotification:v2/ConfigWarningNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

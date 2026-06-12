@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-11-034";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-035";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -196,6 +196,8 @@ class AppProtocol {
                 validateGuardianWarningNotification(params);
             case "deprecationNotice":
                 validateDeprecationNoticeNotification(params);
+            case "configWarning":
+                validateConfigWarningNotification(params);
             case "externalAgentConfig/import/completed":
                 validateExternalAgentConfigImportCompletedNotification(params);
             case "fs/changed":
@@ -777,6 +779,47 @@ class AppProtocol {
         final details = validateOptionalNullableString(params, "details", "$.message.params.details");
         if (!details.ok) return details;
         return success("notification:deprecationNotice");
+    }
+
+    static function validateConfigWarningNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final summary = requiredString(params.keys, params.values, "summary", "$.message.params.summary");
+        if (!summary.ok) return summary.toOutcome();
+        final details = validateOptionalNullableString(params, "details", "$.message.params.details");
+        if (!details.ok) return details;
+        final path = validateOptionalNullableString(params, "path", "$.message.params.path");
+        if (!path.ok) return path;
+        final range = validateOptionalNullableTextRange(params, "range", "$.message.params.range");
+        if (!range.ok) return range;
+        return success("notification:configWarning");
+    }
+
+    static function validateOptionalNullableTextRange(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("text-range:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("text-range:null");
+            case JObject(keys, values):
+                final start = requiredObjectField(keys, values, "start", path + ".start");
+                if (!start.ok) return start.toOutcome();
+                final startResult = validateTextPosition(start, path + ".start");
+                if (!startResult.ok) return startResult;
+                final end = requiredObjectField(keys, values, "end", path + ".end");
+                if (!end.ok) return end.toOutcome();
+                validateTextPosition(end, path + ".end");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateTextPosition(position:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final line = requiredInteger(position.keys, position.values, "line", path + ".line");
+        if (!line.ok) return line.toOutcome();
+        if (line.value < 0) return fail("expected_uint", path + ".line", "expected unsigned JSON integer");
+        final column = requiredInteger(position.keys, position.values, "column", path + ".column");
+        if (!column.ok) return column.toOutcome();
+        if (column.value < 0) return fail("expected_uint", path + ".column", "expected unsigned JSON integer");
+        return success("text-position");
     }
 
     static function validateExternalAgentConfigImportCompletedNotification(_params:ProtocolObjectField):AppProtocolParseOutcome {

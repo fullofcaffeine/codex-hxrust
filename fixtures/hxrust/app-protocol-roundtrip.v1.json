@@ -831,6 +831,30 @@
       }
     },
     {
+      "id": "config-warning-notification",
+      "kind": "notification",
+      "method": "configWarning",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "configWarning",
+        "params": {
+          "summary": "Deprecated config key.",
+          "details": "Use model_provider instead.",
+          "path": "/tmp/codex/config.toml",
+          "range": {
+            "start": {
+              "line": 12,
+              "column": 3
+            },
+            "end": {
+              "line": 12,
+              "column": 18
+            }
+          }
+        }
+      }
+    },
+    {
       "id": "external-agent-config-import-completed-notification",
       "kind": "notification",
       "method": "externalAgentConfig/import/completed",

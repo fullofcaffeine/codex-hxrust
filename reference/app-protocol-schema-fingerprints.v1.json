@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:163df3aefea3221337c6596a530afb78edbdf6d1cd7cbb2d33f770dbd19af3f4",
+  "fingerprint": "sha256:92d3aaa4a2e1bdd26317a5a2fc0d3764706dd2edae2a151a14127d1493ff4455",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -92,6 +92,20 @@
         "required:itemId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "ConfigWarningNotification",
+      "sourcePath": "v2/ConfigWarningNotification.json",
+      "sha256": "af6583b5b77951b92be317e907f9fc23445a1cea9528bc7fd4d482594819f589",
+      "fields": [
+        "definition:TextPosition",
+        "definition:TextRange",
+        "property:details",
+        "property:path",
+        "property:range",
+        "property:summary",
+        "required:summary"
       ]
     },
     {

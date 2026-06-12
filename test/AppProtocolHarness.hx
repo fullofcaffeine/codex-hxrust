@@ -46,6 +46,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "warning");
         assertContains(fingerprintJson, "guardianWarning");
         assertContains(fingerprintJson, "deprecationNotice");
+        assertContains(fingerprintJson, "configWarning");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -59,7 +60,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("48", Std.string(items.length));
+        assertEquals("49", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -82,7 +83,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("39", Std.string(notifications));
+        assertEquals("40", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -281,6 +282,16 @@ class AppProtocolHarness {
         assertFalse(invalidDeprecationNoticeDetails.ok, "deprecation notice details must be a string or null when present");
         assertEquals("expected_nullable_string", invalidDeprecationNoticeDetails.errorCode);
         assertEquals("$.message.params.details", invalidDeprecationNoticeDetails.errorPath);
+
+        final invalidConfigWarningPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-warning-invalid-path\",\"kind\":\"notification\",\"method\":\"configWarning\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"configWarning\",\"params\":{\"summary\":\"warn\",\"path\":7}}}")));
+        assertFalse(invalidConfigWarningPath.ok, "config warning path must be a string or null when present");
+        assertEquals("expected_nullable_string", invalidConfigWarningPath.errorCode);
+        assertEquals("$.message.params.path", invalidConfigWarningPath.errorPath);
+
+        final invalidConfigWarningRangeLine = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-warning-invalid-range-line\",\"kind\":\"notification\",\"method\":\"configWarning\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"configWarning\",\"params\":{\"summary\":\"warn\",\"range\":{\"start\":{\"line\":-1,\"column\":0},\"end\":{\"line\":1,\"column\":2}}}}}")));
+        assertFalse(invalidConfigWarningRangeLine.ok, "config warning range positions must be unsigned integers");
+        assertEquals("expected_uint", invalidConfigWarningRangeLine.errorCode);
+        assertEquals("$.message.params.range.start.line", invalidConfigWarningRangeLine.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
