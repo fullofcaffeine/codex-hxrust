@@ -52,6 +52,9 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/realtime/started");
         assertContains(fingerprintJson, "thread/realtime/itemAdded");
         assertContains(fingerprintJson, "thread/realtime/transcript/delta");
+        assertContains(fingerprintJson, "thread/realtime/transcript/done");
+        assertContains(fingerprintJson, "thread/realtime/outputAudio/delta");
+        assertContains(fingerprintJson, "thread/realtime/sdp");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -65,7 +68,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("54", Std.string(items.length));
+        assertEquals("57", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -88,7 +91,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("45", Std.string(notifications));
+        assertEquals("48", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -327,6 +330,26 @@ class AppProtocolHarness {
         assertFalse(invalidRealtimeTranscriptDelta.ok, "realtime transcript delta must be a string");
         assertEquals("expected_string", invalidRealtimeTranscriptDelta.errorCode);
         assertEquals("$.message.params.delta", invalidRealtimeTranscriptDelta.errorPath);
+
+        final invalidRealtimeTranscriptDoneText = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-transcript-done-invalid-text\",\"kind\":\"notification\",\"method\":\"thread/realtime/transcript/done\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/transcript/done\",\"params\":{\"threadId\":\"thread-1\",\"role\":\"assistant\",\"text\":7}}}")));
+        assertFalse(invalidRealtimeTranscriptDoneText.ok, "realtime transcript done text must be a string");
+        assertEquals("expected_string", invalidRealtimeTranscriptDoneText.errorCode);
+        assertEquals("$.message.params.text", invalidRealtimeTranscriptDoneText.errorPath);
+
+        final invalidRealtimeAudioChannels = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-audio-invalid-channels\",\"kind\":\"notification\",\"method\":\"thread/realtime/outputAudio/delta\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/outputAudio/delta\",\"params\":{\"threadId\":\"thread-1\",\"audio\":{\"data\":\"AQ==\",\"itemId\":null,\"numChannels\":-1,\"sampleRate\":24000,\"samplesPerChannel\":128}}}}")));
+        assertFalse(invalidRealtimeAudioChannels.ok, "realtime audio numChannels must be unsigned");
+        assertEquals("expected_uint", invalidRealtimeAudioChannels.errorCode);
+        assertEquals("$.message.params.audio.numChannels", invalidRealtimeAudioChannels.errorPath);
+
+        final invalidRealtimeAudioSamples = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-audio-invalid-samples\",\"kind\":\"notification\",\"method\":\"thread/realtime/outputAudio/delta\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/outputAudio/delta\",\"params\":{\"threadId\":\"thread-1\",\"audio\":{\"data\":\"AQ==\",\"numChannels\":1,\"sampleRate\":24000,\"samplesPerChannel\":1.5}}}}")));
+        assertFalse(invalidRealtimeAudioSamples.ok, "realtime audio samplesPerChannel must be an integer when present");
+        assertEquals("expected_integer", invalidRealtimeAudioSamples.errorCode);
+        assertEquals("$.message.params.audio.samplesPerChannel", invalidRealtimeAudioSamples.errorPath);
+
+        final missingRealtimeSdp = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-sdp-missing-sdp\",\"kind\":\"notification\",\"method\":\"thread/realtime/sdp\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/sdp\",\"params\":{\"threadId\":\"thread-1\"}}}")));
+        assertFalse(missingRealtimeSdp.ok, "realtime SDP notification must include sdp");
+        assertEquals("missing_field", missingRealtimeSdp.errorCode);
+        assertEquals("$.message.params.sdp", missingRealtimeSdp.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

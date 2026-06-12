@@ -952,6 +952,52 @@
       }
     },
     {
+      "id": "thread-realtime-transcript-done-notification",
+      "kind": "notification",
+      "method": "thread/realtime/transcript/done",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/realtime/transcript/done",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "role": "assistant",
+          "text": "Hello from realtime."
+        }
+      }
+    },
+    {
+      "id": "thread-realtime-output-audio-delta-notification",
+      "kind": "notification",
+      "method": "thread/realtime/outputAudio/delta",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/realtime/outputAudio/delta",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "audio": {
+            "data": "AQID",
+            "itemId": "rt-item-1",
+            "numChannels": 1,
+            "sampleRate": 24000,
+            "samplesPerChannel": null
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-realtime-sdp-notification",
+      "kind": "notification",
+      "method": "thread/realtime/sdp",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/realtime/sdp",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "sdp": "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\n"
+        }
+      }
+    },
+    {
       "id": "external-agent-config-import-completed-notification",
       "kind": "notification",
       "method": "externalAgentConfig/import/completed",

@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/itemAdded,thread/realtime/started,thread/realtime/transcript/delta,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-037";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-038";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -208,6 +208,12 @@ class AppProtocol {
                 validateThreadRealtimeItemAddedNotification(params);
             case "thread/realtime/transcript/delta":
                 validateThreadRealtimeTranscriptDeltaNotification(params);
+            case "thread/realtime/transcript/done":
+                validateThreadRealtimeTranscriptDoneNotification(params);
+            case "thread/realtime/outputAudio/delta":
+                validateThreadRealtimeOutputAudioDeltaNotification(params);
+            case "thread/realtime/sdp":
+                validateThreadRealtimeSdpNotification(params);
             case "externalAgentConfig/import/completed":
                 validateExternalAgentConfigImportCompletedNotification(params);
             case "fs/changed":
@@ -931,6 +937,48 @@ class AppProtocol {
         return success("notification:thread/realtime/transcript/delta");
     }
 
+    static function validateThreadRealtimeTranscriptDoneNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final role = requiredString(params.keys, params.values, "role", "$.message.params.role");
+        if (!role.ok) return role.toOutcome();
+        final text = requiredString(params.keys, params.values, "text", "$.message.params.text");
+        if (!text.ok) return text.toOutcome();
+        return success("notification:thread/realtime/transcript/done");
+    }
+
+    static function validateThreadRealtimeOutputAudioDeltaNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final audio = requiredObjectField(params.keys, params.values, "audio", "$.message.params.audio");
+        if (!audio.ok) return audio.toOutcome();
+        final audioResult = validateThreadRealtimeAudioChunk(audio, "$.message.params.audio");
+        if (!audioResult.ok) return audioResult;
+        return success("notification:thread/realtime/outputAudio/delta");
+    }
+
+    static function validateThreadRealtimeAudioChunk(audio:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final data = requiredString(audio.keys, audio.values, "data", path + ".data");
+        if (!data.ok) return data.toOutcome();
+        final itemId = validateOptionalNullableString(audio, "itemId", path + ".itemId");
+        if (!itemId.ok) return itemId;
+        final numChannels = requiredUInt(audio.keys, audio.values, "numChannels", path + ".numChannels");
+        if (!numChannels.ok) return numChannels.toOutcome();
+        final sampleRate = requiredUInt(audio.keys, audio.values, "sampleRate", path + ".sampleRate");
+        if (!sampleRate.ok) return sampleRate.toOutcome();
+        final samplesPerChannel = validateOptionalNullableUInt(audio, "samplesPerChannel", path + ".samplesPerChannel");
+        if (!samplesPerChannel.ok) return samplesPerChannel;
+        return success("thread-realtime-audio-chunk");
+    }
+
+    static function validateThreadRealtimeSdpNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final sdp = requiredString(params.keys, params.values, "sdp", "$.message.params.sdp");
+        if (!sdp.ok) return sdp.toOutcome();
+        return success("notification:thread/realtime/sdp");
+    }
+
     static function validateExternalAgentConfigImportCompletedNotification(_params:ProtocolObjectField):AppProtocolParseOutcome {
         return success("notification:externalAgentConfig/import/completed");
     }
@@ -1341,6 +1389,13 @@ class AppProtocol {
         return number;
     }
 
+    static function requiredUInt(keys:Array<String>, values:Array<Value>, name:String, path:String):ProtocolNumberField {
+        final number = requiredInteger(keys, values, name, path);
+        if (!number.ok) return number;
+        if (number.value < 0) return ProtocolNumberField.failure("expected_uint", path, "expected unsigned JSON integer");
+        return number;
+    }
+
     static function requiredBool(keys:Array<String>, values:Array<Value>, name:String, path:String):ProtocolBoolField {
         final i = fieldIndex(keys, name);
         if (i < 0) return ProtocolBoolField.failure("missing_field", path, "required field is missing");
@@ -1369,6 +1424,19 @@ class AppProtocol {
                 success("nullable-number");
             case _:
                 fail("expected_nullable_number", path, "expected JSON number or null");
+        }
+    }
+
+    static function validateOptionalNullableUInt(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-uint:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("nullable-uint:null");
+            case JNumber(value):
+                if (value % 1 != 0) fail("expected_integer", path, "expected JSON integer") else if (value < 0) fail("expected_uint", path, "expected unsigned JSON integer") else success("nullable-uint");
+            case _:
+                fail("expected_nullable_integer", path, "expected JSON integer or null");
         }
     }
 

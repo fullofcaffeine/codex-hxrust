@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:0927b6f63e0e3e18d771de8bf95ac909d2c69ab2cfc10b37ec75d209f8d8d053",
+  "fingerprint": "sha256:cda2ec4abe16c1a8ef02d25ed49803de1652393b29c405e09fd3a624b46f0791",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -646,6 +646,29 @@
       ]
     },
     {
+      "id": "ThreadRealtimeOutputAudioDeltaNotification",
+      "sourcePath": "v2/ThreadRealtimeOutputAudioDeltaNotification.json",
+      "sha256": "7837ac6a5657f0e0dd646b9ed9b132a08ec06b6ad93271332a4d1d1d857ac4df",
+      "fields": [
+        "definition:ThreadRealtimeAudioChunk",
+        "property:audio",
+        "property:threadId",
+        "required:audio",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadRealtimeSdpNotification",
+      "sourcePath": "v2/ThreadRealtimeSdpNotification.json",
+      "sha256": "2d48155575b6eb8022a3c192ccd63ffa6a6b4fb407ae89c3ebc3240b8d2490f3",
+      "fields": [
+        "property:sdp",
+        "property:threadId",
+        "required:sdp",
+        "required:threadId"
+      ]
+    },
+    {
       "id": "ThreadRealtimeStartedNotification",
       "sourcePath": "v2/ThreadRealtimeStartedNotification.json",
       "sha256": "527d37ae019f0d2253e530ba94bd90fe6d1d66dad90c473b05026357e7fe2fd2",
@@ -668,6 +691,19 @@
         "property:threadId",
         "required:delta",
         "required:role",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadRealtimeTranscriptDoneNotification",
+      "sourcePath": "v2/ThreadRealtimeTranscriptDoneNotification.json",
+      "sha256": "23285aaa9617f7e5fb086e73756236a322f2801052c01cd3229bfebb3950aab8",
+      "fields": [
+        "property:role",
+        "property:text",
+        "property:threadId",
+        "required:role",
+        "required:text",
         "required:threadId"
       ]
     },
