@@ -562,6 +562,44 @@
       }
     },
     {
+      "id": "process-spawn-request",
+      "kind": "request",
+      "method": "process/spawn",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "process-spawn-1",
+        "method": "process/spawn",
+        "params": {
+          "command": ["echo", "fixture"],
+          "processHandle": "proc-handle-fixture-1",
+          "cwd": "/tmp/codex-hxrust",
+          "tty": true,
+          "streamStdin": true,
+          "streamStdoutStderr": true,
+          "outputBytesCap": null,
+          "timeoutMs": 1000,
+          "env": {
+            "CODEX_HXRUST_FIXTURE": "1",
+            "REMOVE_ME": null
+          },
+          "size": {
+            "rows": 24,
+            "cols": 80
+          }
+        }
+      }
+    },
+    {
+      "id": "process-spawn-response",
+      "kind": "response",
+      "method": "process/spawn",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "process-spawn-1",
+        "result": {}
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

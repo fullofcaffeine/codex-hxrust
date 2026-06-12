@@ -33,6 +33,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "command/exec/write");
         assertContains(fingerprintJson, "command/exec/terminate");
         assertContains(fingerprintJson, "command/exec/resize");
+        assertContains(fingerprintJson, "process/spawn");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -86,7 +87,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("88", Std.string(items.length));
+        assertEquals("90", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -107,8 +108,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("17", Std.string(requests));
-        assertEquals("17", Std.string(responses));
+        assertEquals("18", Std.string(requests));
+        assertEquals("18", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -538,6 +539,31 @@ class AppProtocolHarness {
         assertFalse(invalidCommandResizeResponse.ok, "command/exec/resize response must be empty");
         assertEquals("unexpected_field", invalidCommandResizeResponse.errorCode);
         assertEquals("$.message.result.ok", invalidCommandResizeResponse.errorPath);
+
+        final missingProcessHandle = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"process-spawn-missing-handle\",\"kind\":\"request\",\"method\":\"process/spawn\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"proc-1\",\"method\":\"process/spawn\",\"params\":{\"command\":[\"echo\"],\"cwd\":\"/tmp/codex-hxrust\"}}}")));
+        assertFalse(missingProcessHandle.ok, "process/spawn requires processHandle");
+        assertEquals("missing_field", missingProcessHandle.errorCode);
+        assertEquals("$.message.params.processHandle", missingProcessHandle.errorPath);
+
+        final emptyProcessCommand = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"process-spawn-empty-command\",\"kind\":\"request\",\"method\":\"process/spawn\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"proc-1\",\"method\":\"process/spawn\",\"params\":{\"command\":[],\"processHandle\":\"proc-1\",\"cwd\":\"/tmp/codex-hxrust\"}}}")));
+        assertFalse(emptyProcessCommand.ok, "process/spawn command must be non-empty");
+        assertEquals("empty_array", emptyProcessCommand.errorCode);
+        assertEquals("$.message.params.command", emptyProcessCommand.errorPath);
+
+        final invalidProcessCap = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"process-spawn-invalid-cap\",\"kind\":\"request\",\"method\":\"process/spawn\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"proc-1\",\"method\":\"process/spawn\",\"params\":{\"command\":[\"echo\"],\"processHandle\":\"proc-1\",\"cwd\":\"/tmp/codex-hxrust\",\"outputBytesCap\":-1}}}")));
+        assertFalse(invalidProcessCap.ok, "process/spawn outputBytesCap must be unsigned or null");
+        assertEquals("expected_uint", invalidProcessCap.errorCode);
+        assertEquals("$.message.params.outputBytesCap", invalidProcessCap.errorPath);
+
+        final processSizeWithoutTty = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"process-spawn-size-without-tty\",\"kind\":\"request\",\"method\":\"process/spawn\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"proc-1\",\"method\":\"process/spawn\",\"params\":{\"command\":[\"echo\"],\"processHandle\":\"proc-1\",\"cwd\":\"/tmp/codex-hxrust\",\"size\":{\"rows\":24,\"cols\":80}}}}")));
+        assertFalse(processSizeWithoutTty.ok, "process/spawn size is only valid with tty");
+        assertEquals("terminal_size_without_tty", processSizeWithoutTty.errorCode);
+        assertEquals("$.message.params.size", processSizeWithoutTty.errorPath);
+
+        final invalidProcessResponse = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"process-spawn-extra-response\",\"kind\":\"response\",\"method\":\"process/spawn\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"proc-1\",\"result\":{\"ok\":true}}}")));
+        assertFalse(invalidProcessResponse.ok, "process/spawn response must be empty");
+        assertEquals("unexpected_field", invalidProcessResponse.errorCode);
+        assertEquals("$.message.result.ok", invalidProcessResponse.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
