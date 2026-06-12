@@ -805,6 +805,19 @@
       }
     },
     {
+      "id": "guardian-warning-notification",
+      "kind": "notification",
+      "method": "guardianWarning",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "guardianWarning",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "message": "Guardian checks limited this turn."
+        }
+      }
+    },
+    {
       "id": "external-agent-config-import-completed-notification",
       "kind": "notification",
       "method": "externalAgentConfig/import/completed",

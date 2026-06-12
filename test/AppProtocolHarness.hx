@@ -44,6 +44,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "model/rerouted");
         assertContains(fingerprintJson, "model/verification");
         assertContains(fingerprintJson, "warning");
+        assertContains(fingerprintJson, "guardianWarning");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -57,7 +58,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("46", Std.string(items.length));
+        assertEquals("47", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -80,7 +81,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("37", Std.string(notifications));
+        assertEquals("38", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -269,6 +270,11 @@ class AppProtocolHarness {
         assertFalse(invalidWarningThreadId.ok, "warning threadId must be a string or null when present");
         assertEquals("expected_nullable_string", invalidWarningThreadId.errorCode);
         assertEquals("$.message.params.threadId", invalidWarningThreadId.errorPath);
+
+        final missingGuardianWarningThreadId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"guardian-warning-missing-thread\",\"kind\":\"notification\",\"method\":\"guardianWarning\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"guardianWarning\",\"params\":{\"message\":\"warn\"}}}")));
+        assertFalse(missingGuardianWarningThreadId.ok, "guardian warning threadId must be present");
+        assertEquals("missing_field", missingGuardianWarningThreadId.errorCode);
+        assertEquals("$.message.params.threadId", missingGuardianWarningThreadId.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
