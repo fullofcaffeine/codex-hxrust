@@ -25,6 +25,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "account/login/start");
         assertContains(fingerprintJson, "account/login/cancel");
         assertContains(fingerprintJson, "account/logout");
+        assertContains(fingerprintJson, "account/read");
         assertContains(fingerprintJson, "account/rateLimits/read");
         assertContains(fingerprintJson, "account/usage/read");
         assertContains(fingerprintJson, "account/sendAddCreditsNudgeEmail");
@@ -96,7 +97,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("108", Std.string(items.length));
+        assertEquals("110", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -117,8 +118,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("27", Std.string(requests));
-        assertEquals("27", Std.string(responses));
+        assertEquals("28", Std.string(requests));
+        assertEquals("28", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -438,6 +439,26 @@ class AppProtocolHarness {
         assertFalse(invalidLogoutExtraResult.ok, "logout response must be an empty object");
         assertEquals("unexpected_field", invalidLogoutExtraResult.errorCode);
         assertEquals("$.message.result.ok", invalidLogoutExtraResult.errorPath);
+
+        final invalidAccountReadRefresh = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-read-invalid-refresh\",\"kind\":\"request\",\"method\":\"account/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"account-read-1\",\"method\":\"account/read\",\"params\":{\"refreshToken\":\"yes\"}}}")));
+        assertFalse(invalidAccountReadRefresh.ok, "account/read refreshToken must be a boolean");
+        assertEquals("expected_bool", invalidAccountReadRefresh.errorCode);
+        assertEquals("$.message.params.refreshToken", invalidAccountReadRefresh.errorPath);
+
+        final missingAccountReadAuth = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-read-missing-auth\",\"kind\":\"response\",\"method\":\"account/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"account-read-1\",\"result\":{\"account\":null}}}")));
+        assertFalse(missingAccountReadAuth.ok, "account/read requires requiresOpenaiAuth");
+        assertEquals("missing_field", missingAccountReadAuth.errorCode);
+        assertEquals("$.message.result.requiresOpenaiAuth", missingAccountReadAuth.errorPath);
+
+        final invalidAccountReadPlan = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-read-invalid-plan\",\"kind\":\"response\",\"method\":\"account/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"account-read-1\",\"result\":{\"requiresOpenaiAuth\":false,\"account\":{\"type\":\"chatgpt\",\"email\":\"fixture@example.com\",\"planType\":\"gold\"}}}}")));
+        assertFalse(invalidAccountReadPlan.ok, "account/read chatgpt account validates planType");
+        assertEquals("invalid_account_plan_type", invalidAccountReadPlan.errorCode);
+        assertEquals("$.message.result.account.planType", invalidAccountReadPlan.errorPath);
+
+        final invalidAccountReadType = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-read-invalid-type\",\"kind\":\"response\",\"method\":\"account/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"account-read-1\",\"result\":{\"requiresOpenaiAuth\":false,\"account\":{\"type\":\"oauth\"}}}}")));
+        assertFalse(invalidAccountReadType.ok, "account/read account type must use upstream variants");
+        assertEquals("invalid_account_type", invalidAccountReadType.errorCode);
+        assertEquals("$.message.result.account.type", invalidAccountReadType.errorPath);
 
         final missingReadRateLimits = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"account-rate-limits-missing-rate-limits\",\"kind\":\"response\",\"method\":\"account/rateLimits/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"rates-1\",\"result\":{}}}")));
         assertFalse(missingReadRateLimits.ok, "account rate limit read responses must include rateLimits");

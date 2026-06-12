@@ -37,6 +37,8 @@ selected_schemas=(
   "CancelLoginAccountParams:v2/CancelLoginAccountParams.json"
   "CancelLoginAccountResponse:v2/CancelLoginAccountResponse.json"
   "LogoutAccountResponse:v2/LogoutAccountResponse.json"
+  "GetAccountParams:v2/GetAccountParams.json"
+  "GetAccountResponse:v2/GetAccountResponse.json"
   "GetAccountRateLimitsResponse:v2/GetAccountRateLimitsResponse.json"
   "GetAccountTokenUsageResponse:v2/GetAccountTokenUsageResponse.json"
   "SendAddCreditsNudgeEmailParams:v2/SendAddCreditsNudgeEmailParams.json"

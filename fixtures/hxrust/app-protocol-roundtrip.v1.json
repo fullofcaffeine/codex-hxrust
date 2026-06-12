@@ -299,6 +299,36 @@
       }
     },
     {
+      "id": "account-read-request",
+      "kind": "request",
+      "method": "account/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-read-1",
+        "method": "account/read",
+        "params": {
+          "refreshToken": false
+        }
+      }
+    },
+    {
+      "id": "account-read-response",
+      "kind": "response",
+      "method": "account/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "account-read-1",
+        "result": {
+          "requiresOpenaiAuth": false,
+          "account": {
+            "type": "chatgpt",
+            "email": "fixture@example.com",
+            "planType": "pro"
+          }
+        }
+      }
+    },
+    {
       "id": "account-rate-limits-read-request",
       "kind": "request",
       "method": "account/rateLimits/read",

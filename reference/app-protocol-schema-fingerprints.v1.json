@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:4bd954678bc219f58d1090e2c841d8dd4ee4f69bedf672c2c274ec888ccf55f0",
+  "fingerprint": "sha256:dd454e594d2ef4c21c878bf07c3561792be7f21288e2aa57b71698816b54cd8b",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -533,6 +533,14 @@
       ]
     },
     {
+      "id": "GetAccountParams",
+      "sourcePath": "v2/GetAccountParams.json",
+      "sha256": "17e5ac273188157a40fccccdbe24d27d98d6ea91b34ebb1871888fee8c61b32d",
+      "fields": [
+        "property:refreshToken"
+      ]
+    },
+    {
       "id": "GetAccountRateLimitsResponse",
       "sourcePath": "v2/GetAccountRateLimitsResponse.json",
       "sha256": "ffc2af5f23e8f5a219fb22bafc2248739e13ba97736198a309785192eef146f2",
@@ -546,6 +554,18 @@
         "property:rateLimits",
         "property:rateLimitsByLimitId",
         "required:rateLimits"
+      ]
+    },
+    {
+      "id": "GetAccountResponse",
+      "sourcePath": "v2/GetAccountResponse.json",
+      "sha256": "480a1416803602550dd7be554ce41f59622a19516bdbf62c03a79f0a5409d6c5",
+      "fields": [
+        "definition:Account",
+        "definition:PlanType",
+        "property:account",
+        "property:requiresOpenaiAuth",
+        "required:requiresOpenaiAuth"
       ]
     },
     {
