@@ -404,6 +404,38 @@
       }
     },
     {
+      "id": "feedback-upload-request",
+      "kind": "request",
+      "method": "feedback/upload",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "feedback-upload-1",
+        "method": "feedback/upload",
+        "params": {
+          "classification": "bug",
+          "reason": "fixture-only",
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "includeLogs": false,
+          "extraLogFiles": ["/tmp/codex-hxrust/feedback.log"],
+          "tags": {
+            "source": "fixture"
+          }
+        }
+      }
+    },
+    {
+      "id": "feedback-upload-response",
+      "kind": "response",
+      "method": "feedback/upload",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "feedback-upload-1",
+        "result": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

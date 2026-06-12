@@ -41,6 +41,8 @@ selected_schemas=(
   "GetAccountTokenUsageResponse:v2/GetAccountTokenUsageResponse.json"
   "SendAddCreditsNudgeEmailParams:v2/SendAddCreditsNudgeEmailParams.json"
   "SendAddCreditsNudgeEmailResponse:v2/SendAddCreditsNudgeEmailResponse.json"
+  "FeedbackUploadParams:v2/FeedbackUploadParams.json"
+  "FeedbackUploadResponse:v2/FeedbackUploadResponse.json"
   "ThreadStartedNotification:v2/ThreadStartedNotification.json"
   "ThreadStatusChangedNotification:v2/ThreadStatusChangedNotification.json"
   "TurnStartedNotification:v2/TurnStartedNotification.json"

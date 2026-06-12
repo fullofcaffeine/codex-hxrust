@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:a10fffa662d60cce2902c5791fb8a0c84c6e90083f4bdb369bdf6d55be28066c",
+  "fingerprint": "sha256:f52728dc4252999943ec85ae362d174f38caf5984ae2071a4fb83f463e332864",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -182,6 +182,29 @@
       "sourcePath": "v2/ExternalAgentConfigImportCompletedNotification.json",
       "sha256": "2f2367c99ea4b926697eb1acda0c503ede0c6596a2eacb1f83874af55b73dd40",
       "fields": []
+    },
+    {
+      "id": "FeedbackUploadParams",
+      "sourcePath": "v2/FeedbackUploadParams.json",
+      "sha256": "305ffd92a2031bfcb240e2c42d072f34b8c56851c98e2a12ddb695e737d011bc",
+      "fields": [
+        "property:classification",
+        "property:extraLogFiles",
+        "property:includeLogs",
+        "property:reason",
+        "property:tags",
+        "property:threadId",
+        "required:classification"
+      ]
+    },
+    {
+      "id": "FeedbackUploadResponse",
+      "sourcePath": "v2/FeedbackUploadResponse.json",
+      "sha256": "7a12bfe8b89b94a437258989b0e514361e83dbe44955e74afe16b55815f4b194",
+      "fields": [
+        "property:threadId",
+        "required:threadId"
+      ]
     },
     {
       "id": "FileChangeOutputDeltaNotification",
