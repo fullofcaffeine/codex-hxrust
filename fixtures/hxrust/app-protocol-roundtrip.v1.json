@@ -906,6 +906,54 @@
       }
     },
     {
+      "id": "config-value-write-request",
+      "kind": "request",
+      "method": "config/value/write",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "config-value-write-1",
+        "method": "config/value/write",
+        "params": {
+          "keyPath": "tools.web_search",
+          "mergeStrategy": "upsert",
+          "value": {
+            "allowed_domains": ["example.com"],
+            "context_size": "medium"
+          },
+          "filePath": "/Users/fixture/.codex/config.toml",
+          "expectedVersion": "1"
+        }
+      }
+    },
+    {
+      "id": "config-value-write-response",
+      "kind": "response",
+      "method": "config/value/write",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "config-value-write-1",
+        "result": {
+          "status": "okOverridden",
+          "version": "2",
+          "filePath": "/Users/fixture/.codex/config.toml",
+          "overriddenMetadata": {
+            "message": "Value overridden by project config",
+            "overridingLayer": {
+              "name": {
+                "type": "project",
+                "dotCodexFolder": "/tmp/codex-hxrust/.codex"
+              },
+              "version": "1"
+            },
+            "effectiveValue": {
+              "allowed_domains": ["example.org"],
+              "context_size": "high"
+            }
+          }
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

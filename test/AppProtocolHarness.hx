@@ -40,6 +40,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "config/read");
         assertContains(fingerprintJson, "externalAgentConfig/detect");
         assertContains(fingerprintJson, "externalAgentConfig/import");
+        assertContains(fingerprintJson, "config/value/write");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -93,7 +94,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("102", Std.string(items.length));
+        assertEquals("104", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -114,8 +115,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("24", Std.string(requests));
-        assertEquals("24", Std.string(responses));
+        assertEquals("25", Std.string(requests));
+        assertEquals("25", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -645,6 +646,26 @@ class AppProtocolHarness {
         assertFalse(invalidExternalAgentImportResponse.ok, "externalAgentConfig/import response must be empty");
         assertEquals("unexpected_field", invalidExternalAgentImportResponse.errorCode);
         assertEquals("$.message.result.ok", invalidExternalAgentImportResponse.errorPath);
+
+        final missingConfigValueWriteValue = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-value-write-missing-value\",\"kind\":\"request\",\"method\":\"config/value/write\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-write-1\",\"method\":\"config/value/write\",\"params\":{\"keyPath\":\"model\",\"mergeStrategy\":\"replace\"}}}")));
+        assertFalse(missingConfigValueWriteValue.ok, "config/value/write requires arbitrary JSON value");
+        assertEquals("missing_field", missingConfigValueWriteValue.errorCode);
+        assertEquals("$.message.params.value", missingConfigValueWriteValue.errorPath);
+
+        final invalidConfigValueWriteMerge = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-value-write-invalid-merge\",\"kind\":\"request\",\"method\":\"config/value/write\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-write-1\",\"method\":\"config/value/write\",\"params\":{\"keyPath\":\"model\",\"mergeStrategy\":\"merge\",\"value\":\"gpt-5\"}}}")));
+        assertFalse(invalidConfigValueWriteMerge.ok, "config/value/write mergeStrategy must use upstream enum values");
+        assertEquals("invalid_config_merge_strategy", invalidConfigValueWriteMerge.errorCode);
+        assertEquals("$.message.params.mergeStrategy", invalidConfigValueWriteMerge.errorPath);
+
+        final invalidConfigWriteStatus = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-value-write-invalid-status\",\"kind\":\"response\",\"method\":\"config/value/write\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-write-1\",\"result\":{\"status\":\"done\",\"version\":\"2\",\"filePath\":\"/tmp/config.toml\"}}}")));
+        assertFalse(invalidConfigWriteStatus.ok, "config/value/write response status must use upstream enum values");
+        assertEquals("invalid_config_write_status", invalidConfigWriteStatus.errorCode);
+        assertEquals("$.message.result.status", invalidConfigWriteStatus.errorPath);
+
+        final invalidConfigWriteOverridingLayer = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-value-write-invalid-overriding-layer\",\"kind\":\"response\",\"method\":\"config/value/write\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-write-1\",\"result\":{\"status\":\"okOverridden\",\"version\":\"2\",\"filePath\":\"/tmp/config.toml\",\"overriddenMetadata\":{\"message\":\"overridden\",\"overridingLayer\":{\"name\":{\"type\":\"project\"},\"version\":\"1\"},\"effectiveValue\":true}}}}")));
+        assertFalse(invalidConfigWriteOverridingLayer.ok, "config/value/write overriddenMetadata validates layer metadata");
+        assertEquals("missing_field", invalidConfigWriteOverridingLayer.errorCode);
+        assertEquals("$.message.result.overriddenMetadata.overridingLayer.name.dotCodexFolder", invalidConfigWriteOverridingLayer.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

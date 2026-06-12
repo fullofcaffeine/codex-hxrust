@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-051";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/read,config/value/write,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-052";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -159,6 +159,8 @@ class AppProtocol {
                 validateExternalAgentConfigDetectResponse(result);
             case "externalAgentConfig/import":
                 validateEmptyObject(result, "$.message.result", "response:externalAgentConfig/import");
+            case "config/value/write":
+                validateConfigWriteResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -393,6 +395,8 @@ class AppProtocol {
                 validateExternalAgentConfigDetectParams(params);
             case "externalAgentConfig/import":
                 validateExternalAgentConfigImportParams(params);
+            case "config/value/write":
+                validateConfigValueWriteParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -1159,6 +1163,56 @@ class AppProtocol {
         final layers = validateOptionalNullableConfigLayers(result, "layers", "$.message.result.layers");
         if (!layers.ok) return layers;
         return success("response:config/read");
+    }
+
+    static function validateConfigValueWriteParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final keyPath = requiredString(params.keys, params.values, "keyPath", "$.message.params.keyPath");
+        if (!keyPath.ok) return keyPath.toOutcome();
+        final mergeStrategy = requiredString(params.keys, params.values, "mergeStrategy", "$.message.params.mergeStrategy");
+        if (!mergeStrategy.ok) return mergeStrategy.toOutcome();
+        if (!validConfigMergeStrategy(mergeStrategy.value)) return fail("invalid_config_merge_strategy", "$.message.params.mergeStrategy", "unsupported config merge strategy");
+        final value = requiredValue(params.keys, params.values, "value", "$.message.params.value");
+        if (!value.ok) return value.toOutcome();
+        final filePath = validateOptionalNullableString(params, "filePath", "$.message.params.filePath");
+        if (!filePath.ok) return filePath;
+        final expectedVersion = validateOptionalNullableString(params, "expectedVersion", "$.message.params.expectedVersion");
+        if (!expectedVersion.ok) return expectedVersion;
+        return success("params:config/value/write");
+    }
+
+    static function validateConfigWriteResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final status = requiredString(result.keys, result.values, "status", "$.message.result.status");
+        if (!status.ok) return status.toOutcome();
+        if (!validConfigWriteStatus(status.value)) return fail("invalid_config_write_status", "$.message.result.status", "unsupported config write status");
+        final version = requiredString(result.keys, result.values, "version", "$.message.result.version");
+        if (!version.ok) return version.toOutcome();
+        final filePath = requiredString(result.keys, result.values, "filePath", "$.message.result.filePath");
+        if (!filePath.ok) return filePath.toOutcome();
+        final overridden = validateOptionalOverriddenMetadata(result, "overriddenMetadata", "$.message.result.overriddenMetadata");
+        if (!overridden.ok) return overridden;
+        return success("response:config/write");
+    }
+
+    static function validateOptionalOverriddenMetadata(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("overridden-metadata:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("overridden-metadata:null");
+            case JObject(keys, values):
+                final metadata = ProtocolObjectField.success(keys, values);
+                final message = requiredString(keys, values, "message", path + ".message");
+                if (!message.ok) return message.toOutcome();
+                final overridingLayer = requiredObjectField(keys, values, "overridingLayer", path + ".overridingLayer");
+                if (!overridingLayer.ok) return overridingLayer.toOutcome();
+                final layer = validateConfigLayerMetadata(overridingLayer, path + ".overridingLayer");
+                if (!layer.ok) return layer;
+                final effectiveValue = requiredValue(metadata.keys, metadata.values, "effectiveValue", path + ".effectiveValue");
+                if (!effectiveValue.ok) return effectiveValue.toOutcome();
+                success("overridden-metadata");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
     }
 
     static function validateConfigReadConfig(config:ProtocolObjectField, path:String):AppProtocolParseOutcome {
@@ -2461,6 +2515,14 @@ class AppProtocol {
 
     static function validAddCreditsNudgeEmailStatus(value:String):Bool {
         return value == "sent" || value == "cooldown_active";
+    }
+
+    static function validConfigMergeStrategy(value:String):Bool {
+        return value == "replace" || value == "upsert";
+    }
+
+    static function validConfigWriteStatus(value:String):Bool {
+        return value == "ok" || value == "okOverridden";
     }
 
     static function validExternalAgentConfigMigrationItemType(value:String):Bool {

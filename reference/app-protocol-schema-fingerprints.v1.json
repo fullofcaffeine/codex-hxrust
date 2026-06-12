@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:d19a237254c059fe77777279d6d1bfb794e53c7ca78d53b819e93f75af0aac9c",
+  "fingerprint": "sha256:41f36a0b0ac1f67c842539aac7623d90aa76b6a131801674e0a58aa58a5da3c6",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -261,6 +261,22 @@
       ]
     },
     {
+      "id": "ConfigValueWriteParams",
+      "sourcePath": "v2/ConfigValueWriteParams.json",
+      "sha256": "2fed8cd8bb820ec3542faaddea3edf025bd7325f2bb84bd79aaea34c6f425000",
+      "fields": [
+        "definition:MergeStrategy",
+        "property:expectedVersion",
+        "property:filePath",
+        "property:keyPath",
+        "property:mergeStrategy",
+        "property:value",
+        "required:keyPath",
+        "required:mergeStrategy",
+        "required:value"
+      ]
+    },
+    {
       "id": "ConfigWarningNotification",
       "sourcePath": "v2/ConfigWarningNotification.json",
       "sha256": "af6583b5b77951b92be317e907f9fc23445a1cea9528bc7fd4d482594819f589",
@@ -272,6 +288,25 @@
         "property:range",
         "property:summary",
         "required:summary"
+      ]
+    },
+    {
+      "id": "ConfigWriteResponse",
+      "sourcePath": "v2/ConfigWriteResponse.json",
+      "sha256": "0b46dfc95e6200173d96f385a37a570ca7282864282216418bbb4432b1802293",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:ConfigLayerMetadata",
+        "definition:ConfigLayerSource",
+        "definition:OverriddenMetadata",
+        "definition:WriteStatus",
+        "property:filePath",
+        "property:overriddenMetadata",
+        "property:status",
+        "property:version",
+        "required:filePath",
+        "required:status",
+        "required:version"
       ]
     },
     {

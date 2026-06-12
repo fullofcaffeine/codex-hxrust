@@ -53,6 +53,8 @@ selected_schemas=(
   "CommandExecResizeResponse:v2/CommandExecResizeResponse.json"
   "ConfigReadParams:v2/ConfigReadParams.json"
   "ConfigReadResponse:v2/ConfigReadResponse.json"
+  "ConfigValueWriteParams:v2/ConfigValueWriteParams.json"
+  "ConfigWriteResponse:v2/ConfigWriteResponse.json"
   "ExternalAgentConfigDetectParams:v2/ExternalAgentConfigDetectParams.json"
   "ExternalAgentConfigDetectResponse:v2/ExternalAgentConfigDetectResponse.json"
   "ExternalAgentConfigImportParams:v2/ExternalAgentConfigImportParams.json"
