@@ -797,6 +797,79 @@
       }
     },
     {
+      "id": "external-agent-config-detect-request",
+      "kind": "request",
+      "method": "externalAgentConfig/detect",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "external-agent-config-detect-1",
+        "method": "externalAgentConfig/detect",
+        "params": {
+          "includeHome": true,
+          "cwds": ["/tmp/codex-hxrust"]
+        }
+      }
+    },
+    {
+      "id": "external-agent-config-detect-response",
+      "kind": "response",
+      "method": "externalAgentConfig/detect",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "external-agent-config-detect-1",
+        "result": {
+          "items": [
+            {
+              "itemType": "AGENTS_MD",
+              "description": "Import home instructions",
+              "cwd": null,
+              "details": null
+            },
+            {
+              "itemType": "PLUGINS",
+              "description": "Import plugin marketplace entries",
+              "cwd": "/tmp/codex-hxrust",
+              "details": {
+                "commands": [
+                  {
+                    "name": "fixture-command"
+                  }
+                ],
+                "hooks": [
+                  {
+                    "name": "fixture-hook"
+                  }
+                ],
+                "mcpServers": [
+                  {
+                    "name": "fixture-mcp"
+                  }
+                ],
+                "plugins": [
+                  {
+                    "marketplaceName": "fixture-marketplace",
+                    "pluginNames": ["fixture-plugin"]
+                  }
+                ],
+                "sessions": [
+                  {
+                    "cwd": "/tmp/codex-hxrust",
+                    "path": "/tmp/codex-hxrust/session.jsonl",
+                    "title": null
+                  }
+                ],
+                "subagents": [
+                  {
+                    "name": "fixture-subagent"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

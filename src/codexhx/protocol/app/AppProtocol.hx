@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/read,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-049";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/read,externalAgentConfig/detect,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-050";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -155,6 +155,8 @@ class AppProtocol {
                 validateEmptyObject(result, "$.message.result", "response:process/resizePty");
             case "config/read":
                 validateConfigReadResponse(result);
+            case "externalAgentConfig/detect":
+                validateExternalAgentConfigDetectResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -385,6 +387,8 @@ class AppProtocol {
                 validateProcessResizePtyParams(params);
             case "config/read":
                 validateConfigReadParams(params);
+            case "externalAgentConfig/detect":
+                validateExternalAgentConfigDetectParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -1463,6 +1467,161 @@ class AppProtocol {
         return success("required-strings");
     }
 
+    static function validateExternalAgentConfigDetectParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final includeHome = validateOptionalBool(params, "includeHome", "$.message.params.includeHome");
+        if (!includeHome.ok) return includeHome;
+        final cwds = validateOptionalStringArray(params, "cwds", "$.message.params.cwds", true);
+        if (!cwds.ok) return cwds;
+        return success("params:externalAgentConfig/detect");
+    }
+
+    static function validateExternalAgentConfigDetectResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final items = requiredArray(result.keys, result.values, "items", "$.message.result.items");
+        if (!items.ok) return items.toOutcome();
+        return validateExternalAgentConfigMigrationItems(items.values, "$.message.result.items");
+    }
+
+    static function validateExternalAgentConfigMigrationItems(items:Array<Value>, path:String):AppProtocolParseOutcome {
+        var i = 0;
+        while (i < items.length) {
+            final itemPath = path + "[" + Std.string(i) + "]";
+            switch items[i] {
+                case JObject(keys, values):
+                    final item = validateExternalAgentConfigMigrationItem(ProtocolObjectField.success(keys, values), itemPath);
+                    if (!item.ok) return item;
+                case _:
+                    return fail("expected_object", itemPath, "expected migration item object");
+            }
+            i = i + 1;
+        }
+        return success("external-agent-config-migration-items");
+    }
+
+    static function validateExternalAgentConfigMigrationItem(item:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final description = requiredString(item.keys, item.values, "description", path + ".description");
+        if (!description.ok) return description.toOutcome();
+        final itemType = requiredString(item.keys, item.values, "itemType", path + ".itemType");
+        if (!itemType.ok) return itemType.toOutcome();
+        if (!validExternalAgentConfigMigrationItemType(itemType.value)) return fail("invalid_external_agent_config_item_type", path + ".itemType", "unsupported migration item type");
+        final cwd = validateOptionalNullableString(item, "cwd", path + ".cwd");
+        if (!cwd.ok) return cwd;
+        final details = validateOptionalMigrationDetails(item, "details", path + ".details");
+        if (!details.ok) return details;
+        return success("external-agent-config-migration-item");
+    }
+
+    static function validateOptionalMigrationDetails(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("migration-details:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("migration-details:null");
+            case JObject(keys, values):
+                final details = ProtocolObjectField.success(keys, values);
+                for (field in ["commands", "hooks", "mcpServers", "subagents"]) {
+                    final list = validateOptionalNamedMigrationArray(details, field, path + "." + field);
+                    if (!list.ok) return list;
+                }
+                final plugins = validateOptionalPluginsMigrationArray(details, "plugins", path + ".plugins");
+                if (!plugins.ok) return plugins;
+                final sessions = validateOptionalSessionMigrationArray(details, "sessions", path + ".sessions");
+                if (!sessions.ok) return sessions;
+                success("migration-details");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalNamedMigrationArray(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("named-migration-array:missing");
+        return switch object.values[i] {
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    final entryPath = path + "[" + Std.string(entryIndex) + "]";
+                    switch entries[entryIndex] {
+                        case JObject(keys, values):
+                            final named = requiredString(keys, values, "name", entryPath + ".name");
+                            if (!named.ok) return named.toOutcome();
+                        case _:
+                            return fail("expected_object", entryPath, "expected migration detail object");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("named-migration-array");
+            case _:
+                fail("expected_array", path, "expected JSON array");
+        }
+    }
+
+    static function validateOptionalPluginsMigrationArray(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("plugins-migration-array:missing");
+        return switch object.values[i] {
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    final entryPath = path + "[" + Std.string(entryIndex) + "]";
+                    switch entries[entryIndex] {
+                        case JObject(keys, values):
+                            final marketplaceName = requiredString(keys, values, "marketplaceName", entryPath + ".marketplaceName");
+                            if (!marketplaceName.ok) return marketplaceName.toOutcome();
+                            final pluginNames = requiredArray(keys, values, "pluginNames", entryPath + ".pluginNames");
+                            if (!pluginNames.ok) return pluginNames.toOutcome();
+                            final pluginNamesResult = validateStringArrayEntries(pluginNames.values, entryPath + ".pluginNames");
+                            if (!pluginNamesResult.ok) return pluginNamesResult;
+                        case _:
+                            return fail("expected_object", entryPath, "expected plugin migration object");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("plugins-migration-array");
+            case _:
+                fail("expected_array", path, "expected JSON array");
+        }
+    }
+
+    static function validateOptionalSessionMigrationArray(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("session-migration-array:missing");
+        return switch object.values[i] {
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    final entryPath = path + "[" + Std.string(entryIndex) + "]";
+                    switch entries[entryIndex] {
+                        case JObject(keys, values):
+                            final cwd = requiredString(keys, values, "cwd", entryPath + ".cwd");
+                            if (!cwd.ok) return cwd.toOutcome();
+                            final pathValue = requiredString(keys, values, "path", entryPath + ".path");
+                            if (!pathValue.ok) return pathValue.toOutcome();
+                            final title = validateOptionalNullableString(ProtocolObjectField.success(keys, values), "title", entryPath + ".title");
+                            if (!title.ok) return title;
+                        case _:
+                            return fail("expected_object", entryPath, "expected session migration object");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("session-migration-array");
+            case _:
+                fail("expected_array", path, "expected JSON array");
+        }
+    }
+
+    static function validateStringArrayEntries(entries:Array<Value>, path:String):AppProtocolParseOutcome {
+        var i = 0;
+        while (i < entries.length) {
+            switch entries[i] {
+                case JString(_):
+                case _:
+                    return fail("expected_string", path + "[" + Std.string(i) + "]", "expected JSON string");
+            }
+            i = i + 1;
+        }
+        return success("string-array-entries");
+    }
+
     static function validateRequiredNonEmptyStringArray(values:Array<Value>, path:String):AppProtocolParseOutcome {
         if (values.length == 0) return fail("empty_array", path, "expected non-empty string array");
         var i = 0;
@@ -2292,6 +2451,10 @@ class AppProtocol {
 
     static function validAddCreditsNudgeEmailStatus(value:String):Bool {
         return value == "sent" || value == "cooldown_active";
+    }
+
+    static function validExternalAgentConfigMigrationItemType(value:String):Bool {
+        return value == "AGENTS_MD" || value == "CONFIG" || value == "SKILLS" || value == "PLUGINS" || value == "MCP_SERVER_CONFIG" || value == "SUBAGENTS" || value == "HOOKS" || value == "COMMANDS" || value == "SESSIONS";
     }
 
     static function success(summary:String):AppProtocolParseOutcome {

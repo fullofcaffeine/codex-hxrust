@@ -38,6 +38,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "process/kill");
         assertContains(fingerprintJson, "process/resizePty");
         assertContains(fingerprintJson, "config/read");
+        assertContains(fingerprintJson, "externalAgentConfig/detect");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -91,7 +92,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("98", Std.string(items.length));
+        assertEquals("100", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -112,8 +113,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("22", Std.string(requests));
-        assertEquals("22", Std.string(responses));
+        assertEquals("23", Std.string(requests));
+        assertEquals("23", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -613,6 +614,21 @@ class AppProtocolHarness {
         assertFalse(invalidConfigReadLayerConfig.ok, "config/read layers require raw config value");
         assertEquals("missing_field", invalidConfigReadLayerConfig.errorCode);
         assertEquals("$.message.result.layers[0].config", invalidConfigReadLayerConfig.errorPath);
+
+        final invalidExternalAgentDetectCwd = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"external-agent-config-detect-invalid-cwd\",\"kind\":\"request\",\"method\":\"externalAgentConfig/detect\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"external-detect-1\",\"method\":\"externalAgentConfig/detect\",\"params\":{\"cwds\":[7]}}}")));
+        assertFalse(invalidExternalAgentDetectCwd.ok, "externalAgentConfig/detect cwds must be strings");
+        assertEquals("expected_string", invalidExternalAgentDetectCwd.errorCode);
+        assertEquals("$.message.params.cwds[0]", invalidExternalAgentDetectCwd.errorPath);
+
+        final invalidExternalAgentDetectItemType = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"external-agent-config-detect-invalid-item-type\",\"kind\":\"response\",\"method\":\"externalAgentConfig/detect\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"external-detect-1\",\"result\":{\"items\":[{\"itemType\":\"UNKNOWN\",\"description\":\"bad\"}]}}}")));
+        assertFalse(invalidExternalAgentDetectItemType.ok, "externalAgentConfig/detect itemType must use upstream enum values");
+        assertEquals("invalid_external_agent_config_item_type", invalidExternalAgentDetectItemType.errorCode);
+        assertEquals("$.message.result.items[0].itemType", invalidExternalAgentDetectItemType.errorPath);
+
+        final invalidExternalAgentDetectPluginName = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"external-agent-config-detect-invalid-plugin-name\",\"kind\":\"response\",\"method\":\"externalAgentConfig/detect\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"external-detect-1\",\"result\":{\"items\":[{\"itemType\":\"PLUGINS\",\"description\":\"bad\",\"details\":{\"plugins\":[{\"marketplaceName\":\"fixture\",\"pluginNames\":[1]}]}}]}}}")));
+        assertFalse(invalidExternalAgentDetectPluginName.ok, "externalAgentConfig/detect pluginNames must be strings");
+        assertEquals("expected_string", invalidExternalAgentDetectPluginName.errorCode);
+        assertEquals("$.message.result.items[0].details.plugins[0].pluginNames[0]", invalidExternalAgentDetectPluginName.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
