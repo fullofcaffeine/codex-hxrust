@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:92d3aaa4a2e1bdd26317a5a2fc0d3764706dd2edae2a151a14127d1493ff4455",
+  "fingerprint": "sha256:27ed3916a56e8e1d2291381565e50daa3307ce5f897f0c355a58bea2bcb34b86",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -195,6 +195,30 @@
         "property:watchId",
         "required:changedPaths",
         "required:watchId"
+      ]
+    },
+    {
+      "id": "FuzzyFileSearchSessionCompletedNotification",
+      "sourcePath": "FuzzyFileSearchSessionCompletedNotification.json",
+      "sha256": "8aab02e1f780f3d092baf1187c8ab47d70929d46e2600fc5148f50f31c9c21a7",
+      "fields": [
+        "property:sessionId",
+        "required:sessionId"
+      ]
+    },
+    {
+      "id": "FuzzyFileSearchSessionUpdatedNotification",
+      "sourcePath": "FuzzyFileSearchSessionUpdatedNotification.json",
+      "sha256": "8e20d39f730c026d8bf37a376187187648a959498f060c6ee324b12a22c72afe",
+      "fields": [
+        "definition:FuzzyFileSearchMatchType",
+        "definition:FuzzyFileSearchResult",
+        "property:files",
+        "property:query",
+        "property:sessionId",
+        "required:files",
+        "required:query",
+        "required:sessionId"
       ]
     },
     {

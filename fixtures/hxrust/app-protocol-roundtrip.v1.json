@@ -855,6 +855,52 @@
       }
     },
     {
+      "id": "fuzzy-file-search-session-updated-notification",
+      "kind": "notification",
+      "method": "fuzzyFileSearch/sessionUpdated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "fuzzyFileSearch/sessionUpdated",
+        "params": {
+          "sessionId": "fuzzy-session-1",
+          "query": "proto",
+          "files": [
+            {
+              "file_name": "AppProtocol.hx",
+              "match_type": "file",
+              "path": "src/codexhx/protocol/app/AppProtocol.hx",
+              "root": "/tmp/codex-hxrust",
+              "score": 42,
+              "indices": [
+                0,
+                4
+              ]
+            },
+            {
+              "file_name": "protocol",
+              "match_type": "directory",
+              "path": "src/codexhx/protocol",
+              "root": "/tmp/codex-hxrust",
+              "score": 7,
+              "indices": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fuzzy-file-search-session-completed-notification",
+      "kind": "notification",
+      "method": "fuzzyFileSearch/sessionCompleted",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "fuzzyFileSearch/sessionCompleted",
+        "params": {
+          "sessionId": "fuzzy-session-1"
+        }
+      }
+    },
+    {
       "id": "external-agent-config-import-completed-notification",
       "kind": "notification",
       "method": "externalAgentConfig/import/completed",

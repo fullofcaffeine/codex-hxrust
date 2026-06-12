@@ -5,9 +5,9 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-035";
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:thread/read,thread/start,turn/interrupt,turn/start|notifications:account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-036";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -198,6 +198,10 @@ class AppProtocol {
                 validateDeprecationNoticeNotification(params);
             case "configWarning":
                 validateConfigWarningNotification(params);
+            case "fuzzyFileSearch/sessionUpdated":
+                validateFuzzyFileSearchSessionUpdatedNotification(params);
+            case "fuzzyFileSearch/sessionCompleted":
+                validateFuzzyFileSearchSessionCompletedNotification(params);
             case "externalAgentConfig/import/completed":
                 validateExternalAgentConfigImportCompletedNotification(params);
             case "fs/changed":
@@ -822,6 +826,76 @@ class AppProtocol {
         return success("text-position");
     }
 
+    static function validateFuzzyFileSearchSessionUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final sessionId = requiredString(params.keys, params.values, "sessionId", "$.message.params.sessionId");
+        if (!sessionId.ok) return sessionId.toOutcome();
+        final query = requiredString(params.keys, params.values, "query", "$.message.params.query");
+        if (!query.ok) return query.toOutcome();
+        final files = requiredArray(params.keys, params.values, "files", "$.message.params.files");
+        if (!files.ok) return files.toOutcome();
+
+        var i = 0;
+        while (i < files.values.length) {
+            final filePath = "$.message.params.files[" + Std.string(i) + "]";
+            final file = requireObject(files.values[i], filePath);
+            if (!file.ok) return file.toOutcome();
+            final result = validateFuzzyFileSearchResult(file, filePath);
+            if (!result.ok) return result;
+            i = i + 1;
+        }
+
+        return success("notification:fuzzyFileSearch/sessionUpdated");
+    }
+
+    static function validateFuzzyFileSearchSessionCompletedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final sessionId = requiredString(params.keys, params.values, "sessionId", "$.message.params.sessionId");
+        if (!sessionId.ok) return sessionId.toOutcome();
+        return success("notification:fuzzyFileSearch/sessionCompleted");
+    }
+
+    static function validateFuzzyFileSearchResult(file:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final fileName = requiredString(file.keys, file.values, "file_name", path + ".file_name");
+        if (!fileName.ok) return fileName.toOutcome();
+        final matchType = requiredString(file.keys, file.values, "match_type", path + ".match_type");
+        if (!matchType.ok) return matchType.toOutcome();
+        if (!validFuzzyFileSearchMatchType(matchType.value)) return fail("invalid_fuzzy_file_search_match_type", path + ".match_type", "unsupported fuzzy file search match type");
+        final filePath = requiredString(file.keys, file.values, "path", path + ".path");
+        if (!filePath.ok) return filePath.toOutcome();
+        final root = requiredString(file.keys, file.values, "root", path + ".root");
+        if (!root.ok) return root.toOutcome();
+        final score = requiredInteger(file.keys, file.values, "score", path + ".score");
+        if (!score.ok) return score.toOutcome();
+        if (score.value < 0) return fail("expected_uint", path + ".score", "expected unsigned JSON integer");
+
+        final indices = validateOptionalNullableUIntArray(file, "indices", path + ".indices");
+        if (!indices.ok) return indices;
+        return success("fuzzy-file-search-result");
+    }
+
+    static function validateOptionalNullableUIntArray(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("uint-array:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("uint-array:null");
+            case JArray(values):
+                var j = 0;
+                while (j < values.length) {
+                    switch values[j] {
+                        case JNumber(value):
+                            if (value % 1 != 0) return fail("expected_integer", path + "[" + Std.string(j) + "]", "expected JSON integer");
+                            if (value < 0) return fail("expected_uint", path + "[" + Std.string(j) + "]", "expected unsigned JSON integer");
+                        case _:
+                            return fail("expected_integer", path + "[" + Std.string(j) + "]", "expected JSON integer");
+                    }
+                    j = j + 1;
+                }
+                success("uint-array");
+            case _:
+                fail("expected_nullable_array", path, "expected JSON array or null");
+        }
+    }
+
     static function validateExternalAgentConfigImportCompletedNotification(_params:ProtocolObjectField):AppProtocolParseOutcome {
         return success("notification:externalAgentConfig/import/completed");
     }
@@ -1172,6 +1246,10 @@ class AppProtocol {
 
     static function validModelVerification(value:String):Bool {
         return value == "trustedAccessForCyber";
+    }
+
+    static function validFuzzyFileSearchMatchType(value:String):Bool {
+        return value == "file" || value == "directory";
     }
 
     static function validCommandExecOutputStream(value:String):Bool {

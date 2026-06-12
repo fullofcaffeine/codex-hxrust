@@ -47,6 +47,8 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "guardianWarning");
         assertContains(fingerprintJson, "deprecationNotice");
         assertContains(fingerprintJson, "configWarning");
+        assertContains(fingerprintJson, "fuzzyFileSearch/sessionUpdated");
+        assertContains(fingerprintJson, "fuzzyFileSearch/sessionCompleted");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -60,7 +62,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("49", Std.string(items.length));
+        assertEquals("51", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -83,7 +85,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("40", Std.string(notifications));
+        assertEquals("42", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -292,6 +294,21 @@ class AppProtocolHarness {
         assertFalse(invalidConfigWarningRangeLine.ok, "config warning range positions must be unsigned integers");
         assertEquals("expected_uint", invalidConfigWarningRangeLine.errorCode);
         assertEquals("$.message.params.range.start.line", invalidConfigWarningRangeLine.errorPath);
+
+        final invalidFuzzyMatchType = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fuzzy-search-invalid-match\",\"kind\":\"notification\",\"method\":\"fuzzyFileSearch/sessionUpdated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fuzzyFileSearch/sessionUpdated\",\"params\":{\"sessionId\":\"fuzzy-1\",\"query\":\"p\",\"files\":[{\"file_name\":\"a\",\"match_type\":\"symlink\",\"path\":\"a\",\"root\":\"/tmp\",\"score\":1,\"indices\":null}]}}}")));
+        assertFalse(invalidFuzzyMatchType.ok, "fuzzy file search match type must be file or directory");
+        assertEquals("invalid_fuzzy_file_search_match_type", invalidFuzzyMatchType.errorCode);
+        assertEquals("$.message.params.files[0].match_type", invalidFuzzyMatchType.errorPath);
+
+        final invalidFuzzyIndex = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fuzzy-search-invalid-index\",\"kind\":\"notification\",\"method\":\"fuzzyFileSearch/sessionUpdated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fuzzyFileSearch/sessionUpdated\",\"params\":{\"sessionId\":\"fuzzy-1\",\"query\":\"p\",\"files\":[{\"file_name\":\"a\",\"match_type\":\"file\",\"path\":\"a\",\"root\":\"/tmp\",\"score\":1,\"indices\":[0,-1]}]}}}")));
+        assertFalse(invalidFuzzyIndex.ok, "fuzzy file search indices must be unsigned integers");
+        assertEquals("expected_uint", invalidFuzzyIndex.errorCode);
+        assertEquals("$.message.params.files[0].indices[1]", invalidFuzzyIndex.errorPath);
+
+        final missingFuzzyCompletedSession = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fuzzy-search-completed-missing-session\",\"kind\":\"notification\",\"method\":\"fuzzyFileSearch/sessionCompleted\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fuzzyFileSearch/sessionCompleted\",\"params\":{}}}")));
+        assertFalse(missingFuzzyCompletedSession.ok, "fuzzy file search completion must include sessionId");
+        assertEquals("missing_field", missingFuzzyCompletedSession.errorCode);
+        assertEquals("$.message.params.sessionId", missingFuzzyCompletedSession.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
