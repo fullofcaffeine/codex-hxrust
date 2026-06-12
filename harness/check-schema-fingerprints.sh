@@ -43,6 +43,8 @@ selected_schemas=(
   "SendAddCreditsNudgeEmailResponse:v2/SendAddCreditsNudgeEmailResponse.json"
   "FeedbackUploadParams:v2/FeedbackUploadParams.json"
   "FeedbackUploadResponse:v2/FeedbackUploadResponse.json"
+  "CommandExecParams:v2/CommandExecParams.json"
+  "CommandExecResponse:v2/CommandExecResponse.json"
   "ThreadStartedNotification:v2/ThreadStartedNotification.json"
   "ThreadStatusChangedNotification:v2/ThreadStatusChangedNotification.json"
   "TurnStartedNotification:v2/TurnStartedNotification.json"

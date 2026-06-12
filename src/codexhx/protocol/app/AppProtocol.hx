@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,feedback/upload,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-044";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,feedback/upload,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-045";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -137,6 +137,8 @@ class AppProtocol {
                 validateSendAddCreditsNudgeEmailResponse(result);
             case "feedback/upload":
                 validateFeedbackUploadResponse(result);
+            case "command/exec":
+                validateCommandExecResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -349,6 +351,8 @@ class AppProtocol {
                 validateSendAddCreditsNudgeEmailParams(params);
             case "feedback/upload":
                 validateFeedbackUploadParams(params);
+            case "command/exec":
+                validateCommandExecParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -956,6 +960,149 @@ class AppProtocol {
         final threadId = requiredString(result.keys, result.values, "threadId", "$.message.result.threadId");
         if (!threadId.ok) return threadId.toOutcome();
         return success("response:feedback/upload");
+    }
+
+    static function validateCommandExecParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final command = requiredArray(params.keys, params.values, "command", "$.message.params.command");
+        if (!command.ok) return command.toOutcome();
+        final commandResult = validateRequiredNonEmptyStringArray(command.values, "$.message.params.command");
+        if (!commandResult.ok) return commandResult;
+
+        final processId = validateOptionalNullableString(params, "processId", "$.message.params.processId");
+        if (!processId.ok) return processId;
+        final tty = optionalBoolValue(params, "tty", "$.message.params.tty");
+        if (!tty.ok) return tty.toOutcome();
+        final streamStdin = optionalBoolValue(params, "streamStdin", "$.message.params.streamStdin");
+        if (!streamStdin.ok) return streamStdin.toOutcome();
+        final streamStdoutStderr = optionalBoolValue(params, "streamStdoutStderr", "$.message.params.streamStdoutStderr");
+        if (!streamStdoutStderr.ok) return streamStdoutStderr.toOutcome();
+
+        if ((tty.value || streamStdin.value || streamStdoutStderr.value) && !hasNonNullField(params, "processId")) {
+            return fail("missing_process_id", "$.message.params.processId", "processId is required for tty or streaming command execution");
+        }
+
+        final outputBytesCap = validateOptionalNullableUInt(params, "outputBytesCap", "$.message.params.outputBytesCap");
+        if (!outputBytesCap.ok) return outputBytesCap;
+        final disableOutputCap = optionalBoolValue(params, "disableOutputCap", "$.message.params.disableOutputCap");
+        if (!disableOutputCap.ok) return disableOutputCap.toOutcome();
+        if (disableOutputCap.value && hasNonNullField(params, "outputBytesCap")) {
+            return fail("incompatible_output_cap", "$.message.params.outputBytesCap", "outputBytesCap cannot be combined with disableOutputCap");
+        }
+
+        final timeoutMs = validateOptionalNullableInteger(params, "timeoutMs", "$.message.params.timeoutMs");
+        if (!timeoutMs.ok) return timeoutMs;
+        final disableTimeout = optionalBoolValue(params, "disableTimeout", "$.message.params.disableTimeout");
+        if (!disableTimeout.ok) return disableTimeout.toOutcome();
+        if (disableTimeout.value && hasNonNullField(params, "timeoutMs")) {
+            return fail("incompatible_timeout", "$.message.params.timeoutMs", "timeoutMs cannot be combined with disableTimeout");
+        }
+
+        final cwd = validateOptionalNullableString(params, "cwd", "$.message.params.cwd");
+        if (!cwd.ok) return cwd;
+        final env = validateOptionalNullableStringMap(params, "env", "$.message.params.env");
+        if (!env.ok) return env;
+        final size = validateOptionalCommandExecTerminalSize(params, "size", "$.message.params.size");
+        if (!size.ok) return size;
+        if (hasNonNullField(params, "size") && !tty.value) return fail("terminal_size_without_tty", "$.message.params.size", "size is only valid when tty is true");
+
+        final sandboxPolicy = validateOptionalCommandExecSandboxPolicy(params, "sandboxPolicy", "$.message.params.sandboxPolicy");
+        if (!sandboxPolicy.ok) return sandboxPolicy;
+        final permissionProfile = validateOptionalNullableString(params, "permissionProfile", "$.message.params.permissionProfile");
+        if (!permissionProfile.ok) return permissionProfile;
+        if (hasNonNullField(params, "sandboxPolicy") && hasNonNullField(params, "permissionProfile")) {
+            return fail("incompatible_sandbox_policy", "$.message.params.permissionProfile", "permissionProfile cannot be combined with sandboxPolicy");
+        }
+
+        return success("params:command/exec");
+    }
+
+    static function validateRequiredNonEmptyStringArray(values:Array<Value>, path:String):AppProtocolParseOutcome {
+        if (values.length == 0) return fail("empty_array", path, "expected non-empty string array");
+        var i = 0;
+        while (i < values.length) {
+            switch values[i] {
+                case JString(_):
+                case _:
+                    return fail("expected_string", path + "[" + Std.string(i) + "]", "expected JSON string");
+            }
+            i = i + 1;
+        }
+        return success("string-array:non-empty");
+    }
+
+    static function validateOptionalCommandExecTerminalSize(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("command-exec-size:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("command-exec-size:null");
+            case JObject(keys, values):
+                final rows = requiredUInt(keys, values, "rows", path + ".rows");
+                if (!rows.ok) return rows.toOutcome();
+                final cols = requiredUInt(keys, values, "cols", path + ".cols");
+                if (!cols.ok) return cols.toOutcome();
+                if (rows.value > 65535) return fail("expected_uint16", path + ".rows", "expected unsigned 16-bit JSON integer");
+                if (cols.value > 65535) return fail("expected_uint16", path + ".cols", "expected unsigned 16-bit JSON integer");
+                success("command-exec-size");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalCommandExecSandboxPolicy(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("sandbox-policy:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("sandbox-policy:null");
+            case JObject(keys, values):
+                final policyType = requiredString(keys, values, "type", path + ".type");
+                if (!policyType.ok) return policyType.toOutcome();
+                switch policyType.value {
+                    case "dangerFullAccess":
+                        success("sandbox-policy:dangerFullAccess");
+                    case "readOnly":
+                        final networkAccess = validateOptionalBool(ProtocolObjectField.success(keys, values), "networkAccess", path + ".networkAccess");
+                        if (!networkAccess.ok) networkAccess else success("sandbox-policy:readOnly");
+                    case "externalSandbox":
+                        final networkAccess = validateOptionalExternalSandboxNetworkAccess(keys, values, path + ".networkAccess");
+                        if (!networkAccess.ok) networkAccess else success("sandbox-policy:externalSandbox");
+                    case "workspaceWrite":
+                        final networkAccess = validateOptionalBool(ProtocolObjectField.success(keys, values), "networkAccess", path + ".networkAccess");
+                        if (!networkAccess.ok) return networkAccess;
+                        final excludeSlashTmp = validateOptionalBool(ProtocolObjectField.success(keys, values), "excludeSlashTmp", path + ".excludeSlashTmp");
+                        if (!excludeSlashTmp.ok) return excludeSlashTmp;
+                        final excludeTmpdirEnvVar = validateOptionalBool(ProtocolObjectField.success(keys, values), "excludeTmpdirEnvVar", path + ".excludeTmpdirEnvVar");
+                        if (!excludeTmpdirEnvVar.ok) return excludeTmpdirEnvVar;
+                        final writableRoots = validateOptionalStringArray(ProtocolObjectField.success(keys, values), "writableRoots", path + ".writableRoots", false);
+                        if (!writableRoots.ok) writableRoots else success("sandbox-policy:workspaceWrite");
+                    case _:
+                        fail("invalid_sandbox_policy_type", path + ".type", "unsupported sandbox policy type");
+                }
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalExternalSandboxNetworkAccess(keys:Array<String>, values:Array<Value>, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(keys, "networkAccess");
+        if (i < 0) return success("external-sandbox-network:missing");
+        return switch values[i] {
+            case JString(value):
+                if (value == "restricted" || value == "enabled") success("external-sandbox-network") else fail("invalid_network_access", path, "unsupported external sandbox network access");
+            case _:
+                fail("expected_string", path, "expected JSON string");
+        }
+    }
+
+    static function validateCommandExecResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final exitCode = requiredInteger(result.keys, result.values, "exitCode", "$.message.result.exitCode");
+        if (!exitCode.ok) return exitCode.toOutcome();
+        final stdout = requiredString(result.keys, result.values, "stdout", "$.message.result.stdout");
+        if (!stdout.ok) return stdout.toOutcome();
+        final stderr = requiredString(result.keys, result.values, "stderr", "$.message.result.stderr");
+        if (!stderr.ok) return stderr.toOutcome();
+        return success("response:command/exec");
     }
 
     static function validateAccountRateLimitsUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
@@ -1802,6 +1949,17 @@ class AppProtocol {
         }
     }
 
+    static function optionalBoolValue(object:ProtocolObjectField, name:String, path:String):ProtocolBoolField {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return ProtocolBoolField.success(false);
+        return switch object.values[i] {
+            case JBool(value):
+                ProtocolBoolField.success(value);
+            case _:
+                ProtocolBoolField.failure("expected_bool", path, "expected JSON boolean");
+        }
+    }
+
     static function validateOptionalBool(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
         final i = fieldIndex(object.keys, name);
         if (i < 0) return success("bool:missing");
@@ -1863,6 +2021,28 @@ class AppProtocol {
                     entryIndex = entryIndex + 1;
                 }
                 success("string-map");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalNullableStringMap(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-string-map:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("nullable-string-map:null");
+            case JObject(keys, values):
+                var entryIndex = 0;
+                while (entryIndex < values.length) {
+                    switch values[entryIndex] {
+                        case JString(_) | JNull:
+                        case _:
+                            return fail("expected_nullable_string", path + "." + keys[entryIndex], "expected JSON string or null");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("nullable-string-map");
             case _:
                 fail("expected_nullable_object", path, "expected JSON object or null");
         }
@@ -1964,6 +2144,15 @@ class AppProtocol {
 
     static function hasField(keys:Array<String>, name:String):Bool {
         return fieldIndex(keys, name) >= 0;
+    }
+
+    static function hasNonNullField(object:ProtocolObjectField, name:String):Bool {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return false;
+        return switch object.values[i] {
+            case JNull: false;
+            case _: true;
+        }
     }
 
     static function quote(value:String):String {

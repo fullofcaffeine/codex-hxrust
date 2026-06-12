@@ -436,6 +436,57 @@
       }
     },
     {
+      "id": "command-exec-request",
+      "kind": "request",
+      "method": "command/exec",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "command-exec-1",
+        "method": "command/exec",
+        "params": {
+          "command": ["echo", "fixture"],
+          "processId": "proc-fixture-1",
+          "tty": true,
+          "streamStdin": true,
+          "streamStdoutStderr": true,
+          "outputBytesCap": 4096,
+          "disableOutputCap": false,
+          "timeoutMs": 1000,
+          "disableTimeout": false,
+          "cwd": "/tmp/codex-hxrust",
+          "env": {
+            "CODEX_HXRUST_FIXTURE": "1",
+            "REMOVE_ME": null
+          },
+          "size": {
+            "rows": 24,
+            "cols": 80
+          },
+          "sandboxPolicy": {
+            "type": "workspaceWrite",
+            "networkAccess": false,
+            "writableRoots": ["/tmp/codex-hxrust"],
+            "excludeSlashTmp": false,
+            "excludeTmpdirEnvVar": false
+          }
+        }
+      }
+    },
+    {
+      "id": "command-exec-response",
+      "kind": "response",
+      "method": "command/exec",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "command-exec-1",
+        "result": {
+          "exitCode": 0,
+          "stdout": "fixture\n",
+          "stderr": ""
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

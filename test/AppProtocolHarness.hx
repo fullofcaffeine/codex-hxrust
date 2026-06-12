@@ -29,6 +29,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "account/usage/read");
         assertContains(fingerprintJson, "account/sendAddCreditsNudgeEmail");
         assertContains(fingerprintJson, "feedback/upload");
+        assertContains(fingerprintJson, "command/exec");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -82,7 +83,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("80", Std.string(items.length));
+        assertEquals("82", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -103,8 +104,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("13", Std.string(requests));
-        assertEquals("13", Std.string(responses));
+        assertEquals("14", Std.string(requests));
+        assertEquals("14", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -469,6 +470,46 @@ class AppProtocolHarness {
         assertFalse(missingFeedbackResponseThread.ok, "feedback upload response must include threadId");
         assertEquals("missing_field", missingFeedbackResponseThread.errorCode);
         assertEquals("$.message.result.threadId", missingFeedbackResponseThread.errorPath);
+
+        final emptyCommandExecCommand = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-empty-command\",\"kind\":\"request\",\"method\":\"command/exec\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-1\",\"method\":\"command/exec\",\"params\":{\"command\":[]}}}")));
+        assertFalse(emptyCommandExecCommand.ok, "command/exec command argv must be non-empty");
+        assertEquals("empty_array", emptyCommandExecCommand.errorCode);
+        assertEquals("$.message.params.command", emptyCommandExecCommand.errorPath);
+
+        final missingStreamingProcessId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-missing-stream-process\",\"kind\":\"request\",\"method\":\"command/exec\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-1\",\"method\":\"command/exec\",\"params\":{\"command\":[\"echo\"],\"streamStdoutStderr\":true}}}")));
+        assertFalse(missingStreamingProcessId.ok, "command/exec streaming modes require processId");
+        assertEquals("missing_process_id", missingStreamingProcessId.errorCode);
+        assertEquals("$.message.params.processId", missingStreamingProcessId.errorPath);
+
+        final incompatibleOutputCap = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-incompatible-output-cap\",\"kind\":\"request\",\"method\":\"command/exec\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-1\",\"method\":\"command/exec\",\"params\":{\"command\":[\"echo\"],\"outputBytesCap\":1,\"disableOutputCap\":true}}}")));
+        assertFalse(incompatibleOutputCap.ok, "command/exec outputBytesCap cannot combine with disableOutputCap");
+        assertEquals("incompatible_output_cap", incompatibleOutputCap.errorCode);
+        assertEquals("$.message.params.outputBytesCap", incompatibleOutputCap.errorPath);
+
+        final incompatibleTimeout = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-incompatible-timeout\",\"kind\":\"request\",\"method\":\"command/exec\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-1\",\"method\":\"command/exec\",\"params\":{\"command\":[\"echo\"],\"timeoutMs\":1,\"disableTimeout\":true}}}")));
+        assertFalse(incompatibleTimeout.ok, "command/exec timeoutMs cannot combine with disableTimeout");
+        assertEquals("incompatible_timeout", incompatibleTimeout.errorCode);
+        assertEquals("$.message.params.timeoutMs", incompatibleTimeout.errorPath);
+
+        final terminalSizeWithoutTty = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-size-without-tty\",\"kind\":\"request\",\"method\":\"command/exec\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-1\",\"method\":\"command/exec\",\"params\":{\"command\":[\"echo\"],\"size\":{\"rows\":24,\"cols\":80}}}}")));
+        assertFalse(terminalSizeWithoutTty.ok, "command/exec size is only valid with tty");
+        assertEquals("terminal_size_without_tty", terminalSizeWithoutTty.errorCode);
+        assertEquals("$.message.params.size", terminalSizeWithoutTty.errorPath);
+
+        final invalidCommandEnv = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-invalid-env\",\"kind\":\"request\",\"method\":\"command/exec\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-1\",\"method\":\"command/exec\",\"params\":{\"command\":[\"echo\"],\"env\":{\"BAD\":7}}}}")));
+        assertFalse(invalidCommandEnv.ok, "command/exec env values must be strings or null");
+        assertEquals("expected_nullable_string", invalidCommandEnv.errorCode);
+        assertEquals("$.message.params.env.BAD", invalidCommandEnv.errorPath);
+
+        final invalidSandboxPolicy = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-invalid-sandbox\",\"kind\":\"request\",\"method\":\"command/exec\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-1\",\"method\":\"command/exec\",\"params\":{\"command\":[\"echo\"],\"sandboxPolicy\":{\"type\":\"moonBase\"}}}}")));
+        assertFalse(invalidSandboxPolicy.ok, "command/exec sandboxPolicy type must be known");
+        assertEquals("invalid_sandbox_policy_type", invalidSandboxPolicy.errorCode);
+        assertEquals("$.message.params.sandboxPolicy.type", invalidSandboxPolicy.errorPath);
+
+        final missingCommandExit = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"command-exec-missing-exit\",\"kind\":\"response\",\"method\":\"command/exec\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"cmd-1\",\"result\":{\"stdout\":\"\",\"stderr\":\"\"}}}")));
+        assertFalse(missingCommandExit.ok, "command/exec response must include exitCode");
+        assertEquals("missing_field", missingCommandExit.errorCode);
+        assertEquals("$.message.result.exitCode", missingCommandExit.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

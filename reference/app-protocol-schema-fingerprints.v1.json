@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:f52728dc4252999943ec85ae362d174f38caf5984ae2071a4fb83f463e332864",
+  "fingerprint": "sha256:10b8813205dfced4540dec74dcd840ebd0a186a52ede4d8fdd030d26545a62f0",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -107,6 +107,44 @@
         "required:deltaBase64",
         "required:processId",
         "required:stream"
+      ]
+    },
+    {
+      "id": "CommandExecParams",
+      "sourcePath": "v2/CommandExecParams.json",
+      "sha256": "d64ef59d5a30cb644ee3b952fff9d7bbdb820a40e5771399dccbb3cb06f2d021",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:CommandExecTerminalSize",
+        "definition:NetworkAccess",
+        "definition:SandboxPolicy",
+        "property:command",
+        "property:cwd",
+        "property:disableOutputCap",
+        "property:disableTimeout",
+        "property:env",
+        "property:outputBytesCap",
+        "property:processId",
+        "property:sandboxPolicy",
+        "property:size",
+        "property:streamStdin",
+        "property:streamStdoutStderr",
+        "property:timeoutMs",
+        "property:tty",
+        "required:command"
+      ]
+    },
+    {
+      "id": "CommandExecResponse",
+      "sourcePath": "v2/CommandExecResponse.json",
+      "sha256": "f40282af0193d753edd4df784fd96054da3634ec41965619e8ffd27141a21191",
+      "fields": [
+        "property:exitCode",
+        "property:stderr",
+        "property:stdout",
+        "required:exitCode",
+        "required:stderr",
+        "required:stdout"
       ]
     },
     {
