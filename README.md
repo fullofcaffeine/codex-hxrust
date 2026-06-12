@@ -124,6 +124,8 @@ jq empty reference/*.json
 
 The gates are credential-free. They should not make model calls or mutate real Codex state.
 
+Testing policy is documented in `docs/testing-strategy.md`. In short: Haxe-authored tests compiled through haxe.rust are the primary codexhx proof; upstream Codex schemas/tests/fixtures are contract inputs and oracle evidence; differential tests should compare public behavior as runtime parity grows.
+
 Generated Rust is build output. Clean generated crates after validation unless a Bead explicitly asks for a generated snapshot:
 
 ```bash

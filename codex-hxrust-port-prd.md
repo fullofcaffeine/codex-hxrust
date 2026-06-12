@@ -612,18 +612,24 @@ Disallowed for replacement gates:
 
 ## 12. Test and validation plan
 
+The canonical testing policy lives in `docs/testing-strategy.md`. The short version is: Haxe-authored tests compiled through `haxe.rust` are the primary proof for `codex-hxrust`; upstream Codex schemas, fixtures, and tests are contract inputs and oracle evidence; differential tests compare public behavior when runtime parity claims become meaningful.
+
 ### 12.1 Test layers
 
 | Layer | Purpose | Required before next gate |
 | --- | --- | --- |
-| Haxe unit tests | Pure logic and DTO behavior | Yes |
+| Haxe unit/fixture tests | Primary proof for pure logic, DTO behavior, and selected runtime semantics | Yes |
 | `haxe.rust` snapshot/semantic-diff suite | Compiler/runtime confidence | Yes |
-| Generated Cargo tests | Rust crate sanity | Yes |
+| Generated Cargo tests | Generated Rust crate sanity from the Haxe source | Yes |
 | Fixture round-trip tests | JSON/protocol parity | Yes |
-| Oracle comparison tests | Upstream/Cafex behavioral parity | Yes |
+| Schema fingerprint tests | Reviewed upstream contract drift detection | Yes for covered protocol/schema slices |
+| Oracle comparison tests | Upstream/Cafex public behavioral parity via normalized outputs/events/state | Yes when a slice claims runtime parity |
+| Adapted upstream tests | Public upstream behavior re-expressed through Haxe fixtures or generated-binary harnesses | As applicable |
 | Cafetera contract tests | Cafex seam parity | Before replacement consideration |
 | Security/sandbox tests | No policy regression | Before real tool execution |
 | Performance smoke tests | Detect pathological generated output | Before broader runtime scope |
+
+Do not treat upstream Rust-internal test success as sufficient for a codexhx completion claim. Upstream tests should first be interpreted as behavior contracts, then re-expressed as Haxe-owned fixtures or differential public-behavior harnesses.
 
 ### 12.2 Fixture sources
 

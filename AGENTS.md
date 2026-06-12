@@ -46,6 +46,10 @@ If a Cafex/Cafetera item floats to the top of the ready queue before its upstrea
 
 Cafex work is a compatibility layer that comes after the upstream-shaped Haxe core is strong enough for the slice being claimed. Keep Cafex adapter changes under `codexhx.adapters.cafex` and related fixtures/docs, and do not let Cafex behavior leak into upstream-shaped core modules or into `../haxe.rust`.
 
+## Testing Strategy
+
+Use `docs/testing-strategy.md` as the testing policy. Haxe-authored tests that run through the Haxe interpreter and haxe.rust-generated Rust are the primary codexhx proof. Upstream Codex schemas, fixtures, and tests are contract inputs and oracle evidence; adapt them into Haxe-owned fixtures or differential public-behavior harnesses rather than treating upstream Rust-internal test success as sufficient. Generated Rust must remain build output and must not be manually edited to pass tests.
+
 ## haxe.rust Profile Language
 
 Use haxe.rust's supported profile selectors precisely:
