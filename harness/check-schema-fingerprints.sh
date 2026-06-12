@@ -55,6 +55,8 @@ selected_schemas=(
   "ConfigReadResponse:v2/ConfigReadResponse.json"
   "ExternalAgentConfigDetectParams:v2/ExternalAgentConfigDetectParams.json"
   "ExternalAgentConfigDetectResponse:v2/ExternalAgentConfigDetectResponse.json"
+  "ExternalAgentConfigImportParams:v2/ExternalAgentConfigImportParams.json"
+  "ExternalAgentConfigImportResponse:v2/ExternalAgentConfigImportResponse.json"
   "ThreadStartedNotification:v2/ThreadStartedNotification.json"
   "ThreadStatusChangedNotification:v2/ThreadStatusChangedNotification.json"
   "TurnStartedNotification:v2/TurnStartedNotification.json"

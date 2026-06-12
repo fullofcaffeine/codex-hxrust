@@ -39,6 +39,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "process/resizePty");
         assertContains(fingerprintJson, "config/read");
         assertContains(fingerprintJson, "externalAgentConfig/detect");
+        assertContains(fingerprintJson, "externalAgentConfig/import");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -92,7 +93,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("100", Std.string(items.length));
+        assertEquals("102", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -113,8 +114,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("23", Std.string(requests));
-        assertEquals("23", Std.string(responses));
+        assertEquals("24", Std.string(requests));
+        assertEquals("24", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -629,6 +630,21 @@ class AppProtocolHarness {
         assertFalse(invalidExternalAgentDetectPluginName.ok, "externalAgentConfig/detect pluginNames must be strings");
         assertEquals("expected_string", invalidExternalAgentDetectPluginName.errorCode);
         assertEquals("$.message.result.items[0].details.plugins[0].pluginNames[0]", invalidExternalAgentDetectPluginName.errorPath);
+
+        final missingExternalAgentImportItems = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"external-agent-config-import-missing-items\",\"kind\":\"request\",\"method\":\"externalAgentConfig/import\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"external-import-1\",\"method\":\"externalAgentConfig/import\",\"params\":{}}}")));
+        assertFalse(missingExternalAgentImportItems.ok, "externalAgentConfig/import requires migrationItems");
+        assertEquals("missing_field", missingExternalAgentImportItems.errorCode);
+        assertEquals("$.message.params.migrationItems", missingExternalAgentImportItems.errorPath);
+
+        final invalidExternalAgentImportItemType = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"external-agent-config-import-invalid-item-type\",\"kind\":\"request\",\"method\":\"externalAgentConfig/import\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"external-import-1\",\"method\":\"externalAgentConfig/import\",\"params\":{\"migrationItems\":[{\"itemType\":\"UNKNOWN\",\"description\":\"bad\"}]}}}")));
+        assertFalse(invalidExternalAgentImportItemType.ok, "externalAgentConfig/import reuses migration item type validation");
+        assertEquals("invalid_external_agent_config_item_type", invalidExternalAgentImportItemType.errorCode);
+        assertEquals("$.message.params.migrationItems[0].itemType", invalidExternalAgentImportItemType.errorPath);
+
+        final invalidExternalAgentImportResponse = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"external-agent-config-import-extra-response\",\"kind\":\"response\",\"method\":\"externalAgentConfig/import\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"external-import-1\",\"result\":{\"ok\":true}}}")));
+        assertFalse(invalidExternalAgentImportResponse.ok, "externalAgentConfig/import response must be empty");
+        assertEquals("unexpected_field", invalidExternalAgentImportResponse.errorCode);
+        assertEquals("$.message.result.ok", invalidExternalAgentImportResponse.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

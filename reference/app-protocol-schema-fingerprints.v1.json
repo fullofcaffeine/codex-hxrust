@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:bfa2b40a316abd8ced1cd848ba59c8b5ca20a8dc5c71cf014ece699be2ca39b9",
+  "fingerprint": "sha256:d19a237254c059fe77777279d6d1bfb794e53c7ca78d53b819e93f75af0aac9c",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -344,6 +344,30 @@
       "id": "ExternalAgentConfigImportCompletedNotification",
       "sourcePath": "v2/ExternalAgentConfigImportCompletedNotification.json",
       "sha256": "2f2367c99ea4b926697eb1acda0c503ede0c6596a2eacb1f83874af55b73dd40",
+      "fields": []
+    },
+    {
+      "id": "ExternalAgentConfigImportParams",
+      "sourcePath": "v2/ExternalAgentConfigImportParams.json",
+      "sha256": "ab6dc58d4d44d017aac5f6647df68c02b4e4a38106764ac551284591995c351c",
+      "fields": [
+        "definition:CommandMigration",
+        "definition:ExternalAgentConfigMigrationItem",
+        "definition:ExternalAgentConfigMigrationItemType",
+        "definition:HookMigration",
+        "definition:McpServerMigration",
+        "definition:MigrationDetails",
+        "definition:PluginsMigration",
+        "definition:SessionMigration",
+        "definition:SubagentMigration",
+        "property:migrationItems",
+        "required:migrationItems"
+      ]
+    },
+    {
+      "id": "ExternalAgentConfigImportResponse",
+      "sourcePath": "v2/ExternalAgentConfigImportResponse.json",
+      "sha256": "9972b212ae664d56d9e5652e6da7be0abd0640147181c1752527f8c3ad1e00e8",
       "fields": []
     },
     {

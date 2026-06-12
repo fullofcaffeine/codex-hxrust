@@ -870,6 +870,42 @@
       }
     },
     {
+      "id": "external-agent-config-import-request",
+      "kind": "request",
+      "method": "externalAgentConfig/import",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "external-agent-config-import-1",
+        "method": "externalAgentConfig/import",
+        "params": {
+          "migrationItems": [
+            {
+              "itemType": "COMMANDS",
+              "description": "Import command definitions",
+              "cwd": "/tmp/codex-hxrust",
+              "details": {
+                "commands": [
+                  {
+                    "name": "fixture-command"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "external-agent-config-import-response",
+      "kind": "response",
+      "method": "externalAgentConfig/import",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "external-agent-config-import-1",
+        "result": {}
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",
