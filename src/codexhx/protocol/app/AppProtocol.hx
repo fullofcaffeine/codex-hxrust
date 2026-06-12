@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-048";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/read,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-049";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -153,6 +153,8 @@ class AppProtocol {
                 validateEmptyObject(result, "$.message.result", "response:process/kill");
             case "process/resizePty":
                 validateEmptyObject(result, "$.message.result", "response:process/resizePty");
+            case "config/read":
+                validateConfigReadResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -381,6 +383,8 @@ class AppProtocol {
                 validateProcessHandleOnlyParams(params, "params:process/kill");
             case "process/resizePty":
                 validateProcessResizePtyParams(params);
+            case "config/read":
+                validateConfigReadParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -1125,6 +1129,338 @@ class AppProtocol {
         final sizeResult = validateCommandExecTerminalSizeObject(size, "$.message.params.size");
         if (!sizeResult.ok) return sizeResult;
         return success("params:process/resizePty");
+    }
+
+    static function validateConfigReadParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final includeLayers = validateOptionalBool(params, "includeLayers", "$.message.params.includeLayers");
+        if (!includeLayers.ok) return includeLayers;
+        final cwd = validateOptionalNullableString(params, "cwd", "$.message.params.cwd");
+        if (!cwd.ok) return cwd;
+        return success("params:config/read");
+    }
+
+    static function validateConfigReadResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final config = requiredObjectField(result.keys, result.values, "config", "$.message.result.config");
+        if (!config.ok) return config.toOutcome();
+        final configResult = validateConfigReadConfig(config, "$.message.result.config");
+        if (!configResult.ok) return configResult;
+        final origins = requiredObjectField(result.keys, result.values, "origins", "$.message.result.origins");
+        if (!origins.ok) return origins.toOutcome();
+        final originsResult = validateConfigLayerMetadataMap(origins, "$.message.result.origins");
+        if (!originsResult.ok) return originsResult;
+        final layers = validateOptionalNullableConfigLayers(result, "layers", "$.message.result.layers");
+        if (!layers.ok) return layers;
+        return success("response:config/read");
+    }
+
+    static function validateConfigReadConfig(config:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        for (field in ["model", "review_model", "model_provider", "instructions", "developer_instructions", "compact_prompt", "service_tier"]) {
+            final result = validateOptionalNullableString(config, field, path + "." + field);
+            if (!result.ok) return result;
+        }
+        for (field in ["model_context_window", "model_auto_compact_token_limit"]) {
+            final result = validateOptionalNullableInteger(config, field, path + "." + field);
+            if (!result.ok) return result;
+        }
+
+        final autoCompactScope = validateOptionalNullableStringEnum(config, "model_auto_compact_token_limit_scope", path + ".model_auto_compact_token_limit_scope", ["total", "body_after_prefix"], "invalid_auto_compact_token_limit_scope");
+        if (!autoCompactScope.ok) return autoCompactScope;
+        final approvalPolicy = validateOptionalAskForApproval(config, "approval_policy", path + ".approval_policy");
+        if (!approvalPolicy.ok) return approvalPolicy;
+        final approvalsReviewer = validateOptionalNullableStringEnum(config, "approvals_reviewer", path + ".approvals_reviewer", ["user", "auto_review", "guardian_subagent"], "invalid_approvals_reviewer");
+        if (!approvalsReviewer.ok) return approvalsReviewer;
+        final sandboxMode = validateOptionalNullableStringEnum(config, "sandbox_mode", path + ".sandbox_mode", ["read-only", "workspace-write", "danger-full-access"], "invalid_sandbox_mode");
+        if (!sandboxMode.ok) return sandboxMode;
+        final sandboxWorkspaceWrite = validateOptionalSandboxWorkspaceWrite(config, "sandbox_workspace_write", path + ".sandbox_workspace_write");
+        if (!sandboxWorkspaceWrite.ok) return sandboxWorkspaceWrite;
+        final forcedWorkspaceId = validateOptionalForcedChatgptWorkspaceId(config, "forced_chatgpt_workspace_id", path + ".forced_chatgpt_workspace_id");
+        if (!forcedWorkspaceId.ok) return forcedWorkspaceId;
+        final forcedLoginMethod = validateOptionalNullableStringEnum(config, "forced_login_method", path + ".forced_login_method", ["chatgpt", "api"], "invalid_forced_login_method");
+        if (!forcedLoginMethod.ok) return forcedLoginMethod;
+        final webSearch = validateOptionalNullableStringEnum(config, "web_search", path + ".web_search", ["disabled", "cached", "live"], "invalid_web_search_mode");
+        if (!webSearch.ok) return webSearch;
+        final tools = validateOptionalToolsV2(config, "tools", path + ".tools");
+        if (!tools.ok) return tools;
+        final reasoningEffort = validateOptionalNullableNonEmptyString(config, "model_reasoning_effort", path + ".model_reasoning_effort");
+        if (!reasoningEffort.ok) return reasoningEffort;
+        final reasoningSummary = validateOptionalNullableStringEnum(config, "model_reasoning_summary", path + ".model_reasoning_summary", ["auto", "concise", "detailed", "none"], "invalid_reasoning_summary");
+        if (!reasoningSummary.ok) return reasoningSummary;
+        final verbosity = validateOptionalNullableStringEnum(config, "model_verbosity", path + ".model_verbosity", ["low", "medium", "high"], "invalid_model_verbosity");
+        if (!verbosity.ok) return verbosity;
+        final analytics = validateOptionalAnalyticsConfig(config, "analytics", path + ".analytics");
+        if (!analytics.ok) return analytics;
+        final desktop = validateOptionalNullableObject(config, "desktop", path + ".desktop");
+        if (!desktop.ok) return desktop;
+        final apps = validateOptionalAppsConfig(config, "apps", path + ".apps");
+        if (!apps.ok) return apps;
+        return success("config");
+    }
+
+    static function validateOptionalAskForApproval(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("ask-for-approval:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("ask-for-approval:null");
+            case JString(value):
+                if (contains(["untrusted", "on-failure", "on-request", "never"], value)) success("ask-for-approval") else fail("invalid_approval_policy", path, "unsupported approval policy");
+            case JObject(keys, values):
+                final granular = requiredObjectField(keys, values, "granular", path + ".granular");
+                if (!granular.ok) return granular.toOutcome();
+                for (field in ["mcp_elicitations", "rules", "sandbox_approval"]) {
+                    final required = requiredBool(granular.keys, granular.values, field, path + ".granular." + field);
+                    if (!required.ok) return required.toOutcome();
+                }
+                for (field in ["request_permissions", "skill_approval"]) {
+                    final optional = validateOptionalBool(granular, field, path + ".granular." + field);
+                    if (!optional.ok) return optional;
+                }
+                success("ask-for-approval:granular");
+            case _:
+                fail("expected_approval_policy", path, "expected approval policy string, granular object, or null");
+        }
+    }
+
+    static function validateOptionalSandboxWorkspaceWrite(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("sandbox-workspace-write:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("sandbox-workspace-write:null");
+            case JObject(keys, values):
+                final workspace = ProtocolObjectField.success(keys, values);
+                final writableRoots = validateOptionalStringArray(workspace, "writable_roots", path + ".writable_roots", false);
+                if (!writableRoots.ok) return writableRoots;
+                for (field in ["network_access", "exclude_tmpdir_env_var", "exclude_slash_tmp"]) {
+                    final result = validateOptionalBool(workspace, field, path + "." + field);
+                    if (!result.ok) return result;
+                }
+                success("sandbox-workspace-write");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalForcedChatgptWorkspaceId(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("forced-chatgpt-workspace-id:missing");
+        return switch object.values[i] {
+            case JNull | JString(_):
+                success("forced-chatgpt-workspace-id");
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    switch entries[entryIndex] {
+                        case JString(_):
+                        case _:
+                            return fail("expected_string", path + "[" + Std.string(entryIndex) + "]", "expected JSON string");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("forced-chatgpt-workspace-id");
+            case _:
+                fail("expected_string_or_string_array", path, "expected JSON string, string array, or null");
+        }
+    }
+
+    static function validateOptionalToolsV2(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("tools-v2:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("tools-v2:null");
+            case JObject(keys, values):
+                final tools = ProtocolObjectField.success(keys, values);
+                final webSearch = validateOptionalWebSearchToolConfig(tools, "web_search", path + ".web_search");
+                if (!webSearch.ok) return webSearch;
+                success("tools-v2");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalWebSearchToolConfig(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("web-search-tool:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("web-search-tool:null");
+            case JObject(keys, values):
+                final config = ProtocolObjectField.success(keys, values);
+                final allowedDomains = validateOptionalStringArray(config, "allowed_domains", path + ".allowed_domains", true);
+                if (!allowedDomains.ok) return allowedDomains;
+                final contextSize = validateOptionalNullableStringEnum(config, "context_size", path + ".context_size", ["low", "medium", "high"], "invalid_web_search_context_size");
+                if (!contextSize.ok) return contextSize;
+                final location = validateOptionalWebSearchLocation(config, "location", path + ".location");
+                if (!location.ok) return location;
+                success("web-search-tool");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalWebSearchLocation(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("web-search-location:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("web-search-location:null");
+            case JObject(keys, values):
+                final location = ProtocolObjectField.success(keys, values);
+                for (field in ["city", "country", "region", "timezone"]) {
+                    final result = validateOptionalNullableString(location, field, path + "." + field);
+                    if (!result.ok) return result;
+                }
+                success("web-search-location");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalAnalyticsConfig(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("analytics:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("analytics:null");
+            case JObject(keys, values):
+                final enabled = validateOptionalNullableBool(ProtocolObjectField.success(keys, values), "enabled", path + ".enabled");
+                if (!enabled.ok) enabled else success("analytics");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalAppsConfig(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("apps:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("apps:null");
+            case JObject(keys, values):
+                var entryIndex = 0;
+                while (entryIndex < keys.length) {
+                    final entryPath = path + "." + keys[entryIndex];
+                    switch values[entryIndex] {
+                        case JNull:
+                        case JObject(appKeys, appValues):
+                            final app = ProtocolObjectField.success(appKeys, appValues);
+                            if (keys[entryIndex] == "_default") {
+                                for (field in ["enabled", "destructive_enabled", "open_world_enabled"]) {
+                                    final result = validateOptionalBool(app, field, entryPath + "." + field);
+                                    if (!result.ok) return result;
+                                }
+                            } else {
+                                final enabled = validateOptionalNullableBool(app, "enabled", entryPath + ".enabled");
+                                if (!enabled.ok) return enabled;
+                                final approvalMode = validateOptionalNullableStringEnum(app, "approval_mode", entryPath + ".approval_mode", ["auto", "prompt", "approve"], "invalid_app_tool_approval");
+                                if (!approvalMode.ok) return approvalMode;
+                            }
+                        case _:
+                            return fail("expected_nullable_object", entryPath, "expected JSON object or null");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("apps");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateConfigLayerMetadataMap(origins:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        var i = 0;
+        while (i < origins.keys.length) {
+            final entryPath = path + "." + origins.keys[i];
+            switch origins.values[i] {
+                case JObject(keys, values):
+                    final result = validateConfigLayerMetadata(ProtocolObjectField.success(keys, values), entryPath);
+                    if (!result.ok) return result;
+                case _:
+                    return fail("expected_object", entryPath, "expected config layer metadata object");
+            }
+            i = i + 1;
+        }
+        return success("config-layer-metadata-map");
+    }
+
+    static function validateConfigLayerMetadata(metadata:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final name = requiredObjectField(metadata.keys, metadata.values, "name", path + ".name");
+        if (!name.ok) return name.toOutcome();
+        final source = validateConfigLayerSource(name, path + ".name");
+        if (!source.ok) return source;
+        final version = requiredString(metadata.keys, metadata.values, "version", path + ".version");
+        if (!version.ok) return version.toOutcome();
+        return success("config-layer-metadata");
+    }
+
+    static function validateOptionalNullableConfigLayers(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("config-layers:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("config-layers:null");
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    final entryPath = path + "[" + Std.string(entryIndex) + "]";
+                    switch entries[entryIndex] {
+                        case JObject(keys, values):
+                            final layer = validateConfigLayer(ProtocolObjectField.success(keys, values), entryPath);
+                            if (!layer.ok) return layer;
+                        case _:
+                            return fail("expected_object", entryPath, "expected config layer object");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("config-layers");
+            case _:
+                fail("expected_nullable_array", path, "expected JSON array or null");
+        }
+    }
+
+    static function validateConfigLayer(layer:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final metadata = validateConfigLayerMetadata(layer, path);
+        if (!metadata.ok) return metadata;
+        final config = requiredValue(layer.keys, layer.values, "config", path + ".config");
+        if (!config.ok) return config.toOutcome();
+        final disabledReason = validateOptionalNullableString(layer, "disabledReason", path + ".disabledReason");
+        if (!disabledReason.ok) return disabledReason;
+        return success("config-layer");
+    }
+
+    static function validateConfigLayerSource(source:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final sourceType = requiredString(source.keys, source.values, "type", path + ".type");
+        if (!sourceType.ok) return sourceType.toOutcome();
+        switch sourceType.value {
+            case "mdm":
+                return validateRequiredStrings(source, ["domain", "key"], path);
+            case "system":
+                return validateRequiredStrings(source, ["file"], path);
+            case "enterpriseManaged":
+                return validateRequiredStrings(source, ["id", "name"], path);
+            case "user":
+                final file = requiredString(source.keys, source.values, "file", path + ".file");
+                if (!file.ok) return file.toOutcome();
+                final profile = validateOptionalNullableString(source, "profile", path + ".profile");
+                if (!profile.ok) return profile;
+                return success("config-layer-source:user");
+            case "project":
+                return validateRequiredStrings(source, ["dotCodexFolder"], path);
+            case "sessionFlags" | "legacyManagedConfigTomlFromMdm":
+                return success("config-layer-source:" + sourceType.value);
+            case "legacyManagedConfigTomlFromFile":
+                return validateRequiredStrings(source, ["file"], path);
+            case _:
+                return fail("invalid_config_layer_source", path + ".type", "unsupported config layer source");
+        }
+    }
+
+    static function validateRequiredStrings(object:ProtocolObjectField, names:Array<String>, path:String):AppProtocolParseOutcome {
+        for (name in names) {
+            final result = requiredString(object.keys, object.values, name, path + "." + name);
+            if (!result.ok) return result.toOutcome();
+        }
+        return success("required-strings");
     }
 
     static function validateRequiredNonEmptyStringArray(values:Array<Value>, path:String):AppProtocolParseOutcome {
@@ -2022,6 +2358,32 @@ class AppProtocol {
         return switch object.values[i] {
             case JString(_) | JNull:
                 success("nullable-string");
+            case _:
+                fail("expected_nullable_string", path, "expected JSON string or null");
+        }
+    }
+
+    static function validateOptionalNullableNonEmptyString(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-non-empty-string:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("nullable-non-empty-string:null");
+            case JString(value):
+                if (value.length == 0) fail("empty_string", path, "expected non-empty JSON string") else success("nullable-non-empty-string");
+            case _:
+                fail("expected_nullable_string", path, "expected JSON string or null");
+        }
+    }
+
+    static function validateOptionalNullableStringEnum(object:ProtocolObjectField, name:String, path:String, values:Array<String>, errorCode:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-string-enum:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("nullable-string-enum:null");
+            case JString(value):
+                if (contains(values, value)) success("nullable-string-enum") else fail(errorCode, path, "unsupported enum value");
             case _:
                 fail("expected_nullable_string", path, "expected JSON string or null");
         }

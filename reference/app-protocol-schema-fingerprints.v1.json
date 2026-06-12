@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:6e3103a3c906c97ea696bd073100473f91a0021449ae1d57ba197fe66b0efa93",
+  "fingerprint": "sha256:6cac9144add02f281d796d34adcce1467e18ef587338fa5905476bb3c7958571",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -210,6 +210,54 @@
         "required:itemId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "ConfigReadParams",
+      "sourcePath": "v2/ConfigReadParams.json",
+      "sha256": "30c0c8cf7aeba951a065e57291c07ff4c757089f918cb07ee7dcdf89a11cd6ff",
+      "fields": [
+        "property:cwd",
+        "property:includeLayers"
+      ]
+    },
+    {
+      "id": "ConfigReadResponse",
+      "sourcePath": "v2/ConfigReadResponse.json",
+      "sha256": "c4925893bec399b70c7ac2a57dc3d201e7ad3fd3810812b0657ab06ce1a07e98",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:AnalyticsConfig",
+        "definition:AppConfig",
+        "definition:AppToolApproval",
+        "definition:AppToolConfig",
+        "definition:AppToolsConfig",
+        "definition:ApprovalsReviewer",
+        "definition:AppsConfig",
+        "definition:AppsDefaultConfig",
+        "definition:AskForApproval",
+        "definition:AutoCompactTokenLimitScope",
+        "definition:Config",
+        "definition:ConfigLayer",
+        "definition:ConfigLayerMetadata",
+        "definition:ConfigLayerSource",
+        "definition:ForcedChatgptWorkspaceIds",
+        "definition:ForcedLoginMethod",
+        "definition:ReasoningEffort",
+        "definition:ReasoningSummary",
+        "definition:SandboxMode",
+        "definition:SandboxWorkspaceWrite",
+        "definition:ToolsV2",
+        "definition:Verbosity",
+        "definition:WebSearchContextSize",
+        "definition:WebSearchLocation",
+        "definition:WebSearchMode",
+        "definition:WebSearchToolConfig",
+        "property:config",
+        "property:layers",
+        "property:origins",
+        "required:config",
+        "required:origins"
       ]
     },
     {

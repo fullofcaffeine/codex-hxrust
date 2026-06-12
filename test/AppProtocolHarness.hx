@@ -37,6 +37,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "process/writeStdin");
         assertContains(fingerprintJson, "process/kill");
         assertContains(fingerprintJson, "process/resizePty");
+        assertContains(fingerprintJson, "config/read");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -90,7 +91,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("96", Std.string(items.length));
+        assertEquals("98", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -111,8 +112,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("21", Std.string(requests));
-        assertEquals("21", Std.string(responses));
+        assertEquals("22", Std.string(requests));
+        assertEquals("22", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -592,6 +593,26 @@ class AppProtocolHarness {
         assertFalse(invalidProcessResizeResponse.ok, "process/resizePty response must be empty");
         assertEquals("unexpected_field", invalidProcessResizeResponse.errorCode);
         assertEquals("$.message.result.ok", invalidProcessResizeResponse.errorPath);
+
+        final invalidConfigReadIncludeLayers = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-read-invalid-include-layers\",\"kind\":\"request\",\"method\":\"config/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-read-1\",\"method\":\"config/read\",\"params\":{\"includeLayers\":\"yes\"}}}")));
+        assertFalse(invalidConfigReadIncludeLayers.ok, "config/read includeLayers must be a boolean");
+        assertEquals("expected_bool", invalidConfigReadIncludeLayers.errorCode);
+        assertEquals("$.message.params.includeLayers", invalidConfigReadIncludeLayers.errorPath);
+
+        final invalidConfigReadSandboxMode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-read-invalid-sandbox-mode\",\"kind\":\"response\",\"method\":\"config/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-read-1\",\"result\":{\"config\":{\"sandbox_mode\":\"root\"},\"origins\":{}}}}")));
+        assertFalse(invalidConfigReadSandboxMode.ok, "config/read sandbox_mode must use upstream enum values");
+        assertEquals("invalid_sandbox_mode", invalidConfigReadSandboxMode.errorCode);
+        assertEquals("$.message.result.config.sandbox_mode", invalidConfigReadSandboxMode.errorPath);
+
+        final invalidConfigReadOrigin = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-read-invalid-origin\",\"kind\":\"response\",\"method\":\"config/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-read-1\",\"result\":{\"config\":{},\"origins\":{\"model\":{\"name\":{\"type\":\"user\"},\"version\":\"1\"}}}}}")));
+        assertFalse(invalidConfigReadOrigin.ok, "config/read user origins require file");
+        assertEquals("missing_field", invalidConfigReadOrigin.errorCode);
+        assertEquals("$.message.result.origins.model.name.file", invalidConfigReadOrigin.errorPath);
+
+        final invalidConfigReadLayerConfig = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-read-invalid-layer-config\",\"kind\":\"response\",\"method\":\"config/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-read-1\",\"result\":{\"config\":{},\"origins\":{},\"layers\":[{\"name\":{\"type\":\"sessionFlags\"},\"version\":\"1\"}]}}}")));
+        assertFalse(invalidConfigReadLayerConfig.ok, "config/read layers require raw config value");
+        assertEquals("missing_field", invalidConfigReadLayerConfig.errorCode);
+        assertEquals("$.message.result.layers[0].config", invalidConfigReadLayerConfig.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

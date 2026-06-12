@@ -51,6 +51,8 @@ selected_schemas=(
   "CommandExecTerminateResponse:v2/CommandExecTerminateResponse.json"
   "CommandExecResizeParams:v2/CommandExecResizeParams.json"
   "CommandExecResizeResponse:v2/CommandExecResizeResponse.json"
+  "ConfigReadParams:v2/ConfigReadParams.json"
+  "ConfigReadResponse:v2/ConfigReadResponse.json"
   "ThreadStartedNotification:v2/ThreadStartedNotification.json"
   "ThreadStatusChangedNotification:v2/ThreadStatusChangedNotification.json"
   "TurnStartedNotification:v2/TurnStartedNotification.json"

@@ -675,6 +675,128 @@
       }
     },
     {
+      "id": "config-read-request",
+      "kind": "request",
+      "method": "config/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "config-read-1",
+        "method": "config/read",
+        "params": {
+          "includeLayers": true,
+          "cwd": "/tmp/codex-hxrust"
+        }
+      }
+    },
+    {
+      "id": "config-read-response",
+      "kind": "response",
+      "method": "config/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "config-read-1",
+        "result": {
+          "config": {
+            "model": "gpt-5",
+            "review_model": null,
+            "model_context_window": 200000,
+            "model_auto_compact_token_limit": null,
+            "model_auto_compact_token_limit_scope": "total",
+            "model_provider": "openai",
+            "approval_policy": "on-request",
+            "approvals_reviewer": "user",
+            "sandbox_mode": "workspace-write",
+            "sandbox_workspace_write": {
+              "writable_roots": ["/tmp/codex-hxrust"],
+              "network_access": false,
+              "exclude_tmpdir_env_var": false,
+              "exclude_slash_tmp": false
+            },
+            "forced_chatgpt_workspace_id": ["workspace-fixture"],
+            "forced_login_method": "api",
+            "web_search": "cached",
+            "tools": {
+              "web_search": {
+                "allowed_domains": ["example.com"],
+                "context_size": "medium",
+                "location": {
+                  "city": null,
+                  "country": "US",
+                  "region": null,
+                  "timezone": "America/Mexico_City"
+                }
+              }
+            },
+            "instructions": "fixture instructions",
+            "developer_instructions": null,
+            "compact_prompt": null,
+            "model_reasoning_effort": "medium",
+            "model_reasoning_summary": "auto",
+            "model_verbosity": "medium",
+            "service_tier": null,
+            "analytics": {
+              "enabled": false,
+              "fixture_channel": "codex-hxrust"
+            },
+            "apps": {
+              "_default": {
+                "enabled": true,
+                "destructive_enabled": false,
+                "open_world_enabled": false
+              },
+              "fixture-app": {
+                "enabled": true,
+                "approval_mode": "prompt"
+              }
+            },
+            "desktop": {
+              "theme": "system"
+            },
+            "fixture_extra": true
+          },
+          "origins": {
+            "model": {
+              "name": {
+                "type": "user",
+                "file": "/Users/fixture/.codex/config.toml",
+                "profile": null
+              },
+              "version": "1"
+            },
+            "sandbox_mode": {
+              "name": {
+                "type": "sessionFlags"
+              },
+              "version": "1"
+            }
+          },
+          "layers": [
+            {
+              "name": {
+                "type": "user",
+                "file": "/Users/fixture/.codex/config.toml",
+                "profile": null
+              },
+              "version": "1",
+              "config": {
+                "model": "gpt-5"
+              },
+              "disabledReason": null
+            },
+            {
+              "name": {
+                "type": "project",
+                "dotCodexFolder": "/tmp/codex-hxrust/.codex"
+              },
+              "version": "1",
+              "config": {},
+              "disabledReason": "fixture disabled project layer"
+            }
+          ]
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",
