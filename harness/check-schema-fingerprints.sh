@@ -167,9 +167,9 @@ jq -n \
         reason: "Cafex/Cafetera fixtures are adapter oracles and are intentionally inactive until the upstream-shaped core exists."
       },
       {
-        id: "process-spawn-request-schema",
+        id: "process-request-schemas",
         status: "tracked_from_rust_source",
-        reason: "Upstream exports process/spawn request DTOs from Rust source and experimental protocol mappings, but does not currently emit standalone v2/ProcessSpawnParams.json or ProcessSpawnResponse.json files. The local subset validates the Rust DTO contract and keeps process output/exited notification schemas fingerprinted."
+        reason: "Upstream exports process/spawn, process/writeStdin, process/kill, and process/resizePty request DTOs from Rust source and experimental protocol mappings, but does not currently emit standalone v2/Process*Params.json or v2/Process*Response.json request/response schema files for these methods. The local subset validates the Rust DTO contracts and keeps process output/exited notification schemas fingerprinted."
       }
     ]
   }' > "$ACTUAL"

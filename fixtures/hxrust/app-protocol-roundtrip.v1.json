@@ -600,6 +600,81 @@
       }
     },
     {
+      "id": "process-write-stdin-request",
+      "kind": "request",
+      "method": "process/writeStdin",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "process-write-stdin-1",
+        "method": "process/writeStdin",
+        "params": {
+          "processHandle": "proc-handle-fixture-1",
+          "deltaBase64": "Zml4dHVyZQo=",
+          "closeStdin": false
+        }
+      }
+    },
+    {
+      "id": "process-write-stdin-response",
+      "kind": "response",
+      "method": "process/writeStdin",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "process-write-stdin-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "process-kill-request",
+      "kind": "request",
+      "method": "process/kill",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "process-kill-1",
+        "method": "process/kill",
+        "params": {
+          "processHandle": "proc-handle-fixture-1"
+        }
+      }
+    },
+    {
+      "id": "process-kill-response",
+      "kind": "response",
+      "method": "process/kill",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "process-kill-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "process-resize-pty-request",
+      "kind": "request",
+      "method": "process/resizePty",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "process-resize-pty-1",
+        "method": "process/resizePty",
+        "params": {
+          "processHandle": "proc-handle-fixture-1",
+          "size": {
+            "rows": 30,
+            "cols": 100
+          }
+        }
+      }
+    },
+    {
+      "id": "process-resize-pty-response",
+      "kind": "response",
+      "method": "process/resizePty",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "process-resize-pty-1",
+        "result": {}
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

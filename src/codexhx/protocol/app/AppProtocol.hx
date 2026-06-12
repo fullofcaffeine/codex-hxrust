@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,feedback/upload,process/spawn,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-047";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-048";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -147,6 +147,12 @@ class AppProtocol {
                 validateEmptyObject(result, "$.message.result", "response:command/exec/resize");
             case "process/spawn":
                 validateEmptyObject(result, "$.message.result", "response:process/spawn");
+            case "process/writeStdin":
+                validateEmptyObject(result, "$.message.result", "response:process/writeStdin");
+            case "process/kill":
+                validateEmptyObject(result, "$.message.result", "response:process/kill");
+            case "process/resizePty":
+                validateEmptyObject(result, "$.message.result", "response:process/resizePty");
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -369,6 +375,12 @@ class AppProtocol {
                 validateCommandExecResizeParams(params);
             case "process/spawn":
                 validateProcessSpawnParams(params);
+            case "process/writeStdin":
+                validateProcessWriteStdinParams(params);
+            case "process/kill":
+                validateProcessHandleOnlyParams(params, "params:process/kill");
+            case "process/resizePty":
+                validateProcessResizePtyParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -1087,6 +1099,32 @@ class AppProtocol {
         if (hasNonNullField(params, "size") && !tty.value) return fail("terminal_size_without_tty", "$.message.params.size", "size is only valid when tty is true");
 
         return success("params:process/spawn");
+    }
+
+    static function validateProcessWriteStdinParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final processHandle = requiredString(params.keys, params.values, "processHandle", "$.message.params.processHandle");
+        if (!processHandle.ok) return processHandle.toOutcome();
+        final deltaBase64 = validateOptionalNullableString(params, "deltaBase64", "$.message.params.deltaBase64");
+        if (!deltaBase64.ok) return deltaBase64;
+        final closeStdin = validateOptionalBool(params, "closeStdin", "$.message.params.closeStdin");
+        if (!closeStdin.ok) return closeStdin;
+        return success("params:process/writeStdin");
+    }
+
+    static function validateProcessHandleOnlyParams(params:ProtocolObjectField, label:String):AppProtocolParseOutcome {
+        final processHandle = requiredString(params.keys, params.values, "processHandle", "$.message.params.processHandle");
+        if (!processHandle.ok) return processHandle.toOutcome();
+        return success(label);
+    }
+
+    static function validateProcessResizePtyParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final processHandle = requiredString(params.keys, params.values, "processHandle", "$.message.params.processHandle");
+        if (!processHandle.ok) return processHandle.toOutcome();
+        final size = requiredObjectField(params.keys, params.values, "size", "$.message.params.size");
+        if (!size.ok) return size.toOutcome();
+        final sizeResult = validateCommandExecTerminalSizeObject(size, "$.message.params.size");
+        if (!sizeResult.ok) return sizeResult;
+        return success("params:process/resizePty");
     }
 
     static function validateRequiredNonEmptyStringArray(values:Array<Value>, path:String):AppProtocolParseOutcome {
