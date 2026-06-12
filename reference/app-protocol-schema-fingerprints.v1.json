@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:43a1ef09adb8602a588804d7dc719d06dc66977c0e8f43fe12e483d429247c4f",
+  "fingerprint": "sha256:163df3aefea3221337c6596a530afb78edbdf6d1cd7cbb2d33f770dbd19af3f4",
   "schemas": [
     {
       "id": "AccountRateLimitsUpdatedNotification",
@@ -103,6 +103,16 @@
         "property:turnId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "DeprecationNoticeNotification",
+      "sourcePath": "v2/DeprecationNoticeNotification.json",
+      "sha256": "dd45d65ab33fca3f95fd42a0783e17770348751fd0988cf1e71a5cb152c15cfa",
+      "fields": [
+        "property:details",
+        "property:summary",
+        "required:summary"
       ]
     },
     {

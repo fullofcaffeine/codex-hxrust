@@ -45,6 +45,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "model/verification");
         assertContains(fingerprintJson, "warning");
         assertContains(fingerprintJson, "guardianWarning");
+        assertContains(fingerprintJson, "deprecationNotice");
         assertContains(fingerprintJson, "externalAgentConfig/import/completed");
         assertContains(fingerprintJson, "fs/changed");
         assertContains(fingerprintJson, "rawResponseItem/completed");
@@ -58,7 +59,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("47", Std.string(items.length));
+        assertEquals("48", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -81,7 +82,7 @@ class AppProtocolHarness {
 
         assertEquals("4", Std.string(requests));
         assertEquals("4", Std.string(responses));
-        assertEquals("38", Std.string(notifications));
+        assertEquals("39", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -275,6 +276,11 @@ class AppProtocolHarness {
         assertFalse(missingGuardianWarningThreadId.ok, "guardian warning threadId must be present");
         assertEquals("missing_field", missingGuardianWarningThreadId.errorCode);
         assertEquals("$.message.params.threadId", missingGuardianWarningThreadId.errorPath);
+
+        final invalidDeprecationNoticeDetails = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"deprecation-notice-invalid-details\",\"kind\":\"notification\",\"method\":\"deprecationNotice\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"deprecationNotice\",\"params\":{\"summary\":\"deprecated\",\"details\":7}}}")));
+        assertFalse(invalidDeprecationNoticeDetails.ok, "deprecation notice details must be a string or null when present");
+        assertEquals("expected_nullable_string", invalidDeprecationNoticeDetails.errorCode);
+        assertEquals("$.message.params.details", invalidDeprecationNoticeDetails.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

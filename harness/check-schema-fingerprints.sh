@@ -64,6 +64,7 @@ selected_schemas=(
   "TurnModerationMetadataNotification:v2/TurnModerationMetadataNotification.json"
   "WarningNotification:v2/WarningNotification.json"
   "GuardianWarningNotification:v2/GuardianWarningNotification.json"
+  "DeprecationNoticeNotification:v2/DeprecationNoticeNotification.json"
   "ItemCompletedNotification:v2/ItemCompletedNotification.json"
   "ErrorNotification:v2/ErrorNotification.json"
   "JSONRPCError:JSONRPCError.json"

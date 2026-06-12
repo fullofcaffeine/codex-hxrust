@@ -818,6 +818,19 @@
       }
     },
     {
+      "id": "deprecation-notice-notification",
+      "kind": "notification",
+      "method": "deprecationNotice",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "deprecationNotice",
+        "params": {
+          "summary": "Legacy config key is deprecated.",
+          "details": null
+        }
+      }
+    },
+    {
       "id": "external-agent-config-import-completed-notification",
       "kind": "notification",
       "method": "externalAgentConfig/import/completed",
