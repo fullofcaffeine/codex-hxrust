@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:b8148bdf2fc724a84fa2eea1f0809651df1df6b971927b6e291c3d5d55f50d9c",
+  "fingerprint": "sha256:4bd954678bc219f58d1090e2c841d8dd4ee4f69bedf672c2c274ec888ccf55f0",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -272,6 +272,28 @@
         "property:origins",
         "required:config",
         "required:origins"
+      ]
+    },
+    {
+      "id": "ConfigRequirementsReadResponse",
+      "sourcePath": "v2/ConfigRequirementsReadResponse.json",
+      "sha256": "2143e09a24705eb72c69eccaccf7b69b9e99cc997548bc092aa32a7436c382e6",
+      "fields": [
+        "definition:ApprovalsReviewer",
+        "definition:AskForApproval",
+        "definition:ComputerUseRequirements",
+        "definition:ConfigRequirements",
+        "definition:ConfiguredHookHandler",
+        "definition:ConfiguredHookMatcherGroup",
+        "definition:ManagedHooksRequirements",
+        "definition:NetworkDomainPermission",
+        "definition:NetworkRequirements",
+        "definition:NetworkUnixSocketPermission",
+        "definition:ResidencyRequirement",
+        "definition:SandboxMode",
+        "definition:WebSearchMode",
+        "definition:WindowsSandboxSetupMode",
+        "property:requirements"
       ]
     },
     {

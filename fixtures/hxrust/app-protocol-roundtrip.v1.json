@@ -998,6 +998,58 @@
       }
     },
     {
+      "id": "config-requirements-read-request",
+      "kind": "request",
+      "method": "configRequirements/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "config-requirements-read-1",
+        "method": "configRequirements/read"
+      }
+    },
+    {
+      "id": "config-requirements-read-response",
+      "kind": "response",
+      "method": "configRequirements/read",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "config-requirements-read-1",
+        "result": {
+          "requirements": {
+            "allowedApprovalPolicies": [
+              "on-request",
+              {
+                "granular": {
+                  "mcp_elicitations": true,
+                  "rules": true,
+                  "sandbox_approval": true,
+                  "request_permissions": false,
+                  "skill_approval": false
+                }
+              }
+            ],
+            "allowedSandboxModes": ["workspace-write"],
+            "allowedWindowsSandboxImplementations": ["elevated"],
+            "allowedPermissionProfiles": {
+              "default": true,
+              "full-trust": false
+            },
+            "defaultPermissions": "default",
+            "allowedWebSearchModes": ["cached", "live"],
+            "allowManagedHooksOnly": false,
+            "allowAppshots": true,
+            "computerUse": {
+              "allowLockedComputerUse": null
+            },
+            "featureRequirements": {
+              "experimental_network": true
+            },
+            "enforceResidency": "us"
+          }
+        }
+      }
+    },
+    {
       "id": "thread-started-notification",
       "kind": "notification",
       "method": "thread/started",

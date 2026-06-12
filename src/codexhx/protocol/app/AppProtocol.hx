@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-053";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-054";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -163,6 +163,8 @@ class AppProtocol {
                 validateConfigWriteResponse(result);
             case "config/batchWrite":
                 validateConfigWriteResponse(result);
+            case "configRequirements/read":
+                validateConfigRequirementsReadResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -308,7 +310,7 @@ class AppProtocol {
     }
 
     static function acceptsOptionalEmptyParams(method:String):Bool {
-        return method == "windowsSandbox/readiness" || method == "account/logout" || method == "account/rateLimits/read" || method == "account/usage/read";
+        return method == "windowsSandbox/readiness" || method == "account/logout" || method == "account/rateLimits/read" || method == "account/usage/read" || method == "configRequirements/read";
     }
 
     static function optionalEmptyParams(object:ProtocolObjectField):ProtocolObjectField {
@@ -401,6 +403,8 @@ class AppProtocol {
                 validateConfigValueWriteParams(params);
             case "config/batchWrite":
                 validateConfigBatchWriteParams(params);
+            case "configRequirements/read":
+                success("params:configRequirements/read");
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
@@ -1244,6 +1248,126 @@ class AppProtocol {
                 final effectiveValue = requiredValue(metadata.keys, metadata.values, "effectiveValue", path + ".effectiveValue");
                 if (!effectiveValue.ok) return effectiveValue.toOutcome();
                 success("overridden-metadata");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateConfigRequirementsReadResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final i = fieldIndex(result.keys, "requirements");
+        if (i < 0) return success("response:configRequirements/read");
+        return switch result.values[i] {
+            case JNull:
+                success("response:configRequirements/read:null");
+            case JObject(keys, values):
+                validateConfigRequirements(ProtocolObjectField.success(keys, values), "$.message.result.requirements");
+            case _:
+                fail("expected_nullable_object", "$.message.result.requirements", "expected JSON object or null");
+        }
+    }
+
+    static function validateConfigRequirements(requirements:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final approvalPolicies = validateOptionalNullableAskForApprovalArray(requirements, "allowedApprovalPolicies", path + ".allowedApprovalPolicies");
+        if (!approvalPolicies.ok) return approvalPolicies;
+        final sandboxModes = validateOptionalNullableStringEnumArray(requirements, "allowedSandboxModes", path + ".allowedSandboxModes", ["read-only", "workspace-write", "danger-full-access"], "invalid_sandbox_mode");
+        if (!sandboxModes.ok) return sandboxModes;
+        final windowsSandboxModes = validateOptionalNullableStringEnumArray(requirements, "allowedWindowsSandboxImplementations", path + ".allowedWindowsSandboxImplementations", ["elevated", "unelevated"], "invalid_windows_sandbox_setup_mode");
+        if (!windowsSandboxModes.ok) return windowsSandboxModes;
+        final webSearchModes = validateOptionalNullableStringEnumArray(requirements, "allowedWebSearchModes", path + ".allowedWebSearchModes", ["disabled", "cached", "live"], "invalid_web_search_mode");
+        if (!webSearchModes.ok) return webSearchModes;
+        final permissionProfiles = validateOptionalNullableBoolMap(requirements, "allowedPermissionProfiles", path + ".allowedPermissionProfiles");
+        if (!permissionProfiles.ok) return permissionProfiles;
+        final featureRequirements = validateOptionalNullableBoolMap(requirements, "featureRequirements", path + ".featureRequirements");
+        if (!featureRequirements.ok) return featureRequirements;
+        final defaultPermissions = validateOptionalNullableString(requirements, "defaultPermissions", path + ".defaultPermissions");
+        if (!defaultPermissions.ok) return defaultPermissions;
+        final allowManagedHooksOnly = validateOptionalNullableBool(requirements, "allowManagedHooksOnly", path + ".allowManagedHooksOnly");
+        if (!allowManagedHooksOnly.ok) return allowManagedHooksOnly;
+        final allowAppshots = validateOptionalNullableBool(requirements, "allowAppshots", path + ".allowAppshots");
+        if (!allowAppshots.ok) return allowAppshots;
+        final computerUse = validateOptionalComputerUseRequirements(requirements, "computerUse", path + ".computerUse");
+        if (!computerUse.ok) return computerUse;
+        final enforceResidency = validateOptionalNullableStringEnum(requirements, "enforceResidency", path + ".enforceResidency", ["us"], "invalid_residency_requirement");
+        if (!enforceResidency.ok) return enforceResidency;
+        return success("config-requirements");
+    }
+
+    static function validateOptionalNullableAskForApprovalArray(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("approval-array:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("approval-array:null");
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    final entryPath = path + "[" + Std.string(entryIndex) + "]";
+                    final entryObject = ProtocolObjectField.success(["approval"], [entries[entryIndex]]);
+                    final approval = validateOptionalAskForApproval(entryObject, "approval", entryPath);
+                    if (!approval.ok) return approval;
+                    entryIndex = entryIndex + 1;
+                }
+                success("approval-array");
+            case _:
+                fail("expected_nullable_array", path, "expected JSON array or null");
+        }
+    }
+
+    static function validateOptionalNullableStringEnumArray(object:ProtocolObjectField, name:String, path:String, values:Array<String>, errorCode:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("enum-array:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("enum-array:null");
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    final entryPath = path + "[" + Std.string(entryIndex) + "]";
+                    switch entries[entryIndex] {
+                        case JString(value):
+                            if (!contains(values, value)) return fail(errorCode, entryPath, "unsupported enum value");
+                        case _:
+                            return fail("expected_string", entryPath, "expected JSON string");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("enum-array");
+            case _:
+                fail("expected_nullable_array", path, "expected JSON array or null");
+        }
+    }
+
+    static function validateOptionalNullableBoolMap(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("bool-map:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("bool-map:null");
+            case JObject(keys, values):
+                var entryIndex = 0;
+                while (entryIndex < values.length) {
+                    switch values[entryIndex] {
+                        case JBool(_):
+                        case _:
+                            return fail("expected_bool", path + "." + keys[entryIndex], "expected JSON boolean");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("bool-map");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalComputerUseRequirements(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("computer-use:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("computer-use:null");
+            case JObject(keys, values):
+                final allowLocked = validateOptionalNullableBool(ProtocolObjectField.success(keys, values), "allowLockedComputerUse", path + ".allowLockedComputerUse");
+                if (!allowLocked.ok) allowLocked else success("computer-use");
             case _:
                 fail("expected_nullable_object", path, "expected JSON object or null");
         }

@@ -42,6 +42,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "externalAgentConfig/import");
         assertContains(fingerprintJson, "config/value/write");
         assertContains(fingerprintJson, "config/batchWrite");
+        assertContains(fingerprintJson, "configRequirements/read");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -95,7 +96,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("106", Std.string(items.length));
+        assertEquals("108", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -116,8 +117,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("26", Std.string(requests));
-        assertEquals("26", Std.string(responses));
+        assertEquals("27", Std.string(requests));
+        assertEquals("27", Std.string(responses));
         assertEquals("53", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -687,6 +688,26 @@ class AppProtocolHarness {
         assertFalse(invalidConfigBatchWriteResponse.ok, "config/batchWrite response requires filePath");
         assertEquals("missing_field", invalidConfigBatchWriteResponse.errorCode);
         assertEquals("$.message.result.filePath", invalidConfigBatchWriteResponse.errorPath);
+
+        final invalidConfigRequirementsSandbox = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-requirements-invalid-sandbox\",\"kind\":\"response\",\"method\":\"configRequirements/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-req-1\",\"result\":{\"requirements\":{\"allowedSandboxModes\":[\"root\"]}}}}")));
+        assertFalse(invalidConfigRequirementsSandbox.ok, "configRequirements/read validates sandbox mode enum values");
+        assertEquals("invalid_sandbox_mode", invalidConfigRequirementsSandbox.errorCode);
+        assertEquals("$.message.result.requirements.allowedSandboxModes[0]", invalidConfigRequirementsSandbox.errorPath);
+
+        final invalidConfigRequirementsProfileMap = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-requirements-invalid-profile-map\",\"kind\":\"response\",\"method\":\"configRequirements/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-req-1\",\"result\":{\"requirements\":{\"allowedPermissionProfiles\":{\"default\":\"yes\"}}}}}")));
+        assertFalse(invalidConfigRequirementsProfileMap.ok, "configRequirements/read allowedPermissionProfiles values must be boolean");
+        assertEquals("expected_bool", invalidConfigRequirementsProfileMap.errorCode);
+        assertEquals("$.message.result.requirements.allowedPermissionProfiles.default", invalidConfigRequirementsProfileMap.errorPath);
+
+        final invalidConfigRequirementsComputerUse = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-requirements-invalid-computer-use\",\"kind\":\"response\",\"method\":\"configRequirements/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-req-1\",\"result\":{\"requirements\":{\"computerUse\":{\"allowLockedComputerUse\":\"no\"}}}}}")));
+        assertFalse(invalidConfigRequirementsComputerUse.ok, "configRequirements/read computerUse booleans may be bool/null only");
+        assertEquals("expected_nullable_bool", invalidConfigRequirementsComputerUse.errorCode);
+        assertEquals("$.message.result.requirements.computerUse.allowLockedComputerUse", invalidConfigRequirementsComputerUse.errorPath);
+
+        final invalidConfigRequirementsParams = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"config-requirements-invalid-params\",\"kind\":\"request\",\"method\":\"configRequirements/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"config-req-1\",\"method\":\"configRequirements/read\",\"params\":7}}")));
+        assertFalse(invalidConfigRequirementsParams.ok, "configRequirements/read params must be missing, null, or object");
+        assertEquals("expected_nullable_object", invalidConfigRequirementsParams.errorCode);
+        assertEquals("$.message.params", invalidConfigRequirementsParams.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
