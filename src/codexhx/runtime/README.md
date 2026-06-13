@@ -112,6 +112,14 @@ The fixture `fixtures/hxrust/runtime-transport.v1.json` and `harness/check-runti
 
 The fixture `fixtures/hxrust/persistence-boundary.v1.json` and `harness/check-persistence-boundary.sh` prove the boundary through both Haxe interpreter and haxe.rust-generated Rust. The full boundary decision is documented in `docs/persistent-state-boundary.md`.
 
+`codexhx.native.state.StateSqliteBridge` is the HXCX-4.14 first native SQLite pressure slice:
+
+- metal haxe.rust owns an in-memory SQLite upsert/readback for selected thread metadata;
+- portable/interpreter mode keeps a deterministic in-memory simulation because local Haxe `sys.db.Sqlite` is unsupported;
+- mutation intent and invalid metadata fail closed before native writes.
+
+The fixture `fixtures/hxrust/native-sqlite-persistence.v1.json` and `harness/check-native-sqlite-persistence.sh` prove the slice through both paths. This is still a narrow pressure proof, not full `StateDbHandle` or `LogDbLayer` parity.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

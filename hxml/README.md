@@ -19,6 +19,7 @@ Profile policy for the scaffold:
 | `runtime-bootstrap.hxml` | Compile the HXCX-4.11 initialize/bootstrap runtime harness through portable haxe.rust. |
 | `runtime-transport.hxml` | Compile the HXCX-4.12 fixture live-transport harness through portable haxe.rust. |
 | `persistence-boundary.hxml` | Compile the HXCX-4.13 persistent app-server/TUI state boundary harness through portable haxe.rust. |
+| `native-sqlite-persistence.hxml` | Compile the HXCX-4.14 native SQLite persistence pressure harness through metal haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |

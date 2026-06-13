@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=metal
+-D rust_output=generated/native-sqlite-persistence
+-D rust_crate=codex_hxrust_native_sqlite_persistence
+-D rust_cargo_subcommand=check
+-main NativeSqlitePersistenceHarness

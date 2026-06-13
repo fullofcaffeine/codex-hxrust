@@ -1,0 +1,117 @@
+{
+  "schema": "codex-hxrust.native-sqlite-persistence.v1",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    "../codex/codex-rs/rollout/src/state_db.rs:474",
+    "../codex/codex-rs/thread-store/src/local/mod.rs:92",
+    "../codex/codex-rs/app-server-client/src/lib.rs:326",
+    "../codex/codex-rs/app-server/src/in_process.rs:132"
+  ],
+  "batches": [
+    {
+      "id": "reconcile-insert-and-update",
+      "operations": [
+        {
+          "id": "insert-thread",
+          "mutationEnabled": true,
+          "metadata": {
+            "threadId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "sessionId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+            "rolloutPath": "/tmp/codex-hxrust/native-sqlite/rollout-a.jsonl",
+            "historyItemCount": 2,
+            "persistedItemCount": 1,
+            "rolloutItemKinds": [
+              "session_meta",
+              "event_msg"
+            ],
+            "includeHistory": true,
+            "archived": false,
+            "goalStateRequested": false
+          },
+          "expect": {
+            "ok": true,
+            "code": "reconciled",
+            "rowCount": 1,
+            "summaryContains": "history=2;persisted=1;archived=false"
+          }
+        },
+        {
+          "id": "update-thread",
+          "mutationEnabled": true,
+          "metadata": {
+            "threadId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "sessionId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "rolloutPath": "/tmp/codex-hxrust/native-sqlite/rollout-a-archived.jsonl",
+            "historyItemCount": 3,
+            "persistedItemCount": 3,
+            "rolloutItemKinds": [
+              "session_meta",
+              "event_msg",
+              "event_msg"
+            ],
+            "includeHistory": true,
+            "archived": true,
+            "goalStateRequested": false
+          },
+          "expect": {
+            "ok": true,
+            "code": "reconciled",
+            "rowCount": 1,
+            "summaryContains": "session=cccccccc-cccc-4ccc-8ccc-cccccccccccc;rollout=/tmp/codex-hxrust/native-sqlite/rollout-a-archived.jsonl;history=3;persisted=3;archived=true"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fail-closed",
+      "operations": [
+        {
+          "id": "mutation-disabled",
+          "mutationEnabled": false,
+          "metadata": {
+            "threadId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "sessionId": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+            "rolloutPath": "/tmp/codex-hxrust/native-sqlite/rollout-denied.jsonl",
+            "historyItemCount": 1,
+            "persistedItemCount": 1,
+            "rolloutItemKinds": [
+              "session_meta"
+            ],
+            "includeHistory": false,
+            "archived": false,
+            "goalStateRequested": false
+          },
+          "expect": {
+            "ok": false,
+            "code": "native_mutation_disabled",
+            "rowCount": 0,
+            "summaryContains": ""
+          }
+        },
+        {
+          "id": "invalid-persisted-count",
+          "mutationEnabled": true,
+          "metadata": {
+            "threadId": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+            "sessionId": "99999999-9999-4999-8999-999999999999",
+            "rolloutPath": "/tmp/codex-hxrust/native-sqlite/rollout-invalid.jsonl",
+            "historyItemCount": 1,
+            "persistedItemCount": 2,
+            "rolloutItemKinds": [
+              "session_meta"
+            ],
+            "includeHistory": false,
+            "archived": false,
+            "goalStateRequested": false
+          },
+          "expect": {
+            "ok": false,
+            "code": "persisted_count_exceeds_history",
+            "rowCount": 0,
+            "summaryContains": ""
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -148,13 +148,24 @@ Define the persistence split before claiming production state parity:
 - native Rust owns `StateDbHandle`, `LogDbLayer`, SQLite/sqlx runtime ownership, rollout reconciliation, live thread persistence, file locking, migrations, repair, and cross-process coordination;
 - JSONL fixture evidence remains metadata proof only, not a production persistence substitute.
 
-Status: HXCX-4.13 now owns `fixtures/hxrust/persistence-boundary.v1.json` and validates the boundary through `harness/check-persistence-boundary.sh`. No haxe.rust compiler limitation surfaced in this slice.
+Status: HXCX-4.13 now owns `fixtures/hxrust/persistence-boundary.v1.json` and validates the boundary through `harness/check-persistence-boundary.sh`.
 
-### HXCX-4.14+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.14: Native SQLite Persistence Pressure
+
+Exercise the first real native persistence operation without claiming full production state parity:
+
+- use a typed metal Haxe facade over `sys.db.Sqlite`/`rusqlite`;
+- reconcile selected thread metadata into an in-memory SQLite table;
+- keep mutation intent explicit and fail closed for invalid metadata;
+- treat any haxe.rust compiler/runtime limitation as product-neutral haxe.rust work.
+
+Status: HXCX-4.14 now owns `fixtures/hxrust/native-sqlite-persistence.v1.json` and validates the slice through `harness/check-native-sqlite-persistence.sh`. It exposed and upstreamed three generic haxe.rust std metal-clean fixes: `haxe.ds.List.iterator`, `sys.io.File`, and `sys.io.FileInput`/`FileOutput`.
+
+### HXCX-4.15+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
-- SQLite/log DB adapter implementation for persistent session/runtime state through a generic metal/native Rust boundary;
+- broader SQLite/log DB adapter implementation for persistent session/runtime state through generic metal/native Rust boundaries;
 - credentialed provider integration and explicit no-credential test mode;
 - realtime audio/WebRTC transport;
 - full crossterm alternate-screen ownership;

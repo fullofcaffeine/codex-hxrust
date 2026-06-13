@@ -5,25 +5,26 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 13,
-    "resolvedUpstream": 10,
+    "totalGaps": 16,
+    "resolvedUpstream": 13,
     "openUpstream": 3,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 6,
+      "medium": 9,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
       "runtime_model_session": 6,
+      "native_metal_std_boundary": 3,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 158,
+    "sourceFilesScanned": 163,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -228,6 +229,57 @@
       "validation": [
         "harness/check-turn-runtime-reducer.sh",
         "haxe.rust-fzl acceptance requires a product-neutral regression fixture"
+      ]
+    },
+    {
+      "id": "haxe-ds-list-iterator-raw-metal-fallback",
+      "status": "resolved_upstream",
+      "severity": "medium",
+      "sourceArea": "native_metal_std_boundary",
+      "codexBead": "codex-hxrust-bsy",
+      "haxeRustRefs": [
+        "haxe.rust-j65"
+      ],
+      "resolvedBy": "f1b122b52696e6f5a441757fbe1d5a873e9fa273",
+      "reproduction": "The HXCX-4.14 native SQLite metal boundary pulled in sys.db.ResultSet, whose results() signature reached haxe.ds.List. haxe.ds.List.iterator still emitted inline raw Rust and strict metal rejected the app.",
+      "workaround": "Resolved upstream: List.iterator now calls a typed ListNative helper backed by haxe/ds/native/list_native.rs.",
+      "validation": [
+        "list_minimal snapshot in ../haxe.rust",
+        "harness/check-native-sqlite-persistence.sh"
+      ]
+    },
+    {
+      "id": "sys-io-file-raw-metal-fallback",
+      "status": "resolved_upstream",
+      "severity": "medium",
+      "sourceArea": "native_metal_std_boundary",
+      "codexBead": "codex-hxrust-bsy",
+      "haxeRustRefs": [
+        "haxe.rust-wwz"
+      ],
+      "resolvedBy": "f1b122b52696e6f5a441757fbe1d5a873e9fa273",
+      "reproduction": "The HXCX-4.14 native SQLite metal boundary pulled in sys.io.File through sys.db. sys.io.File static operations used inline raw Rust filesystem expressions, so strict metal rejected typed user code.",
+      "workaround": "Resolved upstream: sys.io.File static operations now call a typed file_native helper backed by sys/io/native/file_native.rs.",
+      "validation": [
+        "sys_io snapshot in ../haxe.rust",
+        "harness/check-native-sqlite-persistence.sh"
+      ]
+    },
+    {
+      "id": "sys-io-file-stream-raw-metal-fallback",
+      "status": "resolved_upstream",
+      "severity": "medium",
+      "sourceArea": "native_metal_std_boundary",
+      "codexBead": "codex-hxrust-bsy",
+      "haxeRustRefs": [
+        "haxe.rust-tzw"
+      ],
+      "resolvedBy": "f1b122b52696e6f5a441757fbe1d5a873e9fa273",
+      "reproduction": "After sys.io.File was cleaned, HXCX-4.14 exposed FileInput/FileOutput handle reads, writes, seeks, flushes, and close calls as inline raw Rust expressions.",
+      "workaround": "Resolved upstream: FileInput and FileOutput now call typed handle operations on the same file_native helper.",
+      "validation": [
+        "sys_io snapshot in ../haxe.rust",
+        "harness/check-native-sqlite-persistence.sh"
       ]
     },
     {
