@@ -25,6 +25,22 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/archive");
         assertContains(fingerprintJson, "thread/unarchive");
         assertContains(fingerprintJson, "thread/unsubscribe");
+        assertContains(fingerprintJson, "thread/increment_elicitation");
+        assertContains(fingerprintJson, "thread/decrement_elicitation");
+        assertContains(fingerprintJson, "thread/name/set");
+        assertContains(fingerprintJson, "thread/goal/set");
+        assertContains(fingerprintJson, "thread/goal/get");
+        assertContains(fingerprintJson, "thread/goal/clear");
+        assertContains(fingerprintJson, "thread/metadata/update");
+        assertContains(fingerprintJson, "thread/settings/update");
+        assertContains(fingerprintJson, "thread/memoryMode/set");
+        assertContains(fingerprintJson, "memory/reset");
+        assertContains(fingerprintJson, "thread/compact/start");
+        assertContains(fingerprintJson, "thread/shellCommand");
+        assertContains(fingerprintJson, "thread/approveGuardianDeniedAction");
+        assertContains(fingerprintJson, "thread/backgroundTerminals/clean");
+        assertContains(fingerprintJson, "thread/rollback");
+        assertContains(fingerprintJson, "thread/inject_items");
         assertContains(fingerprintJson, "thread/list");
         assertContains(fingerprintJson, "thread/loaded/list");
         assertContains(fingerprintJson, "windowsSandbox/setupStart");
@@ -57,6 +73,11 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/archived");
         assertContains(fingerprintJson, "thread/unarchived");
         assertContains(fingerprintJson, "thread/closed");
+        assertContains(fingerprintJson, "thread/name/updated");
+        assertContains(fingerprintJson, "thread/goal/updated");
+        assertContains(fingerprintJson, "thread/goal/cleared");
+        assertContains(fingerprintJson, "thread/settings/updated");
+        assertContains(fingerprintJson, "thread/tokenUsage/updated");
         assertContains(fingerprintJson, "thread/compacted");
         assertContains(fingerprintJson, "item/completed");
         assertContains(fingerprintJson, "item/agentMessage/delta");
@@ -107,7 +128,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("127", Std.string(items.length));
+        assertEquals("164", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -128,9 +149,9 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("35", Std.string(requests));
-        assertEquals("35", Std.string(responses));
-        assertEquals("56", Std.string(notifications));
+        assertEquals("51", Std.string(requests));
+        assertEquals("51", Std.string(responses));
+        assertEquals("61", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -171,6 +192,36 @@ class AppProtocolHarness {
         assertFalse(missingThreadArchivedId.ok, "thread/archived must include threadId");
         assertEquals("missing_field", missingThreadArchivedId.errorCode);
         assertEquals("$.message.params.threadId", missingThreadArchivedId.errorPath);
+
+        final invalidThreadGoalStatus = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-goal-invalid-status\",\"kind\":\"request\",\"method\":\"thread/goal/set\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"goal-1\",\"method\":\"thread/goal/set\",\"params\":{\"threadId\":\"thread-1\",\"status\":\"sleeping\"}}}")));
+        assertFalse(invalidThreadGoalStatus.ok, "thread goals must use upstream status values");
+        assertEquals("invalid_thread_goal_status", invalidThreadGoalStatus.errorCode);
+        assertEquals("$.message.params.status", invalidThreadGoalStatus.errorPath);
+
+        final invalidThreadMemoryMode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-memory-invalid-mode\",\"kind\":\"request\",\"method\":\"thread/memoryMode/set\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"memory-mode-1\",\"method\":\"thread/memoryMode/set\",\"params\":{\"threadId\":\"thread-1\",\"mode\":\"auto\"}}}")));
+        assertFalse(invalidThreadMemoryMode.ok, "thread memory mode must be enabled or disabled");
+        assertEquals("invalid_thread_memory_mode", invalidThreadMemoryMode.errorCode);
+        assertEquals("$.message.params.mode", invalidThreadMemoryMode.errorPath);
+
+        final invalidThreadRollbackTurns = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-rollback-invalid-turns\",\"kind\":\"request\",\"method\":\"thread/rollback\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"rollback-1\",\"method\":\"thread/rollback\",\"params\":{\"threadId\":\"thread-1\",\"numTurns\":0}}}")));
+        assertFalse(invalidThreadRollbackTurns.ok, "thread rollback must drop at least one turn");
+        assertEquals("expected_positive_uint", invalidThreadRollbackTurns.errorCode);
+        assertEquals("$.message.params.numTurns", invalidThreadRollbackTurns.errorPath);
+
+        final invalidThreadInjectItem = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-inject-invalid-item\",\"kind\":\"request\",\"method\":\"thread/inject_items\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"inject-1\",\"method\":\"thread/inject_items\",\"params\":{\"threadId\":\"thread-1\",\"items\":[7]}}}")));
+        assertFalse(invalidThreadInjectItem.ok, "thread/inject_items entries must be JSON objects in this subset");
+        assertEquals("expected_object", invalidThreadInjectItem.errorCode);
+        assertEquals("$.message.params.items[0]", invalidThreadInjectItem.errorPath);
+
+        final missingThreadSettings = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-settings-missing\",\"kind\":\"notification\",\"method\":\"thread/settings/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/settings/updated\",\"params\":{\"threadId\":\"thread-1\"}}}")));
+        assertFalse(missingThreadSettings.ok, "thread/settings/updated must include threadSettings");
+        assertEquals("missing_field", missingThreadSettings.errorCode);
+        assertEquals("$.message.params.threadSettings", missingThreadSettings.errorPath);
+
+        final missingTokenUsageTotalTokens = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-token-usage-missing-total\",\"kind\":\"notification\",\"method\":\"thread/tokenUsage/updated\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/tokenUsage/updated\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"tokenUsage\":{\"total\":{\"inputTokens\":1,\"cachedInputTokens\":0,\"outputTokens\":1,\"reasoningOutputTokens\":0},\"last\":{\"totalTokens\":2,\"inputTokens\":1,\"cachedInputTokens\":0,\"outputTokens\":1,\"reasoningOutputTokens\":0},\"modelContextWindow\":null}}}}")));
+        assertFalse(missingTokenUsageTotalTokens.ok, "token usage breakdowns must include totalTokens");
+        assertEquals("missing_field", missingTokenUsageTotalTokens.errorCode);
+        assertEquals("$.message.params.tokenUsage.total.totalTokens", missingTokenUsageTotalTokens.errorPath);
     }
 
     static function validatesPlanUpdates():Void {

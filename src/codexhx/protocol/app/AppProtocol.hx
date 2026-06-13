@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "turn/start", "turn/interrupt", "thread/list", "thread/loaded/list", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/archived", "thread/unarchived", "thread/closed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/archive,thread/fork,thread/list,thread/loaded/list,thread/read,thread/resume,thread/start,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-056";
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "turn/start", "turn/interrupt", "thread/list", "thread/loaded/list", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read"];
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/archived", "thread/unarchived", "thread/closed", "thread/name/updated", "thread/goal/updated", "thread/goal/cleared", "thread/settings/updated", "thread/tokenUsage/updated", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,memory/reset,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/resume,thread/rollback,thread/settings/update,thread/shellCommand,thread/start,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-057";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -117,6 +117,20 @@ class AppProtocol {
                 validateThreadOpenResponse(result, "$.message.result", "response:" + fixtureMethod);
             case "thread/archive":
                 validateEmptyObject(result, "$.message.result", "response:thread/archive");
+            case "thread/increment_elicitation" | "thread/decrement_elicitation":
+                validateThreadElicitationResponse(result, fixtureMethod);
+            case "thread/name/set" | "thread/settings/update" | "thread/memoryMode/set" | "memory/reset" | "thread/compact/start" | "thread/shellCommand" | "thread/approveGuardianDeniedAction" | "thread/backgroundTerminals/clean" | "thread/inject_items":
+                validateEmptyObject(result, "$.message.result", "response:" + fixtureMethod);
+            case "thread/goal/set":
+                validateThreadGoalResponse(result, "$.message.result", "response:thread/goal/set");
+            case "thread/goal/get":
+                validateThreadGoalGetResponse(result);
+            case "thread/goal/clear":
+                validateThreadGoalClearResponse(result);
+            case "thread/metadata/update" | "thread/rollback":
+                final thread = requiredObjectField(result.keys, result.values, "thread", "$.message.result.thread");
+                if (!thread.ok) return thread.toOutcome();
+                validateThread(thread, "$.message.result.thread");
             case "thread/unsubscribe":
                 validateThreadUnsubscribeResponse(result);
             case "thread/list":
@@ -202,8 +216,16 @@ class AppProtocol {
                 final status = requiredObjectField(params.keys, params.values, "status", "$.message.params.status");
                 if (!status.ok) return status.toOutcome();
                 validateThreadStatus(status, "$.message.params.status");
-            case "thread/archived" | "thread/unarchived" | "thread/closed":
+            case "thread/archived" | "thread/unarchived" | "thread/closed" | "thread/goal/cleared":
                 validateThreadIdNotification(params, fixtureMethod);
+            case "thread/name/updated":
+                validateThreadNameUpdatedNotification(params);
+            case "thread/goal/updated":
+                validateThreadGoalUpdatedNotification(params);
+            case "thread/settings/updated":
+                validateThreadSettingsUpdatedNotification(params);
+            case "thread/tokenUsage/updated":
+                validateThreadTokenUsageUpdatedNotification(params);
             case "thread/compacted":
                 validateContextCompactedNotification(params);
             case "turn/started" | "turn/completed":
@@ -324,7 +346,7 @@ class AppProtocol {
     }
 
     static function acceptsOptionalEmptyParams(method:String):Bool {
-        return method == "windowsSandbox/readiness" || method == "account/logout" || method == "account/rateLimits/read" || method == "account/usage/read" || method == "configRequirements/read";
+        return method == "memory/reset" || method == "windowsSandbox/readiness" || method == "account/logout" || method == "account/rateLimits/read" || method == "account/usage/read" || method == "configRequirements/read";
     }
 
     static function optionalEmptyParams(object:ProtocolObjectField):ProtocolObjectField {
@@ -353,6 +375,28 @@ class AppProtocol {
                 validateThreadOpenParams(params, method);
             case "thread/archive" | "thread/unarchive" | "thread/unsubscribe":
                 validateThreadIdParams(params, method);
+            case "thread/increment_elicitation" | "thread/decrement_elicitation" | "thread/goal/get" | "thread/goal/clear" | "thread/compact/start" | "thread/backgroundTerminals/clean":
+                validateThreadIdParams(params, method);
+            case "thread/name/set":
+                validateThreadSetNameParams(params);
+            case "thread/goal/set":
+                validateThreadGoalSetParams(params);
+            case "thread/metadata/update":
+                validateThreadMetadataUpdateParams(params);
+            case "thread/settings/update":
+                validateThreadSettingsUpdateParams(params);
+            case "thread/memoryMode/set":
+                validateThreadMemoryModeSetParams(params);
+            case "memory/reset":
+                validateEmptyObject(params, "$.message.params", "params:memory/reset");
+            case "thread/shellCommand":
+                validateThreadShellCommandParams(params);
+            case "thread/approveGuardianDeniedAction":
+                validateThreadApproveGuardianDeniedActionParams(params);
+            case "thread/rollback":
+                validateThreadRollbackParams(params);
+            case "thread/inject_items":
+                validateThreadInjectItemsParams(params);
             case "thread/list":
                 validateThreadListParams(params);
             case "thread/loaded/list":
@@ -630,6 +674,306 @@ class AppProtocol {
         final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
         if (!threadId.ok) return threadId.toOutcome();
         return success("notification:" + method);
+    }
+
+    static function validateThreadElicitationResponse(result:ProtocolObjectField, method:String):AppProtocolParseOutcome {
+        final count = requiredUInt(result.keys, result.values, "count", "$.message.result.count");
+        if (!count.ok) return count.toOutcome();
+        final paused = requiredBool(result.keys, result.values, "paused", "$.message.result.paused");
+        if (!paused.ok) return paused.toOutcome();
+        return success("response:" + method);
+    }
+
+    static function validateThreadSetNameParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final name = requiredString(params.keys, params.values, "name", "$.message.params.name");
+        if (!name.ok) return name.toOutcome();
+        return success("params:thread/name/set");
+    }
+
+    static function validateThreadGoalSetParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final objective = validateOptionalNullableString(params, "objective", "$.message.params.objective");
+        if (!objective.ok) return objective;
+        final status = validateOptionalNullableStringEnum(params, "status", "$.message.params.status", ["active", "paused", "blocked", "usageLimited", "budgetLimited", "complete"], "invalid_thread_goal_status");
+        if (!status.ok) return status;
+        final tokenBudget = validateOptionalNullableInteger(params, "tokenBudget", "$.message.params.tokenBudget");
+        if (!tokenBudget.ok) return tokenBudget;
+        return success("params:thread/goal/set");
+    }
+
+    static function validateThreadGoalResponse(result:ProtocolObjectField, path:String, label:String):AppProtocolParseOutcome {
+        final goal = requiredObjectField(result.keys, result.values, "goal", path + ".goal");
+        if (!goal.ok) return goal.toOutcome();
+        final goalResult = validateThreadGoal(goal, path + ".goal");
+        if (!goalResult.ok) return goalResult;
+        return success(label);
+    }
+
+    static function validateThreadGoalGetResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final i = fieldIndex(result.keys, "goal");
+        if (i < 0) return success("response:thread/goal/get");
+        return switch result.values[i] {
+            case JNull:
+                success("response:thread/goal/get");
+            case JObject(keys, values):
+                final goalResult = validateThreadGoal(ProtocolObjectField.success(keys, values), "$.message.result.goal");
+                if (!goalResult.ok) goalResult else success("response:thread/goal/get");
+            case _:
+                fail("expected_nullable_object", "$.message.result.goal", "expected JSON object or null");
+        }
+    }
+
+    static function validateThreadGoalClearResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final cleared = requiredBool(result.keys, result.values, "cleared", "$.message.result.cleared");
+        if (!cleared.ok) return cleared.toOutcome();
+        return success("response:thread/goal/clear");
+    }
+
+    static function validateThreadGoal(goal:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        for (field in ["threadId", "objective"]) {
+            final text = requiredString(goal.keys, goal.values, field, path + "." + field);
+            if (!text.ok) return text.toOutcome();
+        }
+        final status = requiredString(goal.keys, goal.values, "status", path + ".status");
+        if (!status.ok) return status.toOutcome();
+        if (!validThreadGoalStatus(status.value)) return fail("invalid_thread_goal_status", path + ".status", "unsupported thread goal status");
+        final tokenBudget = validateOptionalNullableInteger(goal, "tokenBudget", path + ".tokenBudget");
+        if (!tokenBudget.ok) return tokenBudget;
+        for (field in ["tokensUsed", "timeUsedSeconds", "createdAt", "updatedAt"]) {
+            final number = requiredInteger(goal.keys, goal.values, field, path + "." + field);
+            if (!number.ok) return number.toOutcome();
+        }
+        return success("thread-goal");
+    }
+
+    static function validateThreadMetadataUpdateParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final gitInfo = validateOptionalThreadMetadataGitInfo(params, "gitInfo", "$.message.params.gitInfo");
+        if (!gitInfo.ok) return gitInfo;
+        return success("params:thread/metadata/update");
+    }
+
+    static function validateOptionalThreadMetadataGitInfo(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("thread-metadata-git-info:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("thread-metadata-git-info:null");
+            case JObject(keys, values):
+                final gitInfo = ProtocolObjectField.success(keys, values);
+                for (field in ["sha", "branch", "originUrl"]) {
+                    final result = validateOptionalNullableString(gitInfo, field, path + "." + field);
+                    if (!result.ok) return result;
+                }
+                success("thread-metadata-git-info");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateThreadSettingsUpdateParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        for (field in ["cwd", "permissions", "model", "serviceTier"]) {
+            final result = validateOptionalNullableString(params, field, "$.message.params." + field);
+            if (!result.ok) return result;
+        }
+        final approvalPolicy = validateOptionalAskForApproval(params, "approvalPolicy", "$.message.params.approvalPolicy");
+        if (!approvalPolicy.ok) return approvalPolicy;
+        final approvalsReviewer = validateOptionalNullableStringEnum(params, "approvalsReviewer", "$.message.params.approvalsReviewer", ["user", "auto_review", "guardian_subagent"], "invalid_approvals_reviewer");
+        if (!approvalsReviewer.ok) return approvalsReviewer;
+        final sandboxPolicy = validateOptionalCommandExecSandboxPolicy(params, "sandboxPolicy", "$.message.params.sandboxPolicy");
+        if (!sandboxPolicy.ok) return sandboxPolicy;
+        final effort = validateOptionalNullableNonEmptyString(params, "effort", "$.message.params.effort");
+        if (!effort.ok) return effort;
+        final summary = validateOptionalNullableStringEnum(params, "summary", "$.message.params.summary", ["auto", "concise", "detailed", "none"], "invalid_reasoning_summary");
+        if (!summary.ok) return summary;
+        final collaborationMode = validateOptionalNullableCollaborationMode(params, "collaborationMode", "$.message.params.collaborationMode");
+        if (!collaborationMode.ok) return collaborationMode;
+        final personality = validateOptionalNullableStringEnum(params, "personality", "$.message.params.personality", ["none", "friendly", "pragmatic"], "invalid_personality");
+        if (!personality.ok) return personality;
+        return success("params:thread/settings/update");
+    }
+
+    static function validateThreadMemoryModeSetParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final mode = validateRequiredStringEnum(params.keys, params.values, "mode", "$.message.params.mode", ["enabled", "disabled"], "invalid_thread_memory_mode");
+        if (!mode.ok) return mode;
+        return success("params:thread/memoryMode/set");
+    }
+
+    static function validateThreadShellCommandParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final command = requiredString(params.keys, params.values, "command", "$.message.params.command");
+        if (!command.ok) return command.toOutcome();
+        return success("params:thread/shellCommand");
+    }
+
+    static function validateThreadApproveGuardianDeniedActionParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final event = requiredValue(params.keys, params.values, "event", "$.message.params.event");
+        if (!event.ok) return event.toOutcome();
+        return success("params:thread/approveGuardianDeniedAction");
+    }
+
+    static function validateThreadRollbackParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final numTurns = requiredUInt(params.keys, params.values, "numTurns", "$.message.params.numTurns");
+        if (!numTurns.ok) return numTurns.toOutcome();
+        if (numTurns.value == 0) return fail("expected_positive_uint", "$.message.params.numTurns", "expected unsigned JSON integer greater than zero");
+        return success("params:thread/rollback");
+    }
+
+    static function validateThreadInjectItemsParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final items = requiredArray(params.keys, params.values, "items", "$.message.params.items");
+        if (!items.ok) return items.toOutcome();
+        var i = 0;
+        while (i < items.values.length) {
+            final item = requireObject(items.values[i], "$.message.params.items[" + Std.string(i) + "]");
+            if (!item.ok) return item.toOutcome();
+            i = i + 1;
+        }
+        return success("params:thread/inject_items");
+    }
+
+    static function validateThreadNameUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final threadName = validateOptionalNullableString(params, "threadName", "$.message.params.threadName");
+        if (!threadName.ok) return threadName;
+        return success("notification:thread/name/updated");
+    }
+
+    static function validateThreadGoalUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = validateOptionalNullableString(params, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId;
+        final goal = requiredObjectField(params.keys, params.values, "goal", "$.message.params.goal");
+        if (!goal.ok) return goal.toOutcome();
+        final goalResult = validateThreadGoal(goal, "$.message.params.goal");
+        if (!goalResult.ok) return goalResult;
+        return success("notification:thread/goal/updated");
+    }
+
+    static function validateThreadSettingsUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final settings = requiredObjectField(params.keys, params.values, "threadSettings", "$.message.params.threadSettings");
+        if (!settings.ok) return settings.toOutcome();
+        final settingsResult = validateThreadSettings(settings, "$.message.params.threadSettings");
+        if (!settingsResult.ok) return settingsResult;
+        return success("notification:thread/settings/updated");
+    }
+
+    static function validateThreadSettings(settings:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        for (field in ["cwd", "model", "modelProvider"]) {
+            final text = requiredString(settings.keys, settings.values, field, path + "." + field);
+            if (!text.ok) return text.toOutcome();
+        }
+        final approvalPolicy = validateRequiredAskForApproval(settings, "approvalPolicy", path + ".approvalPolicy");
+        if (!approvalPolicy.ok) return approvalPolicy;
+        final approvalsReviewer = validateRequiredStringEnum(settings.keys, settings.values, "approvalsReviewer", path + ".approvalsReviewer", ["user", "auto_review", "guardian_subagent"], "invalid_approvals_reviewer");
+        if (!approvalsReviewer.ok) return approvalsReviewer;
+        final sandboxPolicy = validateRequiredSandboxPolicy(settings, "sandboxPolicy", path + ".sandboxPolicy");
+        if (!sandboxPolicy.ok) return sandboxPolicy;
+        final activePermissionProfile = validateOptionalNullableActivePermissionProfile(settings, "activePermissionProfile", path + ".activePermissionProfile");
+        if (!activePermissionProfile.ok) return activePermissionProfile;
+        final serviceTier = validateOptionalNullableString(settings, "serviceTier", path + ".serviceTier");
+        if (!serviceTier.ok) return serviceTier;
+        final effort = validateOptionalNullableNonEmptyString(settings, "effort", path + ".effort");
+        if (!effort.ok) return effort;
+        final summary = validateOptionalNullableStringEnum(settings, "summary", path + ".summary", ["auto", "concise", "detailed", "none"], "invalid_reasoning_summary");
+        if (!summary.ok) return summary;
+        final collaborationMode = requiredObjectField(settings.keys, settings.values, "collaborationMode", path + ".collaborationMode");
+        if (!collaborationMode.ok) return collaborationMode.toOutcome();
+        final collaborationResult = validateCollaborationMode(collaborationMode, path + ".collaborationMode");
+        if (!collaborationResult.ok) return collaborationResult;
+        final personality = validateOptionalNullableStringEnum(settings, "personality", path + ".personality", ["none", "friendly", "pragmatic"], "invalid_personality");
+        if (!personality.ok) return personality;
+        return success("thread-settings");
+    }
+
+    static function validateOptionalNullableActivePermissionProfile(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("active-permission-profile:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("active-permission-profile:null");
+            case JObject(keys, values):
+                final id = requiredString(keys, values, "id", path + ".id");
+                if (!id.ok) return id.toOutcome();
+                final profile = ProtocolObjectField.success(keys, values);
+                final parent = validateOptionalNullableString(profile, "extends", path + ".extends");
+                if (!parent.ok) parent else success("active-permission-profile");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateOptionalNullableCollaborationMode(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("collaboration-mode:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("collaboration-mode:null");
+            case JObject(keys, values):
+                validateCollaborationMode(ProtocolObjectField.success(keys, values), path);
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateCollaborationMode(mode:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final modeKind = validateRequiredStringEnum(mode.keys, mode.values, "mode", path + ".mode", ["plan", "default"], "invalid_collaboration_mode");
+        if (!modeKind.ok) return modeKind;
+        final settings = requiredObjectField(mode.keys, mode.values, "settings", path + ".settings");
+        if (!settings.ok) return settings.toOutcome();
+        final model = requiredString(settings.keys, settings.values, "model", path + ".settings.model");
+        if (!model.ok) return model.toOutcome();
+        final developerInstructions = validateOptionalNullableString(settings, "developer_instructions", path + ".settings.developer_instructions");
+        if (!developerInstructions.ok) return developerInstructions;
+        final reasoningEffort = validateOptionalNullableNonEmptyString(settings, "reasoning_effort", path + ".settings.reasoning_effort");
+        if (!reasoningEffort.ok) return reasoningEffort;
+        return success("collaboration-mode");
+    }
+
+    static function validateThreadTokenUsageUpdatedNotification(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredString(params.keys, params.values, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final tokenUsage = requiredObjectField(params.keys, params.values, "tokenUsage", "$.message.params.tokenUsage");
+        if (!tokenUsage.ok) return tokenUsage.toOutcome();
+        final total = requiredObjectField(tokenUsage.keys, tokenUsage.values, "total", "$.message.params.tokenUsage.total");
+        if (!total.ok) return total.toOutcome();
+        final totalResult = validateTokenUsageBreakdown(total, "$.message.params.tokenUsage.total");
+        if (!totalResult.ok) return totalResult;
+        final last = requiredObjectField(tokenUsage.keys, tokenUsage.values, "last", "$.message.params.tokenUsage.last");
+        if (!last.ok) return last.toOutcome();
+        final lastResult = validateTokenUsageBreakdown(last, "$.message.params.tokenUsage.last");
+        if (!lastResult.ok) return lastResult;
+        final contextWindow = validateOptionalNullableInteger(tokenUsage, "modelContextWindow", "$.message.params.tokenUsage.modelContextWindow");
+        if (!contextWindow.ok) return contextWindow;
+        return success("notification:thread/tokenUsage/updated");
+    }
+
+    static function validateTokenUsageBreakdown(breakdown:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        for (field in ["totalTokens", "inputTokens", "cachedInputTokens", "outputTokens", "reasoningOutputTokens"]) {
+            final number = requiredInteger(breakdown.keys, breakdown.values, field, path + "." + field);
+            if (!number.ok) return number.toOutcome();
+        }
+        return success("token-usage-breakdown");
     }
 
     static function validateTranscriptItem(item:ProtocolObjectField, path:String):AppProtocolParseOutcome {
@@ -2840,6 +3184,10 @@ class AppProtocol {
 
     static function validPlanStepStatus(value:String):Bool {
         return value == "pending" || value == "inProgress" || value == "completed";
+    }
+
+    static function validThreadGoalStatus(value:String):Bool {
+        return value == "active" || value == "paused" || value == "blocked" || value == "usageLimited" || value == "budgetLimited" || value == "complete";
     }
 
     static function validMcpServerStartupStatus(value:String):Bool {

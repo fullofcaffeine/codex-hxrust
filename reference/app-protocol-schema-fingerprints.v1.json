@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:86aaed59b168f481866b801763663c54095879374257836339239c0af34e91d2",
+  "fingerprint": "sha256:4d45470cd9d25956a9484f784d2dce519ebcfcb328e89c41d5756ce1e95bcace",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -970,6 +970,23 @@
       ]
     },
     {
+      "id": "ThreadApproveGuardianDeniedActionParams",
+      "sourcePath": "v2/ThreadApproveGuardianDeniedActionParams.json",
+      "sha256": "d558921e4ebd3d7829c8846c8d18b2f9e12d430dcb87c92c6688e9131547803e",
+      "fields": [
+        "property:event",
+        "property:threadId",
+        "required:event",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadApproveGuardianDeniedActionResponse",
+      "sourcePath": "v2/ThreadApproveGuardianDeniedActionResponse.json",
+      "sha256": "cab335b769152c0db6a4931bce3a396a255436a610e4923ba68d7e14af4b4f47",
+      "fields": []
+    },
+    {
       "id": "ThreadArchiveParams",
       "sourcePath": "v2/ThreadArchiveParams.json",
       "sha256": "685745fd6f4aaa0f95f59bb16b8fd065b8f9dca4ce80dfa829c9b068ee431747",
@@ -1001,6 +1018,21 @@
         "property:threadId",
         "required:threadId"
       ]
+    },
+    {
+      "id": "ThreadCompactStartParams",
+      "sourcePath": "v2/ThreadCompactStartParams.json",
+      "sha256": "0dff617cb93a1398149de30d6b53098dabca86ba1ff750a7b2af8023651b9dfc",
+      "fields": [
+        "property:threadId",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadCompactStartResponse",
+      "sourcePath": "v2/ThreadCompactStartResponse.json",
+      "sha256": "3933ea992c2fa391f8762b71c27133d4bf2e10c6fb84459bcbe05169af23cbc0",
+      "fields": []
     },
     {
       "id": "ThreadForkParams",
@@ -1101,6 +1133,107 @@
       ]
     },
     {
+      "id": "ThreadGoalClearParams",
+      "sourcePath": "v2/ThreadGoalClearParams.json",
+      "sha256": "3c24c0d1257c01ce9ba80451635814569983e7bb460923a1bb55431d291d9640",
+      "fields": [
+        "property:threadId",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadGoalClearResponse",
+      "sourcePath": "v2/ThreadGoalClearResponse.json",
+      "sha256": "b574447c0527e052086c15238acd31b2791181a8d0a3a9a06118a33e7a579370",
+      "fields": [
+        "property:cleared",
+        "required:cleared"
+      ]
+    },
+    {
+      "id": "ThreadGoalClearedNotification",
+      "sourcePath": "v2/ThreadGoalClearedNotification.json",
+      "sha256": "315d01caafa21bf70ac3d3c6c4db9ffb57cd8003d24abb2b56153b87b81228c5",
+      "fields": [
+        "property:threadId",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadGoalGetParams",
+      "sourcePath": "v2/ThreadGoalGetParams.json",
+      "sha256": "abd3b460941f0224ff48e6f5343be33d92ede7e0e3c832b2a4239958f58a46bf",
+      "fields": [
+        "property:threadId",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadGoalGetResponse",
+      "sourcePath": "v2/ThreadGoalGetResponse.json",
+      "sha256": "1252e855bcb4fa23970c3e168b1addb397d22cffedca6f0b02521ade9d698b26",
+      "fields": [
+        "definition:ThreadGoal",
+        "definition:ThreadGoalStatus",
+        "property:goal"
+      ]
+    },
+    {
+      "id": "ThreadGoalSetParams",
+      "sourcePath": "v2/ThreadGoalSetParams.json",
+      "sha256": "6f4ce2097e47be29cf97949951cf3262167adaef982d54dd1146b521db458c01",
+      "fields": [
+        "definition:ThreadGoalStatus",
+        "property:objective",
+        "property:status",
+        "property:threadId",
+        "property:tokenBudget",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadGoalSetResponse",
+      "sourcePath": "v2/ThreadGoalSetResponse.json",
+      "sha256": "728144917b87a635b88fe175a53ad741d49eec6a864073d94836ca0180c68ca0",
+      "fields": [
+        "definition:ThreadGoal",
+        "definition:ThreadGoalStatus",
+        "property:goal",
+        "required:goal"
+      ]
+    },
+    {
+      "id": "ThreadGoalUpdatedNotification",
+      "sourcePath": "v2/ThreadGoalUpdatedNotification.json",
+      "sha256": "eaf5fb21c6347b2ef6c5604f87ceec6fd1e4c8dd396b82e0cd1ad88570c263d4",
+      "fields": [
+        "definition:ThreadGoal",
+        "definition:ThreadGoalStatus",
+        "property:goal",
+        "property:threadId",
+        "property:turnId",
+        "required:goal",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadInjectItemsParams",
+      "sourcePath": "v2/ThreadInjectItemsParams.json",
+      "sha256": "bc2b62895d5f357f8098f6fc6788d1ead5eadf2568cc911d8793babff5fe857c",
+      "fields": [
+        "property:items",
+        "property:threadId",
+        "required:items",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadInjectItemsResponse",
+      "sourcePath": "v2/ThreadInjectItemsResponse.json",
+      "sha256": "943a763669893dd11f2d3919fbc04421fd1ec80c87e0922996023dbf59b657cf",
+      "fields": []
+    },
+    {
       "id": "ThreadListParams",
       "sourcePath": "v2/ThreadListParams.json",
       "sha256": "bc3b8aad80284111e5a4aebdd7f30530f45a41b3f93d15a8de52e7f40d89e94a",
@@ -1192,6 +1325,79 @@
         "property:data",
         "property:nextCursor",
         "required:data"
+      ]
+    },
+    {
+      "id": "ThreadMetadataUpdateParams",
+      "sourcePath": "v2/ThreadMetadataUpdateParams.json",
+      "sha256": "d5e2b63bd4faa588fea50a4df6db71da30ad7b8152f964e6702ee09ac810c55f",
+      "fields": [
+        "definition:ThreadMetadataGitInfoUpdateParams",
+        "property:gitInfo",
+        "property:threadId",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadMetadataUpdateResponse",
+      "sourcePath": "v2/ThreadMetadataUpdateResponse.json",
+      "sha256": "d30fa547032a1972f576005705b7575db2cd9e459b5682e00ceaf2aae6d80ae9",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:AgentPath",
+        "definition:ByteRange",
+        "definition:CodexErrorInfo",
+        "definition:CollabAgentState",
+        "definition:CollabAgentStatus",
+        "definition:CollabAgentTool",
+        "definition:CollabAgentToolCallStatus",
+        "definition:CommandAction",
+        "definition:CommandExecutionSource",
+        "definition:CommandExecutionStatus",
+        "definition:DynamicToolCallOutputContentItem",
+        "definition:DynamicToolCallStatus",
+        "definition:FileUpdateChange",
+        "definition:GitInfo",
+        "definition:HookPromptFragment",
+        "definition:ImageDetail",
+        "definition:McpToolCallError",
+        "definition:McpToolCallResult",
+        "definition:McpToolCallStatus",
+        "definition:MemoryCitation",
+        "definition:MemoryCitationEntry",
+        "definition:MessagePhase",
+        "definition:NonSteerableTurnKind",
+        "definition:PatchApplyStatus",
+        "definition:PatchChangeKind",
+        "definition:ReasoningEffort",
+        "definition:SessionSource",
+        "definition:SubAgentActivityKind",
+        "definition:SubAgentSource",
+        "definition:TextElement",
+        "definition:Thread",
+        "definition:ThreadActiveFlag",
+        "definition:ThreadId",
+        "definition:ThreadItem",
+        "definition:ThreadSource",
+        "definition:ThreadStatus",
+        "definition:Turn",
+        "definition:TurnError",
+        "definition:TurnItemsView",
+        "definition:TurnStatus",
+        "definition:UserInput",
+        "definition:WebSearchAction",
+        "property:thread",
+        "required:thread"
+      ]
+    },
+    {
+      "id": "ThreadNameUpdatedNotification",
+      "sourcePath": "v2/ThreadNameUpdatedNotification.json",
+      "sha256": "7fd00624774829b921931ed006fc0f1908aa5012dc4b79920584b6016fce0455",
+      "fields": [
+        "property:threadId",
+        "property:threadName",
+        "required:threadId"
       ]
     },
     {
@@ -1464,6 +1670,127 @@
       ]
     },
     {
+      "id": "ThreadRollbackParams",
+      "sourcePath": "v2/ThreadRollbackParams.json",
+      "sha256": "794c94907d1651ee68bde8d6c4fdc56efc03c39b2a3c7705294e9bd2e4d9f45b",
+      "fields": [
+        "property:numTurns",
+        "property:threadId",
+        "required:numTurns",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadRollbackResponse",
+      "sourcePath": "v2/ThreadRollbackResponse.json",
+      "sha256": "ace6fd7f3dfed0fe904d261c41a06d74fd2a16e85b0013e82bdb1086b3579eb4",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:AgentPath",
+        "definition:ByteRange",
+        "definition:CodexErrorInfo",
+        "definition:CollabAgentState",
+        "definition:CollabAgentStatus",
+        "definition:CollabAgentTool",
+        "definition:CollabAgentToolCallStatus",
+        "definition:CommandAction",
+        "definition:CommandExecutionSource",
+        "definition:CommandExecutionStatus",
+        "definition:DynamicToolCallOutputContentItem",
+        "definition:DynamicToolCallStatus",
+        "definition:FileUpdateChange",
+        "definition:GitInfo",
+        "definition:HookPromptFragment",
+        "definition:ImageDetail",
+        "definition:McpToolCallError",
+        "definition:McpToolCallResult",
+        "definition:McpToolCallStatus",
+        "definition:MemoryCitation",
+        "definition:MemoryCitationEntry",
+        "definition:MessagePhase",
+        "definition:NonSteerableTurnKind",
+        "definition:PatchApplyStatus",
+        "definition:PatchChangeKind",
+        "definition:ReasoningEffort",
+        "definition:SessionSource",
+        "definition:SubAgentActivityKind",
+        "definition:SubAgentSource",
+        "definition:TextElement",
+        "definition:Thread",
+        "definition:ThreadActiveFlag",
+        "definition:ThreadId",
+        "definition:ThreadItem",
+        "definition:ThreadSource",
+        "definition:ThreadStatus",
+        "definition:Turn",
+        "definition:TurnError",
+        "definition:TurnItemsView",
+        "definition:TurnStatus",
+        "definition:UserInput",
+        "definition:WebSearchAction",
+        "property:thread",
+        "required:thread"
+      ]
+    },
+    {
+      "id": "ThreadSetNameParams",
+      "sourcePath": "v2/ThreadSetNameParams.json",
+      "sha256": "82a3c1be49106366a581fb8265045e27884742aa66a19a580e54ceeb83783242",
+      "fields": [
+        "property:name",
+        "property:threadId",
+        "required:name",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadSetNameResponse",
+      "sourcePath": "v2/ThreadSetNameResponse.json",
+      "sha256": "95fce33f29f96967f4b29e5404e2718b0d1f8491e942f2398b447ef795a3c62b",
+      "fields": []
+    },
+    {
+      "id": "ThreadSettingsUpdatedNotification",
+      "sourcePath": "v2/ThreadSettingsUpdatedNotification.json",
+      "sha256": "8246286e4b4c3fb36152d402be86bfe27b8b8c317cc978374be9b870772a9870",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:ActivePermissionProfile",
+        "definition:ApprovalsReviewer",
+        "definition:AskForApproval",
+        "definition:CollaborationMode",
+        "definition:ModeKind",
+        "definition:NetworkAccess",
+        "definition:Personality",
+        "definition:ReasoningEffort",
+        "definition:ReasoningSummary",
+        "definition:SandboxPolicy",
+        "definition:Settings",
+        "definition:ThreadSettings",
+        "property:threadId",
+        "property:threadSettings",
+        "required:threadId",
+        "required:threadSettings"
+      ]
+    },
+    {
+      "id": "ThreadShellCommandParams",
+      "sourcePath": "v2/ThreadShellCommandParams.json",
+      "sha256": "73755c3c5a965891e9e2f3417ccc56978870cad9a8efe804475add9bef21b72f",
+      "fields": [
+        "property:command",
+        "property:threadId",
+        "required:command",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadShellCommandResponse",
+      "sourcePath": "v2/ThreadShellCommandResponse.json",
+      "sha256": "e6602fd6bbba348f4b6ef037c7c0e972eefcaf89b3f89fbc8da46ed1ae22cb38",
+      "fields": []
+    },
+    {
       "id": "ThreadStartParams",
       "sourcePath": "v2/ThreadStartParams.json",
       "sha256": "d722042f74bb3155a70b24315f87a0bffe4e5ee1c9a681e004d68e323bd2b94d",
@@ -1631,6 +1958,21 @@
         "property:threadId",
         "required:status",
         "required:threadId"
+      ]
+    },
+    {
+      "id": "ThreadTokenUsageUpdatedNotification",
+      "sourcePath": "v2/ThreadTokenUsageUpdatedNotification.json",
+      "sha256": "7d9f1c75f29f28bb8e5ca215773f61f410fbfa04cbb0db3eecf3d33f9d053643",
+      "fields": [
+        "definition:ThreadTokenUsage",
+        "definition:TokenUsageBreakdown",
+        "property:threadId",
+        "property:tokenUsage",
+        "property:turnId",
+        "required:threadId",
+        "required:tokenUsage",
+        "required:turnId"
       ]
     },
     {
@@ -2019,6 +2361,11 @@
       "id": "process-request-schemas",
       "status": "tracked_from_rust_source",
       "reason": "Upstream exports process/spawn, process/writeStdin, process/kill, and process/resizePty request DTOs from Rust source and experimental protocol mappings, but does not currently emit standalone v2/Process*Params.json or v2/Process*Response.json request/response schema files for these methods. The local subset validates the Rust DTO contracts and keeps process output/exited notification schemas fingerprinted."
+    },
+    {
+      "id": "thread-state-rust-source-schemas",
+      "status": "tracked_from_rust_source",
+      "reason": "Upstream exports thread/increment_elicitation, thread/decrement_elicitation, thread/settings/update, thread/memoryMode/set, memory/reset, and thread/backgroundTerminals/clean from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those experimental request/response surfaces. The local subset validates the Rust DTO contracts and keeps paired emitted thread state notification schemas fingerprinted."
     }
   ]
 }

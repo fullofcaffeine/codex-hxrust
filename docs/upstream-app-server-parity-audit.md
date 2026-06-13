@@ -20,7 +20,7 @@ No Cafex or Cafetera source is part of this audit.
 
 ## Current Local Selection
 
-The local app protocol subset currently admits 35 client request methods:
+The local app protocol subset currently admits 51 client request methods:
 
 ```text
 account/login/cancel
@@ -45,12 +45,28 @@ process/kill
 process/resizePty
 process/spawn
 process/writeStdin
+memory/reset
+thread/approveGuardianDeniedAction
 thread/start
 thread/resume
 thread/fork
 thread/archive
 thread/unarchive
 thread/unsubscribe
+thread/increment_elicitation
+thread/decrement_elicitation
+thread/name/set
+thread/goal/set
+thread/goal/get
+thread/goal/clear
+thread/metadata/update
+thread/settings/update
+thread/memoryMode/set
+thread/compact/start
+thread/shellCommand
+thread/backgroundTerminals/clean
+thread/rollback
+thread/inject_items
 thread/list
 thread/loaded/list
 thread/read
@@ -66,14 +82,14 @@ The local subset also validates selected notifications needed by the current hea
 
 ## Upstream Gap Summary
 
-Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 35-method selection, 77 quoted request wires remain outside the local subset.
+Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 51-method selection, 61 quoted request wires remain outside the local subset.
 
 The remaining requests fall into these groups:
 
 | Group | Missing methods | Priority |
 | --- | --- | --- |
 | Thread navigation and lifecycle | `thread/resume`, `thread/fork`, `thread/archive`, `thread/unarchive`, `thread/unsubscribe`, `thread/list`, `thread/loaded/list` | Admitted in HXCX-3.63 |
-| Thread state and history mutation | `thread/name/set`, `thread/goal/set`, `thread/goal/get`, `thread/goal/clear`, `thread/metadata/update`, `thread/settings/update`, `thread/memoryMode/set`, `thread/compact/start`, `thread/shellCommand`, `thread/approveGuardianDeniedAction`, `thread/backgroundTerminals/clean`, `thread/rollback`, `thread/inject_items`, `memory/reset` | Next |
+| Thread state and history mutation | `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/name/set`, `thread/goal/set`, `thread/goal/get`, `thread/goal/clear`, `thread/metadata/update`, `thread/settings/update`, `thread/memoryMode/set`, `thread/compact/start`, `thread/shellCommand`, `thread/approveGuardianDeniedAction`, `thread/backgroundTerminals/clean`, `thread/rollback`, `thread/inject_items`, `memory/reset` | Admitted in HXCX-3.64 |
 | Turn and review continuation | `turn/steer`, `review/start`, `thread/turns/list`, `thread/turns/items/list` | High |
 | Models and environment | `model/list`, `modelProvider/capabilities/read`, `environment/add`, `experimentalFeature/list`, `experimentalFeature/enablement/set`, `permissionProfile/list`, `collaborationMode/list`, `mock/experimentalMethod` | Medium |
 | Apps, skills, hooks, marketplace, plugins | `app/list`, `skills/list`, `skills/extraRoots/set`, `skills/config/write`, `hooks/list`, `marketplace/add`, `marketplace/remove`, `marketplace/upgrade`, `plugin/list`, `plugin/installed`, `plugin/read`, `plugin/skill/read`, `plugin/install`, `plugin/uninstall`, `plugin/share/save`, `plugin/share/updateTargets`, `plugin/share/list`, `plugin/share/checkout`, `plugin/share/delete` | Medium |
@@ -94,14 +110,6 @@ hook/started
 item/autoApprovalReview/completed
 item/autoApprovalReview/started
 skills/changed
-thread/archived
-thread/closed
-thread/goal/cleared
-thread/goal/updated
-thread/name/updated
-thread/settings/updated
-thread/tokenUsage/updated
-thread/unarchived
 turn/diff/updated
 ```
 
@@ -131,35 +139,26 @@ Most modern v2 request families above have standalone schema files under `schema
 Known exceptions:
 
 - `process/spawn`, `process/writeStdin`, `process/kill`, and `process/resizePty` are already selected from upstream Rust DTO/protocol mappings because standalone process request schema files are not exported.
+- `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/settings/update`, `thread/memoryMode/set`, `memory/reset`, and `thread/backgroundTerminals/clean` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
 - `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, and `fuzzyFileSearch/sessionStop` are Rust DTO/protocol mappings without standalone request/response schema files; their notifications are already tracked through top-level schema files.
 - Deprecated v1 request surfaces should remain deferred until a deliberate compatibility slice selects them.
 
 ## Sequencing Decision
 
-The next raw upstream slice should admit thread state and history mutation requests before plugin/MCP/fs/remote/Cafex surfaces:
+The next raw upstream slice should admit turn continuation and review/history navigation requests before plugin/MCP/fs/remote/Cafex surfaces:
 
 ```text
-thread/name/set
-thread/goal/set
-thread/goal/get
-thread/goal/clear
-thread/metadata/update
-thread/settings/update
-thread/memoryMode/set
-thread/compact/start
-thread/shellCommand
-thread/approveGuardianDeniedAction
-thread/backgroundTerminals/clean
-thread/rollback
-thread/inject_items
-memory/reset
+turn/steer
+review/start
+thread/turns/list
+thread/turns/items/list
 ```
 
 Rationale:
 
 - these are mainstream Codex app-server methods, not Cafex adapters
-- they extend the existing `thread/start`, `thread/read`, and lifecycle/navigation foundation
-- they unlock more realistic upstream thread state, history, naming, goals, and rollback fixtures
+- they extend the existing `thread/start`, `thread/read`, lifecycle/navigation, and state/history foundation
+- they unlock turn continuation, review entry, and paged turn/item history fixtures
 - they keep deprecated v1 APIs and Cafex bridge work out of the core until selected intentionally
 
 ## Follow-Up Bead Policy

@@ -39,6 +39,26 @@ selected_schemas=(
   "ThreadUnarchiveResponse:v2/ThreadUnarchiveResponse.json"
   "ThreadUnsubscribeParams:v2/ThreadUnsubscribeParams.json"
   "ThreadUnsubscribeResponse:v2/ThreadUnsubscribeResponse.json"
+  "ThreadSetNameParams:v2/ThreadSetNameParams.json"
+  "ThreadSetNameResponse:v2/ThreadSetNameResponse.json"
+  "ThreadGoalSetParams:v2/ThreadGoalSetParams.json"
+  "ThreadGoalSetResponse:v2/ThreadGoalSetResponse.json"
+  "ThreadGoalGetParams:v2/ThreadGoalGetParams.json"
+  "ThreadGoalGetResponse:v2/ThreadGoalGetResponse.json"
+  "ThreadGoalClearParams:v2/ThreadGoalClearParams.json"
+  "ThreadGoalClearResponse:v2/ThreadGoalClearResponse.json"
+  "ThreadMetadataUpdateParams:v2/ThreadMetadataUpdateParams.json"
+  "ThreadMetadataUpdateResponse:v2/ThreadMetadataUpdateResponse.json"
+  "ThreadCompactStartParams:v2/ThreadCompactStartParams.json"
+  "ThreadCompactStartResponse:v2/ThreadCompactStartResponse.json"
+  "ThreadShellCommandParams:v2/ThreadShellCommandParams.json"
+  "ThreadShellCommandResponse:v2/ThreadShellCommandResponse.json"
+  "ThreadApproveGuardianDeniedActionParams:v2/ThreadApproveGuardianDeniedActionParams.json"
+  "ThreadApproveGuardianDeniedActionResponse:v2/ThreadApproveGuardianDeniedActionResponse.json"
+  "ThreadRollbackParams:v2/ThreadRollbackParams.json"
+  "ThreadRollbackResponse:v2/ThreadRollbackResponse.json"
+  "ThreadInjectItemsParams:v2/ThreadInjectItemsParams.json"
+  "ThreadInjectItemsResponse:v2/ThreadInjectItemsResponse.json"
   "ThreadListParams:v2/ThreadListParams.json"
   "ThreadListResponse:v2/ThreadListResponse.json"
   "ThreadLoadedListParams:v2/ThreadLoadedListParams.json"
@@ -82,6 +102,11 @@ selected_schemas=(
   "ThreadArchivedNotification:v2/ThreadArchivedNotification.json"
   "ThreadUnarchivedNotification:v2/ThreadUnarchivedNotification.json"
   "ThreadClosedNotification:v2/ThreadClosedNotification.json"
+  "ThreadNameUpdatedNotification:v2/ThreadNameUpdatedNotification.json"
+  "ThreadGoalUpdatedNotification:v2/ThreadGoalUpdatedNotification.json"
+  "ThreadGoalClearedNotification:v2/ThreadGoalClearedNotification.json"
+  "ThreadSettingsUpdatedNotification:v2/ThreadSettingsUpdatedNotification.json"
+  "ThreadTokenUsageUpdatedNotification:v2/ThreadTokenUsageUpdatedNotification.json"
   "TurnStartedNotification:v2/TurnStartedNotification.json"
   "TurnCompletedNotification:v2/TurnCompletedNotification.json"
   "TurnPlanUpdatedNotification:v2/TurnPlanUpdatedNotification.json"
@@ -199,6 +224,11 @@ jq -n \
         id: "process-request-schemas",
         status: "tracked_from_rust_source",
         reason: "Upstream exports process/spawn, process/writeStdin, process/kill, and process/resizePty request DTOs from Rust source and experimental protocol mappings, but does not currently emit standalone v2/Process*Params.json or v2/Process*Response.json request/response schema files for these methods. The local subset validates the Rust DTO contracts and keeps process output/exited notification schemas fingerprinted."
+      },
+      {
+        id: "thread-state-rust-source-schemas",
+        status: "tracked_from_rust_source",
+        reason: "Upstream exports thread/increment_elicitation, thread/decrement_elicitation, thread/settings/update, thread/memoryMode/set, memory/reset, and thread/backgroundTerminals/clean from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those experimental request/response surfaces. The local subset validates the Rust DTO contracts and keeps paired emitted thread state notification schemas fingerprinted."
       }
     ]
   }' > "$ACTUAL"

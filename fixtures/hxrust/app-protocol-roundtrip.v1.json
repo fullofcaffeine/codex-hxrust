@@ -377,6 +377,476 @@
       }
     },
     {
+      "id": "thread-increment-elicitation-request",
+      "kind": "request",
+      "method": "thread/increment_elicitation",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-increment-elicitation-1",
+        "method": "thread/increment_elicitation",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-increment-elicitation-response",
+      "kind": "response",
+      "method": "thread/increment_elicitation",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-increment-elicitation-1",
+        "result": {
+          "count": 1,
+          "paused": true
+        }
+      }
+    },
+    {
+      "id": "thread-decrement-elicitation-request",
+      "kind": "request",
+      "method": "thread/decrement_elicitation",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-decrement-elicitation-1",
+        "method": "thread/decrement_elicitation",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-decrement-elicitation-response",
+      "kind": "response",
+      "method": "thread/decrement_elicitation",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-decrement-elicitation-1",
+        "result": {
+          "count": 0,
+          "paused": false
+        }
+      }
+    },
+    {
+      "id": "thread-name-set-request",
+      "kind": "request",
+      "method": "thread/name/set",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-name-set-1",
+        "method": "thread/name/set",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "name": "Codex haxe.rust port"
+        }
+      }
+    },
+    {
+      "id": "thread-name-set-response",
+      "kind": "response",
+      "method": "thread/name/set",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-name-set-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "thread-goal-set-request",
+      "kind": "request",
+      "method": "thread/goal/set",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-goal-set-1",
+        "method": "thread/goal/set",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "objective": "Port raw upstream Codex protocol first",
+          "status": "active",
+          "tokenBudget": 250000
+        }
+      }
+    },
+    {
+      "id": "thread-goal-set-response",
+      "kind": "response",
+      "method": "thread/goal/set",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-goal-set-1",
+        "result": {
+          "goal": {
+            "threadId": "thread-00000000-0000-4000-8000-000000000001",
+            "objective": "Port raw upstream Codex protocol first",
+            "status": "active",
+            "tokenBudget": 250000,
+            "tokensUsed": 1200,
+            "timeUsedSeconds": 60,
+            "createdAt": 1781049600,
+            "updatedAt": 1781049660
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-goal-get-request",
+      "kind": "request",
+      "method": "thread/goal/get",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-goal-get-1",
+        "method": "thread/goal/get",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-goal-get-response",
+      "kind": "response",
+      "method": "thread/goal/get",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-goal-get-1",
+        "result": {
+          "goal": null
+        }
+      }
+    },
+    {
+      "id": "thread-goal-clear-request",
+      "kind": "request",
+      "method": "thread/goal/clear",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-goal-clear-1",
+        "method": "thread/goal/clear",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-goal-clear-response",
+      "kind": "response",
+      "method": "thread/goal/clear",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-goal-clear-1",
+        "result": {
+          "cleared": true
+        }
+      }
+    },
+    {
+      "id": "thread-metadata-update-request",
+      "kind": "request",
+      "method": "thread/metadata/update",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-metadata-update-1",
+        "method": "thread/metadata/update",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "gitInfo": {
+            "sha": "0123456789abcdef0123456789abcdef01234567",
+            "branch": "main",
+            "originUrl": null
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-metadata-update-response",
+      "kind": "response",
+      "method": "thread/metadata/update",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-metadata-update-1",
+        "result": {
+          "thread": {
+            "id": "thread-00000000-0000-4000-8000-000000000001",
+            "sessionId": "00000000-0000-4000-8000-000000000001",
+            "cliVersion": "0.0.0-hxrust",
+            "createdAt": "2026-06-10T00:00:00Z",
+            "updatedAt": "2026-06-10T00:00:05Z",
+            "cwd": "/tmp/codex-hxrust",
+            "ephemeral": true,
+            "modelProvider": "openai",
+            "preview": "hello codex",
+            "source": "codex-hxrust",
+            "status": {
+              "type": "idle"
+            },
+            "turns": []
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-settings-update-request",
+      "kind": "request",
+      "method": "thread/settings/update",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-settings-update-1",
+        "method": "thread/settings/update",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "cwd": "/tmp/codex-hxrust",
+          "approvalPolicy": "on-request",
+          "approvalsReviewer": "user",
+          "sandboxPolicy": {
+            "type": "workspaceWrite",
+            "networkAccess": false,
+            "writableRoots": ["/tmp/codex-hxrust"]
+          },
+          "permissions": null,
+          "model": "gpt-5.2-codex",
+          "serviceTier": null,
+          "effort": "medium",
+          "summary": "auto",
+          "collaborationMode": {
+            "mode": "default",
+            "settings": {
+              "model": "gpt-5.2-codex",
+              "developer_instructions": null,
+              "reasoning_effort": "medium"
+            }
+          },
+          "personality": "pragmatic"
+        }
+      }
+    },
+    {
+      "id": "thread-settings-update-response",
+      "kind": "response",
+      "method": "thread/settings/update",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-settings-update-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "thread-memory-mode-set-request",
+      "kind": "request",
+      "method": "thread/memoryMode/set",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-memory-mode-set-1",
+        "method": "thread/memoryMode/set",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "mode": "enabled"
+        }
+      }
+    },
+    {
+      "id": "thread-memory-mode-set-response",
+      "kind": "response",
+      "method": "thread/memoryMode/set",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-memory-mode-set-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "memory-reset-request",
+      "kind": "request",
+      "method": "memory/reset",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "memory-reset-1",
+        "method": "memory/reset"
+      }
+    },
+    {
+      "id": "memory-reset-response",
+      "kind": "response",
+      "method": "memory/reset",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "memory-reset-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "thread-compact-start-request",
+      "kind": "request",
+      "method": "thread/compact/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-compact-start-1",
+        "method": "thread/compact/start",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-compact-start-response",
+      "kind": "response",
+      "method": "thread/compact/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-compact-start-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "thread-shell-command-request",
+      "kind": "request",
+      "method": "thread/shellCommand",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-shell-command-1",
+        "method": "thread/shellCommand",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "command": "cargo test"
+        }
+      }
+    },
+    {
+      "id": "thread-shell-command-response",
+      "kind": "response",
+      "method": "thread/shellCommand",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-shell-command-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "thread-approve-guardian-denied-action-request",
+      "kind": "request",
+      "method": "thread/approveGuardianDeniedAction",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-approve-guardian-denied-action-1",
+        "method": "thread/approveGuardianDeniedAction",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "event": {
+            "action": "continue",
+            "reason": "fixture"
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-approve-guardian-denied-action-response",
+      "kind": "response",
+      "method": "thread/approveGuardianDeniedAction",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-approve-guardian-denied-action-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "thread-background-terminals-clean-request",
+      "kind": "request",
+      "method": "thread/backgroundTerminals/clean",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-background-terminals-clean-1",
+        "method": "thread/backgroundTerminals/clean",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-background-terminals-clean-response",
+      "kind": "response",
+      "method": "thread/backgroundTerminals/clean",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-background-terminals-clean-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "thread-rollback-request",
+      "kind": "request",
+      "method": "thread/rollback",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-rollback-1",
+        "method": "thread/rollback",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "numTurns": 1
+        }
+      }
+    },
+    {
+      "id": "thread-rollback-response",
+      "kind": "response",
+      "method": "thread/rollback",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-rollback-1",
+        "result": {
+          "thread": {
+            "id": "thread-00000000-0000-4000-8000-000000000001",
+            "sessionId": "00000000-0000-4000-8000-000000000001",
+            "cliVersion": "0.0.0-hxrust",
+            "createdAt": "2026-06-10T00:00:00Z",
+            "updatedAt": "2026-06-10T00:00:06Z",
+            "cwd": "/tmp/codex-hxrust",
+            "ephemeral": true,
+            "modelProvider": "openai",
+            "preview": "hello codex",
+            "source": "codex-hxrust",
+            "status": {
+              "type": "idle"
+            },
+            "turns": []
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-inject-items-request",
+      "kind": "request",
+      "method": "thread/inject_items",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-inject-items-1",
+        "method": "thread/inject_items",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "items": [
+            {
+              "type": "message",
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "Seed model-visible history"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "thread-inject-items-response",
+      "kind": "response",
+      "method": "thread/inject_items",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-inject-items-1",
+        "result": {}
+      }
+    },
+    {
       "id": "thread-list-request",
       "kind": "request",
       "method": "thread/list",
@@ -1437,6 +1907,124 @@
         "method": "thread/closed",
         "params": {
           "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-name-updated-notification",
+      "kind": "notification",
+      "method": "thread/name/updated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/name/updated",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "threadName": "Codex haxe.rust port"
+        }
+      }
+    },
+    {
+      "id": "thread-goal-updated-notification",
+      "kind": "notification",
+      "method": "thread/goal/updated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/goal/updated",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": null,
+          "goal": {
+            "threadId": "thread-00000000-0000-4000-8000-000000000001",
+            "objective": "Port raw upstream Codex protocol first",
+            "status": "active",
+            "tokenBudget": null,
+            "tokensUsed": 1200,
+            "timeUsedSeconds": 60,
+            "createdAt": 1781049600,
+            "updatedAt": 1781049660
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-goal-cleared-notification",
+      "kind": "notification",
+      "method": "thread/goal/cleared",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/goal/cleared",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-settings-updated-notification",
+      "kind": "notification",
+      "method": "thread/settings/updated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/settings/updated",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "threadSettings": {
+            "cwd": "/tmp/codex-hxrust",
+            "approvalPolicy": "on-request",
+            "approvalsReviewer": "user",
+            "sandboxPolicy": {
+              "type": "workspaceWrite",
+              "networkAccess": false,
+              "writableRoots": ["/tmp/codex-hxrust"]
+            },
+            "activePermissionProfile": {
+              "id": ":workspace",
+              "extends": null
+            },
+            "model": "gpt-5.2-codex",
+            "modelProvider": "openai",
+            "serviceTier": null,
+            "effort": "medium",
+            "summary": "auto",
+            "collaborationMode": {
+              "mode": "default",
+              "settings": {
+                "model": "gpt-5.2-codex",
+                "developer_instructions": null,
+                "reasoning_effort": "medium"
+              }
+            },
+            "personality": "pragmatic"
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-token-usage-updated-notification",
+      "kind": "notification",
+      "method": "thread/tokenUsage/updated",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/tokenUsage/updated",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "tokenUsage": {
+            "total": {
+              "totalTokens": 1280,
+              "inputTokens": 900,
+              "cachedInputTokens": 120,
+              "outputTokens": 380,
+              "reasoningOutputTokens": 40
+            },
+            "last": {
+              "totalTokens": 320,
+              "inputTokens": 220,
+              "cachedInputTokens": 20,
+              "outputTokens": 100,
+              "reasoningOutputTokens": 10
+            },
+            "modelContextWindow": 200000
+          }
         }
       }
     },
