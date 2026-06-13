@@ -97,6 +97,8 @@ Port the first terminal rendering invariant:
 
 Use upstream `vt100_history`, `vt100_live_commit`, and `status_indicator` as behavior oracles. Generated Rust must run the same fixture harness.
 
+Status: HXCX-4.9 now owns the selected fixture `fixtures/upstream/vt100-render-selected.v1.json` and validates it through `harness/check-tui-render.sh`. This is string-backend parity, not full ratatui/crossterm ownership.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:
@@ -163,7 +165,7 @@ Cafex/Cafetera adapter work stays behind upstream-shaped foundations:
 
 - deterministic protocol and DTO parity: done for the selected app-server subset;
 - runtime event bus/app-server client facade: not yet done;
-- TUI story/replay: selected fixture active; VT100 rendering parity: not yet done;
+- TUI story/replay and selected VT100 rendering invariants: active;
 - live transport/persistence boundaries: not yet done.
 
 Therefore `codex-hxrust-mpd` and similar Cafex bridge tasks should remain P4/dependency-gated until at least HXCX-4.7 and HXCX-4.8 are intentionally selected or completed. Cafex live-status receipts are useful later, but they are not a substitute for upstream TUI/runtime ownership.

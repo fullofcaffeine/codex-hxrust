@@ -33,7 +33,7 @@ harness/check-haxe-rust-pressure-gaps.sh
 | High severity | 7 |
 | Medium severity | 5 |
 | Raw Rust escape matches in current app/test Haxe source | 0 |
-| Haxe source/test files scanned | 123 |
+| Haxe source/test files scanned | 130 |
 
 Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAllowRaw`, `@:rust...`, or `untyped` escapes are present under `src` or `test`.
 

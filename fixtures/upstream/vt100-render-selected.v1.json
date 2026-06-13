@@ -1,0 +1,16 @@
+{
+  "schema": "codex-hxrust.vt100-render-selected.v1",
+  "source": [
+    "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
+    "../codex/codex-rs/tui/tests/suite/vt100_live_commit.rs",
+    "../codex/codex-rs/tui/tests/suite/status_indicator.rs"
+  ],
+  "width": 20,
+  "wideWidth": 40,
+  "longToken": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "emojiCjk": "😀😀😀😀😀 你好世界",
+  "ansi": "\u001b[31mred\u001b[0m+plain",
+  "wordWrap": "Years passed, and Willowmere thrived in peace and friendship. Mira’s herb garden flourished with both ordinary and enchanted plants, and travelers spoke of the kindness of the woman who tended them.",
+  "emDashWrap": "Mara found an old key on the shore. Curious, she opened a tarnished box half-buried in sand—and inside lay a single, glowing seed.",
+  "liveRows": ["one\n", "two\n", "three\n", "four\n", "five\n"]
+}

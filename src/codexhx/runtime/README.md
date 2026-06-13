@@ -90,3 +90,14 @@ HXCX-4.7 also exposed generic haxe.rust issue `haxe.rust-362`: nullable `Array<C
 - `TuiStoryReplaySummary` normalizes volatile timestamp, cwd, model, session id, and event id noise into a stable replay fingerprint.
 
 This is replay evidence, not terminal rendering ownership. HXCX-4.9 owns VT100/history/render invariants next.
+
+## TUI Render Invariants
+
+`codexhx.runtime.tui.render` is the HXCX-4.9 deterministic render slice. It adapts selected upstream invariants from `vt100_history`, `vt100_live_commit`, and `status_indicator` into pure Haxe state:
+
+- `TuiAnsiSanitizer` strips ANSI escape sequences before text reaches the string backend.
+- `TuiGlyphScanner` assigns selected display widths for the upstream emoji/CJK fixture and keeps the logic portable.
+- `TuiRowBuilder` wraps words without splitting them when the word fits, hard-wraps long tokens only when required, and drains commit-ready live rows.
+- `TuiHistoryBuffer` models deterministic history insertion and cursor restoration for the selected string backend.
+
+The fixture `fixtures/upstream/vt100-render-selected.v1.json` and `harness/check-tui-render.sh` prove these invariants through both Haxe interpreter and haxe.rust-generated Rust. This still does not claim full ratatui/crossterm ownership; those crates remain a later metal/native boundary for the interactive TUI.
