@@ -178,6 +178,275 @@
       }
     },
     {
+      "id": "thread-resume-request",
+      "kind": "request",
+      "method": "thread/resume",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "resume-1",
+        "method": "thread/resume",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "cwd": "/tmp/codex-hxrust",
+          "model": "gpt-5.2-codex",
+          "modelProvider": "openai",
+          "approvalPolicy": "on-request",
+          "approvalsReviewer": "user",
+          "sandbox": "workspace-write",
+          "personality": "pragmatic",
+          "config": null
+        }
+      }
+    },
+    {
+      "id": "thread-resume-response",
+      "kind": "response",
+      "method": "thread/resume",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "resume-1",
+        "result": {
+          "approvalPolicy": "on-request",
+          "approvalsReviewer": "user",
+          "cwd": "/tmp/codex-hxrust",
+          "model": "gpt-5.2-codex",
+          "modelProvider": "openai",
+          "sandbox": {
+            "type": "readOnly",
+            "networkAccess": false
+          },
+          "instructionSources": [],
+          "reasoningEffort": null,
+          "serviceTier": null,
+          "thread": {
+            "id": "thread-00000000-0000-4000-8000-000000000001",
+            "sessionId": "00000000-0000-4000-8000-000000000001",
+            "cliVersion": "0.0.0-hxrust",
+            "createdAt": "2026-06-10T00:00:00Z",
+            "updatedAt": "2026-06-10T00:00:02Z",
+            "cwd": "/tmp/codex-hxrust",
+            "ephemeral": true,
+            "modelProvider": "openai",
+            "preview": "hello codex",
+            "source": "codex-hxrust",
+            "status": {
+              "type": "idle"
+            },
+            "turns": []
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-fork-request",
+      "kind": "request",
+      "method": "thread/fork",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "fork-1",
+        "method": "thread/fork",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "cwd": "/tmp/codex-hxrust",
+          "ephemeral": true,
+          "threadSource": "codex-hxrust"
+        }
+      }
+    },
+    {
+      "id": "thread-fork-response",
+      "kind": "response",
+      "method": "thread/fork",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "fork-1",
+        "result": {
+          "approvalPolicy": "on-request",
+          "approvalsReviewer": "user",
+          "cwd": "/tmp/codex-hxrust",
+          "model": "gpt-5.2-codex",
+          "modelProvider": "openai",
+          "sandbox": {
+            "type": "readOnly"
+          },
+          "thread": {
+            "id": "thread-00000000-0000-4000-8000-000000000002",
+            "sessionId": "00000000-0000-4000-8000-000000000001",
+            "cliVersion": "0.0.0-hxrust",
+            "createdAt": "2026-06-10T00:00:03Z",
+            "updatedAt": "2026-06-10T00:00:03Z",
+            "cwd": "/tmp/codex-hxrust",
+            "ephemeral": true,
+            "modelProvider": "openai",
+            "preview": "forked hello codex",
+            "source": "codex-hxrust",
+            "status": {
+              "type": "idle"
+            },
+            "turns": []
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-archive-request",
+      "kind": "request",
+      "method": "thread/archive",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "archive-1",
+        "method": "thread/archive",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-archive-response",
+      "kind": "response",
+      "method": "thread/archive",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "archive-1",
+        "result": {}
+      }
+    },
+    {
+      "id": "thread-unarchive-request",
+      "kind": "request",
+      "method": "thread/unarchive",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "unarchive-1",
+        "method": "thread/unarchive",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-unarchive-response",
+      "kind": "response",
+      "method": "thread/unarchive",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "unarchive-1",
+        "result": {
+          "thread": {
+            "id": "thread-00000000-0000-4000-8000-000000000001",
+            "sessionId": "00000000-0000-4000-8000-000000000001",
+            "cliVersion": "0.0.0-hxrust",
+            "createdAt": "2026-06-10T00:00:00Z",
+            "updatedAt": "2026-06-10T00:00:04Z",
+            "cwd": "/tmp/codex-hxrust",
+            "ephemeral": true,
+            "modelProvider": "openai",
+            "preview": "hello codex",
+            "source": "codex-hxrust",
+            "status": {
+              "type": "idle"
+            },
+            "turns": []
+          }
+        }
+      }
+    },
+    {
+      "id": "thread-unsubscribe-request",
+      "kind": "request",
+      "method": "thread/unsubscribe",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "unsubscribe-1",
+        "method": "thread/unsubscribe",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-unsubscribe-response",
+      "kind": "response",
+      "method": "thread/unsubscribe",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "unsubscribe-1",
+        "result": {
+          "status": "unsubscribed"
+        }
+      }
+    },
+    {
+      "id": "thread-list-request",
+      "kind": "request",
+      "method": "thread/list",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-list-1",
+        "method": "thread/list",
+        "params": {
+          "archived": null,
+          "cursor": null,
+          "limit": 10,
+          "cwd": [
+            "/tmp/codex-hxrust"
+          ],
+          "modelProviders": [
+            "openai"
+          ],
+          "sourceKinds": [
+            "appServer"
+          ],
+          "sortDirection": "desc",
+          "sortKey": "updated_at",
+          "useStateDbOnly": true
+        }
+      }
+    },
+    {
+      "id": "thread-list-response",
+      "kind": "response",
+      "method": "thread/list",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-list-1",
+        "result": {
+          "data": [],
+          "nextCursor": null,
+          "backwardsCursor": null
+        }
+      }
+    },
+    {
+      "id": "thread-loaded-list-request",
+      "kind": "request",
+      "method": "thread/loaded/list",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-loaded-list-1",
+        "method": "thread/loaded/list",
+        "params": {
+          "cursor": null,
+          "limit": 20
+        }
+      }
+    },
+    {
+      "id": "thread-loaded-list-response",
+      "kind": "response",
+      "method": "thread/loaded/list",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-loaded-list-1",
+        "result": {
+          "data": [
+            "thread-00000000-0000-4000-8000-000000000001"
+          ],
+          "nextCursor": null
+        }
+      }
+    },
+    {
       "id": "windows-sandbox-setup-start-request",
       "kind": "request",
       "method": "windowsSandbox/setupStart",
@@ -1132,6 +1401,42 @@
         "params": {
           "threadId": "thread-00000000-0000-4000-8000-000000000001",
           "turnId": "turn-1"
+        }
+      }
+    },
+    {
+      "id": "thread-archived-notification",
+      "kind": "notification",
+      "method": "thread/archived",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/archived",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-unarchived-notification",
+      "kind": "notification",
+      "method": "thread/unarchived",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/unarchived",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-closed-notification",
+      "kind": "notification",
+      "method": "thread/closed",
+      "message": {
+        "jsonrpc": "2.0",
+        "method": "thread/closed",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001"
         }
       }
     },

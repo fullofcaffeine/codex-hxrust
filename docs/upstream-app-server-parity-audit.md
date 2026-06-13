@@ -20,7 +20,7 @@ No Cafex or Cafetera source is part of this audit.
 
 ## Current Local Selection
 
-The local app protocol subset currently admits 28 client request methods:
+The local app protocol subset currently admits 35 client request methods:
 
 ```text
 account/login/cancel
@@ -45,28 +45,35 @@ process/kill
 process/resizePty
 process/spawn
 process/writeStdin
-thread/read
 thread/start
+thread/resume
+thread/fork
+thread/archive
+thread/unarchive
+thread/unsubscribe
+thread/list
+thread/loaded/list
+thread/read
 turn/interrupt
 turn/start
 windowsSandbox/readiness
 windowsSandbox/setupStart
 ```
 
-This covers the first credential-free headless/runtime path plus auth, account, config, external-agent import, command/process, and Windows sandbox request families that have already been admitted through fixture-backed Haxe and generated Rust gates.
+This covers the first credential-free headless/runtime path plus thread lifecycle/navigation, auth, account, config, external-agent import, command/process, and Windows sandbox request families that have already been admitted through fixture-backed Haxe and generated Rust gates.
 
 The local subset also validates selected notifications needed by the current headless/app protocol fixtures, including thread/turn lifecycle basics, streaming item deltas, account/rate-limit updates, config warnings, app list updates, realtime output notifications, process output, filesystem change, and selected deprecated notification parity.
 
 ## Upstream Gap Summary
 
-Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 28-method selection, 84 quoted request wires remain outside the local subset.
+Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 35-method selection, 77 quoted request wires remain outside the local subset.
 
 The remaining requests fall into these groups:
 
 | Group | Missing methods | Priority |
 | --- | --- | --- |
-| Thread navigation and lifecycle | `thread/resume`, `thread/fork`, `thread/archive`, `thread/unarchive`, `thread/unsubscribe`, `thread/list`, `thread/loaded/list` | Next |
-| Thread state and history mutation | `thread/name/set`, `thread/goal/set`, `thread/goal/get`, `thread/goal/clear`, `thread/metadata/update`, `thread/settings/update`, `thread/memoryMode/set`, `thread/compact/start`, `thread/shellCommand`, `thread/approveGuardianDeniedAction`, `thread/backgroundTerminals/clean`, `thread/rollback`, `thread/inject_items`, `memory/reset` | High |
+| Thread navigation and lifecycle | `thread/resume`, `thread/fork`, `thread/archive`, `thread/unarchive`, `thread/unsubscribe`, `thread/list`, `thread/loaded/list` | Admitted in HXCX-3.63 |
+| Thread state and history mutation | `thread/name/set`, `thread/goal/set`, `thread/goal/get`, `thread/goal/clear`, `thread/metadata/update`, `thread/settings/update`, `thread/memoryMode/set`, `thread/compact/start`, `thread/shellCommand`, `thread/approveGuardianDeniedAction`, `thread/backgroundTerminals/clean`, `thread/rollback`, `thread/inject_items`, `memory/reset` | Next |
 | Turn and review continuation | `turn/steer`, `review/start`, `thread/turns/list`, `thread/turns/items/list` | High |
 | Models and environment | `model/list`, `modelProvider/capabilities/read`, `environment/add`, `experimentalFeature/list`, `experimentalFeature/enablement/set`, `permissionProfile/list`, `collaborationMode/list`, `mock/experimentalMethod` | Medium |
 | Apps, skills, hooks, marketplace, plugins | `app/list`, `skills/list`, `skills/extraRoots/set`, `skills/config/write`, `hooks/list`, `marketplace/add`, `marketplace/remove`, `marketplace/upgrade`, `plugin/list`, `plugin/installed`, `plugin/read`, `plugin/skill/read`, `plugin/install`, `plugin/uninstall`, `plugin/share/save`, `plugin/share/updateTargets`, `plugin/share/list`, `plugin/share/checkout`, `plugin/share/delete` | Medium |
@@ -129,26 +136,30 @@ Known exceptions:
 
 ## Sequencing Decision
 
-The next raw upstream slice should admit thread navigation and lifecycle requests before plugin/MCP/fs/remote/Cafex surfaces:
+The next raw upstream slice should admit thread state and history mutation requests before plugin/MCP/fs/remote/Cafex surfaces:
 
 ```text
-thread/resume
-thread/fork
-thread/archive
-thread/unarchive
-thread/unsubscribe
-thread/list
-thread/loaded/list
-thread/archived
-thread/unarchived
-thread/closed
+thread/name/set
+thread/goal/set
+thread/goal/get
+thread/goal/clear
+thread/metadata/update
+thread/settings/update
+thread/memoryMode/set
+thread/compact/start
+thread/shellCommand
+thread/approveGuardianDeniedAction
+thread/backgroundTerminals/clean
+thread/rollback
+thread/inject_items
+memory/reset
 ```
 
 Rationale:
 
 - these are mainstream Codex app-server methods, not Cafex adapters
-- they extend the existing `thread/start` and `thread/read` foundation
-- they unlock more realistic upstream app navigation and persistence fixtures
+- they extend the existing `thread/start`, `thread/read`, and lifecycle/navigation foundation
+- they unlock more realistic upstream thread state, history, naming, goals, and rollback fixtures
 - they keep deprecated v1 APIs and Cafex bridge work out of the core until selected intentionally
 
 ## Follow-Up Bead Policy

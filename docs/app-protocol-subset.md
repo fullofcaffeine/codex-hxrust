@@ -11,8 +11,15 @@ This slice implements a fixture-backed pure Haxe validator/normalizer for the fi
 Included client requests:
 
 - `thread/start`
+- `thread/resume`
+- `thread/fork`
+- `thread/archive`
+- `thread/unarchive`
+- `thread/unsubscribe`
 - `turn/start`
 - `turn/interrupt`
+- `thread/list`
+- `thread/loaded/list`
 - `thread/read`
 - `windowsSandbox/setupStart`
 - `windowsSandbox/readiness`
@@ -43,6 +50,9 @@ Included server notifications:
 
 - `thread/started`
 - `thread/status/changed`
+- `thread/archived`
+- `thread/unarchived`
+- `thread/closed`
 - `thread/compacted`
 - `turn/started`
 - `turn/completed`
@@ -97,6 +107,13 @@ Included server notifications:
 Included response payloads:
 
 - `ThreadStartResponse`
+- `ThreadResumeResponse`
+- `ThreadForkResponse`
+- `ThreadArchiveResponse`
+- `ThreadUnarchiveResponse`
+- `ThreadUnsubscribeResponse`
+- `ThreadListResponse`
+- `ThreadLoadedListResponse`
 - `TurnStartResponse`
 - `TurnInterruptResponse`
 - `ThreadReadResponse`
@@ -120,7 +137,13 @@ Included response payloads:
 - `ExternalAgentConfigDetectResponse`
 - `ExternalAgentConfigImportResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read/rate-limit/usage requests, add-credits nudge email requests, feedback upload requests, standalone command execution requests and control requests, host process spawn and control requests, config read/value-write/batch-write and requirements read request responses, external agent config detect/import request responses, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, thread resume/fork/archive/unarchive/unsubscribe/list/loaded-list lifecycle request responses, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read/rate-limit/usage requests, add-credits nudge email requests, feedback upload requests, standalone command execution requests and control requests, host process spawn and control requests, config read/value-write/batch-write and requirements read request responses, external agent config detect/import request responses, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+
+`thread/resume` and `thread/fork` reopen or fork existing upstream threads. The selected subset validates required `threadId`, selected nullable override fields, approval policy variants, approvals reviewer, sandbox mode, personality, and response metadata plus the shared `Thread` payload.
+
+`thread/archive`, `thread/unarchive`, and `thread/unsubscribe` validate required `threadId` params. Archive returns an empty object, unarchive returns a `Thread`, and unsubscribe returns the upstream `notLoaded`/`notSubscribed`/`unsubscribed` status enum. Paired `thread/archived`, `thread/unarchived`, and `thread/closed` notifications validate `threadId`.
+
+`thread/list` and `thread/loaded/list` validate upstream pagination params, cursors, limits, sort/filter enums, and response arrays. `thread/list` returns `Thread` objects, while `thread/loaded/list` returns loaded thread id strings.
 
 `item/plan/delta` is admitted as the upstream streaming payload shape. Completed `plan` items are validated through the shared `ThreadItem` shape; their `text` is authoritative and may not match the concatenation of streamed deltas.
 

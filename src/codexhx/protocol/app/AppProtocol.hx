@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "turn/start", "turn/interrupt", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read"];
-    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/read,thread/start,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-055";
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "turn/start", "turn/interrupt", "thread/list", "thread/loaded/list", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read"];
+    static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/archived", "thread/unarchived", "thread/closed", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/archive,thread/fork,thread/list,thread/loaded/list,thread/read,thread/resume,thread/start,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/started,thread/status/changed,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-056";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -109,10 +109,20 @@ class AppProtocol {
         if (!result.ok) return result.toOutcome();
 
         return switch fixtureMethod {
-            case "thread/start" | "thread/read":
+            case "thread/start" | "thread/read" | "thread/unarchive":
                 final thread = requiredObjectField(result.keys, result.values, "thread", "$.message.result.thread");
                 if (!thread.ok) return thread.toOutcome();
                 validateThread(thread, "$.message.result.thread");
+            case "thread/resume" | "thread/fork":
+                validateThreadOpenResponse(result, "$.message.result", "response:" + fixtureMethod);
+            case "thread/archive":
+                validateEmptyObject(result, "$.message.result", "response:thread/archive");
+            case "thread/unsubscribe":
+                validateThreadUnsubscribeResponse(result);
+            case "thread/list":
+                validateThreadListResponse(result);
+            case "thread/loaded/list":
+                validateThreadLoadedListResponse(result);
             case "turn/start":
                 final turn = requiredObjectField(result.keys, result.values, "turn", "$.message.result.turn");
                 if (!turn.ok) return turn.toOutcome();
@@ -192,6 +202,8 @@ class AppProtocol {
                 final status = requiredObjectField(params.keys, params.values, "status", "$.message.params.status");
                 if (!status.ok) return status.toOutcome();
                 validateThreadStatus(status, "$.message.params.status");
+            case "thread/archived" | "thread/unarchived" | "thread/closed":
+                validateThreadIdNotification(params, fixtureMethod);
             case "thread/compacted":
                 validateContextCompactedNotification(params);
             case "turn/started" | "turn/completed":
@@ -337,6 +349,14 @@ class AppProtocol {
         return switch method {
             case "thread/start":
                 success("params:thread/start");
+            case "thread/resume" | "thread/fork":
+                validateThreadOpenParams(params, method);
+            case "thread/archive" | "thread/unarchive" | "thread/unsubscribe":
+                validateThreadIdParams(params, method);
+            case "thread/list":
+                validateThreadListParams(params);
+            case "thread/loaded/list":
+                validateThreadLoadedListParams(params);
             case "turn/start":
                 final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
                 if (!threadId.ok) return threadId.toOutcome();
@@ -476,6 +496,140 @@ class AppProtocol {
             return success("status:" + statusType.value);
         }
         return fail("invalid_thread_status", path + ".type", "unsupported thread status");
+    }
+
+    static function validateThreadIdParams(params:ProtocolObjectField, method:String):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        return success("params:" + method);
+    }
+
+    static function validateThreadOpenParams(params:ProtocolObjectField, method:String):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        for (field in ["cwd", "model", "modelProvider", "baseInstructions", "developerInstructions", "serviceTier"]) {
+            final result = validateOptionalNullableString(params, field, "$.message.params." + field);
+            if (!result.ok) return result;
+        }
+        final approvalPolicy = validateOptionalAskForApproval(params, "approvalPolicy", "$.message.params.approvalPolicy");
+        if (!approvalPolicy.ok) return approvalPolicy;
+        final approvalsReviewer = validateOptionalNullableStringEnum(params, "approvalsReviewer", "$.message.params.approvalsReviewer", ["user", "auto_review", "guardian_subagent"], "invalid_approvals_reviewer");
+        if (!approvalsReviewer.ok) return approvalsReviewer;
+        final sandbox = validateOptionalNullableStringEnum(params, "sandbox", "$.message.params.sandbox", ["read-only", "workspace-write", "danger-full-access"], "invalid_sandbox_mode");
+        if (!sandbox.ok) return sandbox;
+        final personality = validateOptionalNullableStringEnum(params, "personality", "$.message.params.personality", ["none", "friendly", "pragmatic"], "invalid_personality");
+        if (!personality.ok) return personality;
+        final config = validateOptionalNullableObject(params, "config", "$.message.params.config");
+        if (!config.ok) return config;
+        final ephemeral = validateOptionalBool(params, "ephemeral", "$.message.params.ephemeral");
+        if (!ephemeral.ok) return ephemeral;
+        final threadSource = validateOptionalNullableString(params, "threadSource", "$.message.params.threadSource");
+        if (!threadSource.ok) return threadSource;
+        return success("params:" + method);
+    }
+
+    static function validateThreadOpenResponse(result:ProtocolObjectField, path:String, label:String):AppProtocolParseOutcome {
+        final thread = requiredObjectField(result.keys, result.values, "thread", path + ".thread");
+        if (!thread.ok) return thread.toOutcome();
+        final threadResult = validateThread(thread, path + ".thread");
+        if (!threadResult.ok) return threadResult;
+        final approval = validateRequiredAskForApproval(result, "approvalPolicy", path + ".approvalPolicy");
+        if (!approval.ok) return approval;
+        final approvalsReviewer = validateRequiredStringEnum(result.keys, result.values, "approvalsReviewer", path + ".approvalsReviewer", ["user", "auto_review", "guardian_subagent"], "invalid_approvals_reviewer");
+        if (!approvalsReviewer.ok) return approvalsReviewer;
+        for (field in ["cwd", "model", "modelProvider"]) {
+            final text = requiredString(result.keys, result.values, field, path + "." + field);
+            if (!text.ok) return text.toOutcome();
+        }
+        final sandbox = validateRequiredSandboxPolicy(result, "sandbox", path + ".sandbox");
+        if (!sandbox.ok) return sandbox;
+        final instructionSources = validateOptionalStringArray(result, "instructionSources", path + ".instructionSources", false);
+        if (!instructionSources.ok) return instructionSources;
+        final reasoningEffort = validateOptionalNullableNonEmptyString(result, "reasoningEffort", path + ".reasoningEffort");
+        if (!reasoningEffort.ok) return reasoningEffort;
+        final serviceTier = validateOptionalNullableString(result, "serviceTier", path + ".serviceTier");
+        if (!serviceTier.ok) return serviceTier;
+        return success(label);
+    }
+
+    static function validateThreadUnsubscribeResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final status = requiredString(result.keys, result.values, "status", "$.message.result.status");
+        if (!status.ok) return status.toOutcome();
+        if (!contains(["notLoaded", "notSubscribed", "unsubscribed"], status.value)) return fail("invalid_thread_unsubscribe_status", "$.message.result.status", "unsupported unsubscribe status");
+        return success("response:thread/unsubscribe");
+    }
+
+    static function validateThreadListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final archived = validateOptionalNullableBool(params, "archived", "$.message.params.archived");
+        if (!archived.ok) return archived;
+        final cursor = validateOptionalNullableString(params, "cursor", "$.message.params.cursor");
+        if (!cursor.ok) return cursor;
+        final limit = validateOptionalNullableUInt(params, "limit", "$.message.params.limit");
+        if (!limit.ok) return limit;
+        final searchTerm = validateOptionalNullableString(params, "searchTerm", "$.message.params.searchTerm");
+        if (!searchTerm.ok) return searchTerm;
+        final sortDirection = validateOptionalNullableStringEnum(params, "sortDirection", "$.message.params.sortDirection", ["asc", "desc"], "invalid_sort_direction");
+        if (!sortDirection.ok) return sortDirection;
+        final sortKey = validateOptionalNullableStringEnum(params, "sortKey", "$.message.params.sortKey", ["created_at", "updated_at"], "invalid_thread_sort_key");
+        if (!sortKey.ok) return sortKey;
+        final useStateDbOnly = validateOptionalBool(params, "useStateDbOnly", "$.message.params.useStateDbOnly");
+        if (!useStateDbOnly.ok) return useStateDbOnly;
+        final cwd = validateOptionalThreadListCwd(params, "cwd", "$.message.params.cwd");
+        if (!cwd.ok) return cwd;
+        final modelProviders = validateOptionalStringArray(params, "modelProviders", "$.message.params.modelProviders", true);
+        if (!modelProviders.ok) return modelProviders;
+        final sourceKinds = validateOptionalThreadSourceKindArray(params, "sourceKinds", "$.message.params.sourceKinds");
+        if (!sourceKinds.ok) return sourceKinds;
+        return success("params:thread/list");
+    }
+
+    static function validateThreadLoadedListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final cursor = validateOptionalNullableString(params, "cursor", "$.message.params.cursor");
+        if (!cursor.ok) return cursor;
+        final limit = validateOptionalNullableUInt(params, "limit", "$.message.params.limit");
+        if (!limit.ok) return limit;
+        return success("params:thread/loaded/list");
+    }
+
+    static function validateThreadListResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final data = requiredArray(result.keys, result.values, "data", "$.message.result.data");
+        if (!data.ok) return data.toOutcome();
+        var i = 0;
+        while (i < data.values.length) {
+            final thread = requireObject(data.values[i], "$.message.result.data[" + Std.string(i) + "]");
+            if (!thread.ok) return thread.toOutcome();
+            final threadResult = validateThread(thread, "$.message.result.data[" + Std.string(i) + "]");
+            if (!threadResult.ok) return threadResult;
+            i = i + 1;
+        }
+        for (field in ["nextCursor", "backwardsCursor"]) {
+            final cursor = validateOptionalNullableString(result, field, "$.message.result." + field);
+            if (!cursor.ok) return cursor;
+        }
+        return success("response:thread/list");
+    }
+
+    static function validateThreadLoadedListResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final data = requiredArray(result.keys, result.values, "data", "$.message.result.data");
+        if (!data.ok) return data.toOutcome();
+        var i = 0;
+        while (i < data.values.length) {
+            switch data.values[i] {
+                case JString(_):
+                case _:
+                    return fail("expected_string", "$.message.result.data[" + Std.string(i) + "]", "expected JSON string");
+            }
+            i = i + 1;
+        }
+        final nextCursor = validateOptionalNullableString(result, "nextCursor", "$.message.result.nextCursor");
+        if (!nextCursor.ok) return nextCursor;
+        return success("response:thread/loaded/list");
+    }
+
+    static function validateThreadIdNotification(params:ProtocolObjectField, method:String):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        return success("notification:" + method);
     }
 
     static function validateTranscriptItem(item:ProtocolObjectField, path:String):AppProtocolParseOutcome {
@@ -1486,6 +1640,35 @@ class AppProtocol {
                 success("ask-for-approval:granular");
             case _:
                 fail("expected_approval_policy", path, "expected approval policy string, granular object, or null");
+        }
+    }
+
+    static function validateRequiredAskForApproval(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return fail("missing_field", path, "required field is missing");
+        return switch object.values[i] {
+            case JNull:
+                fail("expected_approval_policy", path, "expected approval policy string or granular object");
+            case _:
+                validateOptionalAskForApproval(ProtocolObjectField.success([name], [object.values[i]]), name, path);
+        }
+    }
+
+    static function validateRequiredStringEnum(keys:Array<String>, values:Array<Value>, name:String, path:String, options:Array<String>, errorCode:String):AppProtocolParseOutcome {
+        final field = requiredString(keys, values, name, path);
+        if (!field.ok) return field.toOutcome();
+        if (!contains(options, field.value)) return fail(errorCode, path, "unsupported enum value");
+        return success("required-string-enum");
+    }
+
+    static function validateRequiredSandboxPolicy(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return fail("missing_field", path, "required field is missing");
+        return switch object.values[i] {
+            case JObject(keys, values):
+                validateOptionalCommandExecSandboxPolicy(ProtocolObjectField.success([name], [JObject(keys, values)]), name, path);
+            case _:
+                fail("expected_object", path, "expected JSON object");
         }
     }
 
@@ -2920,6 +3103,32 @@ class AppProtocol {
             case _:
                 if (nullable) fail("expected_nullable_array", path, "expected JSON array or null") else fail("expected_array", path, "expected JSON array");
         }
+    }
+
+    static function validateOptionalThreadListCwd(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("thread-list-cwd:missing");
+        return switch object.values[i] {
+            case JNull | JString(_):
+                success("thread-list-cwd");
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    switch entries[entryIndex] {
+                        case JString(_):
+                        case _:
+                            return fail("expected_string", path + "[" + Std.string(entryIndex) + "]", "expected JSON string");
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("thread-list-cwd:array");
+            case _:
+                fail("expected_nullable_string_or_array", path, "expected JSON string, string array, or null");
+        }
+    }
+
+    static function validateOptionalThreadSourceKindArray(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        return validateOptionalNullableStringEnumArray(object, name, path, ["cli", "vscode", "exec", "appServer", "subAgent", "subAgentReview", "subAgentCompact", "subAgentThreadSpawn", "subAgentOther", "unknown"], "invalid_thread_source_kind");
     }
 
     static function validateOptionalStringMap(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {

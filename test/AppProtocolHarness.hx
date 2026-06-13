@@ -20,6 +20,13 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "\"schema\":\"codex-hxrust.app-protocol-fingerprint.v1\"");
         assertContains(fingerprintJson, "\"fingerprint\":\"" + AppProtocol.schemaFingerprint() + "\"");
         assertContains(fingerprintJson, "thread/start");
+        assertContains(fingerprintJson, "thread/resume");
+        assertContains(fingerprintJson, "thread/fork");
+        assertContains(fingerprintJson, "thread/archive");
+        assertContains(fingerprintJson, "thread/unarchive");
+        assertContains(fingerprintJson, "thread/unsubscribe");
+        assertContains(fingerprintJson, "thread/list");
+        assertContains(fingerprintJson, "thread/loaded/list");
         assertContains(fingerprintJson, "windowsSandbox/setupStart");
         assertContains(fingerprintJson, "windowsSandbox/readiness");
         assertContains(fingerprintJson, "account/login/start");
@@ -47,6 +54,9 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
+        assertContains(fingerprintJson, "thread/archived");
+        assertContains(fingerprintJson, "thread/unarchived");
+        assertContains(fingerprintJson, "thread/closed");
         assertContains(fingerprintJson, "thread/compacted");
         assertContains(fingerprintJson, "item/completed");
         assertContains(fingerprintJson, "item/agentMessage/delta");
@@ -97,7 +107,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("110", Std.string(items.length));
+        assertEquals("127", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -118,9 +128,9 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("28", Std.string(requests));
-        assertEquals("28", Std.string(responses));
-        assertEquals("53", Std.string(notifications));
+        assertEquals("35", Std.string(requests));
+        assertEquals("35", Std.string(responses));
+        assertEquals("56", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
 
@@ -136,6 +146,31 @@ class AppProtocolHarness {
         assertFalse(unsupported.ok, "image input must fail in this text-only subset");
         assertEquals("unsupported_user_input", unsupported.errorCode);
         assertEquals("$.message.params.input[0].type", unsupported.errorPath);
+
+        final missingThreadResumeId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-resume-missing-thread-id\",\"kind\":\"request\",\"method\":\"thread/resume\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"resume-1\",\"method\":\"thread/resume\",\"params\":{\"cwd\":\"/tmp/codex-hxrust\"}}}")));
+        assertFalse(missingThreadResumeId.ok, "thread/resume must include threadId");
+        assertEquals("missing_field", missingThreadResumeId.errorCode);
+        assertEquals("$.message.params.threadId", missingThreadResumeId.errorPath);
+
+        final invalidThreadUnsubscribeStatus = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-unsubscribe-invalid-status\",\"kind\":\"response\",\"method\":\"thread/unsubscribe\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"unsubscribe-1\",\"result\":{\"status\":\"gone\"}}}")));
+        assertFalse(invalidThreadUnsubscribeStatus.ok, "thread/unsubscribe status must use upstream enum values");
+        assertEquals("invalid_thread_unsubscribe_status", invalidThreadUnsubscribeStatus.errorCode);
+        assertEquals("$.message.result.status", invalidThreadUnsubscribeStatus.errorPath);
+
+        final invalidThreadListLimit = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-list-invalid-limit\",\"kind\":\"request\",\"method\":\"thread/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"thread-list-1\",\"method\":\"thread/list\",\"params\":{\"limit\":-1}}}")));
+        assertFalse(invalidThreadListLimit.ok, "thread/list limit must be unsigned when present");
+        assertEquals("expected_uint", invalidThreadListLimit.errorCode);
+        assertEquals("$.message.params.limit", invalidThreadListLimit.errorPath);
+
+        final invalidThreadLoadedListData = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-loaded-list-invalid-data\",\"kind\":\"response\",\"method\":\"thread/loaded/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"thread-loaded-list-1\",\"result\":{\"data\":[7]}}}")));
+        assertFalse(invalidThreadLoadedListData.ok, "thread/loaded/list data entries must be thread id strings");
+        assertEquals("expected_string", invalidThreadLoadedListData.errorCode);
+        assertEquals("$.message.result.data[0]", invalidThreadLoadedListData.errorPath);
+
+        final missingThreadArchivedId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-archived-missing-thread-id\",\"kind\":\"notification\",\"method\":\"thread/archived\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/archived\",\"params\":{}}}")));
+        assertFalse(missingThreadArchivedId.ok, "thread/archived must include threadId");
+        assertEquals("missing_field", missingThreadArchivedId.errorCode);
+        assertEquals("$.message.params.threadId", missingThreadArchivedId.errorPath);
     }
 
     static function validatesPlanUpdates():Void {
