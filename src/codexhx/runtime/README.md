@@ -260,6 +260,18 @@ The fixture `fixtures/hxrust/thread-read-resume-idle-continuation.v1.json` and `
 
 The fixture `fixtures/hxrust/thread-read-goal-steering.v1.json` and `harness/check-thread-read-goal-steering.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not start turns, inject active-turn steering, own extension stores, or implement Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-goal-steering.md`.
 
+## Thread/Read Try Start Turn If Idle
+
+`codexhx.runtime.app.threadread.ThreadReadTryStartTurnIfIdlePolicy` is the HXCX-4.27 raw upstream host admission slice for `CodexThread::try_start_turn_if_idle`:
+
+- accepted automatic idle work reserves the active turn, injects the emitted goal steering item as pending input, and starts a regular task;
+- active regular turns and active review turns both reject as busy;
+- Plan mode and pending trigger-turn mailbox checks reject before reservation and at the upstream recheck points;
+- reservation loss before task start rejects as busy after clearing the reservation;
+- rejected starts preserve the original steering item summary unchanged.
+
+The fixture `fixtures/hxrust/thread-read-try-start-turn-if-idle.v1.json` and `harness/check-thread-read-try-start-turn-if-idle.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own live `Session`, `InputQueue`, `ActiveTurn`, task spawning, async scheduling, JSON-RPC transport, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-try-start-turn-if-idle.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

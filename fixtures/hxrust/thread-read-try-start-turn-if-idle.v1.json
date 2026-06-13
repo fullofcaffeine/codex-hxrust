@@ -1,0 +1,420 @@
+{
+  "schema": "codex-hxrust.thread-read-try-start-turn-if-idle-fixture.v1",
+  "bead": "HXCX-4.27",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/core/src/codex_thread.rs",
+      "symbols": [
+        "TryStartTurnIfIdleRejectionReason",
+        "TryStartTurnIfIdleError",
+        "CodexThread::try_start_turn_if_idle"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/core/src/session/inject.rs",
+      "symbols": [
+        "Session::try_start_turn_if_idle",
+        "has_trigger_turn_mailbox_items",
+        "CollaborationMode::Plan",
+        "ActiveTurn::default",
+        "extend_pending_input_for_turn_state",
+        "RegularTask::new"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/core/src/session/tests.rs",
+      "symbols": [
+        "try_start_turn_if_idle_rejects_active_turn_without_injecting",
+        "try_start_turn_if_idle_rejects_plan_mode_without_injecting",
+        "try_start_turn_if_idle_rejects_pending_trigger_turn_without_injecting",
+        "try_start_turn_if_idle_rejects_active_review_turn_without_injecting"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "idle-active-goal-starts-regular-task",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "none",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "accepted_regular_turn_started",
+        "accepted": true,
+        "rejected": false,
+        "reason": "none",
+        "reservationCreated": true,
+        "reservationCleared": false,
+        "pendingInputInjected": true,
+        "regularTaskStarted": true,
+        "returnedItemUnchanged": false,
+        "returnedItemSummaryContains": "kind=continuation",
+        "summaryContains": "sequence=steering/item->idle/reserve->pending/input/extend->regular/task/start"
+      }
+    },
+    {
+      "id": "active-regular-turn-rejects-busy",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "regular",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "rejected_busy",
+        "accepted": false,
+        "rejected": true,
+        "reason": "busy",
+        "reservationCreated": false,
+        "reservationCleared": false,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": true,
+        "returnedItemSummaryContains": "kind=continuation",
+        "summaryContains": "message=active regular turn keeps the original steering item untouched"
+      }
+    },
+    {
+      "id": "active-review-turn-rejects-busy",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "review",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "rejected_busy",
+        "accepted": false,
+        "rejected": true,
+        "reason": "busy",
+        "reservationCreated": false,
+        "reservationCleared": false,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": true,
+        "returnedItemSummaryContains": "kind=continuation",
+        "summaryContains": "active review turn maps to the same busy rejection"
+      }
+    },
+    {
+      "id": "plan-mode-before-reservation-rejects-plan",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": true,
+        "activeTaskKind": "none",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "rejected_plan_mode",
+        "accepted": false,
+        "rejected": true,
+        "reason": "plan_mode",
+        "reservationCreated": false,
+        "reservationCleared": false,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": true,
+        "returnedItemSummaryContains": "kind=continuation",
+        "summaryContains": "plan collaboration mode rejects automatic idle work before reservation"
+      }
+    },
+    {
+      "id": "pending-trigger-before-reservation-rejects-pending-mailbox",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": true,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "none",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "rejected_pending_trigger_turn",
+        "accepted": false,
+        "rejected": true,
+        "reason": "pending_trigger_turn",
+        "reservationCreated": false,
+        "reservationCleared": false,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": true,
+        "returnedItemSummaryContains": "kind=continuation",
+        "summaryContains": "pending trigger-turn mailbox is prioritized before automatic idle work"
+      }
+    },
+    {
+      "id": "pending-trigger-after-reservation-clears-reservation",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "none",
+        "pendingTriggerTurnAfterReservation": true,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "rejected_pending_trigger_turn",
+        "accepted": false,
+        "rejected": true,
+        "reason": "pending_trigger_turn",
+        "reservationCreated": true,
+        "reservationCleared": true,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": true,
+        "returnedItemSummaryContains": "kind=continuation",
+        "summaryContains": "sequence=steering/item->idle/reserve->idle/reservation/clear->reject:pending_trigger_turn"
+      }
+    },
+    {
+      "id": "plan-mode-after-turn-context-clears-reservation",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "none",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": true,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "rejected_plan_mode",
+        "accepted": false,
+        "rejected": true,
+        "reason": "plan_mode",
+        "reservationCreated": true,
+        "reservationCleared": true,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": true,
+        "returnedItemSummaryContains": "kind=continuation",
+        "summaryContains": "turn context observed plan mode and cleared the idle reservation"
+      }
+    },
+    {
+      "id": "pending-trigger-after-turn-context-clears-reservation",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "none",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": true,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "rejected_pending_trigger_turn",
+        "accepted": false,
+        "rejected": true,
+        "reason": "pending_trigger_turn",
+        "reservationCreated": true,
+        "reservationCleared": true,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": true,
+        "returnedItemSummaryContains": "kind=continuation",
+        "summaryContains": "pending trigger-turn mailbox is rechecked before task start"
+      }
+    },
+    {
+      "id": "reservation-lost-before-start-rejects-busy",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "none",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "rejected_busy",
+        "accepted": false,
+        "rejected": true,
+        "reason": "busy",
+        "reservationCreated": true,
+        "reservationCleared": true,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": true,
+        "returnedItemSummaryContains": "kind=continuation",
+        "summaryContains": "idle reservation was lost before task start"
+      }
+    },
+    {
+      "id": "empty-input-returns-ok-without-task",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "started",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": true,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "none",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "empty_input_noop",
+        "accepted": false,
+        "rejected": false,
+        "reason": "none",
+        "reservationCreated": false,
+        "reservationCleared": false,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": false,
+        "returnedItemSummaryContains": "item=none",
+        "summaryContains": "empty input returns Ok without reserving a turn"
+      }
+    },
+    {
+      "id": "missing-steering-item-fails-closed",
+      "steering": {
+        "kind": "continuation",
+        "goalStatus": "paused",
+        "goalVariant": "budgeted",
+        "continuationDecision": "snapshot_only",
+        "objectiveChanged": false
+      },
+      "host": {
+        "inputEmpty": false,
+        "pendingTriggerTurnBeforeReservation": false,
+        "collaborationPlanModeBeforeReservation": false,
+        "activeTaskKind": "none",
+        "pendingTriggerTurnAfterReservation": false,
+        "collaborationPlanModeAfterTurnContext": false,
+        "pendingTriggerTurnAfterTurnContext": false,
+        "reservationLostBeforeStart": false
+      },
+      "expect": {
+        "ok": false,
+        "code": "steering_item_not_available",
+        "accepted": false,
+        "rejected": false,
+        "reason": "none",
+        "reservationCreated": false,
+        "reservationCleared": false,
+        "pendingInputInjected": false,
+        "regularTaskStarted": false,
+        "returnedItemUnchanged": false,
+        "returnedItemSummaryContains": "item=none",
+        "summaryContains": "try_start_turn_if_idle requires an emitted steering response item"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 11,
+    "acceptedCount": 1,
+    "rejectedCount": 8,
+    "noopCount": 1,
+    "failureCount": 1,
+    "returnedUnchangedCount": 8,
+    "summaryContains": "schema=codex-hxrust.thread-read-try-start-turn-if-idle-report.v1;cases=11;accepted=1;rejected=8;noop=1;failed=1;returnedUnchanged=8"
+  }
+}

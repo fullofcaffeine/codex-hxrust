@@ -301,7 +301,19 @@ Model the selected contextual user fragment submitted by goal runtime:
 
 Status: HXCX-4.26 now owns `fixtures/hxrust/thread-read-goal-steering.v1.json` and validates the slice through `harness/check-thread-read-goal-steering.sh`. No new haxe.rust limitation was exposed. This is steering-item evidence only, not live turn start, active-turn injection, full template-engine ownership, JSON-RPC transport, or Cafex behavior.
 
-### HXCX-4.27+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.27: Try Start Turn If Idle Admission
+
+Model the selected host admission behavior behind goal continuation:
+
+- empty input returns Ok without reserving a turn;
+- pending trigger-turn mailbox and Plan mode reject before reservation;
+- active regular turns and active Review turns reject as busy while preserving the original input;
+- pending trigger-turn, Plan mode, and lost reservation rechecks clear reservations before rejecting;
+- accepted automatic work injects the steering item as pending input and starts a regular task.
+
+Status: HXCX-4.27 now owns `fixtures/hxrust/thread-read-try-start-turn-if-idle.v1.json` and validates the slice through `harness/check-thread-read-try-start-turn-if-idle.sh`. No new haxe.rust limitation was exposed. This is host-admission evidence only, not live `Session`, `InputQueue`, async task spawning, JSON-RPC transport, or Cafex behavior.
+
+### HXCX-4.28+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
