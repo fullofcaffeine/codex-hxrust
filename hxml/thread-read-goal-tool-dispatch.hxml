@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/thread-read-goal-tool-dispatch
+-D rust_crate=codex_hxrust_thread_read_goal_tool_dispatch
+-D rust_cargo_subcommand=check
+-main ThreadReadGoalToolDispatchHarness

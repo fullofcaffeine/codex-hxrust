@@ -449,6 +449,18 @@ The fixture `fixtures/hxrust/thread-read-create-goal-tool.v1.json` and `harness/
 
 The fixture `fixtures/hxrust/thread-read-update-goal-tool.v1.json` and `harness/check-thread-read-update-goal-tool.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is selected update-tool evidence only; it does not own production SQLite/log state, real async locks, full analytics/event implementations, credentialed model/provider behavior, create_goal behavior, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-update-goal-tool.md`.
 
+## Thread/Read Goal Tool Dispatch
+
+`codexhx.runtime.app.threadread.ThreadReadGoalToolDispatchPolicy` is the HXCX-4.42 raw upstream goal tool executor dispatch slice:
+
+- `get_goal`, `create_goal`, and `update_goal` tool names are modeled as `ThreadReadGoalToolKind`;
+- selected spec facts are typed: non-strict function tools, closed parameters, required fields, and the `complete|blocked` update status enum;
+- dispatch delegates to the existing get/create/update policies without duplicating their behavior;
+- all three tools expose the shared structured response shape: goal, remaining tokens, and completion budget report;
+- update events preserve call-id propagation and complete versus blocked completion-report behavior.
+
+The fixture `fixtures/hxrust/thread-read-goal-tool-dispatch.v1.json` and `harness/check-thread-read-goal-tool-dispatch.sh` prove the trio through the Haxe interpreter and portable haxe.rust-generated Rust. This is selected executor-surface evidence only; it does not own production SQLite/log state, real async locks, full analytics/event implementations, credentialed model/provider behavior, full runtime wiring, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-goal-tool-dispatch.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

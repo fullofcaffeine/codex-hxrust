@@ -1,0 +1,396 @@
+{
+  "schema": "codex-hxrust.thread-read-goal-tool-dispatch-fixture.v1",
+  "upstreamReferences": [
+    "../codex/codex-rs/ext/goal/src/tool.rs:75",
+    "../codex/codex-rs/ext/goal/src/tool.rs:134",
+    "../codex/codex-rs/ext/goal/src/tool.rs:151",
+    "../codex/codex-rs/ext/goal/src/spec.rs:9"
+  ],
+  "cases": [
+    {
+      "name": "dispatch-get-missing",
+      "request": {
+        "toolName": "get_goal",
+        "get": {
+          "threadId": "thread-dispatch",
+          "argumentsJson": "{}",
+          "dbOutcomeKind": "missing",
+          "dbErrorMessage": "",
+          "goal": null
+        }
+      },
+      "expect": {
+        "toolName": "get_goal",
+        "specMatchesDispatch": true,
+        "requiredFields": "",
+        "statusEnum": "",
+        "strict": false,
+        "closedParameters": true,
+        "responseShape": "goal,remainingTokens,completionBudgetReport",
+        "ok": true,
+        "code": "goal_missing_response",
+        "threadId": "thread-dispatch",
+        "turnId": "",
+        "callId": "",
+        "functionCallErrorKind": "",
+        "goalPresent": false,
+        "hasRemainingTokens": false,
+        "remainingTokens": 0,
+        "hasCompletionBudgetReport": false,
+        "eventEmitted": false,
+        "summaryContains": "GoalToolKind::Get"
+      }
+    },
+    {
+      "name": "dispatch-create-active-goal",
+      "request": {
+        "toolName": "create_goal",
+        "create": {
+          "threadId": "thread-dispatch",
+          "turnId": "turn-create",
+          "argumentsJson": "{\"objective\":\"  Port raw Codex goal tools  \",\"token_budget\":1000}",
+          "insertOutcomeKind": "inserted",
+          "insertErrorMessage": "",
+          "previewOutcomeKind": "updated",
+          "previewErrorMessage": "",
+          "insertedGoal": {
+            "threadId": "thread-dispatch",
+            "objective": "Port raw Codex goal tools",
+            "status": "active",
+            "tokenBudget": 1000,
+            "tokensUsed": 120,
+            "timeUsedSeconds": 15,
+            "createdAt": 10,
+            "updatedAt": 20
+          }
+        }
+      },
+      "expect": {
+        "toolName": "create_goal",
+        "specMatchesDispatch": true,
+        "requiredFields": "objective",
+        "statusEnum": "",
+        "strict": false,
+        "closedParameters": true,
+        "responseShape": "goal,remainingTokens,completionBudgetReport",
+        "ok": true,
+        "code": "goal_created",
+        "threadId": "thread-dispatch",
+        "turnId": "turn-create",
+        "callId": "",
+        "functionCallErrorKind": "",
+        "goalPresent": true,
+        "hasRemainingTokens": true,
+        "remainingTokens": 880,
+        "hasCompletionBudgetReport": false,
+        "eventEmitted": true,
+        "summaryContains": "GoalToolKind::Create"
+      }
+    },
+    {
+      "name": "dispatch-get-active-goal",
+      "request": {
+        "toolName": "get_goal",
+        "get": {
+          "threadId": "thread-dispatch",
+          "argumentsJson": "{}",
+          "dbOutcomeKind": "found",
+          "dbErrorMessage": "",
+          "goal": {
+            "threadId": "thread-dispatch",
+            "objective": "Port raw Codex goal tools",
+            "status": "active",
+            "tokenBudget": 1000,
+            "tokensUsed": 120,
+            "timeUsedSeconds": 15,
+            "createdAt": 10,
+            "updatedAt": 20
+          }
+        }
+      },
+      "expect": {
+        "toolName": "get_goal",
+        "specMatchesDispatch": true,
+        "requiredFields": "",
+        "statusEnum": "",
+        "strict": false,
+        "closedParameters": true,
+        "responseShape": "goal,remainingTokens,completionBudgetReport",
+        "ok": true,
+        "code": "goal_read_response",
+        "threadId": "thread-dispatch",
+        "turnId": "",
+        "callId": "",
+        "functionCallErrorKind": "",
+        "goalPresent": true,
+        "hasRemainingTokens": true,
+        "remainingTokens": 880,
+        "hasCompletionBudgetReport": false,
+        "eventEmitted": false,
+        "summaryContains": "goal_response:omit_completion_budget_report"
+      }
+    },
+    {
+      "name": "dispatch-update-complete-with-report",
+      "request": {
+        "toolName": "update_goal",
+        "update": {
+          "threadId": "thread-dispatch",
+          "turnId": "turn-complete",
+          "callId": "call-complete",
+          "argumentsJson": "{\"status\":\"complete\"}",
+          "accountingOutcomeKind": "updated",
+          "accountingErrorMessage": "",
+          "metricsReadOutcomeKind": "found",
+          "metricsReadErrorMessage": "",
+          "previousStatus": "active",
+          "updateOutcomeKind": "updated",
+          "updateErrorMessage": "",
+          "clearedTurnId": "turn-complete",
+          "updatedGoal": {
+            "threadId": "thread-dispatch",
+            "objective": "Port raw Codex goal tools",
+            "status": "complete",
+            "tokenBudget": 1000,
+            "tokensUsed": 430,
+            "timeUsedSeconds": 75,
+            "createdAt": 10,
+            "updatedAt": 30
+          }
+        }
+      },
+      "expect": {
+        "toolName": "update_goal",
+        "specMatchesDispatch": true,
+        "requiredFields": "status",
+        "statusEnum": "complete,blocked",
+        "strict": false,
+        "closedParameters": true,
+        "responseShape": "goal,remainingTokens,completionBudgetReport",
+        "ok": true,
+        "code": "goal_updated_complete",
+        "threadId": "thread-dispatch",
+        "turnId": "turn-complete",
+        "callId": "call-complete",
+        "functionCallErrorKind": "",
+        "goalPresent": true,
+        "hasRemainingTokens": true,
+        "remainingTokens": 570,
+        "hasCompletionBudgetReport": true,
+        "eventEmitted": true,
+        "summaryContains": "thread_goal_updated:call-complete"
+      }
+    },
+    {
+      "name": "dispatch-update-blocked-without-report",
+      "request": {
+        "toolName": "update_goal",
+        "update": {
+          "threadId": "thread-dispatch",
+          "turnId": "turn-blocked",
+          "callId": "call-blocked",
+          "argumentsJson": "{\"status\":\"blocked\"}",
+          "accountingOutcomeKind": "no_snapshot",
+          "accountingErrorMessage": "",
+          "metricsReadOutcomeKind": "missing",
+          "metricsReadErrorMessage": "",
+          "previousStatus": "",
+          "updateOutcomeKind": "updated",
+          "updateErrorMessage": "",
+          "clearedTurnId": "turn-blocked",
+          "updatedGoal": {
+            "threadId": "thread-dispatch",
+            "objective": "Wait for upstream fixture",
+            "status": "blocked",
+            "tokenBudget": null,
+            "tokensUsed": 0,
+            "timeUsedSeconds": 0,
+            "createdAt": 40,
+            "updatedAt": 45
+          }
+        }
+      },
+      "expect": {
+        "toolName": "update_goal",
+        "specMatchesDispatch": true,
+        "requiredFields": "status",
+        "statusEnum": "complete,blocked",
+        "strict": false,
+        "closedParameters": true,
+        "responseShape": "goal,remainingTokens,completionBudgetReport",
+        "ok": true,
+        "code": "goal_updated_blocked",
+        "threadId": "thread-dispatch",
+        "turnId": "turn-blocked",
+        "callId": "call-blocked",
+        "functionCallErrorKind": "",
+        "goalPresent": true,
+        "hasRemainingTokens": false,
+        "remainingTokens": 0,
+        "hasCompletionBudgetReport": false,
+        "eventEmitted": true,
+        "summaryContains": "goal_response:omit_completion_budget_report"
+      }
+    },
+    {
+      "name": "dispatch-create-unfinished-goal-error",
+      "request": {
+        "toolName": "create_goal",
+        "create": {
+          "threadId": "thread-dispatch",
+          "turnId": "turn-create-duplicate",
+          "argumentsJson": "{\"objective\":\"Start another goal\"}",
+          "insertOutcomeKind": "unfinished_goal",
+          "insertErrorMessage": "",
+          "previewOutcomeKind": "not_attempted",
+          "previewErrorMessage": "",
+          "insertedGoal": null
+        }
+      },
+      "expect": {
+        "toolName": "create_goal",
+        "specMatchesDispatch": true,
+        "requiredFields": "objective",
+        "statusEnum": "",
+        "strict": false,
+        "closedParameters": true,
+        "responseShape": "goal,remainingTokens,completionBudgetReport",
+        "ok": false,
+        "code": "unfinished_goal_exists",
+        "threadId": "thread-dispatch",
+        "turnId": "turn-create-duplicate",
+        "callId": "",
+        "functionCallErrorKind": "respond_to_model",
+        "goalPresent": false,
+        "hasRemainingTokens": false,
+        "remainingTokens": 0,
+        "hasCompletionBudgetReport": false,
+        "eventEmitted": false,
+        "summaryContains": "insert_thread_goal:none"
+      }
+    },
+    {
+      "name": "dispatch-update-missing-goal-error",
+      "request": {
+        "toolName": "update_goal",
+        "update": {
+          "threadId": "thread-empty",
+          "turnId": "turn-missing",
+          "callId": "call-missing",
+          "argumentsJson": "{\"status\":\"complete\"}",
+          "accountingOutcomeKind": "no_current_turn",
+          "accountingErrorMessage": "",
+          "metricsReadOutcomeKind": "missing",
+          "metricsReadErrorMessage": "",
+          "previousStatus": "",
+          "updateOutcomeKind": "missing",
+          "updateErrorMessage": "",
+          "clearedTurnId": "",
+          "updatedGoal": null
+        }
+      },
+      "expect": {
+        "toolName": "update_goal",
+        "specMatchesDispatch": true,
+        "requiredFields": "status",
+        "statusEnum": "complete,blocked",
+        "strict": false,
+        "closedParameters": true,
+        "responseShape": "goal,remainingTokens,completionBudgetReport",
+        "ok": false,
+        "code": "goal_update_missing_goal",
+        "threadId": "thread-empty",
+        "turnId": "turn-missing",
+        "callId": "call-missing",
+        "functionCallErrorKind": "respond_to_model",
+        "goalPresent": false,
+        "hasRemainingTokens": false,
+        "remainingTokens": 0,
+        "hasCompletionBudgetReport": false,
+        "eventEmitted": false,
+        "summaryContains": "update_thread_goal:none"
+      }
+    },
+    {
+      "name": "dispatch-get-state-error",
+      "request": {
+        "toolName": "get_goal",
+        "get": {
+          "threadId": "thread-broken",
+          "argumentsJson": "{}",
+          "dbOutcomeKind": "error",
+          "dbErrorMessage": "database unavailable",
+          "goal": null
+        }
+      },
+      "expect": {
+        "toolName": "get_goal",
+        "specMatchesDispatch": true,
+        "requiredFields": "",
+        "statusEnum": "",
+        "strict": false,
+        "closedParameters": true,
+        "responseShape": "goal,remainingTokens,completionBudgetReport",
+        "ok": false,
+        "code": "goal_state_read_error",
+        "threadId": "thread-broken",
+        "turnId": "",
+        "callId": "",
+        "functionCallErrorKind": "respond_to_model",
+        "goalPresent": false,
+        "hasRemainingTokens": false,
+        "remainingTokens": 0,
+        "hasCompletionBudgetReport": false,
+        "eventEmitted": false,
+        "summaryContains": "get_thread_goal:error"
+      }
+    },
+    {
+      "name": "dispatch-create-invalid-arguments",
+      "request": {
+        "toolName": "create_goal",
+        "create": {
+          "threadId": "thread-dispatch",
+          "turnId": "turn-invalid",
+          "argumentsJson": "{\"token_budget\":1000}",
+          "insertOutcomeKind": "inserted",
+          "insertErrorMessage": "",
+          "previewOutcomeKind": "not_attempted",
+          "previewErrorMessage": "",
+          "insertedGoal": null
+        }
+      },
+      "expect": {
+        "toolName": "create_goal",
+        "specMatchesDispatch": true,
+        "requiredFields": "objective",
+        "statusEnum": "",
+        "strict": false,
+        "closedParameters": true,
+        "responseShape": "goal,remainingTokens,completionBudgetReport",
+        "ok": false,
+        "code": "invalid_tool_arguments",
+        "threadId": "thread-dispatch",
+        "turnId": "turn-invalid",
+        "callId": "",
+        "functionCallErrorKind": "respond_to_model",
+        "goalPresent": false,
+        "hasRemainingTokens": false,
+        "remainingTokens": 0,
+        "hasCompletionBudgetReport": false,
+        "eventEmitted": false,
+        "summaryContains": "parse_arguments:error"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 9,
+    "successCount": 5,
+    "errorCount": 4,
+    "eventEmittedCount": 3,
+    "completionBudgetReportCount": 1,
+    "specMismatchCount": 0,
+    "goalPresentCount": 4,
+    "summaryContains": "completionBudgetReports=1"
+  }
+}

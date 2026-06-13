@@ -493,7 +493,20 @@ Model the selected upstream `update_goal` executor path:
 
 Status: HXCX-4.41 now owns `fixtures/hxrust/thread-read-update-goal-tool.v1.json` and validates the slice through `harness/check-thread-read-update-goal-tool.sh`. No new haxe.rust limitation was exposed. This is selected `update_goal` executor evidence only, not production SQLite/log state ownership, real async lock ownership, full analytics/event implementation, model/provider behavior, create_goal behavior, or Cafex behavior.
 
-### HXCX-4.42+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.42: Goal Tool Executor Dispatch
+
+Model the selected upstream `GoalToolExecutor` trio surface:
+
+- constructors select `GoalToolKind::Get`, `Create`, or `Update`;
+- `tool_name` and `spec` expose the matching `get_goal`, `create_goal`, or `update_goal` function tool;
+- `handle` dispatches to the already-modeled get/create/update executor behavior;
+- all three tools preserve the shared structured response fields;
+- create/update success paths emit goal-updated events while get and error paths do not;
+- complete responses include the completion-budget report when budget/time evidence exists, while blocked/get/create responses omit it.
+
+Status: HXCX-4.42 now owns `fixtures/hxrust/thread-read-goal-tool-dispatch.v1.json` and validates the slice through `harness/check-thread-read-goal-tool-dispatch.sh`. No new haxe.rust limitation was exposed. This is selected executor dispatch evidence only, not production SQLite/log state ownership, real async lock ownership, full analytics/event implementation, model/provider behavior, full runtime wiring, or Cafex behavior.
+
+### HXCX-4.43+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
