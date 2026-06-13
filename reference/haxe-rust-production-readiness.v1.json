@@ -12,6 +12,7 @@
       "Resolve haxe.rust-362 nullable Array.shift class-return lowering or carry an explicit release-blocking compiler risk.",
       "Resolve haxe.rust-ojj non-copy class field assign-op lowering or carry an explicit release-blocking compiler risk.",
       "Resolve haxe.rust-fzl non-copy local conditional-result reuse lowering or carry an explicit release-blocking compiler risk.",
+      "Resolve haxe.rust-3f0g static final class field access path lowering or carry an explicit release-blocking compiler risk.",
       "Complete license/distribution review for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts.",
       "Reduce or explicitly native-own the 4 unsupported Cafex seam rows.",
       "Run replacement rollback drills from the operator runbook.",
@@ -32,9 +33,9 @@
     {
       "dimension": "language",
       "score": "yellow_green",
-      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, enum class-payload equality, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metal pressure, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, and token-usage replay payload construction, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, and non-copy local reuse regressions still open upstream.",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, enum class-payload equality, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metal pressure, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, and token-usage replay delivery policy, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, non-copy local reuse, and static final path regressions still open upstream.",
       "strengths": [
-        "14 of 17 pressure gaps are resolved upstream.",
+        "14 of 18 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
         "Native state adapter enum payload pressure resolved HxRef reference equality upstream.",
         "No raw Rust escape matches exist in current app/test Haxe source."
@@ -43,7 +44,8 @@
         "Current language proof is still fixture-backed and selected-slice scoped rather than broad upstream parity.",
         "haxe.rust-362 remains open for nullable Array.shift class-return lowering.",
         "haxe.rust-ojj remains open for non-copy class field assign-op lowering.",
-        "haxe.rust-fzl remains open for non-copy local reuse across conditional expression results."
+        "haxe.rust-fzl remains open for non-copy local reuse across conditional expression results.",
+        "haxe.rust-3f0g remains open for static final class field access path lowering."
       ],
       "evidenceRefs": [
         "reference/haxe-rust-pressure-gaps.v1.json",
@@ -53,13 +55,13 @@
     {
       "dimension": "runtime",
       "score": "yellow",
-      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view proof, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, and token-usage replay payload construction, selected TUI story/render, and turn reducer slices are viable, but live model/full production SQLite log state/full TUI/restart ownership is outside current proof.",
+      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view proof, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, and token-usage replay delivery policy, selected TUI story/render, and turn reducer slices are viable, but live model/full production SQLite log state/full TUI/restart ownership is outside current proof.",
       "strengths": [
         "Headless runtime fixtures pass without model credentials.",
         "Cancellation and transcript/state artifacts are deterministic.",
         "Runtime app-client classification, lag markers, and request correlation pass through generated Rust.",
         "Selected upstream TUI story replay passes through generated Rust with normalized summaries.",
-        "Selected runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view, thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
+        "Selected runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view, thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
         "Operator runbook keeps production default disabled."
       ],
       "caveats": [
@@ -76,7 +78,7 @@
       "score": "yellow_green",
       "rationale": "The project has kept interop typed and narrow: generated Rust is disposable, haxe.rust stays external, and app/test Haxe source has no raw Rust snippets.",
       "strengths": [
-        "Raw Rust escape pressure is 0 matches across 220 Haxe source/test files.",
+        "Raw Rust escape pressure is 0 matches across 226 Haxe source/test files.",
         "haxe.rust fixes are generic and made in ../haxe.rust.",
         "Pin update workflow is scripted and gated."
       ],
@@ -134,7 +136,7 @@
     {
       "dimension": "maintenance",
       "score": "yellow_green",
-      "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while three generic compiler regressions and Cafex live runtime seams are unsupported.",
+      "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while four generic compiler regressions and Cafex live runtime seams are unsupported.",
       "strengths": [
         "14 pressure gaps resolved upstream rather than carried as private compiler hacks.",
         "Native SQLite pressure uncovered and resolved three generic std metal-clean gaps in haxe.rust.",
@@ -142,6 +144,7 @@
         "The new nullable Array.shift class-return regression is tracked as haxe.rust-362 instead of app-specific compiler code.",
         "The non-copy class field assign-op regression is tracked as haxe.rust-ojj instead of app-specific compiler code.",
         "The non-copy local conditional-result reuse regression is tracked as haxe.rust-fzl instead of app-specific compiler code.",
+        "The static final class field access path regression is tracked as haxe.rust-3f0g instead of app-specific compiler code.",
         "Friction comparison supports selected adapter slices and review tooling.",
         "Operator rollback and migration-mode policies are checked."
       ],
@@ -179,12 +182,12 @@
   ],
   "measuredInputs": {
       "pressureGaps": {
-      "total": 17,
+      "total": 18,
       "resolvedUpstream": 14,
-      "openUpstream": 3,
+      "openUpstream": 4,
       "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 220,
+      "sourceFilesScanned": 226,
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {
@@ -215,7 +218,7 @@
     "Recommend HXCX-6.3 select helper-only, sidecar/headless, or selected adapter-slice mode.",
     "Do not select broad replacement from current evidence.",
     "Keep unsupported surfaces explicit and fail-closed.",
-    "Treat haxe.rust-362, haxe.rust-ojj, and haxe.rust-fzl as open compiler risks until fixed with product-neutral regressions.",
+    "Treat haxe.rust-362, haxe.rust-ojj, haxe.rust-fzl, and haxe.rust-3f0g as open compiler risks until fixed with product-neutral regressions.",
     "Treat license/distribution as a release blocker, not a local-experiment blocker."
   ]
 }

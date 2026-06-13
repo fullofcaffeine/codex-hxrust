@@ -26,14 +26,14 @@ harness/check-haxe-rust-pressure-gaps.sh
 
 | Metric | Count |
 | --- | ---: |
-| Total pressure gaps | 17 |
+| Total pressure gaps | 18 |
 | Resolved upstream | 14 |
-| Open upstream | 3 |
+| Open upstream | 4 |
 | Local workaround | 0 |
 | High severity | 7 |
-| Medium severity | 10 |
+| Medium severity | 11 |
 | Raw Rust escape matches in current app/test Haxe source | 0 |
-| Haxe source/test files scanned | 220 |
+| Haxe source/test files scanned | 226 |
 
 Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAllowRaw`, `@:rust...`, or `untyped` escapes are present under `src` or `test`.
 
@@ -43,7 +43,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | --- | ---: | --- |
 | Build/profile/tooling | 2 | Dev haxelib std ownership and Cargo failure propagation blocked trustworthy profile gates. |
 | Protocol/JSON/DTO | 3 | Nullable scalar, generic enum payload, and enum reuse issues surfaced in protocol IDs and JSON helpers. |
-| Runtime/model/session | 6 | Try/catch tail returns, interface null behavior, nullable class-array reads, non-copy field assign-op, and non-copy local reuse surfaced in runtime/TUI work. |
+| Runtime/model/session | 7 | Try/catch tail returns, interface null behavior, nullable class-array reads, non-copy field assign-op, non-copy local reuse, and static final path lowering surfaced in runtime/TUI work. |
 | Native metal/std boundary | 4 | Native SQLite persistence pulled in std List/sys.io surfaces and enum payload equality that needed product-neutral runtime support instead of raw Rust expressions. |
 | Cafex adapter | 2 | Path.directory and String.lastIndexOf are now resolved upstream. |
 
@@ -62,6 +62,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | Nullable `Array<Class>.shift()` return | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-362`; local runtime queue uses a typed read outcome while the compiler regression is fixed generically. |
 | Non-copy class field assign-op | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-ojj`; local TUI story summary uses explicit `field = field + value` while compiler support is fixed generically. |
 | Reused non-copy local conditional results | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-fzl`; local turn reducer uses explicit Haxe string slices while clone insertion is fixed generically. |
+| Static final class field access path | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-3f0g`; local token-usage delivery harness uses a helper function while static getter path lowering is fixed generically. |
 | `haxe.ds.List.iterator` raw metal fallback | `resolved_upstream` | medium | native metal/std boundary | Resolved by haxe.rust `f1b122b5` with a typed `ListNative` helper and `list_minimal` snapshot. |
 | `sys.io.File` raw metal fallback | `resolved_upstream` | medium | native metal/std boundary | Resolved by haxe.rust `f1b122b5` with a typed `file_native` helper and `sys_io` snapshot. |
 | `sys.io.FileInput`/`FileOutput` raw metal fallback | `resolved_upstream` | medium | native metal/std boundary | Resolved by haxe.rust `f1b122b5` with typed handle operations and `sys_io` snapshot. |
@@ -73,11 +74,11 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 
 The pressure test is encouraging but not clean enough for broad replacement:
 
-- haxe.rust fixes have been generic and upstreamable so far; `haxe.rust-362`, `haxe.rust-ojj`, and `haxe.rust-fzl` are the current open generic regressions from live-runtime/TUI work.
+- haxe.rust fixes have been generic and upstreamable so far; `haxe.rust-362`, `haxe.rust-ojj`, `haxe.rust-fzl`, and `haxe.rust-3f0g` are the current open generic regressions from live-runtime/TUI work.
 - The current codexhx source avoids raw Rust escape hatches.
-- The native SQLite persistence, state-adapter, persisted read-view, thread/read turn-projection, turns-page, active-turn merge, turn-items unsupported-runtime, token-usage owner, and token-usage replay payload boundaries compile through haxe.rust after generic std/raw-boundary fixes and the `HxRef<T>` enum-payload equality fix landed upstream.
+- The native SQLite persistence, state-adapter, persisted read-view, thread/read turn-projection, turns-page, active-turn merge, turn-items unsupported-runtime, token-usage owner, token-usage replay payload, and token-usage replay delivery boundaries compile through haxe.rust after generic std/raw-boundary fixes and the `HxRef<T>` enum-payload equality fix landed upstream.
 - Nullable interface values now have a generic upstream fix and passing snapshot.
 - String.lastIndexOf now has a generic upstream fix and passing snapshot.
 - haxe.io.Path.directory now has a generic upstream fix and passing snapshot.
 
-Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter/thread-read projection, pagination, active-turn merge, and unsupported turn-items runtime pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()`, non-copy field assign-op, and non-copy local reuse regressions, unsupported Cafex seam, licensing, and broader parity work.
+Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter/thread-read projection, pagination, active-turn merge, unsupported turn-items runtime, and token-usage replay pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()`, non-copy field assign-op, non-copy local reuse, and static final path regressions, unsupported Cafex seam, licensing, and broader parity work.

@@ -5,26 +5,26 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 17,
+    "totalGaps": 18,
     "resolvedUpstream": 14,
-    "openUpstream": 3,
+    "openUpstream": 4,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 10,
+      "medium": 11,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 6,
+      "runtime_model_session": 7,
       "native_metal_std_boundary": 4,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 220,
+    "sourceFilesScanned": 226,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -229,6 +229,23 @@
       "validation": [
         "harness/check-turn-runtime-reducer.sh",
         "haxe.rust-fzl acceptance requires a product-neutral regression fixture"
+      ]
+    },
+    {
+      "id": "static-final-class-field-access-path",
+      "status": "open_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-ffo",
+      "haxeRustRefs": [
+        "haxe.rust-3f0g"
+      ],
+      "reproduction": "Token usage replay delivery work exposed Rust E0433 when a same-class static final String was read from a static harness method; generated Rust referenced a crate-root class module that was not emitted.",
+      "workaround": "The local delivery harness uses a helper function that returns the stable String literal while haxe.rust fixes static final/static var getter path lowering generically.",
+      "followUp": "haxe.rust-3f0g",
+      "validation": [
+        "harness/check-thread-read-token-usage-replay-delivery.sh",
+        "haxe.rust-3f0g acceptance requires a product-neutral regression fixture"
       ]
     },
     {

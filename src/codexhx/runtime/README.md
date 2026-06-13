@@ -208,6 +208,20 @@ The fixture `fixtures/hxrust/thread-read-token-usage-owner.v1.json` and `harness
 
 The fixture `fixtures/hxrust/thread-read-token-usage-replay.v1.json` and `harness/check-thread-read-token-usage-replay.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not fetch usage from a live `CodexThread`, emit over JSON-RPC, aggregate accounting state, parse rollout files, or own production state. The boundary is documented in `docs/thread-read-token-usage-replay.md`.
 
+## Thread/Read Token Usage Replay Delivery
+
+`codexhx.runtime.app.threadread.ThreadReadTokenUsageReplayDeliveryPolicy` is the HXCX-4.23 raw upstream restored usage delivery-policy slice:
+
+- include-turns resume, fork, and loaded-resume responses may deliver restored usage after the JSON-RPC response.
+- exclude-turns requests skip replay as the upstream cheap path.
+- missing replay payloads skip notification delivery instead of emitting malformed usage.
+- delivered notifications are connection-scoped with one targeted connection and no broadcast.
+- delivery before response readiness or without a connection id fails closed.
+
+The fixture `fixtures/hxrust/thread-read-token-usage-replay-delivery.v1.json` and `harness/check-thread-read-token-usage-replay-delivery.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not open sockets, write JSON-RPC envelopes, rebuild turns, compute owner attribution, or construct usage fields. The boundary is documented in `docs/thread-read-token-usage-replay-delivery.md`.
+
+HXCX-4.23 also exposed generic haxe.rust issue `haxe.rust-3f0g`: same-class `static final` String reads can lower to a missing crate-root static getter path. The local harness uses a helper function as a semantic workaround while the compiler issue is tracked upstream.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

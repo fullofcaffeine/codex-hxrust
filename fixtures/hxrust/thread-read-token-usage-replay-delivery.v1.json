@@ -1,0 +1,207 @@
+{
+  "schema": "codex-hxrust.thread-read-token-usage-replay-delivery-fixture.v1",
+  "bead": "HXCX-4.23",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs",
+      "symbols": [
+        "thread/resume token_usage_thread include_turns gate",
+        "thread/fork token_usage_thread include_turns gate",
+        "send_response before send_thread_token_usage_update_to_connection"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/thread_lifecycle.rs",
+      "symbols": [
+        "loaded thread resume token_usage_thread include_turns gate",
+        "loaded thread resume replay after send_response"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/token_usage_replay.rs",
+      "symbols": [
+        "send_thread_token_usage_update_to_connection"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/src/outgoing_message.rs",
+      "symbols": [
+        "send_server_notification_to_connections"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/tests/suite/v2/thread_resume.rs",
+      "symbols": [
+        "thread_resume_skips_restored_token_usage_when_turns_are_excluded"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/tests/suite/v2/thread_fork.rs",
+      "symbols": [
+        "thread_fork_can_exclude_turns_and_skip_restored_token_usage"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "resume-include-turns-delivers-after-response",
+      "operation": "resume",
+      "includeTurns": true,
+      "responseReady": true,
+      "connectionId": "conn-resume-1",
+      "payload": "valid",
+      "expect": {
+        "ok": true,
+        "code": "delivered",
+        "delivered": true,
+        "skipped": false,
+        "sequence": "response->thread/tokenUsage/updated",
+        "targetedConnectionCount": 1,
+        "connectionId": "conn-resume-1",
+        "broadcast": false,
+        "summaryContains": "targeted=1;connection=conn-resume-1;broadcast=false"
+      }
+    },
+    {
+      "id": "fork-include-turns-delivers-after-response",
+      "operation": "fork",
+      "includeTurns": true,
+      "responseReady": true,
+      "connectionId": "conn-fork-1",
+      "payload": "valid",
+      "expect": {
+        "ok": true,
+        "code": "delivered",
+        "delivered": true,
+        "skipped": false,
+        "sequence": "response->thread/tokenUsage/updated",
+        "targetedConnectionCount": 1,
+        "connectionId": "conn-fork-1",
+        "broadcast": false,
+        "summaryContains": "operation=fork"
+      }
+    },
+    {
+      "id": "loaded-resume-include-turns-delivers-after-response",
+      "operation": "loaded_resume",
+      "includeTurns": true,
+      "responseReady": true,
+      "connectionId": "conn-loaded-1",
+      "payload": "valid",
+      "expect": {
+        "ok": true,
+        "code": "delivered",
+        "delivered": true,
+        "skipped": false,
+        "sequence": "response->thread/tokenUsage/updated",
+        "targetedConnectionCount": 1,
+        "connectionId": "conn-loaded-1",
+        "broadcast": false,
+        "summaryContains": "operation=loaded_resume"
+      }
+    },
+    {
+      "id": "resume-exclude-turns-skips-replay",
+      "operation": "resume",
+      "includeTurns": false,
+      "responseReady": true,
+      "connectionId": "conn-resume-2",
+      "payload": "valid",
+      "expect": {
+        "ok": true,
+        "code": "skipped_exclude_turns",
+        "delivered": false,
+        "skipped": true,
+        "sequence": "response",
+        "targetedConnectionCount": 0,
+        "connectionId": "",
+        "broadcast": false,
+        "summaryContains": "excludeTurns=true skips restored token usage replay"
+      }
+    },
+    {
+      "id": "fork-exclude-turns-skips-even-with-missing-payload",
+      "operation": "fork",
+      "includeTurns": false,
+      "responseReady": true,
+      "connectionId": "conn-fork-2",
+      "payload": "missing_usage",
+      "expect": {
+        "ok": true,
+        "code": "skipped_exclude_turns",
+        "delivered": false,
+        "skipped": true,
+        "sequence": "response",
+        "targetedConnectionCount": 0,
+        "connectionId": "",
+        "broadcast": false,
+        "summaryContains": "skipped_exclude_turns"
+      }
+    },
+    {
+      "id": "include-turns-missing-usage-skips-notification",
+      "operation": "resume",
+      "includeTurns": true,
+      "responseReady": true,
+      "connectionId": "conn-resume-3",
+      "payload": "missing_usage",
+      "expect": {
+        "ok": true,
+        "code": "skipped_no_payload",
+        "delivered": false,
+        "skipped": true,
+        "sequence": "response",
+        "targetedConnectionCount": 0,
+        "connectionId": "",
+        "broadcast": false,
+        "summaryContains": "missing_token_usage"
+      }
+    },
+    {
+      "id": "include-turns-response-not-ready-refuses",
+      "operation": "resume",
+      "includeTurns": true,
+      "responseReady": false,
+      "connectionId": "conn-resume-4",
+      "payload": "valid",
+      "expect": {
+        "ok": false,
+        "code": "response_not_ready",
+        "delivered": false,
+        "skipped": false,
+        "sequence": "none",
+        "targetedConnectionCount": 0,
+        "connectionId": "",
+        "broadcast": false,
+        "summaryContains": "ordered after the JSON-RPC response"
+      }
+    },
+    {
+      "id": "include-turns-empty-connection-refuses",
+      "operation": "fork",
+      "includeTurns": true,
+      "responseReady": true,
+      "connectionId": "",
+      "payload": "valid",
+      "expect": {
+        "ok": false,
+        "code": "invalid_connection_id",
+        "delivered": false,
+        "skipped": false,
+        "sequence": "none",
+        "targetedConnectionCount": 0,
+        "connectionId": "",
+        "broadcast": false,
+        "summaryContains": "requesting connection id"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 8,
+    "deliveredCount": 3,
+    "skippedCount": 3,
+    "failureCount": 2,
+    "summaryContains": "schema=codex-hxrust.thread-read-token-usage-replay-delivery-report.v1;cases=8;delivered=3;skipped=3;failed=2"
+  }
+}

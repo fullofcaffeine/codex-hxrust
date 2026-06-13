@@ -254,7 +254,18 @@ Model the selected restored `thread/tokenUsage/updated` payload construction:
 
 Status: HXCX-4.22 now owns `fixtures/hxrust/thread-read-token-usage-replay.v1.json` and validates the slice through `harness/check-thread-read-token-usage-replay.sh`. No new haxe.rust limitation was exposed. This is payload construction evidence only, not live connection delivery, usage aggregation, rollout parsing, or production state ownership.
 
-### HXCX-4.23+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.23: Token Usage Replay Delivery Policy
+
+Model the selected restored usage delivery policy:
+
+- include-turns responses may deliver restored token usage after the JSON-RPC response;
+- exclude-turns cheap resume/fork paths skip restored usage replay;
+- missing payloads skip notification delivery rather than emitting malformed usage;
+- delivery is connection-scoped and never broadcast to other subscribers.
+
+Status: HXCX-4.23 now owns `fixtures/hxrust/thread-read-token-usage-replay-delivery.v1.json` and validates the slice through `harness/check-thread-read-token-usage-replay-delivery.sh`. It exposed generic haxe.rust issue `haxe.rust-3f0g` for same-class `static final` String access path lowering; codexhx uses a helper-function workaround while the compiler fix belongs upstream. This is delivery-policy evidence only, not socket ownership, JSON-RPC transport, usage aggregation, rollout parsing, or production state ownership.
+
+### HXCX-4.24+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
@@ -279,6 +290,7 @@ These are generic compiler/runtime pressure points. They must not become Codex-s
 | Network/websocket/audio | Remote app-server and realtime require host/network/audio APIs. | Later metal/native-wrapper work, credential-free tests first. |
 | Generated Rust quality | TUI/runtime debugging needs readable generated Rust and useful diagnostics. | Track concrete ugly or inefficient lowering as haxe.rust Beads with product-neutral fixtures. Existing `haxe.rust-oo3.73` is the benchmark-corpus anchor. |
 | Non-copy local reuse | Reducers often route the same text payload into transcript, notification, and state fields. | HXCX-4.10 filed `haxe.rust-fzl`; until fixed, use explicit Haxe semantic copies rather than raw Rust or Codex-specific compiler hooks. |
+| Static final access paths | Fixture and runtime harnesses often keep stable IDs as static constants. | HXCX-4.23 filed `haxe.rust-3f0g`; until fixed, use helper functions for constant values that generated Rust mispaths. |
 
 ## Cafex Gate
 
