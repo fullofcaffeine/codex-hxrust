@@ -25,8 +25,12 @@ selected_schemas=(
   "ThreadStartResponse:v2/ThreadStartResponse.json"
   "TurnStartParams:v2/TurnStartParams.json"
   "TurnStartResponse:v2/TurnStartResponse.json"
+  "TurnSteerParams:v2/TurnSteerParams.json"
+  "TurnSteerResponse:v2/TurnSteerResponse.json"
   "TurnInterruptParams:v2/TurnInterruptParams.json"
   "TurnInterruptResponse:v2/TurnInterruptResponse.json"
+  "ReviewStartParams:v2/ReviewStartParams.json"
+  "ReviewStartResponse:v2/ReviewStartResponse.json"
   "ThreadReadParams:v2/ThreadReadParams.json"
   "ThreadReadResponse:v2/ThreadReadResponse.json"
   "ThreadResumeParams:v2/ThreadResumeParams.json"
@@ -229,6 +233,11 @@ jq -n \
         id: "thread-state-rust-source-schemas",
         status: "tracked_from_rust_source",
         reason: "Upstream exports thread/increment_elicitation, thread/decrement_elicitation, thread/settings/update, thread/memoryMode/set, memory/reset, and thread/backgroundTerminals/clean from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those experimental request/response surfaces. The local subset validates the Rust DTO contracts and keeps paired emitted thread state notification schemas fingerprinted."
+      },
+      {
+        id: "thread-turn-pagination-schemas",
+        status: "tracked_from_rust_source",
+        reason: "Upstream exports thread/turns/list and thread/turns/items/list from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those experimental request/response surfaces. The local subset validates the Rust DTO contracts using shared Turn and ThreadItem shapes."
       }
     ]
   }' > "$ACTUAL"

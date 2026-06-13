@@ -4,10 +4,10 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "turn/start", "turn/interrupt", "thread/list", "thread/loaded/list", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/loaded/list", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/archived", "thread/unarchived", "thread/closed", "thread/name/updated", "thread/goal/updated", "thread/goal/cleared", "thread/settings/updated", "thread/tokenUsage/updated", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,memory/reset,process/kill,process/resizePty,process/spawn,process/writeStdin,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/resume,thread/rollback,thread/settings/update,thread/shellCommand,thread/start,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-057";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,memory/reset,process/kill,process/resizePty,process/spawn,process/writeStdin,review/start,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/resume,thread/rollback,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-058";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -131,6 +131,10 @@ class AppProtocol {
                 final thread = requiredObjectField(result.keys, result.values, "thread", "$.message.result.thread");
                 if (!thread.ok) return thread.toOutcome();
                 validateThread(thread, "$.message.result.thread");
+            case "thread/turns/list":
+                validateThreadTurnsListResponse(result);
+            case "thread/turns/items/list":
+                validateThreadTurnsItemsListResponse(result);
             case "thread/unsubscribe":
                 validateThreadUnsubscribeResponse(result);
             case "thread/list":
@@ -141,8 +145,12 @@ class AppProtocol {
                 final turn = requiredObjectField(result.keys, result.values, "turn", "$.message.result.turn");
                 if (!turn.ok) return turn.toOutcome();
                 validateTurn(turn, "$.message.result.turn");
+            case "turn/steer":
+                validateTurnSteerResponse(result);
             case "turn/interrupt":
                 success("response:turn/interrupt");
+            case "review/start":
+                validateReviewStartResponse(result);
             case "windowsSandbox/setupStart":
                 validateWindowsSandboxSetupStartResponse(result);
             case "windowsSandbox/readiness":
@@ -397,22 +405,26 @@ class AppProtocol {
                 validateThreadRollbackParams(params);
             case "thread/inject_items":
                 validateThreadInjectItemsParams(params);
+            case "thread/turns/list":
+                validateThreadTurnsListParams(params);
+            case "thread/turns/items/list":
+                validateThreadTurnsItemsListParams(params);
             case "thread/list":
                 validateThreadListParams(params);
             case "thread/loaded/list":
                 validateThreadLoadedListParams(params);
             case "turn/start":
-                final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
-                if (!threadId.ok) return threadId.toOutcome();
-                final input = requiredArray(params.keys, params.values, "input", "$.message.params.input");
-                if (!input.ok) return input.toOutcome();
-                validateUserInputArray(input.values, "$.message.params.input");
+                validateTurnInputParams(params, false);
+            case "turn/steer":
+                validateTurnInputParams(params, true);
             case "turn/interrupt":
                 final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
                 if (!threadId.ok) return threadId.toOutcome();
                 final turnId = requiredString(params.keys, params.values, "turnId", "$.message.params.turnId");
                 if (!turnId.ok) return turnId.toOutcome();
                 success("params:turn/interrupt");
+            case "review/start":
+                validateReviewStartParams(params);
             case "thread/read":
                 final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
                 if (!threadId.ok) return threadId.toOutcome();
@@ -668,6 +680,70 @@ class AppProtocol {
         final nextCursor = validateOptionalNullableString(result, "nextCursor", "$.message.result.nextCursor");
         if (!nextCursor.ok) return nextCursor;
         return success("response:thread/loaded/list");
+    }
+
+    static function validateThreadTurnsListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final cursor = validateOptionalNullableString(params, "cursor", "$.message.params.cursor");
+        if (!cursor.ok) return cursor;
+        final limit = validateOptionalNullableUInt(params, "limit", "$.message.params.limit");
+        if (!limit.ok) return limit;
+        final sortDirection = validateOptionalNullableStringEnum(params, "sortDirection", "$.message.params.sortDirection", ["asc", "desc"], "invalid_sort_direction");
+        if (!sortDirection.ok) return sortDirection;
+        final itemsView = validateOptionalNullableStringEnum(params, "itemsView", "$.message.params.itemsView", ["notLoaded", "summary", "full"], "invalid_turn_items_view");
+        if (!itemsView.ok) return itemsView;
+        return success("params:thread/turns/list");
+    }
+
+    static function validateThreadTurnsItemsListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredString(params.keys, params.values, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final cursor = validateOptionalNullableString(params, "cursor", "$.message.params.cursor");
+        if (!cursor.ok) return cursor;
+        final limit = validateOptionalNullableUInt(params, "limit", "$.message.params.limit");
+        if (!limit.ok) return limit;
+        final sortDirection = validateOptionalNullableStringEnum(params, "sortDirection", "$.message.params.sortDirection", ["asc", "desc"], "invalid_sort_direction");
+        if (!sortDirection.ok) return sortDirection;
+        return success("params:thread/turns/items/list");
+    }
+
+    static function validateThreadTurnsListResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final data = requiredArray(result.keys, result.values, "data", "$.message.result.data");
+        if (!data.ok) return data.toOutcome();
+        var i = 0;
+        while (i < data.values.length) {
+            final turn = requireObject(data.values[i], "$.message.result.data[" + Std.string(i) + "]");
+            if (!turn.ok) return turn.toOutcome();
+            final turnResult = validateTurn(turn, "$.message.result.data[" + Std.string(i) + "]");
+            if (!turnResult.ok) return turnResult;
+            i = i + 1;
+        }
+        for (field in ["nextCursor", "backwardsCursor"]) {
+            final cursor = validateOptionalNullableString(result, field, "$.message.result." + field);
+            if (!cursor.ok) return cursor;
+        }
+        return success("response:thread/turns/list");
+    }
+
+    static function validateThreadTurnsItemsListResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final data = requiredArray(result.keys, result.values, "data", "$.message.result.data");
+        if (!data.ok) return data.toOutcome();
+        var i = 0;
+        while (i < data.values.length) {
+            final item = requireObject(data.values[i], "$.message.result.data[" + Std.string(i) + "]");
+            if (!item.ok) return item.toOutcome();
+            final itemResult = validateTranscriptItem(item, "$.message.result.data[" + Std.string(i) + "]");
+            if (!itemResult.ok) return itemResult;
+            i = i + 1;
+        }
+        for (field in ["nextCursor", "backwardsCursor"]) {
+            final cursor = validateOptionalNullableString(result, field, "$.message.result." + field);
+            if (!cursor.ok) return cursor;
+        }
+        return success("response:thread/turns/items/list");
     }
 
     static function validateThreadIdNotification(params:ProtocolObjectField, method:String):AppProtocolParseOutcome {
@@ -974,6 +1050,80 @@ class AppProtocol {
             if (!number.ok) return number.toOutcome();
         }
         return success("token-usage-breakdown");
+    }
+
+    static function validateTurnInputParams(params:ProtocolObjectField, steer:Bool):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final input = requiredArray(params.keys, params.values, "input", "$.message.params.input");
+        if (!input.ok) return input.toOutcome();
+        final inputResult = validateUserInputArray(input.values, "$.message.params.input");
+        if (!inputResult.ok) return inputResult;
+        final clientUserMessageId = validateOptionalNullableString(params, "clientUserMessageId", "$.message.params.clientUserMessageId");
+        if (!clientUserMessageId.ok) return clientUserMessageId;
+        final metadata = validateOptionalStringMap(params, "responsesapiClientMetadata", "$.message.params.responsesapiClientMetadata");
+        if (!metadata.ok) return metadata;
+        final additionalContext = validateOptionalNullableObject(params, "additionalContext", "$.message.params.additionalContext");
+        if (!additionalContext.ok) return additionalContext;
+        if (steer) {
+            final expectedTurnId = requiredString(params.keys, params.values, "expectedTurnId", "$.message.params.expectedTurnId");
+            if (!expectedTurnId.ok) return expectedTurnId.toOutcome();
+            return success("params:turn/steer");
+        }
+        return success("params:turn/start");
+    }
+
+    static function validateTurnSteerResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final turnId = requiredString(result.keys, result.values, "turnId", "$.message.result.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        return success("response:turn/steer");
+    }
+
+    static function validateReviewStartParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final target = requiredObjectField(params.keys, params.values, "target", "$.message.params.target");
+        if (!target.ok) return target.toOutcome();
+        final targetResult = validateReviewTarget(target, "$.message.params.target");
+        if (!targetResult.ok) return targetResult;
+        final delivery = validateOptionalNullableStringEnum(params, "delivery", "$.message.params.delivery", ["inline", "detached"], "invalid_review_delivery");
+        if (!delivery.ok) return delivery;
+        return success("params:review/start");
+    }
+
+    static function validateReviewTarget(target:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final targetType = requiredString(target.keys, target.values, "type", path + ".type");
+        if (!targetType.ok) return targetType.toOutcome();
+        return switch targetType.value {
+            case "uncommittedChanges":
+                success("review-target:uncommittedChanges");
+            case "baseBranch":
+                final branch = requiredString(target.keys, target.values, "branch", path + ".branch");
+                if (!branch.ok) return branch.toOutcome();
+                success("review-target:baseBranch");
+            case "commit":
+                final sha = requiredString(target.keys, target.values, "sha", path + ".sha");
+                if (!sha.ok) return sha.toOutcome();
+                final title = validateOptionalNullableString(target, "title", path + ".title");
+                if (!title.ok) return title;
+                success("review-target:commit");
+            case "custom":
+                final instructions = requiredString(target.keys, target.values, "instructions", path + ".instructions");
+                if (!instructions.ok) return instructions.toOutcome();
+                success("review-target:custom");
+            case _:
+                fail("invalid_review_target", path + ".type", "unsupported review target type");
+        }
+    }
+
+    static function validateReviewStartResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final turn = requiredObjectField(result.keys, result.values, "turn", "$.message.result.turn");
+        if (!turn.ok) return turn.toOutcome();
+        final turnResult = validateTurn(turn, "$.message.result.turn");
+        if (!turnResult.ok) return turnResult;
+        final reviewThreadId = requiredString(result.keys, result.values, "reviewThreadId", "$.message.result.reviewThreadId");
+        if (!reviewThreadId.ok) return reviewThreadId.toOutcome();
+        return success("response:review/start");
     }
 
     static function validateTranscriptItem(item:ProtocolObjectField, path:String):AppProtocolParseOutcome {

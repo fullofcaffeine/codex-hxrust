@@ -41,8 +41,12 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/backgroundTerminals/clean");
         assertContains(fingerprintJson, "thread/rollback");
         assertContains(fingerprintJson, "thread/inject_items");
+        assertContains(fingerprintJson, "thread/turns/list");
+        assertContains(fingerprintJson, "thread/turns/items/list");
         assertContains(fingerprintJson, "thread/list");
         assertContains(fingerprintJson, "thread/loaded/list");
+        assertContains(fingerprintJson, "turn/steer");
+        assertContains(fingerprintJson, "review/start");
         assertContains(fingerprintJson, "windowsSandbox/setupStart");
         assertContains(fingerprintJson, "windowsSandbox/readiness");
         assertContains(fingerprintJson, "account/login/start");
@@ -128,7 +132,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("164", Std.string(items.length));
+        assertEquals("172", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -149,8 +153,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("51", Std.string(requests));
-        assertEquals("51", Std.string(responses));
+        assertEquals("55", Std.string(requests));
+        assertEquals("55", Std.string(responses));
         assertEquals("61", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -222,6 +226,31 @@ class AppProtocolHarness {
         assertFalse(missingTokenUsageTotalTokens.ok, "token usage breakdowns must include totalTokens");
         assertEquals("missing_field", missingTokenUsageTotalTokens.errorCode);
         assertEquals("$.message.params.tokenUsage.total.totalTokens", missingTokenUsageTotalTokens.errorPath);
+
+        final missingTurnSteerExpectedTurn = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"turn-steer-missing-expected\",\"kind\":\"request\",\"method\":\"turn/steer\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"steer-1\",\"method\":\"turn/steer\",\"params\":{\"threadId\":\"thread-1\",\"input\":[{\"type\":\"text\",\"text\":\"continue\"}]}}}")));
+        assertFalse(missingTurnSteerExpectedTurn.ok, "turn/steer must include expectedTurnId");
+        assertEquals("missing_field", missingTurnSteerExpectedTurn.errorCode);
+        assertEquals("$.message.params.expectedTurnId", missingTurnSteerExpectedTurn.errorPath);
+
+        final invalidReviewTarget = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"review-invalid-target\",\"kind\":\"request\",\"method\":\"review/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"review-1\",\"method\":\"review/start\",\"params\":{\"threadId\":\"thread-1\",\"target\":{\"type\":\"branch\"}}}}")));
+        assertFalse(invalidReviewTarget.ok, "review target must use upstream tagged variants");
+        assertEquals("invalid_review_target", invalidReviewTarget.errorCode);
+        assertEquals("$.message.params.target.type", invalidReviewTarget.errorPath);
+
+        final invalidReviewDelivery = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"review-invalid-delivery\",\"kind\":\"request\",\"method\":\"review/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"review-1\",\"method\":\"review/start\",\"params\":{\"threadId\":\"thread-1\",\"target\":{\"type\":\"uncommittedChanges\"},\"delivery\":\"background\"}}}")));
+        assertFalse(invalidReviewDelivery.ok, "review delivery must be inline or detached");
+        assertEquals("invalid_review_delivery", invalidReviewDelivery.errorCode);
+        assertEquals("$.message.params.delivery", invalidReviewDelivery.errorPath);
+
+        final invalidThreadTurnsItemsView = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-turns-invalid-items-view\",\"kind\":\"request\",\"method\":\"thread/turns/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"turns-list-1\",\"method\":\"thread/turns/list\",\"params\":{\"threadId\":\"thread-1\",\"itemsView\":\"everything\"}}}")));
+        assertFalse(invalidThreadTurnsItemsView.ok, "thread/turns/list itemsView must use upstream values");
+        assertEquals("invalid_turn_items_view", invalidThreadTurnsItemsView.errorCode);
+        assertEquals("$.message.params.itemsView", invalidThreadTurnsItemsView.errorPath);
+
+        final invalidThreadTurnsItem = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-turns-items-invalid-item\",\"kind\":\"response\",\"method\":\"thread/turns/items/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"turns-items-1\",\"result\":{\"data\":[7],\"nextCursor\":null,\"backwardsCursor\":null}}}")));
+        assertFalse(invalidThreadTurnsItem.ok, "thread/turns/items/list data entries must be item objects");
+        assertEquals("expected_object", invalidThreadTurnsItem.errorCode);
+        assertEquals("$.message.result.data[0]", invalidThreadTurnsItem.errorPath);
     }
 
     static function validatesPlanUpdates():Void {

@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:4d45470cd9d25956a9484f784d2dce519ebcfcb328e89c41d5756ce1e95bcace",
+  "fingerprint": "sha256:1764ad117faf6eebdb5b413166ba4d5d3369bd6f892e6ce6efddaa8caedadf62",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -918,6 +918,65 @@
         "required:installationId",
         "required:serverName",
         "required:status"
+      ]
+    },
+    {
+      "id": "ReviewStartParams",
+      "sourcePath": "v2/ReviewStartParams.json",
+      "sha256": "8150020336ea48b822af828c3a80fdc6d1722a0d36c802bfb352066d863283fc",
+      "fields": [
+        "definition:ReviewDelivery",
+        "definition:ReviewTarget",
+        "property:delivery",
+        "property:target",
+        "property:threadId",
+        "required:target",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "ReviewStartResponse",
+      "sourcePath": "v2/ReviewStartResponse.json",
+      "sha256": "d82e3e9fbea779abe7ed87edf64232c683bba835c39998d603b78c80cc379f32",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:ByteRange",
+        "definition:CodexErrorInfo",
+        "definition:CollabAgentState",
+        "definition:CollabAgentStatus",
+        "definition:CollabAgentTool",
+        "definition:CollabAgentToolCallStatus",
+        "definition:CommandAction",
+        "definition:CommandExecutionSource",
+        "definition:CommandExecutionStatus",
+        "definition:DynamicToolCallOutputContentItem",
+        "definition:DynamicToolCallStatus",
+        "definition:FileUpdateChange",
+        "definition:HookPromptFragment",
+        "definition:ImageDetail",
+        "definition:McpToolCallError",
+        "definition:McpToolCallResult",
+        "definition:McpToolCallStatus",
+        "definition:MemoryCitation",
+        "definition:MemoryCitationEntry",
+        "definition:MessagePhase",
+        "definition:NonSteerableTurnKind",
+        "definition:PatchApplyStatus",
+        "definition:PatchChangeKind",
+        "definition:ReasoningEffort",
+        "definition:SubAgentActivityKind",
+        "definition:TextElement",
+        "definition:ThreadItem",
+        "definition:Turn",
+        "definition:TurnError",
+        "definition:TurnItemsView",
+        "definition:TurnStatus",
+        "definition:UserInput",
+        "definition:WebSearchAction",
+        "property:reviewThreadId",
+        "property:turn",
+        "required:reviewThreadId",
+        "required:turn"
       ]
     },
     {
@@ -2284,6 +2343,35 @@
       ]
     },
     {
+      "id": "TurnSteerParams",
+      "sourcePath": "v2/TurnSteerParams.json",
+      "sha256": "aa1a293afb470b3aace5a5636608e4f20927c4a218258100abc35a48906244fe",
+      "fields": [
+        "definition:AdditionalContextEntry",
+        "definition:AdditionalContextKind",
+        "definition:ByteRange",
+        "definition:ImageDetail",
+        "definition:TextElement",
+        "definition:UserInput",
+        "property:clientUserMessageId",
+        "property:expectedTurnId",
+        "property:input",
+        "property:threadId",
+        "required:expectedTurnId",
+        "required:input",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "TurnSteerResponse",
+      "sourcePath": "v2/TurnSteerResponse.json",
+      "sha256": "c0cee0b0c57af980fe2727679fbf2d3110ba28e8c9328f40d402fcc44ecb87bf",
+      "fields": [
+        "property:turnId",
+        "required:turnId"
+      ]
+    },
+    {
       "id": "WarningNotification",
       "sourcePath": "v2/WarningNotification.json",
       "sha256": "b900b5bfbd5154287849e97fdd6d82ebdda0b610399e44d4f595d8a98d575537",
@@ -2366,6 +2454,11 @@
       "id": "thread-state-rust-source-schemas",
       "status": "tracked_from_rust_source",
       "reason": "Upstream exports thread/increment_elicitation, thread/decrement_elicitation, thread/settings/update, thread/memoryMode/set, memory/reset, and thread/backgroundTerminals/clean from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those experimental request/response surfaces. The local subset validates the Rust DTO contracts and keeps paired emitted thread state notification schemas fingerprinted."
+    },
+    {
+      "id": "thread-turn-pagination-schemas",
+      "status": "tracked_from_rust_source",
+      "reason": "Upstream exports thread/turns/list and thread/turns/items/list from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those experimental request/response surfaces. The local subset validates the Rust DTO contracts using shared Turn and ThreadItem shapes."
     }
   ]
 }

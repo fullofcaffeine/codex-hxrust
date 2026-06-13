@@ -105,7 +105,171 @@
       "message": {
         "jsonrpc": "2.0",
         "id": 3,
-        "result": {}
+          "result": {}
+      }
+    },
+    {
+      "id": "turn-steer-request",
+      "kind": "request",
+      "method": "turn/steer",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "turn-steer-1",
+        "method": "turn/steer",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "expectedTurnId": "turn-1",
+          "clientUserMessageId": "client-msg-2",
+          "input": [
+            {
+              "type": "text",
+              "text": "please continue with the raw upstream turn slice"
+            }
+          ],
+          "responsesapiClientMetadata": {
+            "fixture": "turn-steer"
+          },
+          "additionalContext": {
+            "harness": {
+              "kind": "text",
+              "text": "Fixture context for turn steering."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "turn-steer-response",
+      "kind": "response",
+      "method": "turn/steer",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "turn-steer-1",
+        "result": {
+          "turnId": "turn-1"
+        }
+      }
+    },
+    {
+      "id": "review-start-request",
+      "kind": "request",
+      "method": "review/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "review-start-1",
+        "method": "review/start",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "target": {
+            "type": "baseBranch",
+            "branch": "main"
+          },
+          "delivery": "inline"
+        }
+      }
+    },
+    {
+      "id": "review-start-response",
+      "kind": "response",
+      "method": "review/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "review-start-1",
+        "result": {
+          "turn": {
+            "id": "review-turn-1",
+            "status": "inProgress",
+            "itemsView": "full",
+            "items": []
+          },
+          "reviewThreadId": "thread-00000000-0000-4000-8000-000000000001"
+        }
+      }
+    },
+    {
+      "id": "thread-turns-list-request",
+      "kind": "request",
+      "method": "thread/turns/list",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-turns-list-1",
+        "method": "thread/turns/list",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "cursor": null,
+          "limit": 10,
+          "sortDirection": "desc",
+          "itemsView": "summary"
+        }
+      }
+    },
+    {
+      "id": "thread-turns-list-response",
+      "kind": "response",
+      "method": "thread/turns/list",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-turns-list-1",
+        "result": {
+          "data": [
+            {
+              "id": "turn-1",
+              "status": "completed",
+              "itemsView": "summary",
+              "items": [
+                {
+                  "type": "agentMessage",
+                  "id": "item-agent-1",
+                  "text": "hello from haxe.rust"
+                }
+              ]
+            }
+          ],
+          "nextCursor": null,
+          "backwardsCursor": "turn-1"
+        }
+      }
+    },
+    {
+      "id": "thread-turns-items-list-request",
+      "kind": "request",
+      "method": "thread/turns/items/list",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-turns-items-list-1",
+        "method": "thread/turns/items/list",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "cursor": null,
+          "limit": 20,
+          "sortDirection": "asc"
+        }
+      }
+    },
+    {
+      "id": "thread-turns-items-list-response",
+      "kind": "response",
+      "method": "thread/turns/items/list",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-turns-items-list-1",
+        "result": {
+          "data": [
+            {
+              "type": "agentMessage",
+              "id": "item-agent-1",
+              "text": "hello from haxe.rust"
+            },
+            {
+              "type": "plan",
+              "id": "turn-1-plan",
+              "text": "# Proposed plan\n- Port Codex through haxe.rust\n"
+            }
+          ],
+          "nextCursor": null,
+          "backwardsCursor": "item-agent-1"
+        }
       }
     },
     {

@@ -20,7 +20,7 @@ No Cafex or Cafetera source is part of this audit.
 
 ## Current Local Selection
 
-The local app protocol subset currently admits 51 client request methods:
+The local app protocol subset currently admits 55 client request methods:
 
 ```text
 account/login/cancel
@@ -67,11 +67,15 @@ thread/shellCommand
 thread/backgroundTerminals/clean
 thread/rollback
 thread/inject_items
+thread/turns/list
+thread/turns/items/list
 thread/list
 thread/loaded/list
 thread/read
+review/start
 turn/interrupt
 turn/start
+turn/steer
 windowsSandbox/readiness
 windowsSandbox/setupStart
 ```
@@ -82,7 +86,7 @@ The local subset also validates selected notifications needed by the current hea
 
 ## Upstream Gap Summary
 
-Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 51-method selection, 61 quoted request wires remain outside the local subset.
+Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 55-method selection, 57 quoted request wires remain outside the local subset.
 
 The remaining requests fall into these groups:
 
@@ -90,7 +94,7 @@ The remaining requests fall into these groups:
 | --- | --- | --- |
 | Thread navigation and lifecycle | `thread/resume`, `thread/fork`, `thread/archive`, `thread/unarchive`, `thread/unsubscribe`, `thread/list`, `thread/loaded/list` | Admitted in HXCX-3.63 |
 | Thread state and history mutation | `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/name/set`, `thread/goal/set`, `thread/goal/get`, `thread/goal/clear`, `thread/metadata/update`, `thread/settings/update`, `thread/memoryMode/set`, `thread/compact/start`, `thread/shellCommand`, `thread/approveGuardianDeniedAction`, `thread/backgroundTerminals/clean`, `thread/rollback`, `thread/inject_items`, `memory/reset` | Admitted in HXCX-3.64 |
-| Turn and review continuation | `turn/steer`, `review/start`, `thread/turns/list`, `thread/turns/items/list` | High |
+| Turn and review continuation | `turn/steer`, `review/start`, `thread/turns/list`, `thread/turns/items/list` | Admitted in HXCX-3.65 |
 | Models and environment | `model/list`, `modelProvider/capabilities/read`, `environment/add`, `experimentalFeature/list`, `experimentalFeature/enablement/set`, `permissionProfile/list`, `collaborationMode/list`, `mock/experimentalMethod` | Medium |
 | Apps, skills, hooks, marketplace, plugins | `app/list`, `skills/list`, `skills/extraRoots/set`, `skills/config/write`, `hooks/list`, `marketplace/add`, `marketplace/remove`, `marketplace/upgrade`, `plugin/list`, `plugin/installed`, `plugin/read`, `plugin/skill/read`, `plugin/install`, `plugin/uninstall`, `plugin/share/save`, `plugin/share/updateTargets`, `plugin/share/list`, `plugin/share/checkout`, `plugin/share/delete` | Medium |
 | Filesystem remote surface | `fs/readFile`, `fs/writeFile`, `fs/createDirectory`, `fs/getMetadata`, `fs/readDirectory`, `fs/remove`, `fs/copy`, `fs/watch`, `fs/unwatch` | Medium |
@@ -140,25 +144,28 @@ Known exceptions:
 
 - `process/spawn`, `process/writeStdin`, `process/kill`, and `process/resizePty` are already selected from upstream Rust DTO/protocol mappings because standalone process request schema files are not exported.
 - `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/settings/update`, `thread/memoryMode/set`, `memory/reset`, and `thread/backgroundTerminals/clean` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
+- `thread/turns/list` and `thread/turns/items/list` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
 - `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, and `fuzzyFileSearch/sessionStop` are Rust DTO/protocol mappings without standalone request/response schema files; their notifications are already tracked through top-level schema files.
 - Deprecated v1 request surfaces should remain deferred until a deliberate compatibility slice selects them.
 
 ## Sequencing Decision
 
-The next raw upstream slice should admit turn continuation and review/history navigation requests before plugin/MCP/fs/remote/Cafex surfaces:
+The next raw upstream slice should admit the client-directed server-request approval surface before plugin/MCP/fs/remote/Cafex surfaces:
 
 ```text
-turn/steer
-review/start
-thread/turns/list
-thread/turns/items/list
+item/commandExecution/requestApproval
+item/fileChange/requestApproval
+item/permissions/requestApproval
+item/tool/call
+item/tool/requestUserInput
+mcpServer/elicitation/request
 ```
 
 Rationale:
 
 - these are mainstream Codex app-server methods, not Cafex adapters
-- they extend the existing `thread/start`, `thread/read`, lifecycle/navigation, and state/history foundation
-- they unlock turn continuation, review entry, and paged turn/item history fixtures
+- they are the next app-server parity boundary after request/response client methods and require bidirectional client/server request fixture modeling
+- they unlock command/file/permission/tool approval flows that real Codex clients must answer
 - they keep deprecated v1 APIs and Cafex bridge work out of the core until selected intentionally
 
 ## Follow-Up Bead Policy
