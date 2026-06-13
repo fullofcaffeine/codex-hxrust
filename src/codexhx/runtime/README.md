@@ -163,6 +163,18 @@ The fixture `fixtures/hxrust/thread-read-turn-projection.v1.json` and `harness/c
 
 The fixture `fixtures/hxrust/thread-read-turns-page.v1.json` and `harness/check-thread-read-turns-page.sh` prove the slice through the Haxe interpreter and portable haxe.rust-generated Rust. This is not `thread/turns/items/list` runtime support, full `Turn` reconstruction, live active-turn merge, rollout file reads, or production state ownership. The boundary is documented in `docs/thread-read-turns-page.md`.
 
+## Thread/Read Active-Turn Merge
+
+`codexhx.runtime.app.threadread.ThreadReadActiveTurnMerger` is the HXCX-4.19 raw upstream active-turn merge/status normalization slice:
+
+- `ThreadReadThreadStatus` models the selected `notLoaded`, `idle`, `systemError`, and `active` thread statuses.
+- live in-progress turns can promote `idle`/`notLoaded` status to `active`, matching upstream listener timing semantics.
+- stale reconstructed `inProgress` turns become `interrupted` when the resolved thread status is not active.
+- a live active-turn snapshot replaces any history turn with the same ID and is appended as the newest turn.
+- missing active snapshots and invalid loaded status values produce deterministic outcomes.
+
+The fixture `fixtures/hxrust/thread-read-active-turn-merge.v1.json` and `harness/check-thread-read-active-turn-merge.sh` prove the slice through the Haxe interpreter and portable haxe.rust-generated Rust. This is not live `ThreadState` ownership, watch-manager integration, rollout storage, or production state ownership. The boundary is documented in `docs/thread-read-active-turn-merge.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

@@ -33,7 +33,7 @@ harness/check-haxe-rust-pressure-gaps.sh
 | High severity | 7 |
 | Medium severity | 10 |
 | Raw Rust escape matches in current app/test Haxe source | 0 |
-| Haxe source/test files scanned | 194 |
+| Haxe source/test files scanned | 200 |
 
 Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAllowRaw`, `@:rust...`, or `untyped` escapes are present under `src` or `test`.
 
@@ -75,9 +75,9 @@ The pressure test is encouraging but not clean enough for broad replacement:
 
 - haxe.rust fixes have been generic and upstreamable so far; `haxe.rust-362`, `haxe.rust-ojj`, and `haxe.rust-fzl` are the current open generic regressions from live-runtime/TUI work.
 - The current codexhx source avoids raw Rust escape hatches.
-- The native SQLite persistence, state-adapter, persisted read-view, thread/read turn-projection, and turns-page boundaries compile through haxe.rust after generic std/raw-boundary fixes and the `HxRef<T>` enum-payload equality fix landed upstream.
+- The native SQLite persistence, state-adapter, persisted read-view, thread/read turn-projection, turns-page, and active-turn merge boundaries compile through haxe.rust after generic std/raw-boundary fixes and the `HxRef<T>` enum-payload equality fix landed upstream.
 - Nullable interface values now have a generic upstream fix and passing snapshot.
 - String.lastIndexOf now has a generic upstream fix and passing snapshot.
 - haxe.io.Path.directory now has a generic upstream fix and passing snapshot.
 
-Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter/thread-read projection and pagination pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()`, non-copy field assign-op, and non-copy local reuse regressions, unsupported Cafex seam, licensing, and broader parity work.
+Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter/thread-read projection, pagination, and active-turn merge pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()`, non-copy field assign-op, and non-copy local reuse regressions, unsupported Cafex seam, licensing, and broader parity work.

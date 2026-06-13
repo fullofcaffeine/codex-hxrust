@@ -210,7 +210,19 @@ Page selected reconstructed turns through upstream-shaped `thread/turns/list` ru
 
 Status: HXCX-4.18 now owns `fixtures/hxrust/thread-read-turns-page.v1.json` and validates the slice through `harness/check-thread-read-turns-page.sh`. No new haxe.rust limitation was exposed; malformed cursor parsing is handled as a typed app boundary failure. This is `thread/turns/list` page evidence only, not `thread/turns/items/list` runtime support, full rollout storage, active-turn merge, or production state ownership.
 
-### HXCX-4.19+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.19: Thread/Read Active-Turn Merge
+
+Model the selected active-turn merge and status normalization behavior around reconstructed turns:
+
+- `idle`/`notLoaded` loaded statuses become `active` when an in-progress live turn exists;
+- stale reconstructed `inProgress` turns are interrupted when the resolved thread status is not active;
+- active-turn snapshots replace matching history turns and append otherwise;
+- missing active snapshots remain valid;
+- invalid loaded status values fail closed.
+
+Status: HXCX-4.19 now owns `fixtures/hxrust/thread-read-active-turn-merge.v1.json` and validates the slice through `harness/check-thread-read-active-turn-merge.sh`. No new haxe.rust limitation was exposed. This is pure state evidence only, not live `ThreadState` ownership, watch-manager integration, rollout storage, or production state ownership.
+
+### HXCX-4.20+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

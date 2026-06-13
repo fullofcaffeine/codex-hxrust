@@ -1,0 +1,130 @@
+{
+  "schema": "codex-hxrust.thread-read-active-turn-merge.v1",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    "../codex/codex-rs/app-server/src/thread_status.rs:285",
+    "../codex/codex-rs/app-server/src/request_processors/thread_lifecycle.rs:778",
+    "../codex/codex-rs/app-server/src/request_processors/thread_lifecycle.rs:783",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:3796",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:3814",
+    "../codex/codex-rs/app-server/src/thread_state.rs:138",
+    "../codex/codex-rs/app-server-protocol/src/protocol/thread_history.rs:120",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor_tests.rs:214"
+  ],
+  "baseTurns": [
+    {
+      "id": "turn-1",
+      "status": "completed",
+      "items": [
+        { "kind": "userMessage", "text": "first prompt" },
+        { "kind": "agentMessage", "text": "first answer" }
+      ]
+    },
+    {
+      "id": "turn-2",
+      "status": "inProgress",
+      "items": [
+        { "kind": "userMessage", "text": "stale prompt" }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "stale-in-progress-interrupted",
+      "loadedStatus": "idle",
+      "hasLiveRunningThread": false,
+      "activeTurn": null,
+      "expect": {
+        "ok": true,
+        "code": "turns_reconstructed",
+        "threadStatus": "idle",
+        "turnCount": 2,
+        "summaryContains": "turn=turn-2;status=interrupted;items=1[userMessage:stale prompt]"
+      }
+    },
+    {
+      "id": "live-running-preserves-in-progress",
+      "loadedStatus": "idle",
+      "hasLiveRunningThread": true,
+      "activeTurn": null,
+      "expect": {
+        "ok": true,
+        "code": "turns_reconstructed",
+        "threadStatus": "active",
+        "turnCount": 2,
+        "summaryContains": "merge:turns_reconstructed;ok=true;threadStatus=active;turns=2;[turn=turn-1;status=completed;items=2[userMessage:first prompt|agentMessage:first answer]||turn=turn-2;status=inProgress;items=1[userMessage:stale prompt]]"
+      }
+    },
+    {
+      "id": "active-turn-appended-before-running-observed",
+      "loadedStatus": "idle",
+      "hasLiveRunningThread": false,
+      "activeTurn": {
+        "id": "live-turn",
+        "status": "inProgress",
+        "items": [
+          { "kind": "userMessage", "text": "live prompt" }
+        ]
+      },
+      "expect": {
+        "ok": true,
+        "code": "turns_reconstructed",
+        "threadStatus": "active",
+        "turnCount": 3,
+        "summaryContains": "turn=live-turn;status=inProgress;items=1[userMessage:live prompt]"
+      }
+    },
+    {
+      "id": "active-turn-replaces-history-copy",
+      "loadedStatus": "active",
+      "hasLiveRunningThread": true,
+      "activeTurn": {
+        "id": "turn-2",
+        "status": "inProgress",
+        "items": [
+          { "kind": "userMessage", "text": "fresh prompt" },
+          { "kind": "agentMessage", "text": "streaming answer" }
+        ]
+      },
+      "expect": {
+        "ok": true,
+        "code": "turns_reconstructed",
+        "threadStatus": "active",
+        "turnCount": 2,
+        "summaryContains": "turn=turn-1;status=completed;items=2[userMessage:first prompt|agentMessage:first answer]||turn=turn-2;status=inProgress;items=2[userMessage:fresh prompt|agentMessage:streaming answer]"
+      }
+    },
+    {
+      "id": "missing-active-snapshot-active-status",
+      "loadedStatus": "active",
+      "hasLiveRunningThread": false,
+      "activeTurn": null,
+      "expect": {
+        "ok": true,
+        "code": "turns_reconstructed",
+        "threadStatus": "active",
+        "turnCount": 2,
+        "summaryContains": "turn=turn-2;status=inProgress;items=1[userMessage:stale prompt]"
+      }
+    },
+    {
+      "id": "invalid-loaded-status-refused",
+      "loadedStatus": "paused",
+      "hasLiveRunningThread": false,
+      "activeTurn": null,
+      "expect": {
+        "ok": false,
+        "code": "invalid_thread_status",
+        "threadStatus": "notLoaded",
+        "turnCount": 0,
+        "summaryContains": ""
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 6,
+    "okCount": 5,
+    "failureCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-active-turn-merge-report.v1;cases=6;ok=5;failed=1"
+  }
+}
