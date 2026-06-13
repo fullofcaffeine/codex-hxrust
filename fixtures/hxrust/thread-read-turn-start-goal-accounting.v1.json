@@ -1,0 +1,331 @@
+{
+  "schema": "codex-hxrust.thread-read-turn-start-goal-accounting-fixture.v1",
+  "bead": "HXCX-4.33",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/ext/goal/src/extension.rs",
+      "symbols": [
+        "GoalExtension::on_turn_start",
+        "goal_runtime_handle",
+        "runtime.is_enabled",
+        "GoalAccountingState::start_turn",
+        "ModeKind::Plan",
+        "GoalAccountingState::clear_current_turn_goal",
+        "get_thread_goal",
+        "GoalAccountingState::mark_turn_goal_active"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/accounting.rs",
+      "symbols": [
+        "GoalAccountingState::start_turn",
+        "GoalAccountingState::mark_turn_goal_active",
+        "GoalAccountingState::clear_current_turn_goal"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "runtime-missing-skips-before-start-turn",
+      "request": {
+        "runtimeAvailable": false,
+        "runtimeEnabled": false,
+        "turnId": "turn-runtime-missing",
+        "collaborationMode": "default",
+        "tokenUsageAtTurnStart": 120,
+        "storedGoalLookupOutcomeKind": "found",
+        "storedGoalLookupErrorCode": "",
+        "storedGoalId": "goal-runtime-missing",
+        "budgetLimitReportedGoalId": "",
+        "storedGoal": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_missing_skip",
+        "runtimeAvailable": false,
+        "runtimeEnabled": false,
+        "startTurnCalled": false,
+        "accountTokens": false,
+        "clearCurrentTurnGoalCalled": false,
+        "storedGoalLookupAttempted": false,
+        "storedGoalLookupOutcomeKind": "none",
+        "storedGoalMarkedActive": false,
+        "currentTurnGoalId": "",
+        "wallClockActiveGoalId": "",
+        "budgetLimitReportCleared": false,
+        "stateLookupError": false,
+        "summaryContains": "goal_runtime_handle/none->return"
+      }
+    },
+    {
+      "id": "runtime-disabled-skips-before-start-turn",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": false,
+        "turnId": "turn-disabled",
+        "collaborationMode": "default",
+        "tokenUsageAtTurnStart": 120,
+        "storedGoalLookupOutcomeKind": "found",
+        "storedGoalLookupErrorCode": "",
+        "storedGoalId": "goal-disabled",
+        "budgetLimitReportedGoalId": "",
+        "storedGoal": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_disabled_skip",
+        "runtimeAvailable": true,
+        "runtimeEnabled": false,
+        "startTurnCalled": false,
+        "accountTokens": false,
+        "clearCurrentTurnGoalCalled": false,
+        "storedGoalLookupAttempted": false,
+        "storedGoalLookupOutcomeKind": "none",
+        "storedGoalMarkedActive": false,
+        "currentTurnGoalId": "",
+        "wallClockActiveGoalId": "",
+        "budgetLimitReportCleared": false,
+        "stateLookupError": false,
+        "summaryContains": "runtime_disabled->return"
+      }
+    },
+    {
+      "id": "plan-mode-starts-turn-and-clears-current-goal",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-plan",
+        "collaborationMode": "plan",
+        "tokenUsageAtTurnStart": 200,
+        "storedGoalLookupOutcomeKind": "found",
+        "storedGoalLookupErrorCode": "",
+        "storedGoalId": "goal-plan",
+        "budgetLimitReportedGoalId": "goal-plan",
+        "storedGoal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001033",
+          "objective": "Plan without auto goal accounting",
+          "status": "active",
+          "tokenBudget": 5000,
+          "tokensUsed": 900,
+          "timeUsedSeconds": 100,
+          "createdAt": 230000,
+          "updatedAt": 230010
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "plan_mode_current_goal_cleared",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "startTurnCalled": true,
+        "accountTokens": false,
+        "clearCurrentTurnGoalCalled": true,
+        "storedGoalLookupAttempted": false,
+        "storedGoalLookupOutcomeKind": "none",
+        "storedGoalMarkedActive": false,
+        "currentTurnGoalId": "",
+        "wallClockActiveGoalId": "",
+        "budgetLimitReportCleared": true,
+        "stateLookupError": false,
+        "summaryContains": "start_turn:account_tokens=false->clear_current_turn_goal->return"
+      }
+    },
+    {
+      "id": "active-stored-goal-marked-for-turn",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-active",
+        "collaborationMode": "default",
+        "tokenUsageAtTurnStart": 250,
+        "storedGoalLookupOutcomeKind": "found",
+        "storedGoalLookupErrorCode": "",
+        "storedGoalId": "goal-active-turn-start",
+        "budgetLimitReportedGoalId": "old-budget-goal",
+        "storedGoal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001033",
+          "objective": "Mark active goal",
+          "status": "active",
+          "tokenBudget": 5000,
+          "tokensUsed": 1000,
+          "timeUsedSeconds": 140,
+          "createdAt": 230000,
+          "updatedAt": 230020
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "active_goal_marked_active_for_turn",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "startTurnCalled": true,
+        "accountTokens": true,
+        "clearCurrentTurnGoalCalled": false,
+        "storedGoalLookupAttempted": true,
+        "storedGoalLookupOutcomeKind": "found",
+        "storedGoalMarkedActive": true,
+        "currentTurnGoalId": "goal-active-turn-start",
+        "wallClockActiveGoalId": "goal-active-turn-start",
+        "budgetLimitReportCleared": true,
+        "stateLookupError": false,
+        "summaryContains": "mark_turn_goal_active:goal-active-turn-start"
+      }
+    },
+    {
+      "id": "budget-limited-stored-goal-marked-for-turn",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-budget",
+        "collaborationMode": "default",
+        "tokenUsageAtTurnStart": 300,
+        "storedGoalLookupOutcomeKind": "found",
+        "storedGoalLookupErrorCode": "",
+        "storedGoalId": "goal-budget-turn-start",
+        "budgetLimitReportedGoalId": "goal-budget-turn-start",
+        "storedGoal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001033",
+          "objective": "Keep budget-limited goal active",
+          "status": "budgetLimited",
+          "tokenBudget": 1000,
+          "tokensUsed": 1200,
+          "timeUsedSeconds": 240,
+          "createdAt": 230000,
+          "updatedAt": 230030
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "budget_limited_goal_marked_active_for_turn",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "startTurnCalled": true,
+        "accountTokens": true,
+        "clearCurrentTurnGoalCalled": false,
+        "storedGoalLookupAttempted": true,
+        "storedGoalLookupOutcomeKind": "found",
+        "storedGoalMarkedActive": true,
+        "currentTurnGoalId": "goal-budget-turn-start",
+        "wallClockActiveGoalId": "goal-budget-turn-start",
+        "budgetLimitReportCleared": false,
+        "stateLookupError": false,
+        "summaryContains": "get_thread_goal:budgetLimited->mark_turn_goal_active"
+      }
+    },
+    {
+      "id": "missing-stored-goal-skips-marking",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-missing-goal",
+        "collaborationMode": "default",
+        "tokenUsageAtTurnStart": 310,
+        "storedGoalLookupOutcomeKind": "missing",
+        "storedGoalLookupErrorCode": "",
+        "storedGoalId": "",
+        "budgetLimitReportedGoalId": "",
+        "storedGoal": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "stored_goal_missing_skip",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "startTurnCalled": true,
+        "accountTokens": true,
+        "clearCurrentTurnGoalCalled": false,
+        "storedGoalLookupAttempted": true,
+        "storedGoalLookupOutcomeKind": "missing",
+        "storedGoalMarkedActive": false,
+        "currentTurnGoalId": "",
+        "wallClockActiveGoalId": "",
+        "budgetLimitReportCleared": false,
+        "stateLookupError": false,
+        "summaryContains": "get_thread_goal/none->return"
+      }
+    },
+    {
+      "id": "non-active-stored-goal-skips-marking",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-paused-goal",
+        "collaborationMode": "default",
+        "tokenUsageAtTurnStart": 320,
+        "storedGoalLookupOutcomeKind": "found",
+        "storedGoalLookupErrorCode": "",
+        "storedGoalId": "goal-paused-turn-start",
+        "budgetLimitReportedGoalId": "",
+        "storedGoal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001033",
+          "objective": "Paused goal is not auto-accounted",
+          "status": "paused",
+          "tokenBudget": 5000,
+          "tokensUsed": 1000,
+          "timeUsedSeconds": 340,
+          "createdAt": 230000,
+          "updatedAt": 230040
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "stored_goal_not_active_skip",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "startTurnCalled": true,
+        "accountTokens": true,
+        "clearCurrentTurnGoalCalled": false,
+        "storedGoalLookupAttempted": true,
+        "storedGoalLookupOutcomeKind": "found",
+        "storedGoalMarkedActive": false,
+        "currentTurnGoalId": "",
+        "wallClockActiveGoalId": "",
+        "budgetLimitReportCleared": false,
+        "stateLookupError": false,
+        "summaryContains": "get_thread_goal:paused->return"
+      }
+    },
+    {
+      "id": "state-lookup-error-skips-marking",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-state-error",
+        "collaborationMode": "default",
+        "tokenUsageAtTurnStart": 330,
+        "storedGoalLookupOutcomeKind": "error",
+        "storedGoalLookupErrorCode": "sqlite_busy",
+        "storedGoalId": "",
+        "budgetLimitReportedGoalId": "",
+        "storedGoal": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "state_lookup_error_skip",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "startTurnCalled": true,
+        "accountTokens": true,
+        "clearCurrentTurnGoalCalled": false,
+        "storedGoalLookupAttempted": true,
+        "storedGoalLookupOutcomeKind": "error",
+        "storedGoalMarkedActive": false,
+        "currentTurnGoalId": "",
+        "wallClockActiveGoalId": "",
+        "budgetLimitReportCleared": false,
+        "stateLookupError": true,
+        "summaryContains": "get_thread_goal/error:sqlite_busy->return"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 8,
+    "markedActiveCount": 2,
+    "skippedCount": 6,
+    "startTurnCount": 6,
+    "planClearedCount": 1,
+    "stateLookupErrorCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-turn-start-goal-accounting-report.v1;cases=8;markedActive=2;skipped=6;startTurn=6;planCleared=1;stateLookupErrors=1"
+  }
+}

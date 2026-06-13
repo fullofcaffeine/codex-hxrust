@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/thread-read-turn-start-goal-accounting
+-D rust_crate=codex_hxrust_thread_read_turn_start_goal_accounting
+-D rust_cargo_subcommand=check
+-main ThreadReadTurnStartGoalAccountingHarness

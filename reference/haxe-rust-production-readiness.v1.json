@@ -6,7 +6,7 @@
   "recommendation": {
     "mode": "conditional_go_for_helper_sidecar_and_selected_adapter_slices",
     "broadReplacement": "no_go",
-    "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, runtime/TUI persistence-boundary, native SQLite persistence/state-adapter/read-view/thread-read projection/pagination/active-turn-merge/turn-items unsupported-runtime/token-usage replay/goal-continuation admission/goal-runtime restore/active-turn and budget-limit goal steering/active-goal and idle-goal progress accounting pressure slices, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
+    "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, runtime/TUI persistence-boundary, native SQLite persistence/state-adapter/read-view/thread-read projection/pagination/active-turn-merge/turn-items unsupported-runtime/token-usage replay/goal-continuation admission/goal-runtime restore/active-turn and budget-limit goal steering/active-goal and idle-goal progress accounting/turn-start accounting pressure slices, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
       "requiredBeforeBroadReplacement": [
       "Broaden haxe.rust parity evidence beyond selected helper/headless/adapter pressure fixtures.",
       "Resolve haxe.rust-362 nullable Array.shift class-return lowering or carry an explicit release-blocking compiler risk.",
@@ -33,7 +33,7 @@
     {
       "dimension": "language",
       "score": "yellow_green",
-      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, enum class-payload equality, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metal pressure, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, and idle-goal progress accounting, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, non-copy local reuse, and static final path regressions still open upstream.",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, enum class-payload equality, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metal pressure, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, and turn-start accounting, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, non-copy local reuse, and static final path regressions still open upstream.",
       "strengths": [
         "14 of 18 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
@@ -55,13 +55,13 @@
     {
       "dimension": "runtime",
       "score": "yellow",
-      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view proof, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, and idle-goal progress accounting, selected TUI story/render, and turn reducer slices are viable, but live model/full production SQLite log state/full TUI/restart ownership is outside current proof.",
+      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view proof, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, and turn-start accounting, selected TUI story/render, and turn reducer slices are viable, but live model/full production SQLite log state/full TUI/restart ownership is outside current proof.",
       "strengths": [
         "Headless runtime fixtures pass without model credentials.",
         "Cancellation and transcript/state artifacts are deterministic.",
         "Runtime app-client classification, lag markers, and request correlation pass through generated Rust.",
         "Selected upstream TUI story replay passes through generated Rust with normalized summaries.",
-        "Selected runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view, thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
+        "Selected runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view, thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
         "Operator runbook keeps production default disabled."
       ],
       "caveats": [
@@ -78,7 +78,7 @@
       "score": "yellow_green",
       "rationale": "The project has kept interop typed and narrow: generated Rust is disposable, haxe.rust stays external, and app/test Haxe source has no raw Rust snippets.",
       "strengths": [
-        "Raw Rust escape pressure is 0 matches across 278 Haxe source/test files.",
+        "Raw Rust escape pressure is 0 matches across 285 Haxe source/test files.",
         "haxe.rust fixes are generic and made in ../haxe.rust.",
         "Pin update workflow is scripted and gated."
       ],
@@ -187,7 +187,7 @@
       "openUpstream": 4,
       "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 278,
+      "sourceFilesScanned": 285,
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {

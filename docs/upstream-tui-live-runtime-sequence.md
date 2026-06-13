@@ -373,7 +373,19 @@ Model the selected upstream idle-goal progress accounting path:
 
 Status: HXCX-4.32 now owns `fixtures/hxrust/thread-read-idle-goal-progress-accounting.v1.json` and validates the slice through `harness/check-thread-read-idle-goal-progress-accounting.sh`. No new haxe.rust limitation was exposed. This is idle accounting-state evidence only, not async permit ownership, production state DB ownership, metrics/analytics clients, event emitter ownership, live wall-clock sources, idle lifecycle scheduling, continuation turn spawning, or Cafex behavior.
 
-### HXCX-4.33+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.33: Turn-Start Goal Accounting
+
+Model the selected upstream turn-start goal accounting setup path:
+
+- runtime-missing and disabled-runtime guards skip before accounting setup;
+- `GoalAccountingState::start_turn` records the current turn and token-accounting eligibility;
+- Plan mode calls `clear_current_turn_goal` and returns before stored-goal lookup;
+- active and budget-limited stored goals call `mark_turn_goal_active`;
+- missing, non-active, and state-error lookup paths skip deterministically.
+
+Status: HXCX-4.33 now owns `fixtures/hxrust/thread-read-turn-start-goal-accounting.v1.json` and validates the slice through `harness/check-thread-read-turn-start-goal-accounting.sh`. No new haxe.rust limitation was exposed. This is turn-start accounting setup evidence only, not full turn lifecycle ownership, token usage aggregation, turn stop/abort/error hooks, production state DB ownership, live turn start, steering injection, or Cafex behavior.
+
+### HXCX-4.34+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

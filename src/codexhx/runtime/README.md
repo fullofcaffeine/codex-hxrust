@@ -332,6 +332,18 @@ The fixture `fixtures/hxrust/thread-read-active-goal-progress-accounting.v1.json
 
 The fixture `fixtures/hxrust/thread-read-idle-goal-progress-accounting.v1.json` and `harness/check-thread-read-idle-goal-progress-accounting.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own async permits, production state DB handles, metrics/analytics clients, event emitters, live wall-clock sources, idle lifecycle scheduling, continuation turn spawning, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-idle-goal-progress-accounting.md`.
 
+## Thread/Read Turn-Start Goal Accounting
+
+`codexhx.runtime.app.threadread.ThreadReadTurnStartGoalAccountingPolicy` is the HXCX-4.33 raw upstream turn-start goal accounting slice:
+
+- runtime-missing and disabled-runtime guards skip before accounting setup;
+- `start_turn` records the current turn and disables token accounting for Plan mode;
+- Plan mode clears current-turn goal state and returns before stored-goal lookup;
+- active and budget-limited stored goals are marked active for the current turn;
+- missing, non-active, and state-error lookup paths skip deterministically.
+
+The fixture `fixtures/hxrust/thread-read-turn-start-goal-accounting.v1.json` and `harness/check-thread-read-turn-start-goal-accounting.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own full turn lifecycle, token usage aggregation, turn stop/abort/error hooks, production state DB handles, live turn start, steering injection, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-turn-start-goal-accounting.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:
