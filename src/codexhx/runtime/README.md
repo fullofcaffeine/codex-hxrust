@@ -344,6 +344,18 @@ The fixture `fixtures/hxrust/thread-read-idle-goal-progress-accounting.v1.json` 
 
 The fixture `fixtures/hxrust/thread-read-turn-start-goal-accounting.v1.json` and `harness/check-thread-read-turn-start-goal-accounting.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own full turn lifecycle, token usage aggregation, turn stop/abort/error hooks, production state DB handles, live turn start, steering injection, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-turn-start-goal-accounting.md`.
 
+## Thread/Read Turn Goal Finalization
+
+`codexhx.runtime.app.threadread.ThreadReadTurnGoalFinalizationPolicy` is the HXCX-4.34 raw upstream turn-stop/abort goal finalization slice:
+
+- runtime-missing and disabled-runtime guards skip before active-goal progress accounting;
+- turn stop and abort choose `:turn-stop` and `:turn-abort` event id suffixes;
+- both hooks account active goal progress with `active_only` mode and `clear_active` budget-limited disposition;
+- accounting errors preserve the turn by skipping `finish_turn`;
+- successful accounting, including `Ok(None)`, finishes the turn.
+
+The fixture `fixtures/hxrust/thread-read-turn-goal-finalization.v1.json` and `harness/check-thread-read-turn-goal-finalization.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This composes with the HXCX-4.31 active-goal accounting policy and does not own turn error goal stopping, token usage aggregation, production state DB handles, metrics, analytics, event emitters, live turn start, steering injection, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-turn-goal-finalization.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

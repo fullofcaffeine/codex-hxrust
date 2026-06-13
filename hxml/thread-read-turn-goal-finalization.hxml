@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/thread-read-turn-goal-finalization
+-D rust_crate=codex_hxrust_thread_read_turn_goal_finalization
+-D rust_cargo_subcommand=check
+-main ThreadReadTurnGoalFinalizationHarness

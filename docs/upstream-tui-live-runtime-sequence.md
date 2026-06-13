@@ -385,7 +385,19 @@ Model the selected upstream turn-start goal accounting setup path:
 
 Status: HXCX-4.33 now owns `fixtures/hxrust/thread-read-turn-start-goal-accounting.v1.json` and validates the slice through `harness/check-thread-read-turn-start-goal-accounting.sh`. No new haxe.rust limitation was exposed. This is turn-start accounting setup evidence only, not full turn lifecycle ownership, token usage aggregation, turn stop/abort/error hooks, production state DB ownership, live turn start, steering injection, or Cafex behavior.
 
-### HXCX-4.34+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.34: Turn Stop/Abort Goal Finalization
+
+Model the selected upstream turn-stop and turn-abort goal finalization path:
+
+- runtime-missing and disabled-runtime guards skip before active-goal progress accounting;
+- turn stop uses `:turn-stop`; turn abort uses `:turn-abort`;
+- both hooks call active-goal progress accounting with `ActiveOnly` and `BudgetLimitedGoalDisposition::ClearActive`;
+- accounting errors warn and return before `finish_turn`;
+- successful accounting, including no progress, calls `finish_turn`.
+
+Status: HXCX-4.34 now owns `fixtures/hxrust/thread-read-turn-goal-finalization.v1.json` and validates the slice through `harness/check-thread-read-turn-goal-finalization.sh`. No new haxe.rust limitation was exposed. This is turn finalization evidence only, not turn error goal stopping, full active-goal accounting internals, token usage aggregation, production state DB ownership, metrics/analytics/event emitters, live turn start, steering injection, or Cafex behavior.
+
+### HXCX-4.35+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

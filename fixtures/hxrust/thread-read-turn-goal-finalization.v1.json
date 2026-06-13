@@ -1,0 +1,332 @@
+{
+  "schema": "codex-hxrust.thread-read-turn-goal-finalization-fixture.v1",
+  "bead": "HXCX-4.34",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/ext/goal/src/extension.rs",
+      "symbols": [
+        "GoalExtension::on_turn_stop",
+        "GoalExtension::on_turn_abort",
+        "goal_runtime_handle",
+        "runtime.is_enabled",
+        "GoalRuntime::account_active_goal_progress",
+        "GoalAccountingMode::ActiveOnly",
+        "BudgetLimitedGoalDisposition::ClearActive",
+        "GoalAccountingState::finish_turn"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/accounting.rs",
+      "symbols": [
+        "GoalAccountingState::finish_turn"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "turn-stop-success-with-active-progress",
+      "request": {
+        "kind": "turn_stop",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-stop-active",
+        "accounting": {
+          "turnId": "turn-stop-active",
+          "eventId": "turn-stop-active:turn-stop",
+          "progressSnapshotAvailable": true,
+          "snapshotExpectedGoalId": "goal-stop-active",
+          "snapshotTimeDeltaSeconds": 10,
+          "snapshotTokenDelta": 128,
+          "previousStatus": "active",
+          "dbOutcomeKind": "updated",
+          "dbErrorCode": "",
+          "updatedGoalId": "goal-stop-active",
+          "disposition": "clear_active",
+          "updatedGoal": {
+            "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001034",
+            "objective": "Finish normal turn",
+            "status": "active",
+            "tokenBudget": 5000,
+            "tokensUsed": 1128,
+            "timeUsedSeconds": 210,
+            "createdAt": 240000,
+            "updatedAt": 240010
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "turn_stop_finalized_with_progress",
+        "kind": "turn_stop",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "accountingAttempted": true,
+        "accountingMode": "active_only",
+        "budgetLimitedDisposition": "clear_active",
+        "eventId": "turn-stop-active:turn-stop",
+        "accountingOk": true,
+        "accountingCode": "active_goal_progress_updated",
+        "progressReturned": true,
+        "activeGoalCleared": false,
+        "finishTurnCalled": true,
+        "turnStatePreserved": false,
+        "warningLogged": false,
+        "summaryContains": "on_turn_stop->account_active_goal_progress:turn-stop-active:turn-stop/ok:active_goal_progress_updated->finish_turn"
+      }
+    },
+    {
+      "id": "turn-abort-success-with-active-progress",
+      "request": {
+        "kind": "turn_abort",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-abort-active",
+        "accounting": {
+          "turnId": "turn-abort-active",
+          "eventId": "turn-abort-active:turn-abort",
+          "progressSnapshotAvailable": true,
+          "snapshotExpectedGoalId": "goal-abort-active",
+          "snapshotTimeDeltaSeconds": 11,
+          "snapshotTokenDelta": 96,
+          "previousStatus": "active",
+          "dbOutcomeKind": "updated",
+          "dbErrorCode": "",
+          "updatedGoalId": "goal-abort-active",
+          "disposition": "clear_active",
+          "updatedGoal": {
+            "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001034",
+            "objective": "Abort normal turn",
+            "status": "active",
+            "tokenBudget": 5000,
+            "tokensUsed": 1096,
+            "timeUsedSeconds": 211,
+            "createdAt": 240000,
+            "updatedAt": 240011
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "turn_abort_finalized_with_progress",
+        "kind": "turn_abort",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "accountingAttempted": true,
+        "accountingMode": "active_only",
+        "budgetLimitedDisposition": "clear_active",
+        "eventId": "turn-abort-active:turn-abort",
+        "accountingOk": true,
+        "accountingCode": "active_goal_progress_updated",
+        "progressReturned": true,
+        "activeGoalCleared": false,
+        "finishTurnCalled": true,
+        "turnStatePreserved": false,
+        "warningLogged": false,
+        "summaryContains": "on_turn_abort->account_active_goal_progress:turn-abort-active:turn-abort/ok:active_goal_progress_updated->finish_turn"
+      }
+    },
+    {
+      "id": "runtime-missing-skip",
+      "request": {
+        "kind": "turn_stop",
+        "runtimeAvailable": false,
+        "runtimeEnabled": false,
+        "turnId": "turn-runtime-missing",
+        "accounting": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_missing_skip",
+        "kind": "turn_stop",
+        "runtimeAvailable": false,
+        "runtimeEnabled": false,
+        "accountingAttempted": false,
+        "accountingMode": "none",
+        "budgetLimitedDisposition": "none",
+        "eventId": "",
+        "accountingOk": true,
+        "accountingCode": "",
+        "progressReturned": false,
+        "activeGoalCleared": false,
+        "finishTurnCalled": false,
+        "turnStatePreserved": true,
+        "warningLogged": false,
+        "summaryContains": "goal_runtime_handle/none->return"
+      }
+    },
+    {
+      "id": "runtime-disabled-skip",
+      "request": {
+        "kind": "turn_abort",
+        "runtimeAvailable": true,
+        "runtimeEnabled": false,
+        "turnId": "turn-runtime-disabled",
+        "accounting": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_disabled_skip",
+        "kind": "turn_abort",
+        "runtimeAvailable": true,
+        "runtimeEnabled": false,
+        "accountingAttempted": false,
+        "accountingMode": "none",
+        "budgetLimitedDisposition": "none",
+        "eventId": "",
+        "accountingOk": true,
+        "accountingCode": "",
+        "progressReturned": false,
+        "activeGoalCleared": false,
+        "finishTurnCalled": false,
+        "turnStatePreserved": true,
+        "warningLogged": false,
+        "summaryContains": "runtime_disabled->return"
+      }
+    },
+    {
+      "id": "accounting-error-preserves-turn",
+      "request": {
+        "kind": "turn_stop",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-accounting-error",
+        "accounting": {
+          "turnId": "turn-accounting-error",
+          "eventId": "turn-accounting-error:turn-stop",
+          "progressSnapshotAvailable": true,
+          "snapshotExpectedGoalId": "goal-error",
+          "snapshotTimeDeltaSeconds": 8,
+          "snapshotTokenDelta": 99,
+          "previousStatus": "active",
+          "dbOutcomeKind": "error",
+          "dbErrorCode": "sqlite_busy",
+          "updatedGoalId": "",
+          "disposition": "clear_active",
+          "updatedGoal": null
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "accounting_error_preserved_turn",
+        "kind": "turn_stop",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "accountingAttempted": true,
+        "accountingMode": "active_only",
+        "budgetLimitedDisposition": "clear_active",
+        "eventId": "turn-accounting-error:turn-stop",
+        "accountingOk": false,
+        "accountingCode": "state_accounting_failed",
+        "progressReturned": false,
+        "activeGoalCleared": false,
+        "finishTurnCalled": false,
+        "turnStatePreserved": true,
+        "warningLogged": true,
+        "summaryContains": "warn->return"
+      }
+    },
+    {
+      "id": "accounting-none-still-finishes-turn",
+      "request": {
+        "kind": "turn_stop",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-no-progress",
+        "accounting": {
+          "turnId": "turn-no-progress",
+          "eventId": "turn-no-progress:turn-stop",
+          "progressSnapshotAvailable": false,
+          "snapshotExpectedGoalId": "",
+          "snapshotTimeDeltaSeconds": 0,
+          "snapshotTokenDelta": 0,
+          "previousStatus": "",
+          "dbOutcomeKind": "updated",
+          "dbErrorCode": "",
+          "updatedGoalId": "",
+          "disposition": "clear_active",
+          "updatedGoal": null
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "turn_stop_finalized_without_progress",
+        "kind": "turn_stop",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "accountingAttempted": true,
+        "accountingMode": "active_only",
+        "budgetLimitedDisposition": "clear_active",
+        "eventId": "turn-no-progress:turn-stop",
+        "accountingOk": true,
+        "accountingCode": "progress_snapshot_missing",
+        "progressReturned": false,
+        "activeGoalCleared": false,
+        "finishTurnCalled": true,
+        "turnStatePreserved": false,
+        "warningLogged": false,
+        "summaryContains": "ok:progress_snapshot_missing->finish_turn"
+      }
+    },
+    {
+      "id": "budget-limited-clear-active-finalizes-turn",
+      "request": {
+        "kind": "turn_abort",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnId": "turn-budget-clear",
+        "accounting": {
+          "turnId": "turn-budget-clear",
+          "eventId": "turn-budget-clear:turn-abort",
+          "progressSnapshotAvailable": true,
+          "snapshotExpectedGoalId": "goal-budget-clear",
+          "snapshotTimeDeltaSeconds": 20,
+          "snapshotTokenDelta": 600,
+          "previousStatus": "active",
+          "dbOutcomeKind": "updated",
+          "dbErrorCode": "",
+          "updatedGoalId": "goal-budget-clear",
+          "disposition": "clear_active",
+          "updatedGoal": {
+            "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001034",
+            "objective": "Budget reached on abort",
+            "status": "budgetLimited",
+            "tokenBudget": 1000,
+            "tokensUsed": 1600,
+            "timeUsedSeconds": 320,
+            "createdAt": 240000,
+            "updatedAt": 240020
+          }
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "turn_abort_finalized_with_progress",
+        "kind": "turn_abort",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "accountingAttempted": true,
+        "accountingMode": "active_only",
+        "budgetLimitedDisposition": "clear_active",
+        "eventId": "turn-budget-clear:turn-abort",
+        "accountingOk": true,
+        "accountingCode": "budget_limited_progress_updated_clear_active",
+        "progressReturned": true,
+        "activeGoalCleared": true,
+        "finishTurnCalled": true,
+        "turnStatePreserved": false,
+        "warningLogged": false,
+        "summaryContains": "activeCleared=true"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 7,
+    "finalizedCount": 4,
+    "skippedCount": 2,
+    "accountingErrorCount": 1,
+    "warningCount": 1,
+    "activeGoalClearedCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-turn-goal-finalization-report.v1;cases=7;finalized=4;skipped=2;accountingErrors=1;warnings=1;activeCleared=1"
+  }
+}
