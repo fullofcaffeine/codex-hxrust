@@ -356,6 +356,19 @@ The fixture `fixtures/hxrust/thread-read-turn-start-goal-accounting.v1.json` and
 
 The fixture `fixtures/hxrust/thread-read-turn-goal-finalization.v1.json` and `harness/check-thread-read-turn-goal-finalization.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This composes with the HXCX-4.31 active-goal accounting policy and does not own turn error goal stopping, token usage aggregation, production state DB handles, metrics, analytics, event emitters, live turn start, steering injection, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-turn-goal-finalization.md`.
 
+## Thread/Read Turn-Error Active Goal Stop
+
+`codexhx.runtime.app.threadread.ThreadReadTurnErrorActiveGoalStopPolicy` is the HXCX-4.35 raw upstream turn-error active-goal stop slice:
+
+- usage-limit errors map to `usage_limit` and target `usageLimited`;
+- other terminal turn errors map to `turn_error` and target `blocked`;
+- disabled runtimes and non-current active turns no-op deterministically;
+- active-goal progress accounting uses `active_only` mode and `clear_active` budget-limited disposition;
+- missing stored goals and non-stoppable stored statuses clear active-goal accounting state;
+- successful stops emit selected `thread_goal_updated` evidence with `:usage-limit` or `:turn-error` event ids.
+
+The fixture `fixtures/hxrust/thread-read-turn-error-active-goal-stop.v1.json` and `harness/check-thread-read-turn-error-active-goal-stop.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This composes with the HXCX-4.31 active-goal accounting policy and does not own live async locks, production state DB handles, metrics, analytics, event emitters, live token aggregation, full error taxonomy, tool lifecycle callbacks, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-turn-error-active-goal-stop.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

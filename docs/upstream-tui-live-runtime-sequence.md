@@ -397,7 +397,20 @@ Model the selected upstream turn-stop and turn-abort goal finalization path:
 
 Status: HXCX-4.34 now owns `fixtures/hxrust/thread-read-turn-goal-finalization.v1.json` and validates the slice through `harness/check-thread-read-turn-goal-finalization.sh`. No new haxe.rust limitation was exposed. This is turn finalization evidence only, not turn error goal stopping, full active-goal accounting internals, token usage aggregation, production state DB ownership, metrics/analytics/event emitters, live turn start, steering injection, or Cafex behavior.
 
-### HXCX-4.35+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.35: Turn-Error Active Goal Stop
+
+Model the selected upstream turn-error active-goal stop path:
+
+- `CodexErrorInfo::UsageLimitExceeded` maps to `ActiveGoalStopReason::UsageLimit`;
+- other terminal turn errors map to `ActiveGoalStopReason::TurnError`;
+- `stop_active_goal_for_turn` holds the goal-state permit through accounting and status update;
+- non-current active turns no-op before progress accounting;
+- active-goal progress accounting uses `ActiveOnly` and `BudgetLimitedGoalDisposition::ClearActive`;
+- usage-limit stops can move budget-limited goals to `UsageLimited`, while generic turn errors move active goals to `Blocked`.
+
+Status: HXCX-4.35 now owns `fixtures/hxrust/thread-read-turn-error-active-goal-stop.v1.json` and validates the slice through `harness/check-thread-read-turn-error-active-goal-stop.sh`. No new haxe.rust limitation was exposed. This is turn-error stop evidence only, not live async lock ownership, full active-goal accounting internals, token usage aggregation, production state DB ownership, metrics/analytics/event emitters, full error taxonomy, live turn start, steering injection, or Cafex behavior.
+
+### HXCX-4.36+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/thread-read-turn-error-active-goal-stop
+-D rust_crate=codex_hxrust_thread_read_turn_error_active_goal_stop
+-D rust_cargo_subcommand=check
+-main ThreadReadTurnErrorActiveGoalStopHarness
