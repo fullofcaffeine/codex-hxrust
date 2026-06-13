@@ -337,7 +337,19 @@ Model the selected goal steering injection path for a running turn:
 
 Status: HXCX-4.29 now owns `fixtures/hxrust/thread-read-active-turn-goal-steering-injection.v1.json` and validates the slice through `harness/check-thread-read-active-turn-goal-steering-injection.sh`. No new haxe.rust limitation was exposed. This is active-turn injection evidence only, not live `ThreadManager`, `CodexThread`, `Session`, active-turn locks, async scheduling, or Cafex behavior.
 
-### HXCX-4.30+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.30: Budget-Limit Goal Steering
+
+Model the selected budget-limit steering path after tool-finish progress accounting:
+
+- active-goal progress with `BudgetLimitedGoalDisposition::KeepActive` may return a budget-limited goal;
+- non-budget and missing progress skip before steering;
+- duplicate budget-limit reports skip through `mark_budget_limit_reported_if_new`;
+- budget-limited progress emits a `budget_limit` contextual user fragment;
+- active-turn unavailable behavior composes with HXCX-4.29 injection.
+
+Status: HXCX-4.30 now owns `fixtures/hxrust/thread-read-budget-limit-goal-steering.v1.json` and validates the slice through `harness/check-thread-read-budget-limit-goal-steering.sh`. No new haxe.rust limitation was exposed. This is budget-limit steering evidence only, not live tool lifecycle ownership, token accounting storage, production state DB ownership, event emission, active-turn locks, async scheduling, or Cafex behavior.
+
+### HXCX-4.31+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

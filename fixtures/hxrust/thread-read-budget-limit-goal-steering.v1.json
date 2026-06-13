@@ -1,0 +1,280 @@
+{
+  "schema": "codex-hxrust.thread-read-budget-limit-goal-steering-fixture.v1",
+  "bead": "HXCX-4.30",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/ext/goal/src/extension.rs",
+      "symbols": [
+        "GoalExtension::on_tool_finish",
+        "tool_attempt_counts_for_goal_progress",
+        "GoalRuntimeHandle::account_active_goal_progress",
+        "BudgetLimitedGoalDisposition::KeepActive",
+        "mark_budget_limit_reported_if_new",
+        "budget_limit_steering_item",
+        "inject_active_turn_steering"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/runtime.rs",
+      "symbols": [
+        "GoalRuntimeHandle::account_active_goal_progress",
+        "GoalAccountingOutcome::Updated",
+        "thread_goal_updated",
+        "AccountedGoalProgress"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/accounting.rs",
+      "symbols": [
+        "BudgetLimitedGoalDisposition::KeepActive",
+        "mark_budget_limit_reported_if_new"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/steering.rs",
+      "symbols": [
+        "budget_limit_steering_item"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/tests/goal_extension_backend.rs",
+      "symbols": [
+        "budget_limited_goal_keeps_accounting_after_later_tool_finish"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "budget-limited-progress-injects-steering",
+      "progress": {
+        "ok": true,
+        "available": true,
+        "errorCode": "",
+        "goalId": "goal-budget-1",
+        "budgetLimitAlreadyReported": false,
+        "goal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001030",
+          "objective": "Ship <Codex> & keep quality",
+          "status": "budgetLimited",
+          "tokenBudget": 25,
+          "tokensUsed": 35,
+          "timeUsedSeconds": 900,
+          "createdAt": 200000,
+          "updatedAt": 200100
+        }
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "budget_limit_steering_injected",
+        "progressAccounted": true,
+        "budgetLimited": true,
+        "reportMarked": true,
+        "duplicateReportSkipped": false,
+        "steeringItemEmitted": true,
+        "injectionAttempted": true,
+        "injected": true,
+        "skipped": false,
+        "injectionCode": "active_turn_steering_injected",
+        "itemSummaryContains": "kind=budget_limit",
+        "summaryContains": "mark_budget_limit_reported:goal-budget-1"
+      }
+    },
+    {
+      "id": "budget-limited-progress-no-active-turn-returns-item",
+      "progress": {
+        "ok": true,
+        "available": true,
+        "errorCode": "",
+        "goalId": "goal-budget-2",
+        "budgetLimitAlreadyReported": false,
+        "goal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001030",
+          "objective": "Keep polishing",
+          "status": "budgetLimited",
+          "tokenBudget": 30,
+          "tokensUsed": 31,
+          "timeUsedSeconds": 650,
+          "createdAt": 200000,
+          "updatedAt": 200100
+        }
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "budget_limit_steering_injection_skipped",
+        "progressAccounted": true,
+        "budgetLimited": true,
+        "reportMarked": true,
+        "duplicateReportSkipped": false,
+        "steeringItemEmitted": true,
+        "injectionAttempted": true,
+        "injected": false,
+        "skipped": true,
+        "injectionCode": "no_active_turn_skip",
+        "itemSummaryContains": "kind=budget_limit",
+        "summaryContains": "inject_if_running->returned/input"
+      }
+    },
+    {
+      "id": "non-budget-limited-progress-skips",
+      "progress": {
+        "ok": true,
+        "available": true,
+        "errorCode": "",
+        "goalId": "goal-active",
+        "budgetLimitAlreadyReported": false,
+        "goal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001030",
+          "objective": "Keep polishing",
+          "status": "active",
+          "tokenBudget": 5000,
+          "tokensUsed": 1200,
+          "timeUsedSeconds": 300,
+          "createdAt": 200000,
+          "updatedAt": 200100
+        }
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "goal_not_budget_limited_skip",
+        "progressAccounted": true,
+        "budgetLimited": false,
+        "reportMarked": false,
+        "duplicateReportSkipped": false,
+        "steeringItemEmitted": false,
+        "injectionAttempted": false,
+        "injected": false,
+        "skipped": true,
+        "injectionCode": "none",
+        "itemSummaryContains": "item=none",
+        "summaryContains": "progress returns a budget-limited goal"
+      }
+    },
+    {
+      "id": "duplicate-budget-limit-report-skips",
+      "progress": {
+        "ok": true,
+        "available": true,
+        "errorCode": "",
+        "goalId": "goal-budget-duplicate",
+        "budgetLimitAlreadyReported": true,
+        "goal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001030",
+          "objective": "Keep polishing",
+          "status": "budgetLimited",
+          "tokenBudget": 25,
+          "tokensUsed": 35,
+          "timeUsedSeconds": 900,
+          "createdAt": 200000,
+          "updatedAt": 200100
+        }
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "budget_limit_already_reported_skip",
+        "progressAccounted": true,
+        "budgetLimited": true,
+        "reportMarked": false,
+        "duplicateReportSkipped": true,
+        "steeringItemEmitted": false,
+        "injectionAttempted": false,
+        "injected": false,
+        "skipped": true,
+        "injectionCode": "none",
+        "itemSummaryContains": "item=none",
+        "summaryContains": "mark_budget_limit_reported/duplicate->skip"
+      }
+    },
+    {
+      "id": "missing-active-progress-skips",
+      "progress": {
+        "ok": true,
+        "available": false,
+        "errorCode": "",
+        "goalId": "",
+        "budgetLimitAlreadyReported": false,
+        "goal": null
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "active_progress_missing_skip",
+        "progressAccounted": false,
+        "budgetLimited": false,
+        "reportMarked": false,
+        "duplicateReportSkipped": false,
+        "steeringItemEmitted": false,
+        "injectionAttempted": false,
+        "injected": false,
+        "skipped": true,
+        "injectionCode": "none",
+        "itemSummaryContains": "item=none",
+        "summaryContains": "no active goal progress was available"
+      }
+    },
+    {
+      "id": "progress-accounting-failure-fails-closed",
+      "progress": {
+        "ok": false,
+        "available": false,
+        "errorCode": "state_db_unavailable",
+        "goalId": "",
+        "budgetLimitAlreadyReported": false,
+        "goal": null
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": false,
+        "code": "progress_accounting_failed",
+        "progressAccounted": false,
+        "budgetLimited": false,
+        "reportMarked": false,
+        "duplicateReportSkipped": false,
+        "steeringItemEmitted": false,
+        "injectionAttempted": false,
+        "injected": false,
+        "skipped": false,
+        "injectionCode": "none",
+        "itemSummaryContains": "item=none",
+        "summaryContains": "state_db_unavailable"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 6,
+    "injectedCount": 1,
+    "skippedCount": 4,
+    "failureCount": 1,
+    "reportMarkedCount": 2,
+    "duplicateCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-budget-limit-goal-steering-report.v1;cases=6;injected=1;skipped=4;failed=1;reportMarked=2;duplicates=1"
+  }
+}

@@ -58,8 +58,8 @@ class ThreadReadActiveTurnGoalSteeringInjectionOutcome {
 			false,
 			true,
 			itemSummary,
-			"goal/objective_updated/item->thread_manager/live_thread->inject_if_running->pending/input/extend",
-			"objective-updated steering item injected into the running turn"
+			"goal/steering/item->thread_manager/live_thread->inject_if_running->pending/input/extend",
+			"goal steering item injected into the running turn"
 		);
 	}
 

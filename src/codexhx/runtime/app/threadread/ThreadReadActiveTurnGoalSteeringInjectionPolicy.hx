@@ -11,6 +11,7 @@ class ThreadReadActiveTurnGoalSteeringInjectionPolicy {
 
 	public static function build(request:ThreadReadActiveTurnGoalSteeringInjectionRequest):ThreadReadActiveTurnGoalSteeringInjectionOutcome {
 		final itemSummary = request.steeringOutcome == null ? "item=none" : request.steeringOutcome.itemSummary();
+		final itemStep = request.steeringOutcome == null ? "goal/steering/item" : "goal/" + request.steeringOutcome.kind + "/item";
 		if (request.steeringOutcome == null || !request.steeringOutcome.ok || !request.steeringOutcome.emitted || request.steeringOutcome.item == null) {
 			return ThreadReadActiveTurnGoalSteeringInjectionOutcome.failure(
 				"steering_item_not_available",
@@ -27,7 +28,7 @@ class ThreadReadActiveTurnGoalSteeringInjectionPolicy {
 				false,
 				false,
 				itemSummary,
-				"goal/objective_updated/item->thread_manager/missing->skip",
+				itemStep + "->thread_manager/missing->skip",
 				"skipping goal steering because thread manager is unavailable"
 			);
 		}
@@ -40,7 +41,7 @@ class ThreadReadActiveTurnGoalSteeringInjectionPolicy {
 				false,
 				false,
 				itemSummary,
-				"goal/objective_updated/item->thread_manager/live_thread/missing->skip",
+				itemStep + "->thread_manager/live_thread/missing->skip",
 				"skipping goal steering because live thread is unavailable"
 			);
 		}
@@ -53,7 +54,7 @@ class ThreadReadActiveTurnGoalSteeringInjectionPolicy {
 				false,
 				true,
 				itemSummary,
-				"goal/objective_updated/item->thread_manager/live_thread->inject_if_running->returned/input",
+				itemStep + "->thread_manager/live_thread->inject_if_running->returned/input",
 				"skipping goal steering because no turn is active"
 			);
 		}

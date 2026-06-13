@@ -296,6 +296,18 @@ The fixture `fixtures/hxrust/thread-read-goal-runtime-restore.v1.json` and `harn
 
 The fixture `fixtures/hxrust/thread-read-active-turn-goal-steering-injection.v1.json` and `harness/check-thread-read-active-turn-goal-steering-injection.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own live `ThreadManager`, `CodexThread`, `Session`, `InputQueue`, active-turn locks, async scheduling, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-active-turn-goal-steering-injection.md`.
 
+## Thread/Read Budget-Limit Goal Steering
+
+`codexhx.runtime.app.threadread.ThreadReadBudgetLimitGoalSteeringPolicy` is the HXCX-4.30 raw upstream budget-limit steering slice for active-goal progress after tool finish:
+
+- active progress that returns a budget-limited goal emits a `budget_limit` contextual user fragment;
+- duplicate budget-limit reports for the same goal skip before steering;
+- non-budget-limited and missing progress skip before steering;
+- progress-accounting failure fails closed;
+- active-turn unavailable behavior delegates to the HXCX-4.29 injection policy and preserves the steering item summary.
+
+The fixture `fixtures/hxrust/thread-read-budget-limit-goal-steering.v1.json` and `harness/check-thread-read-budget-limit-goal-steering.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own live tool lifecycle callbacks, token accounting storage, production state DB handles, event emitters, `ThreadManager`, `CodexThread`, `Session`, `InputQueue`, active-turn locks, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-budget-limit-goal-steering.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:
