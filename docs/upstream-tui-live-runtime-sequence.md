@@ -185,7 +185,19 @@ Project selected persisted thread metadata into an upstream-shaped read-view lay
 
 Status: HXCX-4.16 now owns `fixtures/hxrust/persisted-thread-read-view.v1.json` and validates the slice through `harness/check-persisted-thread-read-view.sh`. No new haxe.rust limitation was exposed; the generated Rust gate passed with typed DTOs, nullable outcomes, adapter-report scanning, and zero raw Rust escapes.
 
-### HXCX-4.17+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.17: Thread/Read Turn Projection
+
+Project selected upstream rollout/history item summaries into typed turn summaries:
+
+- explicit `turn_started`/`turn_complete` boundaries;
+- legacy implicit turn grouping from user messages;
+- user, assistant, command execution, and compaction item summaries;
+- failed active-turn status from selected error items;
+- deterministic malformed-item refusal.
+
+Status: HXCX-4.17 now owns `fixtures/hxrust/thread-read-turn-projection.v1.json` and validates the slice through `harness/check-thread-read-turn-projection.sh`. No new haxe.rust limitation was exposed; the generated Rust gate passed with typed DTOs, enum abstracts, arrays, and zero raw Rust escapes. This is projection evidence only, not full rollout parsing, pagination, live `ThreadState` merge, or production state-file ownership.
+
+### HXCX-4.18+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

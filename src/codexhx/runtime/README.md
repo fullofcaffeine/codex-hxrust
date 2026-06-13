@@ -139,6 +139,18 @@ The fixture `fixtures/hxrust/native-state-adapter.v1.json` and `harness/check-na
 
 The fixture `fixtures/hxrust/persisted-thread-read-view.v1.json` and `harness/check-persisted-thread-read-view.sh` prove the slice through interpreter simulation, native adapter setup, and metal generated Rust. This is not full app-server `thread/read` parity; live `ThreadState`, rollout item rebuilding, and production state-file ownership remain later slices. The boundary is documented in `docs/persisted-thread-read-view.md`.
 
+## Thread/Read Turn Projection
+
+`codexhx.runtime.app.threadread.ThreadReadTurnProjection` is the HXCX-4.17 raw upstream thread/read projection slice:
+
+- `RolloutSummaryItemKind`, `ThreadReadTurnStatus`, and `ThreadReadTurnItemKind` keep selected rollout and projected turn state typed.
+- explicit `turn_started`/`turn_complete` boundaries project named turns;
+- legacy histories without explicit boundaries group user messages and following agent/tool items into deterministic implicit `rollout-N` turns;
+- user, assistant, command execution, and compaction summaries are preserved as typed projected items;
+- malformed item kinds, missing turn IDs, and missing renderable text fail closed through typed outcomes.
+
+The fixture `fixtures/hxrust/thread-read-turn-projection.v1.json` and `harness/check-thread-read-turn-projection.sh` prove the slice through the Haxe interpreter and portable haxe.rust-generated Rust. This is not full rollout parsing, pagination, live `ThreadState` merge, or production state-file ownership. The boundary is documented in `docs/thread-read-turn-projection.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

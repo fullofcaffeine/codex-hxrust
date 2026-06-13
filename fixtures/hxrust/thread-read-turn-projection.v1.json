@@ -1,0 +1,142 @@
+{
+  "schema": "codex-hxrust.thread-read-turn-projection.v1",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    "../codex/codex-rs/app-server-protocol/src/protocol/thread_history.rs:74",
+    "../codex/codex-rs/app-server-protocol/src/protocol/thread_history.rs:78",
+    "../codex/codex-rs/app-server-protocol/src/protocol/thread_history.rs:229",
+    "../codex/codex-rs/app-server-protocol/src/protocol/thread_history.rs:942",
+    "../codex/codex-rs/app-server/src/request_processors/thread_lifecycle.rs:741",
+    "../codex/codex-rs/app-server/tests/suite/v2/thread_read.rs:138"
+  ],
+  "cases": [
+    {
+      "id": "explicit-completed-turn",
+      "items": [
+        {
+          "kind": "turn_started",
+          "turnId": "turn-1"
+        },
+        {
+          "kind": "user_message",
+          "text": "hello"
+        },
+        {
+          "kind": "agent_message",
+          "text": "hi there"
+        },
+        {
+          "kind": "command_execution",
+          "text": "cargo test"
+        },
+        {
+          "kind": "turn_complete",
+          "turnId": "turn-1"
+        }
+      ],
+      "expect": {
+        "ok": true,
+        "code": "turns_projected",
+        "turnCount": 1,
+        "summaryContains": "turn=turn-1;status=completed;items=3[userMessage:hello|agentMessage:hi there|commandExecution:cargo test]"
+      }
+    },
+    {
+      "id": "legacy-implicit-turns",
+      "items": [
+        {
+          "kind": "user_message",
+          "text": "first prompt"
+        },
+        {
+          "kind": "agent_message",
+          "text": "first answer"
+        },
+        {
+          "kind": "user_message",
+          "text": "second prompt"
+        },
+        {
+          "kind": "agent_message",
+          "text": "second answer"
+        }
+      ],
+      "expect": {
+        "ok": true,
+        "code": "turns_projected",
+        "turnCount": 2,
+        "summaryContains": "turn=rollout-0;status=completed;items=2[userMessage:first prompt|agentMessage:first answer]||turn=rollout-2;status=completed;items=2[userMessage:second prompt|agentMessage:second answer]"
+      }
+    },
+    {
+      "id": "failed-active-turn",
+      "items": [
+        {
+          "kind": "turn_started",
+          "turnId": "turn-failed"
+        },
+        {
+          "kind": "user_message",
+          "text": "run risky thing"
+        },
+        {
+          "kind": "error",
+          "text": "permission denied",
+          "affectsTurnStatus": true
+        }
+      ],
+      "expect": {
+        "ok": true,
+        "code": "turns_projected",
+        "turnCount": 1,
+        "summaryContains": "turn=turn-failed;status=failed;items=1[userMessage:run risky thing]"
+      }
+    },
+    {
+      "id": "compacted-only-history",
+      "items": [
+        {
+          "kind": "compacted",
+          "text": "context compacted"
+        }
+      ],
+      "expect": {
+        "ok": true,
+        "code": "turns_projected",
+        "turnCount": 1,
+        "summaryContains": "turn=rollout-0;status=completed;items=1[compacted:context compacted]"
+      }
+    },
+    {
+      "id": "empty-history",
+      "items": [],
+      "expect": {
+        "ok": true,
+        "code": "turns_projected",
+        "turnCount": 0,
+        "summaryContains": "projection:turns_projected;ok=true;turns=0"
+      }
+    },
+    {
+      "id": "malformed-kind-refused",
+      "items": [
+        {
+          "kind": "mystery",
+          "text": "bad"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "code": "invalid_rollout_item_kind",
+        "turnCount": 0,
+        "summaryContains": ""
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 6,
+    "okCount": 5,
+    "failureCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-turn-projection-report.v1;cases=6;ok=5;failed=1"
+  }
+}
