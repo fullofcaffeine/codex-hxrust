@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/thread-read-goal-steering
+-D rust_crate=codex_hxrust_thread_read_goal_steering
+-D rust_cargo_subcommand=check
+-main ThreadReadGoalSteeringHarness

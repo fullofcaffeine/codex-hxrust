@@ -1,0 +1,254 @@
+{
+  "schema": "codex-hxrust.thread-read-goal-steering-fixture.v1",
+  "bead": "HXCX-4.26",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/ext/goal/src/steering.rs",
+      "symbols": [
+        "continuation_steering_item",
+        "objective_updated_steering_item",
+        "goal_context_input_item",
+        "escape_xml_text"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/templates/goals/continuation.md",
+      "symbols": [
+        "active thread goal continuation prompt"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/templates/goals/objective_updated.md",
+      "symbols": [
+        "updated objective prompt"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/runtime.rs",
+      "symbols": [
+        "GoalRuntime::continue_if_idle",
+        "try_start_turn_if_idle",
+        "objective_changed"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/core/src/codex_thread.rs",
+      "symbols": [
+        "try_start_turn_if_idle"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "continuation-active-budgeted-accepted",
+      "kind": "continuation",
+      "goalStatus": "active",
+      "goalVariant": "budgeted_escaped",
+      "continuationDecision": "started",
+      "objectiveChanged": false,
+      "expect": {
+        "ok": true,
+        "code": "steering_item_emitted",
+        "emitted": true,
+        "skipped": false,
+        "source": "goal",
+        "fragmentKind": "contextual_user_fragment",
+        "promptContains": [
+          "Continue working toward the active thread goal.",
+          "<objective>\nShip &lt;Codex&gt; &amp; keep quality\n</objective>",
+          "- Tokens used: 1200",
+          "- Token budget: 5000",
+          "- Tokens remaining: 3800",
+          "Completion audit:"
+        ],
+        "promptNotContains": [
+          "<untrusted_objective>",
+          "Ship <Codex> & keep quality"
+        ],
+        "summaryContains": "source=goal;fragmentKind=contextual_user_fragment;kind=continuation"
+      }
+    },
+    {
+      "id": "continuation-active-unbounded-rejected-by-host-still-emits-item",
+      "kind": "continuation",
+      "goalStatus": "active",
+      "goalVariant": "unbounded",
+      "continuationDecision": "rejected",
+      "objectiveChanged": false,
+      "expect": {
+        "ok": true,
+        "code": "steering_item_emitted",
+        "emitted": true,
+        "skipped": false,
+        "source": "goal",
+        "fragmentKind": "contextual_user_fragment",
+        "promptContains": [
+          "- Token budget: none",
+          "- Tokens remaining: unbounded",
+          "Work from evidence:"
+        ],
+        "promptNotContains": [
+          "<untrusted_objective>"
+        ],
+        "summaryContains": "kind=continuation"
+      }
+    },
+    {
+      "id": "continuation-paused-goal-skips-item",
+      "kind": "continuation",
+      "goalStatus": "paused",
+      "goalVariant": "budgeted",
+      "continuationDecision": "snapshot_only",
+      "objectiveChanged": false,
+      "expect": {
+        "ok": true,
+        "code": "skipped_goal_not_active",
+        "emitted": false,
+        "skipped": true,
+        "source": "",
+        "fragmentKind": "",
+        "promptContains": [],
+        "promptNotContains": [],
+        "summaryContains": "only active goals produce continuation steering items"
+      }
+    },
+    {
+      "id": "continuation-cleared-goal-skips-item",
+      "kind": "continuation",
+      "goalStatus": null,
+      "goalVariant": "missing",
+      "continuationDecision": "snapshot_only",
+      "objectiveChanged": false,
+      "expect": {
+        "ok": true,
+        "code": "skipped_no_goal",
+        "emitted": false,
+        "skipped": true,
+        "source": "",
+        "fragmentKind": "",
+        "promptContains": [],
+        "promptNotContains": [],
+        "summaryContains": "cleared or missing goal"
+      }
+    },
+    {
+      "id": "continuation-decision-failed-refuses-item",
+      "kind": "continuation",
+      "goalStatus": "active",
+      "goalVariant": "budgeted",
+      "continuationDecision": "failure",
+      "objectiveChanged": false,
+      "expect": {
+        "ok": false,
+        "code": "continuation_not_settled",
+        "emitted": false,
+        "skipped": false,
+        "source": "",
+        "fragmentKind": "",
+        "promptContains": [],
+        "promptNotContains": [],
+        "summaryContains": "waits for the resume idle continuation decision"
+      }
+    },
+    {
+      "id": "objective-updated-active-budgeted-overrun",
+      "kind": "objective_updated",
+      "goalStatus": "active",
+      "goalVariant": "over_budget",
+      "continuationDecision": "none",
+      "objectiveChanged": true,
+      "expect": {
+        "ok": true,
+        "code": "steering_item_emitted",
+        "emitted": true,
+        "skipped": false,
+        "source": "goal",
+        "fragmentKind": "contextual_user_fragment",
+        "promptContains": [
+          "The active thread goal objective was edited by the user.",
+          "<untrusted_objective>\nFinish &amp; verify &gt; speculate\n</untrusted_objective>",
+          "- Tokens used: 6200",
+          "- Token budget: 5000",
+          "- Tokens remaining: 0",
+          "Do not call update_goal unless the updated goal is actually complete."
+        ],
+        "promptNotContains": [
+          "<objective>",
+          "Finish & verify > speculate"
+        ],
+        "summaryContains": "kind=objective_updated"
+      }
+    },
+    {
+      "id": "objective-updated-active-unbounded-unknown-remaining",
+      "kind": "objective_updated",
+      "goalStatus": "active",
+      "goalVariant": "unbounded",
+      "continuationDecision": "none",
+      "objectiveChanged": true,
+      "expect": {
+        "ok": true,
+        "code": "steering_item_emitted",
+        "emitted": true,
+        "skipped": false,
+        "source": "goal",
+        "fragmentKind": "contextual_user_fragment",
+        "promptContains": [
+          "- Token budget: none",
+          "- Tokens remaining: unknown",
+          "Adjust the current turn"
+        ],
+        "promptNotContains": [
+          "unbounded"
+        ],
+        "summaryContains": "kind=objective_updated"
+      }
+    },
+    {
+      "id": "objective-updated-unchanged-skips-item",
+      "kind": "objective_updated",
+      "goalStatus": "active",
+      "goalVariant": "budgeted",
+      "continuationDecision": "none",
+      "objectiveChanged": false,
+      "expect": {
+        "ok": true,
+        "code": "skipped_objective_unchanged",
+        "emitted": false,
+        "skipped": true,
+        "source": "",
+        "fragmentKind": "",
+        "promptContains": [],
+        "promptNotContains": [],
+        "summaryContains": "objective update steering is emitted only when the active goal objective changed"
+      }
+    },
+    {
+      "id": "objective-updated-complete-goal-skips-item",
+      "kind": "objective_updated",
+      "goalStatus": "complete",
+      "goalVariant": "budgeted",
+      "continuationDecision": "none",
+      "objectiveChanged": true,
+      "expect": {
+        "ok": true,
+        "code": "skipped_goal_not_active",
+        "emitted": false,
+        "skipped": true,
+        "source": "",
+        "fragmentKind": "",
+        "promptContains": [],
+        "promptNotContains": [],
+        "summaryContains": "only active goals produce continuation steering items"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 9,
+    "emittedCount": 4,
+    "skippedCount": 4,
+    "failureCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-goal-steering-report.v1;cases=9;emitted=4;skipped=4;failed=1"
+  }
+}

@@ -248,6 +248,18 @@ The fixture `fixtures/hxrust/thread-read-resume-goal-snapshot.v1.json` and `harn
 
 The fixture `fixtures/hxrust/thread-read-resume-idle-continuation.v1.json` and `harness/check-thread-read-resume-idle-continuation.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not start real turns, own extension stores, read production state DBs, or implement Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-resume-idle-continuation.md`.
 
+## Thread/Read Goal Steering
+
+`codexhx.runtime.app.threadread.ThreadReadGoalSteeringBuilder` is the HXCX-4.26 raw upstream goal steering item slice:
+
+- continuation steering creates a `goal` contextual user fragment only for active goals whose resume idle continuation requested goal work;
+- objective-updated steering creates a `goal` contextual user fragment only when an active goal objective actually changed;
+- host rejection of automatic idle work still has a continuation item because upstream creates the item before `try_start_turn_if_idle` returns;
+- missing, cleared, non-active, unchanged, and unsettled continuation states fail or skip before prompt construction;
+- objective text escapes `&`, `<`, and `>` and budget fields preserve upstream `none`, `unbounded`, and `unknown` distinctions.
+
+The fixture `fixtures/hxrust/thread-read-goal-steering.v1.json` and `harness/check-thread-read-goal-steering.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not start turns, inject active-turn steering, own extension stores, or implement Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-goal-steering.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

@@ -289,7 +289,19 @@ Model the selected idle lifecycle continuation path after ordered resume goal sn
 
 Status: HXCX-4.25 now owns `fixtures/hxrust/thread-read-resume-idle-continuation.v1.json` and validates the slice through `harness/check-thread-read-resume-idle-continuation.sh`. No new haxe.rust limitation was exposed. This is idle-continuation decision evidence only, not production task spawning, extension store ownership, live state DB access, JSON-RPC transport, or Cafex behavior.
 
-### HXCX-4.26+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.26: Goal Continuation Steering Item
+
+Model the selected contextual user fragment submitted by goal runtime:
+
+- `continuation_steering_item` renders active-goal continuation context with escaped objective and budget fields;
+- `objective_updated_steering_item` renders active objective-change context with the updated objective tag;
+- emitted items use source `goal` and contextual user fragment shape;
+- non-active, cleared, unchanged, and unsettled continuation states fail or skip deterministically;
+- the slice composes with HXCX-4.25 so accepted and host-rejected continuation requests still have item evidence.
+
+Status: HXCX-4.26 now owns `fixtures/hxrust/thread-read-goal-steering.v1.json` and validates the slice through `harness/check-thread-read-goal-steering.sh`. No new haxe.rust limitation was exposed. This is steering-item evidence only, not live turn start, active-turn injection, full template-engine ownership, JSON-RPC transport, or Cafex behavior.
+
+### HXCX-4.27+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
