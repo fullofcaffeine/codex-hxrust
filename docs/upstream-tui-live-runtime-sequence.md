@@ -438,7 +438,19 @@ Model the selected upstream tool-finish admission path:
 
 Status: HXCX-4.37 now owns `fixtures/hxrust/thread-read-tool-finish-goal-progress-admission.v1.json` and validates the slice through `harness/check-thread-read-tool-finish-goal-progress-admission.sh`. No new haxe.rust limitation was exposed. This is tool-finish admission evidence only, not live tool execution, production state DB writes, event emitters, active-turn injection, model/provider behavior, or Cafex behavior.
 
-### HXCX-4.38+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.38: Goal Tool Contributor Visibility
+
+Model the selected upstream goal tool contribution path:
+
+- missing runtime handles return no contributed tools;
+- `runtime.tools_visible()` is `is_enabled() && tools_available_for_thread`;
+- disabled runtimes and tools-unavailable threads return an empty vector;
+- visible runtimes contribute `GoalToolExecutor::get`, `GoalToolExecutor::create`, and `GoalToolExecutor::update` in upstream order;
+- descriptors retain the thread id plus state DB, accounting, analytics, event-emitter, and metrics boundaries.
+
+Status: HXCX-4.38 now owns `fixtures/hxrust/thread-read-goal-tool-contributor-visibility.v1.json` and validates the slice through `harness/check-thread-read-goal-tool-contributor-visibility.sh`. No new haxe.rust limitation was exposed. This is goal tool registration visibility evidence only, not live tool execution, production state mutation, analytics/events emission, model/provider behavior, or Cafex behavior.
+
+### HXCX-4.39+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

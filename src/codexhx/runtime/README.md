@@ -397,6 +397,18 @@ The fixture `fixtures/hxrust/thread-read-goal-token-usage-record.v1.json` and `h
 
 The fixture `fixtures/hxrust/thread-read-tool-finish-goal-progress-admission.v1.json` and `harness/check-thread-read-tool-finish-goal-progress-admission.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This composes with HXCX-4.31 active-goal accounting and HXCX-4.30 budget-limit steering, but does not own live tool execution, production state DB writes, event emitters, active-turn injection, model/provider behavior, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-tool-finish-goal-progress-admission.md`.
 
+## Thread/Read Goal Tool Contributor Visibility
+
+`codexhx.runtime.app.threadread.ThreadReadGoalToolContributorVisibilityPolicy` is the HXCX-4.38 raw upstream goal tool contributor visibility slice:
+
+- missing runtime handles return no goal tools;
+- `runtime.tools_visible()` is modeled as runtime enabled and tools available for the thread;
+- disabled runtimes and thread-unavailable tools return an empty tool list;
+- visible runtimes return typed `get_goal`, `create_goal`, and `update_goal` descriptors in upstream order;
+- descriptors retain the thread id and the attached state DB, accounting, analytics, event-emitter, and metrics boundaries.
+
+The fixture `fixtures/hxrust/thread-read-goal-tool-contributor-visibility.v1.json` and `harness/check-thread-read-goal-tool-contributor-visibility.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is tool registration visibility evidence only; it does not execute goal tools, mutate production state, emit analytics/events, create credentials, or model Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-goal-tool-contributor-visibility.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

@@ -1,0 +1,163 @@
+{
+  "schema": "codex-hxrust.thread-read-goal-tool-contributor-visibility-fixture.v1",
+  "source": {
+    "extension": "../codex/codex-rs/ext/goal/src/extension.rs:406",
+    "runtime": "../codex/codex-rs/ext/goal/src/runtime.rs:114",
+    "tool": "../codex/codex-rs/ext/goal/src/tool.rs:75",
+    "spec": "../codex/codex-rs/ext/goal/src/spec.rs:9"
+  },
+  "cases": [
+    {
+      "name": "runtime-missing-no-tools",
+      "request": {
+        "runtimeAvailable": false,
+        "runtimeEnabled": false,
+        "toolsAvailableForThread": false,
+        "threadId": "thread-tools-1",
+        "stateDbAvailable": false,
+        "accountingStateAvailable": false,
+        "analyticsAvailable": false,
+        "eventEmitterAvailable": false,
+        "metricsAvailable": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_missing_no_tools",
+        "runtimeAvailable": false,
+        "runtimeEnabled": false,
+        "toolsAvailableForThread": false,
+        "toolsVisible": false,
+        "threadId": "thread-tools-1",
+        "returnedToolCount": 0,
+        "stableOrder": "",
+        "summaryContains": "goal_runtime_handle/none",
+        "tools": []
+      }
+    },
+    {
+      "name": "runtime-disabled-no-tools",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": false,
+        "toolsAvailableForThread": true,
+        "threadId": "thread-tools-2",
+        "stateDbAvailable": true,
+        "accountingStateAvailable": true,
+        "analyticsAvailable": true,
+        "eventEmitterAvailable": true,
+        "metricsAvailable": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_disabled_no_tools",
+        "runtimeAvailable": true,
+        "runtimeEnabled": false,
+        "toolsAvailableForThread": true,
+        "toolsVisible": false,
+        "threadId": "thread-tools-2",
+        "returnedToolCount": 0,
+        "stableOrder": "",
+        "summaryContains": "runtime_disabled",
+        "tools": []
+      }
+    },
+    {
+      "name": "tools-unavailable-for-thread",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "toolsAvailableForThread": false,
+        "threadId": "thread-tools-3",
+        "stateDbAvailable": true,
+        "accountingStateAvailable": true,
+        "analyticsAvailable": true,
+        "eventEmitterAvailable": true,
+        "metricsAvailable": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "tools_unavailable_for_thread",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "toolsAvailableForThread": false,
+        "toolsVisible": false,
+        "threadId": "thread-tools-3",
+        "returnedToolCount": 0,
+        "stableOrder": "",
+        "summaryContains": "tools_unavailable_for_thread",
+        "tools": []
+      }
+    },
+    {
+      "name": "visible-tools-in-upstream-order",
+      "request": {
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "toolsAvailableForThread": true,
+        "threadId": "thread-tools-4",
+        "stateDbAvailable": true,
+        "accountingStateAvailable": true,
+        "analyticsAvailable": true,
+        "eventEmitterAvailable": true,
+        "metricsAvailable": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "goal_tools_visible",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "toolsAvailableForThread": true,
+        "toolsVisible": true,
+        "threadId": "thread-tools-4",
+        "returnedToolCount": 3,
+        "stableOrder": "get_goal,create_goal,update_goal",
+        "summaryContains": "GoalToolExecutor::get->create->update",
+        "tools": [
+          {
+            "kind": "get",
+            "toolNamespace": "",
+            "toolName": "get_goal",
+            "threadId": "thread-tools-4",
+            "stateDbAttached": true,
+            "accountingStateAttached": true,
+            "analyticsAttached": true,
+            "eventEmitterAttached": true,
+            "metricsAttached": true,
+            "orderIndex": 0
+          },
+          {
+            "kind": "create",
+            "toolNamespace": "",
+            "toolName": "create_goal",
+            "threadId": "thread-tools-4",
+            "stateDbAttached": true,
+            "accountingStateAttached": true,
+            "analyticsAttached": true,
+            "eventEmitterAttached": true,
+            "metricsAttached": true,
+            "orderIndex": 1
+          },
+          {
+            "kind": "update",
+            "toolNamespace": "",
+            "toolName": "update_goal",
+            "threadId": "thread-tools-4",
+            "stateDbAttached": true,
+            "accountingStateAttached": true,
+            "analyticsAttached": true,
+            "eventEmitterAttached": true,
+            "metricsAttached": true,
+            "orderIndex": 2
+          }
+        ]
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 4,
+    "visibleCount": 1,
+    "skippedCount": 3,
+    "returnedToolCount": 3,
+    "summaryContains": "returnedTools=3"
+  }
+}
