@@ -33,6 +33,7 @@ Profile policy for the scaffold:
 | `thread-read-resume-idle-continuation.hxml` | Compile the HXCX-4.25 raw resume idle lifecycle continuation harness through portable haxe.rust. |
 | `thread-read-goal-steering.hxml` | Compile the HXCX-4.26 raw goal steering item harness through portable haxe.rust. |
 | `thread-read-try-start-turn-if-idle.hxml` | Compile the HXCX-4.27 raw try_start_turn_if_idle admission harness through portable haxe.rust. |
+| `thread-read-goal-runtime-restore.hxml` | Compile the HXCX-4.28 raw goal runtime restore-after-resume harness through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |

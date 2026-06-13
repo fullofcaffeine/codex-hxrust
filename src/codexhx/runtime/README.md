@@ -272,6 +272,18 @@ The fixture `fixtures/hxrust/thread-read-goal-steering.v1.json` and `harness/che
 
 The fixture `fixtures/hxrust/thread-read-try-start-turn-if-idle.v1.json` and `harness/check-thread-read-try-start-turn-if-idle.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own live `Session`, `InputQueue`, `ActiveTurn`, task spawning, async scheduling, JSON-RPC transport, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-try-start-turn-if-idle.md`.
 
+## Thread/Read Goal Runtime Restore
+
+`codexhx.runtime.app.threadread.ThreadReadGoalRuntimeRestorePolicy` is the HXCX-4.28 raw upstream goal runtime restore slice for thread resume:
+
+- missing extension runtime skips restoration;
+- disabled runtime returns Ok without reading stored goal state;
+- stored active goals rehydrate idle accounting and record the resumed metric;
+- missing and non-active stored goals clear active-goal accounting;
+- state-read failures preserve previous active accounting for the caller to handle as a restore error.
+
+The fixture `fixtures/hxrust/thread-read-goal-runtime-restore.v1.json` and `harness/check-thread-read-goal-runtime-restore.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own live extension stores, production state DB handles, metrics clients, async scheduling, goal notifications, continuation turns, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-goal-runtime-restore.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

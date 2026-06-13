@@ -313,7 +313,19 @@ Model the selected host admission behavior behind goal continuation:
 
 Status: HXCX-4.27 now owns `fixtures/hxrust/thread-read-try-start-turn-if-idle.v1.json` and validates the slice through `harness/check-thread-read-try-start-turn-if-idle.sh`. No new haxe.rust limitation was exposed. This is host-admission evidence only, not live `Session`, `InputQueue`, async task spawning, JSON-RPC transport, or Cafex behavior.
 
-### HXCX-4.28+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.28: Goal Runtime Restore After Resume
+
+Model the selected goal runtime restore path after thread resume:
+
+- `GoalExtension::on_thread_resume` skips when the thread store has no runtime;
+- disabled runtime returns Ok without reading stored goal state;
+- active stored goals rehydrate idle accounting and record the resumed metric;
+- missing or non-active stored goals clear active-goal accounting;
+- state-read failure stays a restore error and preserves existing accounting.
+
+Status: HXCX-4.28 now owns `fixtures/hxrust/thread-read-goal-runtime-restore.v1.json` and validates the slice through `harness/check-thread-read-goal-runtime-restore.sh`. No new haxe.rust limitation was exposed. This is restore-accounting evidence only, not live state DB ownership, metrics-client ownership, async scheduling, goal notifications, continuation turns, or Cafex behavior.
+
+### HXCX-4.29+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

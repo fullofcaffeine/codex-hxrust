@@ -1,0 +1,310 @@
+{
+  "schema": "codex-hxrust.thread-read-goal-runtime-restore-fixture.v1",
+  "bead": "HXCX-4.28",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/ext/goal/src/extension.rs",
+      "symbols": [
+        "GoalExtension::on_thread_resume",
+        "goal_runtime_handle",
+        "GoalRuntimeHandle::restore_after_resume"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/runtime.rs",
+      "symbols": [
+        "GoalRuntimeHandle::restore_after_resume",
+        "is_enabled",
+        "get_thread_goal",
+        "mark_idle_goal_active",
+        "clear_active_goal"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/metrics.rs",
+      "symbols": [
+        "GoalMetrics::record_resumed"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/tests/goal_extension_backend.rs",
+      "symbols": [
+        "thread_resume_rehydrates_active_goal_idle_accounting",
+        "GoalExtensionHarness::resume_thread"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "resume-runtime-missing-skips",
+      "runtime": {
+        "present": false,
+        "enabled": true,
+        "previousActiveGoalId": ""
+      },
+      "state": {
+        "readOk": true,
+        "readErrorCode": "",
+        "goal": null,
+        "goalId": ""
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_missing_skip",
+        "runtimePresent": false,
+        "runtimeEnabled": false,
+        "stateReadAttempted": false,
+        "restoredActiveGoal": false,
+        "clearedActiveGoal": false,
+        "resumedMetricRecorded": false,
+        "idleAccountingActive": false,
+        "activeGoalIdAfter": "",
+        "summaryContains": "thread resume has no goal runtime in extension data"
+      }
+    },
+    {
+      "id": "resume-disabled-runtime-noops",
+      "runtime": {
+        "present": true,
+        "enabled": false,
+        "previousActiveGoalId": "goal-before-disabled"
+      },
+      "state": {
+        "readOk": true,
+        "readErrorCode": "",
+        "goal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001028",
+          "objective": "Keep polishing",
+          "status": "active",
+          "tokenBudget": null,
+          "tokensUsed": 1200,
+          "timeUsedSeconds": 300,
+          "createdAt": 200000,
+          "updatedAt": 200100
+        },
+        "goalId": "goal-disabled-should-not-read"
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_disabled_noop",
+        "runtimePresent": true,
+        "runtimeEnabled": false,
+        "stateReadAttempted": false,
+        "restoredActiveGoal": false,
+        "clearedActiveGoal": false,
+        "resumedMetricRecorded": false,
+        "idleAccountingActive": true,
+        "activeGoalIdAfter": "goal-before-disabled",
+        "summaryContains": "disabled goal runtime returns Ok without reading goal state"
+      }
+    },
+    {
+      "id": "resume-active-goal-rehydrates-accounting",
+      "runtime": {
+        "present": true,
+        "enabled": true,
+        "previousActiveGoalId": ""
+      },
+      "state": {
+        "readOk": true,
+        "readErrorCode": "",
+        "goal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001028",
+          "objective": "Ship goal extension backend",
+          "status": "active",
+          "tokenBudget": null,
+          "tokensUsed": 0,
+          "timeUsedSeconds": 1,
+          "createdAt": 200000,
+          "updatedAt": 200100
+        },
+        "goalId": "goal-active-resumed"
+      },
+      "expect": {
+        "ok": true,
+        "code": "active_goal_restored",
+        "runtimePresent": true,
+        "runtimeEnabled": true,
+        "stateReadAttempted": true,
+        "restoredActiveGoal": true,
+        "clearedActiveGoal": false,
+        "resumedMetricRecorded": true,
+        "idleAccountingActive": true,
+        "activeGoalIdAfter": "goal-active-resumed",
+        "summaryContains": "mark_idle_goal_active->metrics/resumed"
+      }
+    },
+    {
+      "id": "resume-active-goal-replaces-stale-accounting",
+      "runtime": {
+        "present": true,
+        "enabled": true,
+        "previousActiveGoalId": "goal-stale-before-resume"
+      },
+      "state": {
+        "readOk": true,
+        "readErrorCode": "",
+        "goal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001028",
+          "objective": "Keep polishing",
+          "status": "active",
+          "tokenBudget": 5000,
+          "tokensUsed": 1200,
+          "timeUsedSeconds": 300,
+          "createdAt": 200000,
+          "updatedAt": 200100
+        },
+        "goalId": "goal-active-current"
+      },
+      "expect": {
+        "ok": true,
+        "code": "active_goal_restored",
+        "runtimePresent": true,
+        "runtimeEnabled": true,
+        "stateReadAttempted": true,
+        "restoredActiveGoal": true,
+        "clearedActiveGoal": false,
+        "resumedMetricRecorded": true,
+        "idleAccountingActive": true,
+        "activeGoalIdAfter": "goal-active-current",
+        "summaryContains": "previousActiveGoalId=goal-stale-before-resume;activeGoalIdAfter=goal-active-current"
+      }
+    },
+    {
+      "id": "resume-missing-goal-clears-accounting",
+      "runtime": {
+        "present": true,
+        "enabled": true,
+        "previousActiveGoalId": "goal-before-missing"
+      },
+      "state": {
+        "readOk": true,
+        "readErrorCode": "",
+        "goal": null,
+        "goalId": ""
+      },
+      "expect": {
+        "ok": true,
+        "code": "stored_goal_missing_cleared",
+        "runtimePresent": true,
+        "runtimeEnabled": true,
+        "stateReadAttempted": true,
+        "restoredActiveGoal": false,
+        "clearedActiveGoal": true,
+        "resumedMetricRecorded": false,
+        "idleAccountingActive": false,
+        "activeGoalIdAfter": "",
+        "summaryContains": "missing stored goal clears active goal accounting"
+      }
+    },
+    {
+      "id": "resume-paused-goal-clears-accounting",
+      "runtime": {
+        "present": true,
+        "enabled": true,
+        "previousActiveGoalId": "goal-before-paused"
+      },
+      "state": {
+        "readOk": true,
+        "readErrorCode": "",
+        "goal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001028",
+          "objective": "Pause here",
+          "status": "paused",
+          "tokenBudget": null,
+          "tokensUsed": 1500,
+          "timeUsedSeconds": 500,
+          "createdAt": 200000,
+          "updatedAt": 200100
+        },
+        "goalId": "goal-paused"
+      },
+      "expect": {
+        "ok": true,
+        "code": "stored_goal_not_active_cleared",
+        "runtimePresent": true,
+        "runtimeEnabled": true,
+        "stateReadAttempted": true,
+        "restoredActiveGoal": false,
+        "clearedActiveGoal": true,
+        "resumedMetricRecorded": false,
+        "idleAccountingActive": false,
+        "activeGoalIdAfter": "",
+        "summaryContains": "stored non-active goal clears active goal accounting"
+      }
+    },
+    {
+      "id": "resume-complete-goal-clears-accounting",
+      "runtime": {
+        "present": true,
+        "enabled": true,
+        "previousActiveGoalId": "goal-before-complete"
+      },
+      "state": {
+        "readOk": true,
+        "readErrorCode": "",
+        "goal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001028",
+          "objective": "Done",
+          "status": "complete",
+          "tokenBudget": 5000,
+          "tokensUsed": 4200,
+          "timeUsedSeconds": 900,
+          "createdAt": 200000,
+          "updatedAt": 200100
+        },
+        "goalId": "goal-complete"
+      },
+      "expect": {
+        "ok": true,
+        "code": "stored_goal_not_active_cleared",
+        "runtimePresent": true,
+        "runtimeEnabled": true,
+        "stateReadAttempted": true,
+        "restoredActiveGoal": false,
+        "clearedActiveGoal": true,
+        "resumedMetricRecorded": false,
+        "idleAccountingActive": false,
+        "activeGoalIdAfter": "",
+        "summaryContains": "accounting/clear_active_goal"
+      }
+    },
+    {
+      "id": "resume-state-read-failure-preserves-accounting",
+      "runtime": {
+        "present": true,
+        "enabled": true,
+        "previousActiveGoalId": "goal-before-error"
+      },
+      "state": {
+        "readOk": false,
+        "readErrorCode": "state_db_unavailable",
+        "goal": null,
+        "goalId": ""
+      },
+      "expect": {
+        "ok": false,
+        "code": "state_read_failed",
+        "runtimePresent": true,
+        "runtimeEnabled": true,
+        "stateReadAttempted": true,
+        "restoredActiveGoal": false,
+        "clearedActiveGoal": false,
+        "resumedMetricRecorded": false,
+        "idleAccountingActive": true,
+        "activeGoalIdAfter": "goal-before-error",
+        "summaryContains": "failed to restore goal runtime after thread resume: state_db_unavailable"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 8,
+    "restoredCount": 2,
+    "clearedCount": 3,
+    "metricCount": 2,
+    "noopCount": 2,
+    "failureCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-goal-runtime-restore-report.v1;cases=8;restored=2;cleared=3;metrics=2;noop=2;failed=1"
+  }
+}
