@@ -91,6 +91,17 @@ HXCX-4.7 also exposed generic haxe.rust issue `haxe.rust-362`: nullable `Array<C
 
 The fixture `fixtures/hxrust/runtime-bootstrap.v1.json` and `harness/check-runtime-bootstrap.sh` prove the boundary through both Haxe interpreter and haxe.rust-generated Rust. The harness also asserts that `initialize` remains rejected by the generic `AppProtocol` request parser.
 
+## Fixture Live Transport
+
+`codexhx.runtime.app.transport.FixtureLiveTransport` is the HXCX-4.12 credential-free transport proof over `InMemoryAppServerClient`:
+
+- request, response, notification, and event-drain flows exercise the same typed runtime facade used by earlier app-client slices;
+- `cancelRequest` removes a pending request and emits a control error event with JSON-RPC cancellation code `-32800`;
+- `disconnect` emits the same disconnected event kind as the upstream remote client and makes later sends fail with `transport_closed`;
+- no websocket, unix socket, auth token, environment credential, or OS control socket is opened in this package.
+
+The fixture `fixtures/hxrust/runtime-transport.v1.json` and `harness/check-runtime-transport.sh` prove request/response notification flow, pending request cancellation, graceful disconnect, and post-disconnect refusal through both Haxe interpreter and haxe.rust-generated Rust. Real remote websocket/control-socket ownership remains a later generic metal/native wrapper, documented in `docs/live-transport-boundary.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

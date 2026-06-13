@@ -17,6 +17,7 @@ Profile policy for the scaffold:
 | `headless-jsonl-adapter.hxml` | Compile the HXCX-3.4 command JSONL app-server/debug adapter harness through portable haxe.rust. |
 | `runtime-app-client.hxml` | Compile the HXCX-4.7 runtime event bus and in-memory app-server client facade harness through portable haxe.rust. |
 | `runtime-bootstrap.hxml` | Compile the HXCX-4.11 initialize/bootstrap runtime harness through portable haxe.rust. |
+| `runtime-transport.hxml` | Compile the HXCX-4.12 fixture live-transport harness through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |

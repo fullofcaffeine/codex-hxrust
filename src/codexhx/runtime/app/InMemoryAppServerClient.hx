@@ -82,6 +82,22 @@ class InMemoryAppServerClient {
         return RuntimeClientOutcome.evented("failed", command.requestId, command.method, command.payloadJson, queued, pendingTotal);
     }
 
+    public function cancelPending(requestId:String, method:String, reason:String):RuntimeClientOutcome {
+        final original = pending.get(requestId);
+        if (original == null) {
+            return RuntimeClientOutcome.failure("unknown_request_id", "no pending request for cancellation", requestId, method, pendingTotal);
+        }
+        if (original.method != method) {
+            return RuntimeClientOutcome.failure("response_method_mismatch", "cancellation method differs from pending request method", requestId, method, pendingTotal);
+        }
+
+        pending.remove(requestId);
+        pendingTotal = pendingTotal - 1;
+        final payloadJson = "{\"code\":-32800,\"message\":" + quote(reason) + "}";
+        final queued = queue.pushError(requestId, method, payloadJson, "cancelled:" + method);
+        return RuntimeClientOutcome.evented("cancelled", requestId, method, payloadJson, queued, pendingTotal);
+    }
+
     public function receiveNotification(method:String, paramsJson:String):RuntimeClientOutcome {
         final parsed = parseFixture(wrapNotification(method, paramsJson));
         if (!parsed.ok) {
@@ -90,6 +106,11 @@ class InMemoryAppServerClient {
 
         final queued = queue.pushNotification(method, parsed.message.canonicalJson, parsed.message.summary);
         return RuntimeClientOutcome.evented(queued.code, "", method, parsed.message.canonicalJson, queued, pendingTotal);
+    }
+
+    public function disconnect(message:String):RuntimeClientOutcome {
+        final queued = queue.pushDisconnected(message);
+        return RuntimeClientOutcome.evented("disconnected", "", "", "{\"message\":" + quote(message) + "}", queued, pendingTotal);
     }
 
     public function readEvent():RuntimeEventReadOutcome {
@@ -102,6 +123,10 @@ class InMemoryAppServerClient {
 
     public function queuedCount():Int {
         return queue.pendingCount();
+    }
+
+    public function pendingRequestCount():Int {
+        return pendingTotal;
     }
 
     public function skippedCount():Int {

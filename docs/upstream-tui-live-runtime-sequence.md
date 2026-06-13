@@ -138,6 +138,8 @@ Add a narrow transport proof:
 
 This slice should decide whether the next implementation step is more app-server runtime or terminal UI.
 
+Status: HXCX-4.12 now owns `fixtures/hxrust/runtime-transport.v1.json` and validates it through `harness/check-runtime-transport.sh`. This is a credential-free fixture transport over the runtime facade, not real socket ownership. Remote websocket/control-socket behavior remains a generic metal/native wrapper boundary.
+
 ### HXCX-4.13+: Persistence, Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

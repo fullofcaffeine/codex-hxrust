@@ -31,3 +31,4 @@ Current fixtures:
 - `headless-jsonl-app-server-output.v1.jsonl` is the canonical JSONL stream with app-server responses plus lifecycle, item, agent-message delta, and raw response item notifications.
 - `headless-jsonl-app-server-failed-input.v1.jsonl` and `headless-jsonl-app-server-failed-output.v1.jsonl` cover the credential-free failed-turn app-server path and its upstream-shaped `error` notification.
 - `runtime-bootstrap.v1.json` validates the HXCX-4.11 upstream initialize/bootstrap boundary, remote/in-process startup mode, opt-out notification methods, platform/codex-home response fields, and startup account/model/config-warning metadata.
+- `runtime-transport.v1.json` validates the HXCX-4.12 credential-free fixture live transport over the runtime facade, request cancellation, graceful disconnect, and post-disconnect refusal.

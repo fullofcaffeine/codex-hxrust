@@ -1,0 +1,113 @@
+{
+  "schema": "codexhx.runtime-transport.v1",
+  "source": {
+    "codex": [
+      "../codex/codex-rs/app-server-client/src/lib.rs",
+      "../codex/codex-rs/app-server-client/src/remote.rs",
+      "../codex/codex-rs/app-server-transport/src/transport/websocket.rs"
+    ],
+    "notes": "Credential-free fixture transport over the typed runtime facade. Remote websocket/control-socket ownership remains a later metal/native wrapper."
+  },
+  "scenarios": [
+    {
+      "name": "request-response-notification-roundtrip",
+      "queueCapacity": 8,
+      "actions": [
+        {
+          "type": "sendRequest",
+          "requestId": "transport-req-1",
+          "method": "turn/interrupt",
+          "params": {
+            "threadId": "thread-1",
+            "turnId": "turn-1"
+          },
+          "expectCode": "accepted"
+        },
+        {
+          "type": "completeResponse",
+          "requestId": "transport-req-1",
+          "method": "turn/interrupt",
+          "result": {},
+          "expectCode": "completed"
+        },
+        {
+          "type": "notification",
+          "method": "item/agentMessage/delta",
+          "params": {
+            "threadId": "thread-1",
+            "turnId": "turn-1",
+            "itemId": "item-1",
+            "delta": "hello"
+          },
+          "expectCode": "queued"
+        },
+        {
+          "type": "drain",
+          "expectContains": [
+            "clientResponse:control:turn/interrupt:transport-req-1:response:turn/interrupt",
+            "serverNotification:lossless:item/agentMessage/delta"
+          ]
+        }
+      ],
+      "expectPending": 0,
+      "expectClosed": false
+    },
+    {
+      "name": "cancel-pending-request",
+      "queueCapacity": 8,
+      "actions": [
+        {
+          "type": "sendRequest",
+          "requestId": "transport-cancel-1",
+          "method": "turn/interrupt",
+          "params": {
+            "threadId": "thread-1",
+            "turnId": "turn-2"
+          },
+          "expectCode": "accepted"
+        },
+        {
+          "type": "cancelRequest",
+          "requestId": "transport-cancel-1",
+          "method": "turn/interrupt",
+          "reason": "caller dropped request handle",
+          "expectCode": "cancelled"
+        },
+        {
+          "type": "drain",
+          "expectContains": [
+            "clientError:control:turn/interrupt:transport-cancel-1:cancelled:turn/interrupt"
+          ]
+        }
+      ],
+      "expectPending": 0,
+      "expectClosed": false
+    },
+    {
+      "name": "graceful-disconnect-closes-transport",
+      "queueCapacity": 8,
+      "actions": [
+        {
+          "type": "disconnect",
+          "message": "remote app server closed the connection",
+          "expectCode": "disconnected"
+        },
+        {
+          "type": "sendRequest",
+          "requestId": "after-close",
+          "method": "thread/start",
+          "params": {},
+          "expectCode": "transport_closed"
+        },
+        {
+          "type": "drain",
+          "expectContains": [
+            "disconnected"
+          ]
+        }
+      ],
+      "expectPending": 0,
+      "expectClosed": true
+    }
+  ]
+}
