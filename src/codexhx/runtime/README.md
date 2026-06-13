@@ -383,6 +383,20 @@ The fixture `fixtures/hxrust/thread-read-turn-error-active-goal-stop.v1.json` an
 
 The fixture `fixtures/hxrust/thread-read-goal-token-usage-record.v1.json` and `harness/check-thread-read-goal-token-usage-record.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own live token aggregation, analytics emission, production state DB writes, active-goal progress persistence, metrics clients, model/provider behavior, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-goal-token-usage-record.md`.
 
+## Thread/Read Tool-Finish Goal Progress Admission
+
+`codexhx.runtime.app.threadread.ThreadReadToolFinishGoalProgressAdmissionPolicy` is the HXCX-4.37 raw upstream tool-finish goal-progress admission slice:
+
+- runtime-missing and disabled-runtime guards skip before active-goal progress accounting;
+- completed tool calls count regardless of their output success marker;
+- failed tool calls count only when the handler executed;
+- blocked, pre-handler failed, and aborted calls skip;
+- bare `update_goal` is excluded from progress accounting, while namespaced `update_goal` can count;
+- admitted calls use `call_id` as the accounting event id with `active_only` mode and `keep_active` budget-limited disposition;
+- accounting errors warn, no-progress results return, and budget-limited progress hands off to the budget-limit steering boundary.
+
+The fixture `fixtures/hxrust/thread-read-tool-finish-goal-progress-admission.v1.json` and `harness/check-thread-read-tool-finish-goal-progress-admission.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This composes with HXCX-4.31 active-goal accounting and HXCX-4.30 budget-limit steering, but does not own live tool execution, production state DB writes, event emitters, active-turn injection, model/provider behavior, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-tool-finish-goal-progress-admission.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

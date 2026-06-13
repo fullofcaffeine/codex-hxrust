@@ -424,7 +424,21 @@ Model the selected upstream token-usage contribution path:
 
 Status: HXCX-4.36 now owns `fixtures/hxrust/thread-read-goal-token-usage-record.v1.json` and validates the slice through `harness/check-thread-read-goal-token-usage-record.sh`. No new haxe.rust limitation was exposed. This is token-usage accounting-state evidence only, not live token aggregation, analytics emission, production state DB writes, active-goal progress persistence, metrics clients, model/provider behavior, or Cafex behavior.
 
-### HXCX-4.37+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.37: Tool-Finish Goal Progress Admission
+
+Model the selected upstream tool-finish admission path:
+
+- runtime-missing and disabled-runtime guards skip before accounting;
+- completed tool calls count regardless of the output success marker;
+- failed tool calls count only when the handler executed;
+- blocked, aborted, and pre-handler failed tool calls skip;
+- bare `update_goal` is excluded while namespaced `update_goal` can count;
+- admitted calls use `call_id` as the accounting event id with `ActiveOnly` and `BudgetLimitedGoalDisposition::KeepActive`;
+- accounting errors warn, `Ok(None)` returns, and budget-limited progress hands off to the existing steering boundary.
+
+Status: HXCX-4.37 now owns `fixtures/hxrust/thread-read-tool-finish-goal-progress-admission.v1.json` and validates the slice through `harness/check-thread-read-tool-finish-goal-progress-admission.sh`. No new haxe.rust limitation was exposed. This is tool-finish admission evidence only, not live tool execution, production state DB writes, event emitters, active-turn injection, model/provider behavior, or Cafex behavior.
+
+### HXCX-4.38+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
