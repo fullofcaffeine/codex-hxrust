@@ -410,7 +410,21 @@ Model the selected upstream turn-error active-goal stop path:
 
 Status: HXCX-4.35 now owns `fixtures/hxrust/thread-read-turn-error-active-goal-stop.v1.json` and validates the slice through `harness/check-thread-read-turn-error-active-goal-stop.sh`. No new haxe.rust limitation was exposed. This is turn-error stop evidence only, not live async lock ownership, full active-goal accounting internals, token usage aggregation, production state DB ownership, metrics/analytics/event emitters, full error taxonomy, live turn start, steering injection, or Cafex behavior.
 
-### HXCX-4.36+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.36: Goal Token Usage Contribution
+
+Model the selected upstream token-usage contribution path:
+
+- `TokenUsageContributor::on_token_usage` uses `turn_store.level_id()` as the accounting owner;
+- runtime-missing and disabled-runtime guards skip before accounting mutation;
+- `GoalAccountingState::record_token_usage` skips unknown turns;
+- known turns update `current_token_usage` before token-accounting and delta guards;
+- token-accounting-disabled turns return `None` after updating current usage;
+- goal token delta is non-cached input plus output tokens;
+- repeated token-usage notifications keep charging against `last_accounted_token_usage` until progress accounting marks the baseline accounted.
+
+Status: HXCX-4.36 now owns `fixtures/hxrust/thread-read-goal-token-usage-record.v1.json` and validates the slice through `harness/check-thread-read-goal-token-usage-record.sh`. No new haxe.rust limitation was exposed. This is token-usage accounting-state evidence only, not live token aggregation, analytics emission, production state DB writes, active-goal progress persistence, metrics clients, model/provider behavior, or Cafex behavior.
+
+### HXCX-4.37+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

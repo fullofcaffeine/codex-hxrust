@@ -1,0 +1,284 @@
+{
+  "schema": "codex-hxrust.thread-read-goal-token-usage-record-fixture.v1",
+  "bead": "HXCX-4.36",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/ext/goal/src/extension.rs",
+      "symbols": [
+        "TokenUsageContributor::on_token_usage",
+        "goal_runtime_handle",
+        "runtime.is_enabled",
+        "turn_store.level_id",
+        "token_usage.total_token_usage",
+        "GoalAccountingState::record_token_usage"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/accounting.rs",
+      "symbols": [
+        "GoalAccountingState::record_token_usage",
+        "GoalTurnAccounting::token_delta_since_last_accounting",
+        "GoalAccountingInner::thread_unflushed_token_delta",
+        "goal_token_delta_for_usage",
+        "RecordedTokenDelta"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/tests/accounting.rs",
+      "symbols": [
+        "goal_accounting_uses_turn_start_baseline_for_exact_deltas",
+        "goal_accounting_ignores_plan_mode_turns"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "runtime-missing-skip",
+      "request": {
+        "turnStoreLevelId": "turn-runtime-missing",
+        "currentTurnId": "turn-runtime-missing",
+        "runtimeAvailable": false,
+        "runtimeEnabled": false,
+        "turnKnown": false,
+        "accountTokens": false,
+        "previousCurrentUsage": { "totalTokens": 0, "inputTokens": 0, "cachedInputTokens": 0, "outputTokens": 0, "reasoningOutputTokens": 0 },
+        "lastAccountedUsage": { "totalTokens": 0, "inputTokens": 0, "cachedInputTokens": 0, "outputTokens": 0, "reasoningOutputTokens": 0 },
+        "totalUsage": { "totalTokens": 10, "inputTokens": 7, "cachedInputTokens": 1, "outputTokens": 3, "reasoningOutputTokens": 0 },
+        "otherUnflushedTokenDelta": 0
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_missing_skip",
+        "runtimeAvailable": false,
+        "runtimeEnabled": false,
+        "turnStoreLevelId": "turn-runtime-missing",
+        "currentTurnId": "turn-runtime-missing",
+        "recordAttempted": false,
+        "turnKnown": false,
+        "accountTokens": false,
+        "currentUsageUpdated": false,
+        "recorded": false,
+        "turnDelta": 0,
+        "threadUnflushedDelta": 0,
+        "goalChargeDelta": 0,
+        "ignoredReasoningOutputTokens": false,
+        "ignoredTotalTokens": false,
+        "summaryContains": "goal_runtime_handle/none->return"
+      }
+    },
+    {
+      "id": "runtime-disabled-skip",
+      "request": {
+        "turnStoreLevelId": "turn-runtime-disabled",
+        "currentTurnId": "turn-runtime-disabled",
+        "runtimeAvailable": true,
+        "runtimeEnabled": false,
+        "turnKnown": true,
+        "accountTokens": true,
+        "previousCurrentUsage": { "totalTokens": 0, "inputTokens": 0, "cachedInputTokens": 0, "outputTokens": 0, "reasoningOutputTokens": 0 },
+        "lastAccountedUsage": { "totalTokens": 0, "inputTokens": 0, "cachedInputTokens": 0, "outputTokens": 0, "reasoningOutputTokens": 0 },
+        "totalUsage": { "totalTokens": 12, "inputTokens": 8, "cachedInputTokens": 2, "outputTokens": 4, "reasoningOutputTokens": 1 },
+        "otherUnflushedTokenDelta": 0
+      },
+      "expect": {
+        "ok": true,
+        "code": "runtime_disabled_skip",
+        "runtimeAvailable": true,
+        "runtimeEnabled": false,
+        "turnStoreLevelId": "turn-runtime-disabled",
+        "currentTurnId": "turn-runtime-disabled",
+        "recordAttempted": false,
+        "turnKnown": false,
+        "accountTokens": false,
+        "currentUsageUpdated": false,
+        "recorded": false,
+        "turnDelta": 0,
+        "threadUnflushedDelta": 0,
+        "goalChargeDelta": 0,
+        "ignoredReasoningOutputTokens": false,
+        "ignoredTotalTokens": false,
+        "summaryContains": "runtime_disabled->return"
+      }
+    },
+    {
+      "id": "token-accounting-disabled-updates-current-usage",
+      "request": {
+        "turnStoreLevelId": "turn-plan",
+        "currentTurnId": "turn-plan",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnKnown": true,
+        "accountTokens": false,
+        "previousCurrentUsage": { "totalTokens": 0, "inputTokens": 0, "cachedInputTokens": 0, "outputTokens": 0, "reasoningOutputTokens": 0 },
+        "lastAccountedUsage": { "totalTokens": 0, "inputTokens": 0, "cachedInputTokens": 0, "outputTokens": 0, "reasoningOutputTokens": 0 },
+        "totalUsage": { "totalTokens": 30, "inputTokens": 20, "cachedInputTokens": 5, "outputTokens": 8, "reasoningOutputTokens": 2 },
+        "otherUnflushedTokenDelta": 0
+      },
+      "expect": {
+        "ok": true,
+        "code": "token_accounting_disabled_skip",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnStoreLevelId": "turn-plan",
+        "currentTurnId": "turn-plan",
+        "recordAttempted": true,
+        "turnKnown": true,
+        "accountTokens": false,
+        "currentUsageUpdated": true,
+        "recorded": false,
+        "turnDelta": 0,
+        "threadUnflushedDelta": 0,
+        "goalChargeDelta": 23,
+        "ignoredReasoningOutputTokens": true,
+        "ignoredTotalTokens": true,
+        "summaryContains": "current_token_usage=total->account_tokens_false->return_none"
+      }
+    },
+    {
+      "id": "unknown-turn-skip",
+      "request": {
+        "turnStoreLevelId": "turn-unknown",
+        "currentTurnId": "turn-current",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnKnown": false,
+        "accountTokens": true,
+        "previousCurrentUsage": { "totalTokens": 0, "inputTokens": 0, "cachedInputTokens": 0, "outputTokens": 0, "reasoningOutputTokens": 0 },
+        "lastAccountedUsage": { "totalTokens": 0, "inputTokens": 0, "cachedInputTokens": 0, "outputTokens": 0, "reasoningOutputTokens": 0 },
+        "totalUsage": { "totalTokens": 20, "inputTokens": 10, "cachedInputTokens": 0, "outputTokens": 10, "reasoningOutputTokens": 0 },
+        "otherUnflushedTokenDelta": 0
+      },
+      "expect": {
+        "ok": true,
+        "code": "turn_unknown_skip",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnStoreLevelId": "turn-unknown",
+        "currentTurnId": "turn-current",
+        "recordAttempted": true,
+        "turnKnown": false,
+        "accountTokens": false,
+        "currentUsageUpdated": false,
+        "recorded": false,
+        "turnDelta": 0,
+        "threadUnflushedDelta": 0,
+        "goalChargeDelta": 0,
+        "ignoredReasoningOutputTokens": false,
+        "ignoredTotalTokens": false,
+        "summaryContains": "turns.get_mut/none->return_none"
+      }
+    },
+    {
+      "id": "successful-record-for-current-turn",
+      "request": {
+        "turnStoreLevelId": "turn-1",
+        "currentTurnId": "turn-1",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnKnown": true,
+        "accountTokens": true,
+        "previousCurrentUsage": { "totalTokens": 135, "inputTokens": 100, "cachedInputTokens": 10, "outputTokens": 30, "reasoningOutputTokens": 5 },
+        "lastAccountedUsage": { "totalTokens": 135, "inputTokens": 100, "cachedInputTokens": 10, "outputTokens": 30, "reasoningOutputTokens": 5 },
+        "totalUsage": { "totalTokens": 162, "inputTokens": 120, "cachedInputTokens": 14, "outputTokens": 42, "reasoningOutputTokens": 8 },
+        "otherUnflushedTokenDelta": 0
+      },
+      "expect": {
+        "ok": true,
+        "code": "token_usage_recorded",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnStoreLevelId": "turn-1",
+        "currentTurnId": "turn-1",
+        "recordAttempted": true,
+        "turnKnown": true,
+        "accountTokens": true,
+        "currentUsageUpdated": true,
+        "recorded": true,
+        "turnDelta": 28,
+        "threadUnflushedDelta": 28,
+        "goalChargeDelta": 28,
+        "ignoredReasoningOutputTokens": true,
+        "ignoredTotalTokens": true,
+        "summaryContains": "RecordedTokenDelta(turn_delta=28,thread_unflushed_delta=28)"
+      }
+    },
+    {
+      "id": "repeated-larger-usage-update-keeps-last-accounted-baseline",
+      "request": {
+        "turnStoreLevelId": "turn-1",
+        "currentTurnId": "turn-1",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnKnown": true,
+        "accountTokens": true,
+        "previousCurrentUsage": { "totalTokens": 162, "inputTokens": 120, "cachedInputTokens": 14, "outputTokens": 42, "reasoningOutputTokens": 8 },
+        "lastAccountedUsage": { "totalTokens": 135, "inputTokens": 100, "cachedInputTokens": 10, "outputTokens": 30, "reasoningOutputTokens": 5 },
+        "totalUsage": { "totalTokens": 189, "inputTokens": 127, "cachedInputTokens": 16, "outputTokens": 52, "reasoningOutputTokens": 10 },
+        "otherUnflushedTokenDelta": 5
+      },
+      "expect": {
+        "ok": true,
+        "code": "token_usage_recorded",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnStoreLevelId": "turn-1",
+        "currentTurnId": "turn-1",
+        "recordAttempted": true,
+        "turnKnown": true,
+        "accountTokens": true,
+        "currentUsageUpdated": true,
+        "recorded": true,
+        "turnDelta": 43,
+        "threadUnflushedDelta": 48,
+        "goalChargeDelta": 43,
+        "ignoredReasoningOutputTokens": true,
+        "ignoredTotalTokens": true,
+        "summaryContains": "RecordedTokenDelta(turn_delta=43,thread_unflushed_delta=48)"
+      }
+    },
+    {
+      "id": "zero-goal-delta-still-updates-current-usage",
+      "request": {
+        "turnStoreLevelId": "turn-zero-delta",
+        "currentTurnId": "turn-zero-delta",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnKnown": true,
+        "accountTokens": true,
+        "previousCurrentUsage": { "totalTokens": 135, "inputTokens": 100, "cachedInputTokens": 10, "outputTokens": 30, "reasoningOutputTokens": 5 },
+        "lastAccountedUsage": { "totalTokens": 135, "inputTokens": 100, "cachedInputTokens": 10, "outputTokens": 30, "reasoningOutputTokens": 5 },
+        "totalUsage": { "totalTokens": 180, "inputTokens": 100, "cachedInputTokens": 10, "outputTokens": 30, "reasoningOutputTokens": 9 },
+        "otherUnflushedTokenDelta": 0
+      },
+      "expect": {
+        "ok": true,
+        "code": "non_positive_delta_skip",
+        "runtimeAvailable": true,
+        "runtimeEnabled": true,
+        "turnStoreLevelId": "turn-zero-delta",
+        "currentTurnId": "turn-zero-delta",
+        "recordAttempted": true,
+        "turnKnown": true,
+        "accountTokens": true,
+        "currentUsageUpdated": true,
+        "recorded": false,
+        "turnDelta": 0,
+        "threadUnflushedDelta": 0,
+        "goalChargeDelta": 0,
+        "ignoredReasoningOutputTokens": true,
+        "ignoredTotalTokens": true,
+        "summaryContains": "current_token_usage=total->non_positive_delta->return_none"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 7,
+    "recordedCount": 2,
+    "skippedCount": 5,
+    "currentUsageUpdatedCount": 4,
+    "ignoredReasoningCount": 4,
+    "ignoredTotalCount": 4,
+    "summaryContains": "schema=codex-hxrust.thread-read-goal-token-usage-record-report.v1;cases=7;recorded=2;skipped=5;currentUsageUpdated=4;ignoredReasoning=4;ignoredTotal=4"
+  }
+}
