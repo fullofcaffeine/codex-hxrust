@@ -284,6 +284,18 @@ The fixture `fixtures/hxrust/thread-read-try-start-turn-if-idle.v1.json` and `ha
 
 The fixture `fixtures/hxrust/thread-read-goal-runtime-restore.v1.json` and `harness/check-thread-read-goal-runtime-restore.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own live extension stores, production state DB handles, metrics clients, async scheduling, goal notifications, continuation turns, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-goal-runtime-restore.md`.
 
+## Thread/Read Active-Turn Goal Steering Injection
+
+`codexhx.runtime.app.threadread.ThreadReadActiveTurnGoalSteeringInjectionPolicy` is the HXCX-4.29 raw upstream active-turn goal steering injection slice:
+
+- objective-updated steering items are injected only when thread manager, live thread, and active turn are all available;
+- missing thread manager and missing live thread skip before injection;
+- no active turn returns the original steering item unchanged through `inject_if_running`;
+- successful injection extends pending input for the active turn and preserves the steering item summary;
+- unavailable steering items fail closed before host lookup.
+
+The fixture `fixtures/hxrust/thread-read-active-turn-goal-steering-injection.v1.json` and `harness/check-thread-read-active-turn-goal-steering-injection.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own live `ThreadManager`, `CodexThread`, `Session`, `InputQueue`, active-turn locks, async scheduling, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-active-turn-goal-steering-injection.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

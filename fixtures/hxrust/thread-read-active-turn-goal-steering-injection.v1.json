@@ -1,0 +1,225 @@
+{
+  "schema": "codex-hxrust.thread-read-active-turn-goal-steering-injection-fixture.v1",
+  "bead": "HXCX-4.29",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/ext/goal/src/runtime.rs",
+      "symbols": [
+        "objective_changed",
+        "objective_updated_steering_item",
+        "GoalRuntimeHandle::inject_active_turn_steering",
+        "thread_manager.upgrade",
+        "thread_manager.get_thread",
+        "thread.inject_if_running"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/core/src/codex_thread.rs",
+      "symbols": [
+        "CodexThread::inject_if_running"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/core/src/session/inject.rs",
+      "symbols": [
+        "Session::inject_if_running",
+        "extend_pending_input_for_turn_state",
+        "Err(input)"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/steering.rs",
+      "symbols": [
+        "objective_updated_steering_item",
+        "goal_context_input_item",
+        "InternalContextSource::from_static(\"goal\")"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "objective-update-injects-into-running-turn",
+      "steering": {
+        "kind": "objective_updated",
+        "goalStatus": "active",
+        "goalVariant": "budgeted_escaped",
+        "continuationDecision": "none",
+        "objectiveChanged": true
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "active_turn_steering_injected",
+        "injected": true,
+        "skipped": false,
+        "threadLookupAttempted": true,
+        "injectIfRunningAttempted": true,
+        "activeTurnRunning": true,
+        "pendingInputExtended": true,
+        "returnedItemUnchanged": false,
+        "injectedItemUnchanged": true,
+        "itemSummaryContains": "kind=objective_updated",
+        "summaryContains": "inject_if_running->pending/input/extend"
+      }
+    },
+    {
+      "id": "missing-thread-manager-skips",
+      "steering": {
+        "kind": "objective_updated",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "none",
+        "objectiveChanged": true
+      },
+      "host": {
+        "threadManagerAvailable": false,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "thread_manager_unavailable_skip",
+        "injected": false,
+        "skipped": true,
+        "threadLookupAttempted": false,
+        "injectIfRunningAttempted": false,
+        "activeTurnRunning": false,
+        "pendingInputExtended": false,
+        "returnedItemUnchanged": false,
+        "injectedItemUnchanged": false,
+        "itemSummaryContains": "kind=objective_updated",
+        "summaryContains": "thread manager is unavailable"
+      }
+    },
+    {
+      "id": "missing-live-thread-skips",
+      "steering": {
+        "kind": "objective_updated",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "none",
+        "objectiveChanged": true
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": false,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": true,
+        "code": "live_thread_unavailable_skip",
+        "injected": false,
+        "skipped": true,
+        "threadLookupAttempted": true,
+        "injectIfRunningAttempted": false,
+        "activeTurnRunning": false,
+        "pendingInputExtended": false,
+        "returnedItemUnchanged": false,
+        "injectedItemUnchanged": false,
+        "itemSummaryContains": "kind=objective_updated",
+        "summaryContains": "live thread is unavailable"
+      }
+    },
+    {
+      "id": "no-active-turn-returns-unchanged-input",
+      "steering": {
+        "kind": "objective_updated",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "none",
+        "objectiveChanged": true
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": false
+      },
+      "expect": {
+        "ok": true,
+        "code": "no_active_turn_skip",
+        "injected": false,
+        "skipped": true,
+        "threadLookupAttempted": true,
+        "injectIfRunningAttempted": true,
+        "activeTurnRunning": false,
+        "pendingInputExtended": false,
+        "returnedItemUnchanged": true,
+        "injectedItemUnchanged": false,
+        "itemSummaryContains": "kind=objective_updated",
+        "summaryContains": "inject_if_running->returned/input"
+      }
+    },
+    {
+      "id": "unchanged-objective-has-no-steering-item",
+      "steering": {
+        "kind": "objective_updated",
+        "goalStatus": "active",
+        "goalVariant": "budgeted",
+        "continuationDecision": "none",
+        "objectiveChanged": false
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": false,
+        "code": "steering_item_not_available",
+        "injected": false,
+        "skipped": false,
+        "threadLookupAttempted": false,
+        "injectIfRunningAttempted": false,
+        "activeTurnRunning": false,
+        "pendingInputExtended": false,
+        "returnedItemUnchanged": false,
+        "injectedItemUnchanged": false,
+        "itemSummaryContains": "item=none",
+        "summaryContains": "active-turn injection requires an emitted goal steering item"
+      }
+    },
+    {
+      "id": "non-active-goal-has-no-injection-item",
+      "steering": {
+        "kind": "objective_updated",
+        "goalStatus": "paused",
+        "goalVariant": "budgeted",
+        "continuationDecision": "none",
+        "objectiveChanged": true
+      },
+      "host": {
+        "threadManagerAvailable": true,
+        "liveThreadAvailable": true,
+        "activeTurnRunning": true
+      },
+      "expect": {
+        "ok": false,
+        "code": "steering_item_not_available",
+        "injected": false,
+        "skipped": false,
+        "threadLookupAttempted": false,
+        "injectIfRunningAttempted": false,
+        "activeTurnRunning": false,
+        "pendingInputExtended": false,
+        "returnedItemUnchanged": false,
+        "injectedItemUnchanged": false,
+        "itemSummaryContains": "item=none",
+        "summaryContains": "active-turn injection requires an emitted goal steering item"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 6,
+    "injectedCount": 1,
+    "skippedCount": 3,
+    "failureCount": 2,
+    "returnedUnchangedCount": 1,
+    "injectedUnchangedCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-active-turn-goal-steering-injection-report.v1;cases=6;injected=1;skipped=3;failed=2;returnedUnchanged=1;injectedUnchanged=1"
+  }
+}

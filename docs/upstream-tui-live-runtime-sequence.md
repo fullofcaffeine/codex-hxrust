@@ -325,7 +325,19 @@ Model the selected goal runtime restore path after thread resume:
 
 Status: HXCX-4.28 now owns `fixtures/hxrust/thread-read-goal-runtime-restore.v1.json` and validates the slice through `harness/check-thread-read-goal-runtime-restore.sh`. No new haxe.rust limitation was exposed. This is restore-accounting evidence only, not live state DB ownership, metrics-client ownership, async scheduling, goal notifications, continuation turns, or Cafex behavior.
 
-### HXCX-4.29+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.29: Active-Turn Goal Steering Injection
+
+Model the selected goal steering injection path for a running turn:
+
+- objective-updated steering composes with the HXCX-4.26 contextual-user-fragment builder;
+- missing thread manager and missing live thread skip without injection;
+- `CodexThread::inject_if_running` returns the original item unchanged when no active turn is running;
+- active turns extend pending input with the unchanged steering item;
+- unavailable steering items fail closed before host lookup.
+
+Status: HXCX-4.29 now owns `fixtures/hxrust/thread-read-active-turn-goal-steering-injection.v1.json` and validates the slice through `harness/check-thread-read-active-turn-goal-steering-injection.sh`. No new haxe.rust limitation was exposed. This is active-turn injection evidence only, not live `ThreadManager`, `CodexThread`, `Session`, active-turn locks, async scheduling, or Cafex behavior.
+
+### HXCX-4.30+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

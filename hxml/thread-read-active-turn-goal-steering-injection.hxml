@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/thread-read-active-turn-goal-steering-injection
+-D rust_crate=codex_hxrust_thread_read_active_turn_goal_steering_injection
+-D rust_cargo_subcommand=check
+-main ThreadReadActiveTurnGoalSteeringInjectionHarness
