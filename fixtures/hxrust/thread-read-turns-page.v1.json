@@ -1,0 +1,148 @@
+{
+  "schema": "codex-hxrust.thread-read-turns-page.v1",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs:1191",
+    "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs:1210",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:2217",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:3600",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:3613",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:3692",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:3703",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:3758"
+  ],
+  "threadId": "11111111-1111-4111-8111-111111111111",
+  "turns": [
+    {
+      "id": "turn-1",
+      "status": "completed",
+      "items": [
+        { "kind": "userMessage", "text": "oldest prompt" },
+        { "kind": "agentMessage", "text": "oldest answer" },
+        { "kind": "commandExecution", "text": "cargo check" }
+      ]
+    },
+    {
+      "id": "turn-2",
+      "status": "completed",
+      "items": [
+        { "kind": "userMessage", "text": "second prompt" },
+        { "kind": "commandExecution", "text": "cargo test" },
+        { "kind": "agentMessage", "text": "second answer" }
+      ]
+    },
+    {
+      "id": "turn-3",
+      "status": "completed",
+      "items": [
+        { "kind": "compacted", "text": "context compacted" }
+      ]
+    },
+    {
+      "id": "turn-4",
+      "status": "failed",
+      "items": [
+        { "kind": "userMessage", "text": "newest prompt" },
+        { "kind": "agentMessage", "text": "permission denied" }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "id": "first-desc-summary-page",
+      "cursor": "",
+      "limit": 2,
+      "sortDirection": "desc",
+      "itemsView": "summary",
+      "expect": {
+        "ok": true,
+        "code": "turns_page_built",
+        "dataCount": 2,
+        "nextCursor": "{\"turnId\":\"turn-3\",\"includeAnchor\":false}",
+        "backwardsCursor": "{\"turnId\":\"turn-4\",\"includeAnchor\":true}",
+        "summaryContains": "turn=turn-4;status=failed;items=2[userMessage:newest prompt|agentMessage:permission denied]||turn=turn-3;status=completed;items=0[]"
+      }
+    },
+    {
+      "id": "second-desc-full-page",
+      "cursor": "{\"turnId\":\"turn-3\",\"includeAnchor\":false}",
+      "limit": 2,
+      "sortDirection": "desc",
+      "itemsView": "full",
+      "expect": {
+        "ok": true,
+        "code": "turns_page_built",
+        "dataCount": 2,
+        "nextCursor": "",
+        "backwardsCursor": "{\"turnId\":\"turn-2\",\"includeAnchor\":true}",
+        "summaryContains": "turn=turn-2;status=completed;items=3[userMessage:second prompt|commandExecution:cargo test|agentMessage:second answer]||turn=turn-1;status=completed;items=3[userMessage:oldest prompt|agentMessage:oldest answer|commandExecution:cargo check]"
+      }
+    },
+    {
+      "id": "reverse-asc-not-loaded-page",
+      "cursor": "{\"turnId\":\"turn-2\",\"includeAnchor\":true}",
+      "limit": 2,
+      "sortDirection": "asc",
+      "itemsView": "notLoaded",
+      "expect": {
+        "ok": true,
+        "code": "turns_page_built",
+        "dataCount": 2,
+        "nextCursor": "{\"turnId\":\"turn-3\",\"includeAnchor\":false}",
+        "backwardsCursor": "{\"turnId\":\"turn-2\",\"includeAnchor\":true}",
+        "summaryContains": "turn=turn-2;status=completed;items=0[]||turn=turn-3;status=completed;items=0[]"
+      }
+    },
+    {
+      "id": "empty-page-after-oldest-desc",
+      "cursor": "{\"turnId\":\"turn-1\",\"includeAnchor\":false}",
+      "limit": 2,
+      "sortDirection": "desc",
+      "itemsView": "summary",
+      "expect": {
+        "ok": true,
+        "code": "turns_page_built",
+        "dataCount": 0,
+        "nextCursor": "",
+        "backwardsCursor": "",
+        "summaryContains": "page:data=0;next=null;back=null"
+      }
+    },
+    {
+      "id": "malformed-cursor-refused",
+      "cursor": "not-json",
+      "limit": 2,
+      "sortDirection": "desc",
+      "itemsView": "summary",
+      "expect": {
+        "ok": false,
+        "code": "invalid_cursor",
+        "dataCount": 0,
+        "nextCursor": "",
+        "backwardsCursor": "",
+        "summaryContains": ""
+      }
+    },
+    {
+      "id": "missing-anchor-refused",
+      "cursor": "{\"turnId\":\"turn-missing\",\"includeAnchor\":false}",
+      "limit": 2,
+      "sortDirection": "desc",
+      "itemsView": "summary",
+      "expect": {
+        "ok": false,
+        "code": "invalid_cursor_anchor",
+        "dataCount": 0,
+        "nextCursor": "",
+        "backwardsCursor": "",
+        "summaryContains": ""
+      }
+    }
+  ],
+  "expectReport": {
+    "requestCount": 6,
+    "okCount": 4,
+    "failureCount": 2,
+    "summaryContains": "schema=codex-hxrust.thread-read-turns-page-report.v1;requests=6;ok=4;failed=2"
+  }
+}

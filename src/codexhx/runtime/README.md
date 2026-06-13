@@ -151,6 +151,18 @@ The fixture `fixtures/hxrust/persisted-thread-read-view.v1.json` and `harness/ch
 
 The fixture `fixtures/hxrust/thread-read-turn-projection.v1.json` and `harness/check-thread-read-turn-projection.sh` prove the slice through the Haxe interpreter and portable haxe.rust-generated Rust. This is not full rollout parsing, pagination, live `ThreadState` merge, or production state-file ownership. The boundary is documented in `docs/thread-read-turn-projection.md`.
 
+## Thread/Read Turns Page
+
+`codexhx.runtime.app.threadread.ThreadReadTurnsPager` is the HXCX-4.18 raw upstream `thread/turns/list` pagination slice:
+
+- `ThreadReadTurnsPageRequest` uses typed `ThreadId`, cursor, limit, sort direction, and item-view values.
+- `ThreadReadTurnsCursor` encodes and decodes upstream-shaped opaque cursor JSON with `turnId` and `includeAnchor`.
+- desc and asc paging both preserve upstream anchor inclusion rules.
+- `notLoaded`, `summary`, and `full` item views project selected turn summaries before pagination results are returned.
+- malformed cursor JSON and missing cursor anchors fail closed through typed outcomes.
+
+The fixture `fixtures/hxrust/thread-read-turns-page.v1.json` and `harness/check-thread-read-turns-page.sh` prove the slice through the Haxe interpreter and portable haxe.rust-generated Rust. This is not `thread/turns/items/list` runtime support, full `Turn` reconstruction, live active-turn merge, rollout file reads, or production state ownership. The boundary is documented in `docs/thread-read-turns-page.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

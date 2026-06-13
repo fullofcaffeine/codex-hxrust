@@ -197,7 +197,20 @@ Project selected upstream rollout/history item summaries into typed turn summari
 
 Status: HXCX-4.17 now owns `fixtures/hxrust/thread-read-turn-projection.v1.json` and validates the slice through `harness/check-thread-read-turn-projection.sh`. No new haxe.rust limitation was exposed; the generated Rust gate passed with typed DTOs, enum abstracts, arrays, and zero raw Rust escapes. This is projection evidence only, not full rollout parsing, pagination, live `ThreadState` merge, or production state-file ownership.
 
-### HXCX-4.18+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.18: Thread/Read Turns Page
+
+Page selected reconstructed turns through upstream-shaped `thread/turns/list` rules:
+
+- opaque cursor JSON with `turnId` and `includeAnchor`;
+- upstream limit clamping and default page sizing;
+- descending and ascending page direction;
+- backwards cursor anchors for reverse paging;
+- `notLoaded`, `summary`, and `full` item views;
+- malformed and missing-anchor cursor refusal.
+
+Status: HXCX-4.18 now owns `fixtures/hxrust/thread-read-turns-page.v1.json` and validates the slice through `harness/check-thread-read-turns-page.sh`. No new haxe.rust limitation was exposed; malformed cursor parsing is handled as a typed app boundary failure. This is `thread/turns/list` page evidence only, not `thread/turns/items/list` runtime support, full rollout storage, active-turn merge, or production state ownership.
+
+### HXCX-4.19+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

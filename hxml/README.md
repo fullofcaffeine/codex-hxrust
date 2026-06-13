@@ -23,6 +23,7 @@ Profile policy for the scaffold:
 | `native-state-adapter.hxml` | Compile the HXCX-4.15 native SQLite state adapter reconcile/query pressure harness through metal haxe.rust. |
 | `persisted-thread-read-view.hxml` | Compile the HXCX-4.16 persisted thread read-view harness through metal haxe.rust after native adapter setup. |
 | `thread-read-turn-projection.hxml` | Compile the HXCX-4.17 raw thread/read turn projection harness through portable haxe.rust. |
+| `thread-read-turns-page.hxml` | Compile the HXCX-4.18 raw thread/read turns page harness through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |
