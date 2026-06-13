@@ -16,6 +16,7 @@ Profile policy for the scaffold:
 | `mock-model-stream.hxml` | Compile the HXCX-3.1/HXCX-3.6 mock model stream parser, fixture provider, one-turn state machine, cancellation, and transcript/state store harness through portable haxe.rust. |
 | `headless-jsonl-adapter.hxml` | Compile the HXCX-3.4 command JSONL app-server/debug adapter harness through portable haxe.rust. |
 | `runtime-app-client.hxml` | Compile the HXCX-4.7 runtime event bus and in-memory app-server client facade harness through portable haxe.rust. |
+| `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `apply-patch-dry-run.hxml` | Compile the HXCX-4.1 apply-patch dry-run wrapper harness through portable haxe.rust. |
 | `process-exec.hxml` | Compile the HXCX-4.2 exact-approval process exec wrapper harness through portable haxe.rust. |
 | `sandbox-gate.hxml` | Compile the HXCX-4.3 fail-closed sandbox permission gate harness through portable haxe.rust. |

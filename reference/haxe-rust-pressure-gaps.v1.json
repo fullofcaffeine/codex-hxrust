@@ -5,25 +5,25 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 11,
+    "totalGaps": 12,
     "resolvedUpstream": 10,
-    "openUpstream": 1,
+    "openUpstream": 2,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 4,
+      "medium": 5,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 4,
+      "runtime_model_session": 5,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 114,
+    "sourceFilesScanned": 123,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -194,6 +194,23 @@
       "validation": [
         "harness/check-runtime-app-client.sh",
         "haxe.rust-362 acceptance requires a product-neutral regression fixture"
+      ]
+    },
+    {
+      "id": "non-copy-class-field-assign-op",
+      "status": "open_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-e0d",
+      "haxeRustRefs": [
+        "haxe.rust-ojj"
+      ],
+      "reproduction": "TUI story replay summary work exposed unsupported lowering for class String field updates written as this.field += value; equivalent Haxe source using this.field = this.field + value compiles.",
+      "workaround": "The local summary uses explicit assignment for string accumulation; the compiler gap remains tracked upstream as generic non-copy class field assign-op lowering work.",
+      "followUp": "haxe.rust-ojj",
+      "validation": [
+        "harness/check-tui-story-replay.sh",
+        "haxe.rust-ojj acceptance requires a product-neutral regression fixture"
       ]
     },
     {

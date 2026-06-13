@@ -47,7 +47,7 @@ Owner: upstream Codex / `../codex`, pinned by `reference/upstream-codex.pin.json
 | Core SSE/mock response harness | `../codex/codex-rs/core/tests/common/responses.rs`; local fixture `fixtures/upstream/mock-model-basic-one-turn.sse` | Rust test helpers plus credential-free SSE fixture | M3 active | Event names, mock stream structure, request-body invariants |
 | Core test harness | `../codex/codex-rs/core/tests/common/test_codex.rs` | Rust test helpers | M3 secondary | Session setup and headless runtime expectations |
 | Core snapshot files | `../codex/codex-rs/core/tests/suite/snapshots` | 36 `.snap` files | M3 secondary | Context compaction, pending input, model-visible layout, realtime request shapes |
-| TUI story fixture | `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl` | 1 JSONL file | HXCX-4.8 | Full-Codex/TUI replay evidence after the runtime event-bus/app-server facade slice |
+| TUI story fixture | `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`; local selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl` | 1 upstream JSONL file; 1 selected codexhx replay fixture | HXCX-4.8 active | Full-Codex/TUI replay evidence after the runtime event-bus/app-server facade slice |
 | Tool JSON schema policy fixtures | `../codex/codex-rs/tools/tests/fixtures/json_schema_policy` | 6 JSON files | M4 secondary | Tool schema filtering/truncation policy examples |
 | Config schema | `../codex/codex-rs/core/config.schema.json` plus `core/src/config/schema.rs` | JSON schema plus generator/source | M2/M4 secondary | Config DTO subset and doctor/config validation |
 | Runtime app-client facade | `fixtures/hxrust/runtime-app-client.v1.json` | Local upstream-shaped request/notification fixture | HXCX-4.7 | Request correlation, lossless/best-effort event classification, lag/backpressure semantics |
@@ -122,7 +122,7 @@ Track these gaps before claiming parity:
 | No upstream Haxe DTO golden files | Covered for first app-protocol subset | `reference/app-protocol-schema-fingerprints.v1.json` and `harness/check-schema-fingerprints.sh`; expand beyond the first M2 subset as DTO coverage grows |
 | Local fixture tree | Active | Keep copied fixture subsets under `fixtures/{upstream,cafex,hxrust}/` and record provenance under `reference/` |
 | Cafex fixtures are adapter-only | Intentional | Keep them inactive until M5 |
-| Full TUI fixtures | Unsupported for first core | HXCX-4.8+ adapts `oss-story.jsonl`; HXCX-4.9+ adapts VT100/history/render invariants before interactive terminal ownership |
+| Full TUI fixtures | Selected story replay active | HXCX-4.8 adapts `oss-story.jsonl` into `oss-story-selected.v1.jsonl`; HXCX-4.9+ adapts VT100/history/render invariants before interactive terminal ownership |
 | Live model/provider traffic | Unsupported | Use mock SSE/JSONL only |
 | Real process/sandbox mutation fixtures | Unsupported until M4 | Start with dry-run/denied-by-default wrappers |
 | App-server full 815-file schema tree | Too broad for first DTO pass | Use initial M2 subset, then expand by scorecard |

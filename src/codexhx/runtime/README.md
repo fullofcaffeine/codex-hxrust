@@ -79,3 +79,14 @@ Unsupported commands fail closed with `unsupported_command`. The adapter remains
 The fixture `fixtures/hxrust/runtime-app-client.v1.json` and `harness/check-runtime-app-client.sh` prove the facade through both Haxe interpreter and haxe.rust-generated Rust. The slice intentionally stays portable; later live transport work can place metal/native async wrappers around this semantic core.
 
 HXCX-4.7 also exposed generic haxe.rust issue `haxe.rust-362`: nullable `Array<Class>.shift()` return lowering mismatched Rust `Option` and non-null class reference signatures. The local runtime queue now uses a typed read outcome plus indexed removal; the compiler issue is tracked upstream as product-neutral work, not a Codex-specific workaround.
+
+## TUI Story Replay
+
+`codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:
+
+- `TuiStoryDirection` and `TuiStoryKind` classify meta, app-event, key-event, codex-event, insert-history, and operation records.
+- `TuiStoryKeyEvent` extracts code/modifier/press kind from upstream crossterm debug strings and accumulates typed user input.
+- `CodexStoryMessageType` covers the selected upstream Codex event subset: session configured, task started, reasoning delta, assistant delta, task complete, and shutdown complete.
+- `TuiStoryReplaySummary` normalizes volatile timestamp, cwd, model, session id, and event id noise into a stable replay fingerprint.
+
+This is replay evidence, not terminal rendering ownership. HXCX-4.9 owns VT100/history/render invariants next.

@@ -83,6 +83,8 @@ Adapt upstream `oss-story.jsonl` into codexhx-owned replay fixtures:
 
 This gives us a public oracle for "TUI-like behavior" without yet owning an interactive terminal.
 
+Status: HXCX-4.8 now owns the selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl` and validates its normalized replay summary through `harness/check-tui-story-replay.sh`.
+
 ### HXCX-4.9: VT100 History And Render Commit Parity
 
 Port the first terminal rendering invariant:
@@ -161,7 +163,7 @@ Cafex/Cafetera adapter work stays behind upstream-shaped foundations:
 
 - deterministic protocol and DTO parity: done for the selected app-server subset;
 - runtime event bus/app-server client facade: not yet done;
-- TUI story/replay and VT100 rendering parity: not yet done;
+- TUI story/replay: selected fixture active; VT100 rendering parity: not yet done;
 - live transport/persistence boundaries: not yet done.
 
 Therefore `codex-hxrust-mpd` and similar Cafex bridge tasks should remain P4/dependency-gated until at least HXCX-4.7 and HXCX-4.8 are intentionally selected or completed. Cafex live-status receipts are useful later, but they are not a substitute for upstream TUI/runtime ownership.
