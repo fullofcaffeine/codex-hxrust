@@ -27,6 +27,7 @@ Profile policy for the scaffold:
 | `thread-read-active-turn-merge.hxml` | Compile the HXCX-4.19 raw active-turn merge/status normalization harness through portable haxe.rust. |
 | `thread-read-turn-items-list.hxml` | Compile the HXCX-4.20 raw thread/turns/items unsupported-runtime harness through portable haxe.rust. |
 | `thread-read-token-usage-owner.hxml` | Compile the HXCX-4.21 raw token-usage replay owner attribution harness through portable haxe.rust. |
+| `thread-read-token-usage-replay.hxml` | Compile the HXCX-4.22 raw restored token-usage notification payload harness through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |

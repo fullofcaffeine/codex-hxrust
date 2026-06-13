@@ -1,0 +1,231 @@
+{
+  "schema": "codex-hxrust.thread-read-token-usage-replay-fixture.v1",
+  "bead": "HXCX-4.22",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/token_usage_replay.rs",
+      "symbols": [
+        "send_thread_token_usage_update_to_connection"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
+      "symbols": [
+        "ThreadTokenUsageUpdatedNotification",
+        "ThreadTokenUsage",
+        "TokenUsageBreakdown",
+        "impl From<CoreTokenUsageInfo> for ThreadTokenUsage",
+        "impl From<CoreTokenUsage> for TokenUsageBreakdown"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/protocol/src/protocol.rs",
+      "symbols": [
+        "TokenUsage",
+        "TokenUsageInfo"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/tests/suite/v2/thread_resume.rs",
+      "symbols": [
+        "thread_resume_emits_restored_token_usage_before_next_turn"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/tests/suite/v2/thread_fork.rs",
+      "symbols": [
+        "thread_fork_emits_restored_token_usage_before_next_turn"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "resume-restored-usage-with-context-window",
+      "threadId": "01890f3d-8f3a-7a9b-9f0d-000000000001",
+      "owner": { "ok": true, "turnId": "turn-resume-owner", "turnIndex": 0, "reason": "explicit_owner" },
+      "tokenUsage": {
+        "total": {
+          "totalTokens": 150,
+          "inputTokens": 120,
+          "cachedInputTokens": 20,
+          "outputTokens": 30,
+          "reasoningOutputTokens": 10
+        },
+        "last": {
+          "totalTokens": 90,
+          "inputTokens": 70,
+          "cachedInputTokens": 15,
+          "outputTokens": 20,
+          "reasoningOutputTokens": 5
+        },
+        "modelContextWindow": 200000
+      },
+      "expect": {
+        "ok": true,
+        "code": "notification_ready",
+        "threadId": "01890f3d-8f3a-7a9b-9f0d-000000000001",
+        "turnId": "turn-resume-owner",
+        "totalTokens": 150,
+        "lastTokens": 90,
+        "modelContextWindow": "200000",
+        "jsonContains": "\"method\":\"thread/tokenUsage/updated\"",
+        "summaryContains": "total.totalTokens=150"
+      }
+    },
+    {
+      "id": "fork-restored-usage-without-context-window",
+      "threadId": "01890f3d-8f3a-7a9b-9f0d-000000000002",
+      "owner": { "ok": true, "turnId": "rebuilt-fork-owner", "turnIndex": 1, "reason": "rebuilt_position" },
+      "tokenUsage": {
+        "total": {
+          "totalTokens": 42,
+          "inputTokens": 30,
+          "cachedInputTokens": 3,
+          "outputTokens": 12,
+          "reasoningOutputTokens": 2
+        },
+        "last": {
+          "totalTokens": 8,
+          "inputTokens": 5,
+          "cachedInputTokens": 1,
+          "outputTokens": 3,
+          "reasoningOutputTokens": 0
+        },
+        "modelContextWindow": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "notification_ready",
+        "threadId": "01890f3d-8f3a-7a9b-9f0d-000000000002",
+        "turnId": "rebuilt-fork-owner",
+        "totalTokens": 42,
+        "lastTokens": 8,
+        "modelContextWindow": "null",
+        "jsonContains": "\"modelContextWindow\":null",
+        "summaryContains": "turnId=rebuilt-fork-owner"
+      }
+    },
+    {
+      "id": "missing-token-usage-refusal",
+      "threadId": "01890f3d-8f3a-7a9b-9f0d-000000000003",
+      "owner": { "ok": true, "turnId": "turn-owner", "turnIndex": 0, "reason": "latest_completed_or_failed" },
+      "expect": {
+        "ok": false,
+        "code": "missing_token_usage",
+        "threadId": "",
+        "turnId": "",
+        "totalTokens": 0,
+        "lastTokens": 0,
+        "modelContextWindow": "",
+        "jsonContains": "",
+        "summaryContains": "conversation has no persisted token usage"
+      }
+    },
+    {
+      "id": "owner-resolution-refusal",
+      "threadId": "01890f3d-8f3a-7a9b-9f0d-000000000004",
+      "owner": { "ok": false, "code": "empty_thread", "reason": "empty_thread" },
+      "tokenUsage": {
+        "total": {
+          "totalTokens": 1,
+          "inputTokens": 1,
+          "cachedInputTokens": 0,
+          "outputTokens": 0,
+          "reasoningOutputTokens": 0
+        },
+        "last": {
+          "totalTokens": 1,
+          "inputTokens": 1,
+          "cachedInputTokens": 0,
+          "outputTokens": 0,
+          "reasoningOutputTokens": 0
+        },
+        "modelContextWindow": null
+      },
+      "expect": {
+        "ok": false,
+        "code": "missing_owner_turn",
+        "threadId": "",
+        "turnId": "",
+        "totalTokens": 0,
+        "lastTokens": 0,
+        "modelContextWindow": "",
+        "jsonContains": "",
+        "summaryContains": "empty_thread"
+      }
+    },
+    {
+      "id": "invalid-thread-id-refusal",
+      "threadId": "thread-not-a-uuid",
+      "owner": { "ok": true, "turnId": "turn-owner", "turnIndex": 0, "reason": "latest_completed_or_failed" },
+      "tokenUsage": {
+        "total": {
+          "totalTokens": 1,
+          "inputTokens": 1,
+          "cachedInputTokens": 0,
+          "outputTokens": 0,
+          "reasoningOutputTokens": 0
+        },
+        "last": {
+          "totalTokens": 1,
+          "inputTokens": 1,
+          "cachedInputTokens": 0,
+          "outputTokens": 0,
+          "reasoningOutputTokens": 0
+        },
+        "modelContextWindow": null
+      },
+      "expect": {
+        "ok": false,
+        "code": "invalid_thread_id",
+        "threadId": "",
+        "turnId": "",
+        "totalTokens": 0,
+        "lastTokens": 0,
+        "modelContextWindow": "",
+        "jsonContains": "",
+        "summaryContains": "valid upstream thread UUID"
+      }
+    },
+    {
+      "id": "invalid-usage-refusal",
+      "threadId": "01890f3d-8f3a-7a9b-9f0d-000000000006",
+      "owner": { "ok": true, "turnId": "turn-owner", "turnIndex": 0, "reason": "latest_completed_or_failed" },
+      "tokenUsage": {
+        "total": {
+          "totalTokens": -1,
+          "inputTokens": 0,
+          "cachedInputTokens": 0,
+          "outputTokens": 0,
+          "reasoningOutputTokens": 0
+        },
+        "last": {
+          "totalTokens": 0,
+          "inputTokens": 0,
+          "cachedInputTokens": 0,
+          "outputTokens": 0,
+          "reasoningOutputTokens": 0
+        },
+        "modelContextWindow": null
+      },
+      "expect": {
+        "ok": false,
+        "code": "invalid_token_usage",
+        "threadId": "",
+        "turnId": "",
+        "totalTokens": 0,
+        "lastTokens": 0,
+        "modelContextWindow": "",
+        "jsonContains": "",
+        "summaryContains": "non-negative"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 6,
+    "okCount": 2,
+    "failureCount": 4,
+    "summaryContains": "schema=codex-hxrust.thread-read-token-usage-replay-report.v1;cases=6;ok=2;failed=4"
+  }
+}

@@ -243,7 +243,18 @@ Model the selected restored token-usage attribution rules around reconstructed t
 
 Status: HXCX-4.21 now owns `fixtures/hxrust/thread-read-token-usage-owner.v1.json` and validates the slice through `harness/check-thread-read-token-usage-owner.sh`. No new haxe.rust limitation was exposed. This is attribution evidence only, not token accounting, notification emission, rollout file parsing, or production state ownership.
 
-### HXCX-4.22+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.22: Token Usage Replay Payload
+
+Model the selected restored `thread/tokenUsage/updated` payload construction:
+
+- valid thread id plus resolved owner turn creates a typed replay notification;
+- total and last usage breakdowns preserve upstream camelCase token counter fields;
+- nullable `modelContextWindow` is carried as a numeric value or JSON null;
+- missing usage, unresolved owners, invalid thread ids, and negative counters fail closed.
+
+Status: HXCX-4.22 now owns `fixtures/hxrust/thread-read-token-usage-replay.v1.json` and validates the slice through `harness/check-thread-read-token-usage-replay.sh`. No new haxe.rust limitation was exposed. This is payload construction evidence only, not live connection delivery, usage aggregation, rollout parsing, or production state ownership.
+
+### HXCX-4.23+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
