@@ -29,7 +29,7 @@ The first M2 subset covers:
 
 `rawResponseItem/completed` is tracked through its standalone v2 schema file because upstream excludes that server notification from the combined JSON export.
 
-`fuzzyFileSearch/sessionUpdated` and `fuzzyFileSearch/sessionCompleted` are tracked through the top-level schema files because upstream currently exports those session notifications outside the `v2/` directory.
+`fuzzyFileSearch/sessionUpdated` and `fuzzyFileSearch/sessionCompleted` are tracked through the top-level schema files because upstream currently exports those session notifications outside the `v2/` directory. The paired fuzzy session request DTOs are selected from upstream Rust DTO/protocol source because standalone request/response schema files are not emitted for them.
 
 `environment/add`, `collaborationMode/list`, and `thread/search` are selected from upstream Rust DTO/protocol source because the pinned export does not currently emit standalone v2 request/response schema files for those methods. `mock/experimentalMethod` remains outside the production subset because it is an upstream experimental test-only method.
 

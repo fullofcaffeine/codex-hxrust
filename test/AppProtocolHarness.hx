@@ -46,6 +46,9 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/list");
         assertContains(fingerprintJson, "thread/search");
         assertContains(fingerprintJson, "thread/loaded/list");
+        assertContains(fingerprintJson, "fuzzyFileSearch/sessionStart");
+        assertContains(fingerprintJson, "fuzzyFileSearch/sessionUpdate");
+        assertContains(fingerprintJson, "fuzzyFileSearch/sessionStop");
         assertContains(fingerprintJson, "turn/steer");
         assertContains(fingerprintJson, "review/start");
         assertContains(fingerprintJson, "windowsSandbox/setupStart");
@@ -181,7 +184,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("270", Std.string(items.length));
+        assertEquals("276", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -206,8 +209,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("96", Std.string(requests));
-        assertEquals("96", Std.string(responses));
+        assertEquals("99", Std.string(requests));
+        assertEquals("99", Std.string(responses));
         assertEquals("8", Std.string(serverRequests));
         assertEquals("8", Std.string(serverResponses));
         assertEquals("61", Std.string(notifications));
@@ -529,6 +532,21 @@ class AppProtocolHarness {
         assertFalse(invalidFuzzyIndex.ok, "fuzzy file search indices must be unsigned integers");
         assertEquals("expected_uint", invalidFuzzyIndex.errorCode);
         assertEquals("$.message.params.files[0].indices[1]", invalidFuzzyIndex.errorPath);
+
+        final emptyFuzzySessionStartId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fuzzy-session-start-empty-id\",\"kind\":\"request\",\"method\":\"fuzzyFileSearch/sessionStart\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"fuzzy-start-1\",\"method\":\"fuzzyFileSearch/sessionStart\",\"params\":{\"sessionId\":\"\",\"roots\":[\"/tmp\"]}}}")));
+        assertFalse(emptyFuzzySessionStartId.ok, "fuzzy session start requires non-empty sessionId");
+        assertEquals("empty_string", emptyFuzzySessionStartId.errorCode);
+        assertEquals("$.message.params.sessionId", emptyFuzzySessionStartId.errorPath);
+
+        final invalidFuzzySessionRoot = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fuzzy-session-start-invalid-root\",\"kind\":\"request\",\"method\":\"fuzzyFileSearch/sessionStart\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"fuzzy-start-1\",\"method\":\"fuzzyFileSearch/sessionStart\",\"params\":{\"sessionId\":\"fuzzy-1\",\"roots\":[7]}}}")));
+        assertFalse(invalidFuzzySessionRoot.ok, "fuzzy session roots must be strings");
+        assertEquals("expected_string", invalidFuzzySessionRoot.errorCode);
+        assertEquals("$.message.params.roots[0]", invalidFuzzySessionRoot.errorPath);
+
+        final missingFuzzySessionUpdateQuery = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fuzzy-session-update-missing-query\",\"kind\":\"request\",\"method\":\"fuzzyFileSearch/sessionUpdate\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"fuzzy-update-1\",\"method\":\"fuzzyFileSearch/sessionUpdate\",\"params\":{\"sessionId\":\"fuzzy-1\"}}}")));
+        assertFalse(missingFuzzySessionUpdateQuery.ok, "fuzzy session update requires query");
+        assertEquals("missing_field", missingFuzzySessionUpdateQuery.errorCode);
+        assertEquals("$.message.params.query", missingFuzzySessionUpdateQuery.errorPath);
 
         final missingFuzzyCompletedSession = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fuzzy-search-completed-missing-session\",\"kind\":\"notification\",\"method\":\"fuzzyFileSearch/sessionCompleted\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fuzzyFileSearch/sessionCompleted\",\"params\":{}}}")));
         assertFalse(missingFuzzyCompletedSession.ok, "fuzzy file search completion must include sessionId");

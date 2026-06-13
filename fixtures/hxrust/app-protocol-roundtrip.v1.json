@@ -1097,6 +1097,42 @@
       }
     },
     {
+      "id": "fuzzy-file-search-session-start-request",
+      "kind": "request",
+      "method": "fuzzyFileSearch/sessionStart",
+      "message": {"jsonrpc": "2.0", "id": "fuzzy-session-start-1", "method": "fuzzyFileSearch/sessionStart", "params": {"sessionId": "fuzzy-session-1", "roots": ["/Users/fixture/project"]}}
+    },
+    {
+      "id": "fuzzy-file-search-session-start-response",
+      "kind": "response",
+      "method": "fuzzyFileSearch/sessionStart",
+      "message": {"jsonrpc": "2.0", "id": "fuzzy-session-start-1", "result": {}}
+    },
+    {
+      "id": "fuzzy-file-search-session-update-request",
+      "kind": "request",
+      "method": "fuzzyFileSearch/sessionUpdate",
+      "message": {"jsonrpc": "2.0", "id": "fuzzy-session-update-1", "method": "fuzzyFileSearch/sessionUpdate", "params": {"sessionId": "fuzzy-session-1", "query": "proto"}}
+    },
+    {
+      "id": "fuzzy-file-search-session-update-response",
+      "kind": "response",
+      "method": "fuzzyFileSearch/sessionUpdate",
+      "message": {"jsonrpc": "2.0", "id": "fuzzy-session-update-1", "result": {}}
+    },
+    {
+      "id": "fuzzy-file-search-session-stop-request",
+      "kind": "request",
+      "method": "fuzzyFileSearch/sessionStop",
+      "message": {"jsonrpc": "2.0", "id": "fuzzy-session-stop-1", "method": "fuzzyFileSearch/sessionStop", "params": {"sessionId": "fuzzy-session-1"}}
+    },
+    {
+      "id": "fuzzy-file-search-session-stop-response",
+      "kind": "response",
+      "method": "fuzzyFileSearch/sessionStop",
+      "message": {"jsonrpc": "2.0", "id": "fuzzy-session-stop-1", "result": {}}
+    },
+    {
       "id": "thread-loaded-list-request",
       "kind": "request",
       "method": "thread/loaded/list",
