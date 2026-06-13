@@ -39,6 +39,7 @@ Included client requests:
 - `turn/interrupt`
 - `review/start`
 - `thread/list`
+- `thread/search`
 - `thread/loaded/list`
 - `thread/read`
 - `windowsSandbox/setupStart`
@@ -427,7 +428,9 @@ Client-directed server requests use upstream's `ServerRequest`/`ServerResponse` 
 
 `mcpServer/oauth/login`, `config/mcpServer/reload`, `mcpServerStatus/list`, `mcpServer/resource/read`, and `mcpServer/tool/call` admit upstream MCP request families at the app-server protocol boundary. The selected subset validates server/tool/resource identifiers, optional scopes/timeouts/detail/thread ids, OAuth authorization URL responses, empty reload responses, status pages, resource content arrays, and tool-call content/meta/error containers. Real MCP transport and execution remain separate tool/runtime work.
 
-`thread/search`, fuzzy search session requests, realtime client controls, remote-control request controls, and deprecated v1 compatibility are selected and sequenced by HXCX-3.68 in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md), but not yet implemented in this protocol subset. `mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
+`thread/search` admits the upstream experimental thread search request family. The selected subset validates required non-empty `searchTerm`, optional pagination, sort, source-kind, and archived filters, result `data` containers, embedded thread objects, string snippets, and nullable cursors. The fixture path does not scan local rollout storage.
+
+Fuzzy search session requests, realtime client controls, remote-control request controls, and deprecated v1 compatibility are selected and sequenced by HXCX-3.68 in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md), but not yet implemented in this protocol subset. `mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 

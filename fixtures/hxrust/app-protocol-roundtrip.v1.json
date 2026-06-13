@@ -1052,6 +1052,51 @@
       }
     },
     {
+      "id": "thread-search-request",
+      "kind": "request",
+      "method": "thread/search",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-search-1",
+        "method": "thread/search",
+        "params": {
+          "cursor": null,
+          "limit": 10,
+          "sortKey": "created_at",
+          "sortDirection": "desc",
+          "sourceKinds": ["cli"],
+          "archived": false,
+          "searchTerm": "needle"
+        }
+      }
+    },
+    {
+      "id": "thread-search-response",
+      "kind": "response",
+      "method": "thread/search",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-search-1",
+        "result": {
+          "data": [
+            {
+              "thread": {
+                "id": "thread-00000000-0000-4000-8000-000000000099",
+                "sessionId": "00000000-0000-4000-8000-000000000099",
+                "status": {
+                  "type": "idle"
+                },
+                "turns": []
+              },
+              "snippet": "mixed NEEDLE suffix"
+            }
+          ],
+          "nextCursor": null,
+          "backwardsCursor": null
+        }
+      }
+    },
+    {
       "id": "thread-loaded-list-request",
       "kind": "request",
       "method": "thread/loaded/list",

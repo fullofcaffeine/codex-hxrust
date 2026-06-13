@@ -44,6 +44,7 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/turns/list");
         assertContains(fingerprintJson, "thread/turns/items/list");
         assertContains(fingerprintJson, "thread/list");
+        assertContains(fingerprintJson, "thread/search");
         assertContains(fingerprintJson, "thread/loaded/list");
         assertContains(fingerprintJson, "turn/steer");
         assertContains(fingerprintJson, "review/start");
@@ -180,7 +181,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("268", Std.string(items.length));
+        assertEquals("270", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -205,8 +206,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("95", Std.string(requests));
-        assertEquals("95", Std.string(responses));
+        assertEquals("96", Std.string(requests));
+        assertEquals("96", Std.string(responses));
         assertEquals("8", Std.string(serverRequests));
         assertEquals("8", Std.string(serverResponses));
         assertEquals("61", Std.string(notifications));
@@ -240,6 +241,26 @@ class AppProtocolHarness {
         assertFalse(invalidThreadListLimit.ok, "thread/list limit must be unsigned when present");
         assertEquals("expected_uint", invalidThreadListLimit.errorCode);
         assertEquals("$.message.params.limit", invalidThreadListLimit.errorPath);
+
+        final missingThreadSearchTerm = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-search-missing-term\",\"kind\":\"request\",\"method\":\"thread/search\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"thread-search-1\",\"method\":\"thread/search\",\"params\":{}}}")));
+        assertFalse(missingThreadSearchTerm.ok, "thread/search requires searchTerm");
+        assertEquals("missing_field", missingThreadSearchTerm.errorCode);
+        assertEquals("$.message.params.searchTerm", missingThreadSearchTerm.errorPath);
+
+        final blankThreadSearchTerm = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-search-blank-term\",\"kind\":\"request\",\"method\":\"thread/search\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"thread-search-1\",\"method\":\"thread/search\",\"params\":{\"searchTerm\":\"   \"}}}")));
+        assertFalse(blankThreadSearchTerm.ok, "thread/search requires non-empty searchTerm after trimming");
+        assertEquals("empty_string", blankThreadSearchTerm.errorCode);
+        assertEquals("$.message.params.searchTerm", blankThreadSearchTerm.errorPath);
+
+        final invalidThreadSearchSourceKind = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-search-invalid-source\",\"kind\":\"request\",\"method\":\"thread/search\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"thread-search-1\",\"method\":\"thread/search\",\"params\":{\"searchTerm\":\"needle\",\"sourceKinds\":[\"browser\"]}}}")));
+        assertFalse(invalidThreadSearchSourceKind.ok, "thread/search sourceKinds must use upstream thread source enum values");
+        assertEquals("invalid_thread_source_kind", invalidThreadSearchSourceKind.errorCode);
+        assertEquals("$.message.params.sourceKinds[0]", invalidThreadSearchSourceKind.errorPath);
+
+        final invalidThreadSearchSnippet = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-search-invalid-snippet\",\"kind\":\"response\",\"method\":\"thread/search\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"thread-search-1\",\"result\":{\"data\":[{\"thread\":{\"id\":\"thread-1\",\"sessionId\":\"session-1\",\"status\":{\"type\":\"idle\"},\"turns\":[]},\"snippet\":7}],\"nextCursor\":null,\"backwardsCursor\":null}}}")));
+        assertFalse(invalidThreadSearchSnippet.ok, "thread/search snippets must be strings");
+        assertEquals("expected_string", invalidThreadSearchSnippet.errorCode);
+        assertEquals("$.message.result.data[0].snippet", invalidThreadSearchSnippet.errorPath);
 
         final invalidThreadLoadedListData = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-loaded-list-invalid-data\",\"kind\":\"response\",\"method\":\"thread/loaded/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"thread-loaded-list-1\",\"result\":{\"data\":[7]}}}")));
         assertFalse(invalidThreadLoadedListData.ok, "thread/loaded/list data entries must be thread id strings");

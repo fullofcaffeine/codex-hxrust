@@ -3603,7 +3603,7 @@
     {
       "id": "environment-collaboration-schemas",
       "status": "tracked_from_rust_source",
-      "reason": "Upstream exports environment/add and collaborationMode/list from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. The local subset validates these DTO contracts from upstream Rust source under HXCX-3.69."
+      "reason": "Upstream exports environment/add, collaborationMode/list, and thread/search from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. The local subset validates these DTO contracts from upstream Rust source under HXCX-3.69 and HXCX-3.70."
     }
   ]
 }
