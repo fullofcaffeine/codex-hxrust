@@ -102,6 +102,16 @@ The fixture `fixtures/hxrust/runtime-bootstrap.v1.json` and `harness/check-runti
 
 The fixture `fixtures/hxrust/runtime-transport.v1.json` and `harness/check-runtime-transport.sh` prove request/response notification flow, pending request cancellation, graceful disconnect, and post-disconnect refusal through both Haxe interpreter and haxe.rust-generated Rust. Real remote websocket/control-socket ownership remains a later generic metal/native wrapper, documented in `docs/live-transport-boundary.md`.
 
+## Persistent App-Server/TUI State Boundary
+
+`codexhx.runtime.app.persistence` is the HXCX-4.13 persistence split for upstream app-server/TUI state:
+
+- portable Haxe validates typed thread/session IDs, absolute rollout paths, history item counts, persisted item counts, rollout item kind summaries, and state-intent flags;
+- native Rust owns production effects such as `StateDbHandle`, `LogDbLayer`, SQLite/sqlx runtime ownership, `reconcile_rollout`, `persist_thread`, file locking, migrations, repair, and cross-process coordination;
+- fixture JSONL metadata is evidence for deterministic validation only, not a replacement claim for upstream persistent state.
+
+The fixture `fixtures/hxrust/persistence-boundary.v1.json` and `harness/check-persistence-boundary.sh` prove the boundary through both Haxe interpreter and haxe.rust-generated Rust. The full boundary decision is documented in `docs/persistent-state-boundary.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

@@ -13,10 +13,13 @@ Filesystem, SQLite, or host-specific persistence should enter through explicit a
 
 The current backend decision is recorded in `../../../docs/state-backend-spike.md` and checked by `../../../harness/check-state-backend-spike.sh`.
 
+The app-server/TUI persistence boundary is recorded in `../../../docs/persistent-state-boundary.md` and checked by `../../../harness/check-persistence-boundary.sh`.
+
 Summary:
 
 - JSONL/plain-file state is sufficient for current helper, headless, and credential-free fixture evidence.
 - SQLite/sqlx or equivalent production persistence parity is required before any slice claims persistent goal, runtime, or app-server state replacement.
+- App-server/TUI production persistence effects such as `StateDbHandle`, `LogDbLayer`, rollout reconciliation, and live thread persistence must be implemented through a generic haxe.rust metal/native Rust boundary.
 - No production state migration is implied by the current experiment.
 
 ## TranscriptStateStore

@@ -140,11 +140,21 @@ This slice should decide whether the next implementation step is more app-server
 
 Status: HXCX-4.12 now owns `fixtures/hxrust/runtime-transport.v1.json` and validates it through `harness/check-runtime-transport.sh`. This is a credential-free fixture transport over the runtime facade, not real socket ownership. Remote websocket/control-socket behavior remains a generic metal/native wrapper boundary.
 
-### HXCX-4.13+: Persistence, Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.13: Persistent App-Server/TUI State Boundary
+
+Define the persistence split before claiming production state parity:
+
+- portable Haxe owns credential-free thread/session/rollout metadata validation;
+- native Rust owns `StateDbHandle`, `LogDbLayer`, SQLite/sqlx runtime ownership, rollout reconciliation, live thread persistence, file locking, migrations, repair, and cross-process coordination;
+- JSONL fixture evidence remains metadata proof only, not a production persistence substitute.
+
+Status: HXCX-4.13 now owns `fixtures/hxrust/persistence-boundary.v1.json` and validates the boundary through `harness/check-persistence-boundary.sh`. No haxe.rust compiler limitation surfaced in this slice.
+
+### HXCX-4.14+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
-- SQLite/log DB adapter parity for persistent session/runtime state;
+- SQLite/log DB adapter implementation for persistent session/runtime state through a generic metal/native Rust boundary;
 - credentialed provider integration and explicit no-credential test mode;
 - realtime audio/WebRTC transport;
 - full crossterm alternate-screen ownership;

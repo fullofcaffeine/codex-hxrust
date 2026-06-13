@@ -6,7 +6,7 @@
   "recommendation": {
     "mode": "conditional_go_for_helper_sidecar_and_selected_adapter_slices",
     "broadReplacement": "no_go",
-    "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
+    "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, runtime/TUI persistence-boundary, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
       "requiredBeforeBroadReplacement": [
       "Broaden haxe.rust parity evidence beyond selected helper/headless/adapter pressure fixtures.",
       "Resolve haxe.rust-362 nullable Array.shift class-return lowering or carry an explicit release-blocking compiler risk.",
@@ -32,7 +32,7 @@
     {
       "dimension": "language",
       "score": "yellow_green",
-      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, the first runtime app-client facade, runtime bootstrap, fixture transport, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, and non-copy local reuse regressions still open upstream.",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, and non-copy local reuse regressions still open upstream.",
       "strengths": [
         "10 of 13 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
@@ -52,18 +52,18 @@
     {
       "dimension": "runtime",
       "score": "yellow",
-      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, selected TUI story/render, and turn reducer slices are viable, but live model/full TUI/restart ownership is outside current proof.",
+      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, selected TUI story/render, and turn reducer slices are viable, but live model/production SQLite log state/full TUI/restart ownership is outside current proof.",
       "strengths": [
         "Headless runtime fixtures pass without model credentials.",
         "Cancellation and transcript/state artifacts are deterministic.",
         "Runtime app-client classification, lag markers, and request correlation pass through generated Rust.",
         "Selected upstream TUI story replay passes through generated Rust with normalized summaries.",
-        "Selected runtime bootstrap, fixture transport, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
+        "Selected runtime bootstrap, fixture transport, persistent state boundary, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
         "Operator runbook keeps production default disabled."
       ],
       "caveats": [
         "Live model/provider traffic is not covered.",
-        "Live TUI, restart, and plan-checkpoint ownership remain unsupported Cafex rows."
+        "Production SQLite/log state, live TUI, restart, and plan-checkpoint ownership remain unsupported."
       ],
       "evidenceRefs": [
         "fixtures/cafex/cafex-hxrust-seam-ledger.v1.json",
@@ -80,7 +80,7 @@
         "Pin update workflow is scripted and gated."
       ],
       "caveats": [
-        "Future metal/native boundaries still need real host-effect implementations."
+        "Future metal/native boundaries still need real host-effect implementations, including production SQLite/log state."
       ],
       "evidenceRefs": [
         "docs/haxe-rust-direct-workflow.md",
@@ -181,7 +181,7 @@
       "openUpstream": 3,
       "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 152,
+      "sourceFilesScanned": 158,
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {
