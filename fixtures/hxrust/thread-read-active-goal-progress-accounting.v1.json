@@ -1,0 +1,289 @@
+{
+  "schema": "codex-hxrust.thread-read-active-goal-progress-accounting-fixture.v1",
+  "bead": "HXCX-4.31",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/ext/goal/src/runtime.rs",
+      "symbols": [
+        "GoalRuntime::account_active_goal_progress",
+        "GoalAccountingOutcome::Updated",
+        "GoalAccountingOutcome::Unchanged",
+        "thread_goal_updated",
+        "AccountedGoalProgress"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/accounting.rs",
+      "symbols": [
+        "GoalAccountingState::progress_snapshot",
+        "GoalAccountingState::mark_progress_accounted_for_status",
+        "BudgetLimitedGoalDisposition::KeepActive",
+        "BudgetLimitedGoalDisposition::ClearActive",
+        "should_clear_active_goal"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/state/src/runtime/goals.rs",
+      "symbols": [
+        "GoalStore::account_thread_goal_usage",
+        "GoalAccountingOutcome"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "updated-active-progress-keeps-active",
+      "request": {
+        "turnId": "turn-active-1",
+        "eventId": "event-active-1",
+        "progressSnapshotAvailable": true,
+        "snapshotExpectedGoalId": "goal-active-1",
+        "snapshotTimeDeltaSeconds": 12,
+        "snapshotTokenDelta": 144,
+        "previousStatus": "active",
+        "dbOutcomeKind": "updated",
+        "dbErrorCode": "",
+        "updatedGoalId": "goal-active-1",
+        "disposition": "clear_active",
+        "updatedGoal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001031",
+          "objective": "Keep raw Codex parity moving",
+          "status": "active",
+          "tokenBudget": 5000,
+          "tokensUsed": 1440,
+          "timeUsedSeconds": 120,
+          "createdAt": 210000,
+          "updatedAt": 210012
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "active_goal_progress_updated",
+        "progressSnapshotAvailable": true,
+        "dbCallAttempted": true,
+        "dbOutcomeKind": "updated",
+        "progressUpdated": true,
+        "progressReturned": true,
+        "goalId": "goal-active-1",
+        "status": "active",
+        "turnLastUsageUpdated": true,
+        "wallClockAccountedSeconds": 12,
+        "tokenDeltaAccounted": 144,
+        "activeGoalCleared": false,
+        "budgetLimitReportCleared": true,
+        "threadGoalUpdatedEmitted": true,
+        "terminalMetricRecorded": false,
+        "summaryContains": "mark_progress_accounted_for_status:active/clear_active"
+      }
+    },
+    {
+      "id": "updated-budget-limited-keep-active",
+      "request": {
+        "turnId": "turn-budget-keep",
+        "eventId": "event-budget-keep",
+        "progressSnapshotAvailable": true,
+        "snapshotExpectedGoalId": "goal-budget-keep",
+        "snapshotTimeDeltaSeconds": 31,
+        "snapshotTokenDelta": 700,
+        "previousStatus": "active",
+        "dbOutcomeKind": "updated",
+        "dbErrorCode": "",
+        "updatedGoalId": "goal-budget-keep",
+        "disposition": "keep_active",
+        "updatedGoal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001031",
+          "objective": "Stay under budget",
+          "status": "budgetLimited",
+          "tokenBudget": 1000,
+          "tokensUsed": 1700,
+          "timeUsedSeconds": 500,
+          "createdAt": 210000,
+          "updatedAt": 210031
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "budget_limited_progress_updated_keep_active",
+        "progressSnapshotAvailable": true,
+        "dbCallAttempted": true,
+        "dbOutcomeKind": "updated",
+        "progressUpdated": true,
+        "progressReturned": true,
+        "goalId": "goal-budget-keep",
+        "status": "budgetLimited",
+        "turnLastUsageUpdated": true,
+        "wallClockAccountedSeconds": 31,
+        "tokenDeltaAccounted": 700,
+        "activeGoalCleared": false,
+        "budgetLimitReportCleared": false,
+        "threadGoalUpdatedEmitted": true,
+        "terminalMetricRecorded": true,
+        "summaryContains": "mark_progress_accounted_for_status:budgetLimited/keep_active"
+      }
+    },
+    {
+      "id": "updated-budget-limited-clear-active",
+      "request": {
+        "turnId": "turn-budget-clear",
+        "eventId": "event-budget-clear",
+        "progressSnapshotAvailable": true,
+        "snapshotExpectedGoalId": "goal-budget-clear",
+        "snapshotTimeDeltaSeconds": 43,
+        "snapshotTokenDelta": 900,
+        "previousStatus": "active",
+        "dbOutcomeKind": "updated",
+        "dbErrorCode": "",
+        "updatedGoalId": "goal-budget-clear",
+        "disposition": "clear_active",
+        "updatedGoal": {
+          "threadId": "01890f3d-8f3a-7a9b-9f0d-000000001031",
+          "objective": "Stop after budget limit",
+          "status": "budgetLimited",
+          "tokenBudget": 1000,
+          "tokensUsed": 1900,
+          "timeUsedSeconds": 543,
+          "createdAt": 210000,
+          "updatedAt": 210043
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "budget_limited_progress_updated_clear_active",
+        "progressSnapshotAvailable": true,
+        "dbCallAttempted": true,
+        "dbOutcomeKind": "updated",
+        "progressUpdated": true,
+        "progressReturned": true,
+        "goalId": "goal-budget-clear",
+        "status": "budgetLimited",
+        "turnLastUsageUpdated": true,
+        "wallClockAccountedSeconds": 43,
+        "tokenDeltaAccounted": 900,
+        "activeGoalCleared": true,
+        "budgetLimitReportCleared": false,
+        "threadGoalUpdatedEmitted": true,
+        "terminalMetricRecorded": true,
+        "summaryContains": "activeCleared=true"
+      }
+    },
+    {
+      "id": "unchanged-result-returns-none",
+      "request": {
+        "turnId": "turn-unchanged",
+        "eventId": "event-unchanged",
+        "progressSnapshotAvailable": true,
+        "snapshotExpectedGoalId": "goal-unchanged",
+        "snapshotTimeDeltaSeconds": 5,
+        "snapshotTokenDelta": 11,
+        "previousStatus": "active",
+        "dbOutcomeKind": "unchanged",
+        "dbErrorCode": "",
+        "updatedGoalId": "",
+        "disposition": "keep_active",
+        "updatedGoal": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "state_accounting_unchanged",
+        "progressSnapshotAvailable": true,
+        "dbCallAttempted": true,
+        "dbOutcomeKind": "unchanged",
+        "progressUpdated": false,
+        "progressReturned": false,
+        "goalId": "goal-unchanged",
+        "status": "",
+        "turnLastUsageUpdated": false,
+        "wallClockAccountedSeconds": 0,
+        "tokenDeltaAccounted": 0,
+        "activeGoalCleared": false,
+        "budgetLimitReportCleared": false,
+        "threadGoalUpdatedEmitted": false,
+        "terminalMetricRecorded": false,
+        "summaryContains": "account_thread_goal_usage/unchanged->return_none"
+      }
+    },
+    {
+      "id": "missing-progress-snapshot",
+      "request": {
+        "turnId": "turn-missing",
+        "eventId": "event-missing",
+        "progressSnapshotAvailable": false,
+        "snapshotExpectedGoalId": "",
+        "snapshotTimeDeltaSeconds": 0,
+        "snapshotTokenDelta": 0,
+        "previousStatus": "",
+        "dbOutcomeKind": "updated",
+        "dbErrorCode": "",
+        "updatedGoalId": "",
+        "disposition": "keep_active",
+        "updatedGoal": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "progress_snapshot_missing",
+        "progressSnapshotAvailable": false,
+        "dbCallAttempted": false,
+        "dbOutcomeKind": "none",
+        "progressUpdated": false,
+        "progressReturned": false,
+        "goalId": "",
+        "status": "",
+        "turnLastUsageUpdated": false,
+        "wallClockAccountedSeconds": 0,
+        "tokenDeltaAccounted": 0,
+        "activeGoalCleared": false,
+        "budgetLimitReportCleared": false,
+        "threadGoalUpdatedEmitted": false,
+        "terminalMetricRecorded": false,
+        "summaryContains": "progress_snapshot/none->return_none"
+      }
+    },
+    {
+      "id": "state-error",
+      "request": {
+        "turnId": "turn-error",
+        "eventId": "event-error",
+        "progressSnapshotAvailable": true,
+        "snapshotExpectedGoalId": "goal-error",
+        "snapshotTimeDeltaSeconds": 8,
+        "snapshotTokenDelta": 99,
+        "previousStatus": "active",
+        "dbOutcomeKind": "error",
+        "dbErrorCode": "sqlite_busy",
+        "updatedGoalId": "",
+        "disposition": "clear_active",
+        "updatedGoal": null
+      },
+      "expect": {
+        "ok": false,
+        "code": "state_accounting_failed",
+        "progressSnapshotAvailable": true,
+        "dbCallAttempted": true,
+        "dbOutcomeKind": "error",
+        "progressUpdated": false,
+        "progressReturned": false,
+        "goalId": "",
+        "status": "",
+        "turnLastUsageUpdated": false,
+        "wallClockAccountedSeconds": 0,
+        "tokenDeltaAccounted": 0,
+        "activeGoalCleared": false,
+        "budgetLimitReportCleared": false,
+        "threadGoalUpdatedEmitted": false,
+        "terminalMetricRecorded": false,
+        "summaryContains": "account_thread_goal_usage/error:sqlite_busy"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 6,
+    "updatedCount": 3,
+    "unchangedCount": 1,
+    "missingSnapshotCount": 1,
+    "failureCount": 1,
+    "emittedCount": 3,
+    "activeGoalClearedCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-active-goal-progress-accounting-report.v1;cases=6;updated=3;unchanged=1;missingSnapshot=1;failed=1;emitted=3;activeCleared=1"
+  }
+}

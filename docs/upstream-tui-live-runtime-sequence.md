@@ -349,7 +349,19 @@ Model the selected budget-limit steering path after tool-finish progress account
 
 Status: HXCX-4.30 now owns `fixtures/hxrust/thread-read-budget-limit-goal-steering.v1.json` and validates the slice through `harness/check-thread-read-budget-limit-goal-steering.sh`. No new haxe.rust limitation was exposed. This is budget-limit steering evidence only, not live tool lifecycle ownership, token accounting storage, production state DB ownership, event emission, active-turn locks, async scheduling, or Cafex behavior.
 
-### HXCX-4.31+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.31: Active Goal Progress Accounting
+
+Model the selected upstream active-goal progress accounting path:
+
+- `progress_snapshot(turn_id)` absence returns none before state DB accounting;
+- `account_thread_goal_usage` updated, unchanged, and error outcomes are explicit;
+- updated goals mark turn token usage and wall-clock deltas as accounted;
+- `BudgetLimitedGoalDisposition::KeepActive` preserves budget-limited active accounting while `ClearActive` clears it;
+- updated progress emits selected `thread_goal_updated` evidence.
+
+Status: HXCX-4.31 now owns `fixtures/hxrust/thread-read-active-goal-progress-accounting.v1.json` and validates the slice through `harness/check-thread-read-active-goal-progress-accounting.sh`. No new haxe.rust limitation was exposed. This is accounting-state evidence only, not async permit ownership, production state DB ownership, metrics/analytics clients, event emitter ownership, live token aggregation, wall-clock sources, tool lifecycle ownership, or Cafex behavior.
+
+### HXCX-4.32+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

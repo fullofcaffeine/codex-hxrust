@@ -308,6 +308,18 @@ The fixture `fixtures/hxrust/thread-read-active-turn-goal-steering-injection.v1.
 
 The fixture `fixtures/hxrust/thread-read-budget-limit-goal-steering.v1.json` and `harness/check-thread-read-budget-limit-goal-steering.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own live tool lifecycle callbacks, token accounting storage, production state DB handles, event emitters, `ThreadManager`, `CodexThread`, `Session`, `InputQueue`, active-turn locks, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-budget-limit-goal-steering.md`.
 
+## Thread/Read Active Goal Progress Accounting
+
+`codexhx.runtime.app.threadread.ThreadReadActiveGoalProgressAccountingPolicy` is the HXCX-4.31 raw upstream active-goal progress accounting slice:
+
+- progress-snapshot absence returns none before state DB accounting;
+- selected state DB outcomes distinguish updated, unchanged, and error paths;
+- updated goals mark turn token usage and wall-clock deltas as accounted;
+- active and budget-limited status behavior follows upstream `BudgetLimitedGoalDisposition::KeepActive`/`ClearActive`;
+- updated progress emits selected `thread_goal_updated` evidence and deterministic summaries.
+
+The fixture `fixtures/hxrust/thread-read-active-goal-progress-accounting.v1.json` and `harness/check-thread-read-active-goal-progress-accounting.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own async permits, production state DB handles, metrics/analytics clients, event emitters, live token aggregation, wall-clock sources, tool lifecycle callbacks, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-active-goal-progress-accounting.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

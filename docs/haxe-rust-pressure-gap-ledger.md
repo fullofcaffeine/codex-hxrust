@@ -33,7 +33,7 @@ harness/check-haxe-rust-pressure-gaps.sh
 | High severity | 7 |
 | Medium severity | 11 |
 | Raw Rust escape matches in current app/test Haxe source | 0 |
-| Haxe source/test files scanned | 266 |
+| Haxe source/test files scanned | 273 |
 
 Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAllowRaw`, `@:rust...`, or `untyped` escapes are present under `src` or `test`.
 
@@ -76,9 +76,9 @@ The pressure test is encouraging but not clean enough for broad replacement:
 
 - haxe.rust fixes have been generic and upstreamable so far; `haxe.rust-362`, `haxe.rust-ojj`, `haxe.rust-fzl`, and `haxe.rust-3f0g` are the current open generic regressions from live-runtime/TUI work.
 - The current codexhx source avoids raw Rust escape hatches.
-- The native SQLite persistence, state-adapter, persisted read-view, thread/read turn-projection, turns-page, active-turn merge, turn-items unsupported-runtime, token-usage owner, token-usage replay payload, token-usage replay delivery, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, and budget-limit goal steering boundaries compile through haxe.rust after generic std/raw-boundary fixes and the `HxRef<T>` enum-payload equality fix landed upstream.
+- The native SQLite persistence, state-adapter, persisted read-view, thread/read turn-projection, turns-page, active-turn merge, turn-items unsupported-runtime, token-usage owner, token-usage replay payload, token-usage replay delivery, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, and active-goal progress accounting boundaries compile through haxe.rust after generic std/raw-boundary fixes and the `HxRef<T>` enum-payload equality fix landed upstream.
 - Nullable interface values now have a generic upstream fix and passing snapshot.
 - String.lastIndexOf now has a generic upstream fix and passing snapshot.
 - haxe.io.Path.directory now has a generic upstream fix and passing snapshot.
 
-Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter/thread-read projection, pagination, active-turn merge, unsupported turn-items runtime, token-usage replay, resume-goal snapshot, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, and budget-limit goal steering pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()`, non-copy field assign-op, non-copy local reuse, and static final path regressions, unsupported Cafex seam, licensing, and broader parity work.
+Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter/thread-read projection, pagination, active-turn merge, unsupported turn-items runtime, token-usage replay, resume-goal snapshot, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, and active-goal progress accounting pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()`, non-copy field assign-op, non-copy local reuse, and static final path regressions, unsupported Cafex seam, licensing, and broader parity work.
