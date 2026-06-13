@@ -1,0 +1,167 @@
+{
+  "schema": "codex-hxrust.thread-read-get-goal-tool-fixture.v1",
+  "source": {
+    "handleGet": "../codex/codex-rs/ext/goal/src/tool.rs:162",
+    "goalResponse": "../codex/codex-rs/ext/goal/src/tool.rs:409",
+    "protocolGoalFromState": "../codex/codex-rs/ext/goal/src/tool.rs:454",
+    "spec": "../codex/codex-rs/ext/goal/src/spec.rs:13"
+  },
+  "cases": [
+    {
+      "name": "empty-arguments-missing-goal",
+      "request": {
+        "threadId": "thread-get-goal-1",
+        "argumentsJson": "",
+        "dbOutcomeKind": "missing",
+        "dbErrorMessage": "",
+        "goal": null
+      },
+      "expect": {
+        "ok": true,
+        "code": "goal_missing_response",
+        "threadId": "thread-get-goal-1",
+        "argumentsAccepted": true,
+        "readAttempted": true,
+        "dbOutcomeKind": "missing",
+        "functionCallErrorKind": "",
+        "errorMessage": "",
+        "goalPresent": false,
+        "hasRemainingTokens": false,
+        "remainingTokens": 0,
+        "hasCompletionBudgetReport": false,
+        "stateMutated": false,
+        "eventsEmitted": false,
+        "summaryContains": "goal_response:omit_completion_budget_report",
+        "goal": null
+      }
+    },
+    {
+      "name": "active-budgeted-goal",
+      "request": {
+        "threadId": "thread-get-goal-2",
+        "argumentsJson": "{}",
+        "dbOutcomeKind": "found",
+        "dbErrorMessage": "",
+        "goal": {
+          "threadId": "thread-get-goal-2",
+          "objective": "Port get_goal executor",
+          "status": "active",
+          "tokenBudget": 20,
+          "tokensUsed": 7,
+          "timeUsedSeconds": 11,
+          "createdAt": 1781049600,
+          "updatedAt": 1781049611
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "goal_read_response",
+        "threadId": "thread-get-goal-2",
+        "argumentsAccepted": true,
+        "readAttempted": true,
+        "dbOutcomeKind": "found",
+        "functionCallErrorKind": "",
+        "errorMessage": "",
+        "goalPresent": true,
+        "hasRemainingTokens": true,
+        "remainingTokens": 13,
+        "hasCompletionBudgetReport": false,
+        "stateMutated": false,
+        "eventsEmitted": false,
+        "summaryContains": "remainingTokens=13",
+        "goal": {
+          "threadId": "thread-get-goal-2",
+          "objective": "Port get_goal executor",
+          "status": "active",
+          "tokenBudget": 20,
+          "tokensUsed": 7,
+          "timeUsedSeconds": 11,
+          "createdAt": 1781049600,
+          "updatedAt": 1781049611
+        }
+      }
+    },
+    {
+      "name": "completed-goal-omits-completion-budget-report",
+      "request": {
+        "threadId": "thread-get-goal-3",
+        "argumentsJson": "{}",
+        "dbOutcomeKind": "found",
+        "dbErrorMessage": "",
+        "goal": {
+          "threadId": "thread-get-goal-3",
+          "objective": "Finish get_goal executor",
+          "status": "complete",
+          "tokenBudget": 12,
+          "tokensUsed": 2,
+          "timeUsedSeconds": 40,
+          "createdAt": 1781049600,
+          "updatedAt": 1781049640
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "goal_read_response",
+        "threadId": "thread-get-goal-3",
+        "argumentsAccepted": true,
+        "readAttempted": true,
+        "dbOutcomeKind": "found",
+        "functionCallErrorKind": "",
+        "errorMessage": "",
+        "goalPresent": true,
+        "hasRemainingTokens": true,
+        "remainingTokens": 10,
+        "hasCompletionBudgetReport": false,
+        "stateMutated": false,
+        "eventsEmitted": false,
+        "summaryContains": "completionBudgetReport=false",
+        "goal": {
+          "threadId": "thread-get-goal-3",
+          "objective": "Finish get_goal executor",
+          "status": "complete",
+          "tokenBudget": 12,
+          "tokensUsed": 2,
+          "timeUsedSeconds": 40,
+          "createdAt": 1781049600,
+          "updatedAt": 1781049640
+        }
+      }
+    },
+    {
+      "name": "read-error-responds-to-model",
+      "request": {
+        "threadId": "thread-get-goal-4",
+        "argumentsJson": "{}",
+        "dbOutcomeKind": "error",
+        "dbErrorMessage": "sqlite unavailable",
+        "goal": null
+      },
+      "expect": {
+        "ok": false,
+        "code": "goal_state_read_error",
+        "threadId": "thread-get-goal-4",
+        "argumentsAccepted": true,
+        "readAttempted": true,
+        "dbOutcomeKind": "error",
+        "functionCallErrorKind": "respond_to_model",
+        "errorMessage": "failed to read goal: sqlite unavailable",
+        "goalPresent": false,
+        "hasRemainingTokens": false,
+        "remainingTokens": 0,
+        "hasCompletionBudgetReport": false,
+        "stateMutated": false,
+        "eventsEmitted": false,
+        "summaryContains": "RespondToModel",
+        "goal": null
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 4,
+    "successCount": 3,
+    "errorCount": 1,
+    "goalPresentCount": 2,
+    "readAttemptedCount": 4,
+    "summaryContains": "goalPresent=2"
+  }
+}

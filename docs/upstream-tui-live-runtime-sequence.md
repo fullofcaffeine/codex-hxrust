@@ -450,7 +450,21 @@ Model the selected upstream goal tool contribution path:
 
 Status: HXCX-4.38 now owns `fixtures/hxrust/thread-read-goal-tool-contributor-visibility.v1.json` and validates the slice through `harness/check-thread-read-goal-tool-contributor-visibility.sh`. No new haxe.rust limitation was exposed. This is goal tool registration visibility evidence only, not live tool execution, production state mutation, analytics/events emission, model/provider behavior, or Cafex behavior.
 
-### HXCX-4.39+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.39: Get Goal Tool Executor
+
+Model the selected upstream read-only `get_goal` executor path:
+
+- function arguments are accepted before state access;
+- `get_thread_goal(self.thread_id)` reads the current thread goal;
+- missing goals return a structured null-goal response;
+- found goals map through `protocol_goal_from_state`;
+- remaining tokens use `max(token_budget - tokens_used, 0)`;
+- `CompletionBudgetReport::Omit` suppresses completion-budget text even for completed goals;
+- state read errors become `FunctionCallError::RespondToModel`.
+
+Status: HXCX-4.39 now owns `fixtures/hxrust/thread-read-get-goal-tool.v1.json` and validates the slice through `harness/check-thread-read-get-goal-tool.sh`. No new haxe.rust limitation was exposed. This is read-only `get_goal` executor evidence only, not create/update tool execution, production state mutation, analytics/events emission, model/provider behavior, or Cafex behavior.
+
+### HXCX-4.40+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

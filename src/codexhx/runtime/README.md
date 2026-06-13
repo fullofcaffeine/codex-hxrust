@@ -409,6 +409,19 @@ The fixture `fixtures/hxrust/thread-read-tool-finish-goal-progress-admission.v1.
 
 The fixture `fixtures/hxrust/thread-read-goal-tool-contributor-visibility.v1.json` and `harness/check-thread-read-goal-tool-contributor-visibility.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is tool registration visibility evidence only; it does not execute goal tools, mutate production state, emit analytics/events, create credentials, or model Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-goal-tool-contributor-visibility.md`.
 
+## Thread/Read Get Goal Tool
+
+`codexhx.runtime.app.threadread.ThreadReadGetGoalToolPolicy` is the HXCX-4.39 raw upstream `get_goal` executor slice:
+
+- empty object arguments are accepted before the state read;
+- missing thread goals produce a structured response with `goal=null`, `remainingTokens=null`, and no completion-budget report;
+- found goals are mapped through the protocol `ThreadGoal` DTO;
+- remaining tokens are `max(tokenBudget - tokensUsed, 0)` when a token budget is present;
+- completed goals still omit the completion-budget report because `get_goal` uses `CompletionBudgetReport::Omit`;
+- state read failures become model-visible tool errors without mutating state or emitting events.
+
+The fixture `fixtures/hxrust/thread-read-get-goal-tool.v1.json` and `harness/check-thread-read-get-goal-tool.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is read-only goal tool evidence only; it does not create/update goals, own production state DB writes, emit analytics/events, create credentials, or model Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-get-goal-tool.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:
