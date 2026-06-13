@@ -22,7 +22,7 @@
 | G1 | M1 scaffold/compiler | Can Haxe generate deterministic Rust in portable and metal profiles? | Continue to DTO parity or remain helper-only |
 | G2 | M2 protocol/DTO | Can Haxe match upstream Codex protocol/schema contracts? | Continue to headless runtime or remain helper-only |
 | G3 | M3 headless one-turn | Can Haxe run a credential-free one-turn Codex-compatible loop? | Continue to tool/state slices or stay sidecar-only |
-| G4 | M4 tools/state/security | Can host effects be wrapped safely and deterministically? | Continue to Cafex adapter or stay headless-only |
+| G4 | M4 tools/state/security | Can host effects be wrapped safely and deterministically? | Continue to upstream TUI/live-runtime slices and later Cafex adapter work, or stay sidecar-only |
 | G5 | M5 Cafex adapter | Can selected Cafex seams pass fixture/contract parity on top of the upstream core? | Target selected adapter replacement or stop at sidecar |
 | G6 | M6 replacement review | Is rollout/revert/support risk acceptable? | Choose helper/sidecar/adapter/replacement mode |
 | G7 | M7 haxe.rust report | Are compiler gaps upstreamable and production-sustainable? | File upstream work, freeze, or stop |

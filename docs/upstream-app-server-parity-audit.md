@@ -207,7 +207,7 @@ Known exceptions:
 
 ## Sequencing Decision
 
-The app/plugin/filesystem/MCP/model client request families have moved into the selected subset under HXCX-3.67, environment/collaboration protocol gates moved in under HXCX-3.69, thread search moved in under HXCX-3.70, fuzzy session requests moved in under HXCX-3.71, realtime client controls moved in under HXCX-3.72, and remote-control request controls moved in under HXCX-3.73. HXCX-3.68 now leaves only deprecated-v1 compatibility in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md). After that protocol compatibility slice, `codex-hxrust-6cs` sequences upstream TUI and live-runtime parity for the full Codex target, including terminal UI work.
+The app/plugin/filesystem/MCP/model client request families have moved into the selected subset under HXCX-3.67, environment/collaboration protocol gates moved in under HXCX-3.69, thread search moved in under HXCX-3.70, fuzzy session requests moved in under HXCX-3.71, realtime client controls moved in under HXCX-3.72, remote-control request controls moved in under HXCX-3.73, and selected deprecated-v1 compatibility moved in under HXCX-3.74. `codex-hxrust-6cs` now sequences upstream TUI and live-runtime parity for the full Codex target, including terminal UI work; see [upstream-tui-live-runtime-sequence.md](upstream-tui-live-runtime-sequence.md).
 
 Rationale:
 

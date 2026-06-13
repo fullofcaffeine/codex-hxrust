@@ -62,4 +62,4 @@ The intended implementation order is:
 6. deprecated v1 compatibility - admitted in HXCX-3.74
 7. TUI/live-runtime sequencing
 
-This lets the full Codex port keep advancing from deterministic protocol parity toward app-server runtime and TUI behavior without letting legacy or Cafex-specific work distort the core Haxe API.
+This lets the full Codex port keep advancing from deterministic protocol parity toward app-server runtime and TUI behavior without letting legacy or Cafex-specific work distort the core Haxe API. The post-protocol sequence is now recorded in [upstream-tui-live-runtime-sequence.md](upstream-tui-live-runtime-sequence.md).

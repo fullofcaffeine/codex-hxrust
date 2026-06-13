@@ -11,6 +11,8 @@ The strategy is upstream-first:
 
 Headless/core slices are the first proving ground because they are easier to gate without credentials or terminal interactivity. They are not the final scope. The end goal is whole-Codex parity, including the interactive TUI and live runtime behavior, with TUI work sequenced after enough protocol, state, tool, and runtime foundations exist to support it cleanly.
 
+The current upstream TUI/live-runtime roadmap is [docs/upstream-tui-live-runtime-sequence.md](docs/upstream-tui-live-runtime-sequence.md). It keeps raw Codex TUI/runtime work ahead of Cafex adapter expansion.
+
 When choosing new work, keep Beads prioritized so mainstream/raw Codex parity is ready first. Cafex tasks should sit later in the queue unless the user explicitly asks for Cafex compatibility or the required upstream-shaped core slice already exists.
 
 This is not a forked copy of Codex or haxe.rust. External repositories stay external and are tracked through pin files under `reference/`.
