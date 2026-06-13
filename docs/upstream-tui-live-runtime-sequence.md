@@ -232,7 +232,18 @@ Record the selected `thread/turns/items/list` runtime contract before implementi
 
 Status: HXCX-4.20 now owns `fixtures/hxrust/thread-read-turn-items-list-runtime.v1.json` and validates the boundary through `harness/check-thread-read-turn-items-list.sh`. No new haxe.rust limitation was exposed. This is unsupported-runtime evidence only, not item pagination, rollout storage, or production state ownership.
 
-### HXCX-4.21+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.21: Token Usage Turn Owner Attribution
+
+Model the selected restored token-usage attribution rules around reconstructed turns:
+
+- explicit active-turn owner id from the rollout wins when it still appears in rebuilt turns;
+- rebuilt turn position is the fallback when generated or implicit turn ids changed during reconstruction;
+- missing rollout owner information falls back to the latest completed or failed turn, then the latest turn;
+- empty reconstructed histories fail closed before an unusable owner id is emitted.
+
+Status: HXCX-4.21 now owns `fixtures/hxrust/thread-read-token-usage-owner.v1.json` and validates the slice through `harness/check-thread-read-token-usage-owner.sh`. No new haxe.rust limitation was exposed. This is attribution evidence only, not token accounting, notification emission, rollout file parsing, or production state ownership.
+
+### HXCX-4.22+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

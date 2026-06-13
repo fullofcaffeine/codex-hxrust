@@ -1,0 +1,142 @@
+{
+  "schema": "codex-hxrust.thread-read-token-usage-owner-fixture.v1",
+  "bead": "HXCX-4.21",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/token_usage_replay.rs",
+      "symbols": [
+        "latest_token_usage_turn_id_from_rollout_items",
+        "latest_token_usage_turn_id",
+        "TokenUsageTurnOwner"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server-protocol/src/protocol/thread_history.rs",
+      "symbols": [
+        "build_turns_from_rollout_items",
+        "ThreadHistoryBuilder::active_turn_snapshot",
+        "ThreadHistoryBuilder::active_turn_position"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/tests/suite/v2/thread_resume.rs",
+      "symbols": [
+        "thread_resume_token_usage_replay_ignores_stale_interrupted_tail_turn",
+        "thread_resume_token_usage_replay_can_belong_to_interrupted_turn"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "explicit-owner-from-rollout-item",
+      "turns": [
+        { "id": "turn-explicit", "status": "completed" },
+        { "id": "turn-after-usage", "status": "interrupted" }
+      ],
+      "ownerHint": { "id": "turn-explicit", "position": 0 },
+      "expect": {
+        "ok": true,
+        "code": "selected",
+        "turnId": "turn-explicit",
+        "turnIndex": 0,
+        "reason": "explicit_owner",
+        "summaryContains": "reason=explicit_owner"
+      }
+    },
+    {
+      "id": "interrupted-turn-with-token-usage",
+      "turns": [
+        { "id": "turn-completed", "status": "completed" },
+        { "id": "turn-interrupted-with-usage", "status": "interrupted" }
+      ],
+      "ownerHint": { "id": "turn-interrupted-with-usage", "position": 1 },
+      "expect": {
+        "ok": true,
+        "code": "selected",
+        "turnId": "turn-interrupted-with-usage",
+        "turnIndex": 1,
+        "reason": "explicit_owner",
+        "summaryContains": "turnId=turn-interrupted-with-usage"
+      }
+    },
+    {
+      "id": "rebuilt-turn-id-fallback",
+      "turns": [
+        { "id": "rebuilt-turn-id", "status": "completed" }
+      ],
+      "ownerHint": { "id": "generated-rollout-owner", "position": 0 },
+      "expect": {
+        "ok": true,
+        "code": "selected",
+        "turnId": "rebuilt-turn-id",
+        "turnIndex": 0,
+        "reason": "rebuilt_position",
+        "summaryContains": "reason=rebuilt_position"
+      }
+    },
+    {
+      "id": "latest-completed-ignores-stale-interrupted-tail",
+      "turns": [
+        { "id": "completed-before-usage", "status": "completed" },
+        { "id": "stale-interrupted-tail", "status": "interrupted" }
+      ],
+      "expect": {
+        "ok": true,
+        "code": "selected",
+        "turnId": "completed-before-usage",
+        "turnIndex": 0,
+        "reason": "latest_completed_or_failed",
+        "summaryContains": "reason=latest_completed_or_failed"
+      }
+    },
+    {
+      "id": "latest-failed-owner-fallback",
+      "turns": [
+        { "id": "completed-old", "status": "completed" },
+        { "id": "failed-latest", "status": "failed" },
+        { "id": "running-tail", "status": "inProgress" }
+      ],
+      "expect": {
+        "ok": true,
+        "code": "selected",
+        "turnId": "failed-latest",
+        "turnIndex": 1,
+        "reason": "latest_completed_or_failed",
+        "summaryContains": "turnIndex=1"
+      }
+    },
+    {
+      "id": "latest-turn-when-no-completed-or-failed",
+      "turns": [
+        { "id": "interrupted-only", "status": "interrupted" }
+      ],
+      "expect": {
+        "ok": true,
+        "code": "selected",
+        "turnId": "interrupted-only",
+        "turnIndex": 0,
+        "reason": "latest_turn",
+        "summaryContains": "reason=latest_turn"
+      }
+    },
+    {
+      "id": "empty-turn-refusal",
+      "turns": [],
+      "expect": {
+        "ok": false,
+        "code": "empty_thread",
+        "turnId": "",
+        "turnIndex": -1,
+        "reason": "empty_thread",
+        "summaryContains": "cannot attribute replayed token usage"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 7,
+    "okCount": 6,
+    "failureCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-token-usage-owner-report.v1;cases=7;ok=6;failed=1"
+  }
+}

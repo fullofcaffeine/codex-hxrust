@@ -185,6 +185,18 @@ The fixture `fixtures/hxrust/thread-read-active-turn-merge.v1.json` and `harness
 
 The fixture `fixtures/hxrust/thread-read-turn-items-list-runtime.v1.json` and `harness/check-thread-read-turn-items-list.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not implement item pagination or full `ThreadItem` page reconstruction; it records the current upstream runtime contract. The boundary is documented in `docs/thread-read-turn-items-list-runtime.md`.
 
+## Thread/Read Token Usage Owner
+
+`codexhx.runtime.app.threadread.ThreadReadTokenUsageOwnerResolver` is the HXCX-4.21 raw upstream token-usage replay owner slice:
+
+- `ThreadReadTokenUsageTurnOwnerHint` captures the rollout active-turn snapshot id and optional rebuilt position before a token-count record.
+- explicit owner ids win when they still appear in reconstructed turns.
+- rebuilt position selects the corresponding turn when generated/implicit ids changed during reconstruction.
+- missing rollout owner information falls back to the latest completed or failed turn, then the latest turn.
+- empty reconstructed histories fail closed before emitting an unusable owner id.
+
+The fixture `fixtures/hxrust/thread-read-token-usage-owner.v1.json` and `harness/check-thread-read-token-usage-owner.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not implement token accounting, usage aggregation, notification emission, rollout file parsing, or production state ownership. The boundary is documented in `docs/thread-read-token-usage-owner.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:
