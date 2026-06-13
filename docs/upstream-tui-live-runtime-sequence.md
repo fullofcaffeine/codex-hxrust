@@ -161,7 +161,19 @@ Exercise the first real native persistence operation without claiming full produ
 
 Status: HXCX-4.14 now owns `fixtures/hxrust/native-sqlite-persistence.v1.json` and validates the slice through `harness/check-native-sqlite-persistence.sh`. It exposed and upstreamed three generic haxe.rust std metal-clean fixes: `haxe.ds.List.iterator`, `sys.io.File`, and `sys.io.FileInput`/`FileOutput`.
 
-### HXCX-4.15+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.15: Native SQLite State Adapter
+
+Extend the native persistence pressure proof into the first selected adapter shape:
+
+- use typed Haxe commands for reconcile and query operations;
+- keep mutation intent explicit for writes and fail closed when disabled;
+- query by thread id and optionally filter archived rows;
+- keep invalid thread IDs and missing rows as typed outcomes;
+- treat enum/class-payload codegen pressure as generic haxe.rust work.
+
+Status: HXCX-4.15 now owns `fixtures/hxrust/native-state-adapter.v1.json` and validates the slice through `harness/check-native-state-adapter.sh`. It exposed and upstreamed generic haxe.rust issue `haxe.rust-x89k`: enum payload equality over `HxRef<T>` class handles now uses reference-identity `PartialEq`/`Eq` in haxe.rust `4772d6ea`.
+
+### HXCX-4.16+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

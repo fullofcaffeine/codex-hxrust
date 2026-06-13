@@ -17,7 +17,26 @@ class StateSqliteBridge {
         #end
     }
 
+    public static function runInMemory(commands:Array<StateSqliteCommand>):StateSqliteAdapterReport {
+        #if reflaxe_rust_profile
+        return new StateSqliteAdapterReport(runCommandsWithSqlite(commands));
+        #else
+        return new StateSqliteAdapterReport(runCommandsWithFixtureSimulation(commands));
+        #end
+    }
+
     #if reflaxe_rust_profile
+    static function runCommandsWithSqlite(commands:Array<StateSqliteCommand>):Array<StateSqliteOperationOutcome> {
+        final outcomes:Array<StateSqliteOperationOutcome> = [];
+        final cnx = Sqlite.open(":memory:");
+        createSchema(cnx);
+        for (command in commands) {
+            outcomes.push(applySqliteCommand(cnx, command));
+        }
+        cnx.close();
+        return outcomes;
+    }
+
     static function reconcileWithSqlite(requests:Array<StateSqliteReconcileRequest>):Array<StateSqliteReconcileOutcome> {
         final outcomes:Array<StateSqliteReconcileOutcome> = [];
         final cnx = Sqlite.open(":memory:");
@@ -27,6 +46,15 @@ class StateSqliteBridge {
         }
         cnx.close();
         return outcomes;
+    }
+
+    static function applySqliteCommand(cnx:Connection, command:StateSqliteCommand):StateSqliteOperationOutcome {
+        return switch command {
+            case Reconcile(request):
+                StateSqliteOperationOutcome.fromReconcile(applySqliteRequest(cnx, request));
+            case Query(request):
+                applySqliteQuery(cnx, request);
+        }
     }
 
     static function createSchema(cnx:Connection):Void {
@@ -79,9 +107,28 @@ class StateSqliteBridge {
     }
 
     static function readRow(cnx:Connection, threadId:String):NativeStateRow {
+        final row = readOptionalRow(cnx, threadId);
+        if (row == null) throw "missing reconciled SQLite row";
+        return row;
+    }
+
+    static function applySqliteQuery(cnx:Connection, request:StateSqliteQueryRequest):StateSqliteOperationOutcome {
+        final validated = request.validate();
+        if (!validated.ok) {
+            return StateSqliteOperationOutcome.failure("query", validated.code, realBackend, validated.message, rowCount(cnx));
+        }
+
+        final row = readOptionalRow(cnx, request.threadId.toString());
+        if (row == null || !matchesArchivedOnly(row, request.archivedOnly)) {
+            return StateSqliteOperationOutcome.failure("query", "thread_not_found", realBackend, "no SQLite metadata row matched thread id", rowCount(cnx));
+        }
+        return StateSqliteOperationOutcome.success("query", "query_found", realBackend, rowCount(cnx), row);
+    }
+
+    static function readOptionalRow(cnx:Connection, threadId:String):Null<NativeStateRow> {
         final result = cnx.request("SELECT thread_id, session_id, rollout_path, history_item_count, persisted_item_count, archived "
             + "FROM codex_threads WHERE thread_id = " + cnx.quote(threadId));
-        if (!result.hasNext()) throw "missing reconciled SQLite row";
+        if (!result.hasNext()) return null;
         result.next();
         return new NativeStateRow(
             result.getResult(0),
@@ -95,6 +142,15 @@ class StateSqliteBridge {
     #end
 
     #if !reflaxe_rust_profile
+    static function runCommandsWithFixtureSimulation(commands:Array<StateSqliteCommand>):Array<StateSqliteOperationOutcome> {
+        final rows:Array<NativeStateRow> = [];
+        final outcomes:Array<StateSqliteOperationOutcome> = [];
+        for (command in commands) {
+            outcomes.push(applyFixtureCommand(rows, command));
+        }
+        return outcomes;
+    }
+
     static function reconcileWithFixtureSimulation(requests:Array<StateSqliteReconcileRequest>):Array<StateSqliteReconcileOutcome> {
         final rows:Array<NativeStateRow> = [];
         final outcomes:Array<StateSqliteReconcileOutcome> = [];
@@ -102,6 +158,15 @@ class StateSqliteBridge {
             outcomes.push(applyFixtureRequest(rows, request));
         }
         return outcomes;
+    }
+
+    static function applyFixtureCommand(rows:Array<NativeStateRow>, command:StateSqliteCommand):StateSqliteOperationOutcome {
+        return switch command {
+            case Reconcile(request):
+                StateSqliteOperationOutcome.fromReconcile(applyFixtureRequest(rows, request));
+            case Query(request):
+                applyFixtureQuery(rows, request);
+        }
     }
 
     static function applyFixtureRequest(rows:Array<NativeStateRow>, request:StateSqliteReconcileRequest):StateSqliteReconcileOutcome {
@@ -130,6 +195,19 @@ class StateSqliteBridge {
         return StateSqliteReconcileOutcome.success(fixtureBackend, rows.length, row);
     }
 
+    static function applyFixtureQuery(rows:Array<NativeStateRow>, request:StateSqliteQueryRequest):StateSqliteOperationOutcome {
+        final validated = request.validate();
+        if (!validated.ok) {
+            return StateSqliteOperationOutcome.failure("query", validated.code, fixtureBackend, validated.message, rows.length);
+        }
+
+        final index = findRow(rows, request.threadId.toString());
+        if (index < 0 || !matchesArchivedOnly(rows[index], request.archivedOnly)) {
+            return StateSqliteOperationOutcome.failure("query", "thread_not_found", fixtureBackend, "no SQLite metadata row matched thread id", rows.length);
+        }
+        return StateSqliteOperationOutcome.success("query", "query_found", fixtureBackend, rows.length, rows[index]);
+    }
+
     static function findRow(rows:Array<NativeStateRow>, threadId:String):Int {
         var i = 0;
         while (i < rows.length) {
@@ -139,4 +217,8 @@ class StateSqliteBridge {
         return -1;
     }
     #end
+
+    static function matchesArchivedOnly(row:NativeStateRow, archivedOnly:Null<Bool>):Bool {
+        return archivedOnly == null || row.archived == archivedOnly;
+    }
 }

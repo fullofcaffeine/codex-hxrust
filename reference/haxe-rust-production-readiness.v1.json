@@ -6,7 +6,7 @@
   "recommendation": {
     "mode": "conditional_go_for_helper_sidecar_and_selected_adapter_slices",
     "broadReplacement": "no_go",
-    "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, runtime/TUI persistence-boundary, native SQLite pressure slice, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
+    "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, runtime/TUI persistence-boundary, native SQLite persistence/state-adapter pressure slices, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
       "requiredBeforeBroadReplacement": [
       "Broaden haxe.rust parity evidence beyond selected helper/headless/adapter pressure fixtures.",
       "Resolve haxe.rust-362 nullable Array.shift class-return lowering or carry an explicit release-blocking compiler risk.",
@@ -32,10 +32,11 @@
     {
       "dimension": "language",
       "score": "yellow_green",
-      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metal pressure, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, and non-copy local reuse regressions still open upstream.",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, enum class-payload equality, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metal pressure, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, and non-copy local reuse regressions still open upstream.",
       "strengths": [
-        "13 of 16 pressure gaps are resolved upstream.",
+        "14 of 17 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
+        "Native state adapter enum payload pressure resolved HxRef reference equality upstream.",
         "No raw Rust escape matches exist in current app/test Haxe source."
       ],
       "caveats": [
@@ -52,13 +53,13 @@
     {
       "dimension": "runtime",
       "score": "yellow",
-      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert proof, selected TUI story/render, and turn reducer slices are viable, but live model/full production SQLite log state/full TUI/restart ownership is outside current proof.",
+      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query proof, selected TUI story/render, and turn reducer slices are viable, but live model/full production SQLite log state/full TUI/restart ownership is outside current proof.",
       "strengths": [
         "Headless runtime fixtures pass without model credentials.",
         "Cancellation and transcript/state artifacts are deterministic.",
         "Runtime app-client classification, lag markers, and request correlation pass through generated Rust.",
         "Selected upstream TUI story replay passes through generated Rust with normalized summaries.",
-        "Selected runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
+        "Selected runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
         "Operator runbook keeps production default disabled."
       ],
       "caveats": [
@@ -75,7 +76,7 @@
       "score": "yellow_green",
       "rationale": "The project has kept interop typed and narrow: generated Rust is disposable, haxe.rust stays external, and app/test Haxe source has no raw Rust snippets.",
       "strengths": [
-        "Raw Rust escape pressure is 0 matches across 163 Haxe source/test files.",
+        "Raw Rust escape pressure is 0 matches across 168 Haxe source/test files.",
         "haxe.rust fixes are generic and made in ../haxe.rust.",
         "Pin update workflow is scripted and gated."
       ],
@@ -135,8 +136,9 @@
       "score": "yellow_green",
       "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while three generic compiler regressions and Cafex live runtime seams are unsupported.",
       "strengths": [
-        "13 pressure gaps resolved upstream rather than carried as private compiler hacks.",
+        "14 pressure gaps resolved upstream rather than carried as private compiler hacks.",
         "Native SQLite pressure uncovered and resolved three generic std metal-clean gaps in haxe.rust.",
+        "Native state-adapter pressure uncovered and resolved generic HxRef enum-payload equality in haxe.rust.",
         "The new nullable Array.shift class-return regression is tracked as haxe.rust-362 instead of app-specific compiler code.",
         "The non-copy class field assign-op regression is tracked as haxe.rust-ojj instead of app-specific compiler code.",
         "The non-copy local conditional-result reuse regression is tracked as haxe.rust-fzl instead of app-specific compiler code.",
@@ -177,12 +179,12 @@
   ],
   "measuredInputs": {
       "pressureGaps": {
-      "total": 16,
-      "resolvedUpstream": 13,
+      "total": 17,
+      "resolvedUpstream": 14,
       "openUpstream": 3,
       "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 163,
+      "sourceFilesScanned": 168,
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {

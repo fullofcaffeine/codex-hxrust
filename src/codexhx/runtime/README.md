@@ -120,6 +120,14 @@ The fixture `fixtures/hxrust/persistence-boundary.v1.json` and `harness/check-pe
 
 The fixture `fixtures/hxrust/native-sqlite-persistence.v1.json` and `harness/check-native-sqlite-persistence.sh` prove the slice through both paths. This is still a narrow pressure proof, not full `StateDbHandle` or `LogDbLayer` parity.
 
+HXCX-4.15 extends the same bridge with `runInMemory(commands)` and a typed `StateSqliteAdapterReport`:
+
+- `StateSqliteCommand` carries reconcile and query requests without raw Rust escapes.
+- `StateSqliteQueryRequest` validates `ThreadId` and supports optional archived-state filtering.
+- adapter outcomes preserve operation, code, backend, row count, and optional row summary for fixture assertions.
+
+The fixture `fixtures/hxrust/native-state-adapter.v1.json` and `harness/check-native-state-adapter.sh` prove insert, update, query, missing-row, mutation-disabled, and invalid-query behavior through both interpreter simulation and metal generated Rust. The slice is documented in `docs/native-state-adapter.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

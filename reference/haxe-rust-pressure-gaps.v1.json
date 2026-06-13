@@ -5,26 +5,26 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 16,
-    "resolvedUpstream": 13,
+    "totalGaps": 17,
+    "resolvedUpstream": 14,
     "openUpstream": 3,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 9,
+      "medium": 10,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
       "runtime_model_session": 6,
-      "native_metal_std_boundary": 3,
+      "native_metal_std_boundary": 4,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 163,
+    "sourceFilesScanned": 168,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -280,6 +280,25 @@
       "validation": [
         "sys_io snapshot in ../haxe.rust",
         "harness/check-native-sqlite-persistence.sh"
+      ]
+    },
+    {
+      "id": "enum-ref-payload-hxref-equality",
+      "status": "resolved_upstream",
+      "severity": "medium",
+      "sourceArea": "native_metal_std_boundary",
+      "codexBead": "codex-hxrust-efo",
+      "haxeRustRefs": [
+        "haxe.rust-x89k"
+      ],
+      "resolvedBy": "4772d6eaee19a556fc58d5bc9855e00321515b5a",
+      "reproduction": "The HXCX-4.15 native state adapter used a typed Haxe enum carrying class request payloads. Generated Rust derived PartialEq for the enum but HxRef<T> payloads did not implement PartialEq, causing E0369.",
+      "workaround": "Resolved upstream: HxRef<T> now implements PartialEq/Eq using reference identity, with a product-neutral enum_ref_payload snapshot.",
+      "validation": [
+        "enum_ref_payload snapshot in ../haxe.rust",
+        "generic_enum_payload snapshot in ../haxe.rust",
+        "enum_reuse_helper_calls snapshot in ../haxe.rust",
+        "harness/check-native-state-adapter.sh"
       ]
     },
     {

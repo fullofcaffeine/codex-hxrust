@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=metal
+-D rust_output=generated/native-state-adapter
+-D rust_crate=codex_hxrust_native_state_adapter
+-D rust_cargo_subcommand=check
+-main NativeStateAdapterHarness
