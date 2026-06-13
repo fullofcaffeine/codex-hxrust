@@ -277,7 +277,19 @@ Model the selected goal snapshot ordering around resume after token-usage replay
 
 Status: HXCX-4.24 now owns `fixtures/hxrust/thread-read-resume-goal-snapshot.v1.json` and validates the slice through `harness/check-thread-read-resume-goal-snapshot.sh`. No new haxe.rust limitation was exposed. This is resume-goal ordering evidence only, not production state DB access, listener command ownership, extension execution, JSON-RPC transport, or Cafex behavior.
 
-### HXCX-4.25+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.25: Resume Idle Lifecycle Continuation
+
+Model the selected idle lifecycle continuation path after ordered resume goal snapshots:
+
+- core `emit_thread_idle_lifecycle_if_idle` fires only when no active turn and no trigger-turn mailbox work exist;
+- loaded running-thread resume replays pending requests before the idle hook;
+- the goal extension sees the idle hook and calls `continue_if_idle`;
+- active goals can request `try_start_turn_if_idle`, while paused, blocked, usage-limited, budget-limited, complete, and cleared goals are snapshot-only;
+- unavailable thread manager/live thread and host rejection are deterministic continuation skips.
+
+Status: HXCX-4.25 now owns `fixtures/hxrust/thread-read-resume-idle-continuation.v1.json` and validates the slice through `harness/check-thread-read-resume-idle-continuation.sh`. No new haxe.rust limitation was exposed. This is idle-continuation decision evidence only, not production task spawning, extension store ownership, live state DB access, JSON-RPC transport, or Cafex behavior.
+
+### HXCX-4.26+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

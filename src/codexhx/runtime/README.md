@@ -235,6 +235,19 @@ HXCX-4.23 also exposed generic haxe.rust issue `haxe.rust-3f0g`: same-class `sta
 
 The fixture `fixtures/hxrust/thread-read-resume-goal-snapshot.v1.json` and `harness/check-thread-read-resume-goal-snapshot.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not read production state DBs, enqueue listener commands, emit JSON-RPC notifications, or implement Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-resume-goal-snapshot.md`.
 
+## Thread/Read Resume Idle Continuation
+
+`codexhx.runtime.app.threadread.ThreadReadResumeIdleContinuationPolicy` is the HXCX-4.25 raw upstream resume idle lifecycle continuation slice:
+
+- resume idle continuation waits until the JSON-RPC response, token-usage delivery, and goal snapshot ordering have settled;
+- core idle lifecycle is skipped while an active turn exists or trigger-turn mailbox work is pending;
+- loaded running-thread resume orders pending request replay before the idle lifecycle hook;
+- cleared and non-active goals are snapshot-only and clear active-goal accounting;
+- active goals may request `try_start_turn_if_idle` only when goal tools are visible and a live thread is available;
+- host rejection of automatic idle work is reported as a deterministic skip.
+
+The fixture `fixtures/hxrust/thread-read-resume-idle-continuation.v1.json` and `harness/check-thread-read-resume-idle-continuation.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not start real turns, own extension stores, read production state DBs, or implement Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-resume-idle-continuation.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

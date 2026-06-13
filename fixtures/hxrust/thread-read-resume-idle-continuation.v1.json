@@ -1,0 +1,389 @@
+{
+  "schema": "codex-hxrust.thread-read-resume-idle-continuation-fixture.v1",
+  "bead": "HXCX-4.25",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/thread_goal_processor.rs",
+      "symbols": [
+        "emit_resume_goal_snapshot_and_continue calls emit_thread_idle_lifecycle_if_idle"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/thread_lifecycle.rs",
+      "symbols": [
+        "loaded resume calls emit_thread_idle_lifecycle_if_idle after pending request replay",
+        "ThreadListenerCommand::EmitThreadGoalSnapshot"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/core/src/tasks/lifecycle.rs",
+      "symbols": [
+        "emit_thread_idle_lifecycle_if_idle",
+        "active_turn guard",
+        "trigger turn mailbox guard"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/extension.rs",
+      "symbols": [
+        "GoalExtension::on_thread_idle"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/ext/goal/src/runtime.rs",
+      "symbols": [
+        "GoalRuntime::continue_if_idle",
+        "active goal status gate",
+        "try_start_turn_if_idle"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/core/src/session/tests.rs",
+      "symbols": [
+        "task_finish_emits_thread_idle_lifecycle_after_active_turn_clears",
+        "thread_idle_lifecycle_waits_for_trigger_turn_mailbox_work"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/tests/suite/v2/thread_resume.rs",
+      "symbols": [
+        "thread_resume_keeps_paused_goal_paused"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "resume-active-goal-starts-continuation-turn",
+      "operation": "resume",
+      "snapshot": "updated_delivered",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "continuation_started",
+        "idleHookEmitted": true,
+        "goalContinuationRequested": true,
+        "turnStarted": true,
+        "activeGoalCleared": false,
+        "skipped": false,
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated->thread/idle->goal/continue->turn/start",
+        "summaryContains": "host accepted automatic idle turn start"
+      }
+    },
+    {
+      "id": "loaded-resume-active-goal-replays-pending-requests-before-idle",
+      "operation": "loaded_resume",
+      "snapshot": "updated_loaded_after_pending",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "continuation_started",
+        "idleHookEmitted": true,
+        "goalContinuationRequested": true,
+        "turnStarted": true,
+        "activeGoalCleared": false,
+        "skipped": false,
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated->pending/request/replay->thread/idle->goal/continue->turn/start",
+        "summaryContains": "operation=loaded_resume"
+      }
+    },
+    {
+      "id": "resume-paused-goal-is-snapshot-only",
+      "operation": "resume",
+      "snapshot": "updated_no_token_usage",
+      "goalStatus": "paused",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "snapshot_only_goal_not_active",
+        "idleHookEmitted": true,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": true,
+        "skipped": true,
+        "sequence": "response->thread/goal/updated->thread/idle",
+        "summaryContains": "status paused clears active goal accounting"
+      }
+    },
+    {
+      "id": "resume-complete-goal-is-snapshot-only",
+      "operation": "resume",
+      "snapshot": "updated_no_token_usage",
+      "goalStatus": "complete",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "snapshot_only_goal_not_active",
+        "idleHookEmitted": true,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": true,
+        "skipped": true,
+        "sequence": "response->thread/goal/updated->thread/idle",
+        "summaryContains": "status complete"
+      }
+    },
+    {
+      "id": "resume-cleared-goal-has-no-continuation",
+      "operation": "resume",
+      "snapshot": "cleared_no_goal",
+      "goalStatus": null,
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "snapshot_only_no_goal",
+        "idleHookEmitted": true,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": true,
+        "skipped": true,
+        "sequence": "response->thread/goal/cleared->thread/idle",
+        "summaryContains": "cleared snapshot"
+      }
+    },
+    {
+      "id": "resume-goals-disabled-skips-idle-hook",
+      "operation": "resume",
+      "snapshot": "goals_disabled",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "skipped_goals_feature_disabled",
+        "idleHookEmitted": false,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": false,
+        "skipped": true,
+        "sequence": "response->thread/tokenUsage/updated",
+        "summaryContains": "returns before resume idle lifecycle"
+      }
+    },
+    {
+      "id": "resume-active-turn-present-skips-idle-hook",
+      "operation": "resume",
+      "snapshot": "updated_delivered",
+      "goalStatus": "active",
+      "activeTurnPresent": true,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "skipped_active_turn_present",
+        "idleHookEmitted": false,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": false,
+        "skipped": true,
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated",
+        "summaryContains": "active turn is present"
+      }
+    },
+    {
+      "id": "resume-trigger-mailbox-pending-skips-idle-hook",
+      "operation": "resume",
+      "snapshot": "updated_delivered",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": true,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "skipped_trigger_mailbox_pending",
+        "idleHookEmitted": false,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": false,
+        "skipped": true,
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated",
+        "summaryContains": "trigger-turn mailbox work"
+      }
+    },
+    {
+      "id": "resume-active-goal-tools-hidden-clears-active-goal",
+      "operation": "resume",
+      "snapshot": "updated_delivered",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": false,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "skipped_tools_not_visible",
+        "idleHookEmitted": true,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": true,
+        "skipped": true,
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated->thread/idle",
+        "summaryContains": "tools are not visible"
+      }
+    },
+    {
+      "id": "resume-thread-manager-unavailable-skips-continuation",
+      "operation": "resume",
+      "snapshot": "updated_delivered",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": false,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "skipped_thread_manager_unavailable",
+        "idleHookEmitted": true,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": false,
+        "skipped": true,
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated->thread/idle",
+        "summaryContains": "thread manager is unavailable"
+      }
+    },
+    {
+      "id": "resume-live-thread-unavailable-skips-continuation",
+      "operation": "resume",
+      "snapshot": "updated_delivered",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": false,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "skipped_live_thread_unavailable",
+        "idleHookEmitted": true,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": false,
+        "skipped": true,
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated->thread/idle",
+        "summaryContains": "live thread is unavailable"
+      }
+    },
+    {
+      "id": "resume-host-rejects-automatic-idle-work",
+      "operation": "resume",
+      "snapshot": "updated_delivered",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": false,
+      "expect": {
+        "ok": true,
+        "code": "continuation_rejected_by_host",
+        "idleHookEmitted": true,
+        "goalContinuationRequested": true,
+        "turnStarted": false,
+        "activeGoalCleared": false,
+        "skipped": true,
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated->thread/idle->goal/continue",
+        "summaryContains": "host rejected automatic idle work"
+      }
+    },
+    {
+      "id": "fork-skips-resume-idle-continuation",
+      "operation": "fork",
+      "snapshot": "fork_skip",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": true,
+        "code": "skipped_fork_has_no_resume_idle_lifecycle",
+        "idleHookEmitted": false,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": false,
+        "skipped": true,
+        "sequence": "response->thread/tokenUsage/updated",
+        "summaryContains": "fork is not routed"
+      }
+    },
+    {
+      "id": "resume-snapshot-failure-refuses-idle-continuation",
+      "operation": "resume",
+      "snapshot": "failure",
+      "goalStatus": "active",
+      "activeTurnPresent": false,
+      "triggerMailboxPending": false,
+      "toolsVisible": true,
+      "threadManagerAvailable": true,
+      "liveThreadAvailable": true,
+      "automaticStartAccepted": true,
+      "expect": {
+        "ok": false,
+        "code": "snapshot_not_settled",
+        "idleHookEmitted": false,
+        "goalContinuationRequested": false,
+        "turnStarted": false,
+        "activeGoalCleared": false,
+        "skipped": false,
+        "sequence": "none",
+        "summaryContains": "waits for response and goal snapshot ordering to settle"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 14,
+    "idleHookCount": 9,
+    "continuationRequestCount": 3,
+    "turnStartedCount": 2,
+    "activeGoalClearedCount": 4,
+    "skippedCount": 11,
+    "failureCount": 1,
+    "summaryContains": "schema=codex-hxrust.thread-read-resume-idle-continuation-report.v1;cases=14;idleHooks=9;continuationRequests=3;turnsStarted=2;activeGoalsCleared=4;skipped=11;failed=1"
+  }
+}
