@@ -146,14 +146,14 @@ The remaining requests fall into these groups:
 | Thread navigation and lifecycle | `thread/resume`, `thread/fork`, `thread/archive`, `thread/unarchive`, `thread/unsubscribe`, `thread/list`, `thread/loaded/list` | Admitted in HXCX-3.63 |
 | Thread state and history mutation | `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/name/set`, `thread/goal/set`, `thread/goal/get`, `thread/goal/clear`, `thread/metadata/update`, `thread/settings/update`, `thread/memoryMode/set`, `thread/compact/start`, `thread/shellCommand`, `thread/approveGuardianDeniedAction`, `thread/backgroundTerminals/clean`, `thread/rollback`, `thread/inject_items`, `memory/reset` | Admitted in HXCX-3.64 |
 | Turn and review continuation | `turn/steer`, `review/start`, `thread/turns/list`, `thread/turns/items/list` | Admitted in HXCX-3.65 |
-| Models and environment | `environment/add`, `collaborationMode/list`, `mock/experimentalMethod` | Medium |
+| Models and environment | `environment/add`, `collaborationMode/list`; `mock/experimentalMethod` remains test-only unsupported production behavior | Selected/sequenced by HXCX-3.68 |
 | Apps, skills, hooks, marketplace, plugins | selected in HXCX-3.67 | Done |
 | Filesystem remote surface | selected in HXCX-3.67 | Done |
 | MCP and config reload | selected in HXCX-3.67 | Done |
-| Remote control | `remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, `remoteControl/client/revoke` | Later |
-| Realtime client controls | `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, `thread/realtime/listVoices` | Later |
-| Search requests | `thread/search`, `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, `fuzzyFileSearch/sessionStop` | Later |
-| Deprecated v1 client requests | `Initialize`, `GetConversationSummary`, `GitDiffToRemote`, `GetAuthStatus` | Explicitly deferred outside the 112 quoted v2 client request count |
+| Remote control | `remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, `remoteControl/client/revoke` | Selected/sequenced by HXCX-3.68 |
+| Realtime client controls | `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, `thread/realtime/listVoices` | Selected/sequenced by HXCX-3.68 |
+| Search requests | `thread/search`, `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, `fuzzyFileSearch/sessionStop` | Selected/sequenced by HXCX-3.68 |
+| Deprecated v1 client requests | `GetConversationSummary`, `GitDiffToRemote`, `GetAuthStatus`, legacy `fuzzyFileSearch`; `Initialize` deferred to app-server transport/bootstrap parity | Isolated compatibility slice |
 
 ## Notification Gaps
 
@@ -197,12 +197,13 @@ Known exceptions:
 - `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/settings/update`, `thread/memoryMode/set`, `memory/reset`, and `thread/backgroundTerminals/clean` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
 - `thread/turns/list` and `thread/turns/items/list` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
 - `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, and `fuzzyFileSearch/sessionStop` are Rust DTO/protocol mappings without standalone request/response schema files; their notifications are already tracked through top-level schema files.
+- `environment/add`, `collaborationMode/list`, `thread/search`, realtime request controls, and remote-control request controls are selected by HXCX-3.68; implementation beads should use upstream Rust DTO/protocol declarations and bundled schema exports where standalone request/response schema files are absent.
 - Client-directed server request schemas are emitted as top-level schema files under `schema/json/` rather than `schema/json/v2`; the selected command/file/permission approval, tool user input, MCP elicitation, dynamic tool call, ChatGPT auth refresh, and attestation schemas are fingerprinted from that location.
 - Deprecated v1 request surfaces should remain deferred until a deliberate compatibility slice selects them.
 
 ## Sequencing Decision
 
-The app/plugin/filesystem/MCP/model client request families have moved into the selected subset under HXCX-3.67. The next raw upstream slice is `codex-hxrust-fuz`, which decides remaining realtime/fuzzy/remote/deprecated-v1 compatibility surfaces. After that, `codex-hxrust-6cs` sequences upstream TUI and live-runtime parity for the full Codex target, including terminal UI work.
+The app/plugin/filesystem/MCP/model client request families have moved into the selected subset under HXCX-3.67. HXCX-3.68 selects the remaining environment/collaboration, thread search, fuzzy-session request, realtime-control, remote-control, and deprecated-v1 compatibility slices in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md). After those protocol/runtime slices, `codex-hxrust-6cs` sequences upstream TUI and live-runtime parity for the full Codex target, including terminal UI work.
 
 Rationale:
 
