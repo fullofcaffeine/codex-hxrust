@@ -9,6 +9,7 @@
     "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
     "requiredBeforeBroadReplacement": [
       "Broaden haxe.rust parity evidence beyond selected helper/headless/adapter pressure fixtures.",
+      "Resolve haxe.rust-362 nullable Array.shift class-return lowering or carry an explicit release-blocking compiler risk.",
       "Complete license/distribution review for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts.",
       "Reduce or explicitly native-own the 4 unsupported Cafex seam rows.",
       "Run replacement rollback drills from the operator runbook.",
@@ -29,14 +30,15 @@
     {
       "dimension": "language",
       "score": "yellow_green",
-      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, and reusable enum values now pass through haxe.rust after generic upstream fixes.",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, and the first runtime app-client facade pass through haxe.rust, with one newly discovered nullable Array.shift class-return regression still open upstream.",
       "strengths": [
-        "10 of 10 pressure gaps are resolved upstream.",
+        "10 of 11 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
         "No raw Rust escape matches exist in current app/test Haxe source."
       ],
       "caveats": [
-        "Current language proof is still fixture-backed and selected-slice scoped rather than broad upstream parity."
+        "Current language proof is still fixture-backed and selected-slice scoped rather than broad upstream parity.",
+        "haxe.rust-362 remains open for nullable Array.shift class-return lowering."
       ],
       "evidenceRefs": [
         "reference/haxe-rust-pressure-gaps.v1.json",
@@ -46,10 +48,11 @@
     {
       "dimension": "runtime",
       "score": "yellow",
-      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, and headless JSONL adapter slices are viable, but live model/TUI/restart ownership is outside current proof.",
+      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, and the first runtime app-client facade slices are viable, but live model/TUI/restart ownership is outside current proof.",
       "strengths": [
         "Headless runtime fixtures pass without model credentials.",
         "Cancellation and transcript/state artifacts are deterministic.",
+        "Runtime app-client classification, lag markers, and request correlation pass through generated Rust.",
         "Operator runbook keeps production default disabled."
       ],
       "caveats": [
@@ -66,7 +69,7 @@
       "score": "yellow_green",
       "rationale": "The project has kept interop typed and narrow: generated Rust is disposable, haxe.rust stays external, and app/test Haxe source has no raw Rust snippets.",
       "strengths": [
-        "Raw Rust escape pressure is 0 matches across 92 Haxe source/test files.",
+        "Raw Rust escape pressure is 0 matches across 114 Haxe source/test files.",
         "haxe.rust fixes are generic and made in ../haxe.rust.",
         "Pin update workflow is scripted and gated."
       ],
@@ -124,9 +127,10 @@
     {
       "dimension": "maintenance",
       "score": "yellow_green",
-      "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while Cafex live runtime seams are unsupported.",
+      "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while one generic compiler regression and Cafex live runtime seams are unsupported.",
       "strengths": [
         "10 pressure gaps resolved upstream rather than carried as private compiler hacks.",
+        "The new nullable Array.shift class-return regression is tracked as haxe.rust-362 instead of app-specific compiler code.",
         "Friction comparison supports selected adapter slices and review tooling.",
         "Operator rollback and migration-mode policies are checked."
       ],
@@ -163,13 +167,13 @@
     }
   ],
   "measuredInputs": {
-    "pressureGaps": {
-      "total": 10,
+      "pressureGaps": {
+      "total": 11,
       "resolvedUpstream": 10,
-      "openUpstream": 0,
+      "openUpstream": 1,
       "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 92,
+      "sourceFilesScanned": 114,
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {
@@ -200,6 +204,7 @@
     "Recommend HXCX-6.3 select helper-only, sidecar/headless, or selected adapter-slice mode.",
     "Do not select broad replacement from current evidence.",
     "Keep unsupported surfaces explicit and fail-closed.",
+    "Treat haxe.rust-362 as an open compiler risk until fixed with a product-neutral regression.",
     "Treat license/distribution as a release blocker, not a local-experiment blocker."
   ]
 }

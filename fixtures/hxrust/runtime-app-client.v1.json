@@ -1,0 +1,46 @@
+{
+  "schema": "codex-hxrust.runtime-app-client-fixture.v1",
+  "source": "Derived from the selected upstream-shaped app protocol subset in fixtures/hxrust/app-protocol-roundtrip.v1.json.",
+  "request": {
+    "requestId": "runtime-req-1",
+    "method": "turn/interrupt",
+    "params": {
+      "threadId": "thread-00000000-0000-4000-8000-000000000001",
+      "turnId": "turn-1"
+    },
+    "result": {}
+  },
+  "notifications": [
+    {
+      "id": "best-thread-status",
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "thread-00000000-0000-4000-8000-000000000001",
+        "status": {
+          "type": "active",
+          "activeFlags": ["turnRunning"]
+        }
+      }
+    },
+    {
+      "id": "best-command-output",
+      "method": "command/exec/outputDelta",
+      "params": {
+        "processId": "proc-1",
+        "stream": "stdout",
+        "deltaBase64": "AQI=",
+        "capReached": false
+      }
+    },
+    {
+      "id": "lossless-agent-delta",
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "thread-00000000-0000-4000-8000-000000000001",
+        "turnId": "turn-1",
+        "itemId": "item-agent-1",
+        "delta": "hello"
+      }
+    }
+  ]
+}

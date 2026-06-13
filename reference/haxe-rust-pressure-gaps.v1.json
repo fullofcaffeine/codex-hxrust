@@ -5,25 +5,25 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 10,
+    "totalGaps": 11,
     "resolvedUpstream": 10,
-    "openUpstream": 0,
+    "openUpstream": 1,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 3,
+      "medium": 4,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 3,
+      "runtime_model_session": 4,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 92,
+    "sourceFilesScanned": 114,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -177,6 +177,23 @@
         "interface_basic snapshot in ../haxe.rust",
         "interface_null_compare snapshot in ../haxe.rust",
         "scripts/update-haxe-rust-pin.sh b3e38c31"
+      ]
+    },
+    {
+      "id": "nullable-array-shift-class-return",
+      "status": "open_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-1hb",
+      "haxeRustRefs": [
+        "haxe.rust-362"
+      ],
+      "reproduction": "Runtime event queue work exposed a method returning Null<ClassType> from Array<ClassType>.shift(); generated Rust returned HxRef<ClassType> while the expression lowered to Option<HxRef<ClassType>>, causing E0308.",
+      "workaround": "The local queue API now uses a typed read outcome and indexed removal to keep generated Rust green; the compiler gap remains tracked upstream as a generic nullable Array.shift/class-return regression.",
+      "followUp": "haxe.rust-362",
+      "validation": [
+        "harness/check-runtime-app-client.sh",
+        "haxe.rust-362 acceptance requires a product-neutral regression fixture"
       ]
     },
     {

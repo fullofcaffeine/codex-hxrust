@@ -50,6 +50,7 @@ Owner: upstream Codex / `../codex`, pinned by `reference/upstream-codex.pin.json
 | TUI story fixture | `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl` | 1 JSONL file | HXCX-4.8 | Full-Codex/TUI replay evidence after the runtime event-bus/app-server facade slice |
 | Tool JSON schema policy fixtures | `../codex/codex-rs/tools/tests/fixtures/json_schema_policy` | 6 JSON files | M4 secondary | Tool schema filtering/truncation policy examples |
 | Config schema | `../codex/codex-rs/core/config.schema.json` plus `core/src/config/schema.rs` | JSON schema plus generator/source | M2/M4 secondary | Config DTO subset and doctor/config validation |
+| Runtime app-client facade | `fixtures/hxrust/runtime-app-client.v1.json` | Local upstream-shaped request/notification fixture | HXCX-4.7 | Request correlation, lossless/best-effort event classification, lag/backpressure semantics |
 
 Initial upstream M2 subset:
 

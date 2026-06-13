@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/runtime-app-client
+-D rust_crate=codex_hxrust_runtime_app_client
+-D rust_cargo_subcommand=check
+-main RuntimeAppClientHarness

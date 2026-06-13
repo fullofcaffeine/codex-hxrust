@@ -26,14 +26,14 @@ harness/check-haxe-rust-pressure-gaps.sh
 
 | Metric | Count |
 | --- | ---: |
-| Total pressure gaps | 10 |
+| Total pressure gaps | 11 |
 | Resolved upstream | 10 |
-| Open upstream | 0 |
+| Open upstream | 1 |
 | Local workaround | 0 |
 | High severity | 7 |
-| Medium severity | 3 |
+| Medium severity | 4 |
 | Raw Rust escape matches in current app/test Haxe source | 0 |
-| Haxe source/test files scanned | 92 |
+| Haxe source/test files scanned | 114 |
 
 Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAllowRaw`, `@:rust...`, or `untyped` escapes are present under `src` or `test`.
 
@@ -43,7 +43,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | --- | ---: | --- |
 | Build/profile/tooling | 2 | Dev haxelib std ownership and Cargo failure propagation blocked trustworthy profile gates. |
 | Protocol/JSON/DTO | 3 | Nullable scalar, generic enum payload, and enum reuse issues surfaced in protocol IDs and JSON helpers. |
-| Runtime/model/session | 3 | Try/catch tail returns and interface null behavior surfaced in mock stream and one-turn state-machine work. |
+| Runtime/model/session | 4 | Try/catch tail returns, interface null behavior, and nullable class-array reads surfaced in runtime work. |
 | Cafex adapter | 2 | Path.directory and String.lastIndexOf are now resolved upstream. |
 
 ## Gap List
@@ -58,6 +58,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | Try/catch tail return lowering | `resolved_upstream` | high | runtime/model/session | Resolved by haxe.rust `551a00bf`; local parseJson shape workaround removed. |
 | Interface null comparison | `resolved_upstream` | high | runtime/model/session | Resolved by haxe.rust `e10eae4d` with `interface_null_compare`. |
 | Nullable interface values | `resolved_upstream` | high | runtime/model/session | Resolved by haxe.rust `b3e38c31` with `nullable_interface_null`. |
+| Nullable `Array<Class>.shift()` return | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-362`; local runtime queue uses a typed read outcome while the compiler regression is fixed generically. |
 | `haxe.io.Path.directory` lowering | `resolved_upstream` | medium | Cafex adapter | Resolved by haxe.rust `39f20b9e` with `path_directory`. |
 | `String.lastIndexOf` lowering | `resolved_upstream` | medium | Cafex adapter | Resolved by haxe.rust `916f1534` with `string_last_index_of`. |
 
@@ -65,10 +66,10 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 
 The pressure test is encouraging but not clean enough for broad replacement:
 
-- haxe.rust fixes have been generic and upstreamable so far.
+- haxe.rust fixes have been generic and upstreamable so far; `haxe.rust-362` is the current open generic regression from live-runtime queue work.
 - The current codexhx source avoids raw Rust escape hatches.
 - Nullable interface values now have a generic upstream fix and passing snapshot.
 - String.lastIndexOf now has a generic upstream fix and passing snapshot.
 - haxe.io.Path.directory now has a generic upstream fix and passing snapshot.
 
-Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter pressure slices, but production readiness still depends on live runtime, unsupported Cafex seam, licensing, and broader parity work.
+Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()` regression, unsupported Cafex seam, licensing, and broader parity work.

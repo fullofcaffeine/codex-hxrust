@@ -65,3 +65,17 @@ Failed mock turns emit the selected upstream `error` server notification with `t
 Successful mock turns emit selected assistant text deltas as upstream `item/agentMessage/delta` notifications between agent item start and completion. They also emit the selected upstream `rawResponseItem/completed` notification for the assistant raw response message before the completed app item. The completed turn and `thread/read` response still use the full deterministic agent message item.
 
 Unsupported commands fail closed with `unsupported_command`. The adapter remains credential-free and fixture-backed; it is not a live app-server transport, and it should stay a thin protocol adapter over the pure runtime state machine.
+
+## Runtime App-Server Client Facade
+
+`codexhx.runtime.app.InMemoryAppServerClient` is the HXCX-4.7 upstream TUI/live-runtime foundation. It is not a transport yet; it is a typed, deterministic shell modeled after upstream `AppServerClient` behavior:
+
+- `CodexRuntimeCommand` represents app request, response completion, and response failure commands.
+- `CodexRuntimeEvent` represents server notifications, client responses/errors, lag markers, and disconnects.
+- `CodexRuntimeNotificationDelivery` mirrors upstream `server_notification_requires_delivery`: assistant/plan/reasoning deltas and item/turn/settings completions are lossless; status/progress/output updates are best-effort.
+- `CodexRuntimeEventQueue` is bounded and deterministic. Best-effort overload records skipped-event lag evidence. Lossless/control events fail with explicit backpressure when no consumer capacity exists, rather than silently corrupting transcript state.
+- Request correlation is explicit: duplicate, unknown, method-mismatched, invalid request, invalid response, and invalid error JSON paths produce typed `RuntimeClientOutcome` codes.
+
+The fixture `fixtures/hxrust/runtime-app-client.v1.json` and `harness/check-runtime-app-client.sh` prove the facade through both Haxe interpreter and haxe.rust-generated Rust. The slice intentionally stays portable; later live transport work can place metal/native async wrappers around this semantic core.
+
+HXCX-4.7 also exposed generic haxe.rust issue `haxe.rust-362`: nullable `Array<Class>.shift()` return lowering mismatched Rust `Option` and non-null class reference signatures. The local runtime queue now uses a typed read outcome plus indexed removal; the compiler issue is tracked upstream as product-neutral work, not a Codex-specific workaround.
