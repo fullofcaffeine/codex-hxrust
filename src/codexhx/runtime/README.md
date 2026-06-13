@@ -128,6 +128,17 @@ HXCX-4.15 extends the same bridge with `runInMemory(commands)` and a typed `Stat
 
 The fixture `fixtures/hxrust/native-state-adapter.v1.json` and `harness/check-native-state-adapter.sh` prove insert, update, query, missing-row, mutation-disabled, and invalid-query behavior through both interpreter simulation and metal generated Rust. The slice is documented in `docs/native-state-adapter.md`.
 
+## Persisted Thread Read View
+
+`codexhx.runtime.app.persistence.PersistedThreadReadViewBuilder` is the HXCX-4.16 adapter-fed read-view slice:
+
+- `PersistedThreadReadRequest` validates typed thread IDs and carries internal include-turns/include-archived read flags.
+- `PersistedThreadReadView` projects selected persisted metadata into typed thread/session/path/status fields.
+- `PersistedThreadHistorySummary` reports metadata-only versus history-included counts without reading real rollout files.
+- missing threads, active-only archived reads, invalid IDs, and malformed rows fail as typed outcomes.
+
+The fixture `fixtures/hxrust/persisted-thread-read-view.v1.json` and `harness/check-persisted-thread-read-view.sh` prove the slice through interpreter simulation, native adapter setup, and metal generated Rust. This is not full app-server `thread/read` parity; live `ThreadState`, rollout item rebuilding, and production state-file ownership remain later slices. The boundary is documented in `docs/persisted-thread-read-view.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

@@ -19,3 +19,5 @@ The full policy lives in `../../../docs/interop-boundary-policy.md`.
 The fixture `fixtures/hxrust/native-sqlite-persistence.v1.json` and `harness/check-native-sqlite-persistence.sh` prove the slice through Haxe interpreter simulation and haxe.rust-generated Rust. The boundary decision is documented in `docs/native-sqlite-persistence-boundary.md`.
 
 The fixture `fixtures/hxrust/native-state-adapter.v1.json` and `harness/check-native-state-adapter.sh` extend that pressure into typed command/report behavior: reconcile, query, archived filtering, mutation-denied failures, and invalid query failures. The adapter slice is documented in `docs/native-state-adapter.md`.
+
+HXCX-4.16 consumes the adapter report from `codexhx.runtime.app.persistence.PersistedThreadReadViewBuilder` to build a typed persisted thread read view. That higher-level facade is documented in `docs/persisted-thread-read-view.md` and validated by `harness/check-persisted-thread-read-view.sh`.

@@ -173,7 +173,19 @@ Extend the native persistence pressure proof into the first selected adapter sha
 
 Status: HXCX-4.15 now owns `fixtures/hxrust/native-state-adapter.v1.json` and validates the slice through `harness/check-native-state-adapter.sh`. It exposed and upstreamed generic haxe.rust issue `haxe.rust-x89k`: enum payload equality over `HxRef<T>` class handles now uses reference-identity `PartialEq`/`Eq` in haxe.rust `4772d6ea`.
 
-### HXCX-4.16+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.16: Persisted Thread Read View
+
+Project selected persisted thread metadata into an upstream-shaped read-view layer:
+
+- feed typed read requests from the native state adapter report;
+- validate `ThreadId` before lookup;
+- distinguish metadata-only reads from include-turns history summaries;
+- fail closed for missing, archived-filtered, and invalid requests;
+- keep real rollout files, live `ThreadState`, and API-turn reconstruction out of scope.
+
+Status: HXCX-4.16 now owns `fixtures/hxrust/persisted-thread-read-view.v1.json` and validates the slice through `harness/check-persisted-thread-read-view.sh`. No new haxe.rust limitation was exposed; the generated Rust gate passed with typed DTOs, nullable outcomes, adapter-report scanning, and zero raw Rust escapes.
+
+### HXCX-4.17+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

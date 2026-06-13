@@ -1,0 +1,144 @@
+{
+  "schema": "codex-hxrust.persisted-thread-read-view.v1",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs:1160",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:2035",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:2052",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:2130",
+    "../codex/codex-rs/thread-store/src/local/read_thread.rs:29",
+    "../codex/codex-rs/thread-store/src/local/read_thread.rs:1186"
+  ],
+  "adapterCommands": [
+    {
+      "id": "insert-live-thread",
+      "type": "reconcile",
+      "mutationEnabled": true,
+      "metadata": {
+        "threadId": "11111111-1111-4111-8111-111111111111",
+        "sessionId": "22222222-2222-4222-8222-222222222222",
+        "rolloutPath": "/tmp/codex-hxrust/read-view/rollout-live.jsonl",
+        "historyItemCount": 2,
+        "persistedItemCount": 2,
+        "rolloutItemKinds": [
+          "session_meta",
+          "event_msg"
+        ],
+        "includeHistory": false,
+        "archived": false,
+        "goalStateRequested": false
+      }
+    },
+    {
+      "id": "query-live-thread",
+      "type": "query",
+      "threadId": "11111111-1111-4111-8111-111111111111",
+      "archivedOnly": false
+    },
+    {
+      "id": "insert-archived-thread",
+      "type": "reconcile",
+      "mutationEnabled": true,
+      "metadata": {
+        "threadId": "33333333-3333-4333-8333-333333333333",
+        "sessionId": "44444444-4444-4444-8444-444444444444",
+        "rolloutPath": "/tmp/codex-hxrust/read-view/rollout-archived.jsonl",
+        "historyItemCount": 3,
+        "persistedItemCount": 2,
+        "rolloutItemKinds": [
+          "session_meta",
+          "event_msg",
+          "event_msg"
+        ],
+        "includeHistory": true,
+        "archived": true,
+        "goalStateRequested": false
+      }
+    },
+    {
+      "id": "query-archived-thread",
+      "type": "query",
+      "threadId": "33333333-3333-4333-8333-333333333333",
+      "archivedOnly": true
+    }
+  ],
+  "readRequests": [
+    {
+      "id": "read-live-metadata-only",
+      "threadId": "11111111-1111-4111-8111-111111111111",
+      "includeTurns": false,
+      "includeArchived": false,
+      "expect": {
+        "ok": true,
+        "code": "read_view_found",
+        "summaryContains": "thread=11111111-1111-4111-8111-111111111111;session=22222222-2222-4222-8222-222222222222;path=/tmp/codex-hxrust/read-view/rollout-live.jsonl;status=notLoaded;archived=false;turns=0;history=2;persisted=2;pending=0;mode=metadata_only"
+      }
+    },
+    {
+      "id": "read-live-with-turn-summary",
+      "threadId": "11111111-1111-4111-8111-111111111111",
+      "includeTurns": true,
+      "includeArchived": false,
+      "expect": {
+        "ok": true,
+        "code": "read_view_found",
+        "summaryContains": "archived=false;turns=2;history=2;persisted=2;pending=0;mode=history_included"
+      }
+    },
+    {
+      "id": "read-archived-filtered",
+      "threadId": "33333333-3333-4333-8333-333333333333",
+      "includeTurns": false,
+      "includeArchived": false,
+      "expect": {
+        "ok": false,
+        "code": "archived_thread_filtered",
+        "summaryContains": ""
+      }
+    },
+    {
+      "id": "read-archived-included",
+      "threadId": "33333333-3333-4333-8333-333333333333",
+      "includeTurns": true,
+      "includeArchived": true,
+      "expect": {
+        "ok": true,
+        "code": "read_view_found",
+        "summaryContains": "thread=33333333-3333-4333-8333-333333333333;session=44444444-4444-4444-8444-444444444444;path=/tmp/codex-hxrust/read-view/rollout-archived.jsonl;status=notLoaded;archived=true;turns=3;history=3;persisted=2;pending=1;mode=history_included"
+      }
+    },
+    {
+      "id": "read-missing-thread",
+      "threadId": "55555555-5555-4555-8555-555555555555",
+      "includeTurns": false,
+      "includeArchived": true,
+      "expect": {
+        "ok": false,
+        "code": "thread_not_found",
+        "summaryContains": ""
+      }
+    },
+    {
+      "id": "read-invalid-thread-id",
+      "threadId": "not-a-uuid",
+      "includeTurns": false,
+      "includeArchived": true,
+      "expect": {
+        "ok": false,
+        "code": "invalid_thread_id",
+        "summaryContains": ""
+      }
+    }
+  ],
+  "expectAdapterReport": {
+    "operationCount": 4,
+    "okCount": 4,
+    "failureCount": 0
+  },
+  "expectReadReport": {
+    "operationCount": 6,
+    "okCount": 3,
+    "failureCount": 3,
+    "summaryContains": "schema=codex-hxrust.persisted-thread-read-view-report.v1;reads=6;ok=3;failed=3"
+  }
+}

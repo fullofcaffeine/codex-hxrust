@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=metal
+-D rust_output=generated/persisted-thread-read-view
+-D rust_crate=codex_hxrust_persisted_thread_read_view
+-D rust_cargo_subcommand=check
+-main PersistedThreadReadViewHarness
