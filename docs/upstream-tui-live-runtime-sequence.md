@@ -464,7 +464,21 @@ Model the selected upstream read-only `get_goal` executor path:
 
 Status: HXCX-4.39 now owns `fixtures/hxrust/thread-read-get-goal-tool.v1.json` and validates the slice through `harness/check-thread-read-get-goal-tool.sh`. No new haxe.rust limitation was exposed. This is read-only `get_goal` executor evidence only, not create/update tool execution, production state mutation, analytics/events emission, model/provider behavior, or Cafex behavior.
 
-### HXCX-4.40+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.40: Create Goal Tool Executor
+
+Model the selected upstream `create_goal` executor path:
+
+- parse function arguments into objective and optional token budget;
+- trim the objective before validation;
+- reject empty objectives and non-positive token budgets before insert;
+- insert an active goal or return an unfinished-goal/state-error model-visible failure;
+- attempt empty-thread-preview fill and preserve warnings without failing the tool;
+- mark the current turn goal active, record metrics/analytics, and emit the goal-updated event boundary;
+- return `goal_response` with `CompletionBudgetReport::Omit`.
+
+Status: HXCX-4.40 now owns `fixtures/hxrust/thread-read-create-goal-tool.v1.json` and validates the slice through `harness/check-thread-read-create-goal-tool.sh`. No new haxe.rust limitation was exposed. This is selected `create_goal` executor evidence only, not production SQLite/log state ownership, real async lock ownership, full analytics/event implementation, model/provider behavior, update_goal behavior, or Cafex behavior.
+
+### HXCX-4.41+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

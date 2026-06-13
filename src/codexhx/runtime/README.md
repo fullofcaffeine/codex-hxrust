@@ -422,6 +422,20 @@ The fixture `fixtures/hxrust/thread-read-goal-tool-contributor-visibility.v1.jso
 
 The fixture `fixtures/hxrust/thread-read-get-goal-tool.v1.json` and `harness/check-thread-read-get-goal-tool.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is read-only goal tool evidence only; it does not create/update goals, own production state DB writes, emit analytics/events, create credentials, or model Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-get-goal-tool.md`.
 
+## Thread/Read Create Goal Tool
+
+`codexhx.runtime.app.threadread.ThreadReadCreateGoalToolPolicy` is the HXCX-4.40 raw upstream `create_goal` executor slice:
+
+- function arguments parse into an objective and optional token budget;
+- objectives are trimmed before validation;
+- empty objectives and non-positive budgets become model-visible errors before insert;
+- inserted goals are active and returned through the protocol `ThreadGoal` DTO;
+- unfinished-goal conflicts and insert errors become model-visible tool errors;
+- preview-fill errors warn without failing the tool;
+- successful inserts mark the current turn goal active, record metrics/analytics, emit the goal-updated event boundary, and omit completion-budget reports.
+
+The fixture `fixtures/hxrust/thread-read-create-goal-tool.v1.json` and `harness/check-thread-read-create-goal-tool.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is selected create-tool evidence only; it does not own production SQLite/log state, real async locks, full analytics/event implementations, credentialed model/provider behavior, update_goal behavior, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-create-goal-tool.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:
