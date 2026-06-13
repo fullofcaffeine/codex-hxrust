@@ -7,69 +7,77 @@ import codexhx.runtime.model.admission.ProviderAdmissionNetworkKind;
 import codexhx.runtime.model.admission.ProviderAdmissionProvider;
 import codexhx.runtime.model.admission.ProviderAdmissionRequest;
 import codexhx.runtime.model.catalog.ModelCatalogEntry;
-import codexhx.runtime.model.catalog.ModelCatalogPolicy;
 import codexhx.runtime.model.catalog.ModelCatalogRefreshStrategy;
-import codexhx.runtime.model.catalog.ModelCatalogReport;
 import codexhx.runtime.model.catalog.ModelCatalogRequest;
 import codexhx.runtime.model.catalog.ModelCatalogToolMode;
 import codexhx.runtime.model.catalog.ModelCatalogVisibility;
 import codexhx.runtime.model.catalog.ModelCatalogWebSearchToolType;
+import codexhx.runtime.model.planning.TurnExtensionToolState;
+import codexhx.runtime.model.planning.TurnModelFeatureFlags;
+import codexhx.runtime.model.planning.TurnModelPlanPolicy;
+import codexhx.runtime.model.planning.TurnModelPlanReport;
+import codexhx.runtime.model.planning.TurnModelPlanRequest;
+import codexhx.runtime.model.planning.TurnModelToolCapabilityKind;
+import codexhx.runtime.model.planning.TurnWebSearchMode;
 import haxe.json.Value;
 import sys.io.File;
 
-class ModelCatalogHarness {
+class TurnModelPlanHarness {
 	static function main():Void {
 		final root = fixtureRoot();
 		final cases = arrayField(root, "cases");
-		final report = ModelCatalogPolicy.buildCases(requests(cases));
+		final report = TurnModelPlanPolicy.buildCases(requests(cases));
 		assertReport(root, report);
 		assertEquals(Std.string(cases.length), Std.string(report.outcomes.length));
 
 		var i = 0;
 		while (i < cases.length) {
-			final request = objectField(objectValue(cases[i]), "request");
 			final expect = objectField(objectValue(cases[i]), "expect");
 			final outcome = report.outcomes[i];
 			final secretProbe = stringField(expect, "secretProbe", "");
 			assertEquals(boolText(boolField(expect, "ok", false)), boolText(outcome.ok));
 			assertEquals(stringField(expect, "code", ""), outcome.code);
 			assertEquals(stringField(expect, "requestId", ""), outcome.requestId);
+			assertEquals(stringField(expect, "catalogCode", ""), outcome.catalogCode);
 			assertEquals(stringField(expect, "providerId", ""), outcome.providerId);
-			assertEquals(stringField(expect, "admissionCode", ""), outcome.admissionCode);
-			assertEquals(stringField(expect, "catalogSource", ""), outcome.catalogSource);
-			assertEquals(stringField(expect, "refreshStrategy", ""), outcome.refreshStrategy);
-			assertEquals(boolText(boolField(expect, "liveFetchAttempted", false)), boolText(outcome.liveFetchAttempted));
 			assertEquals(stringField(expect, "selectedModelId", ""), outcome.selectedModelId);
-			assertEquals(boolText(boolField(expect, "selectedHidden", false)), boolText(outcome.selectedHidden));
-			assertEquals(stringField(expect, "defaultModelId", ""), outcome.defaultModelId);
-			assertEquals(Std.string(intField(expect, "catalogCount", 0)), Std.string(outcome.catalogCount));
-			assertEquals(Std.string(intField(expect, "providerModelCount", 0)), Std.string(outcome.providerModelCount));
-			assertEquals(Std.string(intField(expect, "visibleCount", 0)), Std.string(outcome.visibleCount));
-			assertEquals(Std.string(intField(expect, "hiddenCount", 0)), Std.string(outcome.hiddenCount));
-			assertEquals(Std.string(intField(expect, "apiFilteredCount", 0)), Std.string(outcome.apiFilteredCount));
+			assertEquals(stringField(expect, "effectiveToolMode", ""), outcome.effectiveToolMode);
+			assertEquals(stringField(expect, "requestedCapability", ""), outcome.requestedCapability);
+			assertEquals(boolText(boolField(expect, "capabilityEnabled", false)), boolText(outcome.capabilityEnabled));
 			assertContains(outcome.summary(), stringField(expect, "summaryContains", ""));
 			if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
 			i = i + 1;
 		}
 	}
 
-	static function requests(values:Array<Value>):Array<ModelCatalogRequest> {
-		final out:Array<ModelCatalogRequest> = [];
+	static function requests(values:Array<Value>):Array<TurnModelPlanRequest> {
+		final out:Array<TurnModelPlanRequest> = [];
 		for (value in values) {
 			final request = objectField(objectValue(value), "request");
-			out.push(new ModelCatalogRequest(
+			out.push(new TurnModelPlanRequest(
 				stringField(request, "requestId", ""),
-				admissionRequest(objectField(request, "admission")),
-				stringField(request, "catalogSource", ""),
-				refreshStrategy(stringField(request, "refreshStrategy", "")),
-				boolField(request, "includeHidden", false),
-				boolField(request, "allowLiveFetch", false),
-				boolField(request, "usesCodexBackend", false),
-				stringField(request, "requestedModelId", ""),
-				catalog(arrayField(request, "catalog"))
+				catalogRequest(objectField(request, "catalogRequest")),
+				featureFlags(objectField(request, "features")),
+				extensionToolState(objectField(request, "extensionTools")),
+				webSearchMode(stringField(request, "webSearchMode", "")),
+				toolCapabilityKind(stringField(request, "requestedCapability", ""))
 			));
 		}
 		return out;
+	}
+
+	static function catalogRequest(request:Value):ModelCatalogRequest {
+		return new ModelCatalogRequest(
+			stringField(request, "requestId", ""),
+			admissionRequest(objectField(request, "admission")),
+			stringField(request, "catalogSource", ""),
+			refreshStrategy(stringField(request, "refreshStrategy", "")),
+			boolField(request, "includeHidden", false),
+			boolField(request, "allowLiveFetch", false),
+			boolField(request, "usesCodexBackend", false),
+			stringField(request, "requestedModelId", ""),
+			catalog(arrayField(request, "catalog"))
+		);
 	}
 
 	static function admissionRequest(request:Value):ProviderAdmissionRequest {
@@ -132,10 +140,28 @@ class ModelCatalogHarness {
 				stringField(model, "defaultServiceTier", ""),
 				stringArrayField(model, "additionalSpeedTiers"),
 				stringArrayField(model, "experimentalSupportedTools"),
-				false
+				boolField(model, "useResponsesLite", false)
 			));
 		}
 		return out;
+	}
+
+	static function featureFlags(value:Value):TurnModelFeatureFlags {
+		return new TurnModelFeatureFlags(
+			boolField(value, "codeMode", false),
+			boolField(value, "codeModeOnly", false),
+			boolField(value, "standaloneWebSearch", false),
+			boolField(value, "imageGeneration", false),
+			boolField(value, "imageGenExt", false),
+			boolField(value, "deferredToolsAvailable", false)
+		);
+	}
+
+	static function extensionToolState(value:Value):TurnExtensionToolState {
+		return new TurnExtensionToolState(
+			boolField(value, "standaloneWebRunAvailable", false),
+			boolField(value, "standaloneImageGenerationAvailable", false)
+		);
 	}
 
 	static function credentialKind(value:String):ProviderAdmissionCredentialKind {
@@ -205,19 +231,40 @@ class ModelCatalogHarness {
 		}
 	}
 
-	static function assertReport(root:Value, report:ModelCatalogReport):Void {
+	static function webSearchMode(value:String):TurnWebSearchMode {
+		return switch value {
+			case "disabled": TurnWebSearchMode.Disabled;
+			case "cached": TurnWebSearchMode.Cached;
+			case "live": TurnWebSearchMode.Live;
+			case _: throw "invalid web search mode: " + value;
+		}
+	}
+
+	static function toolCapabilityKind(value:String):TurnModelToolCapabilityKind {
+		return switch value {
+			case "hosted_web_search": TurnModelToolCapabilityKind.HostedWebSearch;
+			case "standalone_web_run": TurnModelToolCapabilityKind.StandaloneWebRun;
+			case "hosted_image_generation": TurnModelToolCapabilityKind.HostedImageGeneration;
+			case "standalone_image_generation": TurnModelToolCapabilityKind.StandaloneImageGeneration;
+			case "namespace_tools": TurnModelToolCapabilityKind.NamespaceTools;
+			case "code_mode_nested_tools": TurnModelToolCapabilityKind.CodeModeNestedTools;
+			case "tool_search": TurnModelToolCapabilityKind.ToolSearch;
+			case _: throw "invalid tool capability kind: " + value;
+		}
+	}
+
+	static function assertReport(root:Value, report:TurnModelPlanReport):Void {
 		final expect = objectField(root, "expectReport");
 		assertEquals(Std.string(intField(expect, "caseCount", 0)), Std.string(report.outcomes.length));
 		assertEquals(Std.string(intField(expect, "successCount", 0)), Std.string(report.successCount()));
 		assertEquals(Std.string(intField(expect, "errorCount", 0)), Std.string(report.errorCount()));
-		assertEquals(Std.string(intField(expect, "hiddenDeniedCount", 0)), Std.string(report.hiddenDeniedCount()));
-		assertEquals(Std.string(intField(expect, "liveFetchDeniedCount", 0)), Std.string(report.liveFetchDeniedCount()));
-		assertEquals(Std.string(intField(expect, "apiFilteredCount", 0)), Std.string(report.apiFilteredCount()));
+		assertEquals(Std.string(intField(expect, "unsupportedCapabilityCount", 0)), Std.string(report.unsupportedCapabilityCount()));
+		assertEquals(Std.string(intField(expect, "catalogDeniedCount", 0)), Std.string(report.catalogDeniedCount()));
 		assertContains(report.summary(), stringField(expect, "summaryContains", ""));
 	}
 
 	static function fixtureRoot():Value {
-		return expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/model-catalog.v1.json")));
+		return expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/turn-model-plan.v1.json")));
 	}
 
 	static function objectField(object:Value, name:String):Value {

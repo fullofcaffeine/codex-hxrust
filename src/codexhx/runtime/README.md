@@ -487,6 +487,20 @@ The fixture `fixtures/hxrust/provider-admission.v1.json` and `harness/check-prov
 
 The fixture `fixtures/hxrust/model-catalog.v1.json` and `harness/check-model-catalog.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is static catalog/capability evidence only; it does not call `/models`, persist model caches, refresh ETags, execute provider traffic, implement realtime/websocket behavior, or model Cafex/Cafetera behavior. The boundary is documented in `docs/model-catalog.md`.
 
+## Turn Model Selection And Tool-Capability Planning
+
+`codexhx.runtime.model.planning.TurnModelPlanPolicy` is the HXCX-4.45 raw upstream turn model and tool capability planning slice:
+
+- provider admission and model catalog selection must pass before any tool plan is accepted;
+- effective tool mode is selected from model metadata first, then feature fallback to code-mode-only, code mode, or direct mode;
+- hosted web search is disabled for Responses Lite models and when a standalone web namespace tool is visible;
+- hosted image generation requires Codex backend auth shape, provider image-generation capability, image input modality, and feature availability;
+- standalone image generation suppresses hosted image generation when the runtime extension tool is visible;
+- namespace tools, nested code-mode tools, and deferred tool search are reported as typed capability booleans;
+- unsupported requested tool capabilities fail before live provider/tool traffic can start.
+
+The fixture `fixtures/hxrust/turn-model-plan.v1.json` and `harness/check-turn-model-plan.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is deterministic planning evidence only; it does not call live providers, execute tools, refresh model catalogs, open realtime/websocket transports, own the interactive TUI, or model Cafex/Cafetera behavior. The boundary is documented in `docs/turn-model-plan.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

@@ -17,6 +17,7 @@ class ModelCatalogEntry {
 	public final defaultServiceTier:String;
 	public final additionalSpeedTiers:Array<String>;
 	public final experimentalSupportedTools:Array<String>;
+	public final useResponsesLite:Bool;
 
 	public function new(
 		modelId:String,
@@ -34,7 +35,8 @@ class ModelCatalogEntry {
 		serviceTiers:Array<String>,
 		defaultServiceTier:String,
 		additionalSpeedTiers:Array<String>,
-		experimentalSupportedTools:Array<String>
+		experimentalSupportedTools:Array<String>,
+		useResponsesLite:Bool
 	) {
 		this.modelId = modelId;
 		this.providerId = providerId;
@@ -52,6 +54,7 @@ class ModelCatalogEntry {
 		this.defaultServiceTier = defaultServiceTier;
 		this.additionalSpeedTiers = additionalSpeedTiers == null ? [] : additionalSpeedTiers;
 		this.experimentalSupportedTools = experimentalSupportedTools == null ? [] : experimentalSupportedTools;
+		this.useResponsesLite = useResponsesLite;
 	}
 
 	public function valid():Bool {
@@ -93,6 +96,7 @@ class ModelCatalogEntry {
 			+ ";maxContextWindow=" + Std.string(maxContextWindow)
 			+ ";webSearchToolType=" + webSearchToolType
 			+ ";toolMode=" + toolMode
+			+ ";useResponsesLite=" + boolText(useResponsesLite)
 			+ ";hostedWebSearch=" + boolText(supportsHostedWebSearch(capabilities))
 			+ ";hostedImageGeneration=" + boolText(supportsHostedImageGeneration(capabilities))
 			+ ";namespaceTools=" + boolText(supportsNamespaceTools(capabilities))

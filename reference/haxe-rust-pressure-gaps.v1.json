@@ -5,26 +5,26 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 19,
+    "totalGaps": 20,
     "resolvedUpstream": 14,
-    "openUpstream": 5,
+    "openUpstream": 6,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 12,
+      "medium": 13,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 8,
+      "runtime_model_session": 9,
       "native_metal_std_boundary": 4,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 368,
+    "sourceFilesScanned": 378,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -263,6 +263,23 @@
       "validation": [
         "harness/check-model-catalog.sh",
         "haxe.rust-fz20 acceptance requires a product-neutral Reflect.compare regression fixture"
+      ]
+    },
+    {
+      "id": "optional-primitive-constructor-default-lowering",
+      "status": "open_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-ckn",
+      "haxeRustRefs": [
+        "haxe.rust-3oju"
+      ],
+      "reproduction": "Turn model/tool planning work exposed Rust E0308 when a constructor parameter shaped as ?flag:Bool = false was assigned into a non-optional Bool field; generated Rust assigned Option<bool> into bool.",
+      "workaround": "The local model catalog DTO now requires an explicit useResponsesLite Bool argument while haxe.rust fixes optional primitive default unwrapping generically.",
+      "followUp": "haxe.rust-3oju",
+      "validation": [
+        "harness/check-turn-model-plan.sh",
+        "haxe.rust-3oju acceptance requires a product-neutral optional primitive constructor default regression fixture"
       ]
     },
     {

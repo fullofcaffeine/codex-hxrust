@@ -533,7 +533,19 @@ Model the selected upstream model catalog and provider capability boundary after
 
 Status: HXCX-4.44 now owns `fixtures/hxrust/model-catalog.v1.json` and validates the slice through `harness/check-model-catalog.sh`. It exposed generic haxe.rust issue `haxe.rust-fz20` for `Reflect.compare` lowering; codexhx uses direct typed comparison locally while the compiler fix belongs upstream. This is selected static catalog/capability evidence only, not live provider traffic, model cache/ETag ownership, websocket/realtime behavior, or Cafex behavior.
 
-### HXCX-4.45+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.45: Turn Model Selection And Tool-Capability Planning
+
+Model the selected upstream turn-context model selection and tool capability planning boundary:
+
+- compose provider admission and model catalog selection before returning a plan;
+- derive effective tool mode from selected model metadata plus feature fallback;
+- gate hosted web search, standalone web run, hosted image generation, standalone image generation, namespace tools, code-mode nested tools, and deferred tool search;
+- suppress hosted tools when Responses Lite or standalone namespace tools own the selected surface;
+- refuse unsupported requested capabilities before live model/tool execution.
+
+Status: HXCX-4.45 now owns `fixtures/hxrust/turn-model-plan.v1.json` and validates the slice through `harness/check-turn-model-plan.sh`. It exposed generic haxe.rust issue `haxe.rust-3oju` for optional primitive constructor default lowering; codexhx uses an explicit constructor argument while the compiler fix belongs upstream. This is selected deterministic planning evidence only, not live provider traffic, real tool execution, websocket/realtime behavior, or Cafex behavior.
+
+### HXCX-4.46+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

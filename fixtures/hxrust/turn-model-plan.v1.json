@@ -1,0 +1,561 @@
+{
+  "schema": "codex-hxrust.turn-model-plan-fixture.v1",
+  "source": "raw-codex",
+  "description": "Deterministic raw Codex turn model selection and hosted-tool capability planning fixture. No live network, no real credentials, no Cafex.",
+  "cases": [
+    {
+      "id": "openai-code-mode-hosted-tools-admitted",
+      "request": {
+        "requestId": "plan-openai-hosted",
+        "webSearchMode": "live",
+        "requestedCapability": "hosted_image_generation",
+        "features": {
+          "codeMode": true,
+          "codeModeOnly": false,
+          "standaloneWebSearch": false,
+          "imageGeneration": true,
+          "imageGenExt": false,
+          "deferredToolsAvailable": true
+        },
+        "extensionTools": {
+          "standaloneWebRunAvailable": false,
+          "standaloneImageGenerationAvailable": false
+        },
+        "catalogRequest": {
+          "requestId": "catalog-openai-hosted",
+          "catalogSource": "config_static",
+          "refreshStrategy": "offline",
+          "includeHidden": false,
+          "allowLiveFetch": false,
+          "usesCodexBackend": true,
+          "requestedModelId": "gpt-5.5",
+          "admission": {
+            "requestId": "admit-openai-hosted",
+            "provider": {
+              "providerId": "openai",
+              "name": "OpenAI",
+              "hasBaseUrl": true,
+              "baseUrl": "https://api.openai.com/v1",
+              "envKeyConfigured": false,
+              "envKeyPresent": false,
+              "envKeyInstructionsPresent": false,
+              "requiresOpenAiAuth": true,
+              "supportsWebsockets": true,
+              "hasAwsAuth": false,
+              "hasCommandAuth": false,
+              "experimentalBearerTokenPresent": false
+            },
+            "model": {
+              "modelId": "gpt-5.5",
+              "providerId": "openai",
+              "contextWindow": 272000
+            },
+            "credentialKind": "openai_auth",
+            "accountKind": "chatgpt",
+            "networkKind": "fixture_only",
+            "liveNetworkAllowed": false,
+            "hasCredentialMaterial": true,
+            "secretProbe": "sk-turn-model-secret"
+          },
+          "catalog": [
+            {
+              "modelId": "gpt-5.5",
+              "providerId": "openai",
+              "displayName": "GPT-5.5",
+              "priority": 0,
+              "visibility": "list",
+              "supportedInApi": true,
+              "contextWindow": 272000,
+              "maxContextWindow": 272000,
+              "supportsSearchTool": true,
+              "webSearchToolType": "text_and_image",
+              "toolMode": "code_mode",
+              "inputModalities": ["text", "image"],
+              "serviceTiers": ["priority"],
+              "defaultServiceTier": "",
+              "additionalSpeedTiers": ["fast"],
+              "experimentalSupportedTools": ["image_generation"],
+              "useResponsesLite": false
+            }
+          ]
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "turn_model_plan_admitted",
+        "requestId": "plan-openai-hosted",
+        "catalogCode": "model_catalog_admitted",
+        "providerId": "openai",
+        "selectedModelId": "gpt-5.5",
+        "effectiveToolMode": "code_mode",
+        "requestedCapability": "hosted_image_generation",
+        "capabilityEnabled": true,
+        "summaryContains": "hostedWebSearch=true;hostedWebSearchExternalAccess=live;hostedWebSearchContentTypes=text,image;standaloneWebRun=false;hostedImageGeneration=true;standaloneImageGeneration=false;namespaceTools=true;codeModeNestedTools=true;toolSearch=true",
+        "secretProbe": "sk-turn-model-secret"
+      }
+    },
+    {
+      "id": "bedrock-direct-refuses-hosted-web",
+      "request": {
+        "requestId": "plan-bedrock-hosted-web",
+        "webSearchMode": "live",
+        "requestedCapability": "hosted_web_search",
+        "features": {
+          "codeMode": false,
+          "codeModeOnly": false,
+          "standaloneWebSearch": false,
+          "imageGeneration": true,
+          "imageGenExt": false,
+          "deferredToolsAvailable": true
+        },
+        "extensionTools": {
+          "standaloneWebRunAvailable": false,
+          "standaloneImageGenerationAvailable": false
+        },
+        "catalogRequest": {
+          "requestId": "catalog-bedrock-hosted-web",
+          "catalogSource": "bedrock_static",
+          "refreshStrategy": "offline",
+          "includeHidden": true,
+          "allowLiveFetch": false,
+          "usesCodexBackend": true,
+          "requestedModelId": "anthropic.claude-sonnet-4-5-20250929-v1:0",
+          "admission": {
+            "requestId": "admit-bedrock-hosted-web",
+            "provider": {
+              "providerId": "amazon-bedrock",
+              "name": "Amazon Bedrock",
+              "hasBaseUrl": true,
+              "baseUrl": "https://bedrock-mantle.us-east-1.api.aws/openai/v1",
+              "envKeyConfigured": false,
+              "envKeyPresent": false,
+              "envKeyInstructionsPresent": false,
+              "requiresOpenAiAuth": false,
+              "supportsWebsockets": false,
+              "hasAwsAuth": true,
+              "hasCommandAuth": false,
+              "experimentalBearerTokenPresent": false
+            },
+            "model": {
+              "modelId": "anthropic.claude-sonnet-4-5-20250929-v1:0",
+              "providerId": "amazon-bedrock",
+              "contextWindow": 272000
+            },
+            "credentialKind": "aws",
+            "accountKind": "amazon_bedrock",
+            "networkKind": "fixture_only",
+            "liveNetworkAllowed": false,
+            "hasCredentialMaterial": true,
+            "secretProbe": ""
+          },
+          "catalog": [
+            {
+              "modelId": "anthropic.claude-sonnet-4-5-20250929-v1:0",
+              "providerId": "amazon-bedrock",
+              "displayName": "Bedrock GPT-5.5",
+              "priority": 0,
+              "visibility": "list",
+              "supportedInApi": true,
+              "contextWindow": 272000,
+              "maxContextWindow": 272000,
+              "supportsSearchTool": true,
+              "webSearchToolType": "text_and_image",
+              "toolMode": "direct",
+              "inputModalities": ["text", "image"],
+              "serviceTiers": [],
+              "defaultServiceTier": "",
+              "additionalSpeedTiers": [],
+              "experimentalSupportedTools": ["image_generation"],
+              "useResponsesLite": false
+            }
+          ]
+        }
+      },
+      "expect": {
+        "ok": false,
+        "code": "unsupported_tool_capability",
+        "requestId": "plan-bedrock-hosted-web",
+        "catalogCode": "model_catalog_admitted",
+        "providerId": "amazon-bedrock",
+        "selectedModelId": "anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "effectiveToolMode": "direct",
+        "requestedCapability": "hosted_web_search",
+        "capabilityEnabled": false,
+        "summaryContains": "hostedWebSearch=false;hostedWebSearchExternalAccess=none;hostedWebSearchContentTypes=text;standaloneWebRun=false;hostedImageGeneration=false;standaloneImageGeneration=false;namespaceTools=true;codeModeNestedTools=false",
+        "secretProbe": ""
+      }
+    },
+    {
+      "id": "local-code-mode-only-nested-tools-admitted",
+      "request": {
+        "requestId": "plan-local-code-mode-only",
+        "webSearchMode": "disabled",
+        "requestedCapability": "code_mode_nested_tools",
+        "features": {
+          "codeMode": false,
+          "codeModeOnly": false,
+          "standaloneWebSearch": false,
+          "imageGeneration": false,
+          "imageGenExt": false,
+          "deferredToolsAvailable": false
+        },
+        "extensionTools": {
+          "standaloneWebRunAvailable": false,
+          "standaloneImageGenerationAvailable": false
+        },
+        "catalogRequest": {
+          "requestId": "catalog-local-code-mode-only",
+          "catalogSource": "local_static",
+          "refreshStrategy": "offline",
+          "includeHidden": false,
+          "allowLiveFetch": false,
+          "usesCodexBackend": false,
+          "requestedModelId": "gpt-oss-20b",
+          "admission": {
+            "requestId": "admit-local-code-mode-only",
+            "provider": {
+              "providerId": "local-oss",
+              "name": "Local OSS",
+              "hasBaseUrl": true,
+              "baseUrl": "http://localhost:1234/v1",
+              "envKeyConfigured": false,
+              "envKeyPresent": false,
+              "envKeyInstructionsPresent": false,
+              "requiresOpenAiAuth": false,
+              "supportsWebsockets": false,
+              "hasAwsAuth": false,
+              "hasCommandAuth": false,
+              "experimentalBearerTokenPresent": false
+            },
+            "model": {
+              "modelId": "gpt-oss-20b",
+              "providerId": "local-oss",
+              "contextWindow": 131072
+            },
+            "credentialKind": "no_credential_test",
+            "accountKind": "none",
+            "networkKind": "fixture_only",
+            "liveNetworkAllowed": false,
+            "hasCredentialMaterial": false,
+            "secretProbe": ""
+          },
+          "catalog": [
+            {
+              "modelId": "gpt-oss-20b",
+              "providerId": "local-oss",
+              "displayName": "GPT OSS 20B",
+              "priority": 0,
+              "visibility": "list",
+              "supportedInApi": true,
+              "contextWindow": 131072,
+              "maxContextWindow": 131072,
+              "supportsSearchTool": false,
+              "webSearchToolType": "text",
+              "toolMode": "code_mode_only",
+              "inputModalities": ["text"],
+              "serviceTiers": [],
+              "defaultServiceTier": "",
+              "additionalSpeedTiers": [],
+              "experimentalSupportedTools": [],
+              "useResponsesLite": false
+            }
+          ]
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "turn_model_plan_admitted",
+        "requestId": "plan-local-code-mode-only",
+        "catalogCode": "model_catalog_admitted",
+        "providerId": "local-oss",
+        "selectedModelId": "gpt-oss-20b",
+        "effectiveToolMode": "code_mode_only",
+        "requestedCapability": "code_mode_nested_tools",
+        "capabilityEnabled": true,
+        "summaryContains": "hostedWebSearch=false;hostedWebSearchExternalAccess=none;hostedWebSearchContentTypes=text;standaloneWebRun=false;hostedImageGeneration=false;standaloneImageGeneration=false;namespaceTools=true;codeModeNestedTools=true;toolSearch=false",
+        "secretProbe": ""
+      }
+    },
+    {
+      "id": "config-direct-standalone-web-suppresses-hosted-web",
+      "request": {
+        "requestId": "plan-standalone-web",
+        "webSearchMode": "cached",
+        "requestedCapability": "standalone_web_run",
+        "features": {
+          "codeMode": false,
+          "codeModeOnly": false,
+          "standaloneWebSearch": true,
+          "imageGeneration": false,
+          "imageGenExt": false,
+          "deferredToolsAvailable": true
+        },
+        "extensionTools": {
+          "standaloneWebRunAvailable": true,
+          "standaloneImageGenerationAvailable": false
+        },
+        "catalogRequest": {
+          "requestId": "catalog-standalone-web",
+          "catalogSource": "config_static",
+          "refreshStrategy": "offline",
+          "includeHidden": false,
+          "allowLiveFetch": false,
+          "usesCodexBackend": true,
+          "requestedModelId": "gpt-direct",
+          "admission": {
+            "requestId": "admit-standalone-web",
+            "provider": {
+              "providerId": "openai",
+              "name": "OpenAI",
+              "hasBaseUrl": true,
+              "baseUrl": "https://api.openai.com/v1",
+              "envKeyConfigured": false,
+              "envKeyPresent": false,
+              "envKeyInstructionsPresent": false,
+              "requiresOpenAiAuth": true,
+              "supportsWebsockets": true,
+              "hasAwsAuth": false,
+              "hasCommandAuth": false,
+              "experimentalBearerTokenPresent": false
+            },
+            "model": {
+              "modelId": "gpt-direct",
+              "providerId": "openai",
+              "contextWindow": 128000
+            },
+            "credentialKind": "openai_auth",
+            "accountKind": "chatgpt",
+            "networkKind": "fixture_only",
+            "liveNetworkAllowed": false,
+            "hasCredentialMaterial": true,
+            "secretProbe": ""
+          },
+          "catalog": [
+            {
+              "modelId": "gpt-direct",
+              "providerId": "openai",
+              "displayName": "GPT Direct",
+              "priority": 0,
+              "visibility": "list",
+              "supportedInApi": true,
+              "contextWindow": 128000,
+              "maxContextWindow": 128000,
+              "supportsSearchTool": true,
+              "webSearchToolType": "text",
+              "toolMode": "none",
+              "inputModalities": ["text"],
+              "serviceTiers": [],
+              "defaultServiceTier": "",
+              "additionalSpeedTiers": [],
+              "experimentalSupportedTools": [],
+              "useResponsesLite": false
+            }
+          ]
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "turn_model_plan_admitted",
+        "requestId": "plan-standalone-web",
+        "catalogCode": "model_catalog_admitted",
+        "providerId": "openai",
+        "selectedModelId": "gpt-direct",
+        "effectiveToolMode": "direct",
+        "requestedCapability": "standalone_web_run",
+        "capabilityEnabled": true,
+        "summaryContains": "hostedWebSearch=false;hostedWebSearchExternalAccess=none;hostedWebSearchContentTypes=text;standaloneWebRun=true;hostedImageGeneration=false;standaloneImageGeneration=false;namespaceTools=true;codeModeNestedTools=false;toolSearch=true",
+        "secretProbe": ""
+      }
+    },
+    {
+      "id": "responses-lite-standalone-image-suppresses-hosted-image",
+      "request": {
+        "requestId": "plan-standalone-image",
+        "webSearchMode": "disabled",
+        "requestedCapability": "standalone_image_generation",
+        "features": {
+          "codeMode": true,
+          "codeModeOnly": false,
+          "standaloneWebSearch": false,
+          "imageGeneration": true,
+          "imageGenExt": false,
+          "deferredToolsAvailable": false
+        },
+        "extensionTools": {
+          "standaloneWebRunAvailable": false,
+          "standaloneImageGenerationAvailable": true
+        },
+        "catalogRequest": {
+          "requestId": "catalog-standalone-image",
+          "catalogSource": "config_static",
+          "refreshStrategy": "offline",
+          "includeHidden": false,
+          "allowLiveFetch": false,
+          "usesCodexBackend": true,
+          "requestedModelId": "gpt-lite-image",
+          "admission": {
+            "requestId": "admit-standalone-image",
+            "provider": {
+              "providerId": "openai",
+              "name": "OpenAI",
+              "hasBaseUrl": true,
+              "baseUrl": "https://api.openai.com/v1",
+              "envKeyConfigured": false,
+              "envKeyPresent": false,
+              "envKeyInstructionsPresent": false,
+              "requiresOpenAiAuth": true,
+              "supportsWebsockets": true,
+              "hasAwsAuth": false,
+              "hasCommandAuth": false,
+              "experimentalBearerTokenPresent": false
+            },
+            "model": {
+              "modelId": "gpt-lite-image",
+              "providerId": "openai",
+              "contextWindow": 128000
+            },
+            "credentialKind": "openai_auth",
+            "accountKind": "chatgpt",
+            "networkKind": "fixture_only",
+            "liveNetworkAllowed": false,
+            "hasCredentialMaterial": true,
+            "secretProbe": ""
+          },
+          "catalog": [
+            {
+              "modelId": "gpt-lite-image",
+              "providerId": "openai",
+              "displayName": "GPT Lite Image",
+              "priority": 0,
+              "visibility": "list",
+              "supportedInApi": true,
+              "contextWindow": 128000,
+              "maxContextWindow": 128000,
+              "supportsSearchTool": false,
+              "webSearchToolType": "text",
+              "toolMode": "none",
+              "inputModalities": ["text", "image"],
+              "serviceTiers": [],
+              "defaultServiceTier": "",
+              "additionalSpeedTiers": [],
+              "experimentalSupportedTools": ["image_generation"],
+              "useResponsesLite": true
+            }
+          ]
+        }
+      },
+      "expect": {
+        "ok": true,
+        "code": "turn_model_plan_admitted",
+        "requestId": "plan-standalone-image",
+        "catalogCode": "model_catalog_admitted",
+        "providerId": "openai",
+        "selectedModelId": "gpt-lite-image",
+        "effectiveToolMode": "code_mode",
+        "requestedCapability": "standalone_image_generation",
+        "capabilityEnabled": true,
+        "summaryContains": "hostedWebSearch=false;hostedWebSearchExternalAccess=none;hostedWebSearchContentTypes=text;standaloneWebRun=false;hostedImageGeneration=false;standaloneImageGeneration=true;namespaceTools=true;codeModeNestedTools=true",
+        "secretProbe": ""
+      }
+    },
+    {
+      "id": "catalog-refusal-composes-into-plan-refusal",
+      "request": {
+        "requestId": "plan-catalog-refusal",
+        "webSearchMode": "live",
+        "requestedCapability": "hosted_web_search",
+        "features": {
+          "codeMode": false,
+          "codeModeOnly": false,
+          "standaloneWebSearch": false,
+          "imageGeneration": false,
+          "imageGenExt": false,
+          "deferredToolsAvailable": false
+        },
+        "extensionTools": {
+          "standaloneWebRunAvailable": false,
+          "standaloneImageGenerationAvailable": false
+        },
+        "catalogRequest": {
+          "requestId": "catalog-plan-missing",
+          "catalogSource": "config_static",
+          "refreshStrategy": "offline",
+          "includeHidden": true,
+          "allowLiveFetch": false,
+          "usesCodexBackend": true,
+          "requestedModelId": "gpt-missing",
+          "admission": {
+            "requestId": "admit-plan-missing",
+            "provider": {
+              "providerId": "openai",
+              "name": "OpenAI",
+              "hasBaseUrl": true,
+              "baseUrl": "https://api.openai.com/v1",
+              "envKeyConfigured": false,
+              "envKeyPresent": false,
+              "envKeyInstructionsPresent": false,
+              "requiresOpenAiAuth": true,
+              "supportsWebsockets": true,
+              "hasAwsAuth": false,
+              "hasCommandAuth": false,
+              "experimentalBearerTokenPresent": false
+            },
+            "model": {
+              "modelId": "gpt-5.5",
+              "providerId": "openai",
+              "contextWindow": 272000
+            },
+            "credentialKind": "openai_auth",
+            "accountKind": "chatgpt",
+            "networkKind": "fixture_only",
+            "liveNetworkAllowed": false,
+            "hasCredentialMaterial": true,
+            "secretProbe": ""
+          },
+          "catalog": [
+            {
+              "modelId": "gpt-5.5",
+              "providerId": "openai",
+              "displayName": "GPT-5.5",
+              "priority": 0,
+              "visibility": "list",
+              "supportedInApi": true,
+              "contextWindow": 272000,
+              "maxContextWindow": 272000,
+              "supportsSearchTool": true,
+              "webSearchToolType": "text_and_image",
+              "toolMode": "code_mode",
+              "inputModalities": ["text", "image"],
+              "serviceTiers": [],
+              "defaultServiceTier": "",
+              "additionalSpeedTiers": [],
+              "experimentalSupportedTools": [],
+              "useResponsesLite": false
+            }
+          ]
+        }
+      },
+      "expect": {
+        "ok": false,
+        "code": "model_catalog_denied",
+        "requestId": "plan-catalog-refusal",
+        "catalogCode": "unsupported_model",
+        "providerId": "openai",
+        "selectedModelId": "",
+        "effectiveToolMode": "none",
+        "requestedCapability": "hosted_web_search",
+        "capabilityEnabled": false,
+        "summaryContains": "model_catalog_denied",
+        "secretProbe": ""
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 6,
+    "successCount": 4,
+    "errorCount": 2,
+    "unsupportedCapabilityCount": 1,
+    "catalogDeniedCount": 1,
+    "summaryContains": "schema=codex-hxrust.turn-model-plan-report.v1;cases=6;success=4;errors=2"
+  }
+}
