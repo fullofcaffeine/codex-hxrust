@@ -32,7 +32,7 @@
     {
       "dimension": "language",
       "score": "yellow_green",
-      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, the first runtime app-client facade, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, and non-copy local reuse regressions still open upstream.",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, the first runtime app-client facade, runtime bootstrap, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, and non-copy local reuse regressions still open upstream.",
       "strengths": [
         "10 of 13 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
@@ -52,13 +52,13 @@
     {
       "dimension": "runtime",
       "score": "yellow",
-      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, selected TUI story/render, and turn reducer slices are viable, but live model/full TUI/restart ownership is outside current proof.",
+      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, selected TUI story/render, and turn reducer slices are viable, but live model/full TUI/restart ownership is outside current proof.",
       "strengths": [
         "Headless runtime fixtures pass without model credentials.",
         "Cancellation and transcript/state artifacts are deterministic.",
         "Runtime app-client classification, lag markers, and request correlation pass through generated Rust.",
         "Selected upstream TUI story replay passes through generated Rust with normalized summaries.",
-        "Selected VT100 render invariants and turn runtime reducers pass through generated Rust.",
+        "Selected runtime bootstrap, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
         "Operator runbook keeps production default disabled."
       ],
       "caveats": [
@@ -75,7 +75,7 @@
       "score": "yellow_green",
       "rationale": "The project has kept interop typed and narrow: generated Rust is disposable, haxe.rust stays external, and app/test Haxe source has no raw Rust snippets.",
       "strengths": [
-        "Raw Rust escape pressure is 0 matches across 139 Haxe source/test files.",
+        "Raw Rust escape pressure is 0 matches across 150 Haxe source/test files.",
         "haxe.rust fixes are generic and made in ../haxe.rust.",
         "Pin update workflow is scripted and gated."
       ],
@@ -181,7 +181,7 @@
       "openUpstream": 3,
       "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 139,
+      "sourceFilesScanned": 150,
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {

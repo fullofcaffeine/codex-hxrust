@@ -80,6 +80,17 @@ The fixture `fixtures/hxrust/runtime-app-client.v1.json` and `harness/check-runt
 
 HXCX-4.7 also exposed generic haxe.rust issue `haxe.rust-362`: nullable `Array<Class>.shift()` return lowering mismatched Rust `Option` and non-null class reference signatures. The local runtime queue now uses a typed read outcome plus indexed removal; the compiler issue is tracked upstream as product-neutral work, not a Codex-specific workaround.
 
+## Runtime Bootstrap
+
+`codexhx.runtime.app.bootstrap` is the HXCX-4.11 app-server initialize/bootstrap slice. It models upstream v1 `initialize` as session setup, not as a post-bootstrap app request:
+
+- `BootstrapClientInfo`, `BootstrapCapabilities`, and `BootstrapInitializeParams` build initialize params with client name/title/version, experimental API, attestation request, and exact opt-out notification method names.
+- `BootstrapInitializeResponse` covers upstream response fields: `userAgent`, absolute `codexHome`, `platformFamily`, and `platformOs`.
+- `BootstrapStartupMetadata` records startup account/model/config-warning metadata beside the handshake instead of pretending it is part of `InitializeResponse`.
+- `CodexBootstrapSession` distinguishes `remote` from `in_process`: remote mode emits the JSON-RPC `initialize` request and follow-up `initialized` notification; in-process mode keeps the same typed params/metadata without transport JSON.
+
+The fixture `fixtures/hxrust/runtime-bootstrap.v1.json` and `harness/check-runtime-bootstrap.sh` prove the boundary through both Haxe interpreter and haxe.rust-generated Rust. The harness also asserts that `initialize` remains rejected by the generic `AppProtocol` request parser.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

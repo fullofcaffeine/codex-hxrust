@@ -125,6 +125,8 @@ Admit `initialize` in the right place:
 
 This was intentionally not admitted as a normal request in HXCX-3.74 because it belongs to transport/bootstrap parity.
 
+Status: HXCX-4.11 now owns `fixtures/hxrust/runtime-bootstrap.v1.json` and validates it through `harness/check-runtime-bootstrap.sh`. Remote mode emits the `initialize` request and `initialized` notification; in-process mode carries the same typed startup params without transport JSON. The generic app request parser still rejects `initialize`.
+
 ### HXCX-4.12: Live Transport Spike
 
 Add a narrow transport proof:

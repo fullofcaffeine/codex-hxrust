@@ -1,0 +1,172 @@
+{
+  "schema": "codexhx.runtime-bootstrap.v1",
+  "source": {
+    "codex": [
+      "../codex/codex-rs/app-server-protocol/src/protocol/v1.rs",
+      "../codex/codex-rs/app-server-client/src/lib.rs",
+      "../codex/codex-rs/app-server-client/src/remote.rs"
+    ],
+    "notes": "Selected initialize/bootstrap contract. Startup config/account/model metadata is modeled beside the handshake, not as extra upstream InitializeResponse fields."
+  },
+  "valid": [
+    {
+      "name": "remote-experimental-opt-out",
+      "mode": "remote",
+      "requestId": "initialize",
+      "clientInfo": {
+        "name": "codex_vscode",
+        "title": "Codex VS Code Extension",
+        "version": "0.1.0"
+      },
+      "capabilities": {
+        "experimentalApi": true,
+        "requestAttestation": true,
+        "optOutNotificationMethods": [
+          "thread/started",
+          "item/agentMessage/delta"
+        ]
+      },
+      "response": {
+        "userAgent": "codex_app_server/1.2.3",
+        "codexHome": "/tmp/codex-home",
+        "platformFamily": "unix",
+        "platformOs": "macos"
+      },
+      "startup": {
+        "account": {
+          "authMode": "chatgpt",
+          "email": "fixture@example.com",
+          "planType": "pro"
+        },
+        "model": {
+          "id": "gpt-5.2-codex",
+          "provider": "openai"
+        },
+        "configWarnings": [
+          {
+            "summary": "project config ignored",
+            "details": "fixture warning",
+            "path": "/tmp/codex-home/config.toml"
+          }
+        ]
+      },
+      "expect": {
+        "serverVersion": "1.2.3",
+        "summary": "remote:codex_vscode:unix/macos:1.2.3:warnings=1",
+        "initializeRequestContains": "\"method\":\"initialize\"",
+        "initializedNotification": "{\"method\":\"initialized\"}"
+      }
+    },
+    {
+      "name": "in-process-no-transport-request",
+      "mode": "in_process",
+      "requestId": "initialize",
+      "clientInfo": {
+        "name": "codex_tui",
+        "title": null,
+        "version": "0.0.0-dev"
+      },
+      "capabilities": {
+        "experimentalApi": false,
+        "requestAttestation": false,
+        "optOutNotificationMethods": []
+      },
+      "response": {
+        "userAgent": "codex_app_server/0.0.0-dev",
+        "codexHome": "/tmp/codex-home",
+        "platformFamily": "unix",
+        "platformOs": "linux"
+      },
+      "startup": {
+        "account": {
+          "authMode": null,
+          "email": null,
+          "planType": null
+        },
+        "model": {
+          "id": "gpt-5.2-codex",
+          "provider": "openai"
+        },
+        "configWarnings": []
+      },
+      "expect": {
+        "serverVersion": "0.0.0-dev",
+        "summary": "in_process:codex_tui:unix/linux:0.0.0-dev:warnings=0",
+        "initializeRequestContains": "",
+        "initializedNotification": ""
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "name": "invalid-opt-out-method",
+      "mode": "remote",
+      "requestId": "initialize",
+      "clientInfo": {
+        "name": "codex_vscode",
+        "title": "Codex VS Code Extension",
+        "version": "0.1.0"
+      },
+      "capabilities": {
+        "experimentalApi": true,
+        "requestAttestation": false,
+        "optOutNotificationMethods": [
+          "thread-started"
+        ]
+      },
+      "response": {
+        "userAgent": "codex_app_server/1.2.3",
+        "codexHome": "/tmp/codex-home",
+        "platformFamily": "unix",
+        "platformOs": "macos"
+      },
+      "startup": {
+        "account": {
+          "authMode": null,
+          "email": null,
+          "planType": null
+        },
+        "model": {
+          "id": "gpt-5.2-codex",
+          "provider": "openai"
+        },
+        "configWarnings": []
+      },
+      "expectCode": "invalid_opt_out_notification"
+    },
+    {
+      "name": "relative-codex-home",
+      "mode": "remote",
+      "requestId": "initialize",
+      "clientInfo": {
+        "name": "codex_vscode",
+        "title": "Codex VS Code Extension",
+        "version": "0.1.0"
+      },
+      "capabilities": {
+        "experimentalApi": true,
+        "requestAttestation": false,
+        "optOutNotificationMethods": []
+      },
+      "response": {
+        "userAgent": "codex_app_server/1.2.3",
+        "codexHome": "relative/codex-home",
+        "platformFamily": "unix",
+        "platformOs": "macos"
+      },
+      "startup": {
+        "account": {
+          "authMode": null,
+          "email": null,
+          "planType": null
+        },
+        "model": {
+          "id": "gpt-5.2-codex",
+          "provider": "openai"
+        },
+        "configWarnings": []
+      },
+      "expectCode": "invalid_codex_home"
+    }
+  ]
+}

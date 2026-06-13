@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/runtime-bootstrap
+-D rust_crate=codex_hxrust_runtime_bootstrap
+-D rust_cargo_subcommand=check
+-main RuntimeBootstrapHarness

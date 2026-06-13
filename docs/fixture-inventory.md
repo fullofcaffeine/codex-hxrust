@@ -53,6 +53,7 @@ Owner: upstream Codex / `../codex`, pinned by `reference/upstream-codex.pin.json
 | Tool JSON schema policy fixtures | `../codex/codex-rs/tools/tests/fixtures/json_schema_policy` | 6 JSON files | M4 secondary | Tool schema filtering/truncation policy examples |
 | Config schema | `../codex/codex-rs/core/config.schema.json` plus `core/src/config/schema.rs` | JSON schema plus generator/source | M2/M4 secondary | Config DTO subset and doctor/config validation |
 | Runtime app-client facade | `fixtures/hxrust/runtime-app-client.v1.json` | Local upstream-shaped request/notification fixture | HXCX-4.7 | Request correlation, lossless/best-effort event classification, lag/backpressure semantics |
+| Runtime bootstrap | `../codex/codex-rs/app-server-protocol/src/protocol/v1.rs`, `../codex/codex-rs/app-server-client/src/{lib.rs,remote.rs}`; local fixture `fixtures/hxrust/runtime-bootstrap.v1.json` | Selected initialize/bootstrap fixture | HXCX-4.11 active | Client info/capabilities, opt-out notification methods, remote vs in-process mode, platform/codex-home response fields, startup account/model/config warnings |
 
 Initial upstream M2 subset:
 

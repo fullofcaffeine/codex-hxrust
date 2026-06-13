@@ -3641,7 +3641,7 @@
     {
       "id": "deprecated-v1-compatibility-schemas",
       "status": "tracked_from_rust_source",
-      "reason": "Upstream exports getConversationSummary, gitDiffToRemote, and getAuthStatus compatibility DTOs from protocol/v1.rs and common.rs, but the pinned schema export does not emit standalone JSON schema files for those deprecated request/response surfaces. The selected local compatibility subset validates these Rust DTO contracts under HXCX-3.74. initialize remains deferred to app-server transport/bootstrap parity."
+      "reason": "Upstream exports getConversationSummary, gitDiffToRemote, and getAuthStatus compatibility DTOs from protocol/v1.rs and common.rs, but the pinned schema export does not emit standalone JSON schema files for those deprecated request/response surfaces. The selected local compatibility subset validates these Rust DTO contracts under HXCX-3.74. initialize is covered separately by HXCX-4.11 runtime bootstrap and remains outside the normal app protocol fingerprint."
     }
   ]
 }

@@ -31,7 +31,7 @@ The first M2 subset covers:
 
 `fuzzyFileSearch/sessionUpdated` and `fuzzyFileSearch/sessionCompleted` are tracked through the top-level schema files because upstream currently exports those session notifications outside the `v2/` directory. The paired fuzzy session request DTOs are selected from upstream Rust DTO/protocol source because standalone request/response schema files are not emitted for them. Legacy `fuzzyFileSearch` params/response schemas are also tracked through top-level schema files.
 
-Deprecated v1 `getConversationSummary`, `gitDiffToRemote`, and `getAuthStatus` are tracked from upstream Rust DTO/protocol source because the pinned schema export does not emit standalone request/response schema files for those compatibility surfaces. `initialize` remains deferred to app-server transport/bootstrap parity.
+Deprecated v1 `getConversationSummary`, `gitDiffToRemote`, and `getAuthStatus` are tracked from upstream Rust DTO/protocol source because the pinned schema export does not emit standalone request/response schema files for those compatibility surfaces. `initialize` is tracked by HXCX-4.11 runtime bootstrap and remains outside the normal app protocol fingerprint.
 
 Realtime notification schemas are tracked through standalone v2 schema files. The paired realtime client control request DTOs are selected from upstream Rust DTO/protocol source because standalone request/response schema files are not emitted for `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, or `thread/realtime/listVoices`.
 

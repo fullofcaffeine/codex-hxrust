@@ -137,7 +137,7 @@ The local subset also validates selected notifications needed by the current hea
 
 ## Upstream Gap Summary
 
-Upstream v2 request parity is complete for production-selected methods; only the upstream test-only `mock/experimentalMethod` remains outside the local production subset. HXCX-3.74 adds the selected deprecated v1 compatibility methods as an explicitly separate legacy surface, while `initialize` stays with app-server transport/bootstrap parity.
+Upstream v2 request parity is complete for production-selected methods; only the upstream test-only `mock/experimentalMethod` remains outside the local production subset. HXCX-3.74 adds the selected deprecated v1 compatibility methods as an explicitly separate legacy surface, while `initialize` is handled by HXCX-4.11 runtime bootstrap.
 
 The remaining requests fall into these groups:
 
@@ -203,7 +203,7 @@ Known exceptions:
 - `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, and `thread/realtime/listVoices` are selected Rust DTO/protocol mappings without standalone request/response schema files; their notifications are already tracked through v2 notification schema files.
 - `remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, and `remoteControl/client/revoke` are selected Rust DTO/protocol mappings without standalone request/response schema files; their status notification schema is already tracked through a v2 notification schema file.
 - Client-directed server request schemas are emitted as top-level schema files under `schema/json/` rather than `schema/json/v2`; the selected command/file/permission approval, tool user input, MCP elicitation, dynamic tool call, ChatGPT auth refresh, and attestation schemas are fingerprinted from that location.
-- Deprecated v1 `getConversationSummary`, `gitDiffToRemote`, and `getAuthStatus` are selected Rust DTO/protocol mappings without standalone request/response schema files. Legacy `fuzzyFileSearch` params/response schemas are tracked through top-level schema files. `initialize` remains deferred to app-server transport/bootstrap parity.
+- Deprecated v1 `getConversationSummary`, `gitDiffToRemote`, and `getAuthStatus` are selected Rust DTO/protocol mappings without standalone request/response schema files. Legacy `fuzzyFileSearch` params/response schemas are tracked through top-level schema files. `initialize` is handled by HXCX-4.11 runtime bootstrap and remains outside the normal app protocol subset.
 
 ## Sequencing Decision
 
