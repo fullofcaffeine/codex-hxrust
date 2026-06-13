@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:1764ad117faf6eebdb5b413166ba4d5d3369bd6f892e6ce6efddaa8caedadf62",
+  "fingerprint": "sha256:5f427a73c91e95a7571fa8aba9a9ddb0b6dc474db38a0494cc2cf246d330dd33",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -75,6 +75,21 @@
       ]
     },
     {
+      "id": "AttestationGenerateParams",
+      "sourcePath": "AttestationGenerateParams.json",
+      "sha256": "aa818c50814505fce83044ee851b9b552953dc36e421706c4cc2d456a60ad619",
+      "fields": []
+    },
+    {
+      "id": "AttestationGenerateResponse",
+      "sourcePath": "AttestationGenerateResponse.json",
+      "sha256": "52716288aa370cbefb9632523b4dd0b01b916e2de4e9daa87b09e6db3ecba93d",
+      "fields": [
+        "property:token",
+        "required:token"
+      ]
+    },
+    {
       "id": "CancelLoginAccountParams",
       "sourcePath": "v2/CancelLoginAccountParams.json",
       "sha256": "36a861ed78cf1c0a60f9e93ccfc9715f0f2022d1a22ab0abb2e477272cfead60",
@@ -91,6 +106,29 @@
         "definition:CancelLoginAccountStatus",
         "property:status",
         "required:status"
+      ]
+    },
+    {
+      "id": "ChatgptAuthTokensRefreshParams",
+      "sourcePath": "ChatgptAuthTokensRefreshParams.json",
+      "sha256": "74d490082dab616ac01c94d388c9a836304c96092db37290cfdd10a46b0f3ef9",
+      "fields": [
+        "definition:ChatgptAuthTokensRefreshReason",
+        "property:previousAccountId",
+        "property:reason",
+        "required:reason"
+      ]
+    },
+    {
+      "id": "ChatgptAuthTokensRefreshResponse",
+      "sourcePath": "ChatgptAuthTokensRefreshResponse.json",
+      "sha256": "ff76f5cc58bff40216f9d5f3c5be921268059f6d66d6c034970cddf0e08f0ced",
+      "fields": [
+        "property:accessToken",
+        "property:chatgptAccountId",
+        "property:chatgptPlanType",
+        "required:accessToken",
+        "required:chatgptAccountId"
       ]
     },
     {
@@ -210,6 +248,55 @@
         "required:itemId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "CommandExecutionRequestApprovalParams",
+      "sourcePath": "CommandExecutionRequestApprovalParams.json",
+      "sha256": "e8533c5557f3548c2a61ab191589df3c1f18a84feb652bb4b317b29d96518633",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:AdditionalFileSystemPermissions",
+        "definition:AdditionalNetworkPermissions",
+        "definition:AdditionalPermissionProfile",
+        "definition:CommandAction",
+        "definition:CommandExecutionApprovalDecision",
+        "definition:FileSystemAccessMode",
+        "definition:FileSystemPath",
+        "definition:FileSystemSandboxEntry",
+        "definition:FileSystemSpecialPath",
+        "definition:NetworkApprovalContext",
+        "definition:NetworkApprovalProtocol",
+        "definition:NetworkPolicyAmendment",
+        "definition:NetworkPolicyRuleAction",
+        "property:approvalId",
+        "property:command",
+        "property:commandActions",
+        "property:cwd",
+        "property:itemId",
+        "property:networkApprovalContext",
+        "property:proposedExecpolicyAmendment",
+        "property:proposedNetworkPolicyAmendments",
+        "property:reason",
+        "property:startedAtMs",
+        "property:threadId",
+        "property:turnId",
+        "required:itemId",
+        "required:startedAtMs",
+        "required:threadId",
+        "required:turnId"
+      ]
+    },
+    {
+      "id": "CommandExecutionRequestApprovalResponse",
+      "sourcePath": "CommandExecutionRequestApprovalResponse.json",
+      "sha256": "d1546d530d210f005b87c0d57e4840da712257fd11747c356c830833b19c0010",
+      "fields": [
+        "definition:CommandExecutionApprovalDecision",
+        "definition:NetworkPolicyAmendment",
+        "definition:NetworkPolicyRuleAction",
+        "property:decision",
+        "required:decision"
       ]
     },
     {
@@ -367,6 +454,36 @@
       ]
     },
     {
+      "id": "DynamicToolCallParams",
+      "sourcePath": "DynamicToolCallParams.json",
+      "sha256": "af7d6eed112291b3974df5bcdf32d2a81ab76c9f3364fd70e54140bd461622b7",
+      "fields": [
+        "property:arguments",
+        "property:callId",
+        "property:namespace",
+        "property:threadId",
+        "property:tool",
+        "property:turnId",
+        "required:arguments",
+        "required:callId",
+        "required:threadId",
+        "required:tool",
+        "required:turnId"
+      ]
+    },
+    {
+      "id": "DynamicToolCallResponse",
+      "sourcePath": "DynamicToolCallResponse.json",
+      "sha256": "12b6c4315c485ece463f8f8bac4a8a3dc019f892ecc5763a9dfdd79301612bdf",
+      "fields": [
+        "definition:DynamicToolCallOutputContentItem",
+        "property:contentItems",
+        "property:success",
+        "required:contentItems",
+        "required:success"
+      ]
+    },
+    {
       "id": "ErrorNotification",
       "sourcePath": "v2/ErrorNotification.json",
       "sha256": "3361e528e54e42757b2dbafb2b5ed9be647d40a09984dfcd71008c3ec1d8652b",
@@ -494,6 +611,33 @@
         "required:itemId",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "FileChangeRequestApprovalParams",
+      "sourcePath": "FileChangeRequestApprovalParams.json",
+      "sha256": "1683d378ee81b2d4d2aeab348d4aa8236a8070c6ee44a1548a8d206ee947411d",
+      "fields": [
+        "property:grantRoot",
+        "property:itemId",
+        "property:reason",
+        "property:startedAtMs",
+        "property:threadId",
+        "property:turnId",
+        "required:itemId",
+        "required:startedAtMs",
+        "required:threadId",
+        "required:turnId"
+      ]
+    },
+    {
+      "id": "FileChangeRequestApprovalResponse",
+      "sourcePath": "FileChangeRequestApprovalResponse.json",
+      "sha256": "f522e127a6160afd094932f6b0a58b736a171ebfb767d58b3d70c0bd7ff7ab97",
+      "fields": [
+        "definition:FileChangeApprovalDecision",
+        "property:decision",
+        "required:decision"
       ]
     },
     {
@@ -709,6 +853,52 @@
       "fields": []
     },
     {
+      "id": "McpServerElicitationRequestParams",
+      "sourcePath": "McpServerElicitationRequestParams.json",
+      "sha256": "ddec255f4567ae05a1dea07b9872b1ef8aee37f57f5d9b93d58ebd9fca60530c",
+      "fields": [
+        "definition:McpElicitationArrayType",
+        "definition:McpElicitationBooleanSchema",
+        "definition:McpElicitationBooleanType",
+        "definition:McpElicitationConstOption",
+        "definition:McpElicitationEnumSchema",
+        "definition:McpElicitationLegacyTitledEnumSchema",
+        "definition:McpElicitationMultiSelectEnumSchema",
+        "definition:McpElicitationNumberSchema",
+        "definition:McpElicitationNumberType",
+        "definition:McpElicitationObjectType",
+        "definition:McpElicitationPrimitiveSchema",
+        "definition:McpElicitationSchema",
+        "definition:McpElicitationSingleSelectEnumSchema",
+        "definition:McpElicitationStringFormat",
+        "definition:McpElicitationStringSchema",
+        "definition:McpElicitationStringType",
+        "definition:McpElicitationTitledEnumItems",
+        "definition:McpElicitationTitledMultiSelectEnumSchema",
+        "definition:McpElicitationTitledSingleSelectEnumSchema",
+        "definition:McpElicitationUntitledEnumItems",
+        "definition:McpElicitationUntitledMultiSelectEnumSchema",
+        "definition:McpElicitationUntitledSingleSelectEnumSchema",
+        "property:serverName",
+        "property:threadId",
+        "property:turnId",
+        "required:serverName",
+        "required:threadId"
+      ]
+    },
+    {
+      "id": "McpServerElicitationRequestResponse",
+      "sourcePath": "McpServerElicitationRequestResponse.json",
+      "sha256": "628ee89b301b9ad59a83172bdeebb36dcd2b021f63b99bf26a33b77255b90e70",
+      "fields": [
+        "definition:McpServerElicitationAction",
+        "property:_meta",
+        "property:action",
+        "property:content",
+        "required:action"
+      ]
+    },
+    {
       "id": "McpServerOauthLoginCompletedNotification",
       "sourcePath": "v2/McpServerOauthLoginCompletedNotification.json",
       "sha256": "8afd53f5d04e8edaf34e23059d0f0deefe4f71eb0409ab13a32485d1757ddbbe",
@@ -779,6 +969,55 @@
         "required:threadId",
         "required:turnId",
         "required:verifications"
+      ]
+    },
+    {
+      "id": "PermissionsRequestApprovalParams",
+      "sourcePath": "PermissionsRequestApprovalParams.json",
+      "sha256": "6fb90a71460b43edbfffd066ee020adf5e3afa90c8adf9fb4e1ba13a48c2a437",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:AdditionalFileSystemPermissions",
+        "definition:AdditionalNetworkPermissions",
+        "definition:FileSystemAccessMode",
+        "definition:FileSystemPath",
+        "definition:FileSystemSandboxEntry",
+        "definition:FileSystemSpecialPath",
+        "definition:RequestPermissionProfile",
+        "property:cwd",
+        "property:environmentId",
+        "property:itemId",
+        "property:permissions",
+        "property:reason",
+        "property:startedAtMs",
+        "property:threadId",
+        "property:turnId",
+        "required:cwd",
+        "required:itemId",
+        "required:permissions",
+        "required:startedAtMs",
+        "required:threadId",
+        "required:turnId"
+      ]
+    },
+    {
+      "id": "PermissionsRequestApprovalResponse",
+      "sourcePath": "PermissionsRequestApprovalResponse.json",
+      "sha256": "25e33b3415d01bc713b1c8377ddc90964b76c27e1a4b59196d34bdf38b0035db",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:AdditionalFileSystemPermissions",
+        "definition:AdditionalNetworkPermissions",
+        "definition:FileSystemAccessMode",
+        "definition:FileSystemPath",
+        "definition:FileSystemSandboxEntry",
+        "definition:FileSystemSpecialPath",
+        "definition:GrantedPermissionProfile",
+        "definition:PermissionGrantScope",
+        "property:permissions",
+        "property:scope",
+        "property:strictAutoReview",
+        "required:permissions"
       ]
     },
     {
@@ -2121,6 +2360,33 @@
         "definition:ThreadUnsubscribeStatus",
         "property:status",
         "required:status"
+      ]
+    },
+    {
+      "id": "ToolRequestUserInputParams",
+      "sourcePath": "ToolRequestUserInputParams.json",
+      "sha256": "6f7bb9bf8ab34fd199a90f7bde6c5675ccef1354d9ba39a58b86b3a0132e971c",
+      "fields": [
+        "definition:ToolRequestUserInputOption",
+        "definition:ToolRequestUserInputQuestion",
+        "property:itemId",
+        "property:questions",
+        "property:threadId",
+        "property:turnId",
+        "required:itemId",
+        "required:questions",
+        "required:threadId",
+        "required:turnId"
+      ]
+    },
+    {
+      "id": "ToolRequestUserInputResponse",
+      "sourcePath": "ToolRequestUserInputResponse.json",
+      "sha256": "18735c465696eda1d8da032be0ff06097656ef1d1bf2cedc86b8707164aa105c",
+      "fields": [
+        "definition:ToolRequestUserInputAnswer",
+        "property:answers",
+        "required:answers"
       ]
     },
     {

@@ -5,9 +5,10 @@ import haxe.json.Value;
 
 class AppProtocol {
     static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/loaded/list", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read"];
+    static final SERVER_REQUEST_METHODS:Array<String> = ["account/chatgptAuthTokens/refresh", "attestation/generate", "item/commandExecution/requestApproval", "item/fileChange/requestApproval", "item/permissions/requestApproval", "item/tool/call", "item/tool/requestUserInput", "mcpServer/elicitation/request"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/archived", "thread/unarchived", "thread/closed", "thread/name/updated", "thread/goal/updated", "thread/goal/cleared", "thread/settings/updated", "thread/tokenUsage/updated", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,memory/reset,process/kill,process/resizePty,process/spawn,process/writeStdin,review/start,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/resume,thread/rollback,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-058";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,memory/reset,process/kill,process/resizePty,process/spawn,process/writeStdin,review/start,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/resume,thread/rollback,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|serverRequests:account/chatgptAuthTokens/refresh,attestation/generate,item/commandExecution/requestApproval,item/fileChange/requestApproval,item/permissions/requestApproval,item/tool/call,item/tool/requestUserInput,mcpServer/elicitation/request|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-059";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -61,6 +62,9 @@ class AppProtocol {
         final object = requireObject(message, "$.message");
         if (!object.ok) return object.toOutcome();
 
+        if (kind == "serverRequest") return validateServerRequest(fixtureMethod, object);
+        if (kind == "serverResponse") return validateServerResponse(fixtureMethod, object);
+
         final jsonrpc = requiredString(object.keys, object.values, "jsonrpc", "$.message.jsonrpc");
         if (!jsonrpc.ok) return jsonrpc.toOutcome();
         if (jsonrpc.value != "2.0") return fail("invalid_jsonrpc_version", "$.message.jsonrpc", "expected JSON-RPC 2.0");
@@ -74,9 +78,41 @@ class AppProtocol {
                 validateNotification(fixtureMethod, object);
             case "error":
                 validateJsonRpcError(object);
+            case "serverRequest" | "serverResponse":
+                fail("invalid_jsonrpc_kind", "$.kind", "server request kinds must not use JSON-RPC message validation");
             case _:
                 fail("unsupported_kind", "$.kind", "unsupported fixture item kind");
         }
+    }
+
+    static function validateServerRequest(fixtureMethod:String, object:ProtocolObjectField):AppProtocolParseOutcome {
+        if (!contains(SERVER_REQUEST_METHODS, fixtureMethod)) return fail("unsupported_method", "$.method", "unsupported server request method");
+        final id = requiredId(object.keys, object.values, "$.message.id");
+        if (!id.ok) return id.toOutcome();
+
+        final method = requiredString(object.keys, object.values, "method", "$.message.method");
+        if (!method.ok) return method.toOutcome();
+        if (method.value != fixtureMethod) return fail("method_mismatch", "$.message.method", "message method differs from fixture method");
+
+        final params = requiredObjectField(object.keys, object.values, "params", "$.message.params");
+        if (!params.ok) return params.toOutcome();
+
+        return validateServerRequestParams(fixtureMethod, params);
+    }
+
+    static function validateServerResponse(fixtureMethod:String, object:ProtocolObjectField):AppProtocolParseOutcome {
+        if (!contains(SERVER_REQUEST_METHODS, fixtureMethod)) return fail("unsupported_method", "$.method", "unsupported server response method");
+        final id = requiredId(object.keys, object.values, "$.message.id");
+        if (!id.ok) return id.toOutcome();
+
+        final method = requiredString(object.keys, object.values, "method", "$.message.method");
+        if (!method.ok) return method.toOutcome();
+        if (method.value != fixtureMethod) return fail("method_mismatch", "$.message.method", "message method differs from fixture method");
+
+        final response = requiredObjectField(object.keys, object.values, "response", "$.message.response");
+        if (!response.ok) return response.toOutcome();
+
+        return validateServerResponsePayload(fixtureMethod, response);
     }
 
     static function validateRequest(fixtureMethod:String, object:ProtocolObjectField):AppProtocolParseOutcome {
@@ -488,6 +524,362 @@ class AppProtocol {
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
+    }
+
+    static function validateServerRequestParams(method:String, params:ProtocolObjectField):AppProtocolParseOutcome {
+        return switch method {
+            case "item/commandExecution/requestApproval":
+                validateCommandExecutionRequestApprovalParams(params);
+            case "item/fileChange/requestApproval":
+                validateFileChangeRequestApprovalParams(params);
+            case "item/permissions/requestApproval":
+                validatePermissionsRequestApprovalParams(params);
+            case "item/tool/requestUserInput":
+                validateToolRequestUserInputParams(params);
+            case "mcpServer/elicitation/request":
+                validateMcpServerElicitationRequestParams(params);
+            case "item/tool/call":
+                validateDynamicToolCallParams(params);
+            case "account/chatgptAuthTokens/refresh":
+                validateChatgptAuthTokensRefreshParams(params);
+            case "attestation/generate":
+                validateEmptyObject(params, "$.message.params", "server-request-params:attestation/generate");
+            case _:
+                fail("unsupported_method", "$.method", "unsupported server request params method");
+        }
+    }
+
+    static function validateServerResponsePayload(method:String, response:ProtocolObjectField):AppProtocolParseOutcome {
+        return switch method {
+            case "item/commandExecution/requestApproval":
+                final decision = requiredValue(response.keys, response.values, "decision", "$.message.response.decision");
+                if (!decision.ok) return decision.toOutcome();
+                validateCommandExecutionApprovalDecision(decision.value, "$.message.response.decision");
+            case "item/fileChange/requestApproval":
+                final decision = requiredString(response.keys, response.values, "decision", "$.message.response.decision");
+                if (!decision.ok) return decision.toOutcome();
+                if (!validFileChangeApprovalDecision(decision.value)) fail("invalid_file_change_approval_decision", "$.message.response.decision", "unsupported file change approval decision") else success("server-response:item/fileChange/requestApproval");
+            case "item/permissions/requestApproval":
+                validatePermissionsRequestApprovalResponse(response);
+            case "item/tool/requestUserInput":
+                validateToolRequestUserInputResponse(response);
+            case "mcpServer/elicitation/request":
+                validateMcpServerElicitationRequestResponse(response);
+            case "item/tool/call":
+                validateDynamicToolCallResponse(response);
+            case "account/chatgptAuthTokens/refresh":
+                validateChatgptAuthTokensRefreshResponse(response);
+            case "attestation/generate":
+                final token = requiredString(response.keys, response.values, "token", "$.message.response.token");
+                if (!token.ok) return token.toOutcome();
+                success("server-response:attestation/generate");
+            case _:
+                fail("unsupported_method", "$.method", "unsupported server response method");
+        }
+    }
+
+    static function validateServerThreadTurnItemFields(params:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", path + ".threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredString(params.keys, params.values, "turnId", path + ".turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final itemId = requiredString(params.keys, params.values, "itemId", path + ".itemId");
+        if (!itemId.ok) return itemId.toOutcome();
+        return success("server-thread-turn-item-fields");
+    }
+
+    static function validateApprovalStartedAt(params:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final startedAtMs = requiredUInt(params.keys, params.values, "startedAtMs", path + ".startedAtMs");
+        if (!startedAtMs.ok) return startedAtMs.toOutcome();
+        return success("approval-started-at");
+    }
+
+    static function validateCommandExecutionRequestApprovalParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final identity = validateServerThreadTurnItemFields(params, "$.message.params");
+        if (!identity.ok) return identity;
+        final startedAt = validateApprovalStartedAt(params, "$.message.params");
+        if (!startedAt.ok) return startedAt;
+        for (field in ["approvalId", "reason", "command", "cwd"]) {
+            final value = validateOptionalNullableString(params, field, "$.message.params." + field);
+            if (!value.ok) return value;
+        }
+        for (field in ["networkApprovalContext", "additionalPermissions", "proposedExecpolicyAmendment"]) {
+            final value = validateOptionalNullableObject(params, field, "$.message.params." + field);
+            if (!value.ok) return value;
+        }
+        for (field in ["commandActions", "proposedNetworkPolicyAmendments"]) {
+            final value = validateOptionalArrayOrNull(params, field, "$.message.params." + field);
+            if (!value.ok) return value;
+        }
+        final available = validateOptionalCommandExecutionDecisionArray(params, "availableDecisions", "$.message.params.availableDecisions");
+        if (!available.ok) return available;
+        return success("server-request:item/commandExecution/requestApproval");
+    }
+
+    static function validateFileChangeRequestApprovalParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final identity = validateServerThreadTurnItemFields(params, "$.message.params");
+        if (!identity.ok) return identity;
+        final startedAt = validateApprovalStartedAt(params, "$.message.params");
+        if (!startedAt.ok) return startedAt;
+        for (field in ["reason", "grantRoot"]) {
+            final value = validateOptionalNullableString(params, field, "$.message.params." + field);
+            if (!value.ok) return value;
+        }
+        return success("server-request:item/fileChange/requestApproval");
+    }
+
+    static function validatePermissionsRequestApprovalParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final identity = validateServerThreadTurnItemFields(params, "$.message.params");
+        if (!identity.ok) return identity;
+        final environmentId = requiredNullableString(params.keys, params.values, "environmentId", "$.message.params.environmentId");
+        if (!environmentId.ok) return environmentId.toOutcome();
+        final startedAt = validateApprovalStartedAt(params, "$.message.params");
+        if (!startedAt.ok) return startedAt;
+        final cwd = requiredString(params.keys, params.values, "cwd", "$.message.params.cwd");
+        if (!cwd.ok) return cwd.toOutcome();
+        final reason = requiredNullableString(params.keys, params.values, "reason", "$.message.params.reason");
+        if (!reason.ok) return reason.toOutcome();
+        final permissions = requiredObjectField(params.keys, params.values, "permissions", "$.message.params.permissions");
+        if (!permissions.ok) return permissions.toOutcome();
+        return validateRequestPermissionProfile(permissions, "$.message.params.permissions", true, "server-request:item/permissions/requestApproval");
+    }
+
+    static function validateToolRequestUserInputParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final identity = validateServerThreadTurnItemFields(params, "$.message.params");
+        if (!identity.ok) return identity;
+        final questions = requiredArray(params.keys, params.values, "questions", "$.message.params.questions");
+        if (!questions.ok) return questions.toOutcome();
+        var i = 0;
+        while (i < questions.values.length) {
+            final path = "$.message.params.questions[" + Std.string(i) + "]";
+            final question = requireObject(questions.values[i], path);
+            if (!question.ok) return question.toOutcome();
+            for (field in ["id", "header", "question"]) {
+                final value = requiredString(question.keys, question.values, field, path + "." + field);
+                if (!value.ok) return value.toOutcome();
+            }
+            for (field in ["isOther", "isSecret"]) {
+                final value = requiredBool(question.keys, question.values, field, path + "." + field);
+                if (!value.ok) return value.toOutcome();
+            }
+            final options = validateToolRequestUserInputOptions(question, "options", path + ".options");
+            if (!options.ok) return options;
+            i = i + 1;
+        }
+        return success("server-request:item/tool/requestUserInput");
+    }
+
+    static function validateMcpServerElicitationRequestParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredNullableString(params.keys, params.values, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final serverName = requiredString(params.keys, params.values, "serverName", "$.message.params.serverName");
+        if (!serverName.ok) return serverName.toOutcome();
+        final mode = requiredString(params.keys, params.values, "mode", "$.message.params.mode");
+        if (!mode.ok) return mode.toOutcome();
+        final meta = requiredValue(params.keys, params.values, "_meta", "$.message.params._meta");
+        if (!meta.ok) return meta.toOutcome();
+        final message = requiredString(params.keys, params.values, "message", "$.message.params.message");
+        if (!message.ok) return message.toOutcome();
+        if (mode.value == "form") {
+            final requestedSchema = requiredObjectField(params.keys, params.values, "requestedSchema", "$.message.params.requestedSchema");
+            if (!requestedSchema.ok) return requestedSchema.toOutcome();
+            return success("server-request:mcpServer/elicitation/request:form");
+        }
+        if (mode.value == "url") {
+            final url = requiredString(params.keys, params.values, "url", "$.message.params.url");
+            if (!url.ok) return url.toOutcome();
+            final elicitationId = requiredString(params.keys, params.values, "elicitationId", "$.message.params.elicitationId");
+            if (!elicitationId.ok) return elicitationId.toOutcome();
+            return success("server-request:mcpServer/elicitation/request:url");
+        }
+        return fail("invalid_mcp_elicitation_mode", "$.message.params.mode", "unsupported MCP elicitation mode");
+    }
+
+    static function validateDynamicToolCallParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final turnId = requiredString(params.keys, params.values, "turnId", "$.message.params.turnId");
+        if (!turnId.ok) return turnId.toOutcome();
+        final callId = requiredString(params.keys, params.values, "callId", "$.message.params.callId");
+        if (!callId.ok) return callId.toOutcome();
+        final namespace = requiredNullableString(params.keys, params.values, "namespace", "$.message.params.namespace");
+        if (!namespace.ok) return namespace.toOutcome();
+        final tool = requiredString(params.keys, params.values, "tool", "$.message.params.tool");
+        if (!tool.ok) return tool.toOutcome();
+        final arguments = requiredValue(params.keys, params.values, "arguments", "$.message.params.arguments");
+        if (!arguments.ok) return arguments.toOutcome();
+        return success("server-request:item/tool/call");
+    }
+
+    static function validateChatgptAuthTokensRefreshParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final reason = requiredString(params.keys, params.values, "reason", "$.message.params.reason");
+        if (!reason.ok) return reason.toOutcome();
+        if (reason.value != "unauthorized") return fail("invalid_chatgpt_auth_tokens_refresh_reason", "$.message.params.reason", "unsupported auth token refresh reason");
+        final previousAccountId = validateOptionalNullableString(params, "previousAccountId", "$.message.params.previousAccountId");
+        if (!previousAccountId.ok) return previousAccountId;
+        return success("server-request:account/chatgptAuthTokens/refresh");
+    }
+
+    static function validatePermissionsRequestApprovalResponse(response:ProtocolObjectField):AppProtocolParseOutcome {
+        final permissions = requiredObjectField(response.keys, response.values, "permissions", "$.message.response.permissions");
+        if (!permissions.ok) return permissions.toOutcome();
+        final permissionResult = validateRequestPermissionProfile(permissions, "$.message.response.permissions", false, "server-response-permissions");
+        if (!permissionResult.ok) return permissionResult;
+        final scope = requiredString(response.keys, response.values, "scope", "$.message.response.scope");
+        if (!scope.ok) return scope.toOutcome();
+        if (scope.value != "turn" && scope.value != "session") return fail("invalid_permission_grant_scope", "$.message.response.scope", "unsupported permission grant scope");
+        final strictAutoReview = validateOptionalBool(response, "strictAutoReview", "$.message.response.strictAutoReview");
+        if (!strictAutoReview.ok) return strictAutoReview;
+        return success("server-response:item/permissions/requestApproval");
+    }
+
+    static function validateToolRequestUserInputResponse(response:ProtocolObjectField):AppProtocolParseOutcome {
+        final answers = requiredObjectField(response.keys, response.values, "answers", "$.message.response.answers");
+        if (!answers.ok) return answers.toOutcome();
+        var i = 0;
+        while (i < answers.values.length) {
+            final path = "$.message.response.answers." + answers.keys[i];
+            final answer = requireObject(answers.values[i], path);
+            if (!answer.ok) return answer.toOutcome();
+            final values = requiredArray(answer.keys, answer.values, "answers", path + ".answers");
+            if (!values.ok) return values.toOutcome();
+            final strings = validateStringArrayEntries(values.values, path + ".answers");
+            if (!strings.ok) return strings;
+            i = i + 1;
+        }
+        return success("server-response:item/tool/requestUserInput");
+    }
+
+    static function validateMcpServerElicitationRequestResponse(response:ProtocolObjectField):AppProtocolParseOutcome {
+        final action = requiredString(response.keys, response.values, "action", "$.message.response.action");
+        if (!action.ok) return action.toOutcome();
+        if (action.value != "accept" && action.value != "decline" && action.value != "cancel") return fail("invalid_mcp_elicitation_action", "$.message.response.action", "unsupported MCP elicitation action");
+        final content = requiredValue(response.keys, response.values, "content", "$.message.response.content");
+        if (!content.ok) return content.toOutcome();
+        final meta = requiredValue(response.keys, response.values, "_meta", "$.message.response._meta");
+        if (!meta.ok) return meta.toOutcome();
+        return success("server-response:mcpServer/elicitation/request");
+    }
+
+    static function validateDynamicToolCallResponse(response:ProtocolObjectField):AppProtocolParseOutcome {
+        final contentItems = requiredArray(response.keys, response.values, "contentItems", "$.message.response.contentItems");
+        if (!contentItems.ok) return contentItems.toOutcome();
+        var i = 0;
+        while (i < contentItems.values.length) {
+            final itemPath = "$.message.response.contentItems[" + Std.string(i) + "]";
+            final item = requireObject(contentItems.values[i], itemPath);
+            if (!item.ok) return item.toOutcome();
+            final itemResult = validateDynamicToolCallOutputContentItem(item, itemPath);
+            if (!itemResult.ok) return itemResult;
+            i = i + 1;
+        }
+        final successFlag = requiredBool(response.keys, response.values, "success", "$.message.response.success");
+        if (!successFlag.ok) return successFlag.toOutcome();
+        return success("server-response:item/tool/call");
+    }
+
+    static function validateChatgptAuthTokensRefreshResponse(response:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["accessToken", "chatgptAccountId"]) {
+            final value = requiredString(response.keys, response.values, field, "$.message.response." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        final planType = requiredNullableString(response.keys, response.values, "chatgptPlanType", "$.message.response.chatgptPlanType");
+        if (!planType.ok) return planType.toOutcome();
+        return success("server-response:account/chatgptAuthTokens/refresh");
+    }
+
+    static function validateOptionalCommandExecutionDecisionArray(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("command-exec-decisions:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("command-exec-decisions:null");
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    final result = validateCommandExecutionApprovalDecision(entries[entryIndex], path + "[" + Std.string(entryIndex) + "]");
+                    if (!result.ok) return result;
+                    entryIndex = entryIndex + 1;
+                }
+                success("command-exec-decisions");
+            case _:
+                fail("expected_nullable_array", path, "expected JSON array or null");
+        }
+    }
+
+    static function validateCommandExecutionApprovalDecision(value:Value, path:String):AppProtocolParseOutcome {
+        return switch value {
+            case JString(decision):
+                if (validCommandExecutionApprovalDecision(decision)) success("command-exec-decision:" + decision) else fail("invalid_command_execution_approval_decision", path, "unsupported command execution approval decision");
+            case JObject(keys, values):
+                if (hasField(keys, "acceptWithExecpolicyAmendment")) {
+                    final amendment = requiredObjectField(keys, values, "acceptWithExecpolicyAmendment", path + ".acceptWithExecpolicyAmendment");
+                    if (!amendment.ok) return amendment.toOutcome();
+                    final execpolicy = requiredObjectField(amendment.keys, amendment.values, "execpolicy_amendment", path + ".acceptWithExecpolicyAmendment.execpolicy_amendment");
+                    if (!execpolicy.ok) return execpolicy.toOutcome();
+                    success("command-exec-decision:acceptWithExecpolicyAmendment");
+                } else if (hasField(keys, "applyNetworkPolicyAmendment")) {
+                    final amendment = requiredObjectField(keys, values, "applyNetworkPolicyAmendment", path + ".applyNetworkPolicyAmendment");
+                    if (!amendment.ok) return amendment.toOutcome();
+                    final policy = requiredObjectField(amendment.keys, amendment.values, "network_policy_amendment", path + ".applyNetworkPolicyAmendment.network_policy_amendment");
+                    if (!policy.ok) return policy.toOutcome();
+                    success("command-exec-decision:applyNetworkPolicyAmendment");
+                } else {
+                    fail("invalid_command_execution_approval_decision", path, "unsupported command execution approval decision object");
+                }
+            case _:
+                fail("invalid_command_execution_approval_decision", path, "unsupported command execution approval decision");
+        }
+    }
+
+    static function validateRequestPermissionProfile(profile:ProtocolObjectField, path:String, requireNullableKeys:Bool, label:String):AppProtocolParseOutcome {
+        final network = if (requireNullableKeys) validateRequiredNullableObject(profile, "network", path + ".network") else validateOptionalNullableObject(profile, "network", path + ".network");
+        if (!network.ok) return network;
+        final fileSystem = if (requireNullableKeys) validateRequiredNullableObject(profile, "fileSystem", path + ".fileSystem") else validateOptionalNullableObject(profile, "fileSystem", path + ".fileSystem");
+        if (!fileSystem.ok) return fileSystem;
+        return success(label);
+    }
+
+    static function validateToolRequestUserInputOptions(question:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(question.keys, name);
+        if (i < 0) return fail("missing_field", path, "required field is missing");
+        return switch question.values[i] {
+            case JNull:
+                success("tool-user-input-options:null");
+            case JArray(entries):
+                var entryIndex = 0;
+                while (entryIndex < entries.length) {
+                    final optionPath = path + "[" + Std.string(entryIndex) + "]";
+                    final option = requireObject(entries[entryIndex], optionPath);
+                    if (!option.ok) return option.toOutcome();
+                    for (field in ["label", "description"]) {
+                        final value = requiredString(option.keys, option.values, field, optionPath + "." + field);
+                        if (!value.ok) return value.toOutcome();
+                    }
+                    entryIndex = entryIndex + 1;
+                }
+                success("tool-user-input-options");
+            case _:
+                fail("expected_nullable_array", path, "expected JSON array or null");
+        }
+    }
+
+    static function validateDynamicToolCallOutputContentItem(item:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final itemType = requiredString(item.keys, item.values, "type", path + ".type");
+        if (!itemType.ok) return itemType.toOutcome();
+        if (itemType.value == "inputText") {
+            final text = requiredString(item.keys, item.values, "text", path + ".text");
+            if (!text.ok) return text.toOutcome();
+            return success("dynamic-tool-output:inputText");
+        }
+        if (itemType.value == "inputImage") {
+            final imageUrl = requiredString(item.keys, item.values, "imageUrl", path + ".imageUrl");
+            if (!imageUrl.ok) return imageUrl.toOutcome();
+            return success("dynamic-tool-output:inputImage");
+        }
+        return fail("invalid_dynamic_tool_output_type", path + ".type", "unsupported dynamic tool output content item type");
     }
 
     static function validateThread(thread:ProtocolObjectField, path:String):AppProtocolParseOutcome {
@@ -3416,6 +3808,14 @@ class AppProtocol {
         return value == "AGENTS_MD" || value == "CONFIG" || value == "SKILLS" || value == "PLUGINS" || value == "MCP_SERVER_CONFIG" || value == "SUBAGENTS" || value == "HOOKS" || value == "COMMANDS" || value == "SESSIONS";
     }
 
+    static function validCommandExecutionApprovalDecision(value:String):Bool {
+        return value == "accept" || value == "acceptForSession" || value == "decline" || value == "cancel";
+    }
+
+    static function validFileChangeApprovalDecision(value:String):Bool {
+        return value == "accept" || value == "acceptForSession" || value == "decline" || value == "cancel";
+    }
+
     static function success(summary:String):AppProtocolParseOutcome {
         return AppProtocolParseOutcome.success(new AppProtocolMessage("", "", "", "", summary, FINGERPRINT));
     }
@@ -3430,6 +3830,16 @@ class AppProtocol {
         return switch values[i] {
             case JString(value): ProtocolStringField.success(value);
             case _: ProtocolStringField.failure("expected_string", path, "expected JSON string");
+        }
+    }
+
+    static function requiredNullableString(keys:Array<String>, values:Array<Value>, name:String, path:String):ProtocolStringField {
+        final i = fieldIndex(keys, name);
+        if (i < 0) return ProtocolStringField.failure("missing_field", path, "required field is missing");
+        return switch values[i] {
+            case JString(value): ProtocolStringField.success(value);
+            case JNull: ProtocolStringField.success("");
+            case _: ProtocolStringField.failure("expected_nullable_string", path, "expected JSON string or null");
         }
     }
 
@@ -3676,6 +4086,17 @@ class AppProtocol {
     static function validateOptionalNullableObject(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
         final i = fieldIndex(object.keys, name);
         if (i < 0) return success("nullable-object:missing");
+        return switch object.values[i] {
+            case JObject(_, _) | JNull:
+                success("nullable-object");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateRequiredNullableObject(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return fail("missing_field", path, "required field is missing");
         return switch object.values[i] {
             case JObject(_, _) | JNull:
                 success("nullable-object");

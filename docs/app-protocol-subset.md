@@ -66,6 +66,17 @@ Included client requests:
 - `config/batchWrite`
 - `configRequirements/read`
 
+Included client-directed server requests:
+
+- `item/commandExecution/requestApproval`
+- `item/fileChange/requestApproval`
+- `item/permissions/requestApproval`
+- `item/tool/requestUserInput`
+- `mcpServer/elicitation/request`
+- `item/tool/call`
+- `account/chatgptAuthTokens/refresh`
+- `attestation/generate`
+
 Included server notifications:
 
 - `thread/started`
@@ -182,7 +193,7 @@ Included response payloads:
 - `ExternalAgentConfigDetectResponse`
 - `ExternalAgentConfigImportResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, thread resume/fork/archive/unarchive/unsubscribe/list/loaded-list lifecycle request responses, upstream thread state/history mutation request responses, turn steering, review start, paged turn and turn-item history responses, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read/rate-limit/usage requests, add-credits nudge email requests, feedback upload requests, standalone command execution requests and control requests, host process spawn/control request responses, config read/value-write/batch-write and requirements read request responses, external agent config detect/import request responses, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, thread resume/fork/archive/unarchive/unsubscribe/list/loaded-list lifecycle request responses, upstream thread state/history mutation request responses, turn steering, review start, paged turn and turn-item history responses, client-directed server request/response pairs for command approval, file-change approval, permission approval, tool user input, MCP elicitation, dynamic tool calls, ChatGPT auth-token refresh, and attestation generation, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read/rate-limit/usage requests, add-credits nudge email requests, feedback upload requests, standalone command execution requests and control requests, host process spawn/control request responses, config read/value-write/batch-write and requirements read request responses, external agent config detect/import request responses, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `thread/resume` and `thread/fork` reopen or fork existing upstream threads. The selected subset validates required `threadId`, selected nullable override fields, approval policy variants, approvals reviewer, sandbox mode, personality, and response metadata plus the shared `Thread` payload.
 
@@ -199,6 +210,8 @@ Thread state notifications validate name changes, goal updates/clears, settings 
 `review/start` validates upstream tagged review targets (`uncommittedChanges`, `baseBranch`, `commit`, and `custom`), optional `inline`/`detached` delivery, and a response containing the review `Turn` plus `reviewThreadId`.
 
 `thread/turns/list` and `thread/turns/items/list` validate pagination params, upstream `asc`/`desc` sort direction, `notLoaded`/`summary`/`full` item view where applicable, and response pages using the shared `Turn` and selected `ThreadItem` validators. Upstream exports these DTOs from Rust source without standalone v2 JSON schema files in the pinned schema tree, so the schema gate records them as explicit Rust-source-tracked gaps.
+
+Client-directed server requests use upstream's `ServerRequest`/`ServerResponse` shape, not normal JSON-RPC client responses: requests carry `{ id, method, params }`, and responses carry `{ id, method, response }`. The selected subset validates command/file/permission approval decisions, tool user-input questions and answers, MCP elicitation `form`/`url` modes and actions, dynamic tool call params and text/image output content items, ChatGPT auth-token refresh reason/response fields, and opaque attestation tokens.
 
 `thread/list` and `thread/loaded/list` validate upstream pagination params, cursors, limits, sort/filter enums, and response arrays. `thread/list` returns `Thread` objects, while `thread/loaded/list` returns loaded thread id strings.
 

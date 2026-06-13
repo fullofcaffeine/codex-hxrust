@@ -71,6 +71,14 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "config/value/write");
         assertContains(fingerprintJson, "config/batchWrite");
         assertContains(fingerprintJson, "configRequirements/read");
+        assertContains(fingerprintJson, "serverRequests:account/chatgptAuthTokens/refresh");
+        assertContains(fingerprintJson, "attestation/generate");
+        assertContains(fingerprintJson, "item/commandExecution/requestApproval");
+        assertContains(fingerprintJson, "item/fileChange/requestApproval");
+        assertContains(fingerprintJson, "item/permissions/requestApproval");
+        assertContains(fingerprintJson, "item/tool/call");
+        assertContains(fingerprintJson, "item/tool/requestUserInput");
+        assertContains(fingerprintJson, "mcpServer/elicitation/request");
         assertContains(fingerprintJson, "turn/completed");
         assertContains(fingerprintJson, "turn/plan/updated");
         assertContains(fingerprintJson, "turn/moderationMetadata");
@@ -132,10 +140,12 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("172", Std.string(items.length));
+        assertEquals("188", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
+        var serverRequests = 0;
+        var serverResponses = 0;
         var notifications = 0;
         var errors = 0;
 
@@ -149,12 +159,16 @@ class AppProtocolHarness {
 
             if (parsed.kind == "request") requests = requests + 1;
             if (parsed.kind == "response") responses = responses + 1;
+            if (parsed.kind == "serverRequest") serverRequests = serverRequests + 1;
+            if (parsed.kind == "serverResponse") serverResponses = serverResponses + 1;
             if (parsed.kind == "notification") notifications = notifications + 1;
             if (parsed.kind == "error") errors = errors + 1;
         }
 
         assertEquals("55", Std.string(requests));
         assertEquals("55", Std.string(responses));
+        assertEquals("8", Std.string(serverRequests));
+        assertEquals("8", Std.string(serverResponses));
         assertEquals("61", Std.string(notifications));
         assertEquals("1", Std.string(errors));
     }
@@ -844,6 +858,41 @@ class AppProtocolHarness {
         assertFalse(invalidConfigRequirementsParams.ok, "configRequirements/read params must be missing, null, or object");
         assertEquals("expected_nullable_object", invalidConfigRequirementsParams.errorCode);
         assertEquals("$.message.params", invalidConfigRequirementsParams.errorPath);
+
+        final invalidServerCommandDecision = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"server-command-invalid-decision\",\"kind\":\"serverResponse\",\"method\":\"item/commandExecution/requestApproval\",\"message\":{\"id\":\"srv-approval-1\",\"method\":\"item/commandExecution/requestApproval\",\"response\":{\"decision\":\"later\"}}}")));
+        assertFalse(invalidServerCommandDecision.ok, "command approval decision must use upstream variants");
+        assertEquals("invalid_command_execution_approval_decision", invalidServerCommandDecision.errorCode);
+        assertEquals("$.message.response.decision", invalidServerCommandDecision.errorPath);
+
+        final invalidServerPermissionsScope = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"server-permissions-invalid-scope\",\"kind\":\"serverResponse\",\"method\":\"item/permissions/requestApproval\",\"message\":{\"id\":\"srv-permissions-1\",\"method\":\"item/permissions/requestApproval\",\"response\":{\"permissions\":{},\"scope\":\"forever\"}}}")));
+        assertFalse(invalidServerPermissionsScope.ok, "permission grants are turn or session scoped");
+        assertEquals("invalid_permission_grant_scope", invalidServerPermissionsScope.errorCode);
+        assertEquals("$.message.response.scope", invalidServerPermissionsScope.errorPath);
+
+        final invalidServerUserInputQuestion = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"server-user-input-invalid-options\",\"kind\":\"serverRequest\",\"method\":\"item/tool/requestUserInput\",\"message\":{\"id\":\"srv-user-input-1\",\"method\":\"item/tool/requestUserInput\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"itemId\":\"item-1\",\"questions\":[{\"id\":\"choice\",\"header\":\"Mode\",\"question\":\"Choose\",\"isOther\":false,\"isSecret\":false,\"options\":[{\"label\":\"Only\"}]}]}}}")));
+        assertFalse(invalidServerUserInputQuestion.ok, "tool user input options require labels and descriptions");
+        assertEquals("missing_field", invalidServerUserInputQuestion.errorCode);
+        assertEquals("$.message.params.questions[0].options[0].description", invalidServerUserInputQuestion.errorPath);
+
+        final invalidServerMcpMode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"server-mcp-invalid-mode\",\"kind\":\"serverRequest\",\"method\":\"mcpServer/elicitation/request\",\"message\":{\"id\":\"srv-mcp-1\",\"method\":\"mcpServer/elicitation/request\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":null,\"serverName\":\"apps\",\"mode\":\"modal\",\"_meta\":null,\"message\":\"Allow?\"}}}")));
+        assertFalse(invalidServerMcpMode.ok, "MCP elicitation mode must be form or url");
+        assertEquals("invalid_mcp_elicitation_mode", invalidServerMcpMode.errorCode);
+        assertEquals("$.message.params.mode", invalidServerMcpMode.errorPath);
+
+        final invalidServerDynamicOutput = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"server-dynamic-invalid-output\",\"kind\":\"serverResponse\",\"method\":\"item/tool/call\",\"message\":{\"id\":\"srv-dynamic-1\",\"method\":\"item/tool/call\",\"response\":{\"contentItems\":[{\"type\":\"audio\",\"text\":\"x\"}],\"success\":true}}}")));
+        assertFalse(invalidServerDynamicOutput.ok, "dynamic tool outputs use upstream content item variants");
+        assertEquals("invalid_dynamic_tool_output_type", invalidServerDynamicOutput.errorCode);
+        assertEquals("$.message.response.contentItems[0].type", invalidServerDynamicOutput.errorPath);
+
+        final invalidServerAuthRefreshReason = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"server-auth-refresh-invalid-reason\",\"kind\":\"serverRequest\",\"method\":\"account/chatgptAuthTokens/refresh\",\"message\":{\"id\":\"srv-auth-1\",\"method\":\"account/chatgptAuthTokens/refresh\",\"params\":{\"reason\":\"proactive\"}}}")));
+        assertFalse(invalidServerAuthRefreshReason.ok, "ChatGPT auth token refresh currently uses unauthorized reason");
+        assertEquals("invalid_chatgpt_auth_tokens_refresh_reason", invalidServerAuthRefreshReason.errorCode);
+        assertEquals("$.message.params.reason", invalidServerAuthRefreshReason.errorPath);
+
+        final invalidServerAttestationResponse = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"server-attestation-missing-token\",\"kind\":\"serverResponse\",\"method\":\"attestation/generate\",\"message\":{\"id\":\"srv-attestation-1\",\"method\":\"attestation/generate\",\"response\":{}}}")));
+        assertFalse(invalidServerAttestationResponse.ok, "attestation response requires an opaque token");
+        assertEquals("missing_field", invalidServerAttestationResponse.errorCode);
+        assertEquals("$.message.response.token", invalidServerAttestationResponse.errorPath);
 
         final invalidFsChangedPath = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-changed-invalid-path\",\"kind\":\"notification\",\"method\":\"fs/changed\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"fs/changed\",\"params\":{\"watchId\":\"watch-1\",\"changedPaths\":[7]}}}")));
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");

@@ -3103,6 +3103,303 @@
       }
     },
     {
+      "id": "server-command-approval-request",
+      "kind": "serverRequest",
+      "method": "item/commandExecution/requestApproval",
+      "message": {
+        "id": "srv-approval-1",
+        "method": "item/commandExecution/requestApproval",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "item-command-1",
+          "startedAtMs": 1781222400000,
+          "approvalId": null,
+          "reason": "Command needs approval",
+          "command": "cargo test --locked",
+          "cwd": "/tmp/codex-hxrust",
+          "commandActions": [],
+          "availableDecisions": [
+            "accept",
+            "decline"
+          ]
+        }
+      }
+    },
+    {
+      "id": "server-command-approval-response",
+      "kind": "serverResponse",
+      "method": "item/commandExecution/requestApproval",
+      "message": {
+        "id": "srv-approval-1",
+        "method": "item/commandExecution/requestApproval",
+        "response": {
+          "decision": "acceptForSession"
+        }
+      }
+    },
+    {
+      "id": "server-file-change-approval-request",
+      "kind": "serverRequest",
+      "method": "item/fileChange/requestApproval",
+      "message": {
+        "id": "srv-file-approval-1",
+        "method": "item/fileChange/requestApproval",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "item-file-1",
+          "startedAtMs": 1781222400001,
+          "reason": "Patch writes a tracked file",
+          "grantRoot": "/tmp/codex-hxrust"
+        }
+      }
+    },
+    {
+      "id": "server-file-change-approval-response",
+      "kind": "serverResponse",
+      "method": "item/fileChange/requestApproval",
+      "message": {
+        "id": "srv-file-approval-1",
+        "method": "item/fileChange/requestApproval",
+        "response": {
+          "decision": "accept"
+        }
+      }
+    },
+    {
+      "id": "server-permissions-approval-request",
+      "kind": "serverRequest",
+      "method": "item/permissions/requestApproval",
+      "message": {
+        "id": "srv-permissions-1",
+        "method": "item/permissions/requestApproval",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "item-permissions-1",
+          "environmentId": null,
+          "startedAtMs": 1781222400002,
+          "cwd": "/tmp/codex-hxrust",
+          "reason": "Need workspace writes and network",
+          "permissions": {
+            "network": {
+              "enabled": true
+            },
+            "fileSystem": {
+              "writableRoots": [
+                "/tmp/codex-hxrust"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "server-permissions-approval-response",
+      "kind": "serverResponse",
+      "method": "item/permissions/requestApproval",
+      "message": {
+        "id": "srv-permissions-1",
+        "method": "item/permissions/requestApproval",
+        "response": {
+          "permissions": {
+            "network": {
+              "enabled": true
+            },
+            "fileSystem": {
+              "writableRoots": [
+                "/tmp/codex-hxrust"
+              ]
+            }
+          },
+          "scope": "turn",
+          "strictAutoReview": false
+        }
+      }
+    },
+    {
+      "id": "server-tool-user-input-request",
+      "kind": "serverRequest",
+      "method": "item/tool/requestUserInput",
+      "message": {
+        "id": "srv-user-input-1",
+        "method": "item/tool/requestUserInput",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "itemId": "item-user-input-1",
+          "questions": [
+            {
+              "id": "choice",
+              "header": "Mode",
+              "question": "Choose a mode",
+              "isOther": false,
+              "isSecret": false,
+              "options": [
+                {
+                  "label": "Fast",
+                  "description": "Use the fast path."
+                },
+                {
+                  "label": "Careful",
+                  "description": "Use the careful path."
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "server-tool-user-input-response",
+      "kind": "serverResponse",
+      "method": "item/tool/requestUserInput",
+      "message": {
+        "id": "srv-user-input-1",
+        "method": "item/tool/requestUserInput",
+        "response": {
+          "answers": {
+            "choice": {
+              "answers": [
+                "Careful"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "server-mcp-elicitation-request",
+      "kind": "serverRequest",
+      "method": "mcpServer/elicitation/request",
+      "message": {
+        "id": "srv-mcp-elicitation-1",
+        "method": "mcpServer/elicitation/request",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "serverName": "codex_apps",
+          "mode": "form",
+          "_meta": null,
+          "message": "Allow this MCP request?",
+          "requestedSchema": {
+            "type": "object",
+            "properties": {
+              "confirmed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "confirmed"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "server-mcp-elicitation-response",
+      "kind": "serverResponse",
+      "method": "mcpServer/elicitation/request",
+      "message": {
+        "id": "srv-mcp-elicitation-1",
+        "method": "mcpServer/elicitation/request",
+        "response": {
+          "action": "accept",
+          "content": {
+            "confirmed": true
+          },
+          "_meta": null
+        }
+      }
+    },
+    {
+      "id": "server-dynamic-tool-call-request",
+      "kind": "serverRequest",
+      "method": "item/tool/call",
+      "message": {
+        "id": "srv-dynamic-tool-1",
+        "method": "item/tool/call",
+        "params": {
+          "threadId": "thread-00000000-0000-4000-8000-000000000001",
+          "turnId": "turn-1",
+          "callId": "call-1",
+          "namespace": "workspace",
+          "tool": "summarize",
+          "arguments": {
+            "path": "README.md"
+          }
+        }
+      }
+    },
+    {
+      "id": "server-dynamic-tool-call-response",
+      "kind": "serverResponse",
+      "method": "item/tool/call",
+      "message": {
+        "id": "srv-dynamic-tool-1",
+        "method": "item/tool/call",
+        "response": {
+          "contentItems": [
+            {
+              "type": "inputText",
+              "text": "summary"
+            }
+          ],
+          "success": true
+        }
+      }
+    },
+    {
+      "id": "server-chatgpt-auth-refresh-request",
+      "kind": "serverRequest",
+      "method": "account/chatgptAuthTokens/refresh",
+      "message": {
+        "id": "srv-auth-refresh-1",
+        "method": "account/chatgptAuthTokens/refresh",
+        "params": {
+          "reason": "unauthorized",
+          "previousAccountId": "acct_123"
+        }
+      }
+    },
+    {
+      "id": "server-chatgpt-auth-refresh-response",
+      "kind": "serverResponse",
+      "method": "account/chatgptAuthTokens/refresh",
+      "message": {
+        "id": "srv-auth-refresh-1",
+        "method": "account/chatgptAuthTokens/refresh",
+        "response": {
+          "accessToken": "access-token",
+          "chatgptAccountId": "acct_123",
+          "chatgptPlanType": null
+        }
+      }
+    },
+    {
+      "id": "server-attestation-generate-request",
+      "kind": "serverRequest",
+      "method": "attestation/generate",
+      "message": {
+        "id": "srv-attestation-1",
+        "method": "attestation/generate",
+        "params": {}
+      }
+    },
+    {
+      "id": "server-attestation-generate-response",
+      "kind": "serverResponse",
+      "method": "attestation/generate",
+      "message": {
+        "id": "srv-attestation-1",
+        "method": "attestation/generate",
+        "response": {
+          "token": "v1.opaque-client-token"
+        }
+      }
+    },
+    {
       "id": "jsonrpc-error",
       "kind": "error",
       "message": {

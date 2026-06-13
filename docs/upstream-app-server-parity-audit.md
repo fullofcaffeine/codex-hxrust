@@ -82,6 +82,19 @@ windowsSandbox/setupStart
 
 This covers the first credential-free headless/runtime path plus thread lifecycle/navigation, auth, account, config, external-agent import, command/process, and Windows sandbox request families that have already been admitted through fixture-backed Haxe and generated Rust gates.
 
+The local subset also admits 8 upstream client-directed server request families:
+
+```text
+account/chatgptAuthTokens/refresh
+attestation/generate
+item/commandExecution/requestApproval
+item/fileChange/requestApproval
+item/permissions/requestApproval
+item/tool/call
+item/tool/requestUserInput
+mcpServer/elicitation/request
+```
+
 The local subset also validates selected notifications needed by the current headless/app protocol fixtures, including thread/turn lifecycle basics, streaming item deltas, account/rate-limit updates, config warnings, app list updates, realtime output notifications, process output, filesystem change, and selected deprecated notification parity.
 
 ## Upstream Gap Summary
@@ -121,7 +134,7 @@ These should be paired with the related request family when practical. For examp
 
 ## Server Request Gaps
 
-Upstream also defines client-directed server requests that are distinct from server notifications:
+Upstream also defines client-directed server requests that are distinct from server notifications. These were admitted in HXCX-3.66:
 
 ```text
 account/chatgptAuthTokens/refresh
@@ -134,7 +147,7 @@ item/tool/requestUserInput
 mcpServer/elicitation/request
 ```
 
-These are important for full app-server parity, but they should be admitted after the client-request navigation/thread state slice because they require bidirectional request/response fixture modeling.
+These are important for full app-server parity and now have bidirectional request/response fixture modeling.
 
 ## Schema Export Notes
 
@@ -146,26 +159,36 @@ Known exceptions:
 - `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/settings/update`, `thread/memoryMode/set`, `memory/reset`, and `thread/backgroundTerminals/clean` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
 - `thread/turns/list` and `thread/turns/items/list` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
 - `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, and `fuzzyFileSearch/sessionStop` are Rust DTO/protocol mappings without standalone request/response schema files; their notifications are already tracked through top-level schema files.
+- Client-directed server request schemas are emitted as top-level schema files under `schema/json/` rather than `schema/json/v2`; the selected command/file/permission approval, tool user input, MCP elicitation, dynamic tool call, ChatGPT auth refresh, and attestation schemas are fingerprinted from that location.
 - Deprecated v1 request surfaces should remain deferred until a deliberate compatibility slice selects them.
 
 ## Sequencing Decision
 
-The next raw upstream slice should admit the client-directed server-request approval surface before plugin/MCP/fs/remote/Cafex surfaces:
+The next raw upstream slice should move into the app/plugin/filesystem/MCP/model client request families before remote/Cafex surfaces:
 
 ```text
-item/commandExecution/requestApproval
-item/fileChange/requestApproval
-item/permissions/requestApproval
-item/tool/call
-item/tool/requestUserInput
-mcpServer/elicitation/request
+app/list
+skills/list
+skills/extraRoots/set
+hooks/list
+model/list
+modelProvider/capabilities/read
+experimentalFeature/list
+permissionProfile/list
+mcpServer/oauth/login
+mcpServerStatus/list
+mcpServer/resource/read
+mcpServer/tool/call
+fs/readFile
+fs/writeFile
+fs/readDirectory
 ```
 
 Rationale:
 
 - these are mainstream Codex app-server methods, not Cafex adapters
-- they are the next app-server parity boundary after request/response client methods and require bidirectional client/server request fixture modeling
-- they unlock command/file/permission/tool approval flows that real Codex clients must answer
+- the client-directed server-request approval surface is now admitted
+- the next missing surfaces unlock app, plugin, file, model, and MCP flows used by real Codex clients
 - they keep deprecated v1 APIs and Cafex bridge work out of the core until selected intentionally
 
 ## Follow-Up Bead Policy
