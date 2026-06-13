@@ -46,6 +46,7 @@ Profile policy for the scaffold:
 | `thread-read-goal-tool-contributor-visibility.hxml` | Compile the HXCX-4.38 raw goal tool contributor visibility harness through portable haxe.rust. |
 | `thread-read-get-goal-tool.hxml` | Compile the HXCX-4.39 raw `get_goal` tool executor harness through portable haxe.rust. |
 | `thread-read-create-goal-tool.hxml` | Compile the HXCX-4.40 raw `create_goal` tool executor harness through portable haxe.rust. |
+| `thread-read-update-goal-tool.hxml` | Compile the HXCX-4.41 raw `update_goal` tool executor harness through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |
