@@ -222,7 +222,17 @@ Model the selected active-turn merge and status normalization behavior around re
 
 Status: HXCX-4.19 now owns `fixtures/hxrust/thread-read-active-turn-merge.v1.json` and validates the slice through `harness/check-thread-read-active-turn-merge.sh`. No new haxe.rust limitation was exposed. This is pure state evidence only, not live `ThreadState` ownership, watch-manager integration, rollout storage, or production state ownership.
 
-### HXCX-4.20+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.20: Thread/Turns Items List Unsupported Runtime Boundary
+
+Record the selected `thread/turns/items/list` runtime contract before implementing item pagination:
+
+- upstream protocol DTOs exist for params and response pages;
+- the current app-server processor returns method-not-found with `thread/turns/items/list is not supported yet`;
+- codexhx validates selected params first, then returns the same unsupported outcome for valid requests.
+
+Status: HXCX-4.20 now owns `fixtures/hxrust/thread-read-turn-items-list-runtime.v1.json` and validates the boundary through `harness/check-thread-read-turn-items-list.sh`. No new haxe.rust limitation was exposed. This is unsupported-runtime evidence only, not item pagination, rollout storage, or production state ownership.
+
+### HXCX-4.21+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

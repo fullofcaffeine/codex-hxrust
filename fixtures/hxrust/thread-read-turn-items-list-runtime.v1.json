@@ -1,0 +1,123 @@
+{
+  "schema": "codex-hxrust.thread-read-turn-items-list-runtime.v1",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs:1225",
+    "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs:1242",
+    "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs:627",
+    "../codex/codex-rs/app-server-protocol/src/protocol/v2/tests.rs:220"
+  ],
+  "requests": [
+    {
+      "id": "valid-params-rejected-unsupported",
+      "threadId": "11111111-1111-4111-8111-111111111111",
+      "turnId": "turn-1",
+      "cursor": "{\"itemId\":\"item-1\",\"includeAnchor\":false}",
+      "limit": 50,
+      "sortDirection": "asc",
+      "expect": {
+        "ok": false,
+        "code": "method_not_found",
+        "threadId": "11111111-1111-4111-8111-111111111111",
+        "turnId": "turn-1",
+        "summaryContains": "thread/turns/items/list is not supported yet"
+      }
+    },
+    {
+      "id": "valid-desc-params-rejected-unsupported",
+      "threadId": "11111111-1111-4111-8111-111111111111",
+      "turnId": "turn-2",
+      "cursor": "",
+      "limit": 10,
+      "sortDirection": "desc",
+      "expect": {
+        "ok": false,
+        "code": "method_not_found",
+        "threadId": "11111111-1111-4111-8111-111111111111",
+        "turnId": "turn-2",
+        "summaryContains": "turn-items:method_not_found;ok=false;thread=11111111-1111-4111-8111-111111111111;turn=turn-2"
+      }
+    },
+    {
+      "id": "invalid-thread-id-refused",
+      "threadId": "not-a-uuid",
+      "turnId": "turn-1",
+      "cursor": "",
+      "limit": 25,
+      "sortDirection": "asc",
+      "expect": {
+        "ok": false,
+        "code": "invalid_thread_id",
+        "threadId": "",
+        "turnId": "",
+        "summaryContains": ""
+      }
+    },
+    {
+      "id": "invalid-turn-id-refused",
+      "threadId": "11111111-1111-4111-8111-111111111111",
+      "turnId": "",
+      "cursor": "",
+      "limit": 25,
+      "sortDirection": "asc",
+      "expect": {
+        "ok": false,
+        "code": "invalid_turn_id",
+        "threadId": "",
+        "turnId": "",
+        "summaryContains": ""
+      }
+    },
+    {
+      "id": "malformed-cursor-refused",
+      "threadId": "11111111-1111-4111-8111-111111111111",
+      "turnId": "turn-1",
+      "cursor": "not-json",
+      "limit": 25,
+      "sortDirection": "asc",
+      "expect": {
+        "ok": false,
+        "code": "invalid_cursor",
+        "threadId": "",
+        "turnId": "",
+        "summaryContains": ""
+      }
+    },
+    {
+      "id": "malformed-limit-refused",
+      "threadId": "11111111-1111-4111-8111-111111111111",
+      "turnId": "turn-1",
+      "cursor": "",
+      "limit": -2,
+      "sortDirection": "asc",
+      "expect": {
+        "ok": false,
+        "code": "invalid_limit",
+        "threadId": "",
+        "turnId": "",
+        "summaryContains": ""
+      }
+    },
+    {
+      "id": "malformed-sort-refused",
+      "threadId": "11111111-1111-4111-8111-111111111111",
+      "turnId": "turn-1",
+      "cursor": "",
+      "limit": 25,
+      "sortDirection": "sideways",
+      "expect": {
+        "ok": false,
+        "code": "invalid_sort_direction",
+        "threadId": "",
+        "turnId": "",
+        "summaryContains": ""
+      }
+    }
+  ],
+  "expectReport": {
+    "requestCount": 7,
+    "unsupportedCount": 2,
+    "failureCount": 7,
+    "summaryContains": "schema=codex-hxrust.thread-read-turn-items-list-report.v1;requests=7;unsupported=2;failed=7"
+  }
+}

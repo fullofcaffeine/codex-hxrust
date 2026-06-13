@@ -175,6 +175,16 @@ The fixture `fixtures/hxrust/thread-read-turns-page.v1.json` and `harness/check-
 
 The fixture `fixtures/hxrust/thread-read-active-turn-merge.v1.json` and `harness/check-thread-read-active-turn-merge.sh` prove the slice through the Haxe interpreter and portable haxe.rust-generated Rust. This is not live `ThreadState` ownership, watch-manager integration, rollout storage, or production state ownership. The boundary is documented in `docs/thread-read-active-turn-merge.md`.
 
+## Thread/Turns Items List Runtime Boundary
+
+`codexhx.runtime.app.threadread.ThreadReadTurnItemsListRuntime` is the HXCX-4.20 raw upstream `thread/turns/items/list` runtime boundary:
+
+- `ThreadReadTurnItemsListRequest` uses typed `ThreadId`, `TurnId`, cursor, limit, and sort direction.
+- valid params return the upstream-shaped unsupported method outcome: `thread/turns/items/list is not supported yet`.
+- invalid thread IDs, empty turn IDs, malformed cursors, malformed limits, and invalid sort directions fail before the unsupported runtime boundary.
+
+The fixture `fixtures/hxrust/thread-read-turn-items-list-runtime.v1.json` and `harness/check-thread-read-turn-items-list.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not implement item pagination or full `ThreadItem` page reconstruction; it records the current upstream runtime contract. The boundary is documented in `docs/thread-read-turn-items-list-runtime.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:
