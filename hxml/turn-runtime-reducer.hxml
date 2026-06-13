@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/turn-runtime-reducer
+-D rust_crate=codex_hxrust_turn_runtime_reducer
+-D rust_cargo_subcommand=check
+-main TurnRuntimeReducerHarness

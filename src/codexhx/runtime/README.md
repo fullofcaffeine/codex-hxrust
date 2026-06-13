@@ -89,7 +89,7 @@ HXCX-4.7 also exposed generic haxe.rust issue `haxe.rust-362`: nullable `Array<C
 - `CodexStoryMessageType` covers the selected upstream Codex event subset: session configured, task started, reasoning delta, assistant delta, task complete, and shutdown complete.
 - `TuiStoryReplaySummary` normalizes volatile timestamp, cwd, model, session id, and event id noise into a stable replay fingerprint.
 
-This is replay evidence, not terminal rendering ownership. HXCX-4.9 owns VT100/history/render invariants next.
+This is replay evidence, not terminal rendering ownership. HXCX-4.9 owns VT100/history/render invariants, and HXCX-4.10 owns turn runtime reducer invariants.
 
 ## TUI Render Invariants
 
@@ -101,3 +101,17 @@ This is replay evidence, not terminal rendering ownership. HXCX-4.9 owns VT100/h
 - `TuiHistoryBuffer` models deterministic history insertion and cursor restoration for the selected string backend.
 
 The fixture `fixtures/upstream/vt100-render-selected.v1.json` and `harness/check-tui-render.sh` prove these invariants through both Haxe interpreter and haxe.rust-generated Rust. This still does not claim full ratatui/crossterm ownership; those crates remain a later metal/native boundary for the interactive TUI.
+
+## Turn Runtime Reducers
+
+`codexhx.runtime.tui.turn` is the HXCX-4.10 pure-state turn runtime slice. It lifts selected upstream `ChatWidget`/`turn_runtime.rs` lifecycle behavior into typed Haxe reducers:
+
+- `TurnRuntimeAction` represents task start/complete/fail/cancel, assistant deltas/final items, plan deltas/final plans, queued follow-ups, and queued steers.
+- `TurnRuntimeState` records running/terminal status, assistant final source, notification text, plan consolidation, queued follow-up/steer bookkeeping, and terminal failure/cancel messages.
+- `TurnRuntimeReducer` preserves the upstream distinction between item-level copy source and completion notification text: item-level final markdown remains the copied transcript source, while a non-empty completion message may still be used for notification text.
+- Live completions clear the plan prompt flag; replayed completions keep it so a later live completion can prompt once.
+- Completion starts at most one queued follow-up and suppresses the completion notification when it does. Active goal continuations also suppress completion notification.
+
+The fixture `fixtures/upstream/turn-runtime-selected.v1.json` and `harness/check-turn-runtime-reducer.sh` prove the reducer through both Haxe interpreter and haxe.rust-generated Rust. This is still not live terminal or app-server ownership; it is the deterministic state core that later transport and TUI surfaces can consume.
+
+HXCX-4.10 also exposed generic haxe.rust issue `haxe.rust-fzl`: reusing a non-copy local `String` as multiple conditional expression results can generate Rust move-after-move errors. The reducer uses explicit Haxe string slices as semantic copies while the compiler issue is tracked upstream as product-neutral clone-insertion work.

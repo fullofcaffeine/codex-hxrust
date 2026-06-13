@@ -26,14 +26,14 @@ harness/check-haxe-rust-pressure-gaps.sh
 
 | Metric | Count |
 | --- | ---: |
-| Total pressure gaps | 12 |
+| Total pressure gaps | 13 |
 | Resolved upstream | 10 |
-| Open upstream | 2 |
+| Open upstream | 3 |
 | Local workaround | 0 |
 | High severity | 7 |
-| Medium severity | 5 |
+| Medium severity | 6 |
 | Raw Rust escape matches in current app/test Haxe source | 0 |
-| Haxe source/test files scanned | 130 |
+| Haxe source/test files scanned | 139 |
 
 Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAllowRaw`, `@:rust...`, or `untyped` escapes are present under `src` or `test`.
 
@@ -43,7 +43,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | --- | ---: | --- |
 | Build/profile/tooling | 2 | Dev haxelib std ownership and Cargo failure propagation blocked trustworthy profile gates. |
 | Protocol/JSON/DTO | 3 | Nullable scalar, generic enum payload, and enum reuse issues surfaced in protocol IDs and JSON helpers. |
-| Runtime/model/session | 5 | Try/catch tail returns, interface null behavior, nullable class-array reads, and non-copy field assign-op surfaced in runtime/TUI work. |
+| Runtime/model/session | 6 | Try/catch tail returns, interface null behavior, nullable class-array reads, non-copy field assign-op, and non-copy local reuse surfaced in runtime/TUI work. |
 | Cafex adapter | 2 | Path.directory and String.lastIndexOf are now resolved upstream. |
 
 ## Gap List
@@ -60,6 +60,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | Nullable interface values | `resolved_upstream` | high | runtime/model/session | Resolved by haxe.rust `b3e38c31` with `nullable_interface_null`. |
 | Nullable `Array<Class>.shift()` return | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-362`; local runtime queue uses a typed read outcome while the compiler regression is fixed generically. |
 | Non-copy class field assign-op | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-ojj`; local TUI story summary uses explicit `field = field + value` while compiler support is fixed generically. |
+| Reused non-copy local conditional results | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-fzl`; local turn reducer uses explicit Haxe string slices while clone insertion is fixed generically. |
 | `haxe.io.Path.directory` lowering | `resolved_upstream` | medium | Cafex adapter | Resolved by haxe.rust `39f20b9e` with `path_directory`. |
 | `String.lastIndexOf` lowering | `resolved_upstream` | medium | Cafex adapter | Resolved by haxe.rust `916f1534` with `string_last_index_of`. |
 
@@ -67,10 +68,10 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 
 The pressure test is encouraging but not clean enough for broad replacement:
 
-- haxe.rust fixes have been generic and upstreamable so far; `haxe.rust-362` and `haxe.rust-ojj` are the current open generic regressions from live-runtime/TUI work.
+- haxe.rust fixes have been generic and upstreamable so far; `haxe.rust-362`, `haxe.rust-ojj`, and `haxe.rust-fzl` are the current open generic regressions from live-runtime/TUI work.
 - The current codexhx source avoids raw Rust escape hatches.
 - Nullable interface values now have a generic upstream fix and passing snapshot.
 - String.lastIndexOf now has a generic upstream fix and passing snapshot.
 - haxe.io.Path.directory now has a generic upstream fix and passing snapshot.
 
-Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()` and non-copy field assign-op regressions, unsupported Cafex seam, licensing, and broader parity work.
+Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()`, non-copy field assign-op, and non-copy local reuse regressions, unsupported Cafex seam, licensing, and broader parity work.

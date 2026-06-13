@@ -7,10 +7,11 @@
     "mode": "conditional_go_for_helper_sidecar_and_selected_adapter_slices",
     "broadReplacement": "no_go",
     "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
-    "requiredBeforeBroadReplacement": [
+      "requiredBeforeBroadReplacement": [
       "Broaden haxe.rust parity evidence beyond selected helper/headless/adapter pressure fixtures.",
       "Resolve haxe.rust-362 nullable Array.shift class-return lowering or carry an explicit release-blocking compiler risk.",
       "Resolve haxe.rust-ojj non-copy class field assign-op lowering or carry an explicit release-blocking compiler risk.",
+      "Resolve haxe.rust-fzl non-copy local conditional-result reuse lowering or carry an explicit release-blocking compiler risk.",
       "Complete license/distribution review for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts.",
       "Reduce or explicitly native-own the 4 unsupported Cafex seam rows.",
       "Run replacement rollback drills from the operator runbook.",
@@ -31,16 +32,17 @@
     {
       "dimension": "language",
       "score": "yellow_green",
-      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, the first runtime app-client facade, and selected TUI story replay pass through haxe.rust, with nullable Array.shift class-return and non-copy class field assign-op regressions still open upstream.",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, the first runtime app-client facade, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, and non-copy local reuse regressions still open upstream.",
       "strengths": [
-        "10 of 12 pressure gaps are resolved upstream.",
+        "10 of 13 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
         "No raw Rust escape matches exist in current app/test Haxe source."
       ],
       "caveats": [
         "Current language proof is still fixture-backed and selected-slice scoped rather than broad upstream parity.",
         "haxe.rust-362 remains open for nullable Array.shift class-return lowering.",
-        "haxe.rust-ojj remains open for non-copy class field assign-op lowering."
+        "haxe.rust-ojj remains open for non-copy class field assign-op lowering.",
+        "haxe.rust-fzl remains open for non-copy local reuse across conditional expression results."
       ],
       "evidenceRefs": [
         "reference/haxe-rust-pressure-gaps.v1.json",
@@ -50,12 +52,13 @@
     {
       "dimension": "runtime",
       "score": "yellow",
-      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, and selected TUI story replay slices are viable, but live model/full TUI/restart ownership is outside current proof.",
+      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, selected TUI story/render, and turn reducer slices are viable, but live model/full TUI/restart ownership is outside current proof.",
       "strengths": [
         "Headless runtime fixtures pass without model credentials.",
         "Cancellation and transcript/state artifacts are deterministic.",
         "Runtime app-client classification, lag markers, and request correlation pass through generated Rust.",
         "Selected upstream TUI story replay passes through generated Rust with normalized summaries.",
+        "Selected VT100 render invariants and turn runtime reducers pass through generated Rust.",
         "Operator runbook keeps production default disabled."
       ],
       "caveats": [
@@ -72,7 +75,7 @@
       "score": "yellow_green",
       "rationale": "The project has kept interop typed and narrow: generated Rust is disposable, haxe.rust stays external, and app/test Haxe source has no raw Rust snippets.",
       "strengths": [
-        "Raw Rust escape pressure is 0 matches across 130 Haxe source/test files.",
+        "Raw Rust escape pressure is 0 matches across 139 Haxe source/test files.",
         "haxe.rust fixes are generic and made in ../haxe.rust.",
         "Pin update workflow is scripted and gated."
       ],
@@ -130,11 +133,12 @@
     {
       "dimension": "maintenance",
       "score": "yellow_green",
-      "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while two generic compiler regressions and Cafex live runtime seams are unsupported.",
+      "rationale": "The pressure-test process has produced upstreamable haxe.rust fixes, checked ledgers, and repeatable pins; broad replacement remains too costly while three generic compiler regressions and Cafex live runtime seams are unsupported.",
       "strengths": [
         "10 pressure gaps resolved upstream rather than carried as private compiler hacks.",
         "The new nullable Array.shift class-return regression is tracked as haxe.rust-362 instead of app-specific compiler code.",
         "The non-copy class field assign-op regression is tracked as haxe.rust-ojj instead of app-specific compiler code.",
+        "The non-copy local conditional-result reuse regression is tracked as haxe.rust-fzl instead of app-specific compiler code.",
         "Friction comparison supports selected adapter slices and review tooling.",
         "Operator rollback and migration-mode policies are checked."
       ],
@@ -172,12 +176,12 @@
   ],
   "measuredInputs": {
       "pressureGaps": {
-      "total": 12,
+      "total": 13,
       "resolvedUpstream": 10,
-      "openUpstream": 2,
+      "openUpstream": 3,
       "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 130,
+      "sourceFilesScanned": 139,
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {
@@ -208,7 +212,7 @@
     "Recommend HXCX-6.3 select helper-only, sidecar/headless, or selected adapter-slice mode.",
     "Do not select broad replacement from current evidence.",
     "Keep unsupported surfaces explicit and fail-closed.",
-    "Treat haxe.rust-362 and haxe.rust-ojj as open compiler risks until fixed with product-neutral regressions.",
+    "Treat haxe.rust-362, haxe.rust-ojj, and haxe.rust-fzl as open compiler risks until fixed with product-neutral regressions.",
     "Treat license/distribution as a release blocker, not a local-experiment blocker."
   ]
 }

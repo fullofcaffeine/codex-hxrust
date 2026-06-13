@@ -5,25 +5,25 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 12,
+    "totalGaps": 13,
     "resolvedUpstream": 10,
-    "openUpstream": 2,
+    "openUpstream": 3,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 5,
+      "medium": 6,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 5,
+      "runtime_model_session": 6,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 130,
+    "sourceFilesScanned": 139,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -211,6 +211,23 @@
       "validation": [
         "harness/check-tui-story-replay.sh",
         "haxe.rust-ojj acceptance requires a product-neutral regression fixture"
+      ]
+    },
+    {
+      "id": "reused-non-copy-local-conditional-results",
+      "status": "open_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-ckg",
+      "haxeRustRefs": [
+        "haxe.rust-fzl"
+      ],
+      "reproduction": "Turn runtime reducer work exposed Rust E0382 move-after-move errors when one String parameter was reused as the then-branch result for multiple conditional expressions feeding final markdown, last markdown, and notification fields.",
+      "workaround": "The local reducer uses explicit semantic Haxe string slices via substr(0, length) while haxe.rust fixes clone insertion/reuse analysis for non-Copy local values generically.",
+      "followUp": "haxe.rust-fzl",
+      "validation": [
+        "harness/check-turn-runtime-reducer.sh",
+        "haxe.rust-fzl acceptance requires a product-neutral regression fixture"
       ]
     },
     {

@@ -1,0 +1,150 @@
+{
+  "schema": "codexhx.turn-runtime.selected.v1",
+  "source": {
+    "codex": "../codex/codex-rs/tui/src/chatwidget/turn_runtime.rs",
+    "story": "fixtures/upstream/oss-story-selected.v1.jsonl",
+    "notes": "Selected pure-state invariants from upstream turn runtime handling; excludes terminal I/O, credentials, and live app-server ownership."
+  },
+  "scenarios": [
+    {
+      "name": "assistant-final-from-completion",
+      "actions": [
+        { "type": "task_started" },
+        { "type": "assistant_delta", "text": "Hello" },
+        { "type": "task_completed", "lastAgentMessage": "Hello final" }
+      ],
+      "expect": {
+        "status": "completed",
+        "running": false,
+        "assistantFinalMarkdown": "Hello final",
+        "assistantFinalSource": "completion",
+        "notificationResponse": "Hello final",
+        "completionNotified": true,
+        "terminalReason": "completed"
+      }
+    },
+    {
+      "name": "item-source-wins-copy-source",
+      "actions": [
+        { "type": "task_started" },
+        { "type": "assistant_delta", "text": "draft " },
+        { "type": "assistant_final", "markdown": "item markdown", "copySource": true },
+        { "type": "task_completed", "lastAgentMessage": "completion summary" }
+      ],
+      "expect": {
+        "status": "completed",
+        "assistantFinalMarkdown": "item markdown",
+        "assistantFinalSource": "item",
+        "lastAgentMarkdown": "item markdown",
+        "sawCopySourceThisTurn": true,
+        "notificationResponse": "completion summary",
+        "completionNotified": true
+      }
+    },
+    {
+      "name": "plan-delta-final-live",
+      "actions": [
+        { "type": "task_started" },
+        { "type": "plan_delta", "text": "1. Inspect upstream runtime" },
+        {
+          "type": "plan_final",
+          "items": [
+            { "status": "completed", "label": "Inspect upstream runtime" },
+            { "status": "in_progress", "label": "Lift reducer state" }
+          ]
+        },
+        { "type": "task_completed", "lastAgentMessage": "" }
+      ],
+      "expect": {
+        "status": "completed",
+        "planFingerprint": "completed:Inspect upstream runtime|in_progress:Lift reducer state",
+        "consolidatedPlanFingerprint": "completed:Inspect upstream runtime|in_progress:Lift reducer state",
+        "sawPlanItemThisTurn": false,
+        "finalSeparatorNeeded": true,
+        "completionNotified": true
+      }
+    },
+    {
+      "name": "plan-replay-keeps-prompt-flag",
+      "actions": [
+        { "type": "task_started" },
+        { "type": "plan_delta", "text": "1. Rehydrate plan mode" },
+        {
+          "type": "plan_final",
+          "items": [
+            { "status": "pending", "label": "Rehydrate plan mode" }
+          ]
+        },
+        { "type": "task_completed", "fromReplay": true, "lastAgentMessage": "" }
+      ],
+      "expect": {
+        "status": "completed",
+        "sawPlanItemThisTurn": true,
+        "planFingerprint": "pending:Rehydrate plan mode",
+        "completionNotified": true
+      }
+    },
+    {
+      "name": "queued-follow-up-and-steer",
+      "actions": [
+        { "type": "task_started" },
+        { "type": "queue_follow_up", "prompt": "continue with next parity slice" },
+        { "type": "queue_follow_up", "prompt": "remaining queued prompt" },
+        { "type": "queue_steer", "prompt": "be concise" },
+        { "type": "task_completed", "lastAgentMessage": "done" }
+      ],
+      "expect": {
+        "status": "completed",
+        "startedFollowUp": "continue with next parity slice",
+        "pendingFollowUps": 1,
+        "pendingSteers": 1,
+        "submitPendingSteersAfterInterrupt": false,
+        "completionNotified": false
+      }
+    },
+    {
+      "name": "active-goal-continuation-suppresses-notify",
+      "actions": [
+        { "type": "task_started" },
+        { "type": "task_completed", "lastAgentMessage": "done", "activeGoalContinuation": true }
+      ],
+      "expect": {
+        "status": "completed",
+        "startedFollowUp": "",
+        "completionNotified": false,
+        "terminalReason": "completed"
+      }
+    },
+    {
+      "name": "failure-terminal-state",
+      "actions": [
+        { "type": "task_started" },
+        { "type": "queue_steer", "prompt": "retry with more logs" },
+        { "type": "task_failed", "message": "model stream failed" }
+      ],
+      "expect": {
+        "status": "failed",
+        "running": false,
+        "terminalReason": "failed",
+        "failureMessage": "model stream failed",
+        "submitPendingSteersAfterInterrupt": false,
+        "completionNotified": false
+      }
+    },
+    {
+      "name": "cancel-terminal-state",
+      "actions": [
+        { "type": "task_started" },
+        { "type": "assistant_delta", "text": "partial" },
+        { "type": "task_cancelled", "message": "user interrupted" }
+      ],
+      "expect": {
+        "status": "cancelled",
+        "running": false,
+        "terminalReason": "cancelled",
+        "failureMessage": "user interrupted",
+        "completionNotified": false
+      }
+    }
+  ]
+}
