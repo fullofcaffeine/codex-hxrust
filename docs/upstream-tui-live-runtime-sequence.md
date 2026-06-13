@@ -506,7 +506,21 @@ Model the selected upstream `GoalToolExecutor` trio surface:
 
 Status: HXCX-4.42 now owns `fixtures/hxrust/thread-read-goal-tool-dispatch.v1.json` and validates the slice through `harness/check-thread-read-goal-tool-dispatch.sh`. No new haxe.rust limitation was exposed. This is selected executor dispatch evidence only, not production SQLite/log state ownership, real async lock ownership, full analytics/event implementation, model/provider behavior, full runtime wiring, or Cafex behavior.
 
-### HXCX-4.43+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.43: Provider Admission Boundary
+
+Model the selected upstream provider and credential admission boundary before live model traffic:
+
+- carry `ModelProviderInfo` auth metadata into typed Haxe provider DTOs;
+- validate AWS/command auth shape conflicts before constructing runtime providers;
+- tie model metadata to its provider id and fail mismatches before a turn can start;
+- allow no-credential fixture providers only when OpenAI/provider-env auth is not required;
+- refuse missing OpenAI auth and missing provider env-key evidence;
+- bucket/redact credential-present cases without exposing tokens or configured env-key names;
+- refuse live-network attempts in the credential-free fixture gate.
+
+Status: HXCX-4.43 now owns `fixtures/hxrust/provider-admission.v1.json` and validates the slice through `harness/check-provider-admission.sh`. No new haxe.rust limitation was exposed. This is selected provider admission evidence only, not live provider traffic, real auth storage, token refresh, model catalog ownership, websocket/realtime behavior, or Cafex behavior.
+
+### HXCX-4.44+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

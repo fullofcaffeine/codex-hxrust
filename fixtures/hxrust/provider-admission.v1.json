@@ -1,0 +1,485 @@
+{
+  "schema": "codex-hxrust.provider-admission-fixture.v1",
+  "upstreamReferences": [
+    "../codex/codex-rs/model-provider-info/src/lib.rs:85",
+    "../codex/codex-rs/model-provider-info/src/lib.rs:150",
+    "../codex/codex-rs/model-provider-info/src/lib.rs:275",
+    "../codex/codex-rs/login/src/auth_env_telemetry.rs:31",
+    "../codex/codex-rs/model-provider/src/auth.rs:52",
+    "../codex/codex-rs/model-provider/src/auth.rs:78",
+    "../codex/codex-rs/model-provider/src/provider.rs:170",
+    "../codex/codex-rs/model-provider/src/provider.rs:222",
+    "../codex/codex-rs/app-server/src/request_processors/account_processor.rs:748",
+    "../codex/codex-rs/cli/src/main.rs:1661"
+  ],
+  "cases": [
+    {
+      "name": "fixture-local-no-credential-test-admitted",
+      "request": {
+        "requestId": "admit-local-fixture",
+        "provider": {
+          "providerId": "gpt-oss",
+          "name": "gpt-oss",
+          "hasBaseUrl": true,
+          "baseUrl": "http://localhost:11434/v1",
+          "envKeyConfigured": false,
+          "envKeyPresent": false,
+          "envKeyInstructionsPresent": false,
+          "requiresOpenAiAuth": false,
+          "supportsWebsockets": false,
+          "hasAwsAuth": false,
+          "hasCommandAuth": false,
+          "experimentalBearerTokenPresent": false
+        },
+        "model": {
+          "modelId": "gpt-oss-20b",
+          "providerId": "gpt-oss",
+          "contextWindow": 131072
+        },
+        "credentialKind": "no_credential_test",
+        "accountKind": "none",
+        "networkKind": "fixture_only",
+        "liveNetworkAllowed": false,
+        "hasCredentialMaterial": false,
+        "secretProbe": ""
+      },
+      "expect": {
+        "ok": true,
+        "code": "provider_admitted",
+        "requestId": "admit-local-fixture",
+        "providerId": "gpt-oss",
+        "modelId": "gpt-oss-20b",
+        "modelProviderId": "gpt-oss",
+        "requiresOpenAiAuth": false,
+        "credentialKind": "no_credential_test",
+        "accountKind": "none",
+        "networkKind": "fixture_only",
+        "credentialAccepted": false,
+        "credentialBucket": "none",
+        "providerEnvKeyNameBucket": "none",
+        "providerEnvKeyPresent": false,
+        "liveNetworkAllowed": false,
+        "admittedNetworkKind": "fixture_only",
+        "accountVisible": "none",
+        "summaryContains": "unauthenticated_provider"
+      }
+    },
+    {
+      "name": "openai-missing-credential-refused",
+      "request": {
+        "requestId": "missing-openai-auth",
+        "provider": {
+          "providerId": "openai",
+          "name": "OpenAI",
+          "hasBaseUrl": false,
+          "baseUrl": "",
+          "envKeyConfigured": false,
+          "envKeyPresent": false,
+          "envKeyInstructionsPresent": false,
+          "requiresOpenAiAuth": true,
+          "supportsWebsockets": true,
+          "hasAwsAuth": false,
+          "hasCommandAuth": false,
+          "experimentalBearerTokenPresent": false
+        },
+        "model": {
+          "modelId": "gpt-5.2-codex",
+          "providerId": "openai",
+          "contextWindow": 200000
+        },
+        "credentialKind": "none",
+        "accountKind": "none",
+        "networkKind": "fixture_only",
+        "liveNetworkAllowed": false,
+        "hasCredentialMaterial": false,
+        "secretProbe": ""
+      },
+      "expect": {
+        "ok": false,
+        "code": "missing_openai_auth",
+        "requestId": "missing-openai-auth",
+        "providerId": "openai",
+        "modelId": "gpt-5.2-codex",
+        "modelProviderId": "openai",
+        "requiresOpenAiAuth": true,
+        "credentialKind": "none",
+        "accountKind": "none",
+        "networkKind": "fixture_only",
+        "credentialAccepted": false,
+        "credentialBucket": "none",
+        "providerEnvKeyNameBucket": "none",
+        "providerEnvKeyPresent": false,
+        "liveNetworkAllowed": false,
+        "admittedNetworkKind": "none",
+        "accountVisible": "none",
+        "summaryContains": "auth_manager:none"
+      }
+    },
+    {
+      "name": "openai-api-key-redacted-admission",
+      "request": {
+        "requestId": "openai-api-key",
+        "provider": {
+          "providerId": "openai",
+          "name": "OpenAI",
+          "hasBaseUrl": false,
+          "baseUrl": "",
+          "envKeyConfigured": false,
+          "envKeyPresent": false,
+          "envKeyInstructionsPresent": false,
+          "requiresOpenAiAuth": true,
+          "supportsWebsockets": true,
+          "hasAwsAuth": false,
+          "hasCommandAuth": false,
+          "experimentalBearerTokenPresent": false
+        },
+        "model": {
+          "modelId": "gpt-5.2-codex",
+          "providerId": "openai",
+          "contextWindow": 200000
+        },
+        "credentialKind": "openai_auth",
+        "accountKind": "api_key",
+        "networkKind": "fixture_only",
+        "liveNetworkAllowed": false,
+        "hasCredentialMaterial": true,
+        "secretProbe": "sk-secret-should-not-leak"
+      },
+      "expect": {
+        "ok": true,
+        "code": "provider_admitted",
+        "requestId": "openai-api-key",
+        "providerId": "openai",
+        "modelId": "gpt-5.2-codex",
+        "modelProviderId": "openai",
+        "requiresOpenAiAuth": true,
+        "credentialKind": "openai_auth",
+        "accountKind": "api_key",
+        "networkKind": "fixture_only",
+        "credentialAccepted": true,
+        "credentialBucket": "present",
+        "providerEnvKeyNameBucket": "none",
+        "providerEnvKeyPresent": false,
+        "liveNetworkAllowed": false,
+        "admittedNetworkKind": "fixture_only",
+        "accountVisible": "api_key",
+        "summaryContains": "redact_token"
+      }
+    },
+    {
+      "name": "custom-provider-env-redacted-admission",
+      "request": {
+        "requestId": "custom-provider-env",
+        "provider": {
+          "providerId": "azure-openai",
+          "name": "Azure OpenAI",
+          "hasBaseUrl": true,
+          "baseUrl": "https://example.openai.azure.com/openai/v1",
+          "envKeyConfigured": true,
+          "envKeyPresent": true,
+          "envKeyInstructionsPresent": true,
+          "requiresOpenAiAuth": false,
+          "supportsWebsockets": false,
+          "hasAwsAuth": false,
+          "hasCommandAuth": false,
+          "experimentalBearerTokenPresent": false
+        },
+        "model": {
+          "modelId": "gpt-5-azure",
+          "providerId": "azure-openai",
+          "contextWindow": 128000
+        },
+        "credentialKind": "provider_env",
+        "accountKind": "none",
+        "networkKind": "fixture_only",
+        "liveNetworkAllowed": false,
+        "hasCredentialMaterial": true,
+        "secretProbe": "AZURE_OPENAI_API_KEY"
+      },
+      "expect": {
+        "ok": true,
+        "code": "provider_admitted",
+        "requestId": "custom-provider-env",
+        "providerId": "azure-openai",
+        "modelId": "gpt-5-azure",
+        "modelProviderId": "azure-openai",
+        "requiresOpenAiAuth": false,
+        "credentialKind": "provider_env",
+        "accountKind": "none",
+        "networkKind": "fixture_only",
+        "credentialAccepted": true,
+        "credentialBucket": "configured",
+        "providerEnvKeyNameBucket": "configured",
+        "providerEnvKeyPresent": true,
+        "liveNetworkAllowed": false,
+        "admittedNetworkKind": "fixture_only",
+        "accountVisible": "none",
+        "summaryContains": "redact_env_key_name"
+      }
+    },
+    {
+      "name": "provider-model-mismatch-refused",
+      "request": {
+        "requestId": "mismatched-model-provider",
+        "provider": {
+          "providerId": "openai",
+          "name": "OpenAI",
+          "hasBaseUrl": false,
+          "baseUrl": "",
+          "envKeyConfigured": false,
+          "envKeyPresent": false,
+          "envKeyInstructionsPresent": false,
+          "requiresOpenAiAuth": true,
+          "supportsWebsockets": true,
+          "hasAwsAuth": false,
+          "hasCommandAuth": false,
+          "experimentalBearerTokenPresent": false
+        },
+        "model": {
+          "modelId": "claude-sonnet",
+          "providerId": "anthropic",
+          "contextWindow": 200000
+        },
+        "credentialKind": "openai_auth",
+        "accountKind": "api_key",
+        "networkKind": "fixture_only",
+        "liveNetworkAllowed": false,
+        "hasCredentialMaterial": true,
+        "secretProbe": ""
+      },
+      "expect": {
+        "ok": false,
+        "code": "provider_model_mismatch",
+        "requestId": "mismatched-model-provider",
+        "providerId": "openai",
+        "modelId": "claude-sonnet",
+        "modelProviderId": "anthropic",
+        "requiresOpenAiAuth": true,
+        "credentialKind": "openai_auth",
+        "accountKind": "api_key",
+        "networkKind": "fixture_only",
+        "credentialAccepted": false,
+        "credentialBucket": "none",
+        "providerEnvKeyNameBucket": "none",
+        "providerEnvKeyPresent": false,
+        "liveNetworkAllowed": false,
+        "admittedNetworkKind": "none",
+        "accountVisible": "none",
+        "summaryContains": "model_provider_match:error"
+      }
+    },
+    {
+      "name": "live-network-attempt-refused-in-fixture-gate",
+      "request": {
+        "requestId": "live-network-disabled",
+        "provider": {
+          "providerId": "openai",
+          "name": "OpenAI",
+          "hasBaseUrl": false,
+          "baseUrl": "",
+          "envKeyConfigured": false,
+          "envKeyPresent": false,
+          "envKeyInstructionsPresent": false,
+          "requiresOpenAiAuth": true,
+          "supportsWebsockets": true,
+          "hasAwsAuth": false,
+          "hasCommandAuth": false,
+          "experimentalBearerTokenPresent": false
+        },
+        "model": {
+          "modelId": "gpt-5.2-codex",
+          "providerId": "openai",
+          "contextWindow": 200000
+        },
+        "credentialKind": "openai_auth",
+        "accountKind": "api_key",
+        "networkKind": "live_network",
+        "liveNetworkAllowed": false,
+        "hasCredentialMaterial": true,
+        "secretProbe": "sk-live-should-not-leak"
+      },
+      "expect": {
+        "ok": false,
+        "code": "live_network_disabled",
+        "requestId": "live-network-disabled",
+        "providerId": "openai",
+        "modelId": "gpt-5.2-codex",
+        "modelProviderId": "openai",
+        "requiresOpenAiAuth": true,
+        "credentialKind": "openai_auth",
+        "accountKind": "api_key",
+        "networkKind": "live_network",
+        "credentialAccepted": false,
+        "credentialBucket": "none",
+        "providerEnvKeyNameBucket": "none",
+        "providerEnvKeyPresent": false,
+        "liveNetworkAllowed": false,
+        "admittedNetworkKind": "none",
+        "accountVisible": "none",
+        "summaryContains": "live_network_disabled"
+      }
+    },
+    {
+      "name": "custom-provider-env-missing-refused",
+      "request": {
+        "requestId": "custom-provider-env-missing",
+        "provider": {
+          "providerId": "azure-openai",
+          "name": "Azure OpenAI",
+          "hasBaseUrl": true,
+          "baseUrl": "https://example.openai.azure.com/openai/v1",
+          "envKeyConfigured": true,
+          "envKeyPresent": false,
+          "envKeyInstructionsPresent": true,
+          "requiresOpenAiAuth": false,
+          "supportsWebsockets": false,
+          "hasAwsAuth": false,
+          "hasCommandAuth": false,
+          "experimentalBearerTokenPresent": false
+        },
+        "model": {
+          "modelId": "gpt-5-azure",
+          "providerId": "azure-openai",
+          "contextWindow": 128000
+        },
+        "credentialKind": "none",
+        "accountKind": "none",
+        "networkKind": "fixture_only",
+        "liveNetworkAllowed": false,
+        "hasCredentialMaterial": false,
+        "secretProbe": "AZURE_OPENAI_API_KEY"
+      },
+      "expect": {
+        "ok": false,
+        "code": "missing_provider_env_key",
+        "requestId": "custom-provider-env-missing",
+        "providerId": "azure-openai",
+        "modelId": "gpt-5-azure",
+        "modelProviderId": "azure-openai",
+        "requiresOpenAiAuth": false,
+        "credentialKind": "none",
+        "accountKind": "none",
+        "networkKind": "fixture_only",
+        "credentialAccepted": false,
+        "credentialBucket": "none",
+        "providerEnvKeyNameBucket": "configured",
+        "providerEnvKeyPresent": false,
+        "liveNetworkAllowed": false,
+        "admittedNetworkKind": "none",
+        "accountVisible": "none",
+        "summaryContains": "provider_env_key:missing"
+      }
+    },
+    {
+      "name": "aws-bedrock-admitted-without-openai-auth",
+      "request": {
+        "requestId": "aws-bedrock",
+        "provider": {
+          "providerId": "amazon-bedrock",
+          "name": "Amazon Bedrock",
+          "hasBaseUrl": true,
+          "baseUrl": "https://bedrock-runtime.us-west-2.amazonaws.com/model",
+          "envKeyConfigured": false,
+          "envKeyPresent": false,
+          "envKeyInstructionsPresent": false,
+          "requiresOpenAiAuth": false,
+          "supportsWebsockets": false,
+          "hasAwsAuth": true,
+          "hasCommandAuth": false,
+          "experimentalBearerTokenPresent": false
+        },
+        "model": {
+          "modelId": "anthropic.claude-3-5-sonnet",
+          "providerId": "amazon-bedrock",
+          "contextWindow": 200000
+        },
+        "credentialKind": "aws",
+        "accountKind": "amazon_bedrock",
+        "networkKind": "fixture_only",
+        "liveNetworkAllowed": false,
+        "hasCredentialMaterial": false,
+        "secretProbe": ""
+      },
+      "expect": {
+        "ok": true,
+        "code": "provider_admitted",
+        "requestId": "aws-bedrock",
+        "providerId": "amazon-bedrock",
+        "modelId": "anthropic.claude-3-5-sonnet",
+        "modelProviderId": "amazon-bedrock",
+        "requiresOpenAiAuth": false,
+        "credentialKind": "aws",
+        "accountKind": "amazon_bedrock",
+        "networkKind": "fixture_only",
+        "credentialAccepted": false,
+        "credentialBucket": "aws_configured",
+        "providerEnvKeyNameBucket": "none",
+        "providerEnvKeyPresent": false,
+        "liveNetworkAllowed": false,
+        "admittedNetworkKind": "fixture_only",
+        "accountVisible": "amazon_bedrock",
+        "summaryContains": "account_state:amazon_bedrock"
+      }
+    },
+    {
+      "name": "aws-provider-openai-auth-conflict-refused",
+      "request": {
+        "requestId": "aws-conflict",
+        "provider": {
+          "providerId": "amazon-bedrock",
+          "name": "Amazon Bedrock",
+          "hasBaseUrl": true,
+          "baseUrl": "https://bedrock-runtime.us-west-2.amazonaws.com/model",
+          "envKeyConfigured": false,
+          "envKeyPresent": false,
+          "envKeyInstructionsPresent": false,
+          "requiresOpenAiAuth": true,
+          "supportsWebsockets": false,
+          "hasAwsAuth": true,
+          "hasCommandAuth": false,
+          "experimentalBearerTokenPresent": false
+        },
+        "model": {
+          "modelId": "anthropic.claude-3-5-sonnet",
+          "providerId": "amazon-bedrock",
+          "contextWindow": 200000
+        },
+        "credentialKind": "aws",
+        "accountKind": "amazon_bedrock",
+        "networkKind": "fixture_only",
+        "liveNetworkAllowed": false,
+        "hasCredentialMaterial": false,
+        "secretProbe": ""
+      },
+      "expect": {
+        "ok": false,
+        "code": "provider_auth_shape_conflict",
+        "requestId": "aws-conflict",
+        "providerId": "amazon-bedrock",
+        "modelId": "anthropic.claude-3-5-sonnet",
+        "modelProviderId": "amazon-bedrock",
+        "requiresOpenAiAuth": true,
+        "credentialKind": "aws",
+        "accountKind": "amazon_bedrock",
+        "networkKind": "fixture_only",
+        "credentialAccepted": false,
+        "credentialBucket": "none",
+        "providerEnvKeyNameBucket": "none",
+        "providerEnvKeyPresent": false,
+        "liveNetworkAllowed": false,
+        "admittedNetworkKind": "none",
+        "accountVisible": "none",
+        "summaryContains": "model_provider_info.validate:error"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 9,
+    "successCount": 4,
+    "errorCount": 5,
+    "credentialAcceptedCount": 2,
+    "redactedCredentialCount": 2,
+    "liveNetworkDeniedCount": 1,
+    "summaryContains": "redactedCredentials=2"
+  }
+}

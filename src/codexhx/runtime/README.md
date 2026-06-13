@@ -461,6 +461,19 @@ The fixture `fixtures/hxrust/thread-read-update-goal-tool.v1.json` and `harness/
 
 The fixture `fixtures/hxrust/thread-read-goal-tool-dispatch.v1.json` and `harness/check-thread-read-goal-tool-dispatch.sh` prove the trio through the Haxe interpreter and portable haxe.rust-generated Rust. This is selected executor-surface evidence only; it does not own production SQLite/log state, real async locks, full analytics/event implementations, credentialed model/provider behavior, full runtime wiring, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-goal-tool-dispatch.md`.
 
+## Provider Admission Boundary
+
+`codexhx.runtime.model.admission.ProviderAdmissionPolicy` is the HXCX-4.43 raw upstream provider/credential admission slice:
+
+- selected `ModelProviderInfo` metadata is typed, including provider id, base URL presence, provider env-key state, OpenAI-auth requirement, websocket support, AWS auth, command auth, and experimental bearer-token presence;
+- model metadata is tied to its provider id so provider/model mismatches fail before any runtime traffic;
+- provider auth-shape conflicts mirror selected upstream validation for AWS/command auth combinations;
+- no-credential fixture use is allowed only when provider semantics do not require OpenAI or provider-env credentials;
+- OpenAI-auth and provider-env admissions expose only redacted buckets, never credential material or env-key names;
+- live-network attempts are refused by this credential-free fixture gate.
+
+The fixture `fixtures/hxrust/provider-admission.v1.json` and `harness/check-provider-admission.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is admission evidence only; it does not read real credentials, refresh tokens, call live model providers, own model catalogs, implement realtime/websocket traffic, or model Cafex/Cafetera behavior. The boundary is documented in `docs/provider-admission.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:
