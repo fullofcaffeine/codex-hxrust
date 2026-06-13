@@ -33,6 +33,8 @@ The first M2 subset covers:
 
 Realtime notification schemas are tracked through standalone v2 schema files. The paired realtime client control request DTOs are selected from upstream Rust DTO/protocol source because standalone request/response schema files are not emitted for `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, or `thread/realtime/listVoices`.
 
+Remote-control status notification schemas are tracked through standalone v2 schema files. The paired remote-control request/response DTOs are selected from upstream Rust DTO/protocol source because standalone request/response schema files are not emitted for `remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, or `remoteControl/client/revoke`.
+
 `environment/add`, `collaborationMode/list`, and `thread/search` are selected from upstream Rust DTO/protocol source because the pinned export does not currently emit standalone v2 request/response schema files for those methods. `mock/experimentalMethod` remains outside the production subset because it is an upstream experimental test-only method.
 
 The script records both per-schema hashes and field labels such as `property:threadId`, `required:threadId`, and `definition:TurnError`. If a hash changes without field-set drift, the diff reports `changedFields: ["schema-content"]`.

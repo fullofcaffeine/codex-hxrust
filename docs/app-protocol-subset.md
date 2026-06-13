@@ -50,6 +50,13 @@ Included client requests:
 - `thread/realtime/appendText`
 - `thread/realtime/stop`
 - `thread/realtime/listVoices`
+- `remoteControl/enable`
+- `remoteControl/disable`
+- `remoteControl/status/read`
+- `remoteControl/pairing/start`
+- `remoteControl/pairing/status`
+- `remoteControl/client/list`
+- `remoteControl/client/revoke`
 - `windowsSandbox/setupStart`
 - `windowsSandbox/readiness`
 - `account/login/start`
@@ -442,7 +449,9 @@ Client-directed server requests use upstream's `ServerRequest`/`ServerResponse` 
 
 `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, and `thread/realtime/listVoices` admit the upstream experimental realtime client control request family. The selected subset validates required thread IDs, start `outputModality`, nullable optional start overrides, `websocket` and `webrtc` transport objects, audio chunks, append text, stop, empty success responses, and the builtin list-voices response. The fixture path does not start live audio, network, or WebRTC behavior.
 
-Remote-control request controls and deprecated v1 compatibility are selected and sequenced by HXCX-3.68 in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md), but not yet implemented in this protocol subset. `mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
+`remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, and `remoteControl/client/revoke` admit the upstream experimental remote-control request family. The selected subset validates absent/empty params for enable/disable/status read, status snapshot responses, pairing start and exactly-one pairing status fields, client list pagination/order and metadata, revoke IDs, and empty revoke responses. The fixture path does not start daemon, account, or network behavior.
+
+Deprecated v1 compatibility is selected and sequenced by HXCX-3.68 in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md), but not yet implemented in this protocol subset. `mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 

@@ -5,11 +5,11 @@ import haxe.json.Value;
 import StringTools;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/search", "thread/loaded/list", "thread/read", "fuzzyFileSearch/sessionStart", "fuzzyFileSearch/sessionUpdate", "fuzzyFileSearch/sessionStop", "thread/realtime/start", "thread/realtime/appendAudio", "thread/realtime/appendText", "thread/realtime/stop", "thread/realtime/listVoices", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read", "environment/add", "collaborationMode/list", "app/list", "skills/list", "skills/extraRoots/set", "skills/config/write", "hooks/list", "marketplace/add", "marketplace/remove", "marketplace/upgrade", "plugin/list", "plugin/installed", "plugin/read", "plugin/skill/read", "plugin/install", "plugin/uninstall", "plugin/share/save", "plugin/share/updateTargets", "plugin/share/list", "plugin/share/checkout", "plugin/share/delete", "fs/readFile", "fs/writeFile", "fs/createDirectory", "fs/getMetadata", "fs/readDirectory", "fs/remove", "fs/copy", "fs/watch", "fs/unwatch", "model/list", "modelProvider/capabilities/read", "experimentalFeature/list", "experimentalFeature/enablement/set", "permissionProfile/list", "mcpServer/oauth/login", "config/mcpServer/reload", "mcpServerStatus/list", "mcpServer/resource/read", "mcpServer/tool/call"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/search", "thread/loaded/list", "thread/read", "fuzzyFileSearch/sessionStart", "fuzzyFileSearch/sessionUpdate", "fuzzyFileSearch/sessionStop", "thread/realtime/start", "thread/realtime/appendAudio", "thread/realtime/appendText", "thread/realtime/stop", "thread/realtime/listVoices", "remoteControl/enable", "remoteControl/disable", "remoteControl/status/read", "remoteControl/pairing/start", "remoteControl/pairing/status", "remoteControl/client/list", "remoteControl/client/revoke", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read", "environment/add", "collaborationMode/list", "app/list", "skills/list", "skills/extraRoots/set", "skills/config/write", "hooks/list", "marketplace/add", "marketplace/remove", "marketplace/upgrade", "plugin/list", "plugin/installed", "plugin/read", "plugin/skill/read", "plugin/install", "plugin/uninstall", "plugin/share/save", "plugin/share/updateTargets", "plugin/share/list", "plugin/share/checkout", "plugin/share/delete", "fs/readFile", "fs/writeFile", "fs/createDirectory", "fs/getMetadata", "fs/readDirectory", "fs/remove", "fs/copy", "fs/watch", "fs/unwatch", "model/list", "modelProvider/capabilities/read", "experimentalFeature/list", "experimentalFeature/enablement/set", "permissionProfile/list", "mcpServer/oauth/login", "config/mcpServer/reload", "mcpServerStatus/list", "mcpServer/resource/read", "mcpServer/tool/call"];
     static final SERVER_REQUEST_METHODS:Array<String> = ["account/chatgptAuthTokens/refresh", "attestation/generate", "item/commandExecution/requestApproval", "item/fileChange/requestApproval", "item/permissions/requestApproval", "item/tool/call", "item/tool/requestUserInput", "mcpServer/elicitation/request"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/archived", "thread/unarchived", "thread/closed", "thread/name/updated", "thread/goal/updated", "thread/goal/cleared", "thread/settings/updated", "thread/tokenUsage/updated", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,app/list,collaborationMode/list,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/mcpServer/reload,config/read,config/value/write,configRequirements/read,environment/add,experimentalFeature/enablement/set,experimentalFeature/list,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,fs/copy,fs/createDirectory,fs/getMetadata,fs/readDirectory,fs/readFile,fs/remove,fs/unwatch,fs/watch,fs/writeFile,fuzzyFileSearch/sessionStart,fuzzyFileSearch/sessionStop,fuzzyFileSearch/sessionUpdate,hooks/list,marketplace/add,marketplace/remove,marketplace/upgrade,mcpServer/oauth/login,mcpServer/resource/read,mcpServer/tool/call,mcpServerStatus/list,memory/reset,model/list,modelProvider/capabilities/read,permissionProfile/list,plugin/installed,plugin/install,plugin/list,plugin/read,plugin/share/checkout,plugin/share/delete,plugin/share/list,plugin/share/save,plugin/share/updateTargets,plugin/skill/read,plugin/uninstall,process/kill,process/resizePty,process/spawn,process/writeStdin,review/start,skills/config/write,skills/extraRoots/set,skills/list,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/realtime/appendAudio,thread/realtime/appendText,thread/realtime/listVoices,thread/realtime/start,thread/realtime/stop,thread/resume,thread/rollback,thread/search,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|serverRequests:account/chatgptAuthTokens/refresh,attestation/generate,item/commandExecution/requestApproval,item/fileChange/requestApproval,item/permissions/requestApproval,item/tool/call,item/tool/requestUserInput,mcpServer/elicitation/request|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-064";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,app/list,collaborationMode/list,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/mcpServer/reload,config/read,config/value/write,configRequirements/read,environment/add,experimentalFeature/enablement/set,experimentalFeature/list,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,fs/copy,fs/createDirectory,fs/getMetadata,fs/readDirectory,fs/readFile,fs/remove,fs/unwatch,fs/watch,fs/writeFile,fuzzyFileSearch/sessionStart,fuzzyFileSearch/sessionStop,fuzzyFileSearch/sessionUpdate,hooks/list,marketplace/add,marketplace/remove,marketplace/upgrade,mcpServer/oauth/login,mcpServer/resource/read,mcpServer/tool/call,mcpServerStatus/list,memory/reset,model/list,modelProvider/capabilities/read,permissionProfile/list,plugin/installed,plugin/install,plugin/list,plugin/read,plugin/share/checkout,plugin/share/delete,plugin/share/list,plugin/share/save,plugin/share/updateTargets,plugin/skill/read,plugin/uninstall,process/kill,process/resizePty,process/spawn,process/writeStdin,remoteControl/client/list,remoteControl/client/revoke,remoteControl/disable,remoteControl/enable,remoteControl/pairing/start,remoteControl/pairing/status,remoteControl/status/read,review/start,skills/config/write,skills/extraRoots/set,skills/list,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/realtime/appendAudio,thread/realtime/appendText,thread/realtime/listVoices,thread/realtime/start,thread/realtime/stop,thread/resume,thread/rollback,thread/search,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|serverRequests:account/chatgptAuthTokens/refresh,attestation/generate,item/commandExecution/requestApproval,item/fileChange/requestApproval,item/permissions/requestApproval,item/tool/call,item/tool/requestUserInput,mcpServer/elicitation/request|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-065";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -186,6 +186,16 @@ class AppProtocol {
                 validateEmptyObject(result, "$.message.result", "response:" + fixtureMethod);
             case "thread/realtime/listVoices":
                 validateThreadRealtimeListVoicesResponse(result);
+            case "remoteControl/enable" | "remoteControl/disable" | "remoteControl/status/read":
+                validateRemoteControlStatusResponse(result, "$.message.result", "response:" + fixtureMethod);
+            case "remoteControl/pairing/start":
+                validateRemoteControlPairingStartResponse(result);
+            case "remoteControl/pairing/status":
+                validateRemoteControlPairingStatusResponse(result);
+            case "remoteControl/client/list":
+                validateRemoteControlClientsListResponse(result);
+            case "remoteControl/client/revoke":
+                validateEmptyObject(result, "$.message.result", "response:remoteControl/client/revoke");
             case "turn/start":
                 final turn = requiredObjectField(result.keys, result.values, "turn", "$.message.result.turn");
                 if (!turn.ok) return turn.toOutcome();
@@ -465,7 +475,7 @@ class AppProtocol {
     }
 
     static function acceptsOptionalEmptyParams(method:String):Bool {
-        return method == "memory/reset" || method == "windowsSandbox/readiness" || method == "account/logout" || method == "account/rateLimits/read" || method == "account/usage/read" || method == "configRequirements/read" || method == "modelProvider/capabilities/read" || method == "plugin/share/list" || method == "config/mcpServer/reload";
+        return method == "memory/reset" || method == "remoteControl/enable" || method == "remoteControl/disable" || method == "remoteControl/status/read" || method == "windowsSandbox/readiness" || method == "account/logout" || method == "account/rateLimits/read" || method == "account/usage/read" || method == "configRequirements/read" || method == "modelProvider/capabilities/read" || method == "plugin/share/list" || method == "config/mcpServer/reload";
     }
 
     static function optionalEmptyParams(object:ProtocolObjectField):ProtocolObjectField {
@@ -542,6 +552,16 @@ class AppProtocol {
                 validateThreadRealtimeStopParams(params);
             case "thread/realtime/listVoices":
                 validateEmptyObject(params, "$.message.params", "params:thread/realtime/listVoices");
+            case "remoteControl/enable" | "remoteControl/disable" | "remoteControl/status/read":
+                validateEmptyObject(params, "$.message.params", "params:" + method);
+            case "remoteControl/pairing/start":
+                validateRemoteControlPairingStartParams(params);
+            case "remoteControl/pairing/status":
+                validateRemoteControlPairingStatusParams(params);
+            case "remoteControl/client/list":
+                validateRemoteControlClientsListParams(params);
+            case "remoteControl/client/revoke":
+                validateRemoteControlClientsRevokeParams(params);
             case "turn/start":
                 validateTurnInputParams(params, false);
             case "turn/steer":
@@ -1866,6 +1886,106 @@ class AppProtocol {
             case _:
                 fail("expected_nullable_string", path, "expected JSON string or null");
         }
+    }
+
+    static function validateRemoteControlStatusResponse(result:ProtocolObjectField, path:String, label:String):AppProtocolParseOutcome {
+        final installationId = requiredString(result.keys, result.values, "installationId", path + ".installationId");
+        if (!installationId.ok) return installationId.toOutcome();
+        final serverName = requiredString(result.keys, result.values, "serverName", path + ".serverName");
+        if (!serverName.ok) return serverName.toOutcome();
+        final status = requiredString(result.keys, result.values, "status", path + ".status");
+        if (!status.ok) return status.toOutcome();
+        if (!validRemoteControlStatus(status.value)) return fail("invalid_remote_control_status", path + ".status", "unsupported remote control status");
+        final environmentId = validateOptionalNullableString(result, "environmentId", path + ".environmentId");
+        if (!environmentId.ok) return environmentId;
+        return success(label);
+    }
+
+    static function validateRemoteControlPairingStartParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final manualCode = validateOptionalBool(params, "manualCode", "$.message.params.manualCode");
+        if (!manualCode.ok) return manualCode;
+        return success("params:remoteControl/pairing/start");
+    }
+
+    static function validateRemoteControlPairingStartResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final pairingCode = requiredString(result.keys, result.values, "pairingCode", "$.message.result.pairingCode");
+        if (!pairingCode.ok) return pairingCode.toOutcome();
+        final manualPairingCode = validateOptionalNullableString(result, "manualPairingCode", "$.message.result.manualPairingCode");
+        if (!manualPairingCode.ok) return manualPairingCode;
+        final environmentId = requiredString(result.keys, result.values, "environmentId", "$.message.result.environmentId");
+        if (!environmentId.ok) return environmentId.toOutcome();
+        final expiresAt = requiredInteger(result.keys, result.values, "expiresAt", "$.message.result.expiresAt");
+        if (!expiresAt.ok) return expiresAt.toOutcome();
+        return success("response:remoteControl/pairing/start");
+    }
+
+    static function validateRemoteControlPairingStatusParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final pairingCode = validateOptionalNullableString(params, "pairingCode", "$.message.params.pairingCode");
+        if (!pairingCode.ok) return pairingCode;
+        final manualPairingCode = validateOptionalNullableString(params, "manualPairingCode", "$.message.params.manualPairingCode");
+        if (!manualPairingCode.ok) return manualPairingCode;
+        final hasPairingCode = hasNonNullField(params, "pairingCode");
+        final hasManualPairingCode = hasNonNullField(params, "manualPairingCode");
+        if (hasPairingCode && hasManualPairingCode) return fail("remote_control_pairing_code_conflict", "$.message.params", "expected exactly one pairing code field");
+        if (!hasPairingCode && !hasManualPairingCode) return fail("missing_remote_control_pairing_code", "$.message.params", "expected pairingCode or manualPairingCode");
+        return success("params:remoteControl/pairing/status");
+    }
+
+    static function validateRemoteControlPairingStatusResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final claimed = requiredBool(result.keys, result.values, "claimed", "$.message.result.claimed");
+        if (!claimed.ok) return claimed.toOutcome();
+        return success("response:remoteControl/pairing/status");
+    }
+
+    static function validateRemoteControlClientsListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final environmentId = requiredString(params.keys, params.values, "environmentId", "$.message.params.environmentId");
+        if (!environmentId.ok) return environmentId.toOutcome();
+        final cursor = validateOptionalNullableString(params, "cursor", "$.message.params.cursor");
+        if (!cursor.ok) return cursor;
+        final limit = validateOptionalNullableUInt(params, "limit", "$.message.params.limit");
+        if (!limit.ok) return limit;
+        final order = validateOptionalNullableStringEnum(params, "order", "$.message.params.order", ["asc", "desc"], "invalid_remote_control_clients_list_order");
+        if (!order.ok) return order;
+        return success("params:remoteControl/client/list");
+    }
+
+    static function validateRemoteControlClientsListResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final data = requiredArray(result.keys, result.values, "data", "$.message.result.data");
+        if (!data.ok) return data.toOutcome();
+        var i = 0;
+        while (i < data.values.length) {
+            switch data.values[i] {
+                case JObject(keys, values):
+                    final clientResult = validateRemoteControlClient(ProtocolObjectField.success(keys, values), "$.message.result.data[" + Std.string(i) + "]");
+                    if (!clientResult.ok) return clientResult;
+                case _:
+                    return fail("expected_object", "$.message.result.data[" + Std.string(i) + "]", "expected JSON object");
+            }
+            i = i + 1;
+        }
+        final nextCursor = validateOptionalNullableString(result, "nextCursor", "$.message.result.nextCursor");
+        if (!nextCursor.ok) return nextCursor;
+        return success("response:remoteControl/client/list");
+    }
+
+    static function validateRemoteControlClient(client:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final clientId = requiredString(client.keys, client.values, "clientId", path + ".clientId");
+        if (!clientId.ok) return clientId.toOutcome();
+        for (field in ["displayName", "deviceType", "platform", "osVersion", "deviceModel", "appVersion"]) {
+            final value = validateOptionalNullableString(client, field, path + "." + field);
+            if (!value.ok) return value;
+        }
+        final lastSeenAt = validateOptionalNullableInteger(client, "lastSeenAt", path + ".lastSeenAt");
+        if (!lastSeenAt.ok) return lastSeenAt;
+        return success("remote-control-client");
+    }
+
+    static function validateRemoteControlClientsRevokeParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final environmentId = requiredString(params.keys, params.values, "environmentId", "$.message.params.environmentId");
+        if (!environmentId.ok) return environmentId.toOutcome();
+        final clientId = requiredString(params.keys, params.values, "clientId", "$.message.params.clientId");
+        if (!clientId.ok) return clientId.toOutcome();
+        return success("params:remoteControl/client/revoke");
     }
 
     static function validateThreadLoadedListResponse(result:ProtocolObjectField):AppProtocolParseOutcome {

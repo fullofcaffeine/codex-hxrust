@@ -1244,6 +1244,90 @@
       }
     },
     {
+      "id": "remote-control-enable-request",
+      "kind": "request",
+      "method": "remoteControl/enable",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-enable-1", "method": "remoteControl/enable"}
+    },
+    {
+      "id": "remote-control-enable-response",
+      "kind": "response",
+      "method": "remoteControl/enable",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-enable-1", "result": {"installationId": "install-1", "serverName": "desktop", "status": "connecting", "environmentId": "env-1"}}
+    },
+    {
+      "id": "remote-control-disable-request",
+      "kind": "request",
+      "method": "remoteControl/disable",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-disable-1", "method": "remoteControl/disable"}
+    },
+    {
+      "id": "remote-control-disable-response",
+      "kind": "response",
+      "method": "remoteControl/disable",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-disable-1", "result": {"installationId": "install-1", "serverName": "desktop", "status": "disabled", "environmentId": null}}
+    },
+    {
+      "id": "remote-control-status-read-request",
+      "kind": "request",
+      "method": "remoteControl/status/read",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-status-1", "method": "remoteControl/status/read"}
+    },
+    {
+      "id": "remote-control-status-read-response",
+      "kind": "response",
+      "method": "remoteControl/status/read",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-status-1", "result": {"installationId": "install-1", "serverName": "desktop", "status": "connected", "environmentId": "env-1"}}
+    },
+    {
+      "id": "remote-control-pairing-start-request",
+      "kind": "request",
+      "method": "remoteControl/pairing/start",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-pairing-start-1", "method": "remoteControl/pairing/start", "params": {"manualCode": true}}
+    },
+    {
+      "id": "remote-control-pairing-start-response",
+      "kind": "response",
+      "method": "remoteControl/pairing/start",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-pairing-start-1", "result": {"pairingCode": "pairing-code", "manualPairingCode": "123-456", "environmentId": "env-1", "expiresAt": 1772694000}}
+    },
+    {
+      "id": "remote-control-pairing-status-request",
+      "kind": "request",
+      "method": "remoteControl/pairing/status",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-pairing-status-1", "method": "remoteControl/pairing/status", "params": {"pairingCode": "pairing-code", "manualPairingCode": null}}
+    },
+    {
+      "id": "remote-control-pairing-status-response",
+      "kind": "response",
+      "method": "remoteControl/pairing/status",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-pairing-status-1", "result": {"claimed": true}}
+    },
+    {
+      "id": "remote-control-client-list-request",
+      "kind": "request",
+      "method": "remoteControl/client/list",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-client-list-1", "method": "remoteControl/client/list", "params": {"environmentId": "env-1", "cursor": "cursor-id", "limit": 10, "order": "desc"}}
+    },
+    {
+      "id": "remote-control-client-list-response",
+      "kind": "response",
+      "method": "remoteControl/client/list",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-client-list-1", "result": {"data": [{"clientId": "client-id", "displayName": "Anton Phone", "deviceType": "phone", "platform": "ios", "osVersion": "19.0", "deviceModel": "iPhone", "appVersion": "1.2.3", "lastSeenAt": 1772694000}], "nextCursor": "next-cursor"}}
+    },
+    {
+      "id": "remote-control-client-revoke-request",
+      "kind": "request",
+      "method": "remoteControl/client/revoke",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-client-revoke-1", "method": "remoteControl/client/revoke", "params": {"environmentId": "env-1", "clientId": "client-id"}}
+    },
+    {
+      "id": "remote-control-client-revoke-response",
+      "kind": "response",
+      "method": "remoteControl/client/revoke",
+      "message": {"jsonrpc": "2.0", "id": "remote-control-client-revoke-1", "result": {}}
+    },
+    {
       "id": "thread-loaded-list-request",
       "kind": "request",
       "method": "thread/loaded/list",

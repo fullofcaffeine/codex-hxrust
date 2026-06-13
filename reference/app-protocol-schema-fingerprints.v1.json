@@ -3609,6 +3609,11 @@
       "id": "realtime-control-schemas",
       "status": "tracked_from_rust_source",
       "reason": "Upstream exports thread/realtime/start, thread/realtime/appendAudio, thread/realtime/appendText, thread/realtime/stop, and thread/realtime/listVoices from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. The local subset validates these DTO contracts from upstream Rust source under HXCX-3.72 while keeping emitted realtime notification schemas fingerprinted."
+    },
+    {
+      "id": "remote-control-schemas",
+      "status": "tracked_from_rust_source",
+      "reason": "Upstream exports remoteControl/enable, remoteControl/disable, remoteControl/status/read, remoteControl/pairing/start, remoteControl/pairing/status, remoteControl/client/list, and remoteControl/client/revoke from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. The local subset validates these DTO contracts from upstream Rust source under HXCX-3.73 while keeping emitted remote-control notification schemas fingerprinted."
     }
   ]
 }

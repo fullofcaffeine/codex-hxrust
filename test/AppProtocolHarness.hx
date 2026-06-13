@@ -54,6 +54,13 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/realtime/appendText");
         assertContains(fingerprintJson, "thread/realtime/stop");
         assertContains(fingerprintJson, "thread/realtime/listVoices");
+        assertContains(fingerprintJson, "remoteControl/enable");
+        assertContains(fingerprintJson, "remoteControl/disable");
+        assertContains(fingerprintJson, "remoteControl/status/read");
+        assertContains(fingerprintJson, "remoteControl/pairing/start");
+        assertContains(fingerprintJson, "remoteControl/pairing/status");
+        assertContains(fingerprintJson, "remoteControl/client/list");
+        assertContains(fingerprintJson, "remoteControl/client/revoke");
         assertContains(fingerprintJson, "turn/steer");
         assertContains(fingerprintJson, "review/start");
         assertContains(fingerprintJson, "windowsSandbox/setupStart");
@@ -189,7 +196,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("288", Std.string(items.length));
+        assertEquals("302", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -214,8 +221,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("105", Std.string(requests));
-        assertEquals("105", Std.string(responses));
+        assertEquals("112", Std.string(requests));
+        assertEquals("112", Std.string(responses));
         assertEquals("8", Std.string(serverRequests));
         assertEquals("8", Std.string(serverResponses));
         assertEquals("61", Std.string(notifications));
@@ -492,6 +499,56 @@ class AppProtocolHarness {
         assertFalse(invalidRemoteControlEnvironment.ok, "remote control environmentId must be a string or null when present");
         assertEquals("expected_nullable_string", invalidRemoteControlEnvironment.errorCode);
         assertEquals("$.message.params.environmentId", invalidRemoteControlEnvironment.errorPath);
+
+        final unexpectedRemoteControlEnableParams = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-enable-unexpected-param\",\"kind\":\"request\",\"method\":\"remoteControl/enable\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-enable-1\",\"method\":\"remoteControl/enable\",\"params\":{\"extra\":true}}}")));
+        assertFalse(unexpectedRemoteControlEnableParams.ok, "remoteControl/enable accepts absent or empty params");
+        assertEquals("unexpected_field", unexpectedRemoteControlEnableParams.errorCode);
+        assertEquals("$.message.params.extra", unexpectedRemoteControlEnableParams.errorPath);
+
+        final invalidRemoteControlStatusResponse = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-status-invalid-response\",\"kind\":\"response\",\"method\":\"remoteControl/status/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-status-1\",\"result\":{\"installationId\":\"install-1\",\"serverName\":\"desktop\",\"status\":\"sleeping\",\"environmentId\":null}}}")));
+        assertFalse(invalidRemoteControlStatusResponse.ok, "remote control status responses must use known status values");
+        assertEquals("invalid_remote_control_status", invalidRemoteControlStatusResponse.errorCode);
+        assertEquals("$.message.result.status", invalidRemoteControlStatusResponse.errorPath);
+
+        final invalidRemoteControlPairingStartManualCode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-pairing-start-invalid-manual-code\",\"kind\":\"request\",\"method\":\"remoteControl/pairing/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-pairing-start-1\",\"method\":\"remoteControl/pairing/start\",\"params\":{\"manualCode\":\"yes\"}}}")));
+        assertFalse(invalidRemoteControlPairingStartManualCode.ok, "remote pairing start manualCode must be bool when present");
+        assertEquals("expected_bool", invalidRemoteControlPairingStartManualCode.errorCode);
+        assertEquals("$.message.params.manualCode", invalidRemoteControlPairingStartManualCode.errorPath);
+
+        final missingRemoteControlPairingStatusCode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-pairing-status-missing-code\",\"kind\":\"request\",\"method\":\"remoteControl/pairing/status\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-pairing-status-1\",\"method\":\"remoteControl/pairing/status\",\"params\":{}}}")));
+        assertFalse(missingRemoteControlPairingStatusCode.ok, "remote pairing status requires one pairing code");
+        assertEquals("missing_remote_control_pairing_code", missingRemoteControlPairingStatusCode.errorCode);
+        assertEquals("$.message.params", missingRemoteControlPairingStatusCode.errorPath);
+
+        final conflictingRemoteControlPairingStatusCode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-pairing-status-conflicting-code\",\"kind\":\"request\",\"method\":\"remoteControl/pairing/status\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-pairing-status-1\",\"method\":\"remoteControl/pairing/status\",\"params\":{\"pairingCode\":\"pairing-code\",\"manualPairingCode\":\"123-456\"}}}")));
+        assertFalse(conflictingRemoteControlPairingStatusCode.ok, "remote pairing status accepts exactly one pairing code");
+        assertEquals("remote_control_pairing_code_conflict", conflictingRemoteControlPairingStatusCode.errorCode);
+        assertEquals("$.message.params", conflictingRemoteControlPairingStatusCode.errorPath);
+
+        final missingRemoteControlClientListEnvironment = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-client-list-missing-environment\",\"kind\":\"request\",\"method\":\"remoteControl/client/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-client-list-1\",\"method\":\"remoteControl/client/list\",\"params\":{}}}")));
+        assertFalse(missingRemoteControlClientListEnvironment.ok, "remote client list requires environmentId");
+        assertEquals("missing_field", missingRemoteControlClientListEnvironment.errorCode);
+        assertEquals("$.message.params.environmentId", missingRemoteControlClientListEnvironment.errorPath);
+
+        final invalidRemoteControlClientListOrder = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-client-list-invalid-order\",\"kind\":\"request\",\"method\":\"remoteControl/client/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-client-list-1\",\"method\":\"remoteControl/client/list\",\"params\":{\"environmentId\":\"env-1\",\"order\":\"newest\"}}}")));
+        assertFalse(invalidRemoteControlClientListOrder.ok, "remote client list order must be asc or desc");
+        assertEquals("invalid_remote_control_clients_list_order", invalidRemoteControlClientListOrder.errorCode);
+        assertEquals("$.message.params.order", invalidRemoteControlClientListOrder.errorPath);
+
+        final invalidRemoteControlClientListLimit = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-client-list-invalid-limit\",\"kind\":\"request\",\"method\":\"remoteControl/client/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-client-list-1\",\"method\":\"remoteControl/client/list\",\"params\":{\"environmentId\":\"env-1\",\"limit\":-1}}}")));
+        assertFalse(invalidRemoteControlClientListLimit.ok, "remote client list limit must be unsigned");
+        assertEquals("expected_uint", invalidRemoteControlClientListLimit.errorCode);
+        assertEquals("$.message.params.limit", invalidRemoteControlClientListLimit.errorPath);
+
+        final invalidRemoteControlClientLastSeen = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-client-list-invalid-last-seen\",\"kind\":\"response\",\"method\":\"remoteControl/client/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-client-list-1\",\"result\":{\"data\":[{\"clientId\":\"client-1\",\"lastSeenAt\":1.5}],\"nextCursor\":null}}}")));
+        assertFalse(invalidRemoteControlClientLastSeen.ok, "remote client lastSeenAt must be integer or null");
+        assertEquals("expected_integer", invalidRemoteControlClientLastSeen.errorCode);
+        assertEquals("$.message.result.data[0].lastSeenAt", invalidRemoteControlClientLastSeen.errorPath);
+
+        final missingRemoteControlClientRevokeId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"remote-control-client-revoke-missing-id\",\"kind\":\"request\",\"method\":\"remoteControl/client/revoke\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"remote-client-revoke-1\",\"method\":\"remoteControl/client/revoke\",\"params\":{\"environmentId\":\"env-1\"}}}")));
+        assertFalse(missingRemoteControlClientRevokeId.ok, "remote client revoke requires clientId");
+        assertEquals("missing_field", missingRemoteControlClientRevokeId.errorCode);
+        assertEquals("$.message.params.clientId", missingRemoteControlClientRevokeId.errorPath);
 
         final invalidModelRerouteReason = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"model-rerouted-invalid-reason\",\"kind\":\"notification\",\"method\":\"model/rerouted\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"model/rerouted\",\"params\":{\"threadId\":\"thread-1\",\"turnId\":\"turn-1\",\"fromModel\":\"gpt-5\",\"toModel\":\"gpt-5-safe\",\"reason\":\"policy\"}}}")));
         assertFalse(invalidModelRerouteReason.ok, "model reroute reason must be a known enum value");

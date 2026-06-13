@@ -12,7 +12,7 @@ The guiding rule is unchanged: raw upstream Codex comes first, Cafex/Cafetera ad
 | Thread search | `thread/search` | Admitted in HXCX-3.70. This is mainstream app navigation/search parity and should precede TUI/live-runtime sequencing. | `codex-hxrust-hrq` |
 | Fuzzy search session API | `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, `fuzzyFileSearch/sessionStop` | Admitted in HXCX-3.71. Notifications were already admitted; request/response parity now travels with them before TUI search work. The local subset uses Rust DTO/protocol source because standalone request schemas are not exported. | `codex-hxrust-a4r` |
 | Realtime client controls | `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, `thread/realtime/listVoices` | Admitted in HXCX-3.72. These are required for full TUI voice/realtime parity; the current slice is deterministic protocol parity only and does not start live audio/network behavior. | `codex-hxrust-mgg` |
-| Remote control | `remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, `remoteControl/client/revoke` | Select after realtime protocol controls. This is app-server/daemon functionality with account/network behavior, so the first slice should be protocol fixtures plus deterministic status/pairing/client DTO validation. | New implementation bead |
+| Remote control | `remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, `remoteControl/client/revoke` | Admitted in HXCX-3.73. This is currently deterministic protocol parity only; app-server daemon/account/network behavior remains for later runtime slices. | `codex-hxrust-tg8` |
 | Deprecated v1 compatibility | `getConversationSummary`, `gitDiffToRemote`, `getAuthStatus`, legacy `fuzzyFileSearch` | Select as an isolated compatibility slice only. It must not shape the modern v2 Haxe API. Keep fixtures explicit and mark deprecated in docs/tests. | New implementation bead |
 | Initial v1 handshake | `initialize` plus `InitializeParams`/`InitializeResponse` | Defer to app-server transport/bootstrap parity. This is protocol-session setup rather than a normal v2 app method and should be handled with the eventual app-server/TUI process harness. | Covered by TUI/live-runtime sequencing |
 | Test-only experimental gate | `mock/experimentalMethod` | Unsupported for production behavior. Keep as an upstream capability-gating reference only; do not add it to the runtime or product protocol subset unless a dedicated test-harness-only bead asks for it. | No implementation bead |
@@ -58,7 +58,7 @@ The intended implementation order is:
 2. `thread/search` - admitted in HXCX-3.70
 3. fuzzy search session requests - admitted in HXCX-3.71
 4. realtime client controls - admitted in HXCX-3.72
-5. remote-control request controls
+5. remote-control request controls - admitted in HXCX-3.73
 6. deprecated v1 compatibility
 7. TUI/live-runtime sequencing
 
