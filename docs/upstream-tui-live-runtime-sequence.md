@@ -265,7 +265,19 @@ Model the selected restored usage delivery policy:
 
 Status: HXCX-4.23 now owns `fixtures/hxrust/thread-read-token-usage-replay-delivery.v1.json` and validates the slice through `harness/check-thread-read-token-usage-replay-delivery.sh`. It exposed generic haxe.rust issue `haxe.rust-3f0g` for same-class `static final` String access path lowering; codexhx uses a helper-function workaround while the compiler fix belongs upstream. This is delivery-policy evidence only, not socket ownership, JSON-RPC transport, usage aggregation, rollout parsing, or production state ownership.
 
-### HXCX-4.24+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.24: Resume Goal Snapshot Ordering
+
+Model the selected goal snapshot ordering around resume after token-usage replay:
+
+- `emit_resume_goal_snapshot_and_continue` waits until response and token-usage replay ordering are complete;
+- `send_thread_goal_snapshot_notification` emits `thread/goal/updated` for stored goals and `thread/goal/cleared` for absent goals;
+- loaded running-thread resume replays pending requests after the goal snapshot;
+- active goals allow idle lifecycle continuation, while paused/terminal goals remain snapshot-only;
+- fork keeps the token-usage replay path but has no resume-goal snapshot.
+
+Status: HXCX-4.24 now owns `fixtures/hxrust/thread-read-resume-goal-snapshot.v1.json` and validates the slice through `harness/check-thread-read-resume-goal-snapshot.sh`. No new haxe.rust limitation was exposed. This is resume-goal ordering evidence only, not production state DB access, listener command ownership, extension execution, JSON-RPC transport, or Cafex behavior.
+
+### HXCX-4.25+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
@@ -297,9 +309,9 @@ These are generic compiler/runtime pressure points. They must not become Codex-s
 Cafex/Cafetera adapter work stays behind upstream-shaped foundations:
 
 - deterministic protocol and DTO parity: done for the selected app-server subset;
-- runtime event bus/app-server client facade: not yet done;
+- runtime event bus/app-server client facade: done for selected fixture-backed behavior;
 - TUI story/replay and selected VT100 rendering invariants: active;
-- live transport/persistence boundaries: not yet done.
+- live transport/persistence boundaries: done for selected fixture/native-boundary behavior, not production ownership.
 
 Therefore `codex-hxrust-mpd` and similar Cafex bridge tasks should remain P4/dependency-gated until at least HXCX-4.7 and HXCX-4.8 are intentionally selected or completed. Cafex live-status receipts are useful later, but they are not a substitute for upstream TUI/runtime ownership.
 

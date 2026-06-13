@@ -1,0 +1,256 @@
+{
+  "schema": "codex-hxrust.thread-read-resume-goal-snapshot-fixture.v1",
+  "bead": "HXCX-4.24",
+  "source": "upstream-codex",
+  "upstreamAnchors": [
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/thread_goal_processor.rs",
+      "symbols": [
+        "emit_resume_goal_snapshot_and_continue",
+        "pending_resume_goal_state",
+        "emit_thread_goal_snapshot"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/thread_lifecycle.rs",
+      "symbols": [
+        "send_thread_goal_snapshot_notification",
+        "loaded thread resume sends token usage before goal snapshot",
+        "loaded thread resume replays pending requests after goal snapshot"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/src/request_processors/thread_processor.rs",
+      "symbols": [
+        "thread/resume sends token usage before emit_resume_goal_snapshot_and_continue",
+        "running thread resume captures pending goal state"
+      ]
+    },
+    {
+      "path": "../codex/codex-rs/app-server/tests/suite/v2/thread_resume.rs",
+      "symbols": [
+        "thread_resume_keeps_paused_goal_paused",
+        "thread/goal/updated after thread/resume response",
+        "thread/goal/cleared snapshot during resume"
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "resume-token-usage-before-active-goal-snapshot",
+      "operation": "resume",
+      "responseReady": true,
+      "goalsFeatureEnabled": true,
+      "stateDbAvailable": true,
+      "pendingRequestsReplayAfterSnapshot": false,
+      "tokenUsageDelivery": "delivered",
+      "goalStatus": "active",
+      "expect": {
+        "ok": true,
+        "code": "goal_snapshot_updated",
+        "snapshotDelivered": true,
+        "goalUpdated": true,
+        "goalCleared": false,
+        "skipped": false,
+        "notificationMethod": "thread/goal/updated",
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated",
+        "continuationIntent": "emit_idle_lifecycle",
+        "pendingRequestsReplayPoint": "none",
+        "summaryContains": "status=active"
+      }
+    },
+    {
+      "id": "loaded-resume-token-usage-before-paused-goal-before-request-replay",
+      "operation": "loaded_resume",
+      "responseReady": true,
+      "goalsFeatureEnabled": true,
+      "stateDbAvailable": true,
+      "pendingRequestsReplayAfterSnapshot": true,
+      "tokenUsageDelivery": "delivered",
+      "goalStatus": "paused",
+      "expect": {
+        "ok": true,
+        "code": "goal_snapshot_updated",
+        "snapshotDelivered": true,
+        "goalUpdated": true,
+        "goalCleared": false,
+        "skipped": false,
+        "notificationMethod": "thread/goal/updated",
+        "sequence": "response->thread/tokenUsage/updated->thread/goal/updated",
+        "continuationIntent": "snapshot_only",
+        "pendingRequestsReplayPoint": "after_goal_snapshot",
+        "summaryContains": "pendingRequestsReplayPoint=after_goal_snapshot"
+      }
+    },
+    {
+      "id": "resume-no-token-usage-still-emits-complete-goal-snapshot",
+      "operation": "resume",
+      "responseReady": true,
+      "goalsFeatureEnabled": true,
+      "stateDbAvailable": true,
+      "pendingRequestsReplayAfterSnapshot": false,
+      "tokenUsageDelivery": "skipped_no_payload",
+      "goalStatus": "complete",
+      "expect": {
+        "ok": true,
+        "code": "goal_snapshot_updated",
+        "snapshotDelivered": true,
+        "goalUpdated": true,
+        "goalCleared": false,
+        "skipped": false,
+        "notificationMethod": "thread/goal/updated",
+        "sequence": "response->thread/goal/updated",
+        "continuationIntent": "snapshot_only",
+        "pendingRequestsReplayPoint": "none",
+        "summaryContains": "status=complete"
+      }
+    },
+    {
+      "id": "resume-no-goal-emits-cleared-snapshot-without-continuation",
+      "operation": "resume",
+      "responseReady": true,
+      "goalsFeatureEnabled": true,
+      "stateDbAvailable": true,
+      "pendingRequestsReplayAfterSnapshot": false,
+      "tokenUsageDelivery": "skipped_no_payload",
+      "goalStatus": null,
+      "expect": {
+        "ok": true,
+        "code": "goal_snapshot_cleared",
+        "snapshotDelivered": true,
+        "goalUpdated": false,
+        "goalCleared": true,
+        "skipped": false,
+        "notificationMethod": "thread/goal/cleared",
+        "sequence": "response->thread/goal/cleared",
+        "continuationIntent": "none",
+        "pendingRequestsReplayPoint": "none",
+        "summaryContains": "no stored goal was available"
+      }
+    },
+    {
+      "id": "fork-does-not-get-resume-goal-snapshot",
+      "operation": "fork",
+      "responseReady": true,
+      "goalsFeatureEnabled": true,
+      "stateDbAvailable": true,
+      "pendingRequestsReplayAfterSnapshot": false,
+      "tokenUsageDelivery": "delivered",
+      "goalStatus": "active",
+      "expect": {
+        "ok": true,
+        "code": "skipped_fork_has_no_resume_goal_snapshot",
+        "snapshotDelivered": false,
+        "goalUpdated": false,
+        "goalCleared": false,
+        "skipped": true,
+        "notificationMethod": "none",
+        "sequence": "response->thread/tokenUsage/updated",
+        "continuationIntent": "none",
+        "pendingRequestsReplayPoint": "none",
+        "summaryContains": "fork delivery replays token usage"
+      }
+    },
+    {
+      "id": "resume-goals-disabled-skips-snapshot-and-continuation",
+      "operation": "resume",
+      "responseReady": true,
+      "goalsFeatureEnabled": false,
+      "stateDbAvailable": true,
+      "pendingRequestsReplayAfterSnapshot": false,
+      "tokenUsageDelivery": "delivered",
+      "goalStatus": "active",
+      "expect": {
+        "ok": true,
+        "code": "skipped_goals_feature_disabled",
+        "snapshotDelivered": false,
+        "goalUpdated": false,
+        "goalCleared": false,
+        "skipped": true,
+        "notificationMethod": "none",
+        "sequence": "response->thread/tokenUsage/updated",
+        "continuationIntent": "none",
+        "pendingRequestsReplayPoint": "none",
+        "summaryContains": "goals feature disabled"
+      }
+    },
+    {
+      "id": "loaded-resume-state-db-unavailable-skips-snapshot",
+      "operation": "loaded_resume",
+      "responseReady": true,
+      "goalsFeatureEnabled": true,
+      "stateDbAvailable": false,
+      "pendingRequestsReplayAfterSnapshot": true,
+      "tokenUsageDelivery": "skipped_no_payload",
+      "goalStatus": "paused",
+      "expect": {
+        "ok": true,
+        "code": "skipped_state_db_unavailable",
+        "snapshotDelivered": false,
+        "goalUpdated": false,
+        "goalCleared": false,
+        "skipped": true,
+        "notificationMethod": "none",
+        "sequence": "response",
+        "continuationIntent": "none",
+        "pendingRequestsReplayPoint": "none",
+        "summaryContains": "state db unavailable"
+      }
+    },
+    {
+      "id": "resume-response-not-ready-refuses-snapshot",
+      "operation": "resume",
+      "responseReady": false,
+      "goalsFeatureEnabled": true,
+      "stateDbAvailable": true,
+      "pendingRequestsReplayAfterSnapshot": false,
+      "tokenUsageDelivery": "delivered",
+      "goalStatus": "active",
+      "expect": {
+        "ok": false,
+        "code": "response_not_ready",
+        "snapshotDelivered": false,
+        "goalUpdated": false,
+        "goalCleared": false,
+        "skipped": false,
+        "notificationMethod": "none",
+        "sequence": "none",
+        "continuationIntent": "none",
+        "pendingRequestsReplayPoint": "none",
+        "summaryContains": "ordered after the JSON-RPC response"
+      }
+    },
+    {
+      "id": "resume-token-usage-policy-must-settle-before-goal-snapshot",
+      "operation": "resume",
+      "responseReady": true,
+      "goalsFeatureEnabled": true,
+      "stateDbAvailable": true,
+      "pendingRequestsReplayAfterSnapshot": false,
+      "tokenUsageDelivery": "failure",
+      "goalStatus": "active",
+      "expect": {
+        "ok": false,
+        "code": "token_usage_delivery_not_settled",
+        "snapshotDelivered": false,
+        "goalUpdated": false,
+        "goalCleared": false,
+        "skipped": false,
+        "notificationMethod": "none",
+        "sequence": "none",
+        "continuationIntent": "none",
+        "pendingRequestsReplayPoint": "none",
+        "summaryContains": "waits for token usage replay policy to settle"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 9,
+    "snapshotCount": 4,
+    "updatedCount": 3,
+    "clearedCount": 1,
+    "skippedCount": 3,
+    "failureCount": 2,
+    "summaryContains": "schema=codex-hxrust.thread-read-resume-goal-snapshot-report.v1;cases=9;snapshots=4;updated=3;cleared=1;skipped=3;failed=2"
+  }
+}

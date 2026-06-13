@@ -222,6 +222,19 @@ The fixture `fixtures/hxrust/thread-read-token-usage-replay-delivery.v1.json` an
 
 HXCX-4.23 also exposed generic haxe.rust issue `haxe.rust-3f0g`: same-class `static final` String reads can lower to a missing crate-root static getter path. The local harness uses a helper function as a semantic workaround while the compiler issue is tracked upstream.
 
+## Thread/Read Resume Goal Snapshot
+
+`codexhx.runtime.app.threadread.ThreadReadResumeGoalSnapshotPolicy` is the HXCX-4.24 raw upstream resume-goal snapshot ordering slice:
+
+- resume and loaded-resume goal snapshots wait until the JSON-RPC response and token-usage delivery policy have settled;
+- delivered token usage is ordered before `thread/goal/updated` or `thread/goal/cleared`;
+- stored goals emit `thread/goal/updated`; absent stored goals emit `thread/goal/cleared` with no goal continuation;
+- active goals allow the upstream idle-lifecycle continuation hook, while paused and terminal goals are snapshot-only;
+- loaded running-thread resume records that pending request replay happens after the goal snapshot;
+- fork keeps the token-usage delivery ordering but does not emit a resume-goal snapshot.
+
+The fixture `fixtures/hxrust/thread-read-resume-goal-snapshot.v1.json` and `harness/check-thread-read-resume-goal-snapshot.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not read production state DBs, enqueue listener commands, emit JSON-RPC notifications, or implement Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-resume-goal-snapshot.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:
