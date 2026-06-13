@@ -37,6 +37,7 @@ Profile policy for the scaffold:
 | `thread-read-active-turn-goal-steering-injection.hxml` | Compile the HXCX-4.29 raw active-turn goal steering injection harness through portable haxe.rust. |
 | `thread-read-budget-limit-goal-steering.hxml` | Compile the HXCX-4.30 raw budget-limit goal steering harness through portable haxe.rust. |
 | `thread-read-active-goal-progress-accounting.hxml` | Compile the HXCX-4.31 raw active-goal progress accounting harness through portable haxe.rust. |
+| `thread-read-idle-goal-progress-accounting.hxml` | Compile the HXCX-4.32 raw idle-goal progress accounting harness through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |

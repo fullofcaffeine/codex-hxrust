@@ -320,6 +320,18 @@ The fixture `fixtures/hxrust/thread-read-budget-limit-goal-steering.v1.json` and
 
 The fixture `fixtures/hxrust/thread-read-active-goal-progress-accounting.v1.json` and `harness/check-thread-read-active-goal-progress-accounting.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own async permits, production state DB handles, metrics/analytics clients, event emitters, live token aggregation, wall-clock sources, tool lifecycle callbacks, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-active-goal-progress-accounting.md`.
 
+## Thread/Read Idle Goal Progress Accounting
+
+`codexhx.runtime.app.threadread.ThreadReadIdleGoalProgressAccountingPolicy` is the HXCX-4.32 raw upstream idle-goal progress accounting slice:
+
+- idle progress-snapshot absence returns none before state DB accounting;
+- selected state DB outcomes distinguish updated, unchanged, and error paths;
+- idle state accounting uses `token_delta` 0 while preserving wall-clock progress;
+- unchanged state resets idle baseline and clears active-goal/budget-limit marker state;
+- updated progress emits selected `thread_goal_updated` evidence with no turn id.
+
+The fixture `fixtures/hxrust/thread-read-idle-goal-progress-accounting.v1.json` and `harness/check-thread-read-idle-goal-progress-accounting.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This does not own async permits, production state DB handles, metrics/analytics clients, event emitters, live wall-clock sources, idle lifecycle scheduling, continuation turn spawning, or Cafex/Cafetera behavior. The boundary is documented in `docs/thread-read-idle-goal-progress-accounting.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

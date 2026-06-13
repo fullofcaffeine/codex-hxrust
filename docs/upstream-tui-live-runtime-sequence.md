@@ -361,7 +361,19 @@ Model the selected upstream active-goal progress accounting path:
 
 Status: HXCX-4.31 now owns `fixtures/hxrust/thread-read-active-goal-progress-accounting.v1.json` and validates the slice through `harness/check-thread-read-active-goal-progress-accounting.sh`. No new haxe.rust limitation was exposed. This is accounting-state evidence only, not async permit ownership, production state DB ownership, metrics/analytics clients, event emitter ownership, live token aggregation, wall-clock sources, tool lifecycle ownership, or Cafex behavior.
 
-### HXCX-4.32+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.32: Idle Goal Progress Accounting
+
+Model the selected upstream idle-goal progress accounting path:
+
+- `idle_progress_snapshot()` absence returns none before state DB accounting;
+- `account_thread_goal_usage` uses `token_delta` 0 for idle progress;
+- updated goals mark idle wall-clock progress and emit `thread_goal_updated` with no turn id;
+- `GoalAccountingOutcome::Unchanged` resets the idle baseline and clears active-goal/budget-limit marker state;
+- `BudgetLimitedGoalDisposition::KeepActive` preserves budget-limited active accounting while `ClearActive` clears it.
+
+Status: HXCX-4.32 now owns `fixtures/hxrust/thread-read-idle-goal-progress-accounting.v1.json` and validates the slice through `harness/check-thread-read-idle-goal-progress-accounting.sh`. No new haxe.rust limitation was exposed. This is idle accounting-state evidence only, not async permit ownership, production state DB ownership, metrics/analytics clients, event emitter ownership, live wall-clock sources, idle lifecycle scheduling, continuation turn spawning, or Cafex behavior.
+
+### HXCX-4.33+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
