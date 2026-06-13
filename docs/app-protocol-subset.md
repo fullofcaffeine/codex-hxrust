@@ -451,7 +451,9 @@ Client-directed server requests use upstream's `ServerRequest`/`ServerResponse` 
 
 `remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, and `remoteControl/client/revoke` admit the upstream experimental remote-control request family. The selected subset validates absent/empty params for enable/disable/status read, status snapshot responses, pairing start and exactly-one pairing status fields, client list pagination/order and metadata, revoke IDs, and empty revoke responses. The fixture path does not start daemon, account, or network behavior.
 
-Deprecated v1 compatibility is selected and sequenced by HXCX-3.68 in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md), but not yet implemented in this protocol subset. `mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
+Deprecated v1 compatibility admits only `getConversationSummary`, `gitDiffToRemote`, `getAuthStatus`, and legacy `fuzzyFileSearch` as explicitly marked fixture items. The selected subset validates the legacy conversation-summary selector variants and nested summary shape, git diff `cwd`/`sha`/`diff`, optional auth token status fields, and the deprecated fuzzy request/response using the shared fuzzy result DTO. These are compatibility-only surfaces and do not define the modern v2 Haxe API. `initialize` remains deferred to app-server transport/bootstrap parity because it is session setup rather than a normal app method.
+
+`mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep full TUI/live-runtime sequencing separate from Cafex adapter work.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 

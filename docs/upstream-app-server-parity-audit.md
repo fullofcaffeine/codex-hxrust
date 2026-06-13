@@ -137,7 +137,7 @@ The local subset also validates selected notifications needed by the current hea
 
 ## Upstream Gap Summary
 
-Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 111-method selection, only the upstream test-only `mock/experimentalMethod` quoted v2 request remains outside the local subset. Deprecated v1 compatibility remains a separate legacy surface.
+Upstream v2 request parity is complete for production-selected methods; only the upstream test-only `mock/experimentalMethod` remains outside the local production subset. HXCX-3.74 adds the selected deprecated v1 compatibility methods as an explicitly separate legacy surface, while `initialize` stays with app-server transport/bootstrap parity.
 
 The remaining requests fall into these groups:
 
@@ -155,7 +155,7 @@ The remaining requests fall into these groups:
 | Realtime client controls | `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, `thread/realtime/listVoices` | Admitted in HXCX-3.72 |
 | Thread search | `thread/search` | Admitted in HXCX-3.70 |
 | Fuzzy search requests | `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, `fuzzyFileSearch/sessionStop` | Admitted in HXCX-3.71 |
-| Deprecated v1 client requests | `GetConversationSummary`, `GitDiffToRemote`, `GetAuthStatus`, legacy `fuzzyFileSearch`; `Initialize` deferred to app-server transport/bootstrap parity | Isolated compatibility slice |
+| Deprecated v1 client requests | `GetConversationSummary`, `GitDiffToRemote`, `GetAuthStatus`, legacy `fuzzyFileSearch`; `Initialize` deferred to app-server transport/bootstrap parity | Admitted in HXCX-3.74 as an isolated compatibility slice |
 
 ## Notification Gaps
 
@@ -203,7 +203,7 @@ Known exceptions:
 - `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, and `thread/realtime/listVoices` are selected Rust DTO/protocol mappings without standalone request/response schema files; their notifications are already tracked through v2 notification schema files.
 - `remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, and `remoteControl/client/revoke` are selected Rust DTO/protocol mappings without standalone request/response schema files; their status notification schema is already tracked through a v2 notification schema file.
 - Client-directed server request schemas are emitted as top-level schema files under `schema/json/` rather than `schema/json/v2`; the selected command/file/permission approval, tool user input, MCP elicitation, dynamic tool call, ChatGPT auth refresh, and attestation schemas are fingerprinted from that location.
-- Deprecated v1 request surfaces should remain deferred until a deliberate compatibility slice selects them.
+- Deprecated v1 `getConversationSummary`, `gitDiffToRemote`, and `getAuthStatus` are selected Rust DTO/protocol mappings without standalone request/response schema files. Legacy `fuzzyFileSearch` params/response schemas are tracked through top-level schema files. `initialize` remains deferred to app-server transport/bootstrap parity.
 
 ## Sequencing Decision
 

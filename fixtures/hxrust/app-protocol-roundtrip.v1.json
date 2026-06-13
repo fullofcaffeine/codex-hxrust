@@ -4156,6 +4156,76 @@
       "message": {"jsonrpc": "2.0", "id": "collaboration-mode-list-1", "result": {"data": [{"name": "Default", "mode": "default", "model": null, "reasoning_effort": null}, {"name": "Plan", "mode": "plan", "model": null, "reasoning_effort": "medium"}]}}
     },
     {
+      "id": "deprecated-v1-get-conversation-summary-thread-request",
+      "compatibility": "deprecated-v1",
+      "kind": "request",
+      "method": "getConversationSummary",
+      "message": {"jsonrpc": "2.0", "id": "v1-summary-thread-1", "method": "getConversationSummary", "params": {"conversationId": "67e55044-10b1-426f-9247-bb680e5fe0c8"}}
+    },
+    {
+      "id": "deprecated-v1-get-conversation-summary-thread-response",
+      "compatibility": "deprecated-v1",
+      "kind": "response",
+      "method": "getConversationSummary",
+      "message": {"jsonrpc": "2.0", "id": "v1-summary-thread-1", "result": {"summary": {"conversationId": "67e55044-10b1-426f-9247-bb680e5fe0c8", "path": "/tmp/codex-hxrust/rollout-2026-06-12T00-00-00-67e55044-10b1-426f-9247-bb680e5fe0c8.jsonl", "preview": "Port Codex through haxe.rust", "timestamp": "2026-06-12T00:00:00Z", "updatedAt": "2026-06-12T00:10:00Z", "modelProvider": "openai", "cwd": "/tmp/codex-hxrust", "cliVersion": "0.0.0-hxrust", "source": "cli", "gitInfo": {"sha": "0123456789abcdef0123456789abcdef01234567", "branch": "main", "origin_url": "https://example.invalid/codex.git"}}}}
+    },
+    {
+      "id": "deprecated-v1-get-conversation-summary-rollout-request",
+      "compatibility": "deprecated-v1",
+      "kind": "request",
+      "method": "getConversationSummary",
+      "message": {"jsonrpc": "2.0", "id": "v1-summary-rollout-1", "method": "getConversationSummary", "params": {"rolloutPath": "/tmp/codex-hxrust/rollout-2026-06-12T00-00-00-67e55044-10b1-426f-9247-bb680e5fe0c8.jsonl"}}
+    },
+    {
+      "id": "deprecated-v1-get-conversation-summary-rollout-response",
+      "compatibility": "deprecated-v1",
+      "kind": "response",
+      "method": "getConversationSummary",
+      "message": {"jsonrpc": "2.0", "id": "v1-summary-rollout-1", "result": {"summary": {"conversationId": "67e55044-10b1-426f-9247-bb680e5fe0c8", "path": "/tmp/codex-hxrust/rollout-2026-06-12T00-00-00-67e55044-10b1-426f-9247-bb680e5fe0c8.jsonl", "preview": "Port Codex through haxe.rust", "timestamp": null, "updatedAt": null, "modelProvider": "openai", "cwd": "/tmp/codex-hxrust", "cliVersion": "0.0.0-hxrust", "source": "cli", "gitInfo": null}}}
+    },
+    {
+      "id": "deprecated-v1-git-diff-to-remote-request",
+      "compatibility": "deprecated-v1",
+      "kind": "request",
+      "method": "gitDiffToRemote",
+      "message": {"jsonrpc": "2.0", "id": "v1-diff-1", "method": "gitDiffToRemote", "params": {"cwd": "/tmp/codex-hxrust"}}
+    },
+    {
+      "id": "deprecated-v1-git-diff-to-remote-response",
+      "compatibility": "deprecated-v1",
+      "kind": "response",
+      "method": "gitDiffToRemote",
+      "message": {"jsonrpc": "2.0", "id": "v1-diff-1", "result": {"sha": "0123456789abcdef0123456789abcdef01234567", "diff": "diff --git a/README.md b/README.md\n"}}
+    },
+    {
+      "id": "deprecated-v1-get-auth-status-request",
+      "compatibility": "deprecated-v1",
+      "kind": "request",
+      "method": "getAuthStatus",
+      "message": {"jsonrpc": "2.0", "id": "v1-auth-1", "method": "getAuthStatus", "params": {"includeToken": false, "refreshToken": false}}
+    },
+    {
+      "id": "deprecated-v1-get-auth-status-response",
+      "compatibility": "deprecated-v1",
+      "kind": "response",
+      "method": "getAuthStatus",
+      "message": {"jsonrpc": "2.0", "id": "v1-auth-1", "result": {"authMethod": "chatgpt", "authToken": null, "requiresOpenaiAuth": false}}
+    },
+    {
+      "id": "deprecated-v1-fuzzy-file-search-request",
+      "compatibility": "deprecated-v1",
+      "kind": "request",
+      "method": "fuzzyFileSearch",
+      "message": {"jsonrpc": "2.0", "id": "v1-fuzzy-1", "method": "fuzzyFileSearch", "params": {"query": "proto", "roots": ["/tmp/codex-hxrust"], "cancellationToken": "legacy-fuzzy-1"}}
+    },
+    {
+      "id": "deprecated-v1-fuzzy-file-search-response",
+      "compatibility": "deprecated-v1",
+      "kind": "response",
+      "method": "fuzzyFileSearch",
+      "message": {"jsonrpc": "2.0", "id": "v1-fuzzy-1", "result": {"files": [{"file_name": "AppProtocol.hx", "match_type": "file", "path": "src/codexhx/protocol/app/AppProtocol.hx", "root": "/tmp/codex-hxrust", "score": 92, "indices": [0, 3, 4]}]}}
+    },
+    {
       "id": "jsonrpc-error",
       "kind": "error",
       "message": {

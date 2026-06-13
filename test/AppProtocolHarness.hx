@@ -46,6 +46,10 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "thread/list");
         assertContains(fingerprintJson, "thread/search");
         assertContains(fingerprintJson, "thread/loaded/list");
+        assertContains(fingerprintJson, "getConversationSummary");
+        assertContains(fingerprintJson, "gitDiffToRemote");
+        assertContains(fingerprintJson, "getAuthStatus");
+        assertContains(fingerprintJson, "fuzzyFileSearch");
         assertContains(fingerprintJson, "fuzzyFileSearch/sessionStart");
         assertContains(fingerprintJson, "fuzzyFileSearch/sessionUpdate");
         assertContains(fingerprintJson, "fuzzyFileSearch/sessionStop");
@@ -196,7 +200,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("302", Std.string(items.length));
+        assertEquals("312", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -221,8 +225,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("112", Std.string(requests));
-        assertEquals("112", Std.string(responses));
+        assertEquals("117", Std.string(requests));
+        assertEquals("117", Std.string(responses));
         assertEquals("8", Std.string(serverRequests));
         assertEquals("8", Std.string(serverResponses));
         assertEquals("61", Std.string(notifications));
@@ -281,6 +285,36 @@ class AppProtocolHarness {
         assertFalse(invalidThreadLoadedListData.ok, "thread/loaded/list data entries must be thread id strings");
         assertEquals("expected_string", invalidThreadLoadedListData.errorCode);
         assertEquals("$.message.result.data[0]", invalidThreadLoadedListData.errorPath);
+
+        final invalidV1ConversationSelector = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"deprecated-v1-conversation-summary-conflicting-selector\",\"kind\":\"request\",\"method\":\"getConversationSummary\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"v1-summary-1\",\"method\":\"getConversationSummary\",\"params\":{\"conversationId\":\"thread-1\",\"rolloutPath\":\"/tmp/rollout.jsonl\"}}}")));
+        assertFalse(invalidV1ConversationSelector.ok, "deprecated v1 conversation summary accepts exactly one selector");
+        assertEquals("invalid_v1_conversation_summary_params", invalidV1ConversationSelector.errorCode);
+        assertEquals("$.message.params", invalidV1ConversationSelector.errorPath);
+
+        final invalidV1ConversationSummaryGitInfo = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"deprecated-v1-conversation-summary-invalid-git-info\",\"kind\":\"response\",\"method\":\"getConversationSummary\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"v1-summary-1\",\"result\":{\"summary\":{\"conversationId\":\"thread-1\",\"path\":\"/tmp/rollout.jsonl\",\"preview\":\"hello\",\"timestamp\":null,\"updatedAt\":null,\"modelProvider\":\"openai\",\"cwd\":\"/tmp\",\"cliVersion\":\"0.0.0\",\"source\":\"cli\",\"gitInfo\":7}}}}")));
+        assertFalse(invalidV1ConversationSummaryGitInfo.ok, "deprecated v1 conversation summary gitInfo must be object or null");
+        assertEquals("expected_nullable_object", invalidV1ConversationSummaryGitInfo.errorCode);
+        assertEquals("$.message.result.summary.gitInfo", invalidV1ConversationSummaryGitInfo.errorPath);
+
+        final invalidV1GitDiffCwd = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"deprecated-v1-git-diff-invalid-cwd\",\"kind\":\"request\",\"method\":\"gitDiffToRemote\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"v1-diff-1\",\"method\":\"gitDiffToRemote\",\"params\":{\"cwd\":7}}}")));
+        assertFalse(invalidV1GitDiffCwd.ok, "deprecated v1 git diff requires string cwd");
+        assertEquals("expected_string", invalidV1GitDiffCwd.errorCode);
+        assertEquals("$.message.params.cwd", invalidV1GitDiffCwd.errorPath);
+
+        final invalidV1AuthRefresh = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"deprecated-v1-auth-invalid-refresh\",\"kind\":\"request\",\"method\":\"getAuthStatus\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"v1-auth-1\",\"method\":\"getAuthStatus\",\"params\":{\"refreshToken\":\"yes\"}}}")));
+        assertFalse(invalidV1AuthRefresh.ok, "deprecated v1 auth refreshToken must be boolean");
+        assertEquals("expected_bool", invalidV1AuthRefresh.errorCode);
+        assertEquals("$.message.params.refreshToken", invalidV1AuthRefresh.errorPath);
+
+        final invalidLegacyFuzzyQuery = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"deprecated-v1-fuzzy-missing-query\",\"kind\":\"request\",\"method\":\"fuzzyFileSearch\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"v1-fuzzy-1\",\"method\":\"fuzzyFileSearch\",\"params\":{\"roots\":[\"/tmp\"]}}}")));
+        assertFalse(invalidLegacyFuzzyQuery.ok, "legacy fuzzy search requires query");
+        assertEquals("missing_field", invalidLegacyFuzzyQuery.errorCode);
+        assertEquals("$.message.params.query", invalidLegacyFuzzyQuery.errorPath);
+
+        final invalidLegacyFuzzyResultMatch = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"deprecated-v1-fuzzy-invalid-match\",\"kind\":\"response\",\"method\":\"fuzzyFileSearch\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"v1-fuzzy-1\",\"result\":{\"files\":[{\"file_name\":\"a\",\"match_type\":\"symlink\",\"path\":\"a\",\"root\":\"/tmp\",\"score\":1,\"indices\":null}]}}}")));
+        assertFalse(invalidLegacyFuzzyResultMatch.ok, "legacy fuzzy result match type must share the upstream fuzzy enum");
+        assertEquals("invalid_fuzzy_file_search_match_type", invalidLegacyFuzzyResultMatch.errorCode);
+        assertEquals("$.message.result.files[0].match_type", invalidLegacyFuzzyResultMatch.errorPath);
 
         final missingThreadArchivedId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"thread-archived-missing-thread-id\",\"kind\":\"notification\",\"method\":\"thread/archived\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/archived\",\"params\":{}}}")));
         assertFalse(missingThreadArchivedId.ok, "thread/archived must include threadId");

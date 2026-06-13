@@ -192,6 +192,8 @@ selected_schemas=(
   "ChatgptAuthTokensRefreshResponse:ChatgptAuthTokensRefreshResponse.json"
   "AttestationGenerateParams:AttestationGenerateParams.json"
   "AttestationGenerateResponse:AttestationGenerateResponse.json"
+  "FuzzyFileSearchParams:FuzzyFileSearchParams.json"
+  "FuzzyFileSearchResponse:FuzzyFileSearchResponse.json"
   "ThreadStartedNotification:v2/ThreadStartedNotification.json"
   "ThreadStatusChangedNotification:v2/ThreadStatusChangedNotification.json"
   "ThreadArchivedNotification:v2/ThreadArchivedNotification.json"
@@ -344,6 +346,11 @@ jq -n \
         id: "remote-control-schemas",
         status: "tracked_from_rust_source",
         reason: "Upstream exports remoteControl/enable, remoteControl/disable, remoteControl/status/read, remoteControl/pairing/start, remoteControl/pairing/status, remoteControl/client/list, and remoteControl/client/revoke from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. The local subset validates these DTO contracts from upstream Rust source under HXCX-3.73 while keeping emitted remote-control notification schemas fingerprinted."
+      },
+      {
+        id: "deprecated-v1-compatibility-schemas",
+        status: "tracked_from_rust_source",
+        reason: "Upstream exports getConversationSummary, gitDiffToRemote, and getAuthStatus compatibility DTOs from protocol/v1.rs and common.rs, but the pinned schema export does not emit standalone JSON schema files for those deprecated request/response surfaces. The selected local compatibility subset validates these Rust DTO contracts under HXCX-3.74. initialize remains deferred to app-server transport/bootstrap parity."
       }
     ]
   }' > "$ACTUAL"

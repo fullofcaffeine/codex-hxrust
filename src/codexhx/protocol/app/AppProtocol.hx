@@ -5,11 +5,11 @@ import haxe.json.Value;
 import StringTools;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/search", "thread/loaded/list", "thread/read", "fuzzyFileSearch/sessionStart", "fuzzyFileSearch/sessionUpdate", "fuzzyFileSearch/sessionStop", "thread/realtime/start", "thread/realtime/appendAudio", "thread/realtime/appendText", "thread/realtime/stop", "thread/realtime/listVoices", "remoteControl/enable", "remoteControl/disable", "remoteControl/status/read", "remoteControl/pairing/start", "remoteControl/pairing/status", "remoteControl/client/list", "remoteControl/client/revoke", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read", "environment/add", "collaborationMode/list", "app/list", "skills/list", "skills/extraRoots/set", "skills/config/write", "hooks/list", "marketplace/add", "marketplace/remove", "marketplace/upgrade", "plugin/list", "plugin/installed", "plugin/read", "plugin/skill/read", "plugin/install", "plugin/uninstall", "plugin/share/save", "plugin/share/updateTargets", "plugin/share/list", "plugin/share/checkout", "plugin/share/delete", "fs/readFile", "fs/writeFile", "fs/createDirectory", "fs/getMetadata", "fs/readDirectory", "fs/remove", "fs/copy", "fs/watch", "fs/unwatch", "model/list", "modelProvider/capabilities/read", "experimentalFeature/list", "experimentalFeature/enablement/set", "permissionProfile/list", "mcpServer/oauth/login", "config/mcpServer/reload", "mcpServerStatus/list", "mcpServer/resource/read", "mcpServer/tool/call"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/search", "thread/loaded/list", "thread/read", "getConversationSummary", "gitDiffToRemote", "getAuthStatus", "fuzzyFileSearch", "fuzzyFileSearch/sessionStart", "fuzzyFileSearch/sessionUpdate", "fuzzyFileSearch/sessionStop", "thread/realtime/start", "thread/realtime/appendAudio", "thread/realtime/appendText", "thread/realtime/stop", "thread/realtime/listVoices", "remoteControl/enable", "remoteControl/disable", "remoteControl/status/read", "remoteControl/pairing/start", "remoteControl/pairing/status", "remoteControl/client/list", "remoteControl/client/revoke", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read", "environment/add", "collaborationMode/list", "app/list", "skills/list", "skills/extraRoots/set", "skills/config/write", "hooks/list", "marketplace/add", "marketplace/remove", "marketplace/upgrade", "plugin/list", "plugin/installed", "plugin/read", "plugin/skill/read", "plugin/install", "plugin/uninstall", "plugin/share/save", "plugin/share/updateTargets", "plugin/share/list", "plugin/share/checkout", "plugin/share/delete", "fs/readFile", "fs/writeFile", "fs/createDirectory", "fs/getMetadata", "fs/readDirectory", "fs/remove", "fs/copy", "fs/watch", "fs/unwatch", "model/list", "modelProvider/capabilities/read", "experimentalFeature/list", "experimentalFeature/enablement/set", "permissionProfile/list", "mcpServer/oauth/login", "config/mcpServer/reload", "mcpServerStatus/list", "mcpServer/resource/read", "mcpServer/tool/call"];
     static final SERVER_REQUEST_METHODS:Array<String> = ["account/chatgptAuthTokens/refresh", "attestation/generate", "item/commandExecution/requestApproval", "item/fileChange/requestApproval", "item/permissions/requestApproval", "item/tool/call", "item/tool/requestUserInput", "mcpServer/elicitation/request"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/archived", "thread/unarchived", "thread/closed", "thread/name/updated", "thread/goal/updated", "thread/goal/cleared", "thread/settings/updated", "thread/tokenUsage/updated", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,app/list,collaborationMode/list,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/mcpServer/reload,config/read,config/value/write,configRequirements/read,environment/add,experimentalFeature/enablement/set,experimentalFeature/list,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,fs/copy,fs/createDirectory,fs/getMetadata,fs/readDirectory,fs/readFile,fs/remove,fs/unwatch,fs/watch,fs/writeFile,fuzzyFileSearch/sessionStart,fuzzyFileSearch/sessionStop,fuzzyFileSearch/sessionUpdate,hooks/list,marketplace/add,marketplace/remove,marketplace/upgrade,mcpServer/oauth/login,mcpServer/resource/read,mcpServer/tool/call,mcpServerStatus/list,memory/reset,model/list,modelProvider/capabilities/read,permissionProfile/list,plugin/installed,plugin/install,plugin/list,plugin/read,plugin/share/checkout,plugin/share/delete,plugin/share/list,plugin/share/save,plugin/share/updateTargets,plugin/skill/read,plugin/uninstall,process/kill,process/resizePty,process/spawn,process/writeStdin,remoteControl/client/list,remoteControl/client/revoke,remoteControl/disable,remoteControl/enable,remoteControl/pairing/start,remoteControl/pairing/status,remoteControl/status/read,review/start,skills/config/write,skills/extraRoots/set,skills/list,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/realtime/appendAudio,thread/realtime/appendText,thread/realtime/listVoices,thread/realtime/start,thread/realtime/stop,thread/resume,thread/rollback,thread/search,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|serverRequests:account/chatgptAuthTokens/refresh,attestation/generate,item/commandExecution/requestApproval,item/fileChange/requestApproval,item/permissions/requestApproval,item/tool/call,item/tool/requestUserInput,mcpServer/elicitation/request|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-065";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,app/list,collaborationMode/list,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/mcpServer/reload,config/read,config/value/write,configRequirements/read,environment/add,experimentalFeature/enablement/set,experimentalFeature/list,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,fs/copy,fs/createDirectory,fs/getMetadata,fs/readDirectory,fs/readFile,fs/remove,fs/unwatch,fs/watch,fs/writeFile,fuzzyFileSearch,fuzzyFileSearch/sessionStart,fuzzyFileSearch/sessionStop,fuzzyFileSearch/sessionUpdate,getAuthStatus,getConversationSummary,gitDiffToRemote,hooks/list,marketplace/add,marketplace/remove,marketplace/upgrade,mcpServer/oauth/login,mcpServer/resource/read,mcpServer/tool/call,mcpServerStatus/list,memory/reset,model/list,modelProvider/capabilities/read,permissionProfile/list,plugin/installed,plugin/install,plugin/list,plugin/read,plugin/share/checkout,plugin/share/delete,plugin/share/list,plugin/share/save,plugin/share/updateTargets,plugin/skill/read,plugin/uninstall,process/kill,process/resizePty,process/spawn,process/writeStdin,remoteControl/client/list,remoteControl/client/revoke,remoteControl/disable,remoteControl/enable,remoteControl/pairing/start,remoteControl/pairing/status,remoteControl/status/read,review/start,skills/config/write,skills/extraRoots/set,skills/list,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/realtime/appendAudio,thread/realtime/appendText,thread/realtime/listVoices,thread/realtime/start,thread/realtime/stop,thread/resume,thread/rollback,thread/search,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|serverRequests:account/chatgptAuthTokens/refresh,attestation/generate,item/commandExecution/requestApproval,item/fileChange/requestApproval,item/permissions/requestApproval,item/tool/call,item/tool/requestUserInput,mcpServer/elicitation/request|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-066";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -180,6 +180,14 @@ class AppProtocol {
                 validateThreadSearchResponse(result);
             case "thread/loaded/list":
                 validateThreadLoadedListResponse(result);
+            case "getConversationSummary":
+                validateV1GetConversationSummaryResponse(result);
+            case "gitDiffToRemote":
+                validateV1GitDiffToRemoteResponse(result);
+            case "getAuthStatus":
+                validateV1GetAuthStatusResponse(result);
+            case "fuzzyFileSearch":
+                validateLegacyFuzzyFileSearchResponse(result);
             case "fuzzyFileSearch/sessionStart" | "fuzzyFileSearch/sessionUpdate" | "fuzzyFileSearch/sessionStop":
                 validateEmptyObject(result, "$.message.result", "response:" + fixtureMethod);
             case "thread/realtime/start" | "thread/realtime/appendAudio" | "thread/realtime/appendText" | "thread/realtime/stop":
@@ -536,6 +544,14 @@ class AppProtocol {
                 validateThreadSearchParams(params);
             case "thread/loaded/list":
                 validateThreadLoadedListParams(params);
+            case "getConversationSummary":
+                validateV1GetConversationSummaryParams(params);
+            case "gitDiffToRemote":
+                validateV1GitDiffToRemoteParams(params);
+            case "getAuthStatus":
+                validateV1GetAuthStatusParams(params);
+            case "fuzzyFileSearch":
+                validateLegacyFuzzyFileSearchParams(params);
             case "fuzzyFileSearch/sessionStart":
                 validateFuzzyFileSearchSessionStartParams(params);
             case "fuzzyFileSearch/sessionUpdate":
@@ -1753,6 +1769,119 @@ class AppProtocol {
             if (!cursor.ok) return cursor;
         }
         return success("response:thread/search");
+    }
+
+    static function validateV1GetConversationSummaryParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final hasRolloutPath = fieldIndex(params.keys, "rolloutPath") >= 0;
+        final hasConversationId = fieldIndex(params.keys, "conversationId") >= 0;
+        if (hasRolloutPath == hasConversationId) return fail("invalid_v1_conversation_summary_params", "$.message.params", "expected exactly one legacy conversation summary selector");
+        if (hasRolloutPath) {
+            final rolloutPath = requiredString(params.keys, params.values, "rolloutPath", "$.message.params.rolloutPath");
+            if (!rolloutPath.ok) return rolloutPath.toOutcome();
+            return success("params:getConversationSummary:rolloutPath");
+        }
+        final conversationId = requiredString(params.keys, params.values, "conversationId", "$.message.params.conversationId");
+        if (!conversationId.ok) return conversationId.toOutcome();
+        return success("params:getConversationSummary:conversationId");
+    }
+
+    static function validateV1GetConversationSummaryResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final summary = requiredObjectField(result.keys, result.values, "summary", "$.message.result.summary");
+        if (!summary.ok) return summary.toOutcome();
+        final summaryResult = validateV1ConversationSummary(summary, "$.message.result.summary");
+        if (!summaryResult.ok) return summaryResult;
+        return success("response:getConversationSummary");
+    }
+
+    static function validateV1ConversationSummary(summary:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        for (field in ["conversationId", "path", "preview", "modelProvider", "cwd", "cliVersion", "source"]) {
+            final value = requiredString(summary.keys, summary.values, field, path + "." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        final timestamp = validateOptionalNullableString(summary, "timestamp", path + ".timestamp");
+        if (!timestamp.ok) return timestamp;
+        final updatedAt = validateOptionalNullableString(summary, "updatedAt", path + ".updatedAt");
+        if (!updatedAt.ok) return updatedAt;
+        final gitInfo = validateV1ConversationGitInfo(summary, "gitInfo", path + ".gitInfo");
+        if (!gitInfo.ok) return gitInfo;
+        return success("v1-conversation-summary");
+    }
+
+    static function validateV1ConversationGitInfo(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("v1-git-info:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("v1-git-info:null");
+            case JObject(keys, values):
+                final gitInfo = ProtocolObjectField.success(keys, values);
+                for (field in ["sha", "branch", "origin_url"]) {
+                    final value = validateOptionalNullableString(gitInfo, field, path + "." + field);
+                    if (!value.ok) return value;
+                }
+                success("v1-git-info");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateV1GitDiffToRemoteParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final cwd = requiredString(params.keys, params.values, "cwd", "$.message.params.cwd");
+        if (!cwd.ok) return cwd.toOutcome();
+        return success("params:gitDiffToRemote");
+    }
+
+    static function validateV1GitDiffToRemoteResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final sha = requiredString(result.keys, result.values, "sha", "$.message.result.sha");
+        if (!sha.ok) return sha.toOutcome();
+        final diff = requiredString(result.keys, result.values, "diff", "$.message.result.diff");
+        if (!diff.ok) return diff.toOutcome();
+        return success("response:gitDiffToRemote");
+    }
+
+    static function validateV1GetAuthStatusParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final includeToken = validateOptionalBool(params, "includeToken", "$.message.params.includeToken");
+        if (!includeToken.ok) return includeToken;
+        final refreshToken = validateOptionalBool(params, "refreshToken", "$.message.params.refreshToken");
+        if (!refreshToken.ok) return refreshToken;
+        return success("params:getAuthStatus");
+    }
+
+    static function validateV1GetAuthStatusResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final authMethod = validateOptionalNullableStringEnum(result, "authMethod", "$.message.result.authMethod", ["apikey", "chatgpt", "chatgptAuthTokens", "agentIdentity", "personalAccessToken"], "invalid_account_auth_mode");
+        if (!authMethod.ok) return authMethod;
+        final authToken = validateOptionalNullableString(result, "authToken", "$.message.result.authToken");
+        if (!authToken.ok) return authToken;
+        final requiresOpenaiAuth = validateOptionalNullableBool(result, "requiresOpenaiAuth", "$.message.result.requiresOpenaiAuth");
+        if (!requiresOpenaiAuth.ok) return requiresOpenaiAuth;
+        return success("response:getAuthStatus");
+    }
+
+    static function validateLegacyFuzzyFileSearchParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final query = requiredString(params.keys, params.values, "query", "$.message.params.query");
+        if (!query.ok) return query.toOutcome();
+        final roots = requiredArray(params.keys, params.values, "roots", "$.message.params.roots");
+        if (!roots.ok) return roots.toOutcome();
+        final rootResult = validateStringArrayEntries(roots.values, "$.message.params.roots");
+        if (!rootResult.ok) return rootResult;
+        final cancellationToken = validateOptionalNullableString(params, "cancellationToken", "$.message.params.cancellationToken");
+        if (!cancellationToken.ok) return cancellationToken;
+        return success("params:fuzzyFileSearch");
+    }
+
+    static function validateLegacyFuzzyFileSearchResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final files = requiredArray(result.keys, result.values, "files", "$.message.result.files");
+        if (!files.ok) return files.toOutcome();
+        var i = 0;
+        while (i < files.values.length) {
+            final filePath = "$.message.result.files[" + Std.string(i) + "]";
+            final file = requireObject(files.values[i], filePath);
+            if (!file.ok) return file.toOutcome();
+            final fileResult = validateFuzzyFileSearchResult(file, filePath);
+            if (!fileResult.ok) return fileResult;
+            i = i + 1;
+        }
+        return success("response:fuzzyFileSearch");
     }
 
     static function validateFuzzyFileSearchSessionStartParams(params:ProtocolObjectField):AppProtocolParseOutcome {

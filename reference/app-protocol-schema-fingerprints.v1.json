@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:6dc61dc3ad5c198e5629cfd0a2f1516e96f544d499711ac9c9847fb110afd994",
+  "fingerprint": "sha256:4292adf78bb6bf03839f6bf8c538a0c76016ea29627694ffb9b5b537376597cf",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -892,6 +892,29 @@
       "sourcePath": "v2/FsWriteFileResponse.json",
       "sha256": "afeb884e1e504db633238399c1b27e4a7ceb9f6b44f49f7a9837308969e984ca",
       "fields": []
+    },
+    {
+      "id": "FuzzyFileSearchParams",
+      "sourcePath": "FuzzyFileSearchParams.json",
+      "sha256": "233829834866264a07931cf0e5d8d7b6d3b3a392fccc2f01564e0631ab59b1cb",
+      "fields": [
+        "property:cancellationToken",
+        "property:query",
+        "property:roots",
+        "required:query",
+        "required:roots"
+      ]
+    },
+    {
+      "id": "FuzzyFileSearchResponse",
+      "sourcePath": "FuzzyFileSearchResponse.json",
+      "sha256": "73021c084fd72fb832e097c92797ec5ec2cbbd80b14e063d4770a22d9356632a",
+      "fields": [
+        "definition:FuzzyFileSearchMatchType",
+        "definition:FuzzyFileSearchResult",
+        "property:files",
+        "required:files"
+      ]
     },
     {
       "id": "FuzzyFileSearchSessionCompletedNotification",
@@ -3614,6 +3637,11 @@
       "id": "remote-control-schemas",
       "status": "tracked_from_rust_source",
       "reason": "Upstream exports remoteControl/enable, remoteControl/disable, remoteControl/status/read, remoteControl/pairing/start, remoteControl/pairing/status, remoteControl/client/list, and remoteControl/client/revoke from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. The local subset validates these DTO contracts from upstream Rust source under HXCX-3.73 while keeping emitted remote-control notification schemas fingerprinted."
+    },
+    {
+      "id": "deprecated-v1-compatibility-schemas",
+      "status": "tracked_from_rust_source",
+      "reason": "Upstream exports getConversationSummary, gitDiffToRemote, and getAuthStatus compatibility DTOs from protocol/v1.rs and common.rs, but the pinned schema export does not emit standalone JSON schema files for those deprecated request/response surfaces. The selected local compatibility subset validates these Rust DTO contracts under HXCX-3.74. initialize remains deferred to app-server transport/bootstrap parity."
     }
   ]
 }
