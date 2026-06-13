@@ -5,26 +5,26 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 18,
+    "totalGaps": 19,
     "resolvedUpstream": 14,
-    "openUpstream": 4,
+    "openUpstream": 5,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 11,
+      "medium": 12,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 7,
+      "runtime_model_session": 8,
       "native_metal_std_boundary": 4,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 357,
+    "sourceFilesScanned": 368,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -246,6 +246,23 @@
       "validation": [
         "harness/check-thread-read-token-usage-replay-delivery.sh",
         "haxe.rust-3f0g acceptance requires a product-neutral regression fixture"
+      ]
+    },
+    {
+      "id": "reflect-compare-lowering",
+      "status": "open_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-fo5",
+      "haxeRustRefs": [
+        "haxe.rust-fz20"
+      ],
+      "reproduction": "Model catalog selection exposed Rust E0433 when Reflect.compare(left.modelId, right.modelId) was used inside a typed Array.sort comparator; generated Rust referenced Reflect::compare without emitting or importing a Reflect runtime type.",
+      "workaround": "The local model catalog sort uses direct typed string comparisons while haxe.rust lowers Reflect.compare generically.",
+      "followUp": "haxe.rust-fz20",
+      "validation": [
+        "harness/check-model-catalog.sh",
+        "haxe.rust-fz20 acceptance requires a product-neutral Reflect.compare regression fixture"
       ]
     },
     {

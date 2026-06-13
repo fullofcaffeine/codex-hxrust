@@ -474,6 +474,19 @@ The fixture `fixtures/hxrust/thread-read-goal-tool-dispatch.v1.json` and `harnes
 
 The fixture `fixtures/hxrust/provider-admission.v1.json` and `harness/check-provider-admission.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is admission evidence only; it does not read real credentials, refresh tokens, call live model providers, own model catalogs, implement realtime/websocket traffic, or model Cafex/Cafetera behavior. The boundary is documented in `docs/provider-admission.md`.
 
+## Model Catalog And Provider Capabilities
+
+`codexhx.runtime.model.catalog.ModelCatalogPolicy` is the HXCX-4.44 raw upstream model catalog and provider capability slice:
+
+- provider admission must pass before catalog selection returns a model;
+- catalog rows carry selected typed `ModelInfo` facts: model id, provider id, priority, visibility, API support, context windows, modalities, tiers, web-search type, tool mode, and hosted tool hints;
+- auth-mode filtering mirrors upstream picker behavior: non-backend/API-key mode sees only API-supported models;
+- hidden models are refused unless the request explicitly includes hidden models;
+- provider capabilities are modeled as upper bounds, with Bedrock preserving namespace tools while disabling hosted web search and image generation;
+- online/uncached refresh strategies are recognized but refused in this credential-free fixture gate.
+
+The fixture `fixtures/hxrust/model-catalog.v1.json` and `harness/check-model-catalog.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is static catalog/capability evidence only; it does not call `/models`, persist model caches, refresh ETags, execute provider traffic, implement realtime/websocket behavior, or model Cafex/Cafetera behavior. The boundary is documented in `docs/model-catalog.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

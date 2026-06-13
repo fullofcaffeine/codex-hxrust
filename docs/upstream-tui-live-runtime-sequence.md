@@ -520,7 +520,20 @@ Model the selected upstream provider and credential admission boundary before li
 
 Status: HXCX-4.43 now owns `fixtures/hxrust/provider-admission.v1.json` and validates the slice through `harness/check-provider-admission.sh`. No new haxe.rust limitation was exposed. This is selected provider admission evidence only, not live provider traffic, real auth storage, token refresh, model catalog ownership, websocket/realtime behavior, or Cafex behavior.
 
-### HXCX-4.44+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.44: Model Catalog And Provider Capabilities
+
+Model the selected upstream model catalog and provider capability boundary after provider admission:
+
+- compose with provider admission before returning catalog results;
+- represent selected `ModelInfo` and app-visible `ModelPreset` fields through typed Haxe DTOs;
+- apply provider-scoped catalog filtering, auth-mode filtering, picker visibility, and default selection;
+- preserve provider capability upper bounds for namespace tools, hosted image generation, and hosted web search;
+- represent Bedrock as a static catalog with hosted web/image disabled and default service-tier behavior;
+- refuse live `/models` refresh attempts in credential-free fixture gates.
+
+Status: HXCX-4.44 now owns `fixtures/hxrust/model-catalog.v1.json` and validates the slice through `harness/check-model-catalog.sh`. It exposed generic haxe.rust issue `haxe.rust-fz20` for `Reflect.compare` lowering; codexhx uses direct typed comparison locally while the compiler fix belongs upstream. This is selected static catalog/capability evidence only, not live provider traffic, model cache/ETag ownership, websocket/realtime behavior, or Cafex behavior.
+
+### HXCX-4.45+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
