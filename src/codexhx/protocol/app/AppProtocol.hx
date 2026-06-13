@@ -5,11 +5,11 @@ import haxe.json.Value;
 import StringTools;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/search", "thread/loaded/list", "thread/read", "fuzzyFileSearch/sessionStart", "fuzzyFileSearch/sessionUpdate", "fuzzyFileSearch/sessionStop", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read", "environment/add", "collaborationMode/list", "app/list", "skills/list", "skills/extraRoots/set", "skills/config/write", "hooks/list", "marketplace/add", "marketplace/remove", "marketplace/upgrade", "plugin/list", "plugin/installed", "plugin/read", "plugin/skill/read", "plugin/install", "plugin/uninstall", "plugin/share/save", "plugin/share/updateTargets", "plugin/share/list", "plugin/share/checkout", "plugin/share/delete", "fs/readFile", "fs/writeFile", "fs/createDirectory", "fs/getMetadata", "fs/readDirectory", "fs/remove", "fs/copy", "fs/watch", "fs/unwatch", "model/list", "modelProvider/capabilities/read", "experimentalFeature/list", "experimentalFeature/enablement/set", "permissionProfile/list", "mcpServer/oauth/login", "config/mcpServer/reload", "mcpServerStatus/list", "mcpServer/resource/read", "mcpServer/tool/call"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/search", "thread/loaded/list", "thread/read", "fuzzyFileSearch/sessionStart", "fuzzyFileSearch/sessionUpdate", "fuzzyFileSearch/sessionStop", "thread/realtime/start", "thread/realtime/appendAudio", "thread/realtime/appendText", "thread/realtime/stop", "thread/realtime/listVoices", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read", "environment/add", "collaborationMode/list", "app/list", "skills/list", "skills/extraRoots/set", "skills/config/write", "hooks/list", "marketplace/add", "marketplace/remove", "marketplace/upgrade", "plugin/list", "plugin/installed", "plugin/read", "plugin/skill/read", "plugin/install", "plugin/uninstall", "plugin/share/save", "plugin/share/updateTargets", "plugin/share/list", "plugin/share/checkout", "plugin/share/delete", "fs/readFile", "fs/writeFile", "fs/createDirectory", "fs/getMetadata", "fs/readDirectory", "fs/remove", "fs/copy", "fs/watch", "fs/unwatch", "model/list", "modelProvider/capabilities/read", "experimentalFeature/list", "experimentalFeature/enablement/set", "permissionProfile/list", "mcpServer/oauth/login", "config/mcpServer/reload", "mcpServerStatus/list", "mcpServer/resource/read", "mcpServer/tool/call"];
     static final SERVER_REQUEST_METHODS:Array<String> = ["account/chatgptAuthTokens/refresh", "attestation/generate", "item/commandExecution/requestApproval", "item/fileChange/requestApproval", "item/permissions/requestApproval", "item/tool/call", "item/tool/requestUserInput", "mcpServer/elicitation/request"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/archived", "thread/unarchived", "thread/closed", "thread/name/updated", "thread/goal/updated", "thread/goal/cleared", "thread/settings/updated", "thread/tokenUsage/updated", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,app/list,collaborationMode/list,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/mcpServer/reload,config/read,config/value/write,configRequirements/read,environment/add,experimentalFeature/enablement/set,experimentalFeature/list,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,fs/copy,fs/createDirectory,fs/getMetadata,fs/readDirectory,fs/readFile,fs/remove,fs/unwatch,fs/watch,fs/writeFile,fuzzyFileSearch/sessionStart,fuzzyFileSearch/sessionStop,fuzzyFileSearch/sessionUpdate,hooks/list,marketplace/add,marketplace/remove,marketplace/upgrade,mcpServer/oauth/login,mcpServer/resource/read,mcpServer/tool/call,mcpServerStatus/list,memory/reset,model/list,modelProvider/capabilities/read,permissionProfile/list,plugin/installed,plugin/install,plugin/list,plugin/read,plugin/share/checkout,plugin/share/delete,plugin/share/list,plugin/share/save,plugin/share/updateTargets,plugin/skill/read,plugin/uninstall,process/kill,process/resizePty,process/spawn,process/writeStdin,review/start,skills/config/write,skills/extraRoots/set,skills/list,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/resume,thread/rollback,thread/search,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|serverRequests:account/chatgptAuthTokens/refresh,attestation/generate,item/commandExecution/requestApproval,item/fileChange/requestApproval,item/permissions/requestApproval,item/tool/call,item/tool/requestUserInput,mcpServer/elicitation/request|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-063";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,app/list,collaborationMode/list,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/mcpServer/reload,config/read,config/value/write,configRequirements/read,environment/add,experimentalFeature/enablement/set,experimentalFeature/list,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,fs/copy,fs/createDirectory,fs/getMetadata,fs/readDirectory,fs/readFile,fs/remove,fs/unwatch,fs/watch,fs/writeFile,fuzzyFileSearch/sessionStart,fuzzyFileSearch/sessionStop,fuzzyFileSearch/sessionUpdate,hooks/list,marketplace/add,marketplace/remove,marketplace/upgrade,mcpServer/oauth/login,mcpServer/resource/read,mcpServer/tool/call,mcpServerStatus/list,memory/reset,model/list,modelProvider/capabilities/read,permissionProfile/list,plugin/installed,plugin/install,plugin/list,plugin/read,plugin/share/checkout,plugin/share/delete,plugin/share/list,plugin/share/save,plugin/share/updateTargets,plugin/skill/read,plugin/uninstall,process/kill,process/resizePty,process/spawn,process/writeStdin,review/start,skills/config/write,skills/extraRoots/set,skills/list,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/realtime/appendAudio,thread/realtime/appendText,thread/realtime/listVoices,thread/realtime/start,thread/realtime/stop,thread/resume,thread/rollback,thread/search,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|serverRequests:account/chatgptAuthTokens/refresh,attestation/generate,item/commandExecution/requestApproval,item/fileChange/requestApproval,item/permissions/requestApproval,item/tool/call,item/tool/requestUserInput,mcpServer/elicitation/request|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-064";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -182,6 +182,10 @@ class AppProtocol {
                 validateThreadLoadedListResponse(result);
             case "fuzzyFileSearch/sessionStart" | "fuzzyFileSearch/sessionUpdate" | "fuzzyFileSearch/sessionStop":
                 validateEmptyObject(result, "$.message.result", "response:" + fixtureMethod);
+            case "thread/realtime/start" | "thread/realtime/appendAudio" | "thread/realtime/appendText" | "thread/realtime/stop":
+                validateEmptyObject(result, "$.message.result", "response:" + fixtureMethod);
+            case "thread/realtime/listVoices":
+                validateThreadRealtimeListVoicesResponse(result);
             case "turn/start":
                 final turn = requiredObjectField(result.keys, result.values, "turn", "$.message.result.turn");
                 if (!turn.ok) return turn.toOutcome();
@@ -528,6 +532,16 @@ class AppProtocol {
                 validateFuzzyFileSearchSessionUpdateParams(params);
             case "fuzzyFileSearch/sessionStop":
                 validateFuzzyFileSearchSessionStopParams(params);
+            case "thread/realtime/start":
+                validateThreadRealtimeStartParams(params);
+            case "thread/realtime/appendAudio":
+                validateThreadRealtimeAppendAudioParams(params);
+            case "thread/realtime/appendText":
+                validateThreadRealtimeAppendTextParams(params);
+            case "thread/realtime/stop":
+                validateThreadRealtimeStopParams(params);
+            case "thread/realtime/listVoices":
+                validateEmptyObject(params, "$.message.params", "params:thread/realtime/listVoices");
             case "turn/start":
                 validateTurnInputParams(params, false);
             case "turn/steer":
@@ -1743,6 +1757,115 @@ class AppProtocol {
         final sessionId = requiredNonEmptyString(params.keys, params.values, "sessionId", "$.message.params.sessionId");
         if (!sessionId.ok) return sessionId.toOutcome();
         return success("params:fuzzyFileSearch/sessionStop");
+    }
+
+    static function validateThreadRealtimeStartParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final model = validateOptionalNullableString(params, "model", "$.message.params.model");
+        if (!model.ok) return model;
+        final outputModality = requiredString(params.keys, params.values, "outputModality", "$.message.params.outputModality");
+        if (!outputModality.ok) return outputModality.toOutcome();
+        if (!validRealtimeOutputModality(outputModality.value)) return fail("invalid_realtime_output_modality", "$.message.params.outputModality", "unsupported realtime output modality");
+        final prompt = validateOptionalNullableString(params, "prompt", "$.message.params.prompt");
+        if (!prompt.ok) return prompt;
+        final realtimeSessionId = validateOptionalNullableString(params, "realtimeSessionId", "$.message.params.realtimeSessionId");
+        if (!realtimeSessionId.ok) return realtimeSessionId;
+        final transport = validateOptionalThreadRealtimeStartTransport(params, "transport", "$.message.params.transport");
+        if (!transport.ok) return transport;
+        final version = validateOptionalNullableStringEnum(params, "version", "$.message.params.version", ["v1", "v2"], "invalid_realtime_conversation_version");
+        if (!version.ok) return version;
+        final voice = validateOptionalNullableRealtimeVoice(params, "voice", "$.message.params.voice");
+        if (!voice.ok) return voice;
+        return success("params:thread/realtime/start");
+    }
+
+    static function validateOptionalThreadRealtimeStartTransport(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("thread-realtime-transport:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("thread-realtime-transport:null");
+            case JObject(keys, values):
+                final transportType = requiredString(keys, values, "type", path + ".type");
+                if (!transportType.ok) transportType.toOutcome() else if (!validRealtimeTransportType(transportType.value)) fail("invalid_realtime_transport", path + ".type", "unsupported realtime transport") else if (transportType.value == "webrtc") {
+                    final sdp = requiredString(keys, values, "sdp", path + ".sdp");
+                    if (!sdp.ok) sdp.toOutcome() else success("thread-realtime-transport:webrtc");
+                } else success("thread-realtime-transport:websocket");
+            case _:
+                fail("expected_nullable_object", path, "expected JSON object or null");
+        }
+    }
+
+    static function validateThreadRealtimeAppendAudioParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final audio = requiredObjectField(params.keys, params.values, "audio", "$.message.params.audio");
+        if (!audio.ok) return audio.toOutcome();
+        final audioResult = validateThreadRealtimeAudioChunk(audio, "$.message.params.audio");
+        if (!audioResult.ok) return audioResult;
+        return success("params:thread/realtime/appendAudio");
+    }
+
+    static function validateThreadRealtimeAppendTextParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        final text = requiredString(params.keys, params.values, "text", "$.message.params.text");
+        if (!text.ok) return text.toOutcome();
+        return success("params:thread/realtime/appendText");
+    }
+
+    static function validateThreadRealtimeStopParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = requiredString(params.keys, params.values, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId.toOutcome();
+        return success("params:thread/realtime/stop");
+    }
+
+    static function validateThreadRealtimeListVoicesResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final voices = requiredObjectField(result.keys, result.values, "voices", "$.message.result.voices");
+        if (!voices.ok) return voices.toOutcome();
+        final v1 = requiredArray(voices.keys, voices.values, "v1", "$.message.result.voices.v1");
+        if (!v1.ok) return v1.toOutcome();
+        final v1Result = validateRealtimeVoiceArray(v1.values, "$.message.result.voices.v1");
+        if (!v1Result.ok) return v1Result;
+        final v2 = requiredArray(voices.keys, voices.values, "v2", "$.message.result.voices.v2");
+        if (!v2.ok) return v2.toOutcome();
+        final v2Result = validateRealtimeVoiceArray(v2.values, "$.message.result.voices.v2");
+        if (!v2Result.ok) return v2Result;
+        final defaultV1 = requiredString(voices.keys, voices.values, "defaultV1", "$.message.result.voices.defaultV1");
+        if (!defaultV1.ok) return defaultV1.toOutcome();
+        if (!validRealtimeVoice(defaultV1.value)) return fail("invalid_realtime_voice", "$.message.result.voices.defaultV1", "unsupported realtime voice");
+        final defaultV2 = requiredString(voices.keys, voices.values, "defaultV2", "$.message.result.voices.defaultV2");
+        if (!defaultV2.ok) return defaultV2.toOutcome();
+        if (!validRealtimeVoice(defaultV2.value)) return fail("invalid_realtime_voice", "$.message.result.voices.defaultV2", "unsupported realtime voice");
+        return success("response:thread/realtime/listVoices");
+    }
+
+    static function validateRealtimeVoiceArray(values:Array<Value>, path:String):AppProtocolParseOutcome {
+        var i = 0;
+        while (i < values.length) {
+            switch values[i] {
+                case JString(value):
+                    if (!validRealtimeVoice(value)) return fail("invalid_realtime_voice", path + "[" + Std.string(i) + "]", "unsupported realtime voice");
+                case _:
+                    return fail("expected_string", path + "[" + Std.string(i) + "]", "expected JSON string");
+            }
+            i = i + 1;
+        }
+        return success("realtime-voice-array");
+    }
+
+    static function validateOptionalNullableRealtimeVoice(object:ProtocolObjectField, name:String, path:String):AppProtocolParseOutcome {
+        final i = fieldIndex(object.keys, name);
+        if (i < 0) return success("nullable-realtime-voice:missing");
+        return switch object.values[i] {
+            case JNull:
+                success("nullable-realtime-voice:null");
+            case JString(value):
+                if (validRealtimeVoice(value)) success("nullable-realtime-voice") else fail("invalid_realtime_voice", path, "unsupported realtime voice");
+            case _:
+                fail("expected_nullable_string", path, "expected JSON string or null");
+        }
     }
 
     static function validateThreadLoadedListResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
@@ -4509,6 +4632,18 @@ class AppProtocol {
 
     static function validRealtimeConversationVersion(value:String):Bool {
         return value == "v1" || value == "v2";
+    }
+
+    static function validRealtimeOutputModality(value:String):Bool {
+        return value == "text" || value == "audio";
+    }
+
+    static function validRealtimeTransportType(value:String):Bool {
+        return value == "websocket" || value == "webrtc";
+    }
+
+    static function validRealtimeVoice(value:String):Bool {
+        return value == "alloy" || value == "arbor" || value == "ash" || value == "ballad" || value == "breeze" || value == "cedar" || value == "coral" || value == "cove" || value == "echo" || value == "ember" || value == "juniper" || value == "maple" || value == "marin" || value == "sage" || value == "shimmer" || value == "sol" || value == "spruce" || value == "vale" || value == "verse";
     }
 
     static function validCommandExecOutputStream(value:String):Bool {

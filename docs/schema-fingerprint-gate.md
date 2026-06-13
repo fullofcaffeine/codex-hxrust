@@ -31,6 +31,8 @@ The first M2 subset covers:
 
 `fuzzyFileSearch/sessionUpdated` and `fuzzyFileSearch/sessionCompleted` are tracked through the top-level schema files because upstream currently exports those session notifications outside the `v2/` directory. The paired fuzzy session request DTOs are selected from upstream Rust DTO/protocol source because standalone request/response schema files are not emitted for them.
 
+Realtime notification schemas are tracked through standalone v2 schema files. The paired realtime client control request DTOs are selected from upstream Rust DTO/protocol source because standalone request/response schema files are not emitted for `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, or `thread/realtime/listVoices`.
+
 `environment/add`, `collaborationMode/list`, and `thread/search` are selected from upstream Rust DTO/protocol source because the pinned export does not currently emit standalone v2 request/response schema files for those methods. `mock/experimentalMethod` remains outside the production subset because it is an upstream experimental test-only method.
 
 The script records both per-schema hashes and field labels such as `property:threadId`, `required:threadId`, and `definition:TurnError`. If a hash changes without field-set drift, the diff reports `changedFields: ["schema-content"]`.

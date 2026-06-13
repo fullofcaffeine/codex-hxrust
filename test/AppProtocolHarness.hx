@@ -49,6 +49,11 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "fuzzyFileSearch/sessionStart");
         assertContains(fingerprintJson, "fuzzyFileSearch/sessionUpdate");
         assertContains(fingerprintJson, "fuzzyFileSearch/sessionStop");
+        assertContains(fingerprintJson, "thread/realtime/start");
+        assertContains(fingerprintJson, "thread/realtime/appendAudio");
+        assertContains(fingerprintJson, "thread/realtime/appendText");
+        assertContains(fingerprintJson, "thread/realtime/stop");
+        assertContains(fingerprintJson, "thread/realtime/listVoices");
         assertContains(fingerprintJson, "turn/steer");
         assertContains(fingerprintJson, "review/start");
         assertContains(fingerprintJson, "windowsSandbox/setupStart");
@@ -184,7 +189,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("276", Std.string(items.length));
+        assertEquals("288", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -209,8 +214,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("99", Std.string(requests));
-        assertEquals("99", Std.string(responses));
+        assertEquals("105", Std.string(requests));
+        assertEquals("105", Std.string(responses));
         assertEquals("8", Std.string(serverRequests));
         assertEquals("8", Std.string(serverResponses));
         assertEquals("61", Std.string(notifications));
@@ -552,6 +557,46 @@ class AppProtocolHarness {
         assertFalse(missingFuzzyCompletedSession.ok, "fuzzy file search completion must include sessionId");
         assertEquals("missing_field", missingFuzzyCompletedSession.errorCode);
         assertEquals("$.message.params.sessionId", missingFuzzyCompletedSession.errorPath);
+
+        final missingRealtimeStartOutputModality = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-start-missing-output-modality\",\"kind\":\"request\",\"method\":\"thread/realtime/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"realtime-start-1\",\"method\":\"thread/realtime/start\",\"params\":{\"threadId\":\"thread-1\"}}}")));
+        assertFalse(missingRealtimeStartOutputModality.ok, "realtime start requires outputModality");
+        assertEquals("missing_field", missingRealtimeStartOutputModality.errorCode);
+        assertEquals("$.message.params.outputModality", missingRealtimeStartOutputModality.errorPath);
+
+        final invalidRealtimeStartOutputModality = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-start-invalid-output-modality\",\"kind\":\"request\",\"method\":\"thread/realtime/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"realtime-start-1\",\"method\":\"thread/realtime/start\",\"params\":{\"threadId\":\"thread-1\",\"outputModality\":\"video\"}}}")));
+        assertFalse(invalidRealtimeStartOutputModality.ok, "realtime start outputModality must be text or audio");
+        assertEquals("invalid_realtime_output_modality", invalidRealtimeStartOutputModality.errorCode);
+        assertEquals("$.message.params.outputModality", invalidRealtimeStartOutputModality.errorPath);
+
+        final invalidRealtimeStartTransport = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-start-invalid-transport\",\"kind\":\"request\",\"method\":\"thread/realtime/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"realtime-start-1\",\"method\":\"thread/realtime/start\",\"params\":{\"threadId\":\"thread-1\",\"outputModality\":\"audio\",\"transport\":{\"type\":\"carrier\"}}}}")));
+        assertFalse(invalidRealtimeStartTransport.ok, "realtime start transport must be websocket or webrtc");
+        assertEquals("invalid_realtime_transport", invalidRealtimeStartTransport.errorCode);
+        assertEquals("$.message.params.transport.type", invalidRealtimeStartTransport.errorPath);
+
+        final missingRealtimeStartWebrtcSdp = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-start-missing-webrtc-sdp\",\"kind\":\"request\",\"method\":\"thread/realtime/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"realtime-start-1\",\"method\":\"thread/realtime/start\",\"params\":{\"threadId\":\"thread-1\",\"outputModality\":\"audio\",\"transport\":{\"type\":\"webrtc\"}}}}")));
+        assertFalse(missingRealtimeStartWebrtcSdp.ok, "realtime WebRTC transport requires sdp");
+        assertEquals("missing_field", missingRealtimeStartWebrtcSdp.errorCode);
+        assertEquals("$.message.params.transport.sdp", missingRealtimeStartWebrtcSdp.errorPath);
+
+        final invalidRealtimeStartVoice = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-start-invalid-voice\",\"kind\":\"request\",\"method\":\"thread/realtime/start\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"realtime-start-1\",\"method\":\"thread/realtime/start\",\"params\":{\"threadId\":\"thread-1\",\"outputModality\":\"audio\",\"voice\":\"alto\"}}}")));
+        assertFalse(invalidRealtimeStartVoice.ok, "realtime voice must match upstream voice enum");
+        assertEquals("invalid_realtime_voice", invalidRealtimeStartVoice.errorCode);
+        assertEquals("$.message.params.voice", invalidRealtimeStartVoice.errorPath);
+
+        final invalidRealtimeAppendAudioSampleRate = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-append-audio-invalid-sample-rate\",\"kind\":\"request\",\"method\":\"thread/realtime/appendAudio\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"realtime-audio-1\",\"method\":\"thread/realtime/appendAudio\",\"params\":{\"threadId\":\"thread-1\",\"audio\":{\"data\":\"AQ==\",\"numChannels\":1,\"sampleRate\":-24000}}}}")));
+        assertFalse(invalidRealtimeAppendAudioSampleRate.ok, "realtime appendAudio sampleRate must be unsigned");
+        assertEquals("expected_uint", invalidRealtimeAppendAudioSampleRate.errorCode);
+        assertEquals("$.message.params.audio.sampleRate", invalidRealtimeAppendAudioSampleRate.errorPath);
+
+        final missingRealtimeAppendText = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-append-text-missing-text\",\"kind\":\"request\",\"method\":\"thread/realtime/appendText\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"realtime-text-1\",\"method\":\"thread/realtime/appendText\",\"params\":{\"threadId\":\"thread-1\"}}}")));
+        assertFalse(missingRealtimeAppendText.ok, "realtime appendText requires text");
+        assertEquals("missing_field", missingRealtimeAppendText.errorCode);
+        assertEquals("$.message.params.text", missingRealtimeAppendText.errorPath);
+
+        final invalidRealtimeVoiceList = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-list-voices-invalid-voice\",\"kind\":\"response\",\"method\":\"thread/realtime/listVoices\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"realtime-list-voices-1\",\"result\":{\"voices\":{\"v1\":[\"cove\"],\"v2\":[\"alto\"],\"defaultV1\":\"cove\",\"defaultV2\":\"marin\"}}}}")));
+        assertFalse(invalidRealtimeVoiceList.ok, "realtime listVoices response must use upstream voice enum values");
+        assertEquals("invalid_realtime_voice", invalidRealtimeVoiceList.errorCode);
+        assertEquals("$.message.result.voices.v2[0]", invalidRealtimeVoiceList.errorPath);
 
         final invalidRealtimeVersion = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"realtime-started-invalid-version\",\"kind\":\"notification\",\"method\":\"thread/realtime/started\",\"message\":{\"jsonrpc\":\"2.0\",\"method\":\"thread/realtime/started\",\"params\":{\"threadId\":\"thread-1\",\"version\":\"v3\",\"realtimeSessionId\":null}}}")));
         assertFalse(invalidRealtimeVersion.ok, "realtime started version must be v1 or v2");

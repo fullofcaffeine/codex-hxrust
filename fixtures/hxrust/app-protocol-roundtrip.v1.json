@@ -1133,6 +1133,117 @@
       "message": {"jsonrpc": "2.0", "id": "fuzzy-session-stop-1", "result": {}}
     },
     {
+      "id": "thread-realtime-start-webrtc-request",
+      "kind": "request",
+      "method": "thread/realtime/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-realtime-start-1",
+        "method": "thread/realtime/start",
+        "params": {
+          "threadId": "thread-1",
+          "model": "realtime-treatment-model",
+          "outputModality": "audio",
+          "prompt": "You are on a call.",
+          "realtimeSessionId": "sess_456",
+          "transport": {"type": "webrtc", "sdp": "v=0\r\no=- 0 0 IN IP4 127.0.0.1\r\ns=codex\r\n"},
+          "version": "v1",
+          "voice": "marin"
+        }
+      }
+    },
+    {
+      "id": "thread-realtime-start-webrtc-response",
+      "kind": "response",
+      "method": "thread/realtime/start",
+      "message": {"jsonrpc": "2.0", "id": "thread-realtime-start-1", "result": {}}
+    },
+    {
+      "id": "thread-realtime-start-websocket-request",
+      "kind": "request",
+      "method": "thread/realtime/start",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-realtime-start-2",
+        "method": "thread/realtime/start",
+        "params": {
+          "threadId": "thread-1",
+          "model": null,
+          "outputModality": "text",
+          "prompt": null,
+          "realtimeSessionId": null,
+          "transport": {"type": "websocket"},
+          "version": "v2",
+          "voice": null
+        }
+      }
+    },
+    {
+      "id": "thread-realtime-start-websocket-response",
+      "kind": "response",
+      "method": "thread/realtime/start",
+      "message": {"jsonrpc": "2.0", "id": "thread-realtime-start-2", "result": {}}
+    },
+    {
+      "id": "thread-realtime-append-audio-request",
+      "kind": "request",
+      "method": "thread/realtime/appendAudio",
+      "message": {"jsonrpc": "2.0", "id": "thread-realtime-audio-1", "method": "thread/realtime/appendAudio", "params": {"threadId": "thread-1", "audio": {"data": "AQID", "sampleRate": 24000, "numChannels": 1, "samplesPerChannel": 512, "itemId": null}}}
+    },
+    {
+      "id": "thread-realtime-append-audio-response",
+      "kind": "response",
+      "method": "thread/realtime/appendAudio",
+      "message": {"jsonrpc": "2.0", "id": "thread-realtime-audio-1", "result": {}}
+    },
+    {
+      "id": "thread-realtime-append-text-request",
+      "kind": "request",
+      "method": "thread/realtime/appendText",
+      "message": {"jsonrpc": "2.0", "id": "thread-realtime-text-1", "method": "thread/realtime/appendText", "params": {"threadId": "thread-1", "text": "hello realtime"}}
+    },
+    {
+      "id": "thread-realtime-append-text-response",
+      "kind": "response",
+      "method": "thread/realtime/appendText",
+      "message": {"jsonrpc": "2.0", "id": "thread-realtime-text-1", "result": {}}
+    },
+    {
+      "id": "thread-realtime-stop-request",
+      "kind": "request",
+      "method": "thread/realtime/stop",
+      "message": {"jsonrpc": "2.0", "id": "thread-realtime-stop-1", "method": "thread/realtime/stop", "params": {"threadId": "thread-1"}}
+    },
+    {
+      "id": "thread-realtime-stop-response",
+      "kind": "response",
+      "method": "thread/realtime/stop",
+      "message": {"jsonrpc": "2.0", "id": "thread-realtime-stop-1", "result": {}}
+    },
+    {
+      "id": "thread-realtime-list-voices-request",
+      "kind": "request",
+      "method": "thread/realtime/listVoices",
+      "message": {"jsonrpc": "2.0", "id": "thread-realtime-list-voices-1", "method": "thread/realtime/listVoices", "params": {}}
+    },
+    {
+      "id": "thread-realtime-list-voices-response",
+      "kind": "response",
+      "method": "thread/realtime/listVoices",
+      "message": {
+        "jsonrpc": "2.0",
+        "id": "thread-realtime-list-voices-1",
+        "result": {
+          "voices": {
+            "v1": ["juniper", "maple", "spruce", "ember", "vale", "breeze", "arbor", "sol", "cove"],
+            "v2": ["alloy", "ash", "ballad", "coral", "echo", "sage", "shimmer", "verse", "marin", "cedar"],
+            "defaultV1": "cove",
+            "defaultV2": "marin"
+          }
+        }
+      }
+    },
+    {
       "id": "thread-loaded-list-request",
       "kind": "request",
       "method": "thread/loaded/list",

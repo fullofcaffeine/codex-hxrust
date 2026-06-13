@@ -334,6 +334,11 @@ jq -n \
         id: "environment-collaboration-schemas",
         status: "tracked_from_rust_source",
         reason: "Upstream exports environment/add, collaborationMode/list, thread/search, fuzzyFileSearch/sessionStart, fuzzyFileSearch/sessionUpdate, and fuzzyFileSearch/sessionStop from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. The local subset validates these DTO contracts from upstream Rust source under HXCX-3.69, HXCX-3.70, and HXCX-3.71."
+      },
+      {
+        id: "realtime-control-schemas",
+        status: "tracked_from_rust_source",
+        reason: "Upstream exports thread/realtime/start, thread/realtime/appendAudio, thread/realtime/appendText, thread/realtime/stop, and thread/realtime/listVoices from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. The local subset validates these DTO contracts from upstream Rust source under HXCX-3.72 while keeping emitted realtime notification schemas fingerprinted."
       }
     ]
   }' > "$ACTUAL"

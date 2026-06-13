@@ -45,6 +45,11 @@ Included client requests:
 - `fuzzyFileSearch/sessionStart`
 - `fuzzyFileSearch/sessionUpdate`
 - `fuzzyFileSearch/sessionStop`
+- `thread/realtime/start`
+- `thread/realtime/appendAudio`
+- `thread/realtime/appendText`
+- `thread/realtime/stop`
+- `thread/realtime/listVoices`
 - `windowsSandbox/setupStart`
 - `windowsSandbox/readiness`
 - `account/login/start`
@@ -435,7 +440,9 @@ Client-directed server requests use upstream's `ServerRequest`/`ServerResponse` 
 
 `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, and `fuzzyFileSearch/sessionStop` admit the upstream experimental fuzzy search session request family. Notifications were already selected; this slice validates start `sessionId` and `roots`, update `sessionId` and `query`, stop `sessionId`, empty success responses, and malformed request cases. The fixture path does not start a real filesystem indexer.
 
-Realtime client controls, remote-control request controls, and deprecated v1 compatibility are selected and sequenced by HXCX-3.68 in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md), but not yet implemented in this protocol subset. `mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
+`thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, and `thread/realtime/listVoices` admit the upstream experimental realtime client control request family. The selected subset validates required thread IDs, start `outputModality`, nullable optional start overrides, `websocket` and `webrtc` transport objects, audio chunks, append text, stop, empty success responses, and the builtin list-voices response. The fixture path does not start live audio, network, or WebRTC behavior.
+
+Remote-control request controls and deprecated v1 compatibility are selected and sequenced by HXCX-3.68 in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md), but not yet implemented in this protocol subset. `mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 
