@@ -6,7 +6,7 @@
     "sourceRoot": "../codex/codex-rs/app-server-protocol/schema/json",
     "sourceCommit": "2704ecea9a1d52ece2429da4ed5775000b59164d"
   },
-  "fingerprint": "sha256:5f427a73c91e95a7571fa8aba9a9ddb0b6dc474db38a0494cc2cf246d330dd33",
+  "fingerprint": "sha256:6dc61dc3ad5c198e5629cfd0a2f1516e96f544d499711ac9c9847fb110afd994",
   "schemas": [
     {
       "id": "AccountLoginCompletedNotification",
@@ -71,6 +71,32 @@
         "definition:AppReview",
         "definition:AppScreenshot",
         "property:data",
+        "required:data"
+      ]
+    },
+    {
+      "id": "AppsListParams",
+      "sourcePath": "v2/AppsListParams.json",
+      "sha256": "6669bc6780ec9fbfb74fd74ec495348e4389b234f372f70064dfdee8fcfa9664",
+      "fields": [
+        "property:cursor",
+        "property:forceRefetch",
+        "property:limit",
+        "property:threadId"
+      ]
+    },
+    {
+      "id": "AppsListResponse",
+      "sourcePath": "v2/AppsListResponse.json",
+      "sha256": "913c0658008b9347f711582c51f759a3a43445147ebfd19e15023179b35e510b",
+      "fields": [
+        "definition:AppBranding",
+        "definition:AppInfo",
+        "definition:AppMetadata",
+        "definition:AppReview",
+        "definition:AppScreenshot",
+        "property:data",
+        "property:nextCursor",
         "required:data"
       ]
     },
@@ -502,6 +528,46 @@
       ]
     },
     {
+      "id": "ExperimentalFeatureEnablementSetParams",
+      "sourcePath": "v2/ExperimentalFeatureEnablementSetParams.json",
+      "sha256": "e3ca755f1960b18dc532c443182d9260d5dbadae4bcfd769f5eb22e7ca796dd6",
+      "fields": [
+        "property:enablement",
+        "required:enablement"
+      ]
+    },
+    {
+      "id": "ExperimentalFeatureEnablementSetResponse",
+      "sourcePath": "v2/ExperimentalFeatureEnablementSetResponse.json",
+      "sha256": "8c7b8ce9157daad573178627fc135df4e1b96b32d53f884df748dfc2c5746c7f",
+      "fields": [
+        "property:enablement",
+        "required:enablement"
+      ]
+    },
+    {
+      "id": "ExperimentalFeatureListParams",
+      "sourcePath": "v2/ExperimentalFeatureListParams.json",
+      "sha256": "dfd22e2b66c5cc628e3b1afe6516245bd7d650635257d201bce5f98a6aa12b77",
+      "fields": [
+        "property:cursor",
+        "property:limit",
+        "property:threadId"
+      ]
+    },
+    {
+      "id": "ExperimentalFeatureListResponse",
+      "sourcePath": "v2/ExperimentalFeatureListResponse.json",
+      "sha256": "c3b75b295dd5197e045f888d9fb4ab4d4abf113ab03f04d2186978126eb0e950",
+      "fields": [
+        "definition:ExperimentalFeature",
+        "definition:ExperimentalFeatureStage",
+        "property:data",
+        "property:nextCursor",
+        "required:data"
+      ]
+    },
+    {
       "id": "ExternalAgentConfigDetectParams",
       "sourcePath": "v2/ExternalAgentConfigDetectParams.json",
       "sha256": "99770a30d8d3f85bbf813ed61241fdd434dc53e1f3c41802a48ce5d4c70d8946",
@@ -653,6 +719,181 @@
       ]
     },
     {
+      "id": "FsCopyParams",
+      "sourcePath": "v2/FsCopyParams.json",
+      "sha256": "a7f7ad201a9b5dd8a6afe8c5565c3b288d1a493fadfee7152beb68842e4a6018",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:destinationPath",
+        "property:recursive",
+        "property:sourcePath",
+        "required:destinationPath",
+        "required:sourcePath"
+      ]
+    },
+    {
+      "id": "FsCopyResponse",
+      "sourcePath": "v2/FsCopyResponse.json",
+      "sha256": "1bde20677d7751e035cecc9464f5b903f63b5bb83267b43007d84ef96c5e69e2",
+      "fields": []
+    },
+    {
+      "id": "FsCreateDirectoryParams",
+      "sourcePath": "v2/FsCreateDirectoryParams.json",
+      "sha256": "3b4839058c30c506ee72563e31d712945013e09ce94d237dab339bc07f0a6d24",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:path",
+        "property:recursive",
+        "required:path"
+      ]
+    },
+    {
+      "id": "FsCreateDirectoryResponse",
+      "sourcePath": "v2/FsCreateDirectoryResponse.json",
+      "sha256": "c57d84c23c800abb727f093ba22eb23d0480d4b8d04b6302404d2882dc82c2d9",
+      "fields": []
+    },
+    {
+      "id": "FsGetMetadataParams",
+      "sourcePath": "v2/FsGetMetadataParams.json",
+      "sha256": "273309eff78a2c9cc61be3e3bf020b40c926134dff7ee9afe485708b51058c5d",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:path",
+        "required:path"
+      ]
+    },
+    {
+      "id": "FsGetMetadataResponse",
+      "sourcePath": "v2/FsGetMetadataResponse.json",
+      "sha256": "4e0da614cdb04db7ba2162adea8254c8f61e5b59eba8cee152d363a573c329f6",
+      "fields": [
+        "property:createdAtMs",
+        "property:isDirectory",
+        "property:isFile",
+        "property:isSymlink",
+        "property:modifiedAtMs",
+        "required:createdAtMs",
+        "required:isDirectory",
+        "required:isFile",
+        "required:isSymlink",
+        "required:modifiedAtMs"
+      ]
+    },
+    {
+      "id": "FsReadDirectoryParams",
+      "sourcePath": "v2/FsReadDirectoryParams.json",
+      "sha256": "c60b14fff96c1311eafc458ab2ceaba54d5f125bf9b9b79787268cf9bed85d51",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:path",
+        "required:path"
+      ]
+    },
+    {
+      "id": "FsReadDirectoryResponse",
+      "sourcePath": "v2/FsReadDirectoryResponse.json",
+      "sha256": "f188be0112899b88e27ff2e051833cda337072fa263b1fb3de70e02c05543a44",
+      "fields": [
+        "definition:FsReadDirectoryEntry",
+        "property:entries",
+        "required:entries"
+      ]
+    },
+    {
+      "id": "FsReadFileParams",
+      "sourcePath": "v2/FsReadFileParams.json",
+      "sha256": "5b523c9c51bdfaee5ebe1851d298ffbea7e178d54e5adf5c75aaea51077ee1aa",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:path",
+        "required:path"
+      ]
+    },
+    {
+      "id": "FsReadFileResponse",
+      "sourcePath": "v2/FsReadFileResponse.json",
+      "sha256": "9206077eb77f824ab5a5ce37235428bc4ac59d3a06429216d860331a30ddd794",
+      "fields": [
+        "property:dataBase64",
+        "required:dataBase64"
+      ]
+    },
+    {
+      "id": "FsRemoveParams",
+      "sourcePath": "v2/FsRemoveParams.json",
+      "sha256": "06f7a5f7b9c9b8cbbefd5607d0168a24c71496ae23013a60c3a9ab0a99ab167d",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:force",
+        "property:path",
+        "property:recursive",
+        "required:path"
+      ]
+    },
+    {
+      "id": "FsRemoveResponse",
+      "sourcePath": "v2/FsRemoveResponse.json",
+      "sha256": "6777c8621b8a6cf7539690d70932d1315884ae6185b15cb186e76f8497beecf6",
+      "fields": []
+    },
+    {
+      "id": "FsUnwatchParams",
+      "sourcePath": "v2/FsUnwatchParams.json",
+      "sha256": "ab763ff6222d24b47725f53fed0c149c8b286319e81f2b206462155706893da1",
+      "fields": [
+        "property:watchId",
+        "required:watchId"
+      ]
+    },
+    {
+      "id": "FsUnwatchResponse",
+      "sourcePath": "v2/FsUnwatchResponse.json",
+      "sha256": "d88a2c985db3e12d74cc0b876b3f54c32b1268f6f60ed8bb8623f72a3e135962",
+      "fields": []
+    },
+    {
+      "id": "FsWatchParams",
+      "sourcePath": "v2/FsWatchParams.json",
+      "sha256": "1dd944d77563aa995b6319c7a0dbf90586fddf1a084c1c42bab3429227f938d3",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:path",
+        "property:watchId",
+        "required:path",
+        "required:watchId"
+      ]
+    },
+    {
+      "id": "FsWatchResponse",
+      "sourcePath": "v2/FsWatchResponse.json",
+      "sha256": "d2f20ad9f7b2edd66dac851ddbdc08896b3819a48e793ea4775bbcbf60b550a6",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:path",
+        "required:path"
+      ]
+    },
+    {
+      "id": "FsWriteFileParams",
+      "sourcePath": "v2/FsWriteFileParams.json",
+      "sha256": "5490b137c437e014d42f84ca5ab94bfbfea3a9ee94747949e0a20ca85c58d090",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:dataBase64",
+        "property:path",
+        "required:dataBase64",
+        "required:path"
+      ]
+    },
+    {
+      "id": "FsWriteFileResponse",
+      "sourcePath": "v2/FsWriteFileResponse.json",
+      "sha256": "afeb884e1e504db633238399c1b27e4a7ceb9f6b44f49f7a9837308969e984ca",
+      "fields": []
+    },
+    {
       "id": "FuzzyFileSearchSessionCompletedNotification",
       "sourcePath": "FuzzyFileSearchSessionCompletedNotification.json",
       "sha256": "8aab02e1f780f3d092baf1187c8ab47d70929d46e2600fc5148f50f31c9c21a7",
@@ -733,6 +974,31 @@
         "property:threadId",
         "required:message",
         "required:threadId"
+      ]
+    },
+    {
+      "id": "HooksListParams",
+      "sourcePath": "v2/HooksListParams.json",
+      "sha256": "10ca05100ec02c2b5a95ffe84d4b26605869ee4b2fd661c64e54b216cfa5ece0",
+      "fields": [
+        "property:cwds"
+      ]
+    },
+    {
+      "id": "HooksListResponse",
+      "sourcePath": "v2/HooksListResponse.json",
+      "sha256": "e3a4953b8b122ac27e2da11d7ffdd17626f40dee19ee710b2aff43d63f9fcc8b",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:HookErrorInfo",
+        "definition:HookEventName",
+        "definition:HookHandlerType",
+        "definition:HookMetadata",
+        "definition:HookSource",
+        "definition:HookTrustStatus",
+        "definition:HooksListEntry",
+        "property:data",
+        "required:data"
       ]
     },
     {
@@ -835,6 +1101,34 @@
       ]
     },
     {
+      "id": "ListMcpServerStatusParams",
+      "sourcePath": "v2/ListMcpServerStatusParams.json",
+      "sha256": "4a4a3a5635d9d992ddd7fbca2697f915a9d0c599c9c45a4f8870c360ea1893f4",
+      "fields": [
+        "definition:McpServerStatusDetail",
+        "property:cursor",
+        "property:detail",
+        "property:limit",
+        "property:threadId"
+      ]
+    },
+    {
+      "id": "ListMcpServerStatusResponse",
+      "sourcePath": "v2/ListMcpServerStatusResponse.json",
+      "sha256": "b72d826608cdf06cc7bbec9caeb8db6f7463bdd2854f43a572bdde0cb3e221ad",
+      "fields": [
+        "definition:McpAuthStatus",
+        "definition:McpServerInfo",
+        "definition:McpServerStatus",
+        "definition:Resource",
+        "definition:ResourceTemplate",
+        "definition:Tool",
+        "property:data",
+        "property:nextCursor",
+        "required:data"
+      ]
+    },
+    {
       "id": "LoginAccountParams",
       "sourcePath": "v2/LoginAccountParams.json",
       "sha256": "328d4728c613c521b8991bc3ca9d94f49da07611ccdd51c7e2240d9c29a833e0",
@@ -851,6 +1145,96 @@
       "sourcePath": "v2/LogoutAccountResponse.json",
       "sha256": "7526d103e8cd99bc1a986d138c303ead01bc2144fef10d570ffaae65ea8399c6",
       "fields": []
+    },
+    {
+      "id": "MarketplaceAddParams",
+      "sourcePath": "v2/MarketplaceAddParams.json",
+      "sha256": "be87286d4bf6cef203d06416bbb33519d81252db429b4aeafbcd6d1e879aa3cd",
+      "fields": [
+        "property:refName",
+        "property:source",
+        "property:sparsePaths",
+        "required:source"
+      ]
+    },
+    {
+      "id": "MarketplaceAddResponse",
+      "sourcePath": "v2/MarketplaceAddResponse.json",
+      "sha256": "e2aae813f189878140fe6db8e4bd6b6263fd7f9932b2b049a2bfbc6b1946e4e0",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:alreadyAdded",
+        "property:installedRoot",
+        "property:marketplaceName",
+        "required:alreadyAdded",
+        "required:installedRoot",
+        "required:marketplaceName"
+      ]
+    },
+    {
+      "id": "MarketplaceRemoveParams",
+      "sourcePath": "v2/MarketplaceRemoveParams.json",
+      "sha256": "7e7feb2f9a15b16dbb7446a5432512635bda978523e596ccbd6284e0dc3f9c0b",
+      "fields": [
+        "property:marketplaceName",
+        "required:marketplaceName"
+      ]
+    },
+    {
+      "id": "MarketplaceRemoveResponse",
+      "sourcePath": "v2/MarketplaceRemoveResponse.json",
+      "sha256": "17ddde604c1408b565ed8806b2fe500b6e3c7d7d9a6e67408fae4abd528fbb1d",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:installedRoot",
+        "property:marketplaceName",
+        "required:marketplaceName"
+      ]
+    },
+    {
+      "id": "MarketplaceUpgradeParams",
+      "sourcePath": "v2/MarketplaceUpgradeParams.json",
+      "sha256": "cc5ece8ddf2764e4abfd7df6af2d97da8379fe267946ea9ade8970ab4f987bde",
+      "fields": [
+        "property:marketplaceName"
+      ]
+    },
+    {
+      "id": "MarketplaceUpgradeResponse",
+      "sourcePath": "v2/MarketplaceUpgradeResponse.json",
+      "sha256": "1e7b3ce2a40c7237e5a9fc8046c881a68afab87ccfc00f4afdab00ec666d0a91",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:MarketplaceUpgradeErrorInfo",
+        "property:errors",
+        "property:selectedMarketplaces",
+        "property:upgradedRoots",
+        "required:errors",
+        "required:selectedMarketplaces",
+        "required:upgradedRoots"
+      ]
+    },
+    {
+      "id": "McpResourceReadParams",
+      "sourcePath": "v2/McpResourceReadParams.json",
+      "sha256": "d5bda0bd5cd45fa3e9c3957a5b16a52cce67738aaa9d78e91a540e4d44228942",
+      "fields": [
+        "property:server",
+        "property:threadId",
+        "property:uri",
+        "required:server",
+        "required:uri"
+      ]
+    },
+    {
+      "id": "McpResourceReadResponse",
+      "sourcePath": "v2/McpResourceReadResponse.json",
+      "sha256": "806960142c62b6af3266ada91f6c149778ec4a895b51556bf9817ce376befa7f",
+      "fields": [
+        "definition:ResourceContent",
+        "property:contents",
+        "required:contents"
+      ]
     },
     {
       "id": "McpServerElicitationRequestParams",
@@ -911,6 +1295,32 @@
       ]
     },
     {
+      "id": "McpServerOauthLoginParams",
+      "sourcePath": "v2/McpServerOauthLoginParams.json",
+      "sha256": "5a8638f7bc50141b3f241e6f45bc25730d5c282f68402521dfa6500465852b89",
+      "fields": [
+        "property:name",
+        "property:scopes",
+        "property:timeoutSecs",
+        "required:name"
+      ]
+    },
+    {
+      "id": "McpServerOauthLoginResponse",
+      "sourcePath": "v2/McpServerOauthLoginResponse.json",
+      "sha256": "883c2449de08a07b9032e3db701b155407c0bccee3c95f10f8664c5a3ba2462f",
+      "fields": [
+        "property:authorizationUrl",
+        "required:authorizationUrl"
+      ]
+    },
+    {
+      "id": "McpServerRefreshResponse",
+      "sourcePath": "v2/McpServerRefreshResponse.json",
+      "sha256": "204c6e0e9a52baab17b58e0deaf23f4a7324fad0d5bf802e2a4413d6912ebb8b",
+      "fields": []
+    },
+    {
       "id": "McpServerStatusUpdatedNotification",
       "sourcePath": "v2/McpServerStatusUpdatedNotification.json",
       "sha256": "a1b2112bb1e84562c00b7d4fef94d1f4c32bc16fe85147160c3ba9c9741f3c2b",
@@ -922,6 +1332,33 @@
         "property:threadId",
         "required:name",
         "required:status"
+      ]
+    },
+    {
+      "id": "McpServerToolCallParams",
+      "sourcePath": "v2/McpServerToolCallParams.json",
+      "sha256": "497a0a80afd35b00c870866c7105a953277299e655a8ec386cbdc8d2ee1f420e",
+      "fields": [
+        "property:_meta",
+        "property:arguments",
+        "property:server",
+        "property:threadId",
+        "property:tool",
+        "required:server",
+        "required:threadId",
+        "required:tool"
+      ]
+    },
+    {
+      "id": "McpServerToolCallResponse",
+      "sourcePath": "v2/McpServerToolCallResponse.json",
+      "sha256": "c7f3e71eb63378b01cac4b978a162dfe099661befc346a80e72fa33001ee184f",
+      "fields": [
+        "property:_meta",
+        "property:content",
+        "property:isError",
+        "property:structuredContent",
+        "required:content"
       ]
     },
     {
@@ -937,6 +1374,52 @@
         "required:message",
         "required:threadId",
         "required:turnId"
+      ]
+    },
+    {
+      "id": "ModelListParams",
+      "sourcePath": "v2/ModelListParams.json",
+      "sha256": "46a4463f6218045aa1e8fbcd4e67b93ffe25b2f9605419be4590a5b768206246",
+      "fields": [
+        "property:cursor",
+        "property:includeHidden",
+        "property:limit"
+      ]
+    },
+    {
+      "id": "ModelListResponse",
+      "sourcePath": "v2/ModelListResponse.json",
+      "sha256": "489cc4a0e0be1875865b029c99adb4938f1a9e064a5cf0535d4a54ebd690f80c",
+      "fields": [
+        "definition:InputModality",
+        "definition:Model",
+        "definition:ModelAvailabilityNux",
+        "definition:ModelServiceTier",
+        "definition:ModelUpgradeInfo",
+        "definition:ReasoningEffort",
+        "definition:ReasoningEffortOption",
+        "property:data",
+        "property:nextCursor",
+        "required:data"
+      ]
+    },
+    {
+      "id": "ModelProviderCapabilitiesReadParams",
+      "sourcePath": "v2/ModelProviderCapabilitiesReadParams.json",
+      "sha256": "404d7ba93b2a3d128a792a1a36264b71c90d3db54b71ac2c3a31987386a6614b",
+      "fields": []
+    },
+    {
+      "id": "ModelProviderCapabilitiesReadResponse",
+      "sourcePath": "v2/ModelProviderCapabilitiesReadResponse.json",
+      "sha256": "612ad82c171a754402f0230c97b1d6cb887133492116c14440dc5a712c03af4c",
+      "fields": [
+        "property:imageGeneration",
+        "property:namespaceTools",
+        "property:webSearch",
+        "required:imageGeneration",
+        "required:namespaceTools",
+        "required:webSearch"
       ]
     },
     {
@@ -969,6 +1452,27 @@
         "required:threadId",
         "required:turnId",
         "required:verifications"
+      ]
+    },
+    {
+      "id": "PermissionProfileListParams",
+      "sourcePath": "v2/PermissionProfileListParams.json",
+      "sha256": "f119463294619c6866e719a6f1ce9c25fa5435c9b210f5dad875996046411cae",
+      "fields": [
+        "property:cursor",
+        "property:cwd",
+        "property:limit"
+      ]
+    },
+    {
+      "id": "PermissionProfileListResponse",
+      "sourcePath": "v2/PermissionProfileListResponse.json",
+      "sha256": "5457cda03cd1dce3b1ef0a3e81a5938d9f2fcfb5df76cfdd333c8d0e2fc84209",
+      "fields": [
+        "definition:PermissionProfileSummary",
+        "property:data",
+        "property:nextCursor",
+        "required:data"
       ]
     },
     {
@@ -1034,6 +1538,313 @@
         "required:threadId",
         "required:turnId"
       ]
+    },
+    {
+      "id": "PluginInstallParams",
+      "sourcePath": "v2/PluginInstallParams.json",
+      "sha256": "a2fdf173594a9d7e359ee48db40a78388c391cf0b4489548817935f38e07a33b",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:marketplacePath",
+        "property:pluginName",
+        "property:remoteMarketplaceName",
+        "required:pluginName"
+      ]
+    },
+    {
+      "id": "PluginInstallResponse",
+      "sourcePath": "v2/PluginInstallResponse.json",
+      "sha256": "682c8c59119568ec205550f38ec97b20caf9567ea9f4bee442fbc22fbfd2b82b",
+      "fields": [
+        "definition:AppSummary",
+        "definition:PluginAuthPolicy",
+        "property:appsNeedingAuth",
+        "property:authPolicy",
+        "required:appsNeedingAuth",
+        "required:authPolicy"
+      ]
+    },
+    {
+      "id": "PluginInstalledParams",
+      "sourcePath": "v2/PluginInstalledParams.json",
+      "sha256": "277418035d874638901e1b0c0443a9bb65f08d30c629f26a26f131947e98d275",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:cwds",
+        "property:installSuggestionPluginNames"
+      ]
+    },
+    {
+      "id": "PluginInstalledResponse",
+      "sourcePath": "v2/PluginInstalledResponse.json",
+      "sha256": "ba4e220c38650207bd6ebe52728f80e5e68bb7fc7b692c3f605cbf9702b3034c",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:MarketplaceInterface",
+        "definition:MarketplaceLoadErrorInfo",
+        "definition:PluginAuthPolicy",
+        "definition:PluginAvailability",
+        "definition:PluginInstallPolicy",
+        "definition:PluginInterface",
+        "definition:PluginMarketplaceEntry",
+        "definition:PluginShareContext",
+        "definition:PluginShareDiscoverability",
+        "definition:PluginSharePrincipal",
+        "definition:PluginSharePrincipalRole",
+        "definition:PluginSharePrincipalType",
+        "definition:PluginSource",
+        "definition:PluginSummary",
+        "property:marketplaceLoadErrors",
+        "property:marketplaces",
+        "required:marketplaces"
+      ]
+    },
+    {
+      "id": "PluginListParams",
+      "sourcePath": "v2/PluginListParams.json",
+      "sha256": "94037a93ce0696dd034ee0fb1a5b02aa4467fa841c1281656fa833b9856b1e1f",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:PluginListMarketplaceKind",
+        "property:cwds",
+        "property:marketplaceKinds"
+      ]
+    },
+    {
+      "id": "PluginListResponse",
+      "sourcePath": "v2/PluginListResponse.json",
+      "sha256": "7577f94b699fa559f82c31cc806f857b0190f941da90125e3ff203987bd3029d",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:MarketplaceInterface",
+        "definition:MarketplaceLoadErrorInfo",
+        "definition:PluginAuthPolicy",
+        "definition:PluginAvailability",
+        "definition:PluginInstallPolicy",
+        "definition:PluginInterface",
+        "definition:PluginMarketplaceEntry",
+        "definition:PluginShareContext",
+        "definition:PluginShareDiscoverability",
+        "definition:PluginSharePrincipal",
+        "definition:PluginSharePrincipalRole",
+        "definition:PluginSharePrincipalType",
+        "definition:PluginSource",
+        "definition:PluginSummary",
+        "property:featuredPluginIds",
+        "property:marketplaceLoadErrors",
+        "property:marketplaces",
+        "required:marketplaces"
+      ]
+    },
+    {
+      "id": "PluginReadParams",
+      "sourcePath": "v2/PluginReadParams.json",
+      "sha256": "951473f055145491cd9f036047991c0122378e997d516bec1615256d55913761",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:marketplacePath",
+        "property:pluginName",
+        "property:remoteMarketplaceName",
+        "required:pluginName"
+      ]
+    },
+    {
+      "id": "PluginReadResponse",
+      "sourcePath": "v2/PluginReadResponse.json",
+      "sha256": "3a6bf48762d096d4d1b7b70ad0fe4432b011807bee35f8d422d8961af915d1c6",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:AppSummary",
+        "definition:AppTemplateSummary",
+        "definition:AppTemplateUnavailableReason",
+        "definition:HookEventName",
+        "definition:PluginAuthPolicy",
+        "definition:PluginAvailability",
+        "definition:PluginDetail",
+        "definition:PluginHookSummary",
+        "definition:PluginInstallPolicy",
+        "definition:PluginInterface",
+        "definition:PluginShareContext",
+        "definition:PluginShareDiscoverability",
+        "definition:PluginSharePrincipal",
+        "definition:PluginSharePrincipalRole",
+        "definition:PluginSharePrincipalType",
+        "definition:PluginSource",
+        "definition:PluginSummary",
+        "definition:SkillInterface",
+        "definition:SkillSummary",
+        "property:plugin",
+        "required:plugin"
+      ]
+    },
+    {
+      "id": "PluginShareCheckoutParams",
+      "sourcePath": "v2/PluginShareCheckoutParams.json",
+      "sha256": "6b5c708f6b212a34dc2b7e0ad6a353213d15430926e7d13afe4fbbf880986f90",
+      "fields": [
+        "property:remotePluginId",
+        "required:remotePluginId"
+      ]
+    },
+    {
+      "id": "PluginShareCheckoutResponse",
+      "sourcePath": "v2/PluginShareCheckoutResponse.json",
+      "sha256": "6daa29bcabacdfdbb8810321fdb6afedaf8a55ecd07984523789c3c3cbc9b2f6",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:marketplaceName",
+        "property:marketplacePath",
+        "property:pluginId",
+        "property:pluginName",
+        "property:pluginPath",
+        "property:remotePluginId",
+        "property:remoteVersion",
+        "required:marketplaceName",
+        "required:marketplacePath",
+        "required:pluginId",
+        "required:pluginName",
+        "required:pluginPath",
+        "required:remotePluginId"
+      ]
+    },
+    {
+      "id": "PluginShareDeleteParams",
+      "sourcePath": "v2/PluginShareDeleteParams.json",
+      "sha256": "19ad3876906f26f5417c5bfa6c8c7c545611943ef35f468a56f8d52819413ef3",
+      "fields": [
+        "property:remotePluginId",
+        "required:remotePluginId"
+      ]
+    },
+    {
+      "id": "PluginShareDeleteResponse",
+      "sourcePath": "v2/PluginShareDeleteResponse.json",
+      "sha256": "670d7caa0f7195eca6f00fd94132ba5e4cb43fd36cb1d2f7ab04d3643fcea345",
+      "fields": []
+    },
+    {
+      "id": "PluginShareListParams",
+      "sourcePath": "v2/PluginShareListParams.json",
+      "sha256": "f93d2aca0425ed9850112fb1579fd61b8a86a5be65a02501878f04e2981b456c",
+      "fields": []
+    },
+    {
+      "id": "PluginShareListResponse",
+      "sourcePath": "v2/PluginShareListResponse.json",
+      "sha256": "433c6f4ea41122630c9658c3a7884d8f89ebd8128f3d53b3b9a3d4b83fc0e8d6",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:PluginAuthPolicy",
+        "definition:PluginAvailability",
+        "definition:PluginInstallPolicy",
+        "definition:PluginInterface",
+        "definition:PluginShareContext",
+        "definition:PluginShareDiscoverability",
+        "definition:PluginShareListItem",
+        "definition:PluginSharePrincipal",
+        "definition:PluginSharePrincipalRole",
+        "definition:PluginSharePrincipalType",
+        "definition:PluginSource",
+        "definition:PluginSummary",
+        "property:data",
+        "required:data"
+      ]
+    },
+    {
+      "id": "PluginShareSaveParams",
+      "sourcePath": "v2/PluginShareSaveParams.json",
+      "sha256": "8c8ffb80b6430c5d7ddd1ae84683c38e275919a9aec8c99bcef7afbb31d8a08e",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:PluginShareDiscoverability",
+        "definition:PluginSharePrincipalType",
+        "definition:PluginShareTarget",
+        "definition:PluginShareTargetRole",
+        "property:discoverability",
+        "property:pluginPath",
+        "property:remotePluginId",
+        "property:shareTargets",
+        "required:pluginPath"
+      ]
+    },
+    {
+      "id": "PluginShareSaveResponse",
+      "sourcePath": "v2/PluginShareSaveResponse.json",
+      "sha256": "ed686955092842c576110a16e756e993babef29fe7dc17911e1c8eb728422a35",
+      "fields": [
+        "property:remotePluginId",
+        "property:shareUrl",
+        "required:remotePluginId",
+        "required:shareUrl"
+      ]
+    },
+    {
+      "id": "PluginShareUpdateTargetsParams",
+      "sourcePath": "v2/PluginShareUpdateTargetsParams.json",
+      "sha256": "1f2987187d7ad947a31ca8f60955c6ac9384c477a517da05fd25a7da6a4c75a5",
+      "fields": [
+        "definition:PluginSharePrincipalType",
+        "definition:PluginShareTarget",
+        "definition:PluginShareTargetRole",
+        "definition:PluginShareUpdateDiscoverability",
+        "property:discoverability",
+        "property:remotePluginId",
+        "property:shareTargets",
+        "required:discoverability",
+        "required:remotePluginId",
+        "required:shareTargets"
+      ]
+    },
+    {
+      "id": "PluginShareUpdateTargetsResponse",
+      "sourcePath": "v2/PluginShareUpdateTargetsResponse.json",
+      "sha256": "f58e1f51629b06b3a045ed0c6695632748c8683088419c303de617dc2ffc35b2",
+      "fields": [
+        "definition:PluginShareDiscoverability",
+        "definition:PluginSharePrincipal",
+        "definition:PluginSharePrincipalRole",
+        "definition:PluginSharePrincipalType",
+        "property:discoverability",
+        "property:principals",
+        "required:discoverability",
+        "required:principals"
+      ]
+    },
+    {
+      "id": "PluginSkillReadParams",
+      "sourcePath": "v2/PluginSkillReadParams.json",
+      "sha256": "57ecfde7e70a346c4822416d53ab5477b22d418af616226c2a247ffab060e814",
+      "fields": [
+        "property:remoteMarketplaceName",
+        "property:remotePluginId",
+        "property:skillName",
+        "required:remoteMarketplaceName",
+        "required:remotePluginId",
+        "required:skillName"
+      ]
+    },
+    {
+      "id": "PluginSkillReadResponse",
+      "sourcePath": "v2/PluginSkillReadResponse.json",
+      "sha256": "4d9a829a4bc48ffac2fff8a303223966d647ddd2538844ec3a276d8aab9e1aea",
+      "fields": [
+        "property:contents"
+      ]
+    },
+    {
+      "id": "PluginUninstallParams",
+      "sourcePath": "v2/PluginUninstallParams.json",
+      "sha256": "376eab9138338f4a2b8305150e71f54da98ed720f48edfd28747472a835c32a0",
+      "fields": [
+        "property:pluginId",
+        "required:pluginId"
+      ]
+    },
+    {
+      "id": "PluginUninstallResponse",
+      "sourcePath": "v2/PluginUninstallResponse.json",
+      "sha256": "ec9c107a429159b084ac32ddc9ceeb255a2dc1b45c4fda23b3e77f90a356c871",
+      "fields": []
     },
     {
       "id": "ProcessExitedNotification",
@@ -1248,6 +2059,69 @@
         "property:threadId",
         "required:requestId",
         "required:threadId"
+      ]
+    },
+    {
+      "id": "SkillsConfigWriteParams",
+      "sourcePath": "v2/SkillsConfigWriteParams.json",
+      "sha256": "5488f6af4cb7b8d8a25edb2d886eda96615a8830b374610df11df67cec8a6ea0",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:enabled",
+        "property:name",
+        "property:path",
+        "required:enabled"
+      ]
+    },
+    {
+      "id": "SkillsConfigWriteResponse",
+      "sourcePath": "v2/SkillsConfigWriteResponse.json",
+      "sha256": "c45a9194a1d04cc61e1a2253d9a940185a5b1ae6613b05438f682d1c587b813e",
+      "fields": [
+        "property:effectiveEnabled",
+        "required:effectiveEnabled"
+      ]
+    },
+    {
+      "id": "SkillsExtraRootsSetParams",
+      "sourcePath": "v2/SkillsExtraRootsSetParams.json",
+      "sha256": "c824b95fb4d570c267efbca2d78f86e7ac8ecf92109b0a9ba6e46cb625505a02",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "property:extraRoots",
+        "required:extraRoots"
+      ]
+    },
+    {
+      "id": "SkillsExtraRootsSetResponse",
+      "sourcePath": "v2/SkillsExtraRootsSetResponse.json",
+      "sha256": "1de04b5644c4d17aac8492af2cde24ebc0ecc9c11fc3e26df4b3d4ffd30c995f",
+      "fields": []
+    },
+    {
+      "id": "SkillsListParams",
+      "sourcePath": "v2/SkillsListParams.json",
+      "sha256": "6545e3092aa7c67aab3dd2e5c602cf1a532e024530568bb3aeab96903dfb0178",
+      "fields": [
+        "property:cwds",
+        "property:forceReload"
+      ]
+    },
+    {
+      "id": "SkillsListResponse",
+      "sourcePath": "v2/SkillsListResponse.json",
+      "sha256": "fc6abca9b65f95ed94d90815ae0682fdb91af42cc1e928a0f6767537ad85d356",
+      "fields": [
+        "definition:AbsolutePathBuf",
+        "definition:SkillDependencies",
+        "definition:SkillErrorInfo",
+        "definition:SkillInterface",
+        "definition:SkillMetadata",
+        "definition:SkillScope",
+        "definition:SkillToolDependency",
+        "definition:SkillsListEntry",
+        "property:data",
+        "required:data"
       ]
     },
     {
@@ -2725,6 +3599,11 @@
       "id": "thread-turn-pagination-schemas",
       "status": "tracked_from_rust_source",
       "reason": "Upstream exports thread/turns/list and thread/turns/items/list from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those experimental request/response surfaces. The local subset validates the Rust DTO contracts using shared Turn and ThreadItem shapes."
+    },
+    {
+      "id": "environment-collaboration-schemas",
+      "status": "sequenced_follow_up",
+      "reason": "Upstream exports environment/add and collaborationMode/list from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. They are sequenced with the remaining upstream compatibility and TUI/live-runtime planning beads rather than admitted in HXCX-3.67."
     }
   ]
 }

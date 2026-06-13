@@ -3400,6 +3400,462 @@
       }
     },
     {
+      "id": "app-list-request",
+      "kind": "request",
+      "method": "app/list",
+      "message": {"jsonrpc": "2.0", "id": "app-list-1", "method": "app/list", "params": {"cursor": null, "limit": 25, "threadId": "thread-1", "forceRefetch": false}}
+    },
+    {
+      "id": "app-list-response",
+      "kind": "response",
+      "method": "app/list",
+      "message": {"jsonrpc": "2.0", "id": "app-list-1", "result": {"data": [], "nextCursor": null}}
+    },
+    {
+      "id": "skills-list-request",
+      "kind": "request",
+      "method": "skills/list",
+      "message": {"jsonrpc": "2.0", "id": "skills-list-1", "method": "skills/list", "params": {"cwds": ["/Users/fixture/project"], "forceReload": false}}
+    },
+    {
+      "id": "skills-list-response",
+      "kind": "response",
+      "method": "skills/list",
+      "message": {"jsonrpc": "2.0", "id": "skills-list-1", "result": {"data": []}}
+    },
+    {
+      "id": "skills-extra-roots-set-request",
+      "kind": "request",
+      "method": "skills/extraRoots/set",
+      "message": {"jsonrpc": "2.0", "id": "skills-extra-roots-1", "method": "skills/extraRoots/set", "params": {"extraRoots": ["/Users/fixture/skills"]}}
+    },
+    {
+      "id": "skills-extra-roots-set-response",
+      "kind": "response",
+      "method": "skills/extraRoots/set",
+      "message": {"jsonrpc": "2.0", "id": "skills-extra-roots-1", "result": {}}
+    },
+    {
+      "id": "skills-config-write-request",
+      "kind": "request",
+      "method": "skills/config/write",
+      "message": {"jsonrpc": "2.0", "id": "skills-config-write-1", "method": "skills/config/write", "params": {"path": "/Users/fixture/.codex/skills.toml", "name": "fixture-skill", "enabled": true}}
+    },
+    {
+      "id": "skills-config-write-response",
+      "kind": "response",
+      "method": "skills/config/write",
+      "message": {"jsonrpc": "2.0", "id": "skills-config-write-1", "result": {"effectiveEnabled": true}}
+    },
+    {
+      "id": "hooks-list-request",
+      "kind": "request",
+      "method": "hooks/list",
+      "message": {"jsonrpc": "2.0", "id": "hooks-list-1", "method": "hooks/list", "params": {"cwds": ["/Users/fixture/project"]}}
+    },
+    {
+      "id": "hooks-list-response",
+      "kind": "response",
+      "method": "hooks/list",
+      "message": {"jsonrpc": "2.0", "id": "hooks-list-1", "result": {"data": []}}
+    },
+    {
+      "id": "marketplace-add-request",
+      "kind": "request",
+      "method": "marketplace/add",
+      "message": {"jsonrpc": "2.0", "id": "marketplace-add-1", "method": "marketplace/add", "params": {"source": "https://example.invalid/marketplace.git", "refName": null, "sparsePaths": ["plugins"]}}
+    },
+    {
+      "id": "marketplace-add-response",
+      "kind": "response",
+      "method": "marketplace/add",
+      "message": {"jsonrpc": "2.0", "id": "marketplace-add-1", "result": {"marketplaceName": "fixture-marketplace", "installedRoot": "/Users/fixture/.codex/marketplaces/fixture", "alreadyAdded": false}}
+    },
+    {
+      "id": "marketplace-remove-request",
+      "kind": "request",
+      "method": "marketplace/remove",
+      "message": {"jsonrpc": "2.0", "id": "marketplace-remove-1", "method": "marketplace/remove", "params": {"marketplaceName": "fixture-marketplace"}}
+    },
+    {
+      "id": "marketplace-remove-response",
+      "kind": "response",
+      "method": "marketplace/remove",
+      "message": {"jsonrpc": "2.0", "id": "marketplace-remove-1", "result": {"marketplaceName": "fixture-marketplace", "installedRoot": null}}
+    },
+    {
+      "id": "marketplace-upgrade-request",
+      "kind": "request",
+      "method": "marketplace/upgrade",
+      "message": {"jsonrpc": "2.0", "id": "marketplace-upgrade-1", "method": "marketplace/upgrade", "params": {"marketplaceName": null}}
+    },
+    {
+      "id": "marketplace-upgrade-response",
+      "kind": "response",
+      "method": "marketplace/upgrade",
+      "message": {"jsonrpc": "2.0", "id": "marketplace-upgrade-1", "result": {"selectedMarketplaces": ["fixture-marketplace"], "upgradedRoots": ["/Users/fixture/.codex/marketplaces/fixture"], "errors": []}}
+    },
+    {
+      "id": "plugin-list-request",
+      "kind": "request",
+      "method": "plugin/list",
+      "message": {"jsonrpc": "2.0", "id": "plugin-list-1", "method": "plugin/list", "params": {"cwds": ["/Users/fixture/project"], "marketplaceKinds": ["local"]}}
+    },
+    {
+      "id": "plugin-list-response",
+      "kind": "response",
+      "method": "plugin/list",
+      "message": {"jsonrpc": "2.0", "id": "plugin-list-1", "result": {"marketplaces": [], "marketplaceLoadErrors": [], "featuredPluginIds": []}}
+    },
+    {
+      "id": "plugin-installed-request",
+      "kind": "request",
+      "method": "plugin/installed",
+      "message": {"jsonrpc": "2.0", "id": "plugin-installed-1", "method": "plugin/installed", "params": {"cwds": null, "installSuggestionPluginNames": ["fixture-plugin"]}}
+    },
+    {
+      "id": "plugin-installed-response",
+      "kind": "response",
+      "method": "plugin/installed",
+      "message": {"jsonrpc": "2.0", "id": "plugin-installed-1", "result": {"marketplaces": [], "marketplaceLoadErrors": []}}
+    },
+    {
+      "id": "plugin-read-request",
+      "kind": "request",
+      "method": "plugin/read",
+      "message": {"jsonrpc": "2.0", "id": "plugin-read-1", "method": "plugin/read", "params": {"marketplacePath": null, "remoteMarketplaceName": "fixture-marketplace", "pluginName": "fixture-plugin"}}
+    },
+    {
+      "id": "plugin-read-response",
+      "kind": "response",
+      "method": "plugin/read",
+      "message": {"jsonrpc": "2.0", "id": "plugin-read-1", "result": {"plugin": {"id": "fixture-plugin"}}}
+    },
+    {
+      "id": "plugin-skill-read-request",
+      "kind": "request",
+      "method": "plugin/skill/read",
+      "message": {"jsonrpc": "2.0", "id": "plugin-skill-read-1", "method": "plugin/skill/read", "params": {"remoteMarketplaceName": "fixture-marketplace", "remotePluginId": "remote-plugin-1", "skillName": "fixture-skill"}}
+    },
+    {
+      "id": "plugin-skill-read-response",
+      "kind": "response",
+      "method": "plugin/skill/read",
+      "message": {"jsonrpc": "2.0", "id": "plugin-skill-read-1", "result": {"contents": null}}
+    },
+    {
+      "id": "plugin-install-request",
+      "kind": "request",
+      "method": "plugin/install",
+      "message": {"jsonrpc": "2.0", "id": "plugin-install-1", "method": "plugin/install", "params": {"marketplacePath": null, "remoteMarketplaceName": "fixture-marketplace", "pluginName": "fixture-plugin"}}
+    },
+    {
+      "id": "plugin-install-response",
+      "kind": "response",
+      "method": "plugin/install",
+      "message": {"jsonrpc": "2.0", "id": "plugin-install-1", "result": {"authPolicy": {"type": "none"}, "appsNeedingAuth": []}}
+    },
+    {
+      "id": "plugin-uninstall-request",
+      "kind": "request",
+      "method": "plugin/uninstall",
+      "message": {"jsonrpc": "2.0", "id": "plugin-uninstall-1", "method": "plugin/uninstall", "params": {"pluginId": "fixture-plugin"}}
+    },
+    {
+      "id": "plugin-uninstall-response",
+      "kind": "response",
+      "method": "plugin/uninstall",
+      "message": {"jsonrpc": "2.0", "id": "plugin-uninstall-1", "result": {}}
+    },
+    {
+      "id": "plugin-share-save-request",
+      "kind": "request",
+      "method": "plugin/share/save",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-save-1", "method": "plugin/share/save", "params": {"pluginPath": "/Users/fixture/plugin", "remotePluginId": null, "discoverability": "private", "shareTargets": []}}
+    },
+    {
+      "id": "plugin-share-save-response",
+      "kind": "response",
+      "method": "plugin/share/save",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-save-1", "result": {"remotePluginId": "remote-plugin-1", "shareUrl": "https://example.invalid/plugins/remote-plugin-1"}}
+    },
+    {
+      "id": "plugin-share-update-targets-request",
+      "kind": "request",
+      "method": "plugin/share/updateTargets",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-update-targets-1", "method": "plugin/share/updateTargets", "params": {"remotePluginId": "remote-plugin-1", "discoverability": "private", "shareTargets": []}}
+    },
+    {
+      "id": "plugin-share-update-targets-response",
+      "kind": "response",
+      "method": "plugin/share/updateTargets",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-update-targets-1", "result": {"principals": [], "discoverability": "private"}}
+    },
+    {
+      "id": "plugin-share-list-request",
+      "kind": "request",
+      "method": "plugin/share/list",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-list-1", "method": "plugin/share/list", "params": {}}
+    },
+    {
+      "id": "plugin-share-list-response",
+      "kind": "response",
+      "method": "plugin/share/list",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-list-1", "result": {"data": []}}
+    },
+    {
+      "id": "plugin-share-checkout-request",
+      "kind": "request",
+      "method": "plugin/share/checkout",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-checkout-1", "method": "plugin/share/checkout", "params": {"remotePluginId": "remote-plugin-1"}}
+    },
+    {
+      "id": "plugin-share-checkout-response",
+      "kind": "response",
+      "method": "plugin/share/checkout",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-checkout-1", "result": {"remotePluginId": "remote-plugin-1", "pluginId": "fixture-plugin", "pluginName": "fixture-plugin", "pluginPath": "/Users/fixture/plugin", "marketplaceName": "fixture-marketplace", "marketplacePath": "/Users/fixture/.codex/marketplaces/fixture", "remoteVersion": null}}
+    },
+    {
+      "id": "plugin-share-delete-request",
+      "kind": "request",
+      "method": "plugin/share/delete",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-delete-1", "method": "plugin/share/delete", "params": {"remotePluginId": "remote-plugin-1"}}
+    },
+    {
+      "id": "plugin-share-delete-response",
+      "kind": "response",
+      "method": "plugin/share/delete",
+      "message": {"jsonrpc": "2.0", "id": "plugin-share-delete-1", "result": {}}
+    },
+    {
+      "id": "fs-read-file-request",
+      "kind": "request",
+      "method": "fs/readFile",
+      "message": {"jsonrpc": "2.0", "id": "fs-read-file-1", "method": "fs/readFile", "params": {"path": "/Users/fixture/project/README.md"}}
+    },
+    {
+      "id": "fs-read-file-response",
+      "kind": "response",
+      "method": "fs/readFile",
+      "message": {"jsonrpc": "2.0", "id": "fs-read-file-1", "result": {"dataBase64": "IyBmaXh0dXJlCg=="}}
+    },
+    {
+      "id": "fs-write-file-request",
+      "kind": "request",
+      "method": "fs/writeFile",
+      "message": {"jsonrpc": "2.0", "id": "fs-write-file-1", "method": "fs/writeFile", "params": {"path": "/Users/fixture/project/out.txt", "dataBase64": "b2sK"}}
+    },
+    {
+      "id": "fs-write-file-response",
+      "kind": "response",
+      "method": "fs/writeFile",
+      "message": {"jsonrpc": "2.0", "id": "fs-write-file-1", "result": {}}
+    },
+    {
+      "id": "fs-create-directory-request",
+      "kind": "request",
+      "method": "fs/createDirectory",
+      "message": {"jsonrpc": "2.0", "id": "fs-create-directory-1", "method": "fs/createDirectory", "params": {"path": "/Users/fixture/project/tmp", "recursive": true}}
+    },
+    {
+      "id": "fs-create-directory-response",
+      "kind": "response",
+      "method": "fs/createDirectory",
+      "message": {"jsonrpc": "2.0", "id": "fs-create-directory-1", "result": {}}
+    },
+    {
+      "id": "fs-get-metadata-request",
+      "kind": "request",
+      "method": "fs/getMetadata",
+      "message": {"jsonrpc": "2.0", "id": "fs-get-metadata-1", "method": "fs/getMetadata", "params": {"path": "/Users/fixture/project/README.md"}}
+    },
+    {
+      "id": "fs-get-metadata-response",
+      "kind": "response",
+      "method": "fs/getMetadata",
+      "message": {"jsonrpc": "2.0", "id": "fs-get-metadata-1", "result": {"isDirectory": false, "isFile": true, "isSymlink": false, "createdAtMs": 1760000000000, "modifiedAtMs": 1760000001000}}
+    },
+    {
+      "id": "fs-read-directory-request",
+      "kind": "request",
+      "method": "fs/readDirectory",
+      "message": {"jsonrpc": "2.0", "id": "fs-read-directory-1", "method": "fs/readDirectory", "params": {"path": "/Users/fixture/project"}}
+    },
+    {
+      "id": "fs-read-directory-response",
+      "kind": "response",
+      "method": "fs/readDirectory",
+      "message": {"jsonrpc": "2.0", "id": "fs-read-directory-1", "result": {"entries": []}}
+    },
+    {
+      "id": "fs-remove-request",
+      "kind": "request",
+      "method": "fs/remove",
+      "message": {"jsonrpc": "2.0", "id": "fs-remove-1", "method": "fs/remove", "params": {"path": "/Users/fixture/project/out.txt", "recursive": false, "force": true}}
+    },
+    {
+      "id": "fs-remove-response",
+      "kind": "response",
+      "method": "fs/remove",
+      "message": {"jsonrpc": "2.0", "id": "fs-remove-1", "result": {}}
+    },
+    {
+      "id": "fs-copy-request",
+      "kind": "request",
+      "method": "fs/copy",
+      "message": {"jsonrpc": "2.0", "id": "fs-copy-1", "method": "fs/copy", "params": {"sourcePath": "/Users/fixture/project/in.txt", "destinationPath": "/Users/fixture/project/out.txt", "recursive": false}}
+    },
+    {
+      "id": "fs-copy-response",
+      "kind": "response",
+      "method": "fs/copy",
+      "message": {"jsonrpc": "2.0", "id": "fs-copy-1", "result": {}}
+    },
+    {
+      "id": "fs-watch-request",
+      "kind": "request",
+      "method": "fs/watch",
+      "message": {"jsonrpc": "2.0", "id": "fs-watch-1", "method": "fs/watch", "params": {"watchId": "watch-2", "path": "/Users/fixture/project"}}
+    },
+    {
+      "id": "fs-watch-response",
+      "kind": "response",
+      "method": "fs/watch",
+      "message": {"jsonrpc": "2.0", "id": "fs-watch-1", "result": {"path": "/Users/fixture/project"}}
+    },
+    {
+      "id": "fs-unwatch-request",
+      "kind": "request",
+      "method": "fs/unwatch",
+      "message": {"jsonrpc": "2.0", "id": "fs-unwatch-1", "method": "fs/unwatch", "params": {"watchId": "watch-2"}}
+    },
+    {
+      "id": "fs-unwatch-response",
+      "kind": "response",
+      "method": "fs/unwatch",
+      "message": {"jsonrpc": "2.0", "id": "fs-unwatch-1", "result": {}}
+    },
+    {
+      "id": "model-list-request",
+      "kind": "request",
+      "method": "model/list",
+      "message": {"jsonrpc": "2.0", "id": "model-list-1", "method": "model/list", "params": {"cursor": null, "limit": 50, "includeHidden": false}}
+    },
+    {
+      "id": "model-list-response",
+      "kind": "response",
+      "method": "model/list",
+      "message": {"jsonrpc": "2.0", "id": "model-list-1", "result": {"data": [], "nextCursor": null}}
+    },
+    {
+      "id": "model-provider-capabilities-read-request",
+      "kind": "request",
+      "method": "modelProvider/capabilities/read",
+      "message": {"jsonrpc": "2.0", "id": "model-provider-capabilities-1", "method": "modelProvider/capabilities/read", "params": {}}
+    },
+    {
+      "id": "model-provider-capabilities-read-response",
+      "kind": "response",
+      "method": "modelProvider/capabilities/read",
+      "message": {"jsonrpc": "2.0", "id": "model-provider-capabilities-1", "result": {"namespaceTools": true, "imageGeneration": false, "webSearch": true}}
+    },
+    {
+      "id": "experimental-feature-list-request",
+      "kind": "request",
+      "method": "experimentalFeature/list",
+      "message": {"jsonrpc": "2.0", "id": "experimental-feature-list-1", "method": "experimentalFeature/list", "params": {"cursor": null, "limit": 25, "threadId": "thread-1"}}
+    },
+    {
+      "id": "experimental-feature-list-response",
+      "kind": "response",
+      "method": "experimentalFeature/list",
+      "message": {"jsonrpc": "2.0", "id": "experimental-feature-list-1", "result": {"data": [], "nextCursor": null}}
+    },
+    {
+      "id": "experimental-feature-enable-request",
+      "kind": "request",
+      "method": "experimentalFeature/enablement/set",
+      "message": {"jsonrpc": "2.0", "id": "experimental-feature-enable-1", "method": "experimentalFeature/enablement/set", "params": {"enablement": {"fixtureFeature": true}}}
+    },
+    {
+      "id": "experimental-feature-enable-response",
+      "kind": "response",
+      "method": "experimentalFeature/enablement/set",
+      "message": {"jsonrpc": "2.0", "id": "experimental-feature-enable-1", "result": {"enablement": {"fixtureFeature": true}}}
+    },
+    {
+      "id": "permission-profile-list-request",
+      "kind": "request",
+      "method": "permissionProfile/list",
+      "message": {"jsonrpc": "2.0", "id": "permission-profile-list-1", "method": "permissionProfile/list", "params": {"cursor": null, "limit": 25, "cwd": "/Users/fixture/project"}}
+    },
+    {
+      "id": "permission-profile-list-response",
+      "kind": "response",
+      "method": "permissionProfile/list",
+      "message": {"jsonrpc": "2.0", "id": "permission-profile-list-1", "result": {"data": [], "nextCursor": null}}
+    },
+    {
+      "id": "mcp-server-oauth-login-request",
+      "kind": "request",
+      "method": "mcpServer/oauth/login",
+      "message": {"jsonrpc": "2.0", "id": "mcp-oauth-login-1", "method": "mcpServer/oauth/login", "params": {"name": "github", "scopes": ["repo"], "timeoutSecs": 60}}
+    },
+    {
+      "id": "mcp-server-oauth-login-response",
+      "kind": "response",
+      "method": "mcpServer/oauth/login",
+      "message": {"jsonrpc": "2.0", "id": "mcp-oauth-login-1", "result": {"authorizationUrl": "https://example.invalid/oauth"}}
+    },
+    {
+      "id": "config-mcp-server-reload-request",
+      "kind": "request",
+      "method": "config/mcpServer/reload",
+      "message": {"jsonrpc": "2.0", "id": "mcp-reload-1", "method": "config/mcpServer/reload", "params": {}}
+    },
+    {
+      "id": "config-mcp-server-reload-response",
+      "kind": "response",
+      "method": "config/mcpServer/reload",
+      "message": {"jsonrpc": "2.0", "id": "mcp-reload-1", "result": {}}
+    },
+    {
+      "id": "mcp-server-status-list-request",
+      "kind": "request",
+      "method": "mcpServerStatus/list",
+      "message": {"jsonrpc": "2.0", "id": "mcp-status-1", "method": "mcpServerStatus/list", "params": {"cursor": null, "limit": 25, "detail": "full", "threadId": "thread-1"}}
+    },
+    {
+      "id": "mcp-server-status-list-response",
+      "kind": "response",
+      "method": "mcpServerStatus/list",
+      "message": {"jsonrpc": "2.0", "id": "mcp-status-1", "result": {"data": [], "nextCursor": null}}
+    },
+    {
+      "id": "mcp-resource-read-request",
+      "kind": "request",
+      "method": "mcpServer/resource/read",
+      "message": {"jsonrpc": "2.0", "id": "mcp-resource-1", "method": "mcpServer/resource/read", "params": {"threadId": "thread-1", "server": "github", "uri": "file:///fixture"}}
+    },
+    {
+      "id": "mcp-resource-read-response",
+      "kind": "response",
+      "method": "mcpServer/resource/read",
+      "message": {"jsonrpc": "2.0", "id": "mcp-resource-1", "result": {"contents": []}}
+    },
+    {
+      "id": "mcp-tool-call-request",
+      "kind": "request",
+      "method": "mcpServer/tool/call",
+      "message": {"jsonrpc": "2.0", "id": "mcp-tool-1", "method": "mcpServer/tool/call", "params": {"threadId": "thread-1", "server": "github", "tool": "search", "arguments": {"q": "fixture"}, "_meta": null}}
+    },
+    {
+      "id": "mcp-tool-call-response",
+      "kind": "response",
+      "method": "mcpServer/tool/call",
+      "message": {"jsonrpc": "2.0", "id": "mcp-tool-1", "result": {"content": [], "structuredContent": null, "isError": false, "_meta": null}}
+    },
+    {
       "id": "jsonrpc-error",
       "kind": "error",
       "message": {

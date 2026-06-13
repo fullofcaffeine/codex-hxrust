@@ -20,7 +20,7 @@ No Cafex or Cafetera source is part of this audit.
 
 ## Current Local Selection
 
-The local app protocol subset currently admits 55 client request methods:
+The local app protocol subset currently admits 93 client request methods:
 
 ```text
 account/login/cancel
@@ -30,49 +30,87 @@ account/rateLimits/read
 account/read
 account/sendAddCreditsNudgeEmail
 account/usage/read
+app/list
 command/exec
 command/exec/resize
 command/exec/terminate
 command/exec/write
 config/batchWrite
+config/mcpServer/reload
 config/read
 config/value/write
 configRequirements/read
+experimentalFeature/enablement/set
+experimentalFeature/list
 externalAgentConfig/detect
 externalAgentConfig/import
 feedback/upload
+fs/copy
+fs/createDirectory
+fs/getMetadata
+fs/readDirectory
+fs/readFile
+fs/remove
+fs/unwatch
+fs/watch
+fs/writeFile
+hooks/list
+marketplace/add
+marketplace/remove
+marketplace/upgrade
+mcpServer/oauth/login
+mcpServer/resource/read
+mcpServer/tool/call
+mcpServerStatus/list
+memory/reset
+model/list
+modelProvider/capabilities/read
+permissionProfile/list
+plugin/installed
+plugin/install
+plugin/list
+plugin/read
+plugin/share/checkout
+plugin/share/delete
+plugin/share/list
+plugin/share/save
+plugin/share/updateTargets
+plugin/skill/read
+plugin/uninstall
 process/kill
 process/resizePty
 process/spawn
 process/writeStdin
-memory/reset
+review/start
+skills/config/write
+skills/extraRoots/set
+skills/list
 thread/approveGuardianDeniedAction
-thread/start
-thread/resume
-thread/fork
 thread/archive
-thread/unarchive
-thread/unsubscribe
-thread/increment_elicitation
-thread/decrement_elicitation
-thread/name/set
-thread/goal/set
-thread/goal/get
-thread/goal/clear
-thread/metadata/update
-thread/settings/update
-thread/memoryMode/set
-thread/compact/start
-thread/shellCommand
 thread/backgroundTerminals/clean
-thread/rollback
+thread/compact/start
+thread/decrement_elicitation
+thread/fork
+thread/metadata/update
+thread/goal/clear
+thread/goal/get
+thread/goal/set
+thread/increment_elicitation
 thread/inject_items
-thread/turns/list
-thread/turns/items/list
 thread/list
 thread/loaded/list
+thread/memoryMode/set
+thread/name/set
 thread/read
-review/start
+thread/resume
+thread/rollback
+thread/settings/update
+thread/shellCommand
+thread/start
+thread/turns/items/list
+thread/turns/list
+thread/unarchive
+thread/unsubscribe
 turn/interrupt
 turn/start
 turn/steer
@@ -99,7 +137,7 @@ The local subset also validates selected notifications needed by the current hea
 
 ## Upstream Gap Summary
 
-Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 55-method selection, 57 quoted request wires remain outside the local subset.
+Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 93-method selection, 19 quoted request wires remain outside the local subset.
 
 The remaining requests fall into these groups:
 
@@ -108,14 +146,14 @@ The remaining requests fall into these groups:
 | Thread navigation and lifecycle | `thread/resume`, `thread/fork`, `thread/archive`, `thread/unarchive`, `thread/unsubscribe`, `thread/list`, `thread/loaded/list` | Admitted in HXCX-3.63 |
 | Thread state and history mutation | `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/name/set`, `thread/goal/set`, `thread/goal/get`, `thread/goal/clear`, `thread/metadata/update`, `thread/settings/update`, `thread/memoryMode/set`, `thread/compact/start`, `thread/shellCommand`, `thread/approveGuardianDeniedAction`, `thread/backgroundTerminals/clean`, `thread/rollback`, `thread/inject_items`, `memory/reset` | Admitted in HXCX-3.64 |
 | Turn and review continuation | `turn/steer`, `review/start`, `thread/turns/list`, `thread/turns/items/list` | Admitted in HXCX-3.65 |
-| Models and environment | `model/list`, `modelProvider/capabilities/read`, `environment/add`, `experimentalFeature/list`, `experimentalFeature/enablement/set`, `permissionProfile/list`, `collaborationMode/list`, `mock/experimentalMethod` | Medium |
-| Apps, skills, hooks, marketplace, plugins | `app/list`, `skills/list`, `skills/extraRoots/set`, `skills/config/write`, `hooks/list`, `marketplace/add`, `marketplace/remove`, `marketplace/upgrade`, `plugin/list`, `plugin/installed`, `plugin/read`, `plugin/skill/read`, `plugin/install`, `plugin/uninstall`, `plugin/share/save`, `plugin/share/updateTargets`, `plugin/share/list`, `plugin/share/checkout`, `plugin/share/delete` | Medium |
-| Filesystem remote surface | `fs/readFile`, `fs/writeFile`, `fs/createDirectory`, `fs/getMetadata`, `fs/readDirectory`, `fs/remove`, `fs/copy`, `fs/watch`, `fs/unwatch` | Medium |
-| MCP and config reload | `mcpServer/oauth/login`, `config/mcpServer/reload`, `mcpServerStatus/list`, `mcpServer/resource/read`, `mcpServer/tool/call` | Medium |
+| Models and environment | `environment/add`, `collaborationMode/list`, `mock/experimentalMethod` | Medium |
+| Apps, skills, hooks, marketplace, plugins | selected in HXCX-3.67 | Done |
+| Filesystem remote surface | selected in HXCX-3.67 | Done |
+| MCP and config reload | selected in HXCX-3.67 | Done |
 | Remote control | `remoteControl/enable`, `remoteControl/disable`, `remoteControl/status/read`, `remoteControl/pairing/start`, `remoteControl/pairing/status`, `remoteControl/client/list`, `remoteControl/client/revoke` | Later |
 | Realtime client controls | `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, `thread/realtime/listVoices` | Later |
-| Fuzzy search requests | `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, `fuzzyFileSearch/sessionStop` plus legacy `FuzzyFileSearch` | Later |
-| Deprecated v1 client requests | `Initialize`, `GetConversationSummary`, `GitDiffToRemote`, `GetAuthStatus` | Explicitly deferred |
+| Search requests | `thread/search`, `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, `fuzzyFileSearch/sessionStop` | Later |
+| Deprecated v1 client requests | `Initialize`, `GetConversationSummary`, `GitDiffToRemote`, `GetAuthStatus` | Explicitly deferred outside the 112 quoted v2 client request count |
 
 ## Notification Gaps
 
@@ -164,25 +202,7 @@ Known exceptions:
 
 ## Sequencing Decision
 
-The next raw upstream slice should move into the app/plugin/filesystem/MCP/model client request families before remote/Cafex surfaces:
-
-```text
-app/list
-skills/list
-skills/extraRoots/set
-hooks/list
-model/list
-modelProvider/capabilities/read
-experimentalFeature/list
-permissionProfile/list
-mcpServer/oauth/login
-mcpServerStatus/list
-mcpServer/resource/read
-mcpServer/tool/call
-fs/readFile
-fs/writeFile
-fs/readDirectory
-```
+The app/plugin/filesystem/MCP/model client request families have moved into the selected subset under HXCX-3.67. The next raw upstream slice is `codex-hxrust-fuz`, which decides remaining realtime/fuzzy/remote/deprecated-v1 compatibility surfaces. After that, `codex-hxrust-6cs` sequences upstream TUI and live-runtime parity for the full Codex target, including terminal UI work.
 
 Rationale:
 

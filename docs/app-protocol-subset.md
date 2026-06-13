@@ -6,7 +6,7 @@
 
 ## Scope
 
-This slice implements a fixture-backed pure Haxe validator/normalizer for the first headless Codex app-server protocol surface.
+This slice implements a fixture-backed pure Haxe validator/normalizer for the selected upstream Codex app-server protocol surface. Headless fixtures are the current deterministic proof path, not the final project scope.
 
 Included client requests:
 
@@ -65,6 +65,44 @@ Included client requests:
 - `config/value/write`
 - `config/batchWrite`
 - `configRequirements/read`
+- `app/list`
+- `skills/list`
+- `skills/extraRoots/set`
+- `skills/config/write`
+- `hooks/list`
+- `marketplace/add`
+- `marketplace/remove`
+- `marketplace/upgrade`
+- `plugin/list`
+- `plugin/installed`
+- `plugin/read`
+- `plugin/skill/read`
+- `plugin/install`
+- `plugin/uninstall`
+- `plugin/share/save`
+- `plugin/share/updateTargets`
+- `plugin/share/list`
+- `plugin/share/checkout`
+- `plugin/share/delete`
+- `fs/readFile`
+- `fs/writeFile`
+- `fs/createDirectory`
+- `fs/getMetadata`
+- `fs/readDirectory`
+- `fs/remove`
+- `fs/copy`
+- `fs/watch`
+- `fs/unwatch`
+- `model/list`
+- `modelProvider/capabilities/read`
+- `experimentalFeature/list`
+- `experimentalFeature/enablement/set`
+- `permissionProfile/list`
+- `mcpServer/oauth/login`
+- `config/mcpServer/reload`
+- `mcpServerStatus/list`
+- `mcpServer/resource/read`
+- `mcpServer/tool/call`
 
 Included client-directed server requests:
 
@@ -192,8 +230,46 @@ Included response payloads:
 - `ConfigRequirementsReadResponse`
 - `ExternalAgentConfigDetectResponse`
 - `ExternalAgentConfigImportResponse`
+- `AppsListResponse`
+- `SkillsListResponse`
+- `SkillsExtraRootsSetResponse`
+- `SkillsConfigWriteResponse`
+- `HooksListResponse`
+- `MarketplaceAddResponse`
+- `MarketplaceRemoveResponse`
+- `MarketplaceUpgradeResponse`
+- `PluginListResponse`
+- `PluginInstalledResponse`
+- `PluginReadResponse`
+- `PluginSkillReadResponse`
+- `PluginInstallResponse`
+- `PluginUninstallResponse`
+- `PluginShareSaveResponse`
+- `PluginShareUpdateTargetsResponse`
+- `PluginShareListResponse`
+- `PluginShareCheckoutResponse`
+- `PluginShareDeleteResponse`
+- `FsReadFileResponse`
+- `FsWriteFileResponse`
+- `FsCreateDirectoryResponse`
+- `FsGetMetadataResponse`
+- `FsReadDirectoryResponse`
+- `FsRemoveResponse`
+- `FsCopyResponse`
+- `FsWatchResponse`
+- `FsUnwatchResponse`
+- `ModelListResponse`
+- `ModelProviderCapabilitiesReadResponse`
+- `ExperimentalFeatureListResponse`
+- `ExperimentalFeatureEnablementSetResponse`
+- `PermissionProfileListResponse`
+- `McpServerOauthLoginResponse`
+- `McpServerRefreshResponse`
+- `ListMcpServerStatusResponse`
+- `McpResourceReadResponse`
+- `McpServerToolCallResponse`
 
-The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, thread resume/fork/archive/unarchive/unsubscribe/list/loaded-list lifecycle request responses, upstream thread state/history mutation request responses, turn steering, review start, paged turn and turn-item history responses, client-directed server request/response pairs for command approval, file-change approval, permission approval, tool user input, MCP elicitation, dynamic tool calls, ChatGPT auth-token refresh, and attestation generation, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read/rate-limit/usage requests, add-credits nudge email requests, feedback upload requests, standalone command execution requests and control requests, host process spawn/control request responses, config read/value-write/batch-write and requirements read request responses, external agent config detect/import request responses, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
+The fixture also covers transcript-bearing turns with text `userMessage`, `agentMessage`, and completed `plan` items, thread resume/fork/archive/unarchive/unsubscribe/list/loaded-list lifecycle request responses, upstream thread state/history mutation request responses, turn steering, review start, paged turn and turn-item history responses, client-directed server request/response pairs for command approval, file-change approval, permission approval, tool user input, MCP elicitation, dynamic tool calls, ChatGPT auth-token refresh, and attestation generation, selected assistant text delta notifications, `turn/plan/updated` checklist notifications, experimental turn moderation metadata, deprecated context-compacted notifications, experimental plan delta notifications, reasoning summary part creation, summary text deltas, and reasoning content text deltas, item command execution deltas and terminal interactions, file-change output and patch update notifications, MCP tool-call progress, MCP OAuth login completion, MCP server startup status, account updates, account login start/cancel/completion, account logout/read/rate-limit/usage requests, add-credits nudge email requests, feedback upload requests, standalone command execution requests and control requests, host process spawn/control request responses, config read/value-write/batch-write and requirements read request responses, external agent config detect/import request responses, apps/skills/hooks/plugin/marketplace request responses, filesystem read/write/metadata/watch request responses, model/capability/experimental-feature/permission-profile request responses, MCP OAuth/status/resource/tool request responses, account rate-limit updates, app-list updates, remote-control status changes, model reroute and verification notifications, warning and guardian warning notifications, deprecation notice and config warning notifications, fuzzy file search session update and completion notifications, realtime startup/item/transcript/audio/SDP/error/closed notifications, Windows sandbox readiness/setup and warning notifications, external agent config import completion, filesystem change notifications, server request resolution, command/process output deltas, process exit notifications, and the raw response item completion notification for assistant `message` response items with `output_text` content.
 
 `thread/resume` and `thread/fork` reopen or fork existing upstream threads. The selected subset validates required `threadId`, selected nullable override fields, approval policy variants, approvals reviewer, sandbox mode, personality, and response metadata plus the shared `Thread` payload.
 
@@ -336,6 +412,18 @@ Client-directed server requests use upstream's `ServerRequest`/`ServerResponse` 
 `externalAgentConfig/detect` detects external agent configuration that can be migrated into Codex. The selected subset validates optional boolean `includeHome`, optional nullable string-array `cwds`, required response `items`, migration `itemType` enum values, optional nullable `cwd`, optional nullable `details`, and typed command, hook, MCP server, plugin, session, and subagent detail arrays. The fixture is protocol-only and does not scan the home directory or workspaces.
 
 `externalAgentConfig/import` imports selected external agent configuration into Codex. The selected subset validates required `migrationItems` using the same migration item/detail shape as `externalAgentConfig/detect` and validates the empty object success response. The fixture is protocol-only and does not import or write real configuration.
+
+`app/list`, `skills/list`, `skills/extraRoots/set`, `skills/config/write`, and `hooks/list` admit the upstream app, skill, and hook request families. The selected subset validates pagination where present, workspace/root arrays, boolean reload/config flags, empty success responses, and list `data` containers. Nested app metadata reuses the same `AppInfo` validator as `app/list/updated`; skill and hook entries remain object-shaped at this layer.
+
+`marketplace/*`, `plugin/*`, and `plugin/share/*` admit upstream plugin and marketplace management request families. The selected subset validates required marketplace/plugin identifiers, optional nullable marketplace paths/names, share target arrays, install/uninstall empty responses, plugin read object containers, auth-policy presence, and share checkout/save/update/list/delete response containers. Deep plugin DTO fields are intentionally deferred to focused nested DTO beads.
+
+`fs/readFile`, `fs/writeFile`, `fs/createDirectory`, `fs/getMetadata`, `fs/readDirectory`, `fs/remove`, `fs/copy`, `fs/watch`, and `fs/unwatch` admit the upstream filesystem request family as protocol fixtures only. The selected subset validates path/watch ids, base64 data fields, optional recursive/force booleans, metadata booleans/timestamps, directory entry object arrays, watch path responses, and empty mutation success responses. It does not mutate the real filesystem.
+
+`model/list`, `modelProvider/capabilities/read`, `experimentalFeature/list`, `experimentalFeature/enablement/set`, and `permissionProfile/list` admit upstream model/capability/feature/profile request families. The selected subset validates pagination, nullable context fields, capability booleans, boolean enablement maps, and object-list response containers.
+
+`mcpServer/oauth/login`, `config/mcpServer/reload`, `mcpServerStatus/list`, `mcpServer/resource/read`, and `mcpServer/tool/call` admit upstream MCP request families at the app-server protocol boundary. The selected subset validates server/tool/resource identifiers, optional scopes/timeouts/detail/thread ids, OAuth authorization URL responses, empty reload responses, status pages, resource content arrays, and tool-call content/meta/error containers. Real MCP transport and execution remain separate tool/runtime work.
+
+`environment/add`, `collaborationMode/list`, and `mock/experimentalMethod` are sequenced rather than implemented in this slice. The pinned upstream schema export does not currently provide standalone v2 schema files for the environment/collaboration-mode request families; `mock/experimentalMethod` is test-only upstream surface. Follow-up `codex-hxrust-fuz` and `codex-hxrust-6cs` keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 

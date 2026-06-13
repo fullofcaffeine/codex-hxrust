@@ -71,6 +71,44 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "config/value/write");
         assertContains(fingerprintJson, "config/batchWrite");
         assertContains(fingerprintJson, "configRequirements/read");
+        assertContains(fingerprintJson, "app/list");
+        assertContains(fingerprintJson, "skills/list");
+        assertContains(fingerprintJson, "skills/extraRoots/set");
+        assertContains(fingerprintJson, "skills/config/write");
+        assertContains(fingerprintJson, "hooks/list");
+        assertContains(fingerprintJson, "marketplace/add");
+        assertContains(fingerprintJson, "marketplace/remove");
+        assertContains(fingerprintJson, "marketplace/upgrade");
+        assertContains(fingerprintJson, "plugin/list");
+        assertContains(fingerprintJson, "plugin/installed");
+        assertContains(fingerprintJson, "plugin/read");
+        assertContains(fingerprintJson, "plugin/skill/read");
+        assertContains(fingerprintJson, "plugin/install");
+        assertContains(fingerprintJson, "plugin/uninstall");
+        assertContains(fingerprintJson, "plugin/share/save");
+        assertContains(fingerprintJson, "plugin/share/updateTargets");
+        assertContains(fingerprintJson, "plugin/share/list");
+        assertContains(fingerprintJson, "plugin/share/checkout");
+        assertContains(fingerprintJson, "plugin/share/delete");
+        assertContains(fingerprintJson, "fs/readFile");
+        assertContains(fingerprintJson, "fs/writeFile");
+        assertContains(fingerprintJson, "fs/createDirectory");
+        assertContains(fingerprintJson, "fs/getMetadata");
+        assertContains(fingerprintJson, "fs/readDirectory");
+        assertContains(fingerprintJson, "fs/remove");
+        assertContains(fingerprintJson, "fs/copy");
+        assertContains(fingerprintJson, "fs/watch");
+        assertContains(fingerprintJson, "fs/unwatch");
+        assertContains(fingerprintJson, "model/list");
+        assertContains(fingerprintJson, "modelProvider/capabilities/read");
+        assertContains(fingerprintJson, "experimentalFeature/list");
+        assertContains(fingerprintJson, "experimentalFeature/enablement/set");
+        assertContains(fingerprintJson, "permissionProfile/list");
+        assertContains(fingerprintJson, "mcpServer/oauth/login");
+        assertContains(fingerprintJson, "config/mcpServer/reload");
+        assertContains(fingerprintJson, "mcpServerStatus/list");
+        assertContains(fingerprintJson, "mcpServer/resource/read");
+        assertContains(fingerprintJson, "mcpServer/tool/call");
         assertContains(fingerprintJson, "serverRequests:account/chatgptAuthTokens/refresh");
         assertContains(fingerprintJson, "attestation/generate");
         assertContains(fingerprintJson, "item/commandExecution/requestApproval");
@@ -140,7 +178,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("188", Std.string(items.length));
+        assertEquals("264", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -165,8 +203,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("55", Std.string(requests));
-        assertEquals("55", Std.string(responses));
+        assertEquals("93", Std.string(requests));
+        assertEquals("93", Std.string(responses));
         assertEquals("8", Std.string(serverRequests));
         assertEquals("8", Std.string(serverResponses));
         assertEquals("61", Std.string(notifications));
@@ -898,6 +936,41 @@ class AppProtocolHarness {
         assertFalse(invalidFsChangedPath.ok, "changed paths must be strings");
         assertEquals("expected_string", invalidFsChangedPath.errorCode);
         assertEquals("$.message.params.changedPaths[0]", invalidFsChangedPath.errorPath);
+
+        final invalidAppListLimit = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"app-list-invalid-limit\",\"kind\":\"request\",\"method\":\"app/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"app-list-1\",\"method\":\"app/list\",\"params\":{\"limit\":-1}}}")));
+        assertFalse(invalidAppListLimit.ok, "app/list limit must be unsigned when present");
+        assertEquals("expected_uint", invalidAppListLimit.errorCode);
+        assertEquals("$.message.params.limit", invalidAppListLimit.errorPath);
+
+        final invalidSkillsExtraRoot = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"skills-extra-root-invalid\",\"kind\":\"request\",\"method\":\"skills/extraRoots/set\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"skills-extra-1\",\"method\":\"skills/extraRoots/set\",\"params\":{\"extraRoots\":[7]}}}")));
+        assertFalse(invalidSkillsExtraRoot.ok, "skills extra roots must be strings");
+        assertEquals("expected_string", invalidSkillsExtraRoot.errorCode);
+        assertEquals("$.message.params.extraRoots[0]", invalidSkillsExtraRoot.errorPath);
+
+        final missingPluginName = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"plugin-read-missing-name\",\"kind\":\"request\",\"method\":\"plugin/read\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"plugin-read-1\",\"method\":\"plugin/read\",\"params\":{\"remoteMarketplaceName\":\"fixture\"}}}")));
+        assertFalse(missingPluginName.ok, "plugin/read requires pluginName");
+        assertEquals("missing_field", missingPluginName.errorCode);
+        assertEquals("$.message.params.pluginName", missingPluginName.errorPath);
+
+        final invalidFsMetadataFileFlag = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"fs-metadata-invalid-file\",\"kind\":\"response\",\"method\":\"fs/getMetadata\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"fs-meta-1\",\"result\":{\"isDirectory\":false,\"isFile\":\"yes\",\"isSymlink\":false,\"createdAtMs\":1,\"modifiedAtMs\":2}}}")));
+        assertFalse(invalidFsMetadataFileFlag.ok, "fs/getMetadata file flags must be booleans");
+        assertEquals("expected_bool", invalidFsMetadataFileFlag.errorCode);
+        assertEquals("$.message.result.isFile", invalidFsMetadataFileFlag.errorPath);
+
+        final invalidFeatureEnablement = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"feature-enable-invalid\",\"kind\":\"request\",\"method\":\"experimentalFeature/enablement/set\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"feature-1\",\"method\":\"experimentalFeature/enablement/set\",\"params\":{\"enablement\":{\"fixture\":\"yes\"}}}}")));
+        assertFalse(invalidFeatureEnablement.ok, "feature enablement values must be booleans");
+        assertEquals("expected_bool", invalidFeatureEnablement.errorCode);
+        assertEquals("$.message.params.enablement.fixture", invalidFeatureEnablement.errorPath);
+
+        final invalidMcpOauthTimeout = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"mcp-oauth-invalid-timeout\",\"kind\":\"request\",\"method\":\"mcpServer/oauth/login\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"mcp-oauth-1\",\"method\":\"mcpServer/oauth/login\",\"params\":{\"name\":\"github\",\"timeoutSecs\":-1}}}")));
+        assertFalse(invalidMcpOauthTimeout.ok, "MCP OAuth timeout must be unsigned when present");
+        assertEquals("expected_uint", invalidMcpOauthTimeout.errorCode);
+        assertEquals("$.message.params.timeoutSecs", invalidMcpOauthTimeout.errorPath);
+
+        final missingMcpToolServer = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"mcp-tool-missing-server\",\"kind\":\"request\",\"method\":\"mcpServer/tool/call\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"mcp-tool-1\",\"method\":\"mcpServer/tool/call\",\"params\":{\"threadId\":\"thread-1\",\"tool\":\"search\"}}}")));
+        assertFalse(missingMcpToolServer.ok, "MCP tool calls require server");
+        assertEquals("missing_field", missingMcpToolServer.errorCode);
+        assertEquals("$.message.params.server", missingMcpToolServer.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

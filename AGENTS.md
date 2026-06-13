@@ -40,6 +40,8 @@ Do not edit, commit, or push changes in `../codex` or Cafex/Cafetera repositorie
 
 ## Work Selection Priority
 
+The project goal is a full Haxe-to-Rust Codex port, not a headless-only replacement. This includes upstream app-server protocol, runtime, tool/state systems, and the interactive TUI. Headless/core gates are early proof slices because they are deterministic and credential-free; do not describe them as the final scope.
+
 Keep Beads ordered so mainstream/raw Codex parity work is ready before Cafex adapter expansion. Use priorities and dependencies to make `bd ready` reflect the intended sequence: upstream/raw Codex protocol, runtime, app-server, tool, and state parity slices should outrank later Cafex/Cafetera adapter tasks.
 
 If a Cafex/Cafetera item floats to the top of the ready queue before its upstream-shaped core is strong enough, fix the queue first: reprioritize or dependency-gate the Cafex item and file/select the missing raw Codex slice. Do this as Beads hygiene, not as an ad hoc skip rule.

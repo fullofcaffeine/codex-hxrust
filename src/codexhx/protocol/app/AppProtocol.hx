@@ -4,11 +4,11 @@ import codexhx.protocol.json.JsonValueCodec;
 import haxe.json.Value;
 
 class AppProtocol {
-    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/loaded/list", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read"];
+    static final REQUEST_METHODS:Array<String> = ["thread/start", "thread/resume", "thread/fork", "thread/archive", "thread/unarchive", "thread/unsubscribe", "thread/increment_elicitation", "thread/decrement_elicitation", "thread/name/set", "thread/goal/set", "thread/goal/get", "thread/goal/clear", "thread/metadata/update", "thread/settings/update", "thread/memoryMode/set", "memory/reset", "thread/compact/start", "thread/shellCommand", "thread/approveGuardianDeniedAction", "thread/backgroundTerminals/clean", "thread/rollback", "thread/inject_items", "thread/turns/list", "thread/turns/items/list", "turn/start", "turn/steer", "turn/interrupt", "review/start", "thread/list", "thread/loaded/list", "thread/read", "windowsSandbox/setupStart", "windowsSandbox/readiness", "account/login/start", "account/login/cancel", "account/logout", "account/read", "account/rateLimits/read", "account/usage/read", "account/sendAddCreditsNudgeEmail", "feedback/upload", "command/exec", "command/exec/write", "command/exec/terminate", "command/exec/resize", "process/spawn", "process/writeStdin", "process/kill", "process/resizePty", "config/read", "externalAgentConfig/detect", "externalAgentConfig/import", "config/value/write", "config/batchWrite", "configRequirements/read", "app/list", "skills/list", "skills/extraRoots/set", "skills/config/write", "hooks/list", "marketplace/add", "marketplace/remove", "marketplace/upgrade", "plugin/list", "plugin/installed", "plugin/read", "plugin/skill/read", "plugin/install", "plugin/uninstall", "plugin/share/save", "plugin/share/updateTargets", "plugin/share/list", "plugin/share/checkout", "plugin/share/delete", "fs/readFile", "fs/writeFile", "fs/createDirectory", "fs/getMetadata", "fs/readDirectory", "fs/remove", "fs/copy", "fs/watch", "fs/unwatch", "model/list", "modelProvider/capabilities/read", "experimentalFeature/list", "experimentalFeature/enablement/set", "permissionProfile/list", "mcpServer/oauth/login", "config/mcpServer/reload", "mcpServerStatus/list", "mcpServer/resource/read", "mcpServer/tool/call"];
     static final SERVER_REQUEST_METHODS:Array<String> = ["account/chatgptAuthTokens/refresh", "attestation/generate", "item/commandExecution/requestApproval", "item/fileChange/requestApproval", "item/permissions/requestApproval", "item/tool/call", "item/tool/requestUserInput", "mcpServer/elicitation/request"];
     static final NOTIFICATION_METHODS:Array<String> = ["thread/started", "thread/status/changed", "thread/archived", "thread/unarchived", "thread/closed", "thread/name/updated", "thread/goal/updated", "thread/goal/cleared", "thread/settings/updated", "thread/tokenUsage/updated", "thread/compacted", "turn/started", "turn/completed", "turn/plan/updated", "turn/moderationMetadata", "item/started", "item/completed", "item/agentMessage/delta", "item/plan/delta", "item/reasoning/summaryTextDelta", "item/reasoning/summaryPartAdded", "item/reasoning/textDelta", "item/commandExecution/outputDelta", "item/commandExecution/terminalInteraction", "item/fileChange/outputDelta", "item/fileChange/patchUpdated", "item/mcpToolCall/progress", "mcpServer/oauthLogin/completed", "mcpServer/startupStatus/updated", "account/updated", "account/login/completed", "account/rateLimits/updated", "app/list/updated", "remoteControl/status/changed", "model/rerouted", "model/verification", "warning", "guardianWarning", "deprecationNotice", "configWarning", "fuzzyFileSearch/sessionUpdated", "fuzzyFileSearch/sessionCompleted", "thread/realtime/started", "thread/realtime/itemAdded", "thread/realtime/transcript/delta", "thread/realtime/transcript/done", "thread/realtime/outputAudio/delta", "thread/realtime/sdp", "thread/realtime/error", "thread/realtime/closed", "windows/worldWritableWarning", "windowsSandbox/setupCompleted", "externalAgentConfig/import/completed", "fs/changed", "rawResponseItem/completed", "serverRequest/resolved", "command/exec/outputDelta", "process/outputDelta", "process/exited", "error"];
-    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/read,config/value/write,configRequirements/read,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,memory/reset,process/kill,process/resizePty,process/spawn,process/writeStdin,review/start,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/resume,thread/rollback,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|serverRequests:account/chatgptAuthTokens/refresh,attestation/generate,item/commandExecution/requestApproval,item/fileChange/requestApproval,item/permissions/requestApproval,item/tool/call,item/tool/requestUserInput,mcpServer/elicitation/request|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
-    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-059";
+    static final FINGERPRINT_BASIS:String = "app-server-protocol:v2|requests:account/login/cancel,account/login/start,account/logout,account/rateLimits/read,account/read,account/sendAddCreditsNudgeEmail,account/usage/read,app/list,command/exec,command/exec/resize,command/exec/terminate,command/exec/write,config/batchWrite,config/mcpServer/reload,config/read,config/value/write,configRequirements/read,experimentalFeature/enablement/set,experimentalFeature/list,externalAgentConfig/detect,externalAgentConfig/import,feedback/upload,fs/copy,fs/createDirectory,fs/getMetadata,fs/readDirectory,fs/readFile,fs/remove,fs/unwatch,fs/watch,fs/writeFile,hooks/list,marketplace/add,marketplace/remove,marketplace/upgrade,mcpServer/oauth/login,mcpServer/resource/read,mcpServer/tool/call,mcpServerStatus/list,memory/reset,model/list,modelProvider/capabilities/read,permissionProfile/list,plugin/installed,plugin/install,plugin/list,plugin/read,plugin/share/checkout,plugin/share/delete,plugin/share/list,plugin/share/save,plugin/share/updateTargets,plugin/skill/read,plugin/uninstall,process/kill,process/resizePty,process/spawn,process/writeStdin,review/start,skills/config/write,skills/extraRoots/set,skills/list,thread/approveGuardianDeniedAction,thread/archive,thread/backgroundTerminals/clean,thread/compact/start,thread/decrement_elicitation,thread/fork,thread/goal/clear,thread/goal/get,thread/goal/set,thread/increment_elicitation,thread/inject_items,thread/list,thread/loaded/list,thread/memoryMode/set,thread/metadata/update,thread/name/set,thread/read,thread/resume,thread/rollback,thread/settings/update,thread/shellCommand,thread/start,thread/turns/items/list,thread/turns/list,thread/unarchive,thread/unsubscribe,turn/interrupt,turn/start,turn/steer,windowsSandbox/readiness,windowsSandbox/setupStart|serverRequests:account/chatgptAuthTokens/refresh,attestation/generate,item/commandExecution/requestApproval,item/fileChange/requestApproval,item/permissions/requestApproval,item/tool/call,item/tool/requestUserInput,mcpServer/elicitation/request|notifications:account/login/completed,account/rateLimits/updated,account/updated,app/list/updated,command/exec/outputDelta,configWarning,deprecationNotice,error,externalAgentConfig/import/completed,fs/changed,fuzzyFileSearch/sessionCompleted,fuzzyFileSearch/sessionUpdated,guardianWarning,item/agentMessage/delta,item/commandExecution/outputDelta,item/commandExecution/terminalInteraction,item/fileChange/outputDelta,item/fileChange/patchUpdated,item/mcpToolCall/progress,item/plan/delta,item/reasoning/summaryPartAdded,item/reasoning/summaryTextDelta,item/reasoning/textDelta,item/completed,item/started,mcpServer/oauthLogin/completed,mcpServer/startupStatus/updated,model/rerouted,model/verification,process/exited,process/outputDelta,rawResponseItem/completed,remoteControl/status/changed,serverRequest/resolved,thread/archived,thread/closed,thread/compacted,thread/goal/cleared,thread/goal/updated,thread/name/updated,thread/realtime/closed,thread/realtime/error,thread/realtime/itemAdded,thread/realtime/outputAudio/delta,thread/realtime/sdp,thread/realtime/started,thread/realtime/transcript/delta,thread/realtime/transcript/done,thread/settings/updated,thread/started,thread/status/changed,thread/tokenUsage/updated,thread/unarchived,turn/completed,turn/moderationMetadata,turn/plan/updated,turn/started,warning,windows/worldWritableWarning,windowsSandbox/setupCompleted|items:agentMessage,plan,userMessage|errors:jsonrpc+turn-error";
+    static final FINGERPRINT:String = "hxcx-app-protocol-v2-subset-2026-06-12-060";
 
     public static function schemaFingerprint():String {
         return FINGERPRINT;
@@ -235,6 +235,68 @@ class AppProtocol {
                 validateConfigWriteResponse(result);
             case "configRequirements/read":
                 validateConfigRequirementsReadResponse(result);
+            case "app/list":
+                validateAppsListResponse(result);
+            case "skills/list":
+                validateObjectDataResponse(result, "$.message.result", "response:skills/list");
+            case "skills/extraRoots/set":
+                validateEmptyObject(result, "$.message.result", "response:skills/extraRoots/set");
+            case "skills/config/write":
+                validateSkillsConfigWriteResponse(result);
+            case "hooks/list":
+                validateObjectDataResponse(result, "$.message.result", "response:hooks/list");
+            case "marketplace/add":
+                validateMarketplaceAddResponse(result);
+            case "marketplace/remove":
+                validateMarketplaceRemoveResponse(result);
+            case "marketplace/upgrade":
+                validateMarketplaceUpgradeResponse(result);
+            case "plugin/list":
+                validatePluginMarketplaceResponse(result, true, "response:plugin/list");
+            case "plugin/installed":
+                validatePluginMarketplaceResponse(result, false, "response:plugin/installed");
+            case "plugin/read":
+                validateRequiredObjectResponse(result, "plugin", "$.message.result.plugin", "response:plugin/read");
+            case "plugin/skill/read":
+                validatePluginSkillReadResponse(result);
+            case "plugin/install":
+                validatePluginInstallResponse(result);
+            case "plugin/uninstall":
+                validateEmptyObject(result, "$.message.result", "response:plugin/uninstall");
+            case "plugin/share/save":
+                validatePluginShareSaveResponse(result);
+            case "plugin/share/updateTargets":
+                validatePluginShareUpdateTargetsResponse(result);
+            case "plugin/share/list":
+                validateObjectDataResponse(result, "$.message.result", "response:plugin/share/list");
+            case "plugin/share/checkout":
+                validatePluginShareCheckoutResponse(result);
+            case "plugin/share/delete":
+                validateEmptyObject(result, "$.message.result", "response:plugin/share/delete");
+            case "fs/readFile":
+                validateFsReadFileResponse(result);
+            case "fs/writeFile" | "fs/createDirectory" | "fs/remove" | "fs/copy" | "fs/unwatch":
+                validateEmptyObject(result, "$.message.result", "response:" + fixtureMethod);
+            case "fs/getMetadata":
+                validateFsGetMetadataResponse(result);
+            case "fs/readDirectory":
+                validateFsReadDirectoryResponse(result);
+            case "fs/watch":
+                validateFsWatchResponse(result);
+            case "model/list" | "experimentalFeature/list" | "permissionProfile/list" | "mcpServerStatus/list":
+                validateObjectDataPaginatedResponse(result, "$.message.result", "response:" + fixtureMethod);
+            case "modelProvider/capabilities/read":
+                validateModelProviderCapabilitiesResponse(result);
+            case "experimentalFeature/enablement/set":
+                validateFeatureEnablementResponse(result);
+            case "mcpServer/oauth/login":
+                validateMcpServerOauthLoginResponse(result);
+            case "config/mcpServer/reload":
+                validateEmptyObject(result, "$.message.result", "response:config/mcpServer/reload");
+            case "mcpServer/resource/read":
+                validateArrayOnlyResponse(result, "contents", "$.message.result.contents", "response:mcpServer/resource/read");
+            case "mcpServer/tool/call":
+                validateMcpServerToolCallResponse(result);
             case _:
                 fail("unsupported_method", "$.method", "unsupported response method");
         }
@@ -390,7 +452,7 @@ class AppProtocol {
     }
 
     static function acceptsOptionalEmptyParams(method:String):Bool {
-        return method == "memory/reset" || method == "windowsSandbox/readiness" || method == "account/logout" || method == "account/rateLimits/read" || method == "account/usage/read" || method == "configRequirements/read";
+        return method == "memory/reset" || method == "windowsSandbox/readiness" || method == "account/logout" || method == "account/rateLimits/read" || method == "account/usage/read" || method == "configRequirements/read" || method == "modelProvider/capabilities/read" || method == "plugin/share/list" || method == "config/mcpServer/reload";
     }
 
     static function optionalEmptyParams(object:ProtocolObjectField):ProtocolObjectField {
@@ -521,9 +583,510 @@ class AppProtocol {
                 validateConfigBatchWriteParams(params);
             case "configRequirements/read":
                 success("params:configRequirements/read");
+            case "app/list":
+                validateAppsListParams(params);
+            case "skills/list":
+                validateSkillsListParams(params);
+            case "skills/extraRoots/set":
+                validateRequiredStringArrayField(params, "extraRoots", "$.message.params.extraRoots", "params:skills/extraRoots/set");
+            case "skills/config/write":
+                validateSkillsConfigWriteParams(params);
+            case "hooks/list":
+                validateHooksListParams(params);
+            case "marketplace/add":
+                validateMarketplaceAddParams(params);
+            case "marketplace/remove":
+                validateSingleStringParams(params, "marketplaceName", "params:marketplace/remove");
+            case "marketplace/upgrade":
+                validateMarketplaceUpgradeParams(params);
+            case "plugin/list":
+                validatePluginListParams(params);
+            case "plugin/installed":
+                validatePluginInstalledParams(params);
+            case "plugin/read":
+                validatePluginReadParams(params);
+            case "plugin/skill/read":
+                validatePluginSkillReadParams(params);
+            case "plugin/install":
+                validatePluginInstallParams(params);
+            case "plugin/uninstall":
+                validateSingleStringParams(params, "pluginId", "params:plugin/uninstall");
+            case "plugin/share/save":
+                validatePluginShareSaveParams(params);
+            case "plugin/share/updateTargets":
+                validatePluginShareUpdateTargetsParams(params);
+            case "plugin/share/list":
+                validateEmptyObject(params, "$.message.params", "params:plugin/share/list");
+            case "plugin/share/checkout" | "plugin/share/delete":
+                validateSingleStringParams(params, "remotePluginId", "params:" + method);
+            case "fs/readFile":
+                validateSingleStringParams(params, "path", "params:fs/readFile");
+            case "fs/writeFile":
+                validateFsWriteFileParams(params);
+            case "fs/createDirectory":
+                validateFsCreateDirectoryParams(params);
+            case "fs/getMetadata":
+                validateSingleStringParams(params, "path", "params:fs/getMetadata");
+            case "fs/readDirectory":
+                validateSingleStringParams(params, "path", "params:fs/readDirectory");
+            case "fs/remove":
+                validateFsRemoveParams(params);
+            case "fs/copy":
+                validateFsCopyParams(params);
+            case "fs/watch":
+                validateFsWatchParams(params);
+            case "fs/unwatch":
+                validateSingleStringParams(params, "watchId", "params:fs/unwatch");
+            case "model/list":
+                validateModelListParams(params);
+            case "modelProvider/capabilities/read":
+                validateEmptyObject(params, "$.message.params", "params:modelProvider/capabilities/read");
+            case "experimentalFeature/list":
+                validateExperimentalFeatureListParams(params);
+            case "experimentalFeature/enablement/set":
+                validateFeatureEnablementParams(params);
+            case "permissionProfile/list":
+                validatePermissionProfileListParams(params);
+            case "mcpServer/oauth/login":
+                validateMcpServerOauthLoginParams(params);
+            case "config/mcpServer/reload":
+                validateEmptyObject(params, "$.message.params", "params:config/mcpServer/reload");
+            case "mcpServerStatus/list":
+                validateMcpServerStatusListParams(params);
+            case "mcpServer/resource/read":
+                validateMcpResourceReadParams(params);
+            case "mcpServer/tool/call":
+                validateMcpServerToolCallParams(params);
             case _:
                 fail("unsupported_method", "$.method", "unsupported params method");
         }
+    }
+
+    static function validateAppsListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final pagination = validateCursorLimitParams(params, "$.message.params");
+        if (!pagination.ok) return pagination;
+        final threadId = validateOptionalNullableString(params, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId;
+        final forceRefetch = validateOptionalBool(params, "forceRefetch", "$.message.params.forceRefetch");
+        if (!forceRefetch.ok) return forceRefetch;
+        return success("params:app/list");
+    }
+
+    static function validateSkillsListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final cwds = validateOptionalStringArray(params, "cwds", "$.message.params.cwds", false);
+        if (!cwds.ok) return cwds;
+        final forceReload = validateOptionalBool(params, "forceReload", "$.message.params.forceReload");
+        if (!forceReload.ok) return forceReload;
+        return success("params:skills/list");
+    }
+
+    static function validateHooksListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final cwds = validateOptionalStringArray(params, "cwds", "$.message.params.cwds", false);
+        if (!cwds.ok) return cwds;
+        return success("params:hooks/list");
+    }
+
+    static function validateSkillsConfigWriteParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final path = validateOptionalNullableString(params, "path", "$.message.params.path");
+        if (!path.ok) return path;
+        final name = validateOptionalNullableString(params, "name", "$.message.params.name");
+        if (!name.ok) return name;
+        final enabled = requiredBool(params.keys, params.values, "enabled", "$.message.params.enabled");
+        if (!enabled.ok) return enabled.toOutcome();
+        return success("params:skills/config/write");
+    }
+
+    static function validateMarketplaceAddParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final source = requiredString(params.keys, params.values, "source", "$.message.params.source");
+        if (!source.ok) return source.toOutcome();
+        final refName = validateOptionalNullableString(params, "refName", "$.message.params.refName");
+        if (!refName.ok) return refName;
+        final sparsePaths = validateOptionalStringArray(params, "sparsePaths", "$.message.params.sparsePaths", true);
+        if (!sparsePaths.ok) return sparsePaths;
+        return success("params:marketplace/add");
+    }
+
+    static function validateMarketplaceUpgradeParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final marketplaceName = validateOptionalNullableString(params, "marketplaceName", "$.message.params.marketplaceName");
+        if (!marketplaceName.ok) return marketplaceName;
+        return success("params:marketplace/upgrade");
+    }
+
+    static function validatePluginListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final cwds = validateOptionalStringArray(params, "cwds", "$.message.params.cwds", true);
+        if (!cwds.ok) return cwds;
+        final kinds = validateOptionalStringArray(params, "marketplaceKinds", "$.message.params.marketplaceKinds", true);
+        if (!kinds.ok) return kinds;
+        return success("params:plugin/list");
+    }
+
+    static function validatePluginInstalledParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final cwds = validateOptionalStringArray(params, "cwds", "$.message.params.cwds", true);
+        if (!cwds.ok) return cwds;
+        final names = validateOptionalStringArray(params, "installSuggestionPluginNames", "$.message.params.installSuggestionPluginNames", true);
+        if (!names.ok) return names;
+        return success("params:plugin/installed");
+    }
+
+    static function validatePluginReadParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final marketplacePath = validateOptionalNullableString(params, "marketplacePath", "$.message.params.marketplacePath");
+        if (!marketplacePath.ok) return marketplacePath;
+        final remoteMarketplaceName = validateOptionalNullableString(params, "remoteMarketplaceName", "$.message.params.remoteMarketplaceName");
+        if (!remoteMarketplaceName.ok) return remoteMarketplaceName;
+        final pluginName = requiredString(params.keys, params.values, "pluginName", "$.message.params.pluginName");
+        if (!pluginName.ok) return pluginName.toOutcome();
+        return success("params:plugin/read");
+    }
+
+    static function validatePluginSkillReadParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["remoteMarketplaceName", "remotePluginId", "skillName"]) {
+            final value = requiredString(params.keys, params.values, field, "$.message.params." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        return success("params:plugin/skill/read");
+    }
+
+    static function validatePluginInstallParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final marketplacePath = validateOptionalNullableString(params, "marketplacePath", "$.message.params.marketplacePath");
+        if (!marketplacePath.ok) return marketplacePath;
+        final remoteMarketplaceName = validateOptionalNullableString(params, "remoteMarketplaceName", "$.message.params.remoteMarketplaceName");
+        if (!remoteMarketplaceName.ok) return remoteMarketplaceName;
+        final pluginName = requiredString(params.keys, params.values, "pluginName", "$.message.params.pluginName");
+        if (!pluginName.ok) return pluginName.toOutcome();
+        return success("params:plugin/install");
+    }
+
+    static function validatePluginShareSaveParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final pluginPath = requiredString(params.keys, params.values, "pluginPath", "$.message.params.pluginPath");
+        if (!pluginPath.ok) return pluginPath.toOutcome();
+        final remotePluginId = validateOptionalNullableString(params, "remotePluginId", "$.message.params.remotePluginId");
+        if (!remotePluginId.ok) return remotePluginId;
+        final discoverability = validateOptionalNullableString(params, "discoverability", "$.message.params.discoverability");
+        if (!discoverability.ok) return discoverability;
+        final targets = validateOptionalArrayOrNull(params, "shareTargets", "$.message.params.shareTargets");
+        if (!targets.ok) return targets;
+        return success("params:plugin/share/save");
+    }
+
+    static function validatePluginShareUpdateTargetsParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final remotePluginId = requiredString(params.keys, params.values, "remotePluginId", "$.message.params.remotePluginId");
+        if (!remotePluginId.ok) return remotePluginId.toOutcome();
+        final discoverability = requiredString(params.keys, params.values, "discoverability", "$.message.params.discoverability");
+        if (!discoverability.ok) return discoverability.toOutcome();
+        final targets = requiredArray(params.keys, params.values, "shareTargets", "$.message.params.shareTargets");
+        if (!targets.ok) return targets.toOutcome();
+        return success("params:plugin/share/updateTargets");
+    }
+
+    static function validateFsWriteFileParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final path = requiredString(params.keys, params.values, "path", "$.message.params.path");
+        if (!path.ok) return path.toOutcome();
+        final dataBase64 = requiredString(params.keys, params.values, "dataBase64", "$.message.params.dataBase64");
+        if (!dataBase64.ok) return dataBase64.toOutcome();
+        return success("params:fs/writeFile");
+    }
+
+    static function validateFsCreateDirectoryParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final path = requiredString(params.keys, params.values, "path", "$.message.params.path");
+        if (!path.ok) return path.toOutcome();
+        final recursive = validateOptionalNullableBool(params, "recursive", "$.message.params.recursive");
+        if (!recursive.ok) return recursive;
+        return success("params:fs/createDirectory");
+    }
+
+    static function validateFsRemoveParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final path = requiredString(params.keys, params.values, "path", "$.message.params.path");
+        if (!path.ok) return path.toOutcome();
+        for (field in ["recursive", "force"]) {
+            final value = validateOptionalNullableBool(params, field, "$.message.params." + field);
+            if (!value.ok) return value;
+        }
+        return success("params:fs/remove");
+    }
+
+    static function validateFsCopyParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["sourcePath", "destinationPath"]) {
+            final value = requiredString(params.keys, params.values, field, "$.message.params." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        final recursive = validateOptionalBool(params, "recursive", "$.message.params.recursive");
+        if (!recursive.ok) return recursive;
+        return success("params:fs/copy");
+    }
+
+    static function validateFsWatchParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["watchId", "path"]) {
+            final value = requiredString(params.keys, params.values, field, "$.message.params." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        return success("params:fs/watch");
+    }
+
+    static function validateModelListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final pagination = validateCursorLimitParams(params, "$.message.params");
+        if (!pagination.ok) return pagination;
+        final includeHidden = validateOptionalNullableBool(params, "includeHidden", "$.message.params.includeHidden");
+        if (!includeHidden.ok) return includeHidden;
+        return success("params:model/list");
+    }
+
+    static function validateExperimentalFeatureListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final pagination = validateCursorLimitParams(params, "$.message.params");
+        if (!pagination.ok) return pagination;
+        final threadId = validateOptionalNullableString(params, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId;
+        return success("params:experimentalFeature/list");
+    }
+
+    static function validatePermissionProfileListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final pagination = validateCursorLimitParams(params, "$.message.params");
+        if (!pagination.ok) return pagination;
+        final cwd = validateOptionalNullableString(params, "cwd", "$.message.params.cwd");
+        if (!cwd.ok) return cwd;
+        return success("params:permissionProfile/list");
+    }
+
+    static function validateFeatureEnablementParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final enablement = requiredObjectField(params.keys, params.values, "enablement", "$.message.params.enablement");
+        if (!enablement.ok) return enablement.toOutcome();
+        return validateBoolMap(enablement, "$.message.params.enablement", "params:experimentalFeature/enablement/set");
+    }
+
+    static function validateMcpServerOauthLoginParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final name = requiredString(params.keys, params.values, "name", "$.message.params.name");
+        if (!name.ok) return name.toOutcome();
+        final scopes = validateOptionalStringArray(params, "scopes", "$.message.params.scopes", true);
+        if (!scopes.ok) return scopes;
+        final timeout = validateOptionalNullableUInt(params, "timeoutSecs", "$.message.params.timeoutSecs");
+        if (!timeout.ok) return timeout;
+        return success("params:mcpServer/oauth/login");
+    }
+
+    static function validateMcpServerStatusListParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final pagination = validateCursorLimitParams(params, "$.message.params");
+        if (!pagination.ok) return pagination;
+        final detail = validateOptionalNullableString(params, "detail", "$.message.params.detail");
+        if (!detail.ok) return detail;
+        final threadId = validateOptionalNullableString(params, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId;
+        return success("params:mcpServerStatus/list");
+    }
+
+    static function validateMcpResourceReadParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        final threadId = validateOptionalNullableString(params, "threadId", "$.message.params.threadId");
+        if (!threadId.ok) return threadId;
+        for (field in ["server", "uri"]) {
+            final value = requiredString(params.keys, params.values, field, "$.message.params." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        return success("params:mcpServer/resource/read");
+    }
+
+    static function validateMcpServerToolCallParams(params:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["threadId", "server", "tool"]) {
+            final value = requiredString(params.keys, params.values, field, "$.message.params." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        final arguments = optionalValue(params.keys, params.values, "arguments");
+        if (arguments.ok && !validJsonValue(arguments.value)) return fail("invalid_json_value", "$.message.params.arguments", "expected JSON value");
+        final meta = optionalValue(params.keys, params.values, "_meta");
+        if (meta.ok && !validJsonValue(meta.value)) return fail("invalid_json_value", "$.message.params._meta", "expected JSON value");
+        return success("params:mcpServer/tool/call");
+    }
+
+    static function validateAppsListResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final data = requiredArray(result.keys, result.values, "data", "$.message.result.data");
+        if (!data.ok) return data.toOutcome();
+        var i = 0;
+        while (i < data.values.length) {
+            final path = "$.message.result.data[" + Std.string(i) + "]";
+            final app = requireObject(data.values[i], path);
+            if (!app.ok) return app.toOutcome();
+            final appResult = validateAppInfo(app, path);
+            if (!appResult.ok) return appResult;
+            i = i + 1;
+        }
+        return validateNextCursor(result, "$.message.result", "response:app/list");
+    }
+
+    static function validateObjectDataResponse(result:ProtocolObjectField, path:String, label:String):AppProtocolParseOutcome {
+        final data = requiredArray(result.keys, result.values, "data", path + ".data");
+        if (!data.ok) return data.toOutcome();
+        return validateObjectArrayEntries(data.values, path + ".data", label);
+    }
+
+    static function validateObjectDataPaginatedResponse(result:ProtocolObjectField, path:String, label:String):AppProtocolParseOutcome {
+        final dataResult = validateObjectDataResponse(result, path, label);
+        if (!dataResult.ok) return dataResult;
+        return validateNextCursor(result, path, label);
+    }
+
+    static function validatePluginMarketplaceResponse(result:ProtocolObjectField, featured:Bool, label:String):AppProtocolParseOutcome {
+        for (field in ["marketplaces", "marketplaceLoadErrors"]) {
+            final items = requiredArray(result.keys, result.values, field, "$.message.result." + field);
+            if (!items.ok) return items.toOutcome();
+            final objectItems = validateObjectArrayEntries(items.values, "$.message.result." + field, label);
+            if (!objectItems.ok) return objectItems;
+        }
+        if (featured) {
+            final featuredPluginIds = requiredArray(result.keys, result.values, "featuredPluginIds", "$.message.result.featuredPluginIds");
+            if (!featuredPluginIds.ok) return featuredPluginIds.toOutcome();
+            final featuredResult = validateStringArrayEntries(featuredPluginIds.values, "$.message.result.featuredPluginIds");
+            if (!featuredResult.ok) return featuredResult;
+        }
+        return success(label);
+    }
+
+    static function validateMarketplaceAddResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["marketplaceName", "installedRoot"]) {
+            final value = requiredString(result.keys, result.values, field, "$.message.result." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        final alreadyAdded = requiredBool(result.keys, result.values, "alreadyAdded", "$.message.result.alreadyAdded");
+        if (!alreadyAdded.ok) return alreadyAdded.toOutcome();
+        return success("response:marketplace/add");
+    }
+
+    static function validateMarketplaceRemoveResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final marketplaceName = requiredString(result.keys, result.values, "marketplaceName", "$.message.result.marketplaceName");
+        if (!marketplaceName.ok) return marketplaceName.toOutcome();
+        final installedRoot = requiredNullableString(result.keys, result.values, "installedRoot", "$.message.result.installedRoot");
+        if (!installedRoot.ok) return installedRoot.toOutcome();
+        return success("response:marketplace/remove");
+    }
+
+    static function validateMarketplaceUpgradeResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["selectedMarketplaces", "upgradedRoots"]) {
+            final entries = requiredArray(result.keys, result.values, field, "$.message.result." + field);
+            if (!entries.ok) return entries.toOutcome();
+            final strings = validateStringArrayEntries(entries.values, "$.message.result." + field);
+            if (!strings.ok) return strings;
+        }
+        final errors = requiredArray(result.keys, result.values, "errors", "$.message.result.errors");
+        if (!errors.ok) return errors.toOutcome();
+        return validateObjectArrayEntries(errors.values, "$.message.result.errors", "response:marketplace/upgrade");
+    }
+
+    static function validateSkillsConfigWriteResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final effectiveEnabled = requiredBool(result.keys, result.values, "effectiveEnabled", "$.message.result.effectiveEnabled");
+        if (!effectiveEnabled.ok) return effectiveEnabled.toOutcome();
+        return success("response:skills/config/write");
+    }
+
+    static function validateRequiredObjectResponse(result:ProtocolObjectField, field:String, path:String, label:String):AppProtocolParseOutcome {
+        final object = requiredObjectField(result.keys, result.values, field, path);
+        if (!object.ok) return object.toOutcome();
+        return success(label);
+    }
+
+    static function validatePluginSkillReadResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final contents = requiredNullableString(result.keys, result.values, "contents", "$.message.result.contents");
+        if (!contents.ok) return contents.toOutcome();
+        return success("response:plugin/skill/read");
+    }
+
+    static function validatePluginInstallResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final authPolicy = requiredValue(result.keys, result.values, "authPolicy", "$.message.result.authPolicy");
+        if (!authPolicy.ok) return authPolicy.toOutcome();
+        final apps = requiredArray(result.keys, result.values, "appsNeedingAuth", "$.message.result.appsNeedingAuth");
+        if (!apps.ok) return apps.toOutcome();
+        return validateObjectArrayEntries(apps.values, "$.message.result.appsNeedingAuth", "response:plugin/install");
+    }
+
+    static function validatePluginShareSaveResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["remotePluginId", "shareUrl"]) {
+            final value = requiredString(result.keys, result.values, field, "$.message.result." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        return success("response:plugin/share/save");
+    }
+
+    static function validatePluginShareUpdateTargetsResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final principals = requiredArray(result.keys, result.values, "principals", "$.message.result.principals");
+        if (!principals.ok) return principals.toOutcome();
+        final principalObjects = validateObjectArrayEntries(principals.values, "$.message.result.principals", "response:plugin/share/updateTargets");
+        if (!principalObjects.ok) return principalObjects;
+        final discoverability = requiredString(result.keys, result.values, "discoverability", "$.message.result.discoverability");
+        if (!discoverability.ok) return discoverability.toOutcome();
+        return success("response:plugin/share/updateTargets");
+    }
+
+    static function validatePluginShareCheckoutResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["remotePluginId", "pluginId", "pluginName", "pluginPath", "marketplaceName", "marketplacePath"]) {
+            final value = requiredString(result.keys, result.values, field, "$.message.result." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        final remoteVersion = requiredNullableString(result.keys, result.values, "remoteVersion", "$.message.result.remoteVersion");
+        if (!remoteVersion.ok) return remoteVersion.toOutcome();
+        return success("response:plugin/share/checkout");
+    }
+
+    static function validateFsReadFileResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final dataBase64 = requiredString(result.keys, result.values, "dataBase64", "$.message.result.dataBase64");
+        if (!dataBase64.ok) return dataBase64.toOutcome();
+        return success("response:fs/readFile");
+    }
+
+    static function validateFsGetMetadataResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["isDirectory", "isFile", "isSymlink"]) {
+            final value = requiredBool(result.keys, result.values, field, "$.message.result." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        for (field in ["createdAtMs", "modifiedAtMs"]) {
+            final value = requiredNumber(result.keys, result.values, field, "$.message.result." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        return success("response:fs/getMetadata");
+    }
+
+    static function validateFsReadDirectoryResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final entries = requiredArray(result.keys, result.values, "entries", "$.message.result.entries");
+        if (!entries.ok) return entries.toOutcome();
+        return validateObjectArrayEntries(entries.values, "$.message.result.entries", "response:fs/readDirectory");
+    }
+
+    static function validateFsWatchResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final path = requiredString(result.keys, result.values, "path", "$.message.result.path");
+        if (!path.ok) return path.toOutcome();
+        return success("response:fs/watch");
+    }
+
+    static function validateModelProviderCapabilitiesResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        for (field in ["namespaceTools", "imageGeneration", "webSearch"]) {
+            final value = requiredBool(result.keys, result.values, field, "$.message.result." + field);
+            if (!value.ok) return value.toOutcome();
+        }
+        return success("response:modelProvider/capabilities/read");
+    }
+
+    static function validateFeatureEnablementResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final enablement = requiredObjectField(result.keys, result.values, "enablement", "$.message.result.enablement");
+        if (!enablement.ok) return enablement.toOutcome();
+        return validateBoolMap(enablement, "$.message.result.enablement", "response:experimentalFeature/enablement/set");
+    }
+
+    static function validateMcpServerOauthLoginResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final authorizationUrl = requiredString(result.keys, result.values, "authorizationUrl", "$.message.result.authorizationUrl");
+        if (!authorizationUrl.ok) return authorizationUrl.toOutcome();
+        return success("response:mcpServer/oauth/login");
+    }
+
+    static function validateArrayOnlyResponse(result:ProtocolObjectField, field:String, path:String, label:String):AppProtocolParseOutcome {
+        final array = requiredArray(result.keys, result.values, field, path);
+        if (!array.ok) return array.toOutcome();
+        return success(label);
+    }
+
+    static function validateMcpServerToolCallResponse(result:ProtocolObjectField):AppProtocolParseOutcome {
+        final content = requiredArray(result.keys, result.values, "content", "$.message.result.content");
+        if (!content.ok) return content.toOutcome();
+        final structured = optionalValue(result.keys, result.values, "structuredContent");
+        if (structured.ok && !validJsonValue(structured.value)) return fail("invalid_json_value", "$.message.result.structuredContent", "expected JSON value");
+        final meta = optionalValue(result.keys, result.values, "_meta");
+        if (meta.ok && !validJsonValue(meta.value)) return fail("invalid_json_value", "$.message.result._meta", "expected JSON value");
+        final isError = validateOptionalBool(result, "isError", "$.message.result.isError");
+        if (!isError.ok) return isError;
+        return success("response:mcpServer/tool/call");
     }
 
     static function validateServerRequestParams(method:String, params:ProtocolObjectField):AppProtocolParseOutcome {
@@ -2959,6 +3522,61 @@ class AppProtocol {
             i = i + 1;
         }
         return success("string-array-entries");
+    }
+
+    static function validateRequiredStringArrayField(object:ProtocolObjectField, name:String, path:String, label:String):AppProtocolParseOutcome {
+        final array = requiredArray(object.keys, object.values, name, path);
+        if (!array.ok) return array.toOutcome();
+        final strings = validateStringArrayEntries(array.values, path);
+        if (!strings.ok) return strings;
+        return success(label);
+    }
+
+    static function validateSingleStringParams(params:ProtocolObjectField, field:String, label:String):AppProtocolParseOutcome {
+        final value = requiredString(params.keys, params.values, field, "$.message.params." + field);
+        if (!value.ok) return value.toOutcome();
+        return success(label);
+    }
+
+    static function validateCursorLimitParams(params:ProtocolObjectField, path:String):AppProtocolParseOutcome {
+        final cursor = validateOptionalNullableString(params, "cursor", path + ".cursor");
+        if (!cursor.ok) return cursor;
+        final limit = validateOptionalNullableUInt(params, "limit", path + ".limit");
+        if (!limit.ok) return limit;
+        return success("cursor-limit-params");
+    }
+
+    static function validateNextCursor(result:ProtocolObjectField, path:String, label:String):AppProtocolParseOutcome {
+        final nextCursor = validateOptionalNullableString(result, "nextCursor", path + ".nextCursor");
+        if (!nextCursor.ok) return nextCursor;
+        return success(label);
+    }
+
+    static function validateObjectArrayEntries(entries:Array<Value>, path:String, label:String):AppProtocolParseOutcome {
+        var i = 0;
+        while (i < entries.length) {
+            final entry = requireObject(entries[i], path + "[" + Std.string(i) + "]");
+            if (!entry.ok) return entry.toOutcome();
+            i = i + 1;
+        }
+        return success(label);
+    }
+
+    static function validateBoolMap(object:ProtocolObjectField, path:String, label:String):AppProtocolParseOutcome {
+        var i = 0;
+        while (i < object.values.length) {
+            switch object.values[i] {
+                case JBool(_):
+                case _:
+                    return fail("expected_bool", path + "." + object.keys[i], "expected JSON boolean");
+            }
+            i = i + 1;
+        }
+        return success(label);
+    }
+
+    static function validJsonValue(_value:Value):Bool {
+        return true;
     }
 
     static function validateRequiredNonEmptyStringArray(values:Array<Value>, path:String):AppProtocolParseOutcome {

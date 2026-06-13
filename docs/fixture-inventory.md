@@ -47,7 +47,7 @@ Owner: upstream Codex / `../codex`, pinned by `reference/upstream-codex.pin.json
 | Core SSE/mock response harness | `../codex/codex-rs/core/tests/common/responses.rs`; local fixture `fixtures/upstream/mock-model-basic-one-turn.sse` | Rust test helpers plus credential-free SSE fixture | M3 active | Event names, mock stream structure, request-body invariants |
 | Core test harness | `../codex/codex-rs/core/tests/common/test_codex.rs` | Rust test helpers | M3 secondary | Session setup and headless runtime expectations |
 | Core snapshot files | `../codex/codex-rs/core/tests/suite/snapshots` | 36 `.snap` files | M3 secondary | Context compaction, pending input, model-visible layout, realtime request shapes |
-| TUI story fixture | `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl` | 1 JSONL file | later | TUI replay only; not part of upstream-first headless core |
+| TUI story fixture | `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl` | 1 JSONL file | later | Full-Codex/TUI parity evidence after the app-server/runtime foundation is strong enough |
 | Tool JSON schema policy fixtures | `../codex/codex-rs/tools/tests/fixtures/json_schema_policy` | 6 JSON files | M4 secondary | Tool schema filtering/truncation policy examples |
 | Config schema | `../codex/codex-rs/core/config.schema.json` plus `core/src/config/schema.rs` | JSON schema plus generator/source | M2/M4 secondary | Config DTO subset and doctor/config validation |
 

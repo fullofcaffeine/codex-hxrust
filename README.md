@@ -1,6 +1,6 @@
 # codex-hxrust
 
-`codex-hxrust` is an experiment to port the headless/core parts of OpenAI Codex to pure Haxe that emits Rust through [`haxe.rust`](../haxe.rust).
+`codex-hxrust` is an experiment to port all of OpenAI Codex to pure Haxe that emits Rust through [`haxe.rust`](../haxe.rust), including the app-server, runtime, tools, state, and TUI surfaces.
 
 The strategy is upstream-first:
 
@@ -8,6 +8,8 @@ The strategy is upstream-first:
 2. Prove Haxe-authored, Rust-emitted parity in small gated slices.
 3. Add Cafex/Cafetera compatibility later as an adapter/conformance layer.
 4. Treat haxe.rust limitations found during the port as upstreamable compiler/runtime work.
+
+Headless/core slices are the first proving ground because they are easier to gate without credentials or terminal interactivity. They are not the final scope. The end goal is whole-Codex parity, including the interactive TUI and live runtime behavior, with TUI work sequenced after enough protocol, state, tool, and runtime foundations exist to support it cleanly.
 
 When choosing new work, keep Beads prioritized so mainstream/raw Codex parity is ready first. Cafex tasks should sit later in the queue unless the user explicitly asks for Cafex compatibility or the required upstream-shaped core slice already exists.
 
