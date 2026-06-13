@@ -118,7 +118,7 @@ windowsSandbox/readiness
 windowsSandbox/setupStart
 ```
 
-This covers the first credential-free headless/runtime path plus thread lifecycle/navigation, auth, account, config, external-agent import, command/process, and Windows sandbox request families that have already been admitted through fixture-backed Haxe and generated Rust gates.
+This covers the first credential-free headless/runtime path plus thread lifecycle/navigation, auth, account, config, external-agent import, command/process, Windows sandbox, environment, and collaboration-mode request families that have already been admitted through fixture-backed Haxe and generated Rust gates.
 
 The local subset also admits 8 upstream client-directed server request families:
 
@@ -137,7 +137,7 @@ The local subset also validates selected notifications needed by the current hea
 
 ## Upstream Gap Summary
 
-Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 93-method selection, 19 quoted request wires remain outside the local subset.
+Upstream currently exposes 112 quoted client request wire methods in `client_request_definitions!`. After the local 95-method selection, 17 quoted request wires remain outside the local subset.
 
 The remaining requests fall into these groups:
 
@@ -146,7 +146,8 @@ The remaining requests fall into these groups:
 | Thread navigation and lifecycle | `thread/resume`, `thread/fork`, `thread/archive`, `thread/unarchive`, `thread/unsubscribe`, `thread/list`, `thread/loaded/list` | Admitted in HXCX-3.63 |
 | Thread state and history mutation | `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/name/set`, `thread/goal/set`, `thread/goal/get`, `thread/goal/clear`, `thread/metadata/update`, `thread/settings/update`, `thread/memoryMode/set`, `thread/compact/start`, `thread/shellCommand`, `thread/approveGuardianDeniedAction`, `thread/backgroundTerminals/clean`, `thread/rollback`, `thread/inject_items`, `memory/reset` | Admitted in HXCX-3.64 |
 | Turn and review continuation | `turn/steer`, `review/start`, `thread/turns/list`, `thread/turns/items/list` | Admitted in HXCX-3.65 |
-| Models and environment | `environment/add`, `collaborationMode/list`; `mock/experimentalMethod` remains test-only unsupported production behavior | Selected/sequenced by HXCX-3.68 |
+| Models and environment | `environment/add`, `collaborationMode/list` | Admitted in HXCX-3.69 |
+| Test-only experimental gate | `mock/experimentalMethod` | Unsupported production behavior |
 | Apps, skills, hooks, marketplace, plugins | selected in HXCX-3.67 | Done |
 | Filesystem remote surface | selected in HXCX-3.67 | Done |
 | MCP and config reload | selected in HXCX-3.67 | Done |
@@ -197,13 +198,14 @@ Known exceptions:
 - `thread/increment_elicitation`, `thread/decrement_elicitation`, `thread/settings/update`, `thread/memoryMode/set`, `memory/reset`, and `thread/backgroundTerminals/clean` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
 - `thread/turns/list` and `thread/turns/items/list` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
 - `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, and `fuzzyFileSearch/sessionStop` are Rust DTO/protocol mappings without standalone request/response schema files; their notifications are already tracked through top-level schema files.
-- `environment/add`, `collaborationMode/list`, `thread/search`, realtime request controls, and remote-control request controls are selected by HXCX-3.68; implementation beads should use upstream Rust DTO/protocol declarations and bundled schema exports where standalone request/response schema files are absent.
+- `environment/add` and `collaborationMode/list` are selected from upstream Rust DTO/protocol mappings because standalone request/response schema files are not exported in the pinned schema tree.
+- `thread/search`, realtime request controls, and remote-control request controls are selected by HXCX-3.68; implementation beads should use upstream Rust DTO/protocol declarations and bundled schema exports where standalone request/response schema files are absent.
 - Client-directed server request schemas are emitted as top-level schema files under `schema/json/` rather than `schema/json/v2`; the selected command/file/permission approval, tool user input, MCP elicitation, dynamic tool call, ChatGPT auth refresh, and attestation schemas are fingerprinted from that location.
 - Deprecated v1 request surfaces should remain deferred until a deliberate compatibility slice selects them.
 
 ## Sequencing Decision
 
-The app/plugin/filesystem/MCP/model client request families have moved into the selected subset under HXCX-3.67. HXCX-3.68 selects the remaining environment/collaboration, thread search, fuzzy-session request, realtime-control, remote-control, and deprecated-v1 compatibility slices in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md). After those protocol/runtime slices, `codex-hxrust-6cs` sequences upstream TUI and live-runtime parity for the full Codex target, including terminal UI work.
+The app/plugin/filesystem/MCP/model client request families have moved into the selected subset under HXCX-3.67, and environment/collaboration protocol gates moved in under HXCX-3.69. HXCX-3.68 selects the remaining thread search, fuzzy-session request, realtime-control, remote-control, and deprecated-v1 compatibility slices in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md). After those protocol/runtime slices, `codex-hxrust-6cs` sequences upstream TUI and live-runtime parity for the full Codex target, including terminal UI work.
 
 Rationale:
 

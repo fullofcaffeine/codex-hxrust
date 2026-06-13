@@ -65,6 +65,8 @@ Included client requests:
 - `config/value/write`
 - `config/batchWrite`
 - `configRequirements/read`
+- `environment/add`
+- `collaborationMode/list`
 - `app/list`
 - `skills/list`
 - `skills/extraRoots/set`
@@ -413,6 +415,8 @@ Client-directed server requests use upstream's `ServerRequest`/`ServerResponse` 
 
 `externalAgentConfig/import` imports selected external agent configuration into Codex. The selected subset validates required `migrationItems` using the same migration item/detail shape as `externalAgentConfig/detect` and validates the empty object success response. The fixture is protocol-only and does not import or write real configuration.
 
+`environment/add` and `collaborationMode/list` admit the upstream experimental environment and collaboration-mode request families. The selected subset validates non-empty `environmentId` and `execServerUrl`, empty environment-add success responses, empty collaboration-mode list params, collaboration-mode `data` containers, non-empty mask names, nullable `mode`/`model`/`reasoning_effort`, `mode` enum values, and non-empty `reasoning_effort` when present. It does not open remote execution transports or mutate live environment registries in the fixture path.
+
 `app/list`, `skills/list`, `skills/extraRoots/set`, `skills/config/write`, and `hooks/list` admit the upstream app, skill, and hook request families. The selected subset validates pagination where present, workspace/root arrays, boolean reload/config flags, empty success responses, and list `data` containers. Nested app metadata reuses the same `AppInfo` validator as `app/list/updated`; skill and hook entries remain object-shaped at this layer.
 
 `marketplace/*`, `plugin/*`, and `plugin/share/*` admit upstream plugin and marketplace management request families. The selected subset validates required marketplace/plugin identifiers, optional nullable marketplace paths/names, share target arrays, install/uninstall empty responses, plugin read object containers, auth-policy presence, and share checkout/save/update/list/delete response containers. Deep plugin DTO fields are intentionally deferred to focused nested DTO beads.
@@ -423,7 +427,7 @@ Client-directed server requests use upstream's `ServerRequest`/`ServerResponse` 
 
 `mcpServer/oauth/login`, `config/mcpServer/reload`, `mcpServerStatus/list`, `mcpServer/resource/read`, and `mcpServer/tool/call` admit upstream MCP request families at the app-server protocol boundary. The selected subset validates server/tool/resource identifiers, optional scopes/timeouts/detail/thread ids, OAuth authorization URL responses, empty reload responses, status pages, resource content arrays, and tool-call content/meta/error containers. Real MCP transport and execution remain separate tool/runtime work.
 
-`environment/add`, `collaborationMode/list`, `thread/search`, fuzzy search session requests, realtime client controls, remote-control request controls, and deprecated v1 compatibility are selected and sequenced by HXCX-3.68 in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md), but not yet implemented in this protocol subset. `mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
+`thread/search`, fuzzy search session requests, realtime client controls, remote-control request controls, and deprecated v1 compatibility are selected and sequenced by HXCX-3.68 in [remaining-app-server-surfaces.md](remaining-app-server-surfaces.md), but not yet implemented in this protocol subset. `mock/experimentalMethod` is an upstream test-only experimental gate and is unsupported for production behavior. Follow-up Beads keep the remaining upstream compatibility and full TUI/live-runtime sequencing separate from Cafex adapter work.
 
 `externalAgentConfig/import/completed` reports completion of an external agent config import. The current upstream schema is an empty object, so the selected subset validates object-shaped `params` with no required fields.
 

@@ -71,6 +71,8 @@ class AppProtocolHarness {
         assertContains(fingerprintJson, "config/value/write");
         assertContains(fingerprintJson, "config/batchWrite");
         assertContains(fingerprintJson, "configRequirements/read");
+        assertContains(fingerprintJson, "environment/add");
+        assertContains(fingerprintJson, "collaborationMode/list");
         assertContains(fingerprintJson, "app/list");
         assertContains(fingerprintJson, "skills/list");
         assertContains(fingerprintJson, "skills/extraRoots/set");
@@ -178,7 +180,7 @@ class AppProtocolHarness {
     static function roundTripsFixture():Void {
         final root = expectParse(CodexJson.parse(File.getContent("fixtures/hxrust/app-protocol-roundtrip.v1.json")));
         final items = fixtureItems(root);
-        assertEquals("264", Std.string(items.length));
+        assertEquals("268", Std.string(items.length));
 
         var requests = 0;
         var responses = 0;
@@ -203,8 +205,8 @@ class AppProtocolHarness {
             if (parsed.kind == "error") errors = errors + 1;
         }
 
-        assertEquals("93", Std.string(requests));
-        assertEquals("93", Std.string(responses));
+        assertEquals("95", Std.string(requests));
+        assertEquals("95", Std.string(responses));
         assertEquals("8", Std.string(serverRequests));
         assertEquals("8", Std.string(serverResponses));
         assertEquals("61", Std.string(notifications));
@@ -971,6 +973,21 @@ class AppProtocolHarness {
         assertFalse(missingMcpToolServer.ok, "MCP tool calls require server");
         assertEquals("missing_field", missingMcpToolServer.errorCode);
         assertEquals("$.message.params.server", missingMcpToolServer.errorPath);
+
+        final missingEnvironmentId = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"environment-add-missing-id\",\"kind\":\"request\",\"method\":\"environment/add\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"environment-add-1\",\"method\":\"environment/add\",\"params\":{\"execServerUrl\":\"ws://127.0.0.1:8765\"}}}")));
+        assertFalse(missingEnvironmentId.ok, "environment/add requires environmentId");
+        assertEquals("missing_field", missingEnvironmentId.errorCode);
+        assertEquals("$.message.params.environmentId", missingEnvironmentId.errorPath);
+
+        final invalidCollaborationMode = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"collaboration-mode-invalid-mode\",\"kind\":\"response\",\"method\":\"collaborationMode/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"collaboration-mode-list-1\",\"result\":{\"data\":[{\"name\":\"Fixture\",\"mode\":\"review\",\"model\":null,\"reasoning_effort\":null}]}}}")));
+        assertFalse(invalidCollaborationMode.ok, "collaboration mode masks must use upstream mode values");
+        assertEquals("invalid_collaboration_mode", invalidCollaborationMode.errorCode);
+        assertEquals("$.message.result.data[0].mode", invalidCollaborationMode.errorPath);
+
+        final invalidCollaborationEffort = AppProtocol.parseFixtureItem(expectParse(CodexJson.parse("{\"id\":\"collaboration-mode-invalid-effort\",\"kind\":\"response\",\"method\":\"collaborationMode/list\",\"message\":{\"jsonrpc\":\"2.0\",\"id\":\"collaboration-mode-list-1\",\"result\":{\"data\":[{\"name\":\"Fixture\",\"mode\":\"plan\",\"model\":null,\"reasoning_effort\":\"\"}]}}}")));
+        assertFalse(invalidCollaborationEffort.ok, "collaboration mode reasoning_effort must be non-empty when present");
+        assertEquals("empty_string", invalidCollaborationEffort.errorCode);
+        assertEquals("$.message.result.data[0].reasoning_effort", invalidCollaborationEffort.errorPath);
     }
 
     static function fixtureItems(root:Value):Array<Value> {

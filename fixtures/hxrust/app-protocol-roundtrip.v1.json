@@ -3856,6 +3856,30 @@
       "message": {"jsonrpc": "2.0", "id": "mcp-tool-1", "result": {"content": [], "structuredContent": null, "isError": false, "_meta": null}}
     },
     {
+      "id": "environment-add-request",
+      "kind": "request",
+      "method": "environment/add",
+      "message": {"jsonrpc": "2.0", "id": "environment-add-1", "method": "environment/add", "params": {"environmentId": "remote-a", "execServerUrl": "ws://127.0.0.1:8765"}}
+    },
+    {
+      "id": "environment-add-response",
+      "kind": "response",
+      "method": "environment/add",
+      "message": {"jsonrpc": "2.0", "id": "environment-add-1", "result": {}}
+    },
+    {
+      "id": "collaboration-mode-list-request",
+      "kind": "request",
+      "method": "collaborationMode/list",
+      "message": {"jsonrpc": "2.0", "id": "collaboration-mode-list-1", "method": "collaborationMode/list", "params": {}}
+    },
+    {
+      "id": "collaboration-mode-list-response",
+      "kind": "response",
+      "method": "collaborationMode/list",
+      "message": {"jsonrpc": "2.0", "id": "collaboration-mode-list-1", "result": {"data": [{"name": "Default", "mode": "default", "model": null, "reasoning_effort": null}, {"name": "Plan", "mode": "plan", "model": null, "reasoning_effort": "medium"}]}}
+    },
+    {
       "id": "jsonrpc-error",
       "kind": "error",
       "message": {

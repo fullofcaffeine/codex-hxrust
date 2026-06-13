@@ -332,8 +332,8 @@ jq -n \
       },
       {
         id: "environment-collaboration-schemas",
-        status: "sequenced_follow_up",
-        reason: "Upstream exports environment/add and collaborationMode/list from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. They are sequenced with the remaining upstream compatibility and TUI/live-runtime planning beads rather than admitted in HXCX-3.67."
+        status: "tracked_from_rust_source",
+        reason: "Upstream exports environment/add and collaborationMode/list from Rust DTO/protocol source, but the pinned schema export does not currently emit standalone v2 JSON schema files for those request/response surfaces. The local subset validates these DTO contracts from upstream Rust source under HXCX-3.69."
       }
     ]
   }' > "$ACTUAL"

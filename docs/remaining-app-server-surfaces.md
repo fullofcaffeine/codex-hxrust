@@ -8,7 +8,7 @@ The guiding rule is unchanged: raw upstream Codex comes first, Cafex/Cafetera ad
 
 | Surface | Upstream methods | Decision | Follow-up |
 | --- | --- | --- | --- |
-| Small experimental protocol gates | `environment/add`, `collaborationMode/list` | Select now. These are first-class upstream protocol variants and support remote execution environment selection plus collaboration-mode UI state. Use Rust DTO/protocol source and bundled schema exports where standalone JSON files are absent. | New implementation bead |
+| Small experimental protocol gates | `environment/add`, `collaborationMode/list` | Admitted in HXCX-3.69. These are first-class upstream protocol variants and support remote execution environment selection plus collaboration-mode UI state. The local subset uses Rust DTO/protocol source because standalone JSON files are absent. | `codex-hxrust-49i` |
 | Thread search | `thread/search` | Select now. This is mainstream app navigation/search parity and should precede TUI/live-runtime sequencing. | New implementation bead |
 | Fuzzy search session API | `fuzzyFileSearch/sessionStart`, `fuzzyFileSearch/sessionUpdate`, `fuzzyFileSearch/sessionStop` | Select now. Notifications are already admitted; request/response parity should join them before TUI search work. Use Rust DTO/protocol source because standalone request schemas are not exported. | New implementation bead |
 | Realtime client controls | `thread/realtime/start`, `thread/realtime/appendAudio`, `thread/realtime/appendText`, `thread/realtime/stop`, `thread/realtime/listVoices` | Select, but after search/fuzzy. These are required for full TUI voice/realtime parity. Start with protocol fixtures and deterministic runtime fakes before live audio/network behavior. | New implementation bead |
@@ -54,7 +54,7 @@ Each selected implementation bead should therefore:
 
 The intended implementation order is:
 
-1. `environment/add` and `collaborationMode/list`
+1. `environment/add` and `collaborationMode/list` - admitted in HXCX-3.69
 2. `thread/search`
 3. fuzzy search session requests
 4. realtime client controls
