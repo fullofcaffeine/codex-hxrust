@@ -18,6 +18,7 @@ Profile policy for the scaffold:
 | `model-request-envelope.hxml` | Compile the HXCX-4.46 raw model request envelope and response routing harness through portable haxe.rust. |
 | `model-stream-route.hxml` | Compile the HXCX-4.47 raw model stream event and error routing harness through portable haxe.rust. |
 | `model-stream-item-reducer.hxml` | Compile the HXCX-4.48 raw stream item reducer and assistant output routing harness through portable haxe.rust. |
+| `async-runtime-contract.hxml` | Compile the HXCX-4.49 runtime-neutral async task/stream/cancel/backpressure contract harness through portable haxe.rust. |
 | `app-protocol.hxml` | Compile the G2.4 app-server protocol subset harness through portable haxe.rust. |
 | `mock-model-stream.hxml` | Compile the HXCX-3.1/HXCX-3.6 mock model stream parser, fixture provider, one-turn state machine, cancellation, and transcript/state store harness through portable haxe.rust. |
 | `headless-jsonl-adapter.hxml` | Compile the HXCX-3.4 command JSONL app-server/debug adapter harness through portable haxe.rust. |

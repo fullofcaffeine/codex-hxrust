@@ -26,14 +26,14 @@ harness/check-haxe-rust-pressure-gaps.sh
 
 | Metric | Count |
 | --- | ---: |
-| Total pressure gaps | 20 |
+| Total pressure gaps | 21 |
 | Resolved upstream | 14 |
-| Open upstream | 6 |
+| Open upstream | 7 |
 | Local workaround | 0 |
 | High severity | 7 |
-| Medium severity | 13 |
+| Medium severity | 14 |
 | Raw Rust escape matches in current app/test Haxe source | 0 |
-| Haxe source/test files scanned | 404 |
+| Haxe source/test files scanned | 419 |
 
 Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAllowRaw`, `@:rust...`, or `untyped` escapes are present under `src` or `test`.
 
@@ -43,7 +43,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | --- | ---: | --- |
 | Build/profile/tooling | 2 | Dev haxelib std ownership and Cargo failure propagation blocked trustworthy profile gates. |
 | Protocol/JSON/DTO | 3 | Nullable scalar, generic enum payload, and enum reuse issues surfaced in protocol IDs and JSON helpers. |
-| Runtime/model/session | 9 | Try/catch tail returns, interface null behavior, nullable class-array reads, non-copy field assign-op, non-copy local reuse, static final path lowering, Reflect.compare lowering, and optional primitive default lowering surfaced in runtime/TUI/model-catalog/planning/request-envelope/stream-route/stream-item-reducer work. |
+| Runtime/model/session | 10 | Try/catch tail returns, interface null behavior, nullable class-array reads, non-copy field assign-op, non-copy local reuse, static final path lowering, Reflect.compare lowering, optional primitive default lowering, and generic helper bound propagation surfaced in runtime/TUI/model-catalog/planning/request-envelope/stream-route/stream-item-reducer/async-contract work. |
 | Native metal/std boundary | 4 | Native SQLite persistence pulled in std List/sys.io surfaces and enum payload equality that needed product-neutral runtime support instead of raw Rust expressions. |
 | Cafex adapter | 2 | Path.directory and String.lastIndexOf are now resolved upstream. |
 
@@ -65,6 +65,7 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 | Static final class field access path | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-3f0g`; local token-usage delivery harness uses a helper function while static getter path lowering is fixed generically. |
 | Reflect.compare lowering | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-fz20`; local model catalog sort uses direct typed comparison while Reflect.compare lowers generically. |
 | Optional primitive constructor default lowering | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-3oju`; local model catalog DTO uses an explicit constructor argument while optional default unwrapping lowers generically. |
+| Generic helper bound propagation | `open_upstream` | medium | runtime/model/session | Filed as haxe.rust `haxe.rust-akfm`; local async contract uses a typed enum outcome plus direct constructors and concrete fixture summaries while helper bound propagation is fixed generically. |
 | `haxe.ds.List.iterator` raw metal fallback | `resolved_upstream` | medium | native metal/std boundary | Resolved by haxe.rust `f1b122b5` with a typed `ListNative` helper and `list_minimal` snapshot. |
 | `sys.io.File` raw metal fallback | `resolved_upstream` | medium | native metal/std boundary | Resolved by haxe.rust `f1b122b5` with a typed `file_native` helper and `sys_io` snapshot. |
 | `sys.io.FileInput`/`FileOutput` raw metal fallback | `resolved_upstream` | medium | native metal/std boundary | Resolved by haxe.rust `f1b122b5` with typed handle operations and `sys_io` snapshot. |
@@ -76,11 +77,11 @@ Raw Rust pressure is currently low: no `__rust__`, `rust.metal.Code`, `@:rustAll
 
 The pressure test is encouraging but not clean enough for broad replacement:
 
-- haxe.rust fixes have been generic and upstreamable so far; `haxe.rust-362`, `haxe.rust-ojj`, `haxe.rust-fzl`, `haxe.rust-3f0g`, `haxe.rust-fz20`, and `haxe.rust-3oju` are the current open generic regressions from live-runtime/TUI/model-catalog/planning/request-envelope/stream-route/stream-item-reducer work.
+- haxe.rust fixes have been generic and upstreamable so far; `haxe.rust-362`, `haxe.rust-ojj`, `haxe.rust-fzl`, `haxe.rust-3f0g`, `haxe.rust-fz20`, `haxe.rust-3oju`, and `haxe.rust-akfm` are the current open generic regressions from live-runtime/TUI/model-catalog/planning/request-envelope/stream-route/stream-item-reducer/async-contract work.
 - The current codexhx source avoids raw Rust escape hatches.
-- The native SQLite persistence, state-adapter, persisted read-view, thread/read turn-projection, turns-page, active-turn merge, turn-items unsupported-runtime, token-usage owner, token-usage replay payload, token-usage replay delivery, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executor, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, and model stream item reducer boundaries compile through haxe.rust after generic std/raw-boundary fixes and the `HxRef<T>` enum-payload equality fix landed upstream.
+- The native SQLite persistence, state-adapter, persisted read-view, thread/read turn-projection, turns-page, active-turn merge, turn-items unsupported-runtime, token-usage owner, token-usage replay payload, token-usage replay delivery, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executor, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, model stream item reducer, and async runtime contract boundaries compile through haxe.rust after generic std/raw-boundary fixes and the `HxRef<T>` enum-payload equality fix landed upstream.
 - Nullable interface values now have a generic upstream fix and passing snapshot.
 - String.lastIndexOf now has a generic upstream fix and passing snapshot.
 - haxe.io.Path.directory now has a generic upstream fix and passing snapshot.
 
-Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter/thread-read projection, pagination, active-turn merge, unsupported turn-items runtime, token-usage replay, resume-goal snapshot, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executor, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, and model stream item reducer pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()`, non-copy field assign-op, non-copy local reuse, static final path, Reflect.compare, and optional primitive default regressions, unsupported Cafex seam, licensing, and broader parity work.
+Feed `HXCX-7.3` with this stance: haxe.rust is viable for the current helper/headless/selected-adapter/thread-read projection, pagination, active-turn merge, unsupported turn-items runtime, token-usage replay, resume-goal snapshot, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executor, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, model stream item reducer, and async runtime contract pressure slices, but production readiness still depends on live runtime, the open nullable `Array.shift()`, non-copy field assign-op, non-copy local reuse, static final path, Reflect.compare, optional primitive default, and generic helper bound-propagation regressions, unsupported Cafex seam, licensing, and broader parity work.

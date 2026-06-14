@@ -591,7 +591,7 @@ Before live provider transport work, define the Haxe-facing async contract witho
 - map the same contract to Tokio only behind haxe.rust metal/native facades or generic haxe.rust runtime support;
 - defer optional `@:await` or macro sugar until it lowers to the same backend-neutral contract.
 
-Status: HXCX-4.49 is tracked by `codex-hxrust-1ss` and documented in `docs/async-runtime-contract.md`.
+Status: HXCX-4.49 now owns `fixtures/hxrust/async-runtime-contract.v1.json` and validates the slice through `harness/check-async-runtime-contract.sh`. The contract lives under `codexhx.runtime.asyncruntime` and is documented in `docs/async-runtime-contract.md`. This is backend-neutral contract evidence only, not live Tokio task ownership, HTTP/WebSocket transport, timers, tool execution, realtime/audio behavior, or Cafex behavior.
 
 ### HXCX-4.50+: Credentialed Runtime, Realtime, And Interactive TUI
 

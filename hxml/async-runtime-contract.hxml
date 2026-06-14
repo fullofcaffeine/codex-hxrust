@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/async-runtime-contract
+-D rust_crate=codex_hxrust_async_runtime_contract
+-D rust_cargo_subcommand=check
+-main AsyncRuntimeContractHarness

@@ -6,7 +6,7 @@
   "recommendation": {
     "mode": "conditional_go_for_helper_sidecar_and_selected_adapter_slices",
     "broadReplacement": "no_go",
-    "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, runtime/TUI persistence-boundary, native SQLite persistence/state-adapter/read-view/thread-read projection/pagination/active-turn-merge/turn-items unsupported-runtime/token-usage replay/goal-continuation admission/goal-runtime restore/active-turn and budget-limit goal steering/active-goal and idle-goal progress accounting/turn-start accounting/turn finalization/turn-error active-goal stop/goal token-usage contribution/tool-finish goal-progress admission/goal-tool contributor visibility/get_goal/create_goal/update_goal executors and goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, and model stream item reducer pressure slices, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
+    "summary": "haxe.rust is viable for the current codexhx helper, credential-free headless, runtime/TUI persistence-boundary, native SQLite persistence/state-adapter/read-view/thread-read projection/pagination/active-turn-merge/turn-items unsupported-runtime/token-usage replay/goal-continuation admission/goal-runtime restore/active-turn and budget-limit goal steering/active-goal and idle-goal progress accounting/turn-start accounting/turn finalization/turn-error active-goal stop/goal token-usage contribution/tool-finish goal-progress admission/goal-tool contributor visibility/get_goal/create_goal/update_goal executors and goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, model stream item reducer, and async runtime contract pressure slices, and selected fixture-backed adapter pressure slices, but it is not production-ready for broad Codex/Cafex replacement yet.",
       "requiredBeforeBroadReplacement": [
       "Broaden haxe.rust parity evidence beyond selected helper/headless/adapter pressure fixtures.",
       "Resolve haxe.rust-362 nullable Array.shift class-return lowering or carry an explicit release-blocking compiler risk.",
@@ -15,6 +15,7 @@
       "Resolve haxe.rust-3f0g static final class field access path lowering or carry an explicit release-blocking compiler risk.",
       "Resolve haxe.rust-fz20 Reflect.compare lowering or carry an explicit release-blocking compiler risk.",
       "Resolve haxe.rust-3oju optional primitive constructor default lowering or carry an explicit release-blocking compiler risk.",
+      "Resolve haxe.rust-akfm generic helper bound propagation or carry an explicit release-blocking compiler risk.",
       "Complete license/distribution review for haxe.rust GPL-3.0 with Codex/Cafex Apache-2.0 artifacts.",
       "Reduce or explicitly native-own the 4 unsupported Cafex seam rows.",
       "Run replacement rollback drills from the operator runbook.",
@@ -35,9 +36,9 @@
     {
       "dimension": "language",
       "score": "yellow_green",
-      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, enum class-payload equality, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metal pressure, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executors, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, model stream item reducer, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, non-copy local reuse, static final path, Reflect.compare, and optional primitive default regressions still open upstream.",
+      "rationale": "Protocol IDs, JSON helpers, DTOs, enums, null scalar patterns, nullable interface values, try/catch returns, reusable enum values, enum class-payload equality, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metal pressure, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executors, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, model stream item reducer, async runtime contract, selected TUI story/render, and turn reducers pass through haxe.rust, with nullable Array.shift class-return, non-copy class field assign-op, non-copy local reuse, static final path, Reflect.compare, optional primitive default, and generic helper bound-propagation regressions still open upstream.",
       "strengths": [
-        "14 of 20 pressure gaps are resolved upstream.",
+        "14 of 21 pressure gaps are resolved upstream.",
         "Protocol and JSON fixtures run through generated Cargo gates.",
         "Native state adapter enum payload pressure resolved HxRef reference equality upstream.",
         "No raw Rust escape matches exist in current app/test Haxe source."
@@ -49,7 +50,8 @@
         "haxe.rust-fzl remains open for non-copy local reuse across conditional expression results.",
         "haxe.rust-3f0g remains open for static final class field access path lowering.",
         "haxe.rust-fz20 remains open for Reflect.compare lowering.",
-        "haxe.rust-3oju remains open for optional primitive constructor default lowering."
+        "haxe.rust-3oju remains open for optional primitive constructor default lowering.",
+        "haxe.rust-akfm remains open for generic helper bound propagation."
       ],
       "evidenceRefs": [
         "reference/haxe-rust-pressure-gaps.v1.json",
@@ -59,13 +61,13 @@
     {
       "dimension": "runtime",
       "score": "yellow",
-      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view proof, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executors, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, model stream item reducer, selected TUI story/render, and turn reducer slices are viable, but live model/full production SQLite log state/full TUI/restart ownership is outside current proof.",
+      "rationale": "Credential-free mock model, one-turn session, transcript/state, cancellation, headless JSONL adapter, the first runtime app-client facade, runtime bootstrap, fixture transport, async runtime contract, persistent state boundary, native SQLite metadata upsert/query/read-view proof, selected thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executors, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, model stream item reducer, selected TUI story/render, and turn reducer slices are viable, but live model/full production SQLite log state/full TUI/restart ownership is outside current proof.",
       "strengths": [
         "Headless runtime fixtures pass without model credentials.",
         "Cancellation and transcript/state artifacts are deterministic.",
         "Runtime app-client classification, lag markers, and request correlation pass through generated Rust.",
         "Selected upstream TUI story replay passes through generated Rust with normalized summaries.",
-        "Selected runtime bootstrap, fixture transport, persistent state boundary, native SQLite metadata upsert/query/read-view, thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executors, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, model stream item reducer, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
+        "Selected runtime bootstrap, fixture transport, async runtime contract, persistent state boundary, native SQLite metadata upsert/query/read-view, thread/read turn projection, pagination, active-turn merge, turn-items unsupported-runtime boundary, token-usage owner attribution, token-usage replay payload construction, token-usage replay delivery policy, resume-goal snapshot ordering, resume idle continuation, goal steering, try_start_turn_if_idle admission, goal runtime restore, active-turn goal steering injection, budget-limit goal steering, active-goal progress accounting, idle-goal progress accounting, turn-start accounting, turn finalization, turn-error active-goal stop, goal token-usage contribution, tool-finish goal-progress admission, goal-tool contributor visibility, get_goal/create_goal/update_goal executors, goal-tool dispatch, provider admission, model catalog, turn model/tool planning, model request envelope, model stream route, model stream item reducer, VT100 render invariants, and turn runtime reducers pass through generated Rust.",
         "Operator runbook keeps production default disabled."
       ],
       "caveats": [
@@ -82,7 +84,7 @@
       "score": "yellow_green",
       "rationale": "The project has kept interop typed and narrow: generated Rust is disposable, haxe.rust stays external, and app/test Haxe source has no raw Rust snippets.",
       "strengths": [
-        "Raw Rust escape pressure is 0 matches across 404 Haxe source/test files.",
+        "Raw Rust escape pressure is 0 matches across 419 Haxe source/test files.",
         "haxe.rust fixes are generic and made in ../haxe.rust.",
         "Pin update workflow is scripted and gated."
       ],
@@ -187,12 +189,12 @@
   ],
   "measuredInputs": {
       "pressureGaps": {
-      "total": 20,
+      "total": 21,
       "resolvedUpstream": 14,
-      "openUpstream": 6,
+      "openUpstream": 7,
       "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 404,
+      "sourceFilesScanned": 419,
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {
@@ -223,7 +225,7 @@
     "Recommend HXCX-6.3 select helper-only, sidecar/headless, or selected adapter-slice mode.",
     "Do not select broad replacement from current evidence.",
     "Keep unsupported surfaces explicit and fail-closed.",
-    "Treat haxe.rust-362, haxe.rust-ojj, haxe.rust-fzl, haxe.rust-3f0g, haxe.rust-fz20, and haxe.rust-3oju as open compiler risks until fixed with product-neutral regressions.",
+    "Treat haxe.rust-362, haxe.rust-ojj, haxe.rust-fzl, haxe.rust-3f0g, haxe.rust-fz20, haxe.rust-3oju, and haxe.rust-akfm as open compiler risks until fixed with product-neutral regressions.",
     "Treat license/distribution as a release blocker, not a local-experiment blocker."
   ]
 }

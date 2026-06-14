@@ -1,0 +1,55 @@
+{
+  "schema": "codex-hxrust.async-runtime-contract-fixture.v1",
+  "id": "hxcx-4.49-runtime-neutral-async-contract",
+  "cases": [
+    {
+      "id": "task-completes-after-fixture-step",
+      "kind": "task_complete",
+      "value": "model-stream-started",
+      "expect": {
+        "summaryContains": "case=task-completes-after-fixture-step;first=kind=pending;cancelReason=test_fixture;pending=0;skipped=0;error=none;second=kind=ready;cancelReason=test_fixture;pending=0;skipped=0;error=none;value=model-stream-started"
+      }
+    },
+    {
+      "id": "task-cancelled-by-token",
+      "kind": "task_token_cancel",
+      "cancelReason": "user_interrupt",
+      "expect": {
+        "summaryContains": "case=task-cancelled-by-token;poll=kind=cancelled;cancelReason=user_interrupt"
+      }
+    },
+    {
+      "id": "lossless-stream-backpressure-then-drain",
+      "kind": "stream_lossless_backpressure",
+      "capacity": 1,
+      "first": "event-a",
+      "second": "event-b",
+      "expect": {
+        "summaryContains": "case=lossless-stream-backpressure-then-drain;push2=kind=backpressured;cancelReason=test_fixture;pending=1;skipped=0;error=code=lossless_backpressure;recoverable=true;message=bounded async stream has no ready capacity;drain1=kind=ready;cancelReason=test_fixture;pending=0;skipped=0;error=none;item=seq=1;delivery=lossless;value=event-a;push3=kind=ready;cancelReason=test_fixture;pending=1;skipped=0;error=none;drain2=kind=ready;cancelReason=test_fixture;pending=0;skipped=0;error=none;item=seq=2;delivery=lossless;value=event-b;terminal=kind=closed"
+      }
+    },
+    {
+      "id": "best-effort-stream-drop-is-reportable",
+      "kind": "stream_best_effort_drop",
+      "capacity": 1,
+      "first": "lossless-control",
+      "second": "progress-tick",
+      "expect": {
+        "summaryContains": "case=best-effort-stream-drop-is-reportable;push2=kind=backpressured;cancelReason=test_fixture;pending=1;skipped=1;error=code=best_effort_dropped;recoverable=true;message=bounded async stream has no ready capacity;drain=kind=ready;cancelReason=test_fixture;pending=0;skipped=1;error=none;item=seq=1;delivery=lossless;value=lossless-control"
+      }
+    },
+    {
+      "id": "stream-failure-is-structured",
+      "kind": "stream_failure",
+      "errorCode": "provider_stream_error",
+      "errorMessage": "fixture provider failed",
+      "expect": {
+        "summaryContains": "case=stream-failure-is-structured;poll=kind=failed;cancelReason=test_fixture;pending=0;skipped=0;error=code=provider_stream_error;recoverable=false"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 5,
+    "summaryContains": "schema=codex-hxrust.async-runtime-contract-report.v1;cases=5"
+  }
+}

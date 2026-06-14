@@ -541,6 +541,18 @@ The fixture `fixtures/hxrust/model-stream-route.v1.json` and `harness/check-mode
 
 The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` and `harness/check-model-stream-item-reducer.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is deterministic reducer evidence only; it does not execute tools, open HTTP/WebSocket transports, parse live SSE frames, own Tokio tasks, persist inference traces, own realtime/audio, or model Cafex/Cafetera behavior. The boundary is documented in `docs/model-stream-item-reducer.md`.
 
+## Runtime-Neutral Async Contract
+
+`codexhx.runtime.asyncruntime` is the HXCX-4.49 backend-neutral async contract slice:
+
+- `AsyncTask<T>` and `AsyncStream<T>` are poll/cancel contracts that avoid Tokio types in Haxe app APIs;
+- `AsyncPoll<T>` carries pending, ready, failed, cancelled, closed, and backpressured outcomes;
+- `AsyncCancellationToken` and `AsyncCancelReason` model user interrupt, consumer drop, timeout, shutdown, and fixture cancellation without backend-specific handles;
+- `AsyncDeliveryKind` records lossless versus best-effort stream semantics so bounded queues can preserve required events and report dropped optional events;
+- `DeterministicAsyncTask<T>` and `DeterministicAsyncStream<T>` provide a thread-free, network-free fixture backend for later live provider, app-server transport, and TUI event-loop slices.
+
+The fixture `fixtures/hxrust/async-runtime-contract.v1.json` and `harness/check-async-runtime-contract.sh` prove the contract through the Haxe interpreter and portable haxe.rust-generated Rust. This is contract evidence only; it does not spawn Tokio tasks, open sockets, sleep on timers, parse live SSE frames, execute tools, or own production transport. The boundary is documented in `docs/async-runtime-contract.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

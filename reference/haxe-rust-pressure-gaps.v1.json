@@ -5,26 +5,26 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 20,
+    "totalGaps": 21,
     "resolvedUpstream": 14,
-    "openUpstream": 6,
+    "openUpstream": 7,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 13,
+      "medium": 14,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 9,
+      "runtime_model_session": 10,
       "native_metal_std_boundary": 4,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 404,
+    "sourceFilesScanned": 419,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -280,6 +280,23 @@
       "validation": [
         "harness/check-turn-model-plan.sh",
         "haxe.rust-3oju acceptance requires a product-neutral optional primitive constructor default regression fixture"
+      ]
+    },
+    {
+      "id": "generic-helper-bound-propagation",
+      "status": "open_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-1ss",
+      "haxeRustRefs": [
+        "haxe.rust-akfm"
+      ],
+      "reproduction": "The HXCX-4.49 async contract initially used generic static/helper functions returning and matching generic payloads such as AsyncPoll<A> and AsyncStreamItem<T>. Generated Rust omitted Clone + Send + Sync bounds required by the generated payload structs/enums, causing E0277/E0599 failures.",
+      "workaround": "Local async contract uses a typed enum outcome, direct constructors, and concrete fixture summaries while generic helper bound propagation is fixed in haxe.rust.",
+      "followUp": "haxe.rust-akfm",
+      "validation": [
+        "harness/check-async-runtime-contract.sh",
+        "haxe.rust-akfm acceptance requires a product-neutral generic helper bound propagation regression fixture"
       ]
     },
     {
