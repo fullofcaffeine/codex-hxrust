@@ -640,7 +640,18 @@ Model the upstream apply-patch verification and tool event boundary against fixt
 
 Status: HXCX-4.53 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic verification/tool-event evidence only, not native apply-patch process ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.54+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.54: Apply-Patch Fixture Application Result Boundary
+
+Model the upstream apply-patch runtime result boundary against copied virtual workspace facts:
+
+- keep completed, failed, and declined statuses typed and aligned with upstream `PatchApplyEndEvent`;
+- carry stdout/stderr and before/after virtual workspace summaries without mutating the real filesystem;
+- compose the request envelope, stream route, stream item reducer, streamed diff parser, verification boundary, and result boundary in one fixture path;
+- keep shell/tool execution out of Haxe test fixtures and leave native process ownership to later runtime work.
+
+Status: HXCX-4.54 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic virtual application-result evidence only, not native apply-patch process ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.55+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

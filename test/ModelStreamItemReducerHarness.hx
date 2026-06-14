@@ -9,9 +9,12 @@ import codexhx.runtime.model.streamitem.ModelStreamItemReducerReport;
 import codexhx.runtime.model.streamitem.ModelStreamItemReducerRequest;
 import codexhx.runtime.model.streamitem.ModelStreamOutputItem;
 import codexhx.runtime.model.streamitem.ModelStreamOutputItemKind;
+import codexhx.runtime.model.streamitem.ModelPatchApplicationPolicy;
+import codexhx.runtime.model.streamitem.ModelPatchApplicationRequest;
 import codexhx.runtime.model.streamitem.ModelPatchApplyStatus;
 import codexhx.runtime.model.streamitem.ModelPatchVerificationPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchVerificationRequest;
+import codexhx.runtime.model.streamitem.ModelPatchVerificationOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchVirtualFile;
 import haxe.json.Value;
 import sys.io.File;
@@ -182,6 +185,7 @@ class ModelStreamItemReducerHarness {
 		switch verificationValue {
 			case JObject(_, _):
 				final expect = objectField(verificationValue, "expect");
+				final beforeFiles = virtualFiles(arrayField(verificationValue, "files"));
 				final verification = ModelPatchVerificationPolicy.verify(new ModelPatchVerificationRequest(
 					stringField(verificationValue, "requestId", ""),
 					outcome,
@@ -191,7 +195,7 @@ class ModelStreamItemReducerHarness {
 					patchApplyStatus(stringField(verificationValue, "desiredStatus", "completed")),
 					stringField(verificationValue, "stdout", ""),
 					stringField(verificationValue, "stderr", ""),
-					virtualFiles(arrayField(verificationValue, "files")),
+					beforeFiles,
 					stringField(verificationValue, "secretProbe", "")
 				));
 				assertEquals(boolText(boolField(expect, "ok", false)), boolText(verification.ok));
@@ -203,9 +207,40 @@ class ModelStreamItemReducerHarness {
 				assertContains(verification.summary(), stringField(expect, "summaryContains", ""));
 				final secretProbe = stringField(verificationValue, "secretProbe", "");
 				if (secretProbe.length > 0) assertNotContains(verification.summary(), secretProbe);
+				assertPatchApplication(verificationValue, verification, beforeFiles, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
+		}
+	}
+
+	static function assertPatchApplication(
+		verificationValue:Value,
+		verification:ModelPatchVerificationOutcome,
+		beforeFiles:Array<ModelPatchVirtualFile>,
+		secretProbe:String
+	):Void {
+		final applicationExpectValue = optionalField(verificationValue, "applicationExpect");
+		switch applicationExpectValue {
+			case JObject(_, _):
+				final application = ModelPatchApplicationPolicy.apply(new ModelPatchApplicationRequest(
+					stringField(applicationExpectValue, "requestId", ""),
+					verification,
+					beforeFiles,
+					secretProbe
+				));
+				assertEquals(boolText(boolField(applicationExpectValue, "ok", false)), boolText(application.ok));
+				assertEquals(stringField(applicationExpectValue, "code", ""), application.code);
+				assertEquals(stringField(applicationExpectValue, "requestId", ""), application.requestId);
+				assertEquals(stringField(applicationExpectValue, "status", ""), application.status);
+				assertEquals(boolText(boolField(applicationExpectValue, "liveNetworkAttempted", false)), boolText(application.liveNetworkAttempted));
+				assertEquals(boolText(boolField(applicationExpectValue, "realFilesystemMutated", false)), boolText(application.realFilesystemMutated));
+				assertEquals(boolText(boolField(applicationExpectValue, "toolExecutedOutsideFixture", false)), boolText(application.toolExecutedOutsideFixture));
+				assertContains(application.summary(), stringField(applicationExpectValue, "summaryContains", ""));
+				if (secretProbe.length > 0) assertNotContains(application.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: applicationExpect";
 		}
 	}
 

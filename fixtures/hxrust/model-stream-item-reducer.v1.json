@@ -261,6 +261,16 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "event=patch_apply_end;callId=call-lite-apply-patch-failed-1;turnId=turn-lite-apply-patch-failed;autoApproved=false;status=failed;success=false"
+        },
+        "applicationExpect": {
+          "ok": true,
+          "code": "patch_application_result_modeled",
+          "requestId": "patch-apply-runtime-failed",
+          "status": "failed",
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "status=failed;stdout=;stderr=apply_patch failed in fixture runtime;before=[];after=[]"
         }
       }
     },
@@ -348,6 +358,16 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "event=patch_apply_end;callId=call-openai-delta-1;turnId=turn-openai-delta-1;autoApproved=false;status=declined;success=false"
+        },
+        "applicationExpect": {
+          "ok": true,
+          "code": "patch_application_result_modeled",
+          "requestId": "patch-apply-openai-declined",
+          "status": "declined",
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "status=declined;stdout=;stderr=user declined patch in fixture;before=[];after=[]"
         }
       }
     },
@@ -506,6 +526,16 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "event=patch_apply_end;callId=call-lite-delta-1;turnId=turn-lite-delta-1;autoApproved=true;status=completed;success=true;stdout=Done!;stderr=;changes=[path=streamed.txt;kind=add;content=hello"
+        },
+        "applicationExpect": {
+          "ok": true,
+          "code": "patch_application_result_modeled",
+          "requestId": "patch-apply-lite-completed",
+          "status": "completed",
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "status=completed;stdout=Done!;stderr=;before=[path=src/old.rs;content=fn run()\nold\n||path=stale.txt;content=remove me\n];after=[path=streamed.txt;content=hello\nworld\n||path=src/new.rs;content=fn run()\nnew\n]"
         }
       }
     },
