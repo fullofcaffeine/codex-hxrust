@@ -115,6 +115,11 @@ import codexhx.runtime.model.streamitem.ModelAppServerQueuedRequestDeliveryKind;
 import codexhx.runtime.model.streamitem.ModelAppServerQueuedRequestDeliveryOutcome;
 import codexhx.runtime.model.streamitem.ModelAppServerQueuedRequestDeliveryPolicy;
 import codexhx.runtime.model.streamitem.ModelAppServerQueuedRequestDeliveryRequest;
+import codexhx.runtime.model.streamitem.ModelThreadActiveTurnDecisionKind;
+import codexhx.runtime.model.streamitem.ModelThreadActiveTurnEventKind;
+import codexhx.runtime.model.streamitem.ModelThreadActiveTurnOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadActiveTurnPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadActiveTurnRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -210,7 +215,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelAppServerRequestEnqueues = assertTopLevelAppServerRequestEnqueues(testCase, topLevelAppServerResponseDispatches, secretProbe);
 			final topLevelAppServerQueuedRequestDeliveries = assertTopLevelAppServerQueuedRequestDeliveries(testCase, topLevelAppServerRequestEnqueues, secretProbe);
 			final topLevelThreadBufferedRequestEvictions = assertTopLevelThreadBufferedRequestEvictions(testCase, topLevelAppServerQueuedRequestDeliveries, secretProbe);
-			assertTopLevelThreadSessionRebases(testCase, topLevelThreadBufferedRequestEvictions, secretProbe);
+			final topLevelThreadSessionRebases = assertTopLevelThreadSessionRebases(testCase, topLevelThreadBufferedRequestEvictions, secretProbe);
+			assertTopLevelThreadActiveTurns(testCase, topLevelThreadSessionRebases, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -392,7 +398,8 @@ class ModelStreamItemReducerHarness {
 				final appServerRequestEnqueues = assertAppServerRequestEnqueues(verificationValue, appServerResponseDispatches, secretProbe);
 				final appServerQueuedRequestDeliveries = assertAppServerQueuedRequestDeliveries(verificationValue, appServerRequestEnqueues, secretProbe);
 				final threadBufferedRequestEvictions = assertThreadBufferedRequestEvictions(verificationValue, appServerQueuedRequestDeliveries, secretProbe);
-				assertThreadSessionRebases(verificationValue, threadBufferedRequestEvictions, secretProbe);
+				final threadSessionRebases = assertThreadSessionRebases(verificationValue, threadBufferedRequestEvictions, secretProbe);
+				assertThreadActiveTurns(verificationValue, threadSessionRebases, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -2321,6 +2328,75 @@ class ModelStreamItemReducerHarness {
 		throw "missing thread buffered request eviction outcome: " + requestId;
 	}
 
+	static function assertTopLevelThreadActiveTurns(
+		testCase:Value,
+		rebases:Array<ModelThreadSessionRebaseOutcome>,
+		secretProbe:String
+	):Array<ModelThreadActiveTurnOutcome> {
+		final outcomes:Array<ModelThreadActiveTurnOutcome> = [];
+		final values = optionalArrayField(testCase, "threadActiveTurnExpects");
+		for (value in values) outcomes.push(assertThreadActiveTurn(objectValue(value), rebases, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadActiveTurns(
+		verificationValue:Value,
+		rebases:Array<ModelThreadSessionRebaseOutcome>,
+		secretProbe:String
+	):Array<ModelThreadActiveTurnOutcome> {
+		final outcomes:Array<ModelThreadActiveTurnOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadActiveTurnExpects");
+		for (value in values) outcomes.push(assertThreadActiveTurn(objectValue(value), rebases, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadActiveTurn(
+		expectValue:Value,
+		rebases:Array<ModelThreadSessionRebaseOutcome>,
+		secretProbe:String
+	):ModelThreadActiveTurnOutcome {
+		final rebaseRequestId = stringField(expectValue, "rebaseRequestId", "");
+		final outcome = ModelThreadActiveTurnPolicy.apply(new ModelThreadActiveTurnRequest(
+			stringField(expectValue, "requestId", ""),
+			threadSessionRebaseByRequestId(rebases, rebaseRequestId),
+			threadActiveTurnEventKind(stringField(expectValue, "eventKind", "turns_restored")),
+			stringField(expectValue, "activeTurnIdBefore", ""),
+			stringField(expectValue, "eventTurnId", ""),
+			stringField(expectValue, "latestInProgressTurnId", ""),
+			boolField(expectValue, "turnsRestoredInOrder", false),
+			intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(rebaseRequestId, outcome.rebaseRequestId);
+		assertEquals(threadActiveTurnEventKind(stringField(expectValue, "eventKind", "turns_restored")), outcome.eventKind);
+		assertEquals(threadActiveTurnDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(stringField(expectValue, "activeTurnIdBefore", ""), outcome.activeTurnIdBefore);
+		assertEquals(stringField(expectValue, "eventTurnId", ""), outcome.eventTurnId);
+		assertEquals(stringField(expectValue, "activeTurnIdAfter", ""), outcome.activeTurnIdAfter);
+		assertEquals(boolText(boolField(expectValue, "activeTurnChanged", false)), boolText(outcome.activeTurnChanged));
+		assertEquals(boolText(boolField(expectValue, "restoredFromTurns", false)), boolText(outcome.restoredFromTurns));
+		assertEquals(boolText(boolField(expectValue, "nonmatchingCompletionIgnored", false)), boolText(outcome.nonmatchingCompletionIgnored));
+		assertEquals(boolText(boolField(expectValue, "threadClosedCleared", false)), boolText(outcome.threadClosedCleared));
+		assertEquals(boolText(boolField(expectValue, "explicitClearApplied", false)), boolText(outcome.explicitClearApplied));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function threadSessionRebaseByRequestId(outcomes:Array<ModelThreadSessionRebaseOutcome>, requestId:String):ModelThreadSessionRebaseOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing thread session rebase outcome: " + requestId;
+	}
+
 	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn replay reconstruction outcome: " + requestId;
@@ -2775,6 +2851,30 @@ class ModelStreamItemReducerHarness {
 			case "dropped_history_entry_response": ModelThreadSessionRebaseKind.DroppedHistoryEntryResponse;
 			case "filtered_resolved_request": ModelThreadSessionRebaseKind.FilteredResolvedRequest;
 			case _: throw "unknown thread session rebase kind: " + value;
+		}
+	}
+
+	static function threadActiveTurnEventKind(value:String):ModelThreadActiveTurnEventKind {
+		return switch value {
+			case "turns_restored": ModelThreadActiveTurnEventKind.TurnsRestored;
+			case "turn_started": ModelThreadActiveTurnEventKind.TurnStarted;
+			case "turn_completed": ModelThreadActiveTurnEventKind.TurnCompleted;
+			case "thread_closed": ModelThreadActiveTurnEventKind.ThreadClosed;
+			case "clear_active_turn": ModelThreadActiveTurnEventKind.ClearActiveTurn;
+			case _: throw "unknown thread active-turn event kind: " + value;
+		}
+	}
+
+	static function threadActiveTurnDecisionKind(value:String):ModelThreadActiveTurnDecisionKind {
+		return switch value {
+			case "restored_latest_in_progress": ModelThreadActiveTurnDecisionKind.RestoredLatestInProgress;
+			case "set_from_turn_started": ModelThreadActiveTurnDecisionKind.SetFromTurnStarted;
+			case "preserved_nonmatching_completion": ModelThreadActiveTurnDecisionKind.PreservedNonmatchingCompletion;
+			case "cleared_matching_completion": ModelThreadActiveTurnDecisionKind.ClearedMatchingCompletion;
+			case "cleared_thread_closed": ModelThreadActiveTurnDecisionKind.ClearedThreadClosed;
+			case "cleared_explicit": ModelThreadActiveTurnDecisionKind.ClearedExplicit;
+			case "unchanged_no_active_turn": ModelThreadActiveTurnDecisionKind.UnchangedNoActiveTurn;
+			case _: throw "unknown thread active-turn decision kind: " + value;
 		}
 	}
 
