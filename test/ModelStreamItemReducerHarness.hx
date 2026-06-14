@@ -11,7 +11,13 @@ import codexhx.runtime.model.streamitem.ModelStreamOutputItem;
 import codexhx.runtime.model.streamitem.ModelStreamOutputItemKind;
 import codexhx.runtime.model.streamitem.ModelPatchApplicationPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchApplicationRequest;
+import codexhx.runtime.model.streamitem.ModelPatchApplicationOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchApplyStatus;
+import codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionPolicy;
+import codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionRequest;
+import codexhx.runtime.model.streamitem.ModelPatchApprovalRequirement;
+import codexhx.runtime.model.streamitem.ModelPatchReviewDecision;
+import codexhx.runtime.model.streamitem.ModelPatchSandboxAttemptKind;
 import codexhx.runtime.model.streamitem.ModelPatchVerificationPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchVerificationRequest;
 import codexhx.runtime.model.streamitem.ModelPatchVerificationOutcome;
@@ -207,7 +213,8 @@ class ModelStreamItemReducerHarness {
 				assertContains(verification.summary(), stringField(expect, "summaryContains", ""));
 				final secretProbe = stringField(verificationValue, "secretProbe", "");
 				if (secretProbe.length > 0) assertNotContains(verification.summary(), secretProbe);
-				assertPatchApplication(verificationValue, verification, beforeFiles, secretProbe);
+				final application = assertPatchApplication(verificationValue, verification, beforeFiles, secretProbe);
+				assertPatchApprovalDecision(verificationValue, verification, application, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -219,7 +226,7 @@ class ModelStreamItemReducerHarness {
 		verification:ModelPatchVerificationOutcome,
 		beforeFiles:Array<ModelPatchVirtualFile>,
 		secretProbe:String
-	):Void {
+	):ModelPatchApplicationOutcome {
 		final applicationExpectValue = optionalField(verificationValue, "applicationExpect");
 		switch applicationExpectValue {
 			case JObject(_, _):
@@ -238,9 +245,53 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(applicationExpectValue, "toolExecutedOutsideFixture", false)), boolText(application.toolExecutedOutsideFixture));
 				assertContains(application.summary(), stringField(applicationExpectValue, "summaryContains", ""));
 				if (secretProbe.length > 0) assertNotContains(application.summary(), secretProbe);
+				return application;
 			case JNull:
+				return null;
 			case _:
 				throw "expected object field: applicationExpect";
+		}
+	}
+
+	static function assertPatchApprovalDecision(
+		verificationValue:Value,
+		verification:ModelPatchVerificationOutcome,
+		application:ModelPatchApplicationOutcome,
+		secretProbe:String
+	):Void {
+		final approvalExpectValue = optionalField(verificationValue, "approvalExpect");
+		switch approvalExpectValue {
+			case JObject(_, _):
+				final approval = ModelPatchApprovalDecisionPolicy.decide(new ModelPatchApprovalDecisionRequest(
+					stringField(approvalExpectValue, "requestId", ""),
+					verification,
+					application,
+					stringField(approvalExpectValue, "environmentId", ""),
+					approvalRequirement(stringField(approvalExpectValue, "approvalRequirement", "skip")),
+					boolField(approvalExpectValue, "permissionsPreapproved", false),
+					stringField(approvalExpectValue, "additionalPermissionRoot", ""),
+					stringField(approvalExpectValue, "retryReason", ""),
+					boolField(approvalExpectValue, "sandboxApprovalAllowed", false),
+					sandboxAttempt(stringField(approvalExpectValue, "sandboxAttempt", "none")),
+					boolField(approvalExpectValue, "sandboxDenied", false),
+					reviewDecision(stringField(approvalExpectValue, "reviewDecision", "denied")),
+					secretProbe
+				));
+				assertEquals(boolText(boolField(approvalExpectValue, "ok", false)), boolText(approval.ok));
+				assertEquals(stringField(approvalExpectValue, "code", ""), approval.code);
+				assertEquals(stringField(approvalExpectValue, "requestId", ""), approval.requestId);
+				assertEquals(boolText(boolField(approvalExpectValue, "approvalRequired", false)), boolText(approval.approvalRequired));
+				assertEquals(boolText(boolField(approvalExpectValue, "approvalRequestEmitted", false)), boolText(approval.approvalRequestEmitted));
+				assertEquals(boolText(boolField(approvalExpectValue, "canRun", false)), boolText(approval.canRun));
+				assertEquals(boolText(boolField(approvalExpectValue, "sandboxRetryRequested", false)), boolText(approval.sandboxRetryRequested));
+				assertEquals(boolText(boolField(approvalExpectValue, "liveNetworkAttempted", false)), boolText(approval.liveNetworkAttempted));
+				assertEquals(boolText(boolField(approvalExpectValue, "realFilesystemMutated", false)), boolText(approval.realFilesystemMutated));
+				assertEquals(boolText(boolField(approvalExpectValue, "toolExecutedOutsideFixture", false)), boolText(approval.toolExecutedOutsideFixture));
+				assertContains(approval.summary(), stringField(approvalExpectValue, "summaryContains", ""));
+				if (secretProbe.length > 0) assertNotContains(approval.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: approvalExpect";
 		}
 	}
 
@@ -259,6 +310,35 @@ class ModelStreamItemReducerHarness {
 			case "failed": ModelPatchApplyStatus.Failed;
 			case "declined": ModelPatchApplyStatus.Declined;
 			case _: throw "invalid patch apply status: " + value;
+		}
+	}
+
+	static function approvalRequirement(value:String):ModelPatchApprovalRequirement {
+		return switch value {
+			case "skip": ModelPatchApprovalRequirement.Skip;
+			case "needs_approval": ModelPatchApprovalRequirement.NeedsApproval;
+			case _: throw "invalid patch approval requirement: " + value;
+		}
+	}
+
+	static function reviewDecision(value:String):ModelPatchReviewDecision {
+		return switch value {
+			case "approved": ModelPatchReviewDecision.Approved;
+			case "approved_for_session": ModelPatchReviewDecision.ApprovedForSession;
+			case "approved_with_amendment": ModelPatchReviewDecision.ApprovedWithAmendment;
+			case "denied": ModelPatchReviewDecision.Denied;
+			case "timed_out": ModelPatchReviewDecision.TimedOut;
+			case "abort": ModelPatchReviewDecision.Abort;
+			case _: throw "invalid patch review decision: " + value;
+		}
+	}
+
+	static function sandboxAttempt(value:String):ModelPatchSandboxAttemptKind {
+		return switch value {
+			case "none": ModelPatchSandboxAttemptKind.None;
+			case "sandboxed": ModelPatchSandboxAttemptKind.Sandboxed;
+			case "escalated": ModelPatchSandboxAttemptKind.Escalated;
+			case _: throw "invalid patch sandbox attempt: " + value;
 		}
 	}
 

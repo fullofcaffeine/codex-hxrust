@@ -271,6 +271,28 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "status=failed;stdout=;stderr=apply_patch failed in fixture runtime;before=[];after=[]"
+        },
+        "approvalExpect": {
+          "ok": true,
+          "code": "patch_approval_decision_modeled",
+          "requestId": "patch-approval-runtime-failed",
+          "environmentId": "env-lite-failed",
+          "approvalRequirement": "needs_approval",
+          "permissionsPreapproved": false,
+          "additionalPermissionRoot": "",
+          "retryReason": "sandbox denied write",
+          "sandboxApprovalAllowed": true,
+          "sandboxAttempt": "sandboxed",
+          "sandboxDenied": true,
+          "reviewDecision": "approved",
+          "approvalRequired": true,
+          "approvalRequestEmitted": true,
+          "canRun": true,
+          "sandboxRetryRequested": true,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "approvalRequired=true;approvalRequestEmitted=true;canRun=true;sandboxPreference=auto;escalatesOnFailure=true;sandboxRetryRequested=true;permissionRequestPayload=tool=apply_patch;input=command;reviewDecision=approved;approvalKeys=[environment=env-lite-failed;path=failed.txt]"
         }
       }
     },
@@ -368,6 +390,28 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "status=declined;stdout=;stderr=user declined patch in fixture;before=[];after=[]"
+        },
+        "approvalExpect": {
+          "ok": true,
+          "code": "patch_approval_decision_modeled",
+          "requestId": "patch-approval-openai-declined",
+          "environmentId": "env-openai-declined",
+          "approvalRequirement": "needs_approval",
+          "permissionsPreapproved": false,
+          "additionalPermissionRoot": "",
+          "retryReason": "",
+          "sandboxApprovalAllowed": false,
+          "sandboxAttempt": "none",
+          "sandboxDenied": false,
+          "reviewDecision": "abort",
+          "approvalRequired": true,
+          "approvalRequestEmitted": true,
+          "canRun": false,
+          "sandboxRetryRequested": false,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "approvalRequired=true;approvalRequestEmitted=true;canRun=false;sandboxPreference=auto;escalatesOnFailure=true;sandboxRetryRequested=false;permissionRequestPayload=tool=apply_patch;input=command;reviewDecision=abort;approvalKeys=[environment=env-openai-declined;path=hello.txt]"
         }
       }
     },
@@ -536,6 +580,28 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "status=completed;stdout=Done!;stderr=;before=[path=src/old.rs;content=fn run()\nold\n||path=stale.txt;content=remove me\n];after=[path=streamed.txt;content=hello\nworld\n||path=src/new.rs;content=fn run()\nnew\n]"
+        },
+        "approvalExpect": {
+          "ok": true,
+          "code": "patch_approval_decision_modeled",
+          "requestId": "patch-approval-lite-completed",
+          "environmentId": "env-lite-completed",
+          "approvalRequirement": "needs_approval",
+          "permissionsPreapproved": true,
+          "additionalPermissionRoot": "/workspace",
+          "retryReason": "",
+          "sandboxApprovalAllowed": true,
+          "sandboxAttempt": "sandboxed",
+          "sandboxDenied": false,
+          "reviewDecision": "denied",
+          "approvalRequired": true,
+          "approvalRequestEmitted": false,
+          "canRun": true,
+          "sandboxRetryRequested": false,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "approvalRequired=true;approvalRequestEmitted=false;canRun=true;sandboxPreference=auto;escalatesOnFailure=true;sandboxRetryRequested=false;permissionRequestPayload=tool=apply_patch;input=command;reviewDecision=approved;approvalKeys=[environment=env-lite-completed;path=streamed.txt||environment=env-lite-completed;path=src/old.rs||environment=env-lite-completed;path=src/new.rs||environment=env-lite-completed;path=stale.txt]"
         }
       }
     },

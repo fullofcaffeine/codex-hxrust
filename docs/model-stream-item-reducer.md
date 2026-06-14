@@ -1,6 +1,6 @@
 # Stream Item Reducer And Assistant Output Routing
 
-**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`; HXCX-4.52 / `codex-hxrust-7md`; HXCX-4.53 / `codex-hxrust-8p1`; HXCX-4.54 / `codex-hxrust-485`
+**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`; HXCX-4.52 / `codex-hxrust-7md`; HXCX-4.53 / `codex-hxrust-8p1`; HXCX-4.54 / `codex-hxrust-485`; HXCX-4.55 / `codex-hxrust-2og`
 **Scope:** raw upstream Codex first; no live network, no real credentials, no live async ownership, no Cafex/Cafetera behavior.
 
 ## Upstream References
@@ -30,8 +30,19 @@ Read-only upstream reference: `../codex`.
 - `../codex/codex-rs/core/src/tools/events.rs:216` emits patch begin/end tool events with file-change payloads.
 - `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:47` defines the runtime apply-patch request.
 - `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:63` defines runtime output as exec output plus applied patch delta.
+- `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:109` marks apply-patch runtime sandbox preference as auto and enables escalation on failure.
+- `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:121` derives approval cache keys from environment id and file paths.
+- `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:134` starts the apply-patch approval flow.
+- `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:150` short-circuits approval when permissions are preapproved and this is not a retry.
+- `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:155` emits a patch approval request when retrying with a reason.
+- `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:186` checks whether the active approval policy allows sandbox approval.
+- `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:199` forwards the apply-patch-specific approval requirement.
+- `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:206` builds the apply-patch permission request payload.
 - `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:215` runs the runtime apply-patch tool.
 - `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:263` returns stdout/stderr/exit-code-shaped apply-patch output.
+- `../codex/codex-rs/protocol/src/approvals.rs:374` defines `ApplyPatchApprovalRequestEvent`.
+- `../codex/codex-rs/protocol/src/protocol.rs:840` defines granular sandbox approval policy behavior.
+- `../codex/codex-rs/protocol/src/protocol.rs:3717` defines `ReviewDecision`.
 - `../codex/codex-rs/core/src/tools/handlers/apply_patch_tests.rs:84` covers streamed `PatchApplyUpdated` events for add-file patch input.
 - `../codex/codex-rs/apply-patch/src/invocation.rs:161` verifies structured apply-patch arguments.
 - `../codex/codex-rs/apply-patch/src/invocation.rs:181` maps add-file hunks to verified file changes.
@@ -68,9 +79,10 @@ Read-only upstream reference: `../codex`.
 - `ModelToolArgumentDiffConsumerState`, `ModelToolArgumentDiffConsumerEvent`, `ModelPatchFileChange`, `ModelPatchUpdateChunk`, `ModelPatchParseError`, and their enum abstracts model the selected `ToolArgumentDiffConsumer` and `StreamingPatchParser` event surface for apply-patch-shaped custom tool input.
 - `ModelPatchVerificationPolicy`, `ModelPatchVerificationRequest`, `ModelPatchVerificationOutcome`, `ModelPatchVerificationEvent`, `ModelPatchVirtualFile`, `ModelPatchApplyStatus`, and `ModelPatchVerificationEventKind` model the selected upstream apply-patch verification/tool-event boundary against fixture-only filesystem facts. They emit deterministic begin/end events and completed/failed/declined status summaries without live network, real filesystem mutation, or out-of-fixture tool execution.
 - `ModelPatchApplicationPolicy`, `ModelPatchApplicationRequest`, and `ModelPatchApplicationOutcome` model the selected runtime result boundary against copied virtual workspace facts. Completed patches update the copy; failed and declined results keep before/after facts unchanged. The policy carries stdout/stderr and status while proving no live network, real filesystem mutation, or out-of-fixture tool execution occurred.
+- `ModelPatchApprovalDecisionPolicy`, `ModelPatchApprovalDecisionRequest`, `ModelPatchApprovalDecisionOutcome`, `ModelPatchApprovalKey`, `ModelPatchApprovalRequirement`, `ModelPatchReviewDecision`, and `ModelPatchSandboxAttemptKind` model the selected approval/sandbox decision boundary. They derive environment/path approval keys, model permission-preapproval short-circuiting, emitted approval requests, opaque review decisions, auto sandbox preference, and sandbox retry intent without granting permissions or executing tools.
 - `ModelStreamItemReducerPolicy` maintains active item/tool metadata, emits deltas against that item or call id, strips selected hidden assistant markup at completion, accumulates accepted custom tool input when the completed item omits it, emits deterministic patch update events for supported streamed argument diffs, and queues tool calls for follow-up without executing them.
 
-The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, add/delete/update/move/end-of-file patch chunks, apply-patch begin/end verification events, fixture-only virtual workspace application results, completed/failed/declined statuses, malformed patch refusal, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no filesystem mutation, no tool execution, and secret-free summaries.
+The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, add/delete/update/move/end-of-file patch chunks, apply-patch begin/end verification events, fixture-only virtual workspace application results, approval/preapproval/review/sandbox retry decisions, completed/failed/declined statuses, malformed patch refusal, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no filesystem mutation, no tool execution, and secret-free summaries.
 
 ## Non-Goals
 

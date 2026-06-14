@@ -651,7 +651,18 @@ Model the upstream apply-patch runtime result boundary against copied virtual wo
 
 Status: HXCX-4.54 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic virtual application-result evidence only, not native apply-patch process ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.55+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.55: Apply-Patch Approval And Sandbox Decision Boundary
+
+Model the upstream apply-patch approval and sandbox decision boundary against deterministic fixture facts:
+
+- derive approval keys from environment id and verified patch file paths;
+- model approval requirement, permission preapproval, emitted approval requests, opaque review decisions, and permission request payload shape;
+- model auto sandbox preference, escalation-on-failure, and sandbox retry intent without granting permissions or executing tools;
+- keep the boundary runtime-neutral and credential-free.
+
+Status: HXCX-4.55 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic approval/sandbox decision evidence only, not native approval UX, native apply-patch process ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.56+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
