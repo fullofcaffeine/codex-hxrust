@@ -75,6 +75,12 @@ import codexhx.runtime.model.streamitem.ModelPendingInputHookRecordingRequest;
 import codexhx.runtime.model.streamitem.ModelPromptPreparationOutcome;
 import codexhx.runtime.model.streamitem.ModelPromptPreparationPolicy;
 import codexhx.runtime.model.streamitem.ModelPromptPreparationRequest;
+import codexhx.runtime.model.streamitem.ModelTerminalStopHookDecisionKind;
+import codexhx.runtime.model.streamitem.ModelTerminalStopHookOutcome;
+import codexhx.runtime.model.streamitem.ModelTerminalStopHookPolicy;
+import codexhx.runtime.model.streamitem.ModelTerminalStopHookRequest;
+import codexhx.runtime.model.streamitem.ModelTerminalStopHookRunStatusKind;
+import codexhx.runtime.model.streamitem.ModelTerminalStopHookTargetKind;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -127,7 +133,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelIntegrations = assertTopLevelSamplingResultIntegrations(testCase, outcome, secretProbe);
 			final topLevelPendingInputDrains = assertTopLevelPostSamplingPendingInputDrains(testCase, topLevelIntegrations, secretProbe);
 			final topLevelHookRecordings = assertTopLevelPendingInputHookRecordings(testCase, topLevelPendingInputDrains, secretProbe);
-			assertTopLevelPromptPreparations(testCase, topLevelHookRecordings, secretProbe);
+			final topLevelPromptPreparations = assertTopLevelPromptPreparations(testCase, topLevelHookRecordings, secretProbe);
+			assertTopLevelTerminalStopHooks(testCase, topLevelIntegrations, topLevelPromptPreparations, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -295,7 +302,8 @@ class ModelStreamItemReducerHarness {
 				final integrations = assertSamplingResultIntegrations(verificationValue, emissions, outcome, secretProbe);
 				final pendingInputDrains = assertPostSamplingPendingInputDrains(verificationValue, integrations, secretProbe);
 				final hookRecordings = assertPendingInputHookRecordings(verificationValue, pendingInputDrains, secretProbe);
-				assertPromptPreparations(verificationValue, hookRecordings, secretProbe);
+				final promptPreparations = assertPromptPreparations(verificationValue, hookRecordings, secretProbe);
+				assertTerminalStopHooks(verificationValue, integrations, promptPreparations, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -1172,9 +1180,99 @@ class ModelStreamItemReducerHarness {
 		return preparation;
 	}
 
+	static function assertTopLevelTerminalStopHooks(
+		testCase:Value,
+		integrations:Array<ModelSamplingResultIntegrationOutcome>,
+		promptPreparations:Array<ModelPromptPreparationOutcome>,
+		secretProbe:String
+	):Array<ModelTerminalStopHookOutcome> {
+		final outcomes:Array<ModelTerminalStopHookOutcome> = [];
+		final values = optionalArrayField(testCase, "terminalStopHookExpects");
+		for (value in values) outcomes.push(assertTerminalStopHook(objectValue(value), integrations, promptPreparations, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTerminalStopHooks(
+		verificationValue:Value,
+		integrations:Array<ModelSamplingResultIntegrationOutcome>,
+		promptPreparations:Array<ModelPromptPreparationOutcome>,
+		secretProbe:String
+	):Array<ModelTerminalStopHookOutcome> {
+		final outcomes:Array<ModelTerminalStopHookOutcome> = [];
+		final values = optionalArrayField(verificationValue, "terminalStopHookExpects");
+		for (value in values) outcomes.push(assertTerminalStopHook(objectValue(value), integrations, promptPreparations, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTerminalStopHook(
+		expectValue:Value,
+		integrations:Array<ModelSamplingResultIntegrationOutcome>,
+		promptPreparations:Array<ModelPromptPreparationOutcome>,
+		secretProbe:String
+	):ModelTerminalStopHookOutcome {
+		final promptPrepId = stringField(expectValue, "promptPreparationRequestId", "");
+		final outcome = ModelTerminalStopHookPolicy.run(new ModelTerminalStopHookRequest(
+			stringField(expectValue, "requestId", ""),
+			samplingResultIntegrationByRequestId(integrations, stringField(expectValue, "integrationRequestId", "")),
+			promptPrepId.length == 0 ? null : promptPreparationByRequestId(promptPreparations, promptPrepId),
+			terminalStopHookTargetKind(stringField(expectValue, "targetKind", "stop")),
+			intField(expectValue, "previewRunCount", 0),
+			intField(expectValue, "completedRunCount", 0),
+			terminalStopHookRunStatusKind(stringField(expectValue, "completedRunStatusKind", "completed")),
+			boolField(expectValue, "shouldBlock", false),
+			intField(expectValue, "continuationFragmentCount", 0),
+			boolField(expectValue, "continuationPromptRenderable", false),
+			boolField(expectValue, "shouldStop", false),
+			boolField(expectValue, "legacyAfterAgentEnabled", false),
+			boolField(expectValue, "legacyAfterAgentAbort", false),
+			boolField(expectValue, "stopHookAlreadyActive", false),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(stringField(expectValue, "integrationRequestId", ""), outcome.integrationRequestId);
+		assertEquals(promptPrepId, outcome.promptPreparationRequestId);
+		assertEquals(stringField(expectValue, "decisionKind", ""), outcome.decisionKind);
+		assertEquals(stringField(expectValue, "targetKind", ""), outcome.targetKind);
+		assertEquals(boolText(boolField(expectValue, "stopHooksEligible", false)), boolText(outcome.stopHooksEligible));
+		assertEquals(boolText(boolField(expectValue, "stopHookDispatched", false)), boolText(outcome.stopHookDispatched));
+		assertEquals(boolText(boolField(expectValue, "stopHookAlreadyActive", false)), boolText(outcome.stopHookAlreadyActive));
+		assertEquals(Std.string(intField(expectValue, "previewRunCount", 0)), Std.string(outcome.previewRunCount));
+		assertEquals(Std.string(intField(expectValue, "completedRunCount", 0)), Std.string(outcome.completedRunCount));
+		assertEquals(stringField(expectValue, "completedRunStatusKind", ""), outcome.completedRunStatusKind);
+		assertEquals(Std.string(intField(expectValue, "hookStartedEventsProjected", 0)), Std.string(outcome.hookStartedEventsProjected));
+		assertEquals(Std.string(intField(expectValue, "hookCompletedEventsProjected", 0)), Std.string(outcome.hookCompletedEventsProjected));
+		assertEquals(boolText(boolField(expectValue, "shouldBlock", false)), boolText(outcome.shouldBlock));
+		assertEquals(Std.string(intField(expectValue, "continuationFragmentCount", 0)), Std.string(outcome.continuationFragmentCount));
+		assertEquals(boolText(boolField(expectValue, "continuationPromptRecorded", false)), boolText(outcome.continuationPromptRecorded));
+		assertEquals(boolText(boolField(expectValue, "warningEmitted", false)), boolText(outcome.warningEmitted));
+		assertEquals(boolText(boolField(expectValue, "shouldStop", false)), boolText(outcome.shouldStop));
+		assertEquals(boolText(boolField(expectValue, "legacyAfterAgentRan", false)), boolText(outcome.legacyAfterAgentRan));
+		assertEquals(boolText(boolField(expectValue, "legacyAfterAgentAbort", false)), boolText(outcome.legacyAfterAgentAbort));
+		assertEquals(stringField(expectValue, "lastAgentMessage", ""), outcome.lastAgentMessage);
+		assertEquals(boolText(boolField(expectValue, "continueLoop", false)), boolText(outcome.continueLoop));
+		assertEquals(boolText(boolField(expectValue, "breakTurnLoop", false)), boolText(outcome.breakTurnLoop));
+		assertEquals(boolText(boolField(expectValue, "errorEmitted", false)), boolText(outcome.errorEmitted));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function samplingResultIntegrationByRequestId(integrations:Array<ModelSamplingResultIntegrationOutcome>, requestId:String):ModelSamplingResultIntegrationOutcome {
 		for (integration in integrations) if (integration.requestId == requestId) return integration;
 		throw "missing sampling result integration outcome: " + requestId;
+	}
+
+	static function promptPreparationByRequestId(
+		preparations:Array<ModelPromptPreparationOutcome>,
+		requestId:String
+	):ModelPromptPreparationOutcome {
+		for (preparation in preparations) if (preparation.requestId == requestId) return preparation;
+		throw "missing prompt preparation outcome: " + requestId;
 	}
 
 	static function pendingInputHookRecordingByRequestId(
@@ -1313,6 +1411,26 @@ class ModelStreamItemReducerHarness {
 			case "continue_input": ModelPendingInputHookActionKind.ContinueInput;
 			case "stop_input": ModelPendingInputHookActionKind.StopInput;
 			case _: throw "unknown pending input hook action kind: " + value;
+		}
+	}
+
+	static function terminalStopHookTargetKind(value:String):ModelTerminalStopHookTargetKind {
+		return switch value {
+			case "stop": ModelTerminalStopHookTargetKind.Stop;
+			case "subagent_stop": ModelTerminalStopHookTargetKind.SubagentStop;
+			case "internal_subagent_skip": ModelTerminalStopHookTargetKind.InternalSubagentSkip;
+			case _: throw "unknown terminal stop hook target kind: " + value;
+		}
+	}
+
+	static function terminalStopHookRunStatusKind(value:String):ModelTerminalStopHookRunStatusKind {
+		return switch value {
+			case "running": ModelTerminalStopHookRunStatusKind.Running;
+			case "completed": ModelTerminalStopHookRunStatusKind.Completed;
+			case "failed": ModelTerminalStopHookRunStatusKind.Failed;
+			case "blocked": ModelTerminalStopHookRunStatusKind.Blocked;
+			case "stopped": ModelTerminalStopHookRunStatusKind.Stopped;
+			case _: throw "unknown terminal stop hook run status kind: " + value;
 		}
 	}
 

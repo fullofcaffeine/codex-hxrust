@@ -843,7 +843,22 @@ Model the upstream prompt preparation path after pending-input hooks:
 
 Status: HXCX-4.70 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic prompt-preparation evidence only, not live hook process execution, live provider traffic, native input queue ownership, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.71+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.71: Terminal Stop-Hook Routing Boundary
+
+Model the upstream terminal stop-hook path after the sampling loop decides no follow-up remains:
+
+- preserve stop-hook eligibility from terminal sampling-result integration;
+- distinguish root `Stop`, thread-spawned `SubagentStop`, and internal-subagent skip targets;
+- project hook-started preview runs and hook-completed runs without executing hook processes;
+- record a hook continuation prompt and continue the turn loop when a block has renderable fragments;
+- emit the warning fallback when a stop hook blocks without a renderable prompt;
+- break the turn for stop-requested outcomes and normal terminal completion;
+- model legacy after-agent abort as an error-emitting terminal path;
+- keep live hook execution, provider traffic, native futures, real tool execution, filesystem mutation, and Cafex behavior out of scope.
+
+Status: HXCX-4.71 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic terminal stop-hook routing evidence only, not live hook process execution, live provider traffic, native input queue ownership, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.72+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
