@@ -93,6 +93,11 @@ import codexhx.runtime.model.streamitem.ModelThreadSnapshotReplayDispatchOutcome
 import codexhx.runtime.model.streamitem.ModelThreadSnapshotReplayDispatchPolicy;
 import codexhx.runtime.model.streamitem.ModelThreadSnapshotReplayDispatchRequest;
 import codexhx.runtime.model.streamitem.ModelThreadSnapshotReplayEventKind;
+import codexhx.runtime.model.streamitem.ModelReplayedServerRequestKind;
+import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceKind;
+import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceOutcome;
+import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfacePolicy;
+import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -171,7 +176,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelTurnTerminalProjections = assertTopLevelTurnTerminalProjections(testCase, topLevelTurnLifecycles, secretProbe);
 			final topLevelTurnReplayReconstructions = assertTopLevelTurnReplayReconstructions(testCase, topLevelTurnTerminalProjections, secretProbe);
 			final topLevelPendingInteractiveReplays = assertTopLevelPendingInteractiveReplays(testCase, topLevelTurnReplayReconstructions, secretProbe);
-			assertTopLevelThreadSnapshotReplayDispatches(testCase, topLevelPendingInteractiveReplays, secretProbe);
+			final topLevelThreadSnapshotReplayDispatches = assertTopLevelThreadSnapshotReplayDispatches(testCase, topLevelPendingInteractiveReplays, secretProbe);
+			assertTopLevelReplayedServerRequestSurfaces(testCase, topLevelThreadSnapshotReplayDispatches, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -346,7 +352,8 @@ class ModelStreamItemReducerHarness {
 				final turnTerminalProjections = assertTurnTerminalProjections(verificationValue, turnLifecycles, secretProbe);
 				final turnReplayReconstructions = assertTurnReplayReconstructions(verificationValue, turnTerminalProjections, secretProbe);
 				final pendingInteractiveReplays = assertPendingInteractiveReplays(verificationValue, turnReplayReconstructions, secretProbe);
-				assertThreadSnapshotReplayDispatches(verificationValue, pendingInteractiveReplays, secretProbe);
+				final threadSnapshotReplayDispatches = assertThreadSnapshotReplayDispatches(verificationValue, pendingInteractiveReplays, secretProbe);
+				assertReplayedServerRequestSurfaces(verificationValue, threadSnapshotReplayDispatches, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -1749,6 +1756,77 @@ class ModelStreamItemReducerHarness {
 		throw "missing pending interactive replay outcome: " + requestId;
 	}
 
+	static function assertTopLevelReplayedServerRequestSurfaces(
+		testCase:Value,
+		dispatches:Array<ModelThreadSnapshotReplayDispatchOutcome>,
+		secretProbe:String
+	):Array<ModelReplayedServerRequestSurfaceOutcome> {
+		final outcomes:Array<ModelReplayedServerRequestSurfaceOutcome> = [];
+		final values = optionalArrayField(testCase, "replayedServerRequestSurfaceExpects");
+		for (value in values) outcomes.push(assertReplayedServerRequestSurface(objectValue(value), dispatches, secretProbe));
+		return outcomes;
+	}
+
+	static function assertReplayedServerRequestSurfaces(
+		verificationValue:Value,
+		dispatches:Array<ModelThreadSnapshotReplayDispatchOutcome>,
+		secretProbe:String
+	):Array<ModelReplayedServerRequestSurfaceOutcome> {
+		final outcomes:Array<ModelReplayedServerRequestSurfaceOutcome> = [];
+		final values = optionalArrayField(verificationValue, "replayedServerRequestSurfaceExpects");
+		for (value in values) outcomes.push(assertReplayedServerRequestSurface(objectValue(value), dispatches, secretProbe));
+		return outcomes;
+	}
+
+	static function assertReplayedServerRequestSurface(
+		expectValue:Value,
+		dispatches:Array<ModelThreadSnapshotReplayDispatchOutcome>,
+		secretProbe:String
+	):ModelReplayedServerRequestSurfaceOutcome {
+		final dispatchRequestId = stringField(expectValue, "dispatchRequestId", "");
+		final outcome = ModelReplayedServerRequestSurfacePolicy.surface(new ModelReplayedServerRequestSurfaceRequest(
+			stringField(expectValue, "requestId", ""),
+			dispatchRequestId.length == 0 ? null : threadSnapshotReplayDispatchByRequestId(dispatches, dispatchRequestId),
+			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
+			turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
+			boolField(expectValue, "snapshotRequestAllowed", false),
+			boolField(expectValue, "liveRequest", false),
+			boolField(expectValue, "elicitationUrlRequest", false),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(dispatchRequestId, outcome.dispatchRequestId);
+		assertEquals(stringField(expectValue, "requestKind", ""), outcome.requestKind);
+		assertEquals(stringField(expectValue, "surfaceKind", ""), outcome.surfaceKind);
+		assertEquals(stringField(expectValue, "replayKind", ""), outcome.replayKind);
+		assertEquals(boolText(boolField(expectValue, "replayKindAttached", false)), boolText(outcome.replayKindAttached));
+		assertEquals(boolText(boolField(expectValue, "snapshotRequestAllowed", false)), boolText(outcome.snapshotRequestAllowed));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetRequestHandled", false)), boolText(outcome.chatWidgetRequestHandled));
+		assertEquals(boolText(boolField(expectValue, "execApprovalRendered", false)), boolText(outcome.execApprovalRendered));
+		assertEquals(boolText(boolField(expectValue, "fileChangeApprovalRendered", false)), boolText(outcome.fileChangeApprovalRendered));
+		assertEquals(boolText(boolField(expectValue, "elicitationRendered", false)), boolText(outcome.elicitationRendered));
+		assertEquals(boolText(boolField(expectValue, "elicitationUrlDeclined", false)), boolText(outcome.elicitationUrlDeclined));
+		assertEquals(boolText(boolField(expectValue, "permissionsRendered", false)), boolText(outcome.permissionsRendered));
+		assertEquals(boolText(boolField(expectValue, "userInputRendered", false)), boolText(outcome.userInputRendered));
+		assertEquals(boolText(boolField(expectValue, "unsupportedStubErrorEmitted", false)), boolText(outcome.unsupportedStubErrorEmitted));
+		assertEquals(boolText(boolField(expectValue, "unsupportedReplayStubSuppressed", false)), boolText(outcome.unsupportedReplayStubSuppressed));
+		assertEquals(boolText(boolField(expectValue, "liveOnlyEffectsSuppressed", false)), boolText(outcome.liveOnlyEffectsSuppressed));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function threadSnapshotReplayDispatchByRequestId(outcomes:Array<ModelThreadSnapshotReplayDispatchOutcome>, requestId:String):ModelThreadSnapshotReplayDispatchOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing thread snapshot replay dispatch outcome: " + requestId;
+	}
+
 	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn replay reconstruction outcome: " + requestId;
@@ -2068,6 +2146,36 @@ class ModelStreamItemReducerHarness {
 			case "notice_suppressed": ModelThreadSnapshotReplayDispatchKind.NoticeSuppressed;
 			case "request_filtered": ModelThreadSnapshotReplayDispatchKind.RequestFiltered;
 			case _: throw "unknown thread snapshot replay dispatch kind: " + value;
+		}
+	}
+
+	static function replayedServerRequestKind(value:String):ModelReplayedServerRequestKind {
+		return switch value {
+			case "exec_approval": ModelReplayedServerRequestKind.ExecApproval;
+			case "file_change_approval": ModelReplayedServerRequestKind.FileChangeApproval;
+			case "mcp_elicitation": ModelReplayedServerRequestKind.McpElicitation;
+			case "permissions_approval": ModelReplayedServerRequestKind.PermissionsApproval;
+			case "user_input": ModelReplayedServerRequestKind.UserInput;
+			case "dynamic_tool_call": ModelReplayedServerRequestKind.DynamicToolCall;
+			case "attestation_generate": ModelReplayedServerRequestKind.AttestationGenerate;
+			case "chatgpt_auth_tokens_refresh": ModelReplayedServerRequestKind.ChatgptAuthTokensRefresh;
+			case "legacy_apply_patch_approval": ModelReplayedServerRequestKind.LegacyApplyPatchApproval;
+			case "legacy_exec_command_approval": ModelReplayedServerRequestKind.LegacyExecCommandApproval;
+			case _: throw "unknown replayed server request kind: " + value;
+		}
+	}
+
+	static function replayedServerRequestSurfaceKind(value:String):ModelReplayedServerRequestSurfaceKind {
+		return switch value {
+			case "exec_approval_prompt": ModelReplayedServerRequestSurfaceKind.ExecApprovalPrompt;
+			case "file_change_approval_prompt": ModelReplayedServerRequestSurfaceKind.FileChangeApprovalPrompt;
+			case "mcp_elicitation_prompt": ModelReplayedServerRequestSurfaceKind.McpElicitationPrompt;
+			case "permissions_prompt": ModelReplayedServerRequestSurfaceKind.PermissionsPrompt;
+			case "user_input_prompt": ModelReplayedServerRequestSurfaceKind.UserInputPrompt;
+			case "unsupported_stub_error": ModelReplayedServerRequestSurfaceKind.UnsupportedStubError;
+			case "unsupported_replay_suppressed": ModelReplayedServerRequestSurfaceKind.UnsupportedReplaySuppressed;
+			case "request_filtered": ModelReplayedServerRequestSurfaceKind.RequestFiltered;
+			case _: throw "unknown replayed server request surface kind: " + value;
 		}
 	}
 
