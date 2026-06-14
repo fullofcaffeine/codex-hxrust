@@ -913,7 +913,20 @@ Model the selected restored-turn reconstruction behavior used by app-server thre
 
 Status: HXCX-4.75 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic replay/reconstruction projection evidence only, not live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.76+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.76: Pending Interactive Replay Routing Boundary
+
+Model selected TUI/app thread-event routing around restored active turns and pending interactive prompts:
+
+- restore active turn id from the latest in-progress turn when setting rebuilt turns;
+- observe incoming interactive server requests and keep only unresolved prompts in thread snapshots;
+- clear prompt queues on matching `TurnCompleted`, server-request resolution, outbound answer/approval commands, request eviction, thread close, and rollback;
+- preserve active turn id when a replayed/nonmatching `TurnCompleted` targets a different turn;
+- expose side-parent pending status as needs-input before approval when prompts remain;
+- replay buffered notifications and requests with `Some(ReplayKind::ThreadSnapshot)`.
+
+Status: HXCX-4.76 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic pending interactive replay routing evidence only, not live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.77+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

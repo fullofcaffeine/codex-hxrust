@@ -82,6 +82,12 @@ import codexhx.runtime.model.streamitem.ModelTurnReplayReconstructionOutcome;
 import codexhx.runtime.model.streamitem.ModelTurnReplayReconstructionPolicy;
 import codexhx.runtime.model.streamitem.ModelTurnReplayReconstructionRequest;
 import codexhx.runtime.model.streamitem.ModelTurnReplayTargetKind;
+import codexhx.runtime.model.streamitem.ModelPendingInteractivePromptKind;
+import codexhx.runtime.model.streamitem.ModelPendingInteractiveReplayEventKind;
+import codexhx.runtime.model.streamitem.ModelPendingInteractiveReplayOutcome;
+import codexhx.runtime.model.streamitem.ModelPendingInteractiveReplayPolicy;
+import codexhx.runtime.model.streamitem.ModelPendingInteractiveReplayRequest;
+import codexhx.runtime.model.streamitem.ModelPendingInteractiveSideStatusKind;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -158,7 +164,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelSamplingErrorTerminals = assertTopLevelSamplingErrorTerminals(testCase, topLevelTerminalStopHooks, secretProbe);
 			final topLevelTurnLifecycles = assertTopLevelTurnLifecycles(testCase, topLevelTerminalStopHooks, topLevelSamplingErrorTerminals, secretProbe);
 			final topLevelTurnTerminalProjections = assertTopLevelTurnTerminalProjections(testCase, topLevelTurnLifecycles, secretProbe);
-			assertTopLevelTurnReplayReconstructions(testCase, topLevelTurnTerminalProjections, secretProbe);
+			final topLevelTurnReplayReconstructions = assertTopLevelTurnReplayReconstructions(testCase, topLevelTurnTerminalProjections, secretProbe);
+			assertTopLevelPendingInteractiveReplays(testCase, topLevelTurnReplayReconstructions, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -331,7 +338,8 @@ class ModelStreamItemReducerHarness {
 				final samplingErrorTerminals = assertSamplingErrorTerminals(verificationValue, terminalStopHooks, secretProbe);
 				final turnLifecycles = assertTurnLifecycles(verificationValue, terminalStopHooks, samplingErrorTerminals, secretProbe);
 				final turnTerminalProjections = assertTurnTerminalProjections(verificationValue, turnLifecycles, secretProbe);
-				assertTurnReplayReconstructions(verificationValue, turnTerminalProjections, secretProbe);
+				final turnReplayReconstructions = assertTurnReplayReconstructions(verificationValue, turnTerminalProjections, secretProbe);
+				assertPendingInteractiveReplays(verificationValue, turnReplayReconstructions, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -1581,6 +1589,86 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelPendingInteractiveReplays(
+		testCase:Value,
+		reconstructions:Array<ModelTurnReplayReconstructionOutcome>,
+		secretProbe:String
+	):Array<ModelPendingInteractiveReplayOutcome> {
+		final outcomes:Array<ModelPendingInteractiveReplayOutcome> = [];
+		final values = optionalArrayField(testCase, "pendingInteractiveReplayExpects");
+		for (value in values) outcomes.push(assertPendingInteractiveReplay(objectValue(value), reconstructions, secretProbe));
+		return outcomes;
+	}
+
+	static function assertPendingInteractiveReplays(
+		verificationValue:Value,
+		reconstructions:Array<ModelTurnReplayReconstructionOutcome>,
+		secretProbe:String
+	):Array<ModelPendingInteractiveReplayOutcome> {
+		final outcomes:Array<ModelPendingInteractiveReplayOutcome> = [];
+		final values = optionalArrayField(verificationValue, "pendingInteractiveReplayExpects");
+		for (value in values) outcomes.push(assertPendingInteractiveReplay(objectValue(value), reconstructions, secretProbe));
+		return outcomes;
+	}
+
+	static function assertPendingInteractiveReplay(
+		expectValue:Value,
+		reconstructions:Array<ModelTurnReplayReconstructionOutcome>,
+		secretProbe:String
+	):ModelPendingInteractiveReplayOutcome {
+		final reconstructionRequestId = stringField(expectValue, "reconstructionRequestId", "");
+		final outcome = ModelPendingInteractiveReplayPolicy.route(new ModelPendingInteractiveReplayRequest(
+			stringField(expectValue, "requestId", ""),
+			reconstructionRequestId.length == 0 ? null : turnReplayReconstructionByRequestId(reconstructions, reconstructionRequestId),
+			pendingInteractiveReplayEventKind(stringField(expectValue, "eventKind", "snapshot")),
+			pendingInteractivePromptKind(stringField(expectValue, "promptKind", "none")),
+			stringField(expectValue, "turnId", ""),
+			stringField(expectValue, "activeTurnIdBefore", ""),
+			stringField(expectValue, "restoredInProgressTurnId", ""),
+			intField(expectValue, "pendingPromptCountBefore", 0),
+			intField(expectValue, "pendingPromptCountForTurnBefore", 0),
+			boolField(expectValue, "requestMatchesPendingPrompt", false),
+			boolField(expectValue, "outboundOpCanChangeState", false),
+			boolField(expectValue, "outboundOpMatchesPrompt", false),
+			boolField(expectValue, "terminalMatchesActiveTurn", false),
+			boolField(expectValue, "snapshotRequested", false),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(reconstructionRequestId, outcome.reconstructionRequestId);
+		assertEquals(stringField(expectValue, "eventKind", ""), outcome.eventKind);
+		assertEquals(stringField(expectValue, "promptKind", ""), outcome.promptKind);
+		assertEquals(boolText(boolField(expectValue, "restoredActiveTurnDetected", false)), boolText(outcome.restoredActiveTurnDetected));
+		assertEquals(stringField(expectValue, "activeTurnIdAfter", ""), outcome.activeTurnIdAfter);
+		assertEquals(boolText(boolField(expectValue, "activeTurnCleared", false)), boolText(outcome.activeTurnCleared));
+		assertEquals(boolText(boolField(expectValue, "nonmatchingCompletionPreservedActive", false)), boolText(outcome.nonmatchingCompletionPreservedActive));
+		assertEquals(boolText(boolField(expectValue, "promptRecorded", false)), boolText(outcome.promptRecorded));
+		assertEquals(boolText(boolField(expectValue, "promptRemovedByTurnCompletion", false)), boolText(outcome.promptRemovedByTurnCompletion));
+		assertEquals(boolText(boolField(expectValue, "promptRemovedByOutboundOp", false)), boolText(outcome.promptRemovedByOutboundOp));
+		assertEquals(boolText(boolField(expectValue, "promptRemovedByResolution", false)), boolText(outcome.promptRemovedByResolution));
+		assertEquals(boolText(boolField(expectValue, "promptRemovedByEviction", false)), boolText(outcome.promptRemovedByEviction));
+		assertEquals(boolText(boolField(expectValue, "pendingReplayCleared", false)), boolText(outcome.pendingReplayCleared));
+		assertEquals(boolText(boolField(expectValue, "snapshotRequestReplayed", false)), boolText(outcome.snapshotRequestReplayed));
+		assertEquals(boolText(boolField(expectValue, "snapshotRequestFiltered", false)), boolText(outcome.snapshotRequestFiltered));
+		assertEquals(boolText(boolField(expectValue, "replayedTurnCompletedHandled", false)), boolText(outcome.replayedTurnCompletedHandled));
+		assertEquals(boolText(boolField(expectValue, "replayUsesThreadSnapshotKind", false)), boolText(outcome.replayUsesThreadSnapshotKind));
+		assertEquals(stringField(expectValue, "sideStatusKind", ""), outcome.sideStatusKind);
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing turn replay reconstruction outcome: " + requestId;
+	}
+
 	static function turnTerminalProjectionByRequestId(outcomes:Array<ModelTurnTerminalProjectionOutcome>, requestId:String):ModelTurnTerminalProjectionOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn terminal projection outcome: " + requestId;
@@ -1835,6 +1923,42 @@ class ModelStreamItemReducerHarness {
 			case "active_fallback": ModelTurnReplayTargetKind.ActiveFallback;
 			case "missing_noop": ModelTurnReplayTargetKind.MissingNoop;
 			case _: throw "unknown turn replay target kind: " + value;
+		}
+	}
+
+	static function pendingInteractiveReplayEventKind(value:String):ModelPendingInteractiveReplayEventKind {
+		return switch value {
+			case "set_turns": ModelPendingInteractiveReplayEventKind.SetTurns;
+			case "server_request": ModelPendingInteractiveReplayEventKind.ServerRequest;
+			case "turn_completed": ModelPendingInteractiveReplayEventKind.TurnCompleted;
+			case "server_request_resolved": ModelPendingInteractiveReplayEventKind.ServerRequestResolved;
+			case "evicted_server_request": ModelPendingInteractiveReplayEventKind.EvictedServerRequest;
+			case "outbound_op": ModelPendingInteractiveReplayEventKind.OutboundOp;
+			case "snapshot": ModelPendingInteractiveReplayEventKind.Snapshot;
+			case "thread_closed": ModelPendingInteractiveReplayEventKind.ThreadClosed;
+			case "rollback": ModelPendingInteractiveReplayEventKind.Rollback;
+			case _: throw "unknown pending interactive replay event kind: " + value;
+		}
+	}
+
+	static function pendingInteractivePromptKind(value:String):ModelPendingInteractivePromptKind {
+		return switch value {
+			case "none": ModelPendingInteractivePromptKind.None;
+			case "exec_approval": ModelPendingInteractivePromptKind.ExecApproval;
+			case "patch_approval": ModelPendingInteractivePromptKind.PatchApproval;
+			case "elicitation": ModelPendingInteractivePromptKind.Elicitation;
+			case "request_permissions": ModelPendingInteractivePromptKind.RequestPermissions;
+			case "request_user_input": ModelPendingInteractivePromptKind.RequestUserInput;
+			case _: throw "unknown pending interactive prompt kind: " + value;
+		}
+	}
+
+	static function pendingInteractiveSideStatusKind(value:String):ModelPendingInteractiveSideStatusKind {
+		return switch value {
+			case "none": ModelPendingInteractiveSideStatusKind.None;
+			case "needs_approval": ModelPendingInteractiveSideStatusKind.NeedsApproval;
+			case "needs_input": ModelPendingInteractiveSideStatusKind.NeedsInput;
+			case _: throw "unknown pending interactive side status kind: " + value;
 		}
 	}
 
