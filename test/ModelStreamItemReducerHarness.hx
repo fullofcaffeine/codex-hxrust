@@ -52,6 +52,9 @@ import codexhx.runtime.model.streamitem.ModelInFlightToolDrainFailureKind;
 import codexhx.runtime.model.streamitem.ModelInFlightToolDrainItem;
 import codexhx.runtime.model.streamitem.ModelInFlightToolDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelInFlightToolDrainRequest;
+import codexhx.runtime.model.streamitem.ModelInFlightToolDrainOutcome;
+import codexhx.runtime.model.streamitem.ModelPostDrainEmissionPolicy;
+import codexhx.runtime.model.streamitem.ModelPostDrainEmissionRequest;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -263,7 +266,8 @@ class ModelStreamItemReducerHarness {
 				final dispatch = assertSamplingDispatch(verificationValue, assembly, secretProbe);
 				final attempts = assertSamplingStreamAttempts(verificationValue, dispatch, secretProbe);
 				final handoffs = assertSamplingStreamEventHandoffs(verificationValue, outcome, attempts, secretProbe);
-				assertInFlightToolDrains(verificationValue, responseInput, handoffs, secretProbe);
+				final drains = assertInFlightToolDrains(verificationValue, responseInput, handoffs, secretProbe);
+				assertPostDrainEmissions(verificationValue, drains, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -781,7 +785,8 @@ class ModelStreamItemReducerHarness {
 		responseInput:ModelPatchToolResponseInputOutcome,
 		handoffs:Array<ModelSamplingStreamEventHandoffOutcome>,
 		secretProbe:String
-	):Void {
+	):Array<ModelInFlightToolDrainOutcome> {
+		final drains:Array<ModelInFlightToolDrainOutcome> = [];
 		final values = optionalArrayField(verificationValue, "inFlightToolDrainExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
@@ -815,7 +820,54 @@ class ModelStreamItemReducerHarness {
 			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(drain.toolExecutedOutsideFixture));
 			assertContains(drain.summary(), stringField(expectValue, "summaryContains", ""));
 			if (secretProbe.length > 0) assertNotContains(drain.summary(), secretProbe);
+			drains.push(drain);
 		}
+		return drains;
+	}
+
+	static function assertPostDrainEmissions(
+		verificationValue:Value,
+		drains:Array<ModelInFlightToolDrainOutcome>,
+		secretProbe:String
+	):Void {
+		final values = optionalArrayField(verificationValue, "postDrainEmissionExpects");
+		for (value in values) {
+			final expectValue = objectValue(value);
+			final emission = ModelPostDrainEmissionPolicy.project(new ModelPostDrainEmissionRequest(
+				stringField(expectValue, "requestId", ""),
+				drainByRequestId(drains, stringField(expectValue, "drainRequestId", "")),
+				boolField(expectValue, "cancellationRequestedAfterDrain", false),
+				boolField(expectValue, "unifiedDiffAvailable", false),
+				boolField(expectValue, "tokenInfoAvailable", false),
+				secretProbe
+			));
+			assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(emission.ok));
+			assertEquals(stringField(expectValue, "code", ""), emission.code);
+			assertEquals(stringField(expectValue, "requestId", ""), emission.requestId);
+			assertEquals(stringField(expectValue, "emissionKind", ""), emission.emissionKind);
+			assertEquals(stringField(expectValue, "cancellationKind", ""), emission.cancellationKind);
+			assertEquals(boolText(boolField(expectValue, "tokenCountPending", false)), boolText(emission.tokenCountPending));
+			assertEquals(boolText(boolField(expectValue, "tokenCountProjected", false)), boolText(emission.tokenCountProjected));
+			assertEquals(boolText(boolField(expectValue, "tokenInfoAvailable", false)), boolText(emission.tokenInfoAvailable));
+			assertEquals(boolText(boolField(expectValue, "cancellationCheckedAfterTokenCount", false)), boolText(emission.cancellationCheckedAfterTokenCount));
+			assertEquals(boolText(boolField(expectValue, "turnDiffPending", false)), boolText(emission.turnDiffPending));
+			assertEquals(boolText(boolField(expectValue, "turnDiffTrackerRead", false)), boolText(emission.turnDiffTrackerRead));
+			assertEquals(boolText(boolField(expectValue, "unifiedDiffAvailable", false)), boolText(emission.unifiedDiffAvailable));
+			assertEquals(boolText(boolField(expectValue, "turnDiffProjected", false)), boolText(emission.turnDiffProjected));
+			assertEquals(boolText(boolField(expectValue, "turnDiffSkippedByCancellation", false)), boolText(emission.turnDiffSkippedByCancellation));
+			assertEquals(boolText(boolField(expectValue, "turnDiffSkippedNoDiff", false)), boolText(emission.turnDiffSkippedNoDiff));
+			assertEquals(boolText(boolField(expectValue, "samplingOutcomeReturned", false)), boolText(emission.samplingOutcomeReturned));
+			assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(emission.liveNetworkAttempted));
+			assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(emission.realFilesystemMutated));
+			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(emission.toolExecutedOutsideFixture));
+			assertContains(emission.summary(), stringField(expectValue, "summaryContains", ""));
+			if (secretProbe.length > 0) assertNotContains(emission.summary(), secretProbe);
+		}
+	}
+
+	static function drainByRequestId(drains:Array<ModelInFlightToolDrainOutcome>, requestId:String):ModelInFlightToolDrainOutcome {
+		for (drain in drains) if (drain.requestId == requestId) return drain;
+		throw "missing in-flight tool drain outcome: " + requestId;
 	}
 
 	static function streamHandoffByRequestId(handoffs:Array<ModelSamplingStreamEventHandoffOutcome>, requestId:String):ModelSamplingStreamEventHandoffOutcome {

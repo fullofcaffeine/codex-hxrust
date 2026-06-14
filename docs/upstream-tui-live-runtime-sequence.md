@@ -776,7 +776,20 @@ Model the upstream post-stream in-flight tool drain before token-count and turn-
 
 Status: HXCX-4.65 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic in-flight tool drain evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.66+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.66: Post-Drain Token And Turn-Diff Emission Boundary
+
+Model the upstream post-drain emission sequence before the sampling outcome is returned:
+
+- project token-count emission only after the in-flight drain completes;
+- check cancellation after token-count emission and before turn-diff emission;
+- project turn-diff tracker reads and `TurnDiffEvent` emission only when a unified diff is available;
+- preserve no-emission behavior when pending flags are absent;
+- preserve sampling outcome return only when cancellation does not interrupt the post-drain path;
+- keep native app-server fanout, real provider traffic, filesystem mutation, and Cafex behavior out of scope.
+
+Status: HXCX-4.66 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic post-drain emission evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.67+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

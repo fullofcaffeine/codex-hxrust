@@ -616,6 +616,32 @@
             "toolExecutedOutsideFixture": false,
             "summaryContains": "drainKind=drained;itemCount=1;drainedItemCount=1;convertedFailureCount=1;fatalFailureCount=0;responseOrderPreserved=true;conversationItemsRecorded=true;memoryModePolluted=false;toolBlockingTimingStarted=true;drainCompletedBeforeTokenCount=false;drainCompletedBeforeTurnDiff=false;tokenCountEmittedAfterDrain=false;turnDiffEmittedAfterDrain=false;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false;orderedItems=[orderIndex=1;callId=call-lite-apply-patch-failed-1;responseKind=custom_tool_call_output;success=false;failureKind=converted_tool_failure;fromResponseInput=true;externalContext=false;text=apply_patch failed in fixture runtime]"
           }
+        ],
+        "postDrainEmissionExpects": [
+          {
+            "ok": true,
+            "code": "post_drain_emission_modeled",
+            "requestId": "post-drain-runtime-failed-no-emission",
+            "drainRequestId": "drain-runtime-failed-converted-tool-failure",
+            "cancellationRequestedAfterDrain": false,
+            "unifiedDiffAvailable": false,
+            "tokenInfoAvailable": false,
+            "emissionKind": "no_emission",
+            "cancellationKind": "none",
+            "tokenCountPending": false,
+            "tokenCountProjected": false,
+            "cancellationCheckedAfterTokenCount": true,
+            "turnDiffPending": false,
+            "turnDiffTrackerRead": false,
+            "turnDiffProjected": false,
+            "turnDiffSkippedByCancellation": false,
+            "turnDiffSkippedNoDiff": false,
+            "samplingOutcomeReturned": true,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "emissionKind=no_emission;cancellationKind=none;tokenCountPending=false;tokenCountProjected=false;tokenInfoAvailable=false;cancellationCheckedAfterTokenCount=true;turnDiffPending=false;turnDiffTrackerRead=false;unifiedDiffAvailable=false;turnDiffProjected=false;turnDiffSkippedByCancellation=false;turnDiffSkippedNoDiff=false;samplingOutcomeReturned=true"
+          }
         ]
       }
     },
@@ -1551,6 +1577,56 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "drainKind=drained;itemCount=1;drainedItemCount=1;convertedFailureCount=0;fatalFailureCount=0;responseOrderPreserved=true;conversationItemsRecorded=true;memoryModePolluted=false;toolBlockingTimingStarted=true;drainCompletedBeforeTokenCount=true;drainCompletedBeforeTurnDiff=true;tokenCountEmittedAfterDrain=true;turnDiffEmittedAfterDrain=true;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false;orderedItems=[orderIndex=3;callId=call-lite-delta-1;responseKind=custom_tool_call_output;success=true;failureKind=none;fromResponseInput=true;externalContext=false;text=Done!]"
+          }
+        ],
+        "postDrainEmissionExpects": [
+          {
+            "ok": true,
+            "code": "post_drain_emission_modeled",
+            "requestId": "post-drain-lite-token-and-turn-diff",
+            "drainRequestId": "drain-lite-completed-success",
+            "cancellationRequestedAfterDrain": false,
+            "unifiedDiffAvailable": true,
+            "tokenInfoAvailable": true,
+            "emissionKind": "token_count_and_turn_diff",
+            "cancellationKind": "none",
+            "tokenCountPending": true,
+            "tokenCountProjected": true,
+            "cancellationCheckedAfterTokenCount": true,
+            "turnDiffPending": true,
+            "turnDiffTrackerRead": true,
+            "turnDiffProjected": true,
+            "turnDiffSkippedByCancellation": false,
+            "turnDiffSkippedNoDiff": false,
+            "samplingOutcomeReturned": true,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "emissionKind=token_count_and_turn_diff;cancellationKind=none;tokenCountPending=true;tokenCountProjected=true;tokenInfoAvailable=true;cancellationCheckedAfterTokenCount=true;turnDiffPending=true;turnDiffTrackerRead=true;unifiedDiffAvailable=true;turnDiffProjected=true;turnDiffSkippedByCancellation=false;turnDiffSkippedNoDiff=false;samplingOutcomeReturned=true"
+          },
+          {
+            "ok": true,
+            "code": "post_drain_emission_modeled",
+            "requestId": "post-drain-lite-cancel-after-token-count",
+            "drainRequestId": "drain-lite-completed-success",
+            "cancellationRequestedAfterDrain": true,
+            "unifiedDiffAvailable": true,
+            "tokenInfoAvailable": true,
+            "emissionKind": "cancelled_after_token_count",
+            "cancellationKind": "after_drain_before_turn_diff",
+            "tokenCountPending": true,
+            "tokenCountProjected": true,
+            "cancellationCheckedAfterTokenCount": true,
+            "turnDiffPending": true,
+            "turnDiffTrackerRead": false,
+            "turnDiffProjected": false,
+            "turnDiffSkippedByCancellation": true,
+            "turnDiffSkippedNoDiff": false,
+            "samplingOutcomeReturned": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "emissionKind=cancelled_after_token_count;cancellationKind=after_drain_before_turn_diff;tokenCountPending=true;tokenCountProjected=true;tokenInfoAvailable=true;cancellationCheckedAfterTokenCount=true;turnDiffPending=true;turnDiffTrackerRead=false;unifiedDiffAvailable=true;turnDiffProjected=false;turnDiffSkippedByCancellation=true;turnDiffSkippedNoDiff=false;samplingOutcomeReturned=false"
           }
         ]
       }
