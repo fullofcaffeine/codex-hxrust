@@ -62,6 +62,10 @@ import codexhx.runtime.model.streamitem.ModelSamplingResultIntegrationPolicy;
 import codexhx.runtime.model.streamitem.ModelSamplingResultIntegrationRequest;
 import codexhx.runtime.model.streamitem.ModelSamplingResultIntegrationOutcome;
 import codexhx.runtime.model.streamitem.ModelSamplingResultIntegrationStatusKind;
+import codexhx.runtime.model.streamitem.ModelSamplingErrorTerminalKind;
+import codexhx.runtime.model.streamitem.ModelSamplingErrorTerminalOutcome;
+import codexhx.runtime.model.streamitem.ModelSamplingErrorTerminalPolicy;
+import codexhx.runtime.model.streamitem.ModelSamplingErrorTerminalRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -134,7 +138,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelPendingInputDrains = assertTopLevelPostSamplingPendingInputDrains(testCase, topLevelIntegrations, secretProbe);
 			final topLevelHookRecordings = assertTopLevelPendingInputHookRecordings(testCase, topLevelPendingInputDrains, secretProbe);
 			final topLevelPromptPreparations = assertTopLevelPromptPreparations(testCase, topLevelHookRecordings, secretProbe);
-			assertTopLevelTerminalStopHooks(testCase, topLevelIntegrations, topLevelPromptPreparations, secretProbe);
+			final topLevelTerminalStopHooks = assertTopLevelTerminalStopHooks(testCase, topLevelIntegrations, topLevelPromptPreparations, secretProbe);
+			assertTopLevelSamplingErrorTerminals(testCase, topLevelTerminalStopHooks, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -303,7 +308,8 @@ class ModelStreamItemReducerHarness {
 				final pendingInputDrains = assertPostSamplingPendingInputDrains(verificationValue, integrations, secretProbe);
 				final hookRecordings = assertPendingInputHookRecordings(verificationValue, pendingInputDrains, secretProbe);
 				final promptPreparations = assertPromptPreparations(verificationValue, hookRecordings, secretProbe);
-				assertTerminalStopHooks(verificationValue, integrations, promptPreparations, secretProbe);
+				final terminalStopHooks = assertTerminalStopHooks(verificationValue, integrations, promptPreparations, secretProbe);
+				assertSamplingErrorTerminals(verificationValue, terminalStopHooks, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -1262,9 +1268,79 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelSamplingErrorTerminals(
+		testCase:Value,
+		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+		secretProbe:String
+	):Array<ModelSamplingErrorTerminalOutcome> {
+		final outcomes:Array<ModelSamplingErrorTerminalOutcome> = [];
+		final values = optionalArrayField(testCase, "samplingErrorTerminalExpects");
+		for (value in values) outcomes.push(assertSamplingErrorTerminal(objectValue(value), terminalStopHooks, secretProbe));
+		return outcomes;
+	}
+
+	static function assertSamplingErrorTerminals(
+		verificationValue:Value,
+		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+		secretProbe:String
+	):Array<ModelSamplingErrorTerminalOutcome> {
+		final outcomes:Array<ModelSamplingErrorTerminalOutcome> = [];
+		final values = optionalArrayField(verificationValue, "samplingErrorTerminalExpects");
+		for (value in values) outcomes.push(assertSamplingErrorTerminal(objectValue(value), terminalStopHooks, secretProbe));
+		return outcomes;
+	}
+
+	static function assertSamplingErrorTerminal(
+		expectValue:Value,
+		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+		secretProbe:String
+	):ModelSamplingErrorTerminalOutcome {
+		final stopHookId = stringField(expectValue, "terminalStopHookRequestId", "");
+		final outcome = ModelSamplingErrorTerminalPolicy.handle(new ModelSamplingErrorTerminalRequest(
+			stringField(expectValue, "requestId", ""),
+			samplingErrorTerminalKind(stringField(expectValue, "errorKind", "generic_codex_error")),
+			stringField(expectValue, "previousLastAgentMessage", ""),
+			boolField(expectValue, "historyImagesReplaceable", false),
+			stringField(expectValue, "errorMessage", ""),
+			stringField(expectValue, "codexErrorInfo", ""),
+			stopHookId.length == 0 ? null : terminalStopHookByRequestId(terminalStopHooks, stopHookId),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(stringField(expectValue, "errorKind", ""), outcome.errorKind);
+		assertEquals(stringField(expectValue, "decisionKind", ""), outcome.decisionKind);
+		assertEquals(stopHookId, outcome.terminalStopHookRequestId);
+		assertEquals(boolText(boolField(expectValue, "stopHooksBypassed", false)), boolText(outcome.stopHooksBypassed));
+		assertEquals(boolText(boolField(expectValue, "turnAborted", false)), boolText(outcome.turnAborted));
+		assertEquals(boolText(boolField(expectValue, "invalidImageSanitizationAttempted", false)), boolText(outcome.invalidImageSanitizationAttempted));
+		assertEquals(boolText(boolField(expectValue, "historyImagesReplaced", false)), boolText(outcome.historyImagesReplaced));
+		assertEquals(boolText(boolField(expectValue, "retrySamplingLoop", false)), boolText(outcome.retrySamplingLoop));
+		assertEquals(boolText(boolField(expectValue, "codexErrorTracked", false)), boolText(outcome.codexErrorTracked));
+		assertEquals(boolText(boolField(expectValue, "lifecycleErrorEmitted", false)), boolText(outcome.lifecycleErrorEmitted));
+		assertEquals(boolText(boolField(expectValue, "errorEventEmitted", false)), boolText(outcome.errorEventEmitted));
+		assertEquals(stringField(expectValue, "expectedCodexErrorInfo", stringField(expectValue, "codexErrorInfo", "")), outcome.codexErrorInfo);
+		assertEquals(boolText(boolField(expectValue, "lastAgentMessagePreserved", false)), boolText(outcome.lastAgentMessagePreserved));
+		assertEquals(stringField(expectValue, "lastAgentMessage", ""), outcome.lastAgentMessage);
+		assertEquals(boolText(boolField(expectValue, "continueLoop", false)), boolText(outcome.continueLoop));
+		assertEquals(boolText(boolField(expectValue, "breakTurnLoop", false)), boolText(outcome.breakTurnLoop));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function samplingResultIntegrationByRequestId(integrations:Array<ModelSamplingResultIntegrationOutcome>, requestId:String):ModelSamplingResultIntegrationOutcome {
 		for (integration in integrations) if (integration.requestId == requestId) return integration;
 		throw "missing sampling result integration outcome: " + requestId;
+	}
+
+	static function terminalStopHookByRequestId(outcomes:Array<ModelTerminalStopHookOutcome>, requestId:String):ModelTerminalStopHookOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing terminal stop hook outcome: " + requestId;
 	}
 
 	static function promptPreparationByRequestId(
@@ -1431,6 +1507,15 @@ class ModelStreamItemReducerHarness {
 			case "blocked": ModelTerminalStopHookRunStatusKind.Blocked;
 			case "stopped": ModelTerminalStopHookRunStatusKind.Stopped;
 			case _: throw "unknown terminal stop hook run status kind: " + value;
+		}
+	}
+
+	static function samplingErrorTerminalKind(value:String):ModelSamplingErrorTerminalKind {
+		return switch value {
+			case "turn_aborted": ModelSamplingErrorTerminalKind.TurnAborted;
+			case "invalid_image_request": ModelSamplingErrorTerminalKind.InvalidImageRequest;
+			case "generic_codex_error": ModelSamplingErrorTerminalKind.GenericCodexError;
+			case _: throw "unknown sampling error terminal kind: " + value;
 		}
 	}
 

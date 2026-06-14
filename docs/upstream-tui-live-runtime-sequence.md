@@ -858,7 +858,20 @@ Model the upstream terminal stop-hook path after the sampling loop decides no fo
 
 Status: HXCX-4.71 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic terminal stop-hook routing evidence only, not live hook process execution, live provider traffic, native input queue ownership, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.72+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.72: Sampling Error Terminal Bypass Boundary
+
+Model the upstream terminal sampling error paths that bypass stop-hook routing:
+
+- break without emitting a new error event for `TurnAborted`, since cancellation is reported by the outer lifecycle;
+- retry the sampling loop after invalid-image history sanitization when previous-turn images can be replaced;
+- emit bad-request lifecycle, tracking, and `EventMsg::Error` when invalid-image retry is not possible;
+- emit generic Codex error lifecycle, tracking, and error-event projection;
+- preserve the previous last agent message across terminal error decisions;
+- keep stop-hook execution, live provider traffic, native futures, real tool execution, filesystem mutation, and Cafex behavior out of scope.
+
+Status: HXCX-4.72 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic sampling-error terminal bypass evidence only, not live hook process execution, live provider traffic, native input queue ownership, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.73+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
