@@ -763,7 +763,20 @@ Model the upstream handoff after a stream attempt either retries before event co
 
 Status: HXCX-4.64 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic stream-event handoff evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.65+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.65: In-Flight Tool Drain Boundary
+
+Model the upstream post-stream in-flight tool drain before token-count and turn-diff emission:
+
+- preserve ordered `ResponseInputItem` drain behavior;
+- record successful and converted-failure tool responses into conversation history;
+- classify fatal tool future failures separately from model-visible converted failures;
+- carry memory-mode pollution facts for external-context response items;
+- prove token-count and turn-diff emission happen after the drain completes;
+- keep native future ownership, real tool execution, provider traffic, filesystem mutation, and Cafex behavior out of scope.
+
+Status: HXCX-4.65 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic in-flight tool drain evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.66+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

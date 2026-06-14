@@ -474,6 +474,34 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "resultKind=retry_scheduled;errorKind=stream_disconnected;retryable=true;retryScheduled=true;retryCountBefore=0;retryCountAfter=1;maxRetries=2;unauthorizedRetryStatePrepared=false;contextWindowMarkedFull=false;usageLimitRateLimitsUpdated=false;terminal=false;streamOpened=false;dispatchAttemptIndex=2;promptItemCount=13;liveProviderRequestAttempted=false;providerStreamOpened=false"
+          },
+          {
+            "ok": true,
+            "code": "sampling_stream_attempt_evaluated",
+            "requestId": "stream-attempt-runtime-failed-fixture-opened",
+            "resultKind": "fixture_stream_opened",
+            "errorKind": "none",
+            "currentRetryCount": 0,
+            "retryable": false,
+            "retryScheduled": false,
+            "retryCountBefore": 0,
+            "retryCountAfter": 0,
+            "maxRetries": 2,
+            "unauthorizedRecoveryAvailable": false,
+            "unauthorizedRetryStatePrepared": false,
+            "contextWindowMarkedFull": false,
+            "rateLimitUpdated": false,
+            "usageLimitRateLimitsUpdated": false,
+            "terminal": false,
+            "streamOpened": true,
+            "dispatchAttemptIndex": 2,
+            "promptItemCount": 13,
+            "liveProviderRequestAttempted": false,
+            "providerStreamOpened": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "resultKind=fixture_stream_opened;errorKind=none;retryable=false;retryScheduled=false;retryCountBefore=0;retryCountAfter=0;maxRetries=2;unauthorizedRetryStatePrepared=false;contextWindowMarkedFull=false;usageLimitRateLimitsUpdated=false;terminal=false;streamOpened=true;dispatchAttemptIndex=2;promptItemCount=13;liveProviderRequestAttempted=false;providerStreamOpened=false"
           }
         ],
         "samplingStreamEventHandoffExpects": [
@@ -512,6 +540,81 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "handoffKind=schedule_retry;eventClass=attempt_retry;attemptResultKind=retry_scheduled;attemptErrorKind=stream_disconnected;terminal=false;turnEnded=false;continuationRequired=false;retryScheduled=true;unauthorizedRetryStatePrepared=false;streamEventsConsumed=false;responseCompleted=false;streamClosedBeforeCompleted=false;toolDrainRequired=false"
+          },
+          {
+            "ok": true,
+            "code": "sampling_stream_event_handoff_modeled",
+            "requestId": "stream-handoff-runtime-failed-converted-tool-failure",
+            "attemptRequestId": "stream-attempt-runtime-failed-fixture-opened",
+            "handoffKind": "continue_turn",
+            "eventClass": "completed_follow_up",
+            "attemptResultKind": "fixture_stream_opened",
+            "attemptErrorKind": "none",
+            "streamClosedBeforeCompleted": false,
+            "inFlightToolCount": 1,
+            "tokenCountPending": false,
+            "turnDiffPending": false,
+            "terminal": false,
+            "turnEnded": false,
+            "continuationRequired": true,
+            "retryScheduled": false,
+            "unauthorizedRetryStatePrepared": false,
+            "streamEventsConsumed": true,
+            "responseCompleted": true,
+            "toolDrainRequired": true,
+            "tokenCountEventDeferredUntilToolDrain": false,
+            "turnDiffEventDeferredUntilToolDrain": false,
+            "needsFollowUp": true,
+            "terminalResponseId": "resp-lite-apply-patch-failed",
+            "totalTokens": 13,
+            "lastAgentMessage": "",
+            "dispatchAttemptIndex": 2,
+            "promptItemCount": 13,
+            "liveProviderRequestAttempted": false,
+            "providerStreamOpened": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "handoffKind=continue_turn;eventClass=completed_follow_up;attemptResultKind=fixture_stream_opened;attemptErrorKind=none;terminal=false;turnEnded=false;continuationRequired=true;retryScheduled=false;unauthorizedRetryStatePrepared=false;streamEventsConsumed=true;responseCompleted=true;streamClosedBeforeCompleted=false;toolDrainRequired=true"
+          }
+        ],
+        "inFlightToolDrainExpects": [
+          {
+            "ok": true,
+            "code": "in_flight_tool_drain_modeled",
+            "requestId": "drain-runtime-failed-converted-tool-failure",
+            "handoffRequestId": "stream-handoff-runtime-failed-converted-tool-failure",
+            "tokenCountPending": false,
+            "turnDiffPending": false,
+            "items": [
+              {
+                "callId": "call-lite-apply-patch-failed-1",
+                "responseKind": "custom_tool_call_output",
+                "orderIndex": 1,
+                "outputText": "apply_patch failed in fixture runtime",
+                "success": false,
+                "failureKind": "converted_tool_failure",
+                "fromResponseInput": true,
+                "externalContext": false
+              }
+            ],
+            "drainKind": "drained",
+            "itemCount": 1,
+            "drainedItemCount": 1,
+            "convertedFailureCount": 1,
+            "fatalFailureCount": 0,
+            "responseOrderPreserved": true,
+            "conversationItemsRecorded": true,
+            "memoryModePolluted": false,
+            "toolBlockingTimingStarted": true,
+            "drainCompletedBeforeTokenCount": false,
+            "drainCompletedBeforeTurnDiff": false,
+            "tokenCountEmittedAfterDrain": false,
+            "turnDiffEmittedAfterDrain": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "drainKind=drained;itemCount=1;drainedItemCount=1;convertedFailureCount=1;fatalFailureCount=0;responseOrderPreserved=true;conversationItemsRecorded=true;memoryModePolluted=false;toolBlockingTimingStarted=true;drainCompletedBeforeTokenCount=false;drainCompletedBeforeTurnDiff=false;tokenCountEmittedAfterDrain=false;turnDiffEmittedAfterDrain=false;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false;orderedItems=[orderIndex=1;callId=call-lite-apply-patch-failed-1;responseKind=custom_tool_call_output;success=false;failureKind=converted_tool_failure;fromResponseInput=true;externalContext=false;text=apply_patch failed in fixture runtime]"
           }
         ]
       }
@@ -1409,6 +1512,45 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "handoffKind=terminal_error;eventClass=attempt_terminal;attemptResultKind=terminal_error;attemptErrorKind=context_window_exceeded;terminal=true;turnEnded=false;continuationRequired=false;retryScheduled=false;unauthorizedRetryStatePrepared=false;streamEventsConsumed=false;responseCompleted=false"
+          }
+        ],
+        "inFlightToolDrainExpects": [
+          {
+            "ok": true,
+            "code": "in_flight_tool_drain_modeled",
+            "requestId": "drain-lite-completed-success",
+            "handoffRequestId": "stream-handoff-lite-completed-follow-up",
+            "tokenCountPending": true,
+            "turnDiffPending": true,
+            "items": [
+              {
+                "callId": "call-lite-delta-1",
+                "responseKind": "custom_tool_call_output",
+                "orderIndex": 3,
+                "outputText": "Done!",
+                "success": true,
+                "failureKind": "none",
+                "fromResponseInput": true,
+                "externalContext": false
+              }
+            ],
+            "drainKind": "drained",
+            "itemCount": 1,
+            "drainedItemCount": 1,
+            "convertedFailureCount": 0,
+            "fatalFailureCount": 0,
+            "responseOrderPreserved": true,
+            "conversationItemsRecorded": true,
+            "memoryModePolluted": false,
+            "toolBlockingTimingStarted": true,
+            "drainCompletedBeforeTokenCount": true,
+            "drainCompletedBeforeTurnDiff": true,
+            "tokenCountEmittedAfterDrain": true,
+            "turnDiffEmittedAfterDrain": true,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "drainKind=drained;itemCount=1;drainedItemCount=1;convertedFailureCount=0;fatalFailureCount=0;responseOrderPreserved=true;conversationItemsRecorded=true;memoryModePolluted=false;toolBlockingTimingStarted=true;drainCompletedBeforeTokenCount=true;drainCompletedBeforeTurnDiff=true;tokenCountEmittedAfterDrain=true;turnDiffEmittedAfterDrain=true;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false;orderedItems=[orderIndex=3;callId=call-lite-delta-1;responseKind=custom_tool_call_output;success=true;failureKind=none;fromResponseInput=true;externalContext=false;text=Done!]"
           }
         ]
       }

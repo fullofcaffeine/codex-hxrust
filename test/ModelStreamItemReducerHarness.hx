@@ -47,6 +47,11 @@ import codexhx.runtime.model.streamitem.ModelSamplingStreamAttemptRequest;
 import codexhx.runtime.model.streamitem.ModelSamplingStreamErrorKind;
 import codexhx.runtime.model.streamitem.ModelSamplingStreamEventHandoffPolicy;
 import codexhx.runtime.model.streamitem.ModelSamplingStreamEventHandoffRequest;
+import codexhx.runtime.model.streamitem.ModelSamplingStreamEventHandoffOutcome;
+import codexhx.runtime.model.streamitem.ModelInFlightToolDrainFailureKind;
+import codexhx.runtime.model.streamitem.ModelInFlightToolDrainItem;
+import codexhx.runtime.model.streamitem.ModelInFlightToolDrainPolicy;
+import codexhx.runtime.model.streamitem.ModelInFlightToolDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -257,7 +262,8 @@ class ModelStreamItemReducerHarness {
 				final assembly = assertSamplingInputAssembly(verificationValue, responseInput, continuation, secretProbe);
 				final dispatch = assertSamplingDispatch(verificationValue, assembly, secretProbe);
 				final attempts = assertSamplingStreamAttempts(verificationValue, dispatch, secretProbe);
-				assertSamplingStreamEventHandoffs(verificationValue, outcome, attempts, secretProbe);
+				final handoffs = assertSamplingStreamEventHandoffs(verificationValue, outcome, attempts, secretProbe);
+				assertInFlightToolDrains(verificationValue, responseInput, handoffs, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -714,7 +720,8 @@ class ModelStreamItemReducerHarness {
 		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
 		attempts:Array<ModelSamplingStreamAttemptOutcome>,
 		secretProbe:String
-	):Void {
+	):Array<ModelSamplingStreamEventHandoffOutcome> {
+		final handoffs:Array<ModelSamplingStreamEventHandoffOutcome> = [];
 		final values = optionalArrayField(verificationValue, "samplingStreamEventHandoffExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
@@ -759,12 +766,88 @@ class ModelStreamItemReducerHarness {
 			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(handoff.toolExecutedOutsideFixture));
 			assertContains(handoff.summary(), stringField(expectValue, "summaryContains", ""));
 			if (secretProbe.length > 0) assertNotContains(handoff.summary(), secretProbe);
+			handoffs.push(handoff);
 		}
+		return handoffs;
 	}
 
 	static function streamAttemptByRequestId(attempts:Array<ModelSamplingStreamAttemptOutcome>, requestId:String):ModelSamplingStreamAttemptOutcome {
 		for (attempt in attempts) if (attempt.requestId == requestId) return attempt;
 		throw "missing stream attempt outcome: " + requestId;
+	}
+
+	static function assertInFlightToolDrains(
+		verificationValue:Value,
+		responseInput:ModelPatchToolResponseInputOutcome,
+		handoffs:Array<ModelSamplingStreamEventHandoffOutcome>,
+		secretProbe:String
+	):Void {
+		final values = optionalArrayField(verificationValue, "inFlightToolDrainExpects");
+		for (value in values) {
+			final expectValue = objectValue(value);
+			final drain = ModelInFlightToolDrainPolicy.drain(new ModelInFlightToolDrainRequest(
+				stringField(expectValue, "requestId", ""),
+				streamHandoffByRequestId(handoffs, stringField(expectValue, "handoffRequestId", "")),
+				responseInput,
+				inFlightDrainItems(arrayField(expectValue, "items")),
+				boolField(expectValue, "tokenCountPending", false),
+				boolField(expectValue, "turnDiffPending", false),
+				secretProbe
+			));
+			assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(drain.ok));
+			assertEquals(stringField(expectValue, "code", ""), drain.code);
+			assertEquals(stringField(expectValue, "requestId", ""), drain.requestId);
+			assertEquals(stringField(expectValue, "drainKind", ""), drain.drainKind);
+			assertEquals(Std.string(intField(expectValue, "itemCount", 0)), Std.string(drain.itemCount));
+			assertEquals(Std.string(intField(expectValue, "drainedItemCount", 0)), Std.string(drain.drainedItemCount));
+			assertEquals(Std.string(intField(expectValue, "convertedFailureCount", 0)), Std.string(drain.convertedFailureCount));
+			assertEquals(Std.string(intField(expectValue, "fatalFailureCount", 0)), Std.string(drain.fatalFailureCount));
+			assertEquals(boolText(boolField(expectValue, "responseOrderPreserved", false)), boolText(drain.responseOrderPreserved));
+			assertEquals(boolText(boolField(expectValue, "conversationItemsRecorded", false)), boolText(drain.conversationItemsRecorded));
+			assertEquals(boolText(boolField(expectValue, "memoryModePolluted", false)), boolText(drain.memoryModePolluted));
+			assertEquals(boolText(boolField(expectValue, "toolBlockingTimingStarted", false)), boolText(drain.toolBlockingTimingStarted));
+			assertEquals(boolText(boolField(expectValue, "drainCompletedBeforeTokenCount", false)), boolText(drain.drainCompletedBeforeTokenCount));
+			assertEquals(boolText(boolField(expectValue, "drainCompletedBeforeTurnDiff", false)), boolText(drain.drainCompletedBeforeTurnDiff));
+			assertEquals(boolText(boolField(expectValue, "tokenCountEmittedAfterDrain", false)), boolText(drain.tokenCountEmittedAfterDrain));
+			assertEquals(boolText(boolField(expectValue, "turnDiffEmittedAfterDrain", false)), boolText(drain.turnDiffEmittedAfterDrain));
+			assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(drain.liveNetworkAttempted));
+			assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(drain.realFilesystemMutated));
+			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(drain.toolExecutedOutsideFixture));
+			assertContains(drain.summary(), stringField(expectValue, "summaryContains", ""));
+			if (secretProbe.length > 0) assertNotContains(drain.summary(), secretProbe);
+		}
+	}
+
+	static function streamHandoffByRequestId(handoffs:Array<ModelSamplingStreamEventHandoffOutcome>, requestId:String):ModelSamplingStreamEventHandoffOutcome {
+		for (handoff in handoffs) if (handoff.requestId == requestId) return handoff;
+		throw "missing stream handoff outcome: " + requestId;
+	}
+
+	static function inFlightDrainItems(values:Array<Value>):Array<ModelInFlightToolDrainItem> {
+		final out:Array<ModelInFlightToolDrainItem> = [];
+		for (value in values) {
+			final item = objectValue(value);
+			out.push(new ModelInFlightToolDrainItem(
+				stringField(item, "callId", ""),
+				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")),
+				intField(item, "orderIndex", 0),
+				stringField(item, "outputText", ""),
+				boolField(item, "success", false),
+				inFlightFailureKind(stringField(item, "failureKind", "none")),
+				boolField(item, "fromResponseInput", false),
+				boolField(item, "externalContext", false)
+			));
+		}
+		return out;
+	}
+
+	static function inFlightFailureKind(value:String):ModelInFlightToolDrainFailureKind {
+		return switch value {
+			case "none": ModelInFlightToolDrainFailureKind.None;
+			case "converted_tool_failure": ModelInFlightToolDrainFailureKind.ConvertedToolFailure;
+			case "fatal_tool_future": ModelInFlightToolDrainFailureKind.FatalToolFuture;
+			case _: throw "unknown in-flight tool drain failure kind: " + value;
+		}
 	}
 
 	static function samplingStreamErrorKind(value:String):ModelSamplingStreamErrorKind {
