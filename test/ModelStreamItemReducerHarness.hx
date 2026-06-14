@@ -115,6 +115,11 @@ import codexhx.runtime.model.streamitem.ModelAppServerQueuedRequestDeliveryKind;
 import codexhx.runtime.model.streamitem.ModelAppServerQueuedRequestDeliveryOutcome;
 import codexhx.runtime.model.streamitem.ModelAppServerQueuedRequestDeliveryPolicy;
 import codexhx.runtime.model.streamitem.ModelAppServerQueuedRequestDeliveryRequest;
+import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
+import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
+import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -198,7 +203,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelAppServerRequestResolutions = assertTopLevelAppServerRequestResolutions(testCase, topLevelReplayedServerRequestSurfaces, secretProbe);
 			final topLevelAppServerResponseDispatches = assertTopLevelAppServerResponseDispatches(testCase, topLevelAppServerRequestResolutions, secretProbe);
 			final topLevelAppServerRequestEnqueues = assertTopLevelAppServerRequestEnqueues(testCase, topLevelAppServerResponseDispatches, secretProbe);
-			assertTopLevelAppServerQueuedRequestDeliveries(testCase, topLevelAppServerRequestEnqueues, secretProbe);
+			final topLevelAppServerQueuedRequestDeliveries = assertTopLevelAppServerQueuedRequestDeliveries(testCase, topLevelAppServerRequestEnqueues, secretProbe);
+			assertTopLevelThreadBufferedRequestEvictions(testCase, topLevelAppServerQueuedRequestDeliveries, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -378,7 +384,8 @@ class ModelStreamItemReducerHarness {
 				final appServerRequestResolutions = assertAppServerRequestResolutions(verificationValue, replayedServerRequestSurfaces, secretProbe);
 				final appServerResponseDispatches = assertAppServerResponseDispatches(verificationValue, appServerRequestResolutions, secretProbe);
 				final appServerRequestEnqueues = assertAppServerRequestEnqueues(verificationValue, appServerResponseDispatches, secretProbe);
-				assertAppServerQueuedRequestDeliveries(verificationValue, appServerRequestEnqueues, secretProbe);
+				final appServerQueuedRequestDeliveries = assertAppServerQueuedRequestDeliveries(verificationValue, appServerRequestEnqueues, secretProbe);
+				assertThreadBufferedRequestEvictions(verificationValue, appServerQueuedRequestDeliveries, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -2165,6 +2172,81 @@ class ModelStreamItemReducerHarness {
 		throw "missing app-server request enqueue outcome: " + requestId;
 	}
 
+	static function assertTopLevelThreadBufferedRequestEvictions(
+		testCase:Value,
+		deliveries:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
+		secretProbe:String
+	):Array<ModelThreadBufferedRequestEvictionOutcome> {
+		final outcomes:Array<ModelThreadBufferedRequestEvictionOutcome> = [];
+		final values = optionalArrayField(testCase, "threadBufferedRequestEvictionExpects");
+		for (value in values) outcomes.push(assertThreadBufferedRequestEviction(objectValue(value), deliveries, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadBufferedRequestEvictions(
+		verificationValue:Value,
+		deliveries:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
+		secretProbe:String
+	):Array<ModelThreadBufferedRequestEvictionOutcome> {
+		final outcomes:Array<ModelThreadBufferedRequestEvictionOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadBufferedRequestEvictionExpects");
+		for (value in values) outcomes.push(assertThreadBufferedRequestEviction(objectValue(value), deliveries, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadBufferedRequestEviction(
+		expectValue:Value,
+		deliveries:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
+		secretProbe:String
+	):ModelThreadBufferedRequestEvictionOutcome {
+		final deliveryRequestId = stringField(expectValue, "deliveryRequestId", "");
+		final outcome = ModelThreadBufferedRequestEvictionPolicy.model(new ModelThreadBufferedRequestEvictionRequest(
+			stringField(expectValue, "requestId", ""),
+			appServerQueuedRequestDeliveryByRequestId(deliveries, deliveryRequestId),
+			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
+			threadBufferedEventKind(stringField(expectValue, "incomingEventKind", "request")),
+			threadBufferedEventKind(stringField(expectValue, "evictedEventKind", "notification")),
+			intField(expectValue, "bufferCapacity", 0),
+			intField(expectValue, "bufferEventCountBefore", 0),
+			intField(expectValue, "incomingOrderIndex", 0),
+			intField(expectValue, "evictedOrderIndex", 0),
+			boolField(expectValue, "targetRequestEvicted", false),
+			boolField(expectValue, "targetRequestWasPendingInteractive", false),
+			boolField(expectValue, "pendingReplayRecordedBefore", false),
+			boolField(expectValue, "snapshotFilterChecked", false),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(deliveryRequestId, outcome.deliveryRequestId);
+		assertEquals(stringField(expectValue, "requestKind", ""), outcome.requestKind);
+		assertEquals(threadBufferedRequestEvictionKind(stringField(expectValue, "evictionKind", "")), outcome.evictionKind);
+		assertEquals(threadBufferedEventKind(stringField(expectValue, "incomingEventKind", "request")), outcome.incomingEventKind);
+		assertEquals(threadBufferedEventKind(stringField(expectValue, "evictedEventKind", "notification")), outcome.evictedEventKind);
+		assertEquals(boolText(boolField(expectValue, "overCapacity", false)), boolText(outcome.overCapacity));
+		assertEquals(boolText(boolField(expectValue, "evictedRequestObserved", false)), boolText(outcome.evictedRequestObserved));
+		assertEquals(boolText(boolField(expectValue, "pendingPromptRemoved", false)), boolText(outcome.pendingPromptRemoved));
+		assertEquals(boolText(boolField(expectValue, "pendingReplayRecordedAfter", false)), boolText(outcome.pendingReplayRecordedAfter));
+		assertEquals(boolText(boolField(expectValue, "snapshotRequestReplayed", false)), boolText(outcome.snapshotRequestReplayed));
+		assertEquals(boolText(boolField(expectValue, "replaySkippedAfterEviction", false)), boolText(outcome.replaySkippedAfterEviction));
+		assertEquals(Std.string(intField(expectValue, "bufferCountAfter", 0)), Std.string(outcome.bufferCountAfter));
+		assertEquals(boolText(boolField(expectValue, "capacityPreserved", false)), boolText(outcome.capacityPreserved));
+		assertEquals(boolText(boolField(expectValue, "orderingPreserved", false)), boolText(outcome.orderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function appServerQueuedRequestDeliveryByRequestId(outcomes:Array<ModelAppServerQueuedRequestDeliveryOutcome>, requestId:String):ModelAppServerQueuedRequestDeliveryOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing app-server queued request delivery outcome: " + requestId;
+	}
+
 	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn replay reconstruction outcome: " + requestId;
@@ -2572,6 +2654,27 @@ class ModelStreamItemReducerHarness {
 			case "replay_delivered": ModelAppServerQueuedRequestDeliveryKind.ReplayDelivered;
 			case "not_queued_skipped": ModelAppServerQueuedRequestDeliveryKind.NotQueuedSkipped;
 			case _: throw "unknown app-server queued request delivery kind: " + value;
+		}
+	}
+
+	static function threadBufferedEventKind(value:String):ModelThreadBufferedEventKind {
+		return switch value {
+			case "request": ModelThreadBufferedEventKind.Request;
+			case "notification": ModelThreadBufferedEventKind.Notification;
+			case "history_entry_response": ModelThreadBufferedEventKind.HistoryEntryResponse;
+			case "feedback_submission": ModelThreadBufferedEventKind.FeedbackSubmission;
+			case _: throw "unknown thread buffered event kind: " + value;
+		}
+	}
+
+	static function threadBufferedRequestEvictionKind(value:String):ModelThreadBufferedRequestEvictionKind {
+		return switch value {
+			case "buffered_request_retained": ModelThreadBufferedRequestEvictionKind.BufferedRequestRetained;
+			case "pending_prompt_removed": ModelThreadBufferedRequestEvictionKind.PendingPromptRemoved;
+			case "replay_skipped_after_eviction": ModelThreadBufferedRequestEvictionKind.ReplaySkippedAfterEviction;
+			case "non_request_eviction_ignored": ModelThreadBufferedRequestEvictionKind.NonRequestEvictionIgnored;
+			case "invalid_capacity_refused": ModelThreadBufferedRequestEvictionKind.InvalidCapacityRefused;
+			case _: throw "unknown thread buffered request eviction kind: " + value;
 		}
 	}
 
