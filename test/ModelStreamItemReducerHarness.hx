@@ -103,6 +103,10 @@ import codexhx.runtime.model.streamitem.ModelAppServerRequestResolutionOutcome;
 import codexhx.runtime.model.streamitem.ModelAppServerRequestResolutionPayloadKind;
 import codexhx.runtime.model.streamitem.ModelAppServerRequestResolutionPolicy;
 import codexhx.runtime.model.streamitem.ModelAppServerRequestResolutionRequest;
+import codexhx.runtime.model.streamitem.ModelAppServerResponseDispatchKind;
+import codexhx.runtime.model.streamitem.ModelAppServerResponseDispatchOutcome;
+import codexhx.runtime.model.streamitem.ModelAppServerResponseDispatchPolicy;
+import codexhx.runtime.model.streamitem.ModelAppServerResponseDispatchRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -183,7 +187,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelPendingInteractiveReplays = assertTopLevelPendingInteractiveReplays(testCase, topLevelTurnReplayReconstructions, secretProbe);
 			final topLevelThreadSnapshotReplayDispatches = assertTopLevelThreadSnapshotReplayDispatches(testCase, topLevelPendingInteractiveReplays, secretProbe);
 			final topLevelReplayedServerRequestSurfaces = assertTopLevelReplayedServerRequestSurfaces(testCase, topLevelThreadSnapshotReplayDispatches, secretProbe);
-			assertTopLevelAppServerRequestResolutions(testCase, topLevelReplayedServerRequestSurfaces, secretProbe);
+			final topLevelAppServerRequestResolutions = assertTopLevelAppServerRequestResolutions(testCase, topLevelReplayedServerRequestSurfaces, secretProbe);
+			assertTopLevelAppServerResponseDispatches(testCase, topLevelAppServerRequestResolutions, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -360,7 +365,8 @@ class ModelStreamItemReducerHarness {
 				final pendingInteractiveReplays = assertPendingInteractiveReplays(verificationValue, turnReplayReconstructions, secretProbe);
 				final threadSnapshotReplayDispatches = assertThreadSnapshotReplayDispatches(verificationValue, pendingInteractiveReplays, secretProbe);
 				final replayedServerRequestSurfaces = assertReplayedServerRequestSurfaces(verificationValue, threadSnapshotReplayDispatches, secretProbe);
-				assertAppServerRequestResolutions(verificationValue, replayedServerRequestSurfaces, secretProbe);
+				final appServerRequestResolutions = assertAppServerRequestResolutions(verificationValue, replayedServerRequestSurfaces, secretProbe);
+				assertAppServerResponseDispatches(verificationValue, appServerRequestResolutions, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -1920,6 +1926,81 @@ class ModelStreamItemReducerHarness {
 		throw "missing replayed server request surface outcome: " + requestId;
 	}
 
+	static function assertTopLevelAppServerResponseDispatches(
+		testCase:Value,
+		resolutions:Array<ModelAppServerRequestResolutionOutcome>,
+		secretProbe:String
+	):Array<ModelAppServerResponseDispatchOutcome> {
+		final outcomes:Array<ModelAppServerResponseDispatchOutcome> = [];
+		final values = optionalArrayField(testCase, "appServerResponseDispatchExpects");
+		for (value in values) outcomes.push(assertAppServerResponseDispatch(objectValue(value), resolutions, secretProbe));
+		return outcomes;
+	}
+
+	static function assertAppServerResponseDispatches(
+		verificationValue:Value,
+		resolutions:Array<ModelAppServerRequestResolutionOutcome>,
+		secretProbe:String
+	):Array<ModelAppServerResponseDispatchOutcome> {
+		final outcomes:Array<ModelAppServerResponseDispatchOutcome> = [];
+		final values = optionalArrayField(verificationValue, "appServerResponseDispatchExpects");
+		for (value in values) outcomes.push(assertAppServerResponseDispatch(objectValue(value), resolutions, secretProbe));
+		return outcomes;
+	}
+
+	static function assertAppServerResponseDispatch(
+		expectValue:Value,
+		resolutions:Array<ModelAppServerRequestResolutionOutcome>,
+		secretProbe:String
+	):ModelAppServerResponseDispatchOutcome {
+		final resolutionRequestId = stringField(expectValue, "resolutionRequestId", "");
+		final outcome = ModelAppServerResponseDispatchPolicy.dispatch(new ModelAppServerResponseDispatchRequest(
+			stringField(expectValue, "requestId", ""),
+			appServerRequestResolutionByRequestId(resolutions, resolutionRequestId),
+			appServerResponseDispatchKind(stringField(expectValue, "dispatchKind", "resolve_response")),
+			boolField(expectValue, "appServerSessionAvailable", false),
+			boolField(expectValue, "serializedPayloadAvailable", false),
+			boolField(expectValue, "transportSendSucceeds", false),
+			stringField(expectValue, "unsupportedRejectReason", ""),
+			intField(expectValue, "previousDispatchCount", 0),
+			intField(expectValue, "responseOrderIndex", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(resolutionRequestId, outcome.resolutionRequestId);
+		assertEquals(stringField(expectValue, "requestKind", ""), outcome.requestKind);
+		assertEquals(stringField(expectValue, "dispatchKind", ""), outcome.dispatchKind);
+		assertEquals(stringField(expectValue, "appServerRequestId", ""), outcome.appServerRequestId);
+		assertEquals(stringField(expectValue, "payloadKind", ""), outcome.payloadKind);
+		assertEquals(boolText(boolField(expectValue, "appServerSessionAvailable", false)), boolText(outcome.appServerSessionAvailable));
+		assertEquals(boolText(boolField(expectValue, "serializedPayloadAvailable", false)), boolText(outcome.serializedPayloadAvailable));
+		assertEquals(boolText(boolField(expectValue, "dispatchIntentRecorded", false)), boolText(outcome.dispatchIntentRecorded));
+		assertEquals(boolText(boolField(expectValue, "resolveServerRequestIntent", false)), boolText(outcome.resolveServerRequestIntent));
+		assertEquals(boolText(boolField(expectValue, "rejectServerRequestIntent", false)), boolText(outcome.rejectServerRequestIntent));
+		assertEquals(boolText(boolField(expectValue, "jsonRpcErrorPayloadBuilt", false)), boolText(outcome.jsonRpcErrorPayloadBuilt));
+		assertEquals(boolText(boolField(expectValue, "responseOrderingPreserved", false)), boolText(outcome.responseOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "pendingReplayStateRefreshRequested", false)), boolText(outcome.pendingReplayStateRefreshRequested));
+		assertEquals(boolText(boolField(expectValue, "missingSessionNoop", false)), boolText(outcome.missingSessionNoop));
+		assertEquals(boolText(boolField(expectValue, "serializationRefused", false)), boolText(outcome.serializationRefused));
+		assertEquals(boolText(boolField(expectValue, "dispatchFailureRecorded", false)), boolText(outcome.dispatchFailureRecorded));
+		assertEquals(boolText(boolField(expectValue, "liveTransportAttempted", false)), boolText(outcome.liveTransportAttempted));
+		assertEquals(boolText(boolField(expectValue, "liveTransportSuppressed", false)), boolText(outcome.liveTransportSuppressed));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function appServerRequestResolutionByRequestId(outcomes:Array<ModelAppServerRequestResolutionOutcome>, requestId:String):ModelAppServerRequestResolutionOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing app-server request resolution outcome: " + requestId;
+	}
+
 	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn replay reconstruction outcome: " + requestId;
@@ -2293,6 +2374,16 @@ class ModelStreamItemReducerHarness {
 			case "tool_request_user_input_response": ModelAppServerRequestResolutionPayloadKind.ToolRequestUserInputResponse;
 			case "mcp_elicitation_response": ModelAppServerRequestResolutionPayloadKind.McpElicitationResponse;
 			case _: throw "unknown app-server request resolution payload kind: " + value;
+		}
+	}
+
+	static function appServerResponseDispatchKind(value:String):ModelAppServerResponseDispatchKind {
+		return switch value {
+			case "resolve_response": ModelAppServerResponseDispatchKind.ResolveResponse;
+			case "reject_unsupported": ModelAppServerResponseDispatchKind.RejectUnsupported;
+			case "serialization_refusal": ModelAppServerResponseDispatchKind.SerializationRefusal;
+			case "missing_session_noop": ModelAppServerResponseDispatchKind.MissingSessionNoop;
+			case _: throw "unknown app-server response dispatch kind: " + value;
 		}
 	}
 
