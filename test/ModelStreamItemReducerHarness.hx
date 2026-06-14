@@ -107,6 +107,10 @@ import codexhx.runtime.model.streamitem.ModelAppServerResponseDispatchKind;
 import codexhx.runtime.model.streamitem.ModelAppServerResponseDispatchOutcome;
 import codexhx.runtime.model.streamitem.ModelAppServerResponseDispatchPolicy;
 import codexhx.runtime.model.streamitem.ModelAppServerResponseDispatchRequest;
+import codexhx.runtime.model.streamitem.ModelAppServerRequestEnqueueOutcome;
+import codexhx.runtime.model.streamitem.ModelAppServerRequestEnqueuePolicy;
+import codexhx.runtime.model.streamitem.ModelAppServerRequestEnqueueRequest;
+import codexhx.runtime.model.streamitem.ModelAppServerRequestEnqueueRouteKind;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -188,7 +192,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelThreadSnapshotReplayDispatches = assertTopLevelThreadSnapshotReplayDispatches(testCase, topLevelPendingInteractiveReplays, secretProbe);
 			final topLevelReplayedServerRequestSurfaces = assertTopLevelReplayedServerRequestSurfaces(testCase, topLevelThreadSnapshotReplayDispatches, secretProbe);
 			final topLevelAppServerRequestResolutions = assertTopLevelAppServerRequestResolutions(testCase, topLevelReplayedServerRequestSurfaces, secretProbe);
-			assertTopLevelAppServerResponseDispatches(testCase, topLevelAppServerRequestResolutions, secretProbe);
+			final topLevelAppServerResponseDispatches = assertTopLevelAppServerResponseDispatches(testCase, topLevelAppServerRequestResolutions, secretProbe);
+			assertTopLevelAppServerRequestEnqueues(testCase, topLevelAppServerResponseDispatches, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -366,7 +371,8 @@ class ModelStreamItemReducerHarness {
 				final threadSnapshotReplayDispatches = assertThreadSnapshotReplayDispatches(verificationValue, pendingInteractiveReplays, secretProbe);
 				final replayedServerRequestSurfaces = assertReplayedServerRequestSurfaces(verificationValue, threadSnapshotReplayDispatches, secretProbe);
 				final appServerRequestResolutions = assertAppServerRequestResolutions(verificationValue, replayedServerRequestSurfaces, secretProbe);
-				assertAppServerResponseDispatches(verificationValue, appServerRequestResolutions, secretProbe);
+				final appServerResponseDispatches = assertAppServerResponseDispatches(verificationValue, appServerRequestResolutions, secretProbe);
+				assertAppServerRequestEnqueues(verificationValue, appServerResponseDispatches, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -2001,6 +2007,88 @@ class ModelStreamItemReducerHarness {
 		throw "missing app-server request resolution outcome: " + requestId;
 	}
 
+	static function assertTopLevelAppServerRequestEnqueues(
+		testCase:Value,
+		dispatches:Array<ModelAppServerResponseDispatchOutcome>,
+		secretProbe:String
+	):Array<ModelAppServerRequestEnqueueOutcome> {
+		final outcomes:Array<ModelAppServerRequestEnqueueOutcome> = [];
+		final values = optionalArrayField(testCase, "appServerRequestEnqueueExpects");
+		for (value in values) outcomes.push(assertAppServerRequestEnqueue(objectValue(value), dispatches, secretProbe));
+		return outcomes;
+	}
+
+	static function assertAppServerRequestEnqueues(
+		verificationValue:Value,
+		dispatches:Array<ModelAppServerResponseDispatchOutcome>,
+		secretProbe:String
+	):Array<ModelAppServerRequestEnqueueOutcome> {
+		final outcomes:Array<ModelAppServerRequestEnqueueOutcome> = [];
+		final values = optionalArrayField(verificationValue, "appServerRequestEnqueueExpects");
+		for (value in values) outcomes.push(assertAppServerRequestEnqueue(objectValue(value), dispatches, secretProbe));
+		return outcomes;
+	}
+
+	static function assertAppServerRequestEnqueue(
+		expectValue:Value,
+		dispatches:Array<ModelAppServerResponseDispatchOutcome>,
+		secretProbe:String
+	):ModelAppServerRequestEnqueueOutcome {
+		final responseDispatchRequestId = stringField(expectValue, "responseDispatchRequestId", "");
+		final outcome = ModelAppServerRequestEnqueuePolicy.enqueue(new ModelAppServerRequestEnqueueRequest(
+			stringField(expectValue, "requestId", ""),
+			responseDispatchRequestId.length == 0 ? null : appServerResponseDispatchByRequestId(dispatches, responseDispatchRequestId),
+			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
+			stringField(expectValue, "threadId", ""),
+			stringField(expectValue, "primaryThreadId", ""),
+			boolField(expectValue, "primaryThreadKnown", false),
+			stringField(expectValue, "activeThreadId", ""),
+			boolField(expectValue, "threadIdAvailable", false),
+			boolField(expectValue, "pendingRequestRecorded", false),
+			boolField(expectValue, "queueActive", false),
+			boolField(expectValue, "enqueueSucceeds", false),
+			intField(expectValue, "pendingPrimaryEventCountBefore", 0),
+			intField(expectValue, "threadQueueEventCountBefore", 0),
+			intField(expectValue, "previousRequestCount", 0),
+			intField(expectValue, "requestOrderIndex", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(responseDispatchRequestId, outcome.responseDispatchRequestId);
+		assertEquals(stringField(expectValue, "requestKind", ""), outcome.requestKind);
+		assertEquals(stringField(expectValue, "routeKind", ""), outcome.routeKind);
+		assertEquals(stringField(expectValue, "threadId", ""), outcome.threadId);
+		assertEquals(stringField(expectValue, "primaryThreadId", ""), outcome.primaryThreadId);
+		assertEquals(boolText(boolField(expectValue, "requestRecordedPending", false)), boolText(outcome.requestRecordedPending));
+		assertEquals(boolText(boolField(expectValue, "primaryPendingEventQueued", false)), boolText(outcome.primaryPendingEventQueued));
+		assertEquals(boolText(boolField(expectValue, "primaryThreadRequestQueued", false)), boolText(outcome.primaryThreadRequestQueued));
+		assertEquals(boolText(boolField(expectValue, "backgroundThreadRequestQueued", false)), boolText(outcome.backgroundThreadRequestQueued));
+		assertEquals(boolText(boolField(expectValue, "threadlessRequestIgnored", false)), boolText(outcome.threadlessRequestIgnored));
+		assertEquals(boolText(boolField(expectValue, "unsupportedAlreadyRejectedSkipped", false)), boolText(outcome.unsupportedAlreadyRejectedSkipped));
+		assertEquals(boolText(boolField(expectValue, "enqueueFailureRecorded", false)), boolText(outcome.enqueueFailureRecorded));
+		assertEquals(boolText(boolField(expectValue, "pendingInteractiveReplayRecordingIntended", false)), boolText(outcome.pendingInteractiveReplayRecordingIntended));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetDeliveryIntended", false)), boolText(outcome.chatWidgetDeliveryIntended));
+		assertEquals(boolText(boolField(expectValue, "sideParentStatusRefreshIntended", false)), boolText(outcome.sideParentStatusRefreshIntended));
+		assertEquals(boolText(boolField(expectValue, "refreshPendingApprovalsIntended", false)), boolText(outcome.refreshPendingApprovalsIntended));
+		assertEquals(boolText(boolField(expectValue, "requestOrderingPreserved", false)), boolText(outcome.requestOrderingPreserved));
+		assertEquals(Std.string(intField(expectValue, "pendingPrimaryEventCountAfter", 0)), Std.string(outcome.pendingPrimaryEventCountAfter));
+		assertEquals(Std.string(intField(expectValue, "threadQueueEventCountAfter", 0)), Std.string(outcome.threadQueueEventCountAfter));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function appServerResponseDispatchByRequestId(outcomes:Array<ModelAppServerResponseDispatchOutcome>, requestId:String):ModelAppServerResponseDispatchOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing app-server response dispatch outcome: " + requestId;
+	}
+
 	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn replay reconstruction outcome: " + requestId;
@@ -2384,6 +2472,18 @@ class ModelStreamItemReducerHarness {
 			case "serialization_refusal": ModelAppServerResponseDispatchKind.SerializationRefusal;
 			case "missing_session_noop": ModelAppServerResponseDispatchKind.MissingSessionNoop;
 			case _: throw "unknown app-server response dispatch kind: " + value;
+		}
+	}
+
+	static function appServerRequestEnqueueRouteKind(value:String):ModelAppServerRequestEnqueueRouteKind {
+		return switch value {
+			case "primary_pending_queue": ModelAppServerRequestEnqueueRouteKind.PrimaryPendingQueue;
+			case "primary_thread_queue": ModelAppServerRequestEnqueueRouteKind.PrimaryThreadQueue;
+			case "background_thread_queue": ModelAppServerRequestEnqueueRouteKind.BackgroundThreadQueue;
+			case "threadless_ignored": ModelAppServerRequestEnqueueRouteKind.ThreadlessIgnored;
+			case "unsupported_rejected_skip": ModelAppServerRequestEnqueueRouteKind.UnsupportedRejectedSkip;
+			case "enqueue_failure": ModelAppServerRequestEnqueueRouteKind.EnqueueFailure;
+			case _: throw "unknown app-server request enqueue route kind: " + value;
 		}
 	}
 

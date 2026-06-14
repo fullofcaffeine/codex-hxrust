@@ -974,7 +974,19 @@ Model selected response/reject dispatch intent after pending request resolution:
 
 Status: HXCX-4.80 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic response dispatch evidence only, not live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.81+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.81: App-Server Request Enqueue Routing Boundary
+
+Model selected incoming server-request enqueue routing after recording/rejection:
+
+- route primary-thread requests to the pending primary buffer before primary setup;
+- route active primary-thread requests into the active thread queue and chatwidget delivery intent;
+- route background-thread requests into per-thread queues with side-parent status refresh intent;
+- preserve threadless request ignore behavior;
+- skip enqueue after unsupported requests have already been rejected.
+
+Status: HXCX-4.81 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic enqueue-routing evidence only, not live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.82+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
