@@ -349,6 +349,25 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "responseKind=custom_tool_call_output;success=false;followUpQueued=true;modelNeedsFollowUp=true;postToolUseResponseVisible=false;stdoutVisible=false;stderrVisible=true;resultTextVisible=true;outputText=apply_patch failed in fixture runtime"
+        },
+        "toolResponseInputExpect": {
+          "ok": true,
+          "code": "patch_tool_response_input_admitted",
+          "requestId": "patch-response-input-runtime-failed",
+          "callId": "call-lite-apply-patch-failed-1",
+          "responseKind": "custom_tool_call_output",
+          "admissionKind": "admitted",
+          "previousResponseCount": 0,
+          "responseOrderIndex": 1,
+          "nextInputCount": 1,
+          "success": false,
+          "followUpRequestRequired": true,
+          "toolFutureDrained": true,
+          "conversationItemRecorded": true,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "responseKind=custom_tool_call_output;admissionKind=admitted;responseOrderIndex=1;nextInputCount=1;success=false;followUpRequestRequired=true;toolFutureDrained=true;conversationItemRecorded=true;outputText=apply_patch failed in fixture runtime"
         }
       }
     },
@@ -524,6 +543,25 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "responseKind=custom_tool_call_output;success=false;followUpQueued=true;modelNeedsFollowUp=true;postToolUseResponseVisible=false;stdoutVisible=false;stderrVisible=true;resultTextVisible=true;outputText=user declined patch in fixture"
+        },
+        "toolResponseInputExpect": {
+          "ok": true,
+          "code": "patch_tool_response_input_admitted",
+          "requestId": "patch-response-input-openai-declined",
+          "callId": "call-openai-delta-1",
+          "responseKind": "custom_tool_call_output",
+          "admissionKind": "admitted",
+          "previousResponseCount": 1,
+          "responseOrderIndex": 2,
+          "nextInputCount": 2,
+          "success": false,
+          "followUpRequestRequired": true,
+          "toolFutureDrained": true,
+          "conversationItemRecorded": true,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "responseKind=custom_tool_call_output;admissionKind=admitted;responseOrderIndex=2;nextInputCount=2;success=false;followUpRequestRequired=true;toolFutureDrained=true;conversationItemRecorded=true;outputText=user declined patch in fixture"
         }
       }
     },
@@ -770,6 +808,25 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "responseKind=custom_tool_call_output;success=true;followUpQueued=true;modelNeedsFollowUp=true;postToolUseResponseVisible=true;stdoutVisible=true;stderrVisible=false;resultTextVisible=true;outputText=Done!"
+        },
+        "toolResponseInputExpect": {
+          "ok": true,
+          "code": "patch_tool_response_input_admitted",
+          "requestId": "patch-response-input-lite-completed",
+          "callId": "call-lite-delta-1",
+          "responseKind": "custom_tool_call_output",
+          "admissionKind": "admitted",
+          "previousResponseCount": 2,
+          "responseOrderIndex": 3,
+          "nextInputCount": 3,
+          "success": true,
+          "followUpRequestRequired": true,
+          "toolFutureDrained": true,
+          "conversationItemRecorded": true,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "responseKind=custom_tool_call_output;admissionKind=admitted;responseOrderIndex=3;nextInputCount=3;success=true;followUpRequestRequired=true;toolFutureDrained=true;conversationItemRecorded=true;outputText=Done!"
         }
       }
     },

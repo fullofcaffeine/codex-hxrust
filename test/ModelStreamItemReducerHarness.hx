@@ -22,8 +22,11 @@ import codexhx.runtime.model.streamitem.ModelPatchProjectionRequest;
 import codexhx.runtime.model.streamitem.ModelPatchReviewDecision;
 import codexhx.runtime.model.streamitem.ModelPatchSandboxAttemptKind;
 import codexhx.runtime.model.streamitem.ModelPatchToolEventStageKind;
+import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpRequest;
+import codexhx.runtime.model.streamitem.ModelPatchToolResponseInputPolicy;
+import codexhx.runtime.model.streamitem.ModelPatchToolResponseInputRequest;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -228,7 +231,8 @@ class ModelStreamItemReducerHarness {
 				final approval = assertPatchApprovalDecision(verificationValue, verification, application, secretProbe);
 				final tracker = assertPatchTurnDiffTracker(verificationValue, verification, application, approval, secretProbe);
 				final projection = assertPatchProjection(verificationValue, verification, application, approval, tracker, secretProbe);
-				assertPatchToolFollowUp(verificationValue, outcome, application, projection, secretProbe);
+				final followUp = assertPatchToolFollowUp(verificationValue, outcome, application, projection, secretProbe);
+				assertPatchToolResponseInput(verificationValue, followUp, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -407,7 +411,7 @@ class ModelStreamItemReducerHarness {
 		application:ModelPatchApplicationOutcome,
 		projection:codexhx.runtime.model.streamitem.ModelPatchProjectionOutcome,
 		secretProbe:String
-	):Void {
+	):ModelPatchToolFollowUpOutcome {
 		final followUpExpectValue = optionalField(verificationValue, "toolFollowUpExpect");
 		switch followUpExpectValue {
 			case JObject(_, _):
@@ -435,9 +439,48 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(followUpExpectValue, "toolExecutedOutsideFixture", false)), boolText(followUp.toolExecutedOutsideFixture));
 				assertContains(followUp.summary(), stringField(followUpExpectValue, "summaryContains", ""));
 				if (secretProbe.length > 0) assertNotContains(followUp.summary(), secretProbe);
+				return followUp;
 			case JNull:
+				return null;
 			case _:
 				throw "expected object field: toolFollowUpExpect";
+		}
+	}
+
+	static function assertPatchToolResponseInput(
+		verificationValue:Value,
+		followUp:ModelPatchToolFollowUpOutcome,
+		secretProbe:String
+	):Void {
+		final inputExpectValue = optionalField(verificationValue, "toolResponseInputExpect");
+		switch inputExpectValue {
+			case JObject(_, _):
+				final input = ModelPatchToolResponseInputPolicy.admit(new ModelPatchToolResponseInputRequest(
+					stringField(inputExpectValue, "requestId", ""),
+					followUp,
+					intField(inputExpectValue, "previousResponseCount", 0),
+					secretProbe
+				));
+				assertEquals(boolText(boolField(inputExpectValue, "ok", false)), boolText(input.ok));
+				assertEquals(stringField(inputExpectValue, "code", ""), input.code);
+				assertEquals(stringField(inputExpectValue, "requestId", ""), input.requestId);
+				assertEquals(stringField(inputExpectValue, "callId", ""), input.callId);
+				assertEquals(stringField(inputExpectValue, "responseKind", ""), input.responseKind);
+				assertEquals(stringField(inputExpectValue, "admissionKind", ""), input.admissionKind);
+				assertEquals(Std.string(intField(inputExpectValue, "responseOrderIndex", 0)), Std.string(input.responseOrderIndex));
+				assertEquals(Std.string(intField(inputExpectValue, "nextInputCount", 0)), Std.string(input.nextInputCount));
+				assertEquals(boolText(boolField(inputExpectValue, "success", false)), boolText(input.success));
+				assertEquals(boolText(boolField(inputExpectValue, "followUpRequestRequired", false)), boolText(input.followUpRequestRequired));
+				assertEquals(boolText(boolField(inputExpectValue, "toolFutureDrained", false)), boolText(input.toolFutureDrained));
+				assertEquals(boolText(boolField(inputExpectValue, "conversationItemRecorded", false)), boolText(input.conversationItemRecorded));
+				assertEquals(boolText(boolField(inputExpectValue, "liveNetworkAttempted", false)), boolText(input.liveNetworkAttempted));
+				assertEquals(boolText(boolField(inputExpectValue, "realFilesystemMutated", false)), boolText(input.realFilesystemMutated));
+				assertEquals(boolText(boolField(inputExpectValue, "toolExecutedOutsideFixture", false)), boolText(input.toolExecutedOutsideFixture));
+				assertContains(input.summary(), stringField(inputExpectValue, "summaryContains", ""));
+				if (secretProbe.length > 0) assertNotContains(input.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: toolResponseInputExpect";
 		}
 	}
 
