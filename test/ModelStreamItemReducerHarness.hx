@@ -132,6 +132,10 @@ import codexhx.runtime.model.streamitem.ModelThreadSideParentStatusChangePolicy;
 import codexhx.runtime.model.streamitem.ModelThreadSideParentStatusChangeRequest;
 import codexhx.runtime.model.streamitem.ModelThreadSideParentStatusKind;
 import codexhx.runtime.model.streamitem.ModelThreadSideParentTurnStatusKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadUiSyncDecisionKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadUiSyncOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadUiSyncPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadUiSyncRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -230,7 +234,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelThreadSessionRebases = assertTopLevelThreadSessionRebases(testCase, topLevelThreadBufferedRequestEvictions, secretProbe);
 			final topLevelThreadActiveTurns = assertTopLevelThreadActiveTurns(testCase, topLevelThreadSessionRebases, secretProbe);
 			final topLevelThreadSideParentPendingStatuses = assertTopLevelThreadSideParentPendingStatuses(testCase, topLevelThreadActiveTurns, secretProbe);
-			assertTopLevelThreadSideParentStatusChanges(testCase, topLevelThreadSideParentPendingStatuses, secretProbe);
+			final topLevelThreadSideParentStatusChanges = assertTopLevelThreadSideParentStatusChanges(testCase, topLevelThreadSideParentPendingStatuses, secretProbe);
+			assertTopLevelThreadSideThreadUiSyncs(testCase, topLevelThreadSideParentStatusChanges, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -415,7 +420,8 @@ class ModelStreamItemReducerHarness {
 				final threadSessionRebases = assertThreadSessionRebases(verificationValue, threadBufferedRequestEvictions, secretProbe);
 				final threadActiveTurns = assertThreadActiveTurns(verificationValue, threadSessionRebases, secretProbe);
 				final threadSideParentPendingStatuses = assertThreadSideParentPendingStatuses(verificationValue, threadActiveTurns, secretProbe);
-				assertThreadSideParentStatusChanges(verificationValue, threadSideParentPendingStatuses, secretProbe);
+				final threadSideParentStatusChanges = assertThreadSideParentStatusChanges(verificationValue, threadSideParentPendingStatuses, secretProbe);
+				assertThreadSideThreadUiSyncs(verificationValue, threadSideParentStatusChanges, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -2555,6 +2561,82 @@ class ModelStreamItemReducerHarness {
 		throw "missing thread side-parent pending status outcome: " + requestId;
 	}
 
+	static function assertTopLevelThreadSideThreadUiSyncs(
+		testCase:Value,
+		statusChanges:Array<ModelThreadSideParentStatusChangeOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideThreadUiSyncOutcome> {
+		final outcomes:Array<ModelThreadSideThreadUiSyncOutcome> = [];
+		final values = optionalArrayField(testCase, "threadSideThreadUiSyncExpects");
+		for (value in values) outcomes.push(assertThreadSideThreadUiSync(objectValue(value), statusChanges, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideThreadUiSyncs(
+		verificationValue:Value,
+		statusChanges:Array<ModelThreadSideParentStatusChangeOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideThreadUiSyncOutcome> {
+		final outcomes:Array<ModelThreadSideThreadUiSyncOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadSideThreadUiSyncExpects");
+		for (value in values) outcomes.push(assertThreadSideThreadUiSync(objectValue(value), statusChanges, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideThreadUiSync(
+		expectValue:Value,
+		statusChanges:Array<ModelThreadSideParentStatusChangeOutcome>,
+		secretProbe:String
+	):ModelThreadSideThreadUiSyncOutcome {
+		final statusChangeRequestId = stringField(expectValue, "statusChangeRequestId", "");
+		final outcome = ModelThreadSideThreadUiSyncPolicy.apply(new ModelThreadSideThreadUiSyncRequest(
+			stringField(expectValue, "requestId", ""),
+			threadSideParentStatusChangeByRequestId(statusChanges, statusChangeRequestId),
+			boolField(expectValue, "activeThreadDisplayed", false),
+			boolField(expectValue, "sideThreadKnown", false),
+			boolField(expectValue, "parentIsMain", false),
+			stringField(expectValue, "parentThreadLabel", ""),
+			threadSideParentStatusKind(stringField(expectValue, "storedParentStatusBefore", "none")),
+			intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(statusChangeRequestId, outcome.statusChangeRequestId);
+		assertEquals(threadSideThreadUiSyncDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(threadSideParentStatusKind(stringField(expectValue, "storedParentStatusBefore", "none")), outcome.storedParentStatusBefore);
+		assertEquals(threadSideParentStatusKind(stringField(expectValue, "storedParentStatusAfter", "none")), outcome.storedParentStatusAfter);
+		assertEquals(boolText(boolField(expectValue, "statusChanged", false)), boolText(outcome.statusChanged));
+		assertEquals(boolText(boolField(expectValue, "syncTriggered", false)), boolText(outcome.syncTriggered));
+		assertEquals(boolText(boolField(expectValue, "sideUiCleared", false)), boolText(outcome.sideUiCleared));
+		assertEquals(boolText(boolField(expectValue, "sideConversationActive", false)), boolText(outcome.sideConversationActive));
+		assertEquals(stringField(expectValue, "contextLabel", ""), outcome.contextLabel);
+		assertEquals(boolText(boolField(expectValue, "renameBlocked", false)), boolText(outcome.renameBlocked));
+		assertEquals(boolText(boolField(expectValue, "interruptedTurnNoticeSuppressed", false)), boolText(outcome.interruptedTurnNoticeSuppressed));
+		assertEquals(boolText(boolField(expectValue, "interruptedTurnNoticeDefaultRestored", false)), boolText(outcome.interruptedTurnNoticeDefaultRestored));
+		assertEquals(boolText(boolField(expectValue, "statusLabelApplied", false)), boolText(outcome.statusLabelApplied));
+		assertEquals(boolText(boolField(expectValue, "statusClearApplied", false)), boolText(outcome.statusClearApplied));
+		assertEquals(boolText(boolField(expectValue, "repeatedSameStatusNoop", false)), boolText(outcome.repeatedSameStatusNoop));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function threadSideParentStatusChangeByRequestId(
+		outcomes:Array<ModelThreadSideParentStatusChangeOutcome>,
+		requestId:String
+	):ModelThreadSideParentStatusChangeOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing thread side-parent status-change outcome: " + requestId;
+	}
+
 	static function threadActiveTurnByRequestId(outcomes:Array<ModelThreadActiveTurnOutcome>, requestId:String):ModelThreadActiveTurnOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing thread active-turn outcome: " + requestId;
@@ -3112,6 +3194,16 @@ class ModelStreamItemReducerHarness {
 			case "preserved_no_change": ModelThreadSideParentStatusChangeDecisionKind.PreservedNoChange;
 			case "ignored_in_progress_turn": ModelThreadSideParentStatusChangeDecisionKind.IgnoredInProgressTurn;
 			case _: throw "unknown thread side-parent status-change decision kind: " + value;
+		}
+	}
+
+	static function threadSideThreadUiSyncDecisionKind(value:String):ModelThreadSideThreadUiSyncDecisionKind {
+		return switch value {
+			case "cleared_no_active_thread": ModelThreadSideThreadUiSyncDecisionKind.ClearedNoActiveThread;
+			case "cleared_no_side_thread": ModelThreadSideThreadUiSyncDecisionKind.ClearedNoSideThread;
+			case "synced_changed_status": ModelThreadSideThreadUiSyncDecisionKind.SyncedChangedStatus;
+			case "skipped_same_status": ModelThreadSideThreadUiSyncDecisionKind.SkippedSameStatus;
+			case _: throw "unknown thread side-thread UI sync decision kind: " + value;
 		}
 	}
 
