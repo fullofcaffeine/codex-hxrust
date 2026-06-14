@@ -22,6 +22,8 @@ import codexhx.runtime.model.streamitem.ModelPatchProjectionRequest;
 import codexhx.runtime.model.streamitem.ModelPatchReviewDecision;
 import codexhx.runtime.model.streamitem.ModelPatchSandboxAttemptKind;
 import codexhx.runtime.model.streamitem.ModelPatchToolEventStageKind;
+import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpPolicy;
+import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpRequest;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -225,7 +227,8 @@ class ModelStreamItemReducerHarness {
 				final application = assertPatchApplication(verificationValue, verification, beforeFiles, secretProbe);
 				final approval = assertPatchApprovalDecision(verificationValue, verification, application, secretProbe);
 				final tracker = assertPatchTurnDiffTracker(verificationValue, verification, application, approval, secretProbe);
-				assertPatchProjection(verificationValue, verification, application, approval, tracker, secretProbe);
+				final projection = assertPatchProjection(verificationValue, verification, application, approval, tracker, secretProbe);
+				assertPatchToolFollowUp(verificationValue, outcome, application, projection, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -359,7 +362,7 @@ class ModelStreamItemReducerHarness {
 		approval:ModelPatchApprovalDecisionOutcome,
 		tracker:ModelPatchTurnDiffTrackerOutcome,
 		secretProbe:String
-	):Void {
+	):codexhx.runtime.model.streamitem.ModelPatchProjectionOutcome {
 		final projectionExpectValue = optionalField(verificationValue, "projectionExpect");
 		switch projectionExpectValue {
 			case JObject(_, _):
@@ -390,9 +393,51 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(projectionExpectValue, "toolExecutedOutsideFixture", false)), boolText(projection.toolExecutedOutsideFixture));
 				assertContains(projection.summary(), stringField(projectionExpectValue, "summaryContains", ""));
 				if (secretProbe.length > 0) assertNotContains(projection.summary(), secretProbe);
+				return projection;
 			case JNull:
+				return null;
 			case _:
 				throw "expected object field: projectionExpect";
+		}
+	}
+
+	static function assertPatchToolFollowUp(
+		verificationValue:Value,
+		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
+		application:ModelPatchApplicationOutcome,
+		projection:codexhx.runtime.model.streamitem.ModelPatchProjectionOutcome,
+		secretProbe:String
+	):Void {
+		final followUpExpectValue = optionalField(verificationValue, "toolFollowUpExpect");
+		switch followUpExpectValue {
+			case JObject(_, _):
+				final followUp = ModelPatchToolFollowUpPolicy.build(new ModelPatchToolFollowUpRequest(
+					stringField(followUpExpectValue, "requestId", ""),
+					reducerOutcome,
+					application,
+					projection,
+					secretProbe
+				));
+				assertEquals(boolText(boolField(followUpExpectValue, "ok", false)), boolText(followUp.ok));
+				assertEquals(stringField(followUpExpectValue, "code", ""), followUp.code);
+				assertEquals(stringField(followUpExpectValue, "requestId", ""), followUp.requestId);
+				assertEquals(stringField(followUpExpectValue, "callId", ""), followUp.callId);
+				assertEquals(stringField(followUpExpectValue, "responseKind", ""), followUp.responseKind);
+				assertEquals(boolText(boolField(followUpExpectValue, "success", false)), boolText(followUp.success));
+				assertEquals(boolText(boolField(followUpExpectValue, "followUpQueued", false)), boolText(followUp.followUpQueued));
+				assertEquals(boolText(boolField(followUpExpectValue, "modelNeedsFollowUp", false)), boolText(followUp.modelNeedsFollowUp));
+				assertEquals(boolText(boolField(followUpExpectValue, "postToolUseResponseVisible", false)), boolText(followUp.postToolUseResponseVisible));
+				assertEquals(boolText(boolField(followUpExpectValue, "stdoutVisible", false)), boolText(followUp.stdoutVisible));
+				assertEquals(boolText(boolField(followUpExpectValue, "stderrVisible", false)), boolText(followUp.stderrVisible));
+				assertEquals(boolText(boolField(followUpExpectValue, "resultTextVisible", false)), boolText(followUp.resultTextVisible));
+				assertEquals(boolText(boolField(followUpExpectValue, "liveNetworkAttempted", false)), boolText(followUp.liveNetworkAttempted));
+				assertEquals(boolText(boolField(followUpExpectValue, "realFilesystemMutated", false)), boolText(followUp.realFilesystemMutated));
+				assertEquals(boolText(boolField(followUpExpectValue, "toolExecutedOutsideFixture", false)), boolText(followUp.toolExecutedOutsideFixture));
+				assertContains(followUp.summary(), stringField(followUpExpectValue, "summaryContains", ""));
+				if (secretProbe.length > 0) assertNotContains(followUp.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: toolFollowUpExpect";
 		}
 	}
 

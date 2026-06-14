@@ -1,6 +1,6 @@
 # Stream Item Reducer And Assistant Output Routing
 
-**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`; HXCX-4.52 / `codex-hxrust-7md`; HXCX-4.53 / `codex-hxrust-8p1`; HXCX-4.54 / `codex-hxrust-485`; HXCX-4.55 / `codex-hxrust-2og`; HXCX-4.56 / `codex-hxrust-4bi`; HXCX-4.57 / `codex-hxrust-aiz`
+**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`; HXCX-4.52 / `codex-hxrust-7md`; HXCX-4.53 / `codex-hxrust-8p1`; HXCX-4.54 / `codex-hxrust-485`; HXCX-4.55 / `codex-hxrust-2og`; HXCX-4.56 / `codex-hxrust-4bi`; HXCX-4.57 / `codex-hxrust-aiz`; HXCX-4.58 / `codex-hxrust-3ll`
 **Scope:** raw upstream Codex first; no live network, no real credentials, no live async ownership, no Cafex/Cafetera behavior.
 
 ## Upstream References
@@ -9,6 +9,8 @@ Read-only upstream reference: `../codex`.
 
 - `../codex/codex-rs/core/src/stream_events_utils.rs:405` handles completed output items.
 - `../codex/codex-rs/core/src/stream_events_utils.rs:413` classifies model-emitted tool calls through `ToolRouter`.
+- `../codex/codex-rs/core/src/stream_events_utils.rs:427` accepts current-turn mailbox delivery, records the tool call, and queues the tool future.
+- `../codex/codex-rs/core/src/stream_events_utils.rs:448` sets `needs_follow_up` when a tool future is queued.
 - `../codex/codex-rs/core/src/stream_events_utils.rs:445` converts non-tool messages/reasoning into completed turn items.
 - `../codex/codex-rs/core/src/stream_events_utils.rs:517` handles non-tool response items.
 - `../codex/codex-rs/core/src/stream_events_utils.rs:555` finalizes assistant messages and strips hidden assistant markup.
@@ -26,6 +28,12 @@ Read-only upstream reference: `../codex`.
 - `../codex/codex-rs/core/src/tools/handlers/apply_patch.rs:385` converts verified file changes into protocol-shaped file-change events.
 - `../codex/codex-rs/core/src/tools/handlers/apply_patch.rs:399` builds the runtime apply-patch request from verified action, file paths, and permission facts.
 - `../codex/codex-rs/core/src/tools/handlers/apply_patch.rs:430` maps `ApplyPatchRuntimeOutput` into emitter finish output and applied patch delta.
+- `../codex/codex-rs/core/src/tools/context.rs:235` defines `ApplyPatchToolOutput`.
+- `../codex/codex-rs/core/src/tools/context.rs:240` constructs apply-patch model-visible output text.
+- `../codex/codex-rs/core/src/tools/context.rs:254` converts apply-patch output into a response item.
+- `../codex/codex-rs/core/src/tools/context.rs:438` centralizes function/custom tool-output response item selection.
+- `../codex/codex-rs/core/src/tools/parallel.rs:67` converts tool futures into response items.
+- `../codex/codex-rs/core/src/tools/parallel.rs:186` converts tool failures into model-visible tool-output responses.
 - `../codex/codex-rs/core/src/tools/events.rs:154` creates apply-patch tool event emitters for the active environment.
 - `../codex/codex-rs/core/src/tools/events.rs:216` emits patch begin/end tool events with file-change payloads.
 - `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:47` defines the runtime apply-patch request.
@@ -94,6 +102,11 @@ Read-only upstream reference: `../codex`.
 - `../codex/codex-rs/protocol/src/protocol.rs:3323` defines `PatchApplyEndEvent`.
 - `../codex/codex-rs/protocol/src/protocol.rs:3345` defines `PatchApplyStatus`.
 - `../codex/codex-rs/protocol/src/protocol.rs:3775` defines the `FileChange` variants used by patch update events.
+- `../codex/codex-rs/protocol/src/models.rs:665` defines `ResponseInputItem`.
+- `../codex/codex-rs/protocol/src/models.rs:673` defines `FunctionCallOutput`.
+- `../codex/codex-rs/protocol/src/models.rs:683` defines `CustomToolCallOutput`.
+- `../codex/codex-rs/protocol/src/models.rs:1386` defines `FunctionCallOutputPayload`.
+- `../codex/codex-rs/core/src/tools/handlers/apply_patch_tests.rs:69` covers post-tool-use apply-patch output text.
 - `../codex/codex-rs/core/tests/suite/apply_patch_cli.rs:1187` covers `response.custom_tool_call_input.delta` apply-patch streaming.
 - `../codex/codex-rs/core/tests/suite/items.rs:1088` covers reasoning summary delta item metadata.
 - `../codex/codex-rs/core/tests/suite/items.rs:1138` covers raw reasoning delta behavior.
@@ -116,9 +129,10 @@ Read-only upstream reference: `../codex`.
 - `ModelPatchApprovalDecisionPolicy`, `ModelPatchApprovalDecisionRequest`, `ModelPatchApprovalDecisionOutcome`, `ModelPatchApprovalKey`, `ModelPatchApprovalRequirement`, `ModelPatchReviewDecision`, and `ModelPatchSandboxAttemptKind` model the selected approval/sandbox decision boundary. They derive environment/path approval keys, model permission-preapproval short-circuiting, emitted approval requests, opaque review decisions, auto sandbox preference, and sandbox retry intent without granting permissions or executing tools.
 - `ModelPatchTurnDiffTrackerPolicy`, `ModelPatchTurnDiffTrackerRequest`, `ModelPatchTurnDiffTrackerOutcome`, `ModelPatchAppliedDelta`, `ModelPatchToolEventStageKind`, and `ModelPatchTurnDiffTrackerUpdateKind` model the selected turn-diff tracker boundary. They distinguish known exact deltas, unknown deltas, invalidation, rejected/no-delta no-ops, environment-scoped diff summaries, and whether a `TurnDiffEvent` would be emitted.
 - `ModelPatchProjectionPolicy`, `ModelPatchProjectionRequest`, `ModelPatchProjectionOutcome`, `ModelPatchProjectionEventKind`, and `ModelPatchFileChangeProjection` model the selected `FileChangeItem`/legacy patch-event/app-server/TUI projection boundary. Canonical file-change item projection is distinct from optional legacy `PatchApplyBegin`/`PatchApplyEnd` projection, and the output carries typed status, auto-approved facts, stdout/stderr visibility, projected change summaries, and turn-diff notification intent.
+- `ModelPatchToolFollowUpPolicy`, `ModelPatchToolFollowUpRequest`, `ModelPatchToolFollowUpOutcome`, and `ModelPatchToolOutputItemKind` model the selected apply-patch tool-output and model-follow-up boundary. They find the queued apply-patch call, project custom/function tool-output response shape, success status, post-tool-use response visibility, stdout/stderr/result text visibility, and the model follow-up requirement without executing tools.
 - `ModelStreamItemReducerPolicy` maintains active item/tool metadata, emits deltas against that item or call id, strips selected hidden assistant markup at completion, accumulates accepted custom tool input when the completed item omits it, emits deterministic patch update events for supported streamed argument diffs, and queues tool calls for follow-up without executing them.
 
-The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, add/delete/update/move/end-of-file patch chunks, apply-patch begin/end verification events, fixture-only virtual workspace application results, approval/preapproval/review/sandbox retry decisions, turn-diff tracker track/invalidate/no-op decisions, canonical file-change item projection, optional legacy patch begin/end projection, TUI/app-server status and stdout/stderr visibility facts, turn-diff notification projection, completed/failed/declined statuses, malformed patch refusal, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no filesystem mutation, no tool execution, and secret-free summaries.
+The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, add/delete/update/move/end-of-file patch chunks, apply-patch begin/end verification events, fixture-only virtual workspace application results, approval/preapproval/review/sandbox retry decisions, turn-diff tracker track/invalidate/no-op decisions, canonical file-change item projection, optional legacy patch begin/end projection, TUI/app-server status and stdout/stderr visibility facts, turn-diff notification projection, model-facing apply-patch tool-output response shape, follow-up queue admission, post-tool-use response visibility, completed/failed/declined statuses, malformed patch refusal, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no filesystem mutation, no tool execution, and secret-free summaries.
 
 ## Non-Goals
 

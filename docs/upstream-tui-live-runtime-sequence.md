@@ -684,7 +684,18 @@ Model the upstream file-change projection boundary before live TUI/app-server ow
 
 Status: HXCX-4.57 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic file-change and turn-diff projection evidence only, not native app-server fanout, interactive TUI rendering ownership, native apply-patch process ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.58+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.58: Apply-Patch Tool-Output Follow-Up Boundary
+
+Model the upstream model-facing tool-output boundary after apply-patch projection:
+
+- find the queued apply-patch tool call from the stream reducer output;
+- project `CustomToolCallOutput` versus `FunctionCallOutput` response item shape;
+- carry success status, post-tool-use response visibility, stdout/stderr visibility, and result text visibility;
+- prove the model follow-up requirement without executing the tool, mutating the filesystem, or owning Tokio task runtime.
+
+Status: HXCX-4.58 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic model-facing apply-patch tool-output and follow-up evidence only, not native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.59+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

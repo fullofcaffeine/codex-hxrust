@@ -331,6 +331,24 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "fileChangeItemProjected=true;legacyBeginProjected=true;legacyEndProjected=true;turnDiffProjected=true;status=failed;autoApproved=false;stdoutVisible=false;stderrVisible=true;changeCount=1;turnDiff=;events=[file_change_item|patch_apply_begin|patch_apply_end|turn_diff];changes=[path=failed.txt;kind=add;movePath=none;addedLines=1;removedLines=0;diff=no-write"
+        },
+        "toolFollowUpExpect": {
+          "ok": true,
+          "code": "patch_tool_output_follow_up_modeled",
+          "requestId": "patch-follow-up-runtime-failed",
+          "callId": "call-lite-apply-patch-failed-1",
+          "responseKind": "custom_tool_call_output",
+          "success": false,
+          "followUpQueued": true,
+          "modelNeedsFollowUp": true,
+          "postToolUseResponseVisible": false,
+          "stdoutVisible": false,
+          "stderrVisible": true,
+          "resultTextVisible": true,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "responseKind=custom_tool_call_output;success=false;followUpQueued=true;modelNeedsFollowUp=true;postToolUseResponseVisible=false;stdoutVisible=false;stderrVisible=true;resultTextVisible=true;outputText=apply_patch failed in fixture runtime"
         }
       }
     },
@@ -488,6 +506,24 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "fileChangeItemProjected=true;legacyBeginProjected=false;legacyEndProjected=false;turnDiffProjected=false;status=declined;autoApproved=false;stdoutVisible=false;stderrVisible=true;changeCount=1;turnDiff=;events=[file_change_item];changes=[path=hello.txt;kind=add;movePath=none;addedLines=1;removedLines=0;diff=hello"
+        },
+        "toolFollowUpExpect": {
+          "ok": true,
+          "code": "patch_tool_output_follow_up_modeled",
+          "requestId": "patch-follow-up-openai-declined",
+          "callId": "call-openai-delta-1",
+          "responseKind": "custom_tool_call_output",
+          "success": false,
+          "followUpQueued": true,
+          "modelNeedsFollowUp": true,
+          "postToolUseResponseVisible": false,
+          "stdoutVisible": false,
+          "stderrVisible": true,
+          "resultTextVisible": true,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "responseKind=custom_tool_call_output;success=false;followUpQueued=true;modelNeedsFollowUp=true;postToolUseResponseVisible=false;stdoutVisible=false;stderrVisible=true;resultTextVisible=true;outputText=user declined patch in fixture"
         }
       }
     },
@@ -716,6 +752,24 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "events=[file_change_item|patch_apply_begin|patch_apply_end|turn_diff];changes=[path=streamed.txt;kind=add;movePath=none;addedLines=2;removedLines=0;diff=hello\nworld\n||path=src/old.rs;kind=update;movePath=src/new.rs;addedLines=1;removedLines=1;diff=@@ fn run()"
+        },
+        "toolFollowUpExpect": {
+          "ok": true,
+          "code": "patch_tool_output_follow_up_modeled",
+          "requestId": "patch-follow-up-lite-completed",
+          "callId": "call-lite-delta-1",
+          "responseKind": "custom_tool_call_output",
+          "success": true,
+          "followUpQueued": true,
+          "modelNeedsFollowUp": true,
+          "postToolUseResponseVisible": true,
+          "stdoutVisible": true,
+          "stderrVisible": false,
+          "resultTextVisible": true,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "responseKind=custom_tool_call_output;success=true;followUpQueued=true;modelNeedsFollowUp=true;postToolUseResponseVisible=true;stdoutVisible=true;stderrVisible=false;resultTextVisible=true;outputText=Done!"
         }
       }
     },
