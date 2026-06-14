@@ -34,8 +34,12 @@ import codexhx.runtime.model.streamitem.ModelSamplingContinuationRequest;
 import codexhx.runtime.model.streamitem.ModelSamplingContinuationOutcome;
 import codexhx.runtime.model.streamitem.ModelSamplingInputAssemblyPolicy;
 import codexhx.runtime.model.streamitem.ModelSamplingInputAssemblyRequest;
+import codexhx.runtime.model.streamitem.ModelSamplingInputAssemblyOutcome;
 import codexhx.runtime.model.streamitem.ModelSamplingInputItem;
 import codexhx.runtime.model.streamitem.ModelSamplingInputItemKind;
+import codexhx.runtime.model.streamitem.ModelSamplingDispatchPolicy;
+import codexhx.runtime.model.streamitem.ModelSamplingDispatchRequest;
+import codexhx.runtime.model.streamitem.ModelSamplingDispatchTransportKind;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -243,7 +247,8 @@ class ModelStreamItemReducerHarness {
 				final followUp = assertPatchToolFollowUp(verificationValue, outcome, application, projection, secretProbe);
 				final responseInput = assertPatchToolResponseInput(verificationValue, followUp, secretProbe);
 				final continuation = assertSamplingContinuation(verificationValue, responseInput, secretProbe);
-				assertSamplingInputAssembly(verificationValue, responseInput, continuation, secretProbe);
+				final assembly = assertSamplingInputAssembly(verificationValue, responseInput, continuation, secretProbe);
+				assertSamplingDispatch(verificationValue, assembly, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -552,7 +557,7 @@ class ModelStreamItemReducerHarness {
 		responseInput:ModelPatchToolResponseInputOutcome,
 		continuation:ModelSamplingContinuationOutcome,
 		secretProbe:String
-	):Void {
+	):ModelSamplingInputAssemblyOutcome {
 		final expectValue = optionalField(verificationValue, "samplingInputAssemblyExpect");
 		switch expectValue {
 			case JObject(_, _):
@@ -586,9 +591,72 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(assembly.toolExecutedOutsideFixture));
 				assertContains(assembly.summary(), stringField(expectValue, "summaryContains", ""));
 				if (secretProbe.length > 0) assertNotContains(assembly.summary(), secretProbe);
+				return assembly;
 			case JNull:
+				return null;
 			case _:
 				throw "expected object field: samplingInputAssemblyExpect";
+		}
+	}
+
+	static function assertSamplingDispatch(
+		verificationValue:Value,
+		assembly:ModelSamplingInputAssemblyOutcome,
+		secretProbe:String
+	):Void {
+		final expectValue = optionalField(verificationValue, "samplingDispatchExpect");
+		switch expectValue {
+			case JObject(_, _):
+				final dispatch = ModelSamplingDispatchPolicy.plan(new ModelSamplingDispatchRequest(
+					stringField(expectValue, "requestId", ""),
+					assembly,
+					samplingDispatchTransportKind(stringField(expectValue, "requestedTransportKind", "responses_http")),
+					stringField(expectValue, "windowId", ""),
+					boolField(expectValue, "turnMetadataHeaderPresent", false),
+					intField(expectValue, "maxRetries", 0),
+					intField(expectValue, "previousDispatchCount", 0),
+					boolField(expectValue, "modelClientSessionReused", false),
+					boolField(expectValue, "stickyRoutingTokenPreserved", false),
+					boolField(expectValue, "cancellationChildTokenCreated", false),
+					boolField(expectValue, "liveProviderEnabled", false),
+					secretProbe
+				));
+				assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(dispatch.ok));
+				assertEquals(stringField(expectValue, "code", ""), dispatch.code);
+				assertEquals(stringField(expectValue, "requestId", ""), dispatch.requestId);
+				assertEquals(stringField(expectValue, "transportKind", ""), dispatch.transportKind);
+				assertEquals(stringField(expectValue, "windowId", ""), dispatch.windowId);
+				assertEquals(boolText(boolField(expectValue, "turnMetadataHeaderPresent", false)), boolText(dispatch.turnMetadataHeaderPresent));
+				assertEquals(Std.string(intField(expectValue, "nextSamplingRequestIndex", 0)), Std.string(dispatch.nextSamplingRequestIndex));
+				assertEquals(Std.string(intField(expectValue, "promptItemCount", 0)), Std.string(dispatch.promptItemCount));
+				assertEquals(Std.string(intField(expectValue, "assembledItemCount", 0)), Std.string(dispatch.assembledItemCount));
+				assertEquals(Std.string(intField(expectValue, "dispatchAttemptIndex", 0)), Std.string(dispatch.dispatchAttemptIndex));
+				assertEquals(Std.string(intField(expectValue, "maxRetries", 0)), Std.string(dispatch.maxRetries));
+				assertEquals(boolText(boolField(expectValue, "retryStateInitialized", false)), boolText(dispatch.retryStateInitialized));
+				assertEquals(boolText(boolField(expectValue, "modelClientSessionTurnScoped", false)), boolText(dispatch.modelClientSessionTurnScoped));
+				assertEquals(boolText(boolField(expectValue, "modelClientSessionReused", false)), boolText(dispatch.modelClientSessionReused));
+				assertEquals(boolText(boolField(expectValue, "stickyRoutingTokenPreserved", false)), boolText(dispatch.stickyRoutingTokenPreserved));
+				assertEquals(boolText(boolField(expectValue, "cancellationChildTokenCreated", false)), boolText(dispatch.cancellationChildTokenCreated));
+				assertEquals(boolText(boolField(expectValue, "promptOrderingPreserved", false)), boolText(dispatch.promptOrderingPreserved));
+				assertEquals(boolText(boolField(expectValue, "liveProviderRequestAttempted", false)), boolText(dispatch.liveProviderRequestAttempted));
+				assertEquals(boolText(boolField(expectValue, "providerStreamOpened", false)), boolText(dispatch.providerStreamOpened));
+				assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(dispatch.liveNetworkAttempted));
+				assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(dispatch.realFilesystemMutated));
+				assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(dispatch.toolExecutedOutsideFixture));
+				assertContains(dispatch.summary(), stringField(expectValue, "summaryContains", ""));
+				if (secretProbe.length > 0) assertNotContains(dispatch.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: samplingDispatchExpect";
+		}
+	}
+
+	static function samplingDispatchTransportKind(value:String):ModelSamplingDispatchTransportKind {
+		return switch value {
+			case "responses_http": ModelSamplingDispatchTransportKind.ResponsesHttp;
+			case "responses_websocket": ModelSamplingDispatchTransportKind.ResponsesWebsocket;
+			case "fixture_disabled": ModelSamplingDispatchTransportKind.FixtureDisabled;
+			case _: throw "unknown sampling dispatch transport kind: " + value;
 		}
 	}
 
