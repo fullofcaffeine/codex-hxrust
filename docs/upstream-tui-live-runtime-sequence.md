@@ -739,7 +739,18 @@ Model the upstream follow-up dispatch branch after prompt input assembly:
 
 Status: HXCX-4.62 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic follow-up sampling dispatch evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.63+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.63: Stream Attempt Outcome Boundary
+
+Model the upstream stream-attempt branch after follow-up dispatch:
+
+- classify fixture stream-open success, retryable stream disconnects, unauthorized recovery, and terminal errors;
+- carry retry counts and max-retry budget without sleeping or owning Tokio timers;
+- prove context-window and usage-limit terminal routing facts;
+- keep provider traffic disabled while preserving the shape of the stream attempt result.
+
+Status: HXCX-4.63 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic stream-attempt outcome evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.64+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

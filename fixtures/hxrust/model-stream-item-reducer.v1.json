@@ -445,7 +445,37 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "transportKind=fixture_disabled;windowId=thread-runtime-failed:1;turnMetadataHeaderPresent=true;nextSamplingRequestIndex=2;promptItemCount=13;assembledItemCount=1;dispatchAttemptIndex=2;maxRetries=2;retryStateInitialized=true;modelClientSessionTurnScoped=true;modelClientSessionReused=true;stickyRoutingTokenPreserved=true;cancellationChildTokenCreated=true;promptOrderingPreserved=true;liveProviderRequestAttempted=false;providerStreamOpened=false"
-        }
+        },
+        "samplingStreamAttemptExpects": [
+          {
+            "ok": true,
+            "code": "sampling_stream_attempt_evaluated",
+            "requestId": "stream-attempt-runtime-failed-retry",
+            "resultKind": "retry_scheduled",
+            "errorKind": "stream_disconnected",
+            "currentRetryCount": 0,
+            "retryable": true,
+            "retryScheduled": true,
+            "retryCountBefore": 0,
+            "retryCountAfter": 1,
+            "maxRetries": 2,
+            "unauthorizedRecoveryAvailable": false,
+            "unauthorizedRetryStatePrepared": false,
+            "contextWindowMarkedFull": false,
+            "rateLimitUpdated": false,
+            "usageLimitRateLimitsUpdated": false,
+            "terminal": false,
+            "streamOpened": false,
+            "dispatchAttemptIndex": 2,
+            "promptItemCount": 13,
+            "liveProviderRequestAttempted": false,
+            "providerStreamOpened": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "resultKind=retry_scheduled;errorKind=stream_disconnected;retryable=true;retryScheduled=true;retryCountBefore=0;retryCountAfter=1;maxRetries=2;unauthorizedRetryStatePrepared=false;contextWindowMarkedFull=false;usageLimitRateLimitsUpdated=false;terminal=false;streamOpened=false;dispatchAttemptIndex=2;promptItemCount=13;liveProviderRequestAttempted=false;providerStreamOpened=false"
+          }
+        ]
       }
     },
     {
@@ -726,7 +756,65 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "transportKind=fixture_disabled;windowId=thread-openai-declined:2;turnMetadataHeaderPresent=false;nextSamplingRequestIndex=3;promptItemCount=20;assembledItemCount=2;dispatchAttemptIndex=3;maxRetries=3;retryStateInitialized=true;modelClientSessionTurnScoped=true;modelClientSessionReused=true;stickyRoutingTokenPreserved=true;cancellationChildTokenCreated=true;promptOrderingPreserved=true;liveProviderRequestAttempted=false;providerStreamOpened=false"
-        }
+        },
+        "samplingStreamAttemptExpects": [
+          {
+            "ok": true,
+            "code": "sampling_stream_attempt_evaluated",
+            "requestId": "stream-attempt-openai-unauthorized",
+            "resultKind": "unauthorized_retry_prepared",
+            "errorKind": "unauthorized",
+            "currentRetryCount": 0,
+            "retryable": false,
+            "retryScheduled": false,
+            "retryCountBefore": 0,
+            "retryCountAfter": 0,
+            "maxRetries": 3,
+            "unauthorizedRecoveryAvailable": true,
+            "unauthorizedRetryStatePrepared": true,
+            "contextWindowMarkedFull": false,
+            "rateLimitUpdated": false,
+            "usageLimitRateLimitsUpdated": false,
+            "terminal": false,
+            "streamOpened": false,
+            "dispatchAttemptIndex": 3,
+            "promptItemCount": 20,
+            "liveProviderRequestAttempted": false,
+            "providerStreamOpened": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "resultKind=unauthorized_retry_prepared;errorKind=unauthorized;retryable=false;retryScheduled=false;retryCountBefore=0;retryCountAfter=0;maxRetries=3;unauthorizedRetryStatePrepared=true;contextWindowMarkedFull=false;usageLimitRateLimitsUpdated=false;terminal=false;streamOpened=false;dispatchAttemptIndex=3;promptItemCount=20;liveProviderRequestAttempted=false;providerStreamOpened=false"
+          },
+          {
+            "ok": true,
+            "code": "sampling_stream_attempt_evaluated",
+            "requestId": "stream-attempt-openai-usage-limit",
+            "resultKind": "terminal_error",
+            "errorKind": "usage_limit_reached",
+            "currentRetryCount": 0,
+            "retryable": false,
+            "retryScheduled": false,
+            "retryCountBefore": 0,
+            "retryCountAfter": 0,
+            "maxRetries": 3,
+            "unauthorizedRecoveryAvailable": false,
+            "unauthorizedRetryStatePrepared": false,
+            "contextWindowMarkedFull": false,
+            "rateLimitUpdated": true,
+            "usageLimitRateLimitsUpdated": true,
+            "terminal": true,
+            "streamOpened": false,
+            "dispatchAttemptIndex": 3,
+            "promptItemCount": 20,
+            "liveProviderRequestAttempted": false,
+            "providerStreamOpened": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "resultKind=terminal_error;errorKind=usage_limit_reached;retryable=false;retryScheduled=false;retryCountBefore=0;retryCountAfter=0;maxRetries=3;unauthorizedRetryStatePrepared=false;contextWindowMarkedFull=false;usageLimitRateLimitsUpdated=true;terminal=true;streamOpened=false;dispatchAttemptIndex=3;promptItemCount=20;liveProviderRequestAttempted=false;providerStreamOpened=false"
+          }
+        ]
       }
     },
     {
@@ -1078,7 +1166,65 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "transportKind=fixture_disabled;windowId=thread-lite-completed:4;turnMetadataHeaderPresent=true;nextSamplingRequestIndex=4;promptItemCount=25;assembledItemCount=1;dispatchAttemptIndex=4;maxRetries=1;retryStateInitialized=true;modelClientSessionTurnScoped=true;modelClientSessionReused=true;stickyRoutingTokenPreserved=true;cancellationChildTokenCreated=true;promptOrderingPreserved=true;liveProviderRequestAttempted=false;providerStreamOpened=false"
-        }
+        },
+        "samplingStreamAttemptExpects": [
+          {
+            "ok": true,
+            "code": "sampling_stream_attempt_evaluated",
+            "requestId": "stream-attempt-lite-fixture-opened",
+            "resultKind": "fixture_stream_opened",
+            "errorKind": "none",
+            "currentRetryCount": 0,
+            "retryable": false,
+            "retryScheduled": false,
+            "retryCountBefore": 0,
+            "retryCountAfter": 0,
+            "maxRetries": 1,
+            "unauthorizedRecoveryAvailable": false,
+            "unauthorizedRetryStatePrepared": false,
+            "contextWindowMarkedFull": false,
+            "rateLimitUpdated": false,
+            "usageLimitRateLimitsUpdated": false,
+            "terminal": false,
+            "streamOpened": true,
+            "dispatchAttemptIndex": 4,
+            "promptItemCount": 25,
+            "liveProviderRequestAttempted": false,
+            "providerStreamOpened": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "resultKind=fixture_stream_opened;errorKind=none;retryable=false;retryScheduled=false;retryCountBefore=0;retryCountAfter=0;maxRetries=1;unauthorizedRetryStatePrepared=false;contextWindowMarkedFull=false;usageLimitRateLimitsUpdated=false;terminal=false;streamOpened=true;dispatchAttemptIndex=4;promptItemCount=25;liveProviderRequestAttempted=false;providerStreamOpened=false"
+          },
+          {
+            "ok": true,
+            "code": "sampling_stream_attempt_evaluated",
+            "requestId": "stream-attempt-lite-context-window",
+            "resultKind": "terminal_error",
+            "errorKind": "context_window_exceeded",
+            "currentRetryCount": 0,
+            "retryable": false,
+            "retryScheduled": false,
+            "retryCountBefore": 0,
+            "retryCountAfter": 0,
+            "maxRetries": 1,
+            "unauthorizedRecoveryAvailable": false,
+            "unauthorizedRetryStatePrepared": false,
+            "contextWindowMarkedFull": true,
+            "rateLimitUpdated": false,
+            "usageLimitRateLimitsUpdated": false,
+            "terminal": true,
+            "streamOpened": false,
+            "dispatchAttemptIndex": 4,
+            "promptItemCount": 25,
+            "liveProviderRequestAttempted": false,
+            "providerStreamOpened": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "resultKind=terminal_error;errorKind=context_window_exceeded;retryable=false;retryScheduled=false;retryCountBefore=0;retryCountAfter=0;maxRetries=1;unauthorizedRetryStatePrepared=false;contextWindowMarkedFull=true;usageLimitRateLimitsUpdated=false;terminal=true;streamOpened=false;dispatchAttemptIndex=4;promptItemCount=25;liveProviderRequestAttempted=false;providerStreamOpened=false"
+          }
+        ]
       }
     },
     {

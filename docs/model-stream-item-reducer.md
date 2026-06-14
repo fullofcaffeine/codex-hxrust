@@ -1,6 +1,6 @@
 # Stream Item Reducer And Assistant Output Routing
 
-**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`; HXCX-4.52 / `codex-hxrust-7md`; HXCX-4.53 / `codex-hxrust-8p1`; HXCX-4.54 / `codex-hxrust-485`; HXCX-4.55 / `codex-hxrust-2og`; HXCX-4.56 / `codex-hxrust-4bi`; HXCX-4.57 / `codex-hxrust-aiz`; HXCX-4.58 / `codex-hxrust-3ll`; HXCX-4.59 / `codex-hxrust-fvw`; HXCX-4.60 / `codex-hxrust-euw`; HXCX-4.61 / `codex-hxrust-doj`; HXCX-4.62 / `codex-hxrust-3od`
+**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`; HXCX-4.52 / `codex-hxrust-7md`; HXCX-4.53 / `codex-hxrust-8p1`; HXCX-4.54 / `codex-hxrust-485`; HXCX-4.55 / `codex-hxrust-2og`; HXCX-4.56 / `codex-hxrust-4bi`; HXCX-4.57 / `codex-hxrust-aiz`; HXCX-4.58 / `codex-hxrust-3ll`; HXCX-4.59 / `codex-hxrust-fvw`; HXCX-4.60 / `codex-hxrust-euw`; HXCX-4.61 / `codex-hxrust-doj`; HXCX-4.62 / `codex-hxrust-3od`; HXCX-4.63 / `codex-hxrust-3uq`
 **Scope:** raw upstream Codex first; no live network, no real credentials, no live async ownership, no Cafex/Cafetera behavior.
 
 ## Upstream References
@@ -70,9 +70,26 @@ Read-only upstream reference: `../codex`.
 - `../codex/codex-rs/core/src/session/turn.rs:1008` reads the provider's stream retry limit.
 - `../codex/codex-rs/core/src/session/turn.rs:1025` calls `try_run_sampling_request`.
 - `../codex/codex-rs/core/src/session/turn.rs:1035` passes a child cancellation token into the provider stream attempt.
+- `../codex/codex-rs/core/src/session/turn.rs:1042` routes context-window exceeded as a terminal stream attempt.
+- `../codex/codex-rs/core/src/session/turn.rs:1046` routes usage-limit errors and rate-limit updates.
+- `../codex/codex-rs/core/src/session/turn.rs:1056` returns non-retryable stream errors.
+- `../codex/codex-rs/core/src/session/turn.rs:1060` delegates retryable stream errors to the shared retry helper.
 - `../codex/codex-rs/core/src/session/turn.rs:1755` defines `try_run_sampling_request`.
 - `../codex/codex-rs/core/src/session/turn.rs:1790` streams through `client_session.stream`.
 - `../codex/codex-rs/core/src/client.rs:1258` initializes unauthorized retry state for Responses HTTP streaming.
+- `../codex/codex-rs/core/src/client.rs:1301` awaits the Responses HTTP stream request.
+- `../codex/codex-rs/core/src/client.rs:1303` classifies successful versus failed HTTP stream attempts.
+- `../codex/codex-rs/core/src/client.rs:1322` prepares unauthorized recovery retry state.
+- `../codex/codex-rs/core/src/client.rs:1335` maps non-unauthorized API errors.
+- `../codex/codex-rs/core/src/client.rs:1381` initializes unauthorized retry state for Responses WebSocket streaming.
+- `../codex/codex-rs/core/src/client.rs:1446` prepares unauthorized recovery retry state for WebSocket setup.
+- `../codex/codex-rs/core/src/client.rs:1456` maps WebSocket setup errors.
+- `../codex/codex-rs/core/src/client.rs:1485` awaits the WebSocket stream request.
+- `../codex/codex-rs/core/src/client.rs:1491` maps WebSocket stream errors.
+- `../codex/codex-rs/core/src/client.rs:1953` defines pending unauthorized retry telemetry.
+- `../codex/codex-rs/core/src/responses_retry.rs:22` handles retryable stream errors.
+- `../codex/codex-rs/core/src/responses_retry.rs:27` decides retry exhaustion and fallback transport.
+- `../codex/codex-rs/core/src/responses_retry.rs:42` increments retry count and schedules delay.
 - `../codex/codex-rs/core/src/tools/events.rs:154` creates apply-patch tool event emitters for the active environment.
 - `../codex/codex-rs/core/src/tools/events.rs:216` emits patch begin/end tool events with file-change payloads.
 - `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:47` defines the runtime apply-patch request.
@@ -174,9 +191,10 @@ Read-only upstream reference: `../codex`.
 - `ModelSamplingContinuationPolicy`, `ModelSamplingContinuationRequest`, `ModelSamplingContinuationOutcome`, and `ModelSamplingContinuationKind` model the selected post-sampling continuation decision. They combine model follow-up, pending input, token-limit compaction, next request index, admitted response-input count, pending-input drain intent, and no-live-effect proofs without performing provider traffic.
 - `ModelSamplingInputAssemblyPolicy`, `ModelSamplingInputAssemblyRequest`, `ModelSamplingInputAssemblyOutcome`, `ModelSamplingInputItem`, and `ModelSamplingInputItemKind` model the selected next prompt input assembly. They carry typed tool-response output and pending-input item shapes, order them as history-visible prompt items, record `clone_history`/`for_prompt` normalization intent, and preserve no-live-effect proofs.
 - `ModelSamplingDispatchPolicy`, `ModelSamplingDispatchRequest`, `ModelSamplingDispatchOutcome`, and `ModelSamplingDispatchTransportKind` model the selected follow-up dispatch boundary. They carry turn-scoped model-client session reuse, window id, metadata-header presence, retry initialization, cancellation child-token intent, prompt ordering, and no-live-provider proof.
+- `ModelSamplingStreamAttemptPolicy`, `ModelSamplingStreamAttemptRequest`, `ModelSamplingStreamAttemptOutcome`, `ModelSamplingStreamAttemptResultKind`, and `ModelSamplingStreamErrorKind` model the selected stream-attempt outcome boundary. They classify fixture stream-open success, retry scheduling, unauthorized retry preparation, context-window terminal routing, usage-limit/rate-limit routing, retry counters, and no-live-provider proofs.
 - `ModelStreamItemReducerPolicy` maintains active item/tool metadata, emits deltas against that item or call id, strips selected hidden assistant markup at completion, accumulates accepted custom tool input when the completed item omits it, emits deterministic patch update events for supported streamed argument diffs, and queues tool calls for follow-up without executing them.
 
-The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, add/delete/update/move/end-of-file patch chunks, apply-patch begin/end verification events, fixture-only virtual workspace application results, approval/preapproval/review/sandbox retry decisions, turn-diff tracker track/invalidate/no-op decisions, canonical file-change item projection, optional legacy patch begin/end projection, TUI/app-server status and stdout/stderr visibility facts, turn-diff notification projection, model-facing apply-patch tool-output response shape, follow-up queue admission, post-tool-use response visibility, tool-response input admission, response ordering, follow-up sampling continuation, next prompt input assembly, follow-up sampling dispatch, pending-input drain decision, token-limit compaction routing, completed/failed/declined statuses, malformed patch refusal, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no filesystem mutation, no tool execution, and secret-free summaries.
+The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, add/delete/update/move/end-of-file patch chunks, apply-patch begin/end verification events, fixture-only virtual workspace application results, approval/preapproval/review/sandbox retry decisions, turn-diff tracker track/invalidate/no-op decisions, canonical file-change item projection, optional legacy patch begin/end projection, TUI/app-server status and stdout/stderr visibility facts, turn-diff notification projection, model-facing apply-patch tool-output response shape, follow-up queue admission, post-tool-use response visibility, tool-response input admission, response ordering, follow-up sampling continuation, next prompt input assembly, follow-up sampling dispatch, stream-attempt outcome routing, pending-input drain decision, token-limit compaction routing, completed/failed/declined statuses, malformed patch refusal, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no filesystem mutation, no tool execution, and secret-free summaries.
 
 ## Non-Goals
 

@@ -40,6 +40,10 @@ import codexhx.runtime.model.streamitem.ModelSamplingInputItemKind;
 import codexhx.runtime.model.streamitem.ModelSamplingDispatchPolicy;
 import codexhx.runtime.model.streamitem.ModelSamplingDispatchRequest;
 import codexhx.runtime.model.streamitem.ModelSamplingDispatchTransportKind;
+import codexhx.runtime.model.streamitem.ModelSamplingDispatchOutcome;
+import codexhx.runtime.model.streamitem.ModelSamplingStreamAttemptPolicy;
+import codexhx.runtime.model.streamitem.ModelSamplingStreamAttemptRequest;
+import codexhx.runtime.model.streamitem.ModelSamplingStreamErrorKind;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -248,7 +252,8 @@ class ModelStreamItemReducerHarness {
 				final responseInput = assertPatchToolResponseInput(verificationValue, followUp, secretProbe);
 				final continuation = assertSamplingContinuation(verificationValue, responseInput, secretProbe);
 				final assembly = assertSamplingInputAssembly(verificationValue, responseInput, continuation, secretProbe);
-				assertSamplingDispatch(verificationValue, assembly, secretProbe);
+				final dispatch = assertSamplingDispatch(verificationValue, assembly, secretProbe);
+				assertSamplingStreamAttempts(verificationValue, dispatch, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -603,7 +608,7 @@ class ModelStreamItemReducerHarness {
 		verificationValue:Value,
 		assembly:ModelSamplingInputAssemblyOutcome,
 		secretProbe:String
-	):Void {
+	):ModelSamplingDispatchOutcome {
 		final expectValue = optionalField(verificationValue, "samplingDispatchExpect");
 		switch expectValue {
 			case JObject(_, _):
@@ -645,9 +650,67 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(dispatch.toolExecutedOutsideFixture));
 				assertContains(dispatch.summary(), stringField(expectValue, "summaryContains", ""));
 				if (secretProbe.length > 0) assertNotContains(dispatch.summary(), secretProbe);
+				return dispatch;
 			case JNull:
+				return null;
 			case _:
 				throw "expected object field: samplingDispatchExpect";
+		}
+	}
+
+	static function assertSamplingStreamAttempts(
+		verificationValue:Value,
+		dispatch:ModelSamplingDispatchOutcome,
+		secretProbe:String
+	):Void {
+		final values = arrayField(verificationValue, "samplingStreamAttemptExpects");
+		for (value in values) {
+			final expectValue = objectValue(value);
+			final attempt = ModelSamplingStreamAttemptPolicy.evaluate(new ModelSamplingStreamAttemptRequest(
+				stringField(expectValue, "requestId", ""),
+				dispatch,
+				samplingStreamErrorKind(stringField(expectValue, "errorKind", "none")),
+				intField(expectValue, "currentRetryCount", 0),
+				boolField(expectValue, "unauthorizedRecoveryAvailable", false),
+				boolField(expectValue, "rateLimitUpdated", false),
+				secretProbe
+			));
+			assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(attempt.ok));
+			assertEquals(stringField(expectValue, "code", ""), attempt.code);
+			assertEquals(stringField(expectValue, "requestId", ""), attempt.requestId);
+			assertEquals(stringField(expectValue, "resultKind", ""), attempt.resultKind);
+			assertEquals(stringField(expectValue, "errorKind", ""), attempt.errorKind);
+			assertEquals(boolText(boolField(expectValue, "retryable", false)), boolText(attempt.retryable));
+			assertEquals(boolText(boolField(expectValue, "retryScheduled", false)), boolText(attempt.retryScheduled));
+			assertEquals(Std.string(intField(expectValue, "retryCountBefore", 0)), Std.string(attempt.retryCountBefore));
+			assertEquals(Std.string(intField(expectValue, "retryCountAfter", 0)), Std.string(attempt.retryCountAfter));
+			assertEquals(Std.string(intField(expectValue, "maxRetries", 0)), Std.string(attempt.maxRetries));
+			assertEquals(boolText(boolField(expectValue, "unauthorizedRetryStatePrepared", false)), boolText(attempt.unauthorizedRetryStatePrepared));
+			assertEquals(boolText(boolField(expectValue, "contextWindowMarkedFull", false)), boolText(attempt.contextWindowMarkedFull));
+			assertEquals(boolText(boolField(expectValue, "usageLimitRateLimitsUpdated", false)), boolText(attempt.usageLimitRateLimitsUpdated));
+			assertEquals(boolText(boolField(expectValue, "terminal", false)), boolText(attempt.terminal));
+			assertEquals(boolText(boolField(expectValue, "streamOpened", false)), boolText(attempt.streamOpened));
+			assertEquals(Std.string(intField(expectValue, "dispatchAttemptIndex", 0)), Std.string(attempt.dispatchAttemptIndex));
+			assertEquals(Std.string(intField(expectValue, "promptItemCount", 0)), Std.string(attempt.promptItemCount));
+			assertEquals(boolText(boolField(expectValue, "liveProviderRequestAttempted", false)), boolText(attempt.liveProviderRequestAttempted));
+			assertEquals(boolText(boolField(expectValue, "providerStreamOpened", false)), boolText(attempt.providerStreamOpened));
+			assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(attempt.liveNetworkAttempted));
+			assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(attempt.realFilesystemMutated));
+			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(attempt.toolExecutedOutsideFixture));
+			assertContains(attempt.summary(), stringField(expectValue, "summaryContains", ""));
+			if (secretProbe.length > 0) assertNotContains(attempt.summary(), secretProbe);
+		}
+	}
+
+	static function samplingStreamErrorKind(value:String):ModelSamplingStreamErrorKind {
+		return switch value {
+			case "none": ModelSamplingStreamErrorKind.None;
+			case "stream_disconnected": ModelSamplingStreamErrorKind.StreamDisconnected;
+			case "unauthorized": ModelSamplingStreamErrorKind.Unauthorized;
+			case "context_window_exceeded": ModelSamplingStreamErrorKind.ContextWindowExceeded;
+			case "usage_limit_reached": ModelSamplingStreamErrorKind.UsageLimitReached;
+			case "non_retryable_api_error": ModelSamplingStreamErrorKind.NonRetryableApiError;
+			case _: throw "unknown sampling stream error kind: " + value;
 		}
 	}
 
