@@ -1010,7 +1010,19 @@ Model selected bounded thread-event buffer behavior around pending interactive r
 
 Status: HXCX-4.83 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic buffer eviction/filter evidence only, not live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.84+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.84: Thread Event Session-Refresh Rebase Boundary
+
+Model selected session-refresh rebase behavior for buffered thread events:
+
+- retain buffered server requests while preserving pending replay filtering separately;
+- retain hook started/completed notifications;
+- retain MCP server status updates and feedback submissions;
+- drop ordinary notifications and history entry responses;
+- preserve resolved-request filtering across rebase so stale interactive prompts do not reappear.
+
+Status: HXCX-4.84 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic session-refresh rebase evidence only, not live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.85+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

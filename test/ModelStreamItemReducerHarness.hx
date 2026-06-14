@@ -120,6 +120,11 @@ import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionPolicy;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionRequest;
+import codexhx.runtime.model.streamitem.ModelThreadSessionRebaseEventKind;
+import codexhx.runtime.model.streamitem.ModelThreadSessionRebaseKind;
+import codexhx.runtime.model.streamitem.ModelThreadSessionRebaseOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadSessionRebasePolicy;
+import codexhx.runtime.model.streamitem.ModelThreadSessionRebaseRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -204,7 +209,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelAppServerResponseDispatches = assertTopLevelAppServerResponseDispatches(testCase, topLevelAppServerRequestResolutions, secretProbe);
 			final topLevelAppServerRequestEnqueues = assertTopLevelAppServerRequestEnqueues(testCase, topLevelAppServerResponseDispatches, secretProbe);
 			final topLevelAppServerQueuedRequestDeliveries = assertTopLevelAppServerQueuedRequestDeliveries(testCase, topLevelAppServerRequestEnqueues, secretProbe);
-			assertTopLevelThreadBufferedRequestEvictions(testCase, topLevelAppServerQueuedRequestDeliveries, secretProbe);
+			final topLevelThreadBufferedRequestEvictions = assertTopLevelThreadBufferedRequestEvictions(testCase, topLevelAppServerQueuedRequestDeliveries, secretProbe);
+			assertTopLevelThreadSessionRebases(testCase, topLevelThreadBufferedRequestEvictions, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -385,7 +391,8 @@ class ModelStreamItemReducerHarness {
 				final appServerResponseDispatches = assertAppServerResponseDispatches(verificationValue, appServerRequestResolutions, secretProbe);
 				final appServerRequestEnqueues = assertAppServerRequestEnqueues(verificationValue, appServerResponseDispatches, secretProbe);
 				final appServerQueuedRequestDeliveries = assertAppServerQueuedRequestDeliveries(verificationValue, appServerRequestEnqueues, secretProbe);
-				assertThreadBufferedRequestEvictions(verificationValue, appServerQueuedRequestDeliveries, secretProbe);
+				final threadBufferedRequestEvictions = assertThreadBufferedRequestEvictions(verificationValue, appServerQueuedRequestDeliveries, secretProbe);
+				assertThreadSessionRebases(verificationValue, threadBufferedRequestEvictions, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -2247,6 +2254,73 @@ class ModelStreamItemReducerHarness {
 		throw "missing app-server queued request delivery outcome: " + requestId;
 	}
 
+	static function assertTopLevelThreadSessionRebases(
+		testCase:Value,
+		evictions:Array<ModelThreadBufferedRequestEvictionOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSessionRebaseOutcome> {
+		final outcomes:Array<ModelThreadSessionRebaseOutcome> = [];
+		final values = optionalArrayField(testCase, "threadSessionRebaseExpects");
+		for (value in values) outcomes.push(assertThreadSessionRebase(objectValue(value), evictions, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSessionRebases(
+		verificationValue:Value,
+		evictions:Array<ModelThreadBufferedRequestEvictionOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSessionRebaseOutcome> {
+		final outcomes:Array<ModelThreadSessionRebaseOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadSessionRebaseExpects");
+		for (value in values) outcomes.push(assertThreadSessionRebase(objectValue(value), evictions, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSessionRebase(
+		expectValue:Value,
+		evictions:Array<ModelThreadBufferedRequestEvictionOutcome>,
+		secretProbe:String
+	):ModelThreadSessionRebaseOutcome {
+		final evictionRequestId = stringField(expectValue, "evictionRequestId", "");
+		final outcome = ModelThreadSessionRebasePolicy.rebase(new ModelThreadSessionRebaseRequest(
+			stringField(expectValue, "requestId", ""),
+			threadBufferedRequestEvictionByRequestId(evictions, evictionRequestId),
+			threadSessionRebaseEventKind(stringField(expectValue, "rebaseEventKind", "request")),
+			intField(expectValue, "bufferEventCountBefore", 0),
+			intField(expectValue, "eventOrderIndexBefore", 0),
+			intField(expectValue, "expectedOrderIndexAfter", 0),
+			boolField(expectValue, "pendingReplayRecordedBefore", false),
+			boolField(expectValue, "serverResolutionRecordedBefore", false),
+			boolField(expectValue, "snapshotFilterChecked", false),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(evictionRequestId, outcome.evictionRequestId);
+		assertEquals(threadSessionRebaseKind(stringField(expectValue, "rebaseKind", "")), outcome.rebaseKind);
+		assertEquals(threadSessionRebaseEventKind(stringField(expectValue, "rebaseEventKind", "request")), outcome.rebaseEventKind);
+		assertEquals(boolText(boolField(expectValue, "eventSurvivesRebase", false)), boolText(outcome.eventSurvivesRebase));
+		assertEquals(boolText(boolField(expectValue, "eventDroppedByRebase", false)), boolText(outcome.eventDroppedByRebase));
+		assertEquals(boolText(boolField(expectValue, "pendingReplayStatePreserved", false)), boolText(outcome.pendingReplayStatePreserved));
+		assertEquals(boolText(boolField(expectValue, "snapshotRequestReplayed", false)), boolText(outcome.snapshotRequestReplayed));
+		assertEquals(boolText(boolField(expectValue, "resolvedRequestFilteredAfterRebase", false)), boolText(outcome.resolvedRequestFilteredAfterRebase));
+		assertEquals(Std.string(intField(expectValue, "bufferEventCountAfter", 0)), Std.string(outcome.bufferEventCountAfter));
+		assertEquals(boolText(boolField(expectValue, "orderingPreserved", false)), boolText(outcome.orderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function threadBufferedRequestEvictionByRequestId(outcomes:Array<ModelThreadBufferedRequestEvictionOutcome>, requestId:String):ModelThreadBufferedRequestEvictionOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing thread buffered request eviction outcome: " + requestId;
+	}
+
 	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn replay reconstruction outcome: " + requestId;
@@ -2675,6 +2749,32 @@ class ModelStreamItemReducerHarness {
 			case "non_request_eviction_ignored": ModelThreadBufferedRequestEvictionKind.NonRequestEvictionIgnored;
 			case "invalid_capacity_refused": ModelThreadBufferedRequestEvictionKind.InvalidCapacityRefused;
 			case _: throw "unknown thread buffered request eviction kind: " + value;
+		}
+	}
+
+	static function threadSessionRebaseEventKind(value:String):ModelThreadSessionRebaseEventKind {
+		return switch value {
+			case "request": ModelThreadSessionRebaseEventKind.Request;
+			case "hook_started_notification": ModelThreadSessionRebaseEventKind.HookStartedNotification;
+			case "hook_completed_notification": ModelThreadSessionRebaseEventKind.HookCompletedNotification;
+			case "mcp_server_status_updated_notification": ModelThreadSessionRebaseEventKind.McpServerStatusUpdatedNotification;
+			case "feedback_submission": ModelThreadSessionRebaseEventKind.FeedbackSubmission;
+			case "ordinary_notification": ModelThreadSessionRebaseEventKind.OrdinaryNotification;
+			case "history_entry_response": ModelThreadSessionRebaseEventKind.HistoryEntryResponse;
+			case _: throw "unknown thread session rebase event kind: " + value;
+		}
+	}
+
+	static function threadSessionRebaseKind(value:String):ModelThreadSessionRebaseKind {
+		return switch value {
+			case "survived_request": ModelThreadSessionRebaseKind.SurvivedRequest;
+			case "survived_hook_notification": ModelThreadSessionRebaseKind.SurvivedHookNotification;
+			case "survived_mcp_status_notification": ModelThreadSessionRebaseKind.SurvivedMcpStatusNotification;
+			case "survived_feedback_submission": ModelThreadSessionRebaseKind.SurvivedFeedbackSubmission;
+			case "dropped_ordinary_notification": ModelThreadSessionRebaseKind.DroppedOrdinaryNotification;
+			case "dropped_history_entry_response": ModelThreadSessionRebaseKind.DroppedHistoryEntryResponse;
+			case "filtered_resolved_request": ModelThreadSessionRebaseKind.FilteredResolvedRequest;
+			case _: throw "unknown thread session rebase kind: " + value;
 		}
 	}
 
