@@ -15,11 +15,15 @@ import codexhx.runtime.model.streamitem.ModelPatchApplicationOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchApplyStatus;
 import codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionRequest;
+import codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchApprovalRequirement;
+import codexhx.runtime.model.streamitem.ModelPatchProjectionPolicy;
+import codexhx.runtime.model.streamitem.ModelPatchProjectionRequest;
 import codexhx.runtime.model.streamitem.ModelPatchReviewDecision;
 import codexhx.runtime.model.streamitem.ModelPatchSandboxAttemptKind;
 import codexhx.runtime.model.streamitem.ModelPatchToolEventStageKind;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
+import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerUpdateKind;
 import codexhx.runtime.model.streamitem.ModelPatchAppliedDelta;
@@ -220,7 +224,8 @@ class ModelStreamItemReducerHarness {
 				if (secretProbe.length > 0) assertNotContains(verification.summary(), secretProbe);
 				final application = assertPatchApplication(verificationValue, verification, beforeFiles, secretProbe);
 				final approval = assertPatchApprovalDecision(verificationValue, verification, application, secretProbe);
-				assertPatchTurnDiffTracker(verificationValue, verification, application, approval, secretProbe);
+				final tracker = assertPatchTurnDiffTracker(verificationValue, verification, application, approval, secretProbe);
+				assertPatchProjection(verificationValue, verification, application, approval, tracker, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -264,7 +269,7 @@ class ModelStreamItemReducerHarness {
 		verification:ModelPatchVerificationOutcome,
 		application:ModelPatchApplicationOutcome,
 		secretProbe:String
-	):codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionOutcome {
+	):ModelPatchApprovalDecisionOutcome {
 		final approvalExpectValue = optionalField(verificationValue, "approvalExpect");
 		switch approvalExpectValue {
 			case JObject(_, _):
@@ -307,9 +312,9 @@ class ModelStreamItemReducerHarness {
 		verificationValue:Value,
 		verification:ModelPatchVerificationOutcome,
 		application:ModelPatchApplicationOutcome,
-		approval:codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionOutcome,
+		approval:ModelPatchApprovalDecisionOutcome,
 		secretProbe:String
-	):Void {
+	):ModelPatchTurnDiffTrackerOutcome {
 		final trackerExpectValue = optionalField(verificationValue, "trackerExpect");
 		switch trackerExpectValue {
 			case JObject(_, _):
@@ -339,9 +344,55 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(trackerExpectValue, "toolExecutedOutsideFixture", false)), boolText(tracker.toolExecutedOutsideFixture));
 				assertContains(tracker.summary(), stringField(trackerExpectValue, "summaryContains", ""));
 				if (secretProbe.length > 0) assertNotContains(tracker.summary(), secretProbe);
+				return tracker;
 			case JNull:
+				return null;
 			case _:
 				throw "expected object field: trackerExpect";
+		}
+	}
+
+	static function assertPatchProjection(
+		verificationValue:Value,
+		verification:ModelPatchVerificationOutcome,
+		application:ModelPatchApplicationOutcome,
+		approval:ModelPatchApprovalDecisionOutcome,
+		tracker:ModelPatchTurnDiffTrackerOutcome,
+		secretProbe:String
+	):Void {
+		final projectionExpectValue = optionalField(verificationValue, "projectionExpect");
+		switch projectionExpectValue {
+			case JObject(_, _):
+				final projection = ModelPatchProjectionPolicy.project(new ModelPatchProjectionRequest(
+					stringField(projectionExpectValue, "requestId", ""),
+					verification,
+					application,
+					approval,
+					tracker,
+					boolField(projectionExpectValue, "includeLegacyEvents", false),
+					secretProbe
+				));
+				assertEquals(boolText(boolField(projectionExpectValue, "ok", false)), boolText(projection.ok));
+				assertEquals(stringField(projectionExpectValue, "code", ""), projection.code);
+				assertEquals(stringField(projectionExpectValue, "requestId", ""), projection.requestId);
+				assertEquals(stringField(projectionExpectValue, "itemId", ""), projection.itemId);
+				assertEquals(boolText(boolField(projectionExpectValue, "fileChangeItemProjected", false)), boolText(projection.fileChangeItemProjected));
+				assertEquals(boolText(boolField(projectionExpectValue, "legacyBeginProjected", false)), boolText(projection.legacyBeginProjected));
+				assertEquals(boolText(boolField(projectionExpectValue, "legacyEndProjected", false)), boolText(projection.legacyEndProjected));
+				assertEquals(boolText(boolField(projectionExpectValue, "turnDiffProjected", false)), boolText(projection.turnDiffProjected));
+				assertEquals(stringField(projectionExpectValue, "status", ""), projection.status);
+				assertEquals(boolText(boolField(projectionExpectValue, "autoApproved", false)), boolText(projection.autoApproved));
+				assertEquals(boolText(boolField(projectionExpectValue, "stdoutVisible", false)), boolText(projection.stdoutVisible));
+				assertEquals(boolText(boolField(projectionExpectValue, "stderrVisible", false)), boolText(projection.stderrVisible));
+				assertEquals(Std.string(intField(projectionExpectValue, "changeCount", 0)), Std.string(projection.changeCount));
+				assertEquals(boolText(boolField(projectionExpectValue, "liveNetworkAttempted", false)), boolText(projection.liveNetworkAttempted));
+				assertEquals(boolText(boolField(projectionExpectValue, "realFilesystemMutated", false)), boolText(projection.realFilesystemMutated));
+				assertEquals(boolText(boolField(projectionExpectValue, "toolExecutedOutsideFixture", false)), boolText(projection.toolExecutedOutsideFixture));
+				assertContains(projection.summary(), stringField(projectionExpectValue, "summaryContains", ""));
+				if (secretProbe.length > 0) assertNotContains(projection.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: projectionExpect";
 		}
 	}
 

@@ -673,7 +673,18 @@ Model the upstream apply-patch turn-diff tracker update boundary against determi
 
 Status: HXCX-4.56 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic turn-diff tracker evidence only, not native tracker persistence, real workspace rereads, native apply-patch process ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.57+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.57: File-Change And Turn-Diff Projection Boundary
+
+Model the upstream file-change projection boundary before live TUI/app-server ownership:
+
+- keep canonical `FileChangeItem` projection separate from optional legacy `PatchApplyBegin`/`PatchApplyEnd` projection;
+- carry typed status, auto-approved begin facts, stdout/stderr visibility, and file-change summaries;
+- model whether a `TurnDiffEvent` notification would be emitted from the tracker outcome;
+- compose request envelope, stream route, stream item reducer, streamed diff parser, verification, application, approval/sandbox decision, tracker, and projection facts in one credential-free fixture path.
+
+Status: HXCX-4.57 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic file-change and turn-diff projection evidence only, not native app-server fanout, interactive TUI rendering ownership, native apply-patch process ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.58+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

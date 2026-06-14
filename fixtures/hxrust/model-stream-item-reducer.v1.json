@@ -311,6 +311,26 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "updateKind=invalidate;trackerValid=false;shouldEmitTurnDiff=true;unifiedDiff=;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false"
+        },
+        "projectionExpect": {
+          "ok": true,
+          "code": "patch_file_change_projection_modeled",
+          "requestId": "patch-projection-runtime-failed",
+          "itemId": "call-lite-apply-patch-failed-1",
+          "includeLegacyEvents": true,
+          "fileChangeItemProjected": true,
+          "legacyBeginProjected": true,
+          "legacyEndProjected": true,
+          "turnDiffProjected": true,
+          "status": "failed",
+          "autoApproved": false,
+          "stdoutVisible": false,
+          "stderrVisible": true,
+          "changeCount": 1,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "fileChangeItemProjected=true;legacyBeginProjected=true;legacyEndProjected=true;turnDiffProjected=true;status=failed;autoApproved=false;stdoutVisible=false;stderrVisible=true;changeCount=1;turnDiff=;events=[file_change_item|patch_apply_begin|patch_apply_end|turn_diff];changes=[path=failed.txt;kind=add;movePath=none;addedLines=1;removedLines=0;diff=no-write"
         }
       }
     },
@@ -448,6 +468,26 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "updateKind=none;trackerValid=true;shouldEmitTurnDiff=false;unifiedDiff=;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false"
+        },
+        "projectionExpect": {
+          "ok": true,
+          "code": "patch_file_change_projection_modeled",
+          "requestId": "patch-projection-openai-declined",
+          "itemId": "call-openai-delta-1",
+          "includeLegacyEvents": false,
+          "fileChangeItemProjected": true,
+          "legacyBeginProjected": false,
+          "legacyEndProjected": false,
+          "turnDiffProjected": false,
+          "status": "declined",
+          "autoApproved": false,
+          "stdoutVisible": false,
+          "stderrVisible": true,
+          "changeCount": 1,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "fileChangeItemProjected=true;legacyBeginProjected=false;legacyEndProjected=false;turnDiffProjected=false;status=declined;autoApproved=false;stdoutVisible=false;stderrVisible=true;changeCount=1;turnDiff=;events=[file_change_item];changes=[path=hello.txt;kind=add;movePath=none;addedLines=1;removedLines=0;diff=hello"
         }
       }
     },
@@ -656,6 +696,26 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "updateKind=track;trackerValid=true;shouldEmitTurnDiff=true;unifiedDiff=diff --git a/env-lite-completed:streamed.txt b/env-lite-completed:streamed.txt"
+        },
+        "projectionExpect": {
+          "ok": true,
+          "code": "patch_file_change_projection_modeled",
+          "requestId": "patch-projection-lite-completed",
+          "itemId": "call-lite-delta-1",
+          "includeLegacyEvents": true,
+          "fileChangeItemProjected": true,
+          "legacyBeginProjected": true,
+          "legacyEndProjected": true,
+          "turnDiffProjected": true,
+          "status": "completed",
+          "autoApproved": true,
+          "stdoutVisible": true,
+          "stderrVisible": false,
+          "changeCount": 3,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "events=[file_change_item|patch_apply_begin|patch_apply_end|turn_diff];changes=[path=streamed.txt;kind=add;movePath=none;addedLines=2;removedLines=0;diff=hello\nworld\n||path=src/old.rs;kind=update;movePath=src/new.rs;addedLines=1;removedLines=1;diff=@@ fn run()"
         }
       }
     },
