@@ -1,0 +1,162 @@
+{
+  "schema": "codex-hxrust.model-stream-route-fixture.v1",
+  "source": "raw-codex",
+  "description": "Deterministic raw Codex Responses stream route and error mapping fixture. Composes the provider admission, catalog, tool-plan, and request-envelope fixture by id. No live network, no real credentials, no Cafex.",
+  "envelopeFixture": "fixtures/hxrust/model-request-envelope.v1.json",
+  "cases": [
+    {
+      "id": "openai-completed-feedback-ids",
+      "envelopeFixtureId": "openai-plan-only-envelope-admitted",
+      "requestId": "stream-openai-completed",
+      "upstreamRequestId": "req-openai-123",
+      "secretProbe": "sk-envelope-secret",
+      "events": [
+        {"kind": "created"},
+        {"kind": "output_item_done", "itemId": "msg-1"},
+        {
+          "kind": "completed",
+          "responseId": "resp-openai-123",
+          "inputTokens": 10,
+          "outputTokens": 20,
+          "cachedInputTokens": 3,
+          "reasoningOutputTokens": 4,
+          "totalTokens": 30,
+          "endTurn": true
+        }
+      ],
+      "expect": {
+        "ok": true,
+        "code": "model_stream_completed",
+        "requestId": "stream-openai-completed",
+        "envelopeCode": "model_request_envelope_admitted",
+        "providerId": "openai",
+        "selectedModelId": "gpt-5.5",
+        "lastModelRequestId": "req-openai-123",
+        "lastModelResponseId": "resp-openai-123",
+        "completed": true,
+        "failed": false,
+        "cancelled": false,
+        "itemsAdded": 1,
+        "totalTokens": 30,
+        "summaryContains": "lastModelRequestId=req-openai-123;lastModelResponseId=resp-openai-123;completed=true;failed=false;cancelled=false;endTurn=true;itemsAdded=1;totalTokens=30;liveNetworkAttempted=false"
+      }
+    },
+    {
+      "id": "openai-provider-error-overrides-request-id",
+      "envelopeFixtureId": "openai-plan-only-envelope-admitted",
+      "requestId": "stream-openai-provider-error",
+      "upstreamRequestId": "req-openai-original",
+      "events": [
+        {"kind": "created"},
+        {"kind": "output_item_done", "itemId": "partial-message"},
+        {
+          "kind": "provider_error",
+          "upstreamRequestId": "req-debug-456",
+          "errorCode": "rate_limit_exceeded",
+          "errorMessage": "retry later"
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "code": "model_stream_failed",
+        "requestId": "stream-openai-provider-error",
+        "envelopeCode": "model_request_envelope_admitted",
+        "providerId": "openai",
+        "selectedModelId": "gpt-5.5",
+        "lastModelRequestId": "req-debug-456",
+        "lastModelResponseId": "",
+        "completed": false,
+        "failed": true,
+        "cancelled": false,
+        "itemsAdded": 1,
+        "totalTokens": 0,
+        "summaryContains": "lastModelRequestId=req-debug-456;lastModelResponseId=none;completed=false;failed=true;cancelled=false;endTurn=false;itemsAdded=1;totalTokens=0;liveNetworkAttempted=false;error=rate_limit_exceeded:retry later"
+      }
+    },
+    {
+      "id": "bedrock-stream-closed-before-completed",
+      "envelopeFixtureId": "bedrock-plan-only-envelope-admitted",
+      "requestId": "stream-bedrock-closed",
+      "upstreamRequestId": "req-bedrock-777",
+      "events": [
+        {"kind": "created"},
+        {"kind": "output_item_done", "itemId": "bedrock-message"},
+        {"kind": "stream_closed"}
+      ],
+      "expect": {
+        "ok": false,
+        "code": "model_stream_failed",
+        "requestId": "stream-bedrock-closed",
+        "envelopeCode": "model_request_envelope_admitted",
+        "providerId": "amazon-bedrock",
+        "selectedModelId": "anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "lastModelRequestId": "req-bedrock-777",
+        "lastModelResponseId": "",
+        "completed": false,
+        "failed": true,
+        "cancelled": false,
+        "itemsAdded": 1,
+        "totalTokens": 0,
+        "summaryContains": "lastModelRequestId=req-bedrock-777;lastModelResponseId=none;completed=false;failed=true;cancelled=false;endTurn=false;itemsAdded=1;totalTokens=0;liveNetworkAttempted=false;error=stream closed before response.completed"
+      }
+    },
+    {
+      "id": "responses-lite-consumer-dropped-cancelled",
+      "envelopeFixtureId": "responses-lite-plan-envelope-disables-parallel",
+      "requestId": "stream-lite-consumer-dropped",
+      "upstreamRequestId": "req-lite-321",
+      "events": [
+        {"kind": "created"},
+        {"kind": "output_item_done", "itemId": "lite-message"},
+        {"kind": "consumer_dropped"}
+      ],
+      "expect": {
+        "ok": false,
+        "code": "model_stream_cancelled",
+        "requestId": "stream-lite-consumer-dropped",
+        "envelopeCode": "model_request_envelope_admitted",
+        "providerId": "openai",
+        "selectedModelId": "gpt-lite-image",
+        "lastModelRequestId": "req-lite-321",
+        "lastModelResponseId": "",
+        "completed": false,
+        "failed": false,
+        "cancelled": true,
+        "itemsAdded": 1,
+        "totalTokens": 0,
+        "summaryContains": "lastModelRequestId=req-lite-321;lastModelResponseId=none;completed=false;failed=false;cancelled=true;endTurn=false;itemsAdded=1;totalTokens=0;liveNetworkAttempted=false;error=response stream dropped before provider terminal event"
+      }
+    },
+    {
+      "id": "envelope-refusal-composes-into-stream-refusal",
+      "envelopeFixtureId": "openai-websocket-live-route-refused",
+      "requestId": "stream-websocket-refused",
+      "upstreamRequestId": "",
+      "events": [],
+      "expect": {
+        "ok": false,
+        "code": "model_request_envelope_denied",
+        "requestId": "stream-websocket-refused",
+        "envelopeCode": "live_network_disabled",
+        "providerId": "openai",
+        "selectedModelId": "gpt-5-mini",
+        "lastModelRequestId": "",
+        "lastModelResponseId": "",
+        "completed": false,
+        "failed": true,
+        "cancelled": false,
+        "itemsAdded": 0,
+        "totalTokens": 0,
+        "summaryContains": "code=model_request_envelope_denied;ok=false;request=stream-websocket-refused;envelopeCode=live_network_disabled;provider=openai;model=gpt-5-mini;upstreamRequestId=none"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 5,
+    "successCount": 1,
+    "errorCount": 4,
+    "cancelledCount": 1,
+    "envelopeDeniedCount": 1,
+    "summaryContains": "schema=codex-hxrust.model-stream-route-report.v1;cases=5;success=1;errors=4;cancelled=1;envelopeDenied=1"
+  }
+}

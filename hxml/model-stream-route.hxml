@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/model-stream-route
+-D rust_crate=codex_hxrust_model_stream_route
+-D rust_cargo_subcommand=check
+-main ModelStreamRouteHarness

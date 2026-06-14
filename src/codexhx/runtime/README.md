@@ -514,6 +514,19 @@ The fixture `fixtures/hxrust/turn-model-plan.v1.json` and `harness/check-turn-mo
 
 The fixture `fixtures/hxrust/model-request-envelope.v1.json` and `harness/check-model-request-envelope.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is request construction/routing evidence only; it does not open HTTP/WebSocket transports, stream SSE events, refresh auth, persist inference traces, own realtime/audio, or model Cafex/Cafetera behavior. The boundary is documented in `docs/model-request-envelope.md`.
 
+## Model Stream Event And Error Routing
+
+`codexhx.runtime.model.stream.ModelStreamRoutePolicy` is the HXCX-4.47 raw upstream Responses stream mapping slice:
+
+- request envelopes must pass before stream event mapping can start;
+- `ModelStreamFixtureEventKind` distinguishes created, output-item completion, provider completion, provider error, stream close, and consumer-drop events;
+- terminal completion records last model response id, request feedback id, added output item count, token totals, and end-turn state;
+- provider errors can override the last model request id from debug/error context, matching upstream feedback capture;
+- consumer drops are cancellation outcomes, while stream close before `response.completed` is a failure;
+- denied request envelopes compose into stream refusals without attempting live network transport.
+
+The fixture `fixtures/hxrust/model-stream-route.v1.json` and `harness/check-model-stream-route.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is deterministic stream mapping evidence only; it does not open HTTP/WebSocket transports, parse live SSE frames, retry unauthorized requests, refresh auth, persist inference traces, own realtime/audio, or model Cafex/Cafetera behavior. The boundary is documented in `docs/model-stream-route.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

@@ -51,7 +51,7 @@ class ModelRequestEnvelopeHarness {
 		}
 	}
 
-	static function requests(values:Array<Value>):Array<ModelRequestEnvelopeRequest> {
+	public static function requests(values:Array<Value>):Array<ModelRequestEnvelopeRequest> {
 		final out:Array<ModelRequestEnvelopeRequest> = [];
 		for (value in values) {
 			final request = objectField(objectValue(value), "request");

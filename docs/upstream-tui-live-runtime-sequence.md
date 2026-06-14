@@ -557,7 +557,20 @@ Model selected upstream `ModelClientSession::stream` request construction and ro
 
 Status: HXCX-4.46 now owns `fixtures/hxrust/model-request-envelope.v1.json` and validates the slice through `harness/check-model-request-envelope.sh`. No new haxe.rust limitation was exposed. This is selected request envelope/routing evidence only, not live HTTP/WebSocket transport, SSE stream mapping, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.47+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.47: Model Stream Event And Error Routing
+
+Model selected upstream `map_response_stream` and `map_response_events` behavior after request-envelope admission, without live provider traffic:
+
+- compose provider admission, model catalog selection, turn tool planning, and request-envelope routing before stream mapping;
+- preserve upstream model request id and last model response id feedback fields;
+- count completed output items and token totals on provider completion;
+- route provider API errors, including request-id override from debug/error context;
+- distinguish consumer-dropped cancellation from stream-close-before-completion failure;
+- compose denied envelopes into stream refusals without attempting transport.
+
+Status: HXCX-4.47 now owns `fixtures/hxrust/model-stream-route.v1.json` and validates the slice through `harness/check-model-stream-route.sh`. No new haxe.rust limitation was exposed. This is selected deterministic stream mapping evidence only, not live HTTP/WebSocket transport, SSE frame parsing, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.48+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
