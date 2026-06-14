@@ -17,7 +17,7 @@ Profile policy for the scaffold:
 | `turn-model-plan.hxml` | Compile the HXCX-4.45 raw turn model selection and tool-capability planning harness through portable haxe.rust. |
 | `model-request-envelope.hxml` | Compile the HXCX-4.46 raw model request envelope and response routing harness through portable haxe.rust. |
 | `model-stream-route.hxml` | Compile the HXCX-4.47 raw model stream event and error routing harness through portable haxe.rust. |
-| `model-stream-item-reducer.hxml` | Compile the HXCX-4.48/HXCX-4.50/HXCX-4.51 raw stream item reducer, assistant output routing, tool-call input delta, and streamed argument diff event harness through portable haxe.rust. |
+| `model-stream-item-reducer.hxml` | Compile the HXCX-4.48/HXCX-4.50/HXCX-4.51/HXCX-4.52 raw stream item reducer, assistant output routing, tool-call input delta, and streamed argument diff event harness through portable haxe.rust. |
 | `async-runtime-contract.hxml` | Compile the HXCX-4.49 runtime-neutral async task/stream/cancel/backpressure contract harness through portable haxe.rust. |
 | `app-protocol.hxml` | Compile the G2.4 app-server protocol subset harness through portable haxe.rust. |
 | `mock-model-stream.hxml` | Compile the HXCX-3.1/HXCX-3.6 mock model stream parser, fixture provider, one-turn state machine, cancellation, and transcript/state store harness through portable haxe.rust. |

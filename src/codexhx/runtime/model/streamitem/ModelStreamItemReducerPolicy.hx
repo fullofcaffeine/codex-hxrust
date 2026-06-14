@@ -142,6 +142,9 @@ class ModelStreamItemReducerPolicy {
 					toolInputDeltaCount = toolInputDeltaCount + 1;
 					if (activeDiffConsumer != null) {
 						final diffEvent = activeDiffConsumer.consume(accepted);
+						if (activeDiffConsumer.hasError()) {
+							return ModelStreamItemReducerOutcome.failed(request, route, runtimeEvents, "ToolArgumentDiffConsumer error: " + activeDiffConsumer.errorSummary(), sequence.join("->"));
+						}
 						if (diffEvent != null) {
 							runtimeEvents.push(toolArgumentDiffEvent(diffEvent));
 							toolArgumentDiffEventCount = toolArgumentDiffEventCount + 1;
@@ -153,6 +156,9 @@ class ModelStreamItemReducerPolicy {
 				if (isToolCall(item)) {
 					if (activeDiffConsumer != null && activeToolCall != null && item.callId == activeToolCall.callId) {
 						final finishedDiffEvent = activeDiffConsumer.finish();
+						if (activeDiffConsumer.hasError()) {
+							return ModelStreamItemReducerOutcome.failed(request, route, runtimeEvents, "ToolArgumentDiffConsumer error: " + activeDiffConsumer.errorSummary(), sequence.join("->"));
+						}
 						if (finishedDiffEvent != null) {
 							runtimeEvents.push(toolArgumentDiffEvent(finishedDiffEvent));
 							toolArgumentDiffEventCount = toolArgumentDiffEventCount + 1;

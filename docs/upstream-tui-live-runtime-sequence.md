@@ -612,12 +612,24 @@ Continue from call-id-routed input deltas into protocol-facing custom tool progr
 - model the upstream `ToolArgumentDiffConsumer` surface without binding Haxe app APIs to Tokio;
 - emit typed, deterministic `PatchApplyUpdated`-style events for apply-patch-shaped streamed custom tool input;
 - flush pending/final diff updates when the tool call item completes;
-- keep the parser intentionally fixture-scoped and credential-free until a later full apply-patch grammar/verifier slice;
+- keep parser effects credential-free and deterministic until live tool execution is modeled separately;
 - never execute tools or mutate the filesystem from this reducer path.
 
 Status: HXCX-4.51 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is selected deterministic diff-consumer event evidence only, not full patch grammar verification, filesystem mutation, live HTTP/WebSocket transport, SSE frame parsing, tool execution, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.52+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.52: Streamed Apply-Patch Grammar Parity
+
+Replace fixture-scoped scanning with a stronger pure-Haxe streaming patch parser:
+
+- model upstream add/delete/update/move/end-of-file hunks and update chunks with typed DTOs/enums;
+- preserve complete-line streaming semantics and final-line/no-newline finish handling;
+- fail malformed patch streams through reducer errors before any tool execution path;
+- keep `PatchApplyUpdated` summaries protocol-shaped while leaving final workspace verification to later native/runtime work;
+- never mutate the filesystem from this reducer path.
+
+Status: HXCX-4.52 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic streaming parser and progress-event evidence only, not final patch verification against a workspace, filesystem mutation, live HTTP/WebSocket transport, SSE frame parsing, tool execution, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.53+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

@@ -1,6 +1,6 @@
 # Stream Item Reducer And Assistant Output Routing
 
-**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`
+**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`; HXCX-4.52 / `codex-hxrust-7md`
 **Scope:** raw upstream Codex first; no live network, no real credentials, no live async ownership, no Cafex/Cafetera behavior.
 
 ## Upstream References
@@ -23,6 +23,11 @@ Read-only upstream reference: `../codex`.
 - `../codex/codex-rs/core/src/tools/handlers/apply_patch.rs:99` pushes deltas through the streaming patch parser.
 - `../codex/codex-rs/core/src/tools/handlers/apply_patch.rs:124` flushes pending diff updates on tool completion.
 - `../codex/codex-rs/core/src/tools/handlers/apply_patch_tests.rs:84` covers streamed `PatchApplyUpdated` events for add-file patch input.
+- `../codex/codex-rs/apply-patch/src/parser.rs:65` defines typed add/delete/update hunks and update chunks.
+- `../codex/codex-rs/apply-patch/src/streaming_parser.rs:22` defines `StreamingPatchParser` state.
+- `../codex/codex-rs/apply-patch/src/streaming_parser.rs:47` implements streamed delta ingestion and finish validation.
+- `../codex/codex-rs/apply-patch/src/streaming_parser.rs:384` covers complete-line streaming for add/delete/update/move hunks.
+- `../codex/codex-rs/apply-patch/src/streaming_parser.rs:724` covers malformed streaming patch errors.
 - `../codex/codex-rs/protocol/src/protocol.rs:3315` defines `PatchApplyUpdatedEvent`.
 - `../codex/codex-rs/protocol/src/protocol.rs:3775` defines the `FileChange` variants used by patch update events.
 - `../codex/codex-rs/core/tests/suite/apply_patch_cli.rs:1187` covers `response.custom_tool_call_input.delta` apply-patch streaming.
@@ -41,14 +46,14 @@ Read-only upstream reference: `../codex`.
 - `ModelStreamItemEventKind` represents selected `ResponseEvent` item-added, item-done, output text delta, tool-call input delta, reasoning summary delta, reasoning raw-content delta, and completion events.
 - `ModelStreamRuntimeEventKind` captures the runtime-facing item started/completed, assistant delta, reasoning delta, raw reasoning delta, tool-call input delta, ignored tool-call input delta, patch-style tool argument diff update, tool-call queued, stream completed, route denied, and reducer error outcomes.
 - `ModelStreamActiveToolCall`, `ModelStreamToolInputDelta`, and `ModelStreamToolInputDeltaStatus` keep active custom tool-call state, accepted diffs, no-active-consumer ignores, and call-id mismatch ignores typed instead of stringly.
-- `ModelToolArgumentDiffConsumerState`, `ModelToolArgumentDiffConsumerEvent`, `ModelPatchFileChange`, and their enum abstracts model the selected `ToolArgumentDiffConsumer` event surface for apply-patch-shaped custom tool input.
+- `ModelToolArgumentDiffConsumerState`, `ModelToolArgumentDiffConsumerEvent`, `ModelPatchFileChange`, `ModelPatchUpdateChunk`, `ModelPatchParseError`, and their enum abstracts model the selected `ToolArgumentDiffConsumer` and `StreamingPatchParser` event surface for apply-patch-shaped custom tool input.
 - `ModelStreamItemReducerPolicy` maintains active item/tool metadata, emits deltas against that item or call id, strips selected hidden assistant markup at completion, accumulates accepted custom tool input when the completed item omits it, emits deterministic patch update events for supported streamed argument diffs, and queues tool calls for follow-up without executing them.
 
-The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no tool execution, and secret-free summaries.
+The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, add/delete/update/move/end-of-file patch chunks, malformed patch refusal, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no filesystem mutation, no tool execution, and secret-free summaries.
 
 ## Non-Goals
 
-This is not live SSE parsing, WebSocket ownership, Tokio task ownership, tool execution, full apply-patch grammar verification, filesystem mutation, plan-mode proposed-plan item extraction, provider auth refresh, unauthorized retry handling, inference trace persistence, realtime/audio transport, or interactive TUI implementation.
+This is not live SSE parsing, WebSocket ownership, Tokio task ownership, tool execution, filesystem mutation, final apply-patch verification against a workspace, plan-mode proposed-plan item extraction, provider auth refresh, unauthorized retry handling, inference trace persistence, realtime/audio transport, or interactive TUI implementation.
 
 ## Gate
 
