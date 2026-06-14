@@ -17,6 +17,7 @@ class ModelStreamItemReducerOutcome {
 	public final rawReasoningDeltaCount:Int;
 	public final toolInputDeltaCount:Int;
 	public final toolInputDeltaIgnoredCount:Int;
+	public final toolArgumentDiffEventCount:Int;
 	public final toolCallCount:Int;
 	public final needsFollowUp:Bool;
 	public final lastAgentMessage:String;
@@ -39,6 +40,7 @@ class ModelStreamItemReducerOutcome {
 		rawReasoningDeltaCount:Int,
 		toolInputDeltaCount:Int,
 		toolInputDeltaIgnoredCount:Int,
+		toolArgumentDiffEventCount:Int,
 		toolCallCount:Int,
 		needsFollowUp:Bool,
 		lastAgentMessage:String,
@@ -62,6 +64,7 @@ class ModelStreamItemReducerOutcome {
 		this.rawReasoningDeltaCount = rawReasoningDeltaCount;
 		this.toolInputDeltaCount = toolInputDeltaCount;
 		this.toolInputDeltaIgnoredCount = toolInputDeltaIgnoredCount;
+		this.toolArgumentDiffEventCount = toolArgumentDiffEventCount;
 		this.toolCallCount = toolCallCount;
 		this.needsFollowUp = needsFollowUp;
 		this.lastAgentMessage = lastAgentMessage;
@@ -83,6 +86,7 @@ class ModelStreamItemReducerOutcome {
 		rawReasoningDeltaCount:Int,
 		toolInputDeltaCount:Int,
 		toolInputDeltaIgnoredCount:Int,
+		toolArgumentDiffEventCount:Int,
 		toolCallCount:Int,
 		needsFollowUp:Bool,
 		lastAgentMessage:String,
@@ -103,6 +107,7 @@ class ModelStreamItemReducerOutcome {
 			rawReasoningDeltaCount,
 			toolInputDeltaCount,
 			toolInputDeltaIgnoredCount,
+			toolArgumentDiffEventCount,
 			toolCallCount,
 			needsFollowUp,
 			lastAgentMessage,
@@ -126,6 +131,7 @@ class ModelStreamItemReducerOutcome {
 			request,
 			route,
 			[errorEvent(ModelStreamRuntimeEventKind.RouteDenied, errorMessage)],
+			0,
 			0,
 			0,
 			0,
@@ -166,6 +172,7 @@ class ModelStreamItemReducerOutcome {
 			countEvents(events, ModelStreamRuntimeEventKind.ReasoningRawContentDelta),
 			countEvents(events, ModelStreamRuntimeEventKind.ToolCallInputDelta),
 			countEvents(events, ModelStreamRuntimeEventKind.ToolCallInputDeltaIgnored),
+			countEvents(events, ModelStreamRuntimeEventKind.ToolArgumentDiffUpdated),
 			countEvents(events, ModelStreamRuntimeEventKind.ToolCallQueued),
 			false,
 			"",
@@ -199,6 +206,7 @@ class ModelStreamItemReducerOutcome {
 			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
 			+ ";toolInputDeltas=" + Std.string(toolInputDeltaCount)
 			+ ";toolInputDeltaIgnored=" + Std.string(toolInputDeltaIgnoredCount)
+			+ ";toolArgumentDiffEvents=" + Std.string(toolArgumentDiffEventCount)
 			+ ";error=" + errorMessage
 			+ ";sequence=" + sequence
 			+ ";events=[" + eventParts.join("##") + "]";

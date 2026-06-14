@@ -41,6 +41,7 @@ class ModelStreamItemReducerHarness {
 			assertEquals(Std.string(intField(expect, "rawReasoningDeltaCount", 0)), Std.string(outcome.rawReasoningDeltaCount));
 			assertEquals(Std.string(intField(expect, "toolInputDeltaCount", 0)), Std.string(outcome.toolInputDeltaCount));
 			assertEquals(Std.string(intField(expect, "toolInputDeltaIgnoredCount", 0)), Std.string(outcome.toolInputDeltaIgnoredCount));
+			assertEquals(Std.string(intField(expect, "toolArgumentDiffEventCount", 0)), Std.string(outcome.toolArgumentDiffEventCount));
 			assertEquals(Std.string(intField(expect, "toolCallCount", 0)), Std.string(outcome.toolCallCount));
 			assertEquals(boolText(boolField(expect, "needsFollowUp", false)), boolText(outcome.needsFollowUp));
 			assertEquals(stringField(expect, "lastAgentMessage", ""), outcome.lastAgentMessage);
@@ -165,6 +166,7 @@ class ModelStreamItemReducerHarness {
 		assertEquals(Std.string(intField(expect, "toolCallCount", 0)), Std.string(report.toolCallCount()));
 		assertEquals(Std.string(intField(expect, "toolInputDeltaCount", 0)), Std.string(report.toolInputDeltaCount()));
 		assertEquals(Std.string(intField(expect, "toolInputDeltaIgnoredCount", 0)), Std.string(report.toolInputDeltaIgnoredCount()));
+		assertEquals(Std.string(intField(expect, "toolArgumentDiffEventCount", 0)), Std.string(report.toolArgumentDiffEventCount()));
 		assertEquals(Std.string(intField(expect, "assistantDeltaCount", 0)), Std.string(report.assistantDeltaCount()));
 		assertEquals(Std.string(intField(expect, "reasoningDeltaCount", 0)), Std.string(report.reasoningDeltaCount()));
 		assertContains(report.summary(), stringField(expect, "summaryContains", ""));

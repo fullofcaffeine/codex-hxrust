@@ -224,6 +224,11 @@
           "delta": "*** Begin Patch\n"
         },
         {
+          "kind": "tool_call_input_delta",
+          "callId": "call-openai-delta-1",
+          "delta": "*** Add File: hello.txt\n+hello"
+        },
+        {
           "kind": "output_item_done",
           "item": {
             "kind": "custom_tool_call",
@@ -247,14 +252,15 @@
         "assistantDeltaCount": 0,
         "reasoningDeltaCount": 0,
         "rawReasoningDeltaCount": 0,
-        "toolInputDeltaCount": 1,
+        "toolInputDeltaCount": 2,
         "toolInputDeltaIgnoredCount": 1,
+        "toolArgumentDiffEventCount": 2,
         "toolCallCount": 1,
         "needsFollowUp": true,
         "lastAgentMessage": "",
         "terminalResponseId": "resp-openai-123",
         "totalTokens": 30,
-        "summaryContains": "event=tool_call_input_delta_ignored;itemKind=custom_tool_call;itemId=custom-openai-delta-1;callId=call-openai-delta-1;tool=apply_patch;delta=ignored input;text=status=ignored_call_mismatch"
+        "summaryContains": "event=tool_argument_diff_updated;itemKind=custom_tool_call;itemId=none;callId=call-openai-delta-1;tool=apply_patch;delta=;text=consumer=apply_patch;callId=call-openai-delta-1;finished=true;index=2;changes=[path=hello.txt;kind=add;content=hello"
       }
     },
     {
@@ -383,12 +389,13 @@
         "rawReasoningDeltaCount": 0,
         "toolInputDeltaCount": 3,
         "toolInputDeltaIgnoredCount": 0,
+        "toolArgumentDiffEventCount": 2,
         "toolCallCount": 1,
         "needsFollowUp": true,
         "lastAgentMessage": "",
         "terminalResponseId": "resp-lite-input-deltas",
         "totalTokens": 18,
-        "summaryContains": "event=tool_call_queued;itemKind=custom_tool_call;itemId=custom-lite-delta-1;callId=call-lite-delta-1;tool=apply_patch;delta=;text=*** Begin Patch"
+        "summaryContains": "event=tool_argument_diff_updated;itemKind=custom_tool_call;itemId=none;callId=call-lite-delta-1;tool=apply_patch;delta=;text=consumer=apply_patch;callId=call-lite-delta-1;finished=true;index=2;changes=[path=streamed.txt;kind=add;content=hello"
       }
     },
     {
@@ -437,10 +444,11 @@
     "successCount": 7,
     "errorCount": 1,
     "toolCallCount": 5,
-    "toolInputDeltaCount": 4,
+    "toolInputDeltaCount": 5,
     "toolInputDeltaIgnoredCount": 2,
+    "toolArgumentDiffEventCount": 4,
     "assistantDeltaCount": 2,
     "reasoningDeltaCount": 1,
-    "summaryContains": "schema=codex-hxrust.model-stream-item-reducer-report.v1;cases=8;success=7;errors=1;toolCalls=5;assistantDeltas=2;reasoningDeltas=1;toolInputDeltas=4;toolInputDeltaIgnored=2"
+    "summaryContains": "schema=codex-hxrust.model-stream-item-reducer-report.v1;cases=8;success=7;errors=1;toolCalls=5;assistantDeltas=2;reasoningDeltas=1;toolInputDeltas=5;toolInputDeltaIgnored=2;toolArgumentDiffEvents=4"
   }
 }

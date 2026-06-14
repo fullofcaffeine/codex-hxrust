@@ -529,7 +529,7 @@ The fixture `fixtures/hxrust/model-stream-route.v1.json` and `harness/check-mode
 
 ## Stream Item Reducer And Assistant Output Routing
 
-`codexhx.runtime.model.streamitem.ModelStreamItemReducerPolicy` is the HXCX-4.48/HXCX-4.50 raw upstream stream item reducer slice:
+`codexhx.runtime.model.streamitem.ModelStreamItemReducerPolicy` is the HXCX-4.48/HXCX-4.50/HXCX-4.51 raw upstream stream item reducer slice:
 
 - stream routes must pass before item reduction can start;
 - `ModelStreamOutputItemKind` distinguishes assistant message, reasoning, function call, custom tool call, web search, image generation, tool output, and unknown items;
@@ -537,6 +537,7 @@ The fixture `fixtures/hxrust/model-stream-route.v1.json` and `harness/check-mode
 - assistant output text deltas emit typed runtime delta events tied to the active item;
 - reasoning summary and raw-content deltas emit typed reasoning events, with raw deltas gated by fixture config;
 - custom tool-call input deltas are routed by active `callId`, accumulated when accepted, and typed as ignored when no custom diff consumer is active or the `callId` mismatches;
+- apply-patch-shaped custom tool input can emit deterministic `PatchApplyUpdated`-style runtime events through typed argument diff consumer state;
 - function/custom tool calls are queued as follow-up work without executing tools;
 - denied stream routes compose into reducer refusals without processing item events.
 

@@ -8,6 +8,7 @@ enum abstract ModelStreamRuntimeEventKind(String) to String {
 	public var ReasoningRawContentDelta = "reasoning_raw_content_delta";
 	public var ToolCallInputDelta = "tool_call_input_delta";
 	public var ToolCallInputDeltaIgnored = "tool_call_input_delta_ignored";
+	public var ToolArgumentDiffUpdated = "tool_argument_diff_updated";
 	public var ToolCallQueued = "tool_call_queued";
 	public var StreamCompleted = "stream_completed";
 	public var RouteDenied = "route_denied";

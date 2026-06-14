@@ -605,7 +605,19 @@ Continue the raw upstream stream reducer before live provider/TUI ownership:
 
 Status: HXCX-4.50 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is selected deterministic argument-diff routing evidence only, not apply-patch hunk parsing, live HTTP/WebSocket transport, SSE frame parsing, tool execution, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.51+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.51: Streamed Tool Argument Diff Consumer Events
+
+Continue from call-id-routed input deltas into protocol-facing custom tool progress events:
+
+- model the upstream `ToolArgumentDiffConsumer` surface without binding Haxe app APIs to Tokio;
+- emit typed, deterministic `PatchApplyUpdated`-style events for apply-patch-shaped streamed custom tool input;
+- flush pending/final diff updates when the tool call item completes;
+- keep the parser intentionally fixture-scoped and credential-free until a later full apply-patch grammar/verifier slice;
+- never execute tools or mutate the filesystem from this reducer path.
+
+Status: HXCX-4.51 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is selected deterministic diff-consumer event evidence only, not full patch grammar verification, filesystem mutation, live HTTP/WebSocket transport, SSE frame parsing, tool execution, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.52+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

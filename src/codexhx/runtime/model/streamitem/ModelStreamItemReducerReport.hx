@@ -51,6 +51,12 @@ class ModelStreamItemReducerReport {
 		return count;
 	}
 
+	public function toolArgumentDiffEventCount():Int {
+		var count = 0;
+		for (outcome in outcomes) count = count + outcome.toolArgumentDiffEventCount;
+		return count;
+	}
+
 	public function summary():String {
 		final parts:Array<String> = [];
 		for (outcome in outcomes) parts.push(outcome.summary());
@@ -63,6 +69,7 @@ class ModelStreamItemReducerReport {
 			+ ";reasoningDeltas=" + Std.string(reasoningDeltaCount())
 			+ ";toolInputDeltas=" + Std.string(toolInputDeltaCount())
 			+ ";toolInputDeltaIgnored=" + Std.string(toolInputDeltaIgnoredCount())
+			+ ";toolArgumentDiffEvents=" + Std.string(toolArgumentDiffEventCount())
 			+ ";outcomes=[" + parts.join("##") + "]";
 	}
 }

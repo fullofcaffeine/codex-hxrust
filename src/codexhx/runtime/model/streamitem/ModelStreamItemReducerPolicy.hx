@@ -25,6 +25,7 @@ class ModelStreamItemReducerPolicy {
 		final sequence:Array<String> = ["model_stream_item_reducer", "stream_route:ok"];
 		var activeItem:ModelStreamOutputItem = null;
 		var activeToolCall:ModelStreamActiveToolCall = null;
+		var activeDiffConsumer:ModelToolArgumentDiffConsumerState = null;
 		var activeStreaming = false;
 		var startedCount = 0;
 		var completedCount = 0;
@@ -33,6 +34,7 @@ class ModelStreamItemReducerPolicy {
 		var rawReasoningDeltaCount = 0;
 		var toolInputDeltaCount = 0;
 		var toolInputDeltaIgnoredCount = 0;
+		var toolArgumentDiffEventCount = 0;
 		var toolCallCount = 0;
 		var needsFollowUp = false;
 		var lastAgentMessage = "";
@@ -49,10 +51,13 @@ class ModelStreamItemReducerPolicy {
 					runtimeEvents.push(itemStarted(item));
 					startedCount = startedCount + 1;
 					activeToolCall = null;
+					activeDiffConsumer = null;
 				} else if (item != null && item.kind == ModelStreamOutputItemKind.CustomToolCall) {
 					activeToolCall = ModelStreamActiveToolCall.fromItem(item);
+					activeDiffConsumer = ModelToolArgumentDiffConsumerState.create(item.toolName, item.callId);
 				} else if (item != null && item.kind == ModelStreamOutputItemKind.FunctionCall) {
 					activeToolCall = null;
+					activeDiffConsumer = null;
 				}
 			} else if (event.kind == ModelStreamItemEventKind.OutputTextDelta) {
 				if (activeItem == null || !activeStreaming) {
@@ -135,15 +140,32 @@ class ModelStreamItemReducerPolicy {
 						accepted
 					));
 					toolInputDeltaCount = toolInputDeltaCount + 1;
+					if (activeDiffConsumer != null) {
+						final diffEvent = activeDiffConsumer.consume(accepted);
+						if (diffEvent != null) {
+							runtimeEvents.push(toolArgumentDiffEvent(diffEvent));
+							toolArgumentDiffEventCount = toolArgumentDiffEventCount + 1;
+						}
+					}
 				}
 			} else if (event.kind == ModelStreamItemEventKind.OutputItemDone) {
 				final item = event.item;
 				if (isToolCall(item)) {
+					if (activeDiffConsumer != null && activeToolCall != null && item.callId == activeToolCall.callId) {
+						final finishedDiffEvent = activeDiffConsumer.finish();
+						if (finishedDiffEvent != null) {
+							runtimeEvents.push(toolArgumentDiffEvent(finishedDiffEvent));
+							toolArgumentDiffEventCount = toolArgumentDiffEventCount + 1;
+						}
+					}
 					final completedToolCall = toolCallWithStreamedInput(item, activeToolCall);
 					runtimeEvents.push(toolCallQueued(completedToolCall));
 					toolCallCount = toolCallCount + 1;
 					needsFollowUp = true;
-					if (activeToolCall != null && activeToolCall.callId == item.callId) activeToolCall = null;
+					if (activeToolCall != null && activeToolCall.callId == item.callId) {
+						activeToolCall = null;
+						activeDiffConsumer = null;
+					}
 					activeItem = null;
 					activeStreaming = false;
 				} else if (isNonToolItem(item)) {
@@ -188,6 +210,7 @@ class ModelStreamItemReducerPolicy {
 			rawReasoningDeltaCount,
 			toolInputDeltaCount,
 			toolInputDeltaIgnoredCount,
+			toolArgumentDiffEventCount,
 			toolCallCount,
 			needsFollowUp,
 			lastAgentMessage,
@@ -329,6 +352,19 @@ class ModelStreamItemReducerPolicy {
 			inputDelta.delta,
 			inputDelta.summary(),
 			inputDelta.index
+		);
+	}
+
+	static function toolArgumentDiffEvent(diffEvent:ModelToolArgumentDiffConsumerEvent):ModelStreamRuntimeEvent {
+		return new ModelStreamRuntimeEvent(
+			ModelStreamRuntimeEventKind.ToolArgumentDiffUpdated,
+			ModelStreamOutputItemKind.CustomToolCall,
+			"",
+			diffEvent.callId,
+			diffEvent.kind,
+			"",
+			diffEvent.summary(),
+			diffEvent.index
 		);
 	}
 
