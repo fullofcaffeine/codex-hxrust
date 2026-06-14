@@ -66,6 +66,11 @@ import codexhx.runtime.model.streamitem.ModelSamplingErrorTerminalKind;
 import codexhx.runtime.model.streamitem.ModelSamplingErrorTerminalOutcome;
 import codexhx.runtime.model.streamitem.ModelSamplingErrorTerminalPolicy;
 import codexhx.runtime.model.streamitem.ModelSamplingErrorTerminalRequest;
+import codexhx.runtime.model.streamitem.ModelTurnLifecycleEventKind;
+import codexhx.runtime.model.streamitem.ModelTurnLifecycleOutcome;
+import codexhx.runtime.model.streamitem.ModelTurnLifecyclePolicy;
+import codexhx.runtime.model.streamitem.ModelTurnLifecycleRequest;
+import codexhx.runtime.model.streamitem.ModelTurnLifecycleTerminalKind;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -139,7 +144,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelHookRecordings = assertTopLevelPendingInputHookRecordings(testCase, topLevelPendingInputDrains, secretProbe);
 			final topLevelPromptPreparations = assertTopLevelPromptPreparations(testCase, topLevelHookRecordings, secretProbe);
 			final topLevelTerminalStopHooks = assertTopLevelTerminalStopHooks(testCase, topLevelIntegrations, topLevelPromptPreparations, secretProbe);
-			assertTopLevelSamplingErrorTerminals(testCase, topLevelTerminalStopHooks, secretProbe);
+			final topLevelSamplingErrorTerminals = assertTopLevelSamplingErrorTerminals(testCase, topLevelTerminalStopHooks, secretProbe);
+			assertTopLevelTurnLifecycles(testCase, topLevelTerminalStopHooks, topLevelSamplingErrorTerminals, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -309,7 +315,8 @@ class ModelStreamItemReducerHarness {
 				final hookRecordings = assertPendingInputHookRecordings(verificationValue, pendingInputDrains, secretProbe);
 				final promptPreparations = assertPromptPreparations(verificationValue, hookRecordings, secretProbe);
 				final terminalStopHooks = assertTerminalStopHooks(verificationValue, integrations, promptPreparations, secretProbe);
-				assertSamplingErrorTerminals(verificationValue, terminalStopHooks, secretProbe);
+				final samplingErrorTerminals = assertSamplingErrorTerminals(verificationValue, terminalStopHooks, secretProbe);
+				assertTurnLifecycles(verificationValue, terminalStopHooks, samplingErrorTerminals, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -1333,6 +1340,83 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelTurnLifecycles(
+		testCase:Value,
+		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+		samplingErrorTerminals:Array<ModelSamplingErrorTerminalOutcome>,
+		secretProbe:String
+	):Array<ModelTurnLifecycleOutcome> {
+		final outcomes:Array<ModelTurnLifecycleOutcome> = [];
+		final values = optionalArrayField(testCase, "turnLifecycleExpects");
+		for (value in values) outcomes.push(assertTurnLifecycle(objectValue(value), terminalStopHooks, samplingErrorTerminals, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTurnLifecycles(
+		verificationValue:Value,
+		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+		samplingErrorTerminals:Array<ModelSamplingErrorTerminalOutcome>,
+		secretProbe:String
+	):Array<ModelTurnLifecycleOutcome> {
+		final outcomes:Array<ModelTurnLifecycleOutcome> = [];
+		final values = optionalArrayField(verificationValue, "turnLifecycleExpects");
+		for (value in values) outcomes.push(assertTurnLifecycle(objectValue(value), terminalStopHooks, samplingErrorTerminals, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTurnLifecycle(
+		expectValue:Value,
+		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+		samplingErrorTerminals:Array<ModelSamplingErrorTerminalOutcome>,
+		secretProbe:String
+	):ModelTurnLifecycleOutcome {
+		final stopHookId = stringField(expectValue, "terminalStopHookRequestId", "");
+		final samplingErrorId = stringField(expectValue, "samplingErrorTerminalRequestId", "");
+		final outcome = ModelTurnLifecyclePolicy.finish(new ModelTurnLifecycleRequest(
+			stringField(expectValue, "requestId", ""),
+			stringField(expectValue, "turnId", ""),
+			turnLifecycleTerminalKind(stringField(expectValue, "terminalKind", "completed")),
+			stopHookId.length == 0 ? null : terminalStopHookByRequestId(terminalStopHooks, stopHookId),
+			samplingErrorId.length == 0 ? null : samplingErrorTerminalByRequestId(samplingErrorTerminals, samplingErrorId),
+			stringField(expectValue, "lastAgentMessageInput", ""),
+			stringField(expectValue, "abortReason", ""),
+			boolField(expectValue, "taskCancellationRequested", false),
+			boolField(expectValue, "rolloutFlushOk", true),
+			boolField(expectValue, "activeTurnMatches", true),
+			boolField(expectValue, "hasPendingTriggerMailbox", false),
+			boolField(expectValue, "interruptedMarkerEligible", false),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(stringField(expectValue, "turnId", ""), outcome.turnId);
+		assertEquals(stringField(expectValue, "terminalKind", ""), outcome.terminalKind);
+		assertEquals(stringField(expectValue, "projectedEventKind", ""), outcome.projectedEventKind);
+		assertEquals(stopHookId, outcome.terminalStopHookRequestId);
+		assertEquals(samplingErrorId, outcome.samplingErrorTerminalRequestId);
+		assertEquals(boolText(boolField(expectValue, "rolloutFlushedBeforeTerminal", false)), boolText(outcome.rolloutFlushedBeforeTerminal));
+		assertEquals(boolText(boolField(expectValue, "rolloutWarningEmitted", false)), boolText(outcome.rolloutWarningEmitted));
+		assertEquals(boolText(boolField(expectValue, "turnStopLifecycleEmitted", false)), boolText(outcome.turnStopLifecycleEmitted));
+		assertEquals(boolText(boolField(expectValue, "turnAbortLifecycleEmitted", false)), boolText(outcome.turnAbortLifecycleEmitted));
+		assertEquals(boolText(boolField(expectValue, "turnErrorLifecycleAlreadyEmitted", false)), boolText(outcome.turnErrorLifecycleAlreadyEmitted));
+		assertEquals(boolText(boolField(expectValue, "turnCompleteEmitted", false)), boolText(outcome.turnCompleteEmitted));
+		assertEquals(boolText(boolField(expectValue, "turnAbortedEmitted", false)), boolText(outcome.turnAbortedEmitted));
+		assertEquals(boolText(boolField(expectValue, "completionSuppressedForCancellation", false)), boolText(outcome.completionSuppressedForCancellation));
+		assertEquals(boolText(boolField(expectValue, "completedAfterError", false)), boolText(outcome.completedAfterError));
+		assertEquals(boolText(boolField(expectValue, "interruptedMarkerRecorded", false)), boolText(outcome.interruptedMarkerRecorded));
+		assertEquals(boolText(boolField(expectValue, "lastAgentMessageCarried", false)), boolText(outcome.lastAgentMessageCarried));
+		assertEquals(stringField(expectValue, "lastAgentMessage", ""), outcome.lastAgentMessage);
+		assertEquals(boolText(boolField(expectValue, "activeTurnCleared", false)), boolText(outcome.activeTurnCleared));
+		assertEquals(boolText(boolField(expectValue, "threadIdleLifecycleEmitted", false)), boolText(outcome.threadIdleLifecycleEmitted));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function samplingResultIntegrationByRequestId(integrations:Array<ModelSamplingResultIntegrationOutcome>, requestId:String):ModelSamplingResultIntegrationOutcome {
 		for (integration in integrations) if (integration.requestId == requestId) return integration;
 		throw "missing sampling result integration outcome: " + requestId;
@@ -1341,6 +1425,11 @@ class ModelStreamItemReducerHarness {
 	static function terminalStopHookByRequestId(outcomes:Array<ModelTerminalStopHookOutcome>, requestId:String):ModelTerminalStopHookOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing terminal stop hook outcome: " + requestId;
+	}
+
+	static function samplingErrorTerminalByRequestId(outcomes:Array<ModelSamplingErrorTerminalOutcome>, requestId:String):ModelSamplingErrorTerminalOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing sampling error terminal outcome: " + requestId;
 	}
 
 	static function promptPreparationByRequestId(
@@ -1516,6 +1605,15 @@ class ModelStreamItemReducerHarness {
 			case "invalid_image_request": ModelSamplingErrorTerminalKind.InvalidImageRequest;
 			case "generic_codex_error": ModelSamplingErrorTerminalKind.GenericCodexError;
 			case _: throw "unknown sampling error terminal kind: " + value;
+		}
+	}
+
+	static function turnLifecycleTerminalKind(value:String):ModelTurnLifecycleTerminalKind {
+		return switch value {
+			case "completed": ModelTurnLifecycleTerminalKind.Completed;
+			case "completed_after_error": ModelTurnLifecycleTerminalKind.CompletedAfterError;
+			case "aborted": ModelTurnLifecycleTerminalKind.Aborted;
+			case _: throw "unknown turn lifecycle terminal kind: " + value;
 		}
 	}
 
