@@ -527,6 +527,20 @@ The fixture `fixtures/hxrust/model-request-envelope.v1.json` and `harness/check-
 
 The fixture `fixtures/hxrust/model-stream-route.v1.json` and `harness/check-model-stream-route.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is deterministic stream mapping evidence only; it does not open HTTP/WebSocket transports, parse live SSE frames, retry unauthorized requests, refresh auth, persist inference traces, own realtime/audio, or model Cafex/Cafetera behavior. The boundary is documented in `docs/model-stream-route.md`.
 
+## Stream Item Reducer And Assistant Output Routing
+
+`codexhx.runtime.model.streamitem.ModelStreamItemReducerPolicy` is the HXCX-4.48 raw upstream stream item reducer slice:
+
+- stream routes must pass before item reduction can start;
+- `ModelStreamOutputItemKind` distinguishes assistant message, reasoning, function call, custom tool call, web search, image generation, tool output, and unknown items;
+- `ModelStreamItemEventKind` represents selected `ResponseEvent` item/delta/terminal events without live async ownership;
+- assistant output text deltas emit typed runtime delta events tied to the active item;
+- reasoning summary and raw-content deltas emit typed reasoning events, with raw deltas gated by fixture config;
+- function/custom tool calls are queued as follow-up work without executing tools;
+- denied stream routes compose into reducer refusals without processing item events.
+
+The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` and `harness/check-model-stream-item-reducer.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is deterministic reducer evidence only; it does not execute tools, open HTTP/WebSocket transports, parse live SSE frames, own Tokio tasks, persist inference traces, own realtime/audio, or model Cafex/Cafetera behavior. The boundary is documented in `docs/model-stream-item-reducer.md`.
+
 ## TUI Story Replay
 
 `codexhx.runtime.tui.TuiStoryReplayParser` is the HXCX-4.8 story oracle slice. It parses the codexhx-owned selected fixture `fixtures/upstream/oss-story-selected.v1.jsonl`, derived from upstream raw Codex `../codex/codex-rs/tui/tests/fixtures/oss-story.jsonl`, into typed replay records:

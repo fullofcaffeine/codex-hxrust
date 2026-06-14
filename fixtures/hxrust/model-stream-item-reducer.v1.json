@@ -1,0 +1,249 @@
+{
+  "schema": "codex-hxrust.model-stream-item-reducer-fixture.v1",
+  "source": "raw-codex",
+  "description": "Deterministic raw Codex stream item reducer fixture. Composes request-envelope and stream-route fixtures by id. No live network, no real credentials, no Tokio-bound Haxe API, no Cafex.",
+  "envelopeFixture": "fixtures/hxrust/model-request-envelope.v1.json",
+  "routeFixture": "fixtures/hxrust/model-stream-route.v1.json",
+  "cases": [
+    {
+      "id": "openai-assistant-message-deltas-and-completion",
+      "requestId": "items-openai-assistant",
+      "routeFixtureId": "openai-completed-feedback-ids",
+      "planMode": false,
+      "showRawReasoning": false,
+      "secretProbe": "sk-envelope-secret",
+      "events": [
+        {
+          "kind": "output_item_added",
+          "item": {
+            "kind": "assistant_message",
+            "itemId": "msg-openai-1",
+            "role": "assistant",
+            "text": "",
+            "phase": "final"
+          }
+        },
+        {"kind": "output_text_delta", "delta": "Hello "},
+        {"kind": "output_text_delta", "delta": "world"},
+        {
+          "kind": "output_item_done",
+          "item": {
+            "kind": "assistant_message",
+            "itemId": "msg-openai-1",
+            "role": "assistant",
+            "text": "Hello <oai-mem-citation><citation_entries>\nMEMORY.md:1-2|note=[x]\n</citation_entries>\n<rollout_ids>\n019cc2ea-1dff-7902-8d40-c8f6e5d83cc4\n</rollout_ids></oai-mem-citation>world",
+            "phase": "final"
+          }
+        },
+        {"kind": "completed", "responseId": "resp-openai-123", "totalTokens": 30, "endTurn": true}
+      ],
+      "expect": {
+        "ok": true,
+        "code": "model_stream_items_reduced",
+        "requestId": "items-openai-assistant",
+        "routeCode": "model_stream_completed",
+        "providerId": "openai",
+        "selectedModelId": "gpt-5.5",
+        "startedCount": 1,
+        "completedCount": 1,
+        "assistantDeltaCount": 2,
+        "reasoningDeltaCount": 0,
+        "rawReasoningDeltaCount": 0,
+        "toolCallCount": 0,
+        "needsFollowUp": false,
+        "lastAgentMessage": "Hello world",
+        "terminalResponseId": "resp-openai-123",
+        "totalTokens": 30,
+        "summaryContains": "started=1;completed=1;assistantDeltas=2;reasoningDeltas=0;rawReasoningDeltas=0;toolCalls=0;needsFollowUp=false;lastAgentMessage=Hello world;terminalResponseId=resp-openai-123;totalTokens=30;liveNetworkAttempted=false"
+      }
+    },
+    {
+      "id": "openai-reasoning-summary-and-raw-deltas",
+      "requestId": "items-openai-reasoning",
+      "routeFixtureId": "openai-completed-feedback-ids",
+      "planMode": false,
+      "showRawReasoning": true,
+      "events": [
+        {
+          "kind": "output_item_added",
+          "item": {
+            "kind": "reasoning",
+            "itemId": "reasoning-openai-1",
+            "summary": [""],
+            "rawContent": []
+          }
+        },
+        {"kind": "reasoning_summary_delta", "delta": "step one", "summaryIndex": 0},
+        {"kind": "reasoning_content_delta", "delta": "raw detail", "contentIndex": 0},
+        {
+          "kind": "output_item_done",
+          "item": {
+            "kind": "reasoning",
+            "itemId": "reasoning-openai-1",
+            "summary": ["step one"],
+            "rawContent": ["raw detail"]
+          }
+        },
+        {"kind": "completed", "responseId": "resp-openai-123", "totalTokens": 30, "endTurn": true}
+      ],
+      "expect": {
+        "ok": true,
+        "code": "model_stream_items_reduced",
+        "requestId": "items-openai-reasoning",
+        "routeCode": "model_stream_completed",
+        "providerId": "openai",
+        "selectedModelId": "gpt-5.5",
+        "startedCount": 1,
+        "completedCount": 1,
+        "assistantDeltaCount": 0,
+        "reasoningDeltaCount": 1,
+        "rawReasoningDeltaCount": 1,
+        "toolCallCount": 0,
+        "needsFollowUp": false,
+        "lastAgentMessage": "",
+        "terminalResponseId": "resp-openai-123",
+        "totalTokens": 30,
+        "summaryContains": "event=reasoning_content_delta;itemKind=reasoning;itemId=reasoning-openai-1;callId=none;tool=none;delta=step one"
+      }
+    },
+    {
+      "id": "bedrock-function-call-queues-follow-up",
+      "requestId": "items-bedrock-function-call",
+      "route": {
+        "requestId": "route-bedrock-items",
+        "envelopeFixtureId": "bedrock-plan-only-envelope-admitted",
+        "upstreamRequestId": "req-bedrock-items",
+        "events": [
+          {"kind": "created"},
+          {"kind": "completed", "responseId": "resp-bedrock-items", "totalTokens": 9, "endTurn": false}
+        ]
+      },
+      "events": [
+        {
+          "kind": "output_item_done",
+          "item": {
+            "kind": "function_call",
+            "itemId": "fn-bedrock-1",
+            "callId": "call-bedrock-1",
+            "toolName": "shell_command",
+            "arguments": "{\"cmd\":\"pwd\"}"
+          }
+        },
+        {"kind": "completed", "responseId": "resp-bedrock-items", "totalTokens": 9, "endTurn": false}
+      ],
+      "expect": {
+        "ok": true,
+        "code": "model_stream_items_reduced",
+        "requestId": "items-bedrock-function-call",
+        "routeCode": "model_stream_completed",
+        "providerId": "amazon-bedrock",
+        "selectedModelId": "anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "startedCount": 0,
+        "completedCount": 0,
+        "assistantDeltaCount": 0,
+        "reasoningDeltaCount": 0,
+        "rawReasoningDeltaCount": 0,
+        "toolCallCount": 1,
+        "needsFollowUp": true,
+        "lastAgentMessage": "",
+        "terminalResponseId": "resp-bedrock-items",
+        "totalTokens": 9,
+        "summaryContains": "event=tool_call_queued;itemKind=function_call;itemId=fn-bedrock-1;callId=call-bedrock-1;tool=shell_command;delta=;text={\"cmd\":\"pwd\"};index=0"
+      }
+    },
+    {
+      "id": "responses-lite-custom-tool-call-queues-follow-up",
+      "requestId": "items-lite-custom-tool-call",
+      "route": {
+        "requestId": "route-lite-items",
+        "envelopeFixtureId": "responses-lite-plan-envelope-disables-parallel",
+        "upstreamRequestId": "req-lite-items",
+        "events": [
+          {"kind": "created"},
+          {"kind": "completed", "responseId": "resp-lite-items", "totalTokens": 12, "endTurn": false}
+        ]
+      },
+      "events": [
+        {
+          "kind": "output_item_done",
+          "item": {
+            "kind": "custom_tool_call",
+            "itemId": "custom-lite-1",
+            "callId": "call-lite-1",
+            "toolName": "exec",
+            "customInput": "echo lite"
+          }
+        },
+        {"kind": "completed", "responseId": "resp-lite-items", "totalTokens": 12, "endTurn": false}
+      ],
+      "expect": {
+        "ok": true,
+        "code": "model_stream_items_reduced",
+        "requestId": "items-lite-custom-tool-call",
+        "routeCode": "model_stream_completed",
+        "providerId": "openai",
+        "selectedModelId": "gpt-lite-image",
+        "startedCount": 0,
+        "completedCount": 0,
+        "assistantDeltaCount": 0,
+        "reasoningDeltaCount": 0,
+        "rawReasoningDeltaCount": 0,
+        "toolCallCount": 1,
+        "needsFollowUp": true,
+        "lastAgentMessage": "",
+        "terminalResponseId": "resp-lite-items",
+        "totalTokens": 12,
+        "summaryContains": "event=tool_call_queued;itemKind=custom_tool_call;itemId=custom-lite-1;callId=call-lite-1;tool=exec;delta=;text=echo lite;index=0"
+      }
+    },
+    {
+      "id": "local-envelope-refusal-denies-item-reducer",
+      "requestId": "items-local-refused",
+      "route": {
+        "requestId": "route-local-refused",
+        "envelopeFixtureId": "plan-refusal-composes-into-envelope-refusal",
+        "upstreamRequestId": "",
+        "events": []
+      },
+      "events": [
+        {
+          "kind": "output_item_done",
+          "item": {
+            "kind": "assistant_message",
+            "itemId": "msg-local-ignored",
+            "role": "assistant",
+            "text": "should not reduce"
+          }
+        }
+      ],
+      "expect": {
+        "ok": false,
+        "code": "model_stream_route_denied",
+        "requestId": "items-local-refused",
+        "routeCode": "model_request_envelope_denied",
+        "providerId": "local-oss",
+        "selectedModelId": "gpt-oss-20b",
+        "startedCount": 0,
+        "completedCount": 0,
+        "assistantDeltaCount": 0,
+        "reasoningDeltaCount": 0,
+        "rawReasoningDeltaCount": 0,
+        "toolCallCount": 0,
+        "needsFollowUp": false,
+        "lastAgentMessage": "",
+        "terminalResponseId": "",
+        "totalTokens": 0,
+        "summaryContains": "code=model_stream_route_denied;ok=false;request=items-local-refused;routeCode=model_request_envelope_denied;provider=local-oss;model=gpt-oss-20b"
+      }
+    }
+  ],
+  "expectReport": {
+    "caseCount": 5,
+    "successCount": 4,
+    "errorCount": 1,
+    "toolCallCount": 2,
+    "assistantDeltaCount": 2,
+    "reasoningDeltaCount": 1,
+    "summaryContains": "schema=codex-hxrust.model-stream-item-reducer-report.v1;cases=5;success=4;errors=1;toolCalls=2;assistantDeltas=2;reasoningDeltas=1"
+  }
+}

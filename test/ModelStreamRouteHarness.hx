@@ -43,7 +43,7 @@ class ModelStreamRouteHarness {
 		}
 	}
 
-	static function requests(values:Array<Value>, envelopeRoot:Value):Array<ModelStreamRouteRequest> {
+	public static function requests(values:Array<Value>, envelopeRoot:Value):Array<ModelStreamRouteRequest> {
 		final out:Array<ModelStreamRouteRequest> = [];
 		for (value in values) {
 			final testCase = objectValue(value);
@@ -59,7 +59,7 @@ class ModelStreamRouteHarness {
 		return out;
 	}
 
-	static function envelopeRequestById(root:Value, id:String):ModelRequestEnvelopeRequest {
+	public static function envelopeRequestById(root:Value, id:String):ModelRequestEnvelopeRequest {
 		for (value in arrayField(root, "cases")) {
 			final testCase = objectValue(value);
 			if (stringField(testCase, "id", "") == id) return ModelRequestEnvelopeHarness.requests([testCase])[0];
@@ -67,7 +67,7 @@ class ModelStreamRouteHarness {
 		throw "missing envelope fixture case: " + id;
 	}
 
-	static function events(values:Array<Value>):Array<ModelStreamFixtureEvent> {
+	public static function events(values:Array<Value>):Array<ModelStreamFixtureEvent> {
 		final out:Array<ModelStreamFixtureEvent> = [];
 		for (value in values) {
 			final event = objectValue(value);

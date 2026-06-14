@@ -580,7 +580,7 @@ Reduce selected `stream_events_utils` and `ResponseEvent` handling into typed Ha
 - remain deterministic and credential-free;
 - avoid Tokio-bound Haxe APIs, `@:await` syntax, or live provider task ownership.
 
-Status: HXCX-4.48 is tracked by `codex-hxrust-19q`.
+Status: HXCX-4.48 now owns `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is selected deterministic item reducer evidence only, not live HTTP/WebSocket transport, SSE frame parsing, tool execution, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
 ### HXCX-4.49: Runtime-Neutral Async Stream Contract
 
