@@ -120,6 +120,12 @@ import codexhx.runtime.model.streamitem.ModelThreadActiveTurnEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadActiveTurnOutcome;
 import codexhx.runtime.model.streamitem.ModelThreadActiveTurnPolicy;
 import codexhx.runtime.model.streamitem.ModelThreadActiveTurnRequest;
+import codexhx.runtime.model.streamitem.ModelThreadSideParentPendingDecisionKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideParentPendingEventKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideParentPendingOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadSideParentPendingPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadSideParentPendingRequest;
+import codexhx.runtime.model.streamitem.ModelThreadSideParentStatusKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -216,7 +222,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelAppServerQueuedRequestDeliveries = assertTopLevelAppServerQueuedRequestDeliveries(testCase, topLevelAppServerRequestEnqueues, secretProbe);
 			final topLevelThreadBufferedRequestEvictions = assertTopLevelThreadBufferedRequestEvictions(testCase, topLevelAppServerQueuedRequestDeliveries, secretProbe);
 			final topLevelThreadSessionRebases = assertTopLevelThreadSessionRebases(testCase, topLevelThreadBufferedRequestEvictions, secretProbe);
-			assertTopLevelThreadActiveTurns(testCase, topLevelThreadSessionRebases, secretProbe);
+			final topLevelThreadActiveTurns = assertTopLevelThreadActiveTurns(testCase, topLevelThreadSessionRebases, secretProbe);
+			assertTopLevelThreadSideParentPendingStatuses(testCase, topLevelThreadActiveTurns, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -399,7 +406,8 @@ class ModelStreamItemReducerHarness {
 				final appServerQueuedRequestDeliveries = assertAppServerQueuedRequestDeliveries(verificationValue, appServerRequestEnqueues, secretProbe);
 				final threadBufferedRequestEvictions = assertThreadBufferedRequestEvictions(verificationValue, appServerQueuedRequestDeliveries, secretProbe);
 				final threadSessionRebases = assertThreadSessionRebases(verificationValue, threadBufferedRequestEvictions, secretProbe);
-				assertThreadActiveTurns(verificationValue, threadSessionRebases, secretProbe);
+				final threadActiveTurns = assertThreadActiveTurns(verificationValue, threadSessionRebases, secretProbe);
+				assertThreadSideParentPendingStatuses(verificationValue, threadActiveTurns, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -2397,6 +2405,81 @@ class ModelStreamItemReducerHarness {
 		throw "missing thread session rebase outcome: " + requestId;
 	}
 
+	static function assertTopLevelThreadSideParentPendingStatuses(
+		testCase:Value,
+		activeTurns:Array<ModelThreadActiveTurnOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideParentPendingOutcome> {
+		final outcomes:Array<ModelThreadSideParentPendingOutcome> = [];
+		final values = optionalArrayField(testCase, "threadSideParentPendingStatusExpects");
+		for (value in values) outcomes.push(assertThreadSideParentPendingStatus(objectValue(value), activeTurns, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideParentPendingStatuses(
+		verificationValue:Value,
+		activeTurns:Array<ModelThreadActiveTurnOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideParentPendingOutcome> {
+		final outcomes:Array<ModelThreadSideParentPendingOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadSideParentPendingStatusExpects");
+		for (value in values) outcomes.push(assertThreadSideParentPendingStatus(objectValue(value), activeTurns, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideParentPendingStatus(
+		expectValue:Value,
+		activeTurns:Array<ModelThreadActiveTurnOutcome>,
+		secretProbe:String
+	):ModelThreadSideParentPendingOutcome {
+		final activeTurnRequestId = stringField(expectValue, "activeTurnRequestId", "");
+		final outcome = ModelThreadSideParentPendingPolicy.apply(new ModelThreadSideParentPendingRequest(
+			stringField(expectValue, "requestId", ""),
+			threadActiveTurnByRequestId(activeTurns, activeTurnRequestId),
+			threadSideParentPendingEventKind(stringField(expectValue, "eventKind", "status_refresh")),
+			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
+			intField(expectValue, "pendingUserInputCountBefore", 0),
+			intField(expectValue, "pendingApprovalCountBefore", 0),
+			boolField(expectValue, "requestAddsUserInput", false),
+			boolField(expectValue, "requestAddsApproval", false),
+			boolField(expectValue, "requestRemovesUserInput", false),
+			boolField(expectValue, "requestRemovesApproval", false),
+			boolField(expectValue, "requestStatusFallbackAllowed", false),
+			intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(activeTurnRequestId, outcome.activeTurnRequestId);
+		assertEquals(threadSideParentPendingEventKind(stringField(expectValue, "eventKind", "status_refresh")), outcome.eventKind);
+		assertEquals(threadSideParentPendingDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")), outcome.requestKind);
+		assertEquals(threadSideParentStatusKind(stringField(expectValue, "sideParentStatusAfter", "none")), outcome.sideParentStatusAfter);
+		assertEquals(Std.string(intField(expectValue, "pendingUserInputCountAfter", 0)), Std.string(outcome.pendingUserInputCountAfter));
+		assertEquals(Std.string(intField(expectValue, "pendingApprovalCountAfter", 0)), Std.string(outcome.pendingApprovalCountAfter));
+		assertEquals(boolText(boolField(expectValue, "pendingThreadApprovalsAfter", false)), boolText(outcome.pendingThreadApprovalsAfter));
+		assertEquals(boolText(boolField(expectValue, "userInputPriorityApplied", false)), boolText(outcome.userInputPriorityApplied));
+		assertEquals(boolText(boolField(expectValue, "requestStatusFallbackApplied", false)), boolText(outcome.requestStatusFallbackApplied));
+		assertEquals(boolText(boolField(expectValue, "resolvedRequestRemoved", false)), boolText(outcome.resolvedRequestRemoved));
+		assertEquals(boolText(boolField(expectValue, "evictedRequestRemoved", false)), boolText(outcome.evictedRequestRemoved));
+		assertEquals(boolText(boolField(expectValue, "threadClosedCleared", false)), boolText(outcome.threadClosedCleared));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function threadActiveTurnByRequestId(outcomes:Array<ModelThreadActiveTurnOutcome>, requestId:String):ModelThreadActiveTurnOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing thread active-turn outcome: " + requestId;
+	}
+
 	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn replay reconstruction outcome: " + requestId;
@@ -2875,6 +2958,37 @@ class ModelStreamItemReducerHarness {
 			case "cleared_explicit": ModelThreadActiveTurnDecisionKind.ClearedExplicit;
 			case "unchanged_no_active_turn": ModelThreadActiveTurnDecisionKind.UnchangedNoActiveTurn;
 			case _: throw "unknown thread active-turn decision kind: " + value;
+		}
+	}
+
+	static function threadSideParentPendingEventKind(value:String):ModelThreadSideParentPendingEventKind {
+		return switch value {
+			case "request_queued": ModelThreadSideParentPendingEventKind.RequestQueued;
+			case "server_request_resolved": ModelThreadSideParentPendingEventKind.ServerRequestResolved;
+			case "request_evicted": ModelThreadSideParentPendingEventKind.RequestEvicted;
+			case "thread_closed": ModelThreadSideParentPendingEventKind.ThreadClosed;
+			case "status_refresh": ModelThreadSideParentPendingEventKind.StatusRefresh;
+			case _: throw "unknown thread side-parent pending event kind: " + value;
+		}
+	}
+
+	static function threadSideParentPendingDecisionKind(value:String):ModelThreadSideParentPendingDecisionKind {
+		return switch value {
+			case "set_needs_input": ModelThreadSideParentPendingDecisionKind.SetNeedsInput;
+			case "set_needs_approval": ModelThreadSideParentPendingDecisionKind.SetNeedsApproval;
+			case "cleared_no_pending": ModelThreadSideParentPendingDecisionKind.ClearedNoPending;
+			case "used_request_status_fallback": ModelThreadSideParentPendingDecisionKind.UsedRequestStatusFallback;
+			case "preserved_no_pending": ModelThreadSideParentPendingDecisionKind.PreservedNoPending;
+			case _: throw "unknown thread side-parent pending decision kind: " + value;
+		}
+	}
+
+	static function threadSideParentStatusKind(value:String):ModelThreadSideParentStatusKind {
+		return switch value {
+			case "none": ModelThreadSideParentStatusKind.None;
+			case "needs_input": ModelThreadSideParentStatusKind.NeedsInput;
+			case "needs_approval": ModelThreadSideParentStatusKind.NeedsApproval;
+			case _: throw "unknown thread side-parent status kind: " + value;
 		}
 	}
 
