@@ -111,6 +111,29 @@
           "toolExecutedOutsideFixture": false,
           "summaryContains": "drainKind=skipped_terminal;canDrainPendingInput=false;acceptsMailboxDelivery=true;activeTurnItemCount=0;mailboxItemCount=0;drainedItemCount=0;userInputRecordedCount=0;responseItemRecordedCount=0;mailboxAppendedAfterActiveTurn=true;hookRecordingAttempted=false;promptAssemblyAfterHooks=false"
         }
+      ],
+      "pendingInputHookRecordingExpects": [
+        {
+          "ok": true,
+          "code": "pending_input_hook_recording_modeled",
+          "requestId": "hook-recording-openai-stop-turn",
+          "drainRequestId": "pending-drain-openai-stop-turn",
+          "items": [],
+          "decisionKind": "skipped",
+          "hookItemCount": 0,
+          "blockedInput": false,
+          "acceptedUserInput": false,
+          "userInputRecordedCount": 0,
+          "responseItemRecordedCount": 0,
+          "additionalContextRecordedCount": 0,
+          "blockedAdditionalContextRecordedCount": 0,
+          "promptPrepContinues": false,
+          "breakBeforePrompt": false,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "decisionKind=skipped;hookItemCount=0;blockedInput=false;acceptedUserInput=false;userInputRecordedCount=0;responseItemRecordedCount=0;additionalContextRecordedCount=0;blockedAdditionalContextRecordedCount=0;promptPrepContinues=false;breakBeforePrompt=false"
+        }
       ]
     },
     {
@@ -823,6 +846,103 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "drainKind=drained;canDrainPendingInput=true;acceptsMailboxDelivery=true;activeTurnItemCount=1;mailboxItemCount=1;drainedItemCount=2;userInputRecordedCount=1;responseItemRecordedCount=1;mailboxAppendedAfterActiveTurn=true;hookRecordingAttempted=true;promptAssemblyAfterHooks=true;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false;orderedItems=[sourceKind=active_turn;inputKind=pending_user_input;orderIndex=1;callId=none;responseKind=function_call_output;text=please inspect the failure|sourceKind=mailbox;inputKind=pending_response_item;orderIndex=2;callId=call-runtime-failed-mailbox;responseKind=function_call_output;text=external context queued while model was running]"
+          }
+        ],
+        "pendingInputHookRecordingExpects": [
+          {
+            "ok": true,
+            "code": "pending_input_hook_recording_modeled",
+            "requestId": "hook-recording-runtime-empty",
+            "drainRequestId": "pending-drain-runtime-empty",
+            "items": [],
+            "decisionKind": "continue_to_prompt",
+            "hookItemCount": 0,
+            "blockedInput": false,
+            "acceptedUserInput": false,
+            "userInputRecordedCount": 0,
+            "responseItemRecordedCount": 0,
+            "additionalContextRecordedCount": 0,
+            "blockedAdditionalContextRecordedCount": 0,
+            "promptPrepContinues": true,
+            "breakBeforePrompt": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "decisionKind=continue_to_prompt;hookItemCount=0;blockedInput=false;acceptedUserInput=false;userInputRecordedCount=0;responseItemRecordedCount=0;additionalContextRecordedCount=0;blockedAdditionalContextRecordedCount=0;promptPrepContinues=true;breakBeforePrompt=false"
+          },
+          {
+            "ok": true,
+            "code": "pending_input_hook_recording_modeled",
+            "requestId": "hook-recording-runtime-mixed",
+            "drainRequestId": "pending-drain-runtime-active-then-mailbox",
+            "items": [
+              {
+                "sourceKind": "active_turn",
+                "inputKind": "pending_user_input",
+                "orderIndex": 1,
+                "callId": "",
+                "responseKind": "function_call_output",
+                "text": "please inspect the failure",
+                "hookActionKind": "continue_input",
+                "additionalContextCount": 1
+              },
+              {
+                "sourceKind": "mailbox",
+                "inputKind": "pending_response_item",
+                "orderIndex": 2,
+                "callId": "call-runtime-failed-mailbox",
+                "responseKind": "function_call_output",
+                "text": "external context queued while model was running",
+                "hookActionKind": "stop_input",
+                "additionalContextCount": 2
+              }
+            ],
+            "decisionKind": "continue_to_prompt",
+            "hookItemCount": 2,
+            "blockedInput": true,
+            "acceptedUserInput": true,
+            "userInputRecordedCount": 1,
+            "responseItemRecordedCount": 0,
+            "additionalContextRecordedCount": 3,
+            "blockedAdditionalContextRecordedCount": 2,
+            "promptPrepContinues": true,
+            "breakBeforePrompt": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "decisionKind=continue_to_prompt;hookItemCount=2;blockedInput=true;acceptedUserInput=true;userInputRecordedCount=1;responseItemRecordedCount=0;additionalContextRecordedCount=3;blockedAdditionalContextRecordedCount=2;promptPrepContinues=true;breakBeforePrompt=false;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false;orderedItems=[sourceKind=active_turn;inputKind=pending_user_input;orderIndex=1;callId=none;responseKind=function_call_output;hookActionKind=continue_input;inputRecorded=true;additionalContextRecorded=true;additionalContextCount=1;text=please inspect the failure|sourceKind=mailbox;inputKind=pending_response_item;orderIndex=2;callId=call-runtime-failed-mailbox;responseKind=function_call_output;hookActionKind=stop_input;inputRecorded=false;additionalContextRecorded=true;additionalContextCount=2;text=external context queued while model was running]"
+          },
+          {
+            "ok": true,
+            "code": "pending_input_hook_recording_modeled",
+            "requestId": "hook-recording-runtime-block-before-prompt",
+            "drainRequestId": "pending-drain-runtime-active-then-mailbox",
+            "items": [
+              {
+                "sourceKind": "active_turn",
+                "inputKind": "pending_user_input",
+                "orderIndex": 1,
+                "callId": "",
+                "responseKind": "function_call_output",
+                "text": "",
+                "hookActionKind": "stop_input",
+                "additionalContextCount": 1
+              }
+            ],
+            "decisionKind": "break_before_prompt",
+            "hookItemCount": 1,
+            "blockedInput": true,
+            "acceptedUserInput": false,
+            "userInputRecordedCount": 0,
+            "responseItemRecordedCount": 0,
+            "additionalContextRecordedCount": 1,
+            "blockedAdditionalContextRecordedCount": 1,
+            "promptPrepContinues": false,
+            "breakBeforePrompt": true,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "decisionKind=break_before_prompt;hookItemCount=1;blockedInput=true;acceptedUserInput=false;userInputRecordedCount=0;responseItemRecordedCount=0;additionalContextRecordedCount=1;blockedAdditionalContextRecordedCount=1;promptPrepContinues=false;breakBeforePrompt=true"
           }
         ]
       }
@@ -1926,6 +2046,50 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "drainKind=bypassed;canDrainPendingInput=false;acceptsMailboxDelivery=true;activeTurnItemCount=0;mailboxItemCount=0;drainedItemCount=0;userInputRecordedCount=0;responseItemRecordedCount=0;mailboxAppendedAfterActiveTurn=true;hookRecordingAttempted=false;promptAssemblyAfterHooks=false"
+          }
+        ],
+        "pendingInputHookRecordingExpects": [
+          {
+            "ok": true,
+            "code": "pending_input_hook_recording_modeled",
+            "requestId": "hook-recording-lite-auto-compact",
+            "drainRequestId": "pending-drain-lite-auto-compact",
+            "items": [],
+            "decisionKind": "skipped",
+            "hookItemCount": 0,
+            "blockedInput": false,
+            "acceptedUserInput": false,
+            "userInputRecordedCount": 0,
+            "responseItemRecordedCount": 0,
+            "additionalContextRecordedCount": 0,
+            "blockedAdditionalContextRecordedCount": 0,
+            "promptPrepContinues": false,
+            "breakBeforePrompt": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "decisionKind=skipped;hookItemCount=0;blockedInput=false;acceptedUserInput=false;userInputRecordedCount=0;responseItemRecordedCount=0;additionalContextRecordedCount=0;blockedAdditionalContextRecordedCount=0;promptPrepContinues=false;breakBeforePrompt=false"
+          },
+          {
+            "ok": true,
+            "code": "pending_input_hook_recording_modeled",
+            "requestId": "hook-recording-lite-cancel-bypass",
+            "drainRequestId": "pending-drain-lite-cancel-bypass",
+            "items": [],
+            "decisionKind": "skipped",
+            "hookItemCount": 0,
+            "blockedInput": false,
+            "acceptedUserInput": false,
+            "userInputRecordedCount": 0,
+            "responseItemRecordedCount": 0,
+            "additionalContextRecordedCount": 0,
+            "blockedAdditionalContextRecordedCount": 0,
+            "promptPrepContinues": false,
+            "breakBeforePrompt": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "decisionKind=skipped;hookItemCount=0;blockedInput=false;acceptedUserInput=false;userInputRecordedCount=0;responseItemRecordedCount=0;additionalContextRecordedCount=0;blockedAdditionalContextRecordedCount=0;promptPrepContinues=false;breakBeforePrompt=false"
           }
         ]
       }

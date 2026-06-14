@@ -67,6 +67,11 @@ import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainReques
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainOutcome;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputSourceKind;
+import codexhx.runtime.model.streamitem.ModelPendingInputHookActionKind;
+import codexhx.runtime.model.streamitem.ModelPendingInputHookRecordingItem;
+import codexhx.runtime.model.streamitem.ModelPendingInputHookRecordingOutcome;
+import codexhx.runtime.model.streamitem.ModelPendingInputHookRecordingPolicy;
+import codexhx.runtime.model.streamitem.ModelPendingInputHookRecordingRequest;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -117,7 +122,8 @@ class ModelStreamItemReducerHarness {
 			assertContains(outcome.summary(), stringField(expect, "summaryContains", ""));
 			if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
 			final topLevelIntegrations = assertTopLevelSamplingResultIntegrations(testCase, outcome, secretProbe);
-			assertTopLevelPostSamplingPendingInputDrains(testCase, topLevelIntegrations, secretProbe);
+			final topLevelPendingInputDrains = assertTopLevelPostSamplingPendingInputDrains(testCase, topLevelIntegrations, secretProbe);
+			assertTopLevelPendingInputHookRecordings(testCase, topLevelPendingInputDrains, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -283,7 +289,8 @@ class ModelStreamItemReducerHarness {
 				final drains = assertInFlightToolDrains(verificationValue, responseInput, handoffs, secretProbe);
 				final emissions = assertPostDrainEmissions(verificationValue, drains, secretProbe);
 				final integrations = assertSamplingResultIntegrations(verificationValue, emissions, outcome, secretProbe);
-				assertPostSamplingPendingInputDrains(verificationValue, integrations, secretProbe);
+				final pendingInputDrains = assertPostSamplingPendingInputDrains(verificationValue, integrations, secretProbe);
+				assertPendingInputHookRecordings(verificationValue, pendingInputDrains, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -986,18 +993,22 @@ class ModelStreamItemReducerHarness {
 		testCase:Value,
 		integrations:Array<ModelSamplingResultIntegrationOutcome>,
 		secretProbe:String
-	):Void {
+	):Array<ModelPostSamplingPendingInputDrainOutcome> {
+		final drains:Array<ModelPostSamplingPendingInputDrainOutcome> = [];
 		final values = optionalArrayField(testCase, "postSamplingPendingInputDrainExpects");
-		for (value in values) assertPostSamplingPendingInputDrain(objectValue(value), integrations, secretProbe);
+		for (value in values) drains.push(assertPostSamplingPendingInputDrain(objectValue(value), integrations, secretProbe));
+		return drains;
 	}
 
 	static function assertPostSamplingPendingInputDrains(
 		verificationValue:Value,
 		integrations:Array<ModelSamplingResultIntegrationOutcome>,
 		secretProbe:String
-	):Void {
+	):Array<ModelPostSamplingPendingInputDrainOutcome> {
+		final drains:Array<ModelPostSamplingPendingInputDrainOutcome> = [];
 		final values = optionalArrayField(verificationValue, "postSamplingPendingInputDrainExpects");
-		for (value in values) assertPostSamplingPendingInputDrain(objectValue(value), integrations, secretProbe);
+		for (value in values) drains.push(assertPostSamplingPendingInputDrain(objectValue(value), integrations, secretProbe));
+		return drains;
 	}
 
 	static function assertPostSamplingPendingInputDrain(
@@ -1036,9 +1047,65 @@ class ModelStreamItemReducerHarness {
 		return drain;
 	}
 
+	static function assertTopLevelPendingInputHookRecordings(
+		testCase:Value,
+		drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
+		secretProbe:String
+	):Void {
+		final values = optionalArrayField(testCase, "pendingInputHookRecordingExpects");
+		for (value in values) assertPendingInputHookRecording(objectValue(value), drains, secretProbe);
+	}
+
+	static function assertPendingInputHookRecordings(
+		verificationValue:Value,
+		drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
+		secretProbe:String
+	):Void {
+		final values = optionalArrayField(verificationValue, "pendingInputHookRecordingExpects");
+		for (value in values) assertPendingInputHookRecording(objectValue(value), drains, secretProbe);
+	}
+
+	static function assertPendingInputHookRecording(
+		expectValue:Value,
+		drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
+		secretProbe:String
+	):ModelPendingInputHookRecordingOutcome {
+		final recording = ModelPendingInputHookRecordingPolicy.record(new ModelPendingInputHookRecordingRequest(
+			stringField(expectValue, "requestId", ""),
+			postSamplingPendingInputDrainByRequestId(drains, stringField(expectValue, "drainRequestId", "")),
+			pendingInputHookRecordingItems(optionalArrayField(expectValue, "items")),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(recording.ok));
+		assertEquals(stringField(expectValue, "code", ""), recording.code);
+		assertEquals(stringField(expectValue, "requestId", ""), recording.requestId);
+		assertEquals(stringField(expectValue, "drainRequestId", ""), recording.drainRequestId);
+		assertEquals(stringField(expectValue, "decisionKind", ""), recording.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "hookItemCount", 0)), Std.string(recording.hookItemCount));
+		assertEquals(boolText(boolField(expectValue, "blockedInput", false)), boolText(recording.blockedInput));
+		assertEquals(boolText(boolField(expectValue, "acceptedUserInput", false)), boolText(recording.acceptedUserInput));
+		assertEquals(Std.string(intField(expectValue, "userInputRecordedCount", 0)), Std.string(recording.userInputRecordedCount));
+		assertEquals(Std.string(intField(expectValue, "responseItemRecordedCount", 0)), Std.string(recording.responseItemRecordedCount));
+		assertEquals(Std.string(intField(expectValue, "additionalContextRecordedCount", 0)), Std.string(recording.additionalContextRecordedCount));
+		assertEquals(Std.string(intField(expectValue, "blockedAdditionalContextRecordedCount", 0)), Std.string(recording.blockedAdditionalContextRecordedCount));
+		assertEquals(boolText(boolField(expectValue, "promptPrepContinues", false)), boolText(recording.promptPrepContinues));
+		assertEquals(boolText(boolField(expectValue, "breakBeforePrompt", false)), boolText(recording.breakBeforePrompt));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(recording.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(recording.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(recording.toolExecutedOutsideFixture));
+		assertContains(recording.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(recording.summary(), secretProbe);
+		return recording;
+	}
+
 	static function samplingResultIntegrationByRequestId(integrations:Array<ModelSamplingResultIntegrationOutcome>, requestId:String):ModelSamplingResultIntegrationOutcome {
 		for (integration in integrations) if (integration.requestId == requestId) return integration;
 		throw "missing sampling result integration outcome: " + requestId;
+	}
+
+	static function postSamplingPendingInputDrainByRequestId(drains:Array<ModelPostSamplingPendingInputDrainOutcome>, requestId:String):ModelPostSamplingPendingInputDrainOutcome {
+		for (drain in drains) if (drain.requestId == requestId) return drain;
+		throw "missing post-sampling pending input drain outcome: " + requestId;
 	}
 
 	static function postDrainEmissionByRequestId(emissions:Array<ModelPostDrainEmissionOutcome>, requestId:String):ModelPostDrainEmissionOutcome {
@@ -1139,6 +1206,32 @@ class ModelStreamItemReducerHarness {
 			));
 		}
 		return out;
+	}
+
+	static function pendingInputHookRecordingItems(values:Array<Value>):Array<ModelPendingInputHookRecordingItem> {
+		final out:Array<ModelPendingInputHookRecordingItem> = [];
+		for (value in values) {
+			final item = objectValue(value);
+			out.push(new ModelPendingInputHookRecordingItem(
+				postSamplingPendingInputSourceKind(stringField(item, "sourceKind", "active_turn")),
+				samplingInputItemKind(stringField(item, "inputKind", "pending_user_input")),
+				intField(item, "orderIndex", 0),
+				stringField(item, "callId", ""),
+				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")),
+				stringField(item, "text", ""),
+				pendingInputHookActionKind(stringField(item, "hookActionKind", "continue_input")),
+				intField(item, "additionalContextCount", 0)
+			));
+		}
+		return out;
+	}
+
+	static function pendingInputHookActionKind(value:String):ModelPendingInputHookActionKind {
+		return switch value {
+			case "continue_input": ModelPendingInputHookActionKind.ContinueInput;
+			case "stop_input": ModelPendingInputHookActionKind.StopInput;
+			case _: throw "unknown pending input hook action kind: " + value;
+		}
 	}
 
 	static function postSamplingPendingInputSourceKind(value:String):ModelPostSamplingPendingInputSourceKind {
