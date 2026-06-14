@@ -42,8 +42,11 @@ import codexhx.runtime.model.streamitem.ModelSamplingDispatchRequest;
 import codexhx.runtime.model.streamitem.ModelSamplingDispatchTransportKind;
 import codexhx.runtime.model.streamitem.ModelSamplingDispatchOutcome;
 import codexhx.runtime.model.streamitem.ModelSamplingStreamAttemptPolicy;
+import codexhx.runtime.model.streamitem.ModelSamplingStreamAttemptOutcome;
 import codexhx.runtime.model.streamitem.ModelSamplingStreamAttemptRequest;
 import codexhx.runtime.model.streamitem.ModelSamplingStreamErrorKind;
+import codexhx.runtime.model.streamitem.ModelSamplingStreamEventHandoffPolicy;
+import codexhx.runtime.model.streamitem.ModelSamplingStreamEventHandoffRequest;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -253,7 +256,8 @@ class ModelStreamItemReducerHarness {
 				final continuation = assertSamplingContinuation(verificationValue, responseInput, secretProbe);
 				final assembly = assertSamplingInputAssembly(verificationValue, responseInput, continuation, secretProbe);
 				final dispatch = assertSamplingDispatch(verificationValue, assembly, secretProbe);
-				assertSamplingStreamAttempts(verificationValue, dispatch, secretProbe);
+				final attempts = assertSamplingStreamAttempts(verificationValue, dispatch, secretProbe);
+				assertSamplingStreamEventHandoffs(verificationValue, outcome, attempts, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -662,7 +666,8 @@ class ModelStreamItemReducerHarness {
 		verificationValue:Value,
 		dispatch:ModelSamplingDispatchOutcome,
 		secretProbe:String
-	):Void {
+	):Array<ModelSamplingStreamAttemptOutcome> {
+		final attempts:Array<ModelSamplingStreamAttemptOutcome> = [];
 		final values = arrayField(verificationValue, "samplingStreamAttemptExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
@@ -699,7 +704,67 @@ class ModelStreamItemReducerHarness {
 			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(attempt.toolExecutedOutsideFixture));
 			assertContains(attempt.summary(), stringField(expectValue, "summaryContains", ""));
 			if (secretProbe.length > 0) assertNotContains(attempt.summary(), secretProbe);
+			attempts.push(attempt);
 		}
+		return attempts;
+	}
+
+	static function assertSamplingStreamEventHandoffs(
+		verificationValue:Value,
+		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
+		attempts:Array<ModelSamplingStreamAttemptOutcome>,
+		secretProbe:String
+	):Void {
+		final values = optionalArrayField(verificationValue, "samplingStreamEventHandoffExpects");
+		for (value in values) {
+			final expectValue = objectValue(value);
+			final handoff = ModelSamplingStreamEventHandoffPolicy.model(new ModelSamplingStreamEventHandoffRequest(
+				stringField(expectValue, "requestId", ""),
+				streamAttemptByRequestId(attempts, stringField(expectValue, "attemptRequestId", "")),
+				reducerOutcome,
+				boolField(expectValue, "streamClosedBeforeCompleted", false),
+				intField(expectValue, "inFlightToolCount", 0),
+				boolField(expectValue, "tokenCountPending", false),
+				boolField(expectValue, "turnDiffPending", false),
+				secretProbe
+			));
+			assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(handoff.ok));
+			assertEquals(stringField(expectValue, "code", ""), handoff.code);
+			assertEquals(stringField(expectValue, "requestId", ""), handoff.requestId);
+			assertEquals(stringField(expectValue, "handoffKind", ""), handoff.handoffKind);
+			assertEquals(stringField(expectValue, "eventClass", ""), handoff.eventClass);
+			assertEquals(stringField(expectValue, "attemptResultKind", ""), handoff.attemptResultKind);
+			assertEquals(stringField(expectValue, "attemptErrorKind", ""), handoff.attemptErrorKind);
+			assertEquals(boolText(boolField(expectValue, "terminal", false)), boolText(handoff.terminal));
+			assertEquals(boolText(boolField(expectValue, "turnEnded", false)), boolText(handoff.turnEnded));
+			assertEquals(boolText(boolField(expectValue, "continuationRequired", false)), boolText(handoff.continuationRequired));
+			assertEquals(boolText(boolField(expectValue, "retryScheduled", false)), boolText(handoff.retryScheduled));
+			assertEquals(boolText(boolField(expectValue, "unauthorizedRetryStatePrepared", false)), boolText(handoff.unauthorizedRetryStatePrepared));
+			assertEquals(boolText(boolField(expectValue, "streamEventsConsumed", false)), boolText(handoff.streamEventsConsumed));
+			assertEquals(boolText(boolField(expectValue, "responseCompleted", false)), boolText(handoff.responseCompleted));
+			assertEquals(boolText(boolField(expectValue, "streamClosedBeforeCompleted", false)), boolText(handoff.streamClosedBeforeCompleted));
+			assertEquals(boolText(boolField(expectValue, "toolDrainRequired", false)), boolText(handoff.toolDrainRequired));
+			assertEquals(boolText(boolField(expectValue, "tokenCountEventDeferredUntilToolDrain", false)), boolText(handoff.tokenCountEventDeferredUntilToolDrain));
+			assertEquals(boolText(boolField(expectValue, "turnDiffEventDeferredUntilToolDrain", false)), boolText(handoff.turnDiffEventDeferredUntilToolDrain));
+			assertEquals(boolText(boolField(expectValue, "needsFollowUp", false)), boolText(handoff.needsFollowUp));
+			assertEquals(stringField(expectValue, "terminalResponseId", ""), handoff.terminalResponseId);
+			assertEquals(Std.string(intField(expectValue, "totalTokens", 0)), Std.string(handoff.totalTokens));
+			assertEquals(stringField(expectValue, "lastAgentMessage", ""), handoff.lastAgentMessage);
+			assertEquals(Std.string(intField(expectValue, "dispatchAttemptIndex", 0)), Std.string(handoff.dispatchAttemptIndex));
+			assertEquals(Std.string(intField(expectValue, "promptItemCount", 0)), Std.string(handoff.promptItemCount));
+			assertEquals(boolText(boolField(expectValue, "liveProviderRequestAttempted", false)), boolText(handoff.liveProviderRequestAttempted));
+			assertEquals(boolText(boolField(expectValue, "providerStreamOpened", false)), boolText(handoff.providerStreamOpened));
+			assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(handoff.liveNetworkAttempted));
+			assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(handoff.realFilesystemMutated));
+			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(handoff.toolExecutedOutsideFixture));
+			assertContains(handoff.summary(), stringField(expectValue, "summaryContains", ""));
+			if (secretProbe.length > 0) assertNotContains(handoff.summary(), secretProbe);
+		}
+	}
+
+	static function streamAttemptByRequestId(attempts:Array<ModelSamplingStreamAttemptOutcome>, requestId:String):ModelSamplingStreamAttemptOutcome {
+		for (attempt in attempts) if (attempt.requestId == requestId) return attempt;
+		throw "missing stream attempt outcome: " + requestId;
 	}
 
 	static function samplingStreamErrorKind(value:String):ModelSamplingStreamErrorKind {
@@ -825,6 +890,14 @@ class ModelStreamItemReducerHarness {
 	static function arrayField(object:Value, name:String):Array<Value> {
 		return switch valueField(object, name) {
 			case JArray(values): values;
+			case _: throw "expected array field: " + name;
+		}
+	}
+
+	static function optionalArrayField(object:Value, name:String):Array<Value> {
+		return switch optionalField(object, name) {
+			case JArray(values): values;
+			case JNull: [];
 			case _: throw "expected array field: " + name;
 		}
 	}
