@@ -394,6 +394,29 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "continuationKind=model_follow_up;modelNeedsFollowUp=true;hasPendingInput=false;needsFollowUp=true;nextSamplingRequestRequired=true;responseInputCarried=true;pendingInputDrainedBeforeNextRequest=false;autoCompactRequired=false;canDrainPendingInputBeforeNextRequest=true;admittedResponseInputCount=1;pendingInputCount=0;nextSamplingInputCount=1;nextSamplingRequestIndex=2"
+        },
+        "samplingInputAssemblyExpect": {
+          "ok": true,
+          "code": "sampling_input_assembled",
+          "requestId": "sampling-input-runtime-failed",
+          "continuationKind": "model_follow_up",
+          "nextSamplingRequestIndex": 2,
+          "previousPromptItemCount": 12,
+          "pendingInputItems": [],
+          "assembledItemCount": 1,
+          "nextPromptItemCount": 13,
+          "responseInputItemCount": 1,
+          "pendingInputItemCount": 0,
+          "pendingInputDrained": false,
+          "historyClonedForPrompt": true,
+          "forPromptNormalized": true,
+          "modelSupportsImages": false,
+          "firstItemKind": "tool_response_output",
+          "lastItemKind": "tool_response_output",
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "continuationKind=model_follow_up;nextSamplingRequestIndex=2;previousPromptItemCount=12;assembledItemCount=1;nextPromptItemCount=13;responseInputItemCount=1;pendingInputItemCount=0;pendingInputDrained=false;historyClonedForPrompt=true;forPromptNormalized=true;modelSupportsImages=false;firstItemKind=tool_response_output;lastItemKind=tool_response_output;orderedItems=kind=tool_response_output;orderIndex=1;callId=call-lite-apply-patch-failed-1;responseKind=custom_tool_call_output;fromPendingInput=false;recordedInHistory=true;text=apply_patch failed in fixture runtime"
         }
       }
     },
@@ -614,6 +637,39 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "continuationKind=model_follow_up_and_pending_input;modelNeedsFollowUp=true;hasPendingInput=true;needsFollowUp=true;nextSamplingRequestRequired=true;responseInputCarried=true;pendingInputDrainedBeforeNextRequest=true;autoCompactRequired=false;canDrainPendingInputBeforeNextRequest=true;admittedResponseInputCount=2;pendingInputCount=1;nextSamplingInputCount=3;nextSamplingRequestIndex=3"
+        },
+        "samplingInputAssemblyExpect": {
+          "ok": true,
+          "code": "sampling_input_assembled",
+          "requestId": "sampling-input-openai-declined",
+          "continuationKind": "model_follow_up_and_pending_input",
+          "nextSamplingRequestIndex": 3,
+          "previousPromptItemCount": 18,
+          "pendingInputItems": [
+            {
+              "kind": "pending_user_input",
+              "orderIndex": 3,
+              "callId": "",
+              "responseKind": "function_call_output",
+              "text": "please retry with approval",
+              "fromPendingInput": true,
+              "recordedInHistory": true
+            }
+          ],
+          "assembledItemCount": 2,
+          "nextPromptItemCount": 20,
+          "responseInputItemCount": 1,
+          "pendingInputItemCount": 1,
+          "pendingInputDrained": true,
+          "historyClonedForPrompt": true,
+          "forPromptNormalized": true,
+          "modelSupportsImages": false,
+          "firstItemKind": "tool_response_output",
+          "lastItemKind": "pending_user_input",
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "continuationKind=model_follow_up_and_pending_input;nextSamplingRequestIndex=3;previousPromptItemCount=18;assembledItemCount=2;nextPromptItemCount=20;responseInputItemCount=1;pendingInputItemCount=1;pendingInputDrained=true;historyClonedForPrompt=true;forPromptNormalized=true;modelSupportsImages=false;firstItemKind=tool_response_output;lastItemKind=pending_user_input;orderedItems=kind=tool_response_output;orderIndex=2;callId=call-openai-delta-1;responseKind=custom_tool_call_output;fromPendingInput=false;recordedInHistory=true;text=user declined patch in fixture|kind=pending_user_input;orderIndex=3;callId=none;responseKind=function_call_output;fromPendingInput=true;recordedInHistory=true;text=please retry with approval"
         }
       }
     },
@@ -905,6 +961,39 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "continuationKind=token_limit_compaction;modelNeedsFollowUp=true;hasPendingInput=false;needsFollowUp=true;nextSamplingRequestRequired=true;responseInputCarried=true;pendingInputDrainedBeforeNextRequest=false;autoCompactRequired=true;canDrainPendingInputBeforeNextRequest=false;admittedResponseInputCount=3;pendingInputCount=0;nextSamplingInputCount=3;nextSamplingRequestIndex=4"
+        },
+        "samplingInputAssemblyExpect": {
+          "ok": true,
+          "code": "sampling_input_assembled",
+          "requestId": "sampling-input-lite-completed-compact",
+          "continuationKind": "token_limit_compaction",
+          "nextSamplingRequestIndex": 4,
+          "previousPromptItemCount": 24,
+          "pendingInputItems": [
+            {
+              "kind": "pending_user_input",
+              "orderIndex": 4,
+              "callId": "",
+              "responseKind": "function_call_output",
+              "text": "deferred steer after compaction",
+              "fromPendingInput": true,
+              "recordedInHistory": false
+            }
+          ],
+          "assembledItemCount": 1,
+          "nextPromptItemCount": 25,
+          "responseInputItemCount": 1,
+          "pendingInputItemCount": 0,
+          "pendingInputDrained": false,
+          "historyClonedForPrompt": true,
+          "forPromptNormalized": true,
+          "modelSupportsImages": true,
+          "firstItemKind": "tool_response_output",
+          "lastItemKind": "tool_response_output",
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "continuationKind=token_limit_compaction;nextSamplingRequestIndex=4;previousPromptItemCount=24;assembledItemCount=1;nextPromptItemCount=25;responseInputItemCount=1;pendingInputItemCount=0;pendingInputDrained=false;historyClonedForPrompt=true;forPromptNormalized=true;modelSupportsImages=true;firstItemKind=tool_response_output;lastItemKind=tool_response_output;orderedItems=kind=tool_response_output;orderIndex=3;callId=call-lite-delta-1;responseKind=custom_tool_call_output;fromPendingInput=false;recordedInHistory=true;text=Done!"
         }
       }
     },

@@ -25,11 +25,17 @@ import codexhx.runtime.model.streamitem.ModelPatchToolEventStageKind;
 import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpRequest;
+import codexhx.runtime.model.streamitem.ModelPatchToolOutputItemKind;
 import codexhx.runtime.model.streamitem.ModelPatchToolResponseInputOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchToolResponseInputPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchToolResponseInputRequest;
 import codexhx.runtime.model.streamitem.ModelSamplingContinuationPolicy;
 import codexhx.runtime.model.streamitem.ModelSamplingContinuationRequest;
+import codexhx.runtime.model.streamitem.ModelSamplingContinuationOutcome;
+import codexhx.runtime.model.streamitem.ModelSamplingInputAssemblyPolicy;
+import codexhx.runtime.model.streamitem.ModelSamplingInputAssemblyRequest;
+import codexhx.runtime.model.streamitem.ModelSamplingInputItem;
+import codexhx.runtime.model.streamitem.ModelSamplingInputItemKind;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -236,7 +242,8 @@ class ModelStreamItemReducerHarness {
 				final projection = assertPatchProjection(verificationValue, verification, application, approval, tracker, secretProbe);
 				final followUp = assertPatchToolFollowUp(verificationValue, outcome, application, projection, secretProbe);
 				final responseInput = assertPatchToolResponseInput(verificationValue, followUp, secretProbe);
-				assertSamplingContinuation(verificationValue, responseInput, secretProbe);
+				final continuation = assertSamplingContinuation(verificationValue, responseInput, secretProbe);
+				assertSamplingInputAssembly(verificationValue, responseInput, continuation, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -494,7 +501,7 @@ class ModelStreamItemReducerHarness {
 		verificationValue:Value,
 		responseInput:ModelPatchToolResponseInputOutcome,
 		secretProbe:String
-	):Void {
+	):ModelSamplingContinuationOutcome {
 		final expectValue = optionalField(verificationValue, "samplingContinuationExpect");
 		switch expectValue {
 			case JObject(_, _):
@@ -532,9 +539,90 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(continuation.toolExecutedOutsideFixture));
 				assertContains(continuation.summary(), stringField(expectValue, "summaryContains", ""));
 				if (secretProbe.length > 0) assertNotContains(continuation.summary(), secretProbe);
+				return continuation;
 			case JNull:
+				return null;
 			case _:
 				throw "expected object field: samplingContinuationExpect";
+		}
+	}
+
+	static function assertSamplingInputAssembly(
+		verificationValue:Value,
+		responseInput:ModelPatchToolResponseInputOutcome,
+		continuation:ModelSamplingContinuationOutcome,
+		secretProbe:String
+	):Void {
+		final expectValue = optionalField(verificationValue, "samplingInputAssemblyExpect");
+		switch expectValue {
+			case JObject(_, _):
+				final assembly = ModelSamplingInputAssemblyPolicy.assemble(new ModelSamplingInputAssemblyRequest(
+					stringField(expectValue, "requestId", ""),
+					responseInput,
+					continuation,
+					samplingInputItems(arrayField(expectValue, "pendingInputItems")),
+					intField(expectValue, "previousPromptItemCount", 0),
+					boolField(expectValue, "modelSupportsImages", false),
+					secretProbe
+				));
+				assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(assembly.ok));
+				assertEquals(stringField(expectValue, "code", ""), assembly.code);
+				assertEquals(stringField(expectValue, "requestId", ""), assembly.requestId);
+				assertEquals(stringField(expectValue, "continuationKind", ""), assembly.continuationKind);
+				assertEquals(Std.string(intField(expectValue, "nextSamplingRequestIndex", 0)), Std.string(assembly.nextSamplingRequestIndex));
+				assertEquals(Std.string(intField(expectValue, "previousPromptItemCount", 0)), Std.string(assembly.previousPromptItemCount));
+				assertEquals(Std.string(intField(expectValue, "assembledItemCount", 0)), Std.string(assembly.assembledItemCount));
+				assertEquals(Std.string(intField(expectValue, "nextPromptItemCount", 0)), Std.string(assembly.nextPromptItemCount));
+				assertEquals(Std.string(intField(expectValue, "responseInputItemCount", 0)), Std.string(assembly.responseInputItemCount));
+				assertEquals(Std.string(intField(expectValue, "pendingInputItemCount", 0)), Std.string(assembly.pendingInputItemCount));
+				assertEquals(boolText(boolField(expectValue, "pendingInputDrained", false)), boolText(assembly.pendingInputDrained));
+				assertEquals(boolText(boolField(expectValue, "historyClonedForPrompt", false)), boolText(assembly.historyClonedForPrompt));
+				assertEquals(boolText(boolField(expectValue, "forPromptNormalized", false)), boolText(assembly.forPromptNormalized));
+				assertEquals(boolText(boolField(expectValue, "modelSupportsImages", false)), boolText(assembly.modelSupportsImages));
+				assertEquals(stringField(expectValue, "firstItemKind", ""), assembly.firstItemKind);
+				assertEquals(stringField(expectValue, "lastItemKind", ""), assembly.lastItemKind);
+				assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(assembly.liveNetworkAttempted));
+				assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(assembly.realFilesystemMutated));
+				assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(assembly.toolExecutedOutsideFixture));
+				assertContains(assembly.summary(), stringField(expectValue, "summaryContains", ""));
+				if (secretProbe.length > 0) assertNotContains(assembly.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: samplingInputAssemblyExpect";
+		}
+	}
+
+	static function samplingInputItems(values:Array<Value>):Array<ModelSamplingInputItem> {
+		final out:Array<ModelSamplingInputItem> = [];
+		for (value in values) {
+			final item = objectValue(value);
+			out.push(new ModelSamplingInputItem(
+				samplingInputItemKind(stringField(item, "kind", "")),
+				intField(item, "orderIndex", 0),
+				stringField(item, "callId", ""),
+				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")),
+				stringField(item, "text", ""),
+				boolField(item, "fromPendingInput", false),
+				boolField(item, "recordedInHistory", false)
+			));
+		}
+		return out;
+	}
+
+	static function samplingInputItemKind(value:String):ModelSamplingInputItemKind {
+		return switch value {
+			case "tool_response_output": ModelSamplingInputItemKind.ToolResponseOutput;
+			case "pending_user_input": ModelSamplingInputItemKind.PendingUserInput;
+			case "pending_response_item": ModelSamplingInputItemKind.PendingResponseItem;
+			case _: throw "unknown sampling input item kind: " + value;
+		}
+	}
+
+	static function toolOutputItemKind(value:String):ModelPatchToolOutputItemKind {
+		return switch value {
+			case "custom_tool_call_output": ModelPatchToolOutputItemKind.CustomToolCallOutput;
+			case "function_call_output": ModelPatchToolOutputItemKind.FunctionCallOutput;
+			case _: throw "unknown tool output item kind: " + value;
 		}
 	}
 

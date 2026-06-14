@@ -84,7 +84,7 @@
       "score": "yellow_green",
       "rationale": "The project has kept interop typed and narrow: generated Rust is disposable, haxe.rust stays external, and app/test Haxe source has no raw Rust snippets.",
       "strengths": [
-        "Raw Rust escape pressure is 0 matches across 471 Haxe source/test files.",
+        "Raw Rust escape pressure is 0 matches across 476 Haxe source/test files.",
         "haxe.rust fixes are generic and made in ../haxe.rust.",
         "Pin update workflow is scripted and gated."
       ],
@@ -194,7 +194,7 @@
       "openUpstream": 7,
       "localWorkaround": 0,
       "rawRustEscapeMatches": 0,
-      "sourceFilesScanned": 471,
+      "sourceFilesScanned": 476,
       "upstreamRepros": 0
     },
     "cafeteraContractSubset": {

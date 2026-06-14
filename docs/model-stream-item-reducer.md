@@ -1,6 +1,6 @@
 # Stream Item Reducer And Assistant Output Routing
 
-**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`; HXCX-4.52 / `codex-hxrust-7md`; HXCX-4.53 / `codex-hxrust-8p1`; HXCX-4.54 / `codex-hxrust-485`; HXCX-4.55 / `codex-hxrust-2og`; HXCX-4.56 / `codex-hxrust-4bi`; HXCX-4.57 / `codex-hxrust-aiz`; HXCX-4.58 / `codex-hxrust-3ll`; HXCX-4.59 / `codex-hxrust-fvw`; HXCX-4.60 / `codex-hxrust-euw`
+**Bead:** HXCX-4.48 / `codex-hxrust-19q`; HXCX-4.50 / `codex-hxrust-9rq`; HXCX-4.51 / `codex-hxrust-xh4`; HXCX-4.52 / `codex-hxrust-7md`; HXCX-4.53 / `codex-hxrust-8p1`; HXCX-4.54 / `codex-hxrust-485`; HXCX-4.55 / `codex-hxrust-2og`; HXCX-4.56 / `codex-hxrust-4bi`; HXCX-4.57 / `codex-hxrust-aiz`; HXCX-4.58 / `codex-hxrust-3ll`; HXCX-4.59 / `codex-hxrust-fvw`; HXCX-4.60 / `codex-hxrust-euw`; HXCX-4.61 / `codex-hxrust-doj`
 **Scope:** raw upstream Codex first; no live network, no real credentials, no live async ownership, no Cafex/Cafetera behavior.
 
 ## Upstream References
@@ -34,6 +34,10 @@ Read-only upstream reference: `../codex`.
 - `../codex/codex-rs/core/src/tools/context.rs:438` centralizes function/custom tool-output response item selection.
 - `../codex/codex-rs/core/src/tools/parallel.rs:67` converts tool futures into response items.
 - `../codex/codex-rs/core/src/tools/parallel.rs:186` converts tool failures into model-visible tool-output responses.
+- `../codex/codex-rs/core/src/session/turn.rs:206` drains pending input for the active turn before prompt assembly when allowed.
+- `../codex/codex-rs/core/src/session/turn.rs:211` records pending input through hooks before building the next request.
+- `../codex/codex-rs/core/src/session/turn.rs:217` clones conversation history for prompt assembly.
+- `../codex/codex-rs/core/src/session/turn.rs:219` applies `for_prompt` normalization against model input modalities.
 - `../codex/codex-rs/core/src/session/turn.rs:242` reads `SamplingRequestResult.needs_follow_up` after a model request.
 - `../codex/codex-rs/core/src/session/turn.rs:246` enables pending-input draining after a sampling request completes.
 - `../codex/codex-rs/core/src/session/turn.rs:247` collects pending input, token status, and estimated token count after sampling.
@@ -47,6 +51,13 @@ Read-only upstream reference: `../codex`.
 - `../codex/codex-rs/core/src/session/turn.rs:2205` starts tool-blocking timing when in-flight tools remain.
 - `../codex/codex-rs/core/src/session/turn.rs:2210` drains in-flight tool responses before returning from sampling.
 - `../codex/codex-rs/core/src/session/mod.rs:3216` records response-input-derived items into conversation history.
+- `../codex/codex-rs/core/src/session/mod.rs:3312` converts additional context into pending response items.
+- `../codex/codex-rs/core/src/session/mod.rs:3314` appends pending user input for the active turn.
+- `../codex/codex-rs/core/src/session/input_queue.rs:172` drains pending input from the active turn.
+- `../codex/codex-rs/core/src/session/input_queue.rs:196` appends mailbox response items after turn-local pending input.
+- `../codex/codex-rs/core/src/hook_runtime.rs:543` records drained pending user input into history.
+- `../codex/codex-rs/core/src/hook_runtime.rs:551` records drained pending response items into history.
+- `../codex/codex-rs/core/src/context_manager/history.rs:111` returns normalized prompt history from `for_prompt`.
 - `../codex/codex-rs/core/src/tools/events.rs:154` creates apply-patch tool event emitters for the active environment.
 - `../codex/codex-rs/core/src/tools/events.rs:216` emits patch begin/end tool events with file-change payloads.
 - `../codex/codex-rs/core/src/tools/runtimes/apply_patch.rs:47` defines the runtime apply-patch request.
@@ -146,9 +157,10 @@ Read-only upstream reference: `../codex`.
 - `ModelPatchToolFollowUpPolicy`, `ModelPatchToolFollowUpRequest`, `ModelPatchToolFollowUpOutcome`, and `ModelPatchToolOutputItemKind` model the selected apply-patch tool-output and model-follow-up boundary. They find the queued apply-patch call, project custom/function tool-output response shape, success status, post-tool-use response visibility, stdout/stderr/result text visibility, and the model follow-up requirement without executing tools.
 - `ModelPatchToolResponseInputPolicy`, `ModelPatchToolResponseInputRequest`, `ModelPatchToolResponseInputOutcome`, and `ModelPatchToolResponseAdmissionKind` model the selected in-flight tool response collection and next-input admission boundary. They preserve response ordering, response kind, success/error output text, conversation-item recording intent, and follow-up-request requirement without owning live futures.
 - `ModelSamplingContinuationPolicy`, `ModelSamplingContinuationRequest`, `ModelSamplingContinuationOutcome`, and `ModelSamplingContinuationKind` model the selected post-sampling continuation decision. They combine model follow-up, pending input, token-limit compaction, next request index, admitted response-input count, pending-input drain intent, and no-live-effect proofs without performing provider traffic.
+- `ModelSamplingInputAssemblyPolicy`, `ModelSamplingInputAssemblyRequest`, `ModelSamplingInputAssemblyOutcome`, `ModelSamplingInputItem`, and `ModelSamplingInputItemKind` model the selected next prompt input assembly. They carry typed tool-response output and pending-input item shapes, order them as history-visible prompt items, record `clone_history`/`for_prompt` normalization intent, and preserve no-live-effect proofs.
 - `ModelStreamItemReducerPolicy` maintains active item/tool metadata, emits deltas against that item or call id, strips selected hidden assistant markup at completion, accumulates accepted custom tool input when the completed item omits it, emits deterministic patch update events for supported streamed argument diffs, and queues tool calls for follow-up without executing them.
 
-The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, add/delete/update/move/end-of-file patch chunks, apply-patch begin/end verification events, fixture-only virtual workspace application results, approval/preapproval/review/sandbox retry decisions, turn-diff tracker track/invalidate/no-op decisions, canonical file-change item projection, optional legacy patch begin/end projection, TUI/app-server status and stdout/stderr visibility facts, turn-diff notification projection, model-facing apply-patch tool-output response shape, follow-up queue admission, post-tool-use response visibility, tool-response input admission, response ordering, follow-up sampling continuation, pending-input drain decision, token-limit compaction routing, completed/failed/declined statuses, malformed patch refusal, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no filesystem mutation, no tool execution, and secret-free summaries.
+The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` covers OpenAI assistant text deltas and completion, OpenAI reasoning summary/raw deltas, OpenAI custom tool input delta routing and mismatch ignores, OpenAI and Responses Lite apply-patch-style `PatchApplyUpdated` progress/final events, add/delete/update/move/end-of-file patch chunks, apply-patch begin/end verification events, fixture-only virtual workspace application results, approval/preapproval/review/sandbox retry decisions, turn-diff tracker track/invalidate/no-op decisions, canonical file-change item projection, optional legacy patch begin/end projection, TUI/app-server status and stdout/stderr visibility facts, turn-diff notification projection, model-facing apply-patch tool-output response shape, follow-up queue admission, post-tool-use response visibility, tool-response input admission, response ordering, follow-up sampling continuation, next prompt input assembly, pending-input drain decision, token-limit compaction routing, completed/failed/declined statuses, malformed patch refusal, Bedrock function delta ignored without a custom diff consumer, Bedrock function tool call follow-up routing, Responses Lite custom tool-call input accumulation, inherited local envelope refusal, no live traffic, no filesystem mutation, no tool execution, and secret-free summaries.
 
 ## Non-Goals
 
