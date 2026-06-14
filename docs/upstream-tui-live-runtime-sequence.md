@@ -803,7 +803,20 @@ Model the upstream integration of returned `SamplingRequestResult` into the oute
 
 Status: HXCX-4.67 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic sampling-result turn-loop integration evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.68+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.68: Post-Sampling Pending Input Drain Boundary
+
+Model the upstream pending-input drain immediately before the next prompt is assembled:
+
+- preserve `can_drain_pending_input` gating after sampling-result integration;
+- skip terminal, cancelled, errored, and model-priority auto-compact paths;
+- drain active-turn pending input before mailbox response items;
+- suppress mailbox delivery when the active turn no longer accepts it;
+- record hook intent for pending user input versus pending response items;
+- keep live queues, native futures, provider traffic, real tool execution, filesystem mutation, and Cafex behavior out of scope.
+
+Status: HXCX-4.68 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic post-sampling pending-input drain evidence only, not live provider traffic, native input queue ownership, native hook execution, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.69+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

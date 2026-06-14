@@ -86,6 +86,31 @@
           "toolExecutedOutsideFixture": false,
           "summaryContains": "decisionKind=stop_turn;statusKind=ok;modelNeedsFollowUp=false;hasPendingInput=false;needsFollowUp=false;pendingInputDrainEnabled=true;canDrainPendingInputAfterAutoCompact=false;tokenLimitReached=false;lastAgentMessageUpdated=true;lastAgentMessage=Hello world;previousLastAgentMessage=none;samplingOutcomeReturned=true;stopHooksEligible=true;continueLoop=false;breakTurnLoop=true;bypassedForCancellation=false;bypassedForError=false"
         }
+      ],
+      "postSamplingPendingInputDrainExpects": [
+        {
+          "ok": true,
+          "code": "post_sampling_pending_input_drain_modeled",
+          "requestId": "pending-drain-openai-stop-turn",
+          "integrationRequestId": "sampling-result-openai-stop-turn",
+          "acceptsMailboxDelivery": true,
+          "activeTurnItems": [],
+          "mailboxItems": [],
+          "drainKind": "skipped_terminal",
+          "canDrainPendingInput": false,
+          "activeTurnItemCount": 0,
+          "mailboxItemCount": 0,
+          "drainedItemCount": 0,
+          "userInputRecordedCount": 0,
+          "responseItemRecordedCount": 0,
+          "mailboxAppendedAfterActiveTurn": true,
+          "hookRecordingAttempted": false,
+          "promptAssemblyAfterHooks": false,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "drainKind=skipped_terminal;canDrainPendingInput=false;acceptsMailboxDelivery=true;activeTurnItemCount=0;mailboxItemCount=0;drainedItemCount=0;userInputRecordedCount=0;responseItemRecordedCount=0;mailboxAppendedAfterActiveTurn=true;hookRecordingAttempted=false;promptAssemblyAfterHooks=false"
+        }
       ]
     },
     {
@@ -703,6 +728,101 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "decisionKind=continue_sampling;statusKind=ok;modelNeedsFollowUp=true;hasPendingInput=false;needsFollowUp=true;pendingInputDrainEnabled=true;canDrainPendingInputAfterAutoCompact=false;tokenLimitReached=false;lastAgentMessageUpdated=false;lastAgentMessage=none;previousLastAgentMessage=none;samplingOutcomeReturned=true;stopHooksEligible=false;continueLoop=true;breakTurnLoop=false;bypassedForCancellation=false;bypassedForError=false"
+          },
+          {
+            "ok": true,
+            "code": "sampling_result_integrated",
+            "requestId": "sampling-result-runtime-pending-drain",
+            "postDrainRequestId": "post-drain-runtime-failed-no-emission",
+            "statusKind": "ok",
+            "modelNeedsFollowUp": false,
+            "hasPendingInput": true,
+            "pendingInputCount": 2,
+            "tokenLimitReached": false,
+            "lastAgentMessage": "",
+            "previousLastAgentMessage": "",
+            "decisionKind": "continue_sampling",
+            "needsFollowUp": true,
+            "pendingInputDrainEnabled": true,
+            "canDrainPendingInputAfterAutoCompact": false,
+            "lastAgentMessageUpdated": false,
+            "integratedLastAgentMessage": "",
+            "samplingOutcomeReturned": true,
+            "stopHooksEligible": false,
+            "continueLoop": true,
+            "breakTurnLoop": false,
+            "bypassedForCancellation": false,
+            "bypassedForError": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "decisionKind=continue_sampling;statusKind=ok;modelNeedsFollowUp=false;hasPendingInput=true;needsFollowUp=true;pendingInputDrainEnabled=true;canDrainPendingInputAfterAutoCompact=false;tokenLimitReached=false;lastAgentMessageUpdated=false;lastAgentMessage=none;previousLastAgentMessage=none;samplingOutcomeReturned=true;stopHooksEligible=false;continueLoop=true;breakTurnLoop=false;bypassedForCancellation=false;bypassedForError=false"
+          }
+        ],
+        "postSamplingPendingInputDrainExpects": [
+          {
+            "ok": true,
+            "code": "post_sampling_pending_input_drain_modeled",
+            "requestId": "pending-drain-runtime-empty",
+            "integrationRequestId": "sampling-result-runtime-failed-continue",
+            "acceptsMailboxDelivery": true,
+            "activeTurnItems": [],
+            "mailboxItems": [],
+            "drainKind": "skipped_no_pending",
+            "canDrainPendingInput": true,
+            "activeTurnItemCount": 0,
+            "mailboxItemCount": 0,
+            "drainedItemCount": 0,
+            "userInputRecordedCount": 0,
+            "responseItemRecordedCount": 0,
+            "mailboxAppendedAfterActiveTurn": true,
+            "hookRecordingAttempted": true,
+            "promptAssemblyAfterHooks": true,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "drainKind=skipped_no_pending;canDrainPendingInput=true;acceptsMailboxDelivery=true;activeTurnItemCount=0;mailboxItemCount=0;drainedItemCount=0;userInputRecordedCount=0;responseItemRecordedCount=0;mailboxAppendedAfterActiveTurn=true;hookRecordingAttempted=true;promptAssemblyAfterHooks=true"
+          },
+          {
+            "ok": true,
+            "code": "post_sampling_pending_input_drain_modeled",
+            "requestId": "pending-drain-runtime-active-then-mailbox",
+            "integrationRequestId": "sampling-result-runtime-pending-drain",
+            "acceptsMailboxDelivery": true,
+            "activeTurnItems": [
+              {
+                "sourceKind": "active_turn",
+                "inputKind": "pending_user_input",
+                "orderIndex": 1,
+                "callId": "",
+                "responseKind": "function_call_output",
+                "text": "please inspect the failure"
+              }
+            ],
+            "mailboxItems": [
+              {
+                "sourceKind": "mailbox",
+                "inputKind": "pending_response_item",
+                "orderIndex": 2,
+                "callId": "call-runtime-failed-mailbox",
+                "responseKind": "function_call_output",
+                "text": "external context queued while model was running"
+              }
+            ],
+            "drainKind": "drained",
+            "canDrainPendingInput": true,
+            "activeTurnItemCount": 1,
+            "mailboxItemCount": 1,
+            "drainedItemCount": 2,
+            "userInputRecordedCount": 1,
+            "responseItemRecordedCount": 1,
+            "mailboxAppendedAfterActiveTurn": true,
+            "hookRecordingAttempted": true,
+            "promptAssemblyAfterHooks": true,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "drainKind=drained;canDrainPendingInput=true;acceptsMailboxDelivery=true;activeTurnItemCount=1;mailboxItemCount=1;drainedItemCount=2;userInputRecordedCount=1;responseItemRecordedCount=1;mailboxAppendedAfterActiveTurn=true;hookRecordingAttempted=true;promptAssemblyAfterHooks=true;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false;orderedItems=[sourceKind=active_turn;inputKind=pending_user_input;orderIndex=1;callId=none;responseKind=function_call_output;text=please inspect the failure|sourceKind=mailbox;inputKind=pending_response_item;orderIndex=2;callId=call-runtime-failed-mailbox;responseKind=function_call_output;text=external context queued while model was running]"
           }
         ]
       }
@@ -1749,6 +1869,63 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "decisionKind=bypass_cancellation;statusKind=cancelled;modelNeedsFollowUp=false;hasPendingInput=false;needsFollowUp=false;pendingInputDrainEnabled=false;canDrainPendingInputAfterAutoCompact=false;tokenLimitReached=false;lastAgentMessageUpdated=false;lastAgentMessage=none;previousLastAgentMessage=none;samplingOutcomeReturned=false;stopHooksEligible=false;continueLoop=false;breakTurnLoop=true;bypassedForCancellation=true;bypassedForError=false"
+          }
+        ],
+        "postSamplingPendingInputDrainExpects": [
+          {
+            "ok": true,
+            "code": "post_sampling_pending_input_drain_modeled",
+            "requestId": "pending-drain-lite-auto-compact",
+            "integrationRequestId": "sampling-result-lite-auto-compact",
+            "acceptsMailboxDelivery": true,
+            "activeTurnItems": [
+              {
+                "sourceKind": "active_turn",
+                "inputKind": "pending_user_input",
+                "orderIndex": 4,
+                "callId": "",
+                "responseKind": "function_call_output",
+                "text": "queued during compaction"
+              }
+            ],
+            "mailboxItems": [],
+            "drainKind": "skipped_auto_compact",
+            "canDrainPendingInput": false,
+            "activeTurnItemCount": 1,
+            "mailboxItemCount": 0,
+            "drainedItemCount": 0,
+            "userInputRecordedCount": 0,
+            "responseItemRecordedCount": 0,
+            "mailboxAppendedAfterActiveTurn": true,
+            "hookRecordingAttempted": false,
+            "promptAssemblyAfterHooks": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "drainKind=skipped_auto_compact;canDrainPendingInput=false;acceptsMailboxDelivery=true;activeTurnItemCount=1;mailboxItemCount=0;drainedItemCount=0;userInputRecordedCount=0;responseItemRecordedCount=0;mailboxAppendedAfterActiveTurn=true;hookRecordingAttempted=false;promptAssemblyAfterHooks=false"
+          },
+          {
+            "ok": true,
+            "code": "post_sampling_pending_input_drain_modeled",
+            "requestId": "pending-drain-lite-cancel-bypass",
+            "integrationRequestId": "sampling-result-lite-cancel-bypass",
+            "acceptsMailboxDelivery": true,
+            "activeTurnItems": [],
+            "mailboxItems": [],
+            "drainKind": "bypassed",
+            "canDrainPendingInput": false,
+            "activeTurnItemCount": 0,
+            "mailboxItemCount": 0,
+            "drainedItemCount": 0,
+            "userInputRecordedCount": 0,
+            "responseItemRecordedCount": 0,
+            "mailboxAppendedAfterActiveTurn": true,
+            "hookRecordingAttempted": false,
+            "promptAssemblyAfterHooks": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "drainKind=bypassed;canDrainPendingInput=false;acceptsMailboxDelivery=true;activeTurnItemCount=0;mailboxItemCount=0;drainedItemCount=0;userInputRecordedCount=0;responseItemRecordedCount=0;mailboxAppendedAfterActiveTurn=true;hookRecordingAttempted=false;promptAssemblyAfterHooks=false"
           }
         ]
       }
