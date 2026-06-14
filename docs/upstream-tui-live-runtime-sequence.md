@@ -593,7 +593,19 @@ Before live provider transport work, define the Haxe-facing async contract witho
 
 Status: HXCX-4.49 now owns `fixtures/hxrust/async-runtime-contract.v1.json` and validates the slice through `harness/check-async-runtime-contract.sh`. The contract lives under `codexhx.runtime.asyncruntime` and is documented in `docs/async-runtime-contract.md`. This is backend-neutral contract evidence only, not live Tokio task ownership, HTTP/WebSocket transport, timers, tool execution, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.50+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.50: Stream Tool-Call Input Delta Routing
+
+Continue the raw upstream stream reducer before live provider/TUI ownership:
+
+- model active custom tool-call argument diff state from `session/turn.rs`;
+- route accepted tool input deltas by active `callId`;
+- record typed ignored outcomes when no custom diff consumer is active or the incoming `callId` mismatches;
+- accumulate accepted custom tool input for final queued tool calls without executing them;
+- keep function-call delta traffic fail-closed unless a future upstream reference proves a custom diff consumer is active for it.
+
+Status: HXCX-4.50 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is selected deterministic argument-diff routing evidence only, not apply-patch hunk parsing, live HTTP/WebSocket transport, SSE frame parsing, tool execution, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.51+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

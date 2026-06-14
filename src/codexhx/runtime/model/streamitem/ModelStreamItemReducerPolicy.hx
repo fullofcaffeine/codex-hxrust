@@ -24,12 +24,15 @@ class ModelStreamItemReducerPolicy {
 		final runtimeEvents:Array<ModelStreamRuntimeEvent> = [];
 		final sequence:Array<String> = ["model_stream_item_reducer", "stream_route:ok"];
 		var activeItem:ModelStreamOutputItem = null;
+		var activeToolCall:ModelStreamActiveToolCall = null;
 		var activeStreaming = false;
 		var startedCount = 0;
 		var completedCount = 0;
 		var assistantDeltaCount = 0;
 		var reasoningDeltaCount = 0;
 		var rawReasoningDeltaCount = 0;
+		var toolInputDeltaCount = 0;
+		var toolInputDeltaIgnoredCount = 0;
 		var toolCallCount = 0;
 		var needsFollowUp = false;
 		var lastAgentMessage = "";
@@ -45,6 +48,11 @@ class ModelStreamItemReducerPolicy {
 					activeStreaming = true;
 					runtimeEvents.push(itemStarted(item));
 					startedCount = startedCount + 1;
+					activeToolCall = null;
+				} else if (item != null && item.kind == ModelStreamOutputItemKind.CustomToolCall) {
+					activeToolCall = ModelStreamActiveToolCall.fromItem(item);
+				} else if (item != null && item.kind == ModelStreamOutputItemKind.FunctionCall) {
+					activeToolCall = null;
 				}
 			} else if (event.kind == ModelStreamItemEventKind.OutputTextDelta) {
 				if (activeItem == null || !activeStreaming) {
@@ -93,12 +101,49 @@ class ModelStreamItemReducerPolicy {
 					));
 					rawReasoningDeltaCount = rawReasoningDeltaCount + 1;
 				}
+			} else if (event.kind == ModelStreamItemEventKind.ToolCallInputDelta) {
+				if (activeToolCall == null) {
+					final ignored = new ModelStreamToolInputDelta(
+						event.callId,
+						event.itemId,
+						event.delta,
+						"",
+						ModelStreamToolInputDeltaStatus.IgnoredNoActiveToolCall,
+						1
+					);
+					runtimeEvents.push(toolInputDeltaEvent(ModelStreamRuntimeEventKind.ToolCallInputDeltaIgnored, ModelStreamOutputItemKind.Unknown, "", "", "", ignored));
+					toolInputDeltaIgnoredCount = toolInputDeltaIgnoredCount + 1;
+				} else if (!activeToolCall.accepts(event.callId)) {
+					final ignored = activeToolCall.ignore(event.callId, event.delta, ModelStreamToolInputDeltaStatus.IgnoredCallMismatch);
+					runtimeEvents.push(toolInputDeltaEvent(
+						ModelStreamRuntimeEventKind.ToolCallInputDeltaIgnored,
+						activeToolCall.itemKind,
+						activeToolCall.itemId,
+						activeToolCall.callId,
+						activeToolCall.displayName(),
+						ignored
+					));
+					toolInputDeltaIgnoredCount = toolInputDeltaIgnoredCount + 1;
+				} else {
+					final accepted = activeToolCall.accept(event.delta);
+					runtimeEvents.push(toolInputDeltaEvent(
+						ModelStreamRuntimeEventKind.ToolCallInputDelta,
+						activeToolCall.itemKind,
+						activeToolCall.itemId,
+						activeToolCall.callId,
+						activeToolCall.displayName(),
+						accepted
+					));
+					toolInputDeltaCount = toolInputDeltaCount + 1;
+				}
 			} else if (event.kind == ModelStreamItemEventKind.OutputItemDone) {
 				final item = event.item;
 				if (isToolCall(item)) {
-					runtimeEvents.push(toolCallQueued(item));
+					final completedToolCall = toolCallWithStreamedInput(item, activeToolCall);
+					runtimeEvents.push(toolCallQueued(completedToolCall));
 					toolCallCount = toolCallCount + 1;
 					needsFollowUp = true;
+					if (activeToolCall != null && activeToolCall.callId == item.callId) activeToolCall = null;
 					activeItem = null;
 					activeStreaming = false;
 				} else if (isNonToolItem(item)) {
@@ -141,6 +186,8 @@ class ModelStreamItemReducerPolicy {
 			assistantDeltaCount,
 			reasoningDeltaCount,
 			rawReasoningDeltaCount,
+			toolInputDeltaCount,
+			toolInputDeltaIgnoredCount,
 			toolCallCount,
 			needsFollowUp,
 			lastAgentMessage,
@@ -185,6 +232,47 @@ class ModelStreamItemReducerPolicy {
 		);
 	}
 
+	static function toolCallWithStreamedInput(item:ModelStreamOutputItem, activeToolCall:ModelStreamActiveToolCall):ModelStreamOutputItem {
+		if (item == null || activeToolCall == null || item.callId != activeToolCall.callId) return item;
+		final streamedInput = activeToolCall.inputSnapshot();
+		if (streamedInput.length == 0) return item;
+		if (item.kind == ModelStreamOutputItemKind.CustomToolCall && item.customInput.length == 0) {
+			return new ModelStreamOutputItem(
+				item.kind,
+				item.itemId,
+				item.role,
+				item.text,
+				item.phase,
+				item.summary,
+				item.rawContent,
+				item.callId,
+				item.toolName,
+				item.namespace,
+				item.arguments,
+				streamedInput,
+				item.status
+			);
+		}
+		if (item.kind == ModelStreamOutputItemKind.FunctionCall && item.arguments.length == 0) {
+			return new ModelStreamOutputItem(
+				item.kind,
+				item.itemId,
+				item.role,
+				item.text,
+				item.phase,
+				item.summary,
+				item.rawContent,
+				item.callId,
+				item.toolName,
+				item.namespace,
+				streamedInput,
+				item.customInput,
+				item.status
+			);
+		}
+		return item;
+	}
+
 	static function itemStarted(item:ModelStreamOutputItem):ModelStreamRuntimeEvent {
 		return new ModelStreamRuntimeEvent(
 			ModelStreamRuntimeEventKind.ItemStarted,
@@ -221,6 +309,26 @@ class ModelStreamItemReducerPolicy {
 			"",
 			item.kind == ModelStreamOutputItemKind.CustomToolCall ? item.customInput : item.arguments,
 			0
+		);
+	}
+
+	static function toolInputDeltaEvent(
+		kind:ModelStreamRuntimeEventKind,
+		itemKind:ModelStreamOutputItemKind,
+		itemId:String,
+		callId:String,
+		toolName:String,
+		inputDelta:ModelStreamToolInputDelta
+	):ModelStreamRuntimeEvent {
+		return new ModelStreamRuntimeEvent(
+			kind,
+			itemKind,
+			itemId,
+			callId,
+			toolName,
+			inputDelta.delta,
+			inputDelta.summary(),
+			inputDelta.index
 		);
 	}
 

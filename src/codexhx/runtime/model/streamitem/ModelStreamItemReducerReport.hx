@@ -39,6 +39,18 @@ class ModelStreamItemReducerReport {
 		return count;
 	}
 
+	public function toolInputDeltaCount():Int {
+		var count = 0;
+		for (outcome in outcomes) count = count + outcome.toolInputDeltaCount;
+		return count;
+	}
+
+	public function toolInputDeltaIgnoredCount():Int {
+		var count = 0;
+		for (outcome in outcomes) count = count + outcome.toolInputDeltaIgnoredCount;
+		return count;
+	}
+
 	public function summary():String {
 		final parts:Array<String> = [];
 		for (outcome in outcomes) parts.push(outcome.summary());
@@ -49,6 +61,8 @@ class ModelStreamItemReducerReport {
 			+ ";toolCalls=" + Std.string(toolCallCount())
 			+ ";assistantDeltas=" + Std.string(assistantDeltaCount())
 			+ ";reasoningDeltas=" + Std.string(reasoningDeltaCount())
+			+ ";toolInputDeltas=" + Std.string(toolInputDeltaCount())
+			+ ";toolInputDeltaIgnored=" + Std.string(toolInputDeltaIgnoredCount())
 			+ ";outcomes=[" + parts.join("##") + "]";
 	}
 }

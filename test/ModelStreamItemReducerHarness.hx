@@ -39,6 +39,8 @@ class ModelStreamItemReducerHarness {
 			assertEquals(Std.string(intField(expect, "assistantDeltaCount", 0)), Std.string(outcome.assistantDeltaCount));
 			assertEquals(Std.string(intField(expect, "reasoningDeltaCount", 0)), Std.string(outcome.reasoningDeltaCount));
 			assertEquals(Std.string(intField(expect, "rawReasoningDeltaCount", 0)), Std.string(outcome.rawReasoningDeltaCount));
+			assertEquals(Std.string(intField(expect, "toolInputDeltaCount", 0)), Std.string(outcome.toolInputDeltaCount));
+			assertEquals(Std.string(intField(expect, "toolInputDeltaIgnoredCount", 0)), Std.string(outcome.toolInputDeltaIgnoredCount));
 			assertEquals(Std.string(intField(expect, "toolCallCount", 0)), Std.string(outcome.toolCallCount));
 			assertEquals(boolText(boolField(expect, "needsFollowUp", false)), boolText(outcome.needsFollowUp));
 			assertEquals(stringField(expect, "lastAgentMessage", ""), outcome.lastAgentMessage);
@@ -92,6 +94,8 @@ class ModelStreamItemReducerHarness {
 			out.push(new ModelStreamItemFixtureEvent(
 				eventKind(stringField(event, "kind", "")),
 				outputItem(optionalField(event, "item")),
+				stringField(event, "itemId", ""),
+				stringField(event, "callId", ""),
 				stringField(event, "delta", ""),
 				intField(event, "summaryIndex", 0),
 				intField(event, "contentIndex", 0),
@@ -131,6 +135,7 @@ class ModelStreamItemReducerHarness {
 			case "output_item_added": ModelStreamItemEventKind.OutputItemAdded;
 			case "output_item_done": ModelStreamItemEventKind.OutputItemDone;
 			case "output_text_delta": ModelStreamItemEventKind.OutputTextDelta;
+			case "tool_call_input_delta": ModelStreamItemEventKind.ToolCallInputDelta;
 			case "reasoning_summary_delta": ModelStreamItemEventKind.ReasoningSummaryDelta;
 			case "reasoning_content_delta": ModelStreamItemEventKind.ReasoningContentDelta;
 			case "completed": ModelStreamItemEventKind.Completed;
@@ -158,6 +163,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(Std.string(intField(expect, "successCount", 0)), Std.string(report.successCount()));
 		assertEquals(Std.string(intField(expect, "errorCount", 0)), Std.string(report.errorCount()));
 		assertEquals(Std.string(intField(expect, "toolCallCount", 0)), Std.string(report.toolCallCount()));
+		assertEquals(Std.string(intField(expect, "toolInputDeltaCount", 0)), Std.string(report.toolInputDeltaCount()));
+		assertEquals(Std.string(intField(expect, "toolInputDeltaIgnoredCount", 0)), Std.string(report.toolInputDeltaIgnoredCount()));
 		assertEquals(Std.string(intField(expect, "assistantDeltaCount", 0)), Std.string(report.assistantDeltaCount()));
 		assertEquals(Std.string(intField(expect, "reasoningDeltaCount", 0)), Std.string(report.reasoningDeltaCount()));
 		assertContains(report.summary(), stringField(expect, "summaryContains", ""));

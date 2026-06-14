@@ -15,6 +15,8 @@ class ModelStreamItemReducerOutcome {
 	public final assistantDeltaCount:Int;
 	public final reasoningDeltaCount:Int;
 	public final rawReasoningDeltaCount:Int;
+	public final toolInputDeltaCount:Int;
+	public final toolInputDeltaIgnoredCount:Int;
 	public final toolCallCount:Int;
 	public final needsFollowUp:Bool;
 	public final lastAgentMessage:String;
@@ -35,6 +37,8 @@ class ModelStreamItemReducerOutcome {
 		assistantDeltaCount:Int,
 		reasoningDeltaCount:Int,
 		rawReasoningDeltaCount:Int,
+		toolInputDeltaCount:Int,
+		toolInputDeltaIgnoredCount:Int,
 		toolCallCount:Int,
 		needsFollowUp:Bool,
 		lastAgentMessage:String,
@@ -56,6 +60,8 @@ class ModelStreamItemReducerOutcome {
 		this.assistantDeltaCount = assistantDeltaCount;
 		this.reasoningDeltaCount = reasoningDeltaCount;
 		this.rawReasoningDeltaCount = rawReasoningDeltaCount;
+		this.toolInputDeltaCount = toolInputDeltaCount;
+		this.toolInputDeltaIgnoredCount = toolInputDeltaIgnoredCount;
 		this.toolCallCount = toolCallCount;
 		this.needsFollowUp = needsFollowUp;
 		this.lastAgentMessage = lastAgentMessage;
@@ -75,6 +81,8 @@ class ModelStreamItemReducerOutcome {
 		assistantDeltaCount:Int,
 		reasoningDeltaCount:Int,
 		rawReasoningDeltaCount:Int,
+		toolInputDeltaCount:Int,
+		toolInputDeltaIgnoredCount:Int,
 		toolCallCount:Int,
 		needsFollowUp:Bool,
 		lastAgentMessage:String,
@@ -93,6 +101,8 @@ class ModelStreamItemReducerOutcome {
 			assistantDeltaCount,
 			reasoningDeltaCount,
 			rawReasoningDeltaCount,
+			toolInputDeltaCount,
+			toolInputDeltaIgnoredCount,
 			toolCallCount,
 			needsFollowUp,
 			lastAgentMessage,
@@ -116,6 +126,8 @@ class ModelStreamItemReducerOutcome {
 			request,
 			route,
 			[errorEvent(ModelStreamRuntimeEventKind.RouteDenied, errorMessage)],
+			0,
+			0,
 			0,
 			0,
 			0,
@@ -152,6 +164,8 @@ class ModelStreamItemReducerOutcome {
 			countEvents(events, ModelStreamRuntimeEventKind.AgentMessageContentDelta),
 			countEvents(events, ModelStreamRuntimeEventKind.ReasoningContentDelta),
 			countEvents(events, ModelStreamRuntimeEventKind.ReasoningRawContentDelta),
+			countEvents(events, ModelStreamRuntimeEventKind.ToolCallInputDelta),
+			countEvents(events, ModelStreamRuntimeEventKind.ToolCallInputDeltaIgnored),
 			countEvents(events, ModelStreamRuntimeEventKind.ToolCallQueued),
 			false,
 			"",
@@ -183,6 +197,8 @@ class ModelStreamItemReducerOutcome {
 			+ ";terminalResponseId=" + noneIfEmpty(terminalResponseId)
 			+ ";totalTokens=" + Std.string(totalTokens)
 			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";toolInputDeltas=" + Std.string(toolInputDeltaCount)
+			+ ";toolInputDeltaIgnored=" + Std.string(toolInputDeltaIgnoredCount)
 			+ ";error=" + errorMessage
 			+ ";sequence=" + sequence
 			+ ";events=[" + eventParts.join("##") + "]";
