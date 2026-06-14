@@ -529,7 +529,7 @@ The fixture `fixtures/hxrust/model-stream-route.v1.json` and `harness/check-mode
 
 ## Stream Item Reducer And Assistant Output Routing
 
-`codexhx.runtime.model.streamitem.ModelStreamItemReducerPolicy` is the HXCX-4.48/HXCX-4.50/HXCX-4.51/HXCX-4.52/HXCX-4.53/HXCX-4.54/HXCX-4.55 raw upstream stream item reducer slice:
+`codexhx.runtime.model.streamitem.ModelStreamItemReducerPolicy` is the HXCX-4.48/HXCX-4.50/HXCX-4.51/HXCX-4.52/HXCX-4.53/HXCX-4.54/HXCX-4.55/HXCX-4.56 raw upstream stream item reducer slice:
 
 - stream routes must pass before item reduction can start;
 - `ModelStreamOutputItemKind` distinguishes assistant message, reasoning, function call, custom tool call, web search, image generation, tool output, and unknown items;
@@ -541,10 +541,11 @@ The fixture `fixtures/hxrust/model-stream-route.v1.json` and `harness/check-mode
 - apply-patch verification is modeled against fixture-only filesystem facts, producing typed begin/end events and completed/failed/declined statuses without live network, real filesystem mutation, or out-of-fixture tool execution;
 - apply-patch runtime results are modeled against copied virtual workspace facts, producing stdout/stderr/status and before/after summaries while leaving the real filesystem untouched;
 - apply-patch approval/sandbox decisions are modeled with typed approval keys, approval requirement, review decision, preapproval, auto sandbox preference, and sandbox retry intent without granting permissions or executing tools;
+- apply-patch turn-diff tracker updates are modeled with typed known applied deltas, tracker update kind, environment-scoped diff summaries, invalidation, and no-op rejected deltas without rereading the workspace;
 - function/custom tool calls are queued as follow-up work without executing tools;
 - denied stream routes compose into reducer refusals without processing item events.
 
-The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` and `harness/check-model-stream-item-reducer.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is deterministic reducer, verification-boundary, virtual application-result, and approval/sandbox decision evidence only; it does not execute tools, mutate the real filesystem, grant permissions, open HTTP/WebSocket transports, parse live SSE frames, own Tokio tasks, persist inference traces, own realtime/audio, or model Cafex/Cafetera behavior. The boundary is documented in `docs/model-stream-item-reducer.md`.
+The fixture `fixtures/hxrust/model-stream-item-reducer.v1.json` and `harness/check-model-stream-item-reducer.sh` prove the boundary through the Haxe interpreter and portable haxe.rust-generated Rust. This is deterministic reducer, verification-boundary, virtual application-result, approval/sandbox decision, and turn-diff tracker evidence only; it does not execute tools, mutate the real filesystem, grant permissions, reread the workspace, open HTTP/WebSocket transports, parse live SSE frames, own Tokio tasks, persist inference traces, own realtime/audio, or model Cafex/Cafetera behavior. The boundary is documented in `docs/model-stream-item-reducer.md`.
 
 ## Runtime-Neutral Async Contract
 

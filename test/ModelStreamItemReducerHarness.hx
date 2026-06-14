@@ -18,6 +18,11 @@ import codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionRequest;
 import codexhx.runtime.model.streamitem.ModelPatchApprovalRequirement;
 import codexhx.runtime.model.streamitem.ModelPatchReviewDecision;
 import codexhx.runtime.model.streamitem.ModelPatchSandboxAttemptKind;
+import codexhx.runtime.model.streamitem.ModelPatchToolEventStageKind;
+import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
+import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
+import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerUpdateKind;
+import codexhx.runtime.model.streamitem.ModelPatchAppliedDelta;
 import codexhx.runtime.model.streamitem.ModelPatchVerificationPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchVerificationRequest;
 import codexhx.runtime.model.streamitem.ModelPatchVerificationOutcome;
@@ -214,7 +219,8 @@ class ModelStreamItemReducerHarness {
 				final secretProbe = stringField(verificationValue, "secretProbe", "");
 				if (secretProbe.length > 0) assertNotContains(verification.summary(), secretProbe);
 				final application = assertPatchApplication(verificationValue, verification, beforeFiles, secretProbe);
-				assertPatchApprovalDecision(verificationValue, verification, application, secretProbe);
+				final approval = assertPatchApprovalDecision(verificationValue, verification, application, secretProbe);
+				assertPatchTurnDiffTracker(verificationValue, verification, application, approval, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -258,7 +264,7 @@ class ModelStreamItemReducerHarness {
 		verification:ModelPatchVerificationOutcome,
 		application:ModelPatchApplicationOutcome,
 		secretProbe:String
-	):Void {
+	):codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionOutcome {
 		final approvalExpectValue = optionalField(verificationValue, "approvalExpect");
 		switch approvalExpectValue {
 			case JObject(_, _):
@@ -289,9 +295,53 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(approvalExpectValue, "toolExecutedOutsideFixture", false)), boolText(approval.toolExecutedOutsideFixture));
 				assertContains(approval.summary(), stringField(approvalExpectValue, "summaryContains", ""));
 				if (secretProbe.length > 0) assertNotContains(approval.summary(), secretProbe);
+				return approval;
 			case JNull:
+				return null;
 			case _:
 				throw "expected object field: approvalExpect";
+		}
+	}
+
+	static function assertPatchTurnDiffTracker(
+		verificationValue:Value,
+		verification:ModelPatchVerificationOutcome,
+		application:ModelPatchApplicationOutcome,
+		approval:codexhx.runtime.model.streamitem.ModelPatchApprovalDecisionOutcome,
+		secretProbe:String
+	):Void {
+		final trackerExpectValue = optionalField(verificationValue, "trackerExpect");
+		switch trackerExpectValue {
+			case JObject(_, _):
+				final tracker = ModelPatchTurnDiffTrackerPolicy.update(new ModelPatchTurnDiffTrackerRequest(
+					stringField(trackerExpectValue, "requestId", ""),
+					verification,
+					application,
+					approval,
+					stringField(trackerExpectValue, "environmentId", ""),
+					toolEventStage(stringField(trackerExpectValue, "stage", "success")),
+					new ModelPatchAppliedDelta(
+						boolField(trackerExpectValue, "deltaKnown", false),
+						boolField(trackerExpectValue, "deltaExact", false),
+						boolField(trackerExpectValue, "deltaFromVerification", false) && verification != null && verification.endEvent != null ? verification.endEvent.changes : []
+					),
+					stringField(trackerExpectValue, "previousUnifiedDiff", ""),
+					secretProbe
+				));
+				assertEquals(boolText(boolField(trackerExpectValue, "ok", false)), boolText(tracker.ok));
+				assertEquals(stringField(trackerExpectValue, "code", ""), tracker.code);
+				assertEquals(stringField(trackerExpectValue, "requestId", ""), tracker.requestId);
+				assertEquals(stringField(trackerExpectValue, "updateKind", ""), tracker.updateKind);
+				assertEquals(boolText(boolField(trackerExpectValue, "trackerValid", false)), boolText(tracker.trackerValid));
+				assertEquals(boolText(boolField(trackerExpectValue, "shouldEmitTurnDiff", false)), boolText(tracker.shouldEmitTurnDiff));
+				assertEquals(boolText(boolField(trackerExpectValue, "liveNetworkAttempted", false)), boolText(tracker.liveNetworkAttempted));
+				assertEquals(boolText(boolField(trackerExpectValue, "realFilesystemMutated", false)), boolText(tracker.realFilesystemMutated));
+				assertEquals(boolText(boolField(trackerExpectValue, "toolExecutedOutsideFixture", false)), boolText(tracker.toolExecutedOutsideFixture));
+				assertContains(tracker.summary(), stringField(trackerExpectValue, "summaryContains", ""));
+				if (secretProbe.length > 0) assertNotContains(tracker.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: trackerExpect";
 		}
 	}
 
@@ -339,6 +389,16 @@ class ModelStreamItemReducerHarness {
 			case "sandboxed": ModelPatchSandboxAttemptKind.Sandboxed;
 			case "escalated": ModelPatchSandboxAttemptKind.Escalated;
 			case _: throw "invalid patch sandbox attempt: " + value;
+		}
+	}
+
+	static function toolEventStage(value:String):ModelPatchToolEventStageKind {
+		return switch value {
+			case "success": ModelPatchToolEventStageKind.Success;
+			case "failure_output": ModelPatchToolEventStageKind.FailureOutput;
+			case "failure_message": ModelPatchToolEventStageKind.FailureMessage;
+			case "rejected": ModelPatchToolEventStageKind.Rejected;
+			case _: throw "invalid patch tool event stage: " + value;
 		}
 	}
 

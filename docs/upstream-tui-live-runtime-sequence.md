@@ -662,7 +662,18 @@ Model the upstream apply-patch approval and sandbox decision boundary against de
 
 Status: HXCX-4.55 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic approval/sandbox decision evidence only, not native approval UX, native apply-patch process ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.56+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.56: Apply-Patch Turn-Diff Tracker Boundary
+
+Model the upstream apply-patch turn-diff tracker update boundary against deterministic fixture facts:
+
+- distinguish known exact applied patch deltas, unknown deltas, exact empty deltas, and rejected/no-delta outcomes;
+- model tracker update kinds for track, invalidate, and none;
+- produce environment-scoped unified diff summaries when a visible turn diff would be emitted;
+- keep the boundary fixture-only, with no real workspace reread or mutation.
+
+Status: HXCX-4.56 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic turn-diff tracker evidence only, not native tracker persistence, real workspace rereads, native apply-patch process ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.57+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

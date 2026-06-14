@@ -293,6 +293,24 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "approvalRequired=true;approvalRequestEmitted=true;canRun=true;sandboxPreference=auto;escalatesOnFailure=true;sandboxRetryRequested=true;permissionRequestPayload=tool=apply_patch;input=command;reviewDecision=approved;approvalKeys=[environment=env-lite-failed;path=failed.txt]"
+        },
+        "trackerExpect": {
+          "ok": true,
+          "code": "patch_turn_diff_tracker_updated",
+          "requestId": "patch-tracker-runtime-failed",
+          "environmentId": "env-lite-failed",
+          "stage": "failure_output",
+          "deltaKnown": false,
+          "deltaExact": false,
+          "deltaFromVerification": false,
+          "previousUnifiedDiff": "diff --git a/old b/old",
+          "updateKind": "invalidate",
+          "trackerValid": false,
+          "shouldEmitTurnDiff": true,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "updateKind=invalidate;trackerValid=false;shouldEmitTurnDiff=true;unifiedDiff=;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false"
         }
       }
     },
@@ -412,6 +430,24 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "approvalRequired=true;approvalRequestEmitted=true;canRun=false;sandboxPreference=auto;escalatesOnFailure=true;sandboxRetryRequested=false;permissionRequestPayload=tool=apply_patch;input=command;reviewDecision=abort;approvalKeys=[environment=env-openai-declined;path=hello.txt]"
+        },
+        "trackerExpect": {
+          "ok": true,
+          "code": "patch_turn_diff_tracker_updated",
+          "requestId": "patch-tracker-openai-declined",
+          "environmentId": "env-openai-declined",
+          "stage": "rejected",
+          "deltaKnown": false,
+          "deltaExact": false,
+          "deltaFromVerification": false,
+          "previousUnifiedDiff": "",
+          "updateKind": "none",
+          "trackerValid": true,
+          "shouldEmitTurnDiff": false,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "updateKind=none;trackerValid=true;shouldEmitTurnDiff=false;unifiedDiff=;liveNetworkAttempted=false;realFilesystemMutated=false;toolExecutedOutsideFixture=false"
         }
       }
     },
@@ -602,6 +638,24 @@
           "realFilesystemMutated": false,
           "toolExecutedOutsideFixture": false,
           "summaryContains": "approvalRequired=true;approvalRequestEmitted=false;canRun=true;sandboxPreference=auto;escalatesOnFailure=true;sandboxRetryRequested=false;permissionRequestPayload=tool=apply_patch;input=command;reviewDecision=approved;approvalKeys=[environment=env-lite-completed;path=streamed.txt||environment=env-lite-completed;path=src/old.rs||environment=env-lite-completed;path=src/new.rs||environment=env-lite-completed;path=stale.txt]"
+        },
+        "trackerExpect": {
+          "ok": true,
+          "code": "patch_turn_diff_tracker_updated",
+          "requestId": "patch-tracker-lite-completed",
+          "environmentId": "env-lite-completed",
+          "stage": "success",
+          "deltaKnown": true,
+          "deltaExact": true,
+          "deltaFromVerification": true,
+          "previousUnifiedDiff": "",
+          "updateKind": "track",
+          "trackerValid": true,
+          "shouldEmitTurnDiff": true,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "updateKind=track;trackerValid=true;shouldEmitTurnDiff=true;unifiedDiff=diff --git a/env-lite-completed:streamed.txt b/env-lite-completed:streamed.txt"
         }
       }
     },
