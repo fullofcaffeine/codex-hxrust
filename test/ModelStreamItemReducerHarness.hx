@@ -77,6 +77,11 @@ import codexhx.runtime.model.streamitem.ModelTurnTerminalProjectionEventKind;
 import codexhx.runtime.model.streamitem.ModelTurnTerminalProjectionOutcome;
 import codexhx.runtime.model.streamitem.ModelTurnTerminalProjectionPolicy;
 import codexhx.runtime.model.streamitem.ModelTurnTerminalProjectionRequest;
+import codexhx.runtime.model.streamitem.ModelTurnReplayKind;
+import codexhx.runtime.model.streamitem.ModelTurnReplayReconstructionOutcome;
+import codexhx.runtime.model.streamitem.ModelTurnReplayReconstructionPolicy;
+import codexhx.runtime.model.streamitem.ModelTurnReplayReconstructionRequest;
+import codexhx.runtime.model.streamitem.ModelTurnReplayTargetKind;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -152,7 +157,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelTerminalStopHooks = assertTopLevelTerminalStopHooks(testCase, topLevelIntegrations, topLevelPromptPreparations, secretProbe);
 			final topLevelSamplingErrorTerminals = assertTopLevelSamplingErrorTerminals(testCase, topLevelTerminalStopHooks, secretProbe);
 			final topLevelTurnLifecycles = assertTopLevelTurnLifecycles(testCase, topLevelTerminalStopHooks, topLevelSamplingErrorTerminals, secretProbe);
-			assertTopLevelTurnTerminalProjections(testCase, topLevelTurnLifecycles, secretProbe);
+			final topLevelTurnTerminalProjections = assertTopLevelTurnTerminalProjections(testCase, topLevelTurnLifecycles, secretProbe);
+			assertTopLevelTurnReplayReconstructions(testCase, topLevelTurnTerminalProjections, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -324,7 +330,8 @@ class ModelStreamItemReducerHarness {
 				final terminalStopHooks = assertTerminalStopHooks(verificationValue, integrations, promptPreparations, secretProbe);
 				final samplingErrorTerminals = assertSamplingErrorTerminals(verificationValue, terminalStopHooks, secretProbe);
 				final turnLifecycles = assertTurnLifecycles(verificationValue, terminalStopHooks, samplingErrorTerminals, secretProbe);
-				assertTurnTerminalProjections(verificationValue, turnLifecycles, secretProbe);
+				final turnTerminalProjections = assertTurnTerminalProjections(verificationValue, turnLifecycles, secretProbe);
+				assertTurnReplayReconstructions(verificationValue, turnTerminalProjections, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -1503,6 +1510,82 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelTurnReplayReconstructions(
+		testCase:Value,
+		projections:Array<ModelTurnTerminalProjectionOutcome>,
+		secretProbe:String
+	):Array<ModelTurnReplayReconstructionOutcome> {
+		final outcomes:Array<ModelTurnReplayReconstructionOutcome> = [];
+		final values = optionalArrayField(testCase, "turnReplayReconstructionExpects");
+		for (value in values) outcomes.push(assertTurnReplayReconstruction(objectValue(value), projections, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTurnReplayReconstructions(
+		verificationValue:Value,
+		projections:Array<ModelTurnTerminalProjectionOutcome>,
+		secretProbe:String
+	):Array<ModelTurnReplayReconstructionOutcome> {
+		final outcomes:Array<ModelTurnReplayReconstructionOutcome> = [];
+		final values = optionalArrayField(verificationValue, "turnReplayReconstructionExpects");
+		for (value in values) outcomes.push(assertTurnReplayReconstruction(objectValue(value), projections, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTurnReplayReconstruction(
+		expectValue:Value,
+		projections:Array<ModelTurnTerminalProjectionOutcome>,
+		secretProbe:String
+	):ModelTurnReplayReconstructionOutcome {
+		final projectionRequestId = stringField(expectValue, "projectionRequestId", "");
+		final outcome = ModelTurnReplayReconstructionPolicy.reconstruct(new ModelTurnReplayReconstructionRequest(
+			stringField(expectValue, "requestId", ""),
+			turnTerminalProjectionByRequestId(projections, projectionRequestId),
+			turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
+			turnReplayTargetKind(stringField(expectValue, "targetKind", "active_exact")),
+			stringField(expectValue, "activeTurnId", ""),
+			stringField(expectValue, "historicalTurnId", ""),
+			stringField(expectValue, "terminalTurnId", ""),
+			boolField(expectValue, "activeTurnPresent", false),
+			boolField(expectValue, "turnWasInProgress", false),
+			boolField(expectValue, "replayTurnHasItems", false),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(projectionRequestId, outcome.projectionRequestId);
+		assertEquals(stringField(expectValue, "replayKind", ""), outcome.replayKind);
+		assertEquals(stringField(expectValue, "targetKind", ""), outcome.targetKind);
+		assertEquals(stringField(expectValue, "terminalTurnId", ""), outcome.terminalTurnId);
+		assertEquals(stringField(expectValue, "reconstructedStatusKind", ""), outcome.reconstructedStatusKind);
+		assertEquals(boolText(boolField(expectValue, "currentTurnClosed", false)), boolText(outcome.currentTurnClosed));
+		assertEquals(boolText(boolField(expectValue, "currentTurnMarkedTerminal", false)), boolText(outcome.currentTurnMarkedTerminal));
+		assertEquals(boolText(boolField(expectValue, "historicalTurnUpdated", false)), boolText(outcome.historicalTurnUpdated));
+		assertEquals(boolText(boolField(expectValue, "activeTurnPreserved", false)), boolText(outcome.activeTurnPreserved));
+		assertEquals(boolText(boolField(expectValue, "fallbackAppliedToActive", false)), boolText(outcome.fallbackAppliedToActive));
+		assertEquals(boolText(boolField(expectValue, "missingTerminalNoop", false)), boolText(outcome.missingTerminalNoop));
+		assertEquals(boolText(boolField(expectValue, "failedStatusPreserved", false)), boolText(outcome.failedStatusPreserved));
+		assertEquals(boolText(boolField(expectValue, "replayTurnCompletedNotificationSynthesized", false)), boolText(outcome.replayTurnCompletedNotificationSynthesized));
+		assertEquals(boolText(boolField(expectValue, "tuiReplayKindAttached", false)), boolText(outcome.tuiReplayKindAttached));
+		assertEquals(boolText(boolField(expectValue, "tuiTaskStartedForInProgress", false)), boolText(outcome.tuiTaskStartedForInProgress));
+		assertEquals(boolText(boolField(expectValue, "resumeInitialStartSuppressed", false)), boolText(outcome.resumeInitialStartSuppressed));
+		assertEquals(boolText(boolField(expectValue, "liveOnlyReplayEffectsSuppressed", false)), boolText(outcome.liveOnlyReplayEffectsSuppressed));
+		assertEquals(boolText(boolField(expectValue, "lastAgentMessageRemainsProjectionOnly", false)), boolText(outcome.lastAgentMessageRemainsProjectionOnly));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function turnTerminalProjectionByRequestId(outcomes:Array<ModelTurnTerminalProjectionOutcome>, requestId:String):ModelTurnTerminalProjectionOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing turn terminal projection outcome: " + requestId;
+	}
+
 	static function turnLifecycleByRequestId(outcomes:Array<ModelTurnLifecycleOutcome>, requestId:String):ModelTurnLifecycleOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn lifecycle outcome: " + requestId;
@@ -1734,6 +1817,24 @@ class ModelStreamItemReducerHarness {
 			case "tui_interrupted_turn": ModelTurnTerminalNotificationIntentKind.TuiInterruptedTurn;
 			case "tui_error_surface": ModelTurnTerminalNotificationIntentKind.TuiErrorSurface;
 			case _: throw "unknown turn terminal notification intent kind: " + value;
+		}
+	}
+
+	static function turnReplayKind(value:String):ModelTurnReplayKind {
+		return switch value {
+			case "resume_initial_messages": ModelTurnReplayKind.ResumeInitialMessages;
+			case "thread_snapshot": ModelTurnReplayKind.ThreadSnapshot;
+			case _: throw "unknown turn replay kind: " + value;
+		}
+	}
+
+	static function turnReplayTargetKind(value:String):ModelTurnReplayTargetKind {
+		return switch value {
+			case "active_exact": ModelTurnReplayTargetKind.ActiveExact;
+			case "historical_exact": ModelTurnReplayTargetKind.HistoricalExact;
+			case "active_fallback": ModelTurnReplayTargetKind.ActiveFallback;
+			case "missing_noop": ModelTurnReplayTargetKind.MissingNoop;
+			case _: throw "unknown turn replay target kind: " + value;
 		}
 	}
 
