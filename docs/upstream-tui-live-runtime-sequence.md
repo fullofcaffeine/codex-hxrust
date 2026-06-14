@@ -1046,7 +1046,20 @@ Model selected side-parent pending status behavior for inactive parent threads:
 
 Status: HXCX-4.86 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic side-parent pending status evidence only, not live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.87+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.87: Thread Side-Parent Terminal Status-Change Boundary
+
+Model selected side-parent status changes driven by upstream server notifications:
+
+- clear parent status when a new turn starts;
+- set finished, interrupted, failed, and closed terminal parent statuses from `TurnCompleted` and `ThreadClosed`;
+- clear only actionable statuses for `ItemStarted` and `ServerRequestResolved`;
+- preserve terminal statuses when clear-actionable notifications arrive;
+- give pending prompt status precedence over notification-derived status changes;
+- ignore in-progress turn-completed notifications that upstream maps to no status change.
+
+Status: HXCX-4.87 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic side-parent notification status-change evidence only, not live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.88+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

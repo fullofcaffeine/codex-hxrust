@@ -96,7 +96,7 @@ class ModelThreadSideParentPendingPolicy {
 		return switch status {
 			case NeedsInput: ModelThreadSideParentPendingDecisionKind.SetNeedsInput;
 			case NeedsApproval: ModelThreadSideParentPendingDecisionKind.SetNeedsApproval;
-			case None: ModelThreadSideParentPendingDecisionKind.ClearedNoPending;
+			case None | Finished | Interrupted | Failed | Closed: ModelThreadSideParentPendingDecisionKind.ClearedNoPending;
 		}
 	}
 
