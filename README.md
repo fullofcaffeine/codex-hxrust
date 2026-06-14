@@ -95,6 +95,8 @@ Current known haxe.rust pressure points are tracked under the `HXCX-7.x` Beads e
 
 Use `metal` now where codexhx needs Rust-native runtime/tool behavior, stricter host-boundary semantics, or production-shaped performance. Keep `portable` for DTOs, codecs, fixtures, schema/protocol validation, config, and pure state. At the compiler level, haxe.rust portable output should converge toward metal-level Rust performance wherever the Rust lowering can preserve Haxe semantics.
 
+Async runtime APIs should stay backend-neutral in Haxe. Tokio is an implementation target for the Rust backend, not the Codex-facing authoring model; live async work should flow through typed task/stream/cancel/backpressure abstractions first. See `docs/async-runtime-contract.md`.
+
 The detailed convergence plan lives in `docs/haxe-rust-performance-convergence-plan.md` and is checked by `harness/check-haxe-rust-performance-convergence-plan.sh`.
 
 ## Layout

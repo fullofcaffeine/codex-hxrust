@@ -25,6 +25,8 @@ Allowed mechanisms, in preference order:
 
 The default answer for new app behavior is pure Haxe. Use native Rust only when the required host capability, Rust crate, lifetime shape, or system API cannot be represented cleanly in portable Haxe.
 
+Async host capabilities follow the same rule. Codex-facing Haxe APIs should expose runtime-neutral task/stream/cancel/backpressure abstractions, not Tokio handles or Rust `Future`/`Stream` types directly. Tokio bindings belong behind typed facades or haxe.rust runtime support, with a deterministic fixture backend for tests.
+
 ## Raw Rust Ban
 
 App-level Haxe modules must not call raw Rust injection:

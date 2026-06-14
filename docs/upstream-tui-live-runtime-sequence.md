@@ -570,7 +570,30 @@ Model selected upstream `map_response_stream` and `map_response_events` behavior
 
 Status: HXCX-4.47 now owns `fixtures/hxrust/model-stream-route.v1.json` and validates the slice through `harness/check-model-stream-route.sh`. No new haxe.rust limitation was exposed. This is selected deterministic stream mapping evidence only, not live HTTP/WebSocket transport, SSE frame parsing, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.48+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.48: Stream Item Reducer And Assistant Output Routing
+
+Reduce selected `stream_events_utils` and `ResponseEvent` handling into typed Haxe runtime items without live async ownership:
+
+- map assistant output items, reasoning summaries/raw deltas, and text deltas into typed runtime events;
+- classify function/custom tool calls separately from assistant text/reasoning items;
+- compose with request-envelope and stream-route fixtures;
+- remain deterministic and credential-free;
+- avoid Tokio-bound Haxe APIs, `@:await` syntax, or live provider task ownership.
+
+Status: HXCX-4.48 is tracked by `codex-hxrust-19q`.
+
+### HXCX-4.49: Runtime-Neutral Async Stream Contract
+
+Before live provider transport work, define the Haxe-facing async contract without binding app APIs directly to Tokio:
+
+- model tasks, streams, poll/next outcomes, cancellation, and backpressure as typed Haxe abstractions;
+- keep fixture runners deterministic and thread/network-free;
+- map the same contract to Tokio only behind haxe.rust metal/native facades or generic haxe.rust runtime support;
+- defer optional `@:await` or macro sugar until it lowers to the same backend-neutral contract.
+
+Status: HXCX-4.49 is tracked by `codex-hxrust-1ss` and documented in `docs/async-runtime-contract.md`.
+
+### HXCX-4.50+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
@@ -586,7 +609,7 @@ These are generic compiler/runtime pressure points. They must not become Codex-s
 
 | Pressure point | Why TUI/runtime needs it | Current stance |
 | --- | --- | --- |
-| Async/event-loop lowering | App-server clients, transport, cancellation, and bounded queues are async-heavy. | Use `metal` + `rust_async` for Rust-native async slices. File generic haxe.rust repros only when codexhx exposes a concrete compiler/runtime limitation. |
+| Async/event-loop lowering | App-server clients, transport, cancellation, and bounded queues are async-heavy. | Define a runtime-neutral Haxe task/stream/cancel/backpressure contract first. Tokio is a Rust backend detail behind metal/native facades or generic haxe.rust runtime support; optional `@:await` sugar must lower to the same contract. File generic haxe.rust repros only when codexhx exposes a concrete compiler/runtime limitation. |
 | Bounded channels/backpressure | Lossless transcript events must block; best-effort events can drop with lag markers. | Start with typed Haxe facades and metal/native wrappers where needed. |
 | Ratatui/crossterm interop | Full TUI rendering depends on mature terminal crates. | haxe.rust already has ratatui demo evidence; codexhx should pressure-test richer VT100 and widget contracts generically. |
 | Unicode width and ANSI spans | Upstream render tests cover CJK/emoji, word wrapping, and ANSI sanitization. | Keep pure text/layout reducers portable where possible; use crate wrappers for terminal-specific behavior. |

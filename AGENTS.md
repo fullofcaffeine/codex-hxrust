@@ -74,6 +74,8 @@ Use the architecture framing: portable by default, Rust-native by opt-in, metal-
 
 For near-term codexhx runtime/tool boundaries, it is acceptable to choose `metal` when the slice needs Rust-native authority, stricter host-boundary semantics, or production-shaped performance now. When a slice would ideally be portable but needs metal for performance or backend maturity, track that as a generic haxe.rust convergence gap rather than encoding Codex-specific compiler behavior.
 
+For async runtime work, keep the Haxe-facing contract runtime-neutral. Do not expose Tokio types, Tokio task handles, or Rust async implementation details directly in codexhx app APIs. Model async work as typed Haxe abstractions such as tasks, streams, poll/next outcomes, cancellation, and backpressure; map those to Tokio only inside a Rust backend, haxe.rust metal/native facade, or generic haxe.rust runtime layer. Haxe has no native `await`, so do not make `@:await` or macro sugar the foundational contract; optional sugar may come later only if it lowers to the same typed abstraction and remains backend-neutral.
+
 For persistent app-server/TUI state, portable Haxe may own typed metadata, codecs, fixtures, validation, and pure decisions. Production state effects such as `StateDbHandle`, `LogDbLayer`, SQLite/sqlx ownership, rollout reconciliation, live thread persistence, file locking, migrations, repair, and cross-process coordination belong behind a generic haxe.rust metal/native Rust boundary.
 
 When documenting plans, say "idiomatic portable output" or "idiomatic metal output" if needed; do not introduce `portable+idiomatic`, `idiomatic`, or `rusty` as build/profile lanes.
