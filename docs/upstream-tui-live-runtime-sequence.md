@@ -706,7 +706,18 @@ Model the upstream tool-response collection and next model input boundary after 
 
 Status: HXCX-4.59 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic tool-response input admission and ordering evidence only, not native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, live HTTP/WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.60+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.60: Follow-Up Sampling Continuation Boundary
+
+Model the upstream post-sampling continuation branch after tool-response input admission:
+
+- combine model follow-up and pending input into a single next-request decision;
+- carry admitted response input items into the planned sampling input count;
+- distinguish plain model continuation, model-plus-pending-input continuation, and token-limit compaction routing;
+- preserve the upstream rule that token-limit compaction can defer pending-input drain when model/tool continuation must resume first.
+
+Status: HXCX-4.60 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic follow-up sampling continuation evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.61+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

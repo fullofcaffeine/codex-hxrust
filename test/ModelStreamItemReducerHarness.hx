@@ -25,8 +25,11 @@ import codexhx.runtime.model.streamitem.ModelPatchToolEventStageKind;
 import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchToolFollowUpRequest;
+import codexhx.runtime.model.streamitem.ModelPatchToolResponseInputOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchToolResponseInputPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchToolResponseInputRequest;
+import codexhx.runtime.model.streamitem.ModelSamplingContinuationPolicy;
+import codexhx.runtime.model.streamitem.ModelSamplingContinuationRequest;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -232,7 +235,8 @@ class ModelStreamItemReducerHarness {
 				final tracker = assertPatchTurnDiffTracker(verificationValue, verification, application, approval, secretProbe);
 				final projection = assertPatchProjection(verificationValue, verification, application, approval, tracker, secretProbe);
 				final followUp = assertPatchToolFollowUp(verificationValue, outcome, application, projection, secretProbe);
-				assertPatchToolResponseInput(verificationValue, followUp, secretProbe);
+				final responseInput = assertPatchToolResponseInput(verificationValue, followUp, secretProbe);
+				assertSamplingContinuation(verificationValue, responseInput, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -451,7 +455,7 @@ class ModelStreamItemReducerHarness {
 		verificationValue:Value,
 		followUp:ModelPatchToolFollowUpOutcome,
 		secretProbe:String
-	):Void {
+	):ModelPatchToolResponseInputOutcome {
 		final inputExpectValue = optionalField(verificationValue, "toolResponseInputExpect");
 		switch inputExpectValue {
 			case JObject(_, _):
@@ -478,9 +482,59 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(inputExpectValue, "toolExecutedOutsideFixture", false)), boolText(input.toolExecutedOutsideFixture));
 				assertContains(input.summary(), stringField(inputExpectValue, "summaryContains", ""));
 				if (secretProbe.length > 0) assertNotContains(input.summary(), secretProbe);
+				return input;
 			case JNull:
+				return null;
 			case _:
 				throw "expected object field: toolResponseInputExpect";
+		}
+	}
+
+	static function assertSamplingContinuation(
+		verificationValue:Value,
+		responseInput:ModelPatchToolResponseInputOutcome,
+		secretProbe:String
+	):Void {
+		final expectValue = optionalField(verificationValue, "samplingContinuationExpect");
+		switch expectValue {
+			case JObject(_, _):
+				final continuation = ModelSamplingContinuationPolicy.plan(new ModelSamplingContinuationRequest(
+					stringField(expectValue, "requestId", ""),
+					responseInput,
+					boolField(expectValue, "hasPendingInput", false),
+					intField(expectValue, "pendingInputCount", 0),
+					boolField(expectValue, "tokenLimitReached", false),
+					intField(expectValue, "activeContextTokens", 0),
+					intField(expectValue, "estimatedTokenCount", 0),
+					intField(expectValue, "previousSamplingRequestCount", 0),
+					secretProbe
+				));
+				assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(continuation.ok));
+				assertEquals(stringField(expectValue, "code", ""), continuation.code);
+				assertEquals(stringField(expectValue, "requestId", ""), continuation.requestId);
+				assertEquals(stringField(expectValue, "continuationKind", ""), continuation.continuationKind);
+				assertEquals(boolText(boolField(expectValue, "modelNeedsFollowUp", false)), boolText(continuation.modelNeedsFollowUp));
+				assertEquals(boolText(boolField(expectValue, "hasPendingInput", false)), boolText(continuation.hasPendingInput));
+				assertEquals(boolText(boolField(expectValue, "needsFollowUp", false)), boolText(continuation.needsFollowUp));
+				assertEquals(boolText(boolField(expectValue, "nextSamplingRequestRequired", false)), boolText(continuation.nextSamplingRequestRequired));
+				assertEquals(boolText(boolField(expectValue, "responseInputCarried", false)), boolText(continuation.responseInputCarried));
+				assertEquals(boolText(boolField(expectValue, "pendingInputDrainedBeforeNextRequest", false)), boolText(continuation.pendingInputDrainedBeforeNextRequest));
+				assertEquals(boolText(boolField(expectValue, "autoCompactRequired", false)), boolText(continuation.autoCompactRequired));
+				assertEquals(boolText(boolField(expectValue, "canDrainPendingInputBeforeNextRequest", false)), boolText(continuation.canDrainPendingInputBeforeNextRequest));
+				assertEquals(Std.string(intField(expectValue, "admittedResponseInputCount", 0)), Std.string(continuation.admittedResponseInputCount));
+				assertEquals(Std.string(intField(expectValue, "pendingInputCount", 0)), Std.string(continuation.pendingInputCount));
+				assertEquals(Std.string(intField(expectValue, "nextSamplingInputCount", 0)), Std.string(continuation.nextSamplingInputCount));
+				assertEquals(Std.string(intField(expectValue, "nextSamplingRequestIndex", 0)), Std.string(continuation.nextSamplingRequestIndex));
+				assertEquals(Std.string(intField(expectValue, "activeContextTokens", 0)), Std.string(continuation.activeContextTokens));
+				assertEquals(Std.string(intField(expectValue, "estimatedTokenCount", 0)), Std.string(continuation.estimatedTokenCount));
+				assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(continuation.liveNetworkAttempted));
+				assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(continuation.realFilesystemMutated));
+				assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(continuation.toolExecutedOutsideFixture));
+				assertContains(continuation.summary(), stringField(expectValue, "summaryContains", ""));
+				if (secretProbe.length > 0) assertNotContains(continuation.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: samplingContinuationExpect";
 		}
 	}
 
