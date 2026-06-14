@@ -9,6 +9,10 @@ import codexhx.runtime.model.streamitem.ModelStreamItemReducerReport;
 import codexhx.runtime.model.streamitem.ModelStreamItemReducerRequest;
 import codexhx.runtime.model.streamitem.ModelStreamOutputItem;
 import codexhx.runtime.model.streamitem.ModelStreamOutputItemKind;
+import codexhx.runtime.model.streamitem.ModelPatchApplyStatus;
+import codexhx.runtime.model.streamitem.ModelPatchVerificationPolicy;
+import codexhx.runtime.model.streamitem.ModelPatchVerificationRequest;
+import codexhx.runtime.model.streamitem.ModelPatchVirtualFile;
 import haxe.json.Value;
 import sys.io.File;
 
@@ -49,6 +53,7 @@ class ModelStreamItemReducerHarness {
 			assertEquals(Std.string(intField(expect, "totalTokens", 0)), Std.string(outcome.totalTokens));
 			assertContains(outcome.summary(), stringField(expect, "summaryContains", ""));
 			if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
 	}
@@ -170,6 +175,56 @@ class ModelStreamItemReducerHarness {
 		assertEquals(Std.string(intField(expect, "assistantDeltaCount", 0)), Std.string(report.assistantDeltaCount()));
 		assertEquals(Std.string(intField(expect, "reasoningDeltaCount", 0)), Std.string(report.reasoningDeltaCount()));
 		assertContains(report.summary(), stringField(expect, "summaryContains", ""));
+	}
+
+	static function assertPatchVerification(testCase:Value, outcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome):Void {
+		final verificationValue = optionalField(testCase, "patchVerification");
+		switch verificationValue {
+			case JObject(_, _):
+				final expect = objectField(verificationValue, "expect");
+				final verification = ModelPatchVerificationPolicy.verify(new ModelPatchVerificationRequest(
+					stringField(verificationValue, "requestId", ""),
+					outcome,
+					stringField(verificationValue, "callId", ""),
+					stringField(verificationValue, "turnId", ""),
+					boolField(verificationValue, "autoApproved", false),
+					patchApplyStatus(stringField(verificationValue, "desiredStatus", "completed")),
+					stringField(verificationValue, "stdout", ""),
+					stringField(verificationValue, "stderr", ""),
+					virtualFiles(arrayField(verificationValue, "files")),
+					stringField(verificationValue, "secretProbe", "")
+				));
+				assertEquals(boolText(boolField(expect, "ok", false)), boolText(verification.ok));
+				assertEquals(stringField(expect, "code", ""), verification.code);
+				assertEquals(stringField(expect, "requestId", ""), verification.requestId);
+				assertEquals(boolText(boolField(expect, "liveNetworkAttempted", false)), boolText(verification.liveNetworkAttempted));
+				assertEquals(boolText(boolField(expect, "realFilesystemMutated", false)), boolText(verification.realFilesystemMutated));
+				assertEquals(boolText(boolField(expect, "toolExecutedOutsideFixture", false)), boolText(verification.toolExecutedOutsideFixture));
+				assertContains(verification.summary(), stringField(expect, "summaryContains", ""));
+				final secretProbe = stringField(verificationValue, "secretProbe", "");
+				if (secretProbe.length > 0) assertNotContains(verification.summary(), secretProbe);
+			case JNull:
+			case _:
+				throw "expected object field: patchVerification";
+		}
+	}
+
+	static function virtualFiles(values:Array<Value>):Array<ModelPatchVirtualFile> {
+		final out:Array<ModelPatchVirtualFile> = [];
+		for (value in values) {
+			final file = objectValue(value);
+			out.push(new ModelPatchVirtualFile(stringField(file, "path", ""), stringField(file, "content", "")));
+		}
+		return out;
+	}
+
+	static function patchApplyStatus(value:String):ModelPatchApplyStatus {
+		return switch value {
+			case "completed": ModelPatchApplyStatus.Completed;
+			case "failed": ModelPatchApplyStatus.Failed;
+			case "declined": ModelPatchApplyStatus.Declined;
+			case _: throw "invalid patch apply status: " + value;
+		}
 	}
 
 	static function fixtureRoot(path:String):Value {

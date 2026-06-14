@@ -197,6 +197,74 @@
       }
     },
     {
+      "id": "responses-lite-apply-patch-runtime-failed-status",
+      "requestId": "items-lite-apply-patch-runtime-failed",
+      "route": {
+        "requestId": "route-lite-apply-patch-failed",
+        "envelopeFixtureId": "responses-lite-plan-envelope-disables-parallel",
+        "upstreamRequestId": "req-lite-apply-patch-failed",
+        "events": [
+          {"kind": "created"},
+          {"kind": "completed", "responseId": "resp-lite-apply-patch-failed", "totalTokens": 13, "endTurn": false}
+        ]
+      },
+      "events": [
+        {
+          "kind": "output_item_done",
+          "item": {
+            "kind": "custom_tool_call",
+            "itemId": "custom-lite-apply-patch-failed-1",
+            "callId": "call-lite-apply-patch-failed-1",
+            "toolName": "apply_patch",
+            "customInput": "*** Begin Patch\n*** Add File: failed.txt\n+no-write\n*** End Patch"
+          }
+        },
+        {"kind": "completed", "responseId": "resp-lite-apply-patch-failed", "totalTokens": 13, "endTurn": false}
+      ],
+      "expect": {
+        "ok": true,
+        "code": "model_stream_items_reduced",
+        "requestId": "items-lite-apply-patch-runtime-failed",
+        "routeCode": "model_stream_completed",
+        "providerId": "openai",
+        "selectedModelId": "gpt-lite-image",
+        "startedCount": 0,
+        "completedCount": 0,
+        "assistantDeltaCount": 0,
+        "reasoningDeltaCount": 0,
+        "rawReasoningDeltaCount": 0,
+        "toolInputDeltaCount": 0,
+        "toolInputDeltaIgnoredCount": 0,
+        "toolArgumentDiffEventCount": 0,
+        "toolCallCount": 1,
+        "needsFollowUp": true,
+        "lastAgentMessage": "",
+        "terminalResponseId": "resp-lite-apply-patch-failed",
+        "totalTokens": 13,
+        "summaryContains": "event=tool_call_queued;itemKind=custom_tool_call;itemId=custom-lite-apply-patch-failed-1;callId=call-lite-apply-patch-failed-1;tool=apply_patch"
+      },
+      "patchVerification": {
+        "requestId": "patch-verify-runtime-failed",
+        "callId": "call-lite-apply-patch-failed-1",
+        "turnId": "turn-lite-apply-patch-failed",
+        "autoApproved": false,
+        "desiredStatus": "failed",
+        "stdout": "",
+        "stderr": "apply_patch failed in fixture runtime",
+        "files": [],
+        "secretProbe": "sk-fixture-runtime-failed-secret",
+        "expect": {
+          "ok": true,
+          "code": "patch_apply_verified",
+          "requestId": "patch-verify-runtime-failed",
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "event=patch_apply_end;callId=call-lite-apply-patch-failed-1;turnId=turn-lite-apply-patch-failed;autoApproved=false;status=failed;success=false"
+        }
+      }
+    },
+    {
       "id": "openai-custom-tool-input-delta-routes-by-call-id",
       "requestId": "items-openai-custom-tool-input-delta",
       "routeFixtureId": "openai-completed-feedback-ids",
@@ -261,6 +329,26 @@
         "terminalResponseId": "resp-openai-123",
         "totalTokens": 30,
         "summaryContains": "event=tool_argument_diff_updated;itemKind=custom_tool_call;itemId=none;callId=call-openai-delta-1;tool=apply_patch;delta=;text=consumer=apply_patch;callId=call-openai-delta-1;finished=true;index=2;changes=[path=hello.txt;kind=add;content=hello"
+      },
+      "patchVerification": {
+        "requestId": "patch-verify-openai-declined",
+        "callId": "call-openai-delta-1",
+        "turnId": "turn-openai-delta-1",
+        "autoApproved": false,
+        "desiredStatus": "declined",
+        "stdout": "",
+        "stderr": "user declined patch in fixture",
+        "files": [],
+        "secretProbe": "sk-fixture-declined-secret",
+        "expect": {
+          "ok": true,
+          "code": "patch_apply_verified",
+          "requestId": "patch-verify-openai-declined",
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "event=patch_apply_end;callId=call-openai-delta-1;turnId=turn-openai-delta-1;autoApproved=false;status=declined;success=false"
+        }
       }
     },
     {
@@ -396,6 +484,29 @@
         "terminalResponseId": "resp-lite-input-deltas",
         "totalTokens": 18,
         "summaryContains": "path=src/old.rs;kind=update;content=;unifiedDiff=@@ fn run()"
+      },
+      "patchVerification": {
+        "requestId": "patch-verify-lite-completed",
+        "callId": "call-lite-delta-1",
+        "turnId": "turn-lite-delta-1",
+        "autoApproved": true,
+        "desiredStatus": "completed",
+        "stdout": "Done!",
+        "stderr": "",
+        "files": [
+          {"path": "src/old.rs", "content": "fn run()\nold\n"},
+          {"path": "stale.txt", "content": "remove me\n"}
+        ],
+        "secretProbe": "sk-fixture-completed-secret",
+        "expect": {
+          "ok": true,
+          "code": "patch_apply_verified",
+          "requestId": "patch-verify-lite-completed",
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "event=patch_apply_end;callId=call-lite-delta-1;turnId=turn-lite-delta-1;autoApproved=true;status=completed;success=true;stdout=Done!;stderr=;changes=[path=streamed.txt;kind=add;content=hello"
+        }
       }
     },
     {
@@ -486,15 +597,15 @@
     }
   ],
   "expectReport": {
-    "caseCount": 9,
-    "successCount": 7,
+    "caseCount": 10,
+    "successCount": 8,
     "errorCount": 2,
-    "toolCallCount": 5,
+    "toolCallCount": 6,
     "toolInputDeltaCount": 6,
     "toolInputDeltaIgnoredCount": 2,
     "toolArgumentDiffEventCount": 4,
     "assistantDeltaCount": 2,
     "reasoningDeltaCount": 1,
-    "summaryContains": "schema=codex-hxrust.model-stream-item-reducer-report.v1;cases=9;success=7;errors=2;toolCalls=5;assistantDeltas=2;reasoningDeltas=1;toolInputDeltas=6;toolInputDeltaIgnored=2;toolArgumentDiffEvents=4"
+    "summaryContains": "schema=codex-hxrust.model-stream-item-reducer-report.v1;cases=10;success=8;errors=2;toolCalls=6;assistantDeltas=2;reasoningDeltas=1;toolInputDeltas=6;toolInputDeltaIgnored=2;toolArgumentDiffEvents=4"
   }
 }
