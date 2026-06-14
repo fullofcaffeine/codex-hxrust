@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/model-request-envelope
+-D rust_crate=codex_hxrust_model_request_envelope
+-D rust_cargo_subcommand=check
+-main ModelRequestEnvelopeHarness

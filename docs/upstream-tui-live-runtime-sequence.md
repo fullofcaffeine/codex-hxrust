@@ -545,7 +545,19 @@ Model the selected upstream turn-context model selection and tool capability pla
 
 Status: HXCX-4.45 now owns `fixtures/hxrust/turn-model-plan.v1.json` and validates the slice through `harness/check-turn-model-plan.sh`. It exposed generic haxe.rust issue `haxe.rust-3oju` for optional primitive constructor default lowering; codexhx uses an explicit constructor argument while the compiler fix belongs upstream. This is selected deterministic planning evidence only, not live provider traffic, real tool execution, websocket/realtime behavior, or Cafex behavior.
 
-### HXCX-4.46+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.46: Model Request Envelope And Response Routing
+
+Model selected upstream `ModelClientSession::stream` request construction and route admission before live provider traffic:
+
+- compose provider admission, model catalog selection, and turn tool planning;
+- build typed Responses request envelope facts without carrying model-visible prompt text into summaries;
+- preserve streamed request defaults, prompt cache key, client metadata, service-tier selection, text controls, reasoning include behavior, and Responses Lite parallel-tool-call suppression;
+- refuse fixture-mode HTTP/WebSocket live routes before transport;
+- refuse unsupported WebSocket route intent before connection setup.
+
+Status: HXCX-4.46 now owns `fixtures/hxrust/model-request-envelope.v1.json` and validates the slice through `harness/check-model-request-envelope.sh`. No new haxe.rust limitation was exposed. This is selected request envelope/routing evidence only, not live HTTP/WebSocket transport, SSE stream mapping, unauthorized retry, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.47+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
