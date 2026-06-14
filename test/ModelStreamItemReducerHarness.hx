@@ -71,6 +71,12 @@ import codexhx.runtime.model.streamitem.ModelTurnLifecycleOutcome;
 import codexhx.runtime.model.streamitem.ModelTurnLifecyclePolicy;
 import codexhx.runtime.model.streamitem.ModelTurnLifecycleRequest;
 import codexhx.runtime.model.streamitem.ModelTurnLifecycleTerminalKind;
+import codexhx.runtime.model.streamitem.ModelTurnTerminalNotificationIntentKind;
+import codexhx.runtime.model.streamitem.ModelTurnTerminalProjectedStatusKind;
+import codexhx.runtime.model.streamitem.ModelTurnTerminalProjectionEventKind;
+import codexhx.runtime.model.streamitem.ModelTurnTerminalProjectionOutcome;
+import codexhx.runtime.model.streamitem.ModelTurnTerminalProjectionPolicy;
+import codexhx.runtime.model.streamitem.ModelTurnTerminalProjectionRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -145,7 +151,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelPromptPreparations = assertTopLevelPromptPreparations(testCase, topLevelHookRecordings, secretProbe);
 			final topLevelTerminalStopHooks = assertTopLevelTerminalStopHooks(testCase, topLevelIntegrations, topLevelPromptPreparations, secretProbe);
 			final topLevelSamplingErrorTerminals = assertTopLevelSamplingErrorTerminals(testCase, topLevelTerminalStopHooks, secretProbe);
-			assertTopLevelTurnLifecycles(testCase, topLevelTerminalStopHooks, topLevelSamplingErrorTerminals, secretProbe);
+			final topLevelTurnLifecycles = assertTopLevelTurnLifecycles(testCase, topLevelTerminalStopHooks, topLevelSamplingErrorTerminals, secretProbe);
+			assertTopLevelTurnTerminalProjections(testCase, topLevelTurnLifecycles, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -316,7 +323,8 @@ class ModelStreamItemReducerHarness {
 				final promptPreparations = assertPromptPreparations(verificationValue, hookRecordings, secretProbe);
 				final terminalStopHooks = assertTerminalStopHooks(verificationValue, integrations, promptPreparations, secretProbe);
 				final samplingErrorTerminals = assertSamplingErrorTerminals(verificationValue, terminalStopHooks, secretProbe);
-				assertTurnLifecycles(verificationValue, terminalStopHooks, samplingErrorTerminals, secretProbe);
+				final turnLifecycles = assertTurnLifecycles(verificationValue, terminalStopHooks, samplingErrorTerminals, secretProbe);
+				assertTurnTerminalProjections(verificationValue, turnLifecycles, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -1417,6 +1425,89 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelTurnTerminalProjections(
+		testCase:Value,
+		lifecycles:Array<ModelTurnLifecycleOutcome>,
+		secretProbe:String
+	):Array<ModelTurnTerminalProjectionOutcome> {
+		final outcomes:Array<ModelTurnTerminalProjectionOutcome> = [];
+		final values = optionalArrayField(testCase, "turnTerminalProjectionExpects");
+		for (value in values) outcomes.push(assertTurnTerminalProjection(objectValue(value), lifecycles, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTurnTerminalProjections(
+		verificationValue:Value,
+		lifecycles:Array<ModelTurnLifecycleOutcome>,
+		secretProbe:String
+	):Array<ModelTurnTerminalProjectionOutcome> {
+		final outcomes:Array<ModelTurnTerminalProjectionOutcome> = [];
+		final values = optionalArrayField(verificationValue, "turnTerminalProjectionExpects");
+		for (value in values) outcomes.push(assertTurnTerminalProjection(objectValue(value), lifecycles, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTurnTerminalProjection(
+		expectValue:Value,
+		lifecycles:Array<ModelTurnLifecycleOutcome>,
+		secretProbe:String
+	):ModelTurnTerminalProjectionOutcome {
+		final lifecycleRequestId = stringField(expectValue, "lifecycleRequestId", "");
+		final outcome = ModelTurnTerminalProjectionPolicy.project(new ModelTurnTerminalProjectionRequest(
+			stringField(expectValue, "requestId", ""),
+			stringField(expectValue, "threadId", ""),
+			stringField(expectValue, "turnId", ""),
+			turnLifecycleByRequestId(lifecycles, lifecycleRequestId),
+			turnTerminalProjectionEventKind(stringField(expectValue, "eventKind", "turn_complete")),
+			stringField(expectValue, "priorTurnErrorMessage", ""),
+			stringField(expectValue, "lastAgentMessageOverride", ""),
+			stringField(expectValue, "abortReason", ""),
+			boolField(expectValue, "pendingInterruptRequest", false),
+			boolField(expectValue, "fromReplay", false),
+			boolField(expectValue, "hasQueuedFollowUp", false),
+			boolField(expectValue, "activeGoalContinuing", false),
+			boolField(expectValue, "sawCopySourceThisTurn", false),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(stringField(expectValue, "threadId", ""), outcome.threadId);
+		assertEquals(stringField(expectValue, "turnId", ""), outcome.turnId);
+		assertEquals(lifecycleRequestId, outcome.lifecycleRequestId);
+		assertEquals(stringField(expectValue, "eventKind", ""), outcome.eventKind);
+		assertEquals(stringField(expectValue, "coreAgentStatusKind", ""), outcome.coreAgentStatusKind);
+		assertEquals(stringField(expectValue, "appTurnStatusKind", ""), outcome.appTurnStatusKind);
+		assertEquals(stringField(expectValue, "appServerNotificationIntentKind", ""), outcome.appServerNotificationIntentKind);
+		assertEquals(stringField(expectValue, "tuiNotificationIntentKind", ""), outcome.tuiNotificationIntentKind);
+		assertEquals(boolText(boolField(expectValue, "pendingServerRequestsAborted", false)), boolText(outcome.pendingServerRequestsAborted));
+		assertEquals(boolText(boolField(expectValue, "pendingInterruptsResolved", false)), boolText(outcome.pendingInterruptsResolved));
+		assertEquals(boolText(boolField(expectValue, "threadStatusCleared", false)), boolText(outcome.threadStatusCleared));
+		assertEquals(boolText(boolField(expectValue, "threadHistoryTurnClosed", false)), boolText(outcome.threadHistoryTurnClosed));
+		assertEquals(boolText(boolField(expectValue, "threadHistoryFailedStatusPreserved", false)), boolText(outcome.threadHistoryFailedStatusPreserved));
+		assertEquals(boolText(boolField(expectValue, "turnCompletedNotificationEmitted", false)), boolText(outcome.turnCompletedNotificationEmitted));
+		assertEquals(boolText(boolField(expectValue, "appServerTurnFailedRecorded", false)), boolText(outcome.appServerTurnFailedRecorded));
+		assertEquals(boolText(boolField(expectValue, "lastAgentMessagePropagatedToCoreStatus", false)), boolText(outcome.lastAgentMessagePropagatedToCoreStatus));
+		assertEquals(boolText(boolField(expectValue, "collabAgentStateHasMessage", false)), boolText(outcome.collabAgentStateHasMessage));
+		assertEquals(boolText(boolField(expectValue, "tuiReceivesLastAgentMessageFromTurnNotification", false)), boolText(outcome.tuiReceivesLastAgentMessageFromTurnNotification));
+		assertEquals(boolText(boolField(expectValue, "tuiNotificationResponseUsesCopySource", false)), boolText(outcome.tuiNotificationResponseUsesCopySource));
+		assertEquals(boolText(boolField(expectValue, "tuiTaskCompletionHandled", false)), boolText(outcome.tuiTaskCompletionHandled));
+		assertEquals(boolText(boolField(expectValue, "tuiInterruptedHandled", false)), boolText(outcome.tuiInterruptedHandled));
+		assertEquals(boolText(boolField(expectValue, "tuiErrorHandled", false)), boolText(outcome.tuiErrorHandled));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function turnLifecycleByRequestId(outcomes:Array<ModelTurnLifecycleOutcome>, requestId:String):ModelTurnLifecycleOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing turn lifecycle outcome: " + requestId;
+	}
+
 	static function samplingResultIntegrationByRequestId(integrations:Array<ModelSamplingResultIntegrationOutcome>, requestId:String):ModelSamplingResultIntegrationOutcome {
 		for (integration in integrations) if (integration.requestId == requestId) return integration;
 		throw "missing sampling result integration outcome: " + requestId;
@@ -1614,6 +1705,35 @@ class ModelStreamItemReducerHarness {
 			case "completed_after_error": ModelTurnLifecycleTerminalKind.CompletedAfterError;
 			case "aborted": ModelTurnLifecycleTerminalKind.Aborted;
 			case _: throw "unknown turn lifecycle terminal kind: " + value;
+		}
+	}
+
+	static function turnTerminalProjectionEventKind(value:String):ModelTurnTerminalProjectionEventKind {
+		return switch value {
+			case "turn_complete": ModelTurnTerminalProjectionEventKind.TurnComplete;
+			case "turn_aborted": ModelTurnTerminalProjectionEventKind.TurnAborted;
+			case _: throw "unknown turn terminal projection event kind: " + value;
+		}
+	}
+
+	static function turnTerminalProjectedStatusKind(value:String):ModelTurnTerminalProjectedStatusKind {
+		return switch value {
+			case "completed": ModelTurnTerminalProjectedStatusKind.Completed;
+			case "interrupted": ModelTurnTerminalProjectedStatusKind.Interrupted;
+			case "failed": ModelTurnTerminalProjectedStatusKind.Failed;
+			case "errored": ModelTurnTerminalProjectedStatusKind.Errored;
+			case _: throw "unknown turn terminal projected status kind: " + value;
+		}
+	}
+
+	static function turnTerminalNotificationIntentKind(value:String):ModelTurnTerminalNotificationIntentKind {
+		return switch value {
+			case "none": ModelTurnTerminalNotificationIntentKind.None;
+			case "app_server_turn_completed": ModelTurnTerminalNotificationIntentKind.AppServerTurnCompleted;
+			case "tui_agent_turn_complete": ModelTurnTerminalNotificationIntentKind.TuiAgentTurnComplete;
+			case "tui_interrupted_turn": ModelTurnTerminalNotificationIntentKind.TuiInterruptedTurn;
+			case "tui_error_surface": ModelTurnTerminalNotificationIntentKind.TuiErrorSurface;
+			case _: throw "unknown turn terminal notification intent kind: " + value;
 		}
 	}
 
