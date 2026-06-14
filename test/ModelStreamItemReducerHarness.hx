@@ -55,6 +55,12 @@ import codexhx.runtime.model.streamitem.ModelInFlightToolDrainRequest;
 import codexhx.runtime.model.streamitem.ModelInFlightToolDrainOutcome;
 import codexhx.runtime.model.streamitem.ModelPostDrainEmissionPolicy;
 import codexhx.runtime.model.streamitem.ModelPostDrainEmissionRequest;
+import codexhx.runtime.model.streamitem.ModelPostDrainEmissionOutcome;
+import codexhx.runtime.model.streamitem.ModelPostDrainEmissionKind;
+import codexhx.runtime.model.streamitem.ModelPostDrainCancellationKind;
+import codexhx.runtime.model.streamitem.ModelSamplingResultIntegrationPolicy;
+import codexhx.runtime.model.streamitem.ModelSamplingResultIntegrationRequest;
+import codexhx.runtime.model.streamitem.ModelSamplingResultIntegrationStatusKind;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerOutcome;
 import codexhx.runtime.model.streamitem.ModelPatchTurnDiffTrackerRequest;
@@ -104,6 +110,7 @@ class ModelStreamItemReducerHarness {
 			assertEquals(Std.string(intField(expect, "totalTokens", 0)), Std.string(outcome.totalTokens));
 			assertContains(outcome.summary(), stringField(expect, "summaryContains", ""));
 			if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+			assertTopLevelSamplingResultIntegrations(testCase, outcome, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -267,7 +274,8 @@ class ModelStreamItemReducerHarness {
 				final attempts = assertSamplingStreamAttempts(verificationValue, dispatch, secretProbe);
 				final handoffs = assertSamplingStreamEventHandoffs(verificationValue, outcome, attempts, secretProbe);
 				final drains = assertInFlightToolDrains(verificationValue, responseInput, handoffs, secretProbe);
-				assertPostDrainEmissions(verificationValue, drains, secretProbe);
+				final emissions = assertPostDrainEmissions(verificationValue, drains, secretProbe);
+				assertSamplingResultIntegrations(verificationValue, emissions, outcome, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -829,7 +837,8 @@ class ModelStreamItemReducerHarness {
 		verificationValue:Value,
 		drains:Array<ModelInFlightToolDrainOutcome>,
 		secretProbe:String
-	):Void {
+	):Array<ModelPostDrainEmissionOutcome> {
+		final emissions:Array<ModelPostDrainEmissionOutcome> = [];
 		final values = optionalArrayField(verificationValue, "postDrainEmissionExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
@@ -862,12 +871,116 @@ class ModelStreamItemReducerHarness {
 			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(emission.toolExecutedOutsideFixture));
 			assertContains(emission.summary(), stringField(expectValue, "summaryContains", ""));
 			if (secretProbe.length > 0) assertNotContains(emission.summary(), secretProbe);
+			emissions.push(emission);
 		}
+		return emissions;
 	}
 
 	static function drainByRequestId(drains:Array<ModelInFlightToolDrainOutcome>, requestId:String):ModelInFlightToolDrainOutcome {
 		for (drain in drains) if (drain.requestId == requestId) return drain;
 		throw "missing in-flight tool drain outcome: " + requestId;
+	}
+
+	static function assertTopLevelSamplingResultIntegrations(
+		testCase:Value,
+		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
+		secretProbe:String
+	):Void {
+		final values = optionalArrayField(testCase, "samplingResultIntegrationExpects");
+		for (value in values) {
+			final expectValue = objectValue(value);
+			final syntheticEmission = new ModelPostDrainEmissionOutcome(
+				true,
+				"post_drain_emission_modeled",
+				stringField(expectValue, "postDrainRequestId", "synthetic-post-drain"),
+				ModelPostDrainEmissionKind.NoEmission,
+				ModelPostDrainCancellationKind.None,
+				false,
+				false,
+				false,
+				true,
+				false,
+				false,
+				false,
+				false,
+				false,
+				false,
+				boolField(expectValue, "samplingOutcomeReturned", true),
+				reducerOutcome.liveNetworkAttempted,
+				false,
+				false,
+				""
+			);
+			assertSamplingResultIntegration(expectValue, syntheticEmission, reducerOutcome, secretProbe);
+		}
+	}
+
+	static function assertSamplingResultIntegrations(
+		verificationValue:Value,
+		emissions:Array<ModelPostDrainEmissionOutcome>,
+		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
+		secretProbe:String
+	):Void {
+		final values = optionalArrayField(verificationValue, "samplingResultIntegrationExpects");
+		for (value in values) {
+			final expectValue = objectValue(value);
+			assertSamplingResultIntegration(expectValue, postDrainEmissionByRequestId(emissions, stringField(expectValue, "postDrainRequestId", "")), reducerOutcome, secretProbe);
+		}
+	}
+
+	static function assertSamplingResultIntegration(
+		expectValue:Value,
+		emission:ModelPostDrainEmissionOutcome,
+		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
+		secretProbe:String
+	):Void {
+		final integration = ModelSamplingResultIntegrationPolicy.integrate(new ModelSamplingResultIntegrationRequest(
+			stringField(expectValue, "requestId", ""),
+			emission,
+			boolField(expectValue, "modelNeedsFollowUp", reducerOutcome.needsFollowUp),
+			boolField(expectValue, "hasPendingInput", false),
+			intField(expectValue, "pendingInputCount", 0),
+			boolField(expectValue, "tokenLimitReached", false),
+			stringField(expectValue, "lastAgentMessage", reducerOutcome.lastAgentMessage),
+			stringField(expectValue, "previousLastAgentMessage", ""),
+			samplingResultStatusKind(stringField(expectValue, "statusKind", "ok")),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(integration.ok));
+		assertEquals(stringField(expectValue, "code", ""), integration.code);
+		assertEquals(stringField(expectValue, "requestId", ""), integration.requestId);
+		assertEquals(stringField(expectValue, "decisionKind", ""), integration.decisionKind);
+		assertEquals(stringField(expectValue, "statusKind", ""), integration.statusKind);
+		assertEquals(boolText(boolField(expectValue, "needsFollowUp", false)), boolText(integration.needsFollowUp));
+		assertEquals(boolText(boolField(expectValue, "pendingInputDrainEnabled", false)), boolText(integration.pendingInputDrainEnabled));
+		assertEquals(boolText(boolField(expectValue, "canDrainPendingInputAfterAutoCompact", false)), boolText(integration.canDrainPendingInputAfterAutoCompact));
+		assertEquals(boolText(boolField(expectValue, "lastAgentMessageUpdated", false)), boolText(integration.lastAgentMessageUpdated));
+		assertEquals(stringField(expectValue, "integratedLastAgentMessage", ""), integration.lastAgentMessage);
+		assertEquals(boolText(boolField(expectValue, "samplingOutcomeReturned", false)), boolText(integration.samplingOutcomeReturned));
+		assertEquals(boolText(boolField(expectValue, "stopHooksEligible", false)), boolText(integration.stopHooksEligible));
+		assertEquals(boolText(boolField(expectValue, "continueLoop", false)), boolText(integration.continueLoop));
+		assertEquals(boolText(boolField(expectValue, "breakTurnLoop", false)), boolText(integration.breakTurnLoop));
+		assertEquals(boolText(boolField(expectValue, "bypassedForCancellation", false)), boolText(integration.bypassedForCancellation));
+		assertEquals(boolText(boolField(expectValue, "bypassedForError", false)), boolText(integration.bypassedForError));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(integration.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(integration.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(integration.toolExecutedOutsideFixture));
+		assertContains(integration.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(integration.summary(), secretProbe);
+	}
+
+	static function postDrainEmissionByRequestId(emissions:Array<ModelPostDrainEmissionOutcome>, requestId:String):ModelPostDrainEmissionOutcome {
+		for (emission in emissions) if (emission.requestId == requestId) return emission;
+		throw "missing post-drain emission outcome: " + requestId;
+	}
+
+	static function samplingResultStatusKind(value:String):ModelSamplingResultIntegrationStatusKind {
+		return switch value {
+			case "ok": ModelSamplingResultIntegrationStatusKind.Ok;
+			case "cancelled": ModelSamplingResultIntegrationStatusKind.Cancelled;
+			case "error": ModelSamplingResultIntegrationStatusKind.Error;
+			case _: throw "unknown sampling result integration status kind: " + value;
+		}
 	}
 
 	static function streamHandoffByRequestId(handoffs:Array<ModelSamplingStreamEventHandoffOutcome>, requestId:String):ModelSamplingStreamEventHandoffOutcome {

@@ -55,7 +55,38 @@
         "terminalResponseId": "resp-openai-123",
         "totalTokens": 30,
         "summaryContains": "started=1;completed=1;assistantDeltas=2;reasoningDeltas=0;rawReasoningDeltas=0;toolCalls=0;needsFollowUp=false;lastAgentMessage=Hello world;terminalResponseId=resp-openai-123;totalTokens=30;liveNetworkAttempted=false"
-      }
+      },
+      "samplingResultIntegrationExpects": [
+        {
+          "ok": true,
+          "code": "sampling_result_integrated",
+          "requestId": "sampling-result-openai-stop-turn",
+          "postDrainRequestId": "post-drain-openai-stop-turn",
+          "statusKind": "ok",
+          "modelNeedsFollowUp": false,
+          "hasPendingInput": false,
+          "pendingInputCount": 0,
+          "tokenLimitReached": false,
+          "lastAgentMessage": "Hello world",
+          "previousLastAgentMessage": "",
+          "decisionKind": "stop_turn",
+          "needsFollowUp": false,
+          "pendingInputDrainEnabled": true,
+          "canDrainPendingInputAfterAutoCompact": false,
+          "lastAgentMessageUpdated": true,
+          "integratedLastAgentMessage": "Hello world",
+          "samplingOutcomeReturned": true,
+          "stopHooksEligible": true,
+          "continueLoop": false,
+          "breakTurnLoop": true,
+          "bypassedForCancellation": false,
+          "bypassedForError": false,
+          "liveNetworkAttempted": false,
+          "realFilesystemMutated": false,
+          "toolExecutedOutsideFixture": false,
+          "summaryContains": "decisionKind=stop_turn;statusKind=ok;modelNeedsFollowUp=false;hasPendingInput=false;needsFollowUp=false;pendingInputDrainEnabled=true;canDrainPendingInputAfterAutoCompact=false;tokenLimitReached=false;lastAgentMessageUpdated=true;lastAgentMessage=Hello world;previousLastAgentMessage=none;samplingOutcomeReturned=true;stopHooksEligible=true;continueLoop=false;breakTurnLoop=true;bypassedForCancellation=false;bypassedForError=false"
+        }
+      ]
     },
     {
       "id": "openai-reasoning-summary-and-raw-deltas",
@@ -641,6 +672,37 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "emissionKind=no_emission;cancellationKind=none;tokenCountPending=false;tokenCountProjected=false;tokenInfoAvailable=false;cancellationCheckedAfterTokenCount=true;turnDiffPending=false;turnDiffTrackerRead=false;unifiedDiffAvailable=false;turnDiffProjected=false;turnDiffSkippedByCancellation=false;turnDiffSkippedNoDiff=false;samplingOutcomeReturned=true"
+          }
+        ],
+        "samplingResultIntegrationExpects": [
+          {
+            "ok": true,
+            "code": "sampling_result_integrated",
+            "requestId": "sampling-result-runtime-failed-continue",
+            "postDrainRequestId": "post-drain-runtime-failed-no-emission",
+            "statusKind": "ok",
+            "modelNeedsFollowUp": true,
+            "hasPendingInput": false,
+            "pendingInputCount": 0,
+            "tokenLimitReached": false,
+            "lastAgentMessage": "",
+            "previousLastAgentMessage": "",
+            "decisionKind": "continue_sampling",
+            "needsFollowUp": true,
+            "pendingInputDrainEnabled": true,
+            "canDrainPendingInputAfterAutoCompact": false,
+            "lastAgentMessageUpdated": false,
+            "integratedLastAgentMessage": "",
+            "samplingOutcomeReturned": true,
+            "stopHooksEligible": false,
+            "continueLoop": true,
+            "breakTurnLoop": false,
+            "bypassedForCancellation": false,
+            "bypassedForError": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "decisionKind=continue_sampling;statusKind=ok;modelNeedsFollowUp=true;hasPendingInput=false;needsFollowUp=true;pendingInputDrainEnabled=true;canDrainPendingInputAfterAutoCompact=false;tokenLimitReached=false;lastAgentMessageUpdated=false;lastAgentMessage=none;previousLastAgentMessage=none;samplingOutcomeReturned=true;stopHooksEligible=false;continueLoop=true;breakTurnLoop=false;bypassedForCancellation=false;bypassedForError=false"
           }
         ]
       }
@@ -1627,6 +1689,66 @@
             "realFilesystemMutated": false,
             "toolExecutedOutsideFixture": false,
             "summaryContains": "emissionKind=cancelled_after_token_count;cancellationKind=after_drain_before_turn_diff;tokenCountPending=true;tokenCountProjected=true;tokenInfoAvailable=true;cancellationCheckedAfterTokenCount=true;turnDiffPending=true;turnDiffTrackerRead=false;unifiedDiffAvailable=true;turnDiffProjected=false;turnDiffSkippedByCancellation=true;turnDiffSkippedNoDiff=false;samplingOutcomeReturned=false"
+          }
+        ],
+        "samplingResultIntegrationExpects": [
+          {
+            "ok": true,
+            "code": "sampling_result_integrated",
+            "requestId": "sampling-result-lite-auto-compact",
+            "postDrainRequestId": "post-drain-lite-token-and-turn-diff",
+            "statusKind": "ok",
+            "modelNeedsFollowUp": true,
+            "hasPendingInput": false,
+            "pendingInputCount": 0,
+            "tokenLimitReached": true,
+            "lastAgentMessage": "",
+            "previousLastAgentMessage": "",
+            "decisionKind": "auto_compact",
+            "needsFollowUp": true,
+            "pendingInputDrainEnabled": true,
+            "canDrainPendingInputAfterAutoCompact": false,
+            "lastAgentMessageUpdated": false,
+            "integratedLastAgentMessage": "",
+            "samplingOutcomeReturned": true,
+            "stopHooksEligible": false,
+            "continueLoop": true,
+            "breakTurnLoop": false,
+            "bypassedForCancellation": false,
+            "bypassedForError": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "decisionKind=auto_compact;statusKind=ok;modelNeedsFollowUp=true;hasPendingInput=false;needsFollowUp=true;pendingInputDrainEnabled=true;canDrainPendingInputAfterAutoCompact=false;tokenLimitReached=true;lastAgentMessageUpdated=false;lastAgentMessage=none;previousLastAgentMessage=none;samplingOutcomeReturned=true;stopHooksEligible=false;continueLoop=true;breakTurnLoop=false;bypassedForCancellation=false;bypassedForError=false"
+          },
+          {
+            "ok": true,
+            "code": "sampling_result_integrated",
+            "requestId": "sampling-result-lite-cancel-bypass",
+            "postDrainRequestId": "post-drain-lite-cancel-after-token-count",
+            "statusKind": "cancelled",
+            "modelNeedsFollowUp": true,
+            "hasPendingInput": false,
+            "pendingInputCount": 0,
+            "tokenLimitReached": true,
+            "lastAgentMessage": "",
+            "previousLastAgentMessage": "",
+            "decisionKind": "bypass_cancellation",
+            "needsFollowUp": false,
+            "pendingInputDrainEnabled": false,
+            "canDrainPendingInputAfterAutoCompact": false,
+            "lastAgentMessageUpdated": false,
+            "integratedLastAgentMessage": "",
+            "samplingOutcomeReturned": false,
+            "stopHooksEligible": false,
+            "continueLoop": false,
+            "breakTurnLoop": true,
+            "bypassedForCancellation": true,
+            "bypassedForError": false,
+            "liveNetworkAttempted": false,
+            "realFilesystemMutated": false,
+            "toolExecutedOutsideFixture": false,
+            "summaryContains": "decisionKind=bypass_cancellation;statusKind=cancelled;modelNeedsFollowUp=false;hasPendingInput=false;needsFollowUp=false;pendingInputDrainEnabled=false;canDrainPendingInputAfterAutoCompact=false;tokenLimitReached=false;lastAgentMessageUpdated=false;lastAgentMessage=none;previousLastAgentMessage=none;samplingOutcomeReturned=false;stopHooksEligible=false;continueLoop=false;breakTurnLoop=true;bypassedForCancellation=true;bypassedForError=false"
           }
         ]
       }

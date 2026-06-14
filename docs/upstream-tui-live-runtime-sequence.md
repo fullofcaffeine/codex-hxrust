@@ -789,7 +789,21 @@ Model the upstream post-drain emission sequence before the sampling outcome is r
 
 Status: HXCX-4.66 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic post-drain emission evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.67+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.67: Sampling Result Turn-Loop Integration Boundary
+
+Model the upstream integration of returned `SamplingRequestResult` into the outer turn loop:
+
+- propagate returned `needs_follow_up` and `last_agent_message` facts;
+- enable pending-input draining after successful sampling returns;
+- combine model follow-up with pending input before deciding the next loop action;
+- route token-limit-plus-follow-up through mid-turn auto-compaction;
+- preserve terminal no-follow-up turn breaks and last-agent-message updates;
+- bypass cancellation and error returns without treating them as successful sampling results;
+- keep live provider traffic, native tool futures, app-server fanout, workspace mutation, and Cafex behavior out of scope.
+
+Status: HXCX-4.67 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic sampling-result turn-loop integration evidence only, not live provider traffic, native tool future execution, native app-server fanout, interactive TUI rendering ownership, real workspace mutation, WebSocket transport, SSE frame parsing, Tokio task ownership, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.68+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
