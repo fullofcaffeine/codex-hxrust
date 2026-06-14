@@ -98,6 +98,11 @@ import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceKind;
 import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceOutcome;
 import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfacePolicy;
 import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceRequest;
+import codexhx.runtime.model.streamitem.ModelAppServerRequestResolutionCommandKind;
+import codexhx.runtime.model.streamitem.ModelAppServerRequestResolutionOutcome;
+import codexhx.runtime.model.streamitem.ModelAppServerRequestResolutionPayloadKind;
+import codexhx.runtime.model.streamitem.ModelAppServerRequestResolutionPolicy;
+import codexhx.runtime.model.streamitem.ModelAppServerRequestResolutionRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainPolicy;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainRequest;
 import codexhx.runtime.model.streamitem.ModelPostSamplingPendingInputDrainItem;
@@ -177,7 +182,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelTurnReplayReconstructions = assertTopLevelTurnReplayReconstructions(testCase, topLevelTurnTerminalProjections, secretProbe);
 			final topLevelPendingInteractiveReplays = assertTopLevelPendingInteractiveReplays(testCase, topLevelTurnReplayReconstructions, secretProbe);
 			final topLevelThreadSnapshotReplayDispatches = assertTopLevelThreadSnapshotReplayDispatches(testCase, topLevelPendingInteractiveReplays, secretProbe);
-			assertTopLevelReplayedServerRequestSurfaces(testCase, topLevelThreadSnapshotReplayDispatches, secretProbe);
+			final topLevelReplayedServerRequestSurfaces = assertTopLevelReplayedServerRequestSurfaces(testCase, topLevelThreadSnapshotReplayDispatches, secretProbe);
+			assertTopLevelAppServerRequestResolutions(testCase, topLevelReplayedServerRequestSurfaces, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -353,7 +359,8 @@ class ModelStreamItemReducerHarness {
 				final turnReplayReconstructions = assertTurnReplayReconstructions(verificationValue, turnTerminalProjections, secretProbe);
 				final pendingInteractiveReplays = assertPendingInteractiveReplays(verificationValue, turnReplayReconstructions, secretProbe);
 				final threadSnapshotReplayDispatches = assertThreadSnapshotReplayDispatches(verificationValue, pendingInteractiveReplays, secretProbe);
-				assertReplayedServerRequestSurfaces(verificationValue, threadSnapshotReplayDispatches, secretProbe);
+				final replayedServerRequestSurfaces = assertReplayedServerRequestSurfaces(verificationValue, threadSnapshotReplayDispatches, secretProbe);
+				assertAppServerRequestResolutions(verificationValue, replayedServerRequestSurfaces, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -1827,6 +1834,92 @@ class ModelStreamItemReducerHarness {
 		throw "missing thread snapshot replay dispatch outcome: " + requestId;
 	}
 
+	static function assertTopLevelAppServerRequestResolutions(
+		testCase:Value,
+		surfaces:Array<ModelReplayedServerRequestSurfaceOutcome>,
+		secretProbe:String
+	):Array<ModelAppServerRequestResolutionOutcome> {
+		final outcomes:Array<ModelAppServerRequestResolutionOutcome> = [];
+		final values = optionalArrayField(testCase, "appServerRequestResolutionExpects");
+		for (value in values) outcomes.push(assertAppServerRequestResolution(objectValue(value), surfaces, secretProbe));
+		return outcomes;
+	}
+
+	static function assertAppServerRequestResolutions(
+		verificationValue:Value,
+		surfaces:Array<ModelReplayedServerRequestSurfaceOutcome>,
+		secretProbe:String
+	):Array<ModelAppServerRequestResolutionOutcome> {
+		final outcomes:Array<ModelAppServerRequestResolutionOutcome> = [];
+		final values = optionalArrayField(verificationValue, "appServerRequestResolutionExpects");
+		for (value in values) outcomes.push(assertAppServerRequestResolution(objectValue(value), surfaces, secretProbe));
+		return outcomes;
+	}
+
+	static function assertAppServerRequestResolution(
+		expectValue:Value,
+		surfaces:Array<ModelReplayedServerRequestSurfaceOutcome>,
+		secretProbe:String
+	):ModelAppServerRequestResolutionOutcome {
+		final surfaceRequestId = stringField(expectValue, "surfaceRequestId", "");
+		final outcome = ModelAppServerRequestResolutionPolicy.resolve(new ModelAppServerRequestResolutionRequest(
+			stringField(expectValue, "requestId", ""),
+			replayedServerRequestSurfaceByRequestId(surfaces, surfaceRequestId),
+			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
+			appServerRequestResolutionCommandKind(stringField(expectValue, "commandKind", "user_input_answer")),
+			stringField(expectValue, "appServerRequestId", ""),
+			stringField(expectValue, "requestKey", ""),
+			stringField(expectValue, "commandKey", ""),
+			stringField(expectValue, "serverName", ""),
+			stringField(expectValue, "commandServerName", ""),
+			stringField(expectValue, "mcpRequestId", ""),
+			stringField(expectValue, "commandMcpRequestId", ""),
+			stringField(expectValue, "pendingItemId", ""),
+			intField(expectValue, "pendingRequestCountBefore", 0),
+			intField(expectValue, "userInputQueueLengthBefore", 0),
+			intField(expectValue, "userInputQueuePosition", -1),
+			boolField(expectValue, "duplicateResponse", false),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(surfaceRequestId, outcome.surfaceRequestId);
+		assertEquals(stringField(expectValue, "requestKind", ""), outcome.requestKind);
+		assertEquals(stringField(expectValue, "commandKind", ""), outcome.commandKind);
+		assertEquals(stringField(expectValue, "payloadKind", ""), outcome.payloadKind);
+		assertEquals(stringField(expectValue, "appServerRequestId", ""), outcome.appServerRequestId);
+		assertEquals(stringField(expectValue, "requestKey", ""), outcome.requestKey);
+		assertEquals(stringField(expectValue, "commandKey", ""), outcome.commandKey);
+		assertEquals(boolText(boolField(expectValue, "pendingRequestRecorded", false)), boolText(outcome.pendingRequestRecorded));
+		assertEquals(boolText(boolField(expectValue, "commandMatchedPendingRequest", false)), boolText(outcome.commandMatchedPendingRequest));
+		assertEquals(boolText(boolField(expectValue, "requestRemovedFromPending", false)), boolText(outcome.requestRemovedFromPending));
+		assertEquals(boolText(boolField(expectValue, "serializedResponseIntentEmitted", false)), boolText(outcome.serializedResponseIntentEmitted));
+		assertEquals(boolText(boolField(expectValue, "execApprovalResolved", false)), boolText(outcome.execApprovalResolved));
+		assertEquals(boolText(boolField(expectValue, "fileChangeApprovalResolved", false)), boolText(outcome.fileChangeApprovalResolved));
+		assertEquals(boolText(boolField(expectValue, "permissionsResolved", false)), boolText(outcome.permissionsResolved));
+		assertEquals(boolText(boolField(expectValue, "userInputQueuePopped", false)), boolText(outcome.userInputQueuePopped));
+		assertEquals(Std.string(intField(expectValue, "userInputQueueLengthAfter", 0)), Std.string(outcome.userInputQueueLengthAfter));
+		assertEquals(stringField(expectValue, "resolvedUserInputItemId", ""), outcome.resolvedUserInputItemId);
+		assertEquals(boolText(boolField(expectValue, "mcpElicitationResolved", false)), boolText(outcome.mcpElicitationResolved));
+		assertEquals(boolText(boolField(expectValue, "requestRemovedByNotification", false)), boolText(outcome.requestRemovedByNotification));
+		assertEquals(boolText(boolField(expectValue, "duplicateOrMissingNoop", false)), boolText(outcome.duplicateOrMissingNoop));
+		assertEquals(boolText(boolField(expectValue, "unsupportedRequestRejected", false)), boolText(outcome.unsupportedRequestRejected));
+		assertEquals(boolText(boolField(expectValue, "liveAppServerFanoutSuppressed", false)), boolText(outcome.liveAppServerFanoutSuppressed));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function replayedServerRequestSurfaceByRequestId(outcomes:Array<ModelReplayedServerRequestSurfaceOutcome>, requestId:String):ModelReplayedServerRequestSurfaceOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing replayed server request surface outcome: " + requestId;
+	}
+
 	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing turn replay reconstruction outcome: " + requestId;
@@ -2176,6 +2269,30 @@ class ModelStreamItemReducerHarness {
 			case "unsupported_replay_suppressed": ModelReplayedServerRequestSurfaceKind.UnsupportedReplaySuppressed;
 			case "request_filtered": ModelReplayedServerRequestSurfaceKind.RequestFiltered;
 			case _: throw "unknown replayed server request surface kind: " + value;
+		}
+	}
+
+	static function appServerRequestResolutionCommandKind(value:String):ModelAppServerRequestResolutionCommandKind {
+		return switch value {
+			case "exec_approval_response": ModelAppServerRequestResolutionCommandKind.ExecApprovalResponse;
+			case "file_change_approval_response": ModelAppServerRequestResolutionCommandKind.FileChangeApprovalResponse;
+			case "permissions_response": ModelAppServerRequestResolutionCommandKind.PermissionsResponse;
+			case "user_input_answer": ModelAppServerRequestResolutionCommandKind.UserInputAnswer;
+			case "mcp_elicitation_response": ModelAppServerRequestResolutionCommandKind.McpElicitationResponse;
+			case "server_request_resolved_notification": ModelAppServerRequestResolutionCommandKind.ServerRequestResolvedNotification;
+			case _: throw "unknown app-server request resolution command kind: " + value;
+		}
+	}
+
+	static function appServerRequestResolutionPayloadKind(value:String):ModelAppServerRequestResolutionPayloadKind {
+		return switch value {
+			case "none": ModelAppServerRequestResolutionPayloadKind.None;
+			case "command_execution_approval_response": ModelAppServerRequestResolutionPayloadKind.CommandExecutionApprovalResponse;
+			case "file_change_approval_response": ModelAppServerRequestResolutionPayloadKind.FileChangeApprovalResponse;
+			case "permissions_approval_response": ModelAppServerRequestResolutionPayloadKind.PermissionsApprovalResponse;
+			case "tool_request_user_input_response": ModelAppServerRequestResolutionPayloadKind.ToolRequestUserInputResponse;
+			case "mcp_elicitation_response": ModelAppServerRequestResolutionPayloadKind.McpElicitationResponse;
+			case _: throw "unknown app-server request resolution payload kind: " + value;
 		}
 	}
 
