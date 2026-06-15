@@ -179,6 +179,13 @@ import codexhx.runtime.model.streamitem.ModelResizeReflowSchedulingDecisionKind;
 import codexhx.runtime.model.streamitem.ModelResizeReflowSchedulingOutcome;
 import codexhx.runtime.model.streamitem.ModelResizeReflowSchedulingPolicy;
 import codexhx.runtime.model.streamitem.ModelResizeReflowSchedulingRequest;
+import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionCategory;
+import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionDecisionKind;
+import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionHistoryCellKind;
+import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionRequestKind;
+import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionRoutingOutcome;
+import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionRoutingPolicy;
+import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionRoutingRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -288,6 +295,7 @@ class ModelStreamItemReducerHarness {
 			final topLevelClearUiHeaders = assertTopLevelClearUiHeaders(testCase, topLevelActiveNonPrimaryShutdowns, secretProbe);
 			final topLevelTerminalResizeReflows = assertTopLevelTerminalResizeReflows(testCase, topLevelClearUiHeaders, secretProbe);
 			assertTopLevelResizeReflowSchedulings(testCase, topLevelTerminalResizeReflows, secretProbe);
+			assertTopLevelFeedbackSubmissionRoutings(testCase, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -483,6 +491,7 @@ class ModelStreamItemReducerHarness {
 				final clearUiHeaders = assertClearUiHeaders(verificationValue, activeNonPrimaryShutdowns, secretProbe);
 				final terminalResizeReflows = assertTerminalResizeReflows(verificationValue, clearUiHeaders, secretProbe);
 				assertResizeReflowSchedulings(verificationValue, terminalResizeReflows, secretProbe);
+				assertFeedbackSubmissionRoutings(verificationValue, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3467,6 +3476,78 @@ class ModelStreamItemReducerHarness {
 		throw "missing terminal resize reflow outcome: " + requestId;
 	}
 
+	static function assertTopLevelFeedbackSubmissionRoutings(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelFeedbackSubmissionRoutingOutcome> {
+		final outcomes:Array<ModelFeedbackSubmissionRoutingOutcome> = [];
+		final values = optionalArrayField(testCase, "feedbackSubmissionRoutingExpects");
+		for (value in values) outcomes.push(assertFeedbackSubmissionRouting(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertFeedbackSubmissionRoutings(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelFeedbackSubmissionRoutingOutcome> {
+		final outcomes:Array<ModelFeedbackSubmissionRoutingOutcome> = [];
+		final values = optionalArrayField(verificationValue, "feedbackSubmissionRoutingExpects");
+		for (value in values) outcomes.push(assertFeedbackSubmissionRouting(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertFeedbackSubmissionRouting(
+		expectValue:Value,
+		secretProbe:String
+	):ModelFeedbackSubmissionRoutingOutcome {
+		final outcome = ModelFeedbackSubmissionRoutingPolicy.route(new ModelFeedbackSubmissionRoutingRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			requestKind: feedbackSubmissionRequestKind(stringField(expectValue, "requestKind", "")),
+			category: feedbackSubmissionCategory(stringField(expectValue, "category", "")),
+			includeLogs: boolField(expectValue, "includeLogs", false),
+			resultOk: boolField(expectValue, "resultOk", false),
+			resultThreadId: stringField(expectValue, "resultThreadId", ""),
+			resultErrorMessage: stringField(expectValue, "resultErrorMessage", ""),
+			originThreadProvided: boolField(expectValue, "originThreadProvided", false),
+			originThreadActive: boolField(expectValue, "originThreadActive", false),
+			snapshotReplay: boolField(expectValue, "snapshotReplay", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(feedbackSubmissionRequestKind(stringField(expectValue, "requestKind", "")), outcome.requestKind);
+		assertEquals(feedbackSubmissionDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(feedbackSubmissionCategory(stringField(expectValue, "category", "")), outcome.category);
+		assertEquals(boolText(boolField(expectValue, "includeLogs", false)), boolText(outcome.includeLogs));
+		assertEquals(boolText(boolField(expectValue, "feedbackSucceeded", false)), boolText(outcome.feedbackSucceeded));
+		assertEquals(stringField(expectValue, "resultThreadId", ""), outcome.resultThreadId);
+		assertEquals(stringField(expectValue, "resultErrorMessage", ""), outcome.resultErrorMessage);
+		assertEquals(boolText(boolField(expectValue, "originThreadProvided", false)), boolText(outcome.originThreadProvided));
+		assertEquals(boolText(boolField(expectValue, "originThreadActive", false)), boolText(outcome.originThreadActive));
+		assertEquals(boolText(boolField(expectValue, "originThreadBuffered", false)), boolText(outcome.originThreadBuffered));
+		assertEquals(boolText(boolField(expectValue, "activeThreadSendAttempted", false)), boolText(outcome.activeThreadSendAttempted));
+		assertEquals(boolText(boolField(expectValue, "currentHistoryRendered", false)), boolText(outcome.currentHistoryRendered));
+		assertEquals(boolText(boolField(expectValue, "snapshotReplayRendered", false)), boolText(outcome.snapshotReplayRendered));
+		assertEquals(feedbackSubmissionHistoryCellKind(stringField(expectValue, "historyCellKind", "")), outcome.historyCellKind);
+		assertEquals(stringField(expectValue, "historyCellText", ""), outcome.historyCellText);
+		assertEquals(boolText(boolField(expectValue, "appEventEmittedImmediately", false)), boolText(outcome.appEventEmittedImmediately));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveFeedbackUploadAttempted", false)), boolText(outcome.liveFeedbackUploadAttempted));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) {
+			assertNotContains(outcome.summary(), secretProbe);
+			assertNotContains(outcome.historyCellText, secretProbe);
+		}
+		return outcome;
+	}
+
 	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
@@ -4250,6 +4331,44 @@ class ModelStreamItemReducerHarness {
 			case "width_change_scheduled": ModelResizeReflowSchedulingDecisionKind.WidthChangeScheduled;
 			case "disabled_width_change_cleared": ModelResizeReflowSchedulingDecisionKind.DisabledWidthChangeCleared;
 			case _: throw "unknown resize reflow scheduling decision kind: " + value;
+		}
+	}
+
+	static function feedbackSubmissionRequestKind(value:String):ModelFeedbackSubmissionRequestKind {
+		return switch value {
+			case "submitted": ModelFeedbackSubmissionRequestKind.Submitted;
+			case "snapshot_replay": ModelFeedbackSubmissionRequestKind.SnapshotReplay;
+			case _: throw "unknown feedback submission request kind: " + value;
+		}
+	}
+
+	static function feedbackSubmissionCategory(value:String):ModelFeedbackSubmissionCategory {
+		return switch value {
+			case "bug": ModelFeedbackSubmissionCategory.Bug;
+			case "bad_result": ModelFeedbackSubmissionCategory.BadResult;
+			case "good_result": ModelFeedbackSubmissionCategory.GoodResult;
+			case "safety_check": ModelFeedbackSubmissionCategory.SafetyCheck;
+			case "other": ModelFeedbackSubmissionCategory.Other;
+			case _: throw "unknown feedback submission category: " + value;
+		}
+	}
+
+	static function feedbackSubmissionDecisionKind(value:String):ModelFeedbackSubmissionDecisionKind {
+		return switch value {
+			case "current_history_rendered": ModelFeedbackSubmissionDecisionKind.CurrentHistoryRendered;
+			case "origin_thread_buffered": ModelFeedbackSubmissionDecisionKind.OriginThreadBuffered;
+			case "active_origin_thread_delivered": ModelFeedbackSubmissionDecisionKind.ActiveOriginThreadDelivered;
+			case "snapshot_replay_rendered": ModelFeedbackSubmissionDecisionKind.SnapshotReplayRendered;
+			case _: throw "unknown feedback submission decision kind: " + value;
+		}
+	}
+
+	static function feedbackSubmissionHistoryCellKind(value:String):ModelFeedbackSubmissionHistoryCellKind {
+		return switch value {
+			case "none": ModelFeedbackSubmissionHistoryCellKind.None;
+			case "success": ModelFeedbackSubmissionHistoryCellKind.Success;
+			case "error": ModelFeedbackSubmissionHistoryCellKind.Error;
+			case _: throw "unknown feedback submission history cell kind: " + value;
 		}
 	}
 

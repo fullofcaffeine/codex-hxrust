@@ -1204,7 +1204,22 @@ Model selected raw Codex draw-size-change resize scheduling behavior:
 
 Status: HXCX-4.97 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic resize reflow scheduling evidence only, not live terminal rendering, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.98+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.98: Feedback Submission Routing Boundary
+
+Model selected raw Codex feedback submission routing behavior:
+
+- render feedback upload failures into current chat history when no origin thread exists;
+- buffer completed feedback submissions into the origin thread event store when an origin thread exists;
+- suppress immediate visible history insertion for inactive origin threads;
+- preserve feedback submissions across session refresh and thread snapshots;
+- render buffered feedback success cells when the origin thread snapshot is replayed;
+- model active-origin delivery intent without owning live Tokio channels;
+- keep feedback categories and history-cell kinds typed;
+- preserve event ordering while avoiding live feedback upload, live app-server fanout, real network traffic, filesystem mutation, and real tool execution.
+
+Status: HXCX-4.98 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic feedback submission routing evidence only, not live feedback upload, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.99+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
