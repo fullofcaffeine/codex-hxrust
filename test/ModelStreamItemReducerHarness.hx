@@ -5738,8 +5738,9 @@ class ModelStreamItemReducerHarness {
 	):ModelKeymapApprovalConflictOutcome {
 		final outcome = ModelKeymapApprovalConflictPolicy.apply(new ModelKeymapApprovalConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
-			configuredApprove: keymapBinding(objectField(expectValue, "configuredApprove")),
-			configuredDecline: keymapBinding(objectField(expectValue, "configuredDecline")),
+			configuredApprove: optionalKeymapBinding(expectValue, "configuredApprove"),
+			configuredDecline: optionalKeymapBinding(expectValue, "configuredDecline"),
+			configuredDeny: optionalKeymapBinding(expectValue, "configuredDeny"),
 			conflictOuterAction: keymapApprovalConflictActionKind(stringField(expectValue, "conflictOuterAction", "")),
 			conflictInnerAction: keymapApprovalConflictActionKind(stringField(expectValue, "conflictInnerAction", "")),
 			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
@@ -5758,6 +5759,7 @@ class ModelStreamItemReducerHarness {
 		assertEquals(keymapApprovalConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
 		assertEquals(boolText(boolField(expectValue, "approveBindingPreserved", false)), boolText(outcome.approveBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "declineBindingPreserved", false)), boolText(outcome.declineBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "denyBindingPreserved", false)), boolText(outcome.denyBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
@@ -7582,6 +7584,13 @@ class ModelStreamItemReducerHarness {
 
 	static function objectField(object:Value, name:String):Value {
 		return objectValue(valueField(object, name));
+	}
+
+	static function optionalKeymapBinding(object:Value, name:String):Null<ModelKeymapBinding> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value: keymapBinding(objectValue(value));
+		}
 	}
 
 	static function arrayField(object:Value, name:String):Array<Value> {

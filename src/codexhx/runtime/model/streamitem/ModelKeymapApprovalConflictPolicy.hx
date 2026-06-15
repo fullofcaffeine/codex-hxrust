@@ -4,6 +4,7 @@ class ModelKeymapApprovalConflictPolicy {
 	static final NoFunctionNumber = -1;
 	static final ApproveName = "approve";
 	static final DeclineName = "decline";
+	static final DenyName = "deny";
 
 	public static function apply(request:ModelKeymapApprovalConflictRequest):ModelKeymapApprovalConflictOutcome {
 		if (request == null) return failure("", "missing keymap approval conflict request");
@@ -11,14 +12,19 @@ class ModelKeymapApprovalConflictPolicy {
 		final expectedBinding = character("y");
 		final approveBindingPreserved = matches(request.configuredApprove, expectedBinding);
 		final declineBindingPreserved = matches(request.configuredDecline, expectedBinding);
+		final denyBindingPreserved = matches(request.configuredDeny, expectedBinding);
+		final declineConflictPreserved = request.conflictInnerAction == ModelKeymapApprovalConflictActionKind.ApprovalDecline
+			&& request.expectedInnerActionName == DeclineName
+			&& declineBindingPreserved;
+		final denyConflictPreserved = request.conflictInnerAction == ModelKeymapApprovalConflictActionKind.ApprovalDeny
+			&& request.expectedInnerActionName == DenyName
+			&& denyBindingPreserved;
 		final conflictActionNamesPreserved = request.conflictOuterAction == ModelKeymapApprovalConflictActionKind.ApprovalApprove
-			&& request.conflictInnerAction == ModelKeymapApprovalConflictActionKind.ApprovalDecline
 			&& request.expectedOuterActionName == ApproveName
-			&& request.expectedInnerActionName == DeclineName;
+			&& (declineConflictPreserved || denyConflictPreserved);
 		final conflictRejectionPreserved = request.conflictRejected;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = approveBindingPreserved
-			&& declineBindingPreserved
 			&& conflictActionNamesPreserved
 			&& conflictRejectionPreserved
 			&& eventOrderingPreserved;
@@ -33,6 +39,7 @@ class ModelKeymapApprovalConflictPolicy {
 			decisionKind: decisionKind,
 			approveBindingPreserved: approveBindingPreserved,
 			declineBindingPreserved: declineBindingPreserved,
+			denyBindingPreserved: denyBindingPreserved,
 			conflictActionNamesPreserved: conflictActionNamesPreserved,
 			conflictRejectionPreserved: conflictRejectionPreserved,
 			eventOrderingPreserved: eventOrderingPreserved,
@@ -66,6 +73,7 @@ class ModelKeymapApprovalConflictPolicy {
 			decisionKind: ModelKeymapApprovalConflictDecisionKind.KeymapApprovalConflictMissed,
 			approveBindingPreserved: false,
 			declineBindingPreserved: false,
+			denyBindingPreserved: false,
 			conflictActionNamesPreserved: false,
 			conflictRejectionPreserved: false,
 			eventOrderingPreserved: false,

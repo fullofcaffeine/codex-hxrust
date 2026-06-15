@@ -8387,7 +8387,7 @@
 	          "realFilesystemMutated": false,
 	          "toolExecutedOutsideFixture": false,
 	          "errorMessage": "",
-	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=true;declineBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=true;declineBindingPreserved=true;denyBindingPreserved=false;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
 	          "configuredApprove": {
 	            "kind": "character",
 	            "keyName": "y",
@@ -8408,6 +8408,45 @@
 	          "conflictInnerAction": "approval_decline",
 	          "expectedOuterActionName": "approve",
 	          "expectedInnerActionName": "decline",
+	          "conflictRejected": true
+	        },
+	        {
+	          "ok": true,
+	          "code": "keymap_approval_conflict_modeled",
+	          "requestId": "keymap-approval-approve-deny-conflict",
+	          "previousEventCount": 96,
+	          "eventOrderIndex": 97,
+	          "decisionKind": "keymap_approval_conflict_rejected",
+	          "approveBindingPreserved": true,
+	          "denyBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=true;declineBindingPreserved=false;denyBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredApprove": {
+	            "kind": "character",
+	            "keyName": "y",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "configuredDeny": {
+	            "kind": "character",
+	            "keyName": "y",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "approval_approve",
+	          "conflictInnerAction": "approval_deny",
+	          "expectedOuterActionName": "approve",
+	          "expectedInnerActionName": "deny",
 	          "conflictRejected": true
 	        }
 	      ],
