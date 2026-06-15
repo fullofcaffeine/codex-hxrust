@@ -7059,6 +7059,37 @@
 	          "summaryContains": "decisionKind=interrupt_question_navigation_conflict_rejected;interruptActionNamePreserved=true;questionNavigationActionNamePreserved=true;interruptRemapAcceptedBeforeValidation=true;questionNavigationBindingPreserved=true;conflictingBindingDetected=true;fixedBacktrackOverlapStillAllowed=true;conflictRejected=true;noFalseBacktrackConflict=true;eventOrderingPreserved=true"
 	        }
 	      ],
+	      "pagerTranscriptBacktrackKeymapExpects": [
+	        {
+	          "ok": true,
+	          "code": "pager_transcript_backtrack_keymap_conflict_modeled",
+	          "requestId": "rejects-pager-bindings-that-collide-with-transcript-backtrack-keys",
+	          "pagerActionName": "close",
+	          "pagerBinding": "left",
+	          "transcriptBacktrackActionName": "fixed.transcript_edit_previous",
+	          "transcriptBacktrackBinding": "left",
+	          "interruptActionName": "chat.interrupt_turn",
+	          "fixedBacktrackActionName": "fixed.backtrack",
+	          "allowedBacktrackOverlapBinding": "esc",
+	          "previousEventCount": 79,
+	          "eventOrderIndex": 80,
+	          "decisionKind": "pager_transcript_backtrack_conflict_rejected",
+	          "pagerActionNamePreserved": true,
+	          "pagerBindingPreserved": true,
+	          "transcriptBacktrackActionNamePreserved": true,
+	          "transcriptLeftBindingPreserved": true,
+	          "reservedCollisionDetected": true,
+	          "conflictRejected": true,
+	          "fixedBacktrackOverlapStillAllowed": true,
+	          "noFalseInterruptBacktrackConflict": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=pager_transcript_backtrack_conflict_rejected;pagerActionNamePreserved=true;pagerBindingPreserved=true;transcriptBacktrackActionNamePreserved=true;transcriptLeftBindingPreserved=true;reservedCollisionDetected=true;conflictRejected=true;fixedBacktrackOverlapStillAllowed=true;noFalseInterruptBacktrackConflict=true;eventOrderingPreserved=true"
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

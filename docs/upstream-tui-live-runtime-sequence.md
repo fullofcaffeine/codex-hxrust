@@ -1494,7 +1494,20 @@ Model selected raw Codex app/list keymap shadow behavior:
 
 Status: HXCX-4.120 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic interrupt/question-navigation keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.121+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.121: Pager/Transcript-Backtrack Keymap Conflict Boundary
+
+Model selected raw Codex pager reserved-key behavior:
+
+- preserve the upstream pager `close` action name;
+- preserve the remapped pager Left binding;
+- preserve the fixed `transcript_edit_previous` Left binding;
+- reject the `close` versus `fixed.transcript_edit_previous` collision;
+- preserve the prior `chat.interrupt_turn`/`fixed.backtrack` Esc overlap as allowed;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.121 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic pager/transcript-backtrack keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.122+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

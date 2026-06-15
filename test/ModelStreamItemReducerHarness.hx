@@ -217,6 +217,10 @@ import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapDe
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapOutcome;
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapPolicy;
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapRequest;
+import codexhx.runtime.model.streamitem.ModelPagerTranscriptBacktrackKeymapDecisionKind;
+import codexhx.runtime.model.streamitem.ModelPagerTranscriptBacktrackKeymapOutcome;
+import codexhx.runtime.model.streamitem.ModelPagerTranscriptBacktrackKeymapPolicy;
+import codexhx.runtime.model.streamitem.ModelPagerTranscriptBacktrackKeymapRequest;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowDecisionKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowMaxRowsKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowOutcome;
@@ -413,6 +417,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelSideBacktrackUnavailableMessages(testCase, secretProbe);
 			assertTopLevelInterruptBacktrackKeymaps(testCase, secretProbe);
 			assertTopLevelInterruptQuestionNavigationKeymaps(testCase, secretProbe);
+			assertTopLevelPagerTranscriptBacktrackKeymaps(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -631,6 +636,7 @@ class ModelStreamItemReducerHarness {
 				assertSideBacktrackUnavailableMessages(verificationValue, secretProbe);
 				assertInterruptBacktrackKeymaps(verificationValue, secretProbe);
 				assertInterruptQuestionNavigationKeymaps(verificationValue, secretProbe);
+				assertPagerTranscriptBacktrackKeymaps(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4756,6 +4762,65 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelPagerTranscriptBacktrackKeymaps(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelPagerTranscriptBacktrackKeymapOutcome> {
+		final outcomes:Array<ModelPagerTranscriptBacktrackKeymapOutcome> = [];
+		final values = optionalArrayField(testCase, "pagerTranscriptBacktrackKeymapExpects");
+		for (value in values) outcomes.push(assertPagerTranscriptBacktrackKeymap(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertPagerTranscriptBacktrackKeymaps(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelPagerTranscriptBacktrackKeymapOutcome> {
+		final outcomes:Array<ModelPagerTranscriptBacktrackKeymapOutcome> = [];
+		final values = optionalArrayField(verificationValue, "pagerTranscriptBacktrackKeymapExpects");
+		for (value in values) outcomes.push(assertPagerTranscriptBacktrackKeymap(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertPagerTranscriptBacktrackKeymap(
+		expectValue:Value,
+		secretProbe:String
+	):ModelPagerTranscriptBacktrackKeymapOutcome {
+		final outcome = ModelPagerTranscriptBacktrackKeymapPolicy.apply(new ModelPagerTranscriptBacktrackKeymapRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			pagerActionName: stringField(expectValue, "pagerActionName", ""),
+			pagerBinding: stringField(expectValue, "pagerBinding", ""),
+			transcriptBacktrackActionName: stringField(expectValue, "transcriptBacktrackActionName", ""),
+			transcriptBacktrackBinding: stringField(expectValue, "transcriptBacktrackBinding", ""),
+			interruptActionName: stringField(expectValue, "interruptActionName", ""),
+			fixedBacktrackActionName: stringField(expectValue, "fixedBacktrackActionName", ""),
+			allowedBacktrackOverlapBinding: stringField(expectValue, "allowedBacktrackOverlapBinding", ""),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(pagerTranscriptBacktrackKeymapDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "pagerActionNamePreserved", false)), boolText(outcome.pagerActionNamePreserved));
+		assertEquals(boolText(boolField(expectValue, "pagerBindingPreserved", false)), boolText(outcome.pagerBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "transcriptBacktrackActionNamePreserved", false)), boolText(outcome.transcriptBacktrackActionNamePreserved));
+		assertEquals(boolText(boolField(expectValue, "transcriptLeftBindingPreserved", false)), boolText(outcome.transcriptLeftBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "reservedCollisionDetected", false)), boolText(outcome.reservedCollisionDetected));
+		assertEquals(boolText(boolField(expectValue, "conflictRejected", false)), boolText(outcome.conflictRejected));
+		assertEquals(boolText(boolField(expectValue, "fixedBacktrackOverlapStillAllowed", false)), boolText(outcome.fixedBacktrackOverlapStillAllowed));
+		assertEquals(boolText(boolField(expectValue, "noFalseInterruptBacktrackConflict", false)), boolText(outcome.noFalseInterruptBacktrackConflict));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6184,6 +6249,14 @@ class ModelStreamItemReducerHarness {
 			case "interrupt_question_navigation_conflict_rejected": ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictRejected;
 			case "interrupt_question_navigation_conflict_missed": ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictMissed;
 			case _: throw "unknown interrupt/question-navigation keymap decision kind: " + value;
+		}
+	}
+
+	static function pagerTranscriptBacktrackKeymapDecisionKind(value:String):ModelPagerTranscriptBacktrackKeymapDecisionKind {
+		return switch value {
+			case "pager_transcript_backtrack_conflict_rejected": ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictRejected;
+			case "pager_transcript_backtrack_conflict_missed": ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictMissed;
+			case _: throw "unknown pager/transcript-backtrack keymap decision kind: " + value;
 		}
 	}
 
