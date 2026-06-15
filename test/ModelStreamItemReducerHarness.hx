@@ -235,6 +235,10 @@ import codexhx.runtime.model.streamitem.ModelBacktrackResubmitDecisionKind;
 import codexhx.runtime.model.streamitem.ModelBacktrackResubmitOutcome;
 import codexhx.runtime.model.streamitem.ModelBacktrackResubmitPolicy;
 import codexhx.runtime.model.streamitem.ModelBacktrackResubmitRequest;
+import codexhx.runtime.model.streamitem.ModelQueuedRollbackOverlaySyncDecisionKind;
+import codexhx.runtime.model.streamitem.ModelQueuedRollbackOverlaySyncOutcome;
+import codexhx.runtime.model.streamitem.ModelQueuedRollbackOverlaySyncPolicy;
+import codexhx.runtime.model.streamitem.ModelQueuedRollbackOverlaySyncRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -354,6 +358,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
 			assertTopLevelBacktrackResubmits(testCase, secretProbe);
+			assertTopLevelQueuedRollbackOverlaySyncs(testCase, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -559,6 +564,7 @@ class ModelStreamItemReducerHarness {
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
 				assertBacktrackResubmits(verificationValue, secretProbe);
+				assertQueuedRollbackOverlaySyncs(verificationValue, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -4208,6 +4214,77 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelQueuedRollbackOverlaySyncs(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelQueuedRollbackOverlaySyncOutcome> {
+		final outcomes:Array<ModelQueuedRollbackOverlaySyncOutcome> = [];
+		final values = optionalArrayField(testCase, "queuedRollbackOverlaySyncExpects");
+		for (value in values) outcomes.push(assertQueuedRollbackOverlaySync(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertQueuedRollbackOverlaySyncs(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelQueuedRollbackOverlaySyncOutcome> {
+		final outcomes:Array<ModelQueuedRollbackOverlaySyncOutcome> = [];
+		final values = optionalArrayField(verificationValue, "queuedRollbackOverlaySyncExpects");
+		for (value in values) outcomes.push(assertQueuedRollbackOverlaySync(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertQueuedRollbackOverlaySync(
+		expectValue:Value,
+		secretProbe:String
+	):ModelQueuedRollbackOverlaySyncOutcome {
+		final outcome = ModelQueuedRollbackOverlaySyncPolicy.apply(new ModelQueuedRollbackOverlaySyncRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			numTurns: intField(expectValue, "numTurns", 0),
+			overlayActive: boolField(expectValue, "overlayActive", false),
+			overlayPreviewActive: boolField(expectValue, "overlayPreviewActive", false),
+			nthUserMessageBefore: intField(expectValue, "nthUserMessageBefore", -1),
+			deferredHistoryLineCountBefore: intField(expectValue, "deferredHistoryLineCountBefore", 0),
+			transcriptCells: backtrackTranscriptCells(expectValue),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(queuedRollbackOverlaySyncDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "numTurns", 0)), Std.string(outcome.numTurns));
+		assertEquals(Std.string(intField(expectValue, "transcriptCellCountBefore", 0)), Std.string(outcome.transcriptCellCountBefore));
+		assertEquals(Std.string(intField(expectValue, "transcriptCellCountAfter", 0)), Std.string(outcome.transcriptCellCountAfter));
+		assertEquals(Std.string(intField(expectValue, "userCountBefore", 0)), Std.string(outcome.userCountBefore));
+		assertEquals(Std.string(intField(expectValue, "userCountAfter", 0)), Std.string(outcome.userCountAfter));
+		assertStringArraysEqual(stringArrayField(expectValue, "userMessagesAfter"), outcome.userMessagesAfter);
+		assertEquals(boolText(boolField(expectValue, "overlayActive", false)), boolText(outcome.overlayActive));
+		assertEquals(Std.string(intField(expectValue, "overlayCommittedCellCountBefore", 0)), Std.string(outcome.overlayCommittedCellCountBefore));
+		assertEquals(Std.string(intField(expectValue, "overlayCommittedCellCountAfter", 0)), Std.string(outcome.overlayCommittedCellCountAfter));
+		assertEquals(boolText(boolField(expectValue, "overlayCommittedCountSynced", false)), boolText(outcome.overlayCommittedCountSynced));
+		assertEquals(Std.string(intField(expectValue, "deferredHistoryLineCountBefore", 0)), Std.string(outcome.deferredHistoryLineCountBefore));
+		assertEquals(Std.string(intField(expectValue, "deferredHistoryLineCountAfter", 0)), Std.string(outcome.deferredHistoryLineCountAfter));
+		assertEquals(boolText(boolField(expectValue, "deferredHistoryCleared", false)), boolText(outcome.deferredHistoryCleared));
+		assertEquals(Std.string(intField(expectValue, "previewSelectionBefore", -1)), Std.string(outcome.previewSelectionBefore));
+		assertEquals(Std.string(intField(expectValue, "previewSelectionAfter", -1)), Std.string(outcome.previewSelectionAfter));
+		assertEquals(boolText(boolField(expectValue, "previewSelectionClamped", false)), boolText(outcome.previewSelectionClamped));
+		assertEquals(Std.string(intField(expectValue, "agentCopyHistoryUserCountAfter", 0)), Std.string(outcome.agentCopyHistoryUserCountAfter));
+		assertEquals(boolText(boolField(expectValue, "agentCopyHistoryTruncated", false)), boolText(outcome.agentCopyHistoryTruncated));
+		assertEquals(boolText(boolField(expectValue, "backtrackRenderPending", false)), boolText(outcome.backtrackRenderPending));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveOnlyEffectsSuppressed", false)), boolText(outcome.liveOnlyEffectsSuppressed));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		for (message in outcome.userMessagesAfter) if (message.length > 0) assertNotContains(outcome.summary(), message);
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
@@ -5164,6 +5241,14 @@ class ModelStreamItemReducerHarness {
 			case "data_image_url_preserved": ModelBacktrackResubmitDecisionKind.DataImageUrlPreserved;
 			case "resubmit_blocked": ModelBacktrackResubmitDecisionKind.ResubmitBlocked;
 			case _: throw "unknown backtrack resubmit decision kind: " + value;
+		}
+	}
+
+	static function queuedRollbackOverlaySyncDecisionKind(value:String):ModelQueuedRollbackOverlaySyncDecisionKind {
+		return switch value {
+			case "rollback_applied": ModelQueuedRollbackOverlaySyncDecisionKind.RollbackApplied;
+			case "rollback_unchanged": ModelQueuedRollbackOverlaySyncDecisionKind.RollbackUnchanged;
+			case _: throw "unknown queued rollback overlay sync decision kind: " + value;
 		}
 	}
 

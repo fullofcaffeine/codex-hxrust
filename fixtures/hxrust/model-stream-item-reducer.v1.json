@@ -6948,6 +6948,82 @@
 	          "errorMessage": "",
 	          "summaryContains": "decisionKind=data_image_url_preserved;userCountSinceLastSession=1;selectedNthUserMessage=0;rollbackTurnCount=1;composerRemoteImageCountAfterRollback=1;submittedImageItemCount=1;submittedTextItemCount=1;dataImageUrlPreserved=true;imageItemBeforeTextItem=true;rollbackSubmitted=true;userTurnSubmitted=true"
 	        }
+	      ],
+	      "queuedRollbackOverlaySyncExpects": [
+	        {
+	          "ok": true,
+	          "code": "queued_rollback_overlay_sync_modeled",
+	          "requestId": "queued-rollback-syncs-overlay-and-clears-deferred-history",
+	          "numTurns": 1,
+	          "overlayActive": true,
+	          "overlayPreviewActive": true,
+	          "nthUserMessageBefore": 1,
+	          "deferredHistoryLineCountBefore": 1,
+	          "previousEventCount": 73,
+	          "eventOrderIndex": 74,
+	          "transcriptCells": [
+	            {
+	              "cellKind": "user",
+	              "message": "first",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "agent",
+	              "message": "after first",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "user",
+	              "message": "second",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "agent",
+	              "message": "after second",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            }
+	          ],
+	          "decisionKind": "rollback_applied",
+	          "transcriptCellCountBefore": 4,
+	          "transcriptCellCountAfter": 2,
+	          "userCountBefore": 2,
+	          "userCountAfter": 1,
+	          "userMessagesAfter": ["first"],
+	          "overlayCommittedCellCountBefore": 4,
+	          "overlayCommittedCellCountAfter": 2,
+	          "overlayCommittedCountSynced": true,
+	          "deferredHistoryLineCountAfter": 0,
+	          "deferredHistoryCleared": true,
+	          "previewSelectionBefore": 1,
+	          "previewSelectionAfter": 0,
+	          "previewSelectionClamped": true,
+	          "agentCopyHistoryUserCountAfter": 1,
+	          "agentCopyHistoryTruncated": true,
+	          "backtrackRenderPending": true,
+	          "eventOrderingPreserved": true,
+	          "liveOnlyEffectsSuppressed": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=rollback_applied;numTurns=1;transcriptCellCountBefore=4;transcriptCellCountAfter=2;userCountBefore=2;userCountAfter=1;overlayActive=true;overlayCommittedCellCountAfter=2;overlayCommittedCountSynced=true;deferredHistoryLineCountBefore=1;deferredHistoryLineCountAfter=0;deferredHistoryCleared=true;previewSelectionBefore=1;previewSelectionAfter=0;previewSelectionClamped=true;agentCopyHistoryUserCountAfter=1;agentCopyHistoryTruncated=true;backtrackRenderPending=true;eventOrderingPreserved=true;liveOnlyEffectsSuppressed=true"
+	        }
 	      ]
 		    },
     {
