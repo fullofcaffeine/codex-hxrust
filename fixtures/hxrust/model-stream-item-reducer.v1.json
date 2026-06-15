@@ -6697,6 +6697,34 @@
 	          "summaryContains": "decisionKind=previous_conversation_shutdown_requested;previousConversationPresent=true;shutdownCurrentThreadAttempted=true;pendingRollbackCleared=true;threadUnsubscribeAttempted=true;threadUnsubscribeSucceeded=true;listenerAbortAttempted=true;listenerTaskRemoved=true;opShutdownSubmitted=false;opQueueLengthBefore=0;opQueueLengthAfter=0;duplicateShutdownSuppressed=true;newSessionMayStartAfterShutdown=true;eventOrderingPreserved=true"
 	        }
 	      ],
+	      "interruptWithoutActiveTurnExpects": [
+	        {
+	          "ok": true,
+	          "code": "interrupt_without_active_turn_modeled",
+	          "requestId": "interrupt-without-active-turn-startup-fallback",
+	          "threadId": "thread-interrupt-startup",
+	          "appCommandInterrupt": true,
+	          "primaryThreadRegistered": true,
+	          "appServerSessionAvailable": true,
+	          "activeTurnId": "",
+	          "startupInterruptSucceeded": true,
+	          "previousEventCount": 69,
+	          "eventOrderIndex": 70,
+	          "decisionKind": "startup_interrupt_submitted",
+	          "activeTurnPresent": false,
+	          "turnInterruptSubmitted": false,
+	          "startupInterruptSubmitted": true,
+	          "handled": true,
+	          "retryAttempted": false,
+	          "activeTurnRaceRetryUsed": false,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=startup_interrupt_submitted;primaryThreadRegistered=true;activeTurnPresent=false;turnInterruptSubmitted=false;startupInterruptSubmitted=true;startupInterruptSucceeded=true;handled=true;retryAttempted=false;activeTurnRaceRetryUsed=false;eventOrderingPreserved=true"
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

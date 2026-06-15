@@ -1367,7 +1367,20 @@ Model selected raw Codex fresh-session shutdown behavior:
 
 Status: HXCX-4.110 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic fresh-session previous-conversation shutdown evidence only, not live app-server calls, live `thread_unsubscribe` RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.111+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.111: Interrupt Without Active Turn Startup Fallback Boundary
+
+Model selected raw Codex interrupt-routing behavior:
+
+- accept an `AppCommand::Interrupt` for a registered primary thread;
+- detect that no active turn id is cached for the target thread;
+- submit startup-interrupt intent instead of turn-interrupt intent;
+- return `handled = true` after successful startup interrupt;
+- skip active-turn mismatch retry handling because there was no active turn id;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.111 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic interrupt without active turn startup fallback evidence only, not live app-server calls, live `startup_interrupt` RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.112+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

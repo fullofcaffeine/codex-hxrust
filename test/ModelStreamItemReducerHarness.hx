@@ -221,6 +221,10 @@ import codexhx.runtime.model.streamitem.ModelFreshSessionPreviousConversationShu
 import codexhx.runtime.model.streamitem.ModelFreshSessionPreviousConversationShutdownOutcome;
 import codexhx.runtime.model.streamitem.ModelFreshSessionPreviousConversationShutdownPolicy;
 import codexhx.runtime.model.streamitem.ModelFreshSessionPreviousConversationShutdownRequest;
+import codexhx.runtime.model.streamitem.ModelInterruptWithoutActiveTurnDecisionKind;
+import codexhx.runtime.model.streamitem.ModelInterruptWithoutActiveTurnOutcome;
+import codexhx.runtime.model.streamitem.ModelInterruptWithoutActiveTurnPolicy;
+import codexhx.runtime.model.streamitem.ModelInterruptWithoutActiveTurnRequest;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionDecisionKind;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionOutcome;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionPolicy;
@@ -363,6 +367,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelTuiActiveTurnErrors(testCase, secretProbe);
 			assertTopLevelFreshSessionServiceTiers(testCase, secretProbe);
 			assertTopLevelFreshSessionPreviousConversationShutdowns(testCase, secretProbe);
+			assertTopLevelInterruptWithoutActiveTurns(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -571,6 +576,7 @@ class ModelStreamItemReducerHarness {
 				assertTuiActiveTurnErrors(verificationValue, secretProbe);
 				assertFreshSessionServiceTiers(verificationValue, secretProbe);
 				assertFreshSessionPreviousConversationShutdowns(verificationValue, secretProbe);
+				assertInterruptWithoutActiveTurns(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4024,6 +4030,69 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelInterruptWithoutActiveTurns(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelInterruptWithoutActiveTurnOutcome> {
+		final outcomes:Array<ModelInterruptWithoutActiveTurnOutcome> = [];
+		final values = optionalArrayField(testCase, "interruptWithoutActiveTurnExpects");
+		for (value in values) outcomes.push(assertInterruptWithoutActiveTurn(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertInterruptWithoutActiveTurns(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelInterruptWithoutActiveTurnOutcome> {
+		final outcomes:Array<ModelInterruptWithoutActiveTurnOutcome> = [];
+		final values = optionalArrayField(verificationValue, "interruptWithoutActiveTurnExpects");
+		for (value in values) outcomes.push(assertInterruptWithoutActiveTurn(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertInterruptWithoutActiveTurn(
+		expectValue:Value,
+		secretProbe:String
+	):ModelInterruptWithoutActiveTurnOutcome {
+		final outcome = ModelInterruptWithoutActiveTurnPolicy.apply(new ModelInterruptWithoutActiveTurnRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			threadId: stringField(expectValue, "threadId", ""),
+			appCommandInterrupt: boolField(expectValue, "appCommandInterrupt", false),
+			primaryThreadRegistered: boolField(expectValue, "primaryThreadRegistered", false),
+			appServerSessionAvailable: boolField(expectValue, "appServerSessionAvailable", false),
+			activeTurnId: stringField(expectValue, "activeTurnId", ""),
+			startupInterruptSucceeded: boolField(expectValue, "startupInterruptSucceeded", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(interruptWithoutActiveTurnDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "primaryThreadRegistered", false)), boolText(outcome.primaryThreadRegistered));
+		assertEquals(boolText(boolField(expectValue, "activeTurnPresent", false)), boolText(outcome.activeTurnPresent));
+		assertEquals(boolText(boolField(expectValue, "turnInterruptSubmitted", false)), boolText(outcome.turnInterruptSubmitted));
+		assertEquals(boolText(boolField(expectValue, "startupInterruptSubmitted", false)), boolText(outcome.startupInterruptSubmitted));
+		assertEquals(boolText(boolField(expectValue, "startupInterruptSucceeded", false)), boolText(outcome.startupInterruptSucceeded));
+		assertEquals(boolText(boolField(expectValue, "handled", false)), boolText(outcome.handled));
+		assertEquals(boolText(boolField(expectValue, "retryAttempted", false)), boolText(outcome.retryAttempted));
+		assertEquals(boolText(boolField(expectValue, "activeTurnRaceRetryUsed", false)), boolText(outcome.activeTurnRaceRetryUsed));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) {
+			assertNotContains(outcome.summary(), secretProbe);
+			assertNotContains(outcome.summary(), stringField(expectValue, "threadId", ""));
+			final activeTurnId = stringField(expectValue, "activeTurnId", "");
+			if (activeTurnId.length > 0) assertNotContains(outcome.summary(), activeTurnId);
+		}
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -5365,6 +5434,15 @@ class ModelStreamItemReducerHarness {
 			case "no_previous_conversation_noop": ModelFreshSessionPreviousConversationShutdownDecisionKind.NoPreviousConversationNoop;
 			case "previous_conversation_unsubscribe_failed": ModelFreshSessionPreviousConversationShutdownDecisionKind.PreviousConversationUnsubscribeFailed;
 			case _: throw "unknown fresh-session previous-conversation shutdown decision kind: " + value;
+		}
+	}
+
+	static function interruptWithoutActiveTurnDecisionKind(value:String):ModelInterruptWithoutActiveTurnDecisionKind {
+		return switch value {
+			case "startup_interrupt_submitted": ModelInterruptWithoutActiveTurnDecisionKind.StartupInterruptSubmitted;
+			case "active_turn_interrupt_submitted": ModelInterruptWithoutActiveTurnDecisionKind.ActiveTurnInterruptSubmitted;
+			case "interrupt_not_handled": ModelInterruptWithoutActiveTurnDecisionKind.InterruptNotHandled;
+			case _: throw "unknown interrupt without active turn decision kind: " + value;
 		}
 	}
 
