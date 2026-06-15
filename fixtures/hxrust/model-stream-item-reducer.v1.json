@@ -8205,6 +8205,42 @@
 	          }
 	        }
 	      ],
+	      "keymapMainSurfaceAssignmentExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_main_surface_assignment_modeled",
+	          "requestId": "keymap-main-toggle-fast-mode-ctrl-shift-f",
+	          "previousEventCount": 100,
+	          "eventOrderIndex": 101,
+	          "decisionKind": "keymap_main_surface_assignment_preserved",
+	          "actionKindPreserved": true,
+	          "defaultBindingEmptyPreserved": true,
+	          "configuredBindingPreserved": true,
+	          "runtimeBindingPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_main_surface_assignment_preserved;actionKindPreserved=true;defaultBindingEmptyPreserved=true;configuredBindingPreserved=true;runtimeBindingPreserved=true;eventOrderingPreserved=true",
+	          "actionKind": "toggle_fast_mode",
+	          "defaultBindings": [],
+	          "configuredBinding": {
+	            "kind": "character",
+	            "keyName": "f",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "shiftModifier": true
+	          },
+	          "runtimeBinding": {
+	            "kind": "character",
+	            "keyName": "f",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "shiftModifier": true
+	          }
+	        }
+	      ],
 	      "keymapEditorConflictExpects": [
 	        {
 	          "ok": true,
