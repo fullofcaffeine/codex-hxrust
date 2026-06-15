@@ -232,6 +232,11 @@ import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictActionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultActionCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowDecisionKind;
@@ -452,6 +457,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapShadows(testCase, secretProbe);
 			assertTopLevelKeymapBindingInputs(testCase, secretProbe);
 			assertTopLevelKeymapDefaultPrunings(testCase, secretProbe);
+			assertTopLevelKeymapOverlapConflicts(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -676,6 +682,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapShadows(verificationValue, secretProbe);
 				assertKeymapBindingInputs(verificationValue, secretProbe);
 				assertKeymapDefaultPrunings(verificationValue, secretProbe);
+				assertKeymapOverlapConflicts(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5243,6 +5250,81 @@ class ModelStreamItemReducerHarness {
 		return cases;
 	}
 
+	static function assertTopLevelKeymapOverlapConflicts(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapOverlapConflictOutcome> {
+		final outcomes:Array<ModelKeymapOverlapConflictOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapOverlapConflictExpects");
+		for (value in values) outcomes.push(assertKeymapOverlapConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapOverlapConflicts(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapOverlapConflictOutcome> {
+		final outcomes:Array<ModelKeymapOverlapConflictOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapOverlapConflictExpects");
+		for (value in values) outcomes.push(assertKeymapOverlapConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapOverlapConflictSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapOverlapConflictOutcome {
+		final outcome = ModelKeymapOverlapConflictPolicy.apply(new ModelKeymapOverlapConflictRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			explicitListLegacyOuterAction: keymapOverlapConflictActionKind(stringField(expectValue, "explicitListLegacyOuterAction", "")),
+			explicitListLegacyInnerAction: keymapOverlapConflictActionKind(stringField(expectValue, "explicitListLegacyInnerAction", "")),
+			explicitListLegacyBinding: keymapBinding(objectField(expectValue, "explicitListLegacyBinding")),
+			configuredAppCopy: keymapBinding(objectField(expectValue, "configuredAppCopy")),
+			prunedListPageDownAfterApp: keymapBindings(expectValue, "prunedListPageDownAfterApp"),
+			configuredApprovalApprove: keymapBinding(objectField(expectValue, "configuredApprovalApprove")),
+			prunedListJumpTopAfterApproval: keymapBindings(expectValue, "prunedListJumpTopAfterApproval"),
+			explicitListApprovalOuterAction: keymapOverlapConflictActionKind(stringField(expectValue, "explicitListApprovalOuterAction", "")),
+			explicitListApprovalInnerAction: keymapOverlapConflictActionKind(stringField(expectValue, "explicitListApprovalInnerAction", "")),
+			explicitListApprovalBinding: keymapBinding(objectField(expectValue, "explicitListApprovalBinding")),
+			configuredLegacyVimMoveLeftForChange: keymapBinding(objectField(expectValue, "configuredLegacyVimMoveLeftForChange")),
+			prunedVimStartChangeOperator: keymapBindings(expectValue, "prunedVimStartChangeOperator"),
+			explicitVimChangeOuterAction: keymapOverlapConflictActionKind(stringField(expectValue, "explicitVimChangeOuterAction", "")),
+			explicitVimChangeInnerAction: keymapOverlapConflictActionKind(stringField(expectValue, "explicitVimChangeInnerAction", "")),
+			explicitVimChangeBinding: keymapBinding(objectField(expectValue, "explicitVimChangeBinding")),
+			configuredLegacyVimMoveLeftForSubstitute: keymapBinding(objectField(expectValue, "configuredLegacyVimMoveLeftForSubstitute")),
+			prunedVimSubstituteChar: keymapBindings(expectValue, "prunedVimSubstituteChar"),
+			explicitVimSubstituteOuterAction: keymapOverlapConflictActionKind(stringField(expectValue, "explicitVimSubstituteOuterAction", "")),
+			explicitVimSubstituteInnerAction: keymapOverlapConflictActionKind(stringField(expectValue, "explicitVimSubstituteInnerAction", "")),
+			explicitVimSubstituteBinding: keymapBinding(objectField(expectValue, "explicitVimSubstituteBinding")),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap overlap conflict expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapOverlapConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "explicitListLegacyConflictPreserved", false)), boolText(outcome.explicitListLegacyConflictPreserved));
+		assertEquals(boolText(boolField(expectValue, "appBindingPrunesListDefaultPreserved", false)), boolText(outcome.appBindingPrunesListDefaultPreserved));
+		assertEquals(boolText(boolField(expectValue, "approvalBindingPrunesListDefaultPreserved", false)), boolText(outcome.approvalBindingPrunesListDefaultPreserved));
+		assertEquals(boolText(boolField(expectValue, "explicitListApprovalConflictPreserved", false)), boolText(outcome.explicitListApprovalConflictPreserved));
+		assertEquals(boolText(boolField(expectValue, "legacyVimChangePruningPreserved", false)), boolText(outcome.legacyVimChangePruningPreserved));
+		assertEquals(boolText(boolField(expectValue, "explicitVimChangeConflictPreserved", false)), boolText(outcome.explicitVimChangeConflictPreserved));
+		assertEquals(boolText(boolField(expectValue, "legacyVimSubstitutePruningPreserved", false)), boolText(outcome.legacyVimSubstitutePruningPreserved));
+		assertEquals(boolText(boolField(expectValue, "explicitVimSubstituteConflictPreserved", false)), boolText(outcome.explicitVimSubstituteConflictPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6724,6 +6806,18 @@ class ModelStreamItemReducerHarness {
 
 	static function keymapDefaultPruningActionKind(value:String):ModelKeymapDefaultPruningActionKind {
 		return ModelKeymapDefaultPruningActionKind.fromString(value);
+	}
+
+	static function keymapOverlapConflictDecisionKind(value:String):ModelKeymapOverlapConflictDecisionKind {
+		return switch value {
+			case "keymap_overlap_conflicts_preserved": ModelKeymapOverlapConflictDecisionKind.KeymapOverlapConflictsPreserved;
+			case "keymap_overlap_conflicts_rejected": ModelKeymapOverlapConflictDecisionKind.KeymapOverlapConflictsRejected;
+			case _: throw "unknown keymap overlap conflict decision kind: " + value;
+		}
+	}
+
+	static function keymapOverlapConflictActionKind(value:String):ModelKeymapOverlapConflictActionKind {
+		return ModelKeymapOverlapConflictActionKind.fromString(value);
 	}
 
 	static function parsedKeyKind(value:String):ModelParsedKeyKind {

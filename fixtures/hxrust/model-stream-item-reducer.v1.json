@@ -7939,6 +7939,89 @@
 	          ]
 	        }
 	      ],
+	      "keymapOverlapConflictExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_overlap_conflicts_modeled",
+	          "requestId": "keymap-overlap-conflicts-list-approval-vim",
+	          "previousEventCount": 86,
+	          "eventOrderIndex": 87,
+	          "decisionKind": "keymap_overlap_conflicts_preserved",
+	          "explicitListLegacyConflictPreserved": true,
+	          "appBindingPrunesListDefaultPreserved": true,
+	          "approvalBindingPrunesListDefaultPreserved": true,
+	          "explicitListApprovalConflictPreserved": true,
+	          "legacyVimChangePruningPreserved": true,
+	          "explicitVimChangeConflictPreserved": true,
+	          "legacyVimSubstitutePruningPreserved": true,
+	          "explicitVimSubstituteConflictPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_overlap_conflicts_preserved;explicitListLegacyConflictPreserved=true;appBindingPrunesListDefaultPreserved=true;approvalBindingPrunesListDefaultPreserved=true;explicitListApprovalConflictPreserved=true;legacyVimChangePruningPreserved=true;explicitVimChangeConflictPreserved=true;legacyVimSubstitutePruningPreserved=true;explicitVimSubstituteConflictPreserved=true;eventOrderingPreserved=true",
+	          "explicitListLegacyOuterAction": "list_move_up",
+	          "explicitListLegacyInnerAction": "list_page_up",
+	          "explicitListLegacyBinding": {
+	            "kind": "named",
+	            "keyName": "page-up",
+	            "functionNumber": -1
+	          },
+	          "configuredAppCopy": {
+	            "kind": "named",
+	            "keyName": "page-down",
+	            "functionNumber": -1
+	          },
+	          "prunedListPageDownAfterApp": [
+	            {
+	              "kind": "character",
+	              "keyName": "f",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            }
+	          ],
+	          "configuredApprovalApprove": {
+	            "kind": "named",
+	            "keyName": "home",
+	            "functionNumber": -1
+	          },
+	          "prunedListJumpTopAfterApproval": [],
+	          "explicitListApprovalOuterAction": "list_jump_top",
+	          "explicitListApprovalInnerAction": "approval_approve",
+	          "explicitListApprovalBinding": {
+	            "kind": "named",
+	            "keyName": "home",
+	            "functionNumber": -1
+	          },
+	          "configuredLegacyVimMoveLeftForChange": {
+	            "kind": "character",
+	            "keyName": "c",
+	            "functionNumber": -1
+	          },
+	          "prunedVimStartChangeOperator": [],
+	          "explicitVimChangeOuterAction": "vim_normal_move_left",
+	          "explicitVimChangeInnerAction": "vim_normal_start_change_operator",
+	          "explicitVimChangeBinding": {
+	            "kind": "character",
+	            "keyName": "c",
+	            "functionNumber": -1
+	          },
+	          "configuredLegacyVimMoveLeftForSubstitute": {
+	            "kind": "character",
+	            "keyName": "s",
+	            "functionNumber": -1
+	          },
+	          "prunedVimSubstituteChar": [],
+	          "explicitVimSubstituteOuterAction": "vim_normal_move_left",
+	          "explicitVimSubstituteInnerAction": "vim_normal_substitute_char",
+	          "explicitVimSubstituteBinding": {
+	            "kind": "character",
+	            "keyName": "s",
+	            "functionNumber": -1
+	          }
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

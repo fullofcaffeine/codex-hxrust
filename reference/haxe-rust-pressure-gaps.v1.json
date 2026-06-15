@@ -24,7 +24,7 @@
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 797,
+    "sourceFilesScanned": 802,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
