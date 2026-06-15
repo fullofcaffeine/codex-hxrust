@@ -252,6 +252,11 @@ import codexhx.runtime.model.streamitem.ModelKeymapApprovalConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapApprovalConflictOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapApprovalConflictPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapApprovalConflictRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapFixedShortcutActionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapFixedShortcutDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapFixedShortcutOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapFixedShortcutPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapFixedShortcutRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictActionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictOutcome;
@@ -498,6 +503,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapPagerConflicts(testCase, secretProbe);
 			assertTopLevelKeymapListConflicts(testCase, secretProbe);
 			assertTopLevelKeymapApprovalConflicts(testCase, secretProbe);
+			assertTopLevelKeymapFixedShortcuts(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -730,6 +736,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapPagerConflicts(verificationValue, secretProbe);
 				assertKeymapListConflicts(verificationValue, secretProbe);
 				assertKeymapApprovalConflicts(verificationValue, secretProbe);
+				assertKeymapFixedShortcuts(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5776,6 +5783,69 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapFixedShortcuts(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapFixedShortcutOutcome> {
+		final outcomes:Array<ModelKeymapFixedShortcutOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapFixedShortcutExpects");
+		for (value in values) outcomes.push(assertKeymapFixedShortcutSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapFixedShortcuts(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapFixedShortcutOutcome> {
+		final outcomes:Array<ModelKeymapFixedShortcutOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapFixedShortcutExpects");
+		for (value in values) outcomes.push(assertKeymapFixedShortcutSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapFixedShortcutSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapFixedShortcutOutcome {
+		final outcome = ModelKeymapFixedShortcutPolicy.apply(new ModelKeymapFixedShortcutRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			configuredCopyBinding: keymapBinding(objectField(expectValue, "configuredCopyBinding")),
+			defaultIncreaseReasoningBinding: keymapBinding(objectField(expectValue, "defaultIncreaseReasoningBinding")),
+			conflictOuterAction: keymapFixedShortcutActionKind(stringField(expectValue, "conflictOuterAction", "")),
+			conflictInnerAction: keymapFixedShortcutActionKind(stringField(expectValue, "conflictInnerAction", "")),
+			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
+			expectedInnerActionName: stringField(expectValue, "expectedInnerActionName", ""),
+			conflictRejected: boolField(expectValue, "conflictRejected", false),
+			increaseReasoningUnbound: boolField(expectValue, "increaseReasoningUnbound", false),
+			runtimeAcceptedAfterUnbind: boolField(expectValue, "runtimeAcceptedAfterUnbind", false),
+			runtimeCopyBinding: keymapBinding(objectField(expectValue, "runtimeCopyBinding")),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap fixed shortcut expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapFixedShortcutDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "configuredCopyBindingPreserved", false)), boolText(outcome.configuredCopyBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "defaultIncreaseReasoningBindingPreserved", false)), boolText(outcome.defaultIncreaseReasoningBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
+		assertEquals(boolText(boolField(expectValue, "originalActionUnboundPreserved", false)), boolText(outcome.originalActionUnboundPreserved));
+		assertEquals(boolText(boolField(expectValue, "runtimeCopyRemapPreserved", false)), boolText(outcome.runtimeCopyRemapPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -7345,6 +7415,18 @@ class ModelStreamItemReducerHarness {
 
 	static function keymapApprovalConflictActionKind(value:String):ModelKeymapApprovalConflictActionKind {
 		return ModelKeymapApprovalConflictActionKind.fromString(value);
+	}
+
+	static function keymapFixedShortcutDecisionKind(value:String):ModelKeymapFixedShortcutDecisionKind {
+		return switch value {
+			case "keymap_fixed_shortcut_conflict_preserved": ModelKeymapFixedShortcutDecisionKind.KeymapFixedShortcutConflictPreserved;
+			case "keymap_fixed_shortcut_conflict_rejected": ModelKeymapFixedShortcutDecisionKind.KeymapFixedShortcutConflictRejected;
+			case _: throw "unknown keymap fixed shortcut decision kind: " + value;
+		}
+	}
+
+	static function keymapFixedShortcutActionKind(value:String):ModelKeymapFixedShortcutActionKind {
+		return ModelKeymapFixedShortcutActionKind.fromString(value);
 	}
 
 	static function parsedKeyKind(value:String):ModelParsedKeyKind {

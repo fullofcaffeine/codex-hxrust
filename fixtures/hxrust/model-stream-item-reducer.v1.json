@@ -8510,6 +8510,53 @@
 	          "conflictRejected": true
 	        }
 	      ],
+	      "keymapFixedShortcutExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_fixed_shortcut_conflict_modeled",
+	          "requestId": "keymap-fixed-shortcut-copy-increase-reasoning-conflict",
+	          "previousEventCount": 99,
+	          "eventOrderIndex": 100,
+	          "decisionKind": "keymap_fixed_shortcut_conflict_preserved",
+	          "configuredCopyBindingPreserved": true,
+	          "defaultIncreaseReasoningBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "originalActionUnboundPreserved": true,
+	          "runtimeCopyRemapPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_fixed_shortcut_conflict_preserved;configuredCopyBindingPreserved=true;defaultIncreaseReasoningBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;originalActionUnboundPreserved=true;runtimeCopyRemapPreserved=true;eventOrderingPreserved=true",
+	          "configuredCopyBinding": {
+	            "kind": "character",
+	            "keyName": ".",
+	            "functionNumber": -1,
+	            "altModifier": true
+	          },
+	          "defaultIncreaseReasoningBinding": {
+	            "kind": "character",
+	            "keyName": ".",
+	            "functionNumber": -1,
+	            "altModifier": true
+	          },
+	          "conflictOuterAction": "global_copy",
+	          "conflictInnerAction": "chat_increase_reasoning_effort",
+	          "expectedOuterActionName": "copy",
+	          "expectedInnerActionName": "chat.increase_reasoning_effort",
+	          "conflictRejected": true,
+	          "increaseReasoningUnbound": true,
+	          "runtimeAcceptedAfterUnbind": true,
+	          "runtimeCopyBinding": {
+	            "kind": "character",
+	            "keyName": ".",
+	            "functionNumber": -1,
+	            "altModifier": true
+	          }
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
