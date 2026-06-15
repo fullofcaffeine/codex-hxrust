@@ -1507,7 +1507,19 @@ Model selected raw Codex pager reserved-key behavior:
 
 Status: HXCX-4.121 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic pager/transcript-backtrack keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.122+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.122: Key Parser Function And Named-Key Boundary
+
+Model selected raw Codex key parser behavior:
+
+- accept F1 and F24 function-key specs;
+- reject out-of-range F25;
+- preserve named non-character keys including tab, backspace, Esc, delete, arrows, home/end, page-up/page-down, space, and minus;
+- keep the parser evidence deterministic and independent of live keyboard input;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.122 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic key parser evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.123+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

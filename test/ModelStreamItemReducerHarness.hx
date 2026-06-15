@@ -217,6 +217,12 @@ import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapDe
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapOutcome;
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapPolicy;
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapRequest;
+import codexhx.runtime.model.streamitem.ModelKeyParserCase;
+import codexhx.runtime.model.streamitem.ModelKeyParserDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeyParserOutcome;
+import codexhx.runtime.model.streamitem.ModelKeyParserPolicy;
+import codexhx.runtime.model.streamitem.ModelKeyParserRequest;
+import codexhx.runtime.model.streamitem.ModelParsedKeyKind;
 import codexhx.runtime.model.streamitem.ModelPagerTranscriptBacktrackKeymapDecisionKind;
 import codexhx.runtime.model.streamitem.ModelPagerTranscriptBacktrackKeymapOutcome;
 import codexhx.runtime.model.streamitem.ModelPagerTranscriptBacktrackKeymapPolicy;
@@ -418,6 +424,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelInterruptBacktrackKeymaps(testCase, secretProbe);
 			assertTopLevelInterruptQuestionNavigationKeymaps(testCase, secretProbe);
 			assertTopLevelPagerTranscriptBacktrackKeymaps(testCase, secretProbe);
+			assertTopLevelKeyParserCases(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -637,6 +644,7 @@ class ModelStreamItemReducerHarness {
 				assertInterruptBacktrackKeymaps(verificationValue, secretProbe);
 				assertInterruptQuestionNavigationKeymaps(verificationValue, secretProbe);
 				assertPagerTranscriptBacktrackKeymaps(verificationValue, secretProbe);
+				assertKeyParserCases(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4821,6 +4829,69 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeyParserCases(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeyParserOutcome> {
+		final outcomes:Array<ModelKeyParserOutcome> = [];
+		final values = optionalArrayField(testCase, "keyParserExpects");
+		for (value in values) outcomes.push(assertKeyParserCaseSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeyParserCases(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeyParserOutcome> {
+		final outcomes:Array<ModelKeyParserOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keyParserExpects");
+		for (value in values) outcomes.push(assertKeyParserCaseSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeyParserCaseSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeyParserOutcome {
+		final cases:Array<ModelKeyParserCase> = [];
+		for (caseValue in arrayField(expectValue, "cases")) {
+			final caseObject = objectValue(caseValue);
+			cases.push(new ModelKeyParserCase({
+				spec: stringField(caseObject, "spec", ""),
+				expectedAccepted: boolField(caseObject, "expectedAccepted", false),
+				expectedKind: parsedKeyKind(stringField(caseObject, "expectedKind", "")),
+				expectedKeyName: stringField(caseObject, "expectedKeyName", ""),
+				expectedFunctionNumber: intField(caseObject, "expectedFunctionNumber", -1)
+			}));
+		}
+		final outcome = ModelKeyParserPolicy.apply(new ModelKeyParserRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			maxFunctionKey: intField(expectValue, "maxFunctionKey", 0),
+			cases: cases,
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keyParserDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "acceptedFunctionKeyCount", 0)), Std.string(outcome.acceptedFunctionKeyCount));
+		assertEquals(Std.string(intField(expectValue, "rejectedFunctionKeyCount", 0)), Std.string(outcome.rejectedFunctionKeyCount));
+		assertEquals(Std.string(intField(expectValue, "namedKeyCount", 0)), Std.string(outcome.namedKeyCount));
+		assertEquals(boolText(boolField(expectValue, "spaceAliasPreserved", false)), boolText(outcome.spaceAliasPreserved));
+		assertEquals(boolText(boolField(expectValue, "minusAliasPreserved", false)), boolText(outcome.minusAliasPreserved));
+		assertEquals(boolText(boolField(expectValue, "allExpectedCasesMatched", false)), boolText(outcome.allExpectedCasesMatched));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6257,6 +6328,24 @@ class ModelStreamItemReducerHarness {
 			case "pager_transcript_backtrack_conflict_rejected": ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictRejected;
 			case "pager_transcript_backtrack_conflict_missed": ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictMissed;
 			case _: throw "unknown pager/transcript-backtrack keymap decision kind: " + value;
+		}
+	}
+
+	static function keyParserDecisionKind(value:String):ModelKeyParserDecisionKind {
+		return switch value {
+			case "key_parser_cases_preserved": ModelKeyParserDecisionKind.KeyParserCasesPreserved;
+			case "key_parser_cases_rejected": ModelKeyParserDecisionKind.KeyParserCasesRejected;
+			case _: throw "unknown key parser decision kind: " + value;
+		}
+	}
+
+	static function parsedKeyKind(value:String):ModelParsedKeyKind {
+		return switch value {
+			case "function": ModelParsedKeyKind.Function;
+			case "named": ModelParsedKeyKind.Named;
+			case "character": ModelParsedKeyKind.Character;
+			case "invalid": ModelParsedKeyKind.Invalid;
+			case _: throw "unknown parsed key kind: " + value;
 		}
 	}
 

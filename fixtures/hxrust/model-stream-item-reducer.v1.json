@@ -7090,6 +7090,150 @@
 	          "summaryContains": "decisionKind=pager_transcript_backtrack_conflict_rejected;pagerActionNamePreserved=true;pagerBindingPreserved=true;transcriptBacktrackActionNamePreserved=true;transcriptLeftBindingPreserved=true;reservedCollisionDetected=true;conflictRejected=true;fixedBacktrackOverlapStillAllowed=true;noFalseInterruptBacktrackConflict=true;eventOrderingPreserved=true"
 	        }
 	      ],
+	      "keyParserExpects": [
+	        {
+	          "ok": true,
+	          "code": "key_parser_cases_modeled",
+	          "requestId": "parses-function-keys-and-named-non-character-keys",
+	          "maxFunctionKey": 24,
+	          "previousEventCount": 80,
+	          "eventOrderIndex": 81,
+	          "decisionKind": "key_parser_cases_preserved",
+	          "acceptedFunctionKeyCount": 2,
+	          "rejectedFunctionKeyCount": 1,
+	          "namedKeyCount": 14,
+	          "spaceAliasPreserved": true,
+	          "minusAliasPreserved": true,
+	          "allExpectedCasesMatched": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=key_parser_cases_preserved;acceptedFunctionKeyCount=2;rejectedFunctionKeyCount=1;namedKeyCount=14;spaceAliasPreserved=true;minusAliasPreserved=true;allExpectedCasesMatched=true;eventOrderingPreserved=true",
+	          "cases": [
+	            {
+	              "spec": "f1",
+	              "expectedAccepted": true,
+	              "expectedKind": "function",
+	              "expectedKeyName": "f1",
+	              "expectedFunctionNumber": 1
+	            },
+	            {
+	              "spec": "f24",
+	              "expectedAccepted": true,
+	              "expectedKind": "function",
+	              "expectedKeyName": "f24",
+	              "expectedFunctionNumber": 24
+	            },
+	            {
+	              "spec": "f25",
+	              "expectedAccepted": false,
+	              "expectedKind": "function",
+	              "expectedKeyName": "",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "tab",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "tab",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "backspace",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "backspace",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "esc",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "esc",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "delete",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "delete",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "up",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "up",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "down",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "down",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "left",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "left",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "right",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "right",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "home",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "home",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "end",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "end",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "page-up",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "page-up",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "page-down",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "page-down",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "space",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "space",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "minus",
+	              "expectedAccepted": true,
+	              "expectedKind": "named",
+	              "expectedKeyName": "minus",
+	              "expectedFunctionNumber": -1
+	            }
+	          ]
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
