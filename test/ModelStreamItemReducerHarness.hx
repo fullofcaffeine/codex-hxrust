@@ -93,6 +93,14 @@ import codexhx.runtime.model.streamitem.ModelThreadSnapshotReplayDispatchOutcome
 import codexhx.runtime.model.streamitem.ModelThreadSnapshotReplayDispatchPolicy;
 import codexhx.runtime.model.streamitem.ModelThreadSnapshotReplayDispatchRequest;
 import codexhx.runtime.model.streamitem.ModelThreadSnapshotReplayEventKind;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryDecisionKind;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryItem;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryItemKind;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryReplayOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryReplayPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryReplayRequest;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryTurn;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnStatusKind;
 import codexhx.runtime.model.streamitem.ModelReplayedServerRequestKind;
 import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceKind;
 import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceOutcome;
@@ -304,6 +312,7 @@ class ModelStreamItemReducerHarness {
 			final topLevelTurnReplayReconstructions = assertTopLevelTurnReplayReconstructions(testCase, topLevelTurnTerminalProjections, secretProbe);
 			final topLevelPendingInteractiveReplays = assertTopLevelPendingInteractiveReplays(testCase, topLevelTurnReplayReconstructions, secretProbe);
 			final topLevelThreadSnapshotReplayDispatches = assertTopLevelThreadSnapshotReplayDispatches(testCase, topLevelPendingInteractiveReplays, secretProbe);
+			assertTopLevelThreadSnapshotTurnHistoryReplays(testCase, secretProbe);
 			final topLevelReplayedServerRequestSurfaces = assertTopLevelReplayedServerRequestSurfaces(testCase, topLevelThreadSnapshotReplayDispatches, secretProbe);
 			final topLevelAppServerRequestResolutions = assertTopLevelAppServerRequestResolutions(testCase, topLevelReplayedServerRequestSurfaces, secretProbe);
 			final topLevelAppServerResponseDispatches = assertTopLevelAppServerResponseDispatches(testCase, topLevelAppServerRequestResolutions, secretProbe);
@@ -506,6 +515,7 @@ class ModelStreamItemReducerHarness {
 				final turnReplayReconstructions = assertTurnReplayReconstructions(verificationValue, turnTerminalProjections, secretProbe);
 				final pendingInteractiveReplays = assertPendingInteractiveReplays(verificationValue, turnReplayReconstructions, secretProbe);
 				final threadSnapshotReplayDispatches = assertThreadSnapshotReplayDispatches(verificationValue, pendingInteractiveReplays, secretProbe);
+				assertThreadSnapshotTurnHistoryReplays(verificationValue, secretProbe);
 				final replayedServerRequestSurfaces = assertReplayedServerRequestSurfaces(verificationValue, threadSnapshotReplayDispatches, secretProbe);
 				final appServerRequestResolutions = assertAppServerRequestResolutions(verificationValue, replayedServerRequestSurfaces, secretProbe);
 				final appServerResponseDispatches = assertAppServerResponseDispatches(verificationValue, appServerRequestResolutions, secretProbe);
@@ -1933,6 +1943,73 @@ class ModelStreamItemReducerHarness {
 	static function pendingInteractiveReplayByRequestId(outcomes:Array<ModelPendingInteractiveReplayOutcome>, requestId:String):ModelPendingInteractiveReplayOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing pending interactive replay outcome: " + requestId;
+	}
+
+	static function assertTopLevelThreadSnapshotTurnHistoryReplays(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelThreadSnapshotTurnHistoryReplayOutcome> {
+		final outcomes:Array<ModelThreadSnapshotTurnHistoryReplayOutcome> = [];
+		final values = optionalArrayField(testCase, "threadSnapshotTurnHistoryReplayExpects");
+		for (value in values) outcomes.push(assertThreadSnapshotTurnHistoryReplay(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSnapshotTurnHistoryReplays(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelThreadSnapshotTurnHistoryReplayOutcome> {
+		final outcomes:Array<ModelThreadSnapshotTurnHistoryReplayOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadSnapshotTurnHistoryReplayExpects");
+		for (value in values) outcomes.push(assertThreadSnapshotTurnHistoryReplay(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSnapshotTurnHistoryReplay(
+		expectValue:Value,
+		secretProbe:String
+	):ModelThreadSnapshotTurnHistoryReplayOutcome {
+		final outcome = ModelThreadSnapshotTurnHistoryReplayPolicy.replay(new ModelThreadSnapshotTurnHistoryReplayRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			replayKind: turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
+			sessionAvailable: boolField(expectValue, "sessionAvailable", false),
+			resumeRestoredQueue: boolField(expectValue, "resumeRestoredQueue", false),
+			turns: threadSnapshotTurnHistoryTurns(expectValue),
+			expectedUserMessages: stringArrayField(expectValue, "expectedUserMessages"),
+			expectedAgentMessages: stringArrayField(expectValue, "expectedAgentMessages"),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")), outcome.replayKind);
+		assertEquals(threadSnapshotTurnHistoryDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "turnCount", 0)), Std.string(outcome.turnCount));
+		assertEquals(Std.string(intField(expectValue, "replayedItemCount", 0)), Std.string(outcome.replayedItemCount));
+		assertEquals(Std.string(intField(expectValue, "userMessageCount", 0)), Std.string(outcome.userMessageCount));
+		assertEquals(Std.string(intField(expectValue, "agentMessageCount", 0)), Std.string(outcome.agentMessageCount));
+		assertEquals(Std.string(intField(expectValue, "terminalTurnCompletedNotificationCount", 0)), Std.string(outcome.terminalTurnCompletedNotificationCount));
+		assertStringArraysEqual(stringArrayField(expectValue, "transcriptUserMessages"), outcome.transcriptUserMessages);
+		assertStringArraysEqual(stringArrayField(expectValue, "transcriptAgentMessages"), outcome.transcriptAgentMessages);
+		assertEquals(boolText(boolField(expectValue, "userMessagesInExpectedOrder", false)), boolText(outcome.userMessagesInExpectedOrder));
+		assertEquals(boolText(boolField(expectValue, "agentMessagesInExpectedOrder", false)), boolText(outcome.agentMessagesInExpectedOrder));
+		assertEquals(boolText(boolField(expectValue, "turnOrderPreserved", false)), boolText(outcome.turnOrderPreserved));
+		assertEquals(boolText(boolField(expectValue, "itemOrderPreserved", false)), boolText(outcome.itemOrderPreserved));
+		assertEquals(boolText(boolField(expectValue, "sessionAppliedBeforeTurns", false)), boolText(outcome.sessionAppliedBeforeTurns));
+		assertEquals(boolText(boolField(expectValue, "queueAutosendSuppressed", false)), boolText(outcome.queueAutosendSuppressed));
+		assertEquals(boolText(boolField(expectValue, "liveOnlyEffectsSuppressed", false)), boolText(outcome.liveOnlyEffectsSuppressed));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		for (message in outcome.transcriptUserMessages) if (message.length > 0) assertNotContains(outcome.summary(), message);
+		for (message in outcome.transcriptAgentMessages) if (message.length > 0) assertNotContains(outcome.summary(), message);
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
 	}
 
 	static function assertTopLevelReplayedServerRequestSurfaces(
@@ -4277,6 +4354,33 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
+	static function threadSnapshotTurnHistoryDecisionKind(value:String):ModelThreadSnapshotTurnHistoryDecisionKind {
+		return switch value {
+			case "turn_history_replayed_in_order": ModelThreadSnapshotTurnHistoryDecisionKind.TurnHistoryReplayedInOrder;
+			case "turn_history_replay_blocked": ModelThreadSnapshotTurnHistoryDecisionKind.TurnHistoryReplayBlocked;
+			case _: throw "unknown thread snapshot turn history decision kind: " + value;
+		}
+	}
+
+	static function threadSnapshotTurnHistoryItemKind(value:String):ModelThreadSnapshotTurnHistoryItemKind {
+		return switch value {
+			case "user_message": ModelThreadSnapshotTurnHistoryItemKind.UserMessage;
+			case "agent_message": ModelThreadSnapshotTurnHistoryItemKind.AgentMessage;
+			case "other": ModelThreadSnapshotTurnHistoryItemKind.Other;
+			case _: throw "unknown thread snapshot turn history item kind: " + value;
+		}
+	}
+
+	static function threadSnapshotTurnStatusKind(value:String):ModelThreadSnapshotTurnStatusKind {
+		return switch value {
+			case "completed": ModelThreadSnapshotTurnStatusKind.Completed;
+			case "failed": ModelThreadSnapshotTurnStatusKind.Failed;
+			case "interrupted": ModelThreadSnapshotTurnStatusKind.Interrupted;
+			case "in_progress": ModelThreadSnapshotTurnStatusKind.InProgress;
+			case _: throw "unknown thread snapshot turn status kind: " + value;
+		}
+	}
+
 	static function turnReplayTargetKind(value:String):ModelTurnReplayTargetKind {
 		return switch value {
 			case "active_exact": ModelTurnReplayTargetKind.ActiveExact;
@@ -4930,6 +5034,30 @@ class ModelStreamItemReducerHarness {
 		for (value in values) {
 			final file = objectValue(value);
 			out.push(new ModelPatchVirtualFile(stringField(file, "path", ""), stringField(file, "content", "")));
+		}
+		return out;
+	}
+
+	static function threadSnapshotTurnHistoryTurns(expectValue:Value):Array<ModelThreadSnapshotTurnHistoryTurn> {
+		final out:Array<ModelThreadSnapshotTurnHistoryTurn> = [];
+		final values = optionalArrayField(expectValue, "turns");
+		for (value in values) {
+			final turn = objectValue(value);
+			final items:Array<ModelThreadSnapshotTurnHistoryItem> = [];
+			final itemValues = optionalArrayField(turn, "items");
+			for (itemValue in itemValues) {
+				final item = objectValue(itemValue);
+				items.push(new ModelThreadSnapshotTurnHistoryItem({
+					itemKind: threadSnapshotTurnHistoryItemKind(stringField(item, "itemKind", "other")),
+					itemId: stringField(item, "itemId", ""),
+					text: stringField(item, "text", "")
+				}));
+			}
+			out.push(new ModelThreadSnapshotTurnHistoryTurn({
+				turnId: stringField(turn, "turnId", ""),
+				statusKind: threadSnapshotTurnStatusKind(stringField(turn, "statusKind", "completed")),
+				items: items
+			}));
 		}
 		return out;
 	}

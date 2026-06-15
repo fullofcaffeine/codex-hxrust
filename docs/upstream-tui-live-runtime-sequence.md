@@ -1294,7 +1294,19 @@ Model selected raw Codex data-image backtrack resubmit behavior:
 
 Status: HXCX-4.104 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic data-image backtrack resubmit evidence only, not live app-server calls, live rollback RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.105+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.105: Thread Snapshot Turn-History Replay Ordering Boundary
+
+Model selected raw Codex thread snapshot turn-history replay behavior:
+
+- apply the replayed thread session before replaying snapshot turns;
+- replay turns in snapshot order and items in each turn's stored order;
+- project replayed user messages and agent messages into transcript state;
+- synthesize replayed terminal turn-complete notifications for completed turns;
+- preserve queue-autosend suppression, event ordering, and no-live/no-network/no-real-tool proofs.
+
+Status: HXCX-4.105 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic thread snapshot turn-history replay evidence only, not live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.106+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

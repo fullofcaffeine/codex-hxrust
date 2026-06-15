@@ -1203,6 +1203,80 @@
 	          "summaryContains": "replayKind=thread_snapshot;eventKind=buffered_request;dispatchKind=request_filtered;beginReplayBufferEmitted=false;endReplayBufferEmitted=false;initialSubmitSuppressed=false;queueAutosendSuppressed=false;inputStateRestored=false;turnsReplayed=false;pendingPrimaryEventsDrained=false;noticeSuppressed=false;notificationDeliveredWithReplayKind=false;requestDeliveredWithReplayKind=false;historyEntryDelivered=false;feedbackDelivered=false;replayKindAttached=false;liveOnlyEffectsSuppressed=false"
 	        }
 	      ],
+	      "threadSnapshotTurnHistoryReplayExpects": [
+	        {
+	          "ok": true,
+	          "code": "thread_snapshot_turn_history_replay_modeled",
+	          "requestId": "thread-snapshot-replays-turn-history-in-order",
+	          "replayKind": "thread_snapshot",
+	          "sessionAvailable": true,
+	          "resumeRestoredQueue": false,
+	          "previousEventCount": 73,
+	          "eventOrderIndex": 74,
+	          "turns": [
+	            {
+	              "turnId": "turn-1",
+	              "statusKind": "completed",
+	              "items": [
+	                {
+	                  "itemKind": "user_message",
+	                  "itemId": "user-1",
+	                  "text": "first prompt"
+	                }
+	              ]
+	            },
+	            {
+	              "turnId": "turn-2",
+	              "statusKind": "completed",
+	              "items": [
+	                {
+	                  "itemKind": "user_message",
+	                  "itemId": "user-2",
+	                  "text": "third prompt"
+	                },
+	                {
+	                  "itemKind": "agent_message",
+	                  "itemId": "assistant-2",
+	                  "text": "done"
+	                }
+	              ]
+	            }
+	          ],
+	          "expectedUserMessages": [
+	            "first prompt",
+	            "third prompt"
+	          ],
+	          "expectedAgentMessages": [
+	            "done"
+	          ],
+	          "decisionKind": "turn_history_replayed_in_order",
+	          "turnCount": 2,
+	          "replayedItemCount": 3,
+	          "userMessageCount": 2,
+	          "agentMessageCount": 1,
+	          "terminalTurnCompletedNotificationCount": 2,
+	          "transcriptUserMessages": [
+	            "first prompt",
+	            "third prompt"
+	          ],
+	          "transcriptAgentMessages": [
+	            "done"
+	          ],
+	          "userMessagesInExpectedOrder": true,
+	          "agentMessagesInExpectedOrder": true,
+	          "turnOrderPreserved": true,
+	          "itemOrderPreserved": true,
+	          "sessionAppliedBeforeTurns": true,
+	          "queueAutosendSuppressed": true,
+	          "liveOnlyEffectsSuppressed": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "replayKind=thread_snapshot;decisionKind=turn_history_replayed_in_order;turnCount=2;replayedItemCount=3;userMessageCount=2;agentMessageCount=1;terminalTurnCompletedNotificationCount=2;userMessagesInExpectedOrder=true;agentMessagesInExpectedOrder=true;turnOrderPreserved=true;itemOrderPreserved=true;sessionAppliedBeforeTurns=true;queueAutosendSuppressed=true;liveOnlyEffectsSuppressed=true"
+	        }
+	      ],
 	      "replayedServerRequestSurfaceExpects": [
 	        {
 	          "ok": true,
