@@ -159,6 +159,11 @@ import codexhx.runtime.model.streamitem.ModelThreadSideThreadNavigationCleanupDe
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadNavigationCleanupOutcome;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadNavigationCleanupPolicy;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadNavigationCleanupRequest;
+import codexhx.runtime.model.streamitem.ModelActiveNonPrimaryShutdownDecisionKind;
+import codexhx.runtime.model.streamitem.ModelActiveNonPrimaryShutdownEventKind;
+import codexhx.runtime.model.streamitem.ModelActiveNonPrimaryShutdownOutcome;
+import codexhx.runtime.model.streamitem.ModelActiveNonPrimaryShutdownPolicy;
+import codexhx.runtime.model.streamitem.ModelActiveNonPrimaryShutdownRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -263,7 +268,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelThreadSideThreadStarts = assertTopLevelThreadSideThreadStarts(testCase, topLevelThreadSideThreadDiscards, secretProbe);
 			final topLevelThreadSideThreadStartupRoutings = assertTopLevelThreadSideThreadStartupRoutings(testCase, topLevelThreadSideThreadStarts, secretProbe);
 			final topLevelThreadSideThreadComposerHandoffs = assertTopLevelThreadSideThreadComposerHandoffs(testCase, topLevelThreadSideThreadStarts, topLevelThreadSideThreadStartupRoutings, secretProbe);
-			assertTopLevelThreadSideThreadNavigationCleanups(testCase, topLevelThreadSideThreadComposerHandoffs, secretProbe);
+			final topLevelThreadSideThreadNavigationCleanups = assertTopLevelThreadSideThreadNavigationCleanups(testCase, topLevelThreadSideThreadComposerHandoffs, secretProbe);
+			assertTopLevelActiveNonPrimaryShutdowns(testCase, topLevelThreadSideThreadNavigationCleanups, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -454,7 +460,8 @@ class ModelStreamItemReducerHarness {
 				final threadSideThreadStarts = assertThreadSideThreadStarts(verificationValue, threadSideThreadDiscards, secretProbe);
 				final threadSideThreadStartupRoutings = assertThreadSideThreadStartupRoutings(verificationValue, threadSideThreadStarts, secretProbe);
 				final threadSideThreadComposerHandoffs = assertThreadSideThreadComposerHandoffs(verificationValue, threadSideThreadStarts, threadSideThreadStartupRoutings, secretProbe);
-				assertThreadSideThreadNavigationCleanups(verificationValue, threadSideThreadComposerHandoffs, secretProbe);
+				final threadSideThreadNavigationCleanups = assertThreadSideThreadNavigationCleanups(verificationValue, threadSideThreadComposerHandoffs, secretProbe);
+				assertActiveNonPrimaryShutdowns(verificationValue, threadSideThreadNavigationCleanups, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3105,6 +3112,93 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelActiveNonPrimaryShutdowns(
+		testCase:Value,
+		navigationCleanups:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
+		secretProbe:String
+	):Array<ModelActiveNonPrimaryShutdownOutcome> {
+		final outcomes:Array<ModelActiveNonPrimaryShutdownOutcome> = [];
+		final values = optionalArrayField(testCase, "activeNonPrimaryShutdownExpects");
+		for (value in values) outcomes.push(assertActiveNonPrimaryShutdown(objectValue(value), navigationCleanups, secretProbe));
+		return outcomes;
+	}
+
+	static function assertActiveNonPrimaryShutdowns(
+		verificationValue:Value,
+		navigationCleanups:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
+		secretProbe:String
+	):Array<ModelActiveNonPrimaryShutdownOutcome> {
+		final outcomes:Array<ModelActiveNonPrimaryShutdownOutcome> = [];
+		final values = optionalArrayField(verificationValue, "activeNonPrimaryShutdownExpects");
+		for (value in values) outcomes.push(assertActiveNonPrimaryShutdown(objectValue(value), navigationCleanups, secretProbe));
+		return outcomes;
+	}
+
+	static function assertActiveNonPrimaryShutdown(
+		expectValue:Value,
+		navigationCleanups:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
+		secretProbe:String
+	):ModelActiveNonPrimaryShutdownOutcome {
+		final navigationCleanupRequestId = stringField(expectValue, "navigationCleanupRequestId", "");
+		final outcome = ModelActiveNonPrimaryShutdownPolicy.apply(new ModelActiveNonPrimaryShutdownRequest(
+			stringField(expectValue, "requestId", ""),
+			threadSideThreadNavigationCleanupByRequestId(navigationCleanups, navigationCleanupRequestId),
+			activeNonPrimaryShutdownEventKind(stringField(expectValue, "eventKind", "")),
+			stringField(expectValue, "activeThreadId", ""),
+			stringField(expectValue, "primaryThreadId", ""),
+			stringField(expectValue, "pendingShutdownExitThreadId", ""),
+			boolField(expectValue, "closedThreadIsSideThread", false),
+			boolField(expectValue, "primarySelectSucceeded", false),
+			intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(navigationCleanupRequestId, outcome.navigationCleanupRequestId);
+		assertEquals(activeNonPrimaryShutdownDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(activeNonPrimaryShutdownEventKind(stringField(expectValue, "eventKind", "")), outcome.eventKind);
+		assertEquals(stringField(expectValue, "activeThreadId", ""), outcome.activeThreadId);
+		assertEquals(stringField(expectValue, "primaryThreadId", ""), outcome.primaryThreadId);
+		assertEquals(stringField(expectValue, "pendingShutdownExitThreadId", ""), outcome.pendingShutdownExitThreadId);
+		assertEquals(stringField(expectValue, "closedThreadId", ""), outcome.closedThreadId);
+		assertEquals(stringField(expectValue, "selectedPrimaryThreadId", ""), outcome.selectedPrimaryThreadId);
+		assertEquals(boolText(boolField(expectValue, "failoverTargetSelected", false)), boolText(outcome.failoverTargetSelected));
+		assertEquals(boolText(boolField(expectValue, "nonShutdownIgnored", false)), boolText(outcome.nonShutdownIgnored));
+		assertEquals(boolText(boolField(expectValue, "primaryShutdownIgnored", false)), boolText(outcome.primaryShutdownIgnored));
+		assertEquals(boolText(boolField(expectValue, "missingThreadIdsIgnored", false)), boolText(outcome.missingThreadIdsIgnored));
+		assertEquals(boolText(boolField(expectValue, "pendingShutdownExitIgnored", false)), boolText(outcome.pendingShutdownExitIgnored));
+		assertEquals(boolText(boolField(expectValue, "otherPendingExitStillSwitches", false)), boolText(outcome.otherPendingExitStillSwitches));
+		assertEquals(boolText(boolField(expectValue, "markAgentPickerClosed", false)), boolText(outcome.markAgentPickerClosed));
+		assertEquals(boolText(boolField(expectValue, "sideClosedLocalCleanupAttempted", false)), boolText(outcome.sideClosedLocalCleanupAttempted));
+		assertEquals(boolText(boolField(expectValue, "discardVisibleSideAttempted", false)), boolText(outcome.discardVisibleSideAttempted));
+		assertEquals(boolText(boolField(expectValue, "selectPrimaryThreadAttempted", false)), boolText(outcome.selectPrimaryThreadAttempted));
+		assertEquals(boolText(boolField(expectValue, "primarySelectSucceeded", false)), boolText(outcome.primarySelectSucceeded));
+		assertEquals(boolText(boolField(expectValue, "infoMessageIntended", false)), boolText(outcome.infoMessageIntended));
+		assertEquals(boolText(boolField(expectValue, "errorMessageDisplayed", false)), boolText(outcome.errorMessageDisplayed));
+		assertEquals(boolText(boolField(expectValue, "activeThreadClearedAfterFailedSwitch", false)), boolText(outcome.activeThreadClearedAfterFailedSwitch));
+		assertEquals(boolText(boolField(expectValue, "pendingShutdownExitMarkerCleared", false)), boolText(outcome.pendingShutdownExitMarkerCleared));
+		assertEquals(boolText(boolField(expectValue, "activeEventForwarded", false)), boolText(outcome.activeEventForwarded));
+		assertEquals(boolText(boolField(expectValue, "failoverBeforePendingExitClear", false)), boolText(outcome.failoverBeforePendingExitClear));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function threadSideThreadNavigationCleanupByRequestId(
+		outcomes:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
+		requestId:String
+	):ModelThreadSideThreadNavigationCleanupOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing thread side-thread navigation cleanup outcome: " + requestId;
+	}
+
 	static function threadSideThreadComposerHandoffByRequestId(
 		outcomes:Array<ModelThreadSideThreadComposerHandoffOutcome>,
 		requestId:String
@@ -3790,6 +3884,26 @@ class ModelStreamItemReducerHarness {
 			case "selected_parent_and_discarded": ModelThreadSideThreadNavigationCleanupDecisionKind.SelectedParentAndDiscarded;
 			case "selected_parent_cleanup_failed_kept_visible": ModelThreadSideThreadNavigationCleanupDecisionKind.SelectedParentCleanupFailedKeptVisible;
 			case _: throw "unknown thread side-thread navigation cleanup decision kind: " + value;
+		}
+	}
+
+	static function activeNonPrimaryShutdownEventKind(value:String):ModelActiveNonPrimaryShutdownEventKind {
+		return switch value {
+			case "other": ModelActiveNonPrimaryShutdownEventKind.Other;
+			case "thread_closed": ModelActiveNonPrimaryShutdownEventKind.ThreadClosed;
+			case _: throw "unknown active non-primary shutdown event kind: " + value;
+		}
+	}
+
+	static function activeNonPrimaryShutdownDecisionKind(value:String):ModelActiveNonPrimaryShutdownDecisionKind {
+		return switch value {
+			case "ignored_non_shutdown_event": ModelActiveNonPrimaryShutdownDecisionKind.IgnoredNonShutdownEvent;
+			case "ignored_missing_thread_ids": ModelActiveNonPrimaryShutdownDecisionKind.IgnoredMissingThreadIds;
+			case "ignored_primary_thread_shutdown": ModelActiveNonPrimaryShutdownDecisionKind.IgnoredPrimaryThreadShutdown;
+			case "ignored_pending_shutdown_exit": ModelActiveNonPrimaryShutdownDecisionKind.IgnoredPendingShutdownExit;
+			case "switched_to_primary": ModelActiveNonPrimaryShutdownDecisionKind.SwitchedToPrimary;
+			case "switched_to_primary_with_other_pending_exit": ModelActiveNonPrimaryShutdownDecisionKind.SwitchedToPrimaryWithOtherPendingExit;
+			case _: throw "unknown active non-primary shutdown decision kind: " + value;
 		}
 	}
 

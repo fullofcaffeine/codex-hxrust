@@ -1139,7 +1139,22 @@ Model selected side-thread agent navigation and local-state cleanup behavior:
 
 Status: HXCX-4.93 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic side-thread agent navigation cleanup evidence only, not live terminal rendering, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.94+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.94: Active Non-Primary Shutdown Target Boundary
+
+Model selected active non-primary `thread/closed` failover behavior:
+
+- ignore non-shutdown notifications;
+- ignore primary-thread shutdown as a failover target;
+- select `(active_thread_id, primary_thread_id)` when the active non-primary thread closes unexpectedly;
+- suppress failover when the active thread matches the pending shutdown-exit marker;
+- still fail over when the pending shutdown-exit marker belongs to another thread;
+- preserve failover-before-pending-exit-clear ordering;
+- distinguish side-thread local cleanup from non-side visible-side discard during failover;
+- model info/error display intent without live terminal mutation.
+
+Status: HXCX-4.94 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic active non-primary shutdown target evidence only, not live terminal rendering, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.95+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
