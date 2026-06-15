@@ -8246,6 +8246,53 @@
 	          "conflictRejected": true
 	        }
 	      ],
+	      "keymapEditorUnbindConflictExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_editor_unbind_conflict_modeled",
+	          "requestId": "keymap-editor-kill-whole-line-kill-line-start-conflict",
+	          "previousEventCount": 92,
+	          "eventOrderIndex": 93,
+	          "decisionKind": "keymap_editor_unbind_conflict_preserved",
+	          "configuredKillWholeLinePreserved": true,
+	          "defaultKillLineStartPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "originalActionUnboundPreserved": true,
+	          "runtimeKillWholeLinePreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_editor_unbind_conflict_preserved;configuredKillWholeLinePreserved=true;defaultKillLineStartPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;originalActionUnboundPreserved=true;runtimeKillWholeLinePreserved=true;eventOrderingPreserved=true",
+	          "configuredKillWholeLine": {
+	            "kind": "character",
+	            "keyName": "u",
+	            "functionNumber": -1,
+	            "ctrlModifier": true
+	          },
+	          "defaultKillLineStart": {
+	            "kind": "character",
+	            "keyName": "u",
+	            "functionNumber": -1,
+	            "ctrlModifier": true
+	          },
+	          "conflictOuterAction": "kill_line_start",
+	          "conflictInnerAction": "kill_whole_line",
+	          "expectedOuterActionName": "kill_line_start",
+	          "expectedInnerActionName": "kill_whole_line",
+	          "conflictRejected": true,
+	          "killLineStartUnbound": true,
+	          "runtimeAcceptedAfterUnbind": true,
+	          "runtimeKillWholeLine": {
+	            "kind": "character",
+	            "keyName": "u",
+	            "functionNumber": -1,
+	            "ctrlModifier": true
+	          }
+	        }
+	      ],
 	      "keymapPagerConflictExpects": [
 	        {
 	          "ok": true,

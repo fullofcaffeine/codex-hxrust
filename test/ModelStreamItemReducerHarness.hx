@@ -242,6 +242,11 @@ import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorUnbindConflictActionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorUnbindConflictDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorUnbindConflictOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorUnbindConflictPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorUnbindConflictRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapPagerConflictActionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapPagerConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapPagerConflictOutcome;
@@ -506,6 +511,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapInvalidGlobalCopies(testCase, secretProbe);
 			assertTopLevelKeymapEditorAssignments(testCase, secretProbe);
 			assertTopLevelKeymapEditorConflicts(testCase, secretProbe);
+			assertTopLevelKeymapEditorUnbindConflicts(testCase, secretProbe);
 			assertTopLevelKeymapPagerConflicts(testCase, secretProbe);
 			assertTopLevelKeymapListConflicts(testCase, secretProbe);
 			assertTopLevelKeymapApprovalConflicts(testCase, secretProbe);
@@ -740,6 +746,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapInvalidGlobalCopies(verificationValue, secretProbe);
 				assertKeymapEditorAssignments(verificationValue, secretProbe);
 				assertKeymapEditorConflicts(verificationValue, secretProbe);
+				assertKeymapEditorUnbindConflicts(verificationValue, secretProbe);
 				assertKeymapPagerConflicts(verificationValue, secretProbe);
 				assertKeymapListConflicts(verificationValue, secretProbe);
 				assertKeymapApprovalConflicts(verificationValue, secretProbe);
@@ -5665,6 +5672,69 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapEditorUnbindConflicts(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapEditorUnbindConflictOutcome> {
+		final outcomes:Array<ModelKeymapEditorUnbindConflictOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapEditorUnbindConflictExpects");
+		for (value in values) outcomes.push(assertKeymapEditorUnbindConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapEditorUnbindConflicts(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapEditorUnbindConflictOutcome> {
+		final outcomes:Array<ModelKeymapEditorUnbindConflictOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapEditorUnbindConflictExpects");
+		for (value in values) outcomes.push(assertKeymapEditorUnbindConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapEditorUnbindConflictSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapEditorUnbindConflictOutcome {
+		final outcome = ModelKeymapEditorUnbindConflictPolicy.apply(new ModelKeymapEditorUnbindConflictRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			configuredKillWholeLine: keymapBinding(objectField(expectValue, "configuredKillWholeLine")),
+			defaultKillLineStart: keymapBinding(objectField(expectValue, "defaultKillLineStart")),
+			conflictOuterAction: keymapEditorUnbindConflictActionKind(stringField(expectValue, "conflictOuterAction", "")),
+			conflictInnerAction: keymapEditorUnbindConflictActionKind(stringField(expectValue, "conflictInnerAction", "")),
+			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
+			expectedInnerActionName: stringField(expectValue, "expectedInnerActionName", ""),
+			conflictRejected: boolField(expectValue, "conflictRejected", false),
+			killLineStartUnbound: boolField(expectValue, "killLineStartUnbound", false),
+			runtimeAcceptedAfterUnbind: boolField(expectValue, "runtimeAcceptedAfterUnbind", false),
+			runtimeKillWholeLine: keymapBinding(objectField(expectValue, "runtimeKillWholeLine")),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap editor unbind conflict expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapEditorUnbindConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "configuredKillWholeLinePreserved", false)), boolText(outcome.configuredKillWholeLinePreserved));
+		assertEquals(boolText(boolField(expectValue, "defaultKillLineStartPreserved", false)), boolText(outcome.defaultKillLineStartPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
+		assertEquals(boolText(boolField(expectValue, "originalActionUnboundPreserved", false)), boolText(outcome.originalActionUnboundPreserved));
+		assertEquals(boolText(boolField(expectValue, "runtimeKillWholeLinePreserved", false)), boolText(outcome.runtimeKillWholeLinePreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelKeymapPagerConflicts(
 		testCase:Value,
 		secretProbe:String
@@ -7453,6 +7523,18 @@ class ModelStreamItemReducerHarness {
 
 	static function keymapEditorConflictActionKind(value:String):ModelKeymapEditorConflictActionKind {
 		return ModelKeymapEditorConflictActionKind.fromString(value);
+	}
+
+	static function keymapEditorUnbindConflictDecisionKind(value:String):ModelKeymapEditorUnbindConflictDecisionKind {
+		return switch value {
+			case "keymap_editor_unbind_conflict_preserved": ModelKeymapEditorUnbindConflictDecisionKind.KeymapEditorUnbindConflictPreserved;
+			case "keymap_editor_unbind_conflict_rejected": ModelKeymapEditorUnbindConflictDecisionKind.KeymapEditorUnbindConflictRejected;
+			case _: throw "unknown keymap editor unbind conflict decision kind: " + value;
+		}
+	}
+
+	static function keymapEditorUnbindConflictActionKind(value:String):ModelKeymapEditorUnbindConflictActionKind {
+		return ModelKeymapEditorUnbindConflictActionKind.fromString(value);
 	}
 
 	static function keymapPagerConflictDecisionKind(value:String):ModelKeymapPagerConflictDecisionKind {
