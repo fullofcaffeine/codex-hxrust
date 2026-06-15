@@ -8370,6 +8370,47 @@
 	          "conflictRejected": true
 	        }
 	      ],
+	      "keymapApprovalConflictExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_approval_conflict_modeled",
+	          "requestId": "keymap-approval-approve-decline-conflict",
+	          "previousEventCount": 95,
+	          "eventOrderIndex": 96,
+	          "decisionKind": "keymap_approval_conflict_rejected",
+	          "approveBindingPreserved": true,
+	          "declineBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=true;declineBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredApprove": {
+	            "kind": "character",
+	            "keyName": "y",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "configuredDecline": {
+	            "kind": "character",
+	            "keyName": "y",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "approval_approve",
+	          "conflictInnerAction": "approval_decline",
+	          "expectedOuterActionName": "approve",
+	          "expectedInnerActionName": "decline",
+	          "conflictRejected": true
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

@@ -247,6 +247,11 @@ import codexhx.runtime.model.streamitem.ModelKeymapListConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapListConflictOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapListConflictPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapListConflictRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapApprovalConflictActionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapApprovalConflictDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapApprovalConflictOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapApprovalConflictPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapApprovalConflictRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictActionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictOutcome;
@@ -492,6 +497,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapEditorConflicts(testCase, secretProbe);
 			assertTopLevelKeymapPagerConflicts(testCase, secretProbe);
 			assertTopLevelKeymapListConflicts(testCase, secretProbe);
+			assertTopLevelKeymapApprovalConflicts(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -723,6 +729,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapEditorConflicts(verificationValue, secretProbe);
 				assertKeymapPagerConflicts(verificationValue, secretProbe);
 				assertKeymapListConflicts(verificationValue, secretProbe);
+				assertKeymapApprovalConflicts(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5705,6 +5712,64 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapApprovalConflicts(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapApprovalConflictOutcome> {
+		final outcomes:Array<ModelKeymapApprovalConflictOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapApprovalConflictExpects");
+		for (value in values) outcomes.push(assertKeymapApprovalConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapApprovalConflicts(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapApprovalConflictOutcome> {
+		final outcomes:Array<ModelKeymapApprovalConflictOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapApprovalConflictExpects");
+		for (value in values) outcomes.push(assertKeymapApprovalConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapApprovalConflictSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapApprovalConflictOutcome {
+		final outcome = ModelKeymapApprovalConflictPolicy.apply(new ModelKeymapApprovalConflictRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			configuredApprove: keymapBinding(objectField(expectValue, "configuredApprove")),
+			configuredDecline: keymapBinding(objectField(expectValue, "configuredDecline")),
+			conflictOuterAction: keymapApprovalConflictActionKind(stringField(expectValue, "conflictOuterAction", "")),
+			conflictInnerAction: keymapApprovalConflictActionKind(stringField(expectValue, "conflictInnerAction", "")),
+			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
+			expectedInnerActionName: stringField(expectValue, "expectedInnerActionName", ""),
+			conflictRejected: boolField(expectValue, "conflictRejected", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap approval conflict expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapApprovalConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "approveBindingPreserved", false)), boolText(outcome.approveBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "declineBindingPreserved", false)), boolText(outcome.declineBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -7262,6 +7327,18 @@ class ModelStreamItemReducerHarness {
 
 	static function keymapListConflictActionKind(value:String):ModelKeymapListConflictActionKind {
 		return ModelKeymapListConflictActionKind.fromString(value);
+	}
+
+	static function keymapApprovalConflictDecisionKind(value:String):ModelKeymapApprovalConflictDecisionKind {
+		return switch value {
+			case "keymap_approval_conflict_rejected": ModelKeymapApprovalConflictDecisionKind.KeymapApprovalConflictRejected;
+			case "keymap_approval_conflict_missed": ModelKeymapApprovalConflictDecisionKind.KeymapApprovalConflictMissed;
+			case _: throw "unknown keymap approval conflict decision kind: " + value;
+		}
+	}
+
+	static function keymapApprovalConflictActionKind(value:String):ModelKeymapApprovalConflictActionKind {
+		return ModelKeymapApprovalConflictActionKind.fromString(value);
 	}
 
 	static function parsedKeyKind(value:String):ModelParsedKeyKind {
