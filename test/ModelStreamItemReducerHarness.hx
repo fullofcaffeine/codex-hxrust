@@ -217,6 +217,10 @@ import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierOutcome;
 import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierPolicy;
 import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierRequest;
 import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierValue;
+import codexhx.runtime.model.streamitem.ModelFreshSessionPreviousConversationShutdownDecisionKind;
+import codexhx.runtime.model.streamitem.ModelFreshSessionPreviousConversationShutdownOutcome;
+import codexhx.runtime.model.streamitem.ModelFreshSessionPreviousConversationShutdownPolicy;
+import codexhx.runtime.model.streamitem.ModelFreshSessionPreviousConversationShutdownRequest;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionDecisionKind;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionOutcome;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionPolicy;
@@ -358,6 +362,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelFeedbackSubmissionRoutings(testCase, secretProbe);
 			assertTopLevelTuiActiveTurnErrors(testCase, secretProbe);
 			assertTopLevelFreshSessionServiceTiers(testCase, secretProbe);
+			assertTopLevelFreshSessionPreviousConversationShutdowns(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -565,6 +570,7 @@ class ModelStreamItemReducerHarness {
 				assertFeedbackSubmissionRoutings(verificationValue, secretProbe);
 				assertTuiActiveTurnErrors(verificationValue, secretProbe);
 				assertFreshSessionServiceTiers(verificationValue, secretProbe);
+				assertFreshSessionPreviousConversationShutdowns(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -3950,6 +3956,74 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelFreshSessionPreviousConversationShutdowns(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelFreshSessionPreviousConversationShutdownOutcome> {
+		final outcomes:Array<ModelFreshSessionPreviousConversationShutdownOutcome> = [];
+		final values = optionalArrayField(testCase, "freshSessionPreviousConversationShutdownExpects");
+		for (value in values) outcomes.push(assertFreshSessionPreviousConversationShutdown(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertFreshSessionPreviousConversationShutdowns(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelFreshSessionPreviousConversationShutdownOutcome> {
+		final outcomes:Array<ModelFreshSessionPreviousConversationShutdownOutcome> = [];
+		final values = optionalArrayField(verificationValue, "freshSessionPreviousConversationShutdownExpects");
+		for (value in values) outcomes.push(assertFreshSessionPreviousConversationShutdown(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertFreshSessionPreviousConversationShutdown(
+		expectValue:Value,
+		secretProbe:String
+	):ModelFreshSessionPreviousConversationShutdownOutcome {
+		final outcome = ModelFreshSessionPreviousConversationShutdownPolicy.apply(new ModelFreshSessionPreviousConversationShutdownRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			previousThreadId: stringField(expectValue, "previousThreadId", ""),
+			newSessionRequested: boolField(expectValue, "newSessionRequested", false),
+			chatWidgetThreadKnown: boolField(expectValue, "chatWidgetThreadKnown", false),
+			appServerSessionAvailable: boolField(expectValue, "appServerSessionAvailable", false),
+			threadChannelTracked: boolField(expectValue, "threadChannelTracked", false),
+			listenerTaskTracked: boolField(expectValue, "listenerTaskTracked", false),
+			pendingRollbackBefore: boolField(expectValue, "pendingRollbackBefore", false),
+			unsubscribeSucceeded: boolField(expectValue, "unsubscribeSucceeded", false),
+			opQueueLengthBefore: intField(expectValue, "opQueueLengthBefore", 0),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(freshSessionPreviousConversationShutdownDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "previousConversationPresent", false)), boolText(outcome.previousConversationPresent));
+		assertEquals(boolText(boolField(expectValue, "shutdownCurrentThreadAttempted", false)), boolText(outcome.shutdownCurrentThreadAttempted));
+		assertEquals(boolText(boolField(expectValue, "pendingRollbackCleared", false)), boolText(outcome.pendingRollbackCleared));
+		assertEquals(boolText(boolField(expectValue, "threadUnsubscribeAttempted", false)), boolText(outcome.threadUnsubscribeAttempted));
+		assertEquals(boolText(boolField(expectValue, "threadUnsubscribeSucceeded", false)), boolText(outcome.threadUnsubscribeSucceeded));
+		assertEquals(boolText(boolField(expectValue, "listenerAbortAttempted", false)), boolText(outcome.listenerAbortAttempted));
+		assertEquals(boolText(boolField(expectValue, "listenerTaskRemoved", false)), boolText(outcome.listenerTaskRemoved));
+		assertEquals(boolText(boolField(expectValue, "opShutdownSubmitted", false)), boolText(outcome.opShutdownSubmitted));
+		assertEquals(Std.string(intField(expectValue, "opQueueLengthBefore", 0)), Std.string(outcome.opQueueLengthBefore));
+		assertEquals(Std.string(intField(expectValue, "opQueueLengthAfter", 0)), Std.string(outcome.opQueueLengthAfter));
+		assertEquals(boolText(boolField(expectValue, "duplicateShutdownSuppressed", false)), boolText(outcome.duplicateShutdownSuppressed));
+		assertEquals(boolText(boolField(expectValue, "newSessionMayStartAfterShutdown", false)), boolText(outcome.newSessionMayStartAfterShutdown));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) {
+			assertNotContains(outcome.summary(), secretProbe);
+			assertNotContains(outcome.summary(), stringField(expectValue, "previousThreadId", ""));
+		}
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -5282,6 +5356,15 @@ class ModelStreamItemReducerHarness {
 			case "flex": ModelFreshSessionServiceTierValue.Flex;
 			case "default": ModelFreshSessionServiceTierValue.Default;
 			case _: throw "unknown fresh-session service-tier value: " + value;
+		}
+	}
+
+	static function freshSessionPreviousConversationShutdownDecisionKind(value:String):ModelFreshSessionPreviousConversationShutdownDecisionKind {
+		return switch value {
+			case "previous_conversation_shutdown_requested": ModelFreshSessionPreviousConversationShutdownDecisionKind.PreviousConversationShutdownRequested;
+			case "no_previous_conversation_noop": ModelFreshSessionPreviousConversationShutdownDecisionKind.NoPreviousConversationNoop;
+			case "previous_conversation_unsubscribe_failed": ModelFreshSessionPreviousConversationShutdownDecisionKind.PreviousConversationUnsubscribeFailed;
+			case _: throw "unknown fresh-session previous-conversation shutdown decision kind: " + value;
 		}
 	}
 

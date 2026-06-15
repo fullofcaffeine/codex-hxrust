@@ -6661,6 +6661,42 @@
 	          "summaryContains": "decisionKind=configured_service_tier_cleared;baseConfigServiceTier=priority;configuredServiceTier=none;freshConfigServiceTier=none"
 	        }
 	      ],
+	      "freshSessionPreviousConversationShutdownExpects": [
+	        {
+	          "ok": true,
+	          "code": "fresh_session_previous_conversation_shutdown_modeled",
+	          "requestId": "new-session-shuts-down-previous-conversation",
+	          "previousThreadId": "thread-new-session-previous",
+	          "newSessionRequested": true,
+	          "chatWidgetThreadKnown": true,
+	          "appServerSessionAvailable": true,
+	          "threadChannelTracked": true,
+	          "listenerTaskTracked": true,
+	          "pendingRollbackBefore": true,
+	          "unsubscribeSucceeded": true,
+	          "opQueueLengthBefore": 0,
+	          "previousEventCount": 68,
+	          "eventOrderIndex": 69,
+	          "decisionKind": "previous_conversation_shutdown_requested",
+	          "previousConversationPresent": true,
+	          "shutdownCurrentThreadAttempted": true,
+	          "pendingRollbackCleared": true,
+	          "threadUnsubscribeAttempted": true,
+	          "threadUnsubscribeSucceeded": true,
+	          "listenerAbortAttempted": true,
+	          "listenerTaskRemoved": true,
+	          "opShutdownSubmitted": false,
+	          "opQueueLengthAfter": 0,
+	          "duplicateShutdownSuppressed": true,
+	          "newSessionMayStartAfterShutdown": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=previous_conversation_shutdown_requested;previousConversationPresent=true;shutdownCurrentThreadAttempted=true;pendingRollbackCleared=true;threadUnsubscribeAttempted=true;threadUnsubscribeSucceeded=true;listenerAbortAttempted=true;listenerTaskRemoved=true;opShutdownSubmitted=false;opQueueLengthBefore=0;opQueueLengthAfter=0;duplicateShutdownSuppressed=true;newSessionMayStartAfterShutdown=true;eventOrderingPreserved=true"
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
