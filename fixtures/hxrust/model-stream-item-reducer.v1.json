@@ -8251,6 +8251,47 @@
 	          "conflictRejected": true
 	        }
 	      ],
+	      "keymapListConflictExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_list_conflict_modeled",
+	          "requestId": "keymap-list-up-conflict",
+	          "previousEventCount": 92,
+	          "eventOrderIndex": 93,
+	          "decisionKind": "keymap_list_conflict_rejected",
+	          "moveUpBindingPreserved": true,
+	          "moveDownBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_list_conflict_rejected;moveUpBindingPreserved=true;moveDownBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredMoveUp": {
+	            "kind": "named",
+	            "keyName": "up",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "configuredMoveDown": {
+	            "kind": "named",
+	            "keyName": "up",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "list_move_up",
+	          "conflictInnerAction": "list_move_down",
+	          "expectedOuterActionName": "move_up",
+	          "expectedInnerActionName": "move_down",
+	          "conflictRejected": true
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
