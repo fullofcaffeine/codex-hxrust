@@ -6,6 +6,8 @@ class ModelKeymapListConflictPolicy {
 	static final MoveDownName = "move_down";
 	static final MoveLeftName = "move_left";
 	static final MoveRightName = "move_right";
+	static final PageUpName = "page_up";
+	static final JumpTopName = "jump_top";
 
 	public static function apply(request:ModelKeymapListConflictRequest):ModelKeymapListConflictOutcome {
 		if (request == null) return failure("", "missing keymap list conflict request");
@@ -56,6 +58,12 @@ class ModelKeymapListConflictPolicy {
 			&& request.expectedInnerActionName == MoveRightName) {
 			return ModelKeymapListConflictKind.Horizontal;
 		}
+		if (request.conflictOuterAction == ModelKeymapListConflictActionKind.ListPageUp
+			&& request.conflictInnerAction == ModelKeymapListConflictActionKind.ListJumpTop
+			&& request.expectedOuterActionName == PageUpName
+			&& request.expectedInnerActionName == JumpTopName) {
+			return ModelKeymapListConflictKind.PageJump;
+		}
 		return ModelKeymapListConflictKind.Unknown;
 	}
 
@@ -63,6 +71,7 @@ class ModelKeymapListConflictPolicy {
 		return switch kind {
 			case Vertical: named("up");
 			case Horizontal: named("left");
+			case PageJump: named("home");
 			case Unknown: named("");
 		}
 	}
@@ -104,5 +113,6 @@ class ModelKeymapListConflictPolicy {
 private enum ModelKeymapListConflictKind {
 	Vertical;
 	Horizontal;
+	PageJump;
 	Unknown;
 }

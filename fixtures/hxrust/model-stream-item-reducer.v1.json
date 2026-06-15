@@ -8329,6 +8329,45 @@
 	          "expectedOuterActionName": "move_left",
 	          "expectedInnerActionName": "move_right",
 	          "conflictRejected": true
+	        },
+	        {
+	          "ok": true,
+	          "code": "keymap_list_conflict_modeled",
+	          "requestId": "keymap-list-page-jump-conflict",
+	          "previousEventCount": 94,
+	          "eventOrderIndex": 95,
+	          "decisionKind": "keymap_list_conflict_rejected",
+	          "outerBindingPreserved": true,
+	          "innerBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_list_conflict_rejected;outerBindingPreserved=true;innerBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredOuterBinding": {
+	            "kind": "named",
+	            "keyName": "home",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "configuredInnerBinding": {
+	            "kind": "named",
+	            "keyName": "home",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "list_page_up",
+	          "conflictInnerAction": "list_jump_top",
+	          "expectedOuterActionName": "page_up",
+	          "expectedInnerActionName": "jump_top",
+	          "conflictRejected": true
 	        }
 	      ],
 	      "backtrackSelectionExpects": [
