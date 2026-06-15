@@ -7671,6 +7671,274 @@
 	          ]
 	        }
 	      ],
+	      "keymapDefaultPruningExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_default_pruning_modeled",
+	          "requestId": "keymap-default-pruning-and-list-defaults",
+	          "previousEventCount": 85,
+	          "eventOrderIndex": 86,
+	          "decisionKind": "keymap_default_pruning_preserved",
+	          "tailMainSurfaceDefaultsPreserved": true,
+	          "listPageAndJumpDefaultsPreserved": true,
+	          "reasoningFallbackPruningPreserved": true,
+	          "explicitReasoningEditorConflictPreserved": true,
+	          "legacyListOverlapPruningPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_default_pruning_preserved;tailMainSurfaceDefaultsPreserved=true;listPageAndJumpDefaultsPreserved=true;reasoningFallbackPruningPreserved=true;explicitReasoningEditorConflictPreserved=true;legacyListOverlapPruningPreserved=true;eventOrderingPreserved=true",
+	          "tailMainSurfaceDefaults": [
+	            {
+	              "actionKind": "edit_queued_message",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "up",
+	                  "functionNumber": -1,
+	                  "altModifier": true
+	                },
+	                {
+	                  "kind": "named",
+	                  "keyName": "left",
+	                  "functionNumber": -1,
+	                  "shiftModifier": true
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "history_search_previous",
+	              "bindings": [
+	                {
+	                  "kind": "character",
+	                  "keyName": "r",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "history_search_next",
+	              "bindings": [
+	                {
+	                  "kind": "character",
+	                  "keyName": "s",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "kill_whole_line",
+	              "bindings": []
+	            }
+	          ],
+	          "listPageAndJumpDefaults": [
+	            {
+	              "actionKind": "list_move_up",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "up",
+	                  "functionNumber": -1
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "p",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "k",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "k",
+	                  "functionNumber": -1
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "list_move_down",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "down",
+	                  "functionNumber": -1
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "n",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "j",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "j",
+	                  "functionNumber": -1
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "list_move_left",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "left",
+	                  "functionNumber": -1
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "h",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "list_move_right",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "right",
+	                  "functionNumber": -1
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "l",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "list_page_up",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "page-up",
+	                  "functionNumber": -1
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "b",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "list_page_down",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "page-down",
+	                  "functionNumber": -1
+	                },
+	                {
+	                  "kind": "character",
+	                  "keyName": "f",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "list_jump_top",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "home",
+	                  "functionNumber": -1
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "list_jump_bottom",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "end",
+	                  "functionNumber": -1
+	                }
+	              ]
+	            }
+	          ],
+	          "configuredEditorMoveUp": {
+	            "kind": "named",
+	            "keyName": "up",
+	            "functionNumber": -1,
+	            "shiftModifier": true
+	          },
+	          "configuredVimTextObjectWord": {
+	            "kind": "named",
+	            "keyName": "down",
+	            "functionNumber": -1,
+	            "shiftModifier": true
+	          },
+	          "prunedDecreaseReasoningBindings": [
+	            {
+	              "kind": "character",
+	              "keyName": ",",
+	              "functionNumber": -1,
+	              "altModifier": true
+	            }
+	          ],
+	          "prunedIncreaseReasoningBindings": [
+	            {
+	              "kind": "character",
+	              "keyName": ".",
+	              "functionNumber": -1,
+	              "altModifier": true
+	            }
+	          ],
+	          "explicitConflictOuterAction": "chat_increase_reasoning_effort",
+	          "explicitConflictInnerAction": "editor_move_up",
+	          "explicitConflictBinding": {
+	            "kind": "named",
+	            "keyName": "up",
+	            "functionNumber": -1,
+	            "shiftModifier": true
+	          },
+	          "legacyListMoveUpConfigured": {
+	            "kind": "named",
+	            "keyName": "page-up",
+	            "functionNumber": -1
+	          },
+	          "legacyListMoveDownConfigured": {
+	            "kind": "named",
+	            "keyName": "page-down",
+	            "functionNumber": -1
+	          },
+	          "legacyListPageUpPruned": [
+	            {
+	              "kind": "character",
+	              "keyName": "b",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            }
+	          ],
+	          "legacyListPageDownPruned": [
+	            {
+	              "kind": "character",
+	              "keyName": "f",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            }
+	          ]
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

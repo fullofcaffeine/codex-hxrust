@@ -226,6 +226,12 @@ import codexhx.runtime.model.streamitem.ModelKeymapBindingInputOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapBindingInputPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapBindingInputRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapBinding;
+import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningActionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningCase;
+import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultActionCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowDecisionKind;
@@ -445,6 +451,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapAliases(testCase, secretProbe);
 			assertTopLevelKeymapShadows(testCase, secretProbe);
 			assertTopLevelKeymapBindingInputs(testCase, secretProbe);
+			assertTopLevelKeymapDefaultPrunings(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -668,6 +675,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapAliases(verificationValue, secretProbe);
 				assertKeymapShadows(verificationValue, secretProbe);
 				assertKeymapBindingInputs(verificationValue, secretProbe);
+				assertKeymapDefaultPrunings(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5158,6 +5166,83 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapDefaultPrunings(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapDefaultPruningOutcome> {
+		final outcomes:Array<ModelKeymapDefaultPruningOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapDefaultPruningExpects");
+		for (value in values) outcomes.push(assertKeymapDefaultPruningSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapDefaultPrunings(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapDefaultPruningOutcome> {
+		final outcomes:Array<ModelKeymapDefaultPruningOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapDefaultPruningExpects");
+		for (value in values) outcomes.push(assertKeymapDefaultPruningSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapDefaultPruningSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapDefaultPruningOutcome {
+		final outcome = ModelKeymapDefaultPruningPolicy.apply(new ModelKeymapDefaultPruningRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			tailMainSurfaceDefaults: keymapDefaultPruningCases(expectValue, "tailMainSurfaceDefaults"),
+			listPageAndJumpDefaults: keymapDefaultPruningCases(expectValue, "listPageAndJumpDefaults"),
+			configuredEditorMoveUp: keymapBinding(objectField(expectValue, "configuredEditorMoveUp")),
+			configuredVimTextObjectWord: keymapBinding(objectField(expectValue, "configuredVimTextObjectWord")),
+			prunedDecreaseReasoningBindings: keymapBindings(expectValue, "prunedDecreaseReasoningBindings"),
+			prunedIncreaseReasoningBindings: keymapBindings(expectValue, "prunedIncreaseReasoningBindings"),
+			explicitConflictOuterAction: keymapDefaultPruningActionKind(stringField(expectValue, "explicitConflictOuterAction", "")),
+			explicitConflictInnerAction: keymapDefaultPruningActionKind(stringField(expectValue, "explicitConflictInnerAction", "")),
+			explicitConflictBinding: keymapBinding(objectField(expectValue, "explicitConflictBinding")),
+			legacyListMoveUpConfigured: keymapBinding(objectField(expectValue, "legacyListMoveUpConfigured")),
+			legacyListMoveDownConfigured: keymapBinding(objectField(expectValue, "legacyListMoveDownConfigured")),
+			legacyListPageUpPruned: keymapBindings(expectValue, "legacyListPageUpPruned"),
+			legacyListPageDownPruned: keymapBindings(expectValue, "legacyListPageDownPruned"),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap default pruning expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapDefaultPruningDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "tailMainSurfaceDefaultsPreserved", false)), boolText(outcome.tailMainSurfaceDefaultsPreserved));
+		assertEquals(boolText(boolField(expectValue, "listPageAndJumpDefaultsPreserved", false)), boolText(outcome.listPageAndJumpDefaultsPreserved));
+		assertEquals(boolText(boolField(expectValue, "reasoningFallbackPruningPreserved", false)), boolText(outcome.reasoningFallbackPruningPreserved));
+		assertEquals(boolText(boolField(expectValue, "explicitReasoningEditorConflictPreserved", false)), boolText(outcome.explicitReasoningEditorConflictPreserved));
+		assertEquals(boolText(boolField(expectValue, "legacyListOverlapPruningPreserved", false)), boolText(outcome.legacyListOverlapPruningPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function keymapDefaultPruningCases(value:Value, fieldName:String):Array<ModelKeymapDefaultPruningCase> {
+		final cases:Array<ModelKeymapDefaultPruningCase> = [];
+		for (caseValue in arrayField(value, fieldName)) {
+			final caseObject = objectValue(caseValue);
+			cases.push(new ModelKeymapDefaultPruningCase({
+				actionKind: keymapDefaultPruningActionKind(stringField(caseObject, "actionKind", "")),
+				bindings: keymapBindings(caseObject, "bindings")
+			}));
+		}
+		return cases;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6627,6 +6712,18 @@ class ModelStreamItemReducerHarness {
 			case "keymap_binding_inputs_rejected": ModelKeymapBindingInputDecisionKind.KeymapBindingInputsRejected;
 			case _: throw "unknown keymap binding input decision kind: " + value;
 		}
+	}
+
+	static function keymapDefaultPruningDecisionKind(value:String):ModelKeymapDefaultPruningDecisionKind {
+		return switch value {
+			case "keymap_default_pruning_preserved": ModelKeymapDefaultPruningDecisionKind.KeymapDefaultPruningPreserved;
+			case "keymap_default_pruning_rejected": ModelKeymapDefaultPruningDecisionKind.KeymapDefaultPruningRejected;
+			case _: throw "unknown keymap default pruning decision kind: " + value;
+		}
+	}
+
+	static function keymapDefaultPruningActionKind(value:String):ModelKeymapDefaultPruningActionKind {
+		return ModelKeymapDefaultPruningActionKind.fromString(value);
 	}
 
 	static function parsedKeyKind(value:String):ModelParsedKeyKind {
