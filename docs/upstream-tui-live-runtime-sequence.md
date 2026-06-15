@@ -1234,7 +1234,20 @@ Model selected raw Codex active-turn TUI error classification behavior:
 
 Status: HXCX-4.99 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. This slice exposed optional anonymous-field read lowering/runtime semantics as generic haxe.rust follow-up `haxe.rust-i8li`; codexhx now materializes that draft record through a typed default factory while the compiler/runtime fix is tracked upstream. This is deterministic active-turn error classification evidence only, not live app-server calls, live turn steering, live interrupt retry, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.100+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.100: Fresh Session Service-Tier Propagation Boundary
+
+Model selected raw Codex fresh-session config behavior:
+
+- clone the base TUI config for fresh session creation;
+- overwrite only `service_tier` from `chat_widget.configured_service_tier()`;
+- preserve `ServiceTier::Fast.request_value()` as `priority`;
+- preserve the explicit standard-routing sentinel `default`;
+- clear a stale base-config service tier when the chat widget has no configured service tier;
+- preserve ordering facts while avoiding live app-server, model-catalog, network, filesystem, and tool execution.
+
+Status: HXCX-4.100 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic fresh-session config evidence only, not live app-server calls, model-catalog default resolution, persisted config writes, interactive TUI ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.101+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

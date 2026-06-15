@@ -6436,6 +6436,68 @@
 	          "errorMessage": "",
 	          "summaryContains": "decisionKind=archived_session_guidance;method=thread/resume;turnKind=none;actualTurnId=none"
 	        }
+	      ],
+	      "freshSessionServiceTierExpects": [
+	        {
+	          "ok": true,
+	          "code": "fresh_session_service_tier_modeled",
+	          "requestId": "fresh-session-config-priority-service-tier",
+	          "baseConfigServiceTier": "",
+	          "configuredServiceTier": "priority",
+	          "previousEventCount": 65,
+	          "eventOrderIndex": 66,
+	          "decisionKind": "configured_service_tier_propagated",
+	          "freshConfigServiceTier": "priority",
+	          "serviceTierOverrodeBaseConfig": true,
+	          "serviceTierClearedFromBaseConfig": false,
+	          "baseConfigOtherwisePreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=configured_service_tier_propagated;baseConfigServiceTier=none;configuredServiceTier=priority;freshConfigServiceTier=priority"
+	        },
+	        {
+	          "ok": true,
+	          "code": "fresh_session_service_tier_modeled",
+	          "requestId": "fresh-session-config-default-service-tier",
+	          "baseConfigServiceTier": "priority",
+	          "configuredServiceTier": "default",
+	          "previousEventCount": 66,
+	          "eventOrderIndex": 67,
+	          "decisionKind": "configured_service_tier_propagated",
+	          "freshConfigServiceTier": "default",
+	          "serviceTierOverrodeBaseConfig": true,
+	          "serviceTierClearedFromBaseConfig": false,
+	          "baseConfigOtherwisePreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=configured_service_tier_propagated;baseConfigServiceTier=priority;configuredServiceTier=default;freshConfigServiceTier=default"
+	        },
+	        {
+	          "ok": true,
+	          "code": "fresh_session_service_tier_modeled",
+	          "requestId": "fresh-session-config-clears-stale-base-service-tier",
+	          "baseConfigServiceTier": "priority",
+	          "configuredServiceTier": "",
+	          "previousEventCount": 67,
+	          "eventOrderIndex": 68,
+	          "decisionKind": "configured_service_tier_cleared",
+	          "freshConfigServiceTier": "",
+	          "serviceTierOverrodeBaseConfig": true,
+	          "serviceTierClearedFromBaseConfig": true,
+	          "baseConfigOtherwisePreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=configured_service_tier_cleared;baseConfigServiceTier=priority;configuredServiceTier=none;freshConfigServiceTier=none"
+	        }
 	      ]
 		    },
     {

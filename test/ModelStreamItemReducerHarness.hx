@@ -192,6 +192,11 @@ import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorPolicy;
 import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorRequest;
 import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorRequestKind;
 import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorTurnKind;
+import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierDecisionKind;
+import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierOutcome;
+import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierPolicy;
+import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierRequest;
+import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierValue;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -303,6 +308,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelResizeReflowSchedulings(testCase, topLevelTerminalResizeReflows, secretProbe);
 			assertTopLevelFeedbackSubmissionRoutings(testCase, secretProbe);
 			assertTopLevelTuiActiveTurnErrors(testCase, secretProbe);
+			assertTopLevelFreshSessionServiceTiers(testCase, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -500,6 +506,7 @@ class ModelStreamItemReducerHarness {
 				assertResizeReflowSchedulings(verificationValue, terminalResizeReflows, secretProbe);
 				assertFeedbackSubmissionRoutings(verificationValue, secretProbe);
 				assertTuiActiveTurnErrors(verificationValue, secretProbe);
+				assertFreshSessionServiceTiers(verificationValue, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3629,6 +3636,58 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelFreshSessionServiceTiers(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelFreshSessionServiceTierOutcome> {
+		final outcomes:Array<ModelFreshSessionServiceTierOutcome> = [];
+		final values = optionalArrayField(testCase, "freshSessionServiceTierExpects");
+		for (value in values) outcomes.push(assertFreshSessionServiceTier(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertFreshSessionServiceTiers(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelFreshSessionServiceTierOutcome> {
+		final outcomes:Array<ModelFreshSessionServiceTierOutcome> = [];
+		final values = optionalArrayField(verificationValue, "freshSessionServiceTierExpects");
+		for (value in values) outcomes.push(assertFreshSessionServiceTier(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertFreshSessionServiceTier(
+		expectValue:Value,
+		secretProbe:String
+	):ModelFreshSessionServiceTierOutcome {
+		final outcome = ModelFreshSessionServiceTierPolicy.apply(new ModelFreshSessionServiceTierRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			baseConfigServiceTier: freshSessionServiceTierValue(stringField(expectValue, "baseConfigServiceTier", "")),
+			configuredServiceTier: freshSessionServiceTierValue(stringField(expectValue, "configuredServiceTier", "")),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(freshSessionServiceTierDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(freshSessionServiceTierValue(stringField(expectValue, "baseConfigServiceTier", "")), outcome.baseConfigServiceTier);
+		assertEquals(freshSessionServiceTierValue(stringField(expectValue, "configuredServiceTier", "")), outcome.configuredServiceTier);
+		assertEquals(freshSessionServiceTierValue(stringField(expectValue, "freshConfigServiceTier", "")), outcome.freshConfigServiceTier);
+		assertEquals(boolText(boolField(expectValue, "serviceTierOverrodeBaseConfig", false)), boolText(outcome.serviceTierOverrodeBaseConfig));
+		assertEquals(boolText(boolField(expectValue, "serviceTierClearedFromBaseConfig", false)), boolText(outcome.serviceTierClearedFromBaseConfig));
+		assertEquals(boolText(boolField(expectValue, "baseConfigOtherwisePreserved", false)), boolText(outcome.baseConfigOtherwisePreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
@@ -4481,6 +4540,24 @@ class ModelStreamItemReducerHarness {
 			case "review": ModelTuiActiveTurnErrorTurnKind.Review;
 			case "other": ModelTuiActiveTurnErrorTurnKind.Other;
 			case _: throw "unknown TUI active-turn error turn kind: " + value;
+		}
+	}
+
+	static function freshSessionServiceTierDecisionKind(value:String):ModelFreshSessionServiceTierDecisionKind {
+		return switch value {
+			case "configured_service_tier_propagated": ModelFreshSessionServiceTierDecisionKind.ConfiguredServiceTierPropagated;
+			case "configured_service_tier_cleared": ModelFreshSessionServiceTierDecisionKind.ConfiguredServiceTierCleared;
+			case _: throw "unknown fresh-session service-tier decision kind: " + value;
+		}
+	}
+
+	static function freshSessionServiceTierValue(value:String):ModelFreshSessionServiceTierValue {
+		return switch value {
+			case "": ModelFreshSessionServiceTierValue.None;
+			case "priority": ModelFreshSessionServiceTierValue.Priority;
+			case "flex": ModelFreshSessionServiceTierValue.Flex;
+			case "default": ModelFreshSessionServiceTierValue.Default;
+			case _: throw "unknown fresh-session service-tier value: " + value;
 		}
 	}
 
