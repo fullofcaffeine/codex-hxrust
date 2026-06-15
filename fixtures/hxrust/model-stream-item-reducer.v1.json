@@ -8210,6 +8210,47 @@
 	          "conflictRejected": true
 	        }
 	      ],
+	      "keymapPagerConflictExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_pager_conflict_modeled",
+	          "requestId": "keymap-pager-ctrl-u-conflict",
+	          "previousEventCount": 91,
+	          "eventOrderIndex": 92,
+	          "decisionKind": "keymap_pager_conflict_rejected",
+	          "scrollUpBindingPreserved": true,
+	          "scrollDownBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_pager_conflict_rejected;scrollUpBindingPreserved=true;scrollDownBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredScrollUp": {
+	            "kind": "character",
+	            "keyName": "u",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "configuredScrollDown": {
+	            "kind": "character",
+	            "keyName": "u",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "pager_scroll_up",
+	          "conflictInnerAction": "pager_scroll_down",
+	          "expectedOuterActionName": "scroll_up",
+	          "expectedInnerActionName": "scroll_down",
+	          "conflictRejected": true
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

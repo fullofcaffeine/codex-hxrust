@@ -1642,7 +1642,20 @@ Model selected raw Codex editor keymap conflict behavior:
 
 Status: HXCX-4.133 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.134+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.134: Keymap Pager Conflict Boundary
+
+Model selected raw Codex pager keymap conflict behavior:
+
+- preserve configured `pager.scroll_up` `ctrl-u` evidence;
+- preserve configured `pager.scroll_down` `ctrl-u` evidence;
+- preserve upstream `scroll_up` and `scroll_down` conflict action names;
+- preserve fail-closed keymap validation conflict behavior;
+- keep the keymap evidence deterministic and independent of live keyboard input;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.134 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.135+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
