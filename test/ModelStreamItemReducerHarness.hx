@@ -169,6 +169,12 @@ import codexhx.runtime.model.streamitem.ModelClearUiHeaderOutcome;
 import codexhx.runtime.model.streamitem.ModelClearUiHeaderPolicy;
 import codexhx.runtime.model.streamitem.ModelClearUiHeaderRequest;
 import codexhx.runtime.model.streamitem.ModelClearUiHeaderRequestKind;
+import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowDecisionKind;
+import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowMaxRowsKind;
+import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowOutcome;
+import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowPolicy;
+import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowRequest;
+import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowRequestKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -275,7 +281,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelThreadSideThreadComposerHandoffs = assertTopLevelThreadSideThreadComposerHandoffs(testCase, topLevelThreadSideThreadStarts, topLevelThreadSideThreadStartupRoutings, secretProbe);
 			final topLevelThreadSideThreadNavigationCleanups = assertTopLevelThreadSideThreadNavigationCleanups(testCase, topLevelThreadSideThreadComposerHandoffs, secretProbe);
 			final topLevelActiveNonPrimaryShutdowns = assertTopLevelActiveNonPrimaryShutdowns(testCase, topLevelThreadSideThreadNavigationCleanups, secretProbe);
-			assertTopLevelClearUiHeaders(testCase, topLevelActiveNonPrimaryShutdowns, secretProbe);
+			final topLevelClearUiHeaders = assertTopLevelClearUiHeaders(testCase, topLevelActiveNonPrimaryShutdowns, secretProbe);
+			assertTopLevelTerminalResizeReflows(testCase, topLevelClearUiHeaders, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -468,7 +475,8 @@ class ModelStreamItemReducerHarness {
 				final threadSideThreadComposerHandoffs = assertThreadSideThreadComposerHandoffs(verificationValue, threadSideThreadStarts, threadSideThreadStartupRoutings, secretProbe);
 				final threadSideThreadNavigationCleanups = assertThreadSideThreadNavigationCleanups(verificationValue, threadSideThreadComposerHandoffs, secretProbe);
 				final activeNonPrimaryShutdowns = assertActiveNonPrimaryShutdowns(verificationValue, threadSideThreadNavigationCleanups, secretProbe);
-				assertClearUiHeaders(verificationValue, activeNonPrimaryShutdowns, secretProbe);
+				final clearUiHeaders = assertClearUiHeaders(verificationValue, activeNonPrimaryShutdowns, secretProbe);
+				assertTerminalResizeReflows(verificationValue, clearUiHeaders, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3285,6 +3293,94 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelTerminalResizeReflows(
+		testCase:Value,
+		clearUiHeaders:Array<ModelClearUiHeaderOutcome>,
+		secretProbe:String
+	):Array<ModelTerminalResizeReflowOutcome> {
+		final outcomes:Array<ModelTerminalResizeReflowOutcome> = [];
+		final values = optionalArrayField(testCase, "terminalResizeReflowExpects");
+		for (value in values) outcomes.push(assertTerminalResizeReflow(objectValue(value), clearUiHeaders, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTerminalResizeReflows(
+		verificationValue:Value,
+		clearUiHeaders:Array<ModelClearUiHeaderOutcome>,
+		secretProbe:String
+	):Array<ModelTerminalResizeReflowOutcome> {
+		final outcomes:Array<ModelTerminalResizeReflowOutcome> = [];
+		final values = optionalArrayField(verificationValue, "terminalResizeReflowExpects");
+		for (value in values) outcomes.push(assertTerminalResizeReflow(objectValue(value), clearUiHeaders, secretProbe));
+		return outcomes;
+	}
+
+	static function assertTerminalResizeReflow(
+		expectValue:Value,
+		clearUiHeaders:Array<ModelClearUiHeaderOutcome>,
+		secretProbe:String
+	):ModelTerminalResizeReflowOutcome {
+		final clearUiHeaderRequestId = stringField(expectValue, "clearUiHeaderRequestId", "");
+		final outcome = ModelTerminalResizeReflowPolicy.apply(new ModelTerminalResizeReflowRequest(
+			stringField(expectValue, "requestId", ""),
+			clearUiHeaderByRequestId(clearUiHeaders, clearUiHeaderRequestId),
+			terminalResizeReflowRequestKind(stringField(expectValue, "requestKind", "")),
+			terminalResizeReflowMaxRowsKind(stringField(expectValue, "maxRowsKind", "")),
+			intField(expectValue, "maxRows", 0),
+			boolField(expectValue, "terminalResizeReflowEnabled", false),
+			boolField(expectValue, "overlayActive", false),
+			intField(expectValue, "terminalWidth", 0),
+			intField(expectValue, "petReservedColumns", 0),
+			stringArrayField(expectValue, "transcriptRows"),
+			stringArrayField(expectValue, "replayRows"),
+			intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(clearUiHeaderRequestId, outcome.clearUiHeaderRequestId);
+		assertEquals(terminalResizeReflowDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(terminalResizeReflowRequestKind(stringField(expectValue, "requestKind", "")), outcome.requestKind);
+		assertEquals(terminalResizeReflowMaxRowsKind(stringField(expectValue, "maxRowsKind", "")), outcome.maxRowsKind);
+		assertEquals(Std.string(intField(expectValue, "maxRows", 0)), Std.string(outcome.maxRows));
+		assertEquals(Std.string(intField(expectValue, "terminalWidth", 0)), Std.string(outcome.terminalWidth));
+		assertEquals(Std.string(intField(expectValue, "historyWrapWidth", 0)), Std.string(outcome.historyWrapWidth));
+		assertEquals(Std.string(intField(expectValue, "petReservedColumns", 0)), Std.string(outcome.petReservedColumns));
+		assertEquals(Std.string(intField(expectValue, "transcriptCellCount", 0)), Std.string(outcome.transcriptCellCount));
+		assertStringArraysEqual(stringArrayField(expectValue, "renderedLines"), outcome.renderedLines);
+		assertStringArraysEqual(stringArrayField(expectValue, "retainedReplayRows"), outcome.retainedReplayRows);
+		assertEquals(Std.string(intField(expectValue, "renderedLineCount", 0)), Std.string(outcome.renderedLineCount));
+		assertEquals(Std.string(intField(expectValue, "trimmedLineCount", 0)), Std.string(outcome.trimmedLineCount));
+		assertEquals(boolText(boolField(expectValue, "rowCapApplied", false)), boolText(outcome.rowCapApplied));
+		assertEquals(boolText(boolField(expectValue, "recentSuffixOnly", false)), boolText(outcome.recentSuffixOnly));
+		assertEquals(boolText(boolField(expectValue, "allCellsRendered", false)), boolText(outcome.allCellsRendered));
+		assertEquals(boolText(boolField(expectValue, "petReservedWidthApplied", false)), boolText(outcome.petReservedWidthApplied));
+		assertEquals(boolText(boolField(expectValue, "petWrappedEarlier", false)), boolText(outcome.petWrappedEarlier));
+		assertEquals(boolText(boolField(expectValue, "initialReplayBufferStarted", false)), boolText(outcome.initialReplayBufferStarted));
+		assertEquals(boolText(boolField(expectValue, "initialReplayRowsTrimmed", false)), boolText(outcome.initialReplayRowsTrimmed));
+		assertEquals(boolText(boolField(expectValue, "threadSwitchTailMode", false)), boolText(outcome.threadSwitchTailMode));
+		assertEquals(boolText(boolField(expectValue, "threadSwitchBufferDisabled", false)), boolText(outcome.threadSwitchBufferDisabled));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function clearUiHeaderByRequestId(outcomes:Array<ModelClearUiHeaderOutcome>, requestId:String):ModelClearUiHeaderOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing clear UI header outcome: " + requestId;
+	}
+
+	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
+		assertEquals(expected.join("\n"), actual.join("\n"));
+	}
+
 	static function activeNonPrimaryShutdownByRequestId(
 		outcomes:Array<ModelActiveNonPrimaryShutdownOutcome>,
 		requestId:String
@@ -4024,6 +4120,36 @@ class ModelStreamItemReducerHarness {
 			case "rendered_fast_status_header": ModelClearUiHeaderDecisionKind.RenderedFastStatusHeader;
 			case "skipped_no_redraw": ModelClearUiHeaderDecisionKind.SkippedNoRedraw;
 			case _: throw "unknown clear UI header decision kind: " + value;
+		}
+	}
+
+	static function terminalResizeReflowRequestKind(value:String):ModelTerminalResizeReflowRequestKind {
+		return switch value {
+			case "render_transcript": ModelTerminalResizeReflowRequestKind.RenderTranscript;
+			case "initial_replay_buffer": ModelTerminalResizeReflowRequestKind.InitialReplayBuffer;
+			case "thread_switch_replay_buffer": ModelTerminalResizeReflowRequestKind.ThreadSwitchReplayBuffer;
+			case _: throw "unknown terminal resize reflow request kind: " + value;
+		}
+	}
+
+	static function terminalResizeReflowMaxRowsKind(value:String):ModelTerminalResizeReflowMaxRowsKind {
+		return switch value {
+			case "limit": ModelTerminalResizeReflowMaxRowsKind.Limit;
+			case "disabled": ModelTerminalResizeReflowMaxRowsKind.Disabled;
+			case _: throw "unknown terminal resize reflow max rows kind: " + value;
+		}
+	}
+
+	static function terminalResizeReflowDecisionKind(value:String):ModelTerminalResizeReflowDecisionKind {
+		return switch value {
+			case "capped_recent_suffix": ModelTerminalResizeReflowDecisionKind.CappedRecentSuffix;
+			case "uncapped_all_cells": ModelTerminalResizeReflowDecisionKind.UncappedAllCells;
+			case "pet_wrapped_earlier": ModelTerminalResizeReflowDecisionKind.PetWrappedEarlier;
+			case "under_limit_all_cells": ModelTerminalResizeReflowDecisionKind.UnderLimitAllCells;
+			case "initial_replay_buffer_tail": ModelTerminalResizeReflowDecisionKind.InitialReplayBufferTail;
+			case "thread_switch_tail_mode": ModelTerminalResizeReflowDecisionKind.ThreadSwitchTailMode;
+			case "thread_switch_buffer_disabled": ModelTerminalResizeReflowDecisionKind.ThreadSwitchBufferDisabled;
+			case _: throw "unknown terminal resize reflow decision kind: " + value;
 		}
 	}
 
