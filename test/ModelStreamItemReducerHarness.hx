@@ -4861,7 +4861,10 @@ class ModelStreamItemReducerHarness {
 				expectedAccepted: boolField(caseObject, "expectedAccepted", false),
 				expectedKind: parsedKeyKind(stringField(caseObject, "expectedKind", "")),
 				expectedKeyName: stringField(caseObject, "expectedKeyName", ""),
-				expectedFunctionNumber: intField(caseObject, "expectedFunctionNumber", -1)
+				expectedFunctionNumber: intField(caseObject, "expectedFunctionNumber", -1),
+				expectedCtrlModifier: boolField(caseObject, "expectedCtrlModifier", false),
+				expectedAltModifier: boolField(caseObject, "expectedAltModifier", false),
+				expectedShiftModifier: boolField(caseObject, "expectedShiftModifier", false)
 			}));
 		}
 		final outcome = ModelKeyParserPolicy.apply(new ModelKeyParserRequest({
@@ -4872,6 +4875,9 @@ class ModelStreamItemReducerHarness {
 			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
 			secretProbe: secretProbe
 		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "key parser expectation failed: " + outcome.summary();
+		}
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -4881,6 +4887,11 @@ class ModelStreamItemReducerHarness {
 		assertEquals(Std.string(intField(expectValue, "namedKeyCount", 0)), Std.string(outcome.namedKeyCount));
 		assertEquals(boolText(boolField(expectValue, "spaceAliasPreserved", false)), boolText(outcome.spaceAliasPreserved));
 		assertEquals(boolText(boolField(expectValue, "minusAliasPreserved", false)), boolText(outcome.minusAliasPreserved));
+		assertEquals(boolText(boolField(expectValue, "modifierOnlyRejected", false)), boolText(outcome.modifierOnlyRejected));
+		assertEquals(boolText(boolField(expectValue, "nonnumericFunctionRejected", false)), boolText(outcome.nonnumericFunctionRejected));
+		assertEquals(boolText(boolField(expectValue, "altMinusAliasPreserved", false)), boolText(outcome.altMinusAliasPreserved));
+		assertEquals(boolText(boolField(expectValue, "legacyAltLiteralMinusPreserved", false)), boolText(outcome.legacyAltLiteralMinusPreserved));
+		assertEquals(boolText(boolField(expectValue, "literalMinusPreserved", false)), boolText(outcome.literalMinusPreserved));
 		assertEquals(boolText(boolField(expectValue, "allExpectedCasesMatched", false)), boolText(outcome.allExpectedCasesMatched));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
 		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));

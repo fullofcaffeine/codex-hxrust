@@ -7094,23 +7094,28 @@
 	        {
 	          "ok": true,
 	          "code": "key_parser_cases_modeled",
-	          "requestId": "parses-function-keys-and-named-non-character-keys",
+	          "requestId": "parses-function-keys-named-keys-and-minus-aliases",
 	          "maxFunctionKey": 24,
 	          "previousEventCount": 80,
 	          "eventOrderIndex": 81,
 	          "decisionKind": "key_parser_cases_preserved",
 	          "acceptedFunctionKeyCount": 2,
-	          "rejectedFunctionKeyCount": 1,
-	          "namedKeyCount": 14,
+	          "rejectedFunctionKeyCount": 2,
+	          "namedKeyCount": 12,
 	          "spaceAliasPreserved": true,
 	          "minusAliasPreserved": true,
+	          "modifierOnlyRejected": true,
+	          "nonnumericFunctionRejected": true,
+	          "altMinusAliasPreserved": true,
+	          "legacyAltLiteralMinusPreserved": true,
+	          "literalMinusPreserved": true,
 	          "allExpectedCasesMatched": true,
 	          "eventOrderingPreserved": true,
 	          "liveNetworkAttempted": false,
 	          "realFilesystemMutated": false,
 	          "toolExecutedOutsideFixture": false,
 	          "errorMessage": "",
-	          "summaryContains": "decisionKind=key_parser_cases_preserved;acceptedFunctionKeyCount=2;rejectedFunctionKeyCount=1;namedKeyCount=14;spaceAliasPreserved=true;minusAliasPreserved=true;allExpectedCasesMatched=true;eventOrderingPreserved=true",
+	          "summaryContains": "decisionKind=key_parser_cases_preserved;acceptedFunctionKeyCount=2;rejectedFunctionKeyCount=2;namedKeyCount=12;spaceAliasPreserved=true;minusAliasPreserved=true;modifierOnlyRejected=true;nonnumericFunctionRejected=true;altMinusAliasPreserved=true;legacyAltLiteralMinusPreserved=true;literalMinusPreserved=true;allExpectedCasesMatched=true;eventOrderingPreserved=true",
 	          "cases": [
 	            {
 	              "spec": "f1",
@@ -7130,6 +7135,20 @@
 	              "spec": "f25",
 	              "expectedAccepted": false,
 	              "expectedKind": "function",
+	              "expectedKeyName": "",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "ff",
+	              "expectedAccepted": false,
+	              "expectedKind": "function",
+	              "expectedKeyName": "",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "ctrl",
+	              "expectedAccepted": false,
+	              "expectedKind": "invalid",
 	              "expectedKeyName": "",
 	              "expectedFunctionNumber": -1
 	            },
@@ -7220,15 +7239,38 @@
 	            {
 	              "spec": "space",
 	              "expectedAccepted": true,
-	              "expectedKind": "named",
-	              "expectedKeyName": "space",
+	              "expectedKind": "character",
+	              "expectedKeyName": " ",
 	              "expectedFunctionNumber": -1
 	            },
 	            {
 	              "spec": "minus",
 	              "expectedAccepted": true,
-	              "expectedKind": "named",
-	              "expectedKeyName": "minus",
+	              "expectedKind": "character",
+	              "expectedKeyName": "-",
+	              "expectedFunctionNumber": -1
+	            },
+	            {
+	              "spec": "alt-minus",
+	              "expectedAccepted": true,
+	              "expectedKind": "character",
+	              "expectedKeyName": "-",
+	              "expectedFunctionNumber": -1,
+	              "expectedAltModifier": true
+	            },
+	            {
+	              "spec": "alt--",
+	              "expectedAccepted": true,
+	              "expectedKind": "character",
+	              "expectedKeyName": "-",
+	              "expectedFunctionNumber": -1,
+	              "expectedAltModifier": true
+	            },
+	            {
+	              "spec": "-",
+	              "expectedAccepted": true,
+	              "expectedKind": "character",
+	              "expectedKeyName": "-",
 	              "expectedFunctionNumber": -1
 	            }
 	          ]

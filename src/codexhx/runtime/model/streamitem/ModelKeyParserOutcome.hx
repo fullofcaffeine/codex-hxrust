@@ -10,6 +10,11 @@ typedef ModelKeyParserOutcomeFields = {
 	final namedKeyCount:Int;
 	final spaceAliasPreserved:Bool;
 	final minusAliasPreserved:Bool;
+	final modifierOnlyRejected:Bool;
+	final nonnumericFunctionRejected:Bool;
+	final altMinusAliasPreserved:Bool;
+	final legacyAltLiteralMinusPreserved:Bool;
+	final literalMinusPreserved:Bool;
 	final allExpectedCasesMatched:Bool;
 	final eventOrderingPreserved:Bool;
 	final liveNetworkAttempted:Bool;
@@ -28,6 +33,11 @@ class ModelKeyParserOutcome {
 	public final namedKeyCount:Int;
 	public final spaceAliasPreserved:Bool;
 	public final minusAliasPreserved:Bool;
+	public final modifierOnlyRejected:Bool;
+	public final nonnumericFunctionRejected:Bool;
+	public final altMinusAliasPreserved:Bool;
+	public final legacyAltLiteralMinusPreserved:Bool;
+	public final literalMinusPreserved:Bool;
 	public final allExpectedCasesMatched:Bool;
 	public final eventOrderingPreserved:Bool;
 	public final liveNetworkAttempted:Bool;
@@ -45,6 +55,11 @@ class ModelKeyParserOutcome {
 		this.namedKeyCount = fields.namedKeyCount;
 		this.spaceAliasPreserved = fields.spaceAliasPreserved;
 		this.minusAliasPreserved = fields.minusAliasPreserved;
+		this.modifierOnlyRejected = fields.modifierOnlyRejected;
+		this.nonnumericFunctionRejected = fields.nonnumericFunctionRejected;
+		this.altMinusAliasPreserved = fields.altMinusAliasPreserved;
+		this.legacyAltLiteralMinusPreserved = fields.legacyAltLiteralMinusPreserved;
+		this.literalMinusPreserved = fields.literalMinusPreserved;
 		this.allExpectedCasesMatched = fields.allExpectedCasesMatched;
 		this.eventOrderingPreserved = fields.eventOrderingPreserved;
 		this.liveNetworkAttempted = fields.liveNetworkAttempted;
@@ -63,6 +78,11 @@ class ModelKeyParserOutcome {
 			+ ";namedKeyCount=" + namedKeyCount
 			+ ";spaceAliasPreserved=" + boolText(spaceAliasPreserved)
 			+ ";minusAliasPreserved=" + boolText(minusAliasPreserved)
+			+ ";modifierOnlyRejected=" + boolText(modifierOnlyRejected)
+			+ ";nonnumericFunctionRejected=" + boolText(nonnumericFunctionRejected)
+			+ ";altMinusAliasPreserved=" + boolText(altMinusAliasPreserved)
+			+ ";legacyAltLiteralMinusPreserved=" + boolText(legacyAltLiteralMinusPreserved)
+			+ ";literalMinusPreserved=" + boolText(literalMinusPreserved)
 			+ ";allExpectedCasesMatched=" + boolText(allExpectedCasesMatched)
 			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
 			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)

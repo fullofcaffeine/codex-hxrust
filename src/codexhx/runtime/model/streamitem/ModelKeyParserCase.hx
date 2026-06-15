@@ -6,6 +6,9 @@ typedef ModelKeyParserCaseFields = {
 	final expectedKind:ModelParsedKeyKind;
 	final expectedKeyName:String;
 	final expectedFunctionNumber:Int;
+	final ?expectedCtrlModifier:Bool;
+	final ?expectedAltModifier:Bool;
+	final ?expectedShiftModifier:Bool;
 }
 
 class ModelKeyParserCase {
@@ -14,6 +17,9 @@ class ModelKeyParserCase {
 	public final expectedKind:ModelParsedKeyKind;
 	public final expectedKeyName:String;
 	public final expectedFunctionNumber:Int;
+	public final expectedCtrlModifier:Bool;
+	public final expectedAltModifier:Bool;
+	public final expectedShiftModifier:Bool;
 
 	public function new(fields:ModelKeyParserCaseFields) {
 		this.spec = normalizeText(fields.spec);
@@ -21,6 +27,9 @@ class ModelKeyParserCase {
 		this.expectedKind = fields.expectedKind == null ? ModelParsedKeyKind.Invalid : fields.expectedKind;
 		this.expectedKeyName = normalizeText(fields.expectedKeyName);
 		this.expectedFunctionNumber = fields.expectedFunctionNumber;
+		this.expectedCtrlModifier = fields.expectedCtrlModifier == true;
+		this.expectedAltModifier = fields.expectedAltModifier == true;
+		this.expectedShiftModifier = fields.expectedShiftModifier == true;
 	}
 
 	static function normalizeText(value:String):String {
