@@ -146,6 +146,11 @@ import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartFailureKind;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartOutcome;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartPolicy;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartRequest;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartupEventKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartupRoutingDecisionKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartupRoutingOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartupRoutingPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartupRoutingRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -247,7 +252,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelThreadSideParentStatusChanges = assertTopLevelThreadSideParentStatusChanges(testCase, topLevelThreadSideParentPendingStatuses, secretProbe);
 			final topLevelThreadSideThreadUiSyncs = assertTopLevelThreadSideThreadUiSyncs(testCase, topLevelThreadSideParentStatusChanges, secretProbe);
 			final topLevelThreadSideThreadDiscards = assertTopLevelThreadSideThreadDiscards(testCase, topLevelThreadSideThreadUiSyncs, secretProbe);
-			assertTopLevelThreadSideThreadStarts(testCase, topLevelThreadSideThreadDiscards, secretProbe);
+			final topLevelThreadSideThreadStarts = assertTopLevelThreadSideThreadStarts(testCase, topLevelThreadSideThreadDiscards, secretProbe);
+			assertTopLevelThreadSideThreadStartupRoutings(testCase, topLevelThreadSideThreadStarts, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -435,7 +441,8 @@ class ModelStreamItemReducerHarness {
 				final threadSideParentStatusChanges = assertThreadSideParentStatusChanges(verificationValue, threadSideParentPendingStatuses, secretProbe);
 				final threadSideThreadUiSyncs = assertThreadSideThreadUiSyncs(verificationValue, threadSideParentStatusChanges, secretProbe);
 				final threadSideThreadDiscards = assertThreadSideThreadDiscards(verificationValue, threadSideThreadUiSyncs, secretProbe);
-				assertThreadSideThreadStarts(verificationValue, threadSideThreadDiscards, secretProbe);
+				final threadSideThreadStarts = assertThreadSideThreadStarts(verificationValue, threadSideThreadDiscards, secretProbe);
+				assertThreadSideThreadStartupRoutings(verificationValue, threadSideThreadStarts, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -2835,6 +2842,91 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelThreadSideThreadStartupRoutings(
+		testCase:Value,
+		starts:Array<ModelThreadSideThreadStartOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideThreadStartupRoutingOutcome> {
+		final outcomes:Array<ModelThreadSideThreadStartupRoutingOutcome> = [];
+		final values = optionalArrayField(testCase, "threadSideThreadStartupRoutingExpects");
+		for (value in values) outcomes.push(assertThreadSideThreadStartupRouting(objectValue(value), starts, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideThreadStartupRoutings(
+		verificationValue:Value,
+		starts:Array<ModelThreadSideThreadStartOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideThreadStartupRoutingOutcome> {
+		final outcomes:Array<ModelThreadSideThreadStartupRoutingOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadSideThreadStartupRoutingExpects");
+		for (value in values) outcomes.push(assertThreadSideThreadStartupRouting(objectValue(value), starts, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideThreadStartupRouting(
+		expectValue:Value,
+		starts:Array<ModelThreadSideThreadStartOutcome>,
+		secretProbe:String
+	):ModelThreadSideThreadStartupRoutingOutcome {
+		final startRequestId = stringField(expectValue, "startRequestId", "");
+		final outcome = ModelThreadSideThreadStartupRoutingPolicy.apply(new ModelThreadSideThreadStartupRoutingRequest(
+			stringField(expectValue, "requestId", ""),
+			threadSideThreadStartByRequestId(starts, startRequestId),
+			boolField(expectValue, "notificationThreadScoped", false),
+			boolField(expectValue, "notificationTargetsVisibleThread", false),
+			boolField(expectValue, "notificationTargetsPrimaryThread", false),
+			boolField(expectValue, "targetThreadIsSideThread", false),
+			boolField(expectValue, "visibleThreadIsSideThread", false),
+			boolField(expectValue, "activeThreadChannel", false),
+			boolField(expectValue, "snapshotReplay", false),
+			boolField(expectValue, "snapshotSessionIsSideThread", false),
+			stringField(expectValue, "mcpServerName", ""),
+			threadSideThreadStartupEventKind(stringField(expectValue, "startupEventKind", "starting")),
+			stringField(expectValue, "startupErrorMessage", ""),
+			boolField(expectValue, "expectedServerConfigured", false),
+			intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(startRequestId, outcome.startRequestId);
+		assertEquals(threadSideThreadStartupRoutingDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(threadSideThreadStartupEventKind(stringField(expectValue, "startupEventKind", "starting")), outcome.startupEventKind);
+		assertEquals(boolText(boolField(expectValue, "expectedServersRefreshed", false)), boolText(outcome.expectedServersRefreshed));
+		assertEquals(boolText(boolField(expectValue, "appScopedIgnored", false)), boolText(outcome.appScopedIgnored));
+		assertEquals(boolText(boolField(expectValue, "misroutedVisibleThreadIgnored", false)), boolText(outcome.misroutedVisibleThreadIgnored));
+		assertEquals(boolText(boolField(expectValue, "childThreadChannelEnsured", false)), boolText(outcome.childThreadChannelEnsured));
+		assertEquals(boolText(boolField(expectValue, "notificationBuffered", false)), boolText(outcome.notificationBuffered));
+		assertEquals(boolText(boolField(expectValue, "notificationSentToActiveReceiver", false)), boolText(outcome.notificationSentToActiveReceiver));
+		assertEquals(boolText(boolField(expectValue, "sideThreadSessionHandled", false)), boolText(outcome.sideThreadSessionHandled));
+		assertEquals(boolText(boolField(expectValue, "sideConversationDisplayMode", false)), boolText(outcome.sideConversationDisplayMode));
+		assertEquals(boolText(boolField(expectValue, "contextLabelPreserved", false)), boolText(outcome.contextLabelPreserved));
+		assertEquals(boolText(boolField(expectValue, "startupStatusRendered", false)), boolText(outcome.startupStatusRendered));
+		assertEquals(boolText(boolField(expectValue, "startupFailureWarningRendered", false)), boolText(outcome.startupFailureWarningRendered));
+		assertEquals(boolText(boolField(expectValue, "loginErrorRendered", false)), boolText(outcome.loginErrorRendered));
+		assertEquals(boolText(boolField(expectValue, "activeTranscriptMutated", false)), boolText(outcome.activeTranscriptMutated));
+		assertEquals(boolText(boolField(expectValue, "appEventRendered", false)), boolText(outcome.appEventRendered));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function threadSideThreadStartByRequestId(
+		outcomes:Array<ModelThreadSideThreadStartOutcome>,
+		requestId:String
+	):ModelThreadSideThreadStartOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing thread side-thread start outcome: " + requestId;
+	}
+
 	static function threadSideThreadDiscardByRequestId(
 		outcomes:Array<ModelThreadSideThreadDiscardOutcome>,
 		requestId:String
@@ -3464,6 +3556,27 @@ class ModelStreamItemReducerHarness {
 			case "switch_failed": ModelThreadSideThreadStartFailureKind.SwitchFailed;
 			case "active_child_missing": ModelThreadSideThreadStartFailureKind.ActiveChildMissing;
 			case _: throw "unknown thread side-thread start failure kind: " + value;
+		}
+	}
+
+	static function threadSideThreadStartupEventKind(value:String):ModelThreadSideThreadStartupEventKind {
+		return switch value {
+			case "starting": ModelThreadSideThreadStartupEventKind.Starting;
+			case "failed": ModelThreadSideThreadStartupEventKind.Failed;
+			case "ready": ModelThreadSideThreadStartupEventKind.Ready;
+			case _: throw "unknown thread side-thread startup event kind: " + value;
+		}
+	}
+
+	static function threadSideThreadStartupRoutingDecisionKind(value:String):ModelThreadSideThreadStartupRoutingDecisionKind {
+		return switch value {
+			case "buffered_for_child_thread": ModelThreadSideThreadStartupRoutingDecisionKind.BufferedForChildThread;
+			case "app_scoped_ignored": ModelThreadSideThreadStartupRoutingDecisionKind.AppScopedIgnored;
+			case "rendered_active_side_thread": ModelThreadSideThreadStartupRoutingDecisionKind.RenderedActiveSideThread;
+			case "replayed_buffered_child_thread": ModelThreadSideThreadStartupRoutingDecisionKind.ReplayedBufferedChildThread;
+			case "side_session_configured": ModelThreadSideThreadStartupRoutingDecisionKind.SideSessionConfigured;
+			case "misrouted_visible_thread_ignored": ModelThreadSideThreadStartupRoutingDecisionKind.MisroutedVisibleThreadIgnored;
+			case _: throw "unknown thread side-thread startup routing decision kind: " + value;
 		}
 	}
 
