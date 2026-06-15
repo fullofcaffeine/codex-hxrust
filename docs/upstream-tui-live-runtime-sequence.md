@@ -1430,7 +1430,20 @@ Model selected raw Codex skill-warning reset behavior:
 
 Status: HXCX-4.115 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic clear-only skill warning rerender evidence only, not live terminal clearing, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.116+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.116: Backtrack Esc Vim-Insert Guard Boundary
+
+Model selected raw Codex keyboard-routing behavior:
+
+- allow backtrack Esc when the composer is empty, side conversation is inactive, and normal backtrack mode is active;
+- keep backtrack Esc available after enabling Vim mode while not in insert mode;
+- give Vim insert-mode Esc precedence over backtrack Esc;
+- avoid priming backtrack while Vim consumes insert-mode Esc;
+- allow backtrack Esc again after Vim insert mode clears;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.116 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic backtrack Esc Vim-insert guard evidence only, not live keyboard input, live terminal clearing, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.117+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

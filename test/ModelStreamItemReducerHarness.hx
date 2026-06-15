@@ -197,6 +197,10 @@ import codexhx.runtime.model.streamitem.ModelClearOnlySkillWarningRerenderDecisi
 import codexhx.runtime.model.streamitem.ModelClearOnlySkillWarningRerenderOutcome;
 import codexhx.runtime.model.streamitem.ModelClearOnlySkillWarningRerenderPolicy;
 import codexhx.runtime.model.streamitem.ModelClearOnlySkillWarningRerenderRequest;
+import codexhx.runtime.model.streamitem.ModelBacktrackEscVimInsertGuardDecisionKind;
+import codexhx.runtime.model.streamitem.ModelBacktrackEscVimInsertGuardOutcome;
+import codexhx.runtime.model.streamitem.ModelBacktrackEscVimInsertGuardPolicy;
+import codexhx.runtime.model.streamitem.ModelBacktrackEscVimInsertGuardRequest;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowDecisionKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowMaxRowsKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowOutcome;
@@ -388,6 +392,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelInactiveThreadSettingsNotifications(testCase, secretProbe);
 			assertTopLevelClearOnlyUiResets(testCase, secretProbe);
 			assertTopLevelClearOnlySkillWarningRerenders(testCase, secretProbe);
+			assertTopLevelBacktrackEscVimInsertGuards(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -601,6 +606,7 @@ class ModelStreamItemReducerHarness {
 				assertInactiveThreadSettingsNotifications(verificationValue, secretProbe);
 				assertClearOnlyUiResets(verificationValue, secretProbe);
 				assertClearOnlySkillWarningRerenders(verificationValue, secretProbe);
+				assertBacktrackEscVimInsertGuards(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4432,6 +4438,67 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelBacktrackEscVimInsertGuards(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelBacktrackEscVimInsertGuardOutcome> {
+		final outcomes:Array<ModelBacktrackEscVimInsertGuardOutcome> = [];
+		final values = optionalArrayField(testCase, "backtrackEscVimInsertGuardExpects");
+		for (value in values) outcomes.push(assertBacktrackEscVimInsertGuard(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertBacktrackEscVimInsertGuards(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelBacktrackEscVimInsertGuardOutcome> {
+		final outcomes:Array<ModelBacktrackEscVimInsertGuardOutcome> = [];
+		final values = optionalArrayField(verificationValue, "backtrackEscVimInsertGuardExpects");
+		for (value in values) outcomes.push(assertBacktrackEscVimInsertGuard(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertBacktrackEscVimInsertGuard(
+		expectValue:Value,
+		secretProbe:String
+	):ModelBacktrackEscVimInsertGuardOutcome {
+		final outcome = ModelBacktrackEscVimInsertGuardPolicy.apply(new ModelBacktrackEscVimInsertGuardRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			keyIsEsc: boolField(expectValue, "keyIsEsc", false),
+			sideConversationActive: boolField(expectValue, "sideConversationActive", false),
+			normalBacktrackMode: boolField(expectValue, "normalBacktrackMode", false),
+			composerEmptyInitially: boolField(expectValue, "composerEmptyInitially", false),
+			vimModeEnabled: boolField(expectValue, "vimModeEnabled", false),
+			vimInsertModeActiveBeforeEsc: boolField(expectValue, "vimInsertModeActiveBeforeEsc", false),
+			vimInsertEscHandled: boolField(expectValue, "vimInsertEscHandled", false),
+			vimInsertModeActiveAfterEsc: boolField(expectValue, "vimInsertModeActiveAfterEsc", false),
+			backtrackPrimedAfterVimEsc: boolField(expectValue, "backtrackPrimedAfterVimEsc", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(backtrackEscVimInsertGuardDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "initialBacktrackEscAllowed", false)), boolText(outcome.initialBacktrackEscAllowed));
+		assertEquals(boolText(boolField(expectValue, "vimNormalBacktrackEscAllowed", false)), boolText(outcome.vimNormalBacktrackEscAllowed));
+		assertEquals(boolText(boolField(expectValue, "vimInsertEscTakesPrecedence", false)), boolText(outcome.vimInsertEscTakesPrecedence));
+		assertEquals(boolText(boolField(expectValue, "backtrackEscSuppressedDuringVimInsert", false)), boolText(outcome.backtrackEscSuppressedDuringVimInsert));
+		assertEquals(boolText(boolField(expectValue, "vimEscHandled", false)), boolText(outcome.vimEscHandled));
+		assertEquals(boolText(boolField(expectValue, "backtrackNotPrimedByVimEsc", false)), boolText(outcome.backtrackNotPrimedByVimEsc));
+		assertEquals(boolText(boolField(expectValue, "vimInsertClearedAfterEsc", false)), boolText(outcome.vimInsertClearedAfterEsc));
+		assertEquals(boolText(boolField(expectValue, "backtrackEscAllowedAfterVimEsc", false)), boolText(outcome.backtrackEscAllowedAfterVimEsc));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -5818,6 +5885,15 @@ class ModelStreamItemReducerHarness {
 			case "skill_warning_still_suppressed": ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningStillSuppressed;
 			case "skill_warning_unavailable": ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningUnavailable;
 			case _: throw "unknown clear-only skill warning rerender decision kind: " + value;
+		}
+	}
+
+	static function backtrackEscVimInsertGuardDecisionKind(value:String):ModelBacktrackEscVimInsertGuardDecisionKind {
+		return switch value {
+			case "backtrack_esc_guard_preserved": ModelBacktrackEscVimInsertGuardDecisionKind.BacktrackEscGuardPreserved;
+			case "vim_insert_esc_stolen": ModelBacktrackEscVimInsertGuardDecisionKind.VimInsertEscStolen;
+			case "backtrack_esc_guard_unavailable": ModelBacktrackEscVimInsertGuardDecisionKind.BacktrackEscGuardUnavailable;
+			case _: throw "unknown backtrack Esc Vim-insert guard decision kind: " + value;
 		}
 	}
 

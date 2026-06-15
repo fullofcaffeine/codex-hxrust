@@ -6909,6 +6909,39 @@
 	          "summaryContains": "decisionKind=skill_warning_rerender_enabled;warningKeyPresent=true;firstWarningRendered=true;repeatedWarningSuppressed=true;resetClearedWarningMemory=true;postResetWarningRenderedAgain=true;sameWarningKeyReused=true;eventOrderingPreserved=true"
 	        }
 	      ],
+	      "backtrackEscVimInsertGuardExpects": [
+	        {
+	          "ok": true,
+	          "code": "backtrack_esc_vim_insert_guard_modeled",
+	          "requestId": "backtrack-esc-does-not-steal-empty-vim-insert-escape",
+	          "keyIsEsc": true,
+	          "sideConversationActive": false,
+	          "normalBacktrackMode": true,
+	          "composerEmptyInitially": true,
+	          "vimModeEnabled": true,
+	          "vimInsertModeActiveBeforeEsc": true,
+	          "vimInsertEscHandled": true,
+	          "vimInsertModeActiveAfterEsc": false,
+	          "backtrackPrimedAfterVimEsc": false,
+	          "previousEventCount": 74,
+	          "eventOrderIndex": 75,
+	          "decisionKind": "backtrack_esc_guard_preserved",
+	          "initialBacktrackEscAllowed": true,
+	          "vimNormalBacktrackEscAllowed": true,
+	          "vimInsertEscTakesPrecedence": true,
+	          "backtrackEscSuppressedDuringVimInsert": true,
+	          "vimEscHandled": true,
+	          "backtrackNotPrimedByVimEsc": true,
+	          "vimInsertClearedAfterEsc": true,
+	          "backtrackEscAllowedAfterVimEsc": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=backtrack_esc_guard_preserved;initialBacktrackEscAllowed=true;vimNormalBacktrackEscAllowed=true;vimInsertEscTakesPrecedence=true;backtrackEscSuppressedDuringVimInsert=true;vimEscHandled=true;backtrackNotPrimedByVimEsc=true;vimInsertClearedAfterEsc=true;backtrackEscAllowedAfterVimEsc=true;eventOrderingPreserved=true"
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
