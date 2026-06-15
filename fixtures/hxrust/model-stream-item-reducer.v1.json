@@ -6624,6 +6624,51 @@
 	          "errorMessage": "",
 	          "summaryContains": "decisionKind=edited_duplicate_user_turn_selected;userCountSinceLastSession=2;selectedNthUserMessage=1;selectedTextElementCount=1;selectedLocalImageCount=1;selectedRemoteImageCount=1;rollbackTurnCount=1"
 	        }
+	      ],
+	      "backtrackRollbackExpects": [
+	        {
+	          "ok": true,
+	          "code": "backtrack_rollback_modeled",
+	          "requestId": "backtrack-remote-image-only-clears-stale-draft",
+	          "pendingRollback": false,
+	          "nthUserMessage": 0,
+	          "selectionPrefill": "",
+	          "selectedTextElementCount": 0,
+	          "selectedLocalImageCount": 0,
+	          "selectedRemoteImageCount": 1,
+	          "selectedRemoteImageUrl": "https://example.com/remote-only.png",
+	          "composerDraftBefore": "stale draft",
+	          "previousEventCount": 69,
+	          "eventOrderIndex": 70,
+	          "transcriptCells": [
+	            {
+	              "cellKind": "user",
+	              "message": "original",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            }
+	          ],
+	          "decisionKind": "remote_image_only_cleared_composer",
+	          "userCountSinceLastSession": 1,
+	          "selectedNthUserMessage": 0,
+	          "prefillEmpty": true,
+	          "remoteImageOnlySelection": true,
+	          "rollbackTurnCount": 1,
+	          "composerDraftAfter": "",
+	          "staleComposerDraftCleared": true,
+	          "remoteImagesApplied": true,
+	          "pendingRollbackRecorded": true,
+	          "threadRollbackSubmitted": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=remote_image_only_cleared_composer;userCountSinceLastSession=1;selectedNthUserMessage=0;prefillEmpty=true;remoteImageOnlySelection=true;selectedTextElementCount=0;selectedLocalImageCount=0;selectedRemoteImageCount=1;rollbackTurnCount=1;staleComposerDraftCleared=true"
+	        }
 	      ]
 		    },
     {
