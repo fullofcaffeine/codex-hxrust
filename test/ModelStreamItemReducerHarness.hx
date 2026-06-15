@@ -246,6 +246,10 @@ import codexhx.runtime.model.streamitem.ModelKeymapVimNormalDefaultsDecisionKind
 import codexhx.runtime.model.streamitem.ModelKeymapVimNormalDefaultsOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapVimNormalDefaultsPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapVimNormalDefaultsRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapInvalidGlobalCopyDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapInvalidGlobalCopyOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapInvalidGlobalCopyPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapInvalidGlobalCopyRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultActionCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowDecisionKind;
@@ -469,6 +473,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapOverlapConflicts(testCase, secretProbe);
 			assertTopLevelKeymapVimOperatorTextObjects(testCase, secretProbe);
 			assertTopLevelKeymapVimNormalDefaults(testCase, secretProbe);
+			assertTopLevelKeymapInvalidGlobalCopies(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -696,6 +701,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapOverlapConflicts(verificationValue, secretProbe);
 				assertKeymapVimOperatorTextObjects(verificationValue, secretProbe);
 				assertKeymapVimNormalDefaults(verificationValue, secretProbe);
+				assertKeymapInvalidGlobalCopies(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5451,6 +5457,59 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapInvalidGlobalCopies(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapInvalidGlobalCopyOutcome> {
+		final outcomes:Array<ModelKeymapInvalidGlobalCopyOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapInvalidGlobalCopyExpects");
+		for (value in values) outcomes.push(assertKeymapInvalidGlobalCopySet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapInvalidGlobalCopies(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapInvalidGlobalCopyOutcome> {
+		final outcomes:Array<ModelKeymapInvalidGlobalCopyOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapInvalidGlobalCopyExpects");
+		for (value in values) outcomes.push(assertKeymapInvalidGlobalCopySet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapInvalidGlobalCopySet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapInvalidGlobalCopyOutcome {
+		final outcome = ModelKeymapInvalidGlobalCopyPolicy.apply(new ModelKeymapInvalidGlobalCopyRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			configuredGlobalCopy: keymapBinding(objectField(expectValue, "configuredGlobalCopy")),
+			expectedErrorPath: stringField(expectValue, "expectedErrorPath", ""),
+			parseFailed: boolField(expectValue, "parseFailed", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap invalid global copy expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapInvalidGlobalCopyDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "invalidBindingPreserved", false)), boolText(outcome.invalidBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "errorPathPreserved", false)), boolText(outcome.errorPathPreserved));
+		assertEquals(boolText(boolField(expectValue, "parseFailurePreserved", false)), boolText(outcome.parseFailurePreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6963,6 +7022,14 @@ class ModelStreamItemReducerHarness {
 			case "keymap_vim_normal_defaults_preserved": ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsPreserved;
 			case "keymap_vim_normal_defaults_rejected": ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsRejected;
 			case _: throw "unknown keymap vim-normal defaults decision kind: " + value;
+		}
+	}
+
+	static function keymapInvalidGlobalCopyDecisionKind(value:String):ModelKeymapInvalidGlobalCopyDecisionKind {
+		return switch value {
+			case "keymap_invalid_global_copy_path_preserved": ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathPreserved;
+			case "keymap_invalid_global_copy_path_rejected": ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathRejected;
+			case _: throw "unknown keymap invalid global copy decision kind: " + value;
 		}
 	}
 

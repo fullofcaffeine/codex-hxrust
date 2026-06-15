@@ -8140,6 +8140,35 @@
 	          ]
 	        }
 	      ],
+	      "keymapInvalidGlobalCopyExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_invalid_global_copy_path_modeled",
+	          "requestId": "keymap-invalid-global-copy-path",
+	          "previousEventCount": 89,
+	          "eventOrderIndex": 90,
+	          "decisionKind": "keymap_invalid_global_copy_path_preserved",
+	          "invalidBindingPreserved": true,
+	          "errorPathPreserved": true,
+	          "parseFailurePreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_invalid_global_copy_path_preserved;invalidBindingPreserved=true;errorPathPreserved=true;parseFailurePreserved=true;eventOrderingPreserved=true",
+	          "configuredGlobalCopy": {
+	            "kind": "character",
+	            "keyName": "o",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": true,
+	            "shiftModifier": false
+	          },
+	          "expectedErrorPath": "tui.keymap.global.copy",
+	          "parseFailed": true
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

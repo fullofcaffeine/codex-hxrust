@@ -1617,7 +1617,19 @@ Model selected raw Codex vim-normal keymap default behavior:
 
 Status: HXCX-4.131 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.132+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.132: Keymap Invalid Global Copy Path Boundary
+
+Model selected raw Codex invalid global keymap copy binding behavior:
+
+- preserve configured `global.copy` `meta-o` evidence;
+- preserve fail-closed parse behavior for the invalid binding;
+- preserve `tui.keymap.global.copy` error-path reporting;
+- keep the keymap evidence deterministic and independent of live keyboard input;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.132 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.133+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
