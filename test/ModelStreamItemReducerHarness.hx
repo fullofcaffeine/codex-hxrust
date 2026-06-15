@@ -197,6 +197,12 @@ import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierOutcome;
 import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierPolicy;
 import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierRequest;
 import codexhx.runtime.model.streamitem.ModelFreshSessionServiceTierValue;
+import codexhx.runtime.model.streamitem.ModelBacktrackSelectionDecisionKind;
+import codexhx.runtime.model.streamitem.ModelBacktrackSelectionOutcome;
+import codexhx.runtime.model.streamitem.ModelBacktrackSelectionPolicy;
+import codexhx.runtime.model.streamitem.ModelBacktrackSelectionRequest;
+import codexhx.runtime.model.streamitem.ModelBacktrackTranscriptCell;
+import codexhx.runtime.model.streamitem.ModelBacktrackTranscriptCellKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -309,6 +315,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelFeedbackSubmissionRoutings(testCase, secretProbe);
 			assertTopLevelTuiActiveTurnErrors(testCase, secretProbe);
 			assertTopLevelFreshSessionServiceTiers(testCase, secretProbe);
+			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -507,6 +514,7 @@ class ModelStreamItemReducerHarness {
 				assertFeedbackSubmissionRoutings(verificationValue, secretProbe);
 				assertTuiActiveTurnErrors(verificationValue, secretProbe);
 				assertFreshSessionServiceTiers(verificationValue, secretProbe);
+				assertBacktrackSelections(verificationValue, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3688,6 +3696,72 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelBacktrackSelections(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelBacktrackSelectionOutcome> {
+		final outcomes:Array<ModelBacktrackSelectionOutcome> = [];
+		final values = optionalArrayField(testCase, "backtrackSelectionExpects");
+		for (value in values) outcomes.push(assertBacktrackSelection(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertBacktrackSelections(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelBacktrackSelectionOutcome> {
+		final outcomes:Array<ModelBacktrackSelectionOutcome> = [];
+		final values = optionalArrayField(verificationValue, "backtrackSelectionExpects");
+		for (value in values) outcomes.push(assertBacktrackSelection(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertBacktrackSelection(
+		expectValue:Value,
+		secretProbe:String
+	):ModelBacktrackSelectionOutcome {
+		final outcome = ModelBacktrackSelectionPolicy.apply(new ModelBacktrackSelectionRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			primed: boolField(expectValue, "primed", false),
+			hasBaseThread: boolField(expectValue, "hasBaseThread", false),
+			pendingRollback: boolField(expectValue, "pendingRollback", false),
+			nthUserMessage: intField(expectValue, "nthUserMessage", 0),
+			transcriptCells: backtrackTranscriptCells(expectValue),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(backtrackSelectionDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "userCountSinceLastSession", 0)), Std.string(outcome.userCountSinceLastSession));
+		assertEquals(Std.string(intField(expectValue, "selectedNthUserMessage", -1)), Std.string(outcome.selectedNthUserMessage));
+		assertEquals(stringField(expectValue, "selectedPrefill", ""), outcome.selectedPrefill);
+		assertEquals(Std.string(intField(expectValue, "selectedTextElementCount", 0)), Std.string(outcome.selectedTextElementCount));
+		assertEquals(Std.string(intField(expectValue, "selectedLocalImageCount", 0)), Std.string(outcome.selectedLocalImageCount));
+		assertEquals(Std.string(intField(expectValue, "selectedRemoteImageCount", 0)), Std.string(outcome.selectedRemoteImageCount));
+		assertEquals(stringField(expectValue, "selectedLocalImagePath", ""), outcome.selectedLocalImagePath);
+		assertEquals(stringField(expectValue, "selectedRemoteImageUrl", ""), outcome.selectedRemoteImageUrl);
+		assertEquals(Std.string(intField(expectValue, "rollbackTurnCount", 0)), Std.string(outcome.rollbackTurnCount));
+		assertEquals(boolText(boolField(expectValue, "remoteImagesApplied", false)), boolText(outcome.remoteImagesApplied));
+		assertEquals(boolText(boolField(expectValue, "composerPrefilled", false)), boolText(outcome.composerPrefilled));
+		assertEquals(boolText(boolField(expectValue, "pendingRollbackRecorded", false)), boolText(outcome.pendingRollbackRecorded));
+		assertEquals(boolText(boolField(expectValue, "threadRollbackSubmitted", false)), boolText(outcome.threadRollbackSubmitted));
+		assertEquals(boolText(boolField(expectValue, "duplicateHistoryIgnoredBeforeLastSession", false)), boolText(outcome.duplicateHistoryIgnoredBeforeLastSession));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		assertNotContains(outcome.summary(), outcome.selectedPrefill);
+		assertNotContains(outcome.summary(), outcome.selectedLocalImagePath);
+		assertNotContains(outcome.summary(), outcome.selectedRemoteImageUrl);
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
@@ -4561,6 +4635,23 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
+	static function backtrackSelectionDecisionKind(value:String):ModelBacktrackSelectionDecisionKind {
+		return switch value {
+			case "edited_duplicate_user_turn_selected": ModelBacktrackSelectionDecisionKind.EditedDuplicateUserTurnSelected;
+			case "selection_unavailable": ModelBacktrackSelectionDecisionKind.SelectionUnavailable;
+			case _: throw "unknown backtrack selection decision kind: " + value;
+		}
+	}
+
+	static function backtrackTranscriptCellKind(value:String):ModelBacktrackTranscriptCellKind {
+		return switch value {
+			case "session_header": ModelBacktrackTranscriptCellKind.SessionHeader;
+			case "user": ModelBacktrackTranscriptCellKind.User;
+			case "agent": ModelBacktrackTranscriptCellKind.Agent;
+			case _: throw "unknown backtrack transcript cell kind: " + value;
+		}
+	}
+
 	static function postSamplingPendingInputSourceKind(value:String):ModelPostSamplingPendingInputSourceKind {
 		return switch value {
 			case "active_turn": ModelPostSamplingPendingInputSourceKind.ActiveTurn;
@@ -4591,6 +4682,24 @@ class ModelStreamItemReducerHarness {
 		for (value in values) {
 			final file = objectValue(value);
 			out.push(new ModelPatchVirtualFile(stringField(file, "path", ""), stringField(file, "content", "")));
+		}
+		return out;
+	}
+
+	static function backtrackTranscriptCells(expectValue:Value):Array<ModelBacktrackTranscriptCell> {
+		final out:Array<ModelBacktrackTranscriptCell> = [];
+		final values = optionalArrayField(expectValue, "transcriptCells");
+		for (value in values) {
+			final cell = objectValue(value);
+			out.push(new ModelBacktrackTranscriptCell({
+				cellKind: backtrackTranscriptCellKind(stringField(cell, "cellKind", "agent")),
+				message: stringField(cell, "message", ""),
+				textElementCount: intField(cell, "textElementCount", 0),
+				localImageCount: intField(cell, "localImageCount", 0),
+				remoteImageCount: intField(cell, "remoteImageCount", 0),
+				localImagePath: stringField(cell, "localImagePath", ""),
+				remoteImageUrl: stringField(cell, "remoteImageUrl", "")
+			}));
 		}
 		return out;
 	}

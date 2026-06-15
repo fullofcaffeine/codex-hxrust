@@ -6498,6 +6498,132 @@
 	          "errorMessage": "",
 	          "summaryContains": "decisionKind=configured_service_tier_cleared;baseConfigServiceTier=priority;configuredServiceTier=none;freshConfigServiceTier=none"
 	        }
+	      ],
+	      "backtrackSelectionExpects": [
+	        {
+	          "ok": true,
+	          "code": "backtrack_selection_modeled",
+	          "requestId": "backtrack-duplicate-history-edited-turn",
+	          "primed": true,
+	          "hasBaseThread": true,
+	          "pendingRollback": false,
+	          "nthUserMessage": 1,
+	          "previousEventCount": 68,
+	          "eventOrderIndex": 69,
+	          "transcriptCells": [
+	            {
+	              "cellKind": "session_header",
+	              "message": "",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "user",
+	              "message": "first question",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "agent",
+	              "message": "answer first",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "user",
+	              "message": "follow-up",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "agent",
+	              "message": "answer follow-up",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "session_header",
+	              "message": "",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "user",
+	              "message": "first question",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "agent",
+	              "message": "answer first",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            },
+	            {
+	              "cellKind": "user",
+	              "message": "follow-up (edited) [Image #1]",
+	              "textElementCount": 1,
+	              "localImageCount": 1,
+	              "remoteImageCount": 1,
+	              "localImagePath": "/tmp/fake-image.png",
+	              "remoteImageUrl": "https://example.com/backtrack.png"
+	            },
+	            {
+	              "cellKind": "agent",
+	              "message": "answer edited",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            }
+	          ],
+	          "decisionKind": "edited_duplicate_user_turn_selected",
+	          "userCountSinceLastSession": 2,
+	          "selectedNthUserMessage": 1,
+	          "selectedPrefill": "follow-up (edited) [Image #1]",
+	          "selectedTextElementCount": 1,
+	          "selectedLocalImageCount": 1,
+	          "selectedRemoteImageCount": 1,
+	          "selectedLocalImagePath": "/tmp/fake-image.png",
+	          "selectedRemoteImageUrl": "https://example.com/backtrack.png",
+	          "rollbackTurnCount": 1,
+	          "remoteImagesApplied": true,
+	          "composerPrefilled": true,
+	          "pendingRollbackRecorded": true,
+	          "threadRollbackSubmitted": true,
+	          "duplicateHistoryIgnoredBeforeLastSession": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=edited_duplicate_user_turn_selected;userCountSinceLastSession=2;selectedNthUserMessage=1;selectedTextElementCount=1;selectedLocalImageCount=1;selectedRemoteImageCount=1;rollbackTurnCount=1"
+	        }
 	      ]
 		    },
     {
