@@ -1123,7 +1123,23 @@ Model selected side-thread inline user-message restoration and submission behavi
 
 Status: HXCX-4.92 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic side-thread composer handoff evidence only, not live terminal rendering, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.93+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.93: Side-Thread Agent Navigation Cleanup Boundary
+
+Model selected side-thread agent navigation and local-state cleanup behavior:
+
+- preserve same-target and no-visible-side no-discard decisions;
+- select the visible side thread as a discard target when switching back to its parent;
+- interrupt side threads through startup or active-turn close intent before unsubscribe cleanup;
+- remove thread event channels, side-thread state, and agent navigation entries after successful discard;
+- keep local state and display an error when interrupt or unsubscribe cleanup fails;
+- keep a failed-cleanup side thread visible after parent-switch cleanup failure;
+- clear active side-thread state or refresh pending approvals according to whether the discarded thread was active;
+- surface pending inactive requests after successful parent-switch cleanup;
+- remove closed side-thread local state without server RPC.
+
+Status: HXCX-4.93 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic side-thread agent navigation cleanup evidence only, not live terminal rendering, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.94+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
