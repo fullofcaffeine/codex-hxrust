@@ -1154,7 +1154,23 @@ Model selected active non-primary `thread/closed` failover behavior:
 
 Status: HXCX-4.94 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic active non-primary shutdown target evidence only, not live terminal rendering, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.95+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.95: Clear-UI Header Render Boundary
+
+Model selected raw Codex clear-UI header behavior:
+
+- build header lines from model, reasoning effort, fast-status eligibility, cwd, version, and width;
+- render a fresh header after clearing a long transcript without replaying stale startup notices or prior transcript text;
+- route slash clear and Ctrl+L through the same clear-header path;
+- show fast status for fast-capable model/service-tier combinations;
+- clear pending history before visible-screen or scrollback clearing;
+- distinguish alternate-screen visible clearing from non-alternate-screen scrollback clearing;
+- anchor the viewport back to the top when needed;
+- reset transcript/app UI state after clear;
+- preserve event ordering while avoiding live terminal mutation.
+
+Status: HXCX-4.95 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic clear-UI header rendering evidence only, not live terminal rendering, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.96+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

@@ -164,6 +164,11 @@ import codexhx.runtime.model.streamitem.ModelActiveNonPrimaryShutdownEventKind;
 import codexhx.runtime.model.streamitem.ModelActiveNonPrimaryShutdownOutcome;
 import codexhx.runtime.model.streamitem.ModelActiveNonPrimaryShutdownPolicy;
 import codexhx.runtime.model.streamitem.ModelActiveNonPrimaryShutdownRequest;
+import codexhx.runtime.model.streamitem.ModelClearUiHeaderDecisionKind;
+import codexhx.runtime.model.streamitem.ModelClearUiHeaderOutcome;
+import codexhx.runtime.model.streamitem.ModelClearUiHeaderPolicy;
+import codexhx.runtime.model.streamitem.ModelClearUiHeaderRequest;
+import codexhx.runtime.model.streamitem.ModelClearUiHeaderRequestKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -269,7 +274,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelThreadSideThreadStartupRoutings = assertTopLevelThreadSideThreadStartupRoutings(testCase, topLevelThreadSideThreadStarts, secretProbe);
 			final topLevelThreadSideThreadComposerHandoffs = assertTopLevelThreadSideThreadComposerHandoffs(testCase, topLevelThreadSideThreadStarts, topLevelThreadSideThreadStartupRoutings, secretProbe);
 			final topLevelThreadSideThreadNavigationCleanups = assertTopLevelThreadSideThreadNavigationCleanups(testCase, topLevelThreadSideThreadComposerHandoffs, secretProbe);
-			assertTopLevelActiveNonPrimaryShutdowns(testCase, topLevelThreadSideThreadNavigationCleanups, secretProbe);
+			final topLevelActiveNonPrimaryShutdowns = assertTopLevelActiveNonPrimaryShutdowns(testCase, topLevelThreadSideThreadNavigationCleanups, secretProbe);
+			assertTopLevelClearUiHeaders(testCase, topLevelActiveNonPrimaryShutdowns, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -461,7 +467,8 @@ class ModelStreamItemReducerHarness {
 				final threadSideThreadStartupRoutings = assertThreadSideThreadStartupRoutings(verificationValue, threadSideThreadStarts, secretProbe);
 				final threadSideThreadComposerHandoffs = assertThreadSideThreadComposerHandoffs(verificationValue, threadSideThreadStarts, threadSideThreadStartupRoutings, secretProbe);
 				final threadSideThreadNavigationCleanups = assertThreadSideThreadNavigationCleanups(verificationValue, threadSideThreadComposerHandoffs, secretProbe);
-				assertActiveNonPrimaryShutdowns(verificationValue, threadSideThreadNavigationCleanups, secretProbe);
+				final activeNonPrimaryShutdowns = assertActiveNonPrimaryShutdowns(verificationValue, threadSideThreadNavigationCleanups, secretProbe);
+				assertClearUiHeaders(verificationValue, activeNonPrimaryShutdowns, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3191,6 +3198,101 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelClearUiHeaders(
+		testCase:Value,
+		activeShutdowns:Array<ModelActiveNonPrimaryShutdownOutcome>,
+		secretProbe:String
+	):Array<ModelClearUiHeaderOutcome> {
+		final outcomes:Array<ModelClearUiHeaderOutcome> = [];
+		final values = optionalArrayField(testCase, "clearUiHeaderExpects");
+		for (value in values) outcomes.push(assertClearUiHeader(objectValue(value), activeShutdowns, secretProbe));
+		return outcomes;
+	}
+
+	static function assertClearUiHeaders(
+		verificationValue:Value,
+		activeShutdowns:Array<ModelActiveNonPrimaryShutdownOutcome>,
+		secretProbe:String
+	):Array<ModelClearUiHeaderOutcome> {
+		final outcomes:Array<ModelClearUiHeaderOutcome> = [];
+		final values = optionalArrayField(verificationValue, "clearUiHeaderExpects");
+		for (value in values) outcomes.push(assertClearUiHeader(objectValue(value), activeShutdowns, secretProbe));
+		return outcomes;
+	}
+
+	static function assertClearUiHeader(
+		expectValue:Value,
+		activeShutdowns:Array<ModelActiveNonPrimaryShutdownOutcome>,
+		secretProbe:String
+	):ModelClearUiHeaderOutcome {
+		final activeShutdownRequestId = stringField(expectValue, "activeShutdownRequestId", "");
+		final outcome = ModelClearUiHeaderPolicy.apply(new ModelClearUiHeaderRequest(
+			stringField(expectValue, "requestId", ""),
+			activeNonPrimaryShutdownByRequestId(activeShutdowns, activeShutdownRequestId),
+			clearUiHeaderRequestKind(stringField(expectValue, "requestKind", "")),
+			stringField(expectValue, "model", ""),
+			stringField(expectValue, "reasoningEffort", ""),
+			stringField(expectValue, "cwd", ""),
+			stringField(expectValue, "version", ""),
+			intField(expectValue, "width", 0),
+			boolField(expectValue, "redrawHeader", false),
+			boolField(expectValue, "altScreenActive", false),
+			intField(expectValue, "viewportYBefore", 0),
+			intField(expectValue, "transcriptCellCountBefore", 0),
+			intField(expectValue, "pendingHistoryLineCountBefore", 0),
+			stringField(expectValue, "staleNoticeProbe", ""),
+			stringField(expectValue, "staleTranscriptProbe", ""),
+			boolField(expectValue, "fastStatusEligible", false),
+			intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(activeShutdownRequestId, outcome.activeShutdownRequestId);
+		assertEquals(clearUiHeaderDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(clearUiHeaderRequestKind(stringField(expectValue, "requestKind", "")), outcome.requestKind);
+		assertEquals(stringField(expectValue, "titleLine", ""), outcome.titleLine);
+		assertEquals(stringField(expectValue, "modelLine", ""), outcome.modelLine);
+		assertEquals(stringField(expectValue, "directoryLine", ""), outcome.directoryLine);
+		assertEquals(Std.string(intField(expectValue, "lineCount", 0)), Std.string(outcome.lineCount));
+		assertEquals(Std.string(intField(expectValue, "width", 0)), Std.string(outcome.width));
+		assertEquals(stringField(expectValue, "version", ""), outcome.version);
+		assertEquals(boolText(boolField(expectValue, "headerRendered", false)), boolText(outcome.headerRendered));
+		assertEquals(boolText(boolField(expectValue, "clearPendingHistoryLines", false)), boolText(outcome.clearPendingHistoryLines));
+		assertEquals(boolText(boolField(expectValue, "visibleScreenCleared", false)), boolText(outcome.visibleScreenCleared));
+		assertEquals(boolText(boolField(expectValue, "scrollbackCleared", false)), boolText(outcome.scrollbackCleared));
+		assertEquals(boolText(boolField(expectValue, "viewportAnchoredToTop", false)), boolText(outcome.viewportAnchoredToTop));
+		assertEquals(boolText(boolField(expectValue, "queuedHeaderInserted", false)), boolText(outcome.queuedHeaderInserted));
+		assertEquals(boolText(boolField(expectValue, "hasEmittedHistoryLinesAfter", false)), boolText(outcome.hasEmittedHistoryLinesAfter));
+		assertEquals(boolText(boolField(expectValue, "transcriptStateReset", false)), boolText(outcome.transcriptStateReset));
+		assertEquals(boolText(boolField(expectValue, "staleNoticeSuppressed", false)), boolText(outcome.staleNoticeSuppressed));
+		assertEquals(boolText(boolField(expectValue, "staleTranscriptSuppressed", false)), boolText(outcome.staleTranscriptSuppressed));
+		assertEquals(boolText(boolField(expectValue, "ctrlLReusedClearHeader", false)), boolText(outcome.ctrlLReusedClearHeader));
+		assertEquals(boolText(boolField(expectValue, "fastStatusShown", false)), boolText(outcome.fastStatusShown));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		final staleNotice = stringField(expectValue, "staleNoticeProbe", "");
+		final staleTranscript = stringField(expectValue, "staleTranscriptProbe", "");
+		if (staleNotice.length > 0) assertNotContains(outcome.summary(), staleNotice);
+		if (staleTranscript.length > 0) assertNotContains(outcome.summary(), staleTranscript);
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function activeNonPrimaryShutdownByRequestId(
+		outcomes:Array<ModelActiveNonPrimaryShutdownOutcome>,
+		requestId:String
+	):ModelActiveNonPrimaryShutdownOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing active non-primary shutdown outcome: " + requestId;
+	}
+
 	static function threadSideThreadNavigationCleanupByRequestId(
 		outcomes:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
 		requestId:String
@@ -3904,6 +4006,24 @@ class ModelStreamItemReducerHarness {
 			case "switched_to_primary": ModelActiveNonPrimaryShutdownDecisionKind.SwitchedToPrimary;
 			case "switched_to_primary_with_other_pending_exit": ModelActiveNonPrimaryShutdownDecisionKind.SwitchedToPrimaryWithOtherPendingExit;
 			case _: throw "unknown active non-primary shutdown decision kind: " + value;
+		}
+	}
+
+	static function clearUiHeaderRequestKind(value:String):ModelClearUiHeaderRequestKind {
+		return switch value {
+			case "slash_clear": ModelClearUiHeaderRequestKind.SlashClear;
+			case "ctrl_l": ModelClearUiHeaderRequestKind.CtrlL;
+			case _: throw "unknown clear UI header request kind: " + value;
+		}
+	}
+
+	static function clearUiHeaderDecisionKind(value:String):ModelClearUiHeaderDecisionKind {
+		return switch value {
+			case "rendered_fresh_header": ModelClearUiHeaderDecisionKind.RenderedFreshHeader;
+			case "reused_clear_header_for_ctrl_l": ModelClearUiHeaderDecisionKind.ReusedClearHeaderForCtrlL;
+			case "rendered_fast_status_header": ModelClearUiHeaderDecisionKind.RenderedFastStatusHeader;
+			case "skipped_no_redraw": ModelClearUiHeaderDecisionKind.SkippedNoRedraw;
+			case _: throw "unknown clear UI header decision kind: " + value;
 		}
 	}
 
