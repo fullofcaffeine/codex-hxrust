@@ -7276,6 +7276,124 @@
 	          ]
 	        }
 	      ],
+	      "keymapAliasExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_aliases_modeled",
+	          "requestId": "keymap-unbind-raw-output-and-editor-aliases",
+	          "previousEventCount": 81,
+	          "eventOrderIndex": 82,
+	          "decisionKind": "keymap_aliases_preserved",
+	          "composerToggleShortcutsConfiguredEmpty": true,
+	          "composerToggleShortcutCount": 0,
+	          "emptyArrayUnbindPreserved": true,
+	          "rawOutputDefaultAltRPreserved": true,
+	          "rawOutputRemapF12Preserved": true,
+	          "editorNewlineAliasesPreserved": true,
+	          "deleteForwardWordAltDPreserved": true,
+	          "modifiedDeletionAliasesPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_aliases_preserved;emptyArrayUnbindPreserved=true;rawOutputDefaultAltRPreserved=true;rawOutputRemapF12Preserved=true;editorNewlineAliasesPreserved=true;deleteForwardWordAltDPreserved=true;modifiedDeletionAliasesPreserved=true;eventOrderingPreserved=true",
+	          "defaultRawOutputToggle": {
+	            "kind": "character",
+	            "keyName": "r",
+	            "functionNumber": -1,
+	            "altModifier": true
+	          },
+	          "remappedRawOutputToggle": {
+	            "kind": "function",
+	            "keyName": "f12",
+	            "functionNumber": 12
+	          },
+	          "editorInsertNewlineBindings": [
+	            {
+	              "kind": "character",
+	              "keyName": "j",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            },
+	            {
+	              "kind": "character",
+	              "keyName": "m",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1,
+	              "shiftModifier": true
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1,
+	              "altModifier": true
+	            }
+	          ],
+	          "editorDeleteForwardWordBindings": [
+	            {
+	              "kind": "character",
+	              "keyName": "d",
+	              "functionNumber": -1,
+	              "altModifier": true
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "delete",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "delete",
+	              "functionNumber": -1,
+	              "ctrlModifier": true,
+	              "shiftModifier": true
+	            }
+	          ],
+	          "editorDeleteBackwardBindings": [
+	            {
+	              "kind": "named",
+	              "keyName": "backspace",
+	              "functionNumber": -1,
+	              "shiftModifier": true
+	            }
+	          ],
+	          "editorDeleteForwardBindings": [
+	            {
+	              "kind": "named",
+	              "keyName": "delete",
+	              "functionNumber": -1,
+	              "shiftModifier": true
+	            }
+	          ],
+	          "editorDeleteBackwardWordBindings": [
+	            {
+	              "kind": "named",
+	              "keyName": "backspace",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "backspace",
+	              "functionNumber": -1,
+	              "ctrlModifier": true,
+	              "shiftModifier": true
+	            }
+	          ]
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

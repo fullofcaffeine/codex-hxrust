@@ -217,6 +217,11 @@ import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapDe
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapOutcome;
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapPolicy;
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapAliasDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapAliasOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapAliasPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapAliasRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapBinding;
 import codexhx.runtime.model.streamitem.ModelKeyParserCase;
 import codexhx.runtime.model.streamitem.ModelKeyParserDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeyParserOutcome;
@@ -425,6 +430,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelInterruptQuestionNavigationKeymaps(testCase, secretProbe);
 			assertTopLevelPagerTranscriptBacktrackKeymaps(testCase, secretProbe);
 			assertTopLevelKeyParserCases(testCase, secretProbe);
+			assertTopLevelKeymapAliases(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -645,6 +651,7 @@ class ModelStreamItemReducerHarness {
 				assertInterruptQuestionNavigationKeymaps(verificationValue, secretProbe);
 				assertPagerTranscriptBacktrackKeymaps(verificationValue, secretProbe);
 				assertKeyParserCases(verificationValue, secretProbe);
+				assertKeymapAliases(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4903,6 +4910,87 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapAliases(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapAliasOutcome> {
+		final outcomes:Array<ModelKeymapAliasOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapAliasExpects");
+		for (value in values) outcomes.push(assertKeymapAliasSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapAliases(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapAliasOutcome> {
+		final outcomes:Array<ModelKeymapAliasOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapAliasExpects");
+		for (value in values) outcomes.push(assertKeymapAliasSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapAliasSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapAliasOutcome {
+		final outcome = ModelKeymapAliasPolicy.apply(new ModelKeymapAliasRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			composerToggleShortcutsConfiguredEmpty: boolField(expectValue, "composerToggleShortcutsConfiguredEmpty", false),
+			composerToggleShortcutCount: intField(expectValue, "composerToggleShortcutCount", -1),
+			defaultRawOutputToggle: keymapBinding(objectField(expectValue, "defaultRawOutputToggle")),
+			remappedRawOutputToggle: keymapBinding(objectField(expectValue, "remappedRawOutputToggle")),
+			editorInsertNewlineBindings: keymapBindings(expectValue, "editorInsertNewlineBindings"),
+			editorDeleteForwardWordBindings: keymapBindings(expectValue, "editorDeleteForwardWordBindings"),
+			editorDeleteBackwardBindings: keymapBindings(expectValue, "editorDeleteBackwardBindings"),
+			editorDeleteForwardBindings: keymapBindings(expectValue, "editorDeleteForwardBindings"),
+			editorDeleteBackwardWordBindings: keymapBindings(expectValue, "editorDeleteBackwardWordBindings"),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap alias expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapAliasDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "emptyArrayUnbindPreserved", false)), boolText(outcome.emptyArrayUnbindPreserved));
+		assertEquals(boolText(boolField(expectValue, "rawOutputDefaultAltRPreserved", false)), boolText(outcome.rawOutputDefaultAltRPreserved));
+		assertEquals(boolText(boolField(expectValue, "rawOutputRemapF12Preserved", false)), boolText(outcome.rawOutputRemapF12Preserved));
+		assertEquals(boolText(boolField(expectValue, "editorNewlineAliasesPreserved", false)), boolText(outcome.editorNewlineAliasesPreserved));
+		assertEquals(boolText(boolField(expectValue, "deleteForwardWordAltDPreserved", false)), boolText(outcome.deleteForwardWordAltDPreserved));
+		assertEquals(boolText(boolField(expectValue, "modifiedDeletionAliasesPreserved", false)), boolText(outcome.modifiedDeletionAliasesPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function keymapBindings(expectValue:Value, fieldName:String):Array<ModelKeymapBinding> {
+		final bindings:Array<ModelKeymapBinding> = [];
+		for (bindingValue in arrayField(expectValue, fieldName)) {
+			bindings.push(keymapBinding(objectValue(bindingValue)));
+		}
+		return bindings;
+	}
+
+	static function keymapBinding(value:Value):ModelKeymapBinding {
+		return new ModelKeymapBinding({
+			kind: parsedKeyKind(stringField(value, "kind", "")),
+			keyName: stringField(value, "keyName", ""),
+			functionNumber: intField(value, "functionNumber", -1),
+			ctrlModifier: boolField(value, "ctrlModifier", false),
+			altModifier: boolField(value, "altModifier", false),
+			shiftModifier: boolField(value, "shiftModifier", false)
+		});
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6347,6 +6435,14 @@ class ModelStreamItemReducerHarness {
 			case "key_parser_cases_preserved": ModelKeyParserDecisionKind.KeyParserCasesPreserved;
 			case "key_parser_cases_rejected": ModelKeyParserDecisionKind.KeyParserCasesRejected;
 			case _: throw "unknown key parser decision kind: " + value;
+		}
+	}
+
+	static function keymapAliasDecisionKind(value:String):ModelKeymapAliasDecisionKind {
+		return switch value {
+			case "keymap_aliases_preserved": ModelKeymapAliasDecisionKind.KeymapAliasesPreserved;
+			case "keymap_aliases_rejected": ModelKeymapAliasDecisionKind.KeymapAliasesRejected;
+			case _: throw "unknown keymap alias decision kind: " + value;
 		}
 	}
 
