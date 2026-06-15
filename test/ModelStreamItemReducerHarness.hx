@@ -205,6 +205,10 @@ import codexhx.runtime.model.streamitem.ModelSideConversationBacktrackEscVimGuar
 import codexhx.runtime.model.streamitem.ModelSideConversationBacktrackEscVimGuardOutcome;
 import codexhx.runtime.model.streamitem.ModelSideConversationBacktrackEscVimGuardPolicy;
 import codexhx.runtime.model.streamitem.ModelSideConversationBacktrackEscVimGuardRequest;
+import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessageDecisionKind;
+import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessageOutcome;
+import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessagePolicy;
+import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessageRequest;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowDecisionKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowMaxRowsKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowOutcome;
@@ -398,6 +402,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelClearOnlySkillWarningRerenders(testCase, secretProbe);
 			assertTopLevelBacktrackEscVimInsertGuards(testCase, secretProbe);
 			assertTopLevelSideConversationBacktrackEscVimGuards(testCase, secretProbe);
+			assertTopLevelSideBacktrackUnavailableMessages(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -613,6 +618,7 @@ class ModelStreamItemReducerHarness {
 				assertClearOnlySkillWarningRerenders(verificationValue, secretProbe);
 				assertBacktrackEscVimInsertGuards(verificationValue, secretProbe);
 				assertSideConversationBacktrackEscVimGuards(verificationValue, secretProbe);
+				assertSideBacktrackUnavailableMessages(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4561,6 +4567,66 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelSideBacktrackUnavailableMessages(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelSideBacktrackUnavailableMessageOutcome> {
+		final outcomes:Array<ModelSideBacktrackUnavailableMessageOutcome> = [];
+		final values = optionalArrayField(testCase, "sideBacktrackUnavailableMessageExpects");
+		for (value in values) outcomes.push(assertSideBacktrackUnavailableMessage(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertSideBacktrackUnavailableMessages(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelSideBacktrackUnavailableMessageOutcome> {
+		final outcomes:Array<ModelSideBacktrackUnavailableMessageOutcome> = [];
+		final values = optionalArrayField(verificationValue, "sideBacktrackUnavailableMessageExpects");
+		for (value in values) outcomes.push(assertSideBacktrackUnavailableMessage(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertSideBacktrackUnavailableMessage(
+		expectValue:Value,
+		secretProbe:String
+	):ModelSideBacktrackUnavailableMessageOutcome {
+		final outcome = ModelSideBacktrackUnavailableMessagePolicy.apply(new ModelSideBacktrackUnavailableMessageRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			backtrackPrimedBefore: boolField(expectValue, "backtrackPrimedBefore", false),
+			rejectInvoked: boolField(expectValue, "rejectInvoked", false),
+			unavailableMessage: stringField(expectValue, "unavailableMessage", ""),
+			renderedWidth: intField(expectValue, "renderedWidth", 0),
+			expectedSnapshotName: stringField(expectValue, "expectedSnapshotName", ""),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(sideBacktrackUnavailableMessageDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "backtrackPrimedAfter", false)), boolText(outcome.backtrackPrimedAfter));
+		assertEquals(boolText(boolField(expectValue, "backtrackReset", false)), boolText(outcome.backtrackReset));
+		assertEquals(boolText(boolField(expectValue, "errorHistoryCellInserted", false)), boolText(outcome.errorHistoryCellInserted));
+		assertEquals(boolText(boolField(expectValue, "insertHistoryCellIntentRecorded", false)), boolText(outcome.insertHistoryCellIntentRecorded));
+		assertEquals(stringField(expectValue, "renderedLine", ""), outcome.renderedLine);
+		assertEquals(boolText(boolField(expectValue, "snapshotNamePreserved", false)), boolText(outcome.snapshotNamePreserved));
+		assertEquals(boolText(boolField(expectValue, "widthStableSnapshot", false)), boolText(outcome.widthStableSnapshot));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) {
+			assertNotContains(outcome.summary(), secretProbe);
+			assertNotContains(outcome.summary(), stringField(expectValue, "unavailableMessage", ""));
+			assertNotContains(outcome.summary(), stringField(expectValue, "renderedLine", ""));
+		}
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -5965,6 +6031,14 @@ class ModelStreamItemReducerHarness {
 			case "vim_insert_esc_takes_precedence": ModelSideConversationBacktrackEscVimGuardDecisionKind.VimInsertEscTakesPrecedence;
 			case "side_backtrack_rejection_unavailable": ModelSideConversationBacktrackEscVimGuardDecisionKind.SideBacktrackRejectionUnavailable;
 			case _: throw "unknown side-conversation backtrack Esc Vim guard decision kind: " + value;
+		}
+	}
+
+	static function sideBacktrackUnavailableMessageDecisionKind(value:String):ModelSideBacktrackUnavailableMessageDecisionKind {
+		return switch value {
+			case "side_backtrack_unavailable_message_inserted": ModelSideBacktrackUnavailableMessageDecisionKind.SideBacktrackUnavailableMessageInserted;
+			case "side_backtrack_unavailable_message_unavailable": ModelSideBacktrackUnavailableMessageDecisionKind.SideBacktrackUnavailableMessageUnavailable;
+			case _: throw "unknown side-backtrack unavailable message decision kind: " + value;
 		}
 	}
 

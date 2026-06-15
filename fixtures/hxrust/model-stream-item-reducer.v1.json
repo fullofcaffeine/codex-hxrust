@@ -6970,6 +6970,34 @@
 	          "summaryContains": "decisionKind=side_backtrack_rejection_guard_preserved;initialBacktrackEscHandled=false;initialSideBacktrackEscRejected=true;vimInsertEscTakesPrecedence=true;backtrackEscSuppressedDuringVimInsert=true;sideRejectionSuppressedDuringVimInsert=true;eventOrderingPreserved=true"
 	        }
 	      ],
+	      "sideBacktrackUnavailableMessageExpects": [
+	        {
+	          "ok": true,
+	          "code": "side_backtrack_unavailable_message_modeled",
+	          "requestId": "side-backtrack-rejection-reports-unavailable-message-snapshot",
+	          "backtrackPrimedBefore": true,
+	          "rejectInvoked": true,
+	          "unavailableMessage": "Editing previous prompts is unavailable in side conversations.",
+	          "renderedWidth": 80,
+	          "expectedSnapshotName": "side_backtrack_rejection_reports_unavailable_message",
+	          "previousEventCount": 76,
+	          "eventOrderIndex": 77,
+	          "decisionKind": "side_backtrack_unavailable_message_inserted",
+	          "backtrackPrimedAfter": false,
+	          "backtrackReset": true,
+	          "errorHistoryCellInserted": true,
+	          "insertHistoryCellIntentRecorded": true,
+	          "renderedLine": "■ Editing previous prompts is unavailable in side conversations.",
+	          "snapshotNamePreserved": true,
+	          "widthStableSnapshot": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=side_backtrack_unavailable_message_inserted;backtrackPrimedAfter=false;backtrackReset=true;errorHistoryCellInserted=true;insertHistoryCellIntentRecorded=true;snapshotNamePreserved=true;widthStableSnapshot=true;eventOrderingPreserved=true"
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
