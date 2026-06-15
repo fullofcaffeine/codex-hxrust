@@ -237,6 +237,11 @@ import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapVimOperatorTextObjectActionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapVimOperatorTextObjectDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapVimOperatorTextObjectOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapVimOperatorTextObjectPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapVimOperatorTextObjectRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultActionCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowDecisionKind;
@@ -458,6 +463,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapBindingInputs(testCase, secretProbe);
 			assertTopLevelKeymapDefaultPrunings(testCase, secretProbe);
 			assertTopLevelKeymapOverlapConflicts(testCase, secretProbe);
+			assertTopLevelKeymapVimOperatorTextObjects(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -683,6 +689,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapBindingInputs(verificationValue, secretProbe);
 				assertKeymapDefaultPrunings(verificationValue, secretProbe);
 				assertKeymapOverlapConflicts(verificationValue, secretProbe);
+				assertKeymapVimOperatorTextObjects(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5325,6 +5332,62 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapVimOperatorTextObjects(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapVimOperatorTextObjectOutcome> {
+		final outcomes:Array<ModelKeymapVimOperatorTextObjectOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapVimOperatorTextObjectExpects");
+		for (value in values) outcomes.push(assertKeymapVimOperatorTextObjectSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapVimOperatorTextObjects(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapVimOperatorTextObjectOutcome> {
+		final outcomes:Array<ModelKeymapVimOperatorTextObjectOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapVimOperatorTextObjectExpects");
+		for (value in values) outcomes.push(assertKeymapVimOperatorTextObjectSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapVimOperatorTextObjectSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapVimOperatorTextObjectOutcome {
+		final outcome = ModelKeymapVimOperatorTextObjectPolicy.apply(new ModelKeymapVimOperatorTextObjectRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			configuredMotionLeft: keymapBinding(objectField(expectValue, "configuredMotionLeft")),
+			configuredMotionRight: keymapBinding(objectField(expectValue, "configuredMotionRight")),
+			prunedSelectInnerTextObject: keymapBindings(expectValue, "prunedSelectInnerTextObject"),
+			prunedSelectAroundTextObject: keymapBindings(expectValue, "prunedSelectAroundTextObject"),
+			explicitConflictOuterAction: keymapVimOperatorTextObjectActionKind(stringField(expectValue, "explicitConflictOuterAction", "")),
+			explicitConflictInnerAction: keymapVimOperatorTextObjectActionKind(stringField(expectValue, "explicitConflictInnerAction", "")),
+			explicitConflictBinding: keymapBinding(objectField(expectValue, "explicitConflictBinding")),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap vim-operator text-object expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapVimOperatorTextObjectDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "legacyMotionPruningPreserved", false)), boolText(outcome.legacyMotionPruningPreserved));
+		assertEquals(boolText(boolField(expectValue, "explicitTextObjectConflictPreserved", false)), boolText(outcome.explicitTextObjectConflictPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6818,6 +6881,18 @@ class ModelStreamItemReducerHarness {
 
 	static function keymapOverlapConflictActionKind(value:String):ModelKeymapOverlapConflictActionKind {
 		return ModelKeymapOverlapConflictActionKind.fromString(value);
+	}
+
+	static function keymapVimOperatorTextObjectDecisionKind(value:String):ModelKeymapVimOperatorTextObjectDecisionKind {
+		return switch value {
+			case "keymap_vim_operator_text_objects_preserved": ModelKeymapVimOperatorTextObjectDecisionKind.KeymapVimOperatorTextObjectsPreserved;
+			case "keymap_vim_operator_text_objects_rejected": ModelKeymapVimOperatorTextObjectDecisionKind.KeymapVimOperatorTextObjectsRejected;
+			case _: throw "unknown keymap vim-operator text-object decision kind: " + value;
+		}
+	}
+
+	static function keymapVimOperatorTextObjectActionKind(value:String):ModelKeymapVimOperatorTextObjectActionKind {
+		return ModelKeymapVimOperatorTextObjectActionKind.fromString(value);
 	}
 
 	static function parsedKeyKind(value:String):ModelParsedKeyKind {

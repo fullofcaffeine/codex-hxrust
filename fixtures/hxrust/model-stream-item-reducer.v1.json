@@ -8022,6 +8022,43 @@
 	          }
 	        }
 	      ],
+	      "keymapVimOperatorTextObjectExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_vim_operator_text_objects_modeled",
+	          "requestId": "keymap-vim-operator-text-object-pruning-conflict",
+	          "previousEventCount": 87,
+	          "eventOrderIndex": 88,
+	          "decisionKind": "keymap_vim_operator_text_objects_preserved",
+	          "legacyMotionPruningPreserved": true,
+	          "explicitTextObjectConflictPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_vim_operator_text_objects_preserved;legacyMotionPruningPreserved=true;explicitTextObjectConflictPreserved=true;eventOrderingPreserved=true",
+	          "configuredMotionLeft": {
+	            "kind": "character",
+	            "keyName": "i",
+	            "functionNumber": -1
+	          },
+	          "configuredMotionRight": {
+	            "kind": "character",
+	            "keyName": "a",
+	            "functionNumber": -1
+	          },
+	          "prunedSelectInnerTextObject": [],
+	          "prunedSelectAroundTextObject": [],
+	          "explicitConflictOuterAction": "vim_operator_motion_left",
+	          "explicitConflictInnerAction": "vim_operator_select_inner_text_object",
+	          "explicitConflictBinding": {
+	            "kind": "character",
+	            "keyName": "i",
+	            "functionNumber": -1
+	          }
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
