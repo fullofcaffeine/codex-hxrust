@@ -1320,6 +1320,51 @@
 	          "summaryContains": "replayKind=thread_snapshot;decisionKind=metadata_reseeded_for_replay;navigationEntryCount=1;reseededMetadataCount=1;replayedWaitItemCount=1;namedWaitItemCount=1;replacementCreatedBeforeReplay=true;metadataReseededBeforeReplay=true;agentNicknamePreserved=true;agentRolePreserved=true;waitItemRendered=true;renderedWaitContainsMetadata=true;fallbackThreadIdRendered=false;liveOnlyEffectsSuppressed=true"
 	        }
 	      ],
+	      "threadSnapshotSessionRefreshExpects": [
+	        {
+	          "ok": true,
+	          "code": "thread_snapshot_session_refresh_modeled",
+	          "requestId": "refreshed-snapshot-session-persists-resumed-turns",
+	          "threadId": "thread-refresh-1",
+	          "snapshotSessionCwdBefore": "/tmp/original",
+	          "storeSessionCwdBefore": "/tmp/original",
+	          "refreshedSessionCwd": "/tmp/refreshed",
+	          "snapshotTurnCountBefore": 0,
+	          "storeTurnCountBefore": 0,
+	          "bufferEventCountBefore": 2,
+	          "survivingBufferEventCount": 1,
+	          "resumedTurns": [
+	            {
+	              "turnId": "turn-1",
+	              "statusKind": "completed",
+	              "userText": "restored prompt"
+	            }
+	          ],
+	          "decisionKind": "refreshed_snapshot_persisted",
+	          "snapshotSessionCwdAfter": "/tmp/refreshed",
+	          "storeSessionCwdAfter": "/tmp/refreshed",
+	          "snapshotTurnCountAfter": 1,
+	          "storeTurnCountAfter": 1,
+	          "resumedTurnCount": 1,
+	          "userMessageCount": 1,
+	          "activeTurnIdAfter": "",
+	          "snapshotSessionReplaced": true,
+	          "snapshotTurnsReplaced": true,
+	          "storeSessionReplaced": true,
+	          "storeTurnsReplaced": true,
+	          "storeSnapshotMatchesRefreshedSnapshot": true,
+	          "bufferRebasedAfterRefresh": true,
+	          "refreshedCwdPreserved": true,
+	          "resumedTurnsPersisted": true,
+	          "activeTurnRestoredFromResumedTurns": false,
+	          "liveOnlyEffectsSuppressed": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=refreshed_snapshot_persisted;snapshotTurnCountAfter=1;storeTurnCountAfter=1;resumedTurnCount=1;userMessageCount=1;activeTurnIdAfter=none;snapshotSessionReplaced=true;snapshotTurnsReplaced=true;storeSessionReplaced=true;storeTurnsReplaced=true;storeSnapshotMatchesRefreshedSnapshot=true;bufferRebasedAfterRefresh=true;refreshedCwdPreserved=true;resumedTurnsPersisted=true;activeTurnRestoredFromResumedTurns=false;liveOnlyEffectsSuppressed=true"
+	        }
+	      ],
 	      "replayedServerRequestSurfaceExpects": [
 	        {
 	          "ok": true,

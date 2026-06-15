@@ -1318,7 +1318,19 @@ Model selected raw Codex chat widget replacement and replay behavior:
 
 Status: HXCX-4.106 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic collab metadata replay evidence only, not live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.107+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.107: Refreshed Snapshot Session Persistence Boundary
+
+Model selected raw Codex refreshed snapshot behavior:
+
+- replace an existing snapshot session with the refreshed session state;
+- replace empty snapshot/store turn lists with resumed turns;
+- preserve refreshed cwd/session facts in both the mutable snapshot and thread event store snapshot;
+- rebase buffered events after the session refresh;
+- preserve active-turn restoration facts, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.107 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic refreshed snapshot persistence evidence only, not live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.108+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
