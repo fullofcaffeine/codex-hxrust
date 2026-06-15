@@ -232,6 +232,11 @@ import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorAssignmentActionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorAssignmentDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorAssignmentOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorAssignmentPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorAssignmentRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictActionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictOutcome;
@@ -499,6 +504,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapVimOperatorTextObjects(testCase, secretProbe);
 			assertTopLevelKeymapVimNormalDefaults(testCase, secretProbe);
 			assertTopLevelKeymapInvalidGlobalCopies(testCase, secretProbe);
+			assertTopLevelKeymapEditorAssignments(testCase, secretProbe);
 			assertTopLevelKeymapEditorConflicts(testCase, secretProbe);
 			assertTopLevelKeymapPagerConflicts(testCase, secretProbe);
 			assertTopLevelKeymapListConflicts(testCase, secretProbe);
@@ -732,6 +738,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapVimOperatorTextObjects(verificationValue, secretProbe);
 				assertKeymapVimNormalDefaults(verificationValue, secretProbe);
 				assertKeymapInvalidGlobalCopies(verificationValue, secretProbe);
+				assertKeymapEditorAssignments(verificationValue, secretProbe);
 				assertKeymapEditorConflicts(verificationValue, secretProbe);
 				assertKeymapPagerConflicts(verificationValue, secretProbe);
 				assertKeymapListConflicts(verificationValue, secretProbe);
@@ -5545,6 +5552,61 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapEditorAssignments(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapEditorAssignmentOutcome> {
+		final outcomes:Array<ModelKeymapEditorAssignmentOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapEditorAssignmentExpects");
+		for (value in values) outcomes.push(assertKeymapEditorAssignmentSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapEditorAssignments(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapEditorAssignmentOutcome> {
+		final outcomes:Array<ModelKeymapEditorAssignmentOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapEditorAssignmentExpects");
+		for (value in values) outcomes.push(assertKeymapEditorAssignmentSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapEditorAssignmentSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapEditorAssignmentOutcome {
+		final outcome = ModelKeymapEditorAssignmentPolicy.apply(new ModelKeymapEditorAssignmentRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			actionKind: keymapEditorAssignmentActionKind(stringField(expectValue, "actionKind", "")),
+			defaultBindings: keymapBindings(expectValue, "defaultBindings"),
+			configuredBinding: keymapBinding(objectField(expectValue, "configuredBinding")),
+			runtimeBinding: keymapBinding(objectField(expectValue, "runtimeBinding")),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap editor assignment expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapEditorAssignmentDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "actionKindPreserved", false)), boolText(outcome.actionKindPreserved));
+		assertEquals(boolText(boolField(expectValue, "defaultBindingEmptyPreserved", false)), boolText(outcome.defaultBindingEmptyPreserved));
+		assertEquals(boolText(boolField(expectValue, "configuredBindingPreserved", false)), boolText(outcome.configuredBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "runtimeBindingPreserved", false)), boolText(outcome.runtimeBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelKeymapEditorConflicts(
 		testCase:Value,
 		secretProbe:String
@@ -7367,6 +7429,18 @@ class ModelStreamItemReducerHarness {
 			case "keymap_invalid_global_copy_path_rejected": ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathRejected;
 			case _: throw "unknown keymap invalid global copy decision kind: " + value;
 		}
+	}
+
+	static function keymapEditorAssignmentDecisionKind(value:String):ModelKeymapEditorAssignmentDecisionKind {
+		return switch value {
+			case "keymap_editor_assignment_preserved": ModelKeymapEditorAssignmentDecisionKind.KeymapEditorAssignmentPreserved;
+			case "keymap_editor_assignment_rejected": ModelKeymapEditorAssignmentDecisionKind.KeymapEditorAssignmentRejected;
+			case _: throw "unknown keymap editor assignment decision kind: " + value;
+		}
+	}
+
+	static function keymapEditorAssignmentActionKind(value:String):ModelKeymapEditorAssignmentActionKind {
+		return ModelKeymapEditorAssignmentActionKind.fromString(value);
 	}
 
 	static function keymapEditorConflictDecisionKind(value:String):ModelKeymapEditorConflictDecisionKind {

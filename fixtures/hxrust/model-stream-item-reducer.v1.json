@@ -8169,6 +8169,42 @@
 	          "parseFailed": true
 	        }
 	      ],
+	      "keymapEditorAssignmentExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_editor_assignment_modeled",
+	          "requestId": "keymap-editor-kill-whole-line-ctrl-shift-u",
+	          "previousEventCount": 91,
+	          "eventOrderIndex": 92,
+	          "decisionKind": "keymap_editor_assignment_preserved",
+	          "actionKindPreserved": true,
+	          "defaultBindingEmptyPreserved": true,
+	          "configuredBindingPreserved": true,
+	          "runtimeBindingPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_editor_assignment_preserved;actionKindPreserved=true;defaultBindingEmptyPreserved=true;configuredBindingPreserved=true;runtimeBindingPreserved=true;eventOrderingPreserved=true",
+	          "actionKind": "kill_whole_line",
+	          "defaultBindings": [],
+	          "configuredBinding": {
+	            "kind": "character",
+	            "keyName": "u",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "shiftModifier": true
+	          },
+	          "runtimeBinding": {
+	            "kind": "character",
+	            "keyName": "u",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "shiftModifier": true
+	          }
+	        }
+	      ],
 	      "keymapEditorConflictExpects": [
 	        {
 	          "ok": true,
