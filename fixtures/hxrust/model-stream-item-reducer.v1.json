@@ -7024,6 +7024,42 @@
 	          "errorMessage": "",
 	          "summaryContains": "decisionKind=rollback_applied;numTurns=1;transcriptCellCountBefore=4;transcriptCellCountAfter=2;userCountBefore=2;userCountAfter=1;overlayActive=true;overlayCommittedCellCountAfter=2;overlayCommittedCountSynced=true;deferredHistoryLineCountBefore=1;deferredHistoryLineCountAfter=0;deferredHistoryCleared=true;previewSelectionBefore=1;previewSelectionAfter=0;previewSelectionClamped=true;agentCopyHistoryUserCountAfter=1;agentCopyHistoryTruncated=true;backtrackRenderPending=true;eventOrderingPreserved=true;liveOnlyEffectsSuppressed=true"
 	        }
+	      ],
+	      "threadRollbackResponseActiveQueueFlushExpects": [
+	        {
+	          "ok": true,
+	          "code": "thread_rollback_response_active_queue_flushed",
+	          "requestId": "thread-rollback-response-discards-queued-active-thread-events",
+	          "activeThreadId": "thread-rollback-active",
+	          "rollbackThreadId": "thread-rollback-active",
+	          "numTurns": 1,
+	          "threadChannelKnown": true,
+	          "receiverAttachedBefore": true,
+	          "receiverDisconnectedDuringDrain": false,
+	          "queuedActiveEventCountBefore": 1,
+	          "queuedStaleNotificationCountBefore": 1,
+	          "staleNotificationSummary": "stale warning",
+	          "pendingBacktrackRollback": false,
+	          "previousEventCount": 74,
+	          "eventOrderIndex": 75,
+	          "decisionKind": "active_queue_flushed",
+	          "activeThreadMatched": true,
+	          "threadStoreRollbackApplied": true,
+	          "receiverAttachedAfter": true,
+	          "receiverClearedAfterDisconnect": false,
+	          "drainedActiveEventCount": 1,
+	          "queuedActiveEventCountAfter": 0,
+	          "staleNotificationDiscarded": true,
+	          "applyThreadRollbackEventQueued": true,
+	          "pendingBacktrackFinished": false,
+	          "eventOrderingPreserved": true,
+	          "liveOnlyEffectsSuppressed": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=active_queue_flushed;numTurns=1;activeThreadMatched=true;threadStoreRollbackApplied=true;receiverAttachedBefore=true;receiverAttachedAfter=true;receiverClearedAfterDisconnect=false;queuedActiveEventCountBefore=1;drainedActiveEventCount=1;queuedActiveEventCountAfter=0;staleNotificationDiscarded=true;applyThreadRollbackEventQueued=true;pendingBacktrackFinished=false;eventOrderingPreserved=true;liveOnlyEffectsSuppressed=true"
+	        }
 	      ]
 		    },
     {

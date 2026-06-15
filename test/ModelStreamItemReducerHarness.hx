@@ -239,6 +239,10 @@ import codexhx.runtime.model.streamitem.ModelQueuedRollbackOverlaySyncDecisionKi
 import codexhx.runtime.model.streamitem.ModelQueuedRollbackOverlaySyncOutcome;
 import codexhx.runtime.model.streamitem.ModelQueuedRollbackOverlaySyncPolicy;
 import codexhx.runtime.model.streamitem.ModelQueuedRollbackOverlaySyncRequest;
+import codexhx.runtime.model.streamitem.ModelThreadRollbackResponseActiveQueueFlushDecisionKind;
+import codexhx.runtime.model.streamitem.ModelThreadRollbackResponseActiveQueueFlushOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadRollbackResponseActiveQueueFlushPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadRollbackResponseActiveQueueFlushRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -359,6 +363,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
 			assertTopLevelBacktrackResubmits(testCase, secretProbe);
 			assertTopLevelQueuedRollbackOverlaySyncs(testCase, secretProbe);
+			assertTopLevelThreadRollbackResponseActiveQueueFlushes(testCase, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -565,6 +570,7 @@ class ModelStreamItemReducerHarness {
 				assertCancelledTurnEdits(verificationValue, secretProbe);
 				assertBacktrackResubmits(verificationValue, secretProbe);
 				assertQueuedRollbackOverlaySyncs(verificationValue, secretProbe);
+				assertThreadRollbackResponseActiveQueueFlushes(verificationValue, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -4285,6 +4291,75 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelThreadRollbackResponseActiveQueueFlushes(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> {
+		final outcomes:Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> = [];
+		final values = optionalArrayField(testCase, "threadRollbackResponseActiveQueueFlushExpects");
+		for (value in values) outcomes.push(assertThreadRollbackResponseActiveQueueFlush(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadRollbackResponseActiveQueueFlushes(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> {
+		final outcomes:Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadRollbackResponseActiveQueueFlushExpects");
+		for (value in values) outcomes.push(assertThreadRollbackResponseActiveQueueFlush(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadRollbackResponseActiveQueueFlush(
+		expectValue:Value,
+		secretProbe:String
+	):ModelThreadRollbackResponseActiveQueueFlushOutcome {
+		final outcome = ModelThreadRollbackResponseActiveQueueFlushPolicy.apply(new ModelThreadRollbackResponseActiveQueueFlushRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			activeThreadId: stringField(expectValue, "activeThreadId", ""),
+			rollbackThreadId: stringField(expectValue, "rollbackThreadId", ""),
+			numTurns: intField(expectValue, "numTurns", 0),
+			threadChannelKnown: boolField(expectValue, "threadChannelKnown", false),
+			receiverAttachedBefore: boolField(expectValue, "receiverAttachedBefore", false),
+			receiverDisconnectedDuringDrain: boolField(expectValue, "receiverDisconnectedDuringDrain", false),
+			queuedActiveEventCountBefore: intField(expectValue, "queuedActiveEventCountBefore", 0),
+			queuedStaleNotificationCountBefore: intField(expectValue, "queuedStaleNotificationCountBefore", 0),
+			pendingBacktrackRollback: boolField(expectValue, "pendingBacktrackRollback", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(threadRollbackResponseActiveQueueFlushDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "numTurns", 0)), Std.string(outcome.numTurns));
+		assertEquals(boolText(boolField(expectValue, "activeThreadMatched", false)), boolText(outcome.activeThreadMatched));
+		assertEquals(boolText(boolField(expectValue, "threadStoreRollbackApplied", false)), boolText(outcome.threadStoreRollbackApplied));
+		assertEquals(boolText(boolField(expectValue, "receiverAttachedBefore", false)), boolText(outcome.receiverAttachedBefore));
+		assertEquals(boolText(boolField(expectValue, "receiverAttachedAfter", false)), boolText(outcome.receiverAttachedAfter));
+		assertEquals(boolText(boolField(expectValue, "receiverClearedAfterDisconnect", false)), boolText(outcome.receiverClearedAfterDisconnect));
+		assertEquals(Std.string(intField(expectValue, "queuedActiveEventCountBefore", 0)), Std.string(outcome.queuedActiveEventCountBefore));
+		assertEquals(Std.string(intField(expectValue, "drainedActiveEventCount", 0)), Std.string(outcome.drainedActiveEventCount));
+		assertEquals(Std.string(intField(expectValue, "queuedActiveEventCountAfter", 0)), Std.string(outcome.queuedActiveEventCountAfter));
+		assertEquals(boolText(boolField(expectValue, "staleNotificationDiscarded", false)), boolText(outcome.staleNotificationDiscarded));
+		assertEquals(boolText(boolField(expectValue, "applyThreadRollbackEventQueued", false)), boolText(outcome.applyThreadRollbackEventQueued));
+		assertEquals(boolText(boolField(expectValue, "pendingBacktrackFinished", false)), boolText(outcome.pendingBacktrackFinished));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveOnlyEffectsSuppressed", false)), boolText(outcome.liveOnlyEffectsSuppressed));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		assertNotContains(outcome.summary(), stringField(expectValue, "staleNotificationSummary", ""));
+		assertNotContains(outcome.summary(), stringField(expectValue, "activeThreadId", ""));
+		assertNotContains(outcome.summary(), stringField(expectValue, "rollbackThreadId", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
@@ -5249,6 +5324,14 @@ class ModelStreamItemReducerHarness {
 			case "rollback_applied": ModelQueuedRollbackOverlaySyncDecisionKind.RollbackApplied;
 			case "rollback_unchanged": ModelQueuedRollbackOverlaySyncDecisionKind.RollbackUnchanged;
 			case _: throw "unknown queued rollback overlay sync decision kind: " + value;
+		}
+	}
+
+	static function threadRollbackResponseActiveQueueFlushDecisionKind(value:String):ModelThreadRollbackResponseActiveQueueFlushDecisionKind {
+		return switch value {
+			case "active_queue_flushed": ModelThreadRollbackResponseActiveQueueFlushDecisionKind.ActiveQueueFlushed;
+			case "active_queue_unchanged": ModelThreadRollbackResponseActiveQueueFlushDecisionKind.ActiveQueueUnchanged;
+			case _: throw "unknown rollback response active queue flush decision kind: " + value;
 		}
 	}
 

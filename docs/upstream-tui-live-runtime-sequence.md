@@ -1342,7 +1342,19 @@ Model selected raw Codex queued rollback behavior:
 
 Status: HXCX-4.108 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic queued rollback overlay sync evidence only, not live app-server calls, live rollback RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.109+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.109: Rollback Response Active-Queue Flush Boundary
+
+Model selected raw Codex rollback response behavior:
+
+- apply the rollback response to the thread event store when a thread channel exists;
+- drain queued active-thread receiver events when the response targets the active thread;
+- restore the active receiver when it is not disconnected;
+- discard stale queued notifications, such as config warnings, after rollback;
+- preserve local rollback-event/backtrack-success intent, event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.109 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic rollback response active-queue flush evidence only, not live app-server calls, live rollback RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.110+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
