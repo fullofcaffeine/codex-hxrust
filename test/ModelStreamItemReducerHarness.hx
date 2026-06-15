@@ -141,6 +141,11 @@ import codexhx.runtime.model.streamitem.ModelThreadSideThreadDiscardOutcome;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadDiscardPolicy;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadDiscardRequest;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadInterruptKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartDecisionKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartFailureKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -241,7 +246,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelThreadSideParentPendingStatuses = assertTopLevelThreadSideParentPendingStatuses(testCase, topLevelThreadActiveTurns, secretProbe);
 			final topLevelThreadSideParentStatusChanges = assertTopLevelThreadSideParentStatusChanges(testCase, topLevelThreadSideParentPendingStatuses, secretProbe);
 			final topLevelThreadSideThreadUiSyncs = assertTopLevelThreadSideThreadUiSyncs(testCase, topLevelThreadSideParentStatusChanges, secretProbe);
-			assertTopLevelThreadSideThreadDiscards(testCase, topLevelThreadSideThreadUiSyncs, secretProbe);
+			final topLevelThreadSideThreadDiscards = assertTopLevelThreadSideThreadDiscards(testCase, topLevelThreadSideThreadUiSyncs, secretProbe);
+			assertTopLevelThreadSideThreadStarts(testCase, topLevelThreadSideThreadDiscards, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -428,7 +434,8 @@ class ModelStreamItemReducerHarness {
 				final threadSideParentPendingStatuses = assertThreadSideParentPendingStatuses(verificationValue, threadActiveTurns, secretProbe);
 				final threadSideParentStatusChanges = assertThreadSideParentStatusChanges(verificationValue, threadSideParentPendingStatuses, secretProbe);
 				final threadSideThreadUiSyncs = assertThreadSideThreadUiSyncs(verificationValue, threadSideParentStatusChanges, secretProbe);
-				assertThreadSideThreadDiscards(verificationValue, threadSideThreadUiSyncs, secretProbe);
+				final threadSideThreadDiscards = assertThreadSideThreadDiscards(verificationValue, threadSideThreadUiSyncs, secretProbe);
+				assertThreadSideThreadStarts(verificationValue, threadSideThreadDiscards, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -2733,6 +2740,109 @@ class ModelStreamItemReducerHarness {
 		throw "missing thread side-thread UI sync outcome: " + requestId;
 	}
 
+	static function assertTopLevelThreadSideThreadStarts(
+		testCase:Value,
+		discards:Array<ModelThreadSideThreadDiscardOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideThreadStartOutcome> {
+		final outcomes:Array<ModelThreadSideThreadStartOutcome> = [];
+		final values = optionalArrayField(testCase, "threadSideThreadStartExpects");
+		for (value in values) outcomes.push(assertThreadSideThreadStart(objectValue(value), discards, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideThreadStarts(
+		verificationValue:Value,
+		discards:Array<ModelThreadSideThreadDiscardOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideThreadStartOutcome> {
+		final outcomes:Array<ModelThreadSideThreadStartOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadSideThreadStartExpects");
+		for (value in values) outcomes.push(assertThreadSideThreadStart(objectValue(value), discards, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideThreadStart(
+		expectValue:Value,
+		discards:Array<ModelThreadSideThreadDiscardOutcome>,
+		secretProbe:String
+	):ModelThreadSideThreadStartOutcome {
+		final cleanupRequestId = stringField(expectValue, "cleanupRequestId", "");
+		final outcome = ModelThreadSideThreadStartPolicy.apply(new ModelThreadSideThreadStartRequest(
+			stringField(expectValue, "requestId", ""),
+			threadSideThreadDiscardByRequestId(discards, cleanupRequestId),
+			boolField(expectValue, "primaryThreadAvailable", false),
+			boolField(expectValue, "sideThreadAlreadyOpen", false),
+			stringField(expectValue, "parentModel", ""),
+			stringField(expectValue, "parentReasoningEffort", ""),
+			stringField(expectValue, "parentServiceTier", ""),
+			stringField(expectValue, "parentApprovalPolicy", ""),
+			stringField(expectValue, "parentPermissionProfile", ""),
+			stringField(expectValue, "parentApprovalsReviewer", ""),
+			stringField(expectValue, "existingDeveloperInstructions", ""),
+			boolField(expectValue, "userMessageProvided", false),
+			boolField(expectValue, "forkSucceeded", false),
+			stringField(expectValue, "forkErrorMessage", ""),
+			boolField(expectValue, "injectBoundarySucceeded", false),
+			boolField(expectValue, "switchSucceeded", false),
+			boolField(expectValue, "activeChildAfterSwitch", false),
+			boolField(expectValue, "discardCleanupSucceeded", false),
+			boolField(expectValue, "activeThreadRestoredToParent", false),
+			intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(cleanupRequestId, outcome.cleanupRequestId);
+		assertEquals(threadSideThreadStartDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(threadSideThreadStartFailureKind(stringField(expectValue, "failureKind", "none")), outcome.failureKind);
+		assertEquals(boolText(boolField(expectValue, "startBlocked", false)), boolText(outcome.startBlocked));
+		assertEquals(boolText(boolField(expectValue, "userMessageRestored", false)), boolText(outcome.userMessageRestored));
+		assertEquals(boolText(boolField(expectValue, "sideUiSynced", false)), boolText(outcome.sideUiSynced));
+		assertEquals(boolText(boolField(expectValue, "contextLabelCleared", false)), boolText(outcome.contextLabelCleared));
+		assertEquals(boolText(boolField(expectValue, "telemetryRecorded", false)), boolText(outcome.telemetryRecorded));
+		assertEquals(boolText(boolField(expectValue, "configRefreshAttempted", false)), boolText(outcome.configRefreshAttempted));
+		assertEquals(boolText(boolField(expectValue, "forkAttempted", false)), boolText(outcome.forkAttempted));
+		assertEquals(boolText(boolField(expectValue, "forkConfigEphemeral", false)), boolText(outcome.forkConfigEphemeral));
+		assertEquals(boolText(boolField(expectValue, "parentModelApplied", false)), boolText(outcome.parentModelApplied));
+		assertEquals(boolText(boolField(expectValue, "inheritedRuntimeSettings", false)), boolText(outcome.inheritedRuntimeSettings));
+		assertEquals(boolText(boolField(expectValue, "developerInstructionsAppended", false)), boolText(outcome.developerInstructionsAppended));
+		assertEquals(boolText(boolField(expectValue, "developerGuardrailsApplied", false)), boolText(outcome.developerGuardrailsApplied));
+		assertEquals(boolText(boolField(expectValue, "boundaryPromptItemBuilt", false)), boolText(outcome.boundaryPromptItemBuilt));
+		assertEquals(boolText(boolField(expectValue, "boundaryPromptInjected", false)), boolText(outcome.boundaryPromptInjected));
+		assertEquals(boolText(boolField(expectValue, "snapshotInstalled", false)), boolText(outcome.snapshotInstalled));
+		assertEquals(boolText(boolField(expectValue, "forkedParentTranscriptHidden", false)), boolText(outcome.forkedParentTranscriptHidden));
+		assertEquals(boolText(boolField(expectValue, "sideThreadRegistered", false)), boolText(outcome.sideThreadRegistered));
+		final expectedSwitchAttempted = boolText(boolField(expectValue, "switchAttempted", false));
+		final actualSwitchAttempted = boolText(outcome.switchAttempted);
+		if (expectedSwitchAttempted != actualSwitchAttempted) {
+			throw "thread side-thread start " + stringField(expectValue, "requestId", "") + " expected switchAttempted `" + expectedSwitchAttempted + "` but got `" + actualSwitchAttempted + "`";
+		}
+		assertEquals(boolText(boolField(expectValue, "discardCleanupAttempted", false)), boolText(outcome.discardCleanupAttempted));
+		assertEquals(boolText(boolField(expectValue, "parentRestoreAttempted", false)), boolText(outcome.parentRestoreAttempted));
+		assertEquals(boolText(boolField(expectValue, "userMessageSubmitted", false)), boolText(outcome.userMessageSubmitted));
+		assertEquals(boolText(boolField(expectValue, "errorMessageAdded", false)), boolText(outcome.errorMessageAdded));
+		assertEquals(boolText(boolField(expectValue, "runControlContinue", false)), boolText(outcome.runControlContinue));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function threadSideThreadDiscardByRequestId(
+		outcomes:Array<ModelThreadSideThreadDiscardOutcome>,
+		requestId:String
+	):ModelThreadSideThreadDiscardOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing thread side-thread discard outcome: " + requestId;
+	}
+
 	static function threadActiveTurnByRequestId(outcomes:Array<ModelThreadActiveTurnOutcome>, requestId:String):ModelThreadActiveTurnOutcome {
 		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
 		throw "missing thread active-turn outcome: " + requestId;
@@ -3325,6 +3435,35 @@ class ModelStreamItemReducerHarness {
 			case "turn_interrupt": ModelThreadSideThreadInterruptKind.TurnInterrupt;
 			case "startup_interrupt": ModelThreadSideThreadInterruptKind.StartupInterrupt;
 			case _: throw "unknown thread side-thread interrupt kind: " + value;
+		}
+	}
+
+	static function threadSideThreadStartDecisionKind(value:String):ModelThreadSideThreadStartDecisionKind {
+		return switch value {
+			case "start_blocked_main_unavailable": ModelThreadSideThreadStartDecisionKind.StartBlockedMainUnavailable;
+			case "start_blocked_side_open": ModelThreadSideThreadStartDecisionKind.StartBlockedSideOpen;
+			case "fork_failed_no_started_conversation": ModelThreadSideThreadStartDecisionKind.ForkFailedNoStartedConversation;
+			case "fork_failed_generic": ModelThreadSideThreadStartDecisionKind.ForkFailedGeneric;
+			case "inject_failed_cleanup": ModelThreadSideThreadStartDecisionKind.InjectFailedCleanup;
+			case "switch_failed_cleanup": ModelThreadSideThreadStartDecisionKind.SwitchFailedCleanup;
+			case "switched_and_submitted_user_message": ModelThreadSideThreadStartDecisionKind.SwitchedAndSubmittedUserMessage;
+			case "switched_without_user_message": ModelThreadSideThreadStartDecisionKind.SwitchedWithoutUserMessage;
+			case "switched_inactive_cleanup": ModelThreadSideThreadStartDecisionKind.SwitchedInactiveCleanup;
+			case _: throw "unknown thread side-thread start decision kind: " + value;
+		}
+	}
+
+	static function threadSideThreadStartFailureKind(value:String):ModelThreadSideThreadStartFailureKind {
+		return switch value {
+			case "none": ModelThreadSideThreadStartFailureKind.None;
+			case "main_thread_unavailable": ModelThreadSideThreadStartFailureKind.MainThreadUnavailable;
+			case "side_already_open": ModelThreadSideThreadStartFailureKind.SideAlreadyOpen;
+			case "fork_no_started_conversation": ModelThreadSideThreadStartFailureKind.ForkNoStartedConversation;
+			case "fork_generic": ModelThreadSideThreadStartFailureKind.ForkGeneric;
+			case "inject_boundary": ModelThreadSideThreadStartFailureKind.InjectBoundary;
+			case "switch_failed": ModelThreadSideThreadStartFailureKind.SwitchFailed;
+			case "active_child_missing": ModelThreadSideThreadStartFailureKind.ActiveChildMissing;
+			case _: throw "unknown thread side-thread start failure kind: " + value;
 		}
 	}
 

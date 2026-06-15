@@ -1083,7 +1083,20 @@ Model selected side-thread return and discard cleanup behavior:
 
 Status: HXCX-4.89 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic side-thread discard cleanup evidence only, not live terminal rendering, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.90+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.90: Side-Thread Fork/Start Boundary
+
+Model selected side-thread fork and startup behavior:
+
+- block `/side` before the main thread is ready or while another side thread is open;
+- build an ephemeral fork config that inherits parent model, reasoning, service tier, permissions, and reviewer settings;
+- append side-conversation developer guardrails and inject the hidden boundary prompt item;
+- classify missing-start fork failures separately from generic fork failures;
+- install side-thread snapshots without rendering forked parent transcript turns;
+- clean up failed boundary injection, failed switch, and inactive-child starts while restoring the pending user message.
+
+Status: HXCX-4.90 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic side-thread fork/start evidence only, not live terminal rendering, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.91+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
