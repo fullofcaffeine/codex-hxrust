@@ -1283,7 +1283,18 @@ Model selected raw Codex cancelled-turn edit behavior:
 
 Status: HXCX-4.103 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic cancelled-turn edit restoration evidence only, not live app-server calls, live rollback RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.104+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.104: Data-Image Backtrack Resubmit Boundary
+
+Model selected raw Codex data-image backtrack resubmit behavior:
+
+- restore a backtrack selection with a `data:image/...` remote URL into composer state;
+- pressing Enter after rollback submits the restored user turn;
+- preserve the remote URL as a submitted `UserInput::Image` item before text;
+- preserve rollback and user-turn submission facts, event ordering, and no-live/no-network/no-real-tool proofs.
+
+Status: HXCX-4.104 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic data-image backtrack resubmit evidence only, not live app-server calls, live rollback RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.105+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

@@ -6741,6 +6741,51 @@
 	          "errorMessage": "",
 	          "summaryContains": "decisionKind=restored_first_prompt_without_local_history;userCountSinceLastSession=0;selectedNthUserMessage=0;rollbackTurnCount=1;usedBacktrackRollbackPath=false;usedFirstPromptRollbackPath=true;promptTextElementCount=0;promptLocalImageCount=0;promptRemoteImageCount=1;remoteImagesApplied=true"
 	        }
+	      ],
+	      "backtrackResubmitExpects": [
+	        {
+	          "ok": true,
+	          "code": "backtrack_resubmit_modeled",
+	          "requestId": "backtrack-resubmit-preserves-data-image-url",
+	          "sessionConfigured": true,
+	          "modelSupportsImages": true,
+	          "nthUserMessage": 0,
+	          "selectionPrefill": "please inspect this",
+	          "selectedRemoteImageCount": 1,
+	          "selectedRemoteImageUrl": "data:image/png;base64,abc123",
+	          "previousEventCount": 72,
+	          "eventOrderIndex": 73,
+	          "transcriptCells": [
+	            {
+	              "cellKind": "user",
+	              "message": "please inspect this",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 1,
+	              "localImagePath": "",
+	              "remoteImageUrl": "data:image/png;base64,abc123"
+	            }
+	          ],
+	          "decisionKind": "data_image_url_preserved",
+	          "userCountSinceLastSession": 1,
+	          "selectedNthUserMessage": 0,
+	          "rollbackTurnCount": 1,
+	          "composerTextAfterRollback": "please inspect this",
+	          "composerRemoteImageCountAfterRollback": 1,
+	          "submittedImageItemCount": 1,
+	          "submittedTextItemCount": 1,
+	          "submittedImageUrl": "data:image/png;base64,abc123",
+	          "dataImageUrlPreserved": true,
+	          "imageItemBeforeTextItem": true,
+	          "rollbackSubmitted": true,
+	          "userTurnSubmitted": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=data_image_url_preserved;userCountSinceLastSession=1;selectedNthUserMessage=0;rollbackTurnCount=1;composerRemoteImageCountAfterRollback=1;submittedImageItemCount=1;submittedTextItemCount=1;dataImageUrlPreserved=true;imageItemBeforeTextItem=true;rollbackSubmitted=true;userTurnSubmitted=true"
+	        }
 	      ]
 		    },
     {

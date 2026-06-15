@@ -211,6 +211,10 @@ import codexhx.runtime.model.streamitem.ModelCancelledTurnEditDecisionKind;
 import codexhx.runtime.model.streamitem.ModelCancelledTurnEditOutcome;
 import codexhx.runtime.model.streamitem.ModelCancelledTurnEditPolicy;
 import codexhx.runtime.model.streamitem.ModelCancelledTurnEditRequest;
+import codexhx.runtime.model.streamitem.ModelBacktrackResubmitDecisionKind;
+import codexhx.runtime.model.streamitem.ModelBacktrackResubmitOutcome;
+import codexhx.runtime.model.streamitem.ModelBacktrackResubmitPolicy;
+import codexhx.runtime.model.streamitem.ModelBacktrackResubmitRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -326,6 +330,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
+			assertTopLevelBacktrackResubmits(testCase, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -527,6 +532,7 @@ class ModelStreamItemReducerHarness {
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
+				assertBacktrackResubmits(verificationValue, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3913,6 +3919,71 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelBacktrackResubmits(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelBacktrackResubmitOutcome> {
+		final outcomes:Array<ModelBacktrackResubmitOutcome> = [];
+		final values = optionalArrayField(testCase, "backtrackResubmitExpects");
+		for (value in values) outcomes.push(assertBacktrackResubmit(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertBacktrackResubmits(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelBacktrackResubmitOutcome> {
+		final outcomes:Array<ModelBacktrackResubmitOutcome> = [];
+		final values = optionalArrayField(verificationValue, "backtrackResubmitExpects");
+		for (value in values) outcomes.push(assertBacktrackResubmit(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertBacktrackResubmit(
+		expectValue:Value,
+		secretProbe:String
+	):ModelBacktrackResubmitOutcome {
+		final outcome = ModelBacktrackResubmitPolicy.apply(new ModelBacktrackResubmitRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			sessionConfigured: boolField(expectValue, "sessionConfigured", false),
+			modelSupportsImages: boolField(expectValue, "modelSupportsImages", false),
+			nthUserMessage: intField(expectValue, "nthUserMessage", 0),
+			selectionPrefill: stringField(expectValue, "selectionPrefill", ""),
+			selectedRemoteImageCount: intField(expectValue, "selectedRemoteImageCount", 0),
+			selectedRemoteImageUrl: stringField(expectValue, "selectedRemoteImageUrl", ""),
+			transcriptCells: backtrackTranscriptCells(expectValue),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(backtrackResubmitDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "userCountSinceLastSession", 0)), Std.string(outcome.userCountSinceLastSession));
+		assertEquals(Std.string(intField(expectValue, "selectedNthUserMessage", -1)), Std.string(outcome.selectedNthUserMessage));
+		assertEquals(Std.string(intField(expectValue, "rollbackTurnCount", 0)), Std.string(outcome.rollbackTurnCount));
+		assertEquals(stringField(expectValue, "composerTextAfterRollback", ""), outcome.composerTextAfterRollback);
+		assertEquals(Std.string(intField(expectValue, "composerRemoteImageCountAfterRollback", 0)), Std.string(outcome.composerRemoteImageCountAfterRollback));
+		assertEquals(Std.string(intField(expectValue, "submittedImageItemCount", 0)), Std.string(outcome.submittedImageItemCount));
+		assertEquals(Std.string(intField(expectValue, "submittedTextItemCount", 0)), Std.string(outcome.submittedTextItemCount));
+		assertEquals(stringField(expectValue, "submittedImageUrl", ""), outcome.submittedImageUrl);
+		assertEquals(boolText(boolField(expectValue, "dataImageUrlPreserved", false)), boolText(outcome.dataImageUrlPreserved));
+		assertEquals(boolText(boolField(expectValue, "imageItemBeforeTextItem", false)), boolText(outcome.imageItemBeforeTextItem));
+		assertEquals(boolText(boolField(expectValue, "rollbackSubmitted", false)), boolText(outcome.rollbackSubmitted));
+		assertEquals(boolText(boolField(expectValue, "userTurnSubmitted", false)), boolText(outcome.userTurnSubmitted));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (outcome.composerTextAfterRollback.length > 0) assertNotContains(outcome.summary(), outcome.composerTextAfterRollback);
+		if (outcome.submittedImageUrl.length > 0) assertNotContains(outcome.summary(), outcome.submittedImageUrl);
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
@@ -4809,6 +4880,14 @@ class ModelStreamItemReducerHarness {
 			case "restored_first_prompt_without_local_history": ModelCancelledTurnEditDecisionKind.RestoredFirstPromptWithoutLocalHistory;
 			case "pending_rollback_rejected": ModelCancelledTurnEditDecisionKind.PendingRollbackRejected;
 			case _: throw "unknown cancelled-turn edit decision kind: " + value;
+		}
+	}
+
+	static function backtrackResubmitDecisionKind(value:String):ModelBacktrackResubmitDecisionKind {
+		return switch value {
+			case "data_image_url_preserved": ModelBacktrackResubmitDecisionKind.DataImageUrlPreserved;
+			case "resubmit_blocked": ModelBacktrackResubmitDecisionKind.ResubmitBlocked;
+			case _: throw "unknown backtrack resubmit decision kind: " + value;
 		}
 	}
 
