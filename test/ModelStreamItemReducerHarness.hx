@@ -151,6 +151,10 @@ import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartupRoutingDecis
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartupRoutingOutcome;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartupRoutingPolicy;
 import codexhx.runtime.model.streamitem.ModelThreadSideThreadStartupRoutingRequest;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadComposerHandoffDecisionKind;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadComposerHandoffOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadComposerHandoffPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadSideThreadComposerHandoffRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -253,7 +257,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelThreadSideThreadUiSyncs = assertTopLevelThreadSideThreadUiSyncs(testCase, topLevelThreadSideParentStatusChanges, secretProbe);
 			final topLevelThreadSideThreadDiscards = assertTopLevelThreadSideThreadDiscards(testCase, topLevelThreadSideThreadUiSyncs, secretProbe);
 			final topLevelThreadSideThreadStarts = assertTopLevelThreadSideThreadStarts(testCase, topLevelThreadSideThreadDiscards, secretProbe);
-			assertTopLevelThreadSideThreadStartupRoutings(testCase, topLevelThreadSideThreadStarts, secretProbe);
+			final topLevelThreadSideThreadStartupRoutings = assertTopLevelThreadSideThreadStartupRoutings(testCase, topLevelThreadSideThreadStarts, secretProbe);
+			assertTopLevelThreadSideThreadComposerHandoffs(testCase, topLevelThreadSideThreadStarts, topLevelThreadSideThreadStartupRoutings, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -442,7 +447,8 @@ class ModelStreamItemReducerHarness {
 				final threadSideThreadUiSyncs = assertThreadSideThreadUiSyncs(verificationValue, threadSideParentStatusChanges, secretProbe);
 				final threadSideThreadDiscards = assertThreadSideThreadDiscards(verificationValue, threadSideThreadUiSyncs, secretProbe);
 				final threadSideThreadStarts = assertThreadSideThreadStarts(verificationValue, threadSideThreadDiscards, secretProbe);
-				assertThreadSideThreadStartupRoutings(verificationValue, threadSideThreadStarts, secretProbe);
+				final threadSideThreadStartupRoutings = assertThreadSideThreadStartupRoutings(verificationValue, threadSideThreadStarts, secretProbe);
+				assertThreadSideThreadComposerHandoffs(verificationValue, threadSideThreadStarts, threadSideThreadStartupRoutings, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -2927,6 +2933,86 @@ class ModelStreamItemReducerHarness {
 		throw "missing thread side-thread start outcome: " + requestId;
 	}
 
+	static function assertTopLevelThreadSideThreadComposerHandoffs(
+		testCase:Value,
+		starts:Array<ModelThreadSideThreadStartOutcome>,
+		startupRoutings:Array<ModelThreadSideThreadStartupRoutingOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideThreadComposerHandoffOutcome> {
+		final outcomes:Array<ModelThreadSideThreadComposerHandoffOutcome> = [];
+		final values = optionalArrayField(testCase, "threadSideThreadComposerHandoffExpects");
+		for (value in values) outcomes.push(assertThreadSideThreadComposerHandoff(objectValue(value), starts, startupRoutings, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideThreadComposerHandoffs(
+		verificationValue:Value,
+		starts:Array<ModelThreadSideThreadStartOutcome>,
+		startupRoutings:Array<ModelThreadSideThreadStartupRoutingOutcome>,
+		secretProbe:String
+	):Array<ModelThreadSideThreadComposerHandoffOutcome> {
+		final outcomes:Array<ModelThreadSideThreadComposerHandoffOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadSideThreadComposerHandoffExpects");
+		for (value in values) outcomes.push(assertThreadSideThreadComposerHandoff(objectValue(value), starts, startupRoutings, secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSideThreadComposerHandoff(
+		expectValue:Value,
+		starts:Array<ModelThreadSideThreadStartOutcome>,
+		startupRoutings:Array<ModelThreadSideThreadStartupRoutingOutcome>,
+		secretProbe:String
+	):ModelThreadSideThreadComposerHandoffOutcome {
+		final startRequestId = stringField(expectValue, "startRequestId", "");
+		final startupRoutingRequestId = stringField(expectValue, "startupRoutingRequestId", "");
+		final outcome = ModelThreadSideThreadComposerHandoffPolicy.apply(new ModelThreadSideThreadComposerHandoffRequest(
+			stringField(expectValue, "requestId", ""),
+			threadSideThreadStartByRequestId(starts, startRequestId),
+			threadSideThreadStartupRoutingByRequestIdOrNull(startupRoutings, startupRoutingRequestId),
+			boolField(expectValue, "userMessageProvided", false),
+			stringField(expectValue, "inlineUserMessageText", ""),
+			boolField(expectValue, "composerInitiallyEmpty", false),
+			stringField(expectValue, "sideContextLabelBefore", ""),
+			intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(startRequestId, outcome.startRequestId);
+		assertEquals(startupRoutingRequestId, outcome.startupRoutingRequestId);
+		assertEquals(threadSideThreadComposerHandoffDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "userMessagePreserved", false)), boolText(outcome.userMessagePreserved));
+		assertEquals(boolText(boolField(expectValue, "restoreAttempted", false)), boolText(outcome.restoreAttempted));
+		assertEquals(boolText(boolField(expectValue, "composerMutated", false)), boolText(outcome.composerMutated));
+		assertEquals(stringField(expectValue, "composerTextAfter", ""), outcome.composerTextAfter);
+		assertEquals(boolText(boolField(expectValue, "submittedAsPlainUserTurn", false)), boolText(outcome.submittedAsPlainUserTurn));
+		assertEquals(boolText(boolField(expectValue, "duplicateSubmissionPrevented", false)), boolText(outcome.duplicateSubmissionPrevented));
+		assertEquals(boolText(boolField(expectValue, "sideUiSynced", false)), boolText(outcome.sideUiSynced));
+		assertEquals(boolText(boolField(expectValue, "contextLabelCleared", false)), boolText(outcome.contextLabelCleared));
+		assertEquals(boolText(boolField(expectValue, "errorMessageDisplayed", false)), boolText(outcome.errorMessageDisplayed));
+		assertEquals(boolText(boolField(expectValue, "runControlContinue", false)), boolText(outcome.runControlContinue));
+		assertEquals(boolText(boolField(expectValue, "startupRoutingComposed", false)), boolText(outcome.startupRoutingComposed));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function threadSideThreadStartupRoutingByRequestIdOrNull(
+		outcomes:Array<ModelThreadSideThreadStartupRoutingOutcome>,
+		requestId:String
+	):ModelThreadSideThreadStartupRoutingOutcome {
+		if (requestId.length == 0) return null;
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing thread side-thread startup routing outcome: " + requestId;
+	}
+
 	static function threadSideThreadDiscardByRequestId(
 		outcomes:Array<ModelThreadSideThreadDiscardOutcome>,
 		requestId:String
@@ -3577,6 +3663,19 @@ class ModelStreamItemReducerHarness {
 			case "side_session_configured": ModelThreadSideThreadStartupRoutingDecisionKind.SideSessionConfigured;
 			case "misrouted_visible_thread_ignored": ModelThreadSideThreadStartupRoutingDecisionKind.MisroutedVisibleThreadIgnored;
 			case _: throw "unknown thread side-thread startup routing decision kind: " + value;
+		}
+	}
+
+	static function threadSideThreadComposerHandoffDecisionKind(value:String):ModelThreadSideThreadComposerHandoffDecisionKind {
+		return switch value {
+			case "no_user_message_noop": ModelThreadSideThreadComposerHandoffDecisionKind.NoUserMessageNoop;
+			case "restored_after_start_blocked": ModelThreadSideThreadComposerHandoffDecisionKind.RestoredAfterStartBlocked;
+			case "restored_after_fork_failure": ModelThreadSideThreadComposerHandoffDecisionKind.RestoredAfterForkFailure;
+			case "restored_after_prepare_failure": ModelThreadSideThreadComposerHandoffDecisionKind.RestoredAfterPrepareFailure;
+			case "restored_after_switch_failure": ModelThreadSideThreadComposerHandoffDecisionKind.RestoredAfterSwitchFailure;
+			case "restored_after_inactive_child_cleanup": ModelThreadSideThreadComposerHandoffDecisionKind.RestoredAfterInactiveChildCleanup;
+			case "submitted_after_switch": ModelThreadSideThreadComposerHandoffDecisionKind.SubmittedAfterSwitch;
+			case _: throw "unknown thread side-thread composer handoff decision kind: " + value;
 		}
 	}
 
