@@ -1406,7 +1406,19 @@ Model selected raw Codex inactive-thread notification behavior:
 
 Status: HXCX-4.113 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic inactive-thread settings notification cache evidence only, not live app-server calls, live WebSocket notification delivery, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.114+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.114: Clear-Only UI Reset Session-Preservation Boundary
+
+Model selected raw Codex clear-only reset behavior:
+
+- call `reset_app_ui_state_after_clear`, which delegates to transcript reset;
+- clear overlay, transcript cells, deferred history lines, history-emitted state, transcript reflow, initial replay buffer, backtrack state, backtrack render-pending state, and skill warning memory;
+- preserve the chat-widget session thread id;
+- preserve composer draft text after the reset;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.114 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic clear-only UI reset session-preservation evidence only, not live terminal clearing, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.115+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

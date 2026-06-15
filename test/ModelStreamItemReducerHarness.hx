@@ -189,6 +189,10 @@ import codexhx.runtime.model.streamitem.ModelClearUiHeaderOutcome;
 import codexhx.runtime.model.streamitem.ModelClearUiHeaderPolicy;
 import codexhx.runtime.model.streamitem.ModelClearUiHeaderRequest;
 import codexhx.runtime.model.streamitem.ModelClearUiHeaderRequestKind;
+import codexhx.runtime.model.streamitem.ModelClearOnlyUiResetDecisionKind;
+import codexhx.runtime.model.streamitem.ModelClearOnlyUiResetOutcome;
+import codexhx.runtime.model.streamitem.ModelClearOnlyUiResetPolicy;
+import codexhx.runtime.model.streamitem.ModelClearOnlyUiResetRequest;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowDecisionKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowMaxRowsKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowOutcome;
@@ -378,6 +382,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelInterruptWithoutActiveTurns(testCase, secretProbe);
 			assertTopLevelOverrideTurnContextSettingsUpdates(testCase, secretProbe);
 			assertTopLevelInactiveThreadSettingsNotifications(testCase, secretProbe);
+			assertTopLevelClearOnlyUiResets(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -589,6 +594,7 @@ class ModelStreamItemReducerHarness {
 				assertInterruptWithoutActiveTurns(verificationValue, secretProbe);
 				assertOverrideTurnContextSettingsUpdates(verificationValue, secretProbe);
 				assertInactiveThreadSettingsNotifications(verificationValue, secretProbe);
+				assertClearOnlyUiResets(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4282,6 +4288,83 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelClearOnlyUiResets(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelClearOnlyUiResetOutcome> {
+		final outcomes:Array<ModelClearOnlyUiResetOutcome> = [];
+		final values = optionalArrayField(testCase, "clearOnlyUiResetExpects");
+		for (value in values) outcomes.push(assertClearOnlyUiReset(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertClearOnlyUiResets(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelClearOnlyUiResetOutcome> {
+		final outcomes:Array<ModelClearOnlyUiResetOutcome> = [];
+		final values = optionalArrayField(verificationValue, "clearOnlyUiResetExpects");
+		for (value in values) outcomes.push(assertClearOnlyUiReset(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertClearOnlyUiReset(
+		expectValue:Value,
+		secretProbe:String
+	):ModelClearOnlyUiResetOutcome {
+		final outcome = ModelClearOnlyUiResetPolicy.apply(new ModelClearOnlyUiResetRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			threadId: stringField(expectValue, "threadId", ""),
+			resetInvoked: boolField(expectValue, "resetInvoked", false),
+			overlayPresentBefore: boolField(expectValue, "overlayPresentBefore", false),
+			transcriptCellCountBefore: intField(expectValue, "transcriptCellCountBefore", 0),
+			deferredHistoryLineCountBefore: intField(expectValue, "deferredHistoryLineCountBefore", 0),
+			hasEmittedHistoryLinesBefore: boolField(expectValue, "hasEmittedHistoryLinesBefore", false),
+			transcriptReflowEntryCountBefore: intField(expectValue, "transcriptReflowEntryCountBefore", 0),
+			initialHistoryReplayBufferPresentBefore: boolField(expectValue, "initialHistoryReplayBufferPresentBefore", false),
+			backtrackPrimedBefore: boolField(expectValue, "backtrackPrimedBefore", false),
+			backtrackOverlayPreviewActiveBefore: boolField(expectValue, "backtrackOverlayPreviewActiveBefore", false),
+			backtrackPendingRollbackBefore: boolField(expectValue, "backtrackPendingRollbackBefore", false),
+			backtrackRenderPendingBefore: boolField(expectValue, "backtrackRenderPendingBefore", false),
+			skillWarningCountBefore: intField(expectValue, "skillWarningCountBefore", 0),
+			chatSessionThreadPresentBefore: boolField(expectValue, "chatSessionThreadPresentBefore", false),
+			composerDraftBefore: stringField(expectValue, "composerDraftBefore", ""),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(clearOnlyUiResetDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "resetInvoked", false)), boolText(outcome.resetInvoked));
+		assertEquals(boolText(boolField(expectValue, "overlayCleared", false)), boolText(outcome.overlayCleared));
+		assertEquals(boolText(boolField(expectValue, "transcriptCleared", false)), boolText(outcome.transcriptCleared));
+		assertEquals(boolText(boolField(expectValue, "deferredHistoryCleared", false)), boolText(outcome.deferredHistoryCleared));
+		assertEquals(boolText(boolField(expectValue, "historyEmittedFlagReset", false)), boolText(outcome.historyEmittedFlagReset));
+		assertEquals(boolText(boolField(expectValue, "transcriptReflowCleared", false)), boolText(outcome.transcriptReflowCleared));
+		assertEquals(boolText(boolField(expectValue, "initialHistoryReplayBufferCleared", false)), boolText(outcome.initialHistoryReplayBufferCleared));
+		assertEquals(boolText(boolField(expectValue, "backtrackPrimedCleared", false)), boolText(outcome.backtrackPrimedCleared));
+		assertEquals(boolText(boolField(expectValue, "backtrackPreviewCleared", false)), boolText(outcome.backtrackPreviewCleared));
+		assertEquals(boolText(boolField(expectValue, "backtrackPendingRollbackCleared", false)), boolText(outcome.backtrackPendingRollbackCleared));
+		assertEquals(boolText(boolField(expectValue, "backtrackRenderPendingCleared", false)), boolText(outcome.backtrackRenderPendingCleared));
+		assertEquals(boolText(boolField(expectValue, "skillWarningsCleared", false)), boolText(outcome.skillWarningsCleared));
+		assertEquals(boolText(boolField(expectValue, "chatSessionThreadPreserved", false)), boolText(outcome.chatSessionThreadPreserved));
+		assertEquals(boolText(boolField(expectValue, "composerDraftPreserved", false)), boolText(outcome.composerDraftPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) {
+			assertNotContains(outcome.summary(), secretProbe);
+			assertNotContains(outcome.summary(), stringField(expectValue, "threadId", ""));
+			assertNotContains(outcome.summary(), stringField(expectValue, "composerDraftBefore", ""));
+		}
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -5650,6 +5733,15 @@ class ModelStreamItemReducerHarness {
 			case "inactive_thread_settings_notification_ignored": ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationIgnored;
 			case "inactive_thread_settings_notification_unavailable": ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationUnavailable;
 			case _: throw "unknown inactive-thread settings notification decision kind: " + value;
+		}
+	}
+
+	static function clearOnlyUiResetDecisionKind(value:String):ModelClearOnlyUiResetDecisionKind {
+		return switch value {
+			case "clear_only_ui_reset_applied": ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetApplied;
+			case "clear_only_ui_reset_skipped": ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetSkipped;
+			case "clear_only_ui_reset_unavailable": ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetUnavailable;
+			case _: throw "unknown clear-only UI reset decision kind: " + value;
 		}
 	}
 
