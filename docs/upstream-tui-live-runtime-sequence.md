@@ -1418,7 +1418,19 @@ Model selected raw Codex clear-only reset behavior:
 
 Status: HXCX-4.114 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic clear-only UI reset session-preservation evidence only, not live terminal clearing, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.115+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.115: Clear-Only Skill Warning Rerender Boundary
+
+Model selected raw Codex skill-warning reset behavior:
+
+- render a newly active skill warning key on the first scan;
+- suppress the same active warning key on a repeated scan;
+- clear skill warning memory through the clear-only UI reset path;
+- allow the same warning key to render again after reset;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.115 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic clear-only skill warning rerender evidence only, not live terminal clearing, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.116+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

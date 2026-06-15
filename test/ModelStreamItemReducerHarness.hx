@@ -193,6 +193,10 @@ import codexhx.runtime.model.streamitem.ModelClearOnlyUiResetDecisionKind;
 import codexhx.runtime.model.streamitem.ModelClearOnlyUiResetOutcome;
 import codexhx.runtime.model.streamitem.ModelClearOnlyUiResetPolicy;
 import codexhx.runtime.model.streamitem.ModelClearOnlyUiResetRequest;
+import codexhx.runtime.model.streamitem.ModelClearOnlySkillWarningRerenderDecisionKind;
+import codexhx.runtime.model.streamitem.ModelClearOnlySkillWarningRerenderOutcome;
+import codexhx.runtime.model.streamitem.ModelClearOnlySkillWarningRerenderPolicy;
+import codexhx.runtime.model.streamitem.ModelClearOnlySkillWarningRerenderRequest;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowDecisionKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowMaxRowsKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowOutcome;
@@ -383,6 +387,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelOverrideTurnContextSettingsUpdates(testCase, secretProbe);
 			assertTopLevelInactiveThreadSettingsNotifications(testCase, secretProbe);
 			assertTopLevelClearOnlyUiResets(testCase, secretProbe);
+			assertTopLevelClearOnlySkillWarningRerenders(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -595,6 +600,7 @@ class ModelStreamItemReducerHarness {
 				assertOverrideTurnContextSettingsUpdates(verificationValue, secretProbe);
 				assertInactiveThreadSettingsNotifications(verificationValue, secretProbe);
 				assertClearOnlyUiResets(verificationValue, secretProbe);
+				assertClearOnlySkillWarningRerenders(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4365,6 +4371,67 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelClearOnlySkillWarningRerenders(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelClearOnlySkillWarningRerenderOutcome> {
+		final outcomes:Array<ModelClearOnlySkillWarningRerenderOutcome> = [];
+		final values = optionalArrayField(testCase, "clearOnlySkillWarningRerenderExpects");
+		for (value in values) outcomes.push(assertClearOnlySkillWarningRerender(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertClearOnlySkillWarningRerenders(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelClearOnlySkillWarningRerenderOutcome> {
+		final outcomes:Array<ModelClearOnlySkillWarningRerenderOutcome> = [];
+		final values = optionalArrayField(verificationValue, "clearOnlySkillWarningRerenderExpects");
+		for (value in values) outcomes.push(assertClearOnlySkillWarningRerender(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertClearOnlySkillWarningRerender(
+		expectValue:Value,
+		secretProbe:String
+	):ModelClearOnlySkillWarningRerenderOutcome {
+		final outcome = ModelClearOnlySkillWarningRerenderPolicy.apply(new ModelClearOnlySkillWarningRerenderRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			warningPath: stringField(expectValue, "warningPath", ""),
+			warningMessage: stringField(expectValue, "warningMessage", ""),
+			firstScanInputCount: intField(expectValue, "firstScanInputCount", 0),
+			repeatedScanInputCount: intField(expectValue, "repeatedScanInputCount", 0),
+			postResetScanInputCount: intField(expectValue, "postResetScanInputCount", 0),
+			resetInvoked: boolField(expectValue, "resetInvoked", false),
+			clearOnlyResetClearsWarnings: boolField(expectValue, "clearOnlyResetClearsWarnings", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(clearOnlySkillWarningRerenderDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "warningKeyPresent", false)), boolText(outcome.warningKeyPresent));
+		assertEquals(boolText(boolField(expectValue, "firstWarningRendered", false)), boolText(outcome.firstWarningRendered));
+		assertEquals(boolText(boolField(expectValue, "repeatedWarningSuppressed", false)), boolText(outcome.repeatedWarningSuppressed));
+		assertEquals(boolText(boolField(expectValue, "resetClearedWarningMemory", false)), boolText(outcome.resetClearedWarningMemory));
+		assertEquals(boolText(boolField(expectValue, "postResetWarningRenderedAgain", false)), boolText(outcome.postResetWarningRenderedAgain));
+		assertEquals(boolText(boolField(expectValue, "sameWarningKeyReused", false)), boolText(outcome.sameWarningKeyReused));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) {
+			assertNotContains(outcome.summary(), secretProbe);
+			assertNotContains(outcome.summary(), stringField(expectValue, "warningPath", ""));
+			assertNotContains(outcome.summary(), stringField(expectValue, "warningMessage", ""));
+		}
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -5742,6 +5809,15 @@ class ModelStreamItemReducerHarness {
 			case "clear_only_ui_reset_skipped": ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetSkipped;
 			case "clear_only_ui_reset_unavailable": ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetUnavailable;
 			case _: throw "unknown clear-only UI reset decision kind: " + value;
+		}
+	}
+
+	static function clearOnlySkillWarningRerenderDecisionKind(value:String):ModelClearOnlySkillWarningRerenderDecisionKind {
+		return switch value {
+			case "skill_warning_rerender_enabled": ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningRerenderEnabled;
+			case "skill_warning_still_suppressed": ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningStillSuppressed;
+			case "skill_warning_unavailable": ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningUnavailable;
+			case _: throw "unknown clear-only skill warning rerender decision kind: " + value;
 		}
 	}
 

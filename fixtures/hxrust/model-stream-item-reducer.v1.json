@@ -6880,6 +6880,35 @@
 	          "summaryContains": "decisionKind=clear_only_ui_reset_applied;resetInvoked=true;overlayCleared=true;transcriptCleared=true;deferredHistoryCleared=true;historyEmittedFlagReset=true;transcriptReflowCleared=true;initialHistoryReplayBufferCleared=true;backtrackPrimedCleared=true;backtrackPreviewCleared=true;backtrackPendingRollbackCleared=true;backtrackRenderPendingCleared=true;skillWarningsCleared=true;chatSessionThreadPreserved=true;composerDraftPreserved=true;eventOrderingPreserved=true"
 	        }
 	      ],
+	      "clearOnlySkillWarningRerenderExpects": [
+	        {
+	          "ok": true,
+	          "code": "clear_only_skill_warning_rerender_modeled",
+	          "requestId": "clear-only-ui-reset-allows-active-skill-warning-to-render-again",
+	          "warningPath": "/tmp/project/.codex/skills/abc/SKILL.md",
+	          "warningMessage": "invalid description",
+	          "firstScanInputCount": 1,
+	          "repeatedScanInputCount": 1,
+	          "postResetScanInputCount": 1,
+	          "resetInvoked": true,
+	          "clearOnlyResetClearsWarnings": true,
+	          "previousEventCount": 73,
+	          "eventOrderIndex": 74,
+	          "decisionKind": "skill_warning_rerender_enabled",
+	          "warningKeyPresent": true,
+	          "firstWarningRendered": true,
+	          "repeatedWarningSuppressed": true,
+	          "resetClearedWarningMemory": true,
+	          "postResetWarningRenderedAgain": true,
+	          "sameWarningKeyReused": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=skill_warning_rerender_enabled;warningKeyPresent=true;firstWarningRendered=true;repeatedWarningSuppressed=true;resetClearedWarningMemory=true;postResetWarningRenderedAgain=true;sameWarningKeyReused=true;eventOrderingPreserved=true"
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
