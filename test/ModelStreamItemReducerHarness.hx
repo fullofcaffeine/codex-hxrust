@@ -221,13 +221,19 @@ import codexhx.runtime.model.streamitem.ModelKeymapAliasDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapAliasOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapAliasPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapAliasRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapBindingInputDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapBindingInputOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapBindingInputPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapBindingInputRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapBinding;
+import codexhx.runtime.model.streamitem.ModelKeymapDefaultActionCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowScopeKind;
+import codexhx.runtime.model.streamitem.ModelKeymapMainSurfaceActionKind;
 import codexhx.runtime.model.streamitem.ModelKeyParserCase;
 import codexhx.runtime.model.streamitem.ModelKeyParserDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeyParserOutcome;
@@ -438,6 +444,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeyParserCases(testCase, secretProbe);
 			assertTopLevelKeymapAliases(testCase, secretProbe);
 			assertTopLevelKeymapShadows(testCase, secretProbe);
+			assertTopLevelKeymapBindingInputs(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -660,6 +667,7 @@ class ModelStreamItemReducerHarness {
 				assertKeyParserCases(verificationValue, secretProbe);
 				assertKeymapAliases(verificationValue, secretProbe);
 				assertKeymapShadows(verificationValue, secretProbe);
+				assertKeymapBindingInputs(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5076,6 +5084,80 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapBindingInputs(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapBindingInputOutcome> {
+		final outcomes:Array<ModelKeymapBindingInputOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapBindingInputExpects");
+		for (value in values) outcomes.push(assertKeymapBindingInputSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapBindingInputs(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapBindingInputOutcome> {
+		final outcomes:Array<ModelKeymapBindingInputOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapBindingInputExpects");
+		for (value in values) outcomes.push(assertKeymapBindingInputSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapBindingInputSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapBindingInputOutcome {
+		final defaultMainSurfaceActions:Array<ModelKeymapDefaultActionCase> = [];
+		for (actionValue in arrayField(expectValue, "defaultMainSurfaceActions")) {
+			final actionObject = objectValue(actionValue);
+			defaultMainSurfaceActions.push(new ModelKeymapDefaultActionCase({
+				actionKind: ModelKeymapMainSurfaceActionKind.fromString(stringField(actionObject, "actionKind", "")),
+				bindings: keymapBindings(actionObject, "bindings")
+			}));
+		}
+		final outcome = ModelKeymapBindingInputPolicy.apply(new ModelKeymapBindingInputRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			invalidMultiBindingPath: stringField(expectValue, "invalidMultiBindingPath", ""),
+			invalidModifierRejected: boolField(expectValue, "invalidModifierRejected", false),
+			validMultiBindings: keymapBindings(expectValue, "validMultiBindings"),
+			dedupeInputBindings: keymapBindings(expectValue, "dedupeInputBindings"),
+			dedupeExpectedBindings: keymapBindings(expectValue, "dedupeExpectedBindings"),
+			globalQueueBinding: keymapBinding(objectField(expectValue, "globalQueueBinding")),
+			composerQueueResolved: keymapBinding(objectField(expectValue, "composerQueueResolved")),
+			invalidGlobalOpenTranscriptPath: stringField(expectValue, "invalidGlobalOpenTranscriptPath", ""),
+			invalidGlobalOpenExternalEditorPath: stringField(expectValue, "invalidGlobalOpenExternalEditorPath", ""),
+			defaultCopyBinding: keymapBinding(objectField(expectValue, "defaultCopyBinding")),
+			defaultMainSurfaceActions: defaultMainSurfaceActions,
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap binding input expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapBindingInputDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "stringOrArrayInputValidated", false)), boolText(outcome.stringOrArrayInputValidated));
+		assertEquals(boolText(boolField(expectValue, "invalidModifierPathPreserved", false)), boolText(outcome.invalidModifierPathPreserved));
+		assertEquals(Std.string(intField(expectValue, "validMultiBindingCount", 0)), Std.string(outcome.validMultiBindingCount));
+		assertEquals(boolText(boolField(expectValue, "dedupeOrderPreserved", false)), boolText(outcome.dedupeOrderPreserved));
+		assertEquals(boolText(boolField(expectValue, "contextFallbackPreserved", false)), boolText(outcome.contextFallbackPreserved));
+		assertEquals(boolText(boolField(expectValue, "invalidGlobalPathsPreserved", false)), boolText(outcome.invalidGlobalPathsPreserved));
+		assertEquals(boolText(boolField(expectValue, "defaultCopyBindingPreserved", false)), boolText(outcome.defaultCopyBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "defaultMainSurfaceActionsPreserved", false)), boolText(outcome.defaultMainSurfaceActionsPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6536,6 +6618,14 @@ class ModelStreamItemReducerHarness {
 			case "keymap_shadow_conflicts_rejected": ModelKeymapShadowDecisionKind.KeymapShadowConflictsRejected;
 			case "keymap_shadow_conflicts_missed": ModelKeymapShadowDecisionKind.KeymapShadowConflictsMissed;
 			case _: throw "unknown keymap shadow decision kind: " + value;
+		}
+	}
+
+	static function keymapBindingInputDecisionKind(value:String):ModelKeymapBindingInputDecisionKind {
+		return switch value {
+			case "keymap_binding_inputs_preserved": ModelKeymapBindingInputDecisionKind.KeymapBindingInputsPreserved;
+			case "keymap_binding_inputs_rejected": ModelKeymapBindingInputDecisionKind.KeymapBindingInputsRejected;
+			case _: throw "unknown keymap binding input decision kind: " + value;
 		}
 	}
 

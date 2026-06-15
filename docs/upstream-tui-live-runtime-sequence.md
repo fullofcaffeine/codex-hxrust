@@ -1551,7 +1551,22 @@ Model selected raw Codex keymap validation behavior:
 
 Status: HXCX-4.126 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. It reuses nullable class-typed binding fields already tracked by generic haxe.rust issue `haxe.rust-yrs1`; no new compiler limitation was exposed. This is deterministic keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.127+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.127: Keymap Binding Input, Dedupe, Fallback, And Defaults Boundary
+
+Model selected raw Codex keymap binding-input behavior:
+
+- preserve string-or-array binding validation and invalid `meta` modifier path reporting;
+- preserve valid multi-binding counts for composer submit;
+- preserve first-seen dedupe order for repeated bindings;
+- preserve context fallback from global queue binding to composer queue binding;
+- preserve invalid global open-transcript/open-external-editor path reporting;
+- preserve default copy and reassignable main-surface action bindings;
+- keep the keymap evidence deterministic and independent of live keyboard input;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.127 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.128+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

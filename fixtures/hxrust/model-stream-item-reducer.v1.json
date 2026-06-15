@@ -7513,6 +7513,164 @@
 	          ]
 	        }
 	      ],
+	      "keymapBindingInputExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_binding_inputs_modeled",
+	          "requestId": "keymap-binding-input-dedupe-fallback-defaults",
+	          "previousEventCount": 84,
+	          "eventOrderIndex": 85,
+	          "decisionKind": "keymap_binding_inputs_preserved",
+	          "stringOrArrayInputValidated": true,
+	          "invalidModifierPathPreserved": true,
+	          "validMultiBindingCount": 2,
+	          "dedupeOrderPreserved": true,
+	          "contextFallbackPreserved": true,
+	          "invalidGlobalPathsPreserved": true,
+	          "defaultCopyBindingPreserved": true,
+	          "defaultMainSurfaceActionsPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_binding_inputs_preserved;stringOrArrayInputValidated=true;invalidModifierPathPreserved=true;validMultiBindingCount=2;dedupeOrderPreserved=true;contextFallbackPreserved=true;invalidGlobalPathsPreserved=true;defaultCopyBindingPreserved=true;defaultMainSurfaceActionsPreserved=true;eventOrderingPreserved=true",
+	          "invalidMultiBindingPath": "tui.keymap.composer.submit",
+	          "invalidModifierRejected": true,
+	          "validMultiBindings": [
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1,
+	              "ctrlModifier": true,
+	              "shiftModifier": true
+	            }
+	          ],
+	          "dedupeInputBindings": [
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1,
+	              "ctrlModifier": true,
+	              "shiftModifier": true
+	            }
+	          ],
+	          "dedupeExpectedBindings": [
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "enter",
+	              "functionNumber": -1,
+	              "ctrlModifier": true,
+	              "shiftModifier": true
+	            }
+	          ],
+	          "globalQueueBinding": {
+	            "kind": "character",
+	            "keyName": "q",
+	            "functionNumber": -1,
+	            "ctrlModifier": true
+	          },
+	          "composerQueueResolved": {
+	            "kind": "character",
+	            "keyName": "q",
+	            "functionNumber": -1,
+	            "ctrlModifier": true
+	          },
+	          "invalidGlobalOpenTranscriptPath": "tui.keymap.global.open_transcript",
+	          "invalidGlobalOpenExternalEditorPath": "tui.keymap.global.open_external_editor",
+	          "defaultCopyBinding": {
+	            "kind": "character",
+	            "keyName": "o",
+	            "functionNumber": -1,
+	            "ctrlModifier": true
+	          },
+	          "defaultMainSurfaceActions": [
+	            {
+	              "actionKind": "clear_terminal",
+	              "bindings": [
+	                {
+	                  "kind": "character",
+	                  "keyName": "l",
+	                  "functionNumber": -1,
+	                  "ctrlModifier": true
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "toggle_fast_mode",
+	              "bindings": []
+	            },
+	            {
+	              "actionKind": "interrupt_turn",
+	              "bindings": [
+	                {
+	                  "kind": "named",
+	                  "keyName": "esc",
+	                  "functionNumber": -1
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "decrease_reasoning_effort",
+	              "bindings": [
+	                {
+	                  "kind": "character",
+	                  "keyName": ",",
+	                  "functionNumber": -1,
+	                  "altModifier": true
+	                },
+	                {
+	                  "kind": "named",
+	                  "keyName": "down",
+	                  "functionNumber": -1,
+	                  "shiftModifier": true
+	                }
+	              ]
+	            },
+	            {
+	              "actionKind": "increase_reasoning_effort",
+	              "bindings": [
+	                {
+	                  "kind": "character",
+	                  "keyName": ".",
+	                  "functionNumber": -1,
+	                  "altModifier": true
+	                },
+	                {
+	                  "kind": "named",
+	                  "keyName": "up",
+	                  "functionNumber": -1,
+	                  "shiftModifier": true
+	                }
+	              ]
+	            }
+	          ]
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
