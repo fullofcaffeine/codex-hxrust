@@ -6942,6 +6942,34 @@
 	          "summaryContains": "decisionKind=backtrack_esc_guard_preserved;initialBacktrackEscAllowed=true;vimNormalBacktrackEscAllowed=true;vimInsertEscTakesPrecedence=true;backtrackEscSuppressedDuringVimInsert=true;vimEscHandled=true;backtrackNotPrimedByVimEsc=true;vimInsertClearedAfterEsc=true;backtrackEscAllowedAfterVimEsc=true;eventOrderingPreserved=true"
 	        }
 	      ],
+	      "sideConversationBacktrackEscVimGuardExpects": [
+	        {
+	          "ok": true,
+	          "code": "side_conversation_backtrack_esc_vim_guard_modeled",
+	          "requestId": "side-conversations-reject-backtrack-esc-without-stealing-vim-insert-escape",
+	          "keyIsEsc": true,
+	          "sideConversationActive": true,
+	          "normalBacktrackMode": true,
+	          "composerEmptyInitially": true,
+	          "vimModeEnabled": true,
+	          "vimInsertModeActiveBeforeSideEsc": false,
+	          "vimInsertModeActiveAfterInsertKey": true,
+	          "previousEventCount": 75,
+	          "eventOrderIndex": 76,
+	          "decisionKind": "side_backtrack_rejection_guard_preserved",
+	          "initialBacktrackEscHandled": false,
+	          "initialSideBacktrackEscRejected": true,
+	          "vimInsertEscTakesPrecedence": true,
+	          "backtrackEscSuppressedDuringVimInsert": true,
+	          "sideRejectionSuppressedDuringVimInsert": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=side_backtrack_rejection_guard_preserved;initialBacktrackEscHandled=false;initialSideBacktrackEscRejected=true;vimInsertEscTakesPrecedence=true;backtrackEscSuppressedDuringVimInsert=true;sideRejectionSuppressedDuringVimInsert=true;eventOrderingPreserved=true"
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
