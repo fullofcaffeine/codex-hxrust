@@ -5,26 +5,26 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 21,
+    "totalGaps": 22,
     "resolvedUpstream": 14,
-    "openUpstream": 7,
+    "openUpstream": 8,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 14,
+      "medium": 15,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 10,
+      "runtime_model_session": 11,
       "native_metal_std_boundary": 4,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 663,
+    "sourceFilesScanned": 669,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
@@ -297,6 +297,23 @@
       "validation": [
         "harness/check-async-runtime-contract.sh",
         "haxe.rust-akfm acceptance requires a product-neutral generic helper bound propagation regression fixture"
+      ]
+    },
+    {
+      "id": "optional-anon-field-read",
+      "status": "open_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-c8bn",
+      "haxeRustRefs": [
+        "haxe.rust-i8li"
+      ],
+      "reproduction": "Active-turn error classification work exposed a generated Rust panic at hxrt/src/anon.rs when a typed anonymous structure omitted optional String/Bool fields and later read them; Haxe interp accepted the source.",
+      "workaround": "The local classifier now materializes all draft fields through a typed default factory while haxe.rust fixes optional anonymous-field lowering/runtime semantics generically.",
+      "followUp": "haxe.rust-i8li",
+      "validation": [
+        "harness/check-model-stream-item-reducer.sh",
+        "haxe.rust-i8li acceptance requires a product-neutral optional anonymous-field regression fixture"
       ]
     },
     {

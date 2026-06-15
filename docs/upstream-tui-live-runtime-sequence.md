@@ -1219,7 +1219,22 @@ Model selected raw Codex feedback submission routing behavior:
 
 Status: HXCX-4.98 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic feedback submission routing evidence only, not live feedback upload, live app-server fanout, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.99+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.99: Active-Turn Error Classification Boundary
+
+Model selected raw Codex active-turn TUI error classification behavior:
+
+- extract structured active-turn-not-steerable server errors without marking the turn failed;
+- route non-steerable review turns into rejected-steer/error-message intent;
+- detect missing active-turn steer races and clear stale cached active-turn state;
+- extract the actual server active-turn id from `turn/steer` expected/found mismatch messages;
+- extract the actual server active-turn id from `turn/interrupt` expected/found mismatch messages;
+- model retry-with-server-turn-id intent without owning live app-server calls;
+- surface archived session guidance without leaking the rollout path;
+- preserve event ordering while avoiding live steering, live interrupt, live app-server fanout, real network traffic, filesystem mutation, and real tool execution.
+
+Status: HXCX-4.99 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. This slice exposed optional anonymous-field read lowering/runtime semantics as generic haxe.rust follow-up `haxe.rust-i8li`; codexhx now materializes that draft record through a typed default factory while the compiler/runtime fix is tracked upstream. This is deterministic active-turn error classification evidence only, not live app-server calls, live turn steering, live interrupt retry, interactive TUI ownership, live Tokio task ownership, live extension execution, rollout persistence, live hook process execution, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.100+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

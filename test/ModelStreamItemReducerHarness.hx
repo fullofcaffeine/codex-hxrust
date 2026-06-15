@@ -186,6 +186,12 @@ import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionRequestKind;
 import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionRoutingOutcome;
 import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionRoutingPolicy;
 import codexhx.runtime.model.streamitem.ModelFeedbackSubmissionRoutingRequest;
+import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorDecisionKind;
+import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorOutcome;
+import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorPolicy;
+import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorRequest;
+import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorRequestKind;
+import codexhx.runtime.model.streamitem.ModelTuiActiveTurnErrorTurnKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -296,6 +302,7 @@ class ModelStreamItemReducerHarness {
 			final topLevelTerminalResizeReflows = assertTopLevelTerminalResizeReflows(testCase, topLevelClearUiHeaders, secretProbe);
 			assertTopLevelResizeReflowSchedulings(testCase, topLevelTerminalResizeReflows, secretProbe);
 			assertTopLevelFeedbackSubmissionRoutings(testCase, secretProbe);
+			assertTopLevelTuiActiveTurnErrors(testCase, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -492,6 +499,7 @@ class ModelStreamItemReducerHarness {
 				final terminalResizeReflows = assertTerminalResizeReflows(verificationValue, clearUiHeaders, secretProbe);
 				assertResizeReflowSchedulings(verificationValue, terminalResizeReflows, secretProbe);
 				assertFeedbackSubmissionRoutings(verificationValue, secretProbe);
+				assertTuiActiveTurnErrors(verificationValue, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3548,6 +3556,79 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelTuiActiveTurnErrors(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelTuiActiveTurnErrorOutcome> {
+		final outcomes:Array<ModelTuiActiveTurnErrorOutcome> = [];
+		final values = optionalArrayField(testCase, "tuiActiveTurnErrorExpects");
+		for (value in values) outcomes.push(assertTuiActiveTurnError(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertTuiActiveTurnErrors(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelTuiActiveTurnErrorOutcome> {
+		final outcomes:Array<ModelTuiActiveTurnErrorOutcome> = [];
+		final values = optionalArrayField(verificationValue, "tuiActiveTurnErrorExpects");
+		for (value in values) outcomes.push(assertTuiActiveTurnError(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertTuiActiveTurnError(
+		expectValue:Value,
+		secretProbe:String
+	):ModelTuiActiveTurnErrorOutcome {
+		final outcome = ModelTuiActiveTurnErrorPolicy.classify(new ModelTuiActiveTurnErrorRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			requestKind: tuiActiveTurnErrorRequestKind(stringField(expectValue, "requestKind", "")),
+			method: stringField(expectValue, "method", ""),
+			message: stringField(expectValue, "message", ""),
+			hasStructuredTurnError: boolField(expectValue, "hasStructuredTurnError", false),
+			structuredNotSteerable: boolField(expectValue, "structuredNotSteerable", false),
+			turnKind: tuiActiveTurnErrorTurnKind(stringField(expectValue, "turnKind", "none")),
+			sessionAction: stringField(expectValue, "sessionAction", ""),
+			targetThreadId: stringField(expectValue, "targetThreadId", ""),
+			targetRolloutPath: stringField(expectValue, "targetRolloutPath", ""),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(tuiActiveTurnErrorRequestKind(stringField(expectValue, "requestKind", "")), outcome.requestKind);
+		assertEquals(tuiActiveTurnErrorDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(stringField(expectValue, "method", ""), outcome.method);
+		assertEquals(tuiActiveTurnErrorTurnKind(stringField(expectValue, "outcomeTurnKind", "none")), outcome.turnKind);
+		assertEquals(stringField(expectValue, "userVisibleMessage", ""), outcome.userVisibleMessage);
+		assertEquals(stringField(expectValue, "sanitizedSessionMessage", ""), outcome.sanitizedSessionMessage);
+		assertEquals(stringField(expectValue, "actualTurnId", ""), outcome.actualTurnId);
+		assertEquals(boolText(boolField(expectValue, "structuredTurnErrorExtracted", false)), boolText(outcome.structuredTurnErrorExtracted));
+		assertEquals(boolText(boolField(expectValue, "steerRaceDetected", false)), boolText(outcome.steerRaceDetected));
+		assertEquals(boolText(boolField(expectValue, "interruptRaceDetected", false)), boolText(outcome.interruptRaceDetected));
+		assertEquals(boolText(boolField(expectValue, "archivedGuidanceDetected", false)), boolText(outcome.archivedGuidanceDetected));
+		assertEquals(boolText(boolField(expectValue, "shouldClearCachedActiveTurn", false)), boolText(outcome.shouldClearCachedActiveTurn));
+		assertEquals(boolText(boolField(expectValue, "shouldStartNewTurn", false)), boolText(outcome.shouldStartNewTurn));
+		assertEquals(boolText(boolField(expectValue, "shouldRetryWithActualTurn", false)), boolText(outcome.shouldRetryWithActualTurn));
+		assertEquals(boolText(boolField(expectValue, "shouldQueueRejectedSteer", false)), boolText(outcome.shouldQueueRejectedSteer));
+		assertEquals(boolText(boolField(expectValue, "shouldDisplayErrorMessage", false)), boolText(outcome.shouldDisplayErrorMessage));
+		assertEquals(boolText(boolField(expectValue, "rolloutPathLeaked", false)), boolText(outcome.rolloutPathLeaked));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) {
+			assertNotContains(outcome.summary(), secretProbe);
+			assertNotContains(outcome.sanitizedSessionMessage, secretProbe);
+			assertNotContains(outcome.userVisibleMessage, secretProbe);
+		}
+		return outcome;
+	}
+
 	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
@@ -4369,6 +4450,37 @@ class ModelStreamItemReducerHarness {
 			case "success": ModelFeedbackSubmissionHistoryCellKind.Success;
 			case "error": ModelFeedbackSubmissionHistoryCellKind.Error;
 			case _: throw "unknown feedback submission history cell kind: " + value;
+		}
+	}
+
+	static function tuiActiveTurnErrorRequestKind(value:String):ModelTuiActiveTurnErrorRequestKind {
+		return switch value {
+			case "active_turn_not_steerable": ModelTuiActiveTurnErrorRequestKind.ActiveTurnNotSteerable;
+			case "steer_race": ModelTuiActiveTurnErrorRequestKind.SteerRace;
+			case "interrupt_race": ModelTuiActiveTurnErrorRequestKind.InterruptRace;
+			case "session_start": ModelTuiActiveTurnErrorRequestKind.SessionStart;
+			case _: throw "unknown TUI active-turn error request kind: " + value;
+		}
+	}
+
+	static function tuiActiveTurnErrorDecisionKind(value:String):ModelTuiActiveTurnErrorDecisionKind {
+		return switch value {
+			case "structured_not_steerable": ModelTuiActiveTurnErrorDecisionKind.StructuredNotSteerable;
+			case "steer_missing_active_turn": ModelTuiActiveTurnErrorDecisionKind.SteerMissingActiveTurn;
+			case "steer_expected_turn_mismatch": ModelTuiActiveTurnErrorDecisionKind.SteerExpectedTurnMismatch;
+			case "interrupt_expected_turn_mismatch": ModelTuiActiveTurnErrorDecisionKind.InterruptExpectedTurnMismatch;
+			case "archived_session_guidance": ModelTuiActiveTurnErrorDecisionKind.ArchivedSessionGuidance;
+			case "no_match": ModelTuiActiveTurnErrorDecisionKind.NoMatch;
+			case _: throw "unknown TUI active-turn error decision kind: " + value;
+		}
+	}
+
+	static function tuiActiveTurnErrorTurnKind(value:String):ModelTuiActiveTurnErrorTurnKind {
+		return switch value {
+			case "none": ModelTuiActiveTurnErrorTurnKind.None;
+			case "review": ModelTuiActiveTurnErrorTurnKind.Review;
+			case "other": ModelTuiActiveTurnErrorTurnKind.Other;
+			case _: throw "unknown TUI active-turn error turn kind: " + value;
 		}
 	}
 
