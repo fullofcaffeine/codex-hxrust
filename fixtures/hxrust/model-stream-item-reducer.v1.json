@@ -7280,9 +7280,9 @@
 	        {
 	          "ok": true,
 	          "code": "keymap_aliases_modeled",
-	          "requestId": "keymap-unbind-raw-output-and-editor-aliases",
-	          "previousEventCount": 81,
-	          "eventOrderIndex": 82,
+	          "requestId": "keymap-unbind-raw-output-editor-aliases-and-primary",
+	          "previousEventCount": 82,
+	          "eventOrderIndex": 83,
 	          "decisionKind": "keymap_aliases_preserved",
 	          "composerToggleShortcutsConfiguredEmpty": true,
 	          "composerToggleShortcutCount": 0,
@@ -7292,12 +7292,17 @@
 	          "editorNewlineAliasesPreserved": true,
 	          "deleteForwardWordAltDPreserved": true,
 	          "modifiedDeletionAliasesPreserved": true,
+	          "composerToggleShiftQuestionPreserved": true,
+	          "approvalOpenFullscreenCtrlShiftAPreserved": true,
+	          "primaryBindingFirstPreserved": true,
+	          "primaryBindingEmptyNonePreserved": true,
+	          "defaultsConflictValidationPreserved": true,
 	          "eventOrderingPreserved": true,
 	          "liveNetworkAttempted": false,
 	          "realFilesystemMutated": false,
 	          "toolExecutedOutsideFixture": false,
 	          "errorMessage": "",
-	          "summaryContains": "decisionKind=keymap_aliases_preserved;emptyArrayUnbindPreserved=true;rawOutputDefaultAltRPreserved=true;rawOutputRemapF12Preserved=true;editorNewlineAliasesPreserved=true;deleteForwardWordAltDPreserved=true;modifiedDeletionAliasesPreserved=true;eventOrderingPreserved=true",
+	          "summaryContains": "decisionKind=keymap_aliases_preserved;emptyArrayUnbindPreserved=true;rawOutputDefaultAltRPreserved=true;rawOutputRemapF12Preserved=true;editorNewlineAliasesPreserved=true;deleteForwardWordAltDPreserved=true;modifiedDeletionAliasesPreserved=true;composerToggleShiftQuestionPreserved=true;approvalOpenFullscreenCtrlShiftAPreserved=true;primaryBindingFirstPreserved=true;primaryBindingEmptyNonePreserved=true;defaultsConflictValidationPreserved=true;eventOrderingPreserved=true",
 	          "defaultRawOutputToggle": {
 	            "kind": "character",
 	            "keyName": "r",
@@ -7391,7 +7396,46 @@
 	              "ctrlModifier": true,
 	              "shiftModifier": true
 	            }
-	          ]
+	          ],
+	          "composerToggleShortcutBindings": [
+	            {
+	              "kind": "character",
+	              "keyName": "?",
+	              "functionNumber": -1,
+	              "shiftModifier": true
+	            }
+	          ],
+	          "approvalOpenFullscreenBindings": [
+	            {
+	              "kind": "character",
+	              "keyName": "a",
+	              "functionNumber": -1,
+	              "ctrlModifier": true,
+	              "shiftModifier": true
+	            }
+	          ],
+	          "primaryBindingCandidates": [
+	            {
+	              "kind": "character",
+	              "keyName": "a",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            },
+	            {
+	              "kind": "character",
+	              "keyName": "b",
+	              "functionNumber": -1,
+	              "shiftModifier": true
+	            }
+	          ],
+	          "primaryBindingExpected": {
+	            "kind": "character",
+	            "keyName": "a",
+	            "functionNumber": -1,
+	            "ctrlModifier": true
+	          },
+	          "primaryEmptyCandidateCount": 0,
+	          "defaultsConflictValidationPassed": true
 	        }
 	      ],
 	      "backtrackSelectionExpects": [

@@ -4945,6 +4945,12 @@ class ModelStreamItemReducerHarness {
 			editorDeleteBackwardBindings: keymapBindings(expectValue, "editorDeleteBackwardBindings"),
 			editorDeleteForwardBindings: keymapBindings(expectValue, "editorDeleteForwardBindings"),
 			editorDeleteBackwardWordBindings: keymapBindings(expectValue, "editorDeleteBackwardWordBindings"),
+			composerToggleShortcutBindings: keymapBindings(expectValue, "composerToggleShortcutBindings"),
+			approvalOpenFullscreenBindings: keymapBindings(expectValue, "approvalOpenFullscreenBindings"),
+			primaryBindingCandidates: keymapBindings(expectValue, "primaryBindingCandidates"),
+			primaryBindingExpected: keymapBinding(objectField(expectValue, "primaryBindingExpected")),
+			primaryEmptyCandidateCount: intField(expectValue, "primaryEmptyCandidateCount", -1),
+			defaultsConflictValidationPassed: boolField(expectValue, "defaultsConflictValidationPassed", false),
 			previousEventCount: intField(expectValue, "previousEventCount", 0),
 			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
 			secretProbe: secretProbe
@@ -4962,6 +4968,11 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "editorNewlineAliasesPreserved", false)), boolText(outcome.editorNewlineAliasesPreserved));
 		assertEquals(boolText(boolField(expectValue, "deleteForwardWordAltDPreserved", false)), boolText(outcome.deleteForwardWordAltDPreserved));
 		assertEquals(boolText(boolField(expectValue, "modifiedDeletionAliasesPreserved", false)), boolText(outcome.modifiedDeletionAliasesPreserved));
+		assertEquals(boolText(boolField(expectValue, "composerToggleShiftQuestionPreserved", false)), boolText(outcome.composerToggleShiftQuestionPreserved));
+		assertEquals(boolText(boolField(expectValue, "approvalOpenFullscreenCtrlShiftAPreserved", false)), boolText(outcome.approvalOpenFullscreenCtrlShiftAPreserved));
+		assertEquals(boolText(boolField(expectValue, "primaryBindingFirstPreserved", false)), boolText(outcome.primaryBindingFirstPreserved));
+		assertEquals(boolText(boolField(expectValue, "primaryBindingEmptyNonePreserved", false)), boolText(outcome.primaryBindingEmptyNonePreserved));
+		assertEquals(boolText(boolField(expectValue, "defaultsConflictValidationPreserved", false)), boolText(outcome.defaultsConflictValidationPreserved));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
 		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));

@@ -32,6 +32,18 @@ class ModelKeymapAliasPolicy {
 			named("delete", true, false, false),
 			named("delete", true, false, true)
 		]);
+		final composerToggleShiftQuestionPreserved = contains(
+			request.composerToggleShortcutBindings,
+			character("?", false, false, true)
+		);
+		final approvalOpenFullscreenCtrlShiftAPreserved = contains(
+			request.approvalOpenFullscreenBindings,
+			character("a", true, false, true)
+		);
+		final primaryBindingFirstPreserved = request.primaryBindingCandidates.length > 0
+			&& matches(request.primaryBindingCandidates[0], request.primaryBindingExpected);
+		final primaryBindingEmptyNonePreserved = request.primaryEmptyCandidateCount == 0;
+		final defaultsConflictValidationPreserved = request.defaultsConflictValidationPassed;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = emptyArrayUnbindPreserved
 			&& rawOutputDefaultAltRPreserved
@@ -39,6 +51,11 @@ class ModelKeymapAliasPolicy {
 			&& editorNewlineAliasesPreserved
 			&& deleteForwardWordAltDPreserved
 			&& modifiedDeletionAliasesPreserved
+			&& composerToggleShiftQuestionPreserved
+			&& approvalOpenFullscreenCtrlShiftAPreserved
+			&& primaryBindingFirstPreserved
+			&& primaryBindingEmptyNonePreserved
+			&& defaultsConflictValidationPreserved
 			&& eventOrderingPreserved;
 		final decisionKind = ok
 			? ModelKeymapAliasDecisionKind.KeymapAliasesPreserved
@@ -55,6 +72,11 @@ class ModelKeymapAliasPolicy {
 			editorNewlineAliasesPreserved: editorNewlineAliasesPreserved,
 			deleteForwardWordAltDPreserved: deleteForwardWordAltDPreserved,
 			modifiedDeletionAliasesPreserved: modifiedDeletionAliasesPreserved,
+			composerToggleShiftQuestionPreserved: composerToggleShiftQuestionPreserved,
+			approvalOpenFullscreenCtrlShiftAPreserved: approvalOpenFullscreenCtrlShiftAPreserved,
+			primaryBindingFirstPreserved: primaryBindingFirstPreserved,
+			primaryBindingEmptyNonePreserved: primaryBindingEmptyNonePreserved,
+			defaultsConflictValidationPreserved: defaultsConflictValidationPreserved,
 			eventOrderingPreserved: eventOrderingPreserved,
 			liveNetworkAttempted: false,
 			realFilesystemMutated: false,
@@ -132,6 +154,11 @@ class ModelKeymapAliasPolicy {
 			editorNewlineAliasesPreserved: false,
 			deleteForwardWordAltDPreserved: false,
 			modifiedDeletionAliasesPreserved: false,
+			composerToggleShiftQuestionPreserved: false,
+			approvalOpenFullscreenCtrlShiftAPreserved: false,
+			primaryBindingFirstPreserved: false,
+			primaryBindingEmptyNonePreserved: false,
+			defaultsConflictValidationPreserved: false,
 			eventOrderingPreserved: false,
 			liveNetworkAttempted: false,
 			realFilesystemMutated: false,

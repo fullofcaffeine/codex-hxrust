@@ -11,6 +11,11 @@ typedef ModelKeymapAliasOutcomeFields = {
 	final editorNewlineAliasesPreserved:Bool;
 	final deleteForwardWordAltDPreserved:Bool;
 	final modifiedDeletionAliasesPreserved:Bool;
+	final composerToggleShiftQuestionPreserved:Bool;
+	final approvalOpenFullscreenCtrlShiftAPreserved:Bool;
+	final primaryBindingFirstPreserved:Bool;
+	final primaryBindingEmptyNonePreserved:Bool;
+	final defaultsConflictValidationPreserved:Bool;
 	final eventOrderingPreserved:Bool;
 	final liveNetworkAttempted:Bool;
 	final realFilesystemMutated:Bool;
@@ -29,6 +34,11 @@ class ModelKeymapAliasOutcome {
 	public final editorNewlineAliasesPreserved:Bool;
 	public final deleteForwardWordAltDPreserved:Bool;
 	public final modifiedDeletionAliasesPreserved:Bool;
+	public final composerToggleShiftQuestionPreserved:Bool;
+	public final approvalOpenFullscreenCtrlShiftAPreserved:Bool;
+	public final primaryBindingFirstPreserved:Bool;
+	public final primaryBindingEmptyNonePreserved:Bool;
+	public final defaultsConflictValidationPreserved:Bool;
 	public final eventOrderingPreserved:Bool;
 	public final liveNetworkAttempted:Bool;
 	public final realFilesystemMutated:Bool;
@@ -46,6 +56,11 @@ class ModelKeymapAliasOutcome {
 		this.editorNewlineAliasesPreserved = fields.editorNewlineAliasesPreserved;
 		this.deleteForwardWordAltDPreserved = fields.deleteForwardWordAltDPreserved;
 		this.modifiedDeletionAliasesPreserved = fields.modifiedDeletionAliasesPreserved;
+		this.composerToggleShiftQuestionPreserved = fields.composerToggleShiftQuestionPreserved;
+		this.approvalOpenFullscreenCtrlShiftAPreserved = fields.approvalOpenFullscreenCtrlShiftAPreserved;
+		this.primaryBindingFirstPreserved = fields.primaryBindingFirstPreserved;
+		this.primaryBindingEmptyNonePreserved = fields.primaryBindingEmptyNonePreserved;
+		this.defaultsConflictValidationPreserved = fields.defaultsConflictValidationPreserved;
 		this.eventOrderingPreserved = fields.eventOrderingPreserved;
 		this.liveNetworkAttempted = fields.liveNetworkAttempted;
 		this.realFilesystemMutated = fields.realFilesystemMutated;
@@ -64,6 +79,11 @@ class ModelKeymapAliasOutcome {
 			+ ";editorNewlineAliasesPreserved=" + boolText(editorNewlineAliasesPreserved)
 			+ ";deleteForwardWordAltDPreserved=" + boolText(deleteForwardWordAltDPreserved)
 			+ ";modifiedDeletionAliasesPreserved=" + boolText(modifiedDeletionAliasesPreserved)
+			+ ";composerToggleShiftQuestionPreserved=" + boolText(composerToggleShiftQuestionPreserved)
+			+ ";approvalOpenFullscreenCtrlShiftAPreserved=" + boolText(approvalOpenFullscreenCtrlShiftAPreserved)
+			+ ";primaryBindingFirstPreserved=" + boolText(primaryBindingFirstPreserved)
+			+ ";primaryBindingEmptyNonePreserved=" + boolText(primaryBindingEmptyNonePreserved)
+			+ ";defaultsConflictValidationPreserved=" + boolText(defaultsConflictValidationPreserved)
 			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
 			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
 			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
