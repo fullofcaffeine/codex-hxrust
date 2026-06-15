@@ -175,6 +175,10 @@ import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowOutcome;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowPolicy;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowRequest;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowRequestKind;
+import codexhx.runtime.model.streamitem.ModelResizeReflowSchedulingDecisionKind;
+import codexhx.runtime.model.streamitem.ModelResizeReflowSchedulingOutcome;
+import codexhx.runtime.model.streamitem.ModelResizeReflowSchedulingPolicy;
+import codexhx.runtime.model.streamitem.ModelResizeReflowSchedulingRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -282,7 +286,8 @@ class ModelStreamItemReducerHarness {
 			final topLevelThreadSideThreadNavigationCleanups = assertTopLevelThreadSideThreadNavigationCleanups(testCase, topLevelThreadSideThreadComposerHandoffs, secretProbe);
 			final topLevelActiveNonPrimaryShutdowns = assertTopLevelActiveNonPrimaryShutdowns(testCase, topLevelThreadSideThreadNavigationCleanups, secretProbe);
 			final topLevelClearUiHeaders = assertTopLevelClearUiHeaders(testCase, topLevelActiveNonPrimaryShutdowns, secretProbe);
-			assertTopLevelTerminalResizeReflows(testCase, topLevelClearUiHeaders, secretProbe);
+			final topLevelTerminalResizeReflows = assertTopLevelTerminalResizeReflows(testCase, topLevelClearUiHeaders, secretProbe);
+			assertTopLevelResizeReflowSchedulings(testCase, topLevelTerminalResizeReflows, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -476,7 +481,8 @@ class ModelStreamItemReducerHarness {
 				final threadSideThreadNavigationCleanups = assertThreadSideThreadNavigationCleanups(verificationValue, threadSideThreadComposerHandoffs, secretProbe);
 				final activeNonPrimaryShutdowns = assertActiveNonPrimaryShutdowns(verificationValue, threadSideThreadNavigationCleanups, secretProbe);
 				final clearUiHeaders = assertClearUiHeaders(verificationValue, activeNonPrimaryShutdowns, secretProbe);
-				assertTerminalResizeReflows(verificationValue, clearUiHeaders, secretProbe);
+				final terminalResizeReflows = assertTerminalResizeReflows(verificationValue, clearUiHeaders, secretProbe);
+				assertResizeReflowSchedulings(verificationValue, terminalResizeReflows, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3377,6 +3383,90 @@ class ModelStreamItemReducerHarness {
 		throw "missing clear UI header outcome: " + requestId;
 	}
 
+	static function assertTopLevelResizeReflowSchedulings(
+		testCase:Value,
+		resizeReflows:Array<ModelTerminalResizeReflowOutcome>,
+		secretProbe:String
+	):Array<ModelResizeReflowSchedulingOutcome> {
+		final outcomes:Array<ModelResizeReflowSchedulingOutcome> = [];
+		final values = optionalArrayField(testCase, "resizeReflowSchedulingExpects");
+		for (value in values) outcomes.push(assertResizeReflowScheduling(objectValue(value), resizeReflows, secretProbe));
+		return outcomes;
+	}
+
+	static function assertResizeReflowSchedulings(
+		verificationValue:Value,
+		resizeReflows:Array<ModelTerminalResizeReflowOutcome>,
+		secretProbe:String
+	):Array<ModelResizeReflowSchedulingOutcome> {
+		final outcomes:Array<ModelResizeReflowSchedulingOutcome> = [];
+		final values = optionalArrayField(verificationValue, "resizeReflowSchedulingExpects");
+		for (value in values) outcomes.push(assertResizeReflowScheduling(objectValue(value), resizeReflows, secretProbe));
+		return outcomes;
+	}
+
+	static function assertResizeReflowScheduling(
+		expectValue:Value,
+		resizeReflows:Array<ModelTerminalResizeReflowOutcome>,
+		secretProbe:String
+	):ModelResizeReflowSchedulingOutcome {
+		final resizeReflowRequestId = stringField(expectValue, "resizeReflowRequestId", "");
+		final outcome = ModelResizeReflowSchedulingPolicy.apply(new ModelResizeReflowSchedulingRequest(
+			stringField(expectValue, "requestId", ""),
+			terminalResizeReflowByRequestId(resizeReflows, resizeReflowRequestId),
+			boolField(expectValue, "terminalResizeReflowEnabled", false),
+			intField(expectValue, "currentWidth", 0),
+			intField(expectValue, "currentHeight", 0),
+			intField(expectValue, "lastKnownWidth", 0),
+			intField(expectValue, "lastKnownHeight", 0),
+			intField(expectValue, "previousObservedWidth", -1),
+			intField(expectValue, "previousReflowWidth", -1),
+			intField(expectValue, "previousPendingWidth", -1),
+			boolField(expectValue, "streamTimeSensitive", false),
+			intField(expectValue, "previousEventCount", 0),
+			intField(expectValue, "eventOrderIndex", 0),
+			secretProbe
+		));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(resizeReflowRequestId, outcome.resizeReflowRequestId);
+		assertEquals(resizeReflowSchedulingDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "currentWidth", 0)), Std.string(outcome.currentWidth));
+		assertEquals(Std.string(intField(expectValue, "currentHeight", 0)), Std.string(outcome.currentHeight));
+		assertEquals(Std.string(intField(expectValue, "lastKnownWidth", 0)), Std.string(outcome.lastKnownWidth));
+		assertEquals(Std.string(intField(expectValue, "lastKnownHeight", 0)), Std.string(outcome.lastKnownHeight));
+		assertEquals(boolText(boolField(expectValue, "widthInitialized", false)), boolText(outcome.widthInitialized));
+		assertEquals(boolText(boolField(expectValue, "widthChanged", false)), boolText(outcome.widthChanged));
+		assertEquals(boolText(boolField(expectValue, "reflowNeededForWidth", false)), boolText(outcome.reflowNeededForWidth));
+		assertEquals(boolText(boolField(expectValue, "heightChanged", false)), boolText(outcome.heightChanged));
+		assertEquals(boolText(boolField(expectValue, "shouldRebuildTranscript", false)), boolText(outcome.shouldRebuildTranscript));
+		assertEquals(boolText(boolField(expectValue, "pendingReflowSet", false)), boolText(outcome.pendingReflowSet));
+		assertEquals(Std.string(intField(expectValue, "pendingTargetWidth", -1)), Std.string(outcome.pendingTargetWidth));
+		assertEquals(Std.string(intField(expectValue, "debounceMs", 0)), Std.string(outcome.debounceMs));
+		assertEquals(boolText(boolField(expectValue, "immediateFrameRequested", false)), boolText(outcome.immediateFrameRequested));
+		assertEquals(boolText(boolField(expectValue, "delayedFrameRequested", false)), boolText(outcome.delayedFrameRequested));
+		assertEquals(boolText(boolField(expectValue, "statusLineRefreshNeeded", false)), boolText(outcome.statusLineRefreshNeeded));
+		assertEquals(boolText(boolField(expectValue, "streamResizeMarked", false)), boolText(outcome.streamResizeMarked));
+		assertEquals(boolText(boolField(expectValue, "reflowStateCleared", false)), boolText(outcome.reflowStateCleared));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function terminalResizeReflowByRequestId(
+		outcomes:Array<ModelTerminalResizeReflowOutcome>,
+		requestId:String
+	):ModelTerminalResizeReflowOutcome {
+		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		throw "missing terminal resize reflow outcome: " + requestId;
+	}
+
 	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
@@ -4150,6 +4240,16 @@ class ModelStreamItemReducerHarness {
 			case "thread_switch_tail_mode": ModelTerminalResizeReflowDecisionKind.ThreadSwitchTailMode;
 			case "thread_switch_buffer_disabled": ModelTerminalResizeReflowDecisionKind.ThreadSwitchBufferDisabled;
 			case _: throw "unknown terminal resize reflow decision kind: " + value;
+		}
+	}
+
+	static function resizeReflowSchedulingDecisionKind(value:String):ModelResizeReflowSchedulingDecisionKind {
+		return switch value {
+			case "unchanged_size_no_op": ModelResizeReflowSchedulingDecisionKind.UnchangedSizeNoOp;
+			case "height_change_scheduled": ModelResizeReflowSchedulingDecisionKind.HeightChangeScheduled;
+			case "width_change_scheduled": ModelResizeReflowSchedulingDecisionKind.WidthChangeScheduled;
+			case "disabled_width_change_cleared": ModelResizeReflowSchedulingDecisionKind.DisabledWidthChangeCleared;
+			case _: throw "unknown resize reflow scheduling decision kind: " + value;
 		}
 	}
 
