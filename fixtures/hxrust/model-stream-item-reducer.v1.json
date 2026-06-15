@@ -8169,6 +8169,47 @@
 	          "parseFailed": true
 	        }
 	      ],
+	      "keymapEditorConflictExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_editor_conflict_modeled",
+	          "requestId": "keymap-editor-ctrl-h-conflict",
+	          "previousEventCount": 90,
+	          "eventOrderIndex": 91,
+	          "decisionKind": "keymap_editor_conflict_rejected",
+	          "moveLeftBindingPreserved": true,
+	          "moveRightBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_editor_conflict_rejected;moveLeftBindingPreserved=true;moveRightBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredMoveLeft": {
+	            "kind": "character",
+	            "keyName": "h",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "configuredMoveRight": {
+	            "kind": "character",
+	            "keyName": "h",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "editor_move_left",
+	          "conflictInnerAction": "editor_move_right",
+	          "expectedOuterActionName": "move_left",
+	          "expectedInnerActionName": "move_right",
+	          "conflictRejected": true
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

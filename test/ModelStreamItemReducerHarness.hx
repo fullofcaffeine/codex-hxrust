@@ -232,6 +232,11 @@ import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultPruningRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictActionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapEditorConflictRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictActionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapOverlapConflictOutcome;
@@ -474,6 +479,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapVimOperatorTextObjects(testCase, secretProbe);
 			assertTopLevelKeymapVimNormalDefaults(testCase, secretProbe);
 			assertTopLevelKeymapInvalidGlobalCopies(testCase, secretProbe);
+			assertTopLevelKeymapEditorConflicts(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -702,6 +708,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapVimOperatorTextObjects(verificationValue, secretProbe);
 				assertKeymapVimNormalDefaults(verificationValue, secretProbe);
 				assertKeymapInvalidGlobalCopies(verificationValue, secretProbe);
+				assertKeymapEditorConflicts(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5510,6 +5517,64 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapEditorConflicts(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapEditorConflictOutcome> {
+		final outcomes:Array<ModelKeymapEditorConflictOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapEditorConflictExpects");
+		for (value in values) outcomes.push(assertKeymapEditorConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapEditorConflicts(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapEditorConflictOutcome> {
+		final outcomes:Array<ModelKeymapEditorConflictOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapEditorConflictExpects");
+		for (value in values) outcomes.push(assertKeymapEditorConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapEditorConflictSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapEditorConflictOutcome {
+		final outcome = ModelKeymapEditorConflictPolicy.apply(new ModelKeymapEditorConflictRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			configuredMoveLeft: keymapBinding(objectField(expectValue, "configuredMoveLeft")),
+			configuredMoveRight: keymapBinding(objectField(expectValue, "configuredMoveRight")),
+			conflictOuterAction: keymapEditorConflictActionKind(stringField(expectValue, "conflictOuterAction", "")),
+			conflictInnerAction: keymapEditorConflictActionKind(stringField(expectValue, "conflictInnerAction", "")),
+			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
+			expectedInnerActionName: stringField(expectValue, "expectedInnerActionName", ""),
+			conflictRejected: boolField(expectValue, "conflictRejected", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap editor conflict expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapEditorConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "moveLeftBindingPreserved", false)), boolText(outcome.moveLeftBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "moveRightBindingPreserved", false)), boolText(outcome.moveRightBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -7031,6 +7096,18 @@ class ModelStreamItemReducerHarness {
 			case "keymap_invalid_global_copy_path_rejected": ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathRejected;
 			case _: throw "unknown keymap invalid global copy decision kind: " + value;
 		}
+	}
+
+	static function keymapEditorConflictDecisionKind(value:String):ModelKeymapEditorConflictDecisionKind {
+		return switch value {
+			case "keymap_editor_conflict_rejected": ModelKeymapEditorConflictDecisionKind.KeymapEditorConflictRejected;
+			case "keymap_editor_conflict_missed": ModelKeymapEditorConflictDecisionKind.KeymapEditorConflictMissed;
+			case _: throw "unknown keymap editor conflict decision kind: " + value;
+		}
+	}
+
+	static function keymapEditorConflictActionKind(value:String):ModelKeymapEditorConflictActionKind {
+		return ModelKeymapEditorConflictActionKind.fromString(value);
 	}
 
 	static function parsedKeyKind(value:String):ModelParsedKeyKind {
