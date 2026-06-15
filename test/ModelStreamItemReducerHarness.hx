@@ -213,6 +213,10 @@ import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapDecisionKin
 import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapOutcome;
 import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapPolicy;
 import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapRequest;
+import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapDecisionKind;
+import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapOutcome;
+import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapPolicy;
+import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapRequest;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowDecisionKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowMaxRowsKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowOutcome;
@@ -408,6 +412,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelSideConversationBacktrackEscVimGuards(testCase, secretProbe);
 			assertTopLevelSideBacktrackUnavailableMessages(testCase, secretProbe);
 			assertTopLevelInterruptBacktrackKeymaps(testCase, secretProbe);
+			assertTopLevelInterruptQuestionNavigationKeymaps(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -625,6 +630,7 @@ class ModelStreamItemReducerHarness {
 				assertSideConversationBacktrackEscVimGuards(verificationValue, secretProbe);
 				assertSideBacktrackUnavailableMessages(verificationValue, secretProbe);
 				assertInterruptBacktrackKeymaps(verificationValue, secretProbe);
+				assertInterruptQuestionNavigationKeymaps(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4691,6 +4697,65 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelInterruptQuestionNavigationKeymaps(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelInterruptQuestionNavigationKeymapOutcome> {
+		final outcomes:Array<ModelInterruptQuestionNavigationKeymapOutcome> = [];
+		final values = optionalArrayField(testCase, "interruptQuestionNavigationKeymapExpects");
+		for (value in values) outcomes.push(assertInterruptQuestionNavigationKeymap(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertInterruptQuestionNavigationKeymaps(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelInterruptQuestionNavigationKeymapOutcome> {
+		final outcomes:Array<ModelInterruptQuestionNavigationKeymapOutcome> = [];
+		final values = optionalArrayField(verificationValue, "interruptQuestionNavigationKeymapExpects");
+		for (value in values) outcomes.push(assertInterruptQuestionNavigationKeymap(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertInterruptQuestionNavigationKeymap(
+		expectValue:Value,
+		secretProbe:String
+	):ModelInterruptQuestionNavigationKeymapOutcome {
+		final outcome = ModelInterruptQuestionNavigationKeymapPolicy.apply(new ModelInterruptQuestionNavigationKeymapRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			interruptActionName: stringField(expectValue, "interruptActionName", ""),
+			questionNavigationActionName: stringField(expectValue, "questionNavigationActionName", ""),
+			interruptBinding: stringField(expectValue, "interruptBinding", ""),
+			questionNavigationBinding: stringField(expectValue, "questionNavigationBinding", ""),
+			fixedBacktrackActionName: stringField(expectValue, "fixedBacktrackActionName", ""),
+			fixedBacktrackBinding: stringField(expectValue, "fixedBacktrackBinding", ""),
+			allowedOverlapBinding: stringField(expectValue, "allowedOverlapBinding", ""),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(interruptQuestionNavigationKeymapDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "interruptActionNamePreserved", false)), boolText(outcome.interruptActionNamePreserved));
+		assertEquals(boolText(boolField(expectValue, "questionNavigationActionNamePreserved", false)), boolText(outcome.questionNavigationActionNamePreserved));
+		assertEquals(boolText(boolField(expectValue, "interruptRemapAcceptedBeforeValidation", false)), boolText(outcome.interruptRemapAcceptedBeforeValidation));
+		assertEquals(boolText(boolField(expectValue, "questionNavigationBindingPreserved", false)), boolText(outcome.questionNavigationBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictingBindingDetected", false)), boolText(outcome.conflictingBindingDetected));
+		assertEquals(boolText(boolField(expectValue, "fixedBacktrackOverlapStillAllowed", false)), boolText(outcome.fixedBacktrackOverlapStillAllowed));
+		assertEquals(boolText(boolField(expectValue, "conflictRejected", false)), boolText(outcome.conflictRejected));
+		assertEquals(boolText(boolField(expectValue, "noFalseBacktrackConflict", false)), boolText(outcome.noFalseBacktrackConflict));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6111,6 +6176,14 @@ class ModelStreamItemReducerHarness {
 			case "interrupt_backtrack_keymap_accepted": ModelInterruptBacktrackKeymapDecisionKind.InterruptBacktrackKeymapAccepted;
 			case "interrupt_backtrack_keymap_rejected": ModelInterruptBacktrackKeymapDecisionKind.InterruptBacktrackKeymapRejected;
 			case _: throw "unknown interrupt/backtrack keymap decision kind: " + value;
+		}
+	}
+
+	static function interruptQuestionNavigationKeymapDecisionKind(value:String):ModelInterruptQuestionNavigationKeymapDecisionKind {
+		return switch value {
+			case "interrupt_question_navigation_conflict_rejected": ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictRejected;
+			case "interrupt_question_navigation_conflict_missed": ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictMissed;
+			case _: throw "unknown interrupt/question-navigation keymap decision kind: " + value;
 		}
 	}
 

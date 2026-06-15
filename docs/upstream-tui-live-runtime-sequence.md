@@ -1481,7 +1481,20 @@ Model selected raw Codex keymap behavior:
 
 Status: HXCX-4.119 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic interrupt/backtrack keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.120+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.120: Interrupt/Question-Navigation Keymap Conflict Boundary
+
+Model selected raw Codex app/list keymap shadow behavior:
+
+- preserve the upstream `chat.interrupt_turn` action name;
+- preserve the upstream `list.move_right` question-navigation action name;
+- detect the F12 collision between `chat.interrupt_turn` and `list.move_right`;
+- reject the collision as a keymap validation conflict;
+- preserve the prior `chat.interrupt_turn`/`fixed.backtrack` Esc overlap as allowed;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.120 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic interrupt/question-navigation keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.121+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
