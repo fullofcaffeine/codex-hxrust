@@ -5673,8 +5673,8 @@ class ModelStreamItemReducerHarness {
 	):ModelKeymapListConflictOutcome {
 		final outcome = ModelKeymapListConflictPolicy.apply(new ModelKeymapListConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
-			configuredMoveUp: keymapBinding(objectField(expectValue, "configuredMoveUp")),
-			configuredMoveDown: keymapBinding(objectField(expectValue, "configuredMoveDown")),
+			configuredOuterBinding: keymapBinding(objectField(expectValue, "configuredOuterBinding")),
+			configuredInnerBinding: keymapBinding(objectField(expectValue, "configuredInnerBinding")),
 			conflictOuterAction: keymapListConflictActionKind(stringField(expectValue, "conflictOuterAction", "")),
 			conflictInnerAction: keymapListConflictActionKind(stringField(expectValue, "conflictInnerAction", "")),
 			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
@@ -5691,8 +5691,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
 		assertEquals(keymapListConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
-		assertEquals(boolText(boolField(expectValue, "moveUpBindingPreserved", false)), boolText(outcome.moveUpBindingPreserved));
-		assertEquals(boolText(boolField(expectValue, "moveDownBindingPreserved", false)), boolText(outcome.moveDownBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "outerBindingPreserved", false)), boolText(outcome.outerBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "innerBindingPreserved", false)), boolText(outcome.innerBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));

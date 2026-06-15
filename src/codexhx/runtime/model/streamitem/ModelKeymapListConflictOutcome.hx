@@ -5,8 +5,8 @@ typedef ModelKeymapListConflictOutcomeFields = {
 	final code:String;
 	final requestId:String;
 	final decisionKind:ModelKeymapListConflictDecisionKind;
-	final moveUpBindingPreserved:Bool;
-	final moveDownBindingPreserved:Bool;
+	final outerBindingPreserved:Bool;
+	final innerBindingPreserved:Bool;
 	final conflictActionNamesPreserved:Bool;
 	final conflictRejectionPreserved:Bool;
 	final eventOrderingPreserved:Bool;
@@ -21,8 +21,8 @@ class ModelKeymapListConflictOutcome {
 	public final code:String;
 	public final requestId:String;
 	public final decisionKind:ModelKeymapListConflictDecisionKind;
-	public final moveUpBindingPreserved:Bool;
-	public final moveDownBindingPreserved:Bool;
+	public final outerBindingPreserved:Bool;
+	public final innerBindingPreserved:Bool;
 	public final conflictActionNamesPreserved:Bool;
 	public final conflictRejectionPreserved:Bool;
 	public final eventOrderingPreserved:Bool;
@@ -36,8 +36,8 @@ class ModelKeymapListConflictOutcome {
 		this.code = fields.code == null ? "" : fields.code;
 		this.requestId = fields.requestId == null ? "" : fields.requestId;
 		this.decisionKind = fields.decisionKind == null ? ModelKeymapListConflictDecisionKind.KeymapListConflictMissed : fields.decisionKind;
-		this.moveUpBindingPreserved = fields.moveUpBindingPreserved;
-		this.moveDownBindingPreserved = fields.moveDownBindingPreserved;
+		this.outerBindingPreserved = fields.outerBindingPreserved;
+		this.innerBindingPreserved = fields.innerBindingPreserved;
 		this.conflictActionNamesPreserved = fields.conflictActionNamesPreserved;
 		this.conflictRejectionPreserved = fields.conflictRejectionPreserved;
 		this.eventOrderingPreserved = fields.eventOrderingPreserved;
@@ -52,8 +52,8 @@ class ModelKeymapListConflictOutcome {
 			+ ";ok=" + boolText(ok)
 			+ ";request=" + requestId
 			+ ";decisionKind=" + decisionKind
-			+ ";moveUpBindingPreserved=" + boolText(moveUpBindingPreserved)
-			+ ";moveDownBindingPreserved=" + boolText(moveDownBindingPreserved)
+			+ ";outerBindingPreserved=" + boolText(outerBindingPreserved)
+			+ ";innerBindingPreserved=" + boolText(innerBindingPreserved)
 			+ ";conflictActionNamesPreserved=" + boolText(conflictActionNamesPreserved)
 			+ ";conflictRejectionPreserved=" + boolText(conflictRejectionPreserved)
 			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)

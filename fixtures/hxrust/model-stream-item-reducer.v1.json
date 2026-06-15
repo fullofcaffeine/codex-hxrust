@@ -8259,8 +8259,8 @@
 	          "previousEventCount": 92,
 	          "eventOrderIndex": 93,
 	          "decisionKind": "keymap_list_conflict_rejected",
-	          "moveUpBindingPreserved": true,
-	          "moveDownBindingPreserved": true,
+	          "outerBindingPreserved": true,
+	          "innerBindingPreserved": true,
 	          "conflictActionNamesPreserved": true,
 	          "conflictRejectionPreserved": true,
 	          "eventOrderingPreserved": true,
@@ -8268,8 +8268,8 @@
 	          "realFilesystemMutated": false,
 	          "toolExecutedOutsideFixture": false,
 	          "errorMessage": "",
-	          "summaryContains": "decisionKind=keymap_list_conflict_rejected;moveUpBindingPreserved=true;moveDownBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
-	          "configuredMoveUp": {
+	          "summaryContains": "decisionKind=keymap_list_conflict_rejected;outerBindingPreserved=true;innerBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredOuterBinding": {
 	            "kind": "named",
 	            "keyName": "up",
 	            "functionNumber": -1,
@@ -8277,7 +8277,7 @@
 	            "altModifier": false,
 	            "shiftModifier": false
 	          },
-	          "configuredMoveDown": {
+	          "configuredInnerBinding": {
 	            "kind": "named",
 	            "keyName": "up",
 	            "functionNumber": -1,
@@ -8289,6 +8289,45 @@
 	          "conflictInnerAction": "list_move_down",
 	          "expectedOuterActionName": "move_up",
 	          "expectedInnerActionName": "move_down",
+	          "conflictRejected": true
+	        },
+	        {
+	          "ok": true,
+	          "code": "keymap_list_conflict_modeled",
+	          "requestId": "keymap-list-left-conflict",
+	          "previousEventCount": 93,
+	          "eventOrderIndex": 94,
+	          "decisionKind": "keymap_list_conflict_rejected",
+	          "outerBindingPreserved": true,
+	          "innerBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_list_conflict_rejected;outerBindingPreserved=true;innerBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredOuterBinding": {
+	            "kind": "named",
+	            "keyName": "left",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "configuredInnerBinding": {
+	            "kind": "named",
+	            "keyName": "left",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "list_move_left",
+	          "conflictInnerAction": "list_move_right",
+	          "expectedOuterActionName": "move_left",
+	          "expectedInnerActionName": "move_right",
 	          "conflictRejected": true
 	        }
 	      ],

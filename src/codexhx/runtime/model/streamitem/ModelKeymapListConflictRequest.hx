@@ -2,8 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 typedef ModelKeymapListConflictRequestFields = {
 	final requestId:String;
-	final configuredMoveUp:Null<ModelKeymapBinding>;
-	final configuredMoveDown:Null<ModelKeymapBinding>;
+	final configuredOuterBinding:Null<ModelKeymapBinding>;
+	final configuredInnerBinding:Null<ModelKeymapBinding>;
 	final conflictOuterAction:ModelKeymapListConflictActionKind;
 	final conflictInnerAction:ModelKeymapListConflictActionKind;
 	final expectedOuterActionName:String;
@@ -16,8 +16,8 @@ typedef ModelKeymapListConflictRequestFields = {
 
 class ModelKeymapListConflictRequest {
 	public final requestId:String;
-	public final configuredMoveUp:Null<ModelKeymapBinding>;
-	public final configuredMoveDown:Null<ModelKeymapBinding>;
+	public final configuredOuterBinding:Null<ModelKeymapBinding>;
+	public final configuredInnerBinding:Null<ModelKeymapBinding>;
 	public final conflictOuterAction:ModelKeymapListConflictActionKind;
 	public final conflictInnerAction:ModelKeymapListConflictActionKind;
 	public final expectedOuterActionName:String;
@@ -29,8 +29,8 @@ class ModelKeymapListConflictRequest {
 
 	public function new(fields:ModelKeymapListConflictRequestFields) {
 		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.configuredMoveUp = fields.configuredMoveUp;
-		this.configuredMoveDown = fields.configuredMoveDown;
+		this.configuredOuterBinding = fields.configuredOuterBinding;
+		this.configuredInnerBinding = fields.configuredInnerBinding;
 		this.conflictOuterAction = fields.conflictOuterAction == null ? ModelKeymapListConflictActionKind.Unknown : fields.conflictOuterAction;
 		this.conflictInnerAction = fields.conflictInnerAction == null ? ModelKeymapListConflictActionKind.Unknown : fields.conflictInnerAction;
 		this.expectedOuterActionName = fields.expectedOuterActionName == null ? "" : fields.expectedOuterActionName;
