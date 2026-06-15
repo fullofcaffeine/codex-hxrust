@@ -7438,6 +7438,81 @@
 	          "defaultsConflictValidationPassed": true
 	        }
 	      ],
+	      "keymapShadowExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_shadow_conflicts_modeled",
+	          "requestId": "keymap-canonical-binding-and-shadow-conflicts",
+	          "previousEventCount": 83,
+	          "eventOrderIndex": 84,
+	          "decisionKind": "keymap_shadow_conflicts_rejected",
+	          "canonicalBindingPreserved": true,
+	          "shadowConflictCount": 4,
+	          "composerShadowRejected": true,
+	          "editorShadowRejected": true,
+	          "approvalShadowRejected": true,
+	          "listShadowRejected": true,
+	          "actionNamesPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_shadow_conflicts_rejected;canonicalBindingPreserved=true;shadowConflictCount=4;composerShadowRejected=true;editorShadowRejected=true;approvalShadowRejected=true;listShadowRejected=true;actionNamesPreserved=true;eventOrderingPreserved=true",
+	          "canonicalBinding": {
+	            "kind": "character",
+	            "keyName": "a",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "altModifier": true,
+	            "shiftModifier": true
+	          },
+	          "shadowCases": [
+	            {
+	              "scope": "composer",
+	              "outerActionName": "open_transcript",
+	              "innerActionName": "composer.submit",
+	              "binding": {
+	                "kind": "character",
+	                "keyName": "t",
+	                "functionNumber": -1,
+	                "ctrlModifier": true
+	              }
+	            },
+	            {
+	              "scope": "editor",
+	              "outerActionName": "composer.submit",
+	              "innerActionName": "editor.insert_newline",
+	              "binding": {
+	                "kind": "character",
+	                "keyName": "j",
+	                "functionNumber": -1,
+	                "ctrlModifier": true
+	              }
+	            },
+	            {
+	              "scope": "approval",
+	              "outerActionName": "open_transcript",
+	              "innerActionName": "approval.approve",
+	              "binding": {
+	                "kind": "character",
+	                "keyName": "y",
+	                "functionNumber": -1
+	              }
+	            },
+	            {
+	              "scope": "list",
+	              "outerActionName": "copy",
+	              "innerActionName": "list.move_down",
+	              "binding": {
+	                "kind": "named",
+	                "keyName": "down",
+	                "functionNumber": -1
+	              }
+	            }
+	          ]
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

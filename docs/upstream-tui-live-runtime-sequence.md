@@ -1539,7 +1539,19 @@ Model selected raw Codex runtime keymap behavior:
 
 Status: HXCX-4.124/HXCX-4.125 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. HXCX-4.124 exposed generic haxe.rust issue `haxe.rust-yrs1`; codexhx uses nullable class-typed request fields until the compiler default-constructor lowering is fixed. This is deterministic keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.126+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.126: Keymap Canonical Binding And Shadow Validation Boundary
+
+Model selected raw Codex keymap validation behavior:
+
+- preserve canonical Ctrl-Alt-Shift-A parsing and modifier bits;
+- reject app/main-scope composer, editor, approval, and list shadow conflicts;
+- preserve conflict scope and action names;
+- keep the keymap evidence deterministic and independent of live keyboard input;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.126 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. It reuses nullable class-typed binding fields already tracked by generic haxe.rust issue `haxe.rust-yrs1`; no new compiler limitation was exposed. This is deterministic keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.127+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

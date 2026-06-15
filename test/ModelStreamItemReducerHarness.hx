@@ -222,6 +222,12 @@ import codexhx.runtime.model.streamitem.ModelKeymapAliasOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapAliasPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapAliasRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapBinding;
+import codexhx.runtime.model.streamitem.ModelKeymapShadowCase;
+import codexhx.runtime.model.streamitem.ModelKeymapShadowDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapShadowOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapShadowPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapShadowRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapShadowScopeKind;
 import codexhx.runtime.model.streamitem.ModelKeyParserCase;
 import codexhx.runtime.model.streamitem.ModelKeyParserDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeyParserOutcome;
@@ -431,6 +437,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelPagerTranscriptBacktrackKeymaps(testCase, secretProbe);
 			assertTopLevelKeyParserCases(testCase, secretProbe);
 			assertTopLevelKeymapAliases(testCase, secretProbe);
+			assertTopLevelKeymapShadows(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -652,6 +659,7 @@ class ModelStreamItemReducerHarness {
 				assertPagerTranscriptBacktrackKeymaps(verificationValue, secretProbe);
 				assertKeyParserCases(verificationValue, secretProbe);
 				assertKeymapAliases(verificationValue, secretProbe);
+				assertKeymapShadows(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5002,6 +5010,72 @@ class ModelStreamItemReducerHarness {
 		});
 	}
 
+	static function assertTopLevelKeymapShadows(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapShadowOutcome> {
+		final outcomes:Array<ModelKeymapShadowOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapShadowExpects");
+		for (value in values) outcomes.push(assertKeymapShadowSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapShadows(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapShadowOutcome> {
+		final outcomes:Array<ModelKeymapShadowOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapShadowExpects");
+		for (value in values) outcomes.push(assertKeymapShadowSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapShadowSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapShadowOutcome {
+		final shadowCases:Array<ModelKeymapShadowCase> = [];
+		for (caseValue in arrayField(expectValue, "shadowCases")) {
+			final caseObject = objectValue(caseValue);
+			shadowCases.push(new ModelKeymapShadowCase({
+				scope: ModelKeymapShadowScopeKind.fromString(stringField(caseObject, "scope", "")),
+				outerActionName: stringField(caseObject, "outerActionName", ""),
+				innerActionName: stringField(caseObject, "innerActionName", ""),
+				binding: keymapBinding(objectField(caseObject, "binding"))
+			}));
+		}
+		final outcome = ModelKeymapShadowPolicy.apply(new ModelKeymapShadowRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			canonicalBinding: keymapBinding(objectField(expectValue, "canonicalBinding")),
+			shadowCases: shadowCases,
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap shadow expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapShadowDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "canonicalBindingPreserved", false)), boolText(outcome.canonicalBindingPreserved));
+		assertEquals(Std.string(intField(expectValue, "shadowConflictCount", 0)), Std.string(outcome.shadowConflictCount));
+		assertEquals(boolText(boolField(expectValue, "composerShadowRejected", false)), boolText(outcome.composerShadowRejected));
+		assertEquals(boolText(boolField(expectValue, "editorShadowRejected", false)), boolText(outcome.editorShadowRejected));
+		assertEquals(boolText(boolField(expectValue, "approvalShadowRejected", false)), boolText(outcome.approvalShadowRejected));
+		assertEquals(boolText(boolField(expectValue, "listShadowRejected", false)), boolText(outcome.listShadowRejected));
+		assertEquals(boolText(boolField(expectValue, "actionNamesPreserved", false)), boolText(outcome.actionNamesPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6454,6 +6528,14 @@ class ModelStreamItemReducerHarness {
 			case "keymap_aliases_preserved": ModelKeymapAliasDecisionKind.KeymapAliasesPreserved;
 			case "keymap_aliases_rejected": ModelKeymapAliasDecisionKind.KeymapAliasesRejected;
 			case _: throw "unknown keymap alias decision kind: " + value;
+		}
+	}
+
+	static function keymapShadowDecisionKind(value:String):ModelKeymapShadowDecisionKind {
+		return switch value {
+			case "keymap_shadow_conflicts_rejected": ModelKeymapShadowDecisionKind.KeymapShadowConflictsRejected;
+			case "keymap_shadow_conflicts_missed": ModelKeymapShadowDecisionKind.KeymapShadowConflictsMissed;
+			case _: throw "unknown keymap shadow decision kind: " + value;
 		}
 	}
 
