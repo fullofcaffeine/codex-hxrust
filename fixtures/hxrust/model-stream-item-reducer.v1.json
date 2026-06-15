@@ -8387,7 +8387,7 @@
 	          "realFilesystemMutated": false,
 	          "toolExecutedOutsideFixture": false,
 	          "errorMessage": "",
-	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=true;declineBindingPreserved=true;denyBindingPreserved=false;listAcceptBindingPreserved=false;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=true;declineBindingPreserved=true;denyBindingPreserved=false;listAcceptBindingPreserved=false;listCancelBindingPreserved=false;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
 	          "configuredApprove": {
 	            "kind": "character",
 	            "keyName": "y",
@@ -8426,7 +8426,7 @@
 	          "realFilesystemMutated": false,
 	          "toolExecutedOutsideFixture": false,
 	          "errorMessage": "",
-	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=true;declineBindingPreserved=false;denyBindingPreserved=true;listAcceptBindingPreserved=false;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=true;declineBindingPreserved=false;denyBindingPreserved=true;listAcceptBindingPreserved=false;listCancelBindingPreserved=false;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
 	          "configuredApprove": {
 	            "kind": "character",
 	            "keyName": "y",
@@ -8464,7 +8464,7 @@
 	          "realFilesystemMutated": false,
 	          "toolExecutedOutsideFixture": false,
 	          "errorMessage": "",
-	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=false;declineBindingPreserved=false;denyBindingPreserved=false;listAcceptBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=false;declineBindingPreserved=false;denyBindingPreserved=false;listAcceptBindingPreserved=true;listCancelBindingPreserved=false;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
 	          "configuredListAccept": {
 	            "kind": "character",
 	            "keyName": "y",
@@ -8477,6 +8477,36 @@
 	          "conflictInnerAction": "approval_approve",
 	          "expectedOuterActionName": "list.accept",
 	          "expectedInnerActionName": "approval.approve",
+	          "conflictRejected": true
+	        },
+	        {
+	          "ok": true,
+	          "code": "keymap_approval_conflict_modeled",
+	          "requestId": "keymap-approval-overlay-cancel-conflict",
+	          "previousEventCount": 98,
+	          "eventOrderIndex": 99,
+	          "decisionKind": "keymap_approval_conflict_rejected",
+	          "listCancelBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_approval_conflict_rejected;approveBindingPreserved=false;declineBindingPreserved=false;denyBindingPreserved=false;listAcceptBindingPreserved=false;listCancelBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredListCancel": {
+	            "kind": "character",
+	            "keyName": "c",
+	            "functionNumber": -1,
+	            "ctrlModifier": false,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "list_cancel",
+	          "conflictInnerAction": "approval_cancel",
+	          "expectedOuterActionName": "list.cancel",
+	          "expectedInnerActionName": "approval.cancel",
 	          "conflictRejected": true
 	        }
 	      ],

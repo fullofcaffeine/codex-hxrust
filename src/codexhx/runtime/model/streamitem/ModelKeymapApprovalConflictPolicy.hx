@@ -6,16 +6,20 @@ class ModelKeymapApprovalConflictPolicy {
 	static final DeclineName = "decline";
 	static final DenyName = "deny";
 	static final ListAcceptName = "list.accept";
+	static final ListCancelName = "list.cancel";
 	static final ApprovalApproveName = "approval.approve";
+	static final ApprovalCancelName = "approval.cancel";
 
 	public static function apply(request:ModelKeymapApprovalConflictRequest):ModelKeymapApprovalConflictOutcome {
 		if (request == null) return failure("", "missing keymap approval conflict request");
 
-		final expectedBinding = character("y");
-		final approveBindingPreserved = matches(request.configuredApprove, expectedBinding);
-		final declineBindingPreserved = matches(request.configuredDecline, expectedBinding);
-		final denyBindingPreserved = matches(request.configuredDeny, expectedBinding);
-		final listAcceptBindingPreserved = matches(request.configuredListAccept, expectedBinding);
+		final approvalBinding = character("y");
+		final cancelBinding = character("c");
+		final approveBindingPreserved = matches(request.configuredApprove, approvalBinding);
+		final declineBindingPreserved = matches(request.configuredDecline, approvalBinding);
+		final denyBindingPreserved = matches(request.configuredDeny, approvalBinding);
+		final listAcceptBindingPreserved = matches(request.configuredListAccept, approvalBinding);
+		final listCancelBindingPreserved = matches(request.configuredListCancel, cancelBinding);
 		final declineConflictPreserved = request.conflictInnerAction == ModelKeymapApprovalConflictActionKind.ApprovalDecline
 			&& request.expectedInnerActionName == DeclineName
 			&& declineBindingPreserved;
@@ -30,10 +34,17 @@ class ModelKeymapApprovalConflictPolicy {
 			&& request.expectedOuterActionName == ListAcceptName
 			&& request.expectedInnerActionName == ApprovalApproveName
 			&& listAcceptBindingPreserved;
-		final conflictActionNamesPreserved = approvalPairConflictPreserved || overlayAcceptConflictPreserved;
+		final overlayCancelConflictPreserved = request.conflictOuterAction == ModelKeymapApprovalConflictActionKind.ListCancel
+			&& request.conflictInnerAction == ModelKeymapApprovalConflictActionKind.ApprovalCancel
+			&& request.expectedOuterActionName == ListCancelName
+			&& request.expectedInnerActionName == ApprovalCancelName
+			&& listCancelBindingPreserved;
+		final conflictActionNamesPreserved = approvalPairConflictPreserved || overlayAcceptConflictPreserved || overlayCancelConflictPreserved;
 		final conflictRejectionPreserved = request.conflictRejected;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final bindingEvidencePreserved = approvalPairConflictPreserved ? approveBindingPreserved : overlayAcceptConflictPreserved;
+		final bindingEvidencePreserved = approvalPairConflictPreserved
+			? approveBindingPreserved
+			: overlayAcceptConflictPreserved || overlayCancelConflictPreserved;
 		final ok = bindingEvidencePreserved
 			&& conflictRejectionPreserved
 			&& eventOrderingPreserved;
@@ -50,6 +61,7 @@ class ModelKeymapApprovalConflictPolicy {
 			declineBindingPreserved: declineBindingPreserved,
 			denyBindingPreserved: denyBindingPreserved,
 			listAcceptBindingPreserved: listAcceptBindingPreserved,
+			listCancelBindingPreserved: listCancelBindingPreserved,
 			conflictActionNamesPreserved: conflictActionNamesPreserved,
 			conflictRejectionPreserved: conflictRejectionPreserved,
 			eventOrderingPreserved: eventOrderingPreserved,
@@ -85,6 +97,7 @@ class ModelKeymapApprovalConflictPolicy {
 			declineBindingPreserved: false,
 			denyBindingPreserved: false,
 			listAcceptBindingPreserved: false,
+			listCancelBindingPreserved: false,
 			conflictActionNamesPreserved: false,
 			conflictRejectionPreserved: false,
 			eventOrderingPreserved: false,

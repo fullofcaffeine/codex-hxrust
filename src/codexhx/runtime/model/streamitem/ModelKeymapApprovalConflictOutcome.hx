@@ -9,6 +9,7 @@ typedef ModelKeymapApprovalConflictOutcomeFields = {
 	final declineBindingPreserved:Bool;
 	final denyBindingPreserved:Bool;
 	final listAcceptBindingPreserved:Bool;
+	final listCancelBindingPreserved:Bool;
 	final conflictActionNamesPreserved:Bool;
 	final conflictRejectionPreserved:Bool;
 	final eventOrderingPreserved:Bool;
@@ -27,6 +28,7 @@ class ModelKeymapApprovalConflictOutcome {
 	public final declineBindingPreserved:Bool;
 	public final denyBindingPreserved:Bool;
 	public final listAcceptBindingPreserved:Bool;
+	public final listCancelBindingPreserved:Bool;
 	public final conflictActionNamesPreserved:Bool;
 	public final conflictRejectionPreserved:Bool;
 	public final eventOrderingPreserved:Bool;
@@ -44,6 +46,7 @@ class ModelKeymapApprovalConflictOutcome {
 		this.declineBindingPreserved = fields.declineBindingPreserved;
 		this.denyBindingPreserved = fields.denyBindingPreserved;
 		this.listAcceptBindingPreserved = fields.listAcceptBindingPreserved;
+		this.listCancelBindingPreserved = fields.listCancelBindingPreserved;
 		this.conflictActionNamesPreserved = fields.conflictActionNamesPreserved;
 		this.conflictRejectionPreserved = fields.conflictRejectionPreserved;
 		this.eventOrderingPreserved = fields.eventOrderingPreserved;
@@ -62,6 +65,7 @@ class ModelKeymapApprovalConflictOutcome {
 			+ ";declineBindingPreserved=" + boolText(declineBindingPreserved)
 			+ ";denyBindingPreserved=" + boolText(denyBindingPreserved)
 			+ ";listAcceptBindingPreserved=" + boolText(listAcceptBindingPreserved)
+			+ ";listCancelBindingPreserved=" + boolText(listCancelBindingPreserved)
 			+ ";conflictActionNamesPreserved=" + boolText(conflictActionNamesPreserved)
 			+ ";conflictRejectionPreserved=" + boolText(conflictRejectionPreserved)
 			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
