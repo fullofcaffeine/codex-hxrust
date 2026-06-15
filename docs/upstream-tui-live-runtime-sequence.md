@@ -1380,7 +1380,20 @@ Model selected raw Codex interrupt-routing behavior:
 
 Status: HXCX-4.111 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic interrupt without active turn startup fallback evidence only, not live app-server calls, live `startup_interrupt` RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.112+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.112: Override-Turn-Context Settings Update Boundary
+
+Model selected raw Codex settings-update behavior:
+
+- accept `AppCommand::OverrideTurnContext` for a registered thread;
+- build thread/settings update intent with model, effort, service tier, approvals, active permission profile, collaboration mode, and personality;
+- return `handled = true` for the command submission path;
+- preserve the upstream ack-versus-notification split, where the update response does not mutate cached primary-session state;
+- apply settings to cached state only after `thread/settings/updated`, preserving top-level model/effort for non-default collaboration mode while caching collaboration settings and other thread settings;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.112 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic override-turn-context settings update evidence only, not live app-server calls, live `thread/settings/update` RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.113+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

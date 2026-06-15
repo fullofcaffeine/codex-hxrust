@@ -225,6 +225,10 @@ import codexhx.runtime.model.streamitem.ModelInterruptWithoutActiveTurnDecisionK
 import codexhx.runtime.model.streamitem.ModelInterruptWithoutActiveTurnOutcome;
 import codexhx.runtime.model.streamitem.ModelInterruptWithoutActiveTurnPolicy;
 import codexhx.runtime.model.streamitem.ModelInterruptWithoutActiveTurnRequest;
+import codexhx.runtime.model.streamitem.ModelOverrideTurnContextSettingsUpdateDecisionKind;
+import codexhx.runtime.model.streamitem.ModelOverrideTurnContextSettingsUpdateOutcome;
+import codexhx.runtime.model.streamitem.ModelOverrideTurnContextSettingsUpdatePolicy;
+import codexhx.runtime.model.streamitem.ModelOverrideTurnContextSettingsUpdateRequest;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionDecisionKind;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionOutcome;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionPolicy;
@@ -368,6 +372,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelFreshSessionServiceTiers(testCase, secretProbe);
 			assertTopLevelFreshSessionPreviousConversationShutdowns(testCase, secretProbe);
 			assertTopLevelInterruptWithoutActiveTurns(testCase, secretProbe);
+			assertTopLevelOverrideTurnContextSettingsUpdates(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -577,6 +582,7 @@ class ModelStreamItemReducerHarness {
 				assertFreshSessionServiceTiers(verificationValue, secretProbe);
 				assertFreshSessionPreviousConversationShutdowns(verificationValue, secretProbe);
 				assertInterruptWithoutActiveTurns(verificationValue, secretProbe);
+				assertOverrideTurnContextSettingsUpdates(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4093,6 +4099,86 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelOverrideTurnContextSettingsUpdates(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelOverrideTurnContextSettingsUpdateOutcome> {
+		final outcomes:Array<ModelOverrideTurnContextSettingsUpdateOutcome> = [];
+		final values = optionalArrayField(testCase, "overrideTurnContextSettingsUpdateExpects");
+		for (value in values) outcomes.push(assertOverrideTurnContextSettingsUpdate(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertOverrideTurnContextSettingsUpdates(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelOverrideTurnContextSettingsUpdateOutcome> {
+		final outcomes:Array<ModelOverrideTurnContextSettingsUpdateOutcome> = [];
+		final values = optionalArrayField(verificationValue, "overrideTurnContextSettingsUpdateExpects");
+		for (value in values) outcomes.push(assertOverrideTurnContextSettingsUpdate(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertOverrideTurnContextSettingsUpdate(
+		expectValue:Value,
+		secretProbe:String
+	):ModelOverrideTurnContextSettingsUpdateOutcome {
+		final outcome = ModelOverrideTurnContextSettingsUpdatePolicy.apply(new ModelOverrideTurnContextSettingsUpdateRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			threadId: stringField(expectValue, "threadId", ""),
+			appCommandOverrideTurnContext: boolField(expectValue, "appCommandOverrideTurnContext", false),
+			primaryThreadRegistered: boolField(expectValue, "primaryThreadRegistered", false),
+			appServerSessionAvailable: boolField(expectValue, "appServerSessionAvailable", false),
+			hasSettingsChanges: boolField(expectValue, "hasSettingsChanges", false),
+			initialModel: stringField(expectValue, "initialModel", ""),
+			initialEffort: stringField(expectValue, "initialEffort", ""),
+			requestedModel: stringField(expectValue, "requestedModel", ""),
+			requestedEffort: stringField(expectValue, "requestedEffort", ""),
+			requestedServiceTier: stringField(expectValue, "requestedServiceTier", ""),
+			requestedApprovalPolicy: stringField(expectValue, "requestedApprovalPolicy", ""),
+			requestedApprovalsReviewer: stringField(expectValue, "requestedApprovalsReviewer", ""),
+			requestedActivePermissionProfile: stringField(expectValue, "requestedActivePermissionProfile", ""),
+			requestedCollaborationMode: stringField(expectValue, "requestedCollaborationMode", ""),
+			requestedCollaborationModel: stringField(expectValue, "requestedCollaborationModel", ""),
+			requestedCollaborationEffort: stringField(expectValue, "requestedCollaborationEffort", ""),
+			requestedPersonality: stringField(expectValue, "requestedPersonality", ""),
+			notificationReceived: boolField(expectValue, "notificationReceived", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(overrideTurnContextSettingsUpdateDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "handled", false)), boolText(outcome.handled));
+		assertEquals(boolText(boolField(expectValue, "threadSettingsUpdateSubmitted", false)), boolText(outcome.threadSettingsUpdateSubmitted));
+		assertEquals(boolText(boolField(expectValue, "updateParamsCarriedRequestedSettings", false)), boolText(outcome.updateParamsCarriedRequestedSettings));
+		assertEquals(boolText(boolField(expectValue, "cachedPrimarySessionUnchangedBeforeNotification", false)), boolText(outcome.cachedPrimarySessionUnchangedBeforeNotification));
+		assertEquals(boolText(boolField(expectValue, "notificationReceived", false)), boolText(outcome.notificationReceived));
+		assertEquals(boolText(boolField(expectValue, "notificationAppliedToCache", false)), boolText(outcome.notificationAppliedToCache));
+		assertEquals(boolText(boolField(expectValue, "primarySessionModelPreserved", false)), boolText(outcome.primarySessionModelPreserved));
+		assertEquals(boolText(boolField(expectValue, "primarySessionEffortPreserved", false)), boolText(outcome.primarySessionEffortPreserved));
+		assertEquals(boolText(boolField(expectValue, "collaborationModeCached", false)), boolText(outcome.collaborationModeCached));
+		assertEquals(boolText(boolField(expectValue, "collaborationSettingsRebasedToNotification", false)), boolText(outcome.collaborationSettingsRebasedToNotification));
+		assertEquals(boolText(boolField(expectValue, "serviceTierCached", false)), boolText(outcome.serviceTierCached));
+		assertEquals(boolText(boolField(expectValue, "approvalPolicyCached", false)), boolText(outcome.approvalPolicyCached));
+		assertEquals(boolText(boolField(expectValue, "approvalsReviewerCached", false)), boolText(outcome.approvalsReviewerCached));
+		assertEquals(boolText(boolField(expectValue, "activePermissionProfileSubmitted", false)), boolText(outcome.activePermissionProfileSubmitted));
+		assertEquals(boolText(boolField(expectValue, "personalityCached", false)), boolText(outcome.personalityCached));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) {
+			assertNotContains(outcome.summary(), secretProbe);
+			assertNotContains(outcome.summary(), stringField(expectValue, "threadId", ""));
+		}
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -5443,6 +5529,15 @@ class ModelStreamItemReducerHarness {
 			case "active_turn_interrupt_submitted": ModelInterruptWithoutActiveTurnDecisionKind.ActiveTurnInterruptSubmitted;
 			case "interrupt_not_handled": ModelInterruptWithoutActiveTurnDecisionKind.InterruptNotHandled;
 			case _: throw "unknown interrupt without active turn decision kind: " + value;
+		}
+	}
+
+	static function overrideTurnContextSettingsUpdateDecisionKind(value:String):ModelOverrideTurnContextSettingsUpdateDecisionKind {
+		return switch value {
+			case "thread_settings_update_submitted": ModelOverrideTurnContextSettingsUpdateDecisionKind.ThreadSettingsUpdateSubmitted;
+			case "no_settings_changes_noop": ModelOverrideTurnContextSettingsUpdateDecisionKind.NoSettingsChangesNoop;
+			case "override_turn_context_not_handled": ModelOverrideTurnContextSettingsUpdateDecisionKind.OverrideTurnContextNotHandled;
+			case _: throw "unknown override-turn-context settings update decision kind: " + value;
 		}
 	}
 
