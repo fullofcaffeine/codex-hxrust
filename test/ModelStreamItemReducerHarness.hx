@@ -209,6 +209,10 @@ import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessageDeci
 import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessageOutcome;
 import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessagePolicy;
 import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessageRequest;
+import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapDecisionKind;
+import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapOutcome;
+import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapPolicy;
+import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapRequest;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowDecisionKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowMaxRowsKind;
 import codexhx.runtime.model.streamitem.ModelTerminalResizeReflowOutcome;
@@ -403,6 +407,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelBacktrackEscVimInsertGuards(testCase, secretProbe);
 			assertTopLevelSideConversationBacktrackEscVimGuards(testCase, secretProbe);
 			assertTopLevelSideBacktrackUnavailableMessages(testCase, secretProbe);
+			assertTopLevelInterruptBacktrackKeymaps(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -619,6 +624,7 @@ class ModelStreamItemReducerHarness {
 				assertBacktrackEscVimInsertGuards(verificationValue, secretProbe);
 				assertSideConversationBacktrackEscVimGuards(verificationValue, secretProbe);
 				assertSideBacktrackUnavailableMessages(verificationValue, secretProbe);
+				assertInterruptBacktrackKeymaps(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4627,6 +4633,64 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelInterruptBacktrackKeymaps(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelInterruptBacktrackKeymapOutcome> {
+		final outcomes:Array<ModelInterruptBacktrackKeymapOutcome> = [];
+		final values = optionalArrayField(testCase, "interruptBacktrackKeymapExpects");
+		for (value in values) outcomes.push(assertInterruptBacktrackKeymap(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertInterruptBacktrackKeymaps(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelInterruptBacktrackKeymapOutcome> {
+		final outcomes:Array<ModelInterruptBacktrackKeymapOutcome> = [];
+		final values = optionalArrayField(verificationValue, "interruptBacktrackKeymapExpects");
+		for (value in values) outcomes.push(assertInterruptBacktrackKeymap(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertInterruptBacktrackKeymap(
+		expectValue:Value,
+		secretProbe:String
+	):ModelInterruptBacktrackKeymapOutcome {
+		final outcome = ModelInterruptBacktrackKeymapPolicy.apply(new ModelInterruptBacktrackKeymapRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			defaultInterruptBinding: stringField(expectValue, "defaultInterruptBinding", ""),
+			fixedBacktrackBinding: stringField(expectValue, "fixedBacktrackBinding", ""),
+			remappedInterruptBinding: stringField(expectValue, "remappedInterruptBinding", ""),
+			unboundInterruptCount: intField(expectValue, "unboundInterruptCount", -1),
+			fixedPasteImageBinding: stringField(expectValue, "fixedPasteImageBinding", ""),
+			conflictingInterruptBinding: stringField(expectValue, "conflictingInterruptBinding", ""),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(interruptBacktrackKeymapDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "defaultEscInterruptPreserved", false)), boolText(outcome.defaultEscInterruptPreserved));
+		assertEquals(boolText(boolField(expectValue, "fixedBacktrackEscPreserved", false)), boolText(outcome.fixedBacktrackEscPreserved));
+		assertEquals(boolText(boolField(expectValue, "backtrackOverlapAllowed", false)), boolText(outcome.backtrackOverlapAllowed));
+		assertEquals(boolText(boolField(expectValue, "remapToF12Accepted", false)), boolText(outcome.remapToF12Accepted));
+		assertEquals(boolText(boolField(expectValue, "unbindAccepted", false)), boolText(outcome.unbindAccepted));
+		assertEquals(boolText(boolField(expectValue, "otherFixedShortcutRejected", false)), boolText(outcome.otherFixedShortcutRejected));
+		assertEquals(boolText(boolField(expectValue, "conflictActionNamePreserved", false)), boolText(outcome.conflictActionNamePreserved));
+		assertEquals(boolText(boolField(expectValue, "dispatchGatingDeferredToHandler", false)), boolText(outcome.dispatchGatingDeferredToHandler));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6039,6 +6103,14 @@ class ModelStreamItemReducerHarness {
 			case "side_backtrack_unavailable_message_inserted": ModelSideBacktrackUnavailableMessageDecisionKind.SideBacktrackUnavailableMessageInserted;
 			case "side_backtrack_unavailable_message_unavailable": ModelSideBacktrackUnavailableMessageDecisionKind.SideBacktrackUnavailableMessageUnavailable;
 			case _: throw "unknown side-backtrack unavailable message decision kind: " + value;
+		}
+	}
+
+	static function interruptBacktrackKeymapDecisionKind(value:String):ModelInterruptBacktrackKeymapDecisionKind {
+		return switch value {
+			case "interrupt_backtrack_keymap_accepted": ModelInterruptBacktrackKeymapDecisionKind.InterruptBacktrackKeymapAccepted;
+			case "interrupt_backtrack_keymap_rejected": ModelInterruptBacktrackKeymapDecisionKind.InterruptBacktrackKeymapRejected;
+			case _: throw "unknown interrupt/backtrack keymap decision kind: " + value;
 		}
 	}
 

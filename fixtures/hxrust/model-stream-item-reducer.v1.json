@@ -6998,6 +6998,36 @@
 	          "summaryContains": "decisionKind=side_backtrack_unavailable_message_inserted;backtrackPrimedAfter=false;backtrackReset=true;errorHistoryCellInserted=true;insertHistoryCellIntentRecorded=true;snapshotNamePreserved=true;widthStableSnapshot=true;eventOrderingPreserved=true"
 	        }
 	      ],
+	      "interruptBacktrackKeymapExpects": [
+	        {
+	          "ok": true,
+	          "code": "interrupt_backtrack_keymap_modeled",
+	          "requestId": "interrupt-turn-allows-backtrack-escape-and-can-be-remapped-or-unbound",
+	          "defaultInterruptBinding": "esc",
+	          "fixedBacktrackBinding": "esc",
+	          "remappedInterruptBinding": "f12",
+	          "unboundInterruptCount": 0,
+	          "fixedPasteImageBinding": "ctrl-v",
+	          "conflictingInterruptBinding": "ctrl-v",
+	          "previousEventCount": 77,
+	          "eventOrderIndex": 78,
+	          "decisionKind": "interrupt_backtrack_keymap_accepted",
+	          "defaultEscInterruptPreserved": true,
+	          "fixedBacktrackEscPreserved": true,
+	          "backtrackOverlapAllowed": true,
+	          "remapToF12Accepted": true,
+	          "unbindAccepted": true,
+	          "otherFixedShortcutRejected": true,
+	          "conflictActionNamePreserved": true,
+	          "dispatchGatingDeferredToHandler": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=interrupt_backtrack_keymap_accepted;defaultEscInterruptPreserved=true;fixedBacktrackEscPreserved=true;backtrackOverlapAllowed=true;remapToF12Accepted=true;unbindAccepted=true;otherFixedShortcutRejected=true;conflictActionNamePreserved=true;dispatchGatingDeferredToHandler=true;eventOrderingPreserved=true"
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,
