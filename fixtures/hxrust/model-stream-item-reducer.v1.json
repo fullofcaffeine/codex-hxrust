@@ -8059,6 +8059,87 @@
 	          }
 	        }
 	      ],
+	      "keymapVimNormalDefaultExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_vim_normal_defaults_modeled",
+	          "requestId": "keymap-vim-normal-default-insert-arrow-aliases",
+	          "previousEventCount": 88,
+	          "eventOrderIndex": 89,
+	          "decisionKind": "keymap_vim_normal_defaults_preserved",
+	          "enterInsertDefaultsPreserved": true,
+	          "moveLeftDefaultsPreserved": true,
+	          "moveRightDefaultsPreserved": true,
+	          "moveUpDefaultsPreserved": true,
+	          "moveDownDefaultsPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_vim_normal_defaults_preserved;enterInsertDefaultsPreserved=true;moveLeftDefaultsPreserved=true;moveRightDefaultsPreserved=true;moveUpDefaultsPreserved=true;moveDownDefaultsPreserved=true;eventOrderingPreserved=true",
+	          "enterInsert": [
+	            {
+	              "kind": "character",
+	              "keyName": "i",
+	              "functionNumber": -1
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "insert",
+	              "functionNumber": -1
+	            }
+	          ],
+	          "moveLeft": [
+	            {
+	              "kind": "character",
+	              "keyName": "h",
+	              "functionNumber": -1
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "left",
+	              "functionNumber": -1
+	            }
+	          ],
+	          "moveRight": [
+	            {
+	              "kind": "character",
+	              "keyName": "l",
+	              "functionNumber": -1
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "right",
+	              "functionNumber": -1
+	            }
+	          ],
+	          "moveUp": [
+	            {
+	              "kind": "character",
+	              "keyName": "k",
+	              "functionNumber": -1
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "up",
+	              "functionNumber": -1
+	            }
+	          ],
+	          "moveDown": [
+	            {
+	              "kind": "character",
+	              "keyName": "j",
+	              "functionNumber": -1
+	            },
+	            {
+	              "kind": "named",
+	              "keyName": "down",
+	              "functionNumber": -1
+	            }
+	          ]
+	        }
+	      ],
 	      "backtrackSelectionExpects": [
 	        {
 	          "ok": true,

@@ -242,6 +242,10 @@ import codexhx.runtime.model.streamitem.ModelKeymapVimOperatorTextObjectDecision
 import codexhx.runtime.model.streamitem.ModelKeymapVimOperatorTextObjectOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapVimOperatorTextObjectPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapVimOperatorTextObjectRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapVimNormalDefaultsDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapVimNormalDefaultsOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapVimNormalDefaultsPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapVimNormalDefaultsRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapDefaultActionCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowCase;
 import codexhx.runtime.model.streamitem.ModelKeymapShadowDecisionKind;
@@ -464,6 +468,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapDefaultPrunings(testCase, secretProbe);
 			assertTopLevelKeymapOverlapConflicts(testCase, secretProbe);
 			assertTopLevelKeymapVimOperatorTextObjects(testCase, secretProbe);
+			assertTopLevelKeymapVimNormalDefaults(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -690,6 +695,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapDefaultPrunings(verificationValue, secretProbe);
 				assertKeymapOverlapConflicts(verificationValue, secretProbe);
 				assertKeymapVimOperatorTextObjects(verificationValue, secretProbe);
+				assertKeymapVimNormalDefaults(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -5388,6 +5394,63 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapVimNormalDefaults(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapVimNormalDefaultsOutcome> {
+		final outcomes:Array<ModelKeymapVimNormalDefaultsOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapVimNormalDefaultExpects");
+		for (value in values) outcomes.push(assertKeymapVimNormalDefaultSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapVimNormalDefaults(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapVimNormalDefaultsOutcome> {
+		final outcomes:Array<ModelKeymapVimNormalDefaultsOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapVimNormalDefaultExpects");
+		for (value in values) outcomes.push(assertKeymapVimNormalDefaultSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapVimNormalDefaultSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapVimNormalDefaultsOutcome {
+		final outcome = ModelKeymapVimNormalDefaultsPolicy.apply(new ModelKeymapVimNormalDefaultsRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			enterInsert: keymapBindings(expectValue, "enterInsert"),
+			moveLeft: keymapBindings(expectValue, "moveLeft"),
+			moveRight: keymapBindings(expectValue, "moveRight"),
+			moveUp: keymapBindings(expectValue, "moveUp"),
+			moveDown: keymapBindings(expectValue, "moveDown"),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap vim-normal default expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapVimNormalDefaultsDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "enterInsertDefaultsPreserved", false)), boolText(outcome.enterInsertDefaultsPreserved));
+		assertEquals(boolText(boolField(expectValue, "moveLeftDefaultsPreserved", false)), boolText(outcome.moveLeftDefaultsPreserved));
+		assertEquals(boolText(boolField(expectValue, "moveRightDefaultsPreserved", false)), boolText(outcome.moveRightDefaultsPreserved));
+		assertEquals(boolText(boolField(expectValue, "moveUpDefaultsPreserved", false)), boolText(outcome.moveUpDefaultsPreserved));
+		assertEquals(boolText(boolField(expectValue, "moveDownDefaultsPreserved", false)), boolText(outcome.moveDownDefaultsPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -6893,6 +6956,14 @@ class ModelStreamItemReducerHarness {
 
 	static function keymapVimOperatorTextObjectActionKind(value:String):ModelKeymapVimOperatorTextObjectActionKind {
 		return ModelKeymapVimOperatorTextObjectActionKind.fromString(value);
+	}
+
+	static function keymapVimNormalDefaultsDecisionKind(value:String):ModelKeymapVimNormalDefaultsDecisionKind {
+		return switch value {
+			case "keymap_vim_normal_defaults_preserved": ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsPreserved;
+			case "keymap_vim_normal_defaults_rejected": ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsRejected;
+			case _: throw "unknown keymap vim-normal defaults decision kind: " + value;
+		}
 	}
 
 	static function parsedKeyKind(value:String):ModelParsedKeyKind {
