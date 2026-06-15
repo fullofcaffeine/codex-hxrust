@@ -229,6 +229,10 @@ import codexhx.runtime.model.streamitem.ModelOverrideTurnContextSettingsUpdateDe
 import codexhx.runtime.model.streamitem.ModelOverrideTurnContextSettingsUpdateOutcome;
 import codexhx.runtime.model.streamitem.ModelOverrideTurnContextSettingsUpdatePolicy;
 import codexhx.runtime.model.streamitem.ModelOverrideTurnContextSettingsUpdateRequest;
+import codexhx.runtime.model.streamitem.ModelInactiveThreadSettingsNotificationDecisionKind;
+import codexhx.runtime.model.streamitem.ModelInactiveThreadSettingsNotificationOutcome;
+import codexhx.runtime.model.streamitem.ModelInactiveThreadSettingsNotificationPolicy;
+import codexhx.runtime.model.streamitem.ModelInactiveThreadSettingsNotificationRequest;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionDecisionKind;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionOutcome;
 import codexhx.runtime.model.streamitem.ModelBacktrackSelectionPolicy;
@@ -373,6 +377,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelFreshSessionPreviousConversationShutdowns(testCase, secretProbe);
 			assertTopLevelInterruptWithoutActiveTurns(testCase, secretProbe);
 			assertTopLevelOverrideTurnContextSettingsUpdates(testCase, secretProbe);
+			assertTopLevelInactiveThreadSettingsNotifications(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
 			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
@@ -583,6 +588,7 @@ class ModelStreamItemReducerHarness {
 				assertFreshSessionPreviousConversationShutdowns(verificationValue, secretProbe);
 				assertInterruptWithoutActiveTurns(verificationValue, secretProbe);
 				assertOverrideTurnContextSettingsUpdates(verificationValue, secretProbe);
+				assertInactiveThreadSettingsNotifications(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
 				assertCancelledTurnEdits(verificationValue, secretProbe);
@@ -4179,6 +4185,103 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelInactiveThreadSettingsNotifications(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelInactiveThreadSettingsNotificationOutcome> {
+		final outcomes:Array<ModelInactiveThreadSettingsNotificationOutcome> = [];
+		final values = optionalArrayField(testCase, "inactiveThreadSettingsNotificationExpects");
+		for (value in values) outcomes.push(assertInactiveThreadSettingsNotification(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertInactiveThreadSettingsNotifications(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelInactiveThreadSettingsNotificationOutcome> {
+		final outcomes:Array<ModelInactiveThreadSettingsNotificationOutcome> = [];
+		final values = optionalArrayField(verificationValue, "inactiveThreadSettingsNotificationExpects");
+		for (value in values) outcomes.push(assertInactiveThreadSettingsNotification(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertInactiveThreadSettingsNotification(
+		expectValue:Value,
+		secretProbe:String
+	):ModelInactiveThreadSettingsNotificationOutcome {
+		final outcome = ModelInactiveThreadSettingsNotificationPolicy.apply(new ModelInactiveThreadSettingsNotificationRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			primaryThreadId: stringField(expectValue, "primaryThreadId", ""),
+			inactiveThreadId: stringField(expectValue, "inactiveThreadId", ""),
+			activeThreadId: stringField(expectValue, "activeThreadId", ""),
+			primaryThreadRegistered: boolField(expectValue, "primaryThreadRegistered", false),
+			inactiveThreadChannelPresent: boolField(expectValue, "inactiveThreadChannelPresent", false),
+			inactiveSessionCached: boolField(expectValue, "inactiveSessionCached", false),
+			notificationKindThreadSettingsUpdated: boolField(expectValue, "notificationKindThreadSettingsUpdated", false),
+			notificationThreadMatchesInactive: boolField(expectValue, "notificationThreadMatchesInactive", false),
+			initialPrimaryModel: stringField(expectValue, "initialPrimaryModel", ""),
+			initialPrimaryEffort: stringField(expectValue, "initialPrimaryEffort", ""),
+			initialInactiveModel: stringField(expectValue, "initialInactiveModel", ""),
+			initialInactiveEffort: stringField(expectValue, "initialInactiveEffort", ""),
+			notificationModel: stringField(expectValue, "notificationModel", ""),
+			notificationEffort: stringField(expectValue, "notificationEffort", ""),
+			notificationModelProvider: stringField(expectValue, "notificationModelProvider", ""),
+			notificationServiceTier: stringField(expectValue, "notificationServiceTier", ""),
+			notificationApprovalPolicy: stringField(expectValue, "notificationApprovalPolicy", ""),
+			notificationApprovalsReviewer: stringField(expectValue, "notificationApprovalsReviewer", ""),
+			notificationSandboxPolicy: stringField(expectValue, "notificationSandboxPolicy", ""),
+			notificationActivePermissionProfile: stringField(expectValue, "notificationActivePermissionProfile", ""),
+			notificationCollaborationMode: stringField(expectValue, "notificationCollaborationMode", ""),
+			notificationCollaborationModel: stringField(expectValue, "notificationCollaborationModel", ""),
+			notificationCollaborationEffort: stringField(expectValue, "notificationCollaborationEffort", ""),
+			notificationPersonality: stringField(expectValue, "notificationPersonality", ""),
+			handoffToChatWidget: boolField(expectValue, "handoffToChatWidget", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(inactiveThreadSettingsNotificationDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "notificationAccepted", false)), boolText(outcome.notificationAccepted));
+		assertEquals(boolText(boolField(expectValue, "inactiveChannelRetained", false)), boolText(outcome.inactiveChannelRetained));
+		assertEquals(boolText(boolField(expectValue, "inactiveSessionUpdated", false)), boolText(outcome.inactiveSessionUpdated));
+		assertEquals(boolText(boolField(expectValue, "primarySessionUnchanged", false)), boolText(outcome.primarySessionUnchanged));
+		assertEquals(boolText(boolField(expectValue, "inactiveSessionModelPreserved", false)), boolText(outcome.inactiveSessionModelPreserved));
+		assertEquals(boolText(boolField(expectValue, "inactiveSessionEffortPreserved", false)), boolText(outcome.inactiveSessionEffortPreserved));
+		assertEquals(boolText(boolField(expectValue, "collaborationModeCached", false)), boolText(outcome.collaborationModeCached));
+		assertEquals(boolText(boolField(expectValue, "collaborationSettingsRebasedToNotification", false)), boolText(outcome.collaborationSettingsRebasedToNotification));
+		assertEquals(boolText(boolField(expectValue, "modelProviderCached", false)), boolText(outcome.modelProviderCached));
+		assertEquals(boolText(boolField(expectValue, "serviceTierCached", false)), boolText(outcome.serviceTierCached));
+		assertEquals(boolText(boolField(expectValue, "approvalPolicyCached", false)), boolText(outcome.approvalPolicyCached));
+		assertEquals(boolText(boolField(expectValue, "approvalsReviewerCached", false)), boolText(outcome.approvalsReviewerCached));
+		assertEquals(boolText(boolField(expectValue, "permissionProfileCached", false)), boolText(outcome.permissionProfileCached));
+		assertEquals(boolText(boolField(expectValue, "activePermissionProfileCached", false)), boolText(outcome.activePermissionProfileCached));
+		assertEquals(boolText(boolField(expectValue, "personalityCached", false)), boolText(outcome.personalityCached));
+		assertEquals(boolText(boolField(expectValue, "notificationBuffered", false)), boolText(outcome.notificationBuffered));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetHandoffApplied", false)), boolText(outcome.chatWidgetHandoffApplied));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetCollaborationModeActive", false)), boolText(outcome.chatWidgetCollaborationModeActive));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetCurrentModelFromCollaborationSettings", false)), boolText(outcome.chatWidgetCurrentModelFromCollaborationSettings));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetCurrentCollaborationModeModelPreservesSessionModel", false)), boolText(outcome.chatWidgetCurrentCollaborationModeModelPreservesSessionModel));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetCurrentEffortFromNotification", false)), boolText(outcome.chatWidgetCurrentEffortFromNotification));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetPersonalityApplied", false)), boolText(outcome.chatWidgetPersonalityApplied));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) {
+			assertNotContains(outcome.summary(), secretProbe);
+			assertNotContains(outcome.summary(), stringField(expectValue, "primaryThreadId", ""));
+			assertNotContains(outcome.summary(), stringField(expectValue, "inactiveThreadId", ""));
+			assertNotContains(outcome.summary(), stringField(expectValue, "activeThreadId", ""));
+			assertNotContains(outcome.summary(), stringField(expectValue, "notificationModel", ""));
+		}
+		return outcome;
+	}
+
 	static function assertTopLevelBacktrackSelections(
 		testCase:Value,
 		secretProbe:String
@@ -5538,6 +5641,15 @@ class ModelStreamItemReducerHarness {
 			case "no_settings_changes_noop": ModelOverrideTurnContextSettingsUpdateDecisionKind.NoSettingsChangesNoop;
 			case "override_turn_context_not_handled": ModelOverrideTurnContextSettingsUpdateDecisionKind.OverrideTurnContextNotHandled;
 			case _: throw "unknown override-turn-context settings update decision kind: " + value;
+		}
+	}
+
+	static function inactiveThreadSettingsNotificationDecisionKind(value:String):ModelInactiveThreadSettingsNotificationDecisionKind {
+		return switch value {
+			case "inactive_thread_settings_notification_cached": ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationCached;
+			case "inactive_thread_settings_notification_ignored": ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationIgnored;
+			case "inactive_thread_settings_notification_unavailable": ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationUnavailable;
+			case _: throw "unknown inactive-thread settings notification decision kind: " + value;
 		}
 	}
 

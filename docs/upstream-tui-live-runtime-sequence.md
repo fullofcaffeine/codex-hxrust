@@ -1393,7 +1393,20 @@ Model selected raw Codex settings-update behavior:
 
 Status: HXCX-4.112 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic override-turn-context settings update evidence only, not live app-server calls, live `thread/settings/update` RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.113+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.113: Inactive Thread Settings Notification Cache Boundary
+
+Model selected raw Codex inactive-thread notification behavior:
+
+- accept `ServerNotification::ThreadSettingsUpdated` for an inactive thread that already has a cached thread channel;
+- apply notification settings to that inactive cached session while leaving the active primary session isolated;
+- preserve top-level model/effort for non-default collaboration mode while rebasing the cached collaboration settings to the notification model/effort;
+- propagate model provider, approval policy, approvals reviewer, sandbox-derived permission profile, active permission profile, and personality facts;
+- model the later chat-widget handoff that makes the inactive session's collaboration mode/current model/current effort/personality visible;
+- preserve event ordering, no-live/no-network/no-real-tool proofs, and secret-free summaries.
+
+Status: HXCX-4.113 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic inactive-thread settings notification cache evidence only, not live app-server calls, live WebSocket notification delivery, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.114+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
