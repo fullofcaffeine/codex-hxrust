@@ -9,6 +9,9 @@ import codexhx.runtime.model.streamitem.ModelStreamItemReducerReport;
 import codexhx.runtime.model.streamitem.ModelStreamItemReducerRequest;
 import codexhx.runtime.model.streamitem.ModelStreamOutputItem;
 import codexhx.runtime.model.streamitem.ModelStreamOutputItemKind;
+import codexhx.runtime.model.streamitem.ModelCollabAgentMetadataEntry;
+import codexhx.runtime.model.streamitem.ModelCollabReplayWaitItem;
+import codexhx.runtime.model.streamitem.ModelCollabReplayWaitStatusKind;
 import codexhx.runtime.model.streamitem.ModelPatchApplicationPolicy;
 import codexhx.runtime.model.streamitem.ModelPatchApplicationRequest;
 import codexhx.runtime.model.streamitem.ModelPatchApplicationOutcome;
@@ -101,6 +104,10 @@ import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryReplayPoli
 import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryReplayRequest;
 import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnHistoryTurn;
 import codexhx.runtime.model.streamitem.ModelThreadSnapshotTurnStatusKind;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotCollabMetadataReplayDecisionKind;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotCollabMetadataReplayOutcome;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotCollabMetadataReplayPolicy;
+import codexhx.runtime.model.streamitem.ModelThreadSnapshotCollabMetadataReplayRequest;
 import codexhx.runtime.model.streamitem.ModelReplayedServerRequestKind;
 import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceKind;
 import codexhx.runtime.model.streamitem.ModelReplayedServerRequestSurfaceOutcome;
@@ -313,6 +320,7 @@ class ModelStreamItemReducerHarness {
 			final topLevelPendingInteractiveReplays = assertTopLevelPendingInteractiveReplays(testCase, topLevelTurnReplayReconstructions, secretProbe);
 			final topLevelThreadSnapshotReplayDispatches = assertTopLevelThreadSnapshotReplayDispatches(testCase, topLevelPendingInteractiveReplays, secretProbe);
 			assertTopLevelThreadSnapshotTurnHistoryReplays(testCase, secretProbe);
+			assertTopLevelThreadSnapshotCollabMetadataReplays(testCase, secretProbe);
 			final topLevelReplayedServerRequestSurfaces = assertTopLevelReplayedServerRequestSurfaces(testCase, topLevelThreadSnapshotReplayDispatches, secretProbe);
 			final topLevelAppServerRequestResolutions = assertTopLevelAppServerRequestResolutions(testCase, topLevelReplayedServerRequestSurfaces, secretProbe);
 			final topLevelAppServerResponseDispatches = assertTopLevelAppServerResponseDispatches(testCase, topLevelAppServerRequestResolutions, secretProbe);
@@ -516,6 +524,7 @@ class ModelStreamItemReducerHarness {
 				final pendingInteractiveReplays = assertPendingInteractiveReplays(verificationValue, turnReplayReconstructions, secretProbe);
 				final threadSnapshotReplayDispatches = assertThreadSnapshotReplayDispatches(verificationValue, pendingInteractiveReplays, secretProbe);
 				assertThreadSnapshotTurnHistoryReplays(verificationValue, secretProbe);
+				assertThreadSnapshotCollabMetadataReplays(verificationValue, secretProbe);
 				final replayedServerRequestSurfaces = assertReplayedServerRequestSurfaces(verificationValue, threadSnapshotReplayDispatches, secretProbe);
 				final appServerRequestResolutions = assertAppServerRequestResolutions(verificationValue, replayedServerRequestSurfaces, secretProbe);
 				final appServerResponseDispatches = assertAppServerResponseDispatches(verificationValue, appServerRequestResolutions, secretProbe);
@@ -2008,6 +2017,67 @@ class ModelStreamItemReducerHarness {
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
 		for (message in outcome.transcriptUserMessages) if (message.length > 0) assertNotContains(outcome.summary(), message);
 		for (message in outcome.transcriptAgentMessages) if (message.length > 0) assertNotContains(outcome.summary(), message);
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
+	static function assertTopLevelThreadSnapshotCollabMetadataReplays(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelThreadSnapshotCollabMetadataReplayOutcome> {
+		final outcomes:Array<ModelThreadSnapshotCollabMetadataReplayOutcome> = [];
+		final values = optionalArrayField(testCase, "threadSnapshotCollabMetadataReplayExpects");
+		for (value in values) outcomes.push(assertThreadSnapshotCollabMetadataReplay(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSnapshotCollabMetadataReplays(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelThreadSnapshotCollabMetadataReplayOutcome> {
+		final outcomes:Array<ModelThreadSnapshotCollabMetadataReplayOutcome> = [];
+		final values = optionalArrayField(verificationValue, "threadSnapshotCollabMetadataReplayExpects");
+		for (value in values) outcomes.push(assertThreadSnapshotCollabMetadataReplay(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertThreadSnapshotCollabMetadataReplay(
+		expectValue:Value,
+		secretProbe:String
+	):ModelThreadSnapshotCollabMetadataReplayOutcome {
+		final outcome = ModelThreadSnapshotCollabMetadataReplayPolicy.replay(new ModelThreadSnapshotCollabMetadataReplayRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			replayKind: turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
+			replacementCreatedBeforeReplay: boolField(expectValue, "replacementCreatedBeforeReplay", false),
+			navigationEntries: collabAgentNavigationEntries(expectValue),
+			waitItems: collabReplayWaitItems(expectValue),
+			expectedAgentNickname: stringField(expectValue, "expectedAgentNickname", ""),
+			expectedAgentRole: stringField(expectValue, "expectedAgentRole", ""),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")), outcome.replayKind);
+		assertEquals(threadSnapshotCollabMetadataDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "navigationEntryCount", 0)), Std.string(outcome.navigationEntryCount));
+		assertEquals(Std.string(intField(expectValue, "reseededMetadataCount", 0)), Std.string(outcome.reseededMetadataCount));
+		assertEquals(Std.string(intField(expectValue, "replayedWaitItemCount", 0)), Std.string(outcome.replayedWaitItemCount));
+		assertEquals(Std.string(intField(expectValue, "namedWaitItemCount", 0)), Std.string(outcome.namedWaitItemCount));
+		assertEquals(boolText(boolField(expectValue, "replacementCreatedBeforeReplay", false)), boolText(outcome.replacementCreatedBeforeReplay));
+		assertEquals(boolText(boolField(expectValue, "metadataReseededBeforeReplay", false)), boolText(outcome.metadataReseededBeforeReplay));
+		assertEquals(boolText(boolField(expectValue, "agentNicknamePreserved", false)), boolText(outcome.agentNicknamePreserved));
+		assertEquals(boolText(boolField(expectValue, "agentRolePreserved", false)), boolText(outcome.agentRolePreserved));
+		assertEquals(boolText(boolField(expectValue, "waitItemRendered", false)), boolText(outcome.waitItemRendered));
+		assertEquals(boolText(boolField(expectValue, "renderedWaitContainsMetadata", false)), boolText(outcome.renderedWaitContainsMetadata));
+		assertEquals(boolText(boolField(expectValue, "fallbackThreadIdRendered", false)), boolText(outcome.fallbackThreadIdRendered));
+		assertEquals(boolText(boolField(expectValue, "liveOnlyEffectsSuppressed", false)), boolText(outcome.liveOnlyEffectsSuppressed));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "renderedWaitSummary", ""), outcome.renderedWaitSummary);
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
 		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
@@ -4381,6 +4451,23 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
+	static function threadSnapshotCollabMetadataDecisionKind(value:String):ModelThreadSnapshotCollabMetadataReplayDecisionKind {
+		return switch value {
+			case "metadata_reseeded_for_replay": ModelThreadSnapshotCollabMetadataReplayDecisionKind.MetadataReseededForReplay;
+			case "metadata_replay_blocked": ModelThreadSnapshotCollabMetadataReplayDecisionKind.MetadataReplayBlocked;
+			case _: throw "unknown thread snapshot collab metadata decision kind: " + value;
+		}
+	}
+
+	static function collabReplayWaitStatusKind(value:String):ModelCollabReplayWaitStatusKind {
+		return switch value {
+			case "in_progress": ModelCollabReplayWaitStatusKind.InProgress;
+			case "completed": ModelCollabReplayWaitStatusKind.Completed;
+			case "failed": ModelCollabReplayWaitStatusKind.Failed;
+			case _: throw "unknown collab replay wait status kind: " + value;
+		}
+	}
+
 	static function turnReplayTargetKind(value:String):ModelTurnReplayTargetKind {
 		return switch value {
 			case "active_exact": ModelTurnReplayTargetKind.ActiveExact;
@@ -5057,6 +5144,34 @@ class ModelStreamItemReducerHarness {
 				turnId: stringField(turn, "turnId", ""),
 				statusKind: threadSnapshotTurnStatusKind(stringField(turn, "statusKind", "completed")),
 				items: items
+			}));
+		}
+		return out;
+	}
+
+	static function collabAgentNavigationEntries(expectValue:Value):Array<ModelCollabAgentMetadataEntry> {
+		final out:Array<ModelCollabAgentMetadataEntry> = [];
+		final values = optionalArrayField(expectValue, "navigationEntries");
+		for (value in values) {
+			final entry = objectValue(value);
+			out.push(new ModelCollabAgentMetadataEntry({
+				threadId: stringField(entry, "threadId", ""),
+				agentNickname: stringField(entry, "agentNickname", ""),
+				agentRole: stringField(entry, "agentRole", "")
+			}));
+		}
+		return out;
+	}
+
+	static function collabReplayWaitItems(expectValue:Value):Array<ModelCollabReplayWaitItem> {
+		final out:Array<ModelCollabReplayWaitItem> = [];
+		final values = optionalArrayField(expectValue, "waitItems");
+		for (value in values) {
+			final item = objectValue(value);
+			out.push(new ModelCollabReplayWaitItem({
+				itemId: stringField(item, "itemId", ""),
+				receiverThreadId: stringField(item, "receiverThreadId", ""),
+				statusKind: collabReplayWaitStatusKind(stringField(item, "statusKind", "in_progress"))
 			}));
 		}
 		return out;

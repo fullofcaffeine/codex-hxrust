@@ -1277,6 +1277,49 @@
 	          "summaryContains": "replayKind=thread_snapshot;decisionKind=turn_history_replayed_in_order;turnCount=2;replayedItemCount=3;userMessageCount=2;agentMessageCount=1;terminalTurnCompletedNotificationCount=2;userMessagesInExpectedOrder=true;agentMessagesInExpectedOrder=true;turnOrderPreserved=true;itemOrderPreserved=true;sessionAppliedBeforeTurns=true;queueAutosendSuppressed=true;liveOnlyEffectsSuppressed=true"
 	        }
 	      ],
+	      "threadSnapshotCollabMetadataReplayExpects": [
+	        {
+	          "ok": true,
+	          "code": "thread_snapshot_collab_metadata_replay_modeled",
+	          "requestId": "replace-chat-widget-reseeds-collab-agent-metadata-for-replay",
+	          "replayKind": "thread_snapshot",
+	          "replacementCreatedBeforeReplay": true,
+	          "navigationEntries": [
+	            {
+	              "threadId": "019cff70-2599-75e2-af72-b958ce5dc1cc",
+	              "agentNickname": "Robie",
+	              "agentRole": "explorer"
+	            }
+	          ],
+	          "waitItems": [
+	            {
+	              "itemId": "wait-1",
+	              "receiverThreadId": "019cff70-2599-75e2-af72-b958ce5dc1cc",
+	              "statusKind": "in_progress"
+	            }
+	          ],
+	          "expectedAgentNickname": "Robie",
+	          "expectedAgentRole": "explorer",
+	          "decisionKind": "metadata_reseeded_for_replay",
+	          "navigationEntryCount": 1,
+	          "reseededMetadataCount": 1,
+	          "replayedWaitItemCount": 1,
+	          "namedWaitItemCount": 1,
+	          "metadataReseededBeforeReplay": true,
+	          "agentNicknamePreserved": true,
+	          "agentRolePreserved": true,
+	          "waitItemRendered": true,
+	          "renderedWaitContainsMetadata": true,
+	          "fallbackThreadIdRendered": false,
+	          "liveOnlyEffectsSuppressed": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "renderedWaitSummary": "Robie [explorer]",
+	          "errorMessage": "",
+	          "summaryContains": "replayKind=thread_snapshot;decisionKind=metadata_reseeded_for_replay;navigationEntryCount=1;reseededMetadataCount=1;replayedWaitItemCount=1;namedWaitItemCount=1;replacementCreatedBeforeReplay=true;metadataReseededBeforeReplay=true;agentNicknamePreserved=true;agentRolePreserved=true;waitItemRendered=true;renderedWaitContainsMetadata=true;fallbackThreadIdRendered=false;liveOnlyEffectsSuppressed=true"
+	        }
+	      ],
 	      "replayedServerRequestSurfaceExpects": [
 	        {
 	          "ok": true,

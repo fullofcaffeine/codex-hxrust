@@ -1306,7 +1306,19 @@ Model selected raw Codex thread snapshot turn-history replay behavior:
 
 Status: HXCX-4.105 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic thread snapshot turn-history replay evidence only, not live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.106+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.106: Thread Snapshot Collab Metadata Replay Boundary
+
+Model selected raw Codex chat widget replacement and replay behavior:
+
+- reconstruct the chat widget before replaying a thread snapshot;
+- reseed collab agent nickname and role metadata from agent navigation into the replacement widget;
+- replay a buffered collab `Wait` tool-call item against the reseeded metadata;
+- render the named wait item as `Robie [explorer]` instead of falling back to the raw receiver thread id;
+- preserve replay-kind, no-live/no-network/no-real-tool, and secret-free summary proofs.
+
+Status: HXCX-4.106 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic collab metadata replay evidence only, not live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.107+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 
