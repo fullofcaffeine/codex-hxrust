@@ -1271,7 +1271,19 @@ Model selected raw Codex backtrack rollback behavior:
 
 Status: HXCX-4.102 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic backtrack rollback application evidence only, not live app-server calls, live rollback RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
-### HXCX-4.103+: Credentialed Runtime, Realtime, And Interactive TUI
+### HXCX-4.103: Cancelled-Turn Edit Rollback Boundary
+
+Model selected raw Codex cancelled-turn edit behavior:
+
+- restore cancelled prompt text and remote image URLs into the composer;
+- when local transcript history has a user turn, route through backtrack rollback for the latest user index;
+- when local transcript history has no user turn, record a pending rollback directly and submit a one-turn rollback;
+- preserve one-turn rollback behavior for both upstream-tested paths;
+- preserve event ordering and no-live/no-network/no-real-tool proofs.
+
+Status: HXCX-4.103 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic cancelled-turn edit restoration evidence only, not live app-server calls, live rollback RPC handling, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
+
+### HXCX-4.104+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
 

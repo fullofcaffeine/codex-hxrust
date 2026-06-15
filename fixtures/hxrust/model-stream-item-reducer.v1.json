@@ -6669,6 +6669,78 @@
 	          "errorMessage": "",
 	          "summaryContains": "decisionKind=remote_image_only_cleared_composer;userCountSinceLastSession=1;selectedNthUserMessage=0;prefillEmpty=true;remoteImageOnlySelection=true;selectedTextElementCount=0;selectedLocalImageCount=0;selectedRemoteImageCount=1;rollbackTurnCount=1;staleComposerDraftCleared=true"
 	        }
+	      ],
+	      "cancelledTurnEditExpects": [
+	        {
+	          "ok": true,
+	          "code": "cancelled_turn_edit_modeled",
+	          "requestId": "cancelled-turn-edit-restores-local-history-prompt",
+	          "pendingRollback": false,
+	          "promptText": "edit me",
+	          "promptTextElementCount": 0,
+	          "promptLocalImageCount": 0,
+	          "promptRemoteImageCount": 1,
+	          "promptRemoteImageUrl": "https://example.com/edit.png",
+	          "previousEventCount": 70,
+	          "eventOrderIndex": 71,
+	          "transcriptCells": [
+	            {
+	              "cellKind": "user",
+	              "message": "original",
+	              "textElementCount": 0,
+	              "localImageCount": 0,
+	              "remoteImageCount": 0,
+	              "localImagePath": "",
+	              "remoteImageUrl": ""
+	            }
+	          ],
+	          "decisionKind": "restored_prompt_with_local_rollback",
+	          "userCountSinceLastSession": 1,
+	          "selectedNthUserMessage": 0,
+	          "rollbackTurnCount": 1,
+	          "usedBacktrackRollbackPath": true,
+	          "usedFirstPromptRollbackPath": false,
+	          "composerTextAfter": "edit me",
+	          "remoteImagesApplied": true,
+	          "pendingRollbackRecorded": true,
+	          "threadRollbackSubmitted": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=restored_prompt_with_local_rollback;userCountSinceLastSession=1;selectedNthUserMessage=0;rollbackTurnCount=1;usedBacktrackRollbackPath=true;usedFirstPromptRollbackPath=false;promptTextElementCount=0;promptLocalImageCount=0;promptRemoteImageCount=1;remoteImagesApplied=true"
+	        },
+	        {
+	          "ok": true,
+	          "code": "cancelled_turn_edit_modeled",
+	          "requestId": "cancelled-turn-edit-restores-first-prompt-without-history",
+	          "pendingRollback": false,
+	          "promptText": "edit first prompt",
+	          "promptTextElementCount": 0,
+	          "promptLocalImageCount": 0,
+	          "promptRemoteImageCount": 1,
+	          "promptRemoteImageUrl": "https://example.com/edit.png",
+	          "previousEventCount": 71,
+	          "eventOrderIndex": 72,
+	          "transcriptCells": [],
+	          "decisionKind": "restored_first_prompt_without_local_history",
+	          "userCountSinceLastSession": 0,
+	          "selectedNthUserMessage": 0,
+	          "rollbackTurnCount": 1,
+	          "usedBacktrackRollbackPath": false,
+	          "usedFirstPromptRollbackPath": true,
+	          "composerTextAfter": "edit first prompt",
+	          "remoteImagesApplied": true,
+	          "pendingRollbackRecorded": true,
+	          "threadRollbackSubmitted": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=restored_first_prompt_without_local_history;userCountSinceLastSession=0;selectedNthUserMessage=0;rollbackTurnCount=1;usedBacktrackRollbackPath=false;usedFirstPromptRollbackPath=true;promptTextElementCount=0;promptLocalImageCount=0;promptRemoteImageCount=1;remoteImagesApplied=true"
+	        }
 	      ]
 		    },
     {

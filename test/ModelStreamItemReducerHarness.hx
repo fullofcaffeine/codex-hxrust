@@ -207,6 +207,10 @@ import codexhx.runtime.model.streamitem.ModelBacktrackRollbackDecisionKind;
 import codexhx.runtime.model.streamitem.ModelBacktrackRollbackOutcome;
 import codexhx.runtime.model.streamitem.ModelBacktrackRollbackPolicy;
 import codexhx.runtime.model.streamitem.ModelBacktrackRollbackRequest;
+import codexhx.runtime.model.streamitem.ModelCancelledTurnEditDecisionKind;
+import codexhx.runtime.model.streamitem.ModelCancelledTurnEditOutcome;
+import codexhx.runtime.model.streamitem.ModelCancelledTurnEditPolicy;
+import codexhx.runtime.model.streamitem.ModelCancelledTurnEditRequest;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedEventKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionKind;
 import codexhx.runtime.model.streamitem.ModelThreadBufferedRequestEvictionOutcome;
@@ -321,6 +325,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelFreshSessionServiceTiers(testCase, secretProbe);
 			assertTopLevelBacktrackSelections(testCase, secretProbe);
 			assertTopLevelBacktrackRollbacks(testCase, secretProbe);
+			assertTopLevelCancelledTurnEdits(testCase, secretProbe);
 			assertPatchVerification(testCase, outcome);
 			i = i + 1;
 		}
@@ -521,6 +526,7 @@ class ModelStreamItemReducerHarness {
 				assertFreshSessionServiceTiers(verificationValue, secretProbe);
 				assertBacktrackSelections(verificationValue, secretProbe);
 				assertBacktrackRollbacks(verificationValue, secretProbe);
+				assertCancelledTurnEdits(verificationValue, secretProbe);
 			case JNull:
 			case _:
 				throw "expected object field: patchVerification";
@@ -3839,6 +3845,74 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelCancelledTurnEdits(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelCancelledTurnEditOutcome> {
+		final outcomes:Array<ModelCancelledTurnEditOutcome> = [];
+		final values = optionalArrayField(testCase, "cancelledTurnEditExpects");
+		for (value in values) outcomes.push(assertCancelledTurnEdit(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertCancelledTurnEdits(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelCancelledTurnEditOutcome> {
+		final outcomes:Array<ModelCancelledTurnEditOutcome> = [];
+		final values = optionalArrayField(verificationValue, "cancelledTurnEditExpects");
+		for (value in values) outcomes.push(assertCancelledTurnEdit(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertCancelledTurnEdit(
+		expectValue:Value,
+		secretProbe:String
+	):ModelCancelledTurnEditOutcome {
+		final outcome = ModelCancelledTurnEditPolicy.apply(new ModelCancelledTurnEditRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			pendingRollback: boolField(expectValue, "pendingRollback", false),
+			promptText: stringField(expectValue, "promptText", ""),
+			promptTextElementCount: intField(expectValue, "promptTextElementCount", 0),
+			promptLocalImageCount: intField(expectValue, "promptLocalImageCount", 0),
+			promptRemoteImageCount: intField(expectValue, "promptRemoteImageCount", 0),
+			promptRemoteImageUrl: stringField(expectValue, "promptRemoteImageUrl", ""),
+			transcriptCells: backtrackTranscriptCells(expectValue),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(cancelledTurnEditDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(Std.string(intField(expectValue, "userCountSinceLastSession", 0)), Std.string(outcome.userCountSinceLastSession));
+		assertEquals(Std.string(intField(expectValue, "selectedNthUserMessage", -1)), Std.string(outcome.selectedNthUserMessage));
+		assertEquals(Std.string(intField(expectValue, "rollbackTurnCount", 0)), Std.string(outcome.rollbackTurnCount));
+		assertEquals(boolText(boolField(expectValue, "usedBacktrackRollbackPath", false)), boolText(outcome.usedBacktrackRollbackPath));
+		assertEquals(boolText(boolField(expectValue, "usedFirstPromptRollbackPath", false)), boolText(outcome.usedFirstPromptRollbackPath));
+		assertEquals(stringField(expectValue, "promptText", ""), outcome.promptText);
+		assertEquals(Std.string(intField(expectValue, "promptTextElementCount", 0)), Std.string(outcome.promptTextElementCount));
+		assertEquals(Std.string(intField(expectValue, "promptLocalImageCount", 0)), Std.string(outcome.promptLocalImageCount));
+		assertEquals(Std.string(intField(expectValue, "promptRemoteImageCount", 0)), Std.string(outcome.promptRemoteImageCount));
+		assertEquals(stringField(expectValue, "promptRemoteImageUrl", ""), outcome.promptRemoteImageUrl);
+		assertEquals(stringField(expectValue, "composerTextAfter", ""), outcome.composerTextAfter);
+		assertEquals(boolText(boolField(expectValue, "remoteImagesApplied", false)), boolText(outcome.remoteImagesApplied));
+		assertEquals(boolText(boolField(expectValue, "pendingRollbackRecorded", false)), boolText(outcome.pendingRollbackRecorded));
+		assertEquals(boolText(boolField(expectValue, "threadRollbackSubmitted", false)), boolText(outcome.threadRollbackSubmitted));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (outcome.promptText.length > 0) assertNotContains(outcome.summary(), outcome.promptText);
+		if (outcome.composerTextAfter.length > 0) assertNotContains(outcome.summary(), outcome.composerTextAfter);
+		if (outcome.promptRemoteImageUrl.length > 0) assertNotContains(outcome.summary(), outcome.promptRemoteImageUrl);
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertStringArraysEqual(expected:Array<String>, actual:Array<String>):Void {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
@@ -4726,6 +4800,15 @@ class ModelStreamItemReducerHarness {
 			case "rollback_applied": ModelBacktrackRollbackDecisionKind.RollbackApplied;
 			case "rollback_unavailable": ModelBacktrackRollbackDecisionKind.RollbackUnavailable;
 			case _: throw "unknown backtrack rollback decision kind: " + value;
+		}
+	}
+
+	static function cancelledTurnEditDecisionKind(value:String):ModelCancelledTurnEditDecisionKind {
+		return switch value {
+			case "restored_prompt_with_local_rollback": ModelCancelledTurnEditDecisionKind.RestoredPromptWithLocalRollback;
+			case "restored_first_prompt_without_local_history": ModelCancelledTurnEditDecisionKind.RestoredFirstPromptWithoutLocalHistory;
+			case "pending_rollback_rejected": ModelCancelledTurnEditDecisionKind.PendingRollbackRejected;
+			case _: throw "unknown cancelled-turn edit decision kind: " + value;
 		}
 	}
 
