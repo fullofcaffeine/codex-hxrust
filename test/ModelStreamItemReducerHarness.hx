@@ -5741,6 +5741,7 @@ class ModelStreamItemReducerHarness {
 			configuredApprove: optionalKeymapBinding(expectValue, "configuredApprove"),
 			configuredDecline: optionalKeymapBinding(expectValue, "configuredDecline"),
 			configuredDeny: optionalKeymapBinding(expectValue, "configuredDeny"),
+			configuredListAccept: optionalKeymapBinding(expectValue, "configuredListAccept"),
 			conflictOuterAction: keymapApprovalConflictActionKind(stringField(expectValue, "conflictOuterAction", "")),
 			conflictInnerAction: keymapApprovalConflictActionKind(stringField(expectValue, "conflictInnerAction", "")),
 			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
@@ -5760,6 +5761,7 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "approveBindingPreserved", false)), boolText(outcome.approveBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "declineBindingPreserved", false)), boolText(outcome.declineBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "denyBindingPreserved", false)), boolText(outcome.denyBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "listAcceptBindingPreserved", false)), boolText(outcome.listAcceptBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
