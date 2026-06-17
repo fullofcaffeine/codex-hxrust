@@ -252,6 +252,10 @@ import codexhx.runtime.model.streamitem.ModelKeymapMainSurfaceAssignmentDecision
 import codexhx.runtime.model.streamitem.ModelKeymapMainSurfaceAssignmentOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapMainSurfaceAssignmentPolicy;
 import codexhx.runtime.model.streamitem.ModelKeymapMainSurfaceAssignmentRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapMainSurfaceConflictDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapMainSurfaceConflictOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapMainSurfaceConflictPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapMainSurfaceConflictRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapPagerConflictActionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapPagerConflictDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapPagerConflictOutcome;
@@ -516,6 +520,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapInvalidGlobalCopies(testCase, secretProbe);
 			assertTopLevelKeymapEditorAssignments(testCase, secretProbe);
 			assertTopLevelKeymapMainSurfaceAssignments(testCase, secretProbe);
+			assertTopLevelKeymapMainSurfaceConflicts(testCase, secretProbe);
 			assertTopLevelKeymapEditorConflicts(testCase, secretProbe);
 			assertTopLevelKeymapEditorUnbindConflicts(testCase, secretProbe);
 			assertTopLevelKeymapPagerConflicts(testCase, secretProbe);
@@ -752,6 +757,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapInvalidGlobalCopies(verificationValue, secretProbe);
 				assertKeymapEditorAssignments(verificationValue, secretProbe);
 				assertKeymapMainSurfaceAssignments(verificationValue, secretProbe);
+				assertKeymapMainSurfaceConflicts(verificationValue, secretProbe);
 				assertKeymapEditorConflicts(verificationValue, secretProbe);
 				assertKeymapEditorUnbindConflicts(verificationValue, secretProbe);
 				assertKeymapPagerConflicts(verificationValue, secretProbe);
@@ -5676,6 +5682,64 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapMainSurfaceConflicts(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapMainSurfaceConflictOutcome> {
+		final outcomes:Array<ModelKeymapMainSurfaceConflictOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapMainSurfaceConflictExpects");
+		for (value in values) outcomes.push(assertKeymapMainSurfaceConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapMainSurfaceConflicts(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapMainSurfaceConflictOutcome> {
+		final outcomes:Array<ModelKeymapMainSurfaceConflictOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapMainSurfaceConflictExpects");
+		for (value in values) outcomes.push(assertKeymapMainSurfaceConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapMainSurfaceConflictSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapMainSurfaceConflictOutcome {
+		final outcome = ModelKeymapMainSurfaceConflictPolicy.apply(new ModelKeymapMainSurfaceConflictRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			configuredToggleFastModeBinding: keymapBinding(objectField(expectValue, "configuredToggleFastModeBinding")),
+			defaultClearTerminalBinding: keymapBinding(objectField(expectValue, "defaultClearTerminalBinding")),
+			conflictOuterAction: ModelKeymapMainSurfaceActionKind.fromString(stringField(expectValue, "conflictOuterAction", "")),
+			conflictInnerAction: ModelKeymapMainSurfaceActionKind.fromString(stringField(expectValue, "conflictInnerAction", "")),
+			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
+			expectedInnerActionName: stringField(expectValue, "expectedInnerActionName", ""),
+			conflictRejected: boolField(expectValue, "conflictRejected", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap main-surface conflict expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapMainSurfaceConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "configuredToggleFastModeBindingPreserved", false)), boolText(outcome.configuredToggleFastModeBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "defaultClearTerminalBindingPreserved", false)), boolText(outcome.defaultClearTerminalBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelKeymapEditorConflicts(
 		testCase:Value,
 		secretProbe:String
@@ -7585,6 +7649,14 @@ class ModelStreamItemReducerHarness {
 
 	static function keymapMainSurfaceAssignmentActionKind(value:String):ModelKeymapMainSurfaceAssignmentActionKind {
 		return ModelKeymapMainSurfaceAssignmentActionKind.fromString(value);
+	}
+
+	static function keymapMainSurfaceConflictDecisionKind(value:String):ModelKeymapMainSurfaceConflictDecisionKind {
+		return switch value {
+			case "keymap_main_surface_conflict_rejected": ModelKeymapMainSurfaceConflictDecisionKind.KeymapMainSurfaceConflictRejected;
+			case "keymap_main_surface_conflict_missed": ModelKeymapMainSurfaceConflictDecisionKind.KeymapMainSurfaceConflictMissed;
+			case _: throw "unknown keymap main-surface conflict decision kind: " + value;
+		}
 	}
 
 	static function keymapEditorConflictDecisionKind(value:String):ModelKeymapEditorConflictDecisionKind {

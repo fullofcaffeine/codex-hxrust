@@ -8241,6 +8241,47 @@
 	          }
 	        }
 	      ],
+	      "keymapMainSurfaceConflictExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_main_surface_conflict_modeled",
+	          "requestId": "keymap-main-toggle-fast-mode-clear-terminal-conflict",
+	          "previousEventCount": 101,
+	          "eventOrderIndex": 102,
+	          "decisionKind": "keymap_main_surface_conflict_rejected",
+	          "configuredToggleFastModeBindingPreserved": true,
+	          "defaultClearTerminalBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_main_surface_conflict_rejected;configuredToggleFastModeBindingPreserved=true;defaultClearTerminalBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredToggleFastModeBinding": {
+	            "kind": "character",
+	            "keyName": "l",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "defaultClearTerminalBinding": {
+	            "kind": "character",
+	            "keyName": "l",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "clear_terminal",
+	          "conflictInnerAction": "toggle_fast_mode",
+	          "expectedOuterActionName": "clear_terminal",
+	          "expectedInnerActionName": "toggle_fast_mode",
+	          "conflictRejected": true
+	        }
+	      ],
 	      "keymapEditorConflictExpects": [
 	        {
 	          "ok": true,
