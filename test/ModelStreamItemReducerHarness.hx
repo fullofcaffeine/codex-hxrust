@@ -217,6 +217,11 @@ import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapDe
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapOutcome;
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapPolicy;
 import codexhx.runtime.model.streamitem.ModelInterruptQuestionNavigationKeymapRequest;
+import codexhx.runtime.model.streamitem.ModelKeymapComposerFixedShortcutConflictActionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapComposerFixedShortcutConflictDecisionKind;
+import codexhx.runtime.model.streamitem.ModelKeymapComposerFixedShortcutConflictOutcome;
+import codexhx.runtime.model.streamitem.ModelKeymapComposerFixedShortcutConflictPolicy;
+import codexhx.runtime.model.streamitem.ModelKeymapComposerFixedShortcutConflictRequest;
 import codexhx.runtime.model.streamitem.ModelKeymapAliasDecisionKind;
 import codexhx.runtime.model.streamitem.ModelKeymapAliasOutcome;
 import codexhx.runtime.model.streamitem.ModelKeymapAliasPolicy;
@@ -521,6 +526,7 @@ class ModelStreamItemReducerHarness {
 			assertTopLevelKeymapEditorAssignments(testCase, secretProbe);
 			assertTopLevelKeymapMainSurfaceAssignments(testCase, secretProbe);
 			assertTopLevelKeymapMainSurfaceConflicts(testCase, secretProbe);
+			assertTopLevelKeymapComposerFixedShortcutConflicts(testCase, secretProbe);
 			assertTopLevelKeymapEditorConflicts(testCase, secretProbe);
 			assertTopLevelKeymapEditorUnbindConflicts(testCase, secretProbe);
 			assertTopLevelKeymapPagerConflicts(testCase, secretProbe);
@@ -758,6 +764,7 @@ class ModelStreamItemReducerHarness {
 				assertKeymapEditorAssignments(verificationValue, secretProbe);
 				assertKeymapMainSurfaceAssignments(verificationValue, secretProbe);
 				assertKeymapMainSurfaceConflicts(verificationValue, secretProbe);
+				assertKeymapComposerFixedShortcutConflicts(verificationValue, secretProbe);
 				assertKeymapEditorConflicts(verificationValue, secretProbe);
 				assertKeymapEditorUnbindConflicts(verificationValue, secretProbe);
 				assertKeymapPagerConflicts(verificationValue, secretProbe);
@@ -5740,6 +5747,64 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
+	static function assertTopLevelKeymapComposerFixedShortcutConflicts(
+		testCase:Value,
+		secretProbe:String
+	):Array<ModelKeymapComposerFixedShortcutConflictOutcome> {
+		final outcomes:Array<ModelKeymapComposerFixedShortcutConflictOutcome> = [];
+		final values = optionalArrayField(testCase, "keymapComposerFixedShortcutConflictExpects");
+		for (value in values) outcomes.push(assertKeymapComposerFixedShortcutConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapComposerFixedShortcutConflicts(
+		verificationValue:Value,
+		secretProbe:String
+	):Array<ModelKeymapComposerFixedShortcutConflictOutcome> {
+		final outcomes:Array<ModelKeymapComposerFixedShortcutConflictOutcome> = [];
+		final values = optionalArrayField(verificationValue, "keymapComposerFixedShortcutConflictExpects");
+		for (value in values) outcomes.push(assertKeymapComposerFixedShortcutConflictSet(objectValue(value), secretProbe));
+		return outcomes;
+	}
+
+	static function assertKeymapComposerFixedShortcutConflictSet(
+		expectValue:Value,
+		secretProbe:String
+	):ModelKeymapComposerFixedShortcutConflictOutcome {
+		final outcome = ModelKeymapComposerFixedShortcutConflictPolicy.apply(new ModelKeymapComposerFixedShortcutConflictRequest({
+			requestId: stringField(expectValue, "requestId", ""),
+			configuredComposerSubmitBinding: keymapBinding(objectField(expectValue, "configuredComposerSubmitBinding")),
+			fixedPasteImageBinding: keymapBinding(objectField(expectValue, "fixedPasteImageBinding")),
+			conflictOuterAction: keymapComposerFixedShortcutConflictActionKind(stringField(expectValue, "conflictOuterAction", "")),
+			conflictInnerAction: keymapComposerFixedShortcutConflictActionKind(stringField(expectValue, "conflictInnerAction", "")),
+			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
+			expectedInnerActionName: stringField(expectValue, "expectedInnerActionName", ""),
+			conflictRejected: boolField(expectValue, "conflictRejected", false),
+			previousEventCount: intField(expectValue, "previousEventCount", 0),
+			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
+			secretProbe: secretProbe
+		}));
+		if (boolText(boolField(expectValue, "ok", false)) != boolText(outcome.ok)) {
+			throw "keymap composer/fixed-shortcut conflict expectation failed: " + outcome.summary();
+		}
+		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
+		assertEquals(stringField(expectValue, "code", ""), outcome.code);
+		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
+		assertEquals(keymapComposerFixedShortcutConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
+		assertEquals(boolText(boolField(expectValue, "configuredComposerSubmitBindingPreserved", false)), boolText(outcome.configuredComposerSubmitBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "fixedPasteImageBindingPreserved", false)), boolText(outcome.fixedPasteImageBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
+		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
+		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
+		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
+		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
+		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
+		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
+		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
+		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		return outcome;
+	}
+
 	static function assertTopLevelKeymapEditorConflicts(
 		testCase:Value,
 		secretProbe:String
@@ -7657,6 +7722,18 @@ class ModelStreamItemReducerHarness {
 			case "keymap_main_surface_conflict_missed": ModelKeymapMainSurfaceConflictDecisionKind.KeymapMainSurfaceConflictMissed;
 			case _: throw "unknown keymap main-surface conflict decision kind: " + value;
 		}
+	}
+
+	static function keymapComposerFixedShortcutConflictDecisionKind(value:String):ModelKeymapComposerFixedShortcutConflictDecisionKind {
+		return switch value {
+			case "keymap_composer_fixed_shortcut_conflict_rejected": ModelKeymapComposerFixedShortcutConflictDecisionKind.KeymapComposerFixedShortcutConflictRejected;
+			case "keymap_composer_fixed_shortcut_conflict_missed": ModelKeymapComposerFixedShortcutConflictDecisionKind.KeymapComposerFixedShortcutConflictMissed;
+			case _: throw "unknown keymap composer/fixed-shortcut conflict decision kind: " + value;
+		}
+	}
+
+	static function keymapComposerFixedShortcutConflictActionKind(value:String):ModelKeymapComposerFixedShortcutConflictActionKind {
+		return ModelKeymapComposerFixedShortcutConflictActionKind.fromString(value);
 	}
 
 	static function keymapEditorConflictDecisionKind(value:String):ModelKeymapEditorConflictDecisionKind {

@@ -8282,6 +8282,47 @@
 	          "conflictRejected": true
 	        }
 	      ],
+	      "keymapComposerFixedShortcutConflictExpects": [
+	        {
+	          "ok": true,
+	          "code": "keymap_composer_fixed_shortcut_conflict_modeled",
+	          "requestId": "keymap-composer-submit-fixed-paste-image-conflict",
+	          "previousEventCount": 102,
+	          "eventOrderIndex": 103,
+	          "decisionKind": "keymap_composer_fixed_shortcut_conflict_rejected",
+	          "configuredComposerSubmitBindingPreserved": true,
+	          "fixedPasteImageBindingPreserved": true,
+	          "conflictActionNamesPreserved": true,
+	          "conflictRejectionPreserved": true,
+	          "eventOrderingPreserved": true,
+	          "liveNetworkAttempted": false,
+	          "realFilesystemMutated": false,
+	          "toolExecutedOutsideFixture": false,
+	          "errorMessage": "",
+	          "summaryContains": "decisionKind=keymap_composer_fixed_shortcut_conflict_rejected;configuredComposerSubmitBindingPreserved=true;fixedPasteImageBindingPreserved=true;conflictActionNamesPreserved=true;conflictRejectionPreserved=true;eventOrderingPreserved=true",
+	          "configuredComposerSubmitBinding": {
+	            "kind": "character",
+	            "keyName": "v",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "fixedPasteImageBinding": {
+	            "kind": "character",
+	            "keyName": "v",
+	            "functionNumber": -1,
+	            "ctrlModifier": true,
+	            "altModifier": false,
+	            "shiftModifier": false
+	          },
+	          "conflictOuterAction": "composer_submit",
+	          "conflictInnerAction": "fixed_paste_image",
+	          "expectedOuterActionName": "composer.submit",
+	          "expectedInnerActionName": "fixed.paste_image",
+	          "conflictRejected": true
+	        }
+	      ],
 	      "keymapEditorConflictExpects": [
 	        {
 	          "ok": true,
