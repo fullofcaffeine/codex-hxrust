@@ -2243,6 +2243,23 @@ Model selected raw Codex composer textarea render behavior:
 
 Status: HXCX-TUI-40 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic textarea render/mask/highlight evidence only, not a full ratatui textarea renderer.
 
+### HXCX-TUI-41: ChatWidget Composer Render Integration
+
+Model selected raw Codex ChatWidget composer integration behavior:
+
+- preserve `ChatWidget::as_renderable` in `../codex/codex-rs/tui/src/chatwidget/rendering.rs`: active cell, renderable active hook cell, and bottom pane are composed in order, and the bottom pane is inset below transcript content;
+- preserve ambient right-reserve propagation: `ambient_pet_wrap_reserved_cols()` is applied to active transcript cells and to bottom-pane composer rendering so prompt/input/cursor layout does not collide with right-side ambient UI;
+- preserve `BottomPaneComposerReserveRenderable` delegation in `chatwidget/rendering.rs`: `render_with_composer_right_reserve`, `desired_height_with_composer_right_reserve`, `cursor_pos_with_composer_right_reserve`, and `cursor_style_with_composer_right_reserve` stay the bottom-pane ownership boundary;
+- preserve `TranscriptAreaRenderable` behavior in `chatwidget/rendering.rs`: active transcript cells get top/right insets, width saturation, bottom-aligned overflow scroll, and desired-height accounting that includes the top spacer;
+- preserve `Renderable for ChatWidget`: render delegates through `as_renderable`, records `last_rendered_width`, and delegates desired height, cursor position, and cursor style to the same renderable tree;
+- preserve `handle_composer_input_result` in `../codex/codex-rs/tui/src/chatwidget/input_flow.rs`: `Submitted`, `Queued`, `Command`, `ServiceTierCommand`, `CommandWithArgs`, and `None` route to distinct app-level effects;
+- preserve immediate-submit versus queue routing: configured session and non-plan-streaming state can submit, shell-only running commands can force queueing, otherwise unconfigured/session-busy/task-running states queue and refresh pending-input preview;
+- preserve `maybe_send_next_queued_input` behavior: autosend suppression and pending/running turns block drain, then queued `Plain`, `ParseSlash`, and `RunShell` actions submit at most the next admissible follow-up before preview refresh;
+- preserve `pre_draw_tick` and `request_redraw` in `../codex/codex-rs/tui/src/chatwidget.rs`: bottom-pane pre-draw ticks, hook/ambient scheduling, plan/goal/title refreshes, and frame-requester scheduling remain ChatWidget-level handoffs;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-41 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic ChatWidget composer render integration evidence only, not a full live ChatWidget renderer or input dispatcher.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

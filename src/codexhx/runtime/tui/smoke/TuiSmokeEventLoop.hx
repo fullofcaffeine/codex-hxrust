@@ -231,6 +231,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetComposerRender:
+					if (!traceChatWidgetComposerRender(event.chatWidgetComposerRender, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1565,6 +1570,103 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.composer_popup_render.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceChatWidgetComposerRender(plan:TuiSmokeChatWidgetComposerRenderPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowLiveDispatch || !plan.enabled()) {
+			trace.push("tui.chat_widget_composer_render.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_composer_render.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeChatWidgetComposerRenderActionKind.Composition:
+					trace.push(
+						"tui.chat_widget_composer_render.composition="
+						+ "area=" + action.areaText()
+						+ ":reserve=" + action.rightReserve
+						+ ":active=" + action.activeCellPresent
+						+ ":hook=" + action.activeHookPresent
+						+ ":hook_render=" + action.activeHookShouldRender
+						+ ":bottom_inset=" + action.bottomPaneInsetTop
+						+ ":terminal=" + !action.noLiveTerminal
+						+ ":ratatui=" + !action.noRatatuiRender
+					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.BottomPaneDelegate:
+					trace.push(
+						"tui.chat_widget_composer_render.bottom_pane="
+						+ "reserve=" + action.rightReserve
+						+ ":desired=" + action.bottomPaneDesiredHeight
+						+ ":cursor=" + action.cursorVisible
+						+ ":style=" + action.cursorStyle
+						+ ":task=" + action.taskRunning
+						+ ":input=" + action.inputEnabled
+					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.TranscriptArea:
+					trace.push(
+						"tui.chat_widget_composer_render.transcript="
+						+ (action.activeHookShouldRender ? "hook" : "active")
+						+ ":width=" + action.transcriptAreaWidth
+						+ ":height=" + action.transcriptAreaHeight
+						+ ":desired=" + action.activeCellDesiredHeight
+						+ ":hook_desired=" + action.activeHookDesiredHeight
+						+ ":scroll=" + action.transcriptScrollOffset
+					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.Cursor:
+					trace.push(
+						"tui.chat_widget_composer_render.cursor="
+						+ action.cursorText()
+						+ ":style=" + action.cursorStyle
+						+ ":reserve=" + action.rightReserve
+						+ ":visible=" + action.cursorVisible
+					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.InputResult:
+					trace.push(
+						"tui.chat_widget_composer_render.input="
+						+ action.inputResult
+						+ ":text=" + action.text
+						+ ":action=" + action.queuedAction
+						+ ":session=" + action.sessionConfigured
+						+ ":plan=" + action.planStreaming
+						+ ":shell_only=" + action.onlyUserShellCommandsRunning
+						+ ":pending=" + action.userTurnPending
+						+ ":submit_now=" + action.shouldSubmitNow
+						+ ":queue=" + action.queueTransitionText()
+						+ ":status=" + action.statusWorking
+						+ ":reasoning_cleared=" + action.reasoningCleared
+						+ ":live_dispatch=" + !action.noLiveDispatch
+					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.QueuePreview:
+					trace.push(
+						"tui.chat_widget_composer_render.queue_preview="
+						+ "queued=" + action.queuedAfter
+						+ ":pending_steers=" + action.pendingSteers
+						+ ":rejected=" + action.rejectedSteers
+						+ ":updated=" + action.previewUpdated
+						+ ":autosend=" + !action.autosendSuppressed
+						+ ":followup=" + action.followupSubmitted
+						+ ":modal=" + action.hadModalOrPopup + "->" + action.modalCleared
+					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.Frame:
+					trace.push(
+						"tui.chat_widget_composer_render.frame="
+						+ "redraw:scheduled=" + action.frameScheduled
+						+ ":pre_draw=" + action.preDrawTick
+						+ ":bottom_tick=" + action.bottomPaneTick
+						+ ":ambient_reserve=" + action.rightReserve
+					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_composer_render.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_composer_render.unknown");
 					return false;
 			}
 		}

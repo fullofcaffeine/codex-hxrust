@@ -8854,6 +8854,250 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.composer_textarea_render.plan=headless\ntui.composer_textarea_render.prompt=normal:text=>:input=true:bash=false\ntui.composer_textarea_render.prompt=bash:text=!:input=true:bash=true\ntui.composer_textarea_render.placeholder=placeholder:text=Ask Codex to do anything:visible=true:input=true:empty=true\ntui.composer_textarea_render.placeholder=disabled_placeholder:text=Input disabled.:visible=true:input=false:empty=false\ntui.composer_textarea_render.cursor=cursor:visible=true:x=12:y=3:reserve=4:input=true:selected_remote=-1\ntui.composer_textarea_render.cursor=cursor:visible=false:x=0:y=0:reserve=4:input=true:selected_remote=0\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer textarea prompt placeholder cursor\ninput> \ntrace:\ntui.composer_textarea_render.plan=headless\ntui.composer_textarea_render.prompt=normal:text=>:input=true:bash=false\ntui.composer_textarea_render.prompt=bash:text=!:input=true:bash=true\ntui.composer_textarea_render.placeholder=placeholder:text=Ask Codex to do anything:visible=true:input=true:empty=true\ntui.composer_textarea_render.placeholder=disabled_placeholder:text=Input disabled.:visible=true:input=false:empty=false\ntui.composer_textarea_render.cursor=cursor:visible=true:x=12:y=3:reserve=4:input=true:selected_remote=-1\ntui.composer_textarea_render.cursor=cursor:visible=false:x=0:y=0:reserve=4:input=true:selected_remote=0\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-composer-render-composition",
+      "frame": {
+        "name": "chat-widget-composer-render-composition",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget composer render composition"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_composer_render",
+          "chatWidgetComposerRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowLiveDispatch": false,
+            "actions": [
+              {
+                "kind": "composition",
+                "width": 72,
+                "height": 20,
+                "rightReserve": 4,
+                "activeCellPresent": true,
+                "activeHookPresent": true,
+                "activeHookShouldRender": true,
+                "bottomPaneInsetTop": 1,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true
+              },
+              {
+                "kind": "bottom_pane_delegate",
+                "rightReserve": 4,
+                "bottomPaneDesiredHeight": 7,
+                "cursorVisible": true,
+                "cursorStyle": "steady_bar",
+                "taskRunning": false,
+                "inputEnabled": true
+              },
+              {
+                "kind": "transcript_area",
+                "transcriptAreaWidth": 68,
+                "transcriptAreaHeight": 11,
+                "activeCellDesiredHeight": 9,
+                "activeHookDesiredHeight": 3,
+                "transcriptScrollOffset": 0
+              },
+              {
+                "kind": "cursor",
+                "rightReserve": 4,
+                "cursorVisible": true,
+                "cursorX": 12,
+                "cursorY": 18,
+                "cursorStyle": "steady_bar"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_composer_render.plan=headless\ntui.chat_widget_composer_render.composition=area=72x20:reserve=4:active=true:hook=true:hook_render=true:bottom_inset=1:terminal=false:ratatui=false\ntui.chat_widget_composer_render.bottom_pane=reserve=4:desired=7:cursor=true:style=steady_bar:task=false:input=true\ntui.chat_widget_composer_render.transcript=active:width=68:height=11:desired=9:hook_desired=3:scroll=0\ntui.chat_widget_composer_render.cursor=12,18:style=steady_bar:reserve=4:visible=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget composer render composition\ninput> \ntrace:\ntui.chat_widget_composer_render.plan=headless\ntui.chat_widget_composer_render.composition=area=72x20:reserve=4:active=true:hook=true:hook_render=true:bottom_inset=1:terminal=false:ratatui=false\ntui.chat_widget_composer_render.bottom_pane=reserve=4:desired=7:cursor=true:style=steady_bar:task=false:input=true\ntui.chat_widget_composer_render.transcript=active:width=68:height=11:desired=9:hook_desired=3:scroll=0\ntui.chat_widget_composer_render.cursor=12,18:style=steady_bar:reserve=4:visible=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-composer-input-queue-preview",
+      "frame": {
+        "name": "chat-widget-composer-input-queue-preview",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget composer input queue preview"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_composer_render",
+          "chatWidgetComposerRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowLiveDispatch": false,
+            "actions": [
+              {
+                "kind": "input_result",
+                "inputResult": "submitted",
+                "queuedAction": "plain",
+                "text": "hello",
+                "sessionConfigured": true,
+                "planStreaming": false,
+                "onlyUserShellCommandsRunning": false,
+                "userTurnPending": false,
+                "shouldSubmitNow": true,
+                "queuedBefore": 0,
+                "queuedAfter": 0,
+                "statusWorking": true,
+                "reasoningCleared": true,
+                "noLiveDispatch": true
+              },
+              {
+                "kind": "input_result",
+                "inputResult": "queued",
+                "queuedAction": "parse_slash",
+                "text": "/review src",
+                "sessionConfigured": true,
+                "planStreaming": false,
+                "taskRunning": true,
+                "userTurnPending": true,
+                "shouldSubmitNow": false,
+                "queuedBefore": 1,
+                "queuedAfter": 2,
+                "previewUpdated": true,
+                "noLiveDispatch": true
+              },
+              {
+                "kind": "queue_preview",
+                "queuedAfter": 2,
+                "pendingSteers": 1,
+                "rejectedSteers": 0,
+                "previewUpdated": true,
+                "autosendSuppressed": false,
+                "followupSubmitted": false,
+                "hadModalOrPopup": true,
+                "modalCleared": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_composer_render.plan=headless\ntui.chat_widget_composer_render.input=submitted:text=hello:action=plain:session=true:plan=false:shell_only=false:pending=false:submit_now=true:queue=0->0:status=true:reasoning_cleared=true:live_dispatch=false\ntui.chat_widget_composer_render.input=queued:text=/review src:action=parse_slash:session=true:plan=false:shell_only=false:pending=true:submit_now=false:queue=1->2:status=false:reasoning_cleared=false:live_dispatch=false\ntui.chat_widget_composer_render.queue_preview=queued=2:pending_steers=1:rejected=0:updated=true:autosend=true:followup=false:modal=true->true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget composer input queue preview\ninput> \ntrace:\ntui.chat_widget_composer_render.plan=headless\ntui.chat_widget_composer_render.input=submitted:text=hello:action=plain:session=true:plan=false:shell_only=false:pending=false:submit_now=true:queue=0->0:status=true:reasoning_cleared=true:live_dispatch=false\ntui.chat_widget_composer_render.input=queued:text=/review src:action=parse_slash:session=true:plan=false:shell_only=false:pending=true:submit_now=false:queue=1->2:status=false:reasoning_cleared=false:live_dispatch=false\ntui.chat_widget_composer_render.queue_preview=queued=2:pending_steers=1:rejected=0:updated=true:autosend=true:followup=false:modal=true->true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-composer-frame-redraw",
+      "frame": {
+        "name": "chat-widget-composer-frame-redraw",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget composer frame redraw"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_composer_render",
+          "chatWidgetComposerRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowLiveDispatch": false,
+            "actions": [
+              {
+                "kind": "input_result",
+                "inputResult": "command",
+                "text": "diff",
+                "commandDispatched": true,
+                "queuedAction": "plain",
+                "queuedBefore": 0,
+                "queuedAfter": 0,
+                "noLiveDispatch": true
+              },
+              {
+                "kind": "input_result",
+                "inputResult": "service_tier_command",
+                "text": "auto",
+                "serviceTierDispatched": true,
+                "queuedAction": "plain",
+                "queuedBefore": 0,
+                "queuedAfter": 0,
+                "noLiveDispatch": true
+              },
+              {
+                "kind": "frame",
+                "rightReserve": 4,
+                "frameScheduled": true,
+                "preDrawTick": true,
+                "bottomPaneTick": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_composer_render.plan=headless\ntui.chat_widget_composer_render.input=command:text=diff:action=plain:session=false:plan=false:shell_only=false:pending=false:submit_now=false:queue=0->0:status=false:reasoning_cleared=false:live_dispatch=false\ntui.chat_widget_composer_render.input=service_tier_command:text=auto:action=plain:session=false:plan=false:shell_only=false:pending=false:submit_now=false:queue=0->0:status=false:reasoning_cleared=false:live_dispatch=false\ntui.chat_widget_composer_render.frame=redraw:scheduled=true:pre_draw=true:bottom_tick=true:ambient_reserve=4\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget composer frame redraw\ninput> \ntrace:\ntui.chat_widget_composer_render.plan=headless\ntui.chat_widget_composer_render.input=command:text=diff:action=plain:session=false:plan=false:shell_only=false:pending=false:submit_now=false:queue=0->0:status=false:reasoning_cleared=false:live_dispatch=false\ntui.chat_widget_composer_render.input=service_tier_command:text=auto:action=plain:session=false:plan=false:shell_only=false:pending=false:submit_now=false:queue=0->0:status=false:reasoning_cleared=false:live_dispatch=false\ntui.chat_widget_composer_render.frame=redraw:scheduled=true:pre_draw=true:bottom_tick=true:ambient_reserve=4\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

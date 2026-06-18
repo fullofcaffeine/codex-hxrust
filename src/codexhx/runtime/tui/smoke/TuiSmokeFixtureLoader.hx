@@ -96,7 +96,80 @@ class TuiSmokeFixtureLoader {
 				composerPopupKey: optionalComposerPopupKeyPlan(value, "composerPopupKey"),
 				composerPopupRender: optionalComposerPopupRenderPlan(value, "composerPopupRender"),
 				composerFooterRender: optionalComposerFooterRenderPlan(value, "composerFooterRender"),
-				composerTextareaRender: optionalComposerTextareaRenderPlan(value, "composerTextareaRender")
+				composerTextareaRender: optionalComposerTextareaRenderPlan(value, "composerTextareaRender"),
+				chatWidgetComposerRender: optionalChatWidgetComposerRenderPlan(value, "chatWidgetComposerRender")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalChatWidgetComposerRenderPlan(object:Value, name:String):Null<TuiSmokeChatWidgetComposerRenderPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeChatWidgetComposerRenderPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowLiveDispatch: optionalBoolField(value, "allowLiveDispatch", false),
+					actions: chatWidgetComposerRenderActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function chatWidgetComposerRenderActions(values:Array<Value>):Array<TuiSmokeChatWidgetComposerRenderAction> {
+		final out:Array<TuiSmokeChatWidgetComposerRenderAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeChatWidgetComposerRenderAction({
+				kind: TuiSmokeChatWidgetComposerRenderActionKind.fromString(stringField(value, "kind", "")),
+				inputResult: TuiSmokeComposerSubmissionResultKind.fromString(optionalStringField(value, "inputResult", "unknown")),
+				queuedAction: TuiSmokeComposerQueuedActionKind.fromString(optionalStringField(value, "queuedAction", "unknown")),
+				cursorStyle: optionalStringField(value, "cursorStyle", ""),
+				text: optionalStringField(value, "text", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				width: optionalIntField(value, "width", 0),
+				height: optionalIntField(value, "height", 0),
+				rightReserve: optionalIntField(value, "rightReserve", 0),
+				bottomPaneInsetTop: optionalIntField(value, "bottomPaneInsetTop", 0),
+				bottomPaneDesiredHeight: optionalIntField(value, "bottomPaneDesiredHeight", 0),
+				activeCellDesiredHeight: optionalIntField(value, "activeCellDesiredHeight", 0),
+				activeHookDesiredHeight: optionalIntField(value, "activeHookDesiredHeight", 0),
+				transcriptAreaWidth: optionalIntField(value, "transcriptAreaWidth", 0),
+				transcriptAreaHeight: optionalIntField(value, "transcriptAreaHeight", 0),
+				transcriptScrollOffset: optionalIntField(value, "transcriptScrollOffset", 0),
+				cursorX: optionalIntField(value, "cursorX", 0),
+				cursorY: optionalIntField(value, "cursorY", 0),
+				queuedBefore: optionalIntField(value, "queuedBefore", 0),
+				queuedAfter: optionalIntField(value, "queuedAfter", 0),
+				pendingSteers: optionalIntField(value, "pendingSteers", 0),
+				rejectedSteers: optionalIntField(value, "rejectedSteers", 0),
+				activeCellPresent: optionalBoolField(value, "activeCellPresent", false),
+				activeHookPresent: optionalBoolField(value, "activeHookPresent", false),
+				activeHookShouldRender: optionalBoolField(value, "activeHookShouldRender", false),
+				cursorVisible: optionalBoolField(value, "cursorVisible", false),
+				inputEnabled: optionalBoolField(value, "inputEnabled", false),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				sessionConfigured: optionalBoolField(value, "sessionConfigured", false),
+				planStreaming: optionalBoolField(value, "planStreaming", false),
+				userTurnPending: optionalBoolField(value, "userTurnPending", false),
+				onlyUserShellCommandsRunning: optionalBoolField(value, "onlyUserShellCommandsRunning", false),
+				hadModalOrPopup: optionalBoolField(value, "hadModalOrPopup", false),
+				modalCleared: optionalBoolField(value, "modalCleared", false),
+				shouldSubmitNow: optionalBoolField(value, "shouldSubmitNow", false),
+				previewUpdated: optionalBoolField(value, "previewUpdated", false),
+				autosendSuppressed: optionalBoolField(value, "autosendSuppressed", false),
+				followupSubmitted: optionalBoolField(value, "followupSubmitted", false),
+				statusWorking: optionalBoolField(value, "statusWorking", false),
+				reasoningCleared: optionalBoolField(value, "reasoningCleared", false),
+				commandDispatched: optionalBoolField(value, "commandDispatched", false),
+				serviceTierDispatched: optionalBoolField(value, "serviceTierDispatched", false),
+				slashArgsDispatched: optionalBoolField(value, "slashArgsDispatched", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				preDrawTick: optionalBoolField(value, "preDrawTick", false),
+				bottomPaneTick: optionalBoolField(value, "bottomPaneTick", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noLiveDispatch: optionalBoolField(value, "noLiveDispatch", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
