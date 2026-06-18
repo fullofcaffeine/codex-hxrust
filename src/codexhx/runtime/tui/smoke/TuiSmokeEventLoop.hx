@@ -196,6 +196,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ComposerSubmission:
+					if (!traceComposerSubmission(event.composerSubmission, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1334,6 +1339,124 @@ class TuiSmokeEventLoop {
 					trace.push("tui.app_link.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.app_link.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceComposerSubmission(plan:TuiSmokeComposerSubmissionPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveDispatch || !plan.enabled()) {
+			trace.push("tui.composer_submission.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.composer_submission.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeComposerSubmissionActionKind.PrepareText:
+					trace.push(
+						"tui.composer_submission.prepare="
+						+ action.result
+						+ ":text=" + action.preparedText
+						+ ":chars=" + action.charCount + "/" + action.maxChars
+						+ ":pending=" + action.pendingTransitionText()
+						+ ":elements=" + action.elementTransitionText()
+						+ ":trimmed=" + action.textTrimmed
+						+ ":expanded=" + action.pendingExpanded
+						+ ":cleared=" + action.pendingCleared
+					);
+				case TuiSmokeComposerSubmissionActionKind.HandleSubmission:
+					trace.push(
+						"tui.composer_submission.handle="
+						+ action.result
+						+ ":queue=" + action.shouldQueue
+						+ ":validation=" + action.slashValidation
+						+ ":burst_flushed=" + action.pasteBurstFlushed
+						+ ":vim_normal=" + action.vimNormalEntered
+					);
+				case TuiSmokeComposerSubmissionActionKind.QueueSubmission:
+					trace.push(
+						"tui.composer_submission.queue="
+						+ action.queuedAction
+						+ ":text=" + action.preparedText
+						+ ":messages=" + action.queueTransitionText()
+						+ ":defer_slash=" + action.slashValidationDeferred
+						+ ":queued=" + action.queued
+					);
+				case TuiSmokeComposerSubmissionActionKind.DispatchBareSlash:
+					trace.push(
+						"tui.composer_submission.dispatch_bare="
+						+ action.commandName
+						+ ":result=" + action.result
+						+ ":history_staged=" + action.historyStaged
+						+ ":history_recorded=" + action.historyRecorded
+						+ ":event=" + action.appEventSent
+					);
+				case TuiSmokeComposerSubmissionActionKind.DispatchSlashArgs:
+					trace.push(
+						"tui.composer_submission.dispatch_args="
+						+ action.commandName
+						+ ":args=" + action.argsText
+						+ ":result=" + action.result
+						+ ":elements=" + action.textElementAfter
+						+ ":history_staged=" + action.historyStaged
+						+ ":live=" + !action.noLiveDispatch
+					);
+				case TuiSmokeComposerSubmissionActionKind.PrepareInlineArgs:
+					trace.push(
+						"tui.composer_submission.inline_args="
+						+ action.commandName
+						+ ":args=" + action.argsText
+						+ ":pending=" + action.pendingTransitionText()
+						+ ":elements=" + action.elementTransitionText()
+						+ ":trimmed=" + action.textTrimmed
+					);
+				case TuiSmokeComposerSubmissionActionKind.BuildUserMessage:
+					trace.push(
+						"tui.composer_submission.user_message="
+						+ action.result
+						+ ":text=" + action.preparedText
+						+ ":local=" + action.localImageTransitionText()
+						+ ":remote=" + action.remoteImageTransitionText()
+						+ ":local_drained=" + action.localImagesDrained
+						+ ":remote_drained=" + action.remoteImagesDrained
+					);
+				case TuiSmokeComposerSubmissionActionKind.QueueDrain:
+					trace.push(
+						"tui.composer_submission.queue_drain="
+						+ action.queuedAction
+						+ ":messages=" + action.queueTransitionText()
+						+ ":submitted=" + action.submittedNow
+						+ ":status_working=" + action.statusWorking
+					);
+				case TuiSmokeComposerSubmissionActionKind.RestoreBlockedImages:
+					trace.push(
+						"tui.composer_submission.restore_blocked_images="
+						+ "model_supports_images=" + action.modelSupportsImages
+						+ ":local=" + action.localImageAfter
+						+ ":remote=" + action.remoteImageAfter
+						+ ":restored=" + action.blockedRestored
+					);
+				case TuiSmokeComposerSubmissionActionKind.HistoryRecord:
+					trace.push(
+						"tui.composer_submission.history="
+						+ action.preparedText
+						+ ":record=" + action.recordHistory
+						+ ":staged=" + action.historyStaged
+						+ ":recorded=" + action.historyRecorded
+					);
+				case TuiSmokeComposerSubmissionActionKind.Failure:
+					trace.push(
+						"tui.composer_submission.failure="
+						+ action.failureCode
+						+ ":slash_failed=" + action.slashValidationFailed
+						+ ":too_large=" + action.tooLargeRejected
+						+ ":empty=" + action.emptySuppressed
+						+ ":pending_restored=" + action.pendingRestored
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.composer_submission.unknown");
 					return false;
 			}
 		}

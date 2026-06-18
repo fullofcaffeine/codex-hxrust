@@ -2141,6 +2141,21 @@ Model selected raw Codex composer paste and attachment behavior:
 
 Status: HXCX-TUI-33 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic composer lifecycle evidence only, not a full composer implementation or live terminal backend.
 
+### HXCX-TUI-34: Composer Submission And Dispatch Lifecycle
+
+Model selected raw Codex composer submission and dispatch behavior:
+
+- preserve `InputResult` variants from `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs`: `Submitted`, `Queued`, `Command`, `ServiceTierCommand`, `CommandWithArgs`, and `None`;
+- preserve `prepare_submission_text_with_options`: pending paste expansion, text element trimming, slash validation, input-too-large rejection, local image pruning, history recording, and pending-paste restoration on suppression;
+- preserve `handle_submission_with_time`: queued startup/task submissions flush paste-burst state first, defer slash validation when queued slash prompts need app-level parsing, map shell prompts to `RunShell`, and keep Enter as newline while a non-slash paste burst is active;
+- preserve bare slash command dispatch and inline slash command args dispatch, including staged local command history and rebased argument text elements;
+- preserve ChatWidget input-result routing in `../codex/codex-rs/tui/src/chatwidget/input_flow.rs`: build `UserMessage`, drain local and remote attachments, submit immediately when allowed, queue while session/task state requires it, and refresh queue preview;
+- preserve app-level submission behavior in `../codex/codex-rs/tui/src/chatwidget/input_submission.rs`: remote image items before local image items before text, blocked-image restoration when the model does not support images, shell escape handling, history recording, pending steer setup, and user-message display intent;
+- preserve queue-drain dispatch for `Plain`, `ParseSlash`, and `RunShell` in `input_flow.rs`, but keep fixture evidence deterministic and no-live;
+- keep the evidence independent of live terminal rendering, live input loops, model/tool execution, command execution, real shell dispatch, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-34 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic composer submission evidence only, not a full live dispatch implementation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

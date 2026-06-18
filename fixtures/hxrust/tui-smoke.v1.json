@@ -6949,6 +6949,282 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.composer_attachment.plan=headless\ntui.composer_attachment.burst_char=a:state=inactive->pending_first_char:buffered=false:newline=false:pending=0->0\ntui.composer_attachment.burst_char=b:state=pending_first_char->buffering:buffered=true:newline=false:pending=0->0\ntui.composer_attachment.burst_char=enter:state=buffering->buffering:buffered=true:newline=true:pending=0->0\ntui.composer_attachment.burst_flush=paste_burst:state=buffering->flushed:flushed=true:chars=1201:pending=0->1:redraw=true\ntui.composer_attachment.frame=scheduled=true:redraw=true:burst=flushed\ntui.composer_attachment.selected_file=/tmp/not-really.png:image_path=true:dimensions_checked=false:attached=false:fallback=true:no_live_fs=true\ntui.composer_attachment.remote_select=up:selected=-1->0:redraw=true\ntui.composer_attachment.remote_delete=delete:remote=1->0:selected=0->-1:relabel_locals=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer paste burst image fallback\ninput> \ntrace:\ntui.composer_attachment.plan=headless\ntui.composer_attachment.burst_char=a:state=inactive->pending_first_char:buffered=false:newline=false:pending=0->0\ntui.composer_attachment.burst_char=b:state=pending_first_char->buffering:buffered=true:newline=false:pending=0->0\ntui.composer_attachment.burst_char=enter:state=buffering->buffering:buffered=true:newline=true:pending=0->0\ntui.composer_attachment.burst_flush=paste_burst:state=buffering->flushed:flushed=true:chars=1201:pending=0->1:redraw=true\ntui.composer_attachment.frame=scheduled=true:redraw=true:burst=flushed\ntui.composer_attachment.selected_file=/tmp/not-really.png:image_path=true:dimensions_checked=false:attached=false:fallback=true:no_live_fs=true\ntui.composer_attachment.remote_select=up:selected=-1->0:redraw=true\ntui.composer_attachment.remote_delete=delete:remote=1->0:selected=0->-1:relabel_locals=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-submission-submit-drains-attachments",
+      "frame": {
+        "name": "composer-submission-submit-drains-attachments",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer submission drains attachments"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_submission",
+          "composerSubmission": {
+            "allowLiveDispatch": false,
+            "actions": [
+              {
+                "kind": "prepare_text",
+                "result": "submitted",
+                "preparedText": "send image",
+                "charCount": 10,
+                "maxChars": 30000,
+                "pendingBefore": 1,
+                "pendingAfter": 0,
+                "textElementBefore": 2,
+                "textElementAfter": 1,
+                "pendingExpanded": true,
+                "pendingCleared": true,
+                "textTrimmed": true,
+                "imagesPruned": true,
+                "recordHistory": true
+              },
+              {
+                "kind": "handle_submission",
+                "result": "submitted",
+                "shouldQueue": false,
+                "slashValidation": "immediate",
+                "pasteBurstFlushed": true,
+                "vimNormalEntered": true
+              },
+              {
+                "kind": "build_user_message",
+                "result": "submitted",
+                "preparedText": "send image",
+                "localImageBefore": 1,
+                "localImageAfter": 0,
+                "remoteImageBefore": 1,
+                "remoteImageAfter": 0,
+                "localImagesDrained": true,
+                "remoteImagesDrained": true,
+                "messageBuilt": true
+              },
+              {
+                "kind": "queue_drain",
+                "queuedAction": "plain",
+                "queueBefore": 0,
+                "queueAfter": 0,
+                "submittedNow": true,
+                "statusWorking": true,
+                "reasoningCleared": true
+              },
+              {
+                "kind": "history_record",
+                "preparedText": "send image",
+                "recordHistory": true,
+                "historyRecorded": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_submission.plan=headless\ntui.composer_submission.prepare=submitted:text=send image:chars=10/30000:pending=1->0:elements=2->1:trimmed=true:expanded=true:cleared=true\ntui.composer_submission.handle=submitted:queue=false:validation=immediate:burst_flushed=true:vim_normal=true\ntui.composer_submission.user_message=submitted:text=send image:local=1->0:remote=1->0:local_drained=true:remote_drained=true\ntui.composer_submission.queue_drain=plain:messages=0->0:submitted=true:status_working=true\ntui.composer_submission.history=send image:record=true:staged=false:recorded=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer submission drains attachments\ninput> \ntrace:\ntui.composer_submission.plan=headless\ntui.composer_submission.prepare=submitted:text=send image:chars=10/30000:pending=1->0:elements=2->1:trimmed=true:expanded=true:cleared=true\ntui.composer_submission.handle=submitted:queue=false:validation=immediate:burst_flushed=true:vim_normal=true\ntui.composer_submission.user_message=submitted:text=send image:local=1->0:remote=1->0:local_drained=true:remote_drained=true\ntui.composer_submission.queue_drain=plain:messages=0->0:submitted=true:status_working=true\ntui.composer_submission.history=send image:record=true:staged=false:recorded=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-submission-queue-slash-shell",
+      "frame": {
+        "name": "composer-submission-queue-slash-shell",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer queued slash shell prompts"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_submission",
+          "composerSubmission": {
+            "allowLiveDispatch": false,
+            "actions": [
+              {
+                "kind": "handle_submission",
+                "result": "queued",
+                "shouldQueue": true,
+                "slashValidation": "deferred",
+                "pasteBurstFlushed": true,
+                "vimNormalEntered": true
+              },
+              {
+                "kind": "queue_submission",
+                "queuedAction": "parse_slash",
+                "preparedText": "/review src",
+                "queueBefore": 0,
+                "queueAfter": 1,
+                "slashValidationDeferred": true,
+                "queued": true
+              },
+              {
+                "kind": "queue_submission",
+                "queuedAction": "run_shell",
+                "preparedText": "!git status",
+                "queueBefore": 1,
+                "queueAfter": 2,
+                "slashValidationDeferred": false,
+                "queued": true
+              },
+              {
+                "kind": "queue_drain",
+                "queuedAction": "parse_slash",
+                "queueBefore": 2,
+                "queueAfter": 1,
+                "submittedNow": false,
+                "statusWorking": false
+              },
+              {
+                "kind": "queue_drain",
+                "queuedAction": "run_shell",
+                "queueBefore": 1,
+                "queueAfter": 0,
+                "submittedNow": true,
+                "statusWorking": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_submission.plan=headless\ntui.composer_submission.handle=queued:queue=true:validation=deferred:burst_flushed=true:vim_normal=true\ntui.composer_submission.queue=parse_slash:text=/review src:messages=0->1:defer_slash=true:queued=true\ntui.composer_submission.queue=run_shell:text=!git status:messages=1->2:defer_slash=false:queued=true\ntui.composer_submission.queue_drain=parse_slash:messages=2->1:submitted=false:status_working=false\ntui.composer_submission.queue_drain=run_shell:messages=1->0:submitted=true:status_working=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer queued slash shell prompts\ninput> \ntrace:\ntui.composer_submission.plan=headless\ntui.composer_submission.handle=queued:queue=true:validation=deferred:burst_flushed=true:vim_normal=true\ntui.composer_submission.queue=parse_slash:text=/review src:messages=0->1:defer_slash=true:queued=true\ntui.composer_submission.queue=run_shell:text=!git status:messages=1->2:defer_slash=false:queued=true\ntui.composer_submission.queue_drain=parse_slash:messages=2->1:submitted=false:status_working=false\ntui.composer_submission.queue_drain=run_shell:messages=1->0:submitted=true:status_working=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-submission-slash-args-fail-restore",
+      "frame": {
+        "name": "composer-submission-slash-args-fail-restore",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer slash args restore failures"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_submission",
+          "composerSubmission": {
+            "allowLiveDispatch": false,
+            "actions": [
+              {
+                "kind": "dispatch_bare_slash",
+                "result": "command",
+                "commandName": "diff",
+                "historyStaged": true,
+                "historyRecorded": true,
+                "appEventSent": false
+              },
+              {
+                "kind": "prepare_inline_args",
+                "commandName": "plan",
+                "argsText": "investigate [Pasted Content 1001 chars]",
+                "pendingBefore": 1,
+                "pendingAfter": 0,
+                "textElementBefore": 2,
+                "textElementAfter": 1,
+                "pendingExpanded": true,
+                "textTrimmed": true
+              },
+              {
+                "kind": "dispatch_slash_args",
+                "result": "command_with_args",
+                "commandName": "plan",
+                "argsText": "investigate [Pasted Content 1001 chars]",
+                "textElementAfter": 1,
+                "historyStaged": true,
+                "noLiveDispatch": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "unknown_slash_command",
+                "slashValidationFailed": true,
+                "pendingRestored": true,
+                "appEventSent": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "input_too_large",
+                "tooLargeRejected": true,
+                "pendingRestored": true,
+                "charCount": 30001,
+                "maxChars": 30000,
+                "appEventSent": true
+              },
+              {
+                "kind": "restore_blocked_images",
+                "modelSupportsImages": false,
+                "localImageAfter": 1,
+                "remoteImageAfter": 1,
+                "blockedRestored": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_submission.plan=headless\ntui.composer_submission.dispatch_bare=diff:result=command:history_staged=true:history_recorded=true:event=false\ntui.composer_submission.inline_args=plan:args=investigate [Pasted Content 1001 chars]:pending=1->0:elements=2->1:trimmed=true\ntui.composer_submission.dispatch_args=plan:args=investigate [Pasted Content 1001 chars]:result=command_with_args:elements=1:history_staged=true:live=false\ntui.composer_submission.failure=unknown_slash_command:slash_failed=true:too_large=false:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.failure=input_too_large:slash_failed=false:too_large=true:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.restore_blocked_images=model_supports_images=false:local=1:remote=1:restored=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer slash args restore failures\ninput> \ntrace:\ntui.composer_submission.plan=headless\ntui.composer_submission.dispatch_bare=diff:result=command:history_staged=true:history_recorded=true:event=false\ntui.composer_submission.inline_args=plan:args=investigate [Pasted Content 1001 chars]:pending=1->0:elements=2->1:trimmed=true\ntui.composer_submission.dispatch_args=plan:args=investigate [Pasted Content 1001 chars]:result=command_with_args:elements=1:history_staged=true:live=false\ntui.composer_submission.failure=unknown_slash_command:slash_failed=true:too_large=false:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.failure=input_too_large:slash_failed=false:too_large=true:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.restore_blocked_images=model_supports_images=false:local=1:remote=1:restored=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

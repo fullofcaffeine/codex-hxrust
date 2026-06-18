@@ -31,6 +31,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final FileMentionPopup = "file_mention_popup";
 	final HistorySearch = "history_search";
 	final ComposerAttachment = "composer_attachment";
+	final ComposerSubmission = "composer_submission";
 	final Unknown = "unknown";
 
 	public static function fromString(value:String):TuiSmokeEventKind {
@@ -65,6 +66,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "file_mention_popup": FileMentionPopup;
 			case "history_search": HistorySearch;
 			case "composer_attachment": ComposerAttachment;
+			case "composer_submission": ComposerSubmission;
 			case _: Unknown;
 		}
 	}

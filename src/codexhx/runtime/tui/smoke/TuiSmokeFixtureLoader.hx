@@ -89,7 +89,76 @@ class TuiSmokeFixtureLoader {
 				slashCommandPopup: optionalSlashPopupPlan(value, "slashCommandPopup"),
 				fileMentionPopup: optionalFileMentionPopupPlan(value, "fileMentionPopup"),
 				historySearch: optionalHistorySearchPlan(value, "historySearch"),
-				composerAttachment: optionalComposerAttachmentPlan(value, "composerAttachment")
+				composerAttachment: optionalComposerAttachmentPlan(value, "composerAttachment"),
+				composerSubmission: optionalComposerSubmissionPlan(value, "composerSubmission")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalComposerSubmissionPlan(object:Value, name:String):Null<TuiSmokeComposerSubmissionPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeComposerSubmissionPlan({
+					allowLiveDispatch: optionalBoolField(value, "allowLiveDispatch", false),
+					actions: composerSubmissionActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function composerSubmissionActions(values:Array<Value>):Array<TuiSmokeComposerSubmissionAction> {
+		final out:Array<TuiSmokeComposerSubmissionAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeComposerSubmissionAction({
+				kind: TuiSmokeComposerSubmissionActionKind.fromString(stringField(value, "kind", "")),
+				result: TuiSmokeComposerSubmissionResultKind.fromString(optionalStringField(value, "result", "unknown")),
+				queuedAction: TuiSmokeComposerQueuedActionKind.fromString(optionalStringField(value, "queuedAction", "unknown")),
+				slashValidation: TuiSmokeComposerSlashValidationKind.fromString(optionalStringField(value, "slashValidation", "unknown")),
+				inputText: optionalStringField(value, "inputText", ""),
+				preparedText: optionalStringField(value, "preparedText", ""),
+				argsText: optionalStringField(value, "argsText", ""),
+				commandName: optionalStringField(value, "commandName", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				charCount: optionalIntField(value, "charCount", 0),
+				maxChars: optionalIntField(value, "maxChars", 0),
+				pendingBefore: optionalIntField(value, "pendingBefore", 0),
+				pendingAfter: optionalIntField(value, "pendingAfter", 0),
+				textElementBefore: optionalIntField(value, "textElementBefore", 0),
+				textElementAfter: optionalIntField(value, "textElementAfter", 0),
+				localImageBefore: optionalIntField(value, "localImageBefore", 0),
+				localImageAfter: optionalIntField(value, "localImageAfter", 0),
+				remoteImageBefore: optionalIntField(value, "remoteImageBefore", 0),
+				remoteImageAfter: optionalIntField(value, "remoteImageAfter", 0),
+				queueBefore: optionalIntField(value, "queueBefore", 0),
+				queueAfter: optionalIntField(value, "queueAfter", 0),
+				shouldQueue: optionalBoolField(value, "shouldQueue", false),
+				recordHistory: optionalBoolField(value, "recordHistory", false),
+				pasteBurstFlushed: optionalBoolField(value, "pasteBurstFlushed", false),
+				pendingExpanded: optionalBoolField(value, "pendingExpanded", false),
+				pendingRestored: optionalBoolField(value, "pendingRestored", false),
+				pendingCleared: optionalBoolField(value, "pendingCleared", false),
+				textTrimmed: optionalBoolField(value, "textTrimmed", false),
+				slashValidationDeferred: optionalBoolField(value, "slashValidationDeferred", false),
+				slashValidationFailed: optionalBoolField(value, "slashValidationFailed", false),
+				tooLargeRejected: optionalBoolField(value, "tooLargeRejected", false),
+				emptySuppressed: optionalBoolField(value, "emptySuppressed", false),
+				imagesPruned: optionalBoolField(value, "imagesPruned", false),
+				localImagesDrained: optionalBoolField(value, "localImagesDrained", false),
+				remoteImagesDrained: optionalBoolField(value, "remoteImagesDrained", false),
+				messageBuilt: optionalBoolField(value, "messageBuilt", false),
+				submittedNow: optionalBoolField(value, "submittedNow", false),
+				queued: optionalBoolField(value, "queued", false),
+				statusWorking: optionalBoolField(value, "statusWorking", false),
+				reasoningCleared: optionalBoolField(value, "reasoningCleared", false),
+				historyStaged: optionalBoolField(value, "historyStaged", false),
+				historyRecorded: optionalBoolField(value, "historyRecorded", false),
+				vimNormalEntered: optionalBoolField(value, "vimNormalEntered", false),
+				modelSupportsImages: optionalBoolField(value, "modelSupportsImages", false),
+				blockedRestored: optionalBoolField(value, "blockedRestored", false),
+				appEventSent: optionalBoolField(value, "appEventSent", false),
+				noLiveDispatch: optionalBoolField(value, "noLiveDispatch", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
