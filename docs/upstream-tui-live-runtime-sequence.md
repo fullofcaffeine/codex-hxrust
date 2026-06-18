@@ -2410,6 +2410,19 @@ Model selected raw Codex terminal-title behavior without writing OSC sequences:
 
 Status: HXCX-TUI-51 extends `fixtures/hxrust/tui-smoke.v1.json` with typed terminal-title sanitize/cache/clear evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic title-boundary evidence only, not live terminal title ownership.
 
+### HXCX-TUI-52: Desktop Notification Backend And Focus Gate
+
+Model selected raw Codex desktop-notification behavior without posting live terminal notifications:
+
+- preserve notification emission gating from `../codex/codex-rs/tui/src/tui.rs`: `NotificationCondition::Unfocused` suppresses notifications while focused and emits when unfocused, while `Always` emits regardless of focus state;
+- preserve focus-state ownership from `../codex/codex-rs/tui/src/tui/event_stream.rs`: focus gained/lost events update the shared terminal-focused flag used by notification decisions;
+- preserve backend selection from `../codex/codex-rs/tui/src/notifications/mod.rs`: explicit `osc9`/`bel` methods choose their matching backend, and `auto` chooses OSC 9 only for supported terminals with BEL fallback otherwise;
+- preserve low-level ANSI formatting boundaries from `../codex/codex-rs/tui/src/notifications/osc9.rs` and `../codex/codex-rs/tui/src/notifications/bel.rs`: OSC 9 tmux DCS passthrough doubles ESC bytes inside the payload, and BEL emits without inspecting the message body;
+- preserve ChatWidget notification handoff anchors from `../codex/codex-rs/tui/src/chatwidget/notifications.rs`: pending notifications are coalesced before `Tui::notify`, and failed backend notification attempts disable future notification backend use;
+- keep the evidence deterministic and independent of live OSC/BEL writes, ratatui rendering, alternate-screen takeover, live input loops, app-server mutation, model/tool execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-52 extends `fixtures/hxrust/tui-smoke.v1.json` with typed desktop-notification backend/focus/escape evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic notification-boundary evidence only, not live terminal notification delivery.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

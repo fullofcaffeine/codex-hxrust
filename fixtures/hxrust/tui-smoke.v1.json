@@ -19,7 +19,11 @@
       "../codex/codex-rs/tui/src/resume_picker.rs",
       "../codex/codex-rs/tui/src/session_resume.rs",
       "../codex/codex-rs/tui/src/terminal_title.rs",
+      "../codex/codex-rs/tui/src/notifications/mod.rs",
+      "../codex/codex-rs/tui/src/notifications/osc9.rs",
+      "../codex/codex-rs/tui/src/notifications/bel.rs",
       "../codex/codex-rs/tui/src/chatwidget/replay.rs",
+      "../codex/codex-rs/tui/src/chatwidget/notifications.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/history_replay.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol_requests.rs",
@@ -11644,6 +11648,113 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.terminal_title.plan=headless\ntui.terminal_title.set=raw_chars=20:sanitized=Codex raw title:stdout=false:applied=true:last=->Codex raw title:max=24:live=false\ntui.terminal_title.skip_duplicate=title=Codex raw title:skipped=true:frame=true\ntui.terminal_title.clear_managed=had_title=true:cleared=true:last=Codex raw title->:stdout=false\ntui.terminal_title.no_visible_content=raw_chars=3:clear=true:last=ghost title->:stdout=false\ntui.terminal_title.failure=invalid_terminal_title_item:invalid_items=1:live=false\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> terminal title no live osc write\ninput> \ntrace:\ntui.terminal_title.plan=headless\ntui.terminal_title.set=raw_chars=20:sanitized=Codex raw title:stdout=false:applied=true:last=->Codex raw title:max=24:live=false\ntui.terminal_title.skip_duplicate=title=Codex raw title:skipped=true:frame=true\ntui.terminal_title.clear_managed=had_title=true:cleared=true:last=Codex raw title->:stdout=false\ntui.terminal_title.no_visible_content=raw_chars=3:clear=true:last=ghost title->:stdout=false\ntui.terminal_title.failure=invalid_terminal_title_item:invalid_items=1:live=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "desktop-notification-focus-backend-and-escape",
+      "frame": {
+        "name": "desktop-notification-focus-backend-and-escape",
+        "title": "Codex TUI Smoke Terminal",
+        "status": "running",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "desktop notification no live write"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "desktop_notification",
+          "desktopNotification": {
+            "allowLiveNotification": false,
+            "actions": [
+              {
+                "kind": "detect_backend",
+                "method": "auto",
+                "terminalName": "wezterm",
+                "multiplexer": "none",
+                "backend": "osc9"
+              },
+              {
+                "kind": "focus_decision",
+                "condition": "unfocused",
+                "terminalFocused": true,
+                "shouldEmit": false
+              },
+              {
+                "kind": "focus_decision",
+                "condition": "unfocused",
+                "terminalFocused": false,
+                "shouldEmit": true
+              },
+              {
+                "kind": "notify",
+                "method": "auto",
+                "terminalName": "wezterm",
+                "multiplexer": "none",
+                "backend": "osc9",
+                "condition": "unfocused",
+                "terminalFocused": false,
+                "shouldEmit": true,
+                "message": "turn complete",
+                "escapedMessage": "turn complete",
+                "dcsPassthrough": false,
+                "liveWriteAllowed": false,
+                "emitted": true
+              },
+              {
+                "kind": "detect_backend",
+                "method": "auto",
+                "terminalName": "alacritty",
+                "multiplexer": "none",
+                "backend": "bel"
+              },
+              {
+                "kind": "notify",
+                "method": "osc9",
+                "terminalName": "wezterm",
+                "multiplexer": "tmux",
+                "backend": "osc9",
+                "condition": "always",
+                "terminalFocused": true,
+                "shouldEmit": true,
+                "message": "danger\u001b[31m",
+                "escapedMessage": "danger\u001b\u001b[31m",
+                "dcsPassthrough": true,
+                "liveWriteAllowed": false,
+                "emitted": true
+              },
+              {
+                "kind": "failure",
+                "backend": "none",
+                "failureCode": "notification_backend_failed",
+                "liveWriteAllowed": false,
+                "disabledAfterFailure": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.desktop_notification.plan=headless\ntui.desktop_notification.detect_backend=method=auto:terminal=wezterm:mux=none:backend=osc9\ntui.desktop_notification.focus_decision=condition=unfocused:focused=true:emit=false\ntui.desktop_notification.focus_decision=condition=unfocused:focused=false:emit=true\ntui.desktop_notification.notify=method=auto:backend=osc9:condition=unfocused:focused=false:emit=true:message_chars=13:dcs=false:esc=0->0:live=false\ntui.desktop_notification.detect_backend=method=auto:terminal=alacritty:mux=none:backend=bel\ntui.desktop_notification.notify=method=osc9:backend=osc9:condition=always:focused=true:emit=true:message_chars=11:dcs=true:esc=1->2:live=false\ntui.desktop_notification.failure=notification_backend_failed:live=false:disabled=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> desktop notification no live write\ninput> \ntrace:\ntui.desktop_notification.plan=headless\ntui.desktop_notification.detect_backend=method=auto:terminal=wezterm:mux=none:backend=osc9\ntui.desktop_notification.focus_decision=condition=unfocused:focused=true:emit=false\ntui.desktop_notification.focus_decision=condition=unfocused:focused=false:emit=true\ntui.desktop_notification.notify=method=auto:backend=osc9:condition=unfocused:focused=false:emit=true:message_chars=13:dcs=false:esc=0->0:live=false\ntui.desktop_notification.detect_backend=method=auto:terminal=alacritty:mux=none:backend=bel\ntui.desktop_notification.notify=method=osc9:backend=osc9:condition=always:focused=true:emit=true:message_chars=11:dcs=true:esc=1->2:live=false\ntui.desktop_notification.failure=notification_backend_failed:live=false:disabled=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

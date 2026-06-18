@@ -106,7 +106,43 @@ class TuiSmokeFixtureLoader {
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
 				clearArchive: optionalClearArchivePlan(value, "clearArchive"),
 				resumeFork: optionalResumeForkPlan(value, "resumeFork"),
-				terminalTitle: optionalTerminalTitlePlan(value, "terminalTitle")
+				terminalTitle: optionalTerminalTitlePlan(value, "terminalTitle"),
+				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalDesktopNotificationPlan(object:Value, name:String):Null<TuiSmokeDesktopNotificationPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeDesktopNotificationPlan({
+					allowLiveNotification: optionalBoolField(value, "allowLiveNotification", false),
+					actions: desktopNotificationActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function desktopNotificationActions(values:Array<Value>):Array<TuiSmokeDesktopNotificationAction> {
+		final out:Array<TuiSmokeDesktopNotificationAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeDesktopNotificationAction({
+				kind: TuiSmokeDesktopNotificationActionKind.fromString(stringField(value, "kind", "")),
+				method: TuiSmokeDesktopNotificationMethodKind.fromString(optionalStringField(value, "method", "")),
+				terminalName: optionalStringField(value, "terminalName", ""),
+				multiplexer: optionalStringField(value, "multiplexer", ""),
+				backend: TuiSmokeDesktopNotificationBackendKind.fromString(optionalStringField(value, "backend", "")),
+				condition: TuiSmokeDesktopNotificationConditionKind.fromString(optionalStringField(value, "condition", "")),
+				terminalFocused: optionalBoolField(value, "terminalFocused", false),
+				shouldEmit: optionalBoolField(value, "shouldEmit", false),
+				message: optionalStringField(value, "message", ""),
+				escapedMessage: optionalStringField(value, "escapedMessage", ""),
+				dcsPassthrough: optionalBoolField(value, "dcsPassthrough", false),
+				liveWriteAllowed: optionalBoolField(value, "liveWriteAllowed", false),
+				emitted: optionalBoolField(value, "emitted", false),
+				disabledAfterFailure: optionalBoolField(value, "disabledAfterFailure", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

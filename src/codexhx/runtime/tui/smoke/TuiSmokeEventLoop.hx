@@ -281,6 +281,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.DesktopNotification:
+					if (!traceDesktopNotification(event.desktopNotification, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1808,6 +1813,81 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.clear_archive.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceDesktopNotification(plan:TuiSmokeDesktopNotificationPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveNotification || !plan.enabled()) {
+			trace.push("tui.desktop_notification.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.desktop_notification.plan=headless");
+		for (action in plan.actions) {
+			if (!action.backendMatches()) {
+				trace.push(
+					"tui.desktop_notification.backend_mismatch="
+					+ action.backend
+					+ ":computed=" + action.computedBackend()
+				);
+				return false;
+			}
+			if (!action.shouldEmitMatches()) {
+				trace.push(
+					"tui.desktop_notification.emit_mismatch="
+					+ action.shouldEmit
+					+ ":computed=" + action.computedShouldEmit()
+				);
+				return false;
+			}
+			if (!action.escapedMessageMatches()) {
+				trace.push(
+					"tui.desktop_notification.escape_mismatch="
+					+ "expected_esc=" + action.messageEscapeCount()
+					+ ":computed_esc=" + action.escapedMessageEscapeCount()
+				);
+				return false;
+			}
+			switch action.kind {
+				case TuiSmokeDesktopNotificationActionKind.DetectBackend:
+					trace.push(
+						"tui.desktop_notification.detect_backend="
+						+ "method=" + action.method
+						+ ":terminal=" + action.terminalName
+						+ ":mux=" + action.multiplexer
+						+ ":backend=" + action.backendTraceName()
+					);
+				case TuiSmokeDesktopNotificationActionKind.FocusDecision:
+					trace.push(
+						"tui.desktop_notification.focus_decision="
+						+ "condition=" + action.condition
+						+ ":focused=" + action.terminalFocused
+						+ ":emit=" + action.shouldEmit
+					);
+				case TuiSmokeDesktopNotificationActionKind.Notify:
+					trace.push(
+						"tui.desktop_notification.notify="
+						+ "method=" + action.method
+						+ ":backend=" + action.backendTraceName()
+						+ ":condition=" + action.condition
+						+ ":focused=" + action.terminalFocused
+						+ ":emit=" + action.emitted
+						+ ":message_chars=" + action.message.length
+						+ ":dcs=" + action.dcsPassthrough
+						+ ":esc=" + action.messageEscapeCount() + "->" + action.escapedMessageEscapeCount()
+						+ ":live=" + action.liveWriteAllowed
+					);
+				case TuiSmokeDesktopNotificationActionKind.Failure:
+					trace.push(
+						"tui.desktop_notification.failure="
+						+ action.failureCode
+						+ ":live=" + action.liveWriteAllowed
+						+ ":disabled=" + action.disabledAfterFailure
+					);
+				case _:
+					trace.push("tui.desktop_notification.unknown");
 					return false;
 			}
 		}
