@@ -147,6 +147,19 @@ Add a typed app-server event facade to the generated smoke binary:
 
 Status: HXCX-TUI-3 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app.rs:1188`, `../codex/codex-rs/tui/src/app/app_server_events.rs:23`, `../codex/codex-rs/tui/src/app/app_server_events.rs:35`, `../codex/codex-rs/tui/src/app/app_server_events.rs:43`, `../codex/codex-rs/tui/src/app/app_server_events.rs:73`, `../codex/codex-rs/tui/src/app/app_server_event_targets.rs:7`, `../codex/codex-rs/tui/src/app/app_server_event_targets.rs:40`, `../codex/codex-rs/tui/src/app_server_session.rs:377`, and `../codex/codex-rs/app-server-client/src/lib.rs:112`. This is app-server event ordering evidence only, not JSON-RPC decoding, Tokio stream ownership, live request routing, active-thread queue fanout, server-request approval UI, or Cafex behavior.
 
+### HXCX-TUI-4: Headless Raw Codex TUI Server-Request Facade
+
+Extend the app-server facade with request routing evidence:
+
+- typed command/file/permissions approval and tool-user-input request DTOs;
+- pending request admission before target routing;
+- primary versus side-thread target summaries;
+- threadless request ignores;
+- unsupported dynamic/attestation/legacy request rejection summaries;
+- deterministic ordering relative to queued app events, draw, and key events.
+
+Status: HXCX-TUI-4 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/app_server_events.rs:48`, `../codex/codex-rs/tui/src/app/app_server_events.rs:156`, `../codex/codex-rs/tui/src/app/app_server_events.rs:162`, `../codex/codex-rs/tui/src/app/app_server_events.rs:185`, `../codex/codex-rs/tui/src/app/app_server_event_targets.rs:7`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:56`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:72`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:116`, `../codex/codex-rs/tui/src/app_server_session.rs:1109`, `../codex/codex-rs/tui/src/app_server_session.rs:1117`, `../codex/codex-rs/tui/src/app.rs:574`, `../codex/codex-rs/tui/src/app.rs:1219`, and `../codex/codex-rs/tui/src/app_event.rs:198`. This is request-routing evidence only, not live JSON-RPC resolution, approval popup UI, actual command/file/tool execution, Tokio channel ownership, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

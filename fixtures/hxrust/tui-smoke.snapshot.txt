@@ -13,4 +13,6 @@ exit: cancelled
 renders: 2
 app-events: 0
 server-events: 0
+server-requests: 0
+server-rejections: 0
 terminal: restored

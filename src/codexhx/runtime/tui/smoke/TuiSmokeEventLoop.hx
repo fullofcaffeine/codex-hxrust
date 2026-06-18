@@ -69,6 +69,12 @@ class TuiSmokeEventLoop {
 						exit = serverExit;
 						running = false;
 					}
+				case TuiSmokeEventKind.AppServerRequest:
+					final requestExit = appServer.handleRequest(event.appServerRequest, trace);
+					if (requestExit != TuiSmokeExitKind.Rendered) {
+						exit = requestExit;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -84,6 +90,8 @@ class TuiSmokeEventLoop {
 			+ "\nrenders: " + renderCount
 			+ "\napp-events: " + appQueue.logged()
 			+ "\nserver-events: " + appServer.handled()
+			+ "\nserver-requests: " + appServer.handledRequests()
+			+ "\nserver-rejections: " + appServer.rejectedRequests()
 			+ "\nterminal: restored";
 		final ok = exit == request.expectedExit
 			&& traceText == request.expectedTrace
@@ -98,6 +106,8 @@ class TuiSmokeEventLoop {
 			renderCount: renderCount,
 			appEventLogCount: appQueue.logged(),
 			appServerEventCount: appServer.handled(),
+			appServerRequestCount: appServer.handledRequests(),
+			appServerRejectedRequestCount: appServer.rejectedRequests(),
 			terminalRestored: terminal.wasRestored()
 		});
 	}
@@ -137,6 +147,8 @@ class TuiSmokeEventLoop {
 			renderCount: 0,
 			appEventLogCount: 0,
 			appServerEventCount: 0,
+			appServerRequestCount: 0,
+			appServerRejectedRequestCount: 0,
 			terminalRestored: false
 		});
 	}
