@@ -251,6 +251,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
+					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1585,6 +1590,105 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.composer_popup_render.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceChatWidgetInterruptQuit(plan:TuiSmokeChatWidgetInterruptQuitPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_interrupt_quit.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_interrupt_quit.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeChatWidgetInterruptQuitActionKind.CtrlC:
+					trace.push(
+						"tui.chat_widget_interrupt_quit.ctrl_c="
+						+ action.route
+						+ ":double_press=" + action.doublePressEnabled
+						+ ":bottom_pane=" + action.bottomPaneHandled
+						+ ":task=" + action.taskRunning
+						+ ":work=" + action.cancellableWorkActive
+						+ ":shortcut=" + action.quitShortcutActiveBefore + "->" + action.quitShortcutActiveAfter
+						+ ":hint=" + action.quitShortcutHintShown
+						+ ":interrupt=" + action.interruptSubmitted
+						+ ":exit=" + action.appExitSent
+					);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.CtrlD:
+					trace.push(
+						"tui.chat_widget_interrupt_quit.ctrl_d="
+						+ action.route
+						+ ":composer_empty=" + action.composerEmpty
+						+ ":modal=" + action.modalOrPopupActive
+						+ ":shortcut=" + action.quitShortcutActiveBefore + "->" + action.quitShortcutActiveAfter
+						+ ":matched=" + action.quitShortcutKeyMatched
+						+ ":exit=" + action.appExitSent
+					);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.InterruptKey:
+					trace.push(
+						"tui.chat_widget_interrupt_quit.interrupt_key="
+						+ action.key
+						+ ":route=" + action.route
+						+ ":pending_steers=" + action.pendingSteersBefore + "->" + action.pendingSteersAfter
+						+ ":submit_after=" + action.submitPendingSteersAfterInterrupt
+						+ ":review=" + action.reviewMode
+						+ ":task=" + action.taskRunning
+						+ ":submitted=" + action.interruptSubmitted
+					);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.ArmQuitShortcut:
+					trace.push(
+						"tui.chat_widget_interrupt_quit.arm_shortcut="
+						+ action.key
+						+ ":active=" + action.quitShortcutActiveBefore + "->" + action.quitShortcutActiveAfter
+						+ ":hint=" + action.quitShortcutHintShown
+						+ ":expired=" + action.quitShortcutExpired
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.RequestQuit:
+					trace.push(
+						"tui.chat_widget_interrupt_quit.request_quit="
+						+ action.exitMode
+						+ ":shortcut=" + action.quitShortcutActiveBefore + "->" + action.quitShortcutActiveAfter
+						+ ":cleared=" + action.quitShortcutHintCleared
+						+ ":app_exit=" + action.appExitSent
+					);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.ShutdownFeedback:
+					trace.push(
+						"tui.chat_widget_interrupt_quit.shutdown_feedback="
+						+ action.exitMode
+						+ ":shown=" + action.shutdownFeedbackShown
+						+ ":input_disabled=" + action.inputDisabled
+						+ ":server_shutdown=" + action.appServerShutdownRequested
+						+ ":pending_thread=" + action.pendingShutdownThreadBefore + "->" + action.pendingShutdownThreadAfter
+					);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.PrepareInterruptSubmission:
+					trace.push(
+						"tui.chat_widget_interrupt_quit.prepare_interrupt="
+						+ "restore_prompt=" + action.interruptRestoresPrompt
+						+ ":cancel_edit=" + action.cancelEditArmedBefore + "->" + action.cancelEditArmedAfter
+						+ ":stream_queue=" + action.streamQueueCleared
+						+ ":plan_queue=" + action.planStreamQueueCleared
+						+ ":tail=" + action.activeTailCleared
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.CancelEditCleanup:
+					trace.push(
+						"tui.chat_widget_interrupt_quit.cancel_edit="
+						+ "cleared=" + action.cancelEditCleared
+						+ ":pending_steers=" + action.pendingSteersBefore + "->" + action.pendingSteersAfter
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_interrupt_quit.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_interrupt_quit.unknown");
 					return false;
 			}
 		}

@@ -2309,6 +2309,23 @@ Model selected raw Codex ChatWidget stream interruption and finish behavior:
 
 Status: HXCX-TUI-44 extends `fixtures/hxrust/tui-smoke.v1.json` with typed ChatWidget stream lifecycle fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic stream interruption/finish lifecycle evidence only, not a full live stream renderer, interrupt dispatcher, or terminal overlay.
 
+### HXCX-TUI-45: ChatWidget Interrupt Key And Quit Shortcut Lifecycle
+
+Model selected raw Codex ChatWidget interrupt/quit behavior:
+
+- preserve `handle_key_event` in `../codex/codex-rs/tui/src/chatwidget/interaction.rs`: active bottom-pane views receive local key routing first, Ctrl-C reaches `on_ctrl_c`, Ctrl-D reaches `on_ctrl_d`, unrelated press events clear quit shortcut hints, and configured interrupt bindings can interrupt running tasks;
+- preserve `on_ctrl_c` in `interaction.rs`: live realtime stop takes precedence, bottom-pane cancellation can consume the key, disabled double-press mode interrupts cancellable work or requests shutdown-first quit, and the latent double-press path arms/matches the quit shortcut before requesting shutdown-first exit;
+- preserve `on_ctrl_d` in `interaction.rs`: Ctrl-D participates in quit only when the composer is empty and no modal/popup is active, with the same latent double-press matching behavior as Ctrl-C;
+- preserve `arm_quit_shortcut` and `quit_shortcut_active_for` in `interaction.rs`: shortcut state is owned by `ChatWidget`, rendered by `BottomPane`, time-bounded by `QUIT_SHORTCUT_TIMEOUT`, and key-specific so Ctrl-C followed by Ctrl-D cannot accidentally quit;
+- preserve pending-steer interrupt routing in `interaction.rs`: configured interrupt keys set `submit_pending_steers_after_interrupt`, submit `AppCommand::interrupt`, and roll the flag back if submission fails; review mode keeps separate steer-unavailable handling;
+- preserve `request_quit_without_confirmation` in `../codex/codex-rs/tui/src/chatwidget.rs`: explicit quit paths and double-press shortcuts send `AppEvent::Exit(ExitMode::ShutdownFirst)` rather than submitting a model/tool command;
+- preserve `prepare_local_op_submission` in `chatwidget.rs`: prompt-restoring interrupts arm cancel-edit, clear stream and plan stream queues, clear active stream tails, and request redraw while the agent turn is running;
+- preserve `BottomPane::on_ctrl_c`, `show_quit_shortcut_hint`, `clear_quit_shortcut_hint`, and `set_interrupt_hint_visible` in `../codex/codex-rs/tui/src/bottom_pane/mod.rs`: local views/history search/composer clearing own local cancellation while process-level quit/interrupt decisions remain in `ChatWidget`;
+- preserve shutdown-first app handling in `../codex/codex-rs/tui/src/app/event_dispatch.rs` and `../codex/codex-rs/tui/src/app.rs`: shutdown feedback disables input, pending shutdown thread tracking is set/cleared around current-thread shutdown, and the app exits with `UserRequested` without submitting an `Op::Shutdown`;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-45 extends `fixtures/hxrust/tui-smoke.v1.json` with typed ChatWidget interrupt/quit shortcut fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic interrupt/quit lifecycle evidence only, not a full live keyboard loop, shutdown transport, or terminal overlay.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

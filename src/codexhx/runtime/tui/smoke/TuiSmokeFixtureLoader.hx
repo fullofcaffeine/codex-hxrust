@@ -100,7 +100,72 @@ class TuiSmokeFixtureLoader {
 				chatWidgetComposerRender: optionalChatWidgetComposerRenderPlan(value, "chatWidgetComposerRender"),
 				chatWidgetActiveStream: optionalChatWidgetActiveStreamPlan(value, "chatWidgetActiveStream"),
 				chatWidgetStreamStatus: optionalChatWidgetStreamStatusPlan(value, "chatWidgetStreamStatus"),
-				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle")
+				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle"),
+				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalChatWidgetInterruptQuitPlan(object:Value, name:String):Null<TuiSmokeChatWidgetInterruptQuitPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeChatWidgetInterruptQuitPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: chatWidgetInterruptQuitActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function chatWidgetInterruptQuitActions(values:Array<Value>):Array<TuiSmokeChatWidgetInterruptQuitAction> {
+		final out:Array<TuiSmokeChatWidgetInterruptQuitAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeChatWidgetInterruptQuitAction({
+				kind: TuiSmokeChatWidgetInterruptQuitActionKind.fromString(stringField(value, "kind", "")),
+				key: optionalStringField(value, "key", ""),
+				route: optionalStringField(value, "route", ""),
+				exitMode: optionalStringField(value, "exitMode", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				doublePressEnabled: optionalBoolField(value, "doublePressEnabled", false),
+				realtimeLive: optionalBoolField(value, "realtimeLive", false),
+				modalOrPopupActive: optionalBoolField(value, "modalOrPopupActive", false),
+				bottomPaneHandled: optionalBoolField(value, "bottomPaneHandled", false),
+				cancellableWorkActive: optionalBoolField(value, "cancellableWorkActive", false),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				reviewMode: optionalBoolField(value, "reviewMode", false),
+				composerEmpty: optionalBoolField(value, "composerEmpty", false),
+				quitShortcutActiveBefore: optionalBoolField(value, "quitShortcutActiveBefore", false),
+				quitShortcutActiveAfter: optionalBoolField(value, "quitShortcutActiveAfter", false),
+				quitShortcutKeyMatched: optionalBoolField(value, "quitShortcutKeyMatched", false),
+				quitShortcutHintShown: optionalBoolField(value, "quitShortcutHintShown", false),
+				quitShortcutHintCleared: optionalBoolField(value, "quitShortcutHintCleared", false),
+				quitShortcutExpired: optionalBoolField(value, "quitShortcutExpired", false),
+				interruptSubmitted: optionalBoolField(value, "interruptSubmitted", false),
+				interruptRestoresPrompt: optionalBoolField(value, "interruptRestoresPrompt", false),
+				pendingSteersBefore: optionalIntField(value, "pendingSteersBefore", 0),
+				pendingSteersAfter: optionalIntField(value, "pendingSteersAfter", 0),
+				submitPendingSteersAfterInterrupt: optionalBoolField(value, "submitPendingSteersAfterInterrupt", false),
+				activeGoalPaused: optionalBoolField(value, "activeGoalPaused", false),
+				streamQueueCleared: optionalBoolField(value, "streamQueueCleared", false),
+				planStreamQueueCleared: optionalBoolField(value, "planStreamQueueCleared", false),
+				activeTailCleared: optionalBoolField(value, "activeTailCleared", false),
+				cancelEditArmedBefore: optionalBoolField(value, "cancelEditArmedBefore", false),
+				cancelEditArmedAfter: optionalBoolField(value, "cancelEditArmedAfter", false),
+				cancelEditCleared: optionalBoolField(value, "cancelEditCleared", false),
+				appExitSent: optionalBoolField(value, "appExitSent", false),
+				shutdownFeedbackShown: optionalBoolField(value, "shutdownFeedbackShown", false),
+				appServerShutdownRequested: optionalBoolField(value, "appServerShutdownRequested", false),
+				pendingShutdownThreadBefore: optionalBoolField(value, "pendingShutdownThreadBefore", false),
+				pendingShutdownThreadAfter: optionalBoolField(value, "pendingShutdownThreadAfter", false),
+				inputDisabled: optionalBoolField(value, "inputDisabled", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
