@@ -1563,6 +1563,220 @@
       "expectedExit": "quit",
       "expectedTrace": "thread.replay.active=thread-side\nthread.replay.buffer.begin=thread-side\nthread.replay.session=thread-side:side_conversation:gpt-5.2-codex:Side thread\nthread.replay.autosend_suppressed=true\nthread.replay.turn=thread-side:turn-side:completed:thread_snapshot\nthread.replay.item=thread-side:turn-side:assistant-side:agent_message:side session restored:thread_snapshot\nthread.replay.turn_complete=thread-side:turn-side:completed:thread_snapshot\nthread.replay.buffer.end=thread-side\nthread.replay.autosend_suppressed=false\nserver.request.tool_user_input=req-main-input:thread-main:primary:input-main:active\nthread.notification.warning=note-main-warning:thread-main:primary:main warning:active\nqueue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.pending_interactive=thread-main\nthread.replay.session=thread-main:quiet:gpt-5.2-codex:Main quiet\nthread.replay.autosend_suppressed=true\nthread.replay.input=thread-main:answer requested:task_running=false:queued=0:initial_submit=false\nthread.replay.request=thread-main:req-main-input:input-main:thread_snapshot\nthread.replay.notice_suppressed=thread-main:note-main-warning:main warning\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\napp.event.commit_tick\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> session modes\nassistant> side session restored\ninput> answer requested\ntrace:\nthread.replay.active=thread-side\nthread.replay.buffer.begin=thread-side\nthread.replay.session=thread-side:side_conversation:gpt-5.2-codex:Side thread\nthread.replay.autosend_suppressed=true\nthread.replay.turn=thread-side:turn-side:completed:thread_snapshot\nthread.replay.item=thread-side:turn-side:assistant-side:agent_message:side session restored:thread_snapshot\nthread.replay.turn_complete=thread-side:turn-side:completed:thread_snapshot\nthread.replay.buffer.end=thread-side\nthread.replay.autosend_suppressed=false\nserver.request.tool_user_input=req-main-input:thread-main:primary:input-main:active\nthread.notification.warning=note-main-warning:thread-main:primary:main warning:active\nqueue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.pending_interactive=thread-main\nthread.replay.session=thread-main:quiet:gpt-5.2-codex:Main quiet\nthread.replay.autosend_suppressed=true\nthread.replay.input=thread-main:answer requested:task_running=false:queued=0:initial_submit=false\nthread.replay.request=thread-main:req-main-input:input-main:thread_snapshot\nthread.replay.notice_suppressed=thread-main:note-main-warning:main warning\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\napp.event.commit_tick\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 1\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 1\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 2\nthread-replay-requests: 1\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 1\nthread-replay-turns: 1\nthread-replay-items: 1\nthread-replay-completions: 1\nterminal: restored"
+    },
+    {
+      "name": "thread-replay-server-request-surfaces",
+      "frame": {
+        "name": "thread-replay-server-request-surfaces",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "request surfaces"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "commit_tick"
+          }
+        },
+        {
+          "kind": "thread_replay",
+          "threadReplay": {
+            "kind": "snapshot_active",
+            "threadId": "thread-main",
+            "session": {
+              "threadId": "thread-main",
+              "model": "gpt-5.2-codex",
+              "title": "Request surfaces",
+              "isSideThread": false
+            },
+            "traceRequestSurfaces": true,
+            "resizeReflowEnabled": true,
+            "snapshotRequests": [
+              {
+                "kind": "command_approval",
+                "requestId": "req-cmd",
+                "threadId": "thread-main",
+                "turnId": "turn-main",
+                "itemId": "cmd-item",
+                "approvalId": "approval-cmd"
+              },
+              {
+                "kind": "file_change_approval",
+                "requestId": "req-file",
+                "threadId": "thread-main",
+                "turnId": "turn-main",
+                "itemId": "patch-item"
+              },
+              {
+                "kind": "permissions_approval",
+                "requestId": "req-perm",
+                "threadId": "thread-main",
+                "turnId": "turn-main",
+                "itemId": "perm-item"
+              },
+              {
+                "kind": "mcp_elicitation",
+                "requestId": "req-mcp",
+                "threadId": "thread-main",
+                "turnId": "turn-main",
+                "itemId": "mcp-item",
+                "serverName": "filesystem"
+              },
+              {
+                "kind": "tool_user_input",
+                "requestId": "req-input",
+                "threadId": "thread-main",
+                "turnId": "turn-main",
+                "itemId": "input-item"
+              },
+              {
+                "kind": "dynamic_tool_call",
+                "requestId": "req-dynamic",
+                "threadId": "thread-main",
+                "turnId": "turn-main",
+                "itemId": "dynamic-item"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "queue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.session=thread-main:normal:gpt-5.2-codex:Request surfaces\nthread.replay.autosend_suppressed=true\nthread.replay.request=thread-main:req-cmd:approval-cmd:thread_snapshot\nthread.replay.request_surface=thread-main:req-cmd:command_approval:approval-cmd:thread_snapshot\nthread.replay.request=thread-main:req-file:patch-item:thread_snapshot\nthread.replay.request_surface=thread-main:req-file:file_change_approval:patch-item:thread_snapshot\nthread.replay.request=thread-main:req-perm:perm-item:thread_snapshot\nthread.replay.request_surface=thread-main:req-perm:permissions_approval:perm-item:thread_snapshot\nthread.replay.request=thread-main:req-mcp:filesystem:thread_snapshot\nthread.replay.request_surface=thread-main:req-mcp:mcp_elicitation:filesystem:thread_snapshot\nthread.replay.request=thread-main:req-input:input-item:thread_snapshot\nthread.replay.request_surface=thread-main:req-input:tool_user_input:input-item:thread_snapshot\nthread.replay.request_surface_suppressed=thread-main:req-dynamic:dynamic_tool_call:thread_snapshot\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\napp.event.commit_tick\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> request surfaces\ninput> \ntrace:\nqueue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.session=thread-main:normal:gpt-5.2-codex:Request surfaces\nthread.replay.autosend_suppressed=true\nthread.replay.request=thread-main:req-cmd:approval-cmd:thread_snapshot\nthread.replay.request_surface=thread-main:req-cmd:command_approval:approval-cmd:thread_snapshot\nthread.replay.request=thread-main:req-file:patch-item:thread_snapshot\nthread.replay.request_surface=thread-main:req-file:file_change_approval:patch-item:thread_snapshot\nthread.replay.request=thread-main:req-perm:perm-item:thread_snapshot\nthread.replay.request_surface=thread-main:req-perm:permissions_approval:perm-item:thread_snapshot\nthread.replay.request=thread-main:req-mcp:filesystem:thread_snapshot\nthread.replay.request_surface=thread-main:req-mcp:mcp_elicitation:filesystem:thread_snapshot\nthread.replay.request=thread-main:req-input:input-item:thread_snapshot\nthread.replay.request_surface=thread-main:req-input:tool_user_input:input-item:thread_snapshot\nthread.replay.request_surface_suppressed=thread-main:req-dynamic:dynamic_tool_call:thread_snapshot\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\napp.event.commit_tick\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 1\nthread-replay-requests: 5\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "thread-replay-request-surfaces-filter-resolved",
+      "frame": {
+        "name": "thread-replay-request-surfaces-filter-resolved",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "pending request replay"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "app_server_request",
+          "appServerRequest": {
+            "kind": "command_approval",
+            "requestId": "req-cmd-pending",
+            "threadId": "thread-main",
+            "turnId": "turn-main",
+            "itemId": "cmd-pending",
+            "approvalId": "approval-pending"
+          }
+        },
+        {
+          "kind": "app_server_request",
+          "appServerRequest": {
+            "kind": "file_change_approval",
+            "requestId": "req-file-resolved",
+            "threadId": "thread-main",
+            "turnId": "turn-main",
+            "itemId": "patch-resolved"
+          }
+        },
+        {
+          "kind": "app_server_resolution",
+          "appServerResolution": {
+            "kind": "file_change_approval",
+            "id": "patch-resolved",
+            "decision": "accept"
+          }
+        },
+        {
+          "kind": "app_server_request",
+          "appServerRequest": {
+            "kind": "tool_user_input",
+            "requestId": "req-input-pending",
+            "threadId": "thread-main",
+            "turnId": "turn-main",
+            "itemId": "input-pending"
+          }
+        },
+        {
+          "kind": "thread_notification",
+          "threadNotification": {
+            "kind": "warning",
+            "notificationId": "note-main-warning",
+            "threadId": "thread-main",
+            "message": "main warning"
+          }
+        },
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "commit_tick"
+          }
+        },
+        {
+          "kind": "thread_replay",
+          "threadReplay": {
+            "kind": "snapshot_active",
+            "threadId": "thread-main",
+            "session": {
+              "threadId": "thread-main",
+              "model": "gpt-5.2-codex",
+              "title": "Quiet request replay",
+              "isSideThread": false
+            },
+            "inputState": {
+              "composerText": "approval pending",
+              "taskRunning": false,
+              "queuedUserMessageCount": 0,
+              "pendingInitialSubmit": false
+            },
+            "traceRequestSurfaces": true,
+            "resizeReflowEnabled": true
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "server.request.command_approval=req-cmd-pending:thread-main:primary:approval-pending:active\nserver.request.file_change_approval=req-file-resolved:thread-main:primary:patch-resolved:active\nserver.resolution.file_change_approval=req-file-resolved:patch-resolved:accept\nserver.request.tool_user_input=req-input-pending:thread-main:primary:input-pending:active\nthread.notification.warning=note-main-warning:thread-main:primary:main warning:active\nqueue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.pending_interactive=thread-main\nthread.replay.session=thread-main:quiet:gpt-5.2-codex:Quiet request replay\nthread.replay.autosend_suppressed=true\nthread.replay.input=thread-main:approval pending:task_running=false:queued=0:initial_submit=false\nthread.replay.request=thread-main:req-cmd-pending:approval-pending:thread_snapshot\nthread.replay.request_surface=thread-main:req-cmd-pending:command_approval:approval-pending:thread_snapshot\nthread.replay.skip.request=thread-main:req-file-resolved:patch-resolved:non_pending\nthread.replay.request=thread-main:req-input-pending:input-pending:thread_snapshot\nthread.replay.request_surface=thread-main:req-input-pending:tool_user_input:input-pending:thread_snapshot\nthread.replay.notice_suppressed=thread-main:note-main-warning:main warning\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> pending request replay\ninput> approval pending\ntrace:\nserver.request.command_approval=req-cmd-pending:thread-main:primary:approval-pending:active\nserver.request.file_change_approval=req-file-resolved:thread-main:primary:patch-resolved:active\nserver.resolution.file_change_approval=req-file-resolved:patch-resolved:accept\nserver.request.tool_user_input=req-input-pending:thread-main:primary:input-pending:active\nthread.notification.warning=note-main-warning:thread-main:primary:main warning:active\nqueue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.pending_interactive=thread-main\nthread.replay.session=thread-main:quiet:gpt-5.2-codex:Quiet request replay\nthread.replay.autosend_suppressed=true\nthread.replay.input=thread-main:approval pending:task_running=false:queued=0:initial_submit=false\nthread.replay.request=thread-main:req-cmd-pending:approval-pending:thread_snapshot\nthread.replay.request_surface=thread-main:req-cmd-pending:command_approval:approval-pending:thread_snapshot\nthread.replay.skip.request=thread-main:req-file-resolved:patch-resolved:non_pending\nthread.replay.request=thread-main:req-input-pending:input-pending:thread_snapshot\nthread.replay.request_surface=thread-main:req-input-pending:tool_user_input:input-pending:thread_snapshot\nthread.replay.notice_suppressed=thread-main:note-main-warning:main warning\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 3\nserver-rejections: 0\nserver-resolutions: 1\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 1\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 1\nthread-replay-requests: 2\nthread-replay-skipped-requests: 1\nthread-replay-suppressed-notices: 1\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

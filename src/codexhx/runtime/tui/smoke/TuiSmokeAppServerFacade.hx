@@ -356,6 +356,9 @@ class TuiSmokeAppServerFacade {
 			replayTurn(turn, state, trace);
 			replayed = replayed + 1;
 		}
+		for (request in action.snapshotRequests) {
+			if (replaySnapshotRequest(request, action, trace)) replayed = replayed + 1;
+		}
 		for (event in bufferedEvents) {
 			final request = event.request;
 			final notification = event.notification;
@@ -364,6 +367,7 @@ class TuiSmokeAppServerFacade {
 					replayed = replayed + 1;
 					replayedRequestCount = replayedRequestCount + 1;
 					trace.push("thread.replay.request=" + activeThreadId + ":" + request.requestId + ":" + request.displayId() + ":thread_snapshot");
+					traceReplayRequestSurface(request, action, trace);
 				} else {
 					skippedReplayRequestCount = skippedReplayRequestCount + 1;
 					trace.push("thread.replay.skip.request=" + activeThreadId + ":" + request.requestId + ":" + request.displayId() + ":non_pending");
@@ -390,9 +394,45 @@ class TuiSmokeAppServerFacade {
 		}
 	}
 
+	function replaySnapshotRequest(
+		request:TuiSmokeAppServerRequest,
+		action:TuiSmokeThreadReplayAction,
+		trace:Array<String>
+	):Bool {
+		if (request == null || request.threadId != activeThreadId) return false;
+		if (!request.canReplaySurface()) {
+			if (action.traceRequestSurfaces) {
+				trace.push("thread.replay.request_surface_suppressed=" + activeThreadId + ":" + request.requestId + ":" + request.kind + ":thread_snapshot");
+			}
+			return false;
+		}
+		replayedRequestCount = replayedRequestCount + 1;
+		trace.push("thread.replay.request=" + activeThreadId + ":" + request.requestId + ":" + request.displayId() + ":thread_snapshot");
+		traceReplayRequestSurface(request, action, trace);
+		return true;
+	}
+
+	function traceReplayRequestSurface(
+		request:TuiSmokeAppServerRequest,
+		action:TuiSmokeThreadReplayAction,
+		trace:Array<String>
+	):Void {
+		if (!action.traceRequestSurfaces) return;
+		trace.push(
+			"thread.replay.request_surface="
+			+ activeThreadId
+			+ ":" + request.requestId
+			+ ":" + request.replaySurface()
+			+ ":" + request.displayId()
+			+ ":thread_snapshot"
+		);
+	}
+
 	function hasReplayEnvelope(action:TuiSmokeThreadReplayAction):Bool {
 		return action.session != null
 			|| action.inputState != null
+			|| action.snapshotRequests.length > 0
+			|| action.traceRequestSurfaces
 			|| action.resizeReflowEnabled
 			|| action.resumeRestoredQueue;
 	}

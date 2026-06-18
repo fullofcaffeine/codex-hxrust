@@ -6,6 +6,8 @@ typedef TuiSmokeThreadReplayActionFields = {
 	final session:Null<TuiSmokeThreadSession>;
 	final inputState:Null<TuiSmokeThreadInputState>;
 	final turns:Array<TuiSmokeThreadTurn>;
+	final snapshotRequests:Array<TuiSmokeAppServerRequest>;
+	final traceRequestSurfaces:Bool;
 	final resizeReflowEnabled:Bool;
 	final resumeRestoredQueue:Bool;
 }
@@ -16,6 +18,8 @@ class TuiSmokeThreadReplayAction {
 	public final session:Null<TuiSmokeThreadSession>;
 	public final inputState:Null<TuiSmokeThreadInputState>;
 	public final turns:Array<TuiSmokeThreadTurn>;
+	public final snapshotRequests:Array<TuiSmokeAppServerRequest>;
+	public final traceRequestSurfaces:Bool;
 	public final resizeReflowEnabled:Bool;
 	public final resumeRestoredQueue:Bool;
 
@@ -25,11 +29,13 @@ class TuiSmokeThreadReplayAction {
 		this.session = fields.session;
 		this.inputState = fields.inputState;
 		this.turns = fields.turns == null ? [] : fields.turns;
+		this.snapshotRequests = fields.snapshotRequests == null ? [] : fields.snapshotRequests;
+		this.traceRequestSurfaces = fields.traceRequestSurfaces;
 		this.resizeReflowEnabled = fields.resizeReflowEnabled;
 		this.resumeRestoredQueue = fields.resumeRestoredQueue;
 	}
 
 	public function shouldBufferReplay(hasSnapshotEvents:Bool):Bool {
-		return resizeReflowEnabled && (turns.length > 0 || hasSnapshotEvents);
+		return resizeReflowEnabled && (turns.length > 0 || snapshotRequests.length > 0 || hasSnapshotEvents);
 	}
 }

@@ -39,4 +39,33 @@ class TuiSmokeAppServerRequest {
 				itemId.length > 0 ? itemId : requestId;
 		}
 	}
+
+	public function replaySurface():TuiSmokeReplayedServerRequestSurfaceKind {
+		return switch kind {
+			case TuiSmokeAppServerRequestKind.CommandApproval:
+				TuiSmokeReplayedServerRequestSurfaceKind.CommandApproval;
+			case TuiSmokeAppServerRequestKind.FileChangeApproval:
+				TuiSmokeReplayedServerRequestSurfaceKind.FileChangeApproval;
+			case TuiSmokeAppServerRequestKind.PermissionsApproval:
+				TuiSmokeReplayedServerRequestSurfaceKind.PermissionsApproval;
+			case TuiSmokeAppServerRequestKind.McpElicitation:
+				TuiSmokeReplayedServerRequestSurfaceKind.McpElicitation;
+			case TuiSmokeAppServerRequestKind.ToolUserInput:
+				TuiSmokeReplayedServerRequestSurfaceKind.ToolUserInput;
+			case TuiSmokeAppServerRequestKind.DynamicToolCall
+				| TuiSmokeAppServerRequestKind.AuthTokensRefresh
+				| TuiSmokeAppServerRequestKind.AttestationGenerate
+				| TuiSmokeAppServerRequestKind.LegacyPatchApproval
+				| TuiSmokeAppServerRequestKind.LegacyCommandApproval:
+				TuiSmokeReplayedServerRequestSurfaceKind.UnsupportedSuppressed;
+			case _:
+				TuiSmokeReplayedServerRequestSurfaceKind.Unknown;
+		}
+	}
+
+	public function canReplaySurface():Bool {
+		final surface = replaySurface();
+		return surface != TuiSmokeReplayedServerRequestSurfaceKind.UnsupportedSuppressed
+			&& surface != TuiSmokeReplayedServerRequestSurfaceKind.Unknown;
+	}
 }

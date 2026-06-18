@@ -107,16 +107,7 @@ class TuiSmokeFixtureLoader {
 	static function optionalAppServerRequest(object:Value, name:String):Null<TuiSmokeAppServerRequest> {
 		return switch optionalField(object, name) {
 			case JNull: null;
-			case value:
-				new TuiSmokeAppServerRequest({
-					kind: TuiSmokeAppServerRequestKind.fromString(stringField(value, "kind", "")),
-					requestId: optionalStringField(value, "requestId", ""),
-					threadId: optionalStringField(value, "threadId", ""),
-					turnId: optionalStringField(value, "turnId", ""),
-					itemId: optionalStringField(value, "itemId", ""),
-					approvalId: optionalStringField(value, "approvalId", ""),
-					serverName: optionalStringField(value, "serverName", "")
-				});
+			case value: appServerRequest(value);
 		}
 	}
 
@@ -171,6 +162,8 @@ class TuiSmokeFixtureLoader {
 					session: optionalThreadSession(value, "session"),
 					inputState: optionalThreadInputState(value, "inputState"),
 					turns: optionalThreadTurns(value, "turns"),
+					snapshotRequests: appServerRequests(optionalArrayField(value, "snapshotRequests")),
+					traceRequestSurfaces: optionalBoolField(value, "traceRequestSurfaces", false),
 					resizeReflowEnabled: optionalBoolField(value, "resizeReflowEnabled", false),
 					resumeRestoredQueue: optionalBoolField(value, "resumeRestoredQueue", false)
 				});
@@ -230,6 +223,26 @@ class TuiSmokeFixtureLoader {
 			}));
 		}
 		return out;
+	}
+
+	static function appServerRequests(values:Array<Value>):Array<TuiSmokeAppServerRequest> {
+		final out:Array<TuiSmokeAppServerRequest> = [];
+		for (value in values) {
+			out.push(appServerRequest(value));
+		}
+		return out;
+	}
+
+	static function appServerRequest(value:Value):TuiSmokeAppServerRequest {
+		return new TuiSmokeAppServerRequest({
+			kind: TuiSmokeAppServerRequestKind.fromString(stringField(value, "kind", "")),
+			requestId: optionalStringField(value, "requestId", ""),
+			threadId: optionalStringField(value, "threadId", ""),
+			turnId: optionalStringField(value, "turnId", ""),
+			itemId: optionalStringField(value, "itemId", ""),
+			approvalId: optionalStringField(value, "approvalId", ""),
+			serverName: optionalStringField(value, "serverName", "")
+		});
 	}
 
 	static function transcriptRows(values:Array<Value>):Array<TuiSmokeTranscriptRow> {
