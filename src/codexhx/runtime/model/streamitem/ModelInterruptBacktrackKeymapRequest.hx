@@ -8,6 +8,10 @@ typedef ModelInterruptBacktrackKeymapRequestFields = {
 	final unboundInterruptCount:Int;
 	final fixedPasteImageBinding:String;
 	final conflictingInterruptBinding:String;
+	final conflictOuterAction:ModelInterruptBacktrackFixedShortcutActionKind;
+	final conflictInnerAction:ModelInterruptBacktrackFixedShortcutActionKind;
+	final expectedOuterActionName:String;
+	final expectedInnerActionName:String;
 	final previousEventCount:Int;
 	final eventOrderIndex:Int;
 	final secretProbe:String;
@@ -21,6 +25,10 @@ class ModelInterruptBacktrackKeymapRequest {
 	public final unboundInterruptCount:Int;
 	public final fixedPasteImageBinding:String;
 	public final conflictingInterruptBinding:String;
+	public final conflictOuterAction:ModelInterruptBacktrackFixedShortcutActionKind;
+	public final conflictInnerAction:ModelInterruptBacktrackFixedShortcutActionKind;
+	public final expectedOuterActionName:String;
+	public final expectedInnerActionName:String;
 	public final previousEventCount:Int;
 	public final eventOrderIndex:Int;
 	public final secretProbe:String;
@@ -33,6 +41,10 @@ class ModelInterruptBacktrackKeymapRequest {
 		this.unboundInterruptCount = fields.unboundInterruptCount;
 		this.fixedPasteImageBinding = normalizeBinding(fields.fixedPasteImageBinding);
 		this.conflictingInterruptBinding = normalizeBinding(fields.conflictingInterruptBinding);
+		this.conflictOuterAction = fields.conflictOuterAction == null ? ModelInterruptBacktrackFixedShortcutActionKind.Unknown : fields.conflictOuterAction;
+		this.conflictInnerAction = fields.conflictInnerAction == null ? ModelInterruptBacktrackFixedShortcutActionKind.Unknown : fields.conflictInnerAction;
+		this.expectedOuterActionName = fields.expectedOuterActionName == null ? "" : fields.expectedOuterActionName;
+		this.expectedInnerActionName = fields.expectedInnerActionName == null ? "" : fields.expectedInnerActionName;
 		this.previousEventCount = fields.previousEventCount;
 		this.eventOrderIndex = fields.eventOrderIndex;
 		this.secretProbe = fields.secretProbe == null ? "" : fields.secretProbe;

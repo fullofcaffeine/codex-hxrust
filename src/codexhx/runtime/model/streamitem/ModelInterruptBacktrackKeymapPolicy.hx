@@ -4,6 +4,8 @@ class ModelInterruptBacktrackKeymapPolicy {
 	static final EscBinding = "esc";
 	static final F12Binding = "f12";
 	static final CtrlVBinding = "ctrl-v";
+	static final ChatInterruptTurnName = "chat.interrupt_turn";
+	static final FixedPasteImageName = "fixed.paste_image";
 
 	public static function apply(request:ModelInterruptBacktrackKeymapRequest):ModelInterruptBacktrackKeymapOutcome {
 		if (request == null) return failure("", "missing interrupt/backtrack keymap request");
@@ -15,7 +17,11 @@ class ModelInterruptBacktrackKeymapPolicy {
 		final unbindAccepted = request.unboundInterruptCount == 0;
 		final otherFixedShortcutRejected = request.conflictingInterruptBinding == request.fixedPasteImageBinding
 			&& request.fixedPasteImageBinding == CtrlVBinding;
-		final conflictActionNamePreserved = otherFixedShortcutRejected;
+		final conflictActionNamePreserved = otherFixedShortcutRejected
+			&& request.conflictOuterAction == ModelInterruptBacktrackFixedShortcutActionKind.ChatInterruptTurn
+			&& request.conflictInnerAction == ModelInterruptBacktrackFixedShortcutActionKind.FixedPasteImage
+			&& request.expectedOuterActionName == ChatInterruptTurnName
+			&& request.expectedInnerActionName == FixedPasteImageName;
 		final dispatchGatingDeferredToHandler = backtrackOverlapAllowed;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = backtrackOverlapAllowed

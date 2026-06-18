@@ -210,6 +210,7 @@ import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessageOutc
 import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessagePolicy;
 import codexhx.runtime.model.streamitem.ModelSideBacktrackUnavailableMessageRequest;
 import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapDecisionKind;
+import codexhx.runtime.model.streamitem.ModelInterruptBacktrackFixedShortcutActionKind;
 import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapOutcome;
 import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapPolicy;
 import codexhx.runtime.model.streamitem.ModelInterruptBacktrackKeymapRequest;
@@ -4811,6 +4812,10 @@ class ModelStreamItemReducerHarness {
 			unboundInterruptCount: intField(expectValue, "unboundInterruptCount", -1),
 			fixedPasteImageBinding: stringField(expectValue, "fixedPasteImageBinding", ""),
 			conflictingInterruptBinding: stringField(expectValue, "conflictingInterruptBinding", ""),
+			conflictOuterAction: interruptBacktrackFixedShortcutActionKind(stringField(expectValue, "conflictOuterAction", "")),
+			conflictInnerAction: interruptBacktrackFixedShortcutActionKind(stringField(expectValue, "conflictInnerAction", "")),
+			expectedOuterActionName: stringField(expectValue, "expectedOuterActionName", ""),
+			expectedInnerActionName: stringField(expectValue, "expectedInnerActionName", ""),
 			previousEventCount: intField(expectValue, "previousEventCount", 0),
 			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
 			secretProbe: secretProbe
@@ -7594,6 +7599,10 @@ class ModelStreamItemReducerHarness {
 			case "interrupt_backtrack_keymap_rejected": ModelInterruptBacktrackKeymapDecisionKind.InterruptBacktrackKeymapRejected;
 			case _: throw "unknown interrupt/backtrack keymap decision kind: " + value;
 		}
+	}
+
+	static function interruptBacktrackFixedShortcutActionKind(value:String):ModelInterruptBacktrackFixedShortcutActionKind {
+		return ModelInterruptBacktrackFixedShortcutActionKind.fromString(value);
 	}
 
 	static function interruptQuestionNavigationKeymapDecisionKind(value:String):ModelInterruptQuestionNavigationKeymapDecisionKind {
