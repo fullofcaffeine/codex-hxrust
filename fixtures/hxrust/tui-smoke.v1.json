@@ -8603,6 +8603,257 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.composer_footer_render.plan=headless\ntui.composer_footer_render.quit=composer_empty->quit_shortcut_reminder:key=ctrl-c:visible=true:expired=false:ctrl_c=true\ntui.composer_footer_render.quit=quit_shortcut_reminder->composer_has_draft:key=ctrl-c:visible=false:expired=true:ctrl_c=false\ntui.composer_footer_render.esc=composer_has_draft->esc_hint:key=escape:backtrack=true\ntui.composer_footer_render.fallback=esc_hint:lines=1:hints=0:shortcuts=false:queue=false:cycle=false:terminal=false:ratatui=false\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer footer quit esc\ninput> \ntrace:\ntui.composer_footer_render.plan=headless\ntui.composer_footer_render.quit=composer_empty->quit_shortcut_reminder:key=ctrl-c:visible=true:expired=false:ctrl_c=true\ntui.composer_footer_render.quit=quit_shortcut_reminder->composer_has_draft:key=ctrl-c:visible=false:expired=true:ctrl_c=false\ntui.composer_footer_render.esc=composer_has_draft->esc_hint:key=escape:backtrack=true\ntui.composer_footer_render.fallback=esc_hint:lines=1:hints=0:shortcuts=false:queue=false:cycle=false:terminal=false:ratatui=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-textarea-render-layout-remote-reserve",
+      "frame": {
+        "name": "composer-textarea-render-layout-remote-reserve",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer textarea layout remote reserve"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_textarea_render",
+          "composerTextareaRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "layout",
+                "width": 72,
+                "height": 10,
+                "textareaRightReserve": 8,
+                "textareaWidth": 60,
+                "textareaHeight": 5,
+                "remoteImageHeight": 2,
+                "remoteImageSeparator": 1,
+                "popupHeight": 2,
+                "footerTotalHeight": 2
+              },
+              {
+                "kind": "desired_height",
+                "width": 72,
+                "innerWidth": 60,
+                "wrappedLineCount": 3,
+                "remoteImageHeight": 2,
+                "remoteImageSeparator": 1,
+                "footerTotalHeight": 2,
+                "desiredHeight": 8
+              },
+              {
+                "kind": "remote_images",
+                "remoteImageCount": 2,
+                "remoteImageHeight": 2,
+                "selectedRemoteIndex": 1,
+                "remoteImagesDoNotMutateTextarea": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_textarea_render.plan=headless\ntui.composer_textarea_render.layout=area=72x10:reserve=8:textarea=60x5:remote_height=2:remote_separator=1:popup=2:footer=2\ntui.composer_textarea_render.desired=width=72:inner=60:wrapped=3:remote=2:separator=1:footer=2:total=8\ntui.composer_textarea_render.remote_images=count=2:height=2:selected=1:textarea_mutated=false:terminal=false:ratatui=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer textarea layout remote reserve\ninput> \ntrace:\ntui.composer_textarea_render.plan=headless\ntui.composer_textarea_render.layout=area=72x10:reserve=8:textarea=60x5:remote_height=2:remote_separator=1:popup=2:footer=2\ntui.composer_textarea_render.desired=width=72:inner=60:wrapped=3:remote=2:separator=1:footer=2:total=8\ntui.composer_textarea_render.remote_images=count=2:height=2:selected=1:textarea_mutated=false:terminal=false:ratatui=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-textarea-render-plain-masked-highlighted",
+      "frame": {
+        "name": "composer-textarea-render-plain-masked-highlighted",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer textarea plain masked highlighted"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_textarea_render",
+          "composerTextareaRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "plain",
+                "mode": "plain",
+                "wrappedLineCount": 4,
+                "scrollBefore": 0,
+                "scrollAfter": 1,
+                "visibleStartLine": 1,
+                "visibleEndLine": 4,
+                "elementCount": 2,
+                "highlightCount": 0
+              },
+              {
+                "kind": "masked",
+                "mode": "masked",
+                "maskChar": "*",
+                "textLength": 18,
+                "wrappedLineCount": 2,
+                "scrollBefore": 0,
+                "scrollAfter": 0,
+                "visibleStartLine": 0,
+                "visibleEndLine": 2
+              },
+              {
+                "kind": "highlighted",
+                "mode": "highlighted",
+                "wrappedLineCount": 3,
+                "scrollBefore": 1,
+                "scrollAfter": 1,
+                "visibleStartLine": 1,
+                "visibleEndLine": 3,
+                "elementCount": 1,
+                "pluginHighlightCount": 1,
+                "historyHighlightCount": 2,
+                "renderOnlyHighlights": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_textarea_render.plan=headless\ntui.composer_textarea_render.plain=lines=4:scroll=0->1:window=1..4:elements=2:highlights=0\ntui.composer_textarea_render.masked=char=*:text_len=18:lines=2:scroll=0->0:window=0..2\ntui.composer_textarea_render.highlighted=lines=3:scroll=1->1:window=1..3:elements=1:plugin=1:history=2:render_only=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer textarea plain masked highlighted\ninput> \ntrace:\ntui.composer_textarea_render.plan=headless\ntui.composer_textarea_render.plain=lines=4:scroll=0->1:window=1..4:elements=2:highlights=0\ntui.composer_textarea_render.masked=char=*:text_len=18:lines=2:scroll=0->0:window=0..2\ntui.composer_textarea_render.highlighted=lines=3:scroll=1->1:window=1..3:elements=1:plugin=1:history=2:render_only=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-textarea-render-prompt-placeholder-cursor",
+      "frame": {
+        "name": "composer-textarea-render-prompt-placeholder-cursor",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer textarea prompt placeholder cursor"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_textarea_render",
+          "composerTextareaRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "prompt",
+                "promptKind": "normal",
+                "promptText": ">",
+                "inputEnabled": true,
+                "bashMode": false
+              },
+              {
+                "kind": "prompt",
+                "promptKind": "bash",
+                "promptText": "!",
+                "inputEnabled": true,
+                "bashMode": true
+              },
+              {
+                "kind": "placeholder",
+                "mode": "placeholder",
+                "placeholderText": "Ask Codex to do anything",
+                "placeholderVisible": true,
+                "inputEnabled": true,
+                "textareaEmpty": true
+              },
+              {
+                "kind": "placeholder",
+                "mode": "disabled_placeholder",
+                "placeholderText": "Input disabled.",
+                "placeholderVisible": true,
+                "inputEnabled": false,
+                "textareaEmpty": false
+              },
+              {
+                "kind": "cursor",
+                "mode": "cursor",
+                "cursorVisible": true,
+                "cursorX": 12,
+                "cursorY": 3,
+                "textareaRightReserve": 4,
+                "inputEnabled": true,
+                "selectedRemoteIndex": -1
+              },
+              {
+                "kind": "cursor",
+                "mode": "cursor",
+                "cursorVisible": false,
+                "cursorX": 0,
+                "cursorY": 0,
+                "textareaRightReserve": 4,
+                "inputEnabled": true,
+                "selectedRemoteIndex": 0
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_textarea_render.plan=headless\ntui.composer_textarea_render.prompt=normal:text=>:input=true:bash=false\ntui.composer_textarea_render.prompt=bash:text=!:input=true:bash=true\ntui.composer_textarea_render.placeholder=placeholder:text=Ask Codex to do anything:visible=true:input=true:empty=true\ntui.composer_textarea_render.placeholder=disabled_placeholder:text=Input disabled.:visible=true:input=false:empty=false\ntui.composer_textarea_render.cursor=cursor:visible=true:x=12:y=3:reserve=4:input=true:selected_remote=-1\ntui.composer_textarea_render.cursor=cursor:visible=false:x=0:y=0:reserve=4:input=true:selected_remote=0\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer textarea prompt placeholder cursor\ninput> \ntrace:\ntui.composer_textarea_render.plan=headless\ntui.composer_textarea_render.prompt=normal:text=>:input=true:bash=false\ntui.composer_textarea_render.prompt=bash:text=!:input=true:bash=true\ntui.composer_textarea_render.placeholder=placeholder:text=Ask Codex to do anything:visible=true:input=true:empty=true\ntui.composer_textarea_render.placeholder=disabled_placeholder:text=Input disabled.:visible=true:input=false:empty=false\ntui.composer_textarea_render.cursor=cursor:visible=true:x=12:y=3:reserve=4:input=true:selected_remote=-1\ntui.composer_textarea_render.cursor=cursor:visible=false:x=0:y=0:reserve=4:input=true:selected_remote=0\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

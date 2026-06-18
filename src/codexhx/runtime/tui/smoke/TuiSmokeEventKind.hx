@@ -37,6 +37,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ComposerPopupKey = "composer_popup_key";
 	final ComposerPopupRender = "composer_popup_render";
 	final ComposerFooterRender = "composer_footer_render";
+	final ComposerTextareaRender = "composer_textarea_render";
 	final Unknown = "unknown";
 
 	public static function fromString(value:String):TuiSmokeEventKind {
@@ -77,6 +78,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "composer_popup_key": ComposerPopupKey;
 			case "composer_popup_render": ComposerPopupRender;
 			case "composer_footer_render": ComposerFooterRender;
+			case "composer_textarea_render": ComposerTextareaRender;
 			case _: Unknown;
 		}
 	}

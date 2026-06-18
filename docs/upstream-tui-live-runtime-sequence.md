@@ -2228,6 +2228,21 @@ Model selected raw Codex composer footer/status/hint behavior:
 
 Status: HXCX-TUI-39 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic footer/status hint render evidence only, not a full ratatui footer renderer.
 
+### HXCX-TUI-40: Composer Textarea Render Mask Highlight Lifecycle
+
+Model selected raw Codex composer textarea render behavior:
+
+- preserve `ChatComposer::layout_areas_with_textarea_right_reserve` in `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs`: the composer rectangle is inset by the live prompt prefix, the explicit textarea right reserve, footer/popup height, and remote-image rows plus separator before the textarea rect is rendered;
+- preserve `desired_height_with_textarea_right_reserve`: total height is textarea wrapped height plus remote-image rows, optional separator, composer chrome, and either footer height or active popup height;
+- preserve `render_with_mask_and_textarea_right_reserve` textarea dispatch: remote-image lines render above the textarea, the prompt changes for normal, bash, and disabled input states, masked rendering is selected when `mask_char` is present, otherwise normal rendering or styled-highlight rendering is selected;
+- preserve generic `TextArea` render helpers in `../codex/codex-rs/tui/src/bottom_pane/textarea.rs`: stateful rendering clamps/effective-scrolls visible wrapped lines, `render_ref_masked` writes mask characters without revealing source text, and `render_ref_styled_with_highlights` overlays render-only highlights without mutating text, cursor, element metadata, or wrapping cache;
+- preserve styled element and highlight precedence: element ranges render cyan first, then plugin/history render-only highlights overlay those spans, with history-search matches using reversed bold style;
+- preserve placeholder behavior: empty enabled textarea shows the configured placeholder, disabled input shows the disabled placeholder, and the prompt is dimmed when input is disabled;
+- preserve cursor visibility rules from `cursor_pos_with_textarea_right_reserve`: hidden when input is disabled or a remote image row is selected, history-search cursor can win, otherwise the textarea cursor uses the reserved layout rect and current textarea scroll state;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-40 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic textarea render/mask/highlight evidence only, not a full ratatui textarea renderer.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

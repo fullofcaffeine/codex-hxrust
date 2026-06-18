@@ -226,6 +226,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ComposerTextareaRender:
+					if (!traceComposerTextareaRender(event.composerTextareaRender, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1560,6 +1565,117 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.composer_popup_render.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceComposerTextareaRender(plan:TuiSmokeComposerTextareaRenderPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || !plan.enabled()) {
+			trace.push("tui.composer_textarea_render.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.composer_textarea_render.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeComposerTextareaRenderActionKind.Layout:
+					trace.push(
+						"tui.composer_textarea_render.layout="
+						+ "area=" + action.width + "x" + action.height
+						+ ":reserve=" + action.textareaRightReserve
+						+ ":textarea=" + action.textareaSizeText()
+						+ ":remote_height=" + action.remoteImageHeight
+						+ ":remote_separator=" + action.remoteImageSeparator
+						+ ":popup=" + action.popupHeight
+						+ ":footer=" + action.footerTotalHeight
+					);
+				case TuiSmokeComposerTextareaRenderActionKind.DesiredHeight:
+					trace.push(
+						"tui.composer_textarea_render.desired="
+						+ "width=" + action.width
+						+ ":inner=" + action.innerWidth
+						+ ":wrapped=" + action.wrappedLineCount
+						+ ":remote=" + action.remoteImageHeight
+						+ ":separator=" + action.remoteImageSeparator
+						+ ":footer=" + action.footerTotalHeight
+						+ ":total=" + action.desiredHeight
+					);
+				case TuiSmokeComposerTextareaRenderActionKind.RemoteImages:
+					trace.push(
+						"tui.composer_textarea_render.remote_images="
+						+ "count=" + action.remoteImageCount
+						+ ":height=" + action.remoteImageHeight
+						+ ":selected=" + action.selectedRemoteIndex
+						+ ":textarea_mutated=" + !action.remoteImagesDoNotMutateTextarea
+						+ ":terminal=" + !action.noLiveTerminal
+						+ ":ratatui=" + !action.noRatatuiRender
+					);
+				case TuiSmokeComposerTextareaRenderActionKind.Prompt:
+					trace.push(
+						"tui.composer_textarea_render.prompt="
+						+ action.promptKind
+						+ ":text=" + action.promptText
+						+ ":input=" + action.inputEnabled
+						+ ":bash=" + action.bashMode
+					);
+				case TuiSmokeComposerTextareaRenderActionKind.Plain:
+					trace.push(
+						"tui.composer_textarea_render.plain="
+						+ "lines=" + action.wrappedLineCount
+						+ ":scroll=" + action.scrollBefore + "->" + action.scrollAfter
+						+ ":window=" + action.lineWindowText()
+						+ ":elements=" + action.elementCount
+						+ ":highlights=" + action.highlightCount
+					);
+				case TuiSmokeComposerTextareaRenderActionKind.Masked:
+					trace.push(
+						"tui.composer_textarea_render.masked="
+						+ "char=" + action.maskChar
+						+ ":text_len=" + action.textLength
+						+ ":lines=" + action.wrappedLineCount
+						+ ":scroll=" + action.scrollBefore + "->" + action.scrollAfter
+						+ ":window=" + action.lineWindowText()
+					);
+				case TuiSmokeComposerTextareaRenderActionKind.Highlighted:
+					trace.push(
+						"tui.composer_textarea_render.highlighted="
+						+ "lines=" + action.wrappedLineCount
+						+ ":scroll=" + action.scrollBefore + "->" + action.scrollAfter
+						+ ":window=" + action.lineWindowText()
+						+ ":elements=" + action.elementCount
+						+ ":plugin=" + action.pluginHighlightCount
+						+ ":history=" + action.historyHighlightCount
+						+ ":render_only=" + action.renderOnlyHighlights
+					);
+				case TuiSmokeComposerTextareaRenderActionKind.Placeholder:
+					trace.push(
+						"tui.composer_textarea_render.placeholder="
+						+ action.mode
+						+ ":text=" + action.placeholderText
+						+ ":visible=" + action.placeholderVisible
+						+ ":input=" + action.inputEnabled
+						+ ":empty=" + action.textareaEmpty
+					);
+				case TuiSmokeComposerTextareaRenderActionKind.Cursor:
+					trace.push(
+						"tui.composer_textarea_render.cursor="
+						+ action.mode
+						+ ":visible=" + action.cursorVisible
+						+ ":x=" + action.cursorX
+						+ ":y=" + action.cursorY
+						+ ":reserve=" + action.textareaRightReserve
+						+ ":input=" + action.inputEnabled
+						+ ":selected_remote=" + action.selectedRemoteIndex
+					);
+				case TuiSmokeComposerTextareaRenderActionKind.Failure:
+					trace.push(
+						"tui.composer_textarea_render.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.composer_textarea_render.unknown");
 					return false;
 			}
 		}

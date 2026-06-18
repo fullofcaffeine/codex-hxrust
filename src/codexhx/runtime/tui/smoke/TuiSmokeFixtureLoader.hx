@@ -95,7 +95,72 @@ class TuiSmokeFixtureLoader {
 				composerPopupSync: optionalComposerPopupSyncPlan(value, "composerPopupSync"),
 				composerPopupKey: optionalComposerPopupKeyPlan(value, "composerPopupKey"),
 				composerPopupRender: optionalComposerPopupRenderPlan(value, "composerPopupRender"),
-				composerFooterRender: optionalComposerFooterRenderPlan(value, "composerFooterRender")
+				composerFooterRender: optionalComposerFooterRenderPlan(value, "composerFooterRender"),
+				composerTextareaRender: optionalComposerTextareaRenderPlan(value, "composerTextareaRender")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalComposerTextareaRenderPlan(object:Value, name:String):Null<TuiSmokeComposerTextareaRenderPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeComposerTextareaRenderPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					actions: composerTextareaRenderActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function composerTextareaRenderActions(values:Array<Value>):Array<TuiSmokeComposerTextareaRenderAction> {
+		final out:Array<TuiSmokeComposerTextareaRenderAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeComposerTextareaRenderAction({
+				kind: TuiSmokeComposerTextareaRenderActionKind.fromString(stringField(value, "kind", "")),
+				mode: TuiSmokeComposerTextareaRenderModeKind.fromString(optionalStringField(value, "mode", "unknown")),
+				promptKind: TuiSmokeComposerTextareaPromptKind.fromString(optionalStringField(value, "promptKind", "unknown")),
+				promptText: optionalStringField(value, "promptText", ""),
+				placeholderText: optionalStringField(value, "placeholderText", ""),
+				maskChar: optionalStringField(value, "maskChar", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				width: optionalIntField(value, "width", 0),
+				height: optionalIntField(value, "height", 0),
+				textareaRightReserve: optionalIntField(value, "textareaRightReserve", 0),
+				innerWidth: optionalIntField(value, "innerWidth", 0),
+				composerHeight: optionalIntField(value, "composerHeight", 0),
+				popupHeight: optionalIntField(value, "popupHeight", 0),
+				footerTotalHeight: optionalIntField(value, "footerTotalHeight", 0),
+				textareaWidth: optionalIntField(value, "textareaWidth", 0),
+				textareaHeight: optionalIntField(value, "textareaHeight", 0),
+				remoteImageCount: optionalIntField(value, "remoteImageCount", 0),
+				remoteImageHeight: optionalIntField(value, "remoteImageHeight", 0),
+				remoteImageSeparator: optionalIntField(value, "remoteImageSeparator", 0),
+				selectedRemoteIndex: optionalIntField(value, "selectedRemoteIndex", -1),
+				desiredHeight: optionalIntField(value, "desiredHeight", 0),
+				wrappedLineCount: optionalIntField(value, "wrappedLineCount", 0),
+				scrollBefore: optionalIntField(value, "scrollBefore", 0),
+				scrollAfter: optionalIntField(value, "scrollAfter", 0),
+				visibleStartLine: optionalIntField(value, "visibleStartLine", 0),
+				visibleEndLine: optionalIntField(value, "visibleEndLine", 0),
+				textLength: optionalIntField(value, "textLength", 0),
+				elementCount: optionalIntField(value, "elementCount", 0),
+				highlightCount: optionalIntField(value, "highlightCount", 0),
+				pluginHighlightCount: optionalIntField(value, "pluginHighlightCount", 0),
+				historyHighlightCount: optionalIntField(value, "historyHighlightCount", 0),
+				cursorX: optionalIntField(value, "cursorX", 0),
+				cursorY: optionalIntField(value, "cursorY", 0),
+				inputEnabled: optionalBoolField(value, "inputEnabled", false),
+				bashMode: optionalBoolField(value, "bashMode", false),
+				textareaEmpty: optionalBoolField(value, "textareaEmpty", false),
+				placeholderVisible: optionalBoolField(value, "placeholderVisible", false),
+				cursorVisible: optionalBoolField(value, "cursorVisible", false),
+				remoteImagesDoNotMutateTextarea: optionalBoolField(value, "remoteImagesDoNotMutateTextarea", false),
+				renderOnlyHighlights: optionalBoolField(value, "renderOnlyHighlights", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
