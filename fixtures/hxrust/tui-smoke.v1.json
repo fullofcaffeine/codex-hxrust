@@ -5,8 +5,10 @@
       "../codex/codex-rs/tui/src/main.rs",
       "../codex/codex-rs/tui/src/app.rs",
       "../codex/codex-rs/tui/src/app_event.rs",
+      "../codex/codex-rs/tui/src/app_event_sender.rs",
       "../codex/codex-rs/tui/src/app/input.rs",
       "../codex/codex-rs/tui/src/tui.rs",
+      "../codex/codex-rs/tui/src/tui/event_stream.rs",
       "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
       "../codex/codex-rs/tui/tests/suite/status_indicator.rs"
     ],
@@ -114,7 +116,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "tui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: ready | model: gpt-5.2-codex\nsystem> headless app loop\nassistant> waiting for raw Codex events\ninput> continue raw TUI\ntrace:\ntui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 2\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: ready | model: gpt-5.2-codex\nsystem> headless app loop\nassistant> waiting for raw Codex events\ninput> continue raw TUI\ntrace:\ntui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 2\napp-events: 0\nterminal: restored"
     },
     {
       "name": "resize-render-shutdown-first-loop",
@@ -154,7 +156,116 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "tui.resize\napp.exit=shutdown_first",
-      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: idle | model: gpt-5.2-codex\nuser> fixture prompt\nassistant> fixture response\ninput> \ntrace:\ntui.resize\napp.exit=shutdown_first\nexit: cancelled\nrenders: 1\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: idle | model: gpt-5.2-codex\nuser> fixture prompt\nassistant> fixture response\ninput> \ntrace:\ntui.resize\napp.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 0\nterminal: restored"
+    },
+    {
+      "name": "queued-startup-commit-draw-order",
+      "frame": {
+        "name": "queued-startup-commit-draw-order",
+        "title": "Codex TUI Smoke Queue",
+        "status": "booting",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "queued app events"
+          },
+          {
+            "source": "assistant",
+            "text": "commit tick precedes render"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "startup_status",
+            "status": "startup-ready"
+          }
+        },
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "commit_tick"
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "exit",
+            "exitMode": "shutdown_first"
+          }
+        },
+        {
+          "kind": "draw"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "queue.enqueue=startup_status\nqueue.enqueue=commit_tick\napp.event.startup_status=startup-ready\napp.event.commit_tick\ntui.draw\nqueue.enqueue=exit\napp.event.exit=shutdown_first",
+      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: startup-ready | model: gpt-5.2-codex\nsystem> queued app events\nassistant> commit tick precedes render\ninput> \ntrace:\nqueue.enqueue=startup_status\nqueue.enqueue=commit_tick\napp.event.startup_status=startup-ready\napp.event.commit_tick\ntui.draw\nqueue.enqueue=exit\napp.event.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 3\nterminal: restored"
+    },
+    {
+      "name": "terminal-key-exit-precedes-later-queued-exit",
+      "frame": {
+        "name": "terminal-key-exit-precedes-later-queued-exit",
+        "title": "Codex TUI Smoke Queue",
+        "status": "ready",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "user",
+            "text": "press q before queued exit"
+          },
+          {
+            "source": "assistant",
+            "text": "later app events stay untouched"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        },
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "exit",
+            "exitMode": "shutdown_first"
+          }
+        },
+        {
+          "kind": "draw"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: ready | model: gpt-5.2-codex\nuser> press q before queued exit\nassistant> later app events stay untouched\ninput> \ntrace:\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nterminal: restored"
     }
   ]
 }

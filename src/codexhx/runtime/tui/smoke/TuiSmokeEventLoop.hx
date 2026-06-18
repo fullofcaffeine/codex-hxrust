@@ -9,6 +9,7 @@ class TuiSmokeEventLoop {
 		if (!terminal.setup(request.frame.allowLiveTerminal)) return rejected("terminal_setup_rejected");
 
 		final state = new TuiSmokeAppState(request.frame);
+		final appQueue = new TuiSmokeAppEventQueue();
 		final trace:Array<String> = [];
 		var snapshot = "";
 		var exit = TuiSmokeExitKind.Rendered;
@@ -19,10 +20,22 @@ class TuiSmokeEventLoop {
 			if (!running) continue;
 			switch event.kind {
 				case TuiSmokeEventKind.Draw:
+					final appExit = drainAppEvents(appQueue, state, trace);
+					if (appExit != TuiSmokeExitKind.Rendered) {
+						exit = appExit;
+						running = false;
+					}
+					if (!running) continue;
 					trace.push("tui.draw");
 					snapshot = terminal.render(state.frame());
 					renderCount = renderCount + 1;
 				case TuiSmokeEventKind.Resize:
+					final appExit = drainAppEvents(appQueue, state, trace);
+					if (appExit != TuiSmokeExitKind.Rendered) {
+						exit = appExit;
+						running = false;
+					}
+					if (!running) continue;
 					trace.push("tui.resize");
 					snapshot = terminal.render(state.frame());
 					renderCount = renderCount + 1;
@@ -33,6 +46,12 @@ class TuiSmokeEventLoop {
 					state.updateInput(event.input);
 					trace.push("app.input=" + event.input);
 				case TuiSmokeEventKind.Key:
+					final appExit = drainAppEvents(appQueue, state, trace);
+					if (appExit != TuiSmokeExitKind.Rendered) {
+						exit = appExit;
+						running = false;
+					}
+					if (!running) continue;
 					exit = TuiSmokeRunner.exitForKey(event.key);
 					trace.push("tui.key=" + event.key);
 					if (exit != TuiSmokeExitKind.Rendered) running = false;
@@ -40,6 +59,9 @@ class TuiSmokeEventLoop {
 					exit = event.exitMode == TuiSmokeExitMode.Immediate ? TuiSmokeExitKind.Quit : TuiSmokeExitKind.Cancelled;
 					trace.push("app.exit=" + event.exitMode);
 					running = false;
+				case TuiSmokeEventKind.EnqueueApp:
+					final sent = appQueue.send(event.appEvent);
+					trace.push(sent ? "queue.enqueue=" + event.appEvent.kind : "queue.enqueue=rejected");
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -53,6 +75,7 @@ class TuiSmokeEventLoop {
 			+ "\ntrace:\n" + traceText
 			+ "\nexit: " + exit
 			+ "\nrenders: " + renderCount
+			+ "\napp-events: " + appQueue.logged()
 			+ "\nterminal: restored";
 		final ok = exit == request.expectedExit
 			&& traceText == request.expectedTrace
@@ -65,8 +88,34 @@ class TuiSmokeEventLoop {
 			snapshot: finalSnapshot,
 			trace: traceText,
 			renderCount: renderCount,
+			appEventLogCount: appQueue.logged(),
 			terminalRestored: terminal.wasRestored()
 		});
+	}
+
+	static function drainAppEvents(
+		appQueue:TuiSmokeAppEventQueue,
+		state:TuiSmokeAppState,
+		trace:Array<String>
+	):TuiSmokeExitKind {
+		while (appQueue.hasNext()) {
+			final event = appQueue.next();
+			if (event == null) return TuiSmokeExitKind.Rendered;
+			switch event.kind {
+				case TuiSmokeAppEventKind.StartupStatus:
+					state.updateStatus(event.status);
+					trace.push("app.event.startup_status=" + event.status);
+				case TuiSmokeAppEventKind.CommitTick:
+					trace.push("app.event.commit_tick");
+				case TuiSmokeAppEventKind.Exit:
+					trace.push("app.event.exit=" + event.exitMode);
+					return event.exitMode == TuiSmokeExitMode.Immediate ? TuiSmokeExitKind.Quit : TuiSmokeExitKind.Cancelled;
+				case _:
+					trace.push("app.event.unknown");
+					return TuiSmokeExitKind.Rejected;
+			}
+		}
+		return TuiSmokeExitKind.Rendered;
 	}
 
 	static function rejected(code:String):TuiSmokeLoopOutcome {
@@ -77,6 +126,7 @@ class TuiSmokeEventLoop {
 			snapshot: "",
 			trace: "",
 			renderCount: 0,
+			appEventLogCount: 0,
 			terminalRestored: false
 		});
 	}

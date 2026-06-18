@@ -11,4 +11,5 @@ tui.draw
 tui.key=ctrl-c
 exit: cancelled
 renders: 2
+app-events: 0
 terminal: restored

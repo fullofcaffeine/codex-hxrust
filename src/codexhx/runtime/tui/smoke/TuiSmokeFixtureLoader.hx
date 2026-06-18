@@ -65,10 +65,23 @@ class TuiSmokeFixtureLoader {
 				key: TuiSmokeKeyKind.fromString(optionalStringField(value, "key", "none")),
 				status: optionalStringField(value, "status", ""),
 				input: optionalStringField(value, "input", ""),
-				exitMode: TuiSmokeExitMode.fromString(optionalStringField(value, "exitMode", "unknown"))
+				exitMode: TuiSmokeExitMode.fromString(optionalStringField(value, "exitMode", "unknown")),
+				appEvent: optionalAppEvent(value, "appEvent")
 			}));
 		}
 		return out;
+	}
+
+	static function optionalAppEvent(object:Value, name:String):Null<TuiSmokeAppEvent> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAppEvent(
+					TuiSmokeAppEventKind.fromString(stringField(value, "kind", "")),
+					optionalStringField(value, "status", ""),
+					TuiSmokeExitMode.fromString(optionalStringField(value, "exitMode", "unknown"))
+				);
+		}
 	}
 
 	static function transcriptRows(values:Array<Value>):Array<TuiSmokeTranscriptRow> {
@@ -91,6 +104,20 @@ class TuiSmokeFixtureLoader {
 					i = i + 1;
 				}
 				throw "missing field: " + name;
+			case _:
+				throw "expected object for field: " + name;
+		}
+	}
+
+	static function optionalField(object:Value, name:String):Value {
+		return switch object {
+			case JObject(keys, values):
+				var i = 0;
+				while (i < keys.length && i < values.length) {
+					if (keys[i] == name) return values[i];
+					i = i + 1;
+				}
+				JNull;
 			case _:
 				throw "expected object for field: " + name;
 		}

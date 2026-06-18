@@ -123,6 +123,18 @@ Extend the generated smoke binary from a single frame into a minimal app-loop sh
 
 Status: HXCX-TUI-1 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/main.rs:38`, `../codex/codex-rs/tui/src/app.rs:754`, `../codex/codex-rs/tui/src/app.rs:1180`, `../codex/codex-rs/tui/src/tui.rs:499`, `../codex/codex-rs/tui/src/app_event.rs:239`, `../codex/codex-rs/tui/src/app_event.rs:642`, and `../codex/codex-rs/tui/src/app_event.rs:1057`. The loop request uses a nullable class-typed frame field to avoid the existing generic haxe.rust class-field default-constructor lowering issue already tracked in this repo; no Codex-specific compiler workaround was added.
 
+### HXCX-TUI-2: Typed Raw Codex TUI App-Event Queue Facade
+
+Add the first queued app-event facade to the generated smoke binary:
+
+- typed `AppEventSender`-style queue with explicit enqueue logging;
+- startup status, commit tick, and queued app exit events;
+- deterministic app-event drain before terminal render/input steps;
+- terminal key exit precedence over later queued app events;
+- generated binary snapshot still runs headlessly without app-server, model, network, tool, or terminal takeover effects.
+
+Status: HXCX-TUI-2 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app_event_sender.rs:22`, `../codex/codex-rs/tui/src/app_event_sender.rs:28`, `../codex/codex-rs/tui/src/app_event_sender.rs:34`, `../codex/codex-rs/tui/src/app.rs:779`, `../codex/codex-rs/tui/src/app.rs:1181`, `../codex/codex-rs/tui/src/tui/event_stream.rs:132`, `../codex/codex-rs/tui/src/tui/event_stream.rs:236`, and the HXCX-TUI-1 `AppEvent` anchors. This is queue-ordering evidence only, not Tokio channel ownership, live app-server event handling, background task cleanup, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

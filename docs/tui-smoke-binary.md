@@ -1,11 +1,11 @@
 # TUI Smoke Binary
 
-**Bead:** HXCX-TUI-0 / `codex-hxrust-llji`; HXCX-TUI-1 / `codex-hxrust-x2m1`
+**Bead:** HXCX-TUI-0 / `codex-hxrust-llji`; HXCX-TUI-1 / `codex-hxrust-x2m1`; HXCX-TUI-2 / `codex-hxrust-aw7s`
 **Scope:** raw upstream Codex first; no Cafex behavior, no live model calls, no terminal takeover.
 
 ## Purpose
 
-`TuiSmokeMain` is the first haxe.rust-compiled executable shaped like a Codex TUI binary. It is intentionally tiny: it proves that typed Haxe TUI code can generate a Cargo binary, set up a terminal-facing facade, render deterministic transcript/status/input frames, process a small headless event loop, consume quit/cancel paths, and restore the facade in CI.
+`TuiSmokeMain` is the first haxe.rust-compiled executable shaped like a Codex TUI binary. It is intentionally tiny: it proves that typed Haxe TUI code can generate a Cargo binary, set up a terminal-facing facade, render deterministic transcript/status/input frames, process a small headless event loop, preserve queued app-event ordering, consume quit/cancel paths, and restore the facade in CI.
 
 This does not claim full upstream TUI parity. Upstream Codex still owns the real interactive surface in `../codex/codex-rs/tui/src/main.rs`, `../codex/codex-rs/tui/src/app.rs`, `../codex/codex-rs/tui/src/app/input.rs`, and the ratatui/crossterm-backed test surfaces under `../codex/codex-rs/tui/tests/`.
 
@@ -15,6 +15,7 @@ This does not claim full upstream TUI parity. Upstream Codex still owns the real
 - `TuiSmokeTerminalFacade` is a neutral facade. Today it only allows `headless`; a future metal backend can map the same setup/render/poll/restore contract to Rust-native terminal ownership.
 - `TuiSmokeRunner` handles `ctrl-c` as cancel and `q`/Esc as quit.
 - `TuiSmokeEventLoop` models a minimal raw Codex app-loop subset: draw, resize, status update, input update, key dispatch, and explicit app exit.
+- `TuiSmokeAppEventQueue` models the first `AppEventSender`-style queue facade for startup status, commit ticks, and queued app exit.
 - `fixtures/hxrust/tui-smoke.v1.json` provides credential-free frame/key cases plus headless app-loop event cases.
 - `fixtures/hxrust/tui-smoke.snapshot.txt` is the CI-safe generated-binary stdout snapshot.
 
@@ -32,4 +33,4 @@ The gate runs the Haxe interpreter harness, compiles `hxml/tui-smoke.hxml` throu
 
 ## Why This Advances TUI Parity
 
-Earlier TUI slices proved story parsing, VT100 row rendering, turn reducers, and many keymap policies as pure Haxe behavior. These smoke slices add the missing executable boundary: a generated Rust binary can now own a TUI-shaped entrypoint, deterministic terminal facade, and small raw Codex-shaped event loop. The next slices can replace the headless facade piece by piece with Rust-native terminal, app-server, and input backends without coupling haxe.rust to Codex-specific code.
+Earlier TUI slices proved story parsing, VT100 row rendering, turn reducers, and many keymap policies as pure Haxe behavior. These smoke slices add the missing executable boundary: a generated Rust binary can now own a TUI-shaped entrypoint, deterministic terminal facade, small raw Codex-shaped event loop, and typed app-event queue. The next slices can replace the headless facade piece by piece with Rust-native terminal, app-server, and input backends without coupling haxe.rust to Codex-specific code.
