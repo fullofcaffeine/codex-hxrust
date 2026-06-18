@@ -206,6 +206,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ComposerPopupSync:
+					if (!traceComposerPopupSync(event.composerPopupSync, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1344,6 +1349,122 @@ class TuiSmokeEventLoop {
 					trace.push("tui.app_link.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.app_link.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceComposerPopupSync(plan:TuiSmokeComposerPopupSyncPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveFileSearch || !plan.enabled()) {
+			trace.push("tui.composer_popup_sync.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.composer_popup_sync.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeComposerPopupSyncActionKind.Sync:
+					trace.push(
+						"tui.composer_popup_sync.sync="
+						+ action.popupTransitionText()
+						+ ":input=" + action.inputText
+						+ ":popups=" + action.popupsEnabled
+						+ ":mentions_v2=" + action.mentionsV2Enabled
+					);
+				case TuiSmokeComposerPopupSyncActionKind.HistorySearchSuppress:
+					trace.push(
+						"tui.composer_popup_sync.history_search="
+						+ action.popupTransitionText()
+						+ ":active=" + action.historySearchActive
+						+ ":file_query=" + action.currentFileQueryTransitionText()
+						+ ":clear_search=" + action.fileSearchCleared
+					);
+				case TuiSmokeComposerPopupSyncActionKind.PopupsDisabled:
+					trace.push(
+						"tui.composer_popup_sync.disabled="
+						+ action.popupTransitionText()
+						+ ":popups=" + action.popupsEnabled
+						+ ":cleared=" + action.popupCleared
+					);
+				case TuiSmokeComposerPopupSyncActionKind.HistoryNavigationSuppress:
+					trace.push(
+						"tui.composer_popup_sync.history_nav="
+						+ action.popupTransitionText()
+						+ ":browsing=" + action.browsingHistory
+						+ ":file_query=" + action.currentFileQueryTransitionText()
+						+ ":clear_search=" + action.fileSearchCleared
+					);
+				case TuiSmokeComposerPopupSyncActionKind.CommandPopup:
+					trace.push(
+						"tui.composer_popup_sync.command="
+						+ action.query
+						+ ":allowed=" + action.commandAllowed
+						+ ":popup=" + action.popupTransitionText()
+						+ ":created=" + action.commandPopupCreated
+						+ ":updated=" + action.commandPopupUpdated
+						+ ":dismissed=" + action.commandPopupDismissed
+					);
+				case TuiSmokeComposerPopupSyncActionKind.FileSearchPopup:
+					trace.push(
+						"tui.composer_popup_sync.file="
+						+ action.query
+						+ ":token=" + action.token
+						+ ":popup=" + action.popupTransitionText()
+						+ ":search=" + action.fileSearchStarted
+						+ ":current=" + action.currentFileQueryTransitionText()
+						+ ":live=" + !action.noLiveFileSearch
+					);
+				case TuiSmokeComposerPopupSyncActionKind.MentionPopup:
+					trace.push(
+						"tui.composer_popup_sync.mention="
+						+ action.query
+						+ ":popup=" + action.popupTransitionText()
+						+ ":candidates=" + action.candidateCount
+						+ ":skills=" + action.skillCandidateCount
+						+ ":plugins=" + action.pluginCandidateCount
+						+ ":apps=" + action.appCandidateCount
+					);
+				case TuiSmokeComposerPopupSyncActionKind.MentionsV2Popup:
+					trace.push(
+						"tui.composer_popup_sync.mentions_v2="
+						+ action.query
+						+ ":token=" + action.token
+						+ ":popup=" + action.popupTransitionText()
+						+ ":search=" + action.fileSearchStarted
+						+ ":files=" + action.fileCandidateCount
+						+ ":catalog=" + action.candidateCount
+					);
+				case TuiSmokeComposerPopupSyncActionKind.ClearFileSearch:
+					trace.push(
+						"tui.composer_popup_sync.clear_file_search="
+						+ "current=" + action.currentFileQueryTransitionText()
+						+ ":sent=" + action.fileSearchCleared
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeComposerPopupSyncActionKind.DismissedToken:
+					trace.push(
+						"tui.composer_popup_sync.dismissed="
+						+ action.token
+						+ ":file_match=" + action.dismissedFileTokenMatched
+						+ ":mention_match=" + action.dismissedMentionTokenMatched
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeComposerPopupSyncActionKind.ClearInactivePopup:
+					trace.push(
+						"tui.composer_popup_sync.clear_inactive="
+						+ action.popupTransitionText()
+						+ ":file_token=" + action.fileTokenPresent
+						+ ":mention_token=" + action.mentionTokenPresent
+						+ ":mentions_v2_token=" + action.mentionsV2TokenPresent
+					);
+				case TuiSmokeComposerPopupSyncActionKind.Failure:
+					trace.push(
+						"tui.composer_popup_sync.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.composer_popup_sync.unknown");
 					return false;
 			}
 		}

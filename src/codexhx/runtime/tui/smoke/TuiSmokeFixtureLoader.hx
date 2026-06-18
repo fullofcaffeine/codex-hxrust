@@ -91,7 +91,64 @@ class TuiSmokeFixtureLoader {
 				historySearch: optionalHistorySearchPlan(value, "historySearch"),
 				composerAttachment: optionalComposerAttachmentPlan(value, "composerAttachment"),
 				composerSubmission: optionalComposerSubmissionPlan(value, "composerSubmission"),
-				composerEditing: optionalComposerEditingPlan(value, "composerEditing")
+				composerEditing: optionalComposerEditingPlan(value, "composerEditing"),
+				composerPopupSync: optionalComposerPopupSyncPlan(value, "composerPopupSync")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalComposerPopupSyncPlan(object:Value, name:String):Null<TuiSmokeComposerPopupSyncPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeComposerPopupSyncPlan({
+					allowLiveFileSearch: optionalBoolField(value, "allowLiveFileSearch", false),
+					actions: composerPopupSyncActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function composerPopupSyncActions(values:Array<Value>):Array<TuiSmokeComposerPopupSyncAction> {
+		final out:Array<TuiSmokeComposerPopupSyncAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeComposerPopupSyncAction({
+				kind: TuiSmokeComposerPopupSyncActionKind.fromString(stringField(value, "kind", "")),
+				popupBefore: TuiSmokeComposerPopupKind.fromString(optionalStringField(value, "popupBefore", "unknown")),
+				popupAfter: TuiSmokeComposerPopupKind.fromString(optionalStringField(value, "popupAfter", "unknown")),
+				inputText: optionalStringField(value, "inputText", ""),
+				token: optionalStringField(value, "token", ""),
+				query: optionalStringField(value, "query", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				candidateCount: optionalIntField(value, "candidateCount", 0),
+				fileCandidateCount: optionalIntField(value, "fileCandidateCount", 0),
+				skillCandidateCount: optionalIntField(value, "skillCandidateCount", 0),
+				pluginCandidateCount: optionalIntField(value, "pluginCandidateCount", 0),
+				appCandidateCount: optionalIntField(value, "appCandidateCount", 0),
+				popupsEnabled: optionalBoolField(value, "popupsEnabled", false),
+				slashCommandsEnabled: optionalBoolField(value, "slashCommandsEnabled", false),
+				bashMode: optionalBoolField(value, "bashMode", false),
+				mentionsV2Enabled: optionalBoolField(value, "mentionsV2Enabled", false),
+				historySearchActive: optionalBoolField(value, "historySearchActive", false),
+				browsingHistory: optionalBoolField(value, "browsingHistory", false),
+				commandAllowed: optionalBoolField(value, "commandAllowed", false),
+				commandPopupUpdated: optionalBoolField(value, "commandPopupUpdated", false),
+				commandPopupCreated: optionalBoolField(value, "commandPopupCreated", false),
+				commandPopupDismissed: optionalBoolField(value, "commandPopupDismissed", false),
+				fileTokenPresent: optionalBoolField(value, "fileTokenPresent", false),
+				mentionTokenPresent: optionalBoolField(value, "mentionTokenPresent", false),
+				mentionsV2TokenPresent: optionalBoolField(value, "mentionsV2TokenPresent", false),
+				fileSearchStarted: optionalBoolField(value, "fileSearchStarted", false),
+				fileSearchCleared: optionalBoolField(value, "fileSearchCleared", false),
+				currentFileQueryBefore: optionalBoolField(value, "currentFileQueryBefore", false),
+				currentFileQueryAfter: optionalBoolField(value, "currentFileQueryAfter", false),
+				dismissedFileTokenMatched: optionalBoolField(value, "dismissedFileTokenMatched", false),
+				dismissedMentionTokenMatched: optionalBoolField(value, "dismissedMentionTokenMatched", false),
+				dismissedFileTokenCleared: optionalBoolField(value, "dismissedFileTokenCleared", false),
+				dismissedMentionTokenCleared: optionalBoolField(value, "dismissedMentionTokenCleared", false),
+				popupCleared: optionalBoolField(value, "popupCleared", false),
+				noLiveFileSearch: optionalBoolField(value, "noLiveFileSearch", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

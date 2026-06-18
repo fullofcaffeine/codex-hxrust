@@ -2170,6 +2170,21 @@ Model selected raw Codex composer editing and key-dispatch behavior:
 
 Status: HXCX-TUI-35 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic composer editing evidence only, not a full live input backend.
 
+### HXCX-TUI-36: Composer Popup Synchronization Lifecycle
+
+Model selected raw Codex composer popup synchronization behavior:
+
+- preserve `sync_popups` ordering in `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs`: sync slash-command elements first, suppress all popups during history search, close popups when disabled, derive mentions-v2/file/mention tokens, suppress popups while browsing input history, gate command popup creation, then prefer mentions-v2, `$` mention, and legacy `@` file search in that order;
+- preserve stale file-search clearing with `AppEvent::StartFileSearch(String::new())` when history search starts, history navigation owns the surface, command or mention popups supersede file search, or no token remains;
+- preserve command popup gating: slash commands enabled, not bash mode, no file token, no mentions-v2 token, and no `$` mention token;
+- preserve command popup dismissal when the cursor leaves the editable command-name token or an `@token` should own the surface;
+- preserve legacy file-search popup behavior, including dismissed-file-token suppression, empty prompt behavior, query updates, and `current_file_query` tracking;
+- preserve `$` mention popup behavior using the skill/plugin/app catalog and dismissed mention token suppression;
+- preserve mentions-v2 behavior: editable `@` token with empty-token support, shared file-search query event, catalog built from skills/plugins, and dismissed mention token suppression;
+- keep the evidence deterministic and independent of live terminal rendering, live file search, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-36 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic popup synchronization evidence only, not a live file-search or popup UI implementation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
