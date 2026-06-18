@@ -99,7 +99,74 @@ class TuiSmokeFixtureLoader {
 				composerTextareaRender: optionalComposerTextareaRenderPlan(value, "composerTextareaRender"),
 				chatWidgetComposerRender: optionalChatWidgetComposerRenderPlan(value, "chatWidgetComposerRender"),
 				chatWidgetActiveStream: optionalChatWidgetActiveStreamPlan(value, "chatWidgetActiveStream"),
-				chatWidgetStreamStatus: optionalChatWidgetStreamStatusPlan(value, "chatWidgetStreamStatus")
+				chatWidgetStreamStatus: optionalChatWidgetStreamStatusPlan(value, "chatWidgetStreamStatus"),
+				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalChatWidgetStreamLifecyclePlan(object:Value, name:String):Null<TuiSmokeChatWidgetStreamLifecyclePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeChatWidgetStreamLifecyclePlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: chatWidgetStreamLifecycleActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function chatWidgetStreamLifecycleActions(values:Array<Value>):Array<TuiSmokeChatWidgetStreamLifecycleAction> {
+		final out:Array<TuiSmokeChatWidgetStreamLifecycleAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeChatWidgetStreamLifecycleAction({
+				kind: TuiSmokeChatWidgetStreamLifecycleActionKind.fromString(stringField(value, "kind", "")),
+				interruptKind: optionalStringField(value, "interruptKind", ""),
+				finishReason: optionalStringField(value, "finishReason", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				delta: optionalStringField(value, "delta", ""),
+				queuedInterruptsBefore: optionalIntField(value, "queuedInterruptsBefore", 0),
+				queuedInterruptsAfter: optionalIntField(value, "queuedInterruptsAfter", 0),
+				queuedLinesBefore: optionalIntField(value, "queuedLinesBefore", 0),
+				queuedLinesAfter: optionalIntField(value, "queuedLinesAfter", 0),
+				committedCells: optionalIntField(value, "committedCells", 0),
+				activeStreamControllerBefore: optionalBoolField(value, "activeStreamControllerBefore", false),
+				activeStreamControllerAfter: optionalBoolField(value, "activeStreamControllerAfter", false),
+				planStreamControllerBefore: optionalBoolField(value, "planStreamControllerBefore", false),
+				planStreamControllerAfter: optionalBoolField(value, "planStreamControllerAfter", false),
+				activeTailBefore: optionalBoolField(value, "activeTailBefore", false),
+				activeTailAfter: optionalBoolField(value, "activeTailAfter", false),
+				taskCompletePendingBefore: optionalBoolField(value, "taskCompletePendingBefore", false),
+				taskCompletePendingAfter: optionalBoolField(value, "taskCompletePendingAfter", false),
+				taskRunningBefore: optionalBoolField(value, "taskRunningBefore", false),
+				taskRunningAfter: optionalBoolField(value, "taskRunningAfter", false),
+				statusHidden: optionalBoolField(value, "statusHidden", false),
+				statusPreserved: optionalBoolField(value, "statusPreserved", false),
+				pendingStatusRestoreBefore: optionalBoolField(value, "pendingStatusRestoreBefore", false),
+				pendingStatusRestoreAfter: optionalBoolField(value, "pendingStatusRestoreAfter", false),
+				interruptQueued: optionalBoolField(value, "interruptQueued", false),
+				interruptHandled: optionalBoolField(value, "interruptHandled", false),
+				fifoPreserved: optionalBoolField(value, "fifoPreserved", false),
+				flushedInterrupts: optionalIntField(value, "flushedInterrupts", 0),
+				startCommitAnimation: optionalBoolField(value, "startCommitAnimation", false),
+				stopCommitAnimation: optionalBoolField(value, "stopCommitAnimation", false),
+				catchUpTick: optionalBoolField(value, "catchUpTick", false),
+				adaptiveChunkingReset: optionalBoolField(value, "adaptiveChunkingReset", false),
+				runningCommandsCleared: optionalBoolField(value, "runningCommandsCleared", false),
+				suppressedExecCleared: optionalBoolField(value, "suppressedExecCleared", false),
+				unifiedWaitCleared: optionalBoolField(value, "unifiedWaitCleared", false),
+				cancelEditCleared: optionalBoolField(value, "cancelEditCleared", false),
+				rateLimitPromptChecked: optionalBoolField(value, "rateLimitPromptChecked", false),
+				taskStateUpdated: optionalBoolField(value, "taskStateUpdated", false),
+				statusSurfacesRefreshed: optionalBoolField(value, "statusSurfacesRefreshed", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

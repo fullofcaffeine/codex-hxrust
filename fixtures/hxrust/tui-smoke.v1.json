@@ -9576,6 +9576,240 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_stream_status.plan=headless\ntui.chat_widget_stream_status.stream_error=Stream error:details=Idle timeout waiting for SSE:title=thinking:retry=true:ensured=true:max=4\ntui.chat_widget_stream_status.run_state=thinking:task=true:text=Thinking:title_status=true:refreshed=true\ntui.chat_widget_stream_status.run_state=thinking:task=false:text=Ready:title_status=true:refreshed=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget stream status error run state\ninput> \ntrace:\ntui.chat_widget_stream_status.plan=headless\ntui.chat_widget_stream_status.stream_error=Stream error:details=Idle timeout waiting for SSE:title=thinking:retry=true:ensured=true:max=4\ntui.chat_widget_stream_status.run_state=thinking:task=true:text=Thinking:title_status=true:refreshed=true\ntui.chat_widget_stream_status.run_state=thinking:task=false:text=Ready:title_status=true:refreshed=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-stream-lifecycle-interrupt-deferral",
+      "frame": {
+        "name": "chat-widget-stream-lifecycle-interrupt-deferral",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget stream lifecycle interrupt deferral"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_stream_lifecycle",
+          "chatWidgetStreamLifecycle": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "streaming_delta",
+                "delta": "hello",
+                "activeStreamControllerBefore": false,
+                "activeStreamControllerAfter": true,
+                "queuedLinesBefore": 0,
+                "queuedLinesAfter": 1,
+                "startCommitAnimation": true,
+                "catchUpTick": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "defer_or_handle",
+                "interruptKind": "exec_begin",
+                "activeStreamControllerBefore": true,
+                "queuedInterruptsBefore": 0,
+                "queuedInterruptsAfter": 1,
+                "interruptQueued": true,
+                "interruptHandled": false,
+                "fifoPreserved": true
+              },
+              {
+                "kind": "defer_or_handle",
+                "interruptKind": "exec_end",
+                "activeStreamControllerBefore": false,
+                "queuedInterruptsBefore": 1,
+                "queuedInterruptsAfter": 2,
+                "interruptQueued": true,
+                "interruptHandled": false,
+                "fifoPreserved": true
+              },
+              {
+                "kind": "flush_interrupt_queue",
+                "queuedInterruptsBefore": 2,
+                "queuedInterruptsAfter": 0,
+                "flushedInterrupts": 2,
+                "interruptHandled": true,
+                "fifoPreserved": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_stream_lifecycle.plan=headless\ntui.chat_widget_stream_lifecycle.delta=hello:controller=false->true:queued_lines=0->1:start_animation=true:catch_up=true:redraw=true\ntui.chat_widget_stream_lifecycle.interrupt=exec_begin:controller=true:queue=0->1:queued=true:handled=false:fifo=true\ntui.chat_widget_stream_lifecycle.interrupt=exec_end:controller=false:queue=1->2:queued=true:handled=false:fifo=true\ntui.chat_widget_stream_lifecycle.flush_interrupts=2:queue=2->0:handled=true:fifo=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget stream lifecycle interrupt deferral\ninput> \ntrace:\ntui.chat_widget_stream_lifecycle.plan=headless\ntui.chat_widget_stream_lifecycle.delta=hello:controller=false->true:queued_lines=0->1:start_animation=true:catch_up=true:redraw=true\ntui.chat_widget_stream_lifecycle.interrupt=exec_begin:controller=true:queue=0->1:queued=true:handled=false:fifo=true\ntui.chat_widget_stream_lifecycle.interrupt=exec_end:controller=false:queue=1->2:queued=true:handled=false:fifo=true\ntui.chat_widget_stream_lifecycle.flush_interrupts=2:queue=2->0:handled=true:fifo=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-stream-lifecycle-finish-complete",
+      "frame": {
+        "name": "chat-widget-stream-lifecycle-finish-complete",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget stream lifecycle finish complete"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_stream_lifecycle",
+          "chatWidgetStreamLifecycle": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "stream_finished",
+                "finishReason": "agent_message_item_completed",
+                "taskCompletePendingBefore": true,
+                "taskCompletePendingAfter": false,
+                "statusHidden": true,
+                "queuedInterruptsBefore": 1,
+                "queuedInterruptsAfter": 0,
+                "flushedInterrupts": 1
+              },
+              {
+                "kind": "stop_commit_animation",
+                "stopCommitAnimation": true,
+                "committedCells": 2,
+                "queuedLinesBefore": 2,
+                "queuedLinesAfter": 0
+              },
+              {
+                "kind": "task_complete",
+                "finishReason": "turn_complete",
+                "activeStreamControllerBefore": true,
+                "activeStreamControllerAfter": false,
+                "planStreamControllerBefore": true,
+                "planStreamControllerAfter": false,
+                "taskRunningBefore": true,
+                "taskRunningAfter": false,
+                "pendingStatusRestoreBefore": true,
+                "pendingStatusRestoreAfter": false,
+                "statusPreserved": true,
+                "requestRedraw": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_stream_lifecycle.plan=headless\ntui.chat_widget_stream_lifecycle.stream_finished=agent_message_item_completed:task_complete_pending=true->false:status_hidden=true:flushed=1:queue=1->0\ntui.chat_widget_stream_lifecycle.stop_commit_animation=true:committed=2:queued_lines=2->0\ntui.chat_widget_stream_lifecycle.task_complete=turn_complete:stream=true->false:plan=true->false:task=true->false:status_restore=true->false:status_preserved=true:redraw=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget stream lifecycle finish complete\ninput> \ntrace:\ntui.chat_widget_stream_lifecycle.plan=headless\ntui.chat_widget_stream_lifecycle.stream_finished=agent_message_item_completed:task_complete_pending=true->false:status_hidden=true:flushed=1:queue=1->0\ntui.chat_widget_stream_lifecycle.stop_commit_animation=true:committed=2:queued_lines=2->0\ntui.chat_widget_stream_lifecycle.task_complete=turn_complete:stream=true->false:plan=true->false:task=true->false:status_restore=true->false:status_preserved=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-stream-lifecycle-finalize-error",
+      "frame": {
+        "name": "chat-widget-stream-lifecycle-finalize-error",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget stream lifecycle finalize error"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_stream_lifecycle",
+          "chatWidgetStreamLifecycle": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "finalize_turn",
+                "finishReason": "error",
+                "activeTailBefore": true,
+                "activeTailAfter": false,
+                "activeStreamControllerBefore": true,
+                "activeStreamControllerAfter": false,
+                "planStreamControllerBefore": true,
+                "planStreamControllerAfter": false,
+                "taskRunningBefore": true,
+                "taskRunningAfter": false,
+                "adaptiveChunkingReset": true,
+                "runningCommandsCleared": true,
+                "suppressedExecCleared": true,
+                "unifiedWaitCleared": true,
+                "cancelEditCleared": true,
+                "rateLimitPromptChecked": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_effects_rejected",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_stream_lifecycle.plan=headless\ntui.chat_widget_stream_lifecycle.finalize_turn=error:tail=true->false:stream=true->false:plan=true->false:task=true->false:adaptive_reset=true:commands=true:suppressed=true:wait=true:cancel_edit=true:rate_limit=true\ntui.chat_widget_stream_lifecycle.failure=live_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget stream lifecycle finalize error\ninput> \ntrace:\ntui.chat_widget_stream_lifecycle.plan=headless\ntui.chat_widget_stream_lifecycle.finalize_turn=error:tail=true->false:stream=true->false:plan=true->false:task=true->false:adaptive_reset=true:commands=true:suppressed=true:wait=true:cancel_edit=true:rate_limit=true\ntui.chat_widget_stream_lifecycle.failure=live_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

@@ -2293,6 +2293,22 @@ Model selected raw Codex ChatWidget stream status behavior:
 
 Status: HXCX-TUI-43 extends `fixtures/hxrust/tui-smoke.v1.json` with typed ChatWidget stream status restore/error fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic ChatWidget stream status-surface evidence only, not a full live stream renderer, status widget, or terminal overlay.
 
+### HXCX-TUI-44: ChatWidget Stream Interruption And Finish Lifecycle
+
+Model selected raw Codex ChatWidget stream interruption and finish behavior:
+
+- preserve `handle_streaming_delta` in `../codex/codex-rs/tui/src/chatwidget/streaming.rs`: initialize the agent stream controller on first delta, flush active exec/wait state before stream start, queue visible stream lines, start commit animation, run catch-up ticks, sync the active stream tail, and request redraw;
+- preserve `defer_or_handle` in `streaming.rs`: when a stream controller exists, or any interrupt is already queued, push additional interruptive UI events into `InterruptManager` so FIFO order is deterministic;
+- preserve `flush_interrupt_queue` in `streaming.rs`: temporarily take the manager, flush queued interrupt handlers into `ChatWidget`, and restore the manager after flush;
+- preserve `handle_stream_finished` in `streaming.rs`: hide a pending task-complete status indicator, clear the pending flag, and flush interruptive UI events once non-exec stream content has landed;
+- preserve `run_commit_tick_with_scope` in `streaming.rs`: committed stream cells hide the status row, sync active tails, restore status only after all controllers are idle, send `StopCommitAnimation`, and refresh runtime metrics while the turn is still running;
+- preserve `on_task_complete` in `../codex/codex-rs/tui/src/chatwidget/turn_runtime.rs`: flush answer and plan streams, clear pending status restoration, finish the agent turn lifecycle, update task-running state and status surfaces, clear running command/wait state, and request redraw;
+- preserve `finalize_turn` in `turn_runtime.rs`: clear preview-only active stream tails, fail any active cell, finish task state, reset adaptive chunking, clear stream controllers, clear pending status restoration, clear cancel-edit state, refresh status-line branches, and check pending rate-limit prompts;
+- preserve ChatWidget state ownership in `../codex/codex-rs/tui/src/chatwidget.rs`: stream controllers, plan stream controller, interrupt manager, task-complete-pending flag, and request-redraw frame scheduling remain ChatWidget-owned boundaries;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-44 extends `fixtures/hxrust/tui-smoke.v1.json` with typed ChatWidget stream lifecycle fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic stream interruption/finish lifecycle evidence only, not a full live stream renderer, interrupt dispatcher, or terminal overlay.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

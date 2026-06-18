@@ -246,6 +246,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetStreamLifecycle:
+					if (!traceChatWidgetStreamLifecycle(event.chatWidgetStreamLifecycle, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1580,6 +1585,98 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.composer_popup_render.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceChatWidgetStreamLifecycle(plan:TuiSmokeChatWidgetStreamLifecyclePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_stream_lifecycle.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_stream_lifecycle.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeChatWidgetStreamLifecycleActionKind.StreamingDelta:
+					trace.push(
+						"tui.chat_widget_stream_lifecycle.delta="
+						+ action.delta
+						+ ":controller=" + action.activeStreamControllerBefore + "->" + action.activeStreamControllerAfter
+						+ ":queued_lines=" + action.queuedLinesBefore + "->" + action.queuedLinesAfter
+						+ ":start_animation=" + action.startCommitAnimation
+						+ ":catch_up=" + action.catchUpTick
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeChatWidgetStreamLifecycleActionKind.DeferOrHandle:
+					trace.push(
+						"tui.chat_widget_stream_lifecycle.interrupt="
+						+ action.interruptKind
+						+ ":controller=" + action.activeStreamControllerBefore
+						+ ":queue=" + action.queuedInterruptsBefore + "->" + action.queuedInterruptsAfter
+						+ ":queued=" + action.interruptQueued
+						+ ":handled=" + action.interruptHandled
+						+ ":fifo=" + action.fifoPreserved
+					);
+				case TuiSmokeChatWidgetStreamLifecycleActionKind.FlushInterruptQueue:
+					trace.push(
+						"tui.chat_widget_stream_lifecycle.flush_interrupts="
+						+ action.flushedInterrupts
+						+ ":queue=" + action.queuedInterruptsBefore + "->" + action.queuedInterruptsAfter
+						+ ":handled=" + action.interruptHandled
+						+ ":fifo=" + action.fifoPreserved
+					);
+				case TuiSmokeChatWidgetStreamLifecycleActionKind.StreamFinished:
+					trace.push(
+						"tui.chat_widget_stream_lifecycle.stream_finished="
+						+ action.finishReason
+						+ ":task_complete_pending=" + action.taskCompletePendingBefore + "->" + action.taskCompletePendingAfter
+						+ ":status_hidden=" + action.statusHidden
+						+ ":flushed=" + action.flushedInterrupts
+						+ ":queue=" + action.queuedInterruptsBefore + "->" + action.queuedInterruptsAfter
+					);
+				case TuiSmokeChatWidgetStreamLifecycleActionKind.TaskComplete:
+					trace.push(
+						"tui.chat_widget_stream_lifecycle.task_complete="
+						+ action.finishReason
+						+ ":stream=" + action.activeStreamControllerBefore + "->" + action.activeStreamControllerAfter
+						+ ":plan=" + action.planStreamControllerBefore + "->" + action.planStreamControllerAfter
+						+ ":task=" + action.taskRunningBefore + "->" + action.taskRunningAfter
+						+ ":status_restore=" + action.pendingStatusRestoreBefore + "->" + action.pendingStatusRestoreAfter
+						+ ":status_preserved=" + action.statusPreserved
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeChatWidgetStreamLifecycleActionKind.FinalizeTurn:
+					trace.push(
+						"tui.chat_widget_stream_lifecycle.finalize_turn="
+						+ action.finishReason
+						+ ":tail=" + action.activeTailBefore + "->" + action.activeTailAfter
+						+ ":stream=" + action.activeStreamControllerBefore + "->" + action.activeStreamControllerAfter
+						+ ":plan=" + action.planStreamControllerBefore + "->" + action.planStreamControllerAfter
+						+ ":task=" + action.taskRunningBefore + "->" + action.taskRunningAfter
+						+ ":adaptive_reset=" + action.adaptiveChunkingReset
+						+ ":commands=" + action.runningCommandsCleared
+						+ ":suppressed=" + action.suppressedExecCleared
+						+ ":wait=" + action.unifiedWaitCleared
+						+ ":cancel_edit=" + action.cancelEditCleared
+						+ ":rate_limit=" + action.rateLimitPromptChecked
+					);
+				case TuiSmokeChatWidgetStreamLifecycleActionKind.StopCommitAnimation:
+					trace.push(
+						"tui.chat_widget_stream_lifecycle.stop_commit_animation="
+						+ action.stopCommitAnimation
+						+ ":committed=" + action.committedCells
+						+ ":queued_lines=" + action.queuedLinesBefore + "->" + action.queuedLinesAfter
+					);
+				case TuiSmokeChatWidgetStreamLifecycleActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_stream_lifecycle.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_stream_lifecycle.unknown");
 					return false;
 			}
 		}
