@@ -81,6 +81,12 @@ class TuiSmokeEventLoop {
 						exit = resolutionExit;
 						running = false;
 					}
+				case TuiSmokeEventKind.ThreadDelivery:
+					final deliveryExit = appServer.handleThreadDelivery(event.threadDelivery, trace);
+					if (deliveryExit != TuiSmokeExitKind.Rendered) {
+						exit = deliveryExit;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -100,6 +106,8 @@ class TuiSmokeEventLoop {
 			+ "\nserver-rejections: " + appServer.rejectedRequests()
 			+ "\nserver-resolutions: " + appServer.handledResolutions()
 			+ "\nserver-stale-resolutions: " + appServer.staleResolutions()
+			+ "\nserver-deliveries: " + appServer.deliveredRequests()
+			+ "\nserver-evictions: " + appServer.evictedRequests()
 			+ "\nterminal: restored";
 		final ok = exit == request.expectedExit
 			&& traceText == request.expectedTrace
@@ -118,6 +126,8 @@ class TuiSmokeEventLoop {
 			appServerRejectedRequestCount: appServer.rejectedRequests(),
 			appServerResolutionCount: appServer.handledResolutions(),
 			appServerStaleResolutionCount: appServer.staleResolutions(),
+			appServerDeliveredRequestCount: appServer.deliveredRequests(),
+			appServerEvictedRequestCount: appServer.evictedRequests(),
 			terminalRestored: terminal.wasRestored()
 		});
 	}
@@ -161,6 +171,8 @@ class TuiSmokeEventLoop {
 			appServerRejectedRequestCount: 0,
 			appServerResolutionCount: 0,
 			appServerStaleResolutionCount: 0,
+			appServerDeliveredRequestCount: 0,
+			appServerEvictedRequestCount: 0,
 			terminalRestored: false
 		});
 	}

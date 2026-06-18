@@ -172,6 +172,18 @@ Extend the server-request facade with pending request resolution evidence:
 
 Status: HXCX-TUI-5 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/app_server_requests.rs:160`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:169`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:186`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:201`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:220`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:261`, `../codex/codex-rs/tui/src/app/app_server_events.rs:66`, `../codex/codex-rs/tui/src/app/app_server_events.rs:71`, `../codex/codex-rs/tui/src/app_server_session.rs:1117`, `../codex/codex-rs/tui/src/app_command.rs:70`, `../codex/codex-rs/tui/src/app_command.rs:75`, `../codex/codex-rs/tui/src/app_command.rs:86`, and `../codex/codex-rs/tui/src/app_command.rs:90`. This is request-resolution intent evidence only, not live JSON-RPC response dispatch, approval popup UI ownership, command execution, filesystem mutation, model traffic, or Cafex behavior.
 
+### HXCX-TUI-6: Headless Raw Codex TUI Active-Thread Request Delivery Facade
+
+Extend the server-request facade with thread-buffer delivery evidence:
+
+- primary-thread request delivery through an explicit active drain;
+- side-thread request buffering while the primary thread is active;
+- active-thread switch delivery for queued side-thread requests;
+- stale and evicted queued request receipts;
+- deterministic ordering relative to queued app events, draw, and key events.
+
+Status: HXCX-TUI-6 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/app_server_events.rs:192`, `../codex/codex-rs/tui/src/app/app_server_events.rs:194`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1003`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1027`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1127`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1136`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1168`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1248`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1428`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1440`, `../codex/codex-rs/tui/src/app/thread_events.rs:19`, `../codex/codex-rs/tui/src/app/thread_events.rs:53`, `../codex/codex-rs/tui/src/app/thread_events.rs:135`, and `../codex/codex-rs/tui/src/chatwidget/protocol_requests.rs:9`. This is active-thread delivery intent evidence only, not Tokio channel ownership, snapshot replay ownership, approval popup UI ownership, live app-server transport, model traffic, tool execution, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

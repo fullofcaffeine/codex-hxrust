@@ -17,4 +17,6 @@ server-requests: 0
 server-rejections: 0
 server-resolutions: 0
 server-stale-resolutions: 0
+server-deliveries: 0
+server-evictions: 0
 terminal: restored

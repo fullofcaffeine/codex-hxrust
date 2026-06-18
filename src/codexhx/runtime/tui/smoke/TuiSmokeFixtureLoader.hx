@@ -69,7 +69,8 @@ class TuiSmokeFixtureLoader {
 				appEvent: optionalAppEvent(value, "appEvent"),
 				appServerEvent: optionalAppServerEvent(value, "appServerEvent"),
 				appServerRequest: optionalAppServerRequest(value, "appServerRequest"),
-				appServerResolution: optionalAppServerResolution(value, "appServerResolution")
+				appServerResolution: optionalAppServerResolution(value, "appServerResolution"),
+				threadDelivery: optionalThreadDelivery(value, "threadDelivery")
 			}));
 		}
 		return out;
@@ -127,6 +128,18 @@ class TuiSmokeFixtureLoader {
 					requestId: optionalStringField(value, "requestId", ""),
 					decision: optionalStringField(value, "decision", ""),
 					response: optionalStringField(value, "response", "")
+				});
+		}
+	}
+
+	static function optionalThreadDelivery(object:Value, name:String):Null<TuiSmokeThreadDeliveryAction> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeThreadDeliveryAction({
+					kind: TuiSmokeThreadDeliveryActionKind.fromString(stringField(value, "kind", "")),
+					threadId: optionalStringField(value, "threadId", ""),
+					requestId: optionalStringField(value, "requestId", "")
 				});
 		}
 	}

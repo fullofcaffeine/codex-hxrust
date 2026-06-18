@@ -6,9 +6,13 @@ class TuiSmokeAppServerFacade {
 	var rejectedRequestCount:Int;
 	var resolutionCount:Int;
 	var staleResolutionCount:Int;
+	var deliveredRequestCount:Int;
+	var evictedRequestCount:Int;
 	var closed:Bool;
 	var primaryThreadId:String;
+	var activeThreadId:String;
 	final pendingRequests:Array<TuiSmokeAppServerRequest>;
+	final queuedRequests:Array<TuiSmokeAppServerRequest>;
 
 	public function new() {
 		this.eventCount = 0;
@@ -16,9 +20,13 @@ class TuiSmokeAppServerFacade {
 		this.rejectedRequestCount = 0;
 		this.resolutionCount = 0;
 		this.staleResolutionCount = 0;
+		this.deliveredRequestCount = 0;
+		this.evictedRequestCount = 0;
 		this.closed = false;
 		this.primaryThreadId = "";
+		this.activeThreadId = "";
 		this.pendingRequests = [];
+		this.queuedRequests = [];
 	}
 
 	public function handle(event:TuiSmokeAppServerEvent, state:TuiSmokeAppState, trace:Array<String>):TuiSmokeExitKind {
@@ -82,14 +90,49 @@ class TuiSmokeAppServerFacade {
 		}
 		requestCount = requestCount + 1;
 		pendingRequests.push(request);
+		queuedRequests.push(request);
+		final target = targetForThread(request.threadId);
+		final deliveryState = activeThreadId == request.threadId ? "active" : "buffered";
 		trace.push(
 			"server.request." + request.kind
 			+ "=" + request.requestId
 			+ ":" + request.threadId
-			+ ":" + targetForThread(request.threadId)
+			+ ":" + target
 			+ ":" + request.displayId()
+			+ ":" + deliveryState
 		);
 		return TuiSmokeExitKind.Rendered;
+	}
+
+	public function handleThreadDelivery(action:TuiSmokeThreadDeliveryAction, trace:Array<String>):TuiSmokeExitKind {
+		if (closed) {
+			trace.push("thread.delivery.ignored_after_close");
+			return TuiSmokeExitKind.Rendered;
+		}
+		if (action == null || action.kind == TuiSmokeThreadDeliveryActionKind.Unknown) {
+			trace.push("thread.delivery.unknown");
+			return TuiSmokeExitKind.Rejected;
+		}
+		return switch action.kind {
+			case TuiSmokeThreadDeliveryActionKind.DrainActive:
+				deliverActive(trace);
+				TuiSmokeExitKind.Rendered;
+			case TuiSmokeThreadDeliveryActionKind.SwitchActive:
+				if (action.threadId.length == 0) {
+					trace.push("thread.active.stale=");
+				} else {
+					activeThreadId = action.threadId;
+					trace.push("thread.active=" + activeThreadId);
+					deliverActive(trace);
+				}
+				TuiSmokeExitKind.Rendered;
+			case TuiSmokeThreadDeliveryActionKind.EvictQueued:
+				evictQueued(action.requestId, trace);
+				TuiSmokeExitKind.Rendered;
+			case _:
+				trace.push("thread.delivery.unknown");
+				TuiSmokeExitKind.Rejected;
+		}
 	}
 
 	public function handleResolution(resolution:TuiSmokeAppServerResolution, trace:Array<String>):TuiSmokeExitKind {
@@ -135,6 +178,54 @@ class TuiSmokeAppServerFacade {
 		return staleResolutionCount;
 	}
 
+	public function deliveredRequests():Int {
+		return deliveredRequestCount;
+	}
+
+	public function evictedRequests():Int {
+		return evictedRequestCount;
+	}
+
+	function deliverActive(trace:Array<String>):Void {
+		if (activeThreadId.length == 0) {
+			trace.push("thread.deliver.stale=no_active");
+			return;
+		}
+		var delivered = 0;
+		var i = 0;
+		while (i < queuedRequests.length) {
+			final request = queuedRequests[i];
+			if (request.threadId == activeThreadId) {
+				queuedRequests.splice(i, 1);
+				delivered = delivered + 1;
+				deliveredRequestCount = deliveredRequestCount + 1;
+				trace.push("thread.deliver=" + activeThreadId + ":" + request.requestId + ":" + request.displayId());
+			} else {
+				i = i + 1;
+			}
+		}
+		if (delivered == 0) trace.push("thread.deliver.empty=" + activeThreadId);
+	}
+
+	function evictQueued(requestId:String, trace:Array<String>):Void {
+		if (requestId.length == 0) {
+			trace.push("thread.evict.stale=");
+			return;
+		}
+		var i = 0;
+		while (i < queuedRequests.length) {
+			final request = queuedRequests[i];
+			if (request.requestId == requestId) {
+				queuedRequests.splice(i, 1);
+				evictedRequestCount = evictedRequestCount + 1;
+				trace.push("thread.evict=" + requestId + ":" + request.displayId());
+				return;
+			}
+			i = i + 1;
+		}
+		trace.push("thread.evict.stale=" + requestId);
+	}
+
 	function takePendingForResolution(resolution:TuiSmokeAppServerResolution):Null<TuiSmokeAppServerRequest> {
 		final requestKind = requestKindForResolution(resolution.kind);
 		if (requestKind == TuiSmokeAppServerRequestKind.Unknown) return null;
@@ -168,6 +259,7 @@ class TuiSmokeAppServerFacade {
 	function targetForThread(threadId:String):String {
 		if (primaryThreadId.length == 0) {
 			primaryThreadId = threadId;
+			activeThreadId = threadId;
 			return "primary";
 		}
 		return primaryThreadId == threadId ? "primary" : "side";
