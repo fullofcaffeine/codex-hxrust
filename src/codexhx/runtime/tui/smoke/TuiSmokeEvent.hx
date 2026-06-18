@@ -26,6 +26,7 @@ typedef TuiSmokeEventFields = {
 	final mcpElicitationOverlay:Null<TuiSmokeMcpElicitationPlan>;
 	final appLinkOverlay:Null<TuiSmokeAppLinkPlan>;
 	final hooksBrowser:Null<TuiSmokeHooksBrowserPlan>;
+	final slashCommandPopup:Null<TuiSmokeSlashPopupPlan>;
 }
 
 class TuiSmokeEvent {
@@ -54,6 +55,7 @@ class TuiSmokeEvent {
 	public final mcpElicitationOverlay:Null<TuiSmokeMcpElicitationPlan>;
 	public final appLinkOverlay:Null<TuiSmokeAppLinkPlan>;
 	public final hooksBrowser:Null<TuiSmokeHooksBrowserPlan>;
+	public final slashCommandPopup:Null<TuiSmokeSlashPopupPlan>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -81,5 +83,6 @@ class TuiSmokeEvent {
 		this.mcpElicitationOverlay = fields.mcpElicitationOverlay;
 		this.appLinkOverlay = fields.appLinkOverlay;
 		this.hooksBrowser = fields.hooksBrowser;
+		this.slashCommandPopup = fields.slashCommandPopup;
 	}
 }

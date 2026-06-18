@@ -27,6 +27,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final McpElicitationOverlay = "mcp_elicitation_overlay";
 	final AppLinkOverlay = "app_link_overlay";
 	final HooksBrowser = "hooks_browser";
+	final SlashCommandPopup = "slash_command_popup";
 	final Unknown = "unknown";
 
 	public static function fromString(value:String):TuiSmokeEventKind {
@@ -57,6 +58,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "mcp_elicitation_overlay": McpElicitationOverlay;
 			case "app_link_overlay": AppLinkOverlay;
 			case "hooks_browser": HooksBrowser;
+			case "slash_command_popup": SlashCommandPopup;
 			case _: Unknown;
 		}
 	}

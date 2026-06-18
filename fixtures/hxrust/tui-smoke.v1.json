@@ -5723,6 +5723,283 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.hooks_browser.plan=headless\ntui.hooks_browser.open=events:events=2:hooks=1:needs_review=1:selected=0->0:frame=true\ntui.hooks_browser.render_events=events=2:installed=1:active=1:needs_review=1:warnings=1:errors=1:rows=2:rendered=true\ntui.hooks_browser.open_event=SessionStart:page=events->handlers:handlers=0:selected=0->0:frame=true\ntui.hooks_browser.render_handlers=SessionStart:handlers=0:active=0:needs_review=0:rows=0:details=0:command_lines=0:rendered=true\ntui.hooks_browser.managed_noop=managed.policy:event=SessionStart:managed=true:enabled=true->true:sent=false\ntui.hooks_browser.review_noop=project.changed:event=SessionStart:needs_review=true:trust=untrusted->untrusted:sent=false\ntui.hooks_browser.failure=hooks_browser_config_issues:warnings=1:errors=1:rejected=false\ntui.hooks_browser.close=handlers:complete=false->true:frame=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> hooks browser managed empty issues\ninput> \ntrace:\ntui.hooks_browser.plan=headless\ntui.hooks_browser.open=events:events=2:hooks=1:needs_review=1:selected=0->0:frame=true\ntui.hooks_browser.render_events=events=2:installed=1:active=1:needs_review=1:warnings=1:errors=1:rows=2:rendered=true\ntui.hooks_browser.open_event=SessionStart:page=events->handlers:handlers=0:selected=0->0:frame=true\ntui.hooks_browser.render_handlers=SessionStart:handlers=0:active=0:needs_review=0:rows=0:details=0:command_lines=0:rendered=true\ntui.hooks_browser.managed_noop=managed.policy:event=SessionStart:managed=true:enabled=true->true:sent=false\ntui.hooks_browser.review_noop=project.changed:event=SessionStart:needs_review=true:trust=untrusted->untrusted:sent=false\ntui.hooks_browser.failure=hooks_browser_config_issues:warnings=1:errors=1:rejected=false\ntui.hooks_browser.close=handlers:complete=false->true:frame=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "slash-popup-model-dispatch",
+      "frame": {
+        "name": "slash-popup-model-dispatch",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 64,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "slash popup model dispatch"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "slash_command_popup",
+          "slashCommandPopup": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "sync",
+                "inputText": "/",
+                "filterText": "",
+                "activeBefore": false,
+                "activeAfter": true,
+                "currentFileQueryCleared": false,
+                "redrawRequested": true
+              },
+              {
+                "kind": "activate",
+                "filterText": "",
+                "matchKind": "empty",
+                "popupCreated": true,
+                "totalCommands": 36,
+                "visibleCount": 34,
+                "hiddenAliasCount": 2
+              },
+              {
+                "kind": "render",
+                "filterText": "",
+                "rowCount": 10,
+                "matchedCount": 34,
+                "serviceTierCount": 0,
+                "disabledCount": 0
+              },
+              {
+                "kind": "filter",
+                "filterText": "mo",
+                "matchKind": "prefix",
+                "matchedCount": 1,
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "scrollBefore": 0,
+                "scrollAfter": 0
+              },
+              {
+                "kind": "complete",
+                "commandName": "model",
+                "commandKind": "builtin",
+                "completionKind": "text",
+                "draftPreserved": false,
+                "textCleared": false
+              },
+              {
+                "kind": "dispatch",
+                "commandName": "model",
+                "commandKind": "builtin",
+                "commandDispatched": true,
+                "historyStaged": true,
+                "historyRecorded": true,
+                "textCleared": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.slash_popup.plan=headless\ntui.slash_popup.sync=/:filter=:active=false->true:file_query_cleared=false:redraw=true\ntui.slash_popup.activate=:match=empty:created=true:commands=36:visible=34:aliases_hidden=2\ntui.slash_popup.render=:rows=10:matches=34:services=0:disabled=0\ntui.slash_popup.filter=mo:match=prefix:matches=1:selected=0->0:scroll=0->0\ntui.slash_popup.complete=model:kind=builtin:completion=text:draft_preserved=false:text_cleared=false\ntui.slash_popup.dispatch=model:kind=builtin:command=true:service_tier=false:history=true->true:text_cleared=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> slash popup model dispatch\ninput> \ntrace:\ntui.slash_popup.plan=headless\ntui.slash_popup.sync=/:filter=:active=false->true:file_query_cleared=false:redraw=true\ntui.slash_popup.activate=:match=empty:created=true:commands=36:visible=34:aliases_hidden=2\ntui.slash_popup.render=:rows=10:matches=34:services=0:disabled=0\ntui.slash_popup.filter=mo:match=prefix:matches=1:selected=0->0:scroll=0->0\ntui.slash_popup.complete=model:kind=builtin:completion=text:draft_preserved=false:text_cleared=false\ntui.slash_popup.dispatch=model:kind=builtin:command=true:service_tier=false:history=true->true:text_cleared=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "slash-popup-service-tier-running-task",
+      "frame": {
+        "name": "slash-popup-service-tier-running-task",
+        "title": "Codex TUI Smoke Replay",
+        "status": "running",
+        "model": "gpt-5.2-codex",
+        "width": 64,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "slash popup service tier"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "slash_command_popup",
+          "slashCommandPopup": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "sync",
+                "inputText": "/mo",
+                "filterText": "mo",
+                "activeBefore": false,
+                "activeAfter": true,
+                "redrawRequested": true
+              },
+              {
+                "kind": "activate",
+                "filterText": "mo",
+                "matchKind": "prefix",
+                "popupCreated": true,
+                "totalCommands": 39,
+                "visibleCount": 4,
+                "hiddenAliasCount": 0,
+                "serviceTierCount": 3
+              },
+              {
+                "kind": "filter",
+                "filterText": "fast",
+                "matchKind": "exact",
+                "matchedCount": 1,
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "scrollBefore": 0,
+                "scrollAfter": 0
+              },
+              {
+                "kind": "suppress_interrupt",
+                "filterText": "fast",
+                "taskRunning": true,
+                "activeAfter": true,
+                "interruptSuppressed": true
+              },
+              {
+                "kind": "dispatch",
+                "commandName": "fast",
+                "commandKind": "service_tier",
+                "serviceTierDispatched": true,
+                "historyStaged": true,
+                "historyRecorded": true,
+                "textCleared": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.slash_popup.plan=headless\ntui.slash_popup.sync=/mo:filter=mo:active=false->true:file_query_cleared=false:redraw=true\ntui.slash_popup.activate=mo:match=prefix:created=true:commands=39:visible=4:aliases_hidden=0\ntui.slash_popup.filter=fast:match=exact:matches=1:selected=0->0:scroll=0->0\ntui.slash_popup.suppress_interrupt=fast:task_running=true:active=true:suppressed=true\ntui.slash_popup.dispatch=fast:kind=service_tier:command=false:service_tier=true:history=true->true:text_cleared=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: running | model: gpt-5.2-codex\nsystem> slash popup service tier\ninput> \ntrace:\ntui.slash_popup.plan=headless\ntui.slash_popup.sync=/mo:filter=mo:active=false->true:file_query_cleared=false:redraw=true\ntui.slash_popup.activate=mo:match=prefix:created=true:commands=39:visible=4:aliases_hidden=0\ntui.slash_popup.filter=fast:match=exact:matches=1:selected=0->0:scroll=0->0\ntui.slash_popup.suppress_interrupt=fast:task_running=true:active=true:suppressed=true\ntui.slash_popup.dispatch=fast:kind=service_tier:command=false:service_tier=true:history=true->true:text_cleared=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "slash-popup-hide-unavailable-dismiss",
+      "frame": {
+        "name": "slash-popup-hide-unavailable-dismiss",
+        "title": "Codex TUI Smoke Replay",
+        "status": "running",
+        "model": "gpt-5.2-codex",
+        "width": 64,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "slash popup hide unavailable dismiss"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "slash_command_popup",
+          "slashCommandPopup": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "sync",
+                "inputText": "/ test",
+                "filterText": "",
+                "activeBefore": false,
+                "activeAfter": false,
+                "redrawRequested": true
+              },
+              {
+                "kind": "hide",
+                "inputText": "/ test",
+                "activeBefore": false,
+                "activeAfter": false,
+                "failureCode": "slash_space_history_input"
+              },
+              {
+                "kind": "sync",
+                "inputText": "/zzz",
+                "filterText": "zzz",
+                "activeBefore": false,
+                "activeAfter": false,
+                "redrawRequested": true
+              },
+              {
+                "kind": "hide",
+                "inputText": "/zzz",
+                "activeBefore": false,
+                "activeAfter": false,
+                "failureCode": "no_slash_command_prefix"
+              },
+              {
+                "kind": "reject_unavailable",
+                "commandName": "clear",
+                "commandKind": "builtin",
+                "taskRunning": true,
+                "unsupportedRejected": true,
+                "historyStaged": true,
+                "historyRecorded": true
+              },
+              {
+                "kind": "dismiss",
+                "filterText": "re",
+                "activeBefore": true,
+                "activeAfter": false,
+                "popupDismissed": true,
+                "draftPreserved": true,
+                "redrawRequested": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.slash_popup.plan=headless\ntui.slash_popup.sync=/ test:filter=:active=false->false:file_query_cleared=false:redraw=true\ntui.slash_popup.hide=/ test:active=false->false:reason=slash_space_history_input\ntui.slash_popup.sync=/zzz:filter=zzz:active=false->false:file_query_cleared=false:redraw=true\ntui.slash_popup.hide=/zzz:active=false->false:reason=no_slash_command_prefix\ntui.slash_popup.unavailable=clear:task_running=true:rejected=true:history=true->true\ntui.slash_popup.dismiss=re:active=true->false:dismissed=true:draft_preserved=true:redraw=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: running | model: gpt-5.2-codex\nsystem> slash popup hide unavailable dismiss\ninput> \ntrace:\ntui.slash_popup.plan=headless\ntui.slash_popup.sync=/ test:filter=:active=false->false:file_query_cleared=false:redraw=true\ntui.slash_popup.hide=/ test:active=false->false:reason=slash_space_history_input\ntui.slash_popup.sync=/zzz:filter=zzz:active=false->false:file_query_cleared=false:redraw=true\ntui.slash_popup.hide=/zzz:active=false->false:reason=no_slash_command_prefix\ntui.slash_popup.unavailable=clear:task_running=true:rejected=true:history=true->true\ntui.slash_popup.dismiss=re:active=true->false:dismissed=true:draft_preserved=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

@@ -85,7 +85,63 @@ class TuiSmokeFixtureLoader {
 				userInputOverlay: optionalUserInputPlan(value, "userInputOverlay"),
 				mcpElicitationOverlay: optionalMcpElicitationPlan(value, "mcpElicitationOverlay"),
 				appLinkOverlay: optionalAppLinkPlan(value, "appLinkOverlay"),
-				hooksBrowser: optionalHooksBrowserPlan(value, "hooksBrowser")
+				hooksBrowser: optionalHooksBrowserPlan(value, "hooksBrowser"),
+				slashCommandPopup: optionalSlashPopupPlan(value, "slashCommandPopup")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalSlashPopupPlan(object:Value, name:String):Null<TuiSmokeSlashPopupPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSlashPopupPlan({
+					allowLiveInput: optionalBoolField(value, "allowLiveInput", false),
+					actions: slashPopupActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function slashPopupActions(values:Array<Value>):Array<TuiSmokeSlashPopupAction> {
+		final out:Array<TuiSmokeSlashPopupAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSlashPopupAction({
+				kind: TuiSmokeSlashPopupActionKind.fromString(stringField(value, "kind", "")),
+				commandKind: TuiSmokeSlashPopupCommandKind.fromString(optionalStringField(value, "commandKind", "unknown")),
+				matchKind: TuiSmokeSlashPopupMatchKind.fromString(optionalStringField(value, "matchKind", "unknown")),
+				completionKind: TuiSmokeSlashPopupCompletionKind.fromString(optionalStringField(value, "completionKind", "unknown")),
+				inputText: optionalStringField(value, "inputText", ""),
+				filterText: optionalStringField(value, "filterText", ""),
+				commandName: optionalStringField(value, "commandName", ""),
+				totalCommands: optionalIntField(value, "totalCommands", 0),
+				visibleCount: optionalIntField(value, "visibleCount", 0),
+				matchedCount: optionalIntField(value, "matchedCount", 0),
+				rowCount: optionalIntField(value, "rowCount", 0),
+				hiddenAliasCount: optionalIntField(value, "hiddenAliasCount", 0),
+				serviceTierCount: optionalIntField(value, "serviceTierCount", 0),
+				disabledCount: optionalIntField(value, "disabledCount", 0),
+				selectedBefore: optionalIntField(value, "selectedBefore", 0),
+				selectedAfter: optionalIntField(value, "selectedAfter", 0),
+				scrollBefore: optionalIntField(value, "scrollBefore", 0),
+				scrollAfter: optionalIntField(value, "scrollAfter", 0),
+				activeBefore: optionalBoolField(value, "activeBefore", false),
+				activeAfter: optionalBoolField(value, "activeAfter", false),
+				popupCreated: optionalBoolField(value, "popupCreated", false),
+				popupDismissed: optionalBoolField(value, "popupDismissed", false),
+				textCleared: optionalBoolField(value, "textCleared", false),
+				draftPreserved: optionalBoolField(value, "draftPreserved", false),
+				historyStaged: optionalBoolField(value, "historyStaged", false),
+				historyRecorded: optionalBoolField(value, "historyRecorded", false),
+				commandDispatched: optionalBoolField(value, "commandDispatched", false),
+				serviceTierDispatched: optionalBoolField(value, "serviceTierDispatched", false),
+				currentFileQueryCleared: optionalBoolField(value, "currentFileQueryCleared", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				redrawRequested: optionalBoolField(value, "redrawRequested", false),
+				interruptSuppressed: optionalBoolField(value, "interruptSuppressed", false),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

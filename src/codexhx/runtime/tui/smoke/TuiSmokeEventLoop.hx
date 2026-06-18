@@ -176,6 +176,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.SlashCommandPopup:
+					if (!traceSlashCommandPopup(event.slashCommandPopup, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1314,6 +1319,123 @@ class TuiSmokeEventLoop {
 					trace.push("tui.app_link.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.app_link.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceSlashCommandPopup(plan:TuiSmokeSlashPopupPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveInput || !plan.enabled()) {
+			trace.push("tui.slash_popup.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.slash_popup.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeSlashPopupActionKind.Sync:
+					trace.push(
+						"tui.slash_popup.sync="
+						+ action.inputText
+						+ ":filter=" + action.filterText
+						+ ":active=" + action.activeTransitionText()
+						+ ":file_query_cleared=" + action.currentFileQueryCleared
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeSlashPopupActionKind.Activate:
+					trace.push(
+						"tui.slash_popup.activate="
+						+ action.filterText
+						+ ":match=" + action.matchKind
+						+ ":created=" + action.popupCreated
+						+ ":commands=" + action.totalCommands
+						+ ":visible=" + action.visibleCount
+						+ ":aliases_hidden=" + action.hiddenAliasCount
+					);
+				case TuiSmokeSlashPopupActionKind.Render:
+					trace.push(
+						"tui.slash_popup.render="
+						+ action.filterText
+						+ ":rows=" + action.rowCount
+						+ ":matches=" + action.matchedCount
+						+ ":services=" + action.serviceTierCount
+						+ ":disabled=" + action.disabledCount
+					);
+				case TuiSmokeSlashPopupActionKind.Filter:
+					trace.push(
+						"tui.slash_popup.filter="
+						+ action.filterText
+						+ ":match=" + action.matchKind
+						+ ":matches=" + action.matchedCount
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":scroll=" + action.scrollTransitionText()
+					);
+				case TuiSmokeSlashPopupActionKind.MoveSelection:
+					trace.push(
+						"tui.slash_popup.selection="
+						+ action.filterText
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":scroll=" + action.scrollTransitionText()
+					);
+				case TuiSmokeSlashPopupActionKind.Complete:
+					trace.push(
+						"tui.slash_popup.complete="
+						+ action.commandName
+						+ ":kind=" + action.commandKind
+						+ ":completion=" + action.completionKind
+						+ ":draft_preserved=" + action.draftPreserved
+						+ ":text_cleared=" + action.textCleared
+					);
+				case TuiSmokeSlashPopupActionKind.Dispatch:
+					trace.push(
+						"tui.slash_popup.dispatch="
+						+ action.commandName
+						+ ":kind=" + action.commandKind
+						+ ":command=" + action.commandDispatched
+						+ ":service_tier=" + action.serviceTierDispatched
+						+ ":history=" + action.historyStaged + "->" + action.historyRecorded
+						+ ":text_cleared=" + action.textCleared
+					);
+				case TuiSmokeSlashPopupActionKind.RejectUnavailable:
+					trace.push(
+						"tui.slash_popup.unavailable="
+						+ action.commandName
+						+ ":task_running=" + action.taskRunning
+						+ ":rejected=" + action.unsupportedRejected
+						+ ":history=" + action.historyStaged + "->" + action.historyRecorded
+					);
+				case TuiSmokeSlashPopupActionKind.Dismiss:
+					trace.push(
+						"tui.slash_popup.dismiss="
+						+ action.filterText
+						+ ":active=" + action.activeTransitionText()
+						+ ":dismissed=" + action.popupDismissed
+						+ ":draft_preserved=" + action.draftPreserved
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeSlashPopupActionKind.Hide:
+					trace.push(
+						"tui.slash_popup.hide="
+						+ action.inputText
+						+ ":active=" + action.activeTransitionText()
+						+ ":reason=" + action.failureCode
+					);
+				case TuiSmokeSlashPopupActionKind.SuppressInterrupt:
+					trace.push(
+						"tui.slash_popup.suppress_interrupt="
+						+ action.filterText
+						+ ":task_running=" + action.taskRunning
+						+ ":active=" + action.activeAfter
+						+ ":suppressed=" + action.interruptSuppressed
+					);
+				case TuiSmokeSlashPopupActionKind.Failure:
+					trace.push(
+						"tui.slash_popup.failure="
+						+ action.failureCode
+						+ ":rejected=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.slash_popup.unknown");
 					return false;
 			}
 		}
