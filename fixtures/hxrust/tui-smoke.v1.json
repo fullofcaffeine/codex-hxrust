@@ -3653,6 +3653,199 @@
       "expectedExit": "cancelled",
       "expectedTrace": "tui.draw_composition.plan=headless\ntui.draw_composition.begin=resize_reflow:height=10:terminal=80x20:last=100x24:sync_update=true:vt=true:resume=false\ntui.draw_composition.pending_viewport=skipped:resize_reflow\ntui.draw_composition.viewport=from=0,16 100x8:to=0,10 80x10:clear_before_set=true:scroll_up=false:region=0..16:rows=0\ntui.draw_composition.history_flush=batches=2:rows=12:mode=zellij_raw:wrap=terminal\ntui.draw_composition.repaint=needs_full=true:invalidate=true\ntui.draw_composition.suspend_cursor=19:alt=false\ntui.draw_composition.terminal_draw=autoresize=true:render=true:puts=64:clears=5:cursor=hidden:swap=true:flush=true\ntui.draw\ntui.key=ctrl-c",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resize reflow draw composition\ninput> \ntrace:\ntui.draw_composition.plan=headless\ntui.draw_composition.begin=resize_reflow:height=10:terminal=80x20:last=100x24:sync_update=true:vt=true:resume=false\ntui.draw_composition.pending_viewport=skipped:resize_reflow\ntui.draw_composition.viewport=from=0,16 100x8:to=0,10 80x10:clear_before_set=true:scroll_up=false:region=0..16:rows=0\ntui.draw_composition.history_flush=batches=2:rows=12:mode=zellij_raw:wrap=terminal\ntui.draw_composition.repaint=needs_full=true:invalidate=true\ntui.draw_composition.suspend_cursor=19:alt=false\ntui.draw_composition.terminal_draw=autoresize=true:render=true:puts=64:clears=5:cursor=hidden:swap=true:flush=true\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "frame-scheduler-coalesces-and-rate-limits",
+      "frame": {
+        "name": "frame-scheduler-coalesces-and-rate-limits",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "frame scheduler"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "frame_scheduler",
+          "frameScheduler": {
+            "allowLiveScheduler": false,
+            "actions": [
+              {
+                "kind": "create_requester",
+                "spawnedTask": true,
+                "broadcastCapacity": 1
+              },
+              {
+                "kind": "request_immediate",
+                "source": "chatwidget.request_redraw",
+                "requestMs": 0
+              },
+              {
+                "kind": "request_immediate",
+                "source": "resize_reflow.immediate",
+                "requestMs": 0
+              },
+              {
+                "kind": "request_delayed",
+                "source": "status_indicator.animation",
+                "delayMs": 32,
+                "requestMs": 32
+              },
+              {
+                "kind": "coalesce_deadline",
+                "previousDeadlineMs": -1,
+                "requestMs": 0,
+                "nextDeadlineMs": 0,
+                "requestCount": 3,
+                "coalescedCount": 2
+              },
+              {
+                "kind": "emit_draw",
+                "nextDeadlineMs": 0,
+                "drawSent": true,
+                "emittedCount": 1
+              },
+              {
+                "kind": "request_delayed",
+                "source": "paste_burst.followup",
+                "delayMs": 1,
+                "requestMs": 1
+              },
+              {
+                "kind": "clamp_deadline",
+                "lastEmittedMs": 0,
+                "minIntervalMs": 8,
+                "requestMs": 1,
+                "clampedDeadlineMs": 8
+              },
+              {
+                "kind": "coalesce_deadline",
+                "previousDeadlineMs": -1,
+                "requestMs": 8,
+                "nextDeadlineMs": 8,
+                "requestCount": 1,
+                "coalescedCount": 0
+              },
+              {
+                "kind": "emit_draw",
+                "nextDeadlineMs": 8,
+                "drawSent": true,
+                "emittedCount": 2
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.frame_scheduler.plan=headless\ntui.frame_scheduler.create=spawn_task=true:broadcast_capacity=1\ntui.frame_scheduler.request=immediate:source=chatwidget.request_redraw:at=0ms\ntui.frame_scheduler.request=immediate:source=resize_reflow.immediate:at=0ms\ntui.frame_scheduler.request=delayed:source=status_indicator.animation:delay=32ms:at=32ms\ntui.frame_scheduler.coalesce=prev=none:request=0ms:next=0ms:requests=3:coalesced=2\ntui.frame_scheduler.emit=deadline=0ms:draw=true:emitted=1\ntui.frame_scheduler.request=delayed:source=paste_burst.followup:delay=1ms:at=1ms\ntui.frame_scheduler.clamp=last=0ms:min=8ms:requested=1ms:clamped=8ms\ntui.frame_scheduler.coalesce=prev=none:request=8ms:next=8ms:requests=1:coalesced=0\ntui.frame_scheduler.emit=deadline=8ms:draw=true:emitted=2\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> frame scheduler\ninput> \ntrace:\ntui.frame_scheduler.plan=headless\ntui.frame_scheduler.create=spawn_task=true:broadcast_capacity=1\ntui.frame_scheduler.request=immediate:source=chatwidget.request_redraw:at=0ms\ntui.frame_scheduler.request=immediate:source=resize_reflow.immediate:at=0ms\ntui.frame_scheduler.request=delayed:source=status_indicator.animation:delay=32ms:at=32ms\ntui.frame_scheduler.coalesce=prev=none:request=0ms:next=0ms:requests=3:coalesced=2\ntui.frame_scheduler.emit=deadline=0ms:draw=true:emitted=1\ntui.frame_scheduler.request=delayed:source=paste_burst.followup:delay=1ms:at=1ms\ntui.frame_scheduler.clamp=last=0ms:min=8ms:requested=1ms:clamped=8ms\ntui.frame_scheduler.coalesce=prev=none:request=8ms:next=8ms:requests=1:coalesced=0\ntui.frame_scheduler.emit=deadline=8ms:draw=true:emitted=2\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "frame-scheduler-lagged-draw-and-drop",
+      "frame": {
+        "name": "frame-scheduler-lagged-draw-and-drop",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "frame scheduler close"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "frame_scheduler",
+          "frameScheduler": {
+            "allowLiveScheduler": false,
+            "actions": [
+              {
+                "kind": "create_requester",
+                "spawnedTask": true,
+                "broadcastCapacity": 1
+              },
+              {
+                "kind": "request_delayed",
+                "source": "resize_reflow.rearm",
+                "delayMs": 120,
+                "requestMs": 120
+              },
+              {
+                "kind": "request_delayed",
+                "source": "resize_reflow.final_width_sample",
+                "delayMs": 20,
+                "requestMs": 20
+              },
+              {
+                "kind": "coalesce_deadline",
+                "previousDeadlineMs": 120,
+                "requestMs": 20,
+                "nextDeadlineMs": 20,
+                "requestCount": 2,
+                "coalescedCount": 1
+              },
+              {
+                "kind": "emit_draw",
+                "nextDeadlineMs": 20,
+                "drawSent": true,
+                "emittedCount": 1
+              },
+              {
+                "kind": "lagged_draw",
+                "lagged": true
+              },
+              {
+                "kind": "sender_dropped",
+                "closed": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "draw_receiver_closed"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.frame_scheduler.plan=headless\ntui.frame_scheduler.create=spawn_task=true:broadcast_capacity=1\ntui.frame_scheduler.request=delayed:source=resize_reflow.rearm:delay=120ms:at=120ms\ntui.frame_scheduler.request=delayed:source=resize_reflow.final_width_sample:delay=20ms:at=20ms\ntui.frame_scheduler.coalesce=prev=120ms:request=20ms:next=20ms:requests=2:coalesced=1\ntui.frame_scheduler.emit=deadline=20ms:draw=true:emitted=1\ntui.frame_scheduler.draw_stream=lagged:true->draw\ntui.frame_scheduler.sender_dropped=closed:true\ntui.frame_scheduler.failure=draw_receiver_closed\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> frame scheduler close\ninput> \ntrace:\ntui.frame_scheduler.plan=headless\ntui.frame_scheduler.create=spawn_task=true:broadcast_capacity=1\ntui.frame_scheduler.request=delayed:source=resize_reflow.rearm:delay=120ms:at=120ms\ntui.frame_scheduler.request=delayed:source=resize_reflow.final_width_sample:delay=20ms:at=20ms\ntui.frame_scheduler.coalesce=prev=120ms:request=20ms:next=20ms:requests=2:coalesced=1\ntui.frame_scheduler.emit=deadline=20ms:draw=true:emitted=1\ntui.frame_scheduler.draw_stream=lagged:true->draw\ntui.frame_scheduler.sender_dropped=closed:true\ntui.frame_scheduler.failure=draw_receiver_closed\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

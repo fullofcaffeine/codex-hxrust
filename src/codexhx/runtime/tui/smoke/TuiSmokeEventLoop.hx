@@ -136,6 +136,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.FrameScheduler:
+					if (!traceFrameScheduler(event.frameScheduler, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -663,6 +668,71 @@ class TuiSmokeEventLoop {
 		);
 		if (plan.failureCode != "") {
 			trace.push("tui.draw_composition.failure=" + plan.failureCode);
+		}
+		return true;
+	}
+
+	static function traceFrameScheduler(plan:TuiSmokeFrameSchedulerPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveScheduler || !plan.enabled()) {
+			trace.push("tui.frame_scheduler.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.frame_scheduler.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeFrameSchedulerActionKind.CreateRequester:
+					trace.push(
+						"tui.frame_scheduler.create="
+						+ "spawn_task=" + action.spawnedTask
+						+ ":broadcast_capacity=" + action.broadcastCapacity
+					);
+				case TuiSmokeFrameSchedulerActionKind.RequestImmediate:
+					trace.push(
+						"tui.frame_scheduler.request=immediate"
+						+ ":source=" + action.source
+						+ ":at=" + action.deadlineText(action.requestMs)
+					);
+				case TuiSmokeFrameSchedulerActionKind.RequestDelayed:
+					trace.push(
+						"tui.frame_scheduler.request=delayed"
+						+ ":source=" + action.source
+						+ ":delay=" + action.delayMs + "ms"
+						+ ":at=" + action.deadlineText(action.requestMs)
+					);
+				case TuiSmokeFrameSchedulerActionKind.ClampDeadline:
+					trace.push(
+						"tui.frame_scheduler.clamp="
+						+ "last=" + action.deadlineText(action.lastEmittedMs)
+						+ ":min=" + action.minIntervalMs + "ms"
+						+ ":requested=" + action.deadlineText(action.requestMs)
+						+ ":clamped=" + action.deadlineText(action.clampedDeadlineMs)
+					);
+				case TuiSmokeFrameSchedulerActionKind.CoalesceDeadline:
+					trace.push(
+						"tui.frame_scheduler.coalesce="
+						+ "prev=" + action.previousDeadlineText()
+						+ ":request=" + action.deadlineText(action.requestMs)
+						+ ":next=" + action.nextDeadlineText()
+						+ ":requests=" + action.requestCount
+						+ ":coalesced=" + action.coalescedCount
+					);
+				case TuiSmokeFrameSchedulerActionKind.EmitDraw:
+					trace.push(
+						"tui.frame_scheduler.emit="
+						+ "deadline=" + action.nextDeadlineText()
+						+ ":draw=" + action.drawSent
+						+ ":emitted=" + action.emittedCount
+					);
+				case TuiSmokeFrameSchedulerActionKind.LaggedDraw:
+					trace.push("tui.frame_scheduler.draw_stream=lagged:" + action.lagged + "->draw");
+				case TuiSmokeFrameSchedulerActionKind.SenderDropped:
+					trace.push("tui.frame_scheduler.sender_dropped=closed:" + action.closed);
+				case TuiSmokeFrameSchedulerActionKind.Failure:
+					trace.push("tui.frame_scheduler.failure=" + action.failureCode);
+				case _:
+					trace.push("tui.frame_scheduler.unknown");
+					return false;
+			}
 		}
 		return true;
 	}

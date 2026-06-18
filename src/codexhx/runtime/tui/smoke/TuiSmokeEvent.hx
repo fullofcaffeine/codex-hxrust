@@ -18,6 +18,7 @@ typedef TuiSmokeEventFields = {
 	final terminalModePlan:Null<TuiSmokeTerminalModePlan>;
 	final altScreen:Null<TuiSmokeAltScreenPlan>;
 	final drawComposition:Null<TuiSmokeDrawCompositionPlan>;
+	final frameScheduler:Null<TuiSmokeFrameSchedulerPlan>;
 }
 
 class TuiSmokeEvent {
@@ -38,6 +39,7 @@ class TuiSmokeEvent {
 	public final terminalModePlan:Null<TuiSmokeTerminalModePlan>;
 	public final altScreen:Null<TuiSmokeAltScreenPlan>;
 	public final drawComposition:Null<TuiSmokeDrawCompositionPlan>;
+	public final frameScheduler:Null<TuiSmokeFrameSchedulerPlan>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -57,5 +59,6 @@ class TuiSmokeEvent {
 		this.terminalModePlan = fields.terminalModePlan;
 		this.altScreen = fields.altScreen;
 		this.drawComposition = fields.drawComposition;
+		this.frameScheduler = fields.frameScheduler;
 	}
 }

@@ -77,7 +77,46 @@ class TuiSmokeFixtureLoader {
 				eventStream: optionalEventStreamPlan(value, "eventStream"),
 				terminalModePlan: optionalTerminalModePlan(value, "terminalModePlan"),
 				altScreen: optionalAltScreenPlan(value, "altScreen"),
-				drawComposition: optionalDrawCompositionPlan(value, "drawComposition")
+				drawComposition: optionalDrawCompositionPlan(value, "drawComposition"),
+				frameScheduler: optionalFrameSchedulerPlan(value, "frameScheduler")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalFrameSchedulerPlan(object:Value, name:String):Null<TuiSmokeFrameSchedulerPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeFrameSchedulerPlan({
+					allowLiveScheduler: optionalBoolField(value, "allowLiveScheduler", false),
+					actions: frameSchedulerActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function frameSchedulerActions(values:Array<Value>):Array<TuiSmokeFrameSchedulerAction> {
+		final out:Array<TuiSmokeFrameSchedulerAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeFrameSchedulerAction({
+				kind: TuiSmokeFrameSchedulerActionKind.fromString(stringField(value, "kind", "")),
+				source: optionalStringField(value, "source", "unknown"),
+				requestMs: optionalIntField(value, "requestMs", 0),
+				delayMs: optionalIntField(value, "delayMs", 0),
+				previousDeadlineMs: optionalIntField(value, "previousDeadlineMs", -1),
+				nextDeadlineMs: optionalIntField(value, "nextDeadlineMs", -1),
+				clampedDeadlineMs: optionalIntField(value, "clampedDeadlineMs", 0),
+				lastEmittedMs: optionalIntField(value, "lastEmittedMs", -1),
+				minIntervalMs: optionalIntField(value, "minIntervalMs", 8),
+				requestCount: optionalIntField(value, "requestCount", 0),
+				coalescedCount: optionalIntField(value, "coalescedCount", 0),
+				emittedCount: optionalIntField(value, "emittedCount", 0),
+				broadcastCapacity: optionalIntField(value, "broadcastCapacity", 1),
+				spawnedTask: optionalBoolField(value, "spawnedTask", false),
+				drawSent: optionalBoolField(value, "drawSent", false),
+				lagged: optionalBoolField(value, "lagged", false),
+				closed: optionalBoolField(value, "closed", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;
