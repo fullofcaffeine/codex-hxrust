@@ -156,6 +156,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.UserInputOverlay:
+					if (!traceUserInputOverlay(event.userInputOverlay, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1023,6 +1028,151 @@ class TuiSmokeEventLoop {
 					trace.push("tui.approval.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.approval.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceUserInputOverlay(plan:TuiSmokeUserInputPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveUserInput || !plan.enabled()) {
+			trace.push("tui.user_input.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.user_input.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeUserInputActionKind.NoteServerRequest:
+					trace.push(
+						"tui.user_input.pending.note="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":turn=" + action.turnId
+						+ ":item=" + action.itemId
+						+ ":questions=" + action.questionCount
+						+ ":secret_questions=" + action.secretQuestionCount
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case TuiSmokeUserInputActionKind.ShowModal:
+					trace.push(
+						"tui.user_input.show=modal"
+						+ ":request=" + action.requestKind
+						+ ":request_id=" + action.requestId
+						+ ":questions=" + action.questionCount
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":pause_status=" + action.statusTimerPaused
+						+ ":composer_disabled=" + action.composerDisabled
+						+ ":focus=" + action.focus
+					);
+				case TuiSmokeUserInputActionKind.EnqueueActive:
+					trace.push(
+						"tui.user_input.enqueue_active="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":queue=" + action.queueTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeUserInputActionKind.SelectOption:
+					trace.push(
+						"tui.user_input.select_option="
+						+ action.questionId
+						+ ":options=" + action.optionCount
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":answered=" + action.answerTransitionText()
+						+ ":focus=" + action.focus
+					);
+				case TuiSmokeUserInputActionKind.OpenNotes:
+					trace.push(
+						"tui.user_input.notes=open"
+						+ ":question=" + action.questionId
+						+ ":selected=" + action.selectedOptionAfter
+						+ ":visible=" + action.notesVisible
+						+ ":focus=" + action.focus
+					);
+				case TuiSmokeUserInputActionKind.DraftInput:
+					trace.push(
+						"tui.user_input.draft="
+						+ action.questionId
+						+ ":chars=" + action.draftTransitionText()
+						+ ":paste_burst=" + action.pendingPasteCount
+						+ ":answered=" + action.answerTransitionText()
+					);
+				case TuiSmokeUserInputActionKind.MoveQuestion:
+					trace.push(
+						"tui.user_input.move_question="
+						+ action.questionTransitionText()
+						+ ":saved_draft_chars=" + action.draftCharsBefore
+						+ ":restored_draft_chars=" + action.draftCharsAfter
+						+ ":focus=" + action.focus
+					);
+				case TuiSmokeUserInputActionKind.SubmitQuestion:
+					trace.push(
+						"tui.user_input.submit="
+						+ action.questionId
+						+ ":answers=" + action.answerCount
+						+ ":answered=" + action.answerTransitionText()
+						+ ":unanswered=" + action.unansweredTransitionText()
+						+ ":command=" + action.appCommandSent
+						+ ":history=" + action.historyCellInserted
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeUserInputActionKind.OpenUnansweredConfirmation:
+					trace.push(
+						"tui.user_input.confirm_unanswered=open"
+						+ ":count=" + action.unansweredBefore
+						+ ":focus=" + action.focus
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeUserInputActionKind.ConfirmUnanswered:
+					trace.push(
+						"tui.user_input.confirm_unanswered=choice"
+						+ ":unanswered=" + action.unansweredTransitionText()
+						+ ":answers=" + action.answerCount
+						+ ":command=" + action.appCommandSent
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeUserInputActionKind.Cancel:
+					trace.push(
+						"tui.user_input.cancel="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":command=" + action.appCommandSent
+						+ ":queue=" + action.queueTransitionText()
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeUserInputActionKind.Resolve:
+					trace.push(
+						"tui.user_input.resolve="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":call=" + action.callId
+						+ ":answers=" + action.answerCount
+						+ ":sent=" + action.resolutionSent
+					);
+				case TuiSmokeUserInputActionKind.DismissResolved:
+					trace.push(
+						"tui.user_input.dismiss_resolved="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":matched=" + action.resolvedDismissed
+						+ ":stale=" + action.staleResolution
+						+ ":queue=" + action.queueTransitionText()
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":resume_status=" + action.statusTimerResumed
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeUserInputActionKind.UnsupportedReject:
+					trace.push(
+						"tui.user_input.unsupported="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":rejected=" + action.unsupportedRejected
+						+ ":failure=" + action.failureCode
+					);
+				case TuiSmokeUserInputActionKind.Failure:
+					trace.push("tui.user_input.failure=" + action.failureCode);
+				case _:
+					trace.push("tui.user_input.unknown");
 					return false;
 			}
 		}

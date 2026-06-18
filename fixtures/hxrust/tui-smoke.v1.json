@@ -4488,6 +4488,323 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.approval.plan=headless\ntui.approval.show=immediate:request=exec:title=Would you like to run the following command?:options=2:views=0->1:pause_status=true\ntui.approval.dismiss_resolved=exec:request=server-2:matched=true:stale=false:views=1->0:resume_status=true:frame=true:command=false\ntui.approval.unsupported=legacy_exec:request=legacy-1:rejected=true:failure=legacy_command_approval_unavailable\ntui.approval.keymap_conflict=approval.approve->approval.decline:failure=ambiguous_approval_binding\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> approval stale dismiss\ninput> \ntrace:\ntui.approval.plan=headless\ntui.approval.show=immediate:request=exec:title=Would you like to run the following command?:options=2:views=0->1:pause_status=true\ntui.approval.dismiss_resolved=exec:request=server-2:matched=true:stale=false:views=1->0:resume_status=true:frame=true:command=false\ntui.approval.unsupported=legacy_exec:request=legacy-1:rejected=true:failure=legacy_command_approval_unavailable\ntui.approval.keymap_conflict=approval.approve->approval.decline:failure=ambiguous_approval_binding\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "user-input-overlay-options-notes-submit",
+      "frame": {
+        "name": "user-input-overlay-options-notes-submit",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "user input options notes"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "user_input_overlay",
+          "userInputOverlay": {
+            "allowLiveUserInput": false,
+            "actions": [
+              {
+                "kind": "note_server_request",
+                "requestKind": "mixed",
+                "requestId": "ui-1",
+                "turnId": "turn-1",
+                "itemId": "item-1",
+                "questionCount": 2,
+                "secretQuestionCount": 0
+              },
+              {
+                "kind": "show_modal",
+                "requestKind": "mixed",
+                "requestId": "ui-1",
+                "questionCount": 2,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true,
+                "composerDisabled": true,
+                "focus": "options"
+              },
+              {
+                "kind": "select_option",
+                "questionId": "q-plan",
+                "optionCount": 3,
+                "selectedOptionBefore": -1,
+                "selectedOptionAfter": 1,
+                "answeredBefore": 0,
+                "answeredAfter": 1,
+                "focus": "options"
+              },
+              {
+                "kind": "open_notes",
+                "questionId": "q-plan",
+                "selectedOptionAfter": 1,
+                "notesVisible": true,
+                "focus": "notes"
+              },
+              {
+                "kind": "draft_input",
+                "questionId": "q-plan",
+                "draftCharsBefore": 0,
+                "draftCharsAfter": 18,
+                "answeredBefore": 1,
+                "answeredAfter": 1
+              },
+              {
+                "kind": "move_question",
+                "currentIndexBefore": 0,
+                "currentIndexAfter": 1,
+                "draftCharsBefore": 18,
+                "draftCharsAfter": 0,
+                "focus": "notes"
+              },
+              {
+                "kind": "draft_input",
+                "questionId": "q-notes",
+                "draftCharsBefore": 0,
+                "draftCharsAfter": 12,
+                "answeredBefore": 1,
+                "answeredAfter": 2
+              },
+              {
+                "kind": "submit_question",
+                "questionId": "q-notes",
+                "answerCount": 3,
+                "answeredBefore": 1,
+                "answeredAfter": 2,
+                "unansweredBefore": 1,
+                "unansweredAfter": 0,
+                "appCommandSent": true,
+                "historyCellInserted": true,
+                "completeBefore": false,
+                "completeAfter": true
+              },
+              {
+                "kind": "resolve",
+                "requestKind": "mixed",
+                "requestId": "ui-1",
+                "callId": "call-ui-1",
+                "answerCount": 3,
+                "resolutionSent": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.user_input.plan=headless\ntui.user_input.pending.note=mixed:request=ui-1:turn=turn-1:item=item-1:questions=2:secret_questions=0:unsupported=false\ntui.user_input.show=modal:request=mixed:request_id=ui-1:questions=2:views=0->1:pause_status=true:composer_disabled=true:focus=options\ntui.user_input.select_option=q-plan:options=3:selected=-1->1:answered=0->1:focus=options\ntui.user_input.notes=open:question=q-plan:selected=1:visible=true:focus=notes\ntui.user_input.draft=q-plan:chars=0->18:paste_burst=0:answered=1->1\ntui.user_input.move_question=0->1:saved_draft_chars=18:restored_draft_chars=0:focus=notes\ntui.user_input.draft=q-notes:chars=0->12:paste_burst=0:answered=1->2\ntui.user_input.submit=q-notes:answers=3:answered=1->2:unanswered=1->0:command=true:history=true:complete=false->true\ntui.user_input.resolve=mixed:request=ui-1:call=call-ui-1:answers=3:sent=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> user input options notes\ninput> \ntrace:\ntui.user_input.plan=headless\ntui.user_input.pending.note=mixed:request=ui-1:turn=turn-1:item=item-1:questions=2:secret_questions=0:unsupported=false\ntui.user_input.show=modal:request=mixed:request_id=ui-1:questions=2:views=0->1:pause_status=true:composer_disabled=true:focus=options\ntui.user_input.select_option=q-plan:options=3:selected=-1->1:answered=0->1:focus=options\ntui.user_input.notes=open:question=q-plan:selected=1:visible=true:focus=notes\ntui.user_input.draft=q-plan:chars=0->18:paste_burst=0:answered=1->1\ntui.user_input.move_question=0->1:saved_draft_chars=18:restored_draft_chars=0:focus=notes\ntui.user_input.draft=q-notes:chars=0->12:paste_burst=0:answered=1->2\ntui.user_input.submit=q-notes:answers=3:answered=1->2:unanswered=1->0:command=true:history=true:complete=false->true\ntui.user_input.resolve=mixed:request=ui-1:call=call-ui-1:answers=3:sent=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "user-input-overlay-freeform-unanswered-confirm",
+      "frame": {
+        "name": "user-input-overlay-freeform-unanswered-confirm",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "user input unanswered confirm"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "user_input_overlay",
+          "userInputOverlay": {
+            "allowLiveUserInput": false,
+            "actions": [
+              {
+                "kind": "show_modal",
+                "requestKind": "freeform",
+                "requestId": "ui-2",
+                "questionCount": 2,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true,
+                "composerDisabled": true,
+                "focus": "notes"
+              },
+              {
+                "kind": "draft_input",
+                "questionId": "q-summary",
+                "draftCharsBefore": 0,
+                "draftCharsAfter": 0,
+                "answeredBefore": 0,
+                "answeredAfter": 0
+              },
+              {
+                "kind": "open_unanswered_confirmation",
+                "unansweredBefore": 2,
+                "focus": "confirmation",
+                "frameScheduled": true
+              },
+              {
+                "kind": "confirm_unanswered",
+                "unansweredBefore": 2,
+                "unansweredAfter": 0,
+                "answerCount": 0,
+                "appCommandSent": true,
+                "completeBefore": false,
+                "completeAfter": true
+              },
+              {
+                "kind": "resolve",
+                "requestKind": "freeform",
+                "requestId": "ui-2",
+                "callId": "call-ui-2",
+                "answerCount": 0,
+                "resolutionSent": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.user_input.plan=headless\ntui.user_input.show=modal:request=freeform:request_id=ui-2:questions=2:views=0->1:pause_status=true:composer_disabled=true:focus=notes\ntui.user_input.draft=q-summary:chars=0->0:paste_burst=0:answered=0->0\ntui.user_input.confirm_unanswered=open:count=2:focus=confirmation:frame=true\ntui.user_input.confirm_unanswered=choice:unanswered=2->0:answers=0:command=true:complete=false->true\ntui.user_input.resolve=freeform:request=ui-2:call=call-ui-2:answers=0:sent=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> user input unanswered confirm\ninput> \ntrace:\ntui.user_input.plan=headless\ntui.user_input.show=modal:request=freeform:request_id=ui-2:questions=2:views=0->1:pause_status=true:composer_disabled=true:focus=notes\ntui.user_input.draft=q-summary:chars=0->0:paste_burst=0:answered=0->0\ntui.user_input.confirm_unanswered=open:count=2:focus=confirmation:frame=true\ntui.user_input.confirm_unanswered=choice:unanswered=2->0:answers=0:command=true:complete=false->true\ntui.user_input.resolve=freeform:request=ui-2:call=call-ui-2:answers=0:sent=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "user-input-overlay-dismiss-fifo-unsupported",
+      "frame": {
+        "name": "user-input-overlay-dismiss-fifo-unsupported",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "user input fifo dismiss"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "user_input_overlay",
+          "userInputOverlay": {
+            "allowLiveUserInput": false,
+            "actions": [
+              {
+                "kind": "note_server_request",
+                "requestKind": "options",
+                "requestId": "ui-3",
+                "turnId": "turn-3",
+                "itemId": "item-3",
+                "questionCount": 1
+              },
+              {
+                "kind": "show_modal",
+                "requestKind": "options",
+                "requestId": "ui-3",
+                "questionCount": 1,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true,
+                "composerDisabled": true,
+                "focus": "options"
+              },
+              {
+                "kind": "enqueue_active",
+                "requestKind": "mixed",
+                "requestId": "ui-4",
+                "queueBefore": 0,
+                "queueAfter": 1,
+                "frameScheduled": true
+              },
+              {
+                "kind": "dismiss_resolved",
+                "requestKind": "options",
+                "requestId": "ui-3",
+                "resolvedDismissed": true,
+                "staleResolution": false,
+                "queueBefore": 1,
+                "queueAfter": 0,
+                "viewStackBefore": 1,
+                "viewStackAfter": 1,
+                "statusTimerResumed": false,
+                "frameScheduled": true
+              },
+              {
+                "kind": "dismiss_resolved",
+                "requestKind": "mixed",
+                "requestId": "ui-4",
+                "resolvedDismissed": true,
+                "staleResolution": false,
+                "queueBefore": 0,
+                "queueAfter": 0,
+                "viewStackBefore": 1,
+                "viewStackAfter": 0,
+                "statusTimerResumed": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "unsupported_reject",
+                "requestKind": "secret",
+                "requestId": "ui-secret",
+                "unsupportedRejected": true,
+                "secretQuestionCount": 1,
+                "failureCode": "secret_user_input_not_rendered_headless"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.user_input.plan=headless\ntui.user_input.pending.note=options:request=ui-3:turn=turn-3:item=item-3:questions=1:secret_questions=0:unsupported=false\ntui.user_input.show=modal:request=options:request_id=ui-3:questions=1:views=0->1:pause_status=true:composer_disabled=true:focus=options\ntui.user_input.enqueue_active=mixed:request=ui-4:queue=0->1:frame=true\ntui.user_input.dismiss_resolved=options:request=ui-3:matched=true:stale=false:queue=1->0:views=1->1:resume_status=false:frame=true\ntui.user_input.dismiss_resolved=mixed:request=ui-4:matched=true:stale=false:queue=0->0:views=1->0:resume_status=true:frame=true\ntui.user_input.unsupported=secret:request=ui-secret:rejected=true:failure=secret_user_input_not_rendered_headless\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> user input fifo dismiss\ninput> \ntrace:\ntui.user_input.plan=headless\ntui.user_input.pending.note=options:request=ui-3:turn=turn-3:item=item-3:questions=1:secret_questions=0:unsupported=false\ntui.user_input.show=modal:request=options:request_id=ui-3:questions=1:views=0->1:pause_status=true:composer_disabled=true:focus=options\ntui.user_input.enqueue_active=mixed:request=ui-4:queue=0->1:frame=true\ntui.user_input.dismiss_resolved=options:request=ui-3:matched=true:stale=false:queue=1->0:views=1->1:resume_status=false:frame=true\ntui.user_input.dismiss_resolved=mixed:request=ui-4:matched=true:stale=false:queue=0->0:views=1->0:resume_status=true:frame=true\ntui.user_input.unsupported=secret:request=ui-secret:rejected=true:failure=secret_user_input_not_rendered_headless\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

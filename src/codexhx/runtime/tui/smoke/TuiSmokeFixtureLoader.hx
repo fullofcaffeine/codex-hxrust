@@ -81,7 +81,70 @@ class TuiSmokeFixtureLoader {
 				frameScheduler: optionalFrameSchedulerPlan(value, "frameScheduler"),
 				drawDispatch: optionalDrawDispatchPlan(value, "drawDispatch"),
 				overlayRouting: optionalOverlayRoutingPlan(value, "overlayRouting"),
-				approvalOverlay: optionalApprovalPlan(value, "approvalOverlay")
+				approvalOverlay: optionalApprovalPlan(value, "approvalOverlay"),
+				userInputOverlay: optionalUserInputPlan(value, "userInputOverlay")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalUserInputPlan(object:Value, name:String):Null<TuiSmokeUserInputPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeUserInputPlan({
+					allowLiveUserInput: optionalBoolField(value, "allowLiveUserInput", false),
+					actions: userInputActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function userInputActions(values:Array<Value>):Array<TuiSmokeUserInputAction> {
+		final out:Array<TuiSmokeUserInputAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeUserInputAction({
+				kind: TuiSmokeUserInputActionKind.fromString(stringField(value, "kind", "")),
+				requestKind: TuiSmokeUserInputRequestKind.fromString(optionalStringField(value, "requestKind", "unknown")),
+				focus: TuiSmokeUserInputFocusKind.fromString(optionalStringField(value, "focus", "unknown")),
+				requestId: optionalStringField(value, "requestId", ""),
+				turnId: optionalStringField(value, "turnId", ""),
+				itemId: optionalStringField(value, "itemId", ""),
+				questionId: optionalStringField(value, "questionId", ""),
+				callId: optionalStringField(value, "callId", ""),
+				questionCount: optionalIntField(value, "questionCount", 0),
+				currentIndexBefore: optionalIntField(value, "currentIndexBefore", 0),
+				currentIndexAfter: optionalIntField(value, "currentIndexAfter", 0),
+				optionCount: optionalIntField(value, "optionCount", 0),
+				selectedOptionBefore: optionalIntField(value, "selectedOptionBefore", -1),
+				selectedOptionAfter: optionalIntField(value, "selectedOptionAfter", -1),
+				draftCharsBefore: optionalIntField(value, "draftCharsBefore", 0),
+				draftCharsAfter: optionalIntField(value, "draftCharsAfter", 0),
+				pendingPasteCount: optionalIntField(value, "pendingPasteCount", 0),
+				notesVisible: optionalBoolField(value, "notesVisible", false),
+				answeredBefore: optionalIntField(value, "answeredBefore", 0),
+				answeredAfter: optionalIntField(value, "answeredAfter", 0),
+				unansweredBefore: optionalIntField(value, "unansweredBefore", 0),
+				unansweredAfter: optionalIntField(value, "unansweredAfter", 0),
+				queueBefore: optionalIntField(value, "queueBefore", 0),
+				queueAfter: optionalIntField(value, "queueAfter", 0),
+				viewStackBefore: optionalIntField(value, "viewStackBefore", 0),
+				viewStackAfter: optionalIntField(value, "viewStackAfter", 0),
+				hasInputFocus: optionalBoolField(value, "hasInputFocus", false),
+				composerDisabled: optionalBoolField(value, "composerDisabled", false),
+				statusTimerPaused: optionalBoolField(value, "statusTimerPaused", false),
+				statusTimerResumed: optionalBoolField(value, "statusTimerResumed", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				appCommandSent: optionalBoolField(value, "appCommandSent", false),
+				historyCellInserted: optionalBoolField(value, "historyCellInserted", false),
+				resolutionSent: optionalBoolField(value, "resolutionSent", false),
+				resolvedDismissed: optionalBoolField(value, "resolvedDismissed", false),
+				staleResolution: optionalBoolField(value, "staleResolution", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false),
+				completeBefore: optionalBoolField(value, "completeBefore", false),
+				completeAfter: optionalBoolField(value, "completeAfter", false),
+				answerCount: optionalIntField(value, "answerCount", 0),
+				secretQuestionCount: optionalIntField(value, "secretQuestionCount", 0),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;
