@@ -164,9 +164,29 @@ class TuiSmokeFixtureLoader {
 					turns: optionalThreadTurns(value, "turns"),
 					snapshotRequests: appServerRequests(optionalArrayField(value, "snapshotRequests")),
 					snapshotEvents: threadReplayEvents(optionalArrayField(value, "snapshotEvents")),
+					replayBuffer: optionalReplayBufferPlan(value, "replayBuffer"),
 					traceRequestSurfaces: optionalBoolField(value, "traceRequestSurfaces", false),
 					resizeReflowEnabled: optionalBoolField(value, "resizeReflowEnabled", false),
 					resumeRestoredQueue: optionalBoolField(value, "resumeRestoredQueue", false)
+				});
+		}
+	}
+
+	static function optionalReplayBufferPlan(object:Value, name:String):Null<TuiSmokeReplayBufferPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeReplayBufferPlan({
+					kind: TuiSmokeReplayBufferKind.fromString(stringField(value, "kind", "")),
+					terminalWidth: optionalIntField(value, "terminalWidth", 0),
+					terminalHeight: optionalIntField(value, "terminalHeight", 0),
+					previousWidth: optionalIntField(value, "previousWidth", 0),
+					previousHeight: optionalIntField(value, "previousHeight", 0),
+					maxRows: optionalIntField(value, "maxRows", -1),
+					retainedRows: optionalIntField(value, "retainedRows", 0),
+					renderFromTranscriptTail: optionalBoolField(value, "renderFromTranscriptTail", false),
+					flushAfterReplay: optionalBoolField(value, "flushAfterReplay", false),
+					reflowAfterFlush: optionalBoolField(value, "reflowAfterFlush", false)
 				});
 		}
 	}

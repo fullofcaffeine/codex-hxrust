@@ -2000,6 +2000,223 @@
       "expectedExit": "cancelled",
       "expectedTrace": "thread.replay.active=thread-side\nthread.replay.buffer.begin=thread-side\nthread.replay.session=thread-side:side_conversation:gpt-5.2-codex:Side event thread\nthread.replay.autosend_suppressed=true\nthread.replay.history_entry=thread-side:history-side:side history:thread_snapshot\nthread.replay.buffer.end=thread-side\nthread.replay.autosend_suppressed=false\nserver.request.tool_user_input=req-main-input:thread-main:primary:input-main:active\nthread.notification.warning=note-main-warning:thread-main:primary:hidden warning:active\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.pending_interactive=thread-main\nthread.replay.session=thread-main:quiet:gpt-5.2-codex:Main event thread\nthread.replay.autosend_suppressed=true\nthread.replay.input=thread-main:needs input:task_running=false:queued=0:initial_submit=false\nthread.replay.request=thread-main:req-main-input:input-main:thread_snapshot\nthread.replay.request_surface=thread-main:req-main-input:tool_user_input:input-main:thread_snapshot\nthread.replay.notice_suppressed=thread-main:note-main-warning:hidden warning\nthread.replay.history_entry=thread-main:history-main:main history:thread_snapshot\nthread.replay.feedback=thread-main:feedback-main:complaint:error:network denied:logs=true:thread_snapshot\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\ntui.draw\ntui.key=ctrl-c",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> event suppression\nsystem> history: side history\nsystem> history: main history\nsystem> feedback-error: network denied\ninput> needs input\ntrace:\nthread.replay.active=thread-side\nthread.replay.buffer.begin=thread-side\nthread.replay.session=thread-side:side_conversation:gpt-5.2-codex:Side event thread\nthread.replay.autosend_suppressed=true\nthread.replay.history_entry=thread-side:history-side:side history:thread_snapshot\nthread.replay.buffer.end=thread-side\nthread.replay.autosend_suppressed=false\nserver.request.tool_user_input=req-main-input:thread-main:primary:input-main:active\nthread.notification.warning=note-main-warning:thread-main:primary:hidden warning:active\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.pending_interactive=thread-main\nthread.replay.session=thread-main:quiet:gpt-5.2-codex:Main event thread\nthread.replay.autosend_suppressed=true\nthread.replay.input=thread-main:needs input:task_running=false:queued=0:initial_submit=false\nthread.replay.request=thread-main:req-main-input:input-main:thread_snapshot\nthread.replay.request_surface=thread-main:req-main-input:tool_user_input:input-main:thread_snapshot\nthread.replay.notice_suppressed=thread-main:note-main-warning:hidden warning\nthread.replay.history_entry=thread-main:history-main:main history:thread_snapshot\nthread.replay.feedback=thread-main:feedback-main:complaint:error:network denied:logs=true:thread_snapshot\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 1\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 1\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 2\nthread-replay-requests: 1\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 1\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "thread-replay-buffer-flush-reflow-order",
+      "frame": {
+        "name": "thread-replay-buffer-flush-reflow-order",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "buffer flush order"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "commit_tick"
+          }
+        },
+        {
+          "kind": "thread_replay",
+          "threadReplay": {
+            "kind": "snapshot_active",
+            "threadId": "thread-main",
+            "session": {
+              "threadId": "thread-main",
+              "model": "gpt-5.2-codex",
+              "title": "Buffer flush",
+              "isSideThread": false
+            },
+            "traceRequestSurfaces": true,
+            "resizeReflowEnabled": true,
+            "replayBuffer": {
+              "kind": "initial_history",
+              "terminalWidth": 72,
+              "terminalHeight": 24,
+              "previousWidth": 72,
+              "previousHeight": 24,
+              "maxRows": 4,
+              "retainedRows": 4,
+              "renderFromTranscriptTail": false,
+              "flushAfterReplay": true,
+              "reflowAfterFlush": false
+            },
+            "turns": [
+              {
+                "turnId": "turn-buffer",
+                "status": "completed",
+                "items": [
+                  {
+                    "kind": "agent_message",
+                    "itemId": "assistant-buffer",
+                    "text": "buffered turn"
+                  }
+                ]
+              }
+            ],
+            "snapshotRequests": [
+              {
+                "kind": "file_change_approval",
+                "requestId": "req-buffer-file",
+                "threadId": "thread-main",
+                "turnId": "turn-buffer",
+                "itemId": "patch-buffer"
+              }
+            ],
+            "snapshotEvents": [
+              {
+                "kind": "history_entry_response",
+                "eventId": "history-buffer",
+                "threadId": "thread-main",
+                "text": "buffer history"
+              },
+              {
+                "kind": "feedback_submission",
+                "eventId": "feedback-buffer",
+                "threadId": "thread-main",
+                "category": "bug",
+                "result": "buffer feedback",
+                "success": true,
+                "includeLogs": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "queue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.buffer.plan=thread-main:initial_history:size=72x24:previous=72x24:max_rows=4:tail=false\nthread.replay.session=thread-main:normal:gpt-5.2-codex:Buffer flush\nthread.replay.autosend_suppressed=true\nthread.replay.turn=thread-main:turn-buffer:completed:thread_snapshot\nthread.replay.item=thread-main:turn-buffer:assistant-buffer:agent_message:buffered turn:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-buffer:completed:thread_snapshot\nthread.replay.request=thread-main:req-buffer-file:patch-buffer:thread_snapshot\nthread.replay.request_surface=thread-main:req-buffer-file:file_change_approval:patch-buffer:thread_snapshot\nthread.replay.history_entry=thread-main:history-buffer:buffer history:thread_snapshot\nthread.replay.feedback=thread-main:feedback-buffer:bug:ok:buffer feedback:logs=false:thread_snapshot\nthread.replay.buffer.flush=thread-main:initial_history:retained_rows=4:max_rows=4:tail=false\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\napp.event.commit_tick\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> buffer flush order\nassistant> buffered turn\nsystem> history: buffer history\nsystem> feedback: buffer feedback\ninput> \ntrace:\nqueue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.buffer.plan=thread-main:initial_history:size=72x24:previous=72x24:max_rows=4:tail=false\nthread.replay.session=thread-main:normal:gpt-5.2-codex:Buffer flush\nthread.replay.autosend_suppressed=true\nthread.replay.turn=thread-main:turn-buffer:completed:thread_snapshot\nthread.replay.item=thread-main:turn-buffer:assistant-buffer:agent_message:buffered turn:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-buffer:completed:thread_snapshot\nthread.replay.request=thread-main:req-buffer-file:patch-buffer:thread_snapshot\nthread.replay.request_surface=thread-main:req-buffer-file:file_change_approval:patch-buffer:thread_snapshot\nthread.replay.history_entry=thread-main:history-buffer:buffer history:thread_snapshot\nthread.replay.feedback=thread-main:feedback-buffer:bug:ok:buffer feedback:logs=false:thread_snapshot\nthread.replay.buffer.flush=thread-main:initial_history:retained_rows=4:max_rows=4:tail=false\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\napp.event.commit_tick\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 1\nthread-replay-requests: 1\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 1\nthread-replay-items: 1\nthread-replay-completions: 1\nterminal: restored"
+    },
+    {
+      "name": "thread-switch-replay-buffer-resize-reflow-order",
+      "frame": {
+        "name": "thread-switch-replay-buffer-resize-reflow-order",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "thread switch reflow"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "thread_replay",
+          "threadReplay": {
+            "kind": "snapshot_active",
+            "threadId": "thread-side",
+            "session": {
+              "threadId": "thread-side",
+              "model": "gpt-5.2-codex",
+              "title": "Side switch",
+              "isSideThread": true
+            },
+            "resizeReflowEnabled": true,
+            "replayBuffer": {
+              "kind": "thread_switch",
+              "terminalWidth": 60,
+              "terminalHeight": 20,
+              "previousWidth": 80,
+              "previousHeight": 20,
+              "maxRows": 3,
+              "retainedRows": 0,
+              "renderFromTranscriptTail": true,
+              "flushAfterReplay": true,
+              "reflowAfterFlush": true
+            },
+            "snapshotEvents": [
+              {
+                "kind": "history_entry_response",
+                "eventId": "history-side-reflow",
+                "threadId": "thread-side",
+                "text": "side reflow history"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "thread_replay",
+          "threadReplay": {
+            "kind": "snapshot_active",
+            "threadId": "thread-main",
+            "session": {
+              "threadId": "thread-main",
+              "model": "gpt-5.2-codex",
+              "title": "Main switch",
+              "isSideThread": false
+            },
+            "resizeReflowEnabled": true,
+            "replayBuffer": {
+              "kind": "thread_switch",
+              "terminalWidth": 100,
+              "terminalHeight": 30,
+              "previousWidth": 60,
+              "previousHeight": 20,
+              "maxRows": 5,
+              "retainedRows": 0,
+              "renderFromTranscriptTail": true,
+              "flushAfterReplay": true,
+              "reflowAfterFlush": true
+            },
+            "turns": [
+              {
+                "turnId": "turn-main-reflow",
+                "status": "completed",
+                "items": [
+                  {
+                    "kind": "agent_message",
+                    "itemId": "assistant-main-reflow",
+                    "text": "main after resize"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "thread.replay.active=thread-side\nthread.replay.buffer.begin=thread-side\nthread.replay.buffer.plan=thread-side:thread_switch:size=60x20:previous=80x20:max_rows=3:tail=true\nthread.replay.session=thread-side:side_conversation:gpt-5.2-codex:Side switch\nthread.replay.autosend_suppressed=true\nthread.replay.history_entry=thread-side:history-side-reflow:side reflow history:thread_snapshot\nthread.replay.buffer.flush=thread-side:thread_switch:retained_rows=0:max_rows=3:tail=true\nthread.replay.reflow.schedule=thread-side:from=80x20:to=60x20:target_width=60:height_changed=false\nthread.replay.reflow.run=thread-side:width=60:source=transcript\nthread.replay.buffer.end=thread-side\nthread.replay.autosend_suppressed=false\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.buffer.plan=thread-main:thread_switch:size=100x30:previous=60x20:max_rows=5:tail=true\nthread.replay.session=thread-main:normal:gpt-5.2-codex:Main switch\nthread.replay.autosend_suppressed=true\nthread.replay.turn=thread-main:turn-main-reflow:completed:thread_snapshot\nthread.replay.item=thread-main:turn-main-reflow:assistant-main-reflow:agent_message:main after resize:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-main-reflow:completed:thread_snapshot\nthread.replay.buffer.flush=thread-main:thread_switch:retained_rows=0:max_rows=5:tail=true\nthread.replay.reflow.schedule=thread-main:from=60x20:to=100x30:target_width=100:height_changed=true\nthread.replay.reflow.run=thread-main:width=100:source=transcript\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> thread switch reflow\nsystem> history: side reflow history\nassistant> main after resize\ninput> \ntrace:\nthread.replay.active=thread-side\nthread.replay.buffer.begin=thread-side\nthread.replay.buffer.plan=thread-side:thread_switch:size=60x20:previous=80x20:max_rows=3:tail=true\nthread.replay.session=thread-side:side_conversation:gpt-5.2-codex:Side switch\nthread.replay.autosend_suppressed=true\nthread.replay.history_entry=thread-side:history-side-reflow:side reflow history:thread_snapshot\nthread.replay.buffer.flush=thread-side:thread_switch:retained_rows=0:max_rows=3:tail=true\nthread.replay.reflow.schedule=thread-side:from=80x20:to=60x20:target_width=60:height_changed=false\nthread.replay.reflow.run=thread-side:width=60:source=transcript\nthread.replay.buffer.end=thread-side\nthread.replay.autosend_suppressed=false\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.buffer.plan=thread-main:thread_switch:size=100x30:previous=60x20:max_rows=5:tail=true\nthread.replay.session=thread-main:normal:gpt-5.2-codex:Main switch\nthread.replay.autosend_suppressed=true\nthread.replay.turn=thread-main:turn-main-reflow:completed:thread_snapshot\nthread.replay.item=thread-main:turn-main-reflow:assistant-main-reflow:agent_message:main after resize:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-main-reflow:completed:thread_snapshot\nthread.replay.buffer.flush=thread-main:thread_switch:retained_rows=0:max_rows=5:tail=true\nthread.replay.reflow.schedule=thread-main:from=60x20:to=100x30:target_width=100:height_changed=true\nthread.replay.reflow.run=thread-main:width=100:source=transcript\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 2\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 1\nthread-replay-items: 1\nthread-replay-completions: 1\nterminal: restored"
     }
   ]
 }

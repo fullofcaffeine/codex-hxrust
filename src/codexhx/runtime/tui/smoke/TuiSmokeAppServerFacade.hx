@@ -346,7 +346,10 @@ class TuiSmokeAppServerFacade {
 		final suppressNotices = snapshotHasPendingInteractiveRequest(activeThreadId);
 		final traceEnvelope = hasReplayEnvelope(action);
 		final shouldBufferReplay = action.shouldBufferReplay(snapshotHasBufferedEvent(activeThreadId));
-		if (shouldBufferReplay) trace.push("thread.replay.buffer.begin=" + activeThreadId);
+		if (shouldBufferReplay) {
+			trace.push("thread.replay.buffer.begin=" + activeThreadId);
+			traceReplayBufferPlan(action, trace);
+		}
 		if (suppressNotices) trace.push("thread.replay.pending_interactive=" + activeThreadId);
 		if (action.session != null) replaySession(action.session, suppressNotices, trace);
 		if (traceEnvelope) trace.push("thread.replay.autosend_suppressed=true");
@@ -387,6 +390,7 @@ class TuiSmokeAppServerFacade {
 			if (replaySnapshotEvent(snapshotEvent, suppressNotices, state, trace)) replayed = replayed + 1;
 		}
 		if (replayed == 0) trace.push("thread.replay.empty=" + activeThreadId);
+		traceReplayBufferFlush(action, trace);
 		if (shouldBufferReplay) trace.push("thread.replay.buffer.end=" + activeThreadId);
 		if (traceEnvelope) trace.push("thread.replay.autosend_suppressed=false");
 		if (action.inputState != null && action.inputState.pendingInitialSubmit) {
@@ -413,6 +417,53 @@ class TuiSmokeAppServerFacade {
 		trace.push("thread.replay.request=" + activeThreadId + ":" + request.requestId + ":" + request.displayId() + ":thread_snapshot");
 		traceReplayRequestSurface(request, action, trace);
 		return true;
+	}
+
+	function traceReplayBufferPlan(action:TuiSmokeThreadReplayAction, trace:Array<String>):Void {
+		final replayBuffer = action.replayBuffer;
+		if (replayBuffer == null || !replayBuffer.enabled()) return;
+		trace.push(
+			"thread.replay.buffer.plan="
+			+ activeThreadId
+			+ ":" + replayBuffer.kind
+			+ ":size=" + replayBuffer.sizeText()
+			+ ":previous=" + replayBuffer.previousSizeText()
+			+ ":max_rows=" + replayBuffer.maxRowsText()
+			+ ":tail=" + replayBuffer.renderFromTranscriptTail
+		);
+	}
+
+	function traceReplayBufferFlush(action:TuiSmokeThreadReplayAction, trace:Array<String>):Void {
+		final replayBuffer = action.replayBuffer;
+		if (replayBuffer == null || !replayBuffer.enabled()) return;
+		if (replayBuffer.flushAfterReplay) {
+			trace.push(
+				"thread.replay.buffer.flush="
+				+ activeThreadId
+				+ ":" + replayBuffer.kind
+				+ ":retained_rows=" + replayBuffer.retainedRows
+				+ ":max_rows=" + replayBuffer.maxRowsText()
+				+ ":tail=" + replayBuffer.renderFromTranscriptTail
+			);
+		}
+		if (replayBuffer.shouldScheduleReflow()) {
+			trace.push(
+				"thread.replay.reflow.schedule="
+				+ activeThreadId
+				+ ":from=" + replayBuffer.previousSizeText()
+				+ ":to=" + replayBuffer.sizeText()
+				+ ":target_width=" + replayBuffer.targetWidthText()
+				+ ":height_changed=" + replayBuffer.heightChanged()
+			);
+		}
+		if (replayBuffer.reflowAfterFlush) {
+			trace.push(
+				"thread.replay.reflow.run="
+				+ activeThreadId
+				+ ":width=" + replayBuffer.targetWidthText()
+				+ ":source=transcript"
+			);
+		}
 	}
 
 	function replaySnapshotEvent(
@@ -501,6 +552,7 @@ class TuiSmokeAppServerFacade {
 			|| action.inputState != null
 			|| action.snapshotRequests.length > 0
 			|| action.snapshotEvents.length > 0
+			|| action.replayBuffer != null
 			|| action.traceRequestSurfaces
 			|| action.resizeReflowEnabled
 			|| action.resumeRestoredQueue;
