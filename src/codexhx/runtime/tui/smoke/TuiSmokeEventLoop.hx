@@ -244,9 +244,40 @@ class TuiSmokeEventLoop {
 				+ ":stream_time=" + action.streamTime
 				+ ":transcript_cells=" + action.transcriptCells
 			);
+			traceResizeRepaint(action.repaint, trace);
 		}
 		if (action.followUpDraw) {
 			trace.push("tui.frame.schedule_in=debounce_followup");
+		}
+	}
+
+	static function traceResizeRepaint(repaint:TuiSmokeResizeRepaintPlan, trace:Array<String>):Void {
+		if (repaint == null) return;
+		trace.push("tui.repaint.pending_history.clear=" + repaint.pendingHistoryBatches);
+		if (repaint.emptyTranscript) {
+			trace.push("tui.repaint.transcript.empty_reset=true");
+			return;
+		}
+		trace.push(
+			"tui.repaint.render_source="
+			+ "cells=" + repaint.transcriptCellCount
+			+ ":rows=" + repaint.reflowedRows
+			+ ":row_cap=" + repaint.rowCapText()
+		);
+		trace.push(
+			"tui.repaint.clear="
+			+ repaint.clearKind
+			+ ":viewport_reset=" + repaint.viewportReset
+			+ ":full=" + repaint.needsFullRepaint
+		);
+		trace.push("tui.repaint.deferred_history.clear=" + repaint.deferredHistoryRows);
+		if (repaint.insertRows) {
+			trace.push(
+				"tui.repaint.insert="
+				+ "rows=" + repaint.reflowedRows
+				+ ":wrap=" + repaint.wrapPolicy
+			);
+			trace.push("tui.frame.schedule=history_insert");
 		}
 	}
 

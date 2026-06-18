@@ -2386,6 +2386,180 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.defer=overlay\ntui.draw\ntui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.run=width=90:stream_time=true:transcript_cells=true\ntui.frame.schedule_in=debounce_followup\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> overlay deferral\ninput> \ntrace:\ntui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.defer=overlay\ntui.draw\ntui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.run=width=90:stream_time=true:transcript_cells=true\ntui.frame.schedule_in=debounce_followup\ntui.draw\ntui.key=q\nexit: quit\nrenders: 2\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "resize-repaint-empty-transcript-reset",
+      "frame": {
+        "name": "resize-repaint-empty-transcript-reset",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "empty repaint"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 84,
+            "terminalHeight": 24,
+            "lastWidth": 84,
+            "lastHeight": 24,
+            "resizeReflowEnabled": true,
+            "pendingReflow": true,
+            "pendingDue": true,
+            "runReflow": true,
+            "repaint": {
+              "emptyTranscript": true,
+              "pendingHistoryBatches": 2,
+              "deferredHistoryRows": 3,
+              "clearKind": "none",
+              "wrapPolicy": "terminal"
+            }
+          }
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resize_draw.size=84x24:last=84x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.run=width=84:stream_time=false:transcript_cells=false\ntui.repaint.pending_history.clear=2\ntui.repaint.transcript.empty_reset=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> empty repaint\ninput> \ntrace:\ntui.resize_draw.size=84x24:last=84x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.run=width=84:stream_time=false:transcript_cells=false\ntui.repaint.pending_history.clear=2\ntui.repaint.transcript.empty_reset=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "resize-repaint-inline-source-backed-row-cap",
+      "frame": {
+        "name": "resize-repaint-inline-source-backed-row-cap",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "inline repaint"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 100,
+            "terminalHeight": 30,
+            "lastWidth": 80,
+            "lastHeight": 24,
+            "resizeReflowEnabled": true,
+            "scheduleAccepted": true,
+            "pendingReflow": true,
+            "pendingDue": true,
+            "transcriptCells": true,
+            "runReflow": true,
+            "followUpDraw": true,
+            "repaint": {
+              "transcriptCellCount": 6,
+              "reflowedRows": 5,
+              "rowCap": 5,
+              "pendingHistoryBatches": 1,
+              "deferredHistoryRows": 4,
+              "clearKind": "scrollback_and_visible",
+              "wrapPolicy": "terminal",
+              "viewportReset": true,
+              "needsFullRepaint": true,
+              "insertRows": true
+            }
+          }
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.resize_draw.size=100x30:last=80x24:width=changed:height_changed=true\ntui.resize_draw.reflow.schedule=target_width=100:accepted=true\ntui.frame.schedule=immediate\ntui.resize_draw.pending_history.clear=true\ntui.resize_draw.reflow.run=width=100:stream_time=false:transcript_cells=true\ntui.repaint.pending_history.clear=1\ntui.repaint.render_source=cells=6:rows=5:row_cap=5\ntui.repaint.clear=scrollback_and_visible:viewport_reset=true:full=true\ntui.repaint.deferred_history.clear=4\ntui.repaint.insert=rows=5:wrap=terminal\ntui.frame.schedule=history_insert\ntui.frame.schedule_in=debounce_followup\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> inline repaint\ninput> \ntrace:\ntui.resize_draw.size=100x30:last=80x24:width=changed:height_changed=true\ntui.resize_draw.reflow.schedule=target_width=100:accepted=true\ntui.frame.schedule=immediate\ntui.resize_draw.pending_history.clear=true\ntui.resize_draw.reflow.run=width=100:stream_time=false:transcript_cells=true\ntui.repaint.pending_history.clear=1\ntui.repaint.render_source=cells=6:rows=5:row_cap=5\ntui.repaint.clear=scrollback_and_visible:viewport_reset=true:full=true\ntui.repaint.deferred_history.clear=4\ntui.repaint.insert=rows=5:wrap=terminal\ntui.frame.schedule=history_insert\ntui.frame.schedule_in=debounce_followup\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "resize-repaint-alt-screen-visible-clear",
+      "frame": {
+        "name": "resize-repaint-alt-screen-visible-clear",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "alt repaint"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 72,
+            "terminalHeight": 18,
+            "lastWidth": 72,
+            "lastHeight": 22,
+            "resizeReflowEnabled": true,
+            "scheduleAccepted": true,
+            "pendingReflow": true,
+            "pendingDue": true,
+            "transcriptCells": true,
+            "runReflow": true,
+            "repaint": {
+              "transcriptCellCount": 3,
+              "reflowedRows": 0,
+              "rowCap": -1,
+              "pendingHistoryBatches": 0,
+              "deferredHistoryRows": 0,
+              "clearKind": "visible",
+              "wrapPolicy": "word",
+              "viewportReset": false,
+              "needsFullRepaint": true,
+              "insertRows": false
+            }
+          }
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resize_draw.size=72x18:last=72x22:width=unchanged:height_changed=true\ntui.resize_draw.reflow.schedule=target_width=none:accepted=true\ntui.frame.schedule=immediate\ntui.resize_draw.pending_history.clear=true\ntui.resize_draw.reflow.run=width=72:stream_time=false:transcript_cells=true\ntui.repaint.pending_history.clear=0\ntui.repaint.render_source=cells=3:rows=0:row_cap=none\ntui.repaint.clear=visible:viewport_reset=false:full=true\ntui.repaint.deferred_history.clear=0\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> alt repaint\ninput> \ntrace:\ntui.resize_draw.size=72x18:last=72x22:width=unchanged:height_changed=true\ntui.resize_draw.reflow.schedule=target_width=none:accepted=true\ntui.frame.schedule=immediate\ntui.resize_draw.pending_history.clear=true\ntui.resize_draw.reflow.run=width=72:stream_time=false:transcript_cells=true\ntui.repaint.pending_history.clear=0\ntui.repaint.render_source=cells=3:rows=0:row_cap=none\ntui.repaint.clear=visible:viewport_reset=false:full=true\ntui.repaint.deferred_history.clear=0\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

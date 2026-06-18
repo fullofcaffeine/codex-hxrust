@@ -97,7 +97,28 @@ class TuiSmokeFixtureLoader {
 					remainingMs: optionalIntField(value, "remainingMs", 0),
 					runReflow: optionalBoolField(value, "runReflow", false),
 					streamTime: optionalBoolField(value, "streamTime", false),
-					followUpDraw: optionalBoolField(value, "followUpDraw", false)
+					followUpDraw: optionalBoolField(value, "followUpDraw", false),
+					repaint: optionalResizeRepaintPlan(value, "repaint")
+				});
+		}
+	}
+
+	static function optionalResizeRepaintPlan(object:Value, name:String):Null<TuiSmokeResizeRepaintPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeResizeRepaintPlan({
+					transcriptCellCount: optionalIntField(value, "transcriptCellCount", 0),
+					reflowedRows: optionalIntField(value, "reflowedRows", 0),
+					rowCap: optionalIntField(value, "rowCap", -1),
+					pendingHistoryBatches: optionalIntField(value, "pendingHistoryBatches", 0),
+					deferredHistoryRows: optionalIntField(value, "deferredHistoryRows", 0),
+					clearKind: TuiSmokeResizeClearKind.fromString(optionalStringField(value, "clearKind", "none")),
+					wrapPolicy: TuiSmokeHistoryWrapPolicy.fromString(optionalStringField(value, "wrapPolicy", "terminal")),
+					viewportReset: optionalBoolField(value, "viewportReset", false),
+					needsFullRepaint: optionalBoolField(value, "needsFullRepaint", false),
+					emptyTranscript: optionalBoolField(value, "emptyTranscript", false),
+					insertRows: optionalBoolField(value, "insertRows", false)
 				});
 		}
 	}
