@@ -4243,6 +4243,251 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.overlay_routing.plan=headless\ntui.overlay.open=transcript:title=T R A N S C R I P T:cells=4:enter_alt=true:frame=true\ntui.overlay.transcript.insert_cell=cells=4->5:inserted=1:pinned=true->true:frame=true\ntui.overlay.transcript.consolidate=range=1..4:cells=5->3:pinned=false->false:frame=true\ntui.overlay.key=transcript:action=page_down:done=false->false:scroll=0->12:backtrack=false->false:frame=true\ntui.overlay.key=transcript:action=backtrack_preview:done=false->false:scroll=12->12:backtrack=false->true:frame=true\ntui.overlay.draw=transcript:event=resize:height=u16_max:area=72x20:owns_terminal=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> overlay transcript sync\ninput> \ntrace:\ntui.overlay_routing.plan=headless\ntui.overlay.open=transcript:title=T R A N S C R I P T:cells=4:enter_alt=true:frame=true\ntui.overlay.transcript.insert_cell=cells=4->5:inserted=1:pinned=true->true:frame=true\ntui.overlay.transcript.consolidate=range=1..4:cells=5->3:pinned=false->false:frame=true\ntui.overlay.key=transcript:action=page_down:done=false->false:scroll=0->12:backtrack=false->false:frame=true\ntui.overlay.key=transcript:action=backtrack_preview:done=false->false:scroll=12->12:backtrack=false->true:frame=true\ntui.overlay.draw=transcript:event=resize:height=u16_max:area=72x20:owns_terminal=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "approval-overlay-exec-accept-resolution",
+      "frame": {
+        "name": "approval-overlay-exec-accept-resolution",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "approval exec accept"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "approval_overlay",
+          "approvalOverlay": {
+            "allowLiveApproval": false,
+            "actions": [
+              {
+                "kind": "note_server_request",
+                "requestKind": "exec",
+                "requestId": "server-1",
+                "approvalId": "approval-1"
+              },
+              {
+                "kind": "show_immediate",
+                "requestKind": "exec",
+                "promptTitle": "Would you like to run the following command?",
+                "options": 2,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true
+              },
+              {
+                "kind": "key_decision",
+                "requestKind": "exec",
+                "keyAction": "approval.approve",
+                "selectedIndex": 0,
+                "decision": "accept",
+                "historyCellInserted": true,
+                "appCommandSent": true,
+                "completeBefore": false,
+                "completeAfter": true
+              },
+              {
+                "kind": "resolve",
+                "requestKind": "exec",
+                "requestId": "server-1",
+                "approvalId": "approval-1",
+                "decision": "accept",
+                "resolutionSent": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.approval.plan=headless\ntui.approval.pending.note=exec:request=server-1:approval=approval-1:unsupported=false\ntui.approval.show=immediate:request=exec:title=Would you like to run the following command?:options=2:views=0->1:pause_status=true\ntui.approval.decision=key_decision:key=approval.approve:index=0:decision=accept:history=true:command=true:complete=false->true\ntui.approval.resolve=exec:request=server-1:approval=approval-1:decision=accept:sent=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> approval exec accept\ninput> \ntrace:\ntui.approval.plan=headless\ntui.approval.pending.note=exec:request=server-1:approval=approval-1:unsupported=false\ntui.approval.show=immediate:request=exec:title=Would you like to run the following command?:options=2:views=0->1:pause_status=true\ntui.approval.decision=key_decision:key=approval.approve:index=0:decision=accept:history=true:command=true:complete=false->true\ntui.approval.resolve=exec:request=server-1:approval=approval-1:decision=accept:sent=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "approval-overlay-delayed-permissions-deny",
+      "frame": {
+        "name": "approval-overlay-delayed-permissions-deny",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "approval delayed permissions"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "approval_overlay",
+          "approvalOverlay": {
+            "allowLiveApproval": false,
+            "actions": [
+              {
+                "kind": "note_server_request",
+                "requestKind": "permissions",
+                "requestId": "server-perm-1",
+                "approvalId": "perm-call-1"
+              },
+              {
+                "kind": "delay_request",
+                "requestKind": "permissions",
+                "delayedBefore": 0,
+                "delayedAfter": 1,
+                "delayMs": 500,
+                "frameScheduled": true
+              },
+              {
+                "kind": "promote_delayed",
+                "requestKind": "permissions",
+                "delayedBefore": 1,
+                "delayedAfter": 0,
+                "queueBefore": 0,
+                "queueAfter": 0,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true
+              },
+              {
+                "kind": "key_decision",
+                "requestKind": "permissions",
+                "keyAction": "approval.deny",
+                "selectedIndex": 3,
+                "decision": "deny",
+                "historyCellInserted": true,
+                "appCommandSent": true,
+                "completeBefore": false,
+                "completeAfter": true
+              },
+              {
+                "kind": "resolve",
+                "requestKind": "permissions",
+                "requestId": "server-perm-1",
+                "approvalId": "perm-call-1",
+                "decision": "deny",
+                "resolutionSent": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.approval.plan=headless\ntui.approval.pending.note=permissions:request=server-perm-1:approval=perm-call-1:unsupported=false\ntui.approval.delay=permissions:delayed=0->1:remaining=500ms:frame=true\ntui.approval.promote_delayed=delayed=1->0:queue=0->0:views=0->1:pause_status=true\ntui.approval.decision=key_decision:key=approval.deny:index=3:decision=deny:history=true:command=true:complete=false->true\ntui.approval.resolve=permissions:request=server-perm-1:approval=perm-call-1:decision=deny:sent=true\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> approval delayed permissions\ninput> \ntrace:\ntui.approval.plan=headless\ntui.approval.pending.note=permissions:request=server-perm-1:approval=perm-call-1:unsupported=false\ntui.approval.delay=permissions:delayed=0->1:remaining=500ms:frame=true\ntui.approval.promote_delayed=delayed=1->0:queue=0->0:views=0->1:pause_status=true\ntui.approval.decision=key_decision:key=approval.deny:index=3:decision=deny:history=true:command=true:complete=false->true\ntui.approval.resolve=permissions:request=server-perm-1:approval=perm-call-1:decision=deny:sent=true\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "approval-overlay-dismiss-and-unsupported-reject",
+      "frame": {
+        "name": "approval-overlay-dismiss-and-unsupported-reject",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "approval stale dismiss"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "approval_overlay",
+          "approvalOverlay": {
+            "allowLiveApproval": false,
+            "actions": [
+              {
+                "kind": "show_immediate",
+                "requestKind": "exec",
+                "promptTitle": "Would you like to run the following command?",
+                "options": 2,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true
+              },
+              {
+                "kind": "dismiss_resolved",
+                "requestKind": "exec",
+                "requestId": "server-2",
+                "approvalId": "approval-2",
+                "resolvedDismissed": true,
+                "staleResolution": false,
+                "viewStackBefore": 1,
+                "viewStackAfter": 0,
+                "statusTimerResumed": true,
+                "frameScheduled": true,
+                "appCommandSent": false
+              },
+              {
+                "kind": "unsupported_reject",
+                "requestKind": "legacy_exec",
+                "requestId": "legacy-1",
+                "unsupportedRejected": true,
+                "failureCode": "legacy_command_approval_unavailable"
+              },
+              {
+                "kind": "keymap_conflict",
+                "conflictPrevious": "approval.approve",
+                "conflictAction": "approval.decline",
+                "failureCode": "ambiguous_approval_binding"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.approval.plan=headless\ntui.approval.show=immediate:request=exec:title=Would you like to run the following command?:options=2:views=0->1:pause_status=true\ntui.approval.dismiss_resolved=exec:request=server-2:matched=true:stale=false:views=1->0:resume_status=true:frame=true:command=false\ntui.approval.unsupported=legacy_exec:request=legacy-1:rejected=true:failure=legacy_command_approval_unavailable\ntui.approval.keymap_conflict=approval.approve->approval.decline:failure=ambiguous_approval_binding\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> approval stale dismiss\ninput> \ntrace:\ntui.approval.plan=headless\ntui.approval.show=immediate:request=exec:title=Would you like to run the following command?:options=2:views=0->1:pause_status=true\ntui.approval.dismiss_resolved=exec:request=server-2:matched=true:stale=false:views=1->0:resume_status=true:frame=true:command=false\ntui.approval.unsupported=legacy_exec:request=legacy-1:rejected=true:failure=legacy_command_approval_unavailable\ntui.approval.keymap_conflict=approval.approve->approval.decline:failure=ambiguous_approval_binding\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

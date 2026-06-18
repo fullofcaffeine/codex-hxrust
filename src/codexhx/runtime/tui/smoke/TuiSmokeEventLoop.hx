@@ -151,6 +151,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ApprovalOverlay:
+					if (!traceApprovalOverlay(event.approvalOverlay, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -902,6 +907,122 @@ class TuiSmokeEventLoop {
 					trace.push("tui.overlay.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.overlay.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceApprovalOverlay(plan:TuiSmokeApprovalPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveApproval || !plan.enabled()) {
+			trace.push("tui.approval.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.approval.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeApprovalActionKind.NoteServerRequest:
+					trace.push(
+						"tui.approval.pending.note="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":approval=" + action.approvalId
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case TuiSmokeApprovalActionKind.ShowImmediate:
+					trace.push(
+						"tui.approval.show=immediate"
+						+ ":request=" + action.requestKind
+						+ ":title=" + action.promptTitle
+						+ ":options=" + action.options
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":pause_status=" + action.statusTimerPaused
+					);
+				case TuiSmokeApprovalActionKind.DelayRequest:
+					trace.push(
+						"tui.approval.delay="
+						+ action.requestKind
+						+ ":delayed=" + action.delayedTransitionText()
+						+ ":remaining=" + action.delayMs + "ms"
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeApprovalActionKind.PromoteDelayed:
+					trace.push(
+						"tui.approval.promote_delayed="
+						+ "delayed=" + action.delayedTransitionText()
+						+ ":queue=" + action.queueTransitionText()
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":pause_status=" + action.statusTimerPaused
+					);
+				case TuiSmokeApprovalActionKind.EnqueueActive:
+					trace.push(
+						"tui.approval.enqueue_active="
+						+ action.requestKind
+						+ ":consumed=" + action.consumedByActiveView
+						+ ":queue=" + action.queueTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeApprovalActionKind.KeyDecision, TuiSmokeApprovalActionKind.ListDecision:
+					trace.push(
+						"tui.approval.decision="
+						+ action.kind
+						+ ":key=" + action.keyAction
+						+ ":index=" + action.selectedIndex
+						+ ":decision=" + action.decision
+						+ ":history=" + action.historyCellInserted
+						+ ":command=" + action.appCommandSent
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeApprovalActionKind.Cancel:
+					trace.push(
+						"tui.approval.cancel="
+						+ action.requestKind
+						+ ":key=" + action.keyAction
+						+ ":decision=" + action.decision
+						+ ":command=" + action.appCommandSent
+						+ ":queue=" + action.queueTransitionText()
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeApprovalActionKind.Resolve:
+					trace.push(
+						"tui.approval.resolve="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":approval=" + action.approvalId
+						+ ":decision=" + action.decision
+						+ ":sent=" + action.resolutionSent
+					);
+				case TuiSmokeApprovalActionKind.DismissResolved:
+					trace.push(
+						"tui.approval.dismiss_resolved="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":matched=" + action.resolvedDismissed
+						+ ":stale=" + action.staleResolution
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":resume_status=" + action.statusTimerResumed
+						+ ":frame=" + action.frameScheduled
+						+ ":command=" + action.appCommandSent
+					);
+				case TuiSmokeApprovalActionKind.UnsupportedReject:
+					trace.push(
+						"tui.approval.unsupported="
+						+ action.requestKind
+						+ ":request=" + action.requestId
+						+ ":rejected=" + action.unsupportedRejected
+						+ ":failure=" + action.failureCode
+					);
+				case TuiSmokeApprovalActionKind.KeymapConflict:
+					trace.push(
+						"tui.approval.keymap_conflict="
+						+ action.conflictPrevious
+						+ "->" + action.conflictAction
+						+ ":failure=" + action.failureCode
+					);
+				case TuiSmokeApprovalActionKind.Failure:
+					trace.push("tui.approval.failure=" + action.failureCode);
+				case _:
+					trace.push("tui.approval.unknown");
 					return false;
 			}
 		}

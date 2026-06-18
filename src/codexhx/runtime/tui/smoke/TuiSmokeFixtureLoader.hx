@@ -80,7 +80,61 @@ class TuiSmokeFixtureLoader {
 				drawComposition: optionalDrawCompositionPlan(value, "drawComposition"),
 				frameScheduler: optionalFrameSchedulerPlan(value, "frameScheduler"),
 				drawDispatch: optionalDrawDispatchPlan(value, "drawDispatch"),
-				overlayRouting: optionalOverlayRoutingPlan(value, "overlayRouting")
+				overlayRouting: optionalOverlayRoutingPlan(value, "overlayRouting"),
+				approvalOverlay: optionalApprovalPlan(value, "approvalOverlay")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalApprovalPlan(object:Value, name:String):Null<TuiSmokeApprovalPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeApprovalPlan({
+					allowLiveApproval: optionalBoolField(value, "allowLiveApproval", false),
+					actions: approvalActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function approvalActions(values:Array<Value>):Array<TuiSmokeApprovalAction> {
+		final out:Array<TuiSmokeApprovalAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeApprovalAction({
+				kind: TuiSmokeApprovalActionKind.fromString(stringField(value, "kind", "")),
+				requestKind: TuiSmokeApprovalRequestKind.fromString(optionalStringField(value, "requestKind", "unknown")),
+				decision: TuiSmokeApprovalDecisionKind.fromString(optionalStringField(value, "decision", "unknown")),
+				requestId: optionalStringField(value, "requestId", ""),
+				approvalId: optionalStringField(value, "approvalId", ""),
+				threadLabel: optionalStringField(value, "threadLabel", ""),
+				promptTitle: optionalStringField(value, "promptTitle", ""),
+				options: optionalIntField(value, "options", 0),
+				selectedIndex: optionalIntField(value, "selectedIndex", -1),
+				queueBefore: optionalIntField(value, "queueBefore", 0),
+				queueAfter: optionalIntField(value, "queueAfter", 0),
+				delayedBefore: optionalIntField(value, "delayedBefore", 0),
+				delayedAfter: optionalIntField(value, "delayedAfter", 0),
+				viewStackBefore: optionalIntField(value, "viewStackBefore", 0),
+				viewStackAfter: optionalIntField(value, "viewStackAfter", 0),
+				consumedByActiveView: optionalBoolField(value, "consumedByActiveView", false),
+				promptDelayed: optionalBoolField(value, "promptDelayed", false),
+				delayMs: optionalIntField(value, "delayMs", 0),
+				statusTimerPaused: optionalBoolField(value, "statusTimerPaused", false),
+				statusTimerResumed: optionalBoolField(value, "statusTimerResumed", false),
+				historyCellInserted: optionalBoolField(value, "historyCellInserted", false),
+				appCommandSent: optionalBoolField(value, "appCommandSent", false),
+				resolutionSent: optionalBoolField(value, "resolutionSent", false),
+				resolvedDismissed: optionalBoolField(value, "resolvedDismissed", false),
+				staleResolution: optionalBoolField(value, "staleResolution", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false),
+				completeBefore: optionalBoolField(value, "completeBefore", false),
+				completeAfter: optionalBoolField(value, "completeAfter", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				keyAction: optionalStringField(value, "keyAction", ""),
+				conflictPrevious: optionalStringField(value, "conflictPrevious", ""),
+				conflictAction: optionalStringField(value, "conflictAction", ""),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;
