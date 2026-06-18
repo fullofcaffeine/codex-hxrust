@@ -201,6 +201,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ComposerEditing:
+					if (!traceComposerEditing(event.composerEditing, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1339,6 +1344,145 @@ class TuiSmokeEventLoop {
 					trace.push("tui.app_link.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.app_link.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceComposerEditing(plan:TuiSmokeComposerEditingPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveInput || !plan.enabled()) {
+			trace.push("tui.composer_editing.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.composer_editing.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeComposerEditingActionKind.RouteKey:
+					trace.push(
+						"tui.composer_editing.route="
+						+ action.keyName
+						+ ":result=" + action.result
+						+ ":mode=" + action.modeBefore + "->" + action.modeAfter
+						+ ":consumed=" + action.keyConsumed
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerEditingActionKind.RemoteSelection:
+					trace.push(
+						"tui.composer_editing.remote_selection="
+						+ action.keyName
+						+ ":remote=" + action.remoteImageAfter
+						+ ":selected=" + action.selectedRemoteTransitionText()
+						+ ":handled=" + action.remoteSelectionHandled
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerEditingActionKind.ClearRemoteSelection:
+					trace.push(
+						"tui.composer_editing.remote_clear="
+						+ action.keyName
+						+ ":selected=" + action.selectedRemoteTransitionText()
+						+ ":cleared=" + action.remoteSelectionCleared
+					);
+				case TuiSmokeComposerEditingActionKind.BashEscape:
+					trace.push(
+						"tui.composer_editing.bash_escape="
+						+ action.keyName
+						+ ":mode=" + action.modeBefore + "->" + action.modeAfter
+						+ ":disabled=" + action.bashModeDisabled
+						+ ":burst_flushed=" + action.pasteBurstFlushed
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerEditingActionKind.VimTransition:
+					trace.push(
+						"tui.composer_editing.vim="
+						+ action.keyName
+						+ ":mode=" + action.modeBefore + "->" + action.modeAfter
+						+ ":insert_escape=" + action.vimInsertEscapeHandled
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerEditingActionKind.VimNormalShortcut:
+					trace.push(
+						"tui.composer_editing.vim_shortcut="
+						+ action.keyName
+						+ ":text=" + action.outputText
+						+ ":mode=" + action.modeBefore + "->" + action.modeAfter
+						+ ":bash=" + action.bashModeEnabled
+					);
+				case TuiSmokeComposerEditingActionKind.QueueKey:
+					trace.push(
+						"tui.composer_editing.queue_key="
+						+ action.keyName
+						+ ":task=" + action.taskRunning
+						+ ":queue_submissions=" + action.queueSubmissions
+						+ ":shell=" + action.shellCommand
+						+ ":queued=" + action.submissionQueued
+					);
+				case TuiSmokeComposerEditingActionKind.SubmitKey:
+					trace.push(
+						"tui.composer_editing.submit_key="
+						+ action.keyName
+						+ ":queue_submissions=" + action.queueSubmissions
+						+ ":submitted=" + action.submissionSubmitted
+						+ ":queued=" + action.submissionQueued
+					);
+				case TuiSmokeComposerEditingActionKind.HistoryNavigate:
+					trace.push(
+						"tui.composer_editing.history="
+						+ action.keyName
+						+ ":handled=" + action.historyHandled
+						+ ":applied=" + action.historyApplied
+						+ ":cursor=" + action.cursorTransitionText()
+					);
+				case TuiSmokeComposerEditingActionKind.BasicInput:
+					trace.push(
+						"tui.composer_editing.basic_input="
+						+ action.keyName
+						+ ":text=" + action.inputText + "->" + action.outputText
+						+ ":cursor=" + action.cursorTransitionText()
+						+ ":pending=" + action.pendingPasteTransitionText()
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerEditingActionKind.PasteBurstFlush:
+					trace.push(
+						"tui.composer_editing.burst_flush="
+						+ action.keyName
+						+ ":active=" + action.pasteBurstActiveBefore + "->" + action.pasteBurstActiveAfter
+						+ ":flushed=" + action.pasteBurstFlushed
+						+ ":newline=" + action.newlineCaptured
+						+ ":window_cleared=" + action.burstWindowCleared
+					);
+				case TuiSmokeComposerEditingActionKind.ReconcileElements:
+					trace.push(
+						"tui.composer_editing.reconcile="
+						+ action.keyName
+						+ ":elements=" + action.elementTransitionText()
+						+ ":pending=" + action.pendingPasteTransitionText()
+						+ ":local=" + action.localImageTransitionText()
+						+ ":pending_pruned=" + action.pendingPastePruned
+						+ ":locals_pruned=" + action.localImagesPruned
+					);
+				case TuiSmokeComposerEditingActionKind.ShortcutOverlay:
+					trace.push(
+						"tui.composer_editing.shortcut_overlay="
+						+ action.keyName
+						+ ":handled=" + action.shortcutOverlayHandled
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerEditingActionKind.CtrlD:
+					trace.push(
+						"tui.composer_editing.ctrl_d="
+						+ "empty=" + action.inputText
+						+ ":result=" + action.result
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerEditingActionKind.Failure:
+					trace.push(
+						"tui.composer_editing.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.composer_editing.unknown");
 					return false;
 			}
 		}

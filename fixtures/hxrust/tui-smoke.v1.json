@@ -7225,6 +7225,290 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.composer_submission.plan=headless\ntui.composer_submission.dispatch_bare=diff:result=command:history_staged=true:history_recorded=true:event=false\ntui.composer_submission.inline_args=plan:args=investigate [Pasted Content 1001 chars]:pending=1->0:elements=2->1:trimmed=true\ntui.composer_submission.dispatch_args=plan:args=investigate [Pasted Content 1001 chars]:result=command_with_args:elements=1:history_staged=true:live=false\ntui.composer_submission.failure=unknown_slash_command:slash_failed=true:too_large=false:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.failure=input_too_large:slash_failed=false:too_large=true:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.restore_blocked_images=model_supports_images=false:local=1:remote=1:restored=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer slash args restore failures\ninput> \ntrace:\ntui.composer_submission.plan=headless\ntui.composer_submission.dispatch_bare=diff:result=command:history_staged=true:history_recorded=true:event=false\ntui.composer_submission.inline_args=plan:args=investigate [Pasted Content 1001 chars]:pending=1->0:elements=2->1:trimmed=true\ntui.composer_submission.dispatch_args=plan:args=investigate [Pasted Content 1001 chars]:result=command_with_args:elements=1:history_staged=true:live=false\ntui.composer_submission.failure=unknown_slash_command:slash_failed=true:too_large=false:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.failure=input_too_large:slash_failed=false:too_large=true:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.restore_blocked_images=model_supports_images=false:local=1:remote=1:restored=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-editing-remote-vim-bash-routing",
+      "frame": {
+        "name": "composer-editing-remote-vim-bash-routing",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer remote vim bash routing"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "remote_selection",
+                "keyName": "up",
+                "remoteImageAfter": 2,
+                "selectedRemoteBefore": -1,
+                "selectedRemoteAfter": 1,
+                "remoteSelectionHandled": true,
+                "needsRedraw": true
+              },
+              {
+                "kind": "clear_remote_selection",
+                "keyName": "char-x",
+                "selectedRemoteBefore": 1,
+                "selectedRemoteAfter": -1,
+                "remoteSelectionCleared": true
+              },
+              {
+                "kind": "vim_transition",
+                "keyName": "esc",
+                "modeBefore": "insert",
+                "modeAfter": "normal",
+                "vimInsertEscapeHandled": true,
+                "needsRedraw": true
+              },
+              {
+                "kind": "vim_normal_shortcut",
+                "keyName": "slash",
+                "modeBefore": "normal",
+                "modeAfter": "insert",
+                "outputText": "/",
+                "bashModeEnabled": false
+              },
+              {
+                "kind": "vim_normal_shortcut",
+                "keyName": "bang",
+                "modeBefore": "normal",
+                "modeAfter": "insert",
+                "outputText": "!",
+                "bashModeEnabled": true
+              },
+              {
+                "kind": "bash_escape",
+                "keyName": "esc",
+                "modeBefore": "bash",
+                "modeAfter": "insert",
+                "bashModeDisabled": true,
+                "pasteBurstFlushed": true,
+                "needsRedraw": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.remote_selection=up:remote=2:selected=-1->1:handled=true:redraw=true\ntui.composer_editing.remote_clear=char-x:selected=1->-1:cleared=true\ntui.composer_editing.vim=esc:mode=insert->normal:insert_escape=true:redraw=true\ntui.composer_editing.vim_shortcut=slash:text=/:mode=normal->insert:bash=false\ntui.composer_editing.vim_shortcut=bang:text=!:mode=normal->insert:bash=true\ntui.composer_editing.bash_escape=esc:mode=bash->insert:disabled=true:burst_flushed=true:redraw=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer remote vim bash routing\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.remote_selection=up:remote=2:selected=-1->1:handled=true:redraw=true\ntui.composer_editing.remote_clear=char-x:selected=1->-1:cleared=true\ntui.composer_editing.vim=esc:mode=insert->normal:insert_escape=true:redraw=true\ntui.composer_editing.vim_shortcut=slash:text=/:mode=normal->insert:bash=false\ntui.composer_editing.vim_shortcut=bang:text=!:mode=normal->insert:bash=true\ntui.composer_editing.bash_escape=esc:mode=bash->insert:disabled=true:burst_flushed=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-editing-queue-submit-burst-routing",
+      "frame": {
+        "name": "composer-editing-queue-submit-burst-routing",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer queue submit burst routing"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "queue_key",
+                "keyName": "tab",
+                "taskRunning": true,
+                "queueSubmissions": false,
+                "shellCommand": false,
+                "submissionQueued": true
+              },
+              {
+                "kind": "queue_key",
+                "keyName": "tab",
+                "taskRunning": false,
+                "queueSubmissions": false,
+                "shellCommand": true,
+                "submissionQueued": false
+              },
+              {
+                "kind": "submit_key",
+                "keyName": "enter",
+                "queueSubmissions": false,
+                "submissionSubmitted": true,
+                "submissionQueued": false
+              },
+              {
+                "kind": "submit_key",
+                "keyName": "enter",
+                "queueSubmissions": true,
+                "submissionSubmitted": false,
+                "submissionQueued": true
+              },
+              {
+                "kind": "paste_burst_flush",
+                "keyName": "left",
+                "pasteBurstActiveBefore": true,
+                "pasteBurstActiveAfter": false,
+                "pasteBurstFlushed": true,
+                "newlineCaptured": false,
+                "burstWindowCleared": true
+              },
+              {
+                "kind": "paste_burst_flush",
+                "keyName": "enter",
+                "pasteBurstActiveBefore": true,
+                "pasteBurstActiveAfter": true,
+                "pasteBurstFlushed": false,
+                "newlineCaptured": true,
+                "burstWindowCleared": false
+              },
+              {
+                "kind": "ctrl_d",
+                "inputText": "empty",
+                "result": "none",
+                "needsRedraw": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.queue_key=tab:task=true:queue_submissions=false:shell=false:queued=true\ntui.composer_editing.queue_key=tab:task=false:queue_submissions=false:shell=true:queued=false\ntui.composer_editing.submit_key=enter:queue_submissions=false:submitted=true:queued=false\ntui.composer_editing.submit_key=enter:queue_submissions=true:submitted=false:queued=true\ntui.composer_editing.burst_flush=left:active=true->false:flushed=true:newline=false:window_cleared=true\ntui.composer_editing.burst_flush=enter:active=true->true:flushed=false:newline=true:window_cleared=false\ntui.composer_editing.ctrl_d=empty=empty:result=none:redraw=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer queue submit burst routing\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.queue_key=tab:task=true:queue_submissions=false:shell=false:queued=true\ntui.composer_editing.queue_key=tab:task=false:queue_submissions=false:shell=true:queued=false\ntui.composer_editing.submit_key=enter:queue_submissions=false:submitted=true:queued=false\ntui.composer_editing.submit_key=enter:queue_submissions=true:submitted=false:queued=true\ntui.composer_editing.burst_flush=left:active=true->false:flushed=true:newline=false:window_cleared=true\ntui.composer_editing.burst_flush=enter:active=true->true:flushed=false:newline=true:window_cleared=false\ntui.composer_editing.ctrl_d=empty=empty:result=none:redraw=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-editing-history-basic-reconcile",
+      "frame": {
+        "name": "composer-editing-history-basic-reconcile",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer history basic reconcile"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "history_navigate",
+                "keyName": "up",
+                "cursorBefore": 0,
+                "cursorAfter": 12,
+                "historyHandled": true,
+                "historyApplied": true
+              },
+              {
+                "kind": "basic_input",
+                "keyName": "char-h",
+                "inputText": "",
+                "outputText": "h",
+                "cursorBefore": 0,
+                "cursorAfter": 1,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "needsRedraw": true
+              },
+              {
+                "kind": "basic_input",
+                "keyName": "bang",
+                "inputText": "",
+                "outputText": "!",
+                "modeBefore": "insert",
+                "modeAfter": "bash",
+                "bashModeEnabled": true,
+                "cursorBefore": 0,
+                "cursorAfter": 0,
+                "needsRedraw": true
+              },
+              {
+                "kind": "reconcile_elements",
+                "keyName": "backspace",
+                "elementBefore": 2,
+                "elementAfter": 1,
+                "pendingPasteBefore": 1,
+                "pendingPasteAfter": 0,
+                "localImageBefore": 1,
+                "localImageAfter": 0,
+                "pendingPastePruned": true,
+                "localImagesPruned": true
+              },
+              {
+                "kind": "shortcut_overlay",
+                "keyName": "?",
+                "shortcutOverlayHandled": true,
+                "needsRedraw": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.history=up:handled=true:applied=true:cursor=0->12\ntui.composer_editing.basic_input=char-h:text=->h:cursor=0->1:pending=0->0:redraw=true\ntui.composer_editing.basic_input=bang:text=->!:cursor=0->0:pending=0->0:redraw=true\ntui.composer_editing.reconcile=backspace:elements=2->1:pending=1->0:local=1->0:pending_pruned=true:locals_pruned=true\ntui.composer_editing.shortcut_overlay=?:handled=true:redraw=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer history basic reconcile\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.history=up:handled=true:applied=true:cursor=0->12\ntui.composer_editing.basic_input=char-h:text=->h:cursor=0->1:pending=0->0:redraw=true\ntui.composer_editing.basic_input=bang:text=->!:cursor=0->0:pending=0->0:redraw=true\ntui.composer_editing.reconcile=backspace:elements=2->1:pending=1->0:local=1->0:pending_pruned=true:locals_pruned=true\ntui.composer_editing.shortcut_overlay=?:handled=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

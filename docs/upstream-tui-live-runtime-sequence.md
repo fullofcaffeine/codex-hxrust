@@ -2156,6 +2156,20 @@ Model selected raw Codex composer submission and dispatch behavior:
 
 Status: HXCX-TUI-34 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic composer submission evidence only, not a full live dispatch implementation.
 
+### HXCX-TUI-35: Composer Editing And Key-Dispatch Lifecycle
+
+Model selected raw Codex composer editing and key-dispatch behavior:
+
+- preserve `handle_key_event_without_popup` ordering in `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs`: remote image selection first, selected-remote clearing before normal edits, shortcut-overlay handling, bash-mode Esc, Vim insert escape/operator handling, Vim normal `/` and `!` shortcuts, fixed queue keys, fixed submit keys, Ctrl-D empty handling, history navigation, and finally basic input;
+- preserve `handle_input_basic_with_time`: ignore release events, flush due paste-burst state before new input, append Enter into active burst buffers, intercept plain chars for paste-burst detection, flush buffered bursts before modified/non-char input, sync bang shell mode, and reconcile deleted atomic elements;
+- preserve queue-key semantics: queue when task running or queue-submissions is enabled, but do not hijack bang shell commands when queueing is not required;
+- preserve submit-key semantics: submit normally, or queue when queue-submissions is enabled;
+- preserve deleted-element reconciliation: pending large-paste placeholders and local image placeholders are pruned when their atomic text elements disappear;
+- preserve deterministic no-live evidence for remote selection, Vim/bash mode transitions, history application, and shortcut overlay toggling;
+- keep the evidence independent of live terminal rendering, live input loops, model/tool execution, command execution, real shell dispatch, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-35 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic composer editing evidence only, not a full live input backend.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

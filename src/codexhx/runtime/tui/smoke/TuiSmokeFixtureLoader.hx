@@ -90,7 +90,73 @@ class TuiSmokeFixtureLoader {
 				fileMentionPopup: optionalFileMentionPopupPlan(value, "fileMentionPopup"),
 				historySearch: optionalHistorySearchPlan(value, "historySearch"),
 				composerAttachment: optionalComposerAttachmentPlan(value, "composerAttachment"),
-				composerSubmission: optionalComposerSubmissionPlan(value, "composerSubmission")
+				composerSubmission: optionalComposerSubmissionPlan(value, "composerSubmission"),
+				composerEditing: optionalComposerEditingPlan(value, "composerEditing")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalComposerEditingPlan(object:Value, name:String):Null<TuiSmokeComposerEditingPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeComposerEditingPlan({
+					allowLiveInput: optionalBoolField(value, "allowLiveInput", false),
+					actions: composerEditingActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function composerEditingActions(values:Array<Value>):Array<TuiSmokeComposerEditingAction> {
+		final out:Array<TuiSmokeComposerEditingAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeComposerEditingAction({
+				kind: TuiSmokeComposerEditingActionKind.fromString(stringField(value, "kind", "")),
+				result: TuiSmokeComposerEditingResultKind.fromString(optionalStringField(value, "result", "unknown")),
+				modeBefore: TuiSmokeComposerEditingModeKind.fromString(optionalStringField(value, "modeBefore", "unknown")),
+				modeAfter: TuiSmokeComposerEditingModeKind.fromString(optionalStringField(value, "modeAfter", "unknown")),
+				keyName: optionalStringField(value, "keyName", ""),
+				inputText: optionalStringField(value, "inputText", ""),
+				outputText: optionalStringField(value, "outputText", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				cursorBefore: optionalIntField(value, "cursorBefore", 0),
+				cursorAfter: optionalIntField(value, "cursorAfter", 0),
+				pendingPasteBefore: optionalIntField(value, "pendingPasteBefore", 0),
+				pendingPasteAfter: optionalIntField(value, "pendingPasteAfter", 0),
+				elementBefore: optionalIntField(value, "elementBefore", 0),
+				elementAfter: optionalIntField(value, "elementAfter", 0),
+				localImageBefore: optionalIntField(value, "localImageBefore", 0),
+				localImageAfter: optionalIntField(value, "localImageAfter", 0),
+				remoteImageBefore: optionalIntField(value, "remoteImageBefore", 0),
+				remoteImageAfter: optionalIntField(value, "remoteImageAfter", 0),
+				selectedRemoteBefore: optionalIntField(value, "selectedRemoteBefore", -1),
+				selectedRemoteAfter: optionalIntField(value, "selectedRemoteAfter", -1),
+				needsRedraw: optionalBoolField(value, "needsRedraw", false),
+				keyConsumed: optionalBoolField(value, "keyConsumed", false),
+				releaseIgnored: optionalBoolField(value, "releaseIgnored", false),
+				queueSubmissions: optionalBoolField(value, "queueSubmissions", false),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				shellCommand: optionalBoolField(value, "shellCommand", false),
+				submissionQueued: optionalBoolField(value, "submissionQueued", false),
+				submissionSubmitted: optionalBoolField(value, "submissionSubmitted", false),
+				pasteBurstActiveBefore: optionalBoolField(value, "pasteBurstActiveBefore", false),
+				pasteBurstActiveAfter: optionalBoolField(value, "pasteBurstActiveAfter", false),
+				pasteBurstFlushed: optionalBoolField(value, "pasteBurstFlushed", false),
+				burstWindowCleared: optionalBoolField(value, "burstWindowCleared", false),
+				newlineCaptured: optionalBoolField(value, "newlineCaptured", false),
+				remoteSelectionHandled: optionalBoolField(value, "remoteSelectionHandled", false),
+				remoteSelectionCleared: optionalBoolField(value, "remoteSelectionCleared", false),
+				shortcutOverlayHandled: optionalBoolField(value, "shortcutOverlayHandled", false),
+				bashModeEnabled: optionalBoolField(value, "bashModeEnabled", false),
+				bashModeDisabled: optionalBoolField(value, "bashModeDisabled", false),
+				vimInsertEscapeHandled: optionalBoolField(value, "vimInsertEscapeHandled", false),
+				historyHandled: optionalBoolField(value, "historyHandled", false),
+				historyApplied: optionalBoolField(value, "historyApplied", false),
+				pendingPastePruned: optionalBoolField(value, "pendingPastePruned", false),
+				localImagesPruned: optionalBoolField(value, "localImagesPruned", false),
+				noLiveInput: optionalBoolField(value, "noLiveInput", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
