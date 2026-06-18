@@ -8045,6 +8045,291 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.composer_popup_key.plan=headless\ntui.composer_popup_key.mentions_v2.mode=all->files:key=right:allowed=true:selected=2->0\ntui.composer_popup_key.mentions_v2.file=docs/protocol.md:key=tab:draft=true:popup=mention_v2->none\ntui.composer_popup_key.mentions_v2.tool=@plan:key=enter:path=tools/plan.md:binding=true:popup=mention_v2->none\ntui.composer_popup_key.fallback_enter=mention_v2:selected=false:submit_without_popup=true:without_popup=true:popup=mention_v2->none\ntui.composer_popup_key.basic_input=mention_v2:key=char-x:forwarded=true:sync=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer popup mentions v2 fallback\ninput> \ntrace:\ntui.composer_popup_key.plan=headless\ntui.composer_popup_key.mentions_v2.mode=all->files:key=right:allowed=true:selected=2->0\ntui.composer_popup_key.mentions_v2.file=docs/protocol.md:key=tab:draft=true:popup=mention_v2->none\ntui.composer_popup_key.mentions_v2.tool=@plan:key=enter:path=tools/plan.md:binding=true:popup=mention_v2->none\ntui.composer_popup_key.fallback_enter=mention_v2:selected=false:submit_without_popup=true:without_popup=true:popup=mention_v2->none\ntui.composer_popup_key.basic_input=mention_v2:key=char-x:forwarded=true:sync=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-popup-render-layout-dispatch",
+      "frame": {
+        "name": "composer-popup-render-layout-dispatch",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer popup layout dispatch"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_popup_render",
+          "composerPopupRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "layout",
+                "popup": "command",
+                "width": 72,
+                "composerHeight": 14,
+                "popupHeight": 5,
+                "requiredHeight": 5,
+                "renderDelegated": true
+              },
+              {
+                "kind": "layout",
+                "popup": "file",
+                "width": 72,
+                "composerHeight": 14,
+                "popupHeight": 1,
+                "requiredHeight": 1,
+                "renderDelegated": true
+              },
+              {
+                "kind": "layout",
+                "popup": "skill",
+                "width": 72,
+                "composerHeight": 12,
+                "popupHeight": 6,
+                "requiredHeight": 6,
+                "footerHeight": 2,
+                "renderDelegated": true
+              },
+              {
+                "kind": "layout",
+                "popup": "mention_v2",
+                "width": 72,
+                "composerHeight": 10,
+                "popupHeight": 10,
+                "requiredHeight": 10,
+                "footerHeight": 2,
+                "renderDelegated": true
+              },
+              {
+                "kind": "render_dispatch",
+                "popup": "command",
+                "renderDelegated": true,
+                "noRatatuiRender": true,
+                "noLiveTerminal": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_popup_render.plan=headless\ntui.composer_popup_render.layout=command:width=72:composer=14:popup=5:required=5:footer=0:delegated=true\ntui.composer_popup_render.layout=file:width=72:composer=14:popup=1:required=1:footer=0:delegated=true\ntui.composer_popup_render.layout=skill:width=72:composer=12:popup=6:required=6:footer=2:delegated=true\ntui.composer_popup_render.layout=mention_v2:width=72:composer=10:popup=10:required=10:footer=2:delegated=true\ntui.composer_popup_render.dispatch=command:delegated=true:ratatui=false:terminal=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer popup layout dispatch\ninput> \ntrace:\ntui.composer_popup_render.plan=headless\ntui.composer_popup_render.layout=command:width=72:composer=14:popup=5:required=5:footer=0:delegated=true\ntui.composer_popup_render.layout=file:width=72:composer=14:popup=1:required=1:footer=0:delegated=true\ntui.composer_popup_render.layout=skill:width=72:composer=12:popup=6:required=6:footer=2:delegated=true\ntui.composer_popup_render.layout=mention_v2:width=72:composer=10:popup=10:required=10:footer=2:delegated=true\ntui.composer_popup_render.dispatch=command:delegated=true:ratatui=false:terminal=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-popup-render-command-file-rows",
+      "frame": {
+        "name": "composer-popup-render-command-file-rows",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer popup command file rows"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_popup_render",
+          "composerPopupRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "render_rows",
+                "popup": "command",
+                "rowCount": 5,
+                "visibleRows": 5,
+                "maxRows": 8,
+                "selectedIndex": 1,
+                "scrollTop": 0,
+                "windowStart": 0,
+                "windowEnd": 5,
+                "horizontalInset": 2,
+                "verticalInset": 0,
+                "wrapsDescriptions": true,
+                "columnMode": "fixed"
+              },
+              {
+                "kind": "scroll_window",
+                "popup": "command",
+                "rowCount": 12,
+                "visibleRows": 8,
+                "maxRows": 8,
+                "selectedIndex": 7,
+                "scrollTop": 0,
+                "windowStart": 0,
+                "windowEnd": 8,
+                "selectedVisible": true
+              },
+              {
+                "kind": "empty_state",
+                "popup": "file",
+                "emptyMessage": "loading...",
+                "waiting": true,
+                "visibleRows": 1,
+                "noLiveTerminal": true
+              },
+              {
+                "kind": "render_rows",
+                "popup": "file",
+                "rowCount": 8,
+                "visibleRows": 8,
+                "maxRows": 8,
+                "selectedIndex": 3,
+                "scrollTop": 1,
+                "windowStart": 1,
+                "windowEnd": 8,
+                "horizontalInset": 2,
+                "verticalInset": 0
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_popup_render.plan=headless\ntui.composer_popup_render.rows=command:rows=5:visible=5:max=8:selected=1:scroll=0:window=0..5:inset=2/0:wrap=true\ntui.composer_popup_render.scroll=command:selected=7:visible=true:scroll=0:window=0..8\ntui.composer_popup_render.empty=file:message=loading...:waiting=true:visible=1:no_live=true\ntui.composer_popup_render.rows=file:rows=8:visible=8:max=8:selected=3:scroll=1:window=1..8:inset=2/0:wrap=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer popup command file rows\ninput> \ntrace:\ntui.composer_popup_render.plan=headless\ntui.composer_popup_render.rows=command:rows=5:visible=5:max=8:selected=1:scroll=0:window=0..5:inset=2/0:wrap=true\ntui.composer_popup_render.scroll=command:selected=7:visible=true:scroll=0:window=0..8\ntui.composer_popup_render.empty=file:message=loading...:waiting=true:visible=1:no_live=true\ntui.composer_popup_render.rows=file:rows=8:visible=8:max=8:selected=3:scroll=1:window=1..8:inset=2/0:wrap=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-popup-render-skill-mentions-v2",
+      "frame": {
+        "name": "composer-popup-render-skill-mentions-v2",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer popup skill mentions render"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_popup_render",
+          "composerPopupRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "render_rows",
+                "popup": "skill",
+                "rowCount": 4,
+                "visibleRows": 4,
+                "maxRows": 8,
+                "selectedIndex": 2,
+                "scrollTop": 0,
+                "windowStart": 0,
+                "windowEnd": 4,
+                "horizontalInset": 2,
+                "verticalInset": 0
+              },
+              {
+                "kind": "footer_hint",
+                "popup": "skill",
+                "footerHeight": 2,
+                "footerHintRendered": true
+              },
+              {
+                "kind": "render_rows",
+                "popup": "mention_v2",
+                "searchMode": "files",
+                "rowCount": 9,
+                "visibleRows": 8,
+                "maxRows": 8,
+                "selectedIndex": 8,
+                "scrollTop": 1,
+                "windowStart": 1,
+                "windowEnd": 9,
+                "horizontalInset": 2,
+                "verticalInset": 0
+              },
+              {
+                "kind": "scroll_window",
+                "popup": "mention_v2",
+                "selectedIndex": 8,
+                "selectedVisible": true,
+                "scrollTop": 1,
+                "windowStart": 1,
+                "windowEnd": 9
+              },
+              {
+                "kind": "footer_hint",
+                "popup": "mention_v2",
+                "searchMode": "files",
+                "footerHeight": 2,
+                "footerHintRendered": true
+              },
+              {
+                "kind": "empty_state",
+                "popup": "mention_v2",
+                "emptyMessage": "no matches",
+                "waiting": false,
+                "visibleRows": 1,
+                "noLiveTerminal": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_popup_render.plan=headless\ntui.composer_popup_render.rows=skill:rows=4:visible=4:max=8:selected=2:scroll=0:window=0..4:inset=2/0:wrap=false\ntui.composer_popup_render.footer=skill:mode=unknown:height=2:rendered=true\ntui.composer_popup_render.rows=mention_v2:rows=9:visible=8:max=8:selected=8:scroll=1:window=1..9:inset=2/0:wrap=false\ntui.composer_popup_render.scroll=mention_v2:selected=8:visible=true:scroll=1:window=1..9\ntui.composer_popup_render.footer=mention_v2:mode=files:height=2:rendered=true\ntui.composer_popup_render.empty=mention_v2:message=no matches:waiting=false:visible=1:no_live=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer popup skill mentions render\ninput> \ntrace:\ntui.composer_popup_render.plan=headless\ntui.composer_popup_render.rows=skill:rows=4:visible=4:max=8:selected=2:scroll=0:window=0..4:inset=2/0:wrap=false\ntui.composer_popup_render.footer=skill:mode=unknown:height=2:rendered=true\ntui.composer_popup_render.rows=mention_v2:rows=9:visible=8:max=8:selected=8:scroll=1:window=1..9:inset=2/0:wrap=false\ntui.composer_popup_render.scroll=mention_v2:selected=8:visible=true:scroll=1:window=1..9\ntui.composer_popup_render.footer=mention_v2:mode=files:height=2:rendered=true\ntui.composer_popup_render.empty=mention_v2:message=no matches:waiting=false:visible=1:no_live=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

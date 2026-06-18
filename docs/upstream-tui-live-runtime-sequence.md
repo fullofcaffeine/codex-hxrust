@@ -2199,6 +2199,20 @@ Model selected raw Codex active composer popup key behavior:
 
 Status: HXCX-TUI-37 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic active-popup key lifecycle evidence only, not a full live popup UI or terminal input backend.
 
+### HXCX-TUI-38: Composer Popup Layout And Render Lifecycle
+
+Model selected raw Codex active composer popup layout/render behavior:
+
+- preserve `ChatComposer::layout_areas_with_textarea_right_reserve` in `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs`: active popup kind selects `Constraint::Max(required_height)`, no popup uses footer height, and the composer/popup split remains below the input surface;
+- preserve `ChatComposer::desired_height` popup contribution and `render_with_mask_and_textarea_right_reserve` render dispatch in `chat_composer.rs`: command, file, skill, and mentions-v2 all delegate to their own `render_ref` implementations;
+- preserve command popup height and rows from `../codex/codex-rs/tui/src/bottom_pane/command_popup.rs`: filtered rows, hidden aliases, fixed command column width, wrapped descriptions, `MAX_POPUP_ROWS`, selection clamping, and scroll window visibility;
+- preserve legacy file-search popup render facts from `file_search_popup.rs`: empty/loading row reservation, result truncation to `MAX_POPUP_ROWS`, selected match visibility, left inset, and no-live file search evidence;
+- preserve skill mention popup render facts from `skill_popup.rs`: filtered mentions sorted by score/rank/name, `visible + 2` height for spacer/footer, single-line row rendering, selected row, scroll window, and standard hint line;
+- preserve mentions-v2 popup render facts from `mentions_v2/popup.rs`, `mentions_v2/render.rs`, and `mentions_v2/footer.rs`: fixed `MAX_POPUP_ROWS + 2` height, file-search empty/loading message, selected row visibility, footer mode indicator, and left/right search-mode hint;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live file search, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-38 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic popup layout/render evidence only, not a full ratatui terminal renderer.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

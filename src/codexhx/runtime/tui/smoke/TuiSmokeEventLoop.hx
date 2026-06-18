@@ -216,6 +216,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ComposerPopupRender:
+					if (!traceComposerPopupRender(event.composerPopupRender, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1470,6 +1475,86 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.composer_popup_sync.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceComposerPopupRender(plan:TuiSmokeComposerPopupRenderPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || !plan.enabled()) {
+			trace.push("tui.composer_popup_render.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.composer_popup_render.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeComposerPopupRenderActionKind.Layout:
+					trace.push(
+						"tui.composer_popup_render.layout="
+						+ action.popup
+						+ ":width=" + action.width
+						+ ":composer=" + action.composerHeight
+						+ ":popup=" + action.popupHeight
+						+ ":required=" + action.requiredHeight
+						+ ":footer=" + action.footerHeight
+						+ ":delegated=" + action.renderDelegated
+					);
+				case TuiSmokeComposerPopupRenderActionKind.RenderDispatch:
+					trace.push(
+						"tui.composer_popup_render.dispatch="
+						+ action.popup
+						+ ":delegated=" + action.renderDelegated
+						+ ":ratatui=" + !action.noRatatuiRender
+						+ ":terminal=" + !action.noLiveTerminal
+					);
+				case TuiSmokeComposerPopupRenderActionKind.RenderRows:
+					trace.push(
+						"tui.composer_popup_render.rows="
+						+ action.popup
+						+ ":rows=" + action.rowCount
+						+ ":visible=" + action.visibleRows
+						+ ":max=" + action.maxRows
+						+ ":selected=" + action.selectedIndex
+						+ ":scroll=" + action.scrollTop
+						+ ":window=" + action.windowText()
+						+ ":inset=" + action.insetText()
+						+ ":wrap=" + action.wrapsDescriptions
+					);
+				case TuiSmokeComposerPopupRenderActionKind.EmptyState:
+					trace.push(
+						"tui.composer_popup_render.empty="
+						+ action.popup
+						+ ":message=" + action.emptyMessage
+						+ ":waiting=" + action.waiting
+						+ ":visible=" + action.visibleRows
+						+ ":no_live=" + action.noLiveTerminal
+					);
+				case TuiSmokeComposerPopupRenderActionKind.FooterHint:
+					trace.push(
+						"tui.composer_popup_render.footer="
+						+ action.popup
+						+ ":mode=" + action.searchMode
+						+ ":height=" + action.footerHeight
+						+ ":rendered=" + action.footerHintRendered
+					);
+				case TuiSmokeComposerPopupRenderActionKind.ScrollWindow:
+					trace.push(
+						"tui.composer_popup_render.scroll="
+						+ action.popup
+						+ ":selected=" + action.selectedIndex
+						+ ":visible=" + action.selectedVisible
+						+ ":scroll=" + action.scrollTop
+						+ ":window=" + action.windowText()
+					);
+				case TuiSmokeComposerPopupRenderActionKind.Failure:
+					trace.push(
+						"tui.composer_popup_render.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.composer_popup_render.unknown");
 					return false;
 			}
 		}

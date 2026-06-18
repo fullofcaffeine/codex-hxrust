@@ -93,7 +93,57 @@ class TuiSmokeFixtureLoader {
 				composerSubmission: optionalComposerSubmissionPlan(value, "composerSubmission"),
 				composerEditing: optionalComposerEditingPlan(value, "composerEditing"),
 				composerPopupSync: optionalComposerPopupSyncPlan(value, "composerPopupSync"),
-				composerPopupKey: optionalComposerPopupKeyPlan(value, "composerPopupKey")
+				composerPopupKey: optionalComposerPopupKeyPlan(value, "composerPopupKey"),
+				composerPopupRender: optionalComposerPopupRenderPlan(value, "composerPopupRender")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalComposerPopupRenderPlan(object:Value, name:String):Null<TuiSmokeComposerPopupRenderPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeComposerPopupRenderPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					actions: composerPopupRenderActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function composerPopupRenderActions(values:Array<Value>):Array<TuiSmokeComposerPopupRenderAction> {
+		final out:Array<TuiSmokeComposerPopupRenderAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeComposerPopupRenderAction({
+				kind: TuiSmokeComposerPopupRenderActionKind.fromString(stringField(value, "kind", "")),
+				popup: TuiSmokeComposerPopupKind.fromString(optionalStringField(value, "popup", "unknown")),
+				searchMode: TuiSmokeMentionSearchModeKind.fromString(optionalStringField(value, "searchMode", "unknown")),
+				width: optionalIntField(value, "width", 0),
+				composerHeight: optionalIntField(value, "composerHeight", 0),
+				popupHeight: optionalIntField(value, "popupHeight", 0),
+				requiredHeight: optionalIntField(value, "requiredHeight", 0),
+				footerHeight: optionalIntField(value, "footerHeight", 0),
+				rowCount: optionalIntField(value, "rowCount", 0),
+				visibleRows: optionalIntField(value, "visibleRows", 0),
+				maxRows: optionalIntField(value, "maxRows", 0),
+				selectedIndex: optionalIntField(value, "selectedIndex", -1),
+				scrollTop: optionalIntField(value, "scrollTop", 0),
+				windowStart: optionalIntField(value, "windowStart", 0),
+				windowEnd: optionalIntField(value, "windowEnd", 0),
+				horizontalInset: optionalIntField(value, "horizontalInset", 0),
+				verticalInset: optionalIntField(value, "verticalInset", 0),
+				emptyMessage: optionalStringField(value, "emptyMessage", ""),
+				columnMode: optionalStringField(value, "columnMode", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				renderDelegated: optionalBoolField(value, "renderDelegated", false),
+				wrapsDescriptions: optionalBoolField(value, "wrapsDescriptions", false),
+				footerHintRendered: optionalBoolField(value, "footerHintRendered", false),
+				selectedVisible: optionalBoolField(value, "selectedVisible", false),
+				waiting: optionalBoolField(value, "waiting", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
