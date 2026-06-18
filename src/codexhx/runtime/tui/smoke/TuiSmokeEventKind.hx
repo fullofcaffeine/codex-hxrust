@@ -17,6 +17,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ThreadReplay = "thread_replay";
 	final EventStream = "event_stream";
 	final TerminalMode = "terminal_mode";
+	final AltScreen = "alt_screen";
 	final Unknown = "unknown";
 
 	public static function fromString(value:String):TuiSmokeEventKind {
@@ -37,6 +38,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "thread_replay": ThreadReplay;
 			case "event_stream": EventStream;
 			case "terminal_mode": TerminalMode;
+			case "alt_screen": AltScreen;
 			case _: Unknown;
 		}
 	}

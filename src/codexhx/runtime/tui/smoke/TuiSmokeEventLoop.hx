@@ -126,6 +126,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.AltScreen:
+					if (!traceAltScreen(event.altScreen, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -520,6 +525,64 @@ class TuiSmokeEventLoop {
 					trace.push("tui.terminal_modes.failure=" + action.failureCode + ":supported=" + action.supported);
 				case _:
 					trace.push("tui.terminal_modes.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceAltScreen(plan:TuiSmokeAltScreenPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveAltScreen || !plan.enabled()) {
+			trace.push("tui.alt_screen.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.alt_screen.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeAltScreenActionKind.SetEnabled:
+					trace.push("tui.alt_screen.enabled=" + action.enabled);
+				case TuiSmokeAltScreenActionKind.Enter:
+					if (!action.enabled) {
+						trace.push("tui.alt_screen.enter=noop:enabled=false:active=" + action.activeBefore);
+					} else {
+						trace.push(
+							"tui.alt_screen.enter="
+							+ "active=" + action.activeTransitionText()
+							+ ":terminal=" + action.terminalSizeText()
+							+ ":save=" + action.previousViewportText()
+							+ ":saved_after=" + action.savedViewportPresentAfter
+							+ ":viewport=" + action.appliedViewportText()
+							+ ":enter=" + action.enterAlternateScreen
+							+ ":alt_scroll=" + action.enableAlternateScroll
+							+ ":clear=" + action.clearTerminal
+						);
+					}
+				case TuiSmokeAltScreenActionKind.Leave:
+					if (!action.enabled) {
+						trace.push("tui.alt_screen.leave=noop:enabled=false:active=" + action.activeBefore);
+					} else {
+						trace.push(
+							"tui.alt_screen.leave="
+							+ "active=" + action.activeTransitionText()
+							+ ":restore=" + action.savedViewportText()
+							+ ":saved_before=" + action.savedViewportPresentBefore
+							+ ":saved_after=" + action.savedViewportPresentAfter
+							+ ":viewport=" + action.appliedViewportText()
+							+ ":leave=" + action.leaveAlternateScreen
+							+ ":alt_scroll=" + action.disableAlternateScroll
+						);
+					}
+				case TuiSmokeAltScreenActionKind.ClearForViewportChange:
+					trace.push(
+						"tui.alt_screen.clear_for_viewport_change="
+						+ "from=" + action.previousViewportText()
+						+ ":to=" + action.appliedViewportText()
+						+ ":clear_after=" + action.clearAfterText()
+					);
+				case TuiSmokeAltScreenActionKind.Failure:
+					trace.push("tui.alt_screen.failure=" + action.failureCode);
+				case _:
+					trace.push("tui.alt_screen.unknown");
 					return false;
 			}
 		}

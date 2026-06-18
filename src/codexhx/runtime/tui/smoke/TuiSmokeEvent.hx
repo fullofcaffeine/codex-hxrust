@@ -16,6 +16,7 @@ typedef TuiSmokeEventFields = {
 	final threadReplay:Null<TuiSmokeThreadReplayAction>;
 	final eventStream:Null<TuiSmokeEventStreamPlan>;
 	final terminalModePlan:Null<TuiSmokeTerminalModePlan>;
+	final altScreen:Null<TuiSmokeAltScreenPlan>;
 }
 
 class TuiSmokeEvent {
@@ -34,6 +35,7 @@ class TuiSmokeEvent {
 	public final threadReplay:Null<TuiSmokeThreadReplayAction>;
 	public final eventStream:Null<TuiSmokeEventStreamPlan>;
 	public final terminalModePlan:Null<TuiSmokeTerminalModePlan>;
+	public final altScreen:Null<TuiSmokeAltScreenPlan>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -51,5 +53,6 @@ class TuiSmokeEvent {
 		this.threadReplay = fields.threadReplay;
 		this.eventStream = fields.eventStream;
 		this.terminalModePlan = fields.terminalModePlan;
+		this.altScreen = fields.altScreen;
 	}
 }

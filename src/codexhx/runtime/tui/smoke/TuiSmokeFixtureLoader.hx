@@ -75,7 +75,56 @@ class TuiSmokeFixtureLoader {
 				threadDelivery: optionalThreadDelivery(value, "threadDelivery"),
 				threadReplay: optionalThreadReplay(value, "threadReplay"),
 				eventStream: optionalEventStreamPlan(value, "eventStream"),
-				terminalModePlan: optionalTerminalModePlan(value, "terminalModePlan")
+				terminalModePlan: optionalTerminalModePlan(value, "terminalModePlan"),
+				altScreen: optionalAltScreenPlan(value, "altScreen")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalAltScreenPlan(object:Value, name:String):Null<TuiSmokeAltScreenPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAltScreenPlan({
+					allowLiveAltScreen: optionalBoolField(value, "allowLiveAltScreen", false),
+					actions: altScreenActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function altScreenActions(values:Array<Value>):Array<TuiSmokeAltScreenAction> {
+		final out:Array<TuiSmokeAltScreenAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeAltScreenAction({
+				kind: TuiSmokeAltScreenActionKind.fromString(stringField(value, "kind", "")),
+				enabled: optionalBoolField(value, "enabled", true),
+				activeBefore: optionalBoolField(value, "activeBefore", false),
+				activeAfter: optionalBoolField(value, "activeAfter", false),
+				savedViewportPresentBefore: optionalBoolField(value, "savedViewportPresentBefore", false),
+				savedViewportPresentAfter: optionalBoolField(value, "savedViewportPresentAfter", false),
+				previousViewportX: optionalIntField(value, "previousViewportX", 0),
+				previousViewportY: optionalIntField(value, "previousViewportY", 0),
+				previousViewportWidth: optionalIntField(value, "previousViewportWidth", 0),
+				previousViewportHeight: optionalIntField(value, "previousViewportHeight", 0),
+				savedViewportX: optionalIntField(value, "savedViewportX", 0),
+				savedViewportY: optionalIntField(value, "savedViewportY", 0),
+				savedViewportWidth: optionalIntField(value, "savedViewportWidth", 0),
+				savedViewportHeight: optionalIntField(value, "savedViewportHeight", 0),
+				terminalWidth: optionalIntField(value, "terminalWidth", 0),
+				terminalHeight: optionalIntField(value, "terminalHeight", 0),
+				appliedViewportX: optionalIntField(value, "appliedViewportX", 0),
+				appliedViewportY: optionalIntField(value, "appliedViewportY", 0),
+				appliedViewportWidth: optionalIntField(value, "appliedViewportWidth", 0),
+				appliedViewportHeight: optionalIntField(value, "appliedViewportHeight", 0),
+				enterAlternateScreen: optionalBoolField(value, "enterAlternateScreen", false),
+				leaveAlternateScreen: optionalBoolField(value, "leaveAlternateScreen", false),
+				enableAlternateScroll: optionalBoolField(value, "enableAlternateScroll", false),
+				disableAlternateScroll: optionalBoolField(value, "disableAlternateScroll", false),
+				clearTerminal: optionalBoolField(value, "clearTerminal", false),
+				clearAfterX: optionalIntField(value, "clearAfterX", 0),
+				clearAfterY: optionalIntField(value, "clearAfterY", 0),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

@@ -3311,6 +3311,170 @@
       "expectedExit": "cancelled",
       "expectedTrace": "tui.terminal_modes.plan=headless\ntui.keyboard_enhancement.decision=disabled=true:env=none:wsl=true:vscode=true:tmux=false:tmux_csi_u=false\ntui.terminal_modes.set_modes=vt=true:bracketed_paste=true:raw=true:keyboard_push=false:focus=true\ntui.terminal_modes.restore_keep_raw=raw=keep:keyboard=pop_stack:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=false\ntui.terminal_modes.restore_after_exit=raw=disable:keyboard=reset_after_exit:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=true\ntui.keyboard_enhancement.reset_after_exit=true:ansi=ESC[<u\ntui.terminal_modes.flush_input=true\ntui.terminal_modes.failure=stdin_not_terminal:supported=false\ntui.draw\ntui.key=ctrl-c",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> terminal reset\ninput> \ntrace:\ntui.terminal_modes.plan=headless\ntui.keyboard_enhancement.decision=disabled=true:env=none:wsl=true:vscode=true:tmux=false:tmux_csi_u=false\ntui.terminal_modes.set_modes=vt=true:bracketed_paste=true:raw=true:keyboard_push=false:focus=true\ntui.terminal_modes.restore_keep_raw=raw=keep:keyboard=pop_stack:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=false\ntui.terminal_modes.restore_after_exit=raw=disable:keyboard=reset_after_exit:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=true\ntui.keyboard_enhancement.reset_after_exit=true:ansi=ESC[<u\ntui.terminal_modes.flush_input=true\ntui.terminal_modes.failure=stdin_not_terminal:supported=false\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "alt-screen-enter-leave-restores-inline-viewport",
+      "frame": {
+        "name": "alt-screen-enter-leave-restores-inline-viewport",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "alt screen lifecycle"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "alt_screen",
+          "altScreen": {
+            "allowLiveAltScreen": false,
+            "actions": [
+              {
+                "kind": "set_enabled",
+                "enabled": true
+              },
+              {
+                "kind": "enter",
+                "enabled": true,
+                "activeBefore": false,
+                "activeAfter": true,
+                "savedViewportPresentBefore": false,
+                "savedViewportPresentAfter": true,
+                "previousViewportX": 0,
+                "previousViewportY": 18,
+                "previousViewportWidth": 100,
+                "previousViewportHeight": 6,
+                "terminalWidth": 100,
+                "terminalHeight": 30,
+                "appliedViewportX": 0,
+                "appliedViewportY": 0,
+                "appliedViewportWidth": 100,
+                "appliedViewportHeight": 30,
+                "enterAlternateScreen": true,
+                "enableAlternateScroll": true,
+                "clearTerminal": true
+              },
+              {
+                "kind": "leave",
+                "enabled": true,
+                "activeBefore": true,
+                "activeAfter": false,
+                "savedViewportPresentBefore": true,
+                "savedViewportPresentAfter": false,
+                "savedViewportX": 0,
+                "savedViewportY": 18,
+                "savedViewportWidth": 100,
+                "savedViewportHeight": 6,
+                "appliedViewportX": 0,
+                "appliedViewportY": 18,
+                "appliedViewportWidth": 100,
+                "appliedViewportHeight": 6,
+                "leaveAlternateScreen": true,
+                "disableAlternateScroll": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.alt_screen.plan=headless\ntui.alt_screen.enabled=true\ntui.alt_screen.enter=active=false->true:terminal=100x30:save=0,18 100x6:saved_after=true:viewport=0,0 100x30:enter=true:alt_scroll=true:clear=true\ntui.alt_screen.leave=active=true->false:restore=0,18 100x6:saved_before=true:saved_after=false:viewport=0,18 100x6:leave=true:alt_scroll=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> alt screen lifecycle\ninput> \ntrace:\ntui.alt_screen.plan=headless\ntui.alt_screen.enabled=true\ntui.alt_screen.enter=active=false->true:terminal=100x30:save=0,18 100x6:saved_after=true:viewport=0,0 100x30:enter=true:alt_scroll=true:clear=true\ntui.alt_screen.leave=active=true->false:restore=0,18 100x6:saved_before=true:saved_after=false:viewport=0,18 100x6:leave=true:alt_scroll=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "alt-screen-disabled-and-clear-position",
+      "frame": {
+        "name": "alt-screen-disabled-and-clear-position",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "alt screen disabled"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "alt_screen",
+          "altScreen": {
+            "allowLiveAltScreen": false,
+            "actions": [
+              {
+                "kind": "set_enabled",
+                "enabled": false
+              },
+              {
+                "kind": "enter",
+                "enabled": false,
+                "activeBefore": false,
+                "activeAfter": false
+              },
+              {
+                "kind": "leave",
+                "enabled": false,
+                "activeBefore": false,
+                "activeAfter": false
+              },
+              {
+                "kind": "clear_for_viewport_change",
+                "previousViewportX": 0,
+                "previousViewportY": 0,
+                "previousViewportWidth": 0,
+                "previousViewportHeight": 0,
+                "appliedViewportX": 0,
+                "appliedViewportY": 12,
+                "appliedViewportWidth": 80,
+                "appliedViewportHeight": 12,
+                "clearAfterX": 0,
+                "clearAfterY": 12
+              },
+              {
+                "kind": "failure",
+                "failureCode": "terminal_size_unavailable"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.alt_screen.plan=headless\ntui.alt_screen.enabled=false\ntui.alt_screen.enter=noop:enabled=false:active=false\ntui.alt_screen.leave=noop:enabled=false:active=false\ntui.alt_screen.clear_for_viewport_change=from=0,0 0x0:to=0,12 80x12:clear_after=0,12\ntui.alt_screen.failure=terminal_size_unavailable\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> alt screen disabled\ninput> \ntrace:\ntui.alt_screen.plan=headless\ntui.alt_screen.enabled=false\ntui.alt_screen.enter=noop:enabled=false:active=false\ntui.alt_screen.leave=noop:enabled=false:active=false\ntui.alt_screen.clear_for_viewport_change=from=0,0 0x0:to=0,12 80x12:clear_after=0,12\ntui.alt_screen.failure=terminal_size_unavailable\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
