@@ -2423,6 +2423,19 @@ Model selected raw Codex desktop-notification behavior without posting live term
 
 Status: HXCX-TUI-52 extends `fixtures/hxrust/tui-smoke.v1.json` with typed desktop-notification backend/focus/escape evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic notification-boundary evidence only, not live terminal notification delivery.
 
+### HXCX-TUI-53: Terminal Hyperlink OSC 8 Boundary
+
+Model selected raw Codex terminal-hyperlink behavior without writing live OSC 8 bytes:
+
+- preserve the semantic hyperlink boundary in `../codex/codex-rs/tui/src/terminal_hyperlinks.rs`: hyperlinks are carried separately from visible text so OSC 8 bytes do not affect layout, width, or wrapping decisions;
+- preserve destination filtering from `web_destination`: only `http` and `https` URLs with a host receive OSC 8 decoration, and control characters are removed from destinations before terminal output is assembled;
+- preserve URL discovery behavior from `web_links_in_text`: leading punctuation and unmatched trailing punctuation are excluded from hyperlink columns while balanced URL punctuation remains part of the destination;
+- preserve OSC 8 decoration/stripping behavior from `osc8_hyperlink` and `strip_osc8`: visible text round-trips after hyperlink decoration and terminal-control bytes stay outside snapshot geometry;
+- preserve prefix/remap behavior from `prefix_hyperlink_lines` and wrapped-line remapping: hyperlink column ranges move with display prefixes instead of being recomputed from decorated terminal bytes;
+- keep the evidence deterministic and independent of live OSC 8 terminal output, ratatui buffer mutation, alternate-screen takeover, live input loops, app-server mutation, model/tool execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-53 extends `fixtures/hxrust/tui-smoke.v1.json` with typed terminal-hyperlink sanitize/discover/decorate/strip/remap evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic hyperlink-boundary evidence only, not live terminal hyperlink rendering.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

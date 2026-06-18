@@ -35,6 +35,7 @@
       "../codex/codex-rs/tui/src/tui/keyboard_modes.rs",
       "../codex/codex-rs/tui/src/tui/terminal_probe.rs",
       "../codex/codex-rs/tui/src/tui/terminal_stderr.rs",
+      "../codex/codex-rs/tui/src/terminal_hyperlinks.rs",
       "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
       "../codex/codex-rs/tui/tests/suite/status_indicator.rs",
       "../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs",
@@ -11755,6 +11756,105 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.desktop_notification.plan=headless\ntui.desktop_notification.detect_backend=method=auto:terminal=wezterm:mux=none:backend=osc9\ntui.desktop_notification.focus_decision=condition=unfocused:focused=true:emit=false\ntui.desktop_notification.focus_decision=condition=unfocused:focused=false:emit=true\ntui.desktop_notification.notify=method=auto:backend=osc9:condition=unfocused:focused=false:emit=true:message_chars=13:dcs=false:esc=0->0:live=false\ntui.desktop_notification.detect_backend=method=auto:terminal=alacritty:mux=none:backend=bel\ntui.desktop_notification.notify=method=osc9:backend=osc9:condition=always:focused=true:emit=true:message_chars=11:dcs=true:esc=1->2:live=false\ntui.desktop_notification.failure=notification_backend_failed:live=false:disabled=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> desktop notification no live write\ninput> \ntrace:\ntui.desktop_notification.plan=headless\ntui.desktop_notification.detect_backend=method=auto:terminal=wezterm:mux=none:backend=osc9\ntui.desktop_notification.focus_decision=condition=unfocused:focused=true:emit=false\ntui.desktop_notification.focus_decision=condition=unfocused:focused=false:emit=true\ntui.desktop_notification.notify=method=auto:backend=osc9:condition=unfocused:focused=false:emit=true:message_chars=13:dcs=false:esc=0->0:live=false\ntui.desktop_notification.detect_backend=method=auto:terminal=alacritty:mux=none:backend=bel\ntui.desktop_notification.notify=method=osc9:backend=osc9:condition=always:focused=true:emit=true:message_chars=11:dcs=true:esc=1->2:live=false\ntui.desktop_notification.failure=notification_backend_failed:live=false:disabled=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "terminal-hyperlink-osc8-sanitize-and-map",
+      "frame": {
+        "name": "terminal-hyperlink-osc8-sanitize-and-map",
+        "title": "Codex TUI Smoke Terminal",
+        "status": "running",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "terminal hyperlink no live osc write"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "terminal_hyperlink",
+          "terminalHyperlink": {
+            "allowLiveTerminal": false,
+            "actions": [
+              {
+                "kind": "destination",
+                "destination": "https://example.com/\u0007safe",
+                "safeDestination": "https://example.com/safe",
+                "validWebDestination": true
+              },
+              {
+                "kind": "destination",
+                "destination": "mailto:a@example.com",
+                "safeDestination": "mailto:a@example.com",
+                "validWebDestination": false
+              },
+              {
+                "kind": "discover",
+                "text": "See (https://example.com/a).",
+                "startColumn": 5,
+                "endColumn": 26
+              },
+              {
+                "kind": "decorate",
+                "text": "visible",
+                "destination": "https://example.com/a",
+                "validWebDestination": true,
+                "osc8PairCount": 1,
+                "liveWriteAllowed": false
+              },
+              {
+                "kind": "strip",
+                "text": "visible",
+                "destination": "https://example.com/a",
+                "strippedText": "visible",
+                "osc8PairCount": 1
+              },
+              {
+                "kind": "decorate",
+                "text": "a",
+                "destination": "mailto:a@example.com",
+                "validWebDestination": false,
+                "osc8PairCount": 0,
+                "liveWriteAllowed": false
+              },
+              {
+                "kind": "prefix_remap",
+                "text": "See (https://example.com/a).",
+                "startColumn": 5,
+                "endColumn": 26,
+                "prefixWidth": 2,
+                "shiftedStartColumn": 7,
+                "shiftedEndColumn": 28
+              },
+              {
+                "kind": "failure",
+                "failureCode": "non_web_destination_rejected",
+                "liveWriteAllowed": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.terminal_hyperlink.plan=headless\ntui.terminal_hyperlink.destination=safe=https://example.com/safe:valid=true\ntui.terminal_hyperlink.destination=safe=mailto:a@example.com:valid=false\ntui.terminal_hyperlink.discover=columns=5..26:destination=https://example.com/a\ntui.terminal_hyperlink.decorate=valid=true:pairs=1:visible=visible:live=false\ntui.terminal_hyperlink.strip=pairs=1:visible=visible\ntui.terminal_hyperlink.decorate=valid=false:pairs=0:visible=a:live=false\ntui.terminal_hyperlink.prefix_remap=prefix=2:columns=5..26->7..28\ntui.terminal_hyperlink.failure=non_web_destination_rejected:live=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> terminal hyperlink no live osc write\ninput> \ntrace:\ntui.terminal_hyperlink.plan=headless\ntui.terminal_hyperlink.destination=safe=https://example.com/safe:valid=true\ntui.terminal_hyperlink.destination=safe=mailto:a@example.com:valid=false\ntui.terminal_hyperlink.discover=columns=5..26:destination=https://example.com/a\ntui.terminal_hyperlink.decorate=valid=true:pairs=1:visible=visible:live=false\ntui.terminal_hyperlink.strip=pairs=1:visible=visible\ntui.terminal_hyperlink.decorate=valid=false:pairs=0:visible=a:live=false\ntui.terminal_hyperlink.prefix_remap=prefix=2:columns=5..26->7..28\ntui.terminal_hyperlink.failure=non_web_destination_rejected:live=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

@@ -107,7 +107,43 @@ class TuiSmokeFixtureLoader {
 				clearArchive: optionalClearArchivePlan(value, "clearArchive"),
 				resumeFork: optionalResumeForkPlan(value, "resumeFork"),
 				terminalTitle: optionalTerminalTitlePlan(value, "terminalTitle"),
-				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification")
+				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
+				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTerminalHyperlinkPlan(object:Value, name:String):Null<TuiSmokeTerminalHyperlinkPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTerminalHyperlinkPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					actions: terminalHyperlinkActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function terminalHyperlinkActions(values:Array<Value>):Array<TuiSmokeTerminalHyperlinkAction> {
+		final out:Array<TuiSmokeTerminalHyperlinkAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTerminalHyperlinkAction({
+				kind: TuiSmokeTerminalHyperlinkActionKind.fromString(stringField(value, "kind", "")),
+				text: optionalStringField(value, "text", ""),
+				destination: optionalStringField(value, "destination", ""),
+				safeDestination: optionalStringField(value, "safeDestination", ""),
+				decoratedText: optionalStringField(value, "decoratedText", ""),
+				strippedText: optionalStringField(value, "strippedText", ""),
+				startColumn: optionalIntField(value, "startColumn", -1),
+				endColumn: optionalIntField(value, "endColumn", -1),
+				prefixWidth: optionalIntField(value, "prefixWidth", 0),
+				shiftedStartColumn: optionalIntField(value, "shiftedStartColumn", -1),
+				shiftedEndColumn: optionalIntField(value, "shiftedEndColumn", -1),
+				validWebDestination: optionalBoolField(value, "validWebDestination", false),
+				osc8PairCount: optionalIntField(value, "osc8PairCount", 0),
+				liveWriteAllowed: optionalBoolField(value, "liveWriteAllowed", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

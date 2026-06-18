@@ -286,6 +286,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.TerminalHyperlink:
+					if (!traceTerminalHyperlink(event.terminalHyperlink, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1813,6 +1818,85 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.clear_archive.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceTerminalHyperlink(plan:TuiSmokeTerminalHyperlinkPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || !plan.enabled()) {
+			trace.push("tui.terminal_hyperlink.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.terminal_hyperlink.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeTerminalHyperlinkActionKind.Destination:
+					if (!action.destinationMatches() || !action.validWebDestinationMatches()) {
+						trace.push("tui.terminal_hyperlink.destination_mismatch");
+						return false;
+					}
+					trace.push(
+						"tui.terminal_hyperlink.destination="
+						+ "safe=" + action.safeDestination
+						+ ":valid=" + action.validWebDestination
+					);
+				case TuiSmokeTerminalHyperlinkActionKind.Discover:
+					if (!action.columnsMatch()) {
+						trace.push(
+							"tui.terminal_hyperlink.columns_mismatch="
+							+ action.startColumn + ".." + action.endColumn
+							+ ":computed=" + action.computedStartColumn() + ".." + action.computedEndColumn()
+						);
+						return false;
+					}
+					trace.push(
+						"tui.terminal_hyperlink.discover="
+						+ "columns=" + action.startColumn + ".." + action.endColumn
+						+ ":destination=" + action.discoveredDestination()
+					);
+				case TuiSmokeTerminalHyperlinkActionKind.Decorate:
+					if (!action.decoratedMatches() || !action.osc8PairCountMatches()) {
+						trace.push("tui.terminal_hyperlink.decorate_mismatch");
+						return false;
+					}
+					trace.push(
+						"tui.terminal_hyperlink.decorate="
+						+ "valid=" + action.validWebDestination
+						+ ":pairs=" + action.computedOsc8PairCount()
+						+ ":visible=" + action.text
+						+ ":live=" + action.liveWriteAllowed
+					);
+				case TuiSmokeTerminalHyperlinkActionKind.Strip:
+					if (!action.strippedMatches()) {
+						trace.push("tui.terminal_hyperlink.strip_mismatch");
+						return false;
+					}
+					trace.push(
+						"tui.terminal_hyperlink.strip="
+						+ "pairs=" + action.computedOsc8PairCount()
+						+ ":visible=" + action.computedStrippedText()
+					);
+				case TuiSmokeTerminalHyperlinkActionKind.PrefixRemap:
+					if (!action.shiftedColumnsMatch()) {
+						trace.push("tui.terminal_hyperlink.prefix_mismatch");
+						return false;
+					}
+					trace.push(
+						"tui.terminal_hyperlink.prefix_remap="
+						+ "prefix=" + action.prefixWidth
+						+ ":columns=" + action.startColumn + ".." + action.endColumn
+						+ "->" + action.shiftedStartColumn + ".." + action.shiftedEndColumn
+					);
+				case TuiSmokeTerminalHyperlinkActionKind.Failure:
+					trace.push(
+						"tui.terminal_hyperlink.failure="
+						+ action.failureCode
+						+ ":live=" + action.liveWriteAllowed
+					);
+				case _:
+					trace.push("tui.terminal_hyperlink.unknown");
 					return false;
 			}
 		}
