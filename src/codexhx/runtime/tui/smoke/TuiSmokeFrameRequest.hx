@@ -17,11 +17,13 @@ typedef TuiSmokeFrameRequestFields = {
 	final expectedSnapshot:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeFrameRequest {
 	public final name:String;
 	public final title:String;
 	public final status:String;
 	public final model:String;
+	@:recordMin(20)
 	public final width:Int;
 	public final transcript:Array<TuiSmokeTranscriptRow>;
 	public final input:String;
@@ -32,21 +34,4 @@ class TuiSmokeFrameRequest {
 	public final allowNetwork:Bool;
 	public final allowModelCall:Bool;
 	public final expectedSnapshot:String;
-
-	public function new(fields:TuiSmokeFrameRequestFields) {
-		this.name = fields.name == null ? "" : fields.name;
-		this.title = fields.title == null ? "" : fields.title;
-		this.status = fields.status == null ? "" : fields.status;
-		this.model = fields.model == null ? "" : fields.model;
-		this.width = fields.width < 20 ? 20 : fields.width;
-		this.transcript = fields.transcript == null ? [] : fields.transcript;
-		this.input = fields.input == null ? "" : fields.input;
-		this.terminalMode = fields.terminalMode == null ? TuiSmokeTerminalMode.Unknown : fields.terminalMode;
-		this.key = fields.key == null ? TuiSmokeKeyKind.Unknown : fields.key;
-		this.expectedExit = fields.expectedExit == null ? TuiSmokeExitKind.Unknown : fields.expectedExit;
-		this.allowLiveTerminal = fields.allowLiveTerminal;
-		this.allowNetwork = fields.allowNetwork;
-		this.allowModelCall = fields.allowModelCall;
-		this.expectedSnapshot = fields.expectedSnapshot == null ? "" : fields.expectedSnapshot;
-	}
 }

@@ -56,7 +56,8 @@ class FieldRecordConstructor {
 		final name = field.name;
 		final target = fieldAccess(macro this, name, pos);
 		final source = fieldAccess(macro fields, name, pos);
-		return {expr: EBinop(OpAssign, target, defaultedSource(source, type, explicitDefault(field), pos)), pos: pos};
+		final value = normalizedSource(defaultedSource(source, type, explicitDefault(field), pos), field, pos);
+		return {expr: EBinop(OpAssign, target, value), pos: pos};
 	}
 
 	static function explicitDefault(field:Field):Null<Expr> {
@@ -90,6 +91,32 @@ class FieldRecordConstructor {
 			case _:
 				source;
 		}
+	}
+
+	static function normalizedSource(source:Expr, field:Field, pos:Position):Expr {
+		final min = recordMin(field);
+		if (min != null) {
+			return {
+				expr: EIf({
+					expr: EBinop(OpLt, source, min),
+					pos: pos
+				}, min, source),
+				pos: pos
+			};
+		}
+		return source;
+	}
+
+	static function recordMin(field:Field):Null<Expr> {
+		if (field.meta == null) {
+			return null;
+		}
+		for (meta in field.meta) {
+			if ((meta.name == ":recordMin" || meta.name == "recordMin") && meta.params.length == 1) {
+				return meta.params[0];
+			}
+		}
+		return null;
 	}
 
 	static function unknownValue(path:TypePath, pos:Position):Expr {
