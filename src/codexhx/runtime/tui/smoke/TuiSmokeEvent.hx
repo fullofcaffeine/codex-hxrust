@@ -24,6 +24,7 @@ typedef TuiSmokeEventFields = {
 	final approvalOverlay:Null<TuiSmokeApprovalPlan>;
 	final userInputOverlay:Null<TuiSmokeUserInputPlan>;
 	final mcpElicitationOverlay:Null<TuiSmokeMcpElicitationPlan>;
+	final appLinkOverlay:Null<TuiSmokeAppLinkPlan>;
 }
 
 class TuiSmokeEvent {
@@ -50,6 +51,7 @@ class TuiSmokeEvent {
 	public final approvalOverlay:Null<TuiSmokeApprovalPlan>;
 	public final userInputOverlay:Null<TuiSmokeUserInputPlan>;
 	public final mcpElicitationOverlay:Null<TuiSmokeMcpElicitationPlan>;
+	public final appLinkOverlay:Null<TuiSmokeAppLinkPlan>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -75,5 +77,6 @@ class TuiSmokeEvent {
 		this.approvalOverlay = fields.approvalOverlay;
 		this.userInputOverlay = fields.userInputOverlay;
 		this.mcpElicitationOverlay = fields.mcpElicitationOverlay;
+		this.appLinkOverlay = fields.appLinkOverlay;
 	}
 }

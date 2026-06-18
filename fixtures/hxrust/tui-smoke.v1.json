@@ -5135,6 +5135,278 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.mcp_elicitation.plan=headless\ntui.mcp_elicitation.show=app_link:server=apps:request=mcp-4:tool=calendar:name=Calendar:install_url=true:views=0->1:pause_status=true\ntui.mcp_elicitation.enqueue_active=form_content:request=mcp-5:queue=0->1:frame=true\ntui.mcp_elicitation.dismiss_resolved=tool_suggestion:server=apps:request=mcp-4:matched=true:stale=false:queue=1->0:views=1->1:resume_status=false:frame=true\ntui.mcp_elicitation.dismiss_resolved=form_content:server=apps:request=mcp-5:matched=true:stale=false:queue=0->0:views=1->0:resume_status=true:frame=true\ntui.mcp_elicitation.unsupported=unsupported:server=bad:request=mcp-bad:rejected=true:failure=unsupported_mcp_elicitation_schema\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> mcp elicitation app link\ninput> \ntrace:\ntui.mcp_elicitation.plan=headless\ntui.mcp_elicitation.show=app_link:server=apps:request=mcp-4:tool=calendar:name=Calendar:install_url=true:views=0->1:pause_status=true\ntui.mcp_elicitation.enqueue_active=form_content:request=mcp-5:queue=0->1:frame=true\ntui.mcp_elicitation.dismiss_resolved=tool_suggestion:server=apps:request=mcp-4:matched=true:stale=false:queue=1->0:views=1->1:resume_status=false:frame=true\ntui.mcp_elicitation.dismiss_resolved=form_content:server=apps:request=mcp-5:matched=true:stale=false:queue=0->0:views=1->0:resume_status=true:frame=true\ntui.mcp_elicitation.unsupported=unsupported:server=bad:request=mcp-bad:rejected=true:failure=unsupported_mcp_elicitation_schema\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "app-link-auth-url-complete",
+      "frame": {
+        "name": "app-link-auth-url-complete",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "app link auth url"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "app_link_overlay",
+          "appLinkOverlay": {
+            "allowLiveBrowser": false,
+            "actions": [
+              {
+                "kind": "note_url_request",
+                "suggestion": "auth",
+                "serverName": "codex_apps",
+                "requestId": "link-1",
+                "threadId": "thread-link-1",
+                "messageChars": 38
+              },
+              {
+                "kind": "parse_url",
+                "suggestion": "auth",
+                "urlScheme": "https",
+                "urlHost": "chatgpt.com",
+                "trustedUrl": true,
+                "requiresChatgptHost": true
+              },
+              {
+                "kind": "show_link",
+                "suggestion": "auth",
+                "appId": "connector_calendar",
+                "title": "Google Calendar",
+                "actionCount": 2,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true,
+                "composerDisabled": true
+              },
+              {
+                "kind": "open_external",
+                "suggestion": "auth",
+                "screenBefore": "link",
+                "screenAfter": "confirmation",
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "browserOpenSent": true
+              },
+              {
+                "kind": "complete_external",
+                "suggestion": "auth",
+                "decision": "accept",
+                "refreshConnectorsSent": true,
+                "appCommandSent": true,
+                "completeBefore": false,
+                "completeAfter": true
+              },
+              {
+                "kind": "resolve",
+                "suggestion": "auth",
+                "serverName": "codex_apps",
+                "requestId": "link-1",
+                "decision": "accept",
+                "resolutionSent": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.app_link.plan=headless\ntui.app_link.pending.note=auth:server=codex_apps:request=link-1:thread=thread-link-1:message_chars=38\ntui.app_link.parse_url=auth:scheme=https:host=chatgpt.com:trusted=true:chatgpt_required=true\ntui.app_link.show=auth:app=connector_calendar:title=Google Calendar:actions=2:views=0->1:pause_status=true:composer_disabled=true\ntui.app_link.open_external=auth:screen=link->confirmation:browser=true:selected=0->0\ntui.app_link.complete_external=auth:decision=accept:refresh=true:command=true:complete=false->true\ntui.app_link.resolve=auth:server=codex_apps:request=link-1:decision=accept:sent=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> app link auth url\ninput> \ntrace:\ntui.app_link.plan=headless\ntui.app_link.pending.note=auth:server=codex_apps:request=link-1:thread=thread-link-1:message_chars=38\ntui.app_link.parse_url=auth:scheme=https:host=chatgpt.com:trusted=true:chatgpt_required=true\ntui.app_link.show=auth:app=connector_calendar:title=Google Calendar:actions=2:views=0->1:pause_status=true:composer_disabled=true\ntui.app_link.open_external=auth:screen=link->confirmation:browser=true:selected=0->0\ntui.app_link.complete_external=auth:decision=accept:refresh=true:command=true:complete=false->true\ntui.app_link.resolve=auth:server=codex_apps:request=link-1:decision=accept:sent=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "app-link-generic-url-decline-invalid",
+      "frame": {
+        "name": "app-link-generic-url-decline-invalid",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "app link generic url"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "app_link_overlay",
+          "appLinkOverlay": {
+            "allowLiveBrowser": false,
+            "actions": [
+              {
+                "kind": "parse_url",
+                "suggestion": "external_action",
+                "urlScheme": "https",
+                "urlHost": "payments.example",
+                "trustedUrl": true,
+                "requiresChatgptHost": false
+              },
+              {
+                "kind": "show_link",
+                "suggestion": "external_action",
+                "appId": "payment-123",
+                "title": "Action required",
+                "actionCount": 2,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true,
+                "composerDisabled": true
+              },
+              {
+                "kind": "move_selection",
+                "suggestion": "external_action",
+                "screenBefore": "link",
+                "selectedBefore": 0,
+                "selectedAfter": 1
+              },
+              {
+                "kind": "decline",
+                "suggestion": "external_action",
+                "decision": "decline",
+                "appCommandSent": true,
+                "completeBefore": false,
+                "completeAfter": true
+              },
+              {
+                "kind": "unsupported_reject",
+                "suggestion": "auth",
+                "serverName": "codex_apps",
+                "requestId": "bad-url",
+                "urlScheme": "http",
+                "urlHost": "chatgpt.com",
+                "trustedUrl": false,
+                "requiresChatgptHost": true,
+                "unsupportedRejected": true,
+                "failureCode": "untrusted_app_link_url"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.app_link.plan=headless\ntui.app_link.parse_url=external_action:scheme=https:host=payments.example:trusted=true:chatgpt_required=false\ntui.app_link.show=external_action:app=payment-123:title=Action required:actions=2:views=0->1:pause_status=true:composer_disabled=true\ntui.app_link.selection=external_action:screen=link:selected=0->1\ntui.app_link.decline=external_action:decision=decline:command=true:complete=false->true\ntui.app_link.unsupported=auth:server=codex_apps:request=bad-url:rejected=true:failure=untrusted_app_link_url\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> app link generic url\ninput> \ntrace:\ntui.app_link.plan=headless\ntui.app_link.parse_url=external_action:scheme=https:host=payments.example:trusted=true:chatgpt_required=false\ntui.app_link.show=external_action:app=payment-123:title=Action required:actions=2:views=0->1:pause_status=true:composer_disabled=true\ntui.app_link.selection=external_action:screen=link:selected=0->1\ntui.app_link.decline=external_action:decision=decline:command=true:complete=false->true\ntui.app_link.unsupported=auth:server=codex_apps:request=bad-url:rejected=true:failure=untrusted_app_link_url\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "app-link-enable-toggle-dismiss",
+      "frame": {
+        "name": "app-link-enable-toggle-dismiss",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "app link enable dismiss"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "app_link_overlay",
+          "appLinkOverlay": {
+            "allowLiveBrowser": false,
+            "actions": [
+              {
+                "kind": "show_link",
+                "suggestion": "enable",
+                "appId": "calendar",
+                "title": "Calendar",
+                "actionCount": 3,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true,
+                "composerDisabled": true
+              },
+              {
+                "kind": "toggle_enabled",
+                "suggestion": "enable",
+                "appId": "calendar",
+                "enabledBefore": false,
+                "enabledAfter": true,
+                "setEnabledSent": true,
+                "decision": "accept",
+                "appCommandSent": true
+              },
+              {
+                "kind": "dismiss_resolved",
+                "suggestion": "enable",
+                "serverName": "codex_apps",
+                "requestId": "link-2",
+                "resolvedDismissed": true,
+                "staleResolution": false,
+                "viewStackBefore": 1,
+                "viewStackAfter": 0,
+                "statusTimerResumed": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "cancel",
+                "suggestion": "install",
+                "decision": "decline",
+                "appCommandSent": true,
+                "completeBefore": false,
+                "completeAfter": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.app_link.plan=headless\ntui.app_link.show=enable:app=calendar:title=Calendar:actions=3:views=0->1:pause_status=true:composer_disabled=true\ntui.app_link.toggle_enabled=calendar:enabled=false->true:event=true:decision=accept:command=true\ntui.app_link.dismiss_resolved=enable:server=codex_apps:request=link-2:matched=true:stale=false:views=1->0:resume_status=true:frame=true\ntui.app_link.cancel=install:decision=decline:command=true:complete=false->true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> app link enable dismiss\ninput> \ntrace:\ntui.app_link.plan=headless\ntui.app_link.show=enable:app=calendar:title=Calendar:actions=3:views=0->1:pause_status=true:composer_disabled=true\ntui.app_link.toggle_enabled=calendar:enabled=false->true:event=true:decision=accept:command=true\ntui.app_link.dismiss_resolved=enable:server=codex_apps:request=link-2:matched=true:stale=false:views=1->0:resume_status=true:frame=true\ntui.app_link.cancel=install:decision=decline:command=true:complete=false->true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

@@ -83,7 +83,65 @@ class TuiSmokeFixtureLoader {
 				overlayRouting: optionalOverlayRoutingPlan(value, "overlayRouting"),
 				approvalOverlay: optionalApprovalPlan(value, "approvalOverlay"),
 				userInputOverlay: optionalUserInputPlan(value, "userInputOverlay"),
-				mcpElicitationOverlay: optionalMcpElicitationPlan(value, "mcpElicitationOverlay")
+				mcpElicitationOverlay: optionalMcpElicitationPlan(value, "mcpElicitationOverlay"),
+				appLinkOverlay: optionalAppLinkPlan(value, "appLinkOverlay")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalAppLinkPlan(object:Value, name:String):Null<TuiSmokeAppLinkPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAppLinkPlan({
+					allowLiveBrowser: optionalBoolField(value, "allowLiveBrowser", false),
+					actions: appLinkActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function appLinkActions(values:Array<Value>):Array<TuiSmokeAppLinkAction> {
+		final out:Array<TuiSmokeAppLinkAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeAppLinkAction({
+				kind: TuiSmokeAppLinkActionKind.fromString(stringField(value, "kind", "")),
+				suggestion: TuiSmokeAppLinkSuggestionKind.fromString(optionalStringField(value, "suggestion", "unknown")),
+				screenBefore: TuiSmokeAppLinkScreenKind.fromString(optionalStringField(value, "screenBefore", "unknown")),
+				screenAfter: TuiSmokeAppLinkScreenKind.fromString(optionalStringField(value, "screenAfter", "unknown")),
+				decision: TuiSmokeAppLinkDecisionKind.fromString(optionalStringField(value, "decision", "unknown")),
+				serverName: optionalStringField(value, "serverName", ""),
+				requestId: optionalStringField(value, "requestId", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				appId: optionalStringField(value, "appId", ""),
+				title: optionalStringField(value, "title", ""),
+				urlHost: optionalStringField(value, "urlHost", ""),
+				urlScheme: optionalStringField(value, "urlScheme", ""),
+				messageChars: optionalIntField(value, "messageChars", 0),
+				actionCount: optionalIntField(value, "actionCount", 0),
+				selectedBefore: optionalIntField(value, "selectedBefore", 0),
+				selectedAfter: optionalIntField(value, "selectedAfter", 0),
+				viewStackBefore: optionalIntField(value, "viewStackBefore", 0),
+				viewStackAfter: optionalIntField(value, "viewStackAfter", 0),
+				statusTimerPaused: optionalBoolField(value, "statusTimerPaused", false),
+				statusTimerResumed: optionalBoolField(value, "statusTimerResumed", false),
+				composerDisabled: optionalBoolField(value, "composerDisabled", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				trustedUrl: optionalBoolField(value, "trustedUrl", false),
+				requiresChatgptHost: optionalBoolField(value, "requiresChatgptHost", false),
+				browserOpenSent: optionalBoolField(value, "browserOpenSent", false),
+				refreshConnectorsSent: optionalBoolField(value, "refreshConnectorsSent", false),
+				setEnabledSent: optionalBoolField(value, "setEnabledSent", false),
+				enabledBefore: optionalBoolField(value, "enabledBefore", false),
+				enabledAfter: optionalBoolField(value, "enabledAfter", false),
+				appCommandSent: optionalBoolField(value, "appCommandSent", false),
+				resolutionSent: optionalBoolField(value, "resolutionSent", false),
+				resolvedDismissed: optionalBoolField(value, "resolvedDismissed", false),
+				staleResolution: optionalBoolField(value, "staleResolution", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false),
+				completeBefore: optionalBoolField(value, "completeBefore", false),
+				completeAfter: optionalBoolField(value, "completeAfter", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

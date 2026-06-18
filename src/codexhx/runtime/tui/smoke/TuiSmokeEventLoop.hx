@@ -166,6 +166,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.AppLinkOverlay:
+					if (!traceAppLinkOverlay(event.appLinkOverlay, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1178,6 +1183,132 @@ class TuiSmokeEventLoop {
 					trace.push("tui.user_input.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.user_input.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceAppLinkOverlay(plan:TuiSmokeAppLinkPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveBrowser || !plan.enabled()) {
+			trace.push("tui.app_link.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.app_link.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeAppLinkActionKind.NoteUrlRequest:
+					trace.push(
+						"tui.app_link.pending.note="
+						+ action.suggestion
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":thread=" + action.threadId
+						+ ":message_chars=" + action.messageChars
+					);
+				case TuiSmokeAppLinkActionKind.ParseUrl:
+					trace.push(
+						"tui.app_link.parse_url="
+						+ action.suggestion
+						+ ":scheme=" + action.urlScheme
+						+ ":host=" + action.urlHost
+						+ ":trusted=" + action.trustedUrl
+						+ ":chatgpt_required=" + action.requiresChatgptHost
+					);
+				case TuiSmokeAppLinkActionKind.ShowLink:
+					trace.push(
+						"tui.app_link.show="
+						+ action.suggestion
+						+ ":app=" + action.appId
+						+ ":title=" + action.title
+						+ ":actions=" + action.actionCount
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":pause_status=" + action.statusTimerPaused
+						+ ":composer_disabled=" + action.composerDisabled
+					);
+				case TuiSmokeAppLinkActionKind.MoveSelection:
+					trace.push(
+						"tui.app_link.selection="
+						+ action.suggestion
+						+ ":screen=" + action.screenBefore
+						+ ":selected=" + action.selectionTransitionText()
+					);
+				case TuiSmokeAppLinkActionKind.OpenExternal:
+					trace.push(
+						"tui.app_link.open_external="
+						+ action.suggestion
+						+ ":screen=" + action.screenTransitionText()
+						+ ":browser=" + action.browserOpenSent
+						+ ":selected=" + action.selectionTransitionText()
+					);
+				case TuiSmokeAppLinkActionKind.CompleteExternal:
+					trace.push(
+						"tui.app_link.complete_external="
+						+ action.suggestion
+						+ ":decision=" + action.decision
+						+ ":refresh=" + action.refreshConnectorsSent
+						+ ":command=" + action.appCommandSent
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeAppLinkActionKind.ToggleEnabled:
+					trace.push(
+						"tui.app_link.toggle_enabled="
+						+ action.appId
+						+ ":enabled=" + action.enabledTransitionText()
+						+ ":event=" + action.setEnabledSent
+						+ ":decision=" + action.decision
+						+ ":command=" + action.appCommandSent
+					);
+				case TuiSmokeAppLinkActionKind.Decline:
+					trace.push(
+						"tui.app_link.decline="
+						+ action.suggestion
+						+ ":decision=" + action.decision
+						+ ":command=" + action.appCommandSent
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeAppLinkActionKind.Cancel:
+					trace.push(
+						"tui.app_link.cancel="
+						+ action.suggestion
+						+ ":decision=" + action.decision
+						+ ":command=" + action.appCommandSent
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeAppLinkActionKind.Resolve:
+					trace.push(
+						"tui.app_link.resolve="
+						+ action.suggestion
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":decision=" + action.decision
+						+ ":sent=" + action.resolutionSent
+					);
+				case TuiSmokeAppLinkActionKind.DismissResolved:
+					trace.push(
+						"tui.app_link.dismiss_resolved="
+						+ action.suggestion
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":matched=" + action.resolvedDismissed
+						+ ":stale=" + action.staleResolution
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":resume_status=" + action.statusTimerResumed
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeAppLinkActionKind.UnsupportedReject:
+					trace.push(
+						"tui.app_link.unsupported="
+						+ action.suggestion
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":rejected=" + action.unsupportedRejected
+						+ ":failure=" + action.failureCode
+					);
+				case TuiSmokeAppLinkActionKind.Failure:
+					trace.push("tui.app_link.failure=" + action.failureCode);
+				case _:
+					trace.push("tui.app_link.unknown");
 					return false;
 			}
 		}
