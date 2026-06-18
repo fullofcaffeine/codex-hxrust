@@ -98,7 +98,63 @@ class TuiSmokeFixtureLoader {
 				composerFooterRender: optionalComposerFooterRenderPlan(value, "composerFooterRender"),
 				composerTextareaRender: optionalComposerTextareaRenderPlan(value, "composerTextareaRender"),
 				chatWidgetComposerRender: optionalChatWidgetComposerRenderPlan(value, "chatWidgetComposerRender"),
-				chatWidgetActiveStream: optionalChatWidgetActiveStreamPlan(value, "chatWidgetActiveStream")
+				chatWidgetActiveStream: optionalChatWidgetActiveStreamPlan(value, "chatWidgetActiveStream"),
+				chatWidgetStreamStatus: optionalChatWidgetStreamStatusPlan(value, "chatWidgetStreamStatus")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalChatWidgetStreamStatusPlan(object:Value, name:String):Null<TuiSmokeChatWidgetStreamStatusPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeChatWidgetStreamStatusPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: chatWidgetStreamStatusActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function chatWidgetStreamStatusActions(values:Array<Value>):Array<TuiSmokeChatWidgetStreamStatusAction> {
+		final out:Array<TuiSmokeChatWidgetStreamStatusAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeChatWidgetStreamStatusAction({
+				kind: TuiSmokeChatWidgetStreamStatusActionKind.fromString(stringField(value, "kind", "")),
+				phase: optionalStringField(value, "phase", ""),
+				titleKind: optionalStringField(value, "titleKind", ""),
+				runState: optionalStringField(value, "runState", ""),
+				header: optionalStringField(value, "header", ""),
+				details: optionalStringField(value, "details", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				reasoningDelta: optionalStringField(value, "reasoningDelta", ""),
+				extractedHeader: optionalStringField(value, "extractedHeader", ""),
+				reasoningBufferLength: optionalIntField(value, "reasoningBufferLength", 0),
+				fullReasoningBufferLength: optionalIntField(value, "fullReasoningBufferLength", 0),
+				detailsMaxLines: optionalIntField(value, "detailsMaxLines", 0),
+				queuedLines: optionalIntField(value, "queuedLines", 0),
+				pendingSteers: optionalIntField(value, "pendingSteers", 0),
+				pendingRestoreBefore: optionalBoolField(value, "pendingRestoreBefore", false),
+				pendingRestoreAfter: optionalBoolField(value, "pendingRestoreAfter", false),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				streamIdle: optionalBoolField(value, "streamIdle", false),
+				statusEnsured: optionalBoolField(value, "statusEnsured", false),
+				statusUpdated: optionalBoolField(value, "statusUpdated", false),
+				statusHidden: optionalBoolField(value, "statusHidden", false),
+				statusRestored: optionalBoolField(value, "statusRestored", false),
+				titleUsesStatus: optionalBoolField(value, "titleUsesStatus", false),
+				statusSurfacesRefreshed: optionalBoolField(value, "statusSurfacesRefreshed", false),
+				retryHeaderRemembered: optionalBoolField(value, "retryHeaderRemembered", false),
+				historyInserted: optionalBoolField(value, "historyInserted", false),
+				reasoningCleared: optionalBoolField(value, "reasoningCleared", false),
+				unifiedExecWaitActive: optionalBoolField(value, "unifiedExecWaitActive", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

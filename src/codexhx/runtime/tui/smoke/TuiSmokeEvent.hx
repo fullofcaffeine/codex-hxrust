@@ -39,6 +39,7 @@ typedef TuiSmokeEventFields = {
 	final composerTextareaRender:Null<TuiSmokeComposerTextareaRenderPlan>;
 	final chatWidgetComposerRender:Null<TuiSmokeChatWidgetComposerRenderPlan>;
 	final chatWidgetActiveStream:Null<TuiSmokeChatWidgetActiveStreamPlan>;
+	final chatWidgetStreamStatus:Null<TuiSmokeChatWidgetStreamStatusPlan>;
 }
 
 class TuiSmokeEvent {
@@ -80,6 +81,7 @@ class TuiSmokeEvent {
 	public final composerTextareaRender:Null<TuiSmokeComposerTextareaRenderPlan>;
 	public final chatWidgetComposerRender:Null<TuiSmokeChatWidgetComposerRenderPlan>;
 	public final chatWidgetActiveStream:Null<TuiSmokeChatWidgetActiveStreamPlan>;
+	public final chatWidgetStreamStatus:Null<TuiSmokeChatWidgetStreamStatusPlan>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -120,5 +122,6 @@ class TuiSmokeEvent {
 		this.composerTextareaRender = fields.composerTextareaRender;
 		this.chatWidgetComposerRender = fields.chatWidgetComposerRender;
 		this.chatWidgetActiveStream = fields.chatWidgetActiveStream;
+		this.chatWidgetStreamStatus = fields.chatWidgetStreamStatus;
 	}
 }

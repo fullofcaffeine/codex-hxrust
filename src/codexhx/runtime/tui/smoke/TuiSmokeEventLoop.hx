@@ -241,6 +241,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetStreamStatus:
+					if (!traceChatWidgetStreamStatus(event.chatWidgetStreamStatus, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1575,6 +1580,102 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.composer_popup_render.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceChatWidgetStreamStatus(plan:TuiSmokeChatWidgetStreamStatusPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_stream_status.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_stream_status.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeChatWidgetStreamStatusActionKind.ReasoningDelta:
+					trace.push(
+						"tui.chat_widget_stream_status.reasoning_delta="
+						+ "delta=" + action.reasoningDelta
+						+ ":header=" + action.extractedHeader
+						+ ":buffer=" + action.reasoningBufferLength
+						+ ":title=" + action.titleKind
+						+ ":wait=" + action.unifiedExecWaitActive
+						+ ":status=" + action.statusUpdated
+						+ ":redraw=" + action.requestRedraw
+						+ ":model=" + !action.noModelCall
+					);
+				case TuiSmokeChatWidgetStreamStatusActionKind.ReasoningSectionBreak:
+					trace.push(
+						"tui.chat_widget_stream_status.reasoning_break="
+						+ "reasoning=" + action.reasoningBufferLength
+						+ ":full=" + action.fullReasoningBufferLength
+						+ ":cleared=" + action.reasoningCleared
+					);
+				case TuiSmokeChatWidgetStreamStatusActionKind.ReasoningFinal:
+					trace.push(
+						"tui.chat_widget_stream_status.reasoning_final="
+						+ "history=" + action.historyInserted
+						+ ":reasoning=" + action.reasoningBufferLength
+						+ ":full=" + action.fullReasoningBufferLength
+						+ ":cleared=" + action.reasoningCleared
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeChatWidgetStreamStatusActionKind.RestoreReasoningHeader:
+					trace.push(
+						"tui.chat_widget_stream_status.restore_header="
+						+ action.header
+						+ ":title=" + action.titleKind
+						+ ":task=" + action.taskRunning
+						+ ":status=" + action.statusUpdated
+					);
+				case TuiSmokeChatWidgetStreamStatusActionKind.AssistantMessageCompleted:
+					trace.push(
+						"tui.chat_widget_stream_status.message_completed="
+						+ action.phase
+						+ ":pending_steers=" + action.pendingSteers
+						+ ":restore=" + action.pendingRestoreBefore + "->" + action.pendingRestoreAfter
+						+ ":idle=" + action.streamIdle
+						+ ":status_restored=" + action.statusRestored
+					);
+				case TuiSmokeChatWidgetStreamStatusActionKind.StreamIdleRestore:
+					trace.push(
+						"tui.chat_widget_stream_status.idle_restore="
+						+ "pending=" + action.pendingRestoreBefore + "->" + action.pendingRestoreAfter
+						+ ":task=" + action.taskRunning
+						+ ":idle=" + action.streamIdle
+						+ ":queued=" + action.queuedLines
+						+ ":ensured=" + action.statusEnsured
+						+ ":restored=" + action.statusRestored
+					);
+				case TuiSmokeChatWidgetStreamStatusActionKind.StreamError:
+					trace.push(
+						"tui.chat_widget_stream_status.stream_error="
+						+ action.header
+						+ ":details=" + action.details
+						+ ":title=" + action.titleKind
+						+ ":retry=" + action.retryHeaderRemembered
+						+ ":ensured=" + action.statusEnsured
+						+ ":max=" + action.detailsMaxLines
+					);
+				case TuiSmokeChatWidgetStreamStatusActionKind.RunState:
+					trace.push(
+						"tui.chat_widget_stream_status.run_state="
+						+ action.titleKind
+						+ ":task=" + action.taskRunning
+						+ ":text=" + action.runState
+						+ ":title_status=" + action.titleUsesStatus
+						+ ":refreshed=" + action.statusSurfacesRefreshed
+					);
+				case TuiSmokeChatWidgetStreamStatusActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_stream_status.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_stream_status.unknown");
 					return false;
 			}
 		}

@@ -2276,6 +2276,23 @@ Model selected raw Codex ChatWidget active stream/live-tail behavior:
 
 Status: HXCX-TUI-42 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic ChatWidget active stream/live-tail evidence only, not a full live stream renderer or terminal overlay.
 
+### HXCX-TUI-43: ChatWidget Stream Status Restore And Error Surfaces
+
+Model selected raw Codex ChatWidget stream status behavior:
+
+- preserve `restore_reasoning_status_header` in `../codex/codex-rs/tui/src/chatwidget/streaming.rs`: extract the first bold reasoning header when available, set title kind to thinking, and otherwise restore the working header while a task is running;
+- preserve `on_agent_reasoning_delta`: append reasoning text, let unified exec wait suppress status updates while still requesting redraw, and update the status header from the first bold reasoning header when present;
+- preserve `on_reasoning_section_break` and `on_agent_reasoning_final`: move buffered reasoning into the full reasoning buffer, insert a history reasoning summary cell on final content, clear transient reasoning buffers, and request redraw;
+- preserve `on_agent_message_item_completed` commentary/final restore behavior: pending steers can defer restoration, commentary completion marks pending status restore, and final answers run the same idle-gated restore path;
+- preserve `maybe_restore_status_indicator_after_stream_idle`: restore only when pending, task-running, and all stream controllers are idle; ensure the bottom status indicator, restore the current status, and clear the pending flag;
+- preserve `run_commit_tick_with_scope`: committed stream cells hide the status indicator, sync live tails, and try idle restoration once controllers drain;
+- preserve `on_stream_error`: remember retry status header, ensure the status indicator, set the title kind to thinking, capitalize/preserve status details, and render bounded error detail lines;
+- preserve `set_status` and `set_status_header` in `../codex/codex-rs/tui/src/chatwidget/status_controls.rs`: empty details are filtered, details are capitalized, status state and bottom-pane status stay synchronized, and title/status surfaces refresh when configured;
+- preserve `run_state_status_text` in `../codex/codex-rs/tui/src/chatwidget/status_surfaces.rs`: startup maps to starting, idle maps to ready, and running states map working/waiting/thinking according to terminal-title status kind;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-43 extends `fixtures/hxrust/tui-smoke.v1.json` with typed ChatWidget stream status restore/error fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic ChatWidget stream status-surface evidence only, not a full live stream renderer, status widget, or terminal overlay.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
