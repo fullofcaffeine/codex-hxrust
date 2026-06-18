@@ -271,6 +271,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ResumeFork:
+					if (!traceResumeFork(event.resumeFork, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1798,6 +1803,133 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.clear_archive.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceResumeFork(plan:TuiSmokeResumeForkPlan, trace:Array<String>):Bool {
+		if (
+			plan == null
+			|| plan.allowLiveTerminal
+			|| plan.allowRatatuiRender
+			|| plan.allowModelCall
+			|| plan.allowFilesystemMutation
+			|| !plan.enabled()
+		) {
+			trace.push("tui.resume_fork.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.resume_fork.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeResumeForkActionKind.PickerOpen:
+					trace.push(
+						"tui.resume_fork.picker_open="
+						+ "action=" + action.action
+						+ ":source=" + action.source
+						+ ":context=" + action.context
+						+ ":show_all=" + action.showAll
+						+ ":include_non_interactive=" + action.includeNonInteractive
+						+ ":remote=" + action.remoteWorkspace
+						+ ":alt=" + action.altScreenEntered
+					);
+				case TuiSmokeResumeForkActionKind.PickerSelection:
+					trace.push(
+						"tui.resume_fork.picker_selection="
+						+ "action=" + action.action
+						+ ":selected=" + action.selected
+						+ ":target=" + action.threadId
+						+ ":label=" + action.targetLabel
+						+ ":loaded=" + action.loadedRows
+						+ ":page_size=" + action.pageSize
+						+ ":exit_alt=" + action.altScreenExited
+					);
+				case TuiSmokeResumeForkActionKind.Lookup:
+					trace.push(
+						"tui.resume_fork.lookup="
+						+ "id_or_name=" + action.idOrName
+						+ ":requested=" + action.lookupRequested
+						+ ":success=" + action.lookupSucceeded
+						+ ":target=" + action.threadId
+					);
+				case TuiSmokeResumeForkActionKind.StartupGate:
+					trace.push(
+						"tui.resume_fork.startup_gate="
+						+ "wait_initial=" + action.waitForInitialSession
+						+ ":active_events=" + action.activeEventsAllowed
+						+ ":paused_goal_prompt=" + action.pausedGoalPromptEligible
+					);
+				case TuiSmokeResumeForkActionKind.ResumeRequest:
+					trace.push(
+						"tui.resume_fork.resume_request="
+						+ "target=" + action.threadId
+						+ ":path=" + action.targetPath
+						+ ":cwd=" + action.cwdResolved
+						+ ":config_reload=" + action.configReloaded
+						+ ":settings=" + action.configRebuilt
+						+ ":requested=" + action.resumeRequested
+					);
+				case TuiSmokeResumeForkActionKind.ResumeAttach:
+					trace.push(
+						"tui.resume_fork.resume_attach="
+						+ "thread=" + action.threadId
+						+ ":turns=" + action.turnCount
+						+ ":read=" + action.threadReadRequested
+						+ ":success=" + action.resumeSucceeded
+						+ ":chat_replaced=" + action.chatWidgetReplaced
+						+ ":subagents=" + action.subagentsBackfilled
+						+ ":notify=" + action.notificationSettingsUpdated
+						+ ":file_search=" + action.fileSearchDirUpdated
+						+ ":summary=" + action.summaryInserted
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.SameThreadNoOp:
+					trace.push(
+						"tui.resume_fork.same_thread_noop="
+						+ "thread=" + action.threadId
+						+ ":active=" + action.sameThreadActive
+						+ ":ignored=" + action.ignored
+						+ ":info=" + action.infoInserted
+					);
+				case TuiSmokeResumeForkActionKind.ForkRequest:
+					trace.push(
+						"tui.resume_fork.fork_request="
+						+ "parent=" + action.parentThreadId
+						+ ":target=" + action.threadId
+						+ ":requested=" + action.forkRequested
+						+ ":app_server=" + action.appServerStarted
+						+ ":mutation=" + action.appServerMutationRequested
+						+ ":current_shutdown=" + action.currentThreadShutdown
+					);
+				case TuiSmokeResumeForkActionKind.ForkAttach:
+					trace.push(
+						"tui.resume_fork.fork_attach="
+						+ "parent=" + action.parentThreadId
+						+ ":child=" + action.childThreadId
+						+ ":success=" + action.forkSucceeded
+						+ ":chat_replaced=" + action.chatWidgetReplaced
+						+ ":primary_enqueued=" + action.primaryThreadEnqueued
+						+ ":initial=" + action.initialUserMessageSubmitted
+						+ ":summary=" + action.summaryInserted
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.Failure:
+					trace.push(
+						"tui.resume_fork.failure="
+						+ action.failureCode
+						+ ":error=" + action.errorMessage
+						+ ":source=" + action.source
+						+ ":target=" + action.idOrName
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_fs=" + action.noFilesystemMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.resume_fork.unknown");
 					return false;
 			}
 		}

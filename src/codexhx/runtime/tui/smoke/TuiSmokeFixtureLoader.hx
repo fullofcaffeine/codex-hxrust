@@ -104,7 +104,88 @@ class TuiSmokeFixtureLoader {
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
-				clearArchive: optionalClearArchivePlan(value, "clearArchive")
+				clearArchive: optionalClearArchivePlan(value, "clearArchive"),
+				resumeFork: optionalResumeForkPlan(value, "resumeFork")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalResumeForkPlan(object:Value, name:String):Null<TuiSmokeResumeForkPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeResumeForkPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					actions: resumeForkActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function resumeForkActions(values:Array<Value>):Array<TuiSmokeResumeForkAction> {
+		final out:Array<TuiSmokeResumeForkAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeResumeForkAction({
+				kind: TuiSmokeResumeForkActionKind.fromString(stringField(value, "kind", "")),
+				action: optionalStringField(value, "action", ""),
+				source: optionalStringField(value, "source", ""),
+				context: optionalStringField(value, "context", ""),
+				selection: optionalStringField(value, "selection", ""),
+				idOrName: optionalStringField(value, "idOrName", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				parentThreadId: optionalStringField(value, "parentThreadId", ""),
+				childThreadId: optionalStringField(value, "childThreadId", ""),
+				targetLabel: optionalStringField(value, "targetLabel", ""),
+				targetPath: optionalStringField(value, "targetPath", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				pageSize: optionalIntField(value, "pageSize", 0),
+				loadedRows: optionalIntField(value, "loadedRows", 0),
+				turnCount: optionalIntField(value, "turnCount", 0),
+				altScreenEntered: optionalBoolField(value, "altScreenEntered", false),
+				altScreenExited: optionalBoolField(value, "altScreenExited", false),
+				pickerStarted: optionalBoolField(value, "pickerStarted", false),
+				showAll: optionalBoolField(value, "showAll", false),
+				includeNonInteractive: optionalBoolField(value, "includeNonInteractive", false),
+				selected: optionalBoolField(value, "selected", false),
+				lookupRequested: optionalBoolField(value, "lookupRequested", false),
+				lookupSucceeded: optionalBoolField(value, "lookupSucceeded", false),
+				threadReadRequested: optionalBoolField(value, "threadReadRequested", false),
+				waitForInitialSession: optionalBoolField(value, "waitForInitialSession", false),
+				activeEventsAllowed: optionalBoolField(value, "activeEventsAllowed", false),
+				pausedGoalPromptEligible: optionalBoolField(value, "pausedGoalPromptEligible", false),
+				sameThreadActive: optionalBoolField(value, "sameThreadActive", false),
+				ignored: optionalBoolField(value, "ignored", false),
+				infoInserted: optionalBoolField(value, "infoInserted", false),
+				configReloaded: optionalBoolField(value, "configReloaded", false),
+				cwdResolved: optionalBoolField(value, "cwdResolved", false),
+				configRebuilt: optionalBoolField(value, "configRebuilt", false),
+				remoteWorkspace: optionalBoolField(value, "remoteWorkspace", false),
+				runtimePolicyApplied: optionalBoolField(value, "runtimePolicyApplied", false),
+				resumeRequested: optionalBoolField(value, "resumeRequested", false),
+				resumeSucceeded: optionalBoolField(value, "resumeSucceeded", false),
+				forkRequested: optionalBoolField(value, "forkRequested", false),
+				forkSucceeded: optionalBoolField(value, "forkSucceeded", false),
+				currentThreadShutdown: optionalBoolField(value, "currentThreadShutdown", false),
+				chatWidgetReplaced: optionalBoolField(value, "chatWidgetReplaced", false),
+				primaryThreadEnqueued: optionalBoolField(value, "primaryThreadEnqueued", false),
+				subagentsBackfilled: optionalBoolField(value, "subagentsBackfilled", false),
+				notificationSettingsUpdated: optionalBoolField(value, "notificationSettingsUpdated", false),
+				fileSearchDirUpdated: optionalBoolField(value, "fileSearchDirUpdated", false),
+				summaryInserted: optionalBoolField(value, "summaryInserted", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				appServerStarted: optionalBoolField(value, "appServerStarted", false),
+				appServerMutationRequested: optionalBoolField(value, "appServerMutationRequested", false),
+				initialUserMessageSubmitted: optionalBoolField(value, "initialUserMessageSubmitted", false),
+				errorInserted: optionalBoolField(value, "errorInserted", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

@@ -2372,6 +2372,20 @@ Model selected raw Codex clear/archive behavior:
 
 Status: HXCX-TUI-48 extends `fixtures/hxrust/tui-smoke.v1.json` with typed clear UI reset/session preservation, skill-warning rerender, archive refusal/success/exit intent, shutdown feedback, and no-live evidence fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic clear/archive lifecycle evidence only, not live terminal clearing, ratatui rendering, app-server mutation, thread persistence, or model traffic.
 
+### HXCX-TUI-49: Resume And Fork Lifecycle
+
+Model selected raw Codex resume/fork behavior:
+
+- preserve `AppEvent::OpenResumePicker`, `AppEvent::ResumeSessionByIdOrName`, and `AppEvent::ForkCurrentSession` in `../codex/codex-rs/tui/src/app_event.rs` and `../codex/codex-rs/tui/src/app/event_dispatch.rs`: resume/fork stays app-owned and event-driven, not a ChatWidget-only abstraction;
+- preserve slash-command dispatch anchors in `../codex/codex-rs/tui/src/chatwidget/slash_dispatch.rs`: `/resume` opens the picker, `/resume <id-or-name>` requests direct session lookup, and `/fork` requests a current-thread fork;
+- preserve `run_resume_picker_from_existing_session_with_app_server`, `run_resume_picker_with_app_server`, and `run_fork_picker_with_app_server` in `../codex/codex-rs/tui/src/resume_picker.rs`: picker flows use app-server page loading, alt-screen ownership, show-all/include-non-interactive policy, and deterministic selection outcomes;
+- preserve `lookup_session_target_with_app_server`, `resume_target_session`, app-server `thread/fork` intent, current-thread shutdown, chat-widget replacement, queued primary thread session, subagent backfill, notification/file-search refresh, and frame scheduling as typed lifecycle evidence;
+- preserve `session_resume.rs` cwd/model resolution anchors without doing live rollout or filesystem reads in the smoke fixture;
+- preserve forked-thread display anchors in `../codex/codex-rs/tui/src/chatwidget/session_flow.rs` and `../codex/codex-rs/tui/src/chatwidget/tests/history_replay.rs`: app-server-provided fork parent names win over stale local session-index state;
+- keep the evidence deterministic and independent of live terminal takeover, ratatui rendering, live picker input, app-server mutation, rollout reads, filesystem mutation, model/tool execution, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-49 extends `fixtures/hxrust/tui-smoke.v1.json` with typed direct resume lookup/attach, picker-driven fork selection, current-session fork attach intent, missing-target refusal, and no-live/no-filesystem evidence fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic resume/fork lifecycle evidence only, not live app-server mutation, live picker rendering, crossterm/ratatui ownership, persistent thread reads, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

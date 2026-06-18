@@ -13,12 +13,17 @@
       "../codex/codex-rs/tui/src/app_event.rs",
       "../codex/codex-rs/tui/src/app_event_sender.rs",
       "../codex/codex-rs/tui/src/app/input.rs",
+      "../codex/codex-rs/tui/src/app/event_dispatch.rs",
       "../codex/codex-rs/tui/src/app/pending_interactive_replay.rs",
       "../codex/codex-rs/tui/src/app/replay_filter.rs",
+      "../codex/codex-rs/tui/src/resume_picker.rs",
+      "../codex/codex-rs/tui/src/session_resume.rs",
       "../codex/codex-rs/tui/src/chatwidget/replay.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/history_replay.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol_requests.rs",
+      "../codex/codex-rs/tui/src/chatwidget/session_flow.rs",
+      "../codex/codex-rs/tui/src/chatwidget/slash_dispatch.rs",
       "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/src/tui/event_stream.rs",
       "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
@@ -11234,6 +11239,240 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.clear_archive.plan=headless\ntui.clear_archive.failure=live_effects_rejected:error=clear archive live terminal and app-server calls are disabled:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> clear archive no live rejection\ninput> \ntrace:\ntui.clear_archive.plan=headless\ntui.clear_archive.failure=live_effects_rejected:error=clear archive live terminal and app-server calls are disabled:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "resume-fork-direct-resume-by-id-success",
+      "frame": {
+        "name": "resume-fork-direct-resume-by-id-success",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "resume fork direct resume by id success"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resume_fork",
+          "resumeFork": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "lookup",
+                "idOrName": "named-thread",
+                "threadId": "thread-resume",
+                "lookupRequested": true,
+                "lookupSucceeded": true
+              },
+              {
+                "kind": "startup_gate",
+                "waitForInitialSession": true,
+                "activeEventsAllowed": false,
+                "pausedGoalPromptEligible": false
+              },
+              {
+                "kind": "resume_request",
+                "threadId": "thread-resume",
+                "targetPath": "/tmp/rollout-thread-resume.jsonl",
+                "cwdResolved": true,
+                "configReloaded": true,
+                "configRebuilt": true,
+                "resumeRequested": true
+              },
+              {
+                "kind": "resume_attach",
+                "threadId": "thread-resume",
+                "turnCount": 3,
+                "threadReadRequested": true,
+                "resumeSucceeded": true,
+                "chatWidgetReplaced": true,
+                "subagentsBackfilled": true,
+                "notificationSettingsUpdated": true,
+                "fileSearchDirUpdated": true,
+                "summaryInserted": true,
+                "frameScheduled": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resume_fork.plan=headless\ntui.resume_fork.lookup=id_or_name=named-thread:requested=true:success=true:target=thread-resume\ntui.resume_fork.startup_gate=wait_initial=true:active_events=false:paused_goal_prompt=false\ntui.resume_fork.resume_request=target=thread-resume:path=/tmp/rollout-thread-resume.jsonl:cwd=true:config_reload=true:settings=true:requested=true\ntui.resume_fork.resume_attach=thread=thread-resume:turns=3:read=true:success=true:chat_replaced=true:subagents=true:notify=true:file_search=true:summary=true:frame=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume fork direct resume by id success\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.lookup=id_or_name=named-thread:requested=true:success=true:target=thread-resume\ntui.resume_fork.startup_gate=wait_initial=true:active_events=false:paused_goal_prompt=false\ntui.resume_fork.resume_request=target=thread-resume:path=/tmp/rollout-thread-resume.jsonl:cwd=true:config_reload=true:settings=true:requested=true\ntui.resume_fork.resume_attach=thread=thread-resume:turns=3:read=true:success=true:chat_replaced=true:subagents=true:notify=true:file_search=true:summary=true:frame=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "resume-fork-picker-fork-selection",
+      "frame": {
+        "name": "resume-fork-picker-fork-selection",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "resume fork picker fork selection"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resume_fork",
+          "resumeFork": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "picker_open",
+                "action": "fork",
+                "source": "startup",
+                "context": "picker",
+                "showAll": true,
+                "includeNonInteractive": false,
+                "remoteWorkspace": false,
+                "altScreenEntered": true
+              },
+              {
+                "kind": "picker_selection",
+                "action": "fork",
+                "threadId": "thread-parent",
+                "targetLabel": "Parent thread",
+                "loadedRows": 10,
+                "pageSize": 5,
+                "selected": true,
+                "altScreenExited": true
+              },
+              {
+                "kind": "fork_request",
+                "parentThreadId": "thread-parent",
+                "threadId": "thread-parent",
+                "forkRequested": true,
+                "appServerStarted": true,
+                "appServerMutationRequested": true,
+                "currentThreadShutdown": false
+              },
+              {
+                "kind": "fork_attach",
+                "parentThreadId": "thread-parent",
+                "childThreadId": "thread-child",
+                "forkSucceeded": true,
+                "chatWidgetReplaced": true,
+                "primaryThreadEnqueued": true,
+                "initialUserMessageSubmitted": false,
+                "summaryInserted": true,
+                "frameScheduled": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=fork:source=startup:context=picker:show_all=true:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_selection=action=fork:selected=true:target=thread-parent:label=Parent thread:loaded=10:page_size=5:exit_alt=true\ntui.resume_fork.fork_request=parent=thread-parent:target=thread-parent:requested=true:app_server=true:mutation=true:current_shutdown=false\ntui.resume_fork.fork_attach=parent=thread-parent:child=thread-child:success=true:chat_replaced=true:primary_enqueued=true:initial=false:summary=true:frame=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume fork picker fork selection\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=fork:source=startup:context=picker:show_all=true:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_selection=action=fork:selected=true:target=thread-parent:label=Parent thread:loaded=10:page_size=5:exit_alt=true\ntui.resume_fork.fork_request=parent=thread-parent:target=thread-parent:requested=true:app_server=true:mutation=true:current_shutdown=false\ntui.resume_fork.fork_attach=parent=thread-parent:child=thread-child:success=true:chat_replaced=true:primary_enqueued=true:initial=false:summary=true:frame=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "resume-fork-missing-target-refusal",
+      "frame": {
+        "name": "resume-fork-missing-target-refusal",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "resume fork missing target refusal"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resume_fork",
+          "resumeFork": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "lookup",
+                "idOrName": "missing-thread",
+                "lookupRequested": true,
+                "lookupSucceeded": false
+              },
+              {
+                "kind": "failure",
+                "source": "slash_resume",
+                "idOrName": "missing-thread",
+                "failureCode": "session_not_found",
+                "errorMessage": "No saved chat found matching missing-thread.",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resume_fork.plan=headless\ntui.resume_fork.lookup=id_or_name=missing-thread:requested=true:success=false:target=\ntui.resume_fork.failure=session_not_found:error=No saved chat found matching missing-thread.:source=slash_resume:target=missing-thread:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume fork missing target refusal\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.lookup=id_or_name=missing-thread:requested=true:success=false:target=\ntui.resume_fork.failure=session_not_found:error=No saved chat found matching missing-thread.:source=slash_resume:target=missing-thread:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
