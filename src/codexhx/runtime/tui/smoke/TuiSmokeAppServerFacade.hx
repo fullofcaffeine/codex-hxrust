@@ -344,7 +344,13 @@ class TuiSmokeAppServerFacade {
 		}
 		threadReplayCount = threadReplayCount + 1;
 		final suppressNotices = snapshotHasPendingInteractiveRequest(activeThreadId);
+		final traceEnvelope = hasReplayEnvelope(action);
+		final shouldBufferReplay = action.shouldBufferReplay(snapshotHasBufferedEvent(activeThreadId));
+		if (shouldBufferReplay) trace.push("thread.replay.buffer.begin=" + activeThreadId);
 		if (suppressNotices) trace.push("thread.replay.pending_interactive=" + activeThreadId);
+		if (action.session != null) replaySession(action.session, suppressNotices, trace);
+		if (traceEnvelope) trace.push("thread.replay.autosend_suppressed=true");
+		if (action.inputState != null) restoreInputState(action.inputState, state, trace);
 		var replayed = 0;
 		for (turn in action.turns) {
 			replayTurn(turn, state, trace);
@@ -374,6 +380,45 @@ class TuiSmokeAppServerFacade {
 			}
 		}
 		if (replayed == 0) trace.push("thread.replay.empty=" + activeThreadId);
+		if (shouldBufferReplay) trace.push("thread.replay.buffer.end=" + activeThreadId);
+		if (traceEnvelope) trace.push("thread.replay.autosend_suppressed=false");
+		if (action.inputState != null && action.inputState.pendingInitialSubmit) {
+			trace.push("thread.replay.initial_submit=" + activeThreadId);
+		}
+		if (action.resumeRestoredQueue && action.inputState != null && action.inputState.hasQueuedUserMessage()) {
+			trace.push("thread.replay.resume_queue=" + activeThreadId + ":" + action.inputState.queuedUserMessageCount);
+		}
+	}
+
+	function hasReplayEnvelope(action:TuiSmokeThreadReplayAction):Bool {
+		return action.session != null
+			|| action.inputState != null
+			|| action.resizeReflowEnabled
+			|| action.resumeRestoredQueue;
+	}
+
+	function replaySession(session:TuiSmokeThreadSession, suppressNotices:Bool, trace:Array<String>):Void {
+		final display = session.displayFor(suppressNotices);
+		trace.push(
+			"thread.replay.session="
+			+ session.threadId
+			+ ":" + display
+			+ ":" + session.model
+			+ ":" + session.title
+		);
+	}
+
+	function restoreInputState(inputState:TuiSmokeThreadInputState, state:TuiSmokeAppState, trace:Array<String>):Void {
+		state.updateInput(inputState.composerText);
+		if (inputState.taskRunning) state.updateStatus("working");
+		trace.push(
+			"thread.replay.input="
+			+ activeThreadId
+			+ ":" + inputState.composerText
+			+ ":task_running=" + inputState.taskRunning
+			+ ":queued=" + inputState.queuedUserMessageCount
+			+ ":initial_submit=" + inputState.pendingInitialSubmit
+		);
 	}
 
 	function replayTurn(turn:TuiSmokeThreadTurn, state:TuiSmokeAppState, trace:Array<String>):Void {
@@ -467,6 +512,16 @@ class TuiSmokeAppServerFacade {
 				state.updateStatus("closed");
 			case _:
 		}
+	}
+
+	function snapshotHasBufferedEvent(threadId:String):Bool {
+		for (event in bufferedEvents) {
+			final request = event.request;
+			final notification = event.notification;
+			if (request != null && request.threadId == threadId) return true;
+			if (notification != null && notification.threadId == threadId) return true;
+		}
+		return false;
 	}
 
 	function snapshotHasPendingInteractiveRequest(threadId:String):Bool {

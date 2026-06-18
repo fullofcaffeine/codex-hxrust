@@ -168,7 +168,37 @@ class TuiSmokeFixtureLoader {
 				new TuiSmokeThreadReplayAction({
 					kind: TuiSmokeThreadReplayActionKind.fromString(stringField(value, "kind", "")),
 					threadId: optionalStringField(value, "threadId", ""),
-					turns: optionalThreadTurns(value, "turns")
+					session: optionalThreadSession(value, "session"),
+					inputState: optionalThreadInputState(value, "inputState"),
+					turns: optionalThreadTurns(value, "turns"),
+					resizeReflowEnabled: optionalBoolField(value, "resizeReflowEnabled", false),
+					resumeRestoredQueue: optionalBoolField(value, "resumeRestoredQueue", false)
+				});
+		}
+	}
+
+	static function optionalThreadSession(object:Value, name:String):Null<TuiSmokeThreadSession> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeThreadSession({
+					threadId: optionalStringField(value, "threadId", ""),
+					model: optionalStringField(value, "model", ""),
+					title: optionalStringField(value, "title", ""),
+					isSideThread: optionalBoolField(value, "isSideThread", false)
+				});
+		}
+	}
+
+	static function optionalThreadInputState(object:Value, name:String):Null<TuiSmokeThreadInputState> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeThreadInputState({
+					composerText: optionalStringField(value, "composerText", ""),
+					taskRunning: optionalBoolField(value, "taskRunning", false),
+					queuedUserMessageCount: optionalIntField(value, "queuedUserMessageCount", 0),
+					pendingInitialSubmit: optionalBoolField(value, "pendingInitialSubmit", false)
 				});
 		}
 	}
@@ -292,10 +322,26 @@ class TuiSmokeFixtureLoader {
 		}
 	}
 
+	static function optionalIntField(object:Value, name:String, fallback:Int):Int {
+		return switch optionalField(object, name) {
+			case JNull: fallback;
+			case JNumber(value): Std.int(value);
+			case _: throw "expected int field: " + name;
+		}
+	}
+
 	static function boolField(object:Value, name:String, fallback:Bool):Bool {
 		return switch valueField(object, name) {
 			case JBool(value): value;
 			case JNull: fallback;
+			case _: throw "expected bool field: " + name;
+		}
+	}
+
+	static function optionalBoolField(object:Value, name:String, fallback:Bool):Bool {
+		return switch optionalField(object, name) {
+			case JNull: fallback;
+			case JBool(value): value;
 			case _: throw "expected bool field: " + name;
 		}
 	}
