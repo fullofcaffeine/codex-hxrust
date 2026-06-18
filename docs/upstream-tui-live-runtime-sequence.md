@@ -267,6 +267,18 @@ Extend snapshot replay with typed replay-buffer and reflow intent evidence:
 
 Status: HXCX-TUI-13 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/event_dispatch.rs:194`, `../codex/codex-rs/tui/src/app/event_dispatch.rs:197`, `../codex/codex-rs/tui/src/app/event_dispatch.rs:207`, `../codex/codex-rs/tui/src/app/event_dispatch.rs:223`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:112`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:122`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:133`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:150`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:176`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:224`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:235`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:311`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:390`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:434`, `../codex/codex-rs/tui/src/chatwidget/replay.rs:14`, `../codex/codex-rs/tui/tests/suite/resize_reflow.rs:17`, `../codex/codex-rs/tui/tests/suite/resize_reflow.rs:190`, and `../codex/codex-rs/tui/tests/suite/resize_reflow.rs:323`. This is replay-buffer/reflow intent evidence only, not live terminal ownership, terminal clearing, ratatui rendering, live frame scheduling, model traffic, tool execution, or Cafex behavior.
 
+### HXCX-TUI-14: Headless Raw Codex TUI Resize Draw Scheduling Facade
+
+Extend the headless draw loop with typed resize-sensitive scheduling evidence:
+
+- draw-size-change records terminal size, previous size, width initialization/change, and height-only rebuild facts;
+- resize reflow scheduling records target width, debounce acceptance, pending-history clearing, and frame request intent;
+- pending reflow before deadline re-arms a delayed draw instead of running immediately;
+- due reflow defers while an overlay owns rendering, then runs and schedules a follow-up draw when the overlay is gone;
+- app-event draining still precedes resize draw handling, and terminal restore remains deterministic.
+
+Status: HXCX-TUI-14 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/resize_reflow.rs:313`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:319`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:324`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:331`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:333`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:335`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:367`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:374`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:380`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:390`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:404`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:407`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:419`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:428`, `../codex/codex-rs/tui/src/tui.rs:504`, `../codex/codex-rs/tui/src/tui.rs:789`, `../codex/codex-rs/tui/src/tui.rs:999`, `../codex/codex-rs/tui/src/tui/frame_requester.rs:48`, `../codex/codex-rs/tui/src/tui/frame_requester.rs:54`, `../codex/codex-rs/tui/src/tui/frame_requester.rs:94`, `../codex/codex-rs/tui/src/tui/frame_requester.rs:110`, and `../codex/codex-rs/tui/tests/suite/resize_reflow.rs:17`. This is resize draw scheduling evidence only, not live frame-requester ownership, Tokio task spawning, terminal clearing, ratatui rendering, model traffic, tool execution, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

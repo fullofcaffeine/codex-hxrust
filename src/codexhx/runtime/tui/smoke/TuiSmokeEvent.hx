@@ -6,6 +6,7 @@ typedef TuiSmokeEventFields = {
 	final status:String;
 	final input:String;
 	final exitMode:TuiSmokeExitMode;
+	final resizeDraw:Null<TuiSmokeResizeDrawAction>;
 	final appEvent:Null<TuiSmokeAppEvent>;
 	final appServerEvent:Null<TuiSmokeAppServerEvent>;
 	final appServerRequest:Null<TuiSmokeAppServerRequest>;
@@ -21,6 +22,7 @@ class TuiSmokeEvent {
 	public final status:String;
 	public final input:String;
 	public final exitMode:TuiSmokeExitMode;
+	public final resizeDraw:Null<TuiSmokeResizeDrawAction>;
 	public final appEvent:Null<TuiSmokeAppEvent>;
 	public final appServerEvent:Null<TuiSmokeAppServerEvent>;
 	public final appServerRequest:Null<TuiSmokeAppServerRequest>;
@@ -35,6 +37,7 @@ class TuiSmokeEvent {
 		this.status = fields.status == null ? "" : fields.status;
 		this.input = fields.input == null ? "" : fields.input;
 		this.exitMode = fields.exitMode == null ? TuiSmokeExitMode.Unknown : fields.exitMode;
+		this.resizeDraw = fields.resizeDraw;
 		this.appEvent = fields.appEvent;
 		this.appServerEvent = fields.appServerEvent;
 		this.appServerRequest = fields.appServerRequest;

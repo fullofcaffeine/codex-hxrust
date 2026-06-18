@@ -2217,6 +2217,175 @@
       "expectedExit": "cancelled",
       "expectedTrace": "thread.replay.active=thread-side\nthread.replay.buffer.begin=thread-side\nthread.replay.buffer.plan=thread-side:thread_switch:size=60x20:previous=80x20:max_rows=3:tail=true\nthread.replay.session=thread-side:side_conversation:gpt-5.2-codex:Side switch\nthread.replay.autosend_suppressed=true\nthread.replay.history_entry=thread-side:history-side-reflow:side reflow history:thread_snapshot\nthread.replay.buffer.flush=thread-side:thread_switch:retained_rows=0:max_rows=3:tail=true\nthread.replay.reflow.schedule=thread-side:from=80x20:to=60x20:target_width=60:height_changed=false\nthread.replay.reflow.run=thread-side:width=60:source=transcript\nthread.replay.buffer.end=thread-side\nthread.replay.autosend_suppressed=false\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.buffer.plan=thread-main:thread_switch:size=100x30:previous=60x20:max_rows=5:tail=true\nthread.replay.session=thread-main:normal:gpt-5.2-codex:Main switch\nthread.replay.autosend_suppressed=true\nthread.replay.turn=thread-main:turn-main-reflow:completed:thread_snapshot\nthread.replay.item=thread-main:turn-main-reflow:assistant-main-reflow:agent_message:main after resize:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-main-reflow:completed:thread_snapshot\nthread.replay.buffer.flush=thread-main:thread_switch:retained_rows=0:max_rows=5:tail=true\nthread.replay.reflow.schedule=thread-main:from=60x20:to=100x30:target_width=100:height_changed=true\nthread.replay.reflow.run=thread-main:width=100:source=transcript\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\ntui.draw\ntui.key=ctrl-c",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> thread switch reflow\nsystem> history: side reflow history\nassistant> main after resize\ninput> \ntrace:\nthread.replay.active=thread-side\nthread.replay.buffer.begin=thread-side\nthread.replay.buffer.plan=thread-side:thread_switch:size=60x20:previous=80x20:max_rows=3:tail=true\nthread.replay.session=thread-side:side_conversation:gpt-5.2-codex:Side switch\nthread.replay.autosend_suppressed=true\nthread.replay.history_entry=thread-side:history-side-reflow:side reflow history:thread_snapshot\nthread.replay.buffer.flush=thread-side:thread_switch:retained_rows=0:max_rows=3:tail=true\nthread.replay.reflow.schedule=thread-side:from=80x20:to=60x20:target_width=60:height_changed=false\nthread.replay.reflow.run=thread-side:width=60:source=transcript\nthread.replay.buffer.end=thread-side\nthread.replay.autosend_suppressed=false\nthread.replay.active=thread-main\nthread.replay.buffer.begin=thread-main\nthread.replay.buffer.plan=thread-main:thread_switch:size=100x30:previous=60x20:max_rows=5:tail=true\nthread.replay.session=thread-main:normal:gpt-5.2-codex:Main switch\nthread.replay.autosend_suppressed=true\nthread.replay.turn=thread-main:turn-main-reflow:completed:thread_snapshot\nthread.replay.item=thread-main:turn-main-reflow:assistant-main-reflow:agent_message:main after resize:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-main-reflow:completed:thread_snapshot\nthread.replay.buffer.flush=thread-main:thread_switch:retained_rows=0:max_rows=5:tail=true\nthread.replay.reflow.schedule=thread-main:from=60x20:to=100x30:target_width=100:height_changed=true\nthread.replay.reflow.run=thread-main:width=100:source=transcript\nthread.replay.buffer.end=thread-main\nthread.replay.autosend_suppressed=false\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 2\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 1\nthread-replay-items: 1\nthread-replay-completions: 1\nterminal: restored"
+    },
+    {
+      "name": "resize-draw-width-init-and-schedule",
+      "frame": {
+        "name": "resize-draw-width-init-and-schedule",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "resize width schedule"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 80,
+            "terminalHeight": 24,
+            "lastWidth": 0,
+            "lastHeight": 24,
+            "resizeReflowEnabled": true
+          }
+        },
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 100,
+            "terminalHeight": 24,
+            "lastWidth": 80,
+            "lastHeight": 24,
+            "resizeReflowEnabled": true,
+            "scheduleAccepted": true
+          }
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resize_draw.size=80x24:last=unknown:width=initialized:height_changed=false\ntui.draw\ntui.resize_draw.size=100x24:last=80x24:width=changed:height_changed=false\ntui.resize_draw.reflow.schedule=target_width=100:accepted=true\ntui.frame.schedule=immediate\ntui.resize_draw.pending_history.clear=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resize width schedule\ninput> \ntrace:\ntui.resize_draw.size=80x24:last=unknown:width=initialized:height_changed=false\ntui.draw\ntui.resize_draw.size=100x24:last=80x24:width=changed:height_changed=false\ntui.resize_draw.reflow.schedule=target_width=100:accepted=true\ntui.frame.schedule=immediate\ntui.resize_draw.pending_history.clear=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 2\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "resize-draw-height-rebuild-and-rearm",
+      "frame": {
+        "name": "resize-draw-height-rebuild-and-rearm",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "height rearm"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "commit_tick"
+          }
+        },
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 100,
+            "terminalHeight": 30,
+            "lastWidth": 100,
+            "lastHeight": 24,
+            "resizeReflowEnabled": true,
+            "scheduleAccepted": false,
+            "pendingReflow": true,
+            "pendingDue": false,
+            "remainingMs": 45
+          }
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "queue.enqueue=commit_tick\napp.event.commit_tick\ntui.resize_draw.size=100x30:last=100x24:width=unchanged:height_changed=true\ntui.resize_draw.reflow.schedule=target_width=none:accepted=false\ntui.frame.schedule_in=debounce\ntui.resize_draw.pending_history.clear=true\ntui.resize_draw.reflow.rearm=45ms\ntui.frame.schedule_in=45ms\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> height rearm\ninput> \ntrace:\nqueue.enqueue=commit_tick\napp.event.commit_tick\ntui.resize_draw.size=100x30:last=100x24:width=unchanged:height_changed=true\ntui.resize_draw.reflow.schedule=target_width=none:accepted=false\ntui.frame.schedule_in=debounce\ntui.resize_draw.pending_history.clear=true\ntui.resize_draw.reflow.rearm=45ms\ntui.frame.schedule_in=45ms\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "resize-draw-overlay-deferral-and-immediate-run",
+      "frame": {
+        "name": "resize-draw-overlay-deferral-and-immediate-run",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "overlay deferral"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 90,
+            "terminalHeight": 24,
+            "lastWidth": 90,
+            "lastHeight": 24,
+            "resizeReflowEnabled": true,
+            "pendingReflow": true,
+            "pendingDue": true,
+            "overlayActive": true
+          }
+        },
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 90,
+            "terminalHeight": 24,
+            "lastWidth": 90,
+            "lastHeight": 24,
+            "resizeReflowEnabled": true,
+            "pendingReflow": true,
+            "pendingDue": true,
+            "transcriptCells": true,
+            "runReflow": true,
+            "streamTime": true,
+            "followUpDraw": true
+          }
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.defer=overlay\ntui.draw\ntui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.run=width=90:stream_time=true:transcript_cells=true\ntui.frame.schedule_in=debounce_followup\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> overlay deferral\ninput> \ntrace:\ntui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.defer=overlay\ntui.draw\ntui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.resize_draw.reflow.run=width=90:stream_time=true:transcript_cells=true\ntui.frame.schedule_in=debounce_followup\ntui.draw\ntui.key=q\nexit: quit\nrenders: 2\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

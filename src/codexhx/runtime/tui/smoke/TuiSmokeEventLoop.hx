@@ -40,6 +40,23 @@ class TuiSmokeEventLoop {
 					trace.push("tui.resize");
 					snapshot = terminal.render(state.frame());
 					renderCount = renderCount + 1;
+				case TuiSmokeEventKind.ResizeDraw:
+					final appExit = drainAppEvents(appQueue, state, trace);
+					if (appExit != TuiSmokeExitKind.Rendered) {
+						exit = appExit;
+						running = false;
+					}
+					if (!running) continue;
+					if (event.resizeDraw == null) {
+						exit = TuiSmokeExitKind.Rejected;
+						trace.push("tui.resize_draw.unknown");
+						running = false;
+						continue;
+					}
+					traceResizeDraw(event.resizeDraw, trace);
+					trace.push("tui.draw");
+					snapshot = terminal.render(state.frame());
+					renderCount = renderCount + 1;
 				case TuiSmokeEventKind.StatusUpdate:
 					state.updateStatus(event.status);
 					trace.push("app.status=" + event.status);
@@ -187,6 +204,50 @@ class TuiSmokeEventLoop {
 			}
 		}
 		return TuiSmokeExitKind.Rendered;
+	}
+
+	static function traceResizeDraw(action:TuiSmokeResizeDrawAction, trace:Array<String>):Void {
+		trace.push(
+			"tui.resize_draw.size="
+			+ action.sizeText()
+			+ ":last=" + action.lastSizeText()
+			+ ":width=" + action.widthState()
+			+ ":height_changed=" + action.heightChanged()
+		);
+		if (!action.resizeReflowEnabled) {
+			if (action.widthChanged()) trace.push("tui.resize_draw.reflow.clear=disabled");
+			return;
+		}
+		if (action.shouldRebuildTranscript()) {
+			trace.push(
+				"tui.resize_draw.reflow.schedule="
+				+ "target_width=" + action.targetWidthText()
+				+ ":accepted=" + action.scheduleAccepted
+			);
+			trace.push(action.scheduleAccepted ? "tui.frame.schedule=immediate" : "tui.frame.schedule_in=debounce");
+			trace.push("tui.resize_draw.pending_history.clear=true");
+		}
+		if (!action.pendingReflow) return;
+		if (!action.pendingDue) {
+			trace.push("tui.resize_draw.reflow.rearm=" + action.remainingMs + "ms");
+			trace.push("tui.frame.schedule_in=" + action.remainingMs + "ms");
+			return;
+		}
+		if (action.overlayActive) {
+			trace.push("tui.resize_draw.reflow.defer=overlay");
+			return;
+		}
+		if (action.runReflow) {
+			trace.push(
+				"tui.resize_draw.reflow.run="
+				+ "width=" + action.terminalWidth
+				+ ":stream_time=" + action.streamTime
+				+ ":transcript_cells=" + action.transcriptCells
+			);
+		}
+		if (action.followUpDraw) {
+			trace.push("tui.frame.schedule_in=debounce_followup");
+		}
 	}
 
 	static function rejected(code:String):TuiSmokeLoopOutcome {

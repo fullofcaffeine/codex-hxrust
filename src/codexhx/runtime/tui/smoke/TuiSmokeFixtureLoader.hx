@@ -66,6 +66,7 @@ class TuiSmokeFixtureLoader {
 				status: optionalStringField(value, "status", ""),
 				input: optionalStringField(value, "input", ""),
 				exitMode: TuiSmokeExitMode.fromString(optionalStringField(value, "exitMode", "unknown")),
+				resizeDraw: optionalResizeDrawAction(value, "resizeDraw"),
 				appEvent: optionalAppEvent(value, "appEvent"),
 				appServerEvent: optionalAppServerEvent(value, "appServerEvent"),
 				appServerRequest: optionalAppServerRequest(value, "appServerRequest"),
@@ -76,6 +77,29 @@ class TuiSmokeFixtureLoader {
 			}));
 		}
 		return out;
+	}
+
+	static function optionalResizeDrawAction(object:Value, name:String):Null<TuiSmokeResizeDrawAction> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeResizeDrawAction({
+					terminalWidth: optionalIntField(value, "terminalWidth", 0),
+					terminalHeight: optionalIntField(value, "terminalHeight", 0),
+					lastWidth: optionalIntField(value, "lastWidth", 0),
+					lastHeight: optionalIntField(value, "lastHeight", 0),
+					resizeReflowEnabled: optionalBoolField(value, "resizeReflowEnabled", false),
+					scheduleAccepted: optionalBoolField(value, "scheduleAccepted", true),
+					pendingReflow: optionalBoolField(value, "pendingReflow", false),
+					pendingDue: optionalBoolField(value, "pendingDue", false),
+					overlayActive: optionalBoolField(value, "overlayActive", false),
+					transcriptCells: optionalBoolField(value, "transcriptCells", false),
+					remainingMs: optionalIntField(value, "remainingMs", 0),
+					runReflow: optionalBoolField(value, "runReflow", false),
+					streamTime: optionalBoolField(value, "streamTime", false),
+					followUpDraw: optionalBoolField(value, "followUpDraw", false)
+				});
+		}
 	}
 
 	static function optionalAppEvent(object:Value, name:String):Null<TuiSmokeAppEvent> {
