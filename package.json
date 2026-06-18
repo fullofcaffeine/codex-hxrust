@@ -13,6 +13,7 @@
     "hx:metal": "haxe hxml/metal.hxml",
     "hx:portable:codegen": "haxe hxml/portable.codegen.hxml",
     "hx:metal:codegen": "haxe hxml/metal.codegen.hxml",
-    "test:generated-cargo": "bash scripts/check-generated-cargo.sh"
+    "test:generated-cargo": "bash scripts/check-generated-cargo.sh",
+    "test:tui-smoke": "bash harness/check-tui-smoke.sh"
   }
 }

@@ -1,0 +1,65 @@
+{
+  "schema": "codexhx.tui-smoke.v1",
+  "source": {
+    "codex": [
+      "../codex/codex-rs/tui/src/main.rs",
+      "../codex/codex-rs/tui/src/app.rs",
+      "../codex/codex-rs/tui/src/app/input.rs",
+      "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
+      "../codex/codex-rs/tui/tests/suite/status_indicator.rs"
+    ],
+    "notes": "Minimal generated-binary smoke proof only. It uses a headless terminal facade and fixture frame; it does not claim ratatui/crossterm ownership, live app-server transport, or a full interactive TUI."
+  },
+  "cases": [
+    {
+      "name": "cancel-key-renders-fixture-frame",
+      "title": "Codex TUI Smoke",
+      "status": "idle",
+      "model": "gpt-5.2-codex",
+      "width": 48,
+      "transcript": [
+        {
+          "source": "system",
+          "text": "read-only upstream fixture"
+        },
+        {
+          "source": "assistant",
+          "text": "Rendered through Haxe to Rust"
+        }
+      ],
+      "input": "Summarize next raw Codex TUI step",
+      "terminalMode": "headless",
+      "key": "ctrl-c",
+      "expectedExit": "cancelled",
+      "allowLiveTerminal": false,
+      "allowNetwork": false,
+      "allowModelCall": false,
+      "expectedSnapshot": "Codex TUI Smoke\nstatus: idle | model: gpt-5.2-codex\nsystem> read-only upstream fixture\nassistant> Rendered through Haxe to Rust\ninput> Summarize next raw Codex TUI step\nkey: ctrl-c\nexit: cancelled\nterminal: restored"
+    },
+    {
+      "name": "quit-key-renders-fixture-frame",
+      "title": "Codex TUI Smoke",
+      "status": "waiting-for-input",
+      "model": "gpt-5.2-codex",
+      "width": 48,
+      "transcript": [
+        {
+          "source": "user",
+          "text": "fixture prompt"
+        },
+        {
+          "source": "assistant",
+          "text": "fixture response"
+        }
+      ],
+      "input": "",
+      "terminalMode": "headless",
+      "key": "q",
+      "expectedExit": "quit",
+      "allowLiveTerminal": false,
+      "allowNetwork": false,
+      "allowModelCall": false,
+      "expectedSnapshot": "Codex TUI Smoke\nstatus: waiting-for-input | model: gpt-5.2-codex\nuser> fixture prompt\nassistant> fixture response\ninput> \nkey: q\nexit: quit\nterminal: restored"
+    }
+  ]
+}

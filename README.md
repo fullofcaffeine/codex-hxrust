@@ -26,6 +26,7 @@ npm install
 npm run hx:portable
 npm run hx:metal
 npm run test:generated-cargo
+bash harness/check-tui-smoke.sh
 ```
 
 `haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `scripts/check-generated-cargo.sh` green.

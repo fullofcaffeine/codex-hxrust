@@ -1,0 +1,93 @@
+package codexhx.runtime.tui.smoke;
+
+import codexhx.protocol.json.CodexJson;
+import haxe.json.Value;
+import sys.io.File;
+
+class TuiSmokeFixtureLoader {
+	public static function load(path:String):Array<TuiSmokeFrameRequest> {
+		final parsed = CodexJson.parse(File.getContent(path));
+		if (!parsed.ok) throw parsed.errorCode + " at " + parsed.errorPath + ": " + parsed.errorMessage;
+		final cases = arrayField(parsed.value, "cases");
+		final out:Array<TuiSmokeFrameRequest> = [];
+		for (caseValue in cases) {
+			out.push(frameRequest(caseValue));
+		}
+		return out;
+	}
+
+	static function frameRequest(value:Value):TuiSmokeFrameRequest {
+		return new TuiSmokeFrameRequest({
+			name: stringField(value, "name", ""),
+			title: stringField(value, "title", ""),
+			status: stringField(value, "status", ""),
+			model: stringField(value, "model", ""),
+			width: intField(value, "width", 80),
+			transcript: transcriptRows(arrayField(value, "transcript")),
+			input: stringField(value, "input", ""),
+			terminalMode: TuiSmokeTerminalMode.fromString(stringField(value, "terminalMode", "")),
+			key: TuiSmokeKeyKind.fromString(stringField(value, "key", "")),
+			expectedExit: TuiSmokeExitKind.fromString(stringField(value, "expectedExit", "")),
+			allowLiveTerminal: boolField(value, "allowLiveTerminal", false),
+			allowNetwork: boolField(value, "allowNetwork", false),
+			allowModelCall: boolField(value, "allowModelCall", false),
+			expectedSnapshot: stringField(value, "expectedSnapshot", "")
+		});
+	}
+
+	static function transcriptRows(values:Array<Value>):Array<TuiSmokeTranscriptRow> {
+		final out:Array<TuiSmokeTranscriptRow> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTranscriptRow({
+				source: TuiSmokeTranscriptSource.fromString(stringField(value, "source", "")),
+				text: stringField(value, "text", "")
+			}));
+		}
+		return out;
+	}
+
+	static function valueField(object:Value, name:String):Value {
+		return switch object {
+			case JObject(keys, values):
+				var i = 0;
+				while (i < keys.length && i < values.length) {
+					if (keys[i] == name) return values[i];
+					i = i + 1;
+				}
+				throw "missing field: " + name;
+			case _:
+				throw "expected object for field: " + name;
+		}
+	}
+
+	static function arrayField(object:Value, name:String):Array<Value> {
+		return switch valueField(object, name) {
+			case JArray(values): values;
+			case _: throw "expected array field: " + name;
+		}
+	}
+
+	static function stringField(object:Value, name:String, fallback:String):String {
+		return switch valueField(object, name) {
+			case JString(value): value;
+			case JNull: fallback;
+			case _: throw "expected string field: " + name;
+		}
+	}
+
+	static function intField(object:Value, name:String, fallback:Int):Int {
+		return switch valueField(object, name) {
+			case JNumber(value): Std.int(value);
+			case JNull: fallback;
+			case _: throw "expected int field: " + name;
+		}
+	}
+
+	static function boolField(object:Value, name:String, fallback:Bool):Bool {
+		return switch valueField(object, name) {
+			case JBool(value): value;
+			case JNull: fallback;
+			case _: throw "expected bool field: " + name;
+		}
+	}
+}

@@ -1,0 +1,7 @@
+-cp src
+-lib reflaxe.rust
+-D reflaxe_rust_profile=metal
+-D rust_output=generated/tui-smoke
+-D rust_crate=codex_hxrust_tui_smoke
+-D rust_cargo_subcommand=check
+-main codexhx.runtime.tui.smoke.TuiSmokeMain

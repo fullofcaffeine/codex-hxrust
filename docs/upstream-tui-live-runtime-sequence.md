@@ -99,6 +99,18 @@ Use upstream `vt100_history`, `vt100_live_commit`, and `status_indicator` as beh
 
 Status: HXCX-4.9 now owns the selected fixture `fixtures/upstream/vt100-render-selected.v1.json` and validates it through `harness/check-tui-render.sh`. This is string-backend parity, not full ratatui/crossterm ownership.
 
+### HXCX-TUI-0: Minimal hxrust TUI Smoke Binary
+
+Add the first generated executable boundary for the TUI track:
+
+- typed Haxe entrypoint compiled through haxe.rust to a Cargo binary;
+- neutral terminal facade with setup/render/poll/restore methods;
+- headless fixture frame containing transcript, status, model, and input rows;
+- deterministic cancel/quit key handling;
+- generated binary stdout snapshot suitable for CI.
+
+Status: HXCX-TUI-0 now owns `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. The binary uses metal haxe.rust because this is the path that will eventually host Rust-native terminal ownership. This remains a headless smoke proof, not full ratatui/crossterm ownership, live keyboard input, live app-server fanout, model traffic, or Cafex behavior. It reuses the existing generic haxe.rust issue `haxe.rust-3f0g` workaround by avoiding same-class `static final` string reads in the entrypoint.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

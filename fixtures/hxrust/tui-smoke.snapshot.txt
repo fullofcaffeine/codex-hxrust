@@ -1,0 +1,8 @@
+Codex TUI Smoke
+status: idle | model: gpt-5.2-codex
+system> read-only upstream fixture
+assistant> Rendered through Haxe to Rust
+input> Summarize next raw Codex TUI step
+key: ctrl-c
+exit: cancelled
+terminal: restored
