@@ -3988,6 +3988,261 @@
       "expectedExit": "cancelled",
       "expectedTrace": "tui.draw_dispatch.plan=headless\ntui.draw_dispatch.event=resize:resize_reflow=true:pre_render=true:size_changed=true:status_refresh=true\ntui.draw_dispatch.reflow=clear_pending_history=true:due=true:ran=true:rearm=0ms\ntui.draw_dispatch.pre_admission=backtrack_pending=false:backtrack_rebuilt=false:notification=false\ntui.draw_dispatch.paste_burst=flushed=true:capturing=false:skip=false:followup=0ms\ntui.draw_dispatch.render=resize_reflow:pre_draw_tick=true:desired_height=12:area=80x12:cursor=true\ntui.draw_dispatch.post_draw=ambient_pet=true:pet_preview=true:pet_clear=false:external_editor=true:followup_frame=true\ntui.draw\ntui.key=ctrl-c",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> draw dispatch render\ninput> \ntrace:\ntui.draw_dispatch.plan=headless\ntui.draw_dispatch.event=resize:resize_reflow=true:pre_render=true:size_changed=true:status_refresh=true\ntui.draw_dispatch.reflow=clear_pending_history=true:due=true:ran=true:rearm=0ms\ntui.draw_dispatch.pre_admission=backtrack_pending=false:backtrack_rebuilt=false:notification=false\ntui.draw_dispatch.paste_burst=flushed=true:capturing=false:skip=false:followup=0ms\ntui.draw_dispatch.render=resize_reflow:pre_draw_tick=true:desired_height=12:area=80x12:cursor=true\ntui.draw_dispatch.post_draw=ambient_pet=true:pet_preview=true:pet_clear=false:external_editor=true:followup_frame=true\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "overlay-routing-transcript-live-tail-draw",
+      "frame": {
+        "name": "overlay-routing-transcript-live-tail-draw",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "overlay transcript live tail"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "overlay_routing",
+          "overlayRouting": {
+            "allowLiveOverlay": false,
+            "actions": [
+              {
+                "kind": "open_transcript",
+                "overlay": "transcript",
+                "title": "T R A N S C R I P T",
+                "committedCellsAfter": 2,
+                "enterAltScreen": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "sync_live_tail",
+                "overlay": "transcript",
+                "liveTailWidth": 80,
+                "liveTailRevision": 7,
+                "liveTailContinuation": false,
+                "liveTailAnimationTick": 3,
+                "liveTailKeyChanged": true,
+                "liveTailComputed": true,
+                "liveTailLines": 2,
+                "pinnedBefore": true,
+                "pinnedAfter": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "draw",
+                "overlay": "transcript",
+                "drawHeight": 65535,
+                "renderedWidth": 80,
+                "renderedHeight": 24,
+                "ownsTerminal": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.overlay_routing.plan=headless\ntui.overlay.open=transcript:title=T R A N S C R I P T:cells=2:enter_alt=true:frame=true\ntui.overlay.transcript.live_tail=width=80:revision=7:continuation=false:tick=3:key_changed=true:computed=true:lines=2:pinned=true->true:frame=true\ntui.overlay.draw=transcript:event=draw:height=u16_max:area=80x24:owns_terminal=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> overlay transcript live tail\ninput> \ntrace:\ntui.overlay_routing.plan=headless\ntui.overlay.open=transcript:title=T R A N S C R I P T:cells=2:enter_alt=true:frame=true\ntui.overlay.transcript.live_tail=width=80:revision=7:continuation=false:tick=3:key_changed=true:computed=true:lines=2:pinned=true->true:frame=true\ntui.overlay.draw=transcript:event=draw:height=u16_max:area=80x24:owns_terminal=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "overlay-routing-static-close-cleanup",
+      "frame": {
+        "name": "overlay-routing-static-close-cleanup",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "overlay static close"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "overlay_routing",
+          "overlayRouting": {
+            "allowLiveOverlay": false,
+            "actions": [
+              {
+                "kind": "open_static",
+                "overlay": "static",
+                "title": "D I F F",
+                "lineCount": 8,
+                "enterAltScreen": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "resize",
+                "overlay": "static",
+                "drawHeight": 65535,
+                "renderedWidth": 100,
+                "renderedHeight": 30,
+                "ownsTerminal": true
+              },
+              {
+                "kind": "key",
+                "overlay": "static",
+                "keyAction": "close",
+                "doneBefore": false,
+                "doneAfter": true,
+                "scrollBefore": 0,
+                "scrollAfter": 0,
+                "frameScheduled": false
+              },
+              {
+                "kind": "done_cleanup",
+                "overlay": "static",
+                "doneAfter": true,
+                "leaveAltScreen": true,
+                "deferredHistoryLines": 3,
+                "frameScheduled": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.overlay_routing.plan=headless\ntui.overlay.open=static:title=D I F F:lines=8:enter_alt=true:frame=true\ntui.overlay.draw=static:event=resize:height=u16_max:area=100x30:owns_terminal=true\ntui.overlay.key=static:action=close:done=false->true:scroll=0->0:backtrack=false->false:frame=false\ntui.overlay.done=static:cleared=true:leave_alt=true:deferred_history=3:backtrack=false->false:frame=true\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> overlay static close\ninput> \ntrace:\ntui.overlay_routing.plan=headless\ntui.overlay.open=static:title=D I F F:lines=8:enter_alt=true:frame=true\ntui.overlay.draw=static:event=resize:height=u16_max:area=100x30:owns_terminal=true\ntui.overlay.key=static:action=close:done=false->true:scroll=0->0:backtrack=false->false:frame=false\ntui.overlay.done=static:cleared=true:leave_alt=true:deferred_history=3:backtrack=false->false:frame=true\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "overlay-routing-transcript-cell-sync-scroll",
+      "frame": {
+        "name": "overlay-routing-transcript-cell-sync-scroll",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "overlay transcript sync"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "overlay_routing",
+          "overlayRouting": {
+            "allowLiveOverlay": false,
+            "actions": [
+              {
+                "kind": "open_transcript",
+                "overlay": "transcript",
+                "title": "T R A N S C R I P T",
+                "committedCellsAfter": 4,
+                "enterAltScreen": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "insert_committed_cell",
+                "overlay": "transcript",
+                "committedCellsBefore": 4,
+                "committedCellsAfter": 5,
+                "insertedCells": 1,
+                "pinnedBefore": true,
+                "pinnedAfter": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "consolidate_cells",
+                "overlay": "transcript",
+                "committedCellsBefore": 5,
+                "committedCellsAfter": 3,
+                "consolidateStart": 1,
+                "consolidateEnd": 4,
+                "pinnedBefore": false,
+                "pinnedAfter": false,
+                "frameScheduled": true
+              },
+              {
+                "kind": "key",
+                "overlay": "transcript",
+                "keyAction": "page_down",
+                "doneBefore": false,
+                "doneAfter": false,
+                "scrollBefore": 0,
+                "scrollAfter": 12,
+                "frameScheduled": true
+              },
+              {
+                "kind": "key",
+                "overlay": "transcript",
+                "keyAction": "backtrack_preview",
+                "doneBefore": false,
+                "doneAfter": false,
+                "scrollBefore": 12,
+                "scrollAfter": 12,
+                "backtrackPreviewActiveBefore": false,
+                "backtrackPreviewActiveAfter": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "resize",
+                "overlay": "transcript",
+                "drawHeight": 65535,
+                "renderedWidth": 72,
+                "renderedHeight": 20,
+                "ownsTerminal": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.overlay_routing.plan=headless\ntui.overlay.open=transcript:title=T R A N S C R I P T:cells=4:enter_alt=true:frame=true\ntui.overlay.transcript.insert_cell=cells=4->5:inserted=1:pinned=true->true:frame=true\ntui.overlay.transcript.consolidate=range=1..4:cells=5->3:pinned=false->false:frame=true\ntui.overlay.key=transcript:action=page_down:done=false->false:scroll=0->12:backtrack=false->false:frame=true\ntui.overlay.key=transcript:action=backtrack_preview:done=false->false:scroll=12->12:backtrack=false->true:frame=true\ntui.overlay.draw=transcript:event=resize:height=u16_max:area=72x20:owns_terminal=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> overlay transcript sync\ninput> \ntrace:\ntui.overlay_routing.plan=headless\ntui.overlay.open=transcript:title=T R A N S C R I P T:cells=4:enter_alt=true:frame=true\ntui.overlay.transcript.insert_cell=cells=4->5:inserted=1:pinned=true->true:frame=true\ntui.overlay.transcript.consolidate=range=1..4:cells=5->3:pinned=false->false:frame=true\ntui.overlay.key=transcript:action=page_down:done=false->false:scroll=0->12:backtrack=false->false:frame=true\ntui.overlay.key=transcript:action=backtrack_preview:done=false->false:scroll=12->12:backtrack=false->true:frame=true\ntui.overlay.draw=transcript:event=resize:height=u16_max:area=72x20:owns_terminal=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

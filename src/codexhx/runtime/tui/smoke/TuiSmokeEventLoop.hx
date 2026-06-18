@@ -146,6 +146,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.OverlayRouting:
+					if (!traceOverlayRouting(event.overlayRouting, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -807,6 +812,98 @@ class TuiSmokeEventLoop {
 		);
 		if (plan.failureCode != "") {
 			trace.push("tui.draw_dispatch.failure=" + plan.failureCode);
+		}
+		return true;
+	}
+
+	static function traceOverlayRouting(plan:TuiSmokeOverlayRoutingPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveOverlay || !plan.enabled()) {
+			trace.push("tui.overlay_routing.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.overlay_routing.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeOverlayRoutingActionKind.OpenTranscript:
+					trace.push(
+						"tui.overlay.open=transcript"
+						+ ":title=" + action.title
+						+ ":cells=" + action.committedCellsAfter
+						+ ":enter_alt=" + action.enterAltScreen
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeOverlayRoutingActionKind.OpenStatic:
+					trace.push(
+						"tui.overlay.open=static"
+						+ ":title=" + action.title
+						+ ":lines=" + action.lineCount
+						+ ":enter_alt=" + action.enterAltScreen
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeOverlayRoutingActionKind.InsertCommittedCell:
+					trace.push(
+						"tui.overlay.transcript.insert_cell="
+						+ "cells=" + action.cellTransitionText()
+						+ ":inserted=" + action.insertedCells
+						+ ":pinned=" + action.pinnedTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeOverlayRoutingActionKind.ConsolidateCells:
+					trace.push(
+						"tui.overlay.transcript.consolidate="
+						+ "range=" + action.consolidateStart + ".." + action.consolidateEnd
+						+ ":cells=" + action.cellTransitionText()
+						+ ":pinned=" + action.pinnedTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeOverlayRoutingActionKind.SyncLiveTail:
+					trace.push(
+						"tui.overlay.transcript.live_tail="
+						+ "width=" + action.liveTailWidth
+						+ ":revision=" + action.liveTailRevision
+						+ ":continuation=" + action.liveTailContinuation
+						+ ":tick=" + action.liveTailTickText()
+						+ ":key_changed=" + action.liveTailKeyChanged
+						+ ":computed=" + action.liveTailComputed
+						+ ":lines=" + action.liveTailLines
+						+ ":pinned=" + action.pinnedTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeOverlayRoutingActionKind.Draw, TuiSmokeOverlayRoutingActionKind.Resize:
+					trace.push(
+						"tui.overlay.draw="
+						+ action.overlay
+						+ ":event=" + action.kind
+						+ ":height=" + action.drawHeightText()
+						+ ":area=" + action.renderedAreaText()
+						+ ":owns_terminal=" + action.ownsTerminal
+					);
+				case TuiSmokeOverlayRoutingActionKind.Key:
+					trace.push(
+						"tui.overlay.key="
+						+ action.overlay
+						+ ":action=" + action.keyAction
+						+ ":done=" + action.doneBefore + "->" + action.doneAfter
+						+ ":scroll=" + action.scrollTransitionText()
+						+ ":backtrack=" + action.backtrackPreviewText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeOverlayRoutingActionKind.DoneCleanup:
+					trace.push(
+						"tui.overlay.done="
+						+ action.overlay
+						+ ":cleared=" + action.doneAfter
+						+ ":leave_alt=" + action.leaveAltScreen
+						+ ":deferred_history=" + action.deferredHistoryLines
+						+ ":backtrack=" + action.backtrackPreviewText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeOverlayRoutingActionKind.Failure:
+					trace.push("tui.overlay.failure=" + action.failureCode);
+				case _:
+					trace.push("tui.overlay.unknown");
+					return false;
+			}
 		}
 		return true;
 	}

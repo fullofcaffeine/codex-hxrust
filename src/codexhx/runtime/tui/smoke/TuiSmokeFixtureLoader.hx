@@ -79,7 +79,62 @@ class TuiSmokeFixtureLoader {
 				altScreen: optionalAltScreenPlan(value, "altScreen"),
 				drawComposition: optionalDrawCompositionPlan(value, "drawComposition"),
 				frameScheduler: optionalFrameSchedulerPlan(value, "frameScheduler"),
-				drawDispatch: optionalDrawDispatchPlan(value, "drawDispatch")
+				drawDispatch: optionalDrawDispatchPlan(value, "drawDispatch"),
+				overlayRouting: optionalOverlayRoutingPlan(value, "overlayRouting")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalOverlayRoutingPlan(object:Value, name:String):Null<TuiSmokeOverlayRoutingPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeOverlayRoutingPlan({
+					allowLiveOverlay: optionalBoolField(value, "allowLiveOverlay", false),
+					actions: overlayRoutingActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function overlayRoutingActions(values:Array<Value>):Array<TuiSmokeOverlayRoutingAction> {
+		final out:Array<TuiSmokeOverlayRoutingAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeOverlayRoutingAction({
+				kind: TuiSmokeOverlayRoutingActionKind.fromString(stringField(value, "kind", "")),
+				overlay: TuiSmokeOverlayKind.fromString(optionalStringField(value, "overlay", "unknown")),
+				title: optionalStringField(value, "title", ""),
+				keyAction: TuiSmokeOverlayKeyActionKind.fromString(optionalStringField(value, "keyAction", "unknown")),
+				committedCellsBefore: optionalIntField(value, "committedCellsBefore", 0),
+				committedCellsAfter: optionalIntField(value, "committedCellsAfter", 0),
+				insertedCells: optionalIntField(value, "insertedCells", 0),
+				lineCount: optionalIntField(value, "lineCount", 0),
+				consolidateStart: optionalIntField(value, "consolidateStart", 0),
+				consolidateEnd: optionalIntField(value, "consolidateEnd", 0),
+				liveTailWidth: optionalIntField(value, "liveTailWidth", 0),
+				liveTailRevision: optionalIntField(value, "liveTailRevision", 0),
+				liveTailContinuation: optionalBoolField(value, "liveTailContinuation", false),
+				liveTailAnimationTick: optionalIntField(value, "liveTailAnimationTick", -1),
+				liveTailKeyChanged: optionalBoolField(value, "liveTailKeyChanged", false),
+				liveTailComputed: optionalBoolField(value, "liveTailComputed", false),
+				liveTailLines: optionalIntField(value, "liveTailLines", 0),
+				pinnedBefore: optionalBoolField(value, "pinnedBefore", false),
+				pinnedAfter: optionalBoolField(value, "pinnedAfter", false),
+				scrollBefore: optionalIntField(value, "scrollBefore", 0),
+				scrollAfter: optionalIntField(value, "scrollAfter", 0),
+				drawHeight: optionalIntField(value, "drawHeight", 0),
+				renderedWidth: optionalIntField(value, "renderedWidth", 0),
+				renderedHeight: optionalIntField(value, "renderedHeight", 0),
+				ownsTerminal: optionalBoolField(value, "ownsTerminal", false),
+				doneBefore: optionalBoolField(value, "doneBefore", false),
+				doneAfter: optionalBoolField(value, "doneAfter", false),
+				enterAltScreen: optionalBoolField(value, "enterAltScreen", false),
+				leaveAltScreen: optionalBoolField(value, "leaveAltScreen", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				deferredHistoryLines: optionalIntField(value, "deferredHistoryLines", 0),
+				backtrackPreviewActiveBefore: optionalBoolField(value, "backtrackPreviewActiveBefore", false),
+				backtrackPreviewActiveAfter: optionalBoolField(value, "backtrackPreviewActiveAfter", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;
