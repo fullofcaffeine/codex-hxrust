@@ -3475,6 +3475,184 @@
       "expectedExit": "cancelled",
       "expectedTrace": "tui.alt_screen.plan=headless\ntui.alt_screen.enabled=false\ntui.alt_screen.enter=noop:enabled=false:active=false\ntui.alt_screen.leave=noop:enabled=false:active=false\ntui.alt_screen.clear_for_viewport_change=from=0,0 0x0:to=0,12 80x12:clear_after=0,12\ntui.alt_screen.failure=terminal_size_unavailable\ntui.draw\ntui.key=ctrl-c",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> alt screen disabled\ninput> \ntrace:\ntui.alt_screen.plan=headless\ntui.alt_screen.enabled=false\ntui.alt_screen.enter=noop:enabled=false:active=false\ntui.alt_screen.leave=noop:enabled=false:active=false\ntui.alt_screen.clear_for_viewport_change=from=0,0 0x0:to=0,12 80x12:clear_after=0,12\ntui.alt_screen.failure=terminal_size_unavailable\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "draw-composition-legacy-pending-viewport",
+      "frame": {
+        "name": "draw-composition-legacy-pending-viewport",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "legacy draw composition"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "draw_composition",
+          "drawComposition": {
+            "allowLiveDraw": false,
+            "mode": "legacy",
+            "height": 8,
+            "terminalWidth": 100,
+            "terminalHeight": 30,
+            "lastWidth": 100,
+            "lastHeight": 24,
+            "ensureVirtualTerminalProcessing": true,
+            "syncUpdate": true,
+            "preparedResume": true,
+            "pendingViewportComputed": true,
+            "cursorMoved": true,
+            "lastCursorY": 18,
+            "cursorY": 21,
+            "previousViewportX": 0,
+            "previousViewportY": 18,
+            "previousViewportWidth": 100,
+            "previousViewportHeight": 6,
+            "pendingViewportX": 0,
+            "pendingViewportY": 21,
+            "pendingViewportWidth": 100,
+            "pendingViewportHeight": 6,
+            "appliedViewportX": 0,
+            "appliedViewportY": 21,
+            "appliedViewportWidth": 100,
+            "appliedViewportHeight": 8,
+            "clearForViewportChange": true,
+            "terminalClear": true,
+            "scrollRegionUp": false,
+            "scrollRegionStart": 0,
+            "scrollRegionEnd": 21,
+            "scrollBy": 0,
+            "pendingHistoryBatches": 1,
+            "pendingHistoryRows": 3,
+            "zellijRaw": false,
+            "wrapPolicy": "terminal",
+            "suspendCursorY": 28,
+            "altScreenActive": false,
+            "needsFullRepaint": false,
+            "invalidateViewport": false,
+            "renderCallback": true,
+            "autoresize": true,
+            "diffPutCount": 24,
+            "diffClearToEndCount": 2,
+            "cursorSet": true,
+            "cursorX": 5,
+            "cursorPositionY": 28,
+            "cursorStyle": "default",
+            "swapBuffers": true,
+            "backendFlush": true
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.draw_composition.plan=headless\ntui.draw_composition.begin=legacy:height=8:terminal=100x30:last=100x24:sync_update=true:vt=true:resume=true\ntui.draw_composition.pending_viewport=computed=true:cursor=18->21:moved=true:area=0,21 100x6:clear=true\ntui.draw_composition.viewport=from=0,18 100x6:to=0,21 100x8:clear_before_set=true:scroll_up=false:region=0..21:rows=0\ntui.draw_composition.history_flush=batches=1:rows=3:mode=standard:wrap=terminal\ntui.draw_composition.repaint=needs_full=false:invalidate=false\ntui.draw_composition.suspend_cursor=28:alt=false\ntui.draw_composition.terminal_draw=autoresize=true:render=true:puts=24:clears=2:cursor=5,28:default:swap=true:flush=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> legacy draw composition\ninput> \ntrace:\ntui.draw_composition.plan=headless\ntui.draw_composition.begin=legacy:height=8:terminal=100x30:last=100x24:sync_update=true:vt=true:resume=true\ntui.draw_composition.pending_viewport=computed=true:cursor=18->21:moved=true:area=0,21 100x6:clear=true\ntui.draw_composition.viewport=from=0,18 100x6:to=0,21 100x8:clear_before_set=true:scroll_up=false:region=0..21:rows=0\ntui.draw_composition.history_flush=batches=1:rows=3:mode=standard:wrap=terminal\ntui.draw_composition.repaint=needs_full=false:invalidate=false\ntui.draw_composition.suspend_cursor=28:alt=false\ntui.draw_composition.terminal_draw=autoresize=true:render=true:puts=24:clears=2:cursor=5,28:default:swap=true:flush=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "draw-composition-resize-reflow-invalidate",
+      "frame": {
+        "name": "draw-composition-resize-reflow-invalidate",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "resize reflow draw composition"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "draw_composition",
+          "drawComposition": {
+            "allowLiveDraw": false,
+            "mode": "resize_reflow",
+            "height": 10,
+            "terminalWidth": 80,
+            "terminalHeight": 20,
+            "lastWidth": 100,
+            "lastHeight": 24,
+            "ensureVirtualTerminalProcessing": true,
+            "syncUpdate": true,
+            "preparedResume": false,
+            "pendingViewportComputed": false,
+            "cursorMoved": true,
+            "lastCursorY": 18,
+            "cursorY": 11,
+            "previousViewportX": 0,
+            "previousViewportY": 16,
+            "previousViewportWidth": 100,
+            "previousViewportHeight": 8,
+            "appliedViewportX": 0,
+            "appliedViewportY": 10,
+            "appliedViewportWidth": 80,
+            "appliedViewportHeight": 10,
+            "clearForViewportChange": true,
+            "terminalClear": false,
+            "scrollRegionUp": false,
+            "scrollRegionStart": 0,
+            "scrollRegionEnd": 16,
+            "scrollBy": 0,
+            "pendingHistoryBatches": 2,
+            "pendingHistoryRows": 12,
+            "zellijRaw": true,
+            "wrapPolicy": "terminal",
+            "suspendCursorY": 19,
+            "altScreenActive": false,
+            "needsFullRepaint": true,
+            "invalidateViewport": true,
+            "renderCallback": true,
+            "autoresize": true,
+            "diffPutCount": 64,
+            "diffClearToEndCount": 5,
+            "cursorSet": false,
+            "cursorX": 0,
+            "cursorY": 0,
+            "cursorStyle": "default",
+            "swapBuffers": true,
+            "backendFlush": true
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.draw_composition.plan=headless\ntui.draw_composition.begin=resize_reflow:height=10:terminal=80x20:last=100x24:sync_update=true:vt=true:resume=false\ntui.draw_composition.pending_viewport=skipped:resize_reflow\ntui.draw_composition.viewport=from=0,16 100x8:to=0,10 80x10:clear_before_set=true:scroll_up=false:region=0..16:rows=0\ntui.draw_composition.history_flush=batches=2:rows=12:mode=zellij_raw:wrap=terminal\ntui.draw_composition.repaint=needs_full=true:invalidate=true\ntui.draw_composition.suspend_cursor=19:alt=false\ntui.draw_composition.terminal_draw=autoresize=true:render=true:puts=64:clears=5:cursor=hidden:swap=true:flush=true\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resize reflow draw composition\ninput> \ntrace:\ntui.draw_composition.plan=headless\ntui.draw_composition.begin=resize_reflow:height=10:terminal=80x20:last=100x24:sync_update=true:vt=true:resume=false\ntui.draw_composition.pending_viewport=skipped:resize_reflow\ntui.draw_composition.viewport=from=0,16 100x8:to=0,10 80x10:clear_before_set=true:scroll_up=false:region=0..16:rows=0\ntui.draw_composition.history_flush=batches=2:rows=12:mode=zellij_raw:wrap=terminal\ntui.draw_composition.repaint=needs_full=true:invalidate=true\ntui.draw_composition.suspend_cursor=19:alt=false\ntui.draw_composition.terminal_draw=autoresize=true:render=true:puts=64:clears=5:cursor=hidden:swap=true:flush=true\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

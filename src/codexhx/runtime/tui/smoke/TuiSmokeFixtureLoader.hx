@@ -76,10 +76,71 @@ class TuiSmokeFixtureLoader {
 				threadReplay: optionalThreadReplay(value, "threadReplay"),
 				eventStream: optionalEventStreamPlan(value, "eventStream"),
 				terminalModePlan: optionalTerminalModePlan(value, "terminalModePlan"),
-				altScreen: optionalAltScreenPlan(value, "altScreen")
+				altScreen: optionalAltScreenPlan(value, "altScreen"),
+				drawComposition: optionalDrawCompositionPlan(value, "drawComposition")
 			}));
 		}
 		return out;
+	}
+
+	static function optionalDrawCompositionPlan(object:Value, name:String):Null<TuiSmokeDrawCompositionPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeDrawCompositionPlan({
+					allowLiveDraw: optionalBoolField(value, "allowLiveDraw", false),
+					mode: TuiSmokeDrawCompositionMode.fromString(optionalStringField(value, "mode", "unknown")),
+					height: optionalIntField(value, "height", 0),
+					terminalWidth: optionalIntField(value, "terminalWidth", 0),
+					terminalHeight: optionalIntField(value, "terminalHeight", 0),
+					lastWidth: optionalIntField(value, "lastWidth", 0),
+					lastHeight: optionalIntField(value, "lastHeight", 0),
+					ensureVirtualTerminalProcessing: optionalBoolField(value, "ensureVirtualTerminalProcessing", true),
+					syncUpdate: optionalBoolField(value, "syncUpdate", true),
+					preparedResume: optionalBoolField(value, "preparedResume", false),
+					pendingViewportComputed: optionalBoolField(value, "pendingViewportComputed", false),
+					cursorMoved: optionalBoolField(value, "cursorMoved", false),
+					lastCursorY: optionalIntField(value, "lastCursorY", 0),
+					cursorY: optionalIntField(value, "cursorY", 0),
+					previousViewportX: optionalIntField(value, "previousViewportX", 0),
+					previousViewportY: optionalIntField(value, "previousViewportY", 0),
+					previousViewportWidth: optionalIntField(value, "previousViewportWidth", 0),
+					previousViewportHeight: optionalIntField(value, "previousViewportHeight", 0),
+					pendingViewportX: optionalIntField(value, "pendingViewportX", 0),
+					pendingViewportY: optionalIntField(value, "pendingViewportY", 0),
+					pendingViewportWidth: optionalIntField(value, "pendingViewportWidth", 0),
+					pendingViewportHeight: optionalIntField(value, "pendingViewportHeight", 0),
+					appliedViewportX: optionalIntField(value, "appliedViewportX", 0),
+					appliedViewportY: optionalIntField(value, "appliedViewportY", 0),
+					appliedViewportWidth: optionalIntField(value, "appliedViewportWidth", 0),
+					appliedViewportHeight: optionalIntField(value, "appliedViewportHeight", 0),
+					clearForViewportChange: optionalBoolField(value, "clearForViewportChange", false),
+					terminalClear: optionalBoolField(value, "terminalClear", false),
+					scrollRegionUp: optionalBoolField(value, "scrollRegionUp", false),
+					scrollRegionStart: optionalIntField(value, "scrollRegionStart", 0),
+					scrollRegionEnd: optionalIntField(value, "scrollRegionEnd", 0),
+					scrollBy: optionalIntField(value, "scrollBy", 0),
+					pendingHistoryBatches: optionalIntField(value, "pendingHistoryBatches", 0),
+					pendingHistoryRows: optionalIntField(value, "pendingHistoryRows", 0),
+					zellijRaw: optionalBoolField(value, "zellijRaw", false),
+					wrapPolicy: TuiSmokeHistoryWrapPolicy.fromString(optionalStringField(value, "wrapPolicy", "terminal")),
+					suspendCursorY: optionalIntField(value, "suspendCursorY", 0),
+					altScreenActive: optionalBoolField(value, "altScreenActive", false),
+					needsFullRepaint: optionalBoolField(value, "needsFullRepaint", false),
+					invalidateViewport: optionalBoolField(value, "invalidateViewport", false),
+					renderCallback: optionalBoolField(value, "renderCallback", true),
+					autoresize: optionalBoolField(value, "autoresize", true),
+					diffPutCount: optionalIntField(value, "diffPutCount", 0),
+					diffClearToEndCount: optionalIntField(value, "diffClearToEndCount", 0),
+					cursorSet: optionalBoolField(value, "cursorSet", false),
+					cursorX: optionalIntField(value, "cursorX", 0),
+					cursorPositionY: optionalIntField(value, "cursorPositionY", 0),
+					cursorStyle: optionalStringField(value, "cursorStyle", "default"),
+					swapBuffers: optionalBoolField(value, "swapBuffers", true),
+					backendFlush: optionalBoolField(value, "backendFlush", true),
+					failureCode: optionalStringField(value, "failureCode", "")
+				});
+		}
 	}
 
 	static function optionalAltScreenPlan(object:Value, name:String):Null<TuiSmokeAltScreenPlan> {

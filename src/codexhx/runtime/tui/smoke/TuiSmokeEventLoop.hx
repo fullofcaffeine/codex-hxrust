@@ -131,6 +131,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.DrawComposition:
+					if (!traceDrawComposition(event.drawComposition, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -585,6 +590,79 @@ class TuiSmokeEventLoop {
 					trace.push("tui.alt_screen.unknown");
 					return false;
 			}
+		}
+		return true;
+	}
+
+	static function traceDrawComposition(plan:TuiSmokeDrawCompositionPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveDraw || !plan.enabled()) {
+			trace.push("tui.draw_composition.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.draw_composition.plan=headless");
+		trace.push(
+			"tui.draw_composition.begin="
+			+ plan.mode
+			+ ":height=" + plan.height
+			+ ":terminal=" + plan.terminalSizeText()
+			+ ":last=" + plan.lastSizeText()
+			+ ":sync_update=" + plan.syncUpdate
+			+ ":vt=" + plan.ensureVirtualTerminalProcessing
+			+ ":resume=" + plan.preparedResume
+		);
+		if (plan.mode == TuiSmokeDrawCompositionMode.Legacy) {
+			trace.push(
+				"tui.draw_composition.pending_viewport="
+				+ "computed=" + plan.pendingViewportComputed
+				+ ":cursor=" + plan.lastCursorY + "->" + plan.cursorY
+				+ ":moved=" + plan.cursorMoved
+				+ ":area=" + plan.pendingViewportText()
+				+ ":clear=" + plan.terminalClear
+			);
+		} else if (plan.pendingViewportComputed) {
+			trace.push("tui.draw_composition.pending_viewport=rejected_for_resize_reflow");
+			return false;
+		} else {
+			trace.push("tui.draw_composition.pending_viewport=skipped:resize_reflow");
+		}
+		trace.push(
+			"tui.draw_composition.viewport="
+			+ "from=" + plan.previousViewportText()
+			+ ":to=" + plan.appliedViewportText()
+			+ ":clear_before_set=" + plan.clearForViewportChange
+			+ ":scroll_up=" + plan.scrollRegionUp
+			+ ":region=" + plan.scrollRegionText()
+			+ ":rows=" + plan.scrollBy
+		);
+		trace.push(
+			"tui.draw_composition.history_flush="
+			+ "batches=" + plan.pendingHistoryBatches
+			+ ":rows=" + plan.pendingHistoryRows
+			+ ":mode=" + plan.historyInsertMode()
+			+ ":wrap=" + plan.wrapPolicy
+		);
+		trace.push(
+			"tui.draw_composition.repaint="
+			+ "needs_full=" + plan.needsFullRepaint
+			+ ":invalidate=" + plan.invalidateViewport
+		);
+		trace.push(
+			"tui.draw_composition.suspend_cursor="
+			+ plan.suspendCursorY
+			+ ":alt=" + plan.altScreenActive
+		);
+		trace.push(
+			"tui.draw_composition.terminal_draw="
+			+ "autoresize=" + plan.autoresize
+			+ ":render=" + plan.renderCallback
+			+ ":puts=" + plan.diffPutCount
+			+ ":clears=" + plan.diffClearToEndCount
+			+ ":cursor=" + plan.cursorText()
+			+ ":swap=" + plan.swapBuffers
+			+ ":flush=" + plan.backendFlush
+		);
+		if (plan.failureCode != "") {
+			trace.push("tui.draw_composition.failure=" + plan.failureCode);
 		}
 		return true;
 	}
