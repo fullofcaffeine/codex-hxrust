@@ -196,6 +196,18 @@ Extend the active-thread delivery facade with thread notification buffering evid
 
 Status: HXCX-TUI-7 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app.rs:1188`, `../codex/codex-rs/tui/src/app/app_server_events.rs:120`, `../codex/codex-rs/tui/src/app_server_session.rs:377`, `../codex/codex-rs/tui/src/app_event.rs:198`, `../codex/codex-rs/tui/src/app/thread_routing.rs:860`, `../codex/codex-rs/tui/src/app/thread_routing.rs:900`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1127`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1132`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1160`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1428`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1435`, `../codex/codex-rs/tui/src/app/thread_events.rs:19`, `../codex/codex-rs/tui/src/app/thread_events.rs:53`, `../codex/codex-rs/tui/src/app/thread_events.rs:100`, `../codex/codex-rs/tui/src/app/replay_filter.rs:24`, and `../codex/codex-rs/tui/src/chatwidget/protocol.rs:4`. This is active-thread notification delivery intent evidence only, not Tokio channel ownership, snapshot replay ownership, live app-server transport, model traffic, tool execution, or Cafex behavior.
 
+### HXCX-TUI-8: Headless Raw Codex TUI Pending Interactive Replay Filter Facade
+
+Extend the active-thread buffer facade with snapshot replay filtering evidence:
+
+- pending interactive requests survive thread snapshot replay;
+- answered or resolved requests remain buffered but are skipped during replay;
+- evicted requests are removed from both the queue and pending replay state;
+- warning/config/guardian-style notices are suppressed when a snapshot contains pending interactive prompts;
+- replay delivery attaches `ThreadSnapshot`-style intent without consuming the live active-thread queue.
+
+Status: HXCX-TUI-8 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/pending_interactive_replay.rs:24`, `../codex/codex-rs/tui/src/app/pending_interactive_replay.rs:354`, `../codex/codex-rs/tui/src/app/thread_events.rs:108`, `../codex/codex-rs/tui/src/app/thread_events.rs:130`, `../codex/codex-rs/tui/src/app/thread_events.rs:148`, `../codex/codex-rs/tui/src/app/thread_events.rs:204`, `../codex/codex-rs/tui/src/app/thread_events.rs:212`, `../codex/codex-rs/tui/src/app/replay_filter.rs:9`, `../codex/codex-rs/tui/src/app/replay_filter.rs:24`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1308`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1315`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1331`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1334`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1461`, `../codex/codex-rs/tui/src/app_server_session.rs:377`, `../codex/codex-rs/tui/src/app_event.rs:593`, and `../codex/codex-rs/tui/src/chatwidget/protocol.rs:4`. This is pending interactive replay/filter intent evidence only, not Tokio channel ownership, live app-server transport, interactive approval UI ownership, model traffic, tool execution, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

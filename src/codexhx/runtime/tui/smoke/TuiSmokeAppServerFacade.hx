@@ -11,12 +11,17 @@ class TuiSmokeAppServerFacade {
 	var threadNotificationCount:Int;
 	var deliveredNotificationCount:Int;
 	var evictedNotificationCount:Int;
+	var threadReplayCount:Int;
+	var replayedRequestCount:Int;
+	var skippedReplayRequestCount:Int;
+	var suppressedReplayNoticeCount:Int;
 	var closed:Bool;
 	var primaryThreadId:String;
 	var activeThreadId:String;
 	final pendingRequests:Array<TuiSmokeAppServerRequest>;
 	final queuedRequests:Array<TuiSmokeAppServerRequest>;
 	final queuedNotifications:Array<TuiSmokeThreadNotification>;
+	final bufferedEvents:Array<TuiSmokeThreadBufferedEvent>;
 
 	public function new() {
 		this.eventCount = 0;
@@ -29,12 +34,17 @@ class TuiSmokeAppServerFacade {
 		this.threadNotificationCount = 0;
 		this.deliveredNotificationCount = 0;
 		this.evictedNotificationCount = 0;
+		this.threadReplayCount = 0;
+		this.replayedRequestCount = 0;
+		this.skippedReplayRequestCount = 0;
+		this.suppressedReplayNoticeCount = 0;
 		this.closed = false;
 		this.primaryThreadId = "";
 		this.activeThreadId = "";
 		this.pendingRequests = [];
 		this.queuedRequests = [];
 		this.queuedNotifications = [];
+		this.bufferedEvents = [];
 	}
 
 	public function handle(event:TuiSmokeAppServerEvent, state:TuiSmokeAppState, trace:Array<String>):TuiSmokeExitKind {
@@ -99,6 +109,7 @@ class TuiSmokeAppServerFacade {
 		requestCount = requestCount + 1;
 		pendingRequests.push(request);
 		queuedRequests.push(request);
+		bufferedEvents.push(TuiSmokeThreadBufferedEvent.requestEvent(request));
 		final target = targetForThread(request.threadId);
 		final deliveryState = activeThreadId == request.threadId ? "active" : "buffered";
 		trace.push(
@@ -127,6 +138,7 @@ class TuiSmokeAppServerFacade {
 		}
 		threadNotificationCount = threadNotificationCount + 1;
 		queuedNotifications.push(notification);
+		bufferedEvents.push(TuiSmokeThreadBufferedEvent.notificationEvent(notification));
 		final target = targetForThread(notification.threadId);
 		final deliveryState = activeThreadId == notification.threadId ? "active" : "buffered";
 		trace.push(
@@ -138,6 +150,29 @@ class TuiSmokeAppServerFacade {
 			+ ":" + deliveryState
 		);
 		return TuiSmokeExitKind.Rendered;
+	}
+
+	public function handleThreadReplay(action:TuiSmokeThreadReplayAction, state:TuiSmokeAppState, trace:Array<String>):TuiSmokeExitKind {
+		if (closed) {
+			trace.push("thread.replay.ignored_after_close");
+			return TuiSmokeExitKind.Rendered;
+		}
+		if (action == null || action.kind == TuiSmokeThreadReplayActionKind.Unknown) {
+			trace.push("thread.replay.unknown");
+			return TuiSmokeExitKind.Rejected;
+		}
+		return switch action.kind {
+			case TuiSmokeThreadReplayActionKind.SnapshotActive:
+				if (action.threadId.length > 0) {
+					activeThreadId = action.threadId;
+					trace.push("thread.replay.active=" + activeThreadId);
+				}
+				replayActiveSnapshot(state, trace);
+				TuiSmokeExitKind.Rendered;
+			case _:
+				trace.push("thread.replay.unknown");
+				TuiSmokeExitKind.Rejected;
+		}
 	}
 
 	public function handleThreadDelivery(action:TuiSmokeThreadDeliveryAction, state:TuiSmokeAppState, trace:Array<String>):TuiSmokeExitKind {
@@ -237,6 +272,22 @@ class TuiSmokeAppServerFacade {
 		return evictedNotificationCount;
 	}
 
+	public function handledThreadReplays():Int {
+		return threadReplayCount;
+	}
+
+	public function replayedThreadRequests():Int {
+		return replayedRequestCount;
+	}
+
+	public function skippedThreadReplayRequests():Int {
+		return skippedReplayRequestCount;
+	}
+
+	public function suppressedThreadReplayNotices():Int {
+		return suppressedReplayNoticeCount;
+	}
+
 	function deliverActive(state:TuiSmokeAppState, trace:Array<String>):Void {
 		if (activeThreadId.length == 0) {
 			trace.push("thread.deliver.stale=no_active");
@@ -244,22 +295,19 @@ class TuiSmokeAppServerFacade {
 		}
 		var delivered = 0;
 		var i = 0;
-		while (i < queuedRequests.length) {
-			final request = queuedRequests[i];
-			if (request.threadId == activeThreadId) {
-				queuedRequests.splice(i, 1);
+		while (i < bufferedEvents.length) {
+			final event = bufferedEvents[i];
+			final request = event.request;
+			final notification = event.notification;
+			if (request != null && request.threadId == activeThreadId) {
+				bufferedEvents.splice(i, 1);
+				removeQueuedRequest(request.requestId);
 				delivered = delivered + 1;
 				deliveredRequestCount = deliveredRequestCount + 1;
 				trace.push("thread.deliver=" + activeThreadId + ":" + request.requestId + ":" + request.displayId());
-			} else {
-				i = i + 1;
-			}
-		}
-		i = 0;
-		while (i < queuedNotifications.length) {
-			final notification = queuedNotifications[i];
-			if (notification.threadId == activeThreadId) {
-				queuedNotifications.splice(i, 1);
+			} else if (notification != null && notification.threadId == activeThreadId) {
+				bufferedEvents.splice(i, 1);
+				removeQueuedNotification(notification.notificationId);
 				delivered = delivered + 1;
 				deliveredNotificationCount = deliveredNotificationCount + 1;
 				applyDeliveredNotification(notification, state);
@@ -269,6 +317,41 @@ class TuiSmokeAppServerFacade {
 			}
 		}
 		if (delivered == 0) trace.push("thread.deliver.empty=" + activeThreadId);
+	}
+
+	function replayActiveSnapshot(state:TuiSmokeAppState, trace:Array<String>):Void {
+		if (activeThreadId.length == 0) {
+			trace.push("thread.replay.stale=no_active");
+			return;
+		}
+		threadReplayCount = threadReplayCount + 1;
+		final suppressNotices = snapshotHasPendingInteractiveRequest(activeThreadId);
+		if (suppressNotices) trace.push("thread.replay.pending_interactive=" + activeThreadId);
+		var replayed = 0;
+		for (event in bufferedEvents) {
+			final request = event.request;
+			final notification = event.notification;
+			if (request != null && request.threadId == activeThreadId) {
+				if (isPendingRequest(request)) {
+					replayed = replayed + 1;
+					replayedRequestCount = replayedRequestCount + 1;
+					trace.push("thread.replay.request=" + activeThreadId + ":" + request.requestId + ":" + request.displayId() + ":thread_snapshot");
+				} else {
+					skippedReplayRequestCount = skippedReplayRequestCount + 1;
+					trace.push("thread.replay.skip.request=" + activeThreadId + ":" + request.requestId + ":" + request.displayId() + ":non_pending");
+				}
+			} else if (notification != null && notification.threadId == activeThreadId) {
+				if (suppressNotices && isNotice(notification)) {
+					suppressedReplayNoticeCount = suppressedReplayNoticeCount + 1;
+					trace.push("thread.replay.notice_suppressed=" + activeThreadId + ":" + notification.notificationId + ":" + notification.displayText());
+				} else {
+					replayed = replayed + 1;
+					applyDeliveredNotification(notification, state);
+					trace.push("thread.replay.notification=" + activeThreadId + ":" + notification.notificationId + ":" + notification.displayText() + ":thread_snapshot");
+				}
+			}
+		}
+		if (replayed == 0) trace.push("thread.replay.empty=" + activeThreadId);
 	}
 
 	function evictQueued(requestId:String, trace:Array<String>):Void {
@@ -281,6 +364,8 @@ class TuiSmokeAppServerFacade {
 			final request = queuedRequests[i];
 			if (request.requestId == requestId) {
 				queuedRequests.splice(i, 1);
+				removePendingRequest(request.requestId);
+				removeBufferedRequest(requestId);
 				evictedRequestCount = evictedRequestCount + 1;
 				trace.push("thread.evict=" + requestId + ":" + request.displayId());
 				return;
@@ -300,6 +385,7 @@ class TuiSmokeAppServerFacade {
 			final notification = queuedNotifications[i];
 			if (notification.notificationId == notificationId) {
 				queuedNotifications.splice(i, 1);
+				removeBufferedNotification(notificationId);
 				evictedNotificationCount = evictedNotificationCount + 1;
 				trace.push("thread.notification.evict=" + notificationId + ":" + notification.displayText());
 				return;
@@ -327,6 +413,90 @@ class TuiSmokeAppServerFacade {
 				state.updateStatus("closed");
 			case _:
 		}
+	}
+
+	function snapshotHasPendingInteractiveRequest(threadId:String):Bool {
+		for (event in bufferedEvents) {
+			final request = event.request;
+			if (request != null && request.threadId == threadId && isPendingRequest(request) && isThreadBound(request.kind)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function isPendingRequest(request:TuiSmokeAppServerRequest):Bool {
+		if (request == null || request.requestId.length == 0) return false;
+		for (pending in pendingRequests) {
+			if (pending.requestId == request.requestId) return true;
+		}
+		return false;
+	}
+
+	function removePendingRequest(requestId:String):Void {
+		if (requestId.length == 0) return;
+		var i = 0;
+		while (i < pendingRequests.length) {
+			if (pendingRequests[i].requestId == requestId) {
+				pendingRequests.splice(i, 1);
+			} else {
+				i = i + 1;
+			}
+		}
+	}
+
+	function removeQueuedRequest(requestId:String):Void {
+		if (requestId.length == 0) return;
+		var i = 0;
+		while (i < queuedRequests.length) {
+			if (queuedRequests[i].requestId == requestId) {
+				queuedRequests.splice(i, 1);
+			} else {
+				i = i + 1;
+			}
+		}
+	}
+
+	function removeQueuedNotification(notificationId:String):Void {
+		if (notificationId.length == 0) return;
+		var i = 0;
+		while (i < queuedNotifications.length) {
+			if (queuedNotifications[i].notificationId == notificationId) {
+				queuedNotifications.splice(i, 1);
+			} else {
+				i = i + 1;
+			}
+		}
+	}
+
+	function removeBufferedRequest(requestId:String):Void {
+		if (requestId.length == 0) return;
+		var i = 0;
+		while (i < bufferedEvents.length) {
+			final request = bufferedEvents[i].request;
+			if (request != null && request.requestId == requestId) {
+				bufferedEvents.splice(i, 1);
+			} else {
+				i = i + 1;
+			}
+		}
+	}
+
+	function removeBufferedNotification(notificationId:String):Void {
+		if (notificationId.length == 0) return;
+		var i = 0;
+		while (i < bufferedEvents.length) {
+			final notification = bufferedEvents[i].notification;
+			if (notification != null && notification.notificationId == notificationId) {
+				bufferedEvents.splice(i, 1);
+			} else {
+				i = i + 1;
+			}
+		}
+	}
+
+	static function isNotice(notification:TuiSmokeThreadNotification):Bool {
+		return notification.kind == TuiSmokeThreadNotificationKind.Warning;
 	}
 
 	function takePendingForResolution(resolution:TuiSmokeAppServerResolution):Null<TuiSmokeAppServerRequest> {

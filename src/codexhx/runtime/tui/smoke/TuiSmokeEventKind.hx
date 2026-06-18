@@ -13,6 +13,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final AppServerResolution = "app_server_resolution";
 	final ThreadNotification = "thread_notification";
 	final ThreadDelivery = "thread_delivery";
+	final ThreadReplay = "thread_replay";
 	final Unknown = "unknown";
 
 	public static function fromString(value:String):TuiSmokeEventKind {
@@ -29,6 +30,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "app_server_resolution": AppServerResolution;
 			case "thread_notification": ThreadNotification;
 			case "thread_delivery": ThreadDelivery;
+			case "thread_replay": ThreadReplay;
 			case _: Unknown;
 		}
 	}

@@ -93,6 +93,12 @@ class TuiSmokeEventLoop {
 						exit = deliveryExit;
 						running = false;
 					}
+				case TuiSmokeEventKind.ThreadReplay:
+					final replayExit = appServer.handleThreadReplay(event.threadReplay, state, trace);
+					if (replayExit != TuiSmokeExitKind.Rendered) {
+						exit = replayExit;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -117,6 +123,10 @@ class TuiSmokeEventLoop {
 			+ "\nthread-notifications: " + appServer.handledThreadNotifications()
 			+ "\nthread-notification-deliveries: " + appServer.deliveredThreadNotifications()
 			+ "\nthread-notification-evictions: " + appServer.evictedThreadNotifications()
+			+ "\nthread-replays: " + appServer.handledThreadReplays()
+			+ "\nthread-replay-requests: " + appServer.replayedThreadRequests()
+			+ "\nthread-replay-skipped-requests: " + appServer.skippedThreadReplayRequests()
+			+ "\nthread-replay-suppressed-notices: " + appServer.suppressedThreadReplayNotices()
 			+ "\nterminal: restored";
 		final ok = exit == request.expectedExit
 			&& traceText == request.expectedTrace
@@ -140,6 +150,10 @@ class TuiSmokeEventLoop {
 			threadNotificationCount: appServer.handledThreadNotifications(),
 			threadNotificationDeliveryCount: appServer.deliveredThreadNotifications(),
 			threadNotificationEvictionCount: appServer.evictedThreadNotifications(),
+			threadReplayCount: appServer.handledThreadReplays(),
+			threadReplayRequestCount: appServer.replayedThreadRequests(),
+			threadReplaySkippedRequestCount: appServer.skippedThreadReplayRequests(),
+			threadReplaySuppressedNoticeCount: appServer.suppressedThreadReplayNotices(),
 			terminalRestored: terminal.wasRestored()
 		});
 	}
@@ -188,6 +202,10 @@ class TuiSmokeEventLoop {
 			threadNotificationCount: 0,
 			threadNotificationDeliveryCount: 0,
 			threadNotificationEvictionCount: 0,
+			threadReplayCount: 0,
+			threadReplayRequestCount: 0,
+			threadReplaySkippedRequestCount: 0,
+			threadReplaySuppressedNoticeCount: 0,
 			terminalRestored: false
 		});
 	}

@@ -12,6 +12,7 @@ typedef TuiSmokeEventFields = {
 	final appServerResolution:Null<TuiSmokeAppServerResolution>;
 	final threadNotification:Null<TuiSmokeThreadNotification>;
 	final threadDelivery:Null<TuiSmokeThreadDeliveryAction>;
+	final threadReplay:Null<TuiSmokeThreadReplayAction>;
 }
 
 class TuiSmokeEvent {
@@ -26,6 +27,7 @@ class TuiSmokeEvent {
 	public final appServerResolution:Null<TuiSmokeAppServerResolution>;
 	public final threadNotification:Null<TuiSmokeThreadNotification>;
 	public final threadDelivery:Null<TuiSmokeThreadDeliveryAction>;
+	public final threadReplay:Null<TuiSmokeThreadReplayAction>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -39,5 +41,6 @@ class TuiSmokeEvent {
 		this.appServerResolution = fields.appServerResolution;
 		this.threadNotification = fields.threadNotification;
 		this.threadDelivery = fields.threadDelivery;
+		this.threadReplay = fields.threadReplay;
 	}
 }
