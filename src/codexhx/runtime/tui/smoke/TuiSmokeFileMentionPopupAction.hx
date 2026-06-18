@@ -44,6 +44,7 @@ typedef TuiSmokeFileMentionPopupActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeFileMentionPopupAction {
 	public final kind:TuiSmokeFileMentionPopupActionKind;
 	public final popupBefore:TuiSmokeFileMentionPopupKind;
@@ -87,49 +88,6 @@ class TuiSmokeFileMentionPopupAction {
 	public final liveSearchRejected:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeFileMentionPopupActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeFileMentionPopupActionKind.Unknown : fields.kind;
-		this.popupBefore = fields.popupBefore == null ? TuiSmokeFileMentionPopupKind.Unknown : fields.popupBefore;
-		this.popupAfter = fields.popupAfter == null ? TuiSmokeFileMentionPopupKind.Unknown : fields.popupAfter;
-		this.candidateKind = fields.candidateKind == null ? TuiSmokeMentionCandidateKind.Unknown : fields.candidateKind;
-		this.searchModeBefore = fields.searchModeBefore == null ? TuiSmokeMentionSearchModeKind.Unknown : fields.searchModeBefore;
-		this.searchModeAfter = fields.searchModeAfter == null ? TuiSmokeMentionSearchModeKind.Unknown : fields.searchModeAfter;
-		this.inputText = fields.inputText == null ? "" : fields.inputText;
-		this.token = fields.token == null ? "" : fields.token;
-		this.query = fields.query == null ? "" : fields.query;
-		this.selectedPath = fields.selectedPath == null ? "" : fields.selectedPath;
-		this.insertText = fields.insertText == null ? "" : fields.insertText;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.matchCount = fields.matchCount;
-		this.visibleCount = fields.visibleCount;
-		this.rowCount = fields.rowCount;
-		this.selectedBefore = fields.selectedBefore;
-		this.selectedAfter = fields.selectedAfter;
-		this.scrollBefore = fields.scrollBefore;
-		this.scrollAfter = fields.scrollAfter;
-		this.maxRows = fields.maxRows;
-		this.fileCandidateCount = fields.fileCandidateCount;
-		this.directoryCandidateCount = fields.directoryCandidateCount;
-		this.skillCandidateCount = fields.skillCandidateCount;
-		this.pluginCandidateCount = fields.pluginCandidateCount;
-		this.toolCandidateCount = fields.toolCandidateCount;
-		this.mentionsV2Enabled = fields.mentionsV2Enabled;
-		this.slashPopupSuppressed = fields.slashPopupSuppressed;
-		this.queryStartSent = fields.queryStartSent;
-		this.queryClearSent = fields.queryClearSent;
-		this.sameQuerySkipped = fields.sameQuerySkipped;
-		this.resultAccepted = fields.resultAccepted;
-		this.resultStale = fields.resultStale;
-		this.popupCreated = fields.popupCreated;
-		this.popupDismissed = fields.popupDismissed;
-		this.dismissedTokenStored = fields.dismissedTokenStored;
-		this.bindingStored = fields.bindingStored;
-		this.draftUpdated = fields.draftUpdated;
-		this.frameScheduled = fields.frameScheduled;
-		this.redrawRequested = fields.redrawRequested;
-		this.liveSearchRejected = fields.liveSearchRejected;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 
 	public function popupTransitionText():String {
 		return popupBefore + "->" + popupAfter;

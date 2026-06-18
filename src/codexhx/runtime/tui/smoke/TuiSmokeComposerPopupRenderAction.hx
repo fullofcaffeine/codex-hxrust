@@ -31,6 +31,7 @@ typedef TuiSmokeComposerPopupRenderActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerPopupRenderAction {
 	public final kind:TuiSmokeComposerPopupRenderActionKind;
 	public final popup:TuiSmokeComposerPopupKind;
@@ -61,36 +62,6 @@ class TuiSmokeComposerPopupRenderAction {
 	public final noRatatuiRender:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeComposerPopupRenderActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeComposerPopupRenderActionKind.Unknown : fields.kind;
-		this.popup = fields.popup == null ? TuiSmokeComposerPopupKind.Unknown : fields.popup;
-		this.searchMode = fields.searchMode == null ? TuiSmokeMentionSearchModeKind.Unknown : fields.searchMode;
-		this.width = fields.width;
-		this.composerHeight = fields.composerHeight;
-		this.popupHeight = fields.popupHeight;
-		this.requiredHeight = fields.requiredHeight;
-		this.footerHeight = fields.footerHeight;
-		this.rowCount = fields.rowCount;
-		this.visibleRows = fields.visibleRows;
-		this.maxRows = fields.maxRows;
-		this.selectedIndex = fields.selectedIndex;
-		this.scrollTop = fields.scrollTop;
-		this.windowStart = fields.windowStart;
-		this.windowEnd = fields.windowEnd;
-		this.horizontalInset = fields.horizontalInset;
-		this.verticalInset = fields.verticalInset;
-		this.emptyMessage = fields.emptyMessage == null ? "" : fields.emptyMessage;
-		this.columnMode = fields.columnMode == null ? "" : fields.columnMode;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.renderDelegated = fields.renderDelegated;
-		this.wrapsDescriptions = fields.wrapsDescriptions;
-		this.footerHintRendered = fields.footerHintRendered;
-		this.selectedVisible = fields.selectedVisible;
-		this.waiting = fields.waiting;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 
 	public function windowText():String {
 		return windowStart + ".." + windowEnd;

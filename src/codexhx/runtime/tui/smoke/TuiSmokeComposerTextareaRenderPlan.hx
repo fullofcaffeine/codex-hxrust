@@ -6,16 +6,11 @@ typedef TuiSmokeComposerTextareaRenderPlanFields = {
 	final actions:Array<TuiSmokeComposerTextareaRenderAction>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerTextareaRenderPlan {
 	public final allowLiveTerminal:Bool;
 	public final allowRatatuiRender:Bool;
 	public final actions:Array<TuiSmokeComposerTextareaRenderAction>;
-
-	public function new(fields:TuiSmokeComposerTextareaRenderPlanFields) {
-		this.allowLiveTerminal = fields.allowLiveTerminal;
-		this.allowRatatuiRender = fields.allowRatatuiRender;
-		this.actions = fields.actions == null ? [] : fields.actions;
-	}
 
 	public function enabled():Bool {
 		return !allowLiveTerminal && !allowRatatuiRender && actions.length > 0;

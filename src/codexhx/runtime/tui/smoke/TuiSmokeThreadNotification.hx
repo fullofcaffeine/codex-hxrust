@@ -9,6 +9,7 @@ typedef TuiSmokeThreadNotificationFields = {
 	final message:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeThreadNotification {
 	public final kind:TuiSmokeThreadNotificationKind;
 	public final notificationId:String;
@@ -17,14 +18,6 @@ class TuiSmokeThreadNotification {
 	public final delta:String;
 	public final message:String;
 
-	public function new(fields:TuiSmokeThreadNotificationFields) {
-		this.kind = fields.kind == null ? TuiSmokeThreadNotificationKind.Unknown : fields.kind;
-		this.notificationId = fields.notificationId == null ? "" : fields.notificationId;
-		this.threadId = fields.threadId == null ? "" : fields.threadId;
-		this.status = fields.status == null ? "" : fields.status;
-		this.delta = fields.delta == null ? "" : fields.delta;
-		this.message = fields.message == null ? "" : fields.message;
-	}
 
 	public function displayText():String {
 		return switch kind {

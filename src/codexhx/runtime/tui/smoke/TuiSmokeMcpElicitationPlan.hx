@@ -5,14 +5,10 @@ typedef TuiSmokeMcpElicitationPlanFields = {
 	final actions:Array<TuiSmokeMcpElicitationAction>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeMcpElicitationPlan {
 	public final allowLiveElicitation:Bool;
 	public final actions:Array<TuiSmokeMcpElicitationAction>;
-
-	public function new(fields:TuiSmokeMcpElicitationPlanFields) {
-		this.allowLiveElicitation = fields.allowLiveElicitation;
-		this.actions = fields.actions == null ? [] : fields.actions;
-	}
 
 	public function enabled():Bool {
 		return !allowLiveElicitation && actions.length > 0;

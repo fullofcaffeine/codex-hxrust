@@ -38,6 +38,7 @@ typedef TuiSmokeSlashPopupActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeSlashPopupAction {
 	public final kind:TuiSmokeSlashPopupActionKind;
 	public final commandKind:TuiSmokeSlashPopupCommandKind;
@@ -75,43 +76,6 @@ class TuiSmokeSlashPopupAction {
 	public final unsupportedRejected:Bool;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeSlashPopupActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeSlashPopupActionKind.Unknown : fields.kind;
-		this.commandKind = fields.commandKind == null ? TuiSmokeSlashPopupCommandKind.Unknown : fields.commandKind;
-		this.matchKind = fields.matchKind == null ? TuiSmokeSlashPopupMatchKind.Unknown : fields.matchKind;
-		this.completionKind = fields.completionKind == null ? TuiSmokeSlashPopupCompletionKind.Unknown : fields.completionKind;
-		this.inputText = fields.inputText == null ? "" : fields.inputText;
-		this.filterText = fields.filterText == null ? "" : fields.filterText;
-		this.commandName = fields.commandName == null ? "" : fields.commandName;
-		this.totalCommands = fields.totalCommands;
-		this.visibleCount = fields.visibleCount;
-		this.matchedCount = fields.matchedCount;
-		this.rowCount = fields.rowCount;
-		this.hiddenAliasCount = fields.hiddenAliasCount;
-		this.serviceTierCount = fields.serviceTierCount;
-		this.disabledCount = fields.disabledCount;
-		this.selectedBefore = fields.selectedBefore;
-		this.selectedAfter = fields.selectedAfter;
-		this.scrollBefore = fields.scrollBefore;
-		this.scrollAfter = fields.scrollAfter;
-		this.activeBefore = fields.activeBefore;
-		this.activeAfter = fields.activeAfter;
-		this.popupCreated = fields.popupCreated;
-		this.popupDismissed = fields.popupDismissed;
-		this.textCleared = fields.textCleared;
-		this.draftPreserved = fields.draftPreserved;
-		this.historyStaged = fields.historyStaged;
-		this.historyRecorded = fields.historyRecorded;
-		this.commandDispatched = fields.commandDispatched;
-		this.serviceTierDispatched = fields.serviceTierDispatched;
-		this.currentFileQueryCleared = fields.currentFileQueryCleared;
-		this.frameScheduled = fields.frameScheduled;
-		this.redrawRequested = fields.redrawRequested;
-		this.interruptSuppressed = fields.interruptSuppressed;
-		this.taskRunning = fields.taskRunning;
-		this.unsupportedRejected = fields.unsupportedRejected;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function activeTransitionText():String {
 		return activeBefore + "->" + activeAfter;

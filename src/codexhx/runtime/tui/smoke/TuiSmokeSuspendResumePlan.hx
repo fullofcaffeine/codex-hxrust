@@ -19,6 +19,7 @@ typedef TuiSmokeSuspendResumePlanFields = {
 	final clearAfterRestore:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeSuspendResumePlan {
 	public final action:TuiSmokeResumeActionKind;
 	public final altScreenActive:Bool;
@@ -37,24 +38,6 @@ class TuiSmokeSuspendResumePlan {
 	public final altScroll:Bool;
 	public final clearAfterRestore:Bool;
 
-	public function new(fields:TuiSmokeSuspendResumePlanFields) {
-		this.action = fields.action == null ? TuiSmokeResumeActionKind.Unknown : fields.action;
-		this.altScreenActive = fields.altScreenActive;
-		this.cachedCursorY = fields.cachedCursorY;
-		this.cursorYAfterResume = fields.cursorYAfterResume;
-		this.savedViewportX = fields.savedViewportX;
-		this.savedViewportY = fields.savedViewportY;
-		this.savedViewportWidth = fields.savedViewportWidth;
-		this.savedViewportHeight = fields.savedViewportHeight;
-		this.appliedViewportX = fields.appliedViewportX;
-		this.appliedViewportY = fields.appliedViewportY;
-		this.appliedViewportWidth = fields.appliedViewportWidth;
-		this.appliedViewportHeight = fields.appliedViewportHeight;
-		this.enterAltScreen = fields.enterAltScreen;
-		this.leaveAltScreen = fields.leaveAltScreen;
-		this.altScroll = fields.altScroll;
-		this.clearAfterRestore = fields.clearAfterRestore;
-	}
 
 	public function enabled():Bool {
 		return action != TuiSmokeResumeActionKind.None && action != TuiSmokeResumeActionKind.Unknown;

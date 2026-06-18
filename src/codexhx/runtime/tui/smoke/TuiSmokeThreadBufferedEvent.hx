@@ -6,16 +6,11 @@ typedef TuiSmokeThreadBufferedEventFields = {
 	final notification:Null<TuiSmokeThreadNotification>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeThreadBufferedEvent {
 	public final kind:TuiSmokeThreadBufferedEventKind;
 	public final request:Null<TuiSmokeAppServerRequest>;
 	public final notification:Null<TuiSmokeThreadNotification>;
-
-	public function new(fields:TuiSmokeThreadBufferedEventFields) {
-		this.kind = fields.kind == null ? TuiSmokeThreadBufferedEventKind.Unknown : fields.kind;
-		this.request = fields.request;
-		this.notification = fields.notification;
-	}
 
 	public static function requestEvent(request:TuiSmokeAppServerRequest):TuiSmokeThreadBufferedEvent {
 		return new TuiSmokeThreadBufferedEvent({

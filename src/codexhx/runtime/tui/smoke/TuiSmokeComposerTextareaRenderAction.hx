@@ -46,6 +46,7 @@ typedef TuiSmokeComposerTextareaRenderActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerTextareaRenderAction {
 	public final kind:TuiSmokeComposerTextareaRenderActionKind;
 	public final mode:TuiSmokeComposerTextareaRenderModeKind;
@@ -91,51 +92,6 @@ class TuiSmokeComposerTextareaRenderAction {
 	public final noRatatuiRender:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeComposerTextareaRenderActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeComposerTextareaRenderActionKind.Unknown : fields.kind;
-		this.mode = fields.mode == null ? TuiSmokeComposerTextareaRenderModeKind.Unknown : fields.mode;
-		this.promptKind = fields.promptKind == null ? TuiSmokeComposerTextareaPromptKind.Unknown : fields.promptKind;
-		this.promptText = fields.promptText == null ? "" : fields.promptText;
-		this.placeholderText = fields.placeholderText == null ? "" : fields.placeholderText;
-		this.maskChar = fields.maskChar == null ? "" : fields.maskChar;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.width = fields.width;
-		this.height = fields.height;
-		this.textareaRightReserve = fields.textareaRightReserve;
-		this.innerWidth = fields.innerWidth;
-		this.composerHeight = fields.composerHeight;
-		this.popupHeight = fields.popupHeight;
-		this.footerTotalHeight = fields.footerTotalHeight;
-		this.textareaWidth = fields.textareaWidth;
-		this.textareaHeight = fields.textareaHeight;
-		this.remoteImageCount = fields.remoteImageCount;
-		this.remoteImageHeight = fields.remoteImageHeight;
-		this.remoteImageSeparator = fields.remoteImageSeparator;
-		this.selectedRemoteIndex = fields.selectedRemoteIndex;
-		this.desiredHeight = fields.desiredHeight;
-		this.wrappedLineCount = fields.wrappedLineCount;
-		this.scrollBefore = fields.scrollBefore;
-		this.scrollAfter = fields.scrollAfter;
-		this.visibleStartLine = fields.visibleStartLine;
-		this.visibleEndLine = fields.visibleEndLine;
-		this.textLength = fields.textLength;
-		this.elementCount = fields.elementCount;
-		this.highlightCount = fields.highlightCount;
-		this.pluginHighlightCount = fields.pluginHighlightCount;
-		this.historyHighlightCount = fields.historyHighlightCount;
-		this.cursorX = fields.cursorX;
-		this.cursorY = fields.cursorY;
-		this.inputEnabled = fields.inputEnabled;
-		this.bashMode = fields.bashMode;
-		this.textareaEmpty = fields.textareaEmpty;
-		this.placeholderVisible = fields.placeholderVisible;
-		this.cursorVisible = fields.cursorVisible;
-		this.remoteImagesDoNotMutateTextarea = fields.remoteImagesDoNotMutateTextarea;
-		this.renderOnlyHighlights = fields.renderOnlyHighlights;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 
 	public function lineWindowText():String {
 		return visibleStartLine + ".." + visibleEndLine;

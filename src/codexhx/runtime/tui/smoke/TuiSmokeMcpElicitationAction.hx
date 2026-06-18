@@ -51,6 +51,7 @@ typedef TuiSmokeMcpElicitationActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeMcpElicitationAction {
 	public final kind:TuiSmokeMcpElicitationActionKind;
 	public final mode:TuiSmokeMcpElicitationModeKind;
@@ -101,56 +102,6 @@ class TuiSmokeMcpElicitationAction {
 	public final toolSuggestionHasInstallUrl:Bool;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeMcpElicitationActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeMcpElicitationActionKind.Unknown : fields.kind;
-		this.mode = fields.mode == null ? TuiSmokeMcpElicitationModeKind.Unknown : fields.mode;
-		this.fieldInput = fields.fieldInput == null ? TuiSmokeMcpElicitationFieldInputKind.Unknown : fields.fieldInput;
-		this.decision = fields.decision == null ? TuiSmokeMcpElicitationDecisionKind.Unknown : fields.decision;
-		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.serverName = fields.serverName == null ? "" : fields.serverName;
-		this.threadId = fields.threadId == null ? "" : fields.threadId;
-		this.fieldId = fields.fieldId == null ? "" : fields.fieldId;
-		this.toolId = fields.toolId == null ? "" : fields.toolId;
-		this.toolName = fields.toolName == null ? "" : fields.toolName;
-		this.messageChars = fields.messageChars;
-		this.fieldCount = fields.fieldCount;
-		this.requiredFieldCount = fields.requiredFieldCount;
-		this.optionalFieldCount = fields.optionalFieldCount;
-		this.secretFieldCount = fields.secretFieldCount;
-		this.approvalDisplayParamCount = fields.approvalDisplayParamCount;
-		this.currentIndexBefore = fields.currentIndexBefore;
-		this.currentIndexAfter = fields.currentIndexAfter;
-		this.optionCount = fields.optionCount;
-		this.selectedOptionBefore = fields.selectedOptionBefore;
-		this.selectedOptionAfter = fields.selectedOptionAfter;
-		this.draftCharsBefore = fields.draftCharsBefore;
-		this.draftCharsAfter = fields.draftCharsAfter;
-		this.pendingPasteCount = fields.pendingPasteCount;
-		this.answeredBefore = fields.answeredBefore;
-		this.answeredAfter = fields.answeredAfter;
-		this.requiredUnansweredBefore = fields.requiredUnansweredBefore;
-		this.requiredUnansweredAfter = fields.requiredUnansweredAfter;
-		this.queueBefore = fields.queueBefore;
-		this.queueAfter = fields.queueAfter;
-		this.viewStackBefore = fields.viewStackBefore;
-		this.viewStackAfter = fields.viewStackAfter;
-		this.hasInputFocus = fields.hasInputFocus;
-		this.composerDisabled = fields.composerDisabled;
-		this.statusTimerPaused = fields.statusTimerPaused;
-		this.statusTimerResumed = fields.statusTimerResumed;
-		this.frameScheduled = fields.frameScheduled;
-		this.appCommandSent = fields.appCommandSent;
-		this.resolutionSent = fields.resolutionSent;
-		this.resolvedDismissed = fields.resolvedDismissed;
-		this.staleResolution = fields.staleResolution;
-		this.unsupportedRejected = fields.unsupportedRejected;
-		this.completeBefore = fields.completeBefore;
-		this.completeAfter = fields.completeAfter;
-		this.contentFieldCount = fields.contentFieldCount;
-		this.metaPersisted = fields.metaPersisted;
-		this.toolSuggestionHasInstallUrl = fields.toolSuggestionHasInstallUrl;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function queueTransitionText():String {
 		return queueBefore + "->" + queueAfter;

@@ -37,6 +37,7 @@ typedef TuiSmokeComposerFooterRenderActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerFooterRenderAction {
 	public final kind:TuiSmokeComposerFooterRenderActionKind;
 	public final modeBefore:TuiSmokeComposerFooterModeKind;
@@ -73,42 +74,6 @@ class TuiSmokeComposerFooterRenderAction {
 	public final noRatatuiRender:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeComposerFooterRenderActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeComposerFooterRenderActionKind.Unknown : fields.kind;
-		this.modeBefore = fields.modeBefore == null ? TuiSmokeComposerFooterModeKind.Unknown : fields.modeBefore;
-		this.modeAfter = fields.modeAfter == null ? TuiSmokeComposerFooterModeKind.Unknown : fields.modeAfter;
-		this.baseMode = fields.baseMode == null ? TuiSmokeComposerFooterModeKind.Unknown : fields.baseMode;
-		this.keyName = fields.keyName == null ? "" : fields.keyName;
-		this.statusText = fields.statusText == null ? "" : fields.statusText;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.footerHeight = fields.footerHeight;
-		this.spacing = fields.spacing;
-		this.totalHeight = fields.totalHeight;
-		this.lineCount = fields.lineCount;
-		this.hintCount = fields.hintCount;
-		this.width = fields.width;
-		this.hasInputFocus = fields.hasInputFocus;
-		this.taskRunning = fields.taskRunning;
-		this.inputEmpty = fields.inputEmpty;
-		this.historySearchActive = fields.historySearchActive;
-		this.quitHintVisible = fields.quitHintVisible;
-		this.quitHintExpired = fields.quitHintExpired;
-		this.shortcutOverlayActive = fields.shortcutOverlayActive;
-		this.collaborationModesEnabled = fields.collaborationModesEnabled;
-		this.collaborationIndicatorVisible = fields.collaborationIndicatorVisible;
-		this.showCycleHint = fields.showCycleHint;
-		this.showShortcutsHint = fields.showShortcutsHint;
-		this.showQueueHint = fields.showQueueHint;
-		this.pasteBurstActive = fields.pasteBurstActive;
-		this.statusLineEnabled = fields.statusLineEnabled;
-		this.passiveStatusActive = fields.passiveStatusActive;
-		this.statusHyperlinkActive = fields.statusHyperlinkActive;
-		this.escBacktrackHint = fields.escBacktrackHint;
-		this.ctrlCQuitHint = fields.ctrlCQuitHint;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 
 	public function modeTransitionText():String {
 		return modeBefore + "->" + modeAfter;

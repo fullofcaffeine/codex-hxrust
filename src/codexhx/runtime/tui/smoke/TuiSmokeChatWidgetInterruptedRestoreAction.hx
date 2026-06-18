@@ -46,6 +46,7 @@ typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final kind:TuiSmokeChatWidgetInterruptedRestoreActionKind;
 	public final reason:String;
@@ -91,49 +92,4 @@ class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final noModelCall:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeChatWidgetInterruptedRestoreActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeChatWidgetInterruptedRestoreActionKind.Unknown : fields.kind;
-		this.reason = fields.reason == null ? "" : fields.reason;
-		this.noticeMode = fields.noticeMode == null ? "" : fields.noticeMode;
-		this.noticeText = fields.noticeText == null ? "" : fields.noticeText;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.promptText = fields.promptText == null ? "" : fields.promptText;
-		this.restoredText = fields.restoredText == null ? "" : fields.restoredText;
-		this.composerText = fields.composerText == null ? "" : fields.composerText;
-		this.queuedMessagesBefore = fields.queuedMessagesBefore;
-		this.queuedMessagesAfter = fields.queuedMessagesAfter;
-		this.pendingSteersBefore = fields.pendingSteersBefore;
-		this.pendingSteersAfter = fields.pendingSteersAfter;
-		this.rejectedSteersBefore = fields.rejectedSteersBefore;
-		this.rejectedSteersAfter = fields.rejectedSteersAfter;
-		this.remoteImageCount = fields.remoteImageCount;
-		this.localImageCount = fields.localImageCount;
-		this.mentionBindingCount = fields.mentionBindingCount;
-		this.cancelEditEligibleBefore = fields.cancelEditEligibleBefore;
-		this.cancelEditEligibleAfter = fields.cancelEditEligibleAfter;
-		this.cancelEditArmedBefore = fields.cancelEditArmedBefore;
-		this.cancelEditArmedAfter = fields.cancelEditArmedAfter;
-		this.cancelEditPromptBefore = fields.cancelEditPromptBefore;
-		this.cancelEditPromptAfter = fields.cancelEditPromptAfter;
-		this.composerEmpty = fields.composerEmpty;
-		this.sideConversationActive = fields.sideConversationActive;
-		this.sendPendingSteersImmediately = fields.sendPendingSteersImmediately;
-		this.submitPendingSteersAfterInterruptBefore = fields.submitPendingSteersAfterInterruptBefore;
-		this.submitPendingSteersAfterInterruptAfter = fields.submitPendingSteersAfterInterruptAfter;
-		this.finalizedTurn = fields.finalizedTurn;
-		this.noticeInserted = fields.noticeInserted;
-		this.noticeSuppressed = fields.noticeSuppressed;
-		this.pendingMerged = fields.pendingMerged;
-		this.queuedMerged = fields.queuedMerged;
-		this.composerMerged = fields.composerMerged;
-		this.composerRestored = fields.composerRestored;
-		this.cancelledTurnRestoreEventSent = fields.cancelledTurnRestoreEventSent;
-		this.pendingPreviewRefreshed = fields.pendingPreviewRefreshed;
-		this.threadRollbackSent = fields.threadRollbackSent;
-		this.requestRedraw = fields.requestRedraw;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.noModelCall = fields.noModelCall;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 }

@@ -30,9 +30,12 @@ typedef TuiSmokeTerminalModeActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeTerminalModeAction {
 	public final kind:TuiSmokeTerminalModeActionKind;
+	@:recordDefault(TuiSmokeRawModeRestoreKind.None)
 	public final rawModeRestore:TuiSmokeRawModeRestoreKind;
+	@:recordDefault(TuiSmokeKeyboardRestoreKind.None)
 	public final keyboardRestore:TuiSmokeKeyboardRestoreKind;
 	public final virtualTerminalProcessing:Bool;
 	public final bracketedPaste:Bool;
@@ -42,6 +45,7 @@ class TuiSmokeTerminalModeAction {
 	public final cursorDefault:Bool;
 	public final cursorShow:Bool;
 	public final keyboardEnhancementDisabled:Bool;
+	@:recordDefault("none")
 	public final envOverride:String;
 	public final wsl:Bool;
 	public final vscodeTerminal:Bool;
@@ -59,33 +63,4 @@ class TuiSmokeTerminalModeAction {
 	public final supported:Bool;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeTerminalModeActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeTerminalModeActionKind.Unknown : fields.kind;
-		this.rawModeRestore = fields.rawModeRestore == null ? TuiSmokeRawModeRestoreKind.None : fields.rawModeRestore;
-		this.keyboardRestore = fields.keyboardRestore == null ? TuiSmokeKeyboardRestoreKind.None : fields.keyboardRestore;
-		this.virtualTerminalProcessing = fields.virtualTerminalProcessing;
-		this.bracketedPaste = fields.bracketedPaste;
-		this.rawMode = fields.rawMode;
-		this.focusChange = fields.focusChange;
-		this.mouseCapture = fields.mouseCapture;
-		this.cursorDefault = fields.cursorDefault;
-		this.cursorShow = fields.cursorShow;
-		this.keyboardEnhancementDisabled = fields.keyboardEnhancementDisabled;
-		this.envOverride = fields.envOverride == null ? "none" : fields.envOverride;
-		this.wsl = fields.wsl;
-		this.vscodeTerminal = fields.vscodeTerminal;
-		this.tmuxSession = fields.tmuxSession;
-		this.tmuxCsiU = fields.tmuxCsiU;
-		this.pushKeyboardEnhancement = fields.pushKeyboardEnhancement;
-		this.popKeyboardEnhancement = fields.popKeyboardEnhancement;
-		this.resetKeyboardEnhancement = fields.resetKeyboardEnhancement;
-		this.modifyOtherKeys = fields.modifyOtherKeys;
-		this.stdinTerminal = fields.stdinTerminal;
-		this.stdoutTerminal = fields.stdoutTerminal;
-		this.flushInput = fields.flushInput;
-		this.panicHook = fields.panicHook;
-		this.terminalStderrFinish = fields.terminalStderrFinish;
-		this.supported = fields.supported;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 }

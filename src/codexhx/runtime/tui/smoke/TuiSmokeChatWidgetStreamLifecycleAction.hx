@@ -47,6 +47,7 @@ typedef TuiSmokeChatWidgetStreamLifecycleActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetStreamLifecycleAction {
 	public final kind:TuiSmokeChatWidgetStreamLifecycleActionKind;
 	public final interruptKind:String;
@@ -93,50 +94,4 @@ class TuiSmokeChatWidgetStreamLifecycleAction {
 	public final noModelCall:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeChatWidgetStreamLifecycleActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeChatWidgetStreamLifecycleActionKind.Unknown : fields.kind;
-		this.interruptKind = fields.interruptKind == null ? "" : fields.interruptKind;
-		this.finishReason = fields.finishReason == null ? "" : fields.finishReason;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.delta = fields.delta == null ? "" : fields.delta;
-		this.queuedInterruptsBefore = fields.queuedInterruptsBefore;
-		this.queuedInterruptsAfter = fields.queuedInterruptsAfter;
-		this.queuedLinesBefore = fields.queuedLinesBefore;
-		this.queuedLinesAfter = fields.queuedLinesAfter;
-		this.committedCells = fields.committedCells;
-		this.activeStreamControllerBefore = fields.activeStreamControllerBefore;
-		this.activeStreamControllerAfter = fields.activeStreamControllerAfter;
-		this.planStreamControllerBefore = fields.planStreamControllerBefore;
-		this.planStreamControllerAfter = fields.planStreamControllerAfter;
-		this.activeTailBefore = fields.activeTailBefore;
-		this.activeTailAfter = fields.activeTailAfter;
-		this.taskCompletePendingBefore = fields.taskCompletePendingBefore;
-		this.taskCompletePendingAfter = fields.taskCompletePendingAfter;
-		this.taskRunningBefore = fields.taskRunningBefore;
-		this.taskRunningAfter = fields.taskRunningAfter;
-		this.statusHidden = fields.statusHidden;
-		this.statusPreserved = fields.statusPreserved;
-		this.pendingStatusRestoreBefore = fields.pendingStatusRestoreBefore;
-		this.pendingStatusRestoreAfter = fields.pendingStatusRestoreAfter;
-		this.interruptQueued = fields.interruptQueued;
-		this.interruptHandled = fields.interruptHandled;
-		this.fifoPreserved = fields.fifoPreserved;
-		this.flushedInterrupts = fields.flushedInterrupts;
-		this.startCommitAnimation = fields.startCommitAnimation;
-		this.stopCommitAnimation = fields.stopCommitAnimation;
-		this.catchUpTick = fields.catchUpTick;
-		this.adaptiveChunkingReset = fields.adaptiveChunkingReset;
-		this.runningCommandsCleared = fields.runningCommandsCleared;
-		this.suppressedExecCleared = fields.suppressedExecCleared;
-		this.unifiedWaitCleared = fields.unifiedWaitCleared;
-		this.cancelEditCleared = fields.cancelEditCleared;
-		this.rateLimitPromptChecked = fields.rateLimitPromptChecked;
-		this.taskStateUpdated = fields.taskStateUpdated;
-		this.statusSurfacesRefreshed = fields.statusSurfacesRefreshed;
-		this.requestRedraw = fields.requestRedraw;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.noModelCall = fields.noModelCall;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 }

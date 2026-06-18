@@ -36,6 +36,7 @@ typedef TuiSmokeChatWidgetStreamStatusActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetStreamStatusAction {
 	public final kind:TuiSmokeChatWidgetStreamStatusActionKind;
 	public final phase:String;
@@ -71,39 +72,4 @@ class TuiSmokeChatWidgetStreamStatusAction {
 	public final noModelCall:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeChatWidgetStreamStatusActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeChatWidgetStreamStatusActionKind.Unknown : fields.kind;
-		this.phase = fields.phase == null ? "" : fields.phase;
-		this.titleKind = fields.titleKind == null ? "" : fields.titleKind;
-		this.runState = fields.runState == null ? "" : fields.runState;
-		this.header = fields.header == null ? "" : fields.header;
-		this.details = fields.details == null ? "" : fields.details;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.reasoningDelta = fields.reasoningDelta == null ? "" : fields.reasoningDelta;
-		this.extractedHeader = fields.extractedHeader == null ? "" : fields.extractedHeader;
-		this.reasoningBufferLength = fields.reasoningBufferLength;
-		this.fullReasoningBufferLength = fields.fullReasoningBufferLength;
-		this.detailsMaxLines = fields.detailsMaxLines;
-		this.queuedLines = fields.queuedLines;
-		this.pendingSteers = fields.pendingSteers;
-		this.pendingRestoreBefore = fields.pendingRestoreBefore;
-		this.pendingRestoreAfter = fields.pendingRestoreAfter;
-		this.taskRunning = fields.taskRunning;
-		this.streamIdle = fields.streamIdle;
-		this.statusEnsured = fields.statusEnsured;
-		this.statusUpdated = fields.statusUpdated;
-		this.statusHidden = fields.statusHidden;
-		this.statusRestored = fields.statusRestored;
-		this.titleUsesStatus = fields.titleUsesStatus;
-		this.statusSurfacesRefreshed = fields.statusSurfacesRefreshed;
-		this.retryHeaderRemembered = fields.retryHeaderRemembered;
-		this.historyInserted = fields.historyInserted;
-		this.reasoningCleared = fields.reasoningCleared;
-		this.unifiedExecWaitActive = fields.unifiedExecWaitActive;
-		this.requestRedraw = fields.requestRedraw;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.noModelCall = fields.noModelCall;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 }

@@ -5,14 +5,10 @@ typedef TuiSmokeComposerEditingPlanFields = {
 	final actions:Array<TuiSmokeComposerEditingAction>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerEditingPlan {
 	public final allowLiveInput:Bool;
 	public final actions:Array<TuiSmokeComposerEditingAction>;
-
-	public function new(fields:TuiSmokeComposerEditingPlanFields) {
-		this.allowLiveInput = fields.allowLiveInput;
-		this.actions = fields.actions == null ? [] : fields.actions;
-	}
 
 	public function enabled():Bool {
 		return !allowLiveInput && actions.length > 0;

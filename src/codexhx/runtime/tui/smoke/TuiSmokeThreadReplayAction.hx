@@ -14,6 +14,7 @@ typedef TuiSmokeThreadReplayActionFields = {
 	final resumeRestoredQueue:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeThreadReplayAction {
 	public final kind:TuiSmokeThreadReplayActionKind;
 	public final threadId:String;
@@ -27,19 +28,6 @@ class TuiSmokeThreadReplayAction {
 	public final resizeReflowEnabled:Bool;
 	public final resumeRestoredQueue:Bool;
 
-	public function new(fields:TuiSmokeThreadReplayActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeThreadReplayActionKind.Unknown : fields.kind;
-		this.threadId = fields.threadId == null ? "" : fields.threadId;
-		this.session = fields.session;
-		this.inputState = fields.inputState;
-		this.turns = fields.turns == null ? [] : fields.turns;
-		this.snapshotRequests = fields.snapshotRequests == null ? [] : fields.snapshotRequests;
-		this.snapshotEvents = fields.snapshotEvents == null ? [] : fields.snapshotEvents;
-		this.replayBuffer = fields.replayBuffer;
-		this.traceRequestSurfaces = fields.traceRequestSurfaces;
-		this.resizeReflowEnabled = fields.resizeReflowEnabled;
-		this.resumeRestoredQueue = fields.resumeRestoredQueue;
-	}
 
 	public function shouldBufferReplay(hasSnapshotEvents:Bool):Bool {
 		final hasReplayBuffer = replayBuffer != null && replayBuffer.enabled();

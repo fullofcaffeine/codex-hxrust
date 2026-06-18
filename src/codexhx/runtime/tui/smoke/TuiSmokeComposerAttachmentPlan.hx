@@ -5,14 +5,10 @@ typedef TuiSmokeComposerAttachmentPlanFields = {
 	final actions:Array<TuiSmokeComposerAttachmentAction>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerAttachmentPlan {
 	public final allowLiveFilesystem:Bool;
 	public final actions:Array<TuiSmokeComposerAttachmentAction>;
-
-	public function new(fields:TuiSmokeComposerAttachmentPlanFields) {
-		this.allowLiveFilesystem = fields.allowLiveFilesystem;
-		this.actions = fields.actions == null ? [] : fields.actions;
-	}
 
 	public function enabled():Bool {
 		return !allowLiveFilesystem && actions.length > 0;

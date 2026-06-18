@@ -6,16 +6,11 @@ typedef TuiSmokeComposerPopupKeyPlanFields = {
 	final actions:Array<TuiSmokeComposerPopupKeyAction>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerPopupKeyPlan {
 	public final allowLiveInput:Bool;
 	public final allowLiveFileProbe:Bool;
 	public final actions:Array<TuiSmokeComposerPopupKeyAction>;
-
-	public function new(fields:TuiSmokeComposerPopupKeyPlanFields) {
-		this.allowLiveInput = fields.allowLiveInput;
-		this.allowLiveFileProbe = fields.allowLiveFileProbe;
-		this.actions = fields.actions == null ? [] : fields.actions;
-	}
 
 	public function enabled():Bool {
 		return !allowLiveInput && !allowLiveFileProbe && actions.length > 0;

@@ -36,6 +36,7 @@ typedef TuiSmokeApprovalActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeApprovalAction {
 	public final kind:TuiSmokeApprovalActionKind;
 	public final requestKind:TuiSmokeApprovalRequestKind;
@@ -71,41 +72,6 @@ class TuiSmokeApprovalAction {
 	public final conflictAction:String;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeApprovalActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeApprovalActionKind.Unknown : fields.kind;
-		this.requestKind = fields.requestKind == null ? TuiSmokeApprovalRequestKind.Unknown : fields.requestKind;
-		this.decision = fields.decision == null ? TuiSmokeApprovalDecisionKind.Unknown : fields.decision;
-		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.approvalId = fields.approvalId == null ? "" : fields.approvalId;
-		this.threadLabel = fields.threadLabel == null ? "" : fields.threadLabel;
-		this.promptTitle = fields.promptTitle == null ? "" : fields.promptTitle;
-		this.options = fields.options;
-		this.selectedIndex = fields.selectedIndex;
-		this.queueBefore = fields.queueBefore;
-		this.queueAfter = fields.queueAfter;
-		this.delayedBefore = fields.delayedBefore;
-		this.delayedAfter = fields.delayedAfter;
-		this.viewStackBefore = fields.viewStackBefore;
-		this.viewStackAfter = fields.viewStackAfter;
-		this.consumedByActiveView = fields.consumedByActiveView;
-		this.promptDelayed = fields.promptDelayed;
-		this.delayMs = fields.delayMs;
-		this.statusTimerPaused = fields.statusTimerPaused;
-		this.statusTimerResumed = fields.statusTimerResumed;
-		this.historyCellInserted = fields.historyCellInserted;
-		this.appCommandSent = fields.appCommandSent;
-		this.resolutionSent = fields.resolutionSent;
-		this.resolvedDismissed = fields.resolvedDismissed;
-		this.staleResolution = fields.staleResolution;
-		this.unsupportedRejected = fields.unsupportedRejected;
-		this.completeBefore = fields.completeBefore;
-		this.completeAfter = fields.completeAfter;
-		this.frameScheduled = fields.frameScheduled;
-		this.keyAction = fields.keyAction == null ? "" : fields.keyAction;
-		this.conflictPrevious = fields.conflictPrevious == null ? "" : fields.conflictPrevious;
-		this.conflictAction = fields.conflictAction == null ? "" : fields.conflictAction;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function queueTransitionText():String {
 		return queueBefore + "->" + queueAfter;

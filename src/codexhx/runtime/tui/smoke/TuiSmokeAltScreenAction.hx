@@ -31,6 +31,7 @@ typedef TuiSmokeAltScreenActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeAltScreenAction {
 	public final kind:TuiSmokeAltScreenActionKind;
 	public final enabled:Bool;
@@ -61,36 +62,6 @@ class TuiSmokeAltScreenAction {
 	public final clearAfterY:Int;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeAltScreenActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeAltScreenActionKind.Unknown : fields.kind;
-		this.enabled = fields.enabled;
-		this.activeBefore = fields.activeBefore;
-		this.activeAfter = fields.activeAfter;
-		this.savedViewportPresentBefore = fields.savedViewportPresentBefore;
-		this.savedViewportPresentAfter = fields.savedViewportPresentAfter;
-		this.previousViewportX = fields.previousViewportX;
-		this.previousViewportY = fields.previousViewportY;
-		this.previousViewportWidth = fields.previousViewportWidth;
-		this.previousViewportHeight = fields.previousViewportHeight;
-		this.savedViewportX = fields.savedViewportX;
-		this.savedViewportY = fields.savedViewportY;
-		this.savedViewportWidth = fields.savedViewportWidth;
-		this.savedViewportHeight = fields.savedViewportHeight;
-		this.terminalWidth = fields.terminalWidth;
-		this.terminalHeight = fields.terminalHeight;
-		this.appliedViewportX = fields.appliedViewportX;
-		this.appliedViewportY = fields.appliedViewportY;
-		this.appliedViewportWidth = fields.appliedViewportWidth;
-		this.appliedViewportHeight = fields.appliedViewportHeight;
-		this.enterAlternateScreen = fields.enterAlternateScreen;
-		this.leaveAlternateScreen = fields.leaveAlternateScreen;
-		this.enableAlternateScroll = fields.enableAlternateScroll;
-		this.disableAlternateScroll = fields.disableAlternateScroll;
-		this.clearTerminal = fields.clearTerminal;
-		this.clearAfterX = fields.clearAfterX;
-		this.clearAfterY = fields.clearAfterY;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function activeTransitionText():String {
 		return activeBefore + "->" + activeAfter;

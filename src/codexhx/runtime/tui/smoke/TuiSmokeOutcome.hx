@@ -8,18 +8,11 @@ typedef TuiSmokeOutcomeFields = {
 	final terminalRestored:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeOutcome {
 	public final ok:Bool;
 	public final code:String;
 	public final exit:TuiSmokeExitKind;
 	public final snapshot:String;
 	public final terminalRestored:Bool;
-
-	public function new(fields:TuiSmokeOutcomeFields) {
-		this.ok = fields.ok;
-		this.code = fields.code == null ? "" : fields.code;
-		this.exit = fields.exit == null ? TuiSmokeExitKind.Unknown : fields.exit;
-		this.snapshot = fields.snapshot == null ? "" : fields.snapshot;
-		this.terminalRestored = fields.terminalRestored;
-	}
 }

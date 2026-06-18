@@ -45,6 +45,7 @@ typedef TuiSmokeUserInputActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeUserInputAction {
 	public final kind:TuiSmokeUserInputActionKind;
 	public final requestKind:TuiSmokeUserInputRequestKind;
@@ -89,50 +90,6 @@ class TuiSmokeUserInputAction {
 	public final secretQuestionCount:Int;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeUserInputActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeUserInputActionKind.Unknown : fields.kind;
-		this.requestKind = fields.requestKind == null ? TuiSmokeUserInputRequestKind.Unknown : fields.requestKind;
-		this.focus = fields.focus == null ? TuiSmokeUserInputFocusKind.Unknown : fields.focus;
-		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.turnId = fields.turnId == null ? "" : fields.turnId;
-		this.itemId = fields.itemId == null ? "" : fields.itemId;
-		this.questionId = fields.questionId == null ? "" : fields.questionId;
-		this.callId = fields.callId == null ? "" : fields.callId;
-		this.questionCount = fields.questionCount;
-		this.currentIndexBefore = fields.currentIndexBefore;
-		this.currentIndexAfter = fields.currentIndexAfter;
-		this.optionCount = fields.optionCount;
-		this.selectedOptionBefore = fields.selectedOptionBefore;
-		this.selectedOptionAfter = fields.selectedOptionAfter;
-		this.draftCharsBefore = fields.draftCharsBefore;
-		this.draftCharsAfter = fields.draftCharsAfter;
-		this.pendingPasteCount = fields.pendingPasteCount;
-		this.notesVisible = fields.notesVisible;
-		this.answeredBefore = fields.answeredBefore;
-		this.answeredAfter = fields.answeredAfter;
-		this.unansweredBefore = fields.unansweredBefore;
-		this.unansweredAfter = fields.unansweredAfter;
-		this.queueBefore = fields.queueBefore;
-		this.queueAfter = fields.queueAfter;
-		this.viewStackBefore = fields.viewStackBefore;
-		this.viewStackAfter = fields.viewStackAfter;
-		this.hasInputFocus = fields.hasInputFocus;
-		this.composerDisabled = fields.composerDisabled;
-		this.statusTimerPaused = fields.statusTimerPaused;
-		this.statusTimerResumed = fields.statusTimerResumed;
-		this.frameScheduled = fields.frameScheduled;
-		this.appCommandSent = fields.appCommandSent;
-		this.historyCellInserted = fields.historyCellInserted;
-		this.resolutionSent = fields.resolutionSent;
-		this.resolvedDismissed = fields.resolvedDismissed;
-		this.staleResolution = fields.staleResolution;
-		this.unsupportedRejected = fields.unsupportedRejected;
-		this.completeBefore = fields.completeBefore;
-		this.completeAfter = fields.completeAfter;
-		this.answerCount = fields.answerCount;
-		this.secretQuestionCount = fields.secretQuestionCount;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function queueTransitionText():String {
 		return queueBefore + "->" + queueAfter;

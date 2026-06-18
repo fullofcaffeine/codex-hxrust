@@ -51,6 +51,7 @@ typedef TuiSmokeComposerSubmissionActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerSubmissionAction {
 	public final kind:TuiSmokeComposerSubmissionActionKind;
 	public final result:TuiSmokeComposerSubmissionResultKind;
@@ -101,56 +102,6 @@ class TuiSmokeComposerSubmissionAction {
 	public final noLiveDispatch:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeComposerSubmissionActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeComposerSubmissionActionKind.Unknown : fields.kind;
-		this.result = fields.result == null ? TuiSmokeComposerSubmissionResultKind.Unknown : fields.result;
-		this.queuedAction = fields.queuedAction == null ? TuiSmokeComposerQueuedActionKind.Unknown : fields.queuedAction;
-		this.slashValidation = fields.slashValidation == null ? TuiSmokeComposerSlashValidationKind.Unknown : fields.slashValidation;
-		this.inputText = fields.inputText == null ? "" : fields.inputText;
-		this.preparedText = fields.preparedText == null ? "" : fields.preparedText;
-		this.argsText = fields.argsText == null ? "" : fields.argsText;
-		this.commandName = fields.commandName == null ? "" : fields.commandName;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.charCount = fields.charCount;
-		this.maxChars = fields.maxChars;
-		this.pendingBefore = fields.pendingBefore;
-		this.pendingAfter = fields.pendingAfter;
-		this.textElementBefore = fields.textElementBefore;
-		this.textElementAfter = fields.textElementAfter;
-		this.localImageBefore = fields.localImageBefore;
-		this.localImageAfter = fields.localImageAfter;
-		this.remoteImageBefore = fields.remoteImageBefore;
-		this.remoteImageAfter = fields.remoteImageAfter;
-		this.queueBefore = fields.queueBefore;
-		this.queueAfter = fields.queueAfter;
-		this.shouldQueue = fields.shouldQueue;
-		this.recordHistory = fields.recordHistory;
-		this.pasteBurstFlushed = fields.pasteBurstFlushed;
-		this.pendingExpanded = fields.pendingExpanded;
-		this.pendingRestored = fields.pendingRestored;
-		this.pendingCleared = fields.pendingCleared;
-		this.textTrimmed = fields.textTrimmed;
-		this.slashValidationDeferred = fields.slashValidationDeferred;
-		this.slashValidationFailed = fields.slashValidationFailed;
-		this.tooLargeRejected = fields.tooLargeRejected;
-		this.emptySuppressed = fields.emptySuppressed;
-		this.imagesPruned = fields.imagesPruned;
-		this.localImagesDrained = fields.localImagesDrained;
-		this.remoteImagesDrained = fields.remoteImagesDrained;
-		this.messageBuilt = fields.messageBuilt;
-		this.submittedNow = fields.submittedNow;
-		this.queued = fields.queued;
-		this.statusWorking = fields.statusWorking;
-		this.reasoningCleared = fields.reasoningCleared;
-		this.historyStaged = fields.historyStaged;
-		this.historyRecorded = fields.historyRecorded;
-		this.vimNormalEntered = fields.vimNormalEntered;
-		this.modelSupportsImages = fields.modelSupportsImages;
-		this.blockedRestored = fields.blockedRestored;
-		this.appEventSent = fields.appEventSent;
-		this.noLiveDispatch = fields.noLiveDispatch;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 
 	public function pendingTransitionText():String {
 		return pendingBefore + "->" + pendingAfter;

@@ -7,18 +7,12 @@ typedef TuiSmokeChatWidgetComposerRenderPlanFields = {
 	final actions:Array<TuiSmokeChatWidgetComposerRenderAction>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetComposerRenderPlan {
 	public final allowLiveTerminal:Bool;
 	public final allowRatatuiRender:Bool;
 	public final allowLiveDispatch:Bool;
 	public final actions:Array<TuiSmokeChatWidgetComposerRenderAction>;
-
-	public function new(fields:TuiSmokeChatWidgetComposerRenderPlanFields) {
-		this.allowLiveTerminal = fields.allowLiveTerminal;
-		this.allowRatatuiRender = fields.allowRatatuiRender;
-		this.allowLiveDispatch = fields.allowLiveDispatch;
-		this.actions = fields.actions == null ? [] : fields.actions;
-	}
 
 	public function enabled():Bool {
 		return !allowLiveTerminal && !allowRatatuiRender && !allowLiveDispatch && actions.length > 0;

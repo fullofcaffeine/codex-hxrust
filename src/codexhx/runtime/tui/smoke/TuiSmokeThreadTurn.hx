@@ -6,16 +6,11 @@ typedef TuiSmokeThreadTurnFields = {
 	final items:Array<TuiSmokeThreadItem>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeThreadTurn {
 	public final turnId:String;
 	public final status:TuiSmokeThreadTurnStatus;
 	public final items:Array<TuiSmokeThreadItem>;
-
-	public function new(fields:TuiSmokeThreadTurnFields) {
-		this.turnId = fields.turnId == null ? "" : fields.turnId;
-		this.status = fields.status == null ? TuiSmokeThreadTurnStatus.Unknown : fields.status;
-		this.items = fields.items == null ? [] : fields.items;
-	}
 
 	public function isTerminal():Bool {
 		return status == TuiSmokeThreadTurnStatus.Completed

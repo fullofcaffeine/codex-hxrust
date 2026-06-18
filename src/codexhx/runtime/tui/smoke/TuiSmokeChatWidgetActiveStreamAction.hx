@@ -44,6 +44,7 @@ typedef TuiSmokeChatWidgetActiveStreamActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetActiveStreamAction {
 	public final kind:TuiSmokeChatWidgetActiveStreamActionKind;
 	public final renderMode:String;
@@ -87,49 +88,6 @@ class TuiSmokeChatWidgetActiveStreamAction {
 	public final noModelCall:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeChatWidgetActiveStreamActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeChatWidgetActiveStreamActionKind.Unknown : fields.kind;
-		this.renderMode = fields.renderMode == null ? "" : fields.renderMode;
-		this.scrollbackReflow = fields.scrollbackReflow == null ? "" : fields.scrollbackReflow;
-		this.text = fields.text == null ? "" : fields.text;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.width = fields.width;
-		this.previousWidth = fields.previousWidth;
-		this.streamReservedCols = fields.streamReservedCols;
-		this.planReservedCols = fields.planReservedCols;
-		this.streamWidth = fields.streamWidth;
-		this.planStreamWidth = fields.planStreamWidth;
-		this.queuedLinesBefore = fields.queuedLinesBefore;
-		this.queuedLinesAfter = fields.queuedLinesAfter;
-		this.committedCells = fields.committedCells;
-		this.revisionBefore = fields.revisionBefore;
-		this.revisionAfter = fields.revisionAfter;
-		this.animationTick = fields.animationTick;
-		this.transcriptLineCount = fields.transcriptLineCount;
-		this.hyperlinkLineCount = fields.hyperlinkLineCount;
-		this.planBufferLength = fields.planBufferLength;
-		this.activeCellPresent = fields.activeCellPresent;
-		this.activeHookPresent = fields.activeHookPresent;
-		this.streamControllerPresent = fields.streamControllerPresent;
-		this.planStreamControllerPresent = fields.planStreamControllerPresent;
-		this.pushed = fields.pushed;
-		this.startedCommitAnimation = fields.startedCommitAnimation;
-		this.ranCatchUpTick = fields.ranCatchUpTick;
-		this.statusHidden = fields.statusHidden;
-		this.statusRestorePending = fields.statusRestorePending;
-		this.statusRestored = fields.statusRestored;
-		this.activeTailPresent = fields.activeTailPresent;
-		this.liveTailPresent = fields.liveTailPresent;
-		this.activeTailCleared = fields.activeTailCleared;
-		this.sourceConsolidated = fields.sourceConsolidated;
-		this.historyInserted = fields.historyInserted;
-		this.deferredHistoryCell = fields.deferredHistoryCell;
-		this.requestRedraw = fields.requestRedraw;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.noModelCall = fields.noModelCall;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 
 	public function streamQueueText():String {
 		return queuedLinesBefore + "->" + queuedLinesAfter;

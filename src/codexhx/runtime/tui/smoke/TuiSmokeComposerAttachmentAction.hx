@@ -55,6 +55,7 @@ typedef TuiSmokeComposerAttachmentActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerAttachmentAction {
 	public final kind:TuiSmokeComposerAttachmentActionKind;
 	public final pasteKind:TuiSmokeComposerPasteKind;
@@ -109,60 +110,6 @@ class TuiSmokeComposerAttachmentAction {
 	public final noLiveFilesystem:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeComposerAttachmentActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeComposerAttachmentActionKind.Unknown : fields.kind;
-		this.pasteKind = fields.pasteKind == null ? TuiSmokeComposerPasteKind.Unknown : fields.pasteKind;
-		this.attachmentKind = fields.attachmentKind == null ? TuiSmokeComposerAttachmentKind.Unknown : fields.attachmentKind;
-		this.burstBefore = fields.burstBefore == null ? TuiSmokeComposerPasteBurstStateKind.Unknown : fields.burstBefore;
-		this.burstAfter = fields.burstAfter == null ? TuiSmokeComposerPasteBurstStateKind.Unknown : fields.burstAfter;
-		this.inputText = fields.inputText == null ? "" : fields.inputText;
-		this.normalizedText = fields.normalizedText == null ? "" : fields.normalizedText;
-		this.placeholder = fields.placeholder == null ? "" : fields.placeholder;
-		this.path = fields.path == null ? "" : fields.path;
-		this.remoteUrl = fields.remoteUrl == null ? "" : fields.remoteUrl;
-		this.keyName = fields.keyName == null ? "" : fields.keyName;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.charCount = fields.charCount;
-		this.threshold = fields.threshold;
-		this.pendingBefore = fields.pendingBefore;
-		this.pendingAfter = fields.pendingAfter;
-		this.textElementBefore = fields.textElementBefore;
-		this.textElementAfter = fields.textElementAfter;
-		this.localImageBefore = fields.localImageBefore;
-		this.localImageAfter = fields.localImageAfter;
-		this.remoteImageBefore = fields.remoteImageBefore;
-		this.remoteImageAfter = fields.remoteImageAfter;
-		this.selectedRemoteBefore = fields.selectedRemoteBefore;
-		this.selectedRemoteAfter = fields.selectedRemoteAfter;
-		this.cursorBefore = fields.cursorBefore;
-		this.cursorAfter = fields.cursorAfter;
-		this.needsRedraw = fields.needsRedraw;
-		this.frameScheduled = fields.frameScheduled;
-		this.pasteBurstDisabled = fields.pasteBurstDisabled;
-		this.buffered = fields.buffered;
-		this.flushed = fields.flushed;
-		this.newlineCaptured = fields.newlineCaptured;
-		this.placeholderInserted = fields.placeholderInserted;
-		this.pendingStored = fields.pendingStored;
-		this.pendingExpanded = fields.pendingExpanded;
-		this.pendingCleared = fields.pendingCleared;
-		this.imagePasteEnabled = fields.imagePasteEnabled;
-		this.imageDimensionsChecked = fields.imageDimensionsChecked;
-		this.imageAttached = fields.imageAttached;
-		this.pathInsertedFallback = fields.pathInsertedFallback;
-		this.textInserted = fields.textInserted;
-		this.selectionCleared = fields.selectionCleared;
-		this.remoteRelabeledLocals = fields.remoteRelabeledLocals;
-		this.draftSnapshotStored = fields.draftSnapshotStored;
-		this.draftRestored = fields.draftRestored;
-		this.historyEntryApplied = fields.historyEntryApplied;
-		this.submissionSuppressed = fields.submissionSuppressed;
-		this.submissionPrepared = fields.submissionPrepared;
-		this.localImagesPruned = fields.localImagesPruned;
-		this.remoteImagesTaken = fields.remoteImagesTaken;
-		this.noLiveFilesystem = fields.noLiveFilesystem;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 
 	public function pendingTransitionText():String {
 		return pendingBefore + "->" + pendingAfter;

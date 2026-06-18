@@ -81,9 +81,35 @@ class FieldRecordConstructor {
 				nullCoalesce(source, macro "", pos);
 			case TPath({pack: [], name: "Array"}):
 				nullCoalesce(source, macro [], pos);
+			case TPath({pack: [], name: "Bool" | "Int" | "Float"}):
+				source;
+			case TPath({pack: [], name: "Null"}):
+				source;
+			case TPath(path):
+				nullCoalesce(source, unknownValue(path, pos), pos);
 			case _:
 				source;
 		}
+	}
+
+	static function unknownValue(path:TypePath, pos:Position):Expr {
+		return {
+			expr: EField({
+				expr: path.pack.length == 0
+					? EConst(CIdent(path.name))
+					: EField(drill(path.pack, pos), path.name),
+				pos: pos
+			}, "Unknown"),
+			pos: pos
+		};
+	}
+
+	static function drill(parts:Array<String>, pos:Position):Expr {
+		var out:Expr = {expr: EConst(CIdent(parts[0])), pos: pos};
+		for (i in 1...parts.length) {
+			out = {expr: EField(out, parts[i]), pos: pos};
+		}
+		return out;
 	}
 
 	static function nullCoalesce(value:Expr, fallback:Expr, pos:Position):Expr {

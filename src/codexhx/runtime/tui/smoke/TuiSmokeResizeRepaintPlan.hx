@@ -14,6 +14,7 @@ typedef TuiSmokeResizeRepaintPlanFields = {
 	final insertRows:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeResizeRepaintPlan {
 	public final transcriptCellCount:Int;
 	public final reflowedRows:Int;
@@ -27,19 +28,6 @@ class TuiSmokeResizeRepaintPlan {
 	public final emptyTranscript:Bool;
 	public final insertRows:Bool;
 
-	public function new(fields:TuiSmokeResizeRepaintPlanFields) {
-		this.transcriptCellCount = fields.transcriptCellCount;
-		this.reflowedRows = fields.reflowedRows;
-		this.rowCap = fields.rowCap;
-		this.pendingHistoryBatches = fields.pendingHistoryBatches;
-		this.deferredHistoryRows = fields.deferredHistoryRows;
-		this.clearKind = fields.clearKind == null ? TuiSmokeResizeClearKind.Unknown : fields.clearKind;
-		this.wrapPolicy = fields.wrapPolicy == null ? TuiSmokeHistoryWrapPolicy.Unknown : fields.wrapPolicy;
-		this.viewportReset = fields.viewportReset;
-		this.needsFullRepaint = fields.needsFullRepaint;
-		this.emptyTranscript = fields.emptyTranscript;
-		this.insertRows = fields.insertRows;
-	}
 
 	public function rowCapText():String {
 		return rowCap < 0 ? "none" : Std.string(rowCap);

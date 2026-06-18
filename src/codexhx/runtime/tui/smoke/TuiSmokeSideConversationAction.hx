@@ -58,7 +58,9 @@ typedef TuiSmokeSideConversationActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeSideConversationAction {
+	@:recordDefault(TuiSmokeSideConversationActionKind.Unknown)
 	public final kind:TuiSmokeSideConversationActionKind;
 	public final parentThreadId:String;
 	public final childThreadId:String;
@@ -114,62 +116,4 @@ class TuiSmokeSideConversationAction {
 	public final noRatatuiRender:Bool;
 	public final noModelCall:Bool;
 	public final unsupportedRejected:Bool;
-
-	public function new(fields:TuiSmokeSideConversationActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeSideConversationActionKind.Unknown : fields.kind;
-		this.parentThreadId = fields.parentThreadId == null ? "" : fields.parentThreadId;
-		this.childThreadId = fields.childThreadId == null ? "" : fields.childThreadId;
-		this.targetThreadId = fields.targetThreadId == null ? "" : fields.targetThreadId;
-		this.status = fields.status == null ? "" : fields.status;
-		this.statusChange = fields.statusChange == null ? "" : fields.statusChange;
-		this.label = fields.label == null ? "" : fields.label;
-		this.blockMessage = fields.blockMessage == null ? "" : fields.blockMessage;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.userMessageText = fields.userMessageText == null ? "" : fields.userMessageText;
-		this.errorMessage = fields.errorMessage == null ? "" : fields.errorMessage;
-		this.sideThreadsBefore = fields.sideThreadsBefore;
-		this.sideThreadsAfter = fields.sideThreadsAfter;
-		this.remoteImageCount = fields.remoteImageCount;
-		this.localImageCount = fields.localImageCount;
-		this.mentionBindingCount = fields.mentionBindingCount;
-		this.parentIsMain = fields.parentIsMain;
-		this.sideConversationActiveBefore = fields.sideConversationActiveBefore;
-		this.sideConversationActiveAfter = fields.sideConversationActiveAfter;
-		this.noticeSuppressedBefore = fields.noticeSuppressedBefore;
-		this.noticeSuppressedAfter = fields.noticeSuppressedAfter;
-		this.renameBlockedBefore = fields.renameBlockedBefore;
-		this.renameBlockedAfter = fields.renameBlockedAfter;
-		this.overlayActive = fields.overlayActive;
-		this.modalOrPopupActive = fields.modalOrPopupActive;
-		this.composerEmpty = fields.composerEmpty;
-		this.parentStatusActionable = fields.parentStatusActionable;
-		this.forkConfigEphemeral = fields.forkConfigEphemeral;
-		this.developerInstructionsAdded = fields.developerInstructionsAdded;
-		this.modelInherited = fields.modelInherited;
-		this.serviceTierInherited = fields.serviceTierInherited;
-		this.boundaryInjected = fields.boundaryInjected;
-		this.hiddenBoundaryPrompt = fields.hiddenBoundaryPrompt;
-		this.switchedToChild = fields.switchedToChild;
-		this.switchedToParent = fields.switchedToParent;
-		this.submittedInitialUserMessage = fields.submittedInitialUserMessage;
-		this.restoredComposer = fields.restoredComposer;
-		this.returnRequested = fields.returnRequested;
-		this.returnedToParent = fields.returnedToParent;
-		this.interruptSubmitted = fields.interruptSubmitted;
-		this.startupInterruptUsed = fields.startupInterruptUsed;
-		this.turnInterruptUsed = fields.turnInterruptUsed;
-		this.threadUnsubscribed = fields.threadUnsubscribed;
-		this.localStateDiscarded = fields.localStateDiscarded;
-		this.listenerAborted = fields.listenerAborted;
-		this.channelRemoved = fields.channelRemoved;
-		this.navigationRemoved = fields.navigationRemoved;
-		this.activeThreadCleared = fields.activeThreadCleared;
-		this.approvalsRefreshed = fields.approvalsRefreshed;
-		this.statusSynced = fields.statusSynced;
-		this.requestRedraw = fields.requestRedraw;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.noModelCall = fields.noModelCall;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 }

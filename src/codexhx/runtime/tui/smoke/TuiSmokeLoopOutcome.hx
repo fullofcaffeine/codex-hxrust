@@ -28,6 +28,7 @@ typedef TuiSmokeLoopOutcomeFields = {
 	final terminalRestored:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeLoopOutcome {
 	public final ok:Bool;
 	public final code:String;
@@ -54,32 +55,4 @@ class TuiSmokeLoopOutcome {
 	public final threadReplayItemCount:Int;
 	public final threadReplayCompletionCount:Int;
 	public final terminalRestored:Bool;
-
-	public function new(fields:TuiSmokeLoopOutcomeFields) {
-		this.ok = fields.ok;
-		this.code = fields.code == null ? "" : fields.code;
-		this.exit = fields.exit == null ? TuiSmokeExitKind.Unknown : fields.exit;
-		this.snapshot = fields.snapshot == null ? "" : fields.snapshot;
-		this.trace = fields.trace == null ? "" : fields.trace;
-		this.renderCount = fields.renderCount;
-		this.appEventLogCount = fields.appEventLogCount;
-		this.appServerEventCount = fields.appServerEventCount;
-		this.appServerRequestCount = fields.appServerRequestCount;
-		this.appServerRejectedRequestCount = fields.appServerRejectedRequestCount;
-		this.appServerResolutionCount = fields.appServerResolutionCount;
-		this.appServerStaleResolutionCount = fields.appServerStaleResolutionCount;
-		this.appServerDeliveredRequestCount = fields.appServerDeliveredRequestCount;
-		this.appServerEvictedRequestCount = fields.appServerEvictedRequestCount;
-		this.threadNotificationCount = fields.threadNotificationCount;
-		this.threadNotificationDeliveryCount = fields.threadNotificationDeliveryCount;
-		this.threadNotificationEvictionCount = fields.threadNotificationEvictionCount;
-		this.threadReplayCount = fields.threadReplayCount;
-		this.threadReplayRequestCount = fields.threadReplayRequestCount;
-		this.threadReplaySkippedRequestCount = fields.threadReplaySkippedRequestCount;
-		this.threadReplaySuppressedNoticeCount = fields.threadReplaySuppressedNoticeCount;
-		this.threadReplayTurnCount = fields.threadReplayTurnCount;
-		this.threadReplayItemCount = fields.threadReplayItemCount;
-		this.threadReplayCompletionCount = fields.threadReplayCompletionCount;
-		this.terminalRestored = fields.terminalRestored;
-	}
 }

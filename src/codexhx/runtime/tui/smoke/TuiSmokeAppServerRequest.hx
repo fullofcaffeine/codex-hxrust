@@ -10,6 +10,7 @@ typedef TuiSmokeAppServerRequestFields = {
 	final serverName:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeAppServerRequest {
 	public final kind:TuiSmokeAppServerRequestKind;
 	public final requestId:String;
@@ -18,16 +19,6 @@ class TuiSmokeAppServerRequest {
 	public final itemId:String;
 	public final approvalId:String;
 	public final serverName:String;
-
-	public function new(fields:TuiSmokeAppServerRequestFields) {
-		this.kind = fields.kind == null ? TuiSmokeAppServerRequestKind.Unknown : fields.kind;
-		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.threadId = fields.threadId == null ? "" : fields.threadId;
-		this.turnId = fields.turnId == null ? "" : fields.turnId;
-		this.itemId = fields.itemId == null ? "" : fields.itemId;
-		this.approvalId = fields.approvalId == null ? "" : fields.approvalId;
-		this.serverName = fields.serverName == null ? "" : fields.serverName;
-	}
 
 	public function displayId():String {
 		return switch kind {

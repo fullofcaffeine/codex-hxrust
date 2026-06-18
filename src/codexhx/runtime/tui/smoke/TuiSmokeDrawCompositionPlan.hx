@@ -54,6 +54,7 @@ typedef TuiSmokeDrawCompositionPlanFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeDrawCompositionPlan {
 	public final allowLiveDraw:Bool;
 	public final mode:TuiSmokeDrawCompositionMode;
@@ -102,64 +103,12 @@ class TuiSmokeDrawCompositionPlan {
 	public final cursorSet:Bool;
 	public final cursorX:Int;
 	public final cursorPositionY:Int;
+	@:recordDefault("default")
 	public final cursorStyle:String;
 	public final swapBuffers:Bool;
 	public final backendFlush:Bool;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeDrawCompositionPlanFields) {
-		this.allowLiveDraw = fields.allowLiveDraw;
-		this.mode = fields.mode == null ? TuiSmokeDrawCompositionMode.Unknown : fields.mode;
-		this.height = fields.height;
-		this.terminalWidth = fields.terminalWidth;
-		this.terminalHeight = fields.terminalHeight;
-		this.lastWidth = fields.lastWidth;
-		this.lastHeight = fields.lastHeight;
-		this.ensureVirtualTerminalProcessing = fields.ensureVirtualTerminalProcessing;
-		this.syncUpdate = fields.syncUpdate;
-		this.preparedResume = fields.preparedResume;
-		this.pendingViewportComputed = fields.pendingViewportComputed;
-		this.cursorMoved = fields.cursorMoved;
-		this.lastCursorY = fields.lastCursorY;
-		this.cursorY = fields.cursorY;
-		this.previousViewportX = fields.previousViewportX;
-		this.previousViewportY = fields.previousViewportY;
-		this.previousViewportWidth = fields.previousViewportWidth;
-		this.previousViewportHeight = fields.previousViewportHeight;
-		this.pendingViewportX = fields.pendingViewportX;
-		this.pendingViewportY = fields.pendingViewportY;
-		this.pendingViewportWidth = fields.pendingViewportWidth;
-		this.pendingViewportHeight = fields.pendingViewportHeight;
-		this.appliedViewportX = fields.appliedViewportX;
-		this.appliedViewportY = fields.appliedViewportY;
-		this.appliedViewportWidth = fields.appliedViewportWidth;
-		this.appliedViewportHeight = fields.appliedViewportHeight;
-		this.clearForViewportChange = fields.clearForViewportChange;
-		this.terminalClear = fields.terminalClear;
-		this.scrollRegionUp = fields.scrollRegionUp;
-		this.scrollRegionStart = fields.scrollRegionStart;
-		this.scrollRegionEnd = fields.scrollRegionEnd;
-		this.scrollBy = fields.scrollBy;
-		this.pendingHistoryBatches = fields.pendingHistoryBatches;
-		this.pendingHistoryRows = fields.pendingHistoryRows;
-		this.zellijRaw = fields.zellijRaw;
-		this.wrapPolicy = fields.wrapPolicy == null ? TuiSmokeHistoryWrapPolicy.Unknown : fields.wrapPolicy;
-		this.suspendCursorY = fields.suspendCursorY;
-		this.altScreenActive = fields.altScreenActive;
-		this.needsFullRepaint = fields.needsFullRepaint;
-		this.invalidateViewport = fields.invalidateViewport;
-		this.renderCallback = fields.renderCallback;
-		this.autoresize = fields.autoresize;
-		this.diffPutCount = fields.diffPutCount;
-		this.diffClearToEndCount = fields.diffClearToEndCount;
-		this.cursorSet = fields.cursorSet;
-		this.cursorX = fields.cursorX;
-		this.cursorPositionY = fields.cursorPositionY;
-		this.cursorStyle = fields.cursorStyle == null ? "default" : fields.cursorStyle;
-		this.swapBuffers = fields.swapBuffers;
-		this.backendFlush = fields.backendFlush;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function enabled():Bool {
 		return !allowLiveDraw && mode != TuiSmokeDrawCompositionMode.Unknown;

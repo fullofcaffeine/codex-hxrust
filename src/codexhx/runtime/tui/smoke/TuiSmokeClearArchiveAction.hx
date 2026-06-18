@@ -50,7 +50,9 @@ typedef TuiSmokeClearArchiveActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeClearArchiveAction {
+	@:recordDefault(TuiSmokeClearArchiveActionKind.Unknown)
 	public final kind:TuiSmokeClearArchiveActionKind;
 	public final mode:String;
 	public final threadId:String;
@@ -98,54 +100,4 @@ class TuiSmokeClearArchiveAction {
 	public final noRatatuiRender:Bool;
 	public final noModelCall:Bool;
 	public final unsupportedRejected:Bool;
-
-	public function new(fields:TuiSmokeClearArchiveActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeClearArchiveActionKind.Unknown : fields.kind;
-		this.mode = fields.mode == null ? "" : fields.mode;
-		this.threadId = fields.threadId == null ? "" : fields.threadId;
-		this.sessionStartSource = fields.sessionStartSource == null ? "" : fields.sessionStartSource;
-		this.userMessageText = fields.userMessageText == null ? "" : fields.userMessageText;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.errorMessage = fields.errorMessage == null ? "" : fields.errorMessage;
-		this.clearBackend = fields.clearBackend == null ? "" : fields.clearBackend;
-		this.exitMode = fields.exitMode == null ? "" : fields.exitMode;
-		this.exitReason = fields.exitReason == null ? "" : fields.exitReason;
-		this.transcriptCellsBefore = fields.transcriptCellsBefore;
-		this.transcriptCellsAfter = fields.transcriptCellsAfter;
-		this.deferredHistoryBefore = fields.deferredHistoryBefore;
-		this.deferredHistoryAfter = fields.deferredHistoryAfter;
-		this.pendingHistoryBefore = fields.pendingHistoryBefore;
-		this.pendingHistoryAfter = fields.pendingHistoryAfter;
-		this.skillWarningsBefore = fields.skillWarningsBefore;
-		this.skillWarningsAfter = fields.skillWarningsAfter;
-		this.activeSkillWarningsBefore = fields.activeSkillWarningsBefore;
-		this.activeSkillWarningsAfter = fields.activeSkillWarningsAfter;
-		this.activeThreadBefore = fields.activeThreadBefore;
-		this.activeThreadAfter = fields.activeThreadAfter;
-		this.sessionPreserved = fields.sessionPreserved;
-		this.composerPreserved = fields.composerPreserved;
-		this.overlayCleared = fields.overlayCleared;
-		this.backtrackCleared = fields.backtrackCleared;
-		this.reflowCleared = fields.reflowCleared;
-		this.replayBufferCleared = fields.replayBufferCleared;
-		this.headerQueued = fields.headerQueued;
-		this.frameScheduled = fields.frameScheduled;
-		this.freshSessionStarted = fields.freshSessionStarted;
-		this.initialUserMessageSubmitted = fields.initialUserMessageSubmitted;
-		this.archiveRequested = fields.archiveRequested;
-		this.archiveSucceeded = fields.archiveSucceeded;
-		this.sideConversationActive = fields.sideConversationActive;
-		this.errorInserted = fields.errorInserted;
-		this.pendingShutdownThreadBefore = fields.pendingShutdownThreadBefore;
-		this.pendingShutdownThreadAfter = fields.pendingShutdownThreadAfter;
-		this.shutdownFeedbackShown = fields.shutdownFeedbackShown;
-		this.inputDisabled = fields.inputDisabled;
-		this.appServerShutdownRequested = fields.appServerShutdownRequested;
-		this.exitRequested = fields.exitRequested;
-		this.requestRedraw = fields.requestRedraw;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.noModelCall = fields.noModelCall;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 }

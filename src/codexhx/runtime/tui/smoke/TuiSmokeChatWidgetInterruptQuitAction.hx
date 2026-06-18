@@ -45,6 +45,7 @@ typedef TuiSmokeChatWidgetInterruptQuitActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetInterruptQuitAction {
 	public final kind:TuiSmokeChatWidgetInterruptQuitActionKind;
 	public final key:String;
@@ -89,48 +90,4 @@ class TuiSmokeChatWidgetInterruptQuitAction {
 	public final noModelCall:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeChatWidgetInterruptQuitActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeChatWidgetInterruptQuitActionKind.Unknown : fields.kind;
-		this.key = fields.key == null ? "" : fields.key;
-		this.route = fields.route == null ? "" : fields.route;
-		this.exitMode = fields.exitMode == null ? "" : fields.exitMode;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.doublePressEnabled = fields.doublePressEnabled;
-		this.realtimeLive = fields.realtimeLive;
-		this.modalOrPopupActive = fields.modalOrPopupActive;
-		this.bottomPaneHandled = fields.bottomPaneHandled;
-		this.cancellableWorkActive = fields.cancellableWorkActive;
-		this.taskRunning = fields.taskRunning;
-		this.reviewMode = fields.reviewMode;
-		this.composerEmpty = fields.composerEmpty;
-		this.quitShortcutActiveBefore = fields.quitShortcutActiveBefore;
-		this.quitShortcutActiveAfter = fields.quitShortcutActiveAfter;
-		this.quitShortcutKeyMatched = fields.quitShortcutKeyMatched;
-		this.quitShortcutHintShown = fields.quitShortcutHintShown;
-		this.quitShortcutHintCleared = fields.quitShortcutHintCleared;
-		this.quitShortcutExpired = fields.quitShortcutExpired;
-		this.interruptSubmitted = fields.interruptSubmitted;
-		this.interruptRestoresPrompt = fields.interruptRestoresPrompt;
-		this.pendingSteersBefore = fields.pendingSteersBefore;
-		this.pendingSteersAfter = fields.pendingSteersAfter;
-		this.submitPendingSteersAfterInterrupt = fields.submitPendingSteersAfterInterrupt;
-		this.activeGoalPaused = fields.activeGoalPaused;
-		this.streamQueueCleared = fields.streamQueueCleared;
-		this.planStreamQueueCleared = fields.planStreamQueueCleared;
-		this.activeTailCleared = fields.activeTailCleared;
-		this.cancelEditArmedBefore = fields.cancelEditArmedBefore;
-		this.cancelEditArmedAfter = fields.cancelEditArmedAfter;
-		this.cancelEditCleared = fields.cancelEditCleared;
-		this.appExitSent = fields.appExitSent;
-		this.shutdownFeedbackShown = fields.shutdownFeedbackShown;
-		this.appServerShutdownRequested = fields.appServerShutdownRequested;
-		this.pendingShutdownThreadBefore = fields.pendingShutdownThreadBefore;
-		this.pendingShutdownThreadAfter = fields.pendingShutdownThreadAfter;
-		this.inputDisabled = fields.inputDisabled;
-		this.requestRedraw = fields.requestRedraw;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.noModelCall = fields.noModelCall;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 }

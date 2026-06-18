@@ -37,6 +37,7 @@ typedef TuiSmokeOverlayRoutingActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeOverlayRoutingAction {
 	public final kind:TuiSmokeOverlayRoutingActionKind;
 	public final overlay:TuiSmokeOverlayKind;
@@ -73,42 +74,6 @@ class TuiSmokeOverlayRoutingAction {
 	public final backtrackPreviewActiveAfter:Bool;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeOverlayRoutingActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeOverlayRoutingActionKind.Unknown : fields.kind;
-		this.overlay = fields.overlay == null ? TuiSmokeOverlayKind.Unknown : fields.overlay;
-		this.title = fields.title == null ? "" : fields.title;
-		this.keyAction = fields.keyAction == null ? TuiSmokeOverlayKeyActionKind.Unknown : fields.keyAction;
-		this.committedCellsBefore = fields.committedCellsBefore;
-		this.committedCellsAfter = fields.committedCellsAfter;
-		this.insertedCells = fields.insertedCells;
-		this.lineCount = fields.lineCount;
-		this.consolidateStart = fields.consolidateStart;
-		this.consolidateEnd = fields.consolidateEnd;
-		this.liveTailWidth = fields.liveTailWidth;
-		this.liveTailRevision = fields.liveTailRevision;
-		this.liveTailContinuation = fields.liveTailContinuation;
-		this.liveTailAnimationTick = fields.liveTailAnimationTick;
-		this.liveTailKeyChanged = fields.liveTailKeyChanged;
-		this.liveTailComputed = fields.liveTailComputed;
-		this.liveTailLines = fields.liveTailLines;
-		this.pinnedBefore = fields.pinnedBefore;
-		this.pinnedAfter = fields.pinnedAfter;
-		this.scrollBefore = fields.scrollBefore;
-		this.scrollAfter = fields.scrollAfter;
-		this.drawHeight = fields.drawHeight;
-		this.renderedWidth = fields.renderedWidth;
-		this.renderedHeight = fields.renderedHeight;
-		this.ownsTerminal = fields.ownsTerminal;
-		this.doneBefore = fields.doneBefore;
-		this.doneAfter = fields.doneAfter;
-		this.enterAltScreen = fields.enterAltScreen;
-		this.leaveAltScreen = fields.leaveAltScreen;
-		this.frameScheduled = fields.frameScheduled;
-		this.deferredHistoryLines = fields.deferredHistoryLines;
-		this.backtrackPreviewActiveBefore = fields.backtrackPreviewActiveBefore;
-		this.backtrackPreviewActiveAfter = fields.backtrackPreviewActiveAfter;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function cellTransitionText():String {
 		return committedCellsBefore + "->" + committedCellsAfter;

@@ -53,6 +53,7 @@ typedef TuiSmokeChatWidgetComposerRenderActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetComposerRenderAction {
 	public final kind:TuiSmokeChatWidgetComposerRenderActionKind;
 	public final inputResult:TuiSmokeComposerSubmissionResultKind;
@@ -105,58 +106,6 @@ class TuiSmokeChatWidgetComposerRenderAction {
 	public final noLiveDispatch:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeChatWidgetComposerRenderActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeChatWidgetComposerRenderActionKind.Unknown : fields.kind;
-		this.inputResult = fields.inputResult == null ? TuiSmokeComposerSubmissionResultKind.Unknown : fields.inputResult;
-		this.queuedAction = fields.queuedAction == null ? TuiSmokeComposerQueuedActionKind.Unknown : fields.queuedAction;
-		this.cursorStyle = fields.cursorStyle == null ? "" : fields.cursorStyle;
-		this.text = fields.text == null ? "" : fields.text;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.width = fields.width;
-		this.height = fields.height;
-		this.rightReserve = fields.rightReserve;
-		this.bottomPaneInsetTop = fields.bottomPaneInsetTop;
-		this.bottomPaneDesiredHeight = fields.bottomPaneDesiredHeight;
-		this.activeCellDesiredHeight = fields.activeCellDesiredHeight;
-		this.activeHookDesiredHeight = fields.activeHookDesiredHeight;
-		this.transcriptAreaWidth = fields.transcriptAreaWidth;
-		this.transcriptAreaHeight = fields.transcriptAreaHeight;
-		this.transcriptScrollOffset = fields.transcriptScrollOffset;
-		this.cursorX = fields.cursorX;
-		this.cursorY = fields.cursorY;
-		this.queuedBefore = fields.queuedBefore;
-		this.queuedAfter = fields.queuedAfter;
-		this.pendingSteers = fields.pendingSteers;
-		this.rejectedSteers = fields.rejectedSteers;
-		this.activeCellPresent = fields.activeCellPresent;
-		this.activeHookPresent = fields.activeHookPresent;
-		this.activeHookShouldRender = fields.activeHookShouldRender;
-		this.cursorVisible = fields.cursorVisible;
-		this.inputEnabled = fields.inputEnabled;
-		this.taskRunning = fields.taskRunning;
-		this.sessionConfigured = fields.sessionConfigured;
-		this.planStreaming = fields.planStreaming;
-		this.userTurnPending = fields.userTurnPending;
-		this.onlyUserShellCommandsRunning = fields.onlyUserShellCommandsRunning;
-		this.hadModalOrPopup = fields.hadModalOrPopup;
-		this.modalCleared = fields.modalCleared;
-		this.shouldSubmitNow = fields.shouldSubmitNow;
-		this.previewUpdated = fields.previewUpdated;
-		this.autosendSuppressed = fields.autosendSuppressed;
-		this.followupSubmitted = fields.followupSubmitted;
-		this.statusWorking = fields.statusWorking;
-		this.reasoningCleared = fields.reasoningCleared;
-		this.commandDispatched = fields.commandDispatched;
-		this.serviceTierDispatched = fields.serviceTierDispatched;
-		this.slashArgsDispatched = fields.slashArgsDispatched;
-		this.frameScheduled = fields.frameScheduled;
-		this.preDrawTick = fields.preDrawTick;
-		this.bottomPaneTick = fields.bottomPaneTick;
-		this.noLiveTerminal = fields.noLiveTerminal;
-		this.noRatatuiRender = fields.noRatatuiRender;
-		this.noLiveDispatch = fields.noLiveDispatch;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 
 	public function areaText():String {
 		return width + "x" + height;

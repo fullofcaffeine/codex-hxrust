@@ -21,8 +21,10 @@ typedef TuiSmokeFrameSchedulerActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeFrameSchedulerAction {
 	public final kind:TuiSmokeFrameSchedulerActionKind;
+	@:recordDefault("unknown")
 	public final source:String;
 	public final requestMs:Int;
 	public final delayMs:Int;
@@ -41,26 +43,6 @@ class TuiSmokeFrameSchedulerAction {
 	public final closed:Bool;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeFrameSchedulerActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeFrameSchedulerActionKind.Unknown : fields.kind;
-		this.source = fields.source == null ? "unknown" : fields.source;
-		this.requestMs = fields.requestMs;
-		this.delayMs = fields.delayMs;
-		this.previousDeadlineMs = fields.previousDeadlineMs;
-		this.nextDeadlineMs = fields.nextDeadlineMs;
-		this.clampedDeadlineMs = fields.clampedDeadlineMs;
-		this.lastEmittedMs = fields.lastEmittedMs;
-		this.minIntervalMs = fields.minIntervalMs;
-		this.requestCount = fields.requestCount;
-		this.coalescedCount = fields.coalescedCount;
-		this.emittedCount = fields.emittedCount;
-		this.broadcastCapacity = fields.broadcastCapacity;
-		this.spawnedTask = fields.spawnedTask;
-		this.drawSent = fields.drawSent;
-		this.lagged = fields.lagged;
-		this.closed = fields.closed;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function previousDeadlineText():String {
 		return deadlineText(previousDeadlineMs);

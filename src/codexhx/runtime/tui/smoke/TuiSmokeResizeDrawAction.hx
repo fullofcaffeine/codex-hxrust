@@ -20,6 +20,7 @@ typedef TuiSmokeResizeDrawActionFields = {
 	final suspendResume:Null<TuiSmokeSuspendResumePlan>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeResizeDrawAction {
 	public final terminalWidth:Int;
 	public final terminalHeight:Int;
@@ -39,25 +40,6 @@ class TuiSmokeResizeDrawAction {
 	public final viewport:Null<TuiSmokeViewportResizePlan>;
 	public final suspendResume:Null<TuiSmokeSuspendResumePlan>;
 
-	public function new(fields:TuiSmokeResizeDrawActionFields) {
-		this.terminalWidth = fields.terminalWidth;
-		this.terminalHeight = fields.terminalHeight;
-		this.lastWidth = fields.lastWidth;
-		this.lastHeight = fields.lastHeight;
-		this.resizeReflowEnabled = fields.resizeReflowEnabled;
-		this.scheduleAccepted = fields.scheduleAccepted;
-		this.pendingReflow = fields.pendingReflow;
-		this.pendingDue = fields.pendingDue;
-		this.overlayActive = fields.overlayActive;
-		this.transcriptCells = fields.transcriptCells;
-		this.remainingMs = fields.remainingMs;
-		this.runReflow = fields.runReflow;
-		this.streamTime = fields.streamTime;
-		this.followUpDraw = fields.followUpDraw;
-		this.repaint = fields.repaint;
-		this.viewport = fields.viewport;
-		this.suspendResume = fields.suspendResume;
-	}
 
 	public function sizeText():String {
 		return sizeLabel(terminalWidth, terminalHeight);

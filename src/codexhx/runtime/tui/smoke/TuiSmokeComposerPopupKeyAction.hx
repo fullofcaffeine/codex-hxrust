@@ -45,6 +45,7 @@ typedef TuiSmokeComposerPopupKeyActionFields = {
 	final unsupportedRejected:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeComposerPopupKeyAction {
 	public final kind:TuiSmokeComposerPopupKeyActionKind;
 	public final popupBefore:TuiSmokeComposerPopupKind;
@@ -89,50 +90,6 @@ class TuiSmokeComposerPopupKeyAction {
 	public final liveProbeRejected:Bool;
 	public final unsupportedRejected:Bool;
 
-	public function new(fields:TuiSmokeComposerPopupKeyActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeComposerPopupKeyActionKind.Unknown : fields.kind;
-		this.popupBefore = fields.popupBefore == null ? TuiSmokeComposerPopupKind.Unknown : fields.popupBefore;
-		this.popupAfter = fields.popupAfter == null ? TuiSmokeComposerPopupKind.Unknown : fields.popupAfter;
-		this.candidateKind = fields.candidateKind == null ? TuiSmokeMentionCandidateKind.Unknown : fields.candidateKind;
-		this.searchModeBefore = fields.searchModeBefore == null ? TuiSmokeMentionSearchModeKind.Unknown : fields.searchModeBefore;
-		this.searchModeAfter = fields.searchModeAfter == null ? TuiSmokeMentionSearchModeKind.Unknown : fields.searchModeAfter;
-		this.keyName = fields.keyName == null ? "" : fields.keyName;
-		this.commandName = fields.commandName == null ? "" : fields.commandName;
-		this.token = fields.token == null ? "" : fields.token;
-		this.selectedPath = fields.selectedPath == null ? "" : fields.selectedPath;
-		this.insertText = fields.insertText == null ? "" : fields.insertText;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-		this.selectedBefore = fields.selectedBefore;
-		this.selectedAfter = fields.selectedAfter;
-		this.scrollBefore = fields.scrollBefore;
-		this.scrollAfter = fields.scrollAfter;
-		this.matchCount = fields.matchCount;
-		this.selectedAvailable = fields.selectedAvailable;
-		this.dismissedTokenStored = fields.dismissedTokenStored;
-		this.draftUpdated = fields.draftUpdated;
-		this.textCleared = fields.textCleared;
-		this.commandCompleted = fields.commandCompleted;
-		this.commandDispatched = fields.commandDispatched;
-		this.serviceTierDispatched = fields.serviceTierDispatched;
-		this.historyStaged = fields.historyStaged;
-		this.inlineArgsPreserved = fields.inlineArgsPreserved;
-		this.imagePath = fields.imagePath;
-		this.imageDimensionsAvailable = fields.imageDimensionsAvailable;
-		this.imageAttached = fields.imageAttached;
-		this.pathInserted = fields.pathInserted;
-		this.mentionBindingStored = fields.mentionBindingStored;
-		this.modeSwitchAllowed = fields.modeSwitchAllowed;
-		this.fallbackWithoutPopup = fields.fallbackWithoutPopup;
-		this.submitWithoutPopup = fields.submitWithoutPopup;
-		this.inputForwarded = fields.inputForwarded;
-		this.shortcutOverlayHandled = fields.shortcutOverlayHandled;
-		this.footerModeChanged = fields.footerModeChanged;
-		this.keyConsumed = fields.keyConsumed;
-		this.syncAfterKey = fields.syncAfterKey;
-		this.redrawRequested = fields.redrawRequested;
-		this.liveProbeRejected = fields.liveProbeRejected;
-		this.unsupportedRejected = fields.unsupportedRejected;
-	}
 
 	public function popupTransitionText():String {
 		return popupBefore + "->" + popupAfter;

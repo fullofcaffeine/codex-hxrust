@@ -48,11 +48,15 @@ typedef TuiSmokeEventFields = {
 	final resumeFork:Null<TuiSmokeResumeForkPlan>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeEvent {
+	@:recordDefault(TuiSmokeEventKind.Unknown)
 	public final kind:TuiSmokeEventKind;
+	@:recordDefault(TuiSmokeKeyKind.Unknown)
 	public final key:TuiSmokeKeyKind;
 	public final status:String;
 	public final input:String;
+	@:recordDefault(TuiSmokeExitMode.Unknown)
 	public final exitMode:TuiSmokeExitMode;
 	public final resizeDraw:Null<TuiSmokeResizeDrawAction>;
 	public final appEvent:Null<TuiSmokeAppEvent>;
@@ -94,52 +98,4 @@ class TuiSmokeEvent {
 	public final sideConversation:Null<TuiSmokeSideConversationPlan>;
 	public final clearArchive:Null<TuiSmokeClearArchivePlan>;
 	public final resumeFork:Null<TuiSmokeResumeForkPlan>;
-
-	public function new(fields:TuiSmokeEventFields) {
-		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
-		this.key = fields.key == null ? TuiSmokeKeyKind.Unknown : fields.key;
-		this.status = fields.status == null ? "" : fields.status;
-		this.input = fields.input == null ? "" : fields.input;
-		this.exitMode = fields.exitMode == null ? TuiSmokeExitMode.Unknown : fields.exitMode;
-		this.resizeDraw = fields.resizeDraw;
-		this.appEvent = fields.appEvent;
-		this.appServerEvent = fields.appServerEvent;
-		this.appServerRequest = fields.appServerRequest;
-		this.appServerResolution = fields.appServerResolution;
-		this.threadNotification = fields.threadNotification;
-		this.threadDelivery = fields.threadDelivery;
-		this.threadReplay = fields.threadReplay;
-		this.eventStream = fields.eventStream;
-		this.terminalModePlan = fields.terminalModePlan;
-		this.altScreen = fields.altScreen;
-		this.drawComposition = fields.drawComposition;
-		this.frameScheduler = fields.frameScheduler;
-		this.drawDispatch = fields.drawDispatch;
-		this.overlayRouting = fields.overlayRouting;
-		this.approvalOverlay = fields.approvalOverlay;
-		this.userInputOverlay = fields.userInputOverlay;
-		this.mcpElicitationOverlay = fields.mcpElicitationOverlay;
-		this.appLinkOverlay = fields.appLinkOverlay;
-		this.hooksBrowser = fields.hooksBrowser;
-		this.slashCommandPopup = fields.slashCommandPopup;
-		this.fileMentionPopup = fields.fileMentionPopup;
-		this.historySearch = fields.historySearch;
-		this.composerAttachment = fields.composerAttachment;
-		this.composerSubmission = fields.composerSubmission;
-		this.composerEditing = fields.composerEditing;
-		this.composerPopupSync = fields.composerPopupSync;
-		this.composerPopupKey = fields.composerPopupKey;
-		this.composerPopupRender = fields.composerPopupRender;
-		this.composerFooterRender = fields.composerFooterRender;
-		this.composerTextareaRender = fields.composerTextareaRender;
-		this.chatWidgetComposerRender = fields.chatWidgetComposerRender;
-		this.chatWidgetActiveStream = fields.chatWidgetActiveStream;
-		this.chatWidgetStreamStatus = fields.chatWidgetStreamStatus;
-		this.chatWidgetStreamLifecycle = fields.chatWidgetStreamLifecycle;
-		this.chatWidgetInterruptQuit = fields.chatWidgetInterruptQuit;
-		this.chatWidgetInterruptedRestore = fields.chatWidgetInterruptedRestore;
-		this.sideConversation = fields.sideConversation;
-		this.clearArchive = fields.clearArchive;
-		this.resumeFork = fields.resumeFork;
-	}
 }

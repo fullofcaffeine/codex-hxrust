@@ -13,6 +13,7 @@ typedef TuiSmokeReplayBufferPlanFields = {
 	final reflowAfterFlush:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeReplayBufferPlan {
 	public final kind:TuiSmokeReplayBufferKind;
 	public final terminalWidth:Int;
@@ -25,18 +26,6 @@ class TuiSmokeReplayBufferPlan {
 	public final flushAfterReplay:Bool;
 	public final reflowAfterFlush:Bool;
 
-	public function new(fields:TuiSmokeReplayBufferPlanFields) {
-		this.kind = fields.kind == null ? TuiSmokeReplayBufferKind.Unknown : fields.kind;
-		this.terminalWidth = fields.terminalWidth;
-		this.terminalHeight = fields.terminalHeight;
-		this.previousWidth = fields.previousWidth;
-		this.previousHeight = fields.previousHeight;
-		this.maxRows = fields.maxRows;
-		this.retainedRows = fields.retainedRows;
-		this.renderFromTranscriptTail = fields.renderFromTranscriptTail;
-		this.flushAfterReplay = fields.flushAfterReplay;
-		this.reflowAfterFlush = fields.reflowAfterFlush;
-	}
 
 	public function enabled():Bool {
 		return kind != TuiSmokeReplayBufferKind.None && kind != TuiSmokeReplayBufferKind.Unknown;

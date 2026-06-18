@@ -5,14 +5,10 @@ typedef TuiSmokeFrameSchedulerPlanFields = {
 	final actions:Array<TuiSmokeFrameSchedulerAction>;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeFrameSchedulerPlan {
 	public final allowLiveScheduler:Bool;
 	public final actions:Array<TuiSmokeFrameSchedulerAction>;
-
-	public function new(fields:TuiSmokeFrameSchedulerPlanFields) {
-		this.allowLiveScheduler = fields.allowLiveScheduler;
-		this.actions = fields.actions == null ? [] : fields.actions;
-	}
 
 	public function enabled():Bool {
 		return !allowLiveScheduler && actions.length > 0;

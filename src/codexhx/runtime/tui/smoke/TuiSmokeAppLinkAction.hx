@@ -40,6 +40,7 @@ typedef TuiSmokeAppLinkActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeAppLinkAction {
 	public final kind:TuiSmokeAppLinkActionKind;
 	public final suggestion:TuiSmokeAppLinkSuggestionKind;
@@ -79,45 +80,6 @@ class TuiSmokeAppLinkAction {
 	public final completeAfter:Bool;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeAppLinkActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeAppLinkActionKind.Unknown : fields.kind;
-		this.suggestion = fields.suggestion == null ? TuiSmokeAppLinkSuggestionKind.Unknown : fields.suggestion;
-		this.screenBefore = fields.screenBefore == null ? TuiSmokeAppLinkScreenKind.Unknown : fields.screenBefore;
-		this.screenAfter = fields.screenAfter == null ? TuiSmokeAppLinkScreenKind.Unknown : fields.screenAfter;
-		this.decision = fields.decision == null ? TuiSmokeAppLinkDecisionKind.Unknown : fields.decision;
-		this.serverName = fields.serverName == null ? "" : fields.serverName;
-		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.threadId = fields.threadId == null ? "" : fields.threadId;
-		this.appId = fields.appId == null ? "" : fields.appId;
-		this.title = fields.title == null ? "" : fields.title;
-		this.urlHost = fields.urlHost == null ? "" : fields.urlHost;
-		this.urlScheme = fields.urlScheme == null ? "" : fields.urlScheme;
-		this.messageChars = fields.messageChars;
-		this.actionCount = fields.actionCount;
-		this.selectedBefore = fields.selectedBefore;
-		this.selectedAfter = fields.selectedAfter;
-		this.viewStackBefore = fields.viewStackBefore;
-		this.viewStackAfter = fields.viewStackAfter;
-		this.statusTimerPaused = fields.statusTimerPaused;
-		this.statusTimerResumed = fields.statusTimerResumed;
-		this.composerDisabled = fields.composerDisabled;
-		this.frameScheduled = fields.frameScheduled;
-		this.trustedUrl = fields.trustedUrl;
-		this.requiresChatgptHost = fields.requiresChatgptHost;
-		this.browserOpenSent = fields.browserOpenSent;
-		this.refreshConnectorsSent = fields.refreshConnectorsSent;
-		this.setEnabledSent = fields.setEnabledSent;
-		this.enabledBefore = fields.enabledBefore;
-		this.enabledAfter = fields.enabledAfter;
-		this.appCommandSent = fields.appCommandSent;
-		this.resolutionSent = fields.resolutionSent;
-		this.resolvedDismissed = fields.resolvedDismissed;
-		this.staleResolution = fields.staleResolution;
-		this.unsupportedRejected = fields.unsupportedRejected;
-		this.completeBefore = fields.completeBefore;
-		this.completeAfter = fields.completeAfter;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function screenTransitionText():String {
 		return screenBefore + "->" + screenAfter;

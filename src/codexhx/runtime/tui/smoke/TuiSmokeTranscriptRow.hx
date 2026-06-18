@@ -5,14 +5,10 @@ typedef TuiSmokeTranscriptRowFields = {
 	final text:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeTranscriptRow {
 	public final source:TuiSmokeTranscriptSource;
 	public final text:String;
-
-	public function new(fields:TuiSmokeTranscriptRowFields) {
-		this.source = fields.source == null ? TuiSmokeTranscriptSource.Unknown : fields.source;
-		this.text = fields.text == null ? "" : fields.text;
-	}
 
 	public function label():String {
 		return switch source {

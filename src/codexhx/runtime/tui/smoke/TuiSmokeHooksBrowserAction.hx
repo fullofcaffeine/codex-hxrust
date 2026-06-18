@@ -39,6 +39,7 @@ typedef TuiSmokeHooksBrowserActionFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeHooksBrowserAction {
 	public final kind:TuiSmokeHooksBrowserActionKind;
 	public final pageBefore:TuiSmokeHooksBrowserPageKind;
@@ -77,44 +78,6 @@ class TuiSmokeHooksBrowserAction {
 	public final unsupportedRejected:Bool;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeHooksBrowserActionFields) {
-		this.kind = fields.kind == null ? TuiSmokeHooksBrowserActionKind.Unknown : fields.kind;
-		this.pageBefore = fields.pageBefore == null ? TuiSmokeHooksBrowserPageKind.Unknown : fields.pageBefore;
-		this.pageAfter = fields.pageAfter == null ? TuiSmokeHooksBrowserPageKind.Unknown : fields.pageAfter;
-		this.eventName = fields.eventName == null ? "" : fields.eventName;
-		this.hookKey = fields.hookKey == null ? "" : fields.hookKey;
-		this.hookSource = fields.hookSource == null ? TuiSmokeHookSourceKind.Unknown : fields.hookSource;
-		this.trustBefore = fields.trustBefore == null ? TuiSmokeHookTrustKind.Unknown : fields.trustBefore;
-		this.trustAfter = fields.trustAfter == null ? TuiSmokeHookTrustKind.Unknown : fields.trustAfter;
-		this.eventCount = fields.eventCount;
-		this.hookCount = fields.hookCount;
-		this.activeCount = fields.activeCount;
-		this.installedCount = fields.installedCount;
-		this.needsReviewCount = fields.needsReviewCount;
-		this.warningCount = fields.warningCount;
-		this.errorCount = fields.errorCount;
-		this.visibleRows = fields.visibleRows;
-		this.detailLines = fields.detailLines;
-		this.commandDetailLines = fields.commandDetailLines;
-		this.updatesCount = fields.updatesCount;
-		this.selectedBefore = fields.selectedBefore;
-		this.selectedAfter = fields.selectedAfter;
-		this.scrollBefore = fields.scrollBefore;
-		this.scrollAfter = fields.scrollAfter;
-		this.enabledBefore = fields.enabledBefore;
-		this.enabledAfter = fields.enabledAfter;
-		this.managed = fields.managed;
-		this.needsReview = fields.needsReview;
-		this.setHookEnabledSent = fields.setHookEnabledSent;
-		this.trustHookSent = fields.trustHookSent;
-		this.trustHooksSent = fields.trustHooksSent;
-		this.completeBefore = fields.completeBefore;
-		this.completeAfter = fields.completeAfter;
-		this.frameScheduled = fields.frameScheduled;
-		this.rendered = fields.rendered;
-		this.unsupportedRejected = fields.unsupportedRejected;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function pageTransitionText():String {
 		return pageBefore + "->" + pageAfter;

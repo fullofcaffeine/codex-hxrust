@@ -34,6 +34,7 @@ typedef TuiSmokeDrawDispatchPlanFields = {
 	final failureCode:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeDrawDispatchPlan {
 	public final allowLiveDispatch:Bool;
 	public final event:TuiSmokeDrawDispatchEventKind;
@@ -67,39 +68,6 @@ class TuiSmokeDrawDispatchPlan {
 	public final followUpFrame:Bool;
 	public final failureCode:String;
 
-	public function new(fields:TuiSmokeDrawDispatchPlanFields) {
-		this.allowLiveDispatch = fields.allowLiveDispatch;
-		this.event = fields.event == null ? TuiSmokeDrawDispatchEventKind.Unknown : fields.event;
-		this.renderMode = fields.renderMode == null ? TuiSmokeDrawDispatchRenderMode.Unknown : fields.renderMode;
-		this.resizeReflowEnabled = fields.resizeReflowEnabled;
-		this.preRender = fields.preRender;
-		this.sizeChanged = fields.sizeChanged;
-		this.statusRefresh = fields.statusRefresh;
-		this.clearPendingHistory = fields.clearPendingHistory;
-		this.reflowDue = fields.reflowDue;
-		this.reflowRan = fields.reflowRan;
-		this.rearmDelayMs = fields.rearmDelayMs;
-		this.overlayActive = fields.overlayActive;
-		this.overlayHandled = fields.overlayHandled;
-		this.backtrackRenderPending = fields.backtrackRenderPending;
-		this.backtrackRebuilt = fields.backtrackRebuilt;
-		this.pendingNotification = fields.pendingNotification;
-		this.pasteBurstFlushed = fields.pasteBurstFlushed;
-		this.pasteBurstCapturing = fields.pasteBurstCapturing;
-		this.pasteBurstSkippedFrame = fields.pasteBurstSkippedFrame;
-		this.pasteBurstFollowupMs = fields.pasteBurstFollowupMs;
-		this.preDrawTick = fields.preDrawTick;
-		this.desiredHeight = fields.desiredHeight;
-		this.renderedWidth = fields.renderedWidth;
-		this.renderedHeight = fields.renderedHeight;
-		this.cursorSet = fields.cursorSet;
-		this.ambientPetDraw = fields.ambientPetDraw;
-		this.petPreviewDraw = fields.petPreviewDraw;
-		this.petPreviewClear = fields.petPreviewClear;
-		this.externalEditorLaunch = fields.externalEditorLaunch;
-		this.followUpFrame = fields.followUpFrame;
-		this.failureCode = fields.failureCode == null ? "" : fields.failureCode;
-	}
 
 	public function enabled():Bool {
 		return !allowLiveDispatch

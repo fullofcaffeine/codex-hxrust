@@ -22,6 +22,7 @@ typedef TuiSmokeViewportResizePlanFields = {
 	final needsFullRepaint:Bool;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeViewportResizePlan {
 	public final requestedHeight:Int;
 	public final previousX:Int;
@@ -43,27 +44,6 @@ class TuiSmokeViewportResizePlan {
 	public final clearAfterY:Int;
 	public final needsFullRepaint:Bool;
 
-	public function new(fields:TuiSmokeViewportResizePlanFields) {
-		this.requestedHeight = fields.requestedHeight;
-		this.previousX = fields.previousX;
-		this.previousY = fields.previousY;
-		this.previousWidth = fields.previousWidth;
-		this.previousHeight = fields.previousHeight;
-		this.nextX = fields.nextX;
-		this.nextY = fields.nextY;
-		this.nextWidth = fields.nextWidth;
-		this.nextHeight = fields.nextHeight;
-		this.terminalHeightShrank = fields.terminalHeightShrank;
-		this.terminalHeightGrew = fields.terminalHeightGrew;
-		this.bottomAligned = fields.bottomAligned;
-		this.scrollBy = fields.scrollBy;
-		this.pendingHistoryBatches = fields.pendingHistoryBatches;
-		this.pendingHistoryRows = fields.pendingHistoryRows;
-		this.zellijRaw = fields.zellijRaw;
-		this.wrapPolicy = fields.wrapPolicy == null ? TuiSmokeHistoryWrapPolicy.Unknown : fields.wrapPolicy;
-		this.clearAfterY = fields.clearAfterY;
-		this.needsFullRepaint = fields.needsFullRepaint;
-	}
 
 	public function changed():Bool {
 		return previousX != nextX || previousY != nextY || previousWidth != nextWidth || previousHeight != nextHeight;

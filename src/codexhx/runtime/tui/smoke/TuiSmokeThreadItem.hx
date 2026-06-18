@@ -6,16 +6,11 @@ typedef TuiSmokeThreadItemFields = {
 	final text:String;
 }
 
+@:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeThreadItem {
 	public final kind:TuiSmokeThreadItemKind;
 	public final itemId:String;
 	public final text:String;
-
-	public function new(fields:TuiSmokeThreadItemFields) {
-		this.kind = fields.kind == null ? TuiSmokeThreadItemKind.Unknown : fields.kind;
-		this.itemId = fields.itemId == null ? "" : fields.itemId;
-		this.text = fields.text == null ? "" : fields.text;
-	}
 
 	public function transcriptSource():TuiSmokeTranscriptSource {
 		return switch kind {
