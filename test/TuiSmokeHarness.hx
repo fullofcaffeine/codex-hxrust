@@ -1,4 +1,5 @@
 import codexhx.runtime.tui.smoke.TuiSmokeFixtureLoader;
+import codexhx.runtime.tui.smoke.TuiSmokeEventLoop;
 import codexhx.runtime.tui.smoke.TuiSmokeRunner;
 
 class TuiSmokeHarness {
@@ -11,6 +12,15 @@ class TuiSmokeHarness {
 			final outcome = TuiSmokeRunner.run(request);
 			assertTrue(outcome.ok, request.name + " should render and exit cleanly");
 			assertTrue(outcome.terminalRestored, request.name + " should restore terminal facade");
+			assertEquals(request.expectedSnapshot, outcome.snapshot);
+		}
+		final loopCases = TuiSmokeFixtureLoader.loadLoops(FixturePath);
+		assertEquals("2", Std.string(loopCases.length));
+		for (request in loopCases) {
+			final outcome = TuiSmokeEventLoop.run(request);
+			assertTrue(outcome.ok, request.name + " should run app-loop cleanly");
+			assertTrue(outcome.terminalRestored, request.name + " should restore terminal facade");
+			assertEquals(request.expectedTrace, outcome.trace);
 			assertEquals(request.expectedSnapshot, outcome.snapshot);
 		}
 	}

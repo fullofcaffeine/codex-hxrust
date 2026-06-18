@@ -4,7 +4,9 @@
     "codex": [
       "../codex/codex-rs/tui/src/main.rs",
       "../codex/codex-rs/tui/src/app.rs",
+      "../codex/codex-rs/tui/src/app_event.rs",
       "../codex/codex-rs/tui/src/app/input.rs",
+      "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
       "../codex/codex-rs/tui/tests/suite/status_indicator.rs"
     ],
@@ -60,6 +62,99 @@
       "allowNetwork": false,
       "allowModelCall": false,
       "expectedSnapshot": "Codex TUI Smoke\nstatus: waiting-for-input | model: gpt-5.2-codex\nuser> fixture prompt\nassistant> fixture response\ninput> \nkey: q\nexit: quit\nterminal: restored"
+    }
+  ],
+  "loopCases": [
+    {
+      "name": "status-input-draw-cancel-loop",
+      "frame": {
+        "name": "status-input-draw-cancel-loop",
+        "title": "Codex TUI Smoke Loop",
+        "status": "booting",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "headless app loop"
+          },
+          {
+            "source": "assistant",
+            "text": "waiting for raw Codex events"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "status_update",
+          "status": "ready"
+        },
+        {
+          "kind": "input_update",
+          "input": "continue raw TUI"
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: ready | model: gpt-5.2-codex\nsystem> headless app loop\nassistant> waiting for raw Codex events\ninput> continue raw TUI\ntrace:\ntui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 2\nterminal: restored"
+    },
+    {
+      "name": "resize-render-shutdown-first-loop",
+      "frame": {
+        "name": "resize-render-shutdown-first-loop",
+        "title": "Codex TUI Smoke Loop",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "user",
+            "text": "fixture prompt"
+          },
+          {
+            "source": "assistant",
+            "text": "fixture response"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resize"
+        },
+        {
+          "kind": "app_exit",
+          "exitMode": "shutdown_first"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.resize\napp.exit=shutdown_first",
+      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: idle | model: gpt-5.2-codex\nuser> fixture prompt\nassistant> fixture response\ninput> \ntrace:\ntui.resize\napp.exit=shutdown_first\nexit: cancelled\nrenders: 1\nterminal: restored"
     }
   ]
 }

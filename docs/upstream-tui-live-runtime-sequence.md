@@ -111,6 +111,18 @@ Add the first generated executable boundary for the TUI track:
 
 Status: HXCX-TUI-0 now owns `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. The binary uses metal haxe.rust because this is the path that will eventually host Rust-native terminal ownership. This remains a headless smoke proof, not full ratatui/crossterm ownership, live keyboard input, live app-server fanout, model traffic, or Cafex behavior. It reuses the existing generic haxe.rust issue `haxe.rust-3f0g` workaround by avoiding same-class `static final` string reads in the entrypoint.
 
+### HXCX-TUI-1: Headless Raw Codex TUI Event-Loop Smoke Shell
+
+Extend the generated smoke binary from a single frame into a minimal app-loop shell:
+
+- typed event subset inspired by upstream `TuiEvent::{Draw, Resize, Key}` and selected app events;
+- status/input updates as app-loop state transitions;
+- explicit `AppEvent::Exit(ExitMode)`-style shutdown modes;
+- deterministic render counts and event traces;
+- cancel/quit handling without live terminal, network, model, or tool effects.
+
+Status: HXCX-TUI-1 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/main.rs:38`, `../codex/codex-rs/tui/src/app.rs:754`, `../codex/codex-rs/tui/src/app.rs:1180`, `../codex/codex-rs/tui/src/tui.rs:499`, `../codex/codex-rs/tui/src/app_event.rs:239`, `../codex/codex-rs/tui/src/app_event.rs:642`, and `../codex/codex-rs/tui/src/app_event.rs:1057`. The loop request uses a nullable class-typed frame field to avoid the existing generic haxe.rust class-field default-constructor lowering issue already tracked in this repo; no Codex-specific compiler workaround was added.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

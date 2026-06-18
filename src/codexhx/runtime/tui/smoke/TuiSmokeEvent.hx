@@ -1,0 +1,25 @@
+package codexhx.runtime.tui.smoke;
+
+typedef TuiSmokeEventFields = {
+	final kind:TuiSmokeEventKind;
+	final key:TuiSmokeKeyKind;
+	final status:String;
+	final input:String;
+	final exitMode:TuiSmokeExitMode;
+}
+
+class TuiSmokeEvent {
+	public final kind:TuiSmokeEventKind;
+	public final key:TuiSmokeKeyKind;
+	public final status:String;
+	public final input:String;
+	public final exitMode:TuiSmokeExitMode;
+
+	public function new(fields:TuiSmokeEventFields) {
+		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
+		this.key = fields.key == null ? TuiSmokeKeyKind.Unknown : fields.key;
+		this.status = fields.status == null ? "" : fields.status;
+		this.input = fields.input == null ? "" : fields.input;
+		this.exitMode = fields.exitMode == null ? TuiSmokeExitMode.Unknown : fields.exitMode;
+	}
+}

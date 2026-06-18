@@ -16,6 +16,17 @@ class TuiSmokeFixtureLoader {
 		return out;
 	}
 
+	public static function loadLoops(path:String):Array<TuiSmokeLoopRequest> {
+		final parsed = CodexJson.parse(File.getContent(path));
+		if (!parsed.ok) throw parsed.errorCode + " at " + parsed.errorPath + ": " + parsed.errorMessage;
+		final cases = arrayField(parsed.value, "loopCases");
+		final out:Array<TuiSmokeLoopRequest> = [];
+		for (caseValue in cases) {
+			out.push(loopRequest(caseValue));
+		}
+		return out;
+	}
+
 	static function frameRequest(value:Value):TuiSmokeFrameRequest {
 		return new TuiSmokeFrameRequest({
 			name: stringField(value, "name", ""),
@@ -33,6 +44,31 @@ class TuiSmokeFixtureLoader {
 			allowModelCall: boolField(value, "allowModelCall", false),
 			expectedSnapshot: stringField(value, "expectedSnapshot", "")
 		});
+	}
+
+	static function loopRequest(value:Value):TuiSmokeLoopRequest {
+		return new TuiSmokeLoopRequest(
+			stringField(value, "name", ""),
+			frameRequest(valueField(value, "frame")),
+			events(arrayField(value, "events")),
+			TuiSmokeExitKind.fromString(stringField(value, "expectedExit", "")),
+			stringField(value, "expectedTrace", ""),
+			stringField(value, "expectedSnapshot", "")
+		);
+	}
+
+	static function events(values:Array<Value>):Array<TuiSmokeEvent> {
+		final out:Array<TuiSmokeEvent> = [];
+		for (value in values) {
+			out.push(new TuiSmokeEvent({
+				kind: TuiSmokeEventKind.fromString(stringField(value, "kind", "")),
+				key: TuiSmokeKeyKind.fromString(optionalStringField(value, "key", "none")),
+				status: optionalStringField(value, "status", ""),
+				input: optionalStringField(value, "input", ""),
+				exitMode: TuiSmokeExitMode.fromString(optionalStringField(value, "exitMode", "unknown"))
+			}));
+		}
+		return out;
 	}
 
 	static function transcriptRows(values:Array<Value>):Array<TuiSmokeTranscriptRow> {
@@ -72,6 +108,26 @@ class TuiSmokeFixtureLoader {
 			case JString(value): value;
 			case JNull: fallback;
 			case _: throw "expected string field: " + name;
+		}
+	}
+
+	static function optionalStringField(object:Value, name:String, fallback:String):String {
+		return switch object {
+			case JObject(keys, values):
+				var i = 0;
+				while (i < keys.length && i < values.length) {
+					if (keys[i] == name) {
+						return switch values[i] {
+							case JString(value): value;
+							case JNull: fallback;
+							case _: throw "expected string field: " + name;
+						}
+					}
+					i = i + 1;
+				}
+				fallback;
+			case _:
+				throw "expected object for field: " + name;
 		}
 	}
 

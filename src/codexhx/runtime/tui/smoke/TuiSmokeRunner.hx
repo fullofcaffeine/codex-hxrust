@@ -23,7 +23,7 @@ class TuiSmokeRunner {
 		});
 	}
 
-	static function exitForKey(key:TuiSmokeKeyKind):TuiSmokeExitKind {
+	public static function exitForKey(key:TuiSmokeKeyKind):TuiSmokeExitKind {
 		return switch key {
 			case TuiSmokeKeyKind.CtrlC: TuiSmokeExitKind.Cancelled;
 			case TuiSmokeKeyKind.Escape | TuiSmokeKeyKind.CharQ: TuiSmokeExitKind.Quit;

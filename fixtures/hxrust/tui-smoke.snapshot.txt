@@ -1,8 +1,14 @@
-Codex TUI Smoke
-status: idle | model: gpt-5.2-codex
-system> read-only upstream fixture
-assistant> Rendered through Haxe to Rust
-input> Summarize next raw Codex TUI step
-key: ctrl-c
+Codex TUI Smoke Loop
+status: ready | model: gpt-5.2-codex
+system> headless app loop
+assistant> waiting for raw Codex events
+input> continue raw TUI
+trace:
+tui.draw
+app.status=ready
+app.input=continue raw TUI
+tui.draw
+tui.key=ctrl-c
 exit: cancelled
+renders: 2
 terminal: restored
