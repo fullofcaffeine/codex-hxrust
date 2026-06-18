@@ -99,7 +99,33 @@ class TuiSmokeFixtureLoader {
 					streamTime: optionalBoolField(value, "streamTime", false),
 					followUpDraw: optionalBoolField(value, "followUpDraw", false),
 					repaint: optionalResizeRepaintPlan(value, "repaint"),
-					viewport: optionalViewportResizePlan(value, "viewport")
+					viewport: optionalViewportResizePlan(value, "viewport"),
+					suspendResume: optionalSuspendResumePlan(value, "suspendResume")
+				});
+		}
+	}
+
+	static function optionalSuspendResumePlan(object:Value, name:String):Null<TuiSmokeSuspendResumePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSuspendResumePlan({
+					action: TuiSmokeResumeActionKind.fromString(optionalStringField(value, "action", "none")),
+					altScreenActive: optionalBoolField(value, "altScreenActive", false),
+					cachedCursorY: optionalIntField(value, "cachedCursorY", 0),
+					cursorYAfterResume: optionalIntField(value, "cursorYAfterResume", 0),
+					savedViewportX: optionalIntField(value, "savedViewportX", 0),
+					savedViewportY: optionalIntField(value, "savedViewportY", 0),
+					savedViewportWidth: optionalIntField(value, "savedViewportWidth", 0),
+					savedViewportHeight: optionalIntField(value, "savedViewportHeight", 0),
+					appliedViewportX: optionalIntField(value, "appliedViewportX", 0),
+					appliedViewportY: optionalIntField(value, "appliedViewportY", 0),
+					appliedViewportWidth: optionalIntField(value, "appliedViewportWidth", 0),
+					appliedViewportHeight: optionalIntField(value, "appliedViewportHeight", 0),
+					enterAltScreen: optionalBoolField(value, "enterAltScreen", false),
+					leaveAltScreen: optionalBoolField(value, "leaveAltScreen", false),
+					altScroll: optionalBoolField(value, "altScroll", false),
+					clearAfterRestore: optionalBoolField(value, "clearAfterRestore", false)
 				});
 		}
 	}

@@ -303,6 +303,18 @@ Extend repaint evidence into inline viewport resize synchronization:
 
 Status: HXCX-TUI-16 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/tui.rs:792`, `../codex/codex-rs/tui/src/tui.rs:800`, `../codex/codex-rs/tui/src/tui.rs:809`, `../codex/codex-rs/tui/src/tui.rs:812`, `../codex/codex-rs/tui/src/tui.rs:819`, `../codex/codex-rs/tui/src/tui.rs:821`, `../codex/codex-rs/tui/src/tui.rs:825`, `../codex/codex-rs/tui/src/tui.rs:829`, `../codex/codex-rs/tui/src/tui.rs:831`, `../codex/codex-rs/tui/src/tui.rs:840`, `../codex/codex-rs/tui/src/tui.rs:850`, `../codex/codex-rs/tui/src/tui.rs:855`, `../codex/codex-rs/tui/src/tui.rs:1002`, `../codex/codex-rs/tui/src/tui.rs:1020`, `../codex/codex-rs/tui/src/tui.rs:1022`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:378`, and `../codex/codex-rs/tui/tests/suite/resize_reflow.rs:323`. This is inline viewport synchronization evidence only, not live terminal backend mutation, real scroll-region writes, terminal clearing, ratatui rendering, live frame scheduling, model traffic, tool execution, or Cafex behavior.
 
+### HXCX-TUI-17: Headless Raw Codex TUI Suspend/Resume Viewport Facade
+
+Extend inline viewport sync evidence into suspend/resume restoration:
+
+- suspend captures realign-inline versus restore-alt intent and cached cursor row;
+- alt-screen suspend records leave-alt-screen and alternate-scroll restore intent;
+- resume preparation consumes pending action, updates saved alt viewport y from cursor when applicable, and applies prepared action before viewport resize sync;
+- inline resume realigns the viewport from cursor position before resize sync;
+- synchronized draw updates suspend cursor-y from active inline/alt viewport after viewport work.
+
+Status: HXCX-TUI-17 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/tui/job_control.rs:27`, `../codex/codex-rs/tui/src/tui/job_control.rs:64`, `../codex/codex-rs/tui/src/tui/job_control.rs:73`, `../codex/codex-rs/tui/src/tui/job_control.rs:82`, `../codex/codex-rs/tui/src/tui/job_control.rs:94`, `../codex/codex-rs/tui/src/tui/job_control.rs:98`, `../codex/codex-rs/tui/src/tui/job_control.rs:102`, `../codex/codex-rs/tui/src/tui/job_control.rs:111`, `../codex/codex-rs/tui/src/tui/job_control.rs:123`, `../codex/codex-rs/tui/src/tui/job_control.rs:144`, `../codex/codex-rs/tui/src/tui/job_control.rs:155`, `../codex/codex-rs/tui/src/tui/job_control.rs:158`, `../codex/codex-rs/tui/src/tui/job_control.rs:161`, `../codex/codex-rs/tui/src/tui/job_control.rs:166`, `../codex/codex-rs/tui/src/tui.rs:1002`, `../codex/codex-rs/tui/src/tui.rs:1011`, `../codex/codex-rs/tui/src/tui.rs:1017`, `../codex/codex-rs/tui/src/tui.rs:1022`, `../codex/codex-rs/tui/src/tui.rs:1035`, `../codex/codex-rs/tui/src/tui.rs:1040`, and `../codex/codex-rs/tui/src/tui.rs:1046`. This is suspend/resume viewport evidence only, not live SIGTSTP delivery, terminal mode mutation, alternate-screen control, terminal backend mutation, ratatui rendering, model traffic, tool execution, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

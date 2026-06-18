@@ -17,6 +17,7 @@ typedef TuiSmokeResizeDrawActionFields = {
 	final followUpDraw:Bool;
 	final repaint:Null<TuiSmokeResizeRepaintPlan>;
 	final viewport:Null<TuiSmokeViewportResizePlan>;
+	final suspendResume:Null<TuiSmokeSuspendResumePlan>;
 }
 
 class TuiSmokeResizeDrawAction {
@@ -36,6 +37,7 @@ class TuiSmokeResizeDrawAction {
 	public final followUpDraw:Bool;
 	public final repaint:Null<TuiSmokeResizeRepaintPlan>;
 	public final viewport:Null<TuiSmokeViewportResizePlan>;
+	public final suspendResume:Null<TuiSmokeSuspendResumePlan>;
 
 	public function new(fields:TuiSmokeResizeDrawActionFields) {
 		this.terminalWidth = fields.terminalWidth;
@@ -54,6 +56,7 @@ class TuiSmokeResizeDrawAction {
 		this.followUpDraw = fields.followUpDraw;
 		this.repaint = fields.repaint;
 		this.viewport = fields.viewport;
+		this.suspendResume = fields.suspendResume;
 	}
 
 	public function sizeText():String {

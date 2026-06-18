@@ -2752,6 +2752,162 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.resize_draw.size=120x30:last=120x30:width=unchanged:height_changed=false\ntui.viewport.resize=from=0,20,100x16:to=0,14,120x16:requested_height=16\ntui.viewport.height=shrank=false:grew=false:bottom_aligned=false\ntui.viewport.scroll_region_up=0..20:rows=6\ntui.viewport.set_area=0,14,120x16\ntui.viewport.clear_after=0,14\ntui.viewport.pending_history.flush=batches=2:rows=9:mode=zellij_raw:wrap=terminal\ntui.viewport.invalidate=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> viewport scroll\ninput> \ntrace:\ntui.resize_draw.size=120x30:last=120x30:width=unchanged:height_changed=false\ntui.viewport.resize=from=0,20,100x16:to=0,14,120x16:requested_height=16\ntui.viewport.height=shrank=false:grew=false:bottom_aligned=false\ntui.viewport.scroll_region_up=0..20:rows=6\ntui.viewport.set_area=0,14,120x16\ntui.viewport.clear_after=0,14\ntui.viewport.pending_history.flush=batches=2:rows=9:mode=zellij_raw:wrap=terminal\ntui.viewport.invalidate=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "suspend-resume-inline-realign-viewport",
+      "frame": {
+        "name": "suspend-resume-inline-realign-viewport",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "inline resume"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 90,
+            "terminalHeight": 24,
+            "lastWidth": 90,
+            "lastHeight": 24,
+            "resizeReflowEnabled": true,
+            "suspendResume": {
+              "action": "realign_inline",
+              "altScreenActive": false,
+              "cachedCursorY": 21,
+              "cursorYAfterResume": 7,
+              "savedViewportX": 0,
+              "savedViewportY": 18,
+              "savedViewportWidth": 90,
+              "savedViewportHeight": 6,
+              "appliedViewportX": 0,
+              "appliedViewportY": 7,
+              "appliedViewportWidth": 0,
+              "appliedViewportHeight": 0
+            },
+            "viewport": {
+              "requestedHeight": 8,
+              "previousX": 0,
+              "previousY": 7,
+              "previousWidth": 0,
+              "previousHeight": 0,
+              "nextX": 0,
+              "nextY": 16,
+              "nextWidth": 90,
+              "nextHeight": 8,
+              "terminalHeightShrank": false,
+              "terminalHeightGrew": false,
+              "bottomAligned": false,
+              "pendingHistoryBatches": 1,
+              "pendingHistoryRows": 1,
+              "wrapPolicy": "word",
+              "clearAfterY": 7,
+              "needsFullRepaint": true
+            }
+          }
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.suspend.capture=action=realign_inline:alt=false:cursor_y=21\ntui.resume.prepare=realign_inline:cursor_y=7:saved=0,18,90x6\ntui.resume.apply=realign_viewport:0,7,0x0\ntui.viewport.resize=from=0,7,0x0:to=0,16,90x8:requested_height=8\ntui.viewport.height=shrank=false:grew=false:bottom_aligned=false\ntui.viewport.set_area=0,16,90x8\ntui.viewport.clear_after=0,7\ntui.viewport.pending_history.flush=batches=1:rows=1:mode=standard:wrap=word\ntui.viewport.invalidate=true\ntui.suspend.cursor_y.set=23\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> inline resume\ninput> \ntrace:\ntui.resize_draw.size=90x24:last=90x24:width=unchanged:height_changed=false\ntui.suspend.capture=action=realign_inline:alt=false:cursor_y=21\ntui.resume.prepare=realign_inline:cursor_y=7:saved=0,18,90x6\ntui.resume.apply=realign_viewport:0,7,0x0\ntui.viewport.resize=from=0,7,0x0:to=0,16,90x8:requested_height=8\ntui.viewport.height=shrank=false:grew=false:bottom_aligned=false\ntui.viewport.set_area=0,16,90x8\ntui.viewport.clear_after=0,7\ntui.viewport.pending_history.flush=batches=1:rows=1:mode=standard:wrap=word\ntui.viewport.invalidate=true\ntui.suspend.cursor_y.set=23\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "suspend-resume-alt-screen-restore",
+      "frame": {
+        "name": "suspend-resume-alt-screen-restore",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "alt resume"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resize_draw",
+          "resizeDraw": {
+            "terminalWidth": 100,
+            "terminalHeight": 30,
+            "lastWidth": 100,
+            "lastHeight": 30,
+            "resizeReflowEnabled": true,
+            "suspendResume": {
+              "action": "restore_alt",
+              "altScreenActive": true,
+              "cachedCursorY": 29,
+              "cursorYAfterResume": 5,
+              "savedViewportX": 0,
+              "savedViewportY": 12,
+              "savedViewportWidth": 100,
+              "savedViewportHeight": 18,
+              "appliedViewportX": 0,
+              "appliedViewportY": 0,
+              "appliedViewportWidth": 100,
+              "appliedViewportHeight": 30,
+              "enterAltScreen": true,
+              "leaveAltScreen": true,
+              "altScroll": true,
+              "clearAfterRestore": true
+            },
+            "viewport": {
+              "requestedHeight": 12,
+              "previousX": 0,
+              "previousY": 0,
+              "previousWidth": 100,
+              "previousHeight": 30,
+              "nextX": 0,
+              "nextY": 18,
+              "nextWidth": 100,
+              "nextHeight": 12,
+              "terminalHeightShrank": false,
+              "terminalHeightGrew": false,
+              "bottomAligned": false,
+              "pendingHistoryBatches": 0,
+              "pendingHistoryRows": 0,
+              "wrapPolicy": "terminal",
+              "clearAfterY": 0,
+              "needsFullRepaint": true
+            }
+          }
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.resize_draw.size=100x30:last=100x30:width=unchanged:height_changed=false\ntui.suspend.capture=action=restore_alt:alt=true:cursor_y=29\ntui.suspend.leave_alt_screen=true:alt_scroll=true\ntui.resume.prepare=restore_alt:cursor_y=5:saved=0,12,100x18\ntui.resume.apply=restore_alt_screen:0,0,100x30:enter=true:alt_scroll=true:clear=true\ntui.viewport.resize=from=0,0,100x30:to=0,18,100x12:requested_height=12\ntui.viewport.height=shrank=false:grew=false:bottom_aligned=false\ntui.viewport.set_area=0,18,100x12\ntui.viewport.clear_after=0,0\ntui.viewport.pending_history.flush=batches=0:rows=0:mode=standard:wrap=terminal\ntui.viewport.invalidate=true\ntui.suspend.cursor_y.set=29\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> alt resume\ninput> \ntrace:\ntui.resize_draw.size=100x30:last=100x30:width=unchanged:height_changed=false\ntui.suspend.capture=action=restore_alt:alt=true:cursor_y=29\ntui.suspend.leave_alt_screen=true:alt_scroll=true\ntui.resume.prepare=restore_alt:cursor_y=5:saved=0,12,100x18\ntui.resume.apply=restore_alt_screen:0,0,100x30:enter=true:alt_scroll=true:clear=true\ntui.viewport.resize=from=0,0,100x30:to=0,18,100x12:requested_height=12\ntui.viewport.height=shrank=false:grew=false:bottom_aligned=false\ntui.viewport.set_area=0,18,100x12\ntui.viewport.clear_after=0,0\ntui.viewport.pending_history.flush=batches=0:rows=0:mode=standard:wrap=terminal\ntui.viewport.invalidate=true\ntui.suspend.cursor_y.set=29\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

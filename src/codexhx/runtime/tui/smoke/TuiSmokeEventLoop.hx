@@ -218,6 +218,7 @@ class TuiSmokeEventLoop {
 			if (action.widthChanged()) trace.push("tui.resize_draw.reflow.clear=disabled");
 			return;
 		}
+		traceSuspendResume(action.suspendResume, trace);
 		if (action.shouldRebuildTranscript()) {
 			trace.push(
 				"tui.resize_draw.reflow.schedule="
@@ -229,17 +230,20 @@ class TuiSmokeEventLoop {
 		}
 		if (!action.pendingReflow) {
 			traceViewportResize(action.viewport, trace);
+			traceSuspendCursorUpdate(action.suspendResume, action.viewport, trace);
 			return;
 		}
 		if (!action.pendingDue) {
 			trace.push("tui.resize_draw.reflow.rearm=" + action.remainingMs + "ms");
 			trace.push("tui.frame.schedule_in=" + action.remainingMs + "ms");
 			traceViewportResize(action.viewport, trace);
+			traceSuspendCursorUpdate(action.suspendResume, action.viewport, trace);
 			return;
 		}
 		if (action.overlayActive) {
 			trace.push("tui.resize_draw.reflow.defer=overlay");
 			traceViewportResize(action.viewport, trace);
+			traceSuspendCursorUpdate(action.suspendResume, action.viewport, trace);
 			return;
 		}
 		if (action.runReflow) {
@@ -255,6 +259,7 @@ class TuiSmokeEventLoop {
 			trace.push("tui.frame.schedule_in=debounce_followup");
 		}
 		traceViewportResize(action.viewport, trace);
+		traceSuspendCursorUpdate(action.suspendResume, action.viewport, trace);
 	}
 
 	static function traceResizeRepaint(repaint:TuiSmokeResizeRepaintPlan, trace:Array<String>):Void {
@@ -324,6 +329,50 @@ class TuiSmokeEventLoop {
 		if (viewport.needsFullRepaint) {
 			trace.push("tui.viewport.invalidate=true");
 		}
+	}
+
+	static function traceSuspendResume(plan:TuiSmokeSuspendResumePlan, trace:Array<String>):Void {
+		if (plan == null || !plan.enabled()) return;
+		trace.push(
+			"tui.suspend.capture="
+			+ "action=" + plan.action
+			+ ":alt=" + plan.altScreenActive
+			+ ":cursor_y=" + plan.cachedCursorY
+		);
+		if (plan.leaveAltScreen) {
+			trace.push("tui.suspend.leave_alt_screen=true:alt_scroll=" + plan.altScroll);
+		}
+		trace.push(
+			"tui.resume.prepare="
+			+ plan.action
+			+ ":cursor_y=" + plan.cursorYAfterResume
+			+ ":saved=" + plan.savedViewportText()
+		);
+		switch plan.action {
+			case TuiSmokeResumeActionKind.RealignInline:
+				trace.push("tui.resume.apply=realign_viewport:" + plan.appliedViewportText());
+			case TuiSmokeResumeActionKind.RestoreAlt:
+				trace.push(
+					"tui.resume.apply=restore_alt_screen:"
+					+ plan.appliedViewportText()
+					+ ":enter=" + plan.enterAltScreen
+					+ ":alt_scroll=" + plan.altScroll
+					+ ":clear=" + plan.clearAfterRestore
+				);
+			case _:
+		}
+	}
+
+	static function traceSuspendCursorUpdate(
+		plan:TuiSmokeSuspendResumePlan,
+		viewport:TuiSmokeViewportResizePlan,
+		trace:Array<String>
+	):Void {
+		if (plan == null || !plan.enabled() || viewport == null) return;
+		final cursorY = plan.altScreenActive
+			? plan.appliedViewportY + plan.appliedViewportHeight - 1
+			: viewport.nextY + viewport.nextHeight - 1;
+		trace.push("tui.suspend.cursor_y.set=" + cursorY);
 	}
 
 	static function rejected(code:String):TuiSmokeLoopOutcome {
