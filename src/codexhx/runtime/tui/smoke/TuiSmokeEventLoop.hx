@@ -256,6 +256,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetInterruptedRestore:
+					if (!traceChatWidgetInterruptedRestore(event.chatWidgetInterruptedRestore, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1689,6 +1694,96 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_interrupt_quit.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceChatWidgetInterruptedRestore(plan:TuiSmokeChatWidgetInterruptedRestorePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_interrupted_restore.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_interrupted_restore.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RecordCancelEditCandidate:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.record_cancel_edit="
+						+ "prompt=" + action.promptText
+						+ ":eligible=" + action.cancelEditEligibleBefore + "->" + action.cancelEditEligibleAfter
+						+ ":armed=" + action.cancelEditArmedBefore + "->" + action.cancelEditArmedAfter
+						+ ":prompt_state=" + action.cancelEditPromptBefore + "->" + action.cancelEditPromptAfter
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.ArmCancelEdit:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.arm_cancel_edit="
+						+ "eligible=" + action.cancelEditEligibleBefore
+						+ ":composer_empty=" + action.composerEmpty
+						+ ":pending=" + action.pendingSteersBefore
+						+ ":queued=" + action.queuedMessagesBefore
+						+ ":side=" + action.sideConversationActive
+						+ ":armed=" + action.cancelEditArmedBefore + "->" + action.cancelEditArmedAfter
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.InterruptedTurn:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.interrupted="
+						+ action.reason
+						+ ":finalized=" + action.finalizedTurn
+						+ ":send_pending=" + action.sendPendingSteersImmediately
+						+ ":submit_after=" + action.submitPendingSteersAfterInterruptBefore + "->" + action.submitPendingSteersAfterInterruptAfter
+						+ ":notice=" + action.noticeInserted
+						+ ":suppressed=" + action.noticeSuppressed
+						+ ":preview=" + action.pendingPreviewRefreshed
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.DrainPendingMessages:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.drain_pending="
+						+ "pending=" + action.pendingSteersBefore + "->" + action.pendingSteersAfter
+						+ ":queued=" + action.queuedMessagesBefore + "->" + action.queuedMessagesAfter
+						+ ":rejected=" + action.rejectedSteersBefore + "->" + action.rejectedSteersAfter
+						+ ":pending_merged=" + action.pendingMerged
+						+ ":queued_merged=" + action.queuedMerged
+						+ ":composer_merged=" + action.composerMerged
+						+ ":text=" + action.restoredText
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RestoreComposer:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.restore_composer="
+						+ "text=" + action.restoredText
+						+ ":remote_images=" + action.remoteImageCount
+						+ ":local_images=" + action.localImageCount
+						+ ":mentions=" + action.mentionBindingCount
+						+ ":restored=" + action.composerRestored
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RestoreCancelledTurn:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.restore_cancelled_turn="
+						+ "prompt=" + action.promptText
+						+ ":event=" + action.cancelledTurnRestoreEventSent
+						+ ":rollback=" + action.threadRollbackSent
+						+ ":composer=" + action.composerRestored
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.NoticeMode:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.notice_mode="
+						+ action.noticeMode
+						+ ":suppressed=" + action.noticeSuppressed
+						+ ":text=" + action.noticeText
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.failure="
+						+ action.failureCode
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_interrupted_restore.unknown");
 					return false;
 			}
 		}

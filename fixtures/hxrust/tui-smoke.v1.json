@@ -10095,6 +10095,371 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.interrupt_key=esc:route=pending_steers_interrupt:pending_steers=2->2:submit_after=true:review=false:task=true:submitted=true\ntui.chat_widget_interrupt_quit.cancel_edit=cleared=true:pending_steers=2->0:redraw=true\ntui.chat_widget_interrupt_quit.failure=live_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupt quit cancel edit no live\ninput> \ntrace:\ntui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.interrupt_key=esc:route=pending_steers_interrupt:pending_steers=2->2:submit_after=true:review=false:task=true:submitted=true\ntui.chat_widget_interrupt_quit.cancel_edit=cleared=true:pending_steers=2->0:redraw=true\ntui.chat_widget_interrupt_quit.failure=live_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-interrupted-restore-default-notice",
+      "frame": {
+        "name": "chat-widget-interrupted-restore-default-notice",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget interrupted restore default notice"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupted_restore",
+          "chatWidgetInterruptedRestore": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "interrupted_turn",
+                "reason": "interrupted",
+                "finalizedTurn": true,
+                "sendPendingSteersImmediately": false,
+                "submitPendingSteersAfterInterruptBefore": false,
+                "submitPendingSteersAfterInterruptAfter": false,
+                "noticeInserted": true,
+                "noticeSuppressed": false,
+                "pendingPreviewRefreshed": true,
+                "requestRedraw": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupted restore default notice\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-interrupted-restore-budget-suppressed",
+      "frame": {
+        "name": "chat-widget-interrupted-restore-budget-suppressed",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget interrupted restore budget suppressed"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupted_restore",
+          "chatWidgetInterruptedRestore": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "notice_mode",
+                "noticeMode": "suppress",
+                "noticeText": "",
+                "noticeSuppressed": true
+              },
+              {
+                "kind": "interrupted_turn",
+                "reason": "budget_limited",
+                "finalizedTurn": true,
+                "sendPendingSteersImmediately": false,
+                "submitPendingSteersAfterInterruptBefore": false,
+                "submitPendingSteersAfterInterruptAfter": false,
+                "noticeInserted": false,
+                "noticeSuppressed": true,
+                "pendingPreviewRefreshed": true,
+                "requestRedraw": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.notice_mode=suppress:suppressed=true:text=\ntui.chat_widget_interrupted_restore.interrupted=budget_limited:finalized=true:send_pending=false:submit_after=false->false:notice=false:suppressed=true:preview=true:redraw=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupted restore budget suppressed\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.notice_mode=suppress:suppressed=true:text=\ntui.chat_widget_interrupted_restore.interrupted=budget_limited:finalized=true:send_pending=false:submit_after=false->false:notice=false:suppressed=true:preview=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-interrupted-restore-cancel-edit",
+      "frame": {
+        "name": "chat-widget-interrupted-restore-cancel-edit",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget interrupted restore cancel edit"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupted_restore",
+          "chatWidgetInterruptedRestore": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "record_cancel_edit_candidate",
+                "promptText": "edit me",
+                "cancelEditEligibleBefore": false,
+                "cancelEditEligibleAfter": true,
+                "cancelEditArmedBefore": false,
+                "cancelEditArmedAfter": false,
+                "cancelEditPromptBefore": false,
+                "cancelEditPromptAfter": true
+              },
+              {
+                "kind": "arm_cancel_edit",
+                "cancelEditEligibleBefore": true,
+                "composerEmpty": true,
+                "pendingSteersBefore": 0,
+                "queuedMessagesBefore": 0,
+                "sideConversationActive": false,
+                "cancelEditArmedBefore": false,
+                "cancelEditArmedAfter": true
+              },
+              {
+                "kind": "interrupted_turn",
+                "reason": "interrupted",
+                "finalizedTurn": true,
+                "sendPendingSteersImmediately": false,
+                "submitPendingSteersAfterInterruptBefore": false,
+                "submitPendingSteersAfterInterruptAfter": false,
+                "noticeInserted": false,
+                "noticeSuppressed": false,
+                "pendingPreviewRefreshed": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "restore_cancelled_turn",
+                "promptText": "edit me",
+                "cancelledTurnRestoreEventSent": true,
+                "threadRollbackSent": true,
+                "composerRestored": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.record_cancel_edit=prompt=edit me:eligible=false->true:armed=false->false:prompt_state=false->true\ntui.chat_widget_interrupted_restore.arm_cancel_edit=eligible=true:composer_empty=true:pending=0:queued=0:side=false:armed=false->true\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=false:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.restore_cancelled_turn=prompt=edit me:event=true:rollback=true:composer=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupted restore cancel edit\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.record_cancel_edit=prompt=edit me:eligible=false->true:armed=false->false:prompt_state=false->true\ntui.chat_widget_interrupted_restore.arm_cancel_edit=eligible=true:composer_empty=true:pending=0:queued=0:side=false:armed=false->true\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=false:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.restore_cancelled_turn=prompt=edit me:event=true:rollback=true:composer=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-interrupted-restore-queued-input",
+      "frame": {
+        "name": "chat-widget-interrupted-restore-queued-input",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget interrupted restore queued input"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupted_restore",
+          "chatWidgetInterruptedRestore": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "interrupted_turn",
+                "reason": "interrupted",
+                "finalizedTurn": true,
+                "sendPendingSteersImmediately": false,
+                "submitPendingSteersAfterInterruptBefore": false,
+                "submitPendingSteersAfterInterruptAfter": false,
+                "noticeInserted": true,
+                "noticeSuppressed": false,
+                "pendingPreviewRefreshed": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "drain_pending_messages",
+                "pendingSteersBefore": 1,
+                "pendingSteersAfter": 0,
+                "queuedMessagesBefore": 1,
+                "queuedMessagesAfter": 0,
+                "rejectedSteersBefore": 0,
+                "rejectedSteersAfter": 0,
+                "pendingMerged": true,
+                "queuedMerged": true,
+                "composerMerged": true,
+                "restoredText": "steer guidance | queued follow-up | draft note"
+              },
+              {
+                "kind": "restore_composer",
+                "restoredText": "steer guidance | queued follow-up | draft note",
+                "remoteImageCount": 1,
+                "localImageCount": 1,
+                "mentionBindingCount": 1,
+                "composerRestored": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=1->0:queued=1->0:rejected=0->0:pending_merged=true:queued_merged=true:composer_merged=true:text=steer guidance | queued follow-up | draft note\ntui.chat_widget_interrupted_restore.restore_composer=text=steer guidance | queued follow-up | draft note:remote_images=1:local_images=1:mentions=1:restored=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupted restore queued input\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=1->0:queued=1->0:rejected=0->0:pending_merged=true:queued_merged=true:composer_merged=true:text=steer guidance | queued follow-up | draft note\ntui.chat_widget_interrupted_restore.restore_composer=text=steer guidance | queued follow-up | draft note:remote_images=1:local_images=1:mentions=1:restored=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-interrupted-restore-submit-pending-no-live",
+      "frame": {
+        "name": "chat-widget-interrupted-restore-submit-pending-no-live",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget interrupted restore submit pending no live"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupted_restore",
+          "chatWidgetInterruptedRestore": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "interrupted_turn",
+                "reason": "interrupted",
+                "finalizedTurn": true,
+                "sendPendingSteersImmediately": true,
+                "submitPendingSteersAfterInterruptBefore": true,
+                "submitPendingSteersAfterInterruptAfter": false,
+                "noticeInserted": true,
+                "noticeSuppressed": false,
+                "pendingPreviewRefreshed": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "drain_pending_messages",
+                "pendingSteersBefore": 2,
+                "pendingSteersAfter": 0,
+                "queuedMessagesBefore": 0,
+                "queuedMessagesAfter": 0,
+                "rejectedSteersBefore": 0,
+                "rejectedSteersAfter": 0,
+                "pendingMerged": true,
+                "queuedMerged": false,
+                "composerMerged": false,
+                "restoredText": "steer one | steer two"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_effects_rejected",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=true:submit_after=true->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=2->0:queued=0->0:rejected=0->0:pending_merged=true:queued_merged=false:composer_merged=false:text=steer one | steer two\ntui.chat_widget_interrupted_restore.failure=live_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupted restore submit pending no live\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=true:submit_after=true->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=2->0:queued=0->0:rejected=0->0:pending_merged=true:queued_merged=false:composer_merged=false:text=steer one | steer two\ntui.chat_widget_interrupted_restore.failure=live_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

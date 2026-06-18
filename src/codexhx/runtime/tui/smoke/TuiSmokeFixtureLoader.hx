@@ -101,7 +101,73 @@ class TuiSmokeFixtureLoader {
 				chatWidgetActiveStream: optionalChatWidgetActiveStreamPlan(value, "chatWidgetActiveStream"),
 				chatWidgetStreamStatus: optionalChatWidgetStreamStatusPlan(value, "chatWidgetStreamStatus"),
 				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle"),
-				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit")
+				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
+				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalChatWidgetInterruptedRestorePlan(object:Value, name:String):Null<TuiSmokeChatWidgetInterruptedRestorePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeChatWidgetInterruptedRestorePlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: chatWidgetInterruptedRestoreActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function chatWidgetInterruptedRestoreActions(values:Array<Value>):Array<TuiSmokeChatWidgetInterruptedRestoreAction> {
+		final out:Array<TuiSmokeChatWidgetInterruptedRestoreAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeChatWidgetInterruptedRestoreAction({
+				kind: TuiSmokeChatWidgetInterruptedRestoreActionKind.fromString(stringField(value, "kind", "")),
+				reason: optionalStringField(value, "reason", ""),
+				noticeMode: optionalStringField(value, "noticeMode", ""),
+				noticeText: optionalStringField(value, "noticeText", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				promptText: optionalStringField(value, "promptText", ""),
+				restoredText: optionalStringField(value, "restoredText", ""),
+				composerText: optionalStringField(value, "composerText", ""),
+				queuedMessagesBefore: optionalIntField(value, "queuedMessagesBefore", 0),
+				queuedMessagesAfter: optionalIntField(value, "queuedMessagesAfter", 0),
+				pendingSteersBefore: optionalIntField(value, "pendingSteersBefore", 0),
+				pendingSteersAfter: optionalIntField(value, "pendingSteersAfter", 0),
+				rejectedSteersBefore: optionalIntField(value, "rejectedSteersBefore", 0),
+				rejectedSteersAfter: optionalIntField(value, "rejectedSteersAfter", 0),
+				remoteImageCount: optionalIntField(value, "remoteImageCount", 0),
+				localImageCount: optionalIntField(value, "localImageCount", 0),
+				mentionBindingCount: optionalIntField(value, "mentionBindingCount", 0),
+				cancelEditEligibleBefore: optionalBoolField(value, "cancelEditEligibleBefore", false),
+				cancelEditEligibleAfter: optionalBoolField(value, "cancelEditEligibleAfter", false),
+				cancelEditArmedBefore: optionalBoolField(value, "cancelEditArmedBefore", false),
+				cancelEditArmedAfter: optionalBoolField(value, "cancelEditArmedAfter", false),
+				cancelEditPromptBefore: optionalBoolField(value, "cancelEditPromptBefore", false),
+				cancelEditPromptAfter: optionalBoolField(value, "cancelEditPromptAfter", false),
+				composerEmpty: optionalBoolField(value, "composerEmpty", false),
+				sideConversationActive: optionalBoolField(value, "sideConversationActive", false),
+				sendPendingSteersImmediately: optionalBoolField(value, "sendPendingSteersImmediately", false),
+				submitPendingSteersAfterInterruptBefore: optionalBoolField(value, "submitPendingSteersAfterInterruptBefore", false),
+				submitPendingSteersAfterInterruptAfter: optionalBoolField(value, "submitPendingSteersAfterInterruptAfter", false),
+				finalizedTurn: optionalBoolField(value, "finalizedTurn", false),
+				noticeInserted: optionalBoolField(value, "noticeInserted", false),
+				noticeSuppressed: optionalBoolField(value, "noticeSuppressed", false),
+				pendingMerged: optionalBoolField(value, "pendingMerged", false),
+				queuedMerged: optionalBoolField(value, "queuedMerged", false),
+				composerMerged: optionalBoolField(value, "composerMerged", false),
+				composerRestored: optionalBoolField(value, "composerRestored", false),
+				cancelledTurnRestoreEventSent: optionalBoolField(value, "cancelledTurnRestoreEventSent", false),
+				pendingPreviewRefreshed: optionalBoolField(value, "pendingPreviewRefreshed", false),
+				threadRollbackSent: optionalBoolField(value, "threadRollbackSent", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

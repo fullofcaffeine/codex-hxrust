@@ -2326,6 +2326,22 @@ Model selected raw Codex ChatWidget interrupt/quit behavior:
 
 Status: HXCX-TUI-45 extends `fixtures/hxrust/tui-smoke.v1.json` with typed ChatWidget interrupt/quit shortcut fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic interrupt/quit lifecycle evidence only, not a full live keyboard loop, shutdown transport, or terminal overlay.
 
+### HXCX-TUI-46: ChatWidget Interrupted-Turn Notice And Prompt Restore
+
+Model selected raw Codex ChatWidget interrupted-turn restoration behavior:
+
+- preserve `InterruptedTurnNoticeMode`, `CancelEditState`, and `set_interrupted_turn_notice_mode` in `../codex/codex-rs/tui/src/chatwidget.rs`: interrupted-turn notice behavior is explicit state, not implicit renderer text;
+- preserve `prepare_local_op_submission` in `chatwidget.rs`: prompt-restoring interrupts arm cancel-edit, clear stream and plan stream queues, clear the active stream tail, and request redraw while work is running;
+- preserve `record_cancel_edit_candidate`, `record_visible_turn_activity`, `arm_cancel_edit`, `take_armed_cancel_edit_prompt`, and `clear_cancel_edit` in `../codex/codex-rs/tui/src/chatwidget/input_restore.rs`: cancel-edit restore only fires for interrupted turns whose prompt was eligible, armed, and not invalidated by visible turn activity;
+- preserve `on_interrupted_turn` in `input_restore.rs`: interrupted turns finalize active turn state, clear `submit_pending_steers_after_interrupt`, insert the correct notice unless suppressed or cancelled-prompt restore applies, submit pending steers immediately when requested, otherwise restore pending/queued input to the composer, refresh pending-input preview, send `RestoreCancelledTurn` when needed, and request redraw;
+- preserve `drain_pending_messages_for_restore` and `restore_user_message_to_composer` in `input_restore.rs`: rejected steers, pending steers, queued follow-ups, composer draft text, local/remote images, and mention bindings are rebased into a composer-ready user message without live model/tool execution;
+- preserve `capture_thread_input_state` and `restore_thread_input_state` in `input_restore.rs`: replayed interrupted-turn snapshots can recover queued input deterministically before live input resumes;
+- preserve `interrupted_turn_message` and `finalize_turn` in `../codex/codex-rs/tui/src/chatwidget/turn_runtime.rs`: default interrupts show the feedback-oriented interruption message, budget-limited stops show the budget message, and finalization clears active task/stream/status/cancel-edit state;
+- preserve replay and cancellation anchors in `../codex/codex-rs/tui/src/app/tests.rs`: interrupted-turn replay restores queued input to composer without auto-submit, and cancelled-turn edit restores the prompt and rolls back the latest turn even for the first local prompt;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-46 extends `fixtures/hxrust/tui-smoke.v1.json` with typed ChatWidget interrupted-turn notice, cancel-edit restore, queued input restore, pending-steer submission, and no-live evidence fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic interrupted-turn restore evidence only, not a full live input loop, live renderer, transport, or terminal overlay.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
