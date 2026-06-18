@@ -29,7 +29,9 @@ npm run test:generated-cargo
 bash harness/check-tui-smoke.sh
 ```
 
-`haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `scripts/check-generated-cargo.sh` green.
+`haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. This is a live path dependency: edits in `../haxe.rust/src`, `../haxe.rust/std`, or its vendored Reflaxe tree are reflected immediately by this repo's `haxe`/haxe.rust builds, even before the haxe.rust change is committed.
+
+`reference/haxe-rust.pin.json` is reproducibility metadata, not what local scoped builds use to choose compiler files. Update the pin only after a haxe.rust change has been committed, pushed, and validated as the known-good compiler revision for codex-hxrust. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `scripts/check-generated-cargo.sh` green.
 
 ## Repository Status
 
@@ -86,9 +88,12 @@ The `../haxe.rust` checkout is part of the work surface. When the Codex port exp
 
 1. Reduce it to a small haxe.rust fixture or failing example.
 2. Fix it in `../haxe.rust` in an upstreamable way.
-3. Run haxe.rust validation plus this repo's gates.
-4. Update `reference/haxe-rust.pin.json` only after the gates pass.
-5. Record patches, gaps, and follow-up work in Beads and `reference/`.
+3. Run haxe.rust validation plus this repo's gates against the live sibling checkout.
+4. Commit and push the haxe.rust fix in `../haxe.rust`.
+5. Update `reference/haxe-rust.pin.json` only after the committed haxe.rust revision is the intended known-good consumer revision and the gates pass.
+6. Record patches, gaps, and follow-up work in Beads and `reference/`.
+
+Do not update the pin merely to test local compiler edits. The direct scoped-library path already makes those edits visible to codex-hxrust builds.
 
 Current known haxe.rust pressure points are tracked under the `HXCX-7.x` Beads epic.
 

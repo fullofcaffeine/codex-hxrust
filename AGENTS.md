@@ -16,6 +16,8 @@ bd sync               # Sync with git
 
 The `../haxe.rust` checkout is part of the work surface for this project. Do **not** copy, move, vendor, or submodule it into this repo by default; keep it as a sibling compiler repository and record the known-good consumer commit in `reference/haxe-rust.pin.json`.
 
+Local codex-hxrust builds use the live sibling checkout through `haxe_libraries/reflaxe.rust.hxml`, which adds `../haxe.rust/src` and `../haxe.rust/std` to the Haxe classpath. That means edits in `../haxe.rust` are reflected immediately in this repo's Haxe/haxe.rust gates. The pin does not select files for local scoped builds; it records the committed known-good compiler revision for reproducibility.
+
 Work directly in `../haxe.rust` when fixing compiler/runtime limitations. The compiler must remain a general Haxe-to-Rust backend: never add Codex-specific code, fixtures, paths, naming, or assumptions to haxe.rust. Codex-specific pressure fixtures belong in this repo; haxe.rust fixes need generic minimal repros and generic tests.
 
 When the Codex port exposes a haxe.rust limitation:
@@ -24,9 +26,11 @@ When the Codex port exposes a haxe.rust limitation:
 2. Fix or improve haxe.rust in `../haxe.rust`, respecting its Beads milestones, `AGENTS.md`, and contract-first test policy.
 3. Commit and push the haxe.rust change directly in that repository.
 4. Run the relevant haxe.rust validation plus this repo's generated Cargo/fixture gates.
-5. Update `reference/haxe-rust.pin.json` only after the gated checks pass.
+5. Update `reference/haxe-rust.pin.json` only after the committed haxe.rust revision should become codex-hxrust's known-good compiler pin and the gated checks pass.
 6. Commit and push the codex-hxrust pin/docs/fixture updates.
 7. Record local patches, upstream gaps, and follow-up work in Beads and `reference/haxe-rust-local-patches.v1.json` or an audit note.
+
+Do not change the pin just to try an uncommitted local haxe.rust edit. Test against the live sibling checkout first; pin only after the compiler change is landed and meant to be reproducible for the project.
 
 Treat haxe.rust fixes as first-class compiler contributions, not one-off local hacks hidden inside `codex-hxrust`.
 

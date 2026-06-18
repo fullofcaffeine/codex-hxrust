@@ -9,6 +9,10 @@
 
 `reference/haxe-rust.pin.json` records the known-good compiler commit for this experiment. It is not an upstream merge queue. When compiler work is needed, work directly in `../haxe.rust`, commit and push there, then update the pin here after validation.
 
+The pin is not the local dependency resolver. Day-to-day Haxe builds consume the current files in the sibling checkout through scoped library hxml files. Therefore an uncommitted edit in `../haxe.rust` is immediately visible to codex-hxrust gates, and no codex-hxrust file needs to change just to test that compiler edit.
+
+Update the pin only when the haxe.rust change is committed and should become this repo's reproducible known-good compiler revision. A pin update should mean "codex-hxrust is now known to pass against this haxe.rust commit," not "I need local builds to see my latest compiler edits."
+
 ## Local Dependency Resolution
 
 Use lix scoped libraries for day-to-day local Haxe builds in this repo:
@@ -18,6 +22,8 @@ Use lix scoped libraries for day-to-day local Haxe builds in this repo:
 - `haxe_libraries/reflaxe.hxml` points `-lib reflaxe` at `../haxe.rust/vendor/reflaxe/src`.
 
 This avoids global `haxelib dev` drift while keeping `../haxe.rust` as the authoritative compiler checkout. Do not treat lix as a substitute for haxelib release validation: haxe.rust package/dev-haxelib smoke gates still need to pass for compiler changes because published consumers resolve through haxelib.
+
+Because these paths resolve directly to the sibling checkout, local compiler experiments can be tested in this repo before they are committed upstream. Once the haxe.rust fix is committed and pushed, run `scripts/update-haxe-rust-pin.sh <haxe-rust-sha>` from this repo to update `reference/haxe-rust.pin.json` and `src/codexhx/HaxeRustPin.hx` after generated Cargo gates pass.
 
 ## Compiler Generality Rule
 
@@ -30,7 +36,7 @@ When codex-hxrust exposes a compiler limitation:
 3. Add the smallest generic haxe.rust fixture that reproduces the problem.
 4. Fix the compiler/runtime root cause in haxe.rust.
 5. Run haxe.rust gates, commit, and push haxe.rust.
-6. Update `reference/haxe-rust.pin.json`, run codex-hxrust gates, commit, and push codex-hxrust.
+6. Update `reference/haxe-rust.pin.json` only after the committed haxe.rust revision is the intended known-good consumer revision, run codex-hxrust gates, commit, and push codex-hxrust.
 
 ## Imported Beads
 
