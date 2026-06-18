@@ -2358,6 +2358,20 @@ Model selected raw Codex side-conversation behavior:
 
 Status: HXCX-TUI-47 extends `fixtures/hxrust/tui-smoke.v1.json` with typed side-conversation start, parent-status suppression, return/discard, composer restore, and no-live evidence fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic side-conversation lifecycle evidence only, not a full live fork transport, thread event listener, renderer, or terminal overlay.
 
+### HXCX-TUI-48: Clear And Archive Lifecycle
+
+Model selected raw Codex clear/archive behavior:
+
+- preserve `AppEvent::ClearUi` and `AppEvent::ClearUiAndSubmitUserMessage` in `../codex/codex-rs/tui/src/app/event_dispatch.rs`: app-event clear paths clear terminal output, reset UI state, and start a fresh session with clear source while optionally submitting the initial user message;
+- preserve Ctrl-L handling in `../codex/codex-rs/tui/src/app/input.rs`: clear-only keyboard reset clears terminal output, resets UI state, queues the clear header, and schedules a frame without starting a fresh thread;
+- preserve `clear_terminal_ui`, `reset_app_ui_state_after_clear`, and clear-header queueing in `../codex/codex-rs/tui/src/app/history_ui.rs`: clear resets transcript/deferred history/overlay/backtrack/reflow/replay/skill-warning render state while preserving the active thread and composer text;
+- preserve skill warning rerender behavior through `../codex/codex-rs/tui/src/app/thread_routing.rs`: warning suppression is cleared by UI reset so an active skill warning can render again after clear;
+- preserve `AppEvent::ArchiveCurrentThread`, `archive_current_thread`, and shutdown-first exit handling in `../codex/codex-rs/tui/src/app/event_dispatch.rs`: archive refuses before a thread starts, refuses inside side conversations, requests archive for the current main thread, exits with user-requested intent on success, and records pending shutdown handoff;
+- preserve slash-command and plan-implementation event emitters in `../codex/codex-rs/tui/src/chatwidget/slash_dispatch.rs` and `../codex/codex-rs/tui/src/chatwidget/plan_implementation.rs`: `/clear`, `/archive`, and plan implementation stay app-event driven;
+- keep the evidence deterministic and independent of live terminal clearing, ratatui rendering, live input loops, app-server mutation, model/tool execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-48 extends `fixtures/hxrust/tui-smoke.v1.json` with typed clear UI reset/session preservation, skill-warning rerender, archive refusal/success/exit intent, shutdown feedback, and no-live evidence fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic clear/archive lifecycle evidence only, not live terminal clearing, ratatui rendering, app-server mutation, thread persistence, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

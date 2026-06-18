@@ -103,7 +103,77 @@ class TuiSmokeFixtureLoader {
 				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
-				sideConversation: optionalSideConversationPlan(value, "sideConversation")
+				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
+				clearArchive: optionalClearArchivePlan(value, "clearArchive")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalClearArchivePlan(object:Value, name:String):Null<TuiSmokeClearArchivePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeClearArchivePlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: clearArchiveActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function clearArchiveActions(values:Array<Value>):Array<TuiSmokeClearArchiveAction> {
+		final out:Array<TuiSmokeClearArchiveAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeClearArchiveAction({
+				kind: TuiSmokeClearArchiveActionKind.fromString(stringField(value, "kind", "")),
+				mode: optionalStringField(value, "mode", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				sessionStartSource: optionalStringField(value, "sessionStartSource", ""),
+				userMessageText: optionalStringField(value, "userMessageText", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				clearBackend: optionalStringField(value, "clearBackend", ""),
+				exitMode: optionalStringField(value, "exitMode", ""),
+				exitReason: optionalStringField(value, "exitReason", ""),
+				transcriptCellsBefore: optionalIntField(value, "transcriptCellsBefore", 0),
+				transcriptCellsAfter: optionalIntField(value, "transcriptCellsAfter", 0),
+				deferredHistoryBefore: optionalIntField(value, "deferredHistoryBefore", 0),
+				deferredHistoryAfter: optionalIntField(value, "deferredHistoryAfter", 0),
+				pendingHistoryBefore: optionalIntField(value, "pendingHistoryBefore", 0),
+				pendingHistoryAfter: optionalIntField(value, "pendingHistoryAfter", 0),
+				skillWarningsBefore: optionalIntField(value, "skillWarningsBefore", 0),
+				skillWarningsAfter: optionalIntField(value, "skillWarningsAfter", 0),
+				activeSkillWarningsBefore: optionalIntField(value, "activeSkillWarningsBefore", 0),
+				activeSkillWarningsAfter: optionalIntField(value, "activeSkillWarningsAfter", 0),
+				activeThreadBefore: optionalBoolField(value, "activeThreadBefore", false),
+				activeThreadAfter: optionalBoolField(value, "activeThreadAfter", false),
+				sessionPreserved: optionalBoolField(value, "sessionPreserved", false),
+				composerPreserved: optionalBoolField(value, "composerPreserved", false),
+				overlayCleared: optionalBoolField(value, "overlayCleared", false),
+				backtrackCleared: optionalBoolField(value, "backtrackCleared", false),
+				reflowCleared: optionalBoolField(value, "reflowCleared", false),
+				replayBufferCleared: optionalBoolField(value, "replayBufferCleared", false),
+				headerQueued: optionalBoolField(value, "headerQueued", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				freshSessionStarted: optionalBoolField(value, "freshSessionStarted", false),
+				initialUserMessageSubmitted: optionalBoolField(value, "initialUserMessageSubmitted", false),
+				archiveRequested: optionalBoolField(value, "archiveRequested", false),
+				archiveSucceeded: optionalBoolField(value, "archiveSucceeded", false),
+				sideConversationActive: optionalBoolField(value, "sideConversationActive", false),
+				errorInserted: optionalBoolField(value, "errorInserted", false),
+				pendingShutdownThreadBefore: optionalBoolField(value, "pendingShutdownThreadBefore", false),
+				pendingShutdownThreadAfter: optionalBoolField(value, "pendingShutdownThreadAfter", false),
+				shutdownFeedbackShown: optionalBoolField(value, "shutdownFeedbackShown", false),
+				inputDisabled: optionalBoolField(value, "inputDisabled", false),
+				appServerShutdownRequested: optionalBoolField(value, "appServerShutdownRequested", false),
+				exitRequested: optionalBoolField(value, "exitRequested", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

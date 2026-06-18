@@ -266,6 +266,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ClearArchive:
+					if (!traceClearArchive(event.clearArchive, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1699,6 +1704,100 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_interrupt_quit.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceClearArchive(plan:TuiSmokeClearArchivePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.clear_archive.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.clear_archive.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeClearArchiveActionKind.ClearTerminalUi:
+					trace.push(
+						"tui.clear_archive.clear_terminal="
+						+ action.mode
+						+ ":backend=" + action.clearBackend
+						+ ":pending=" + action.pendingHistoryBefore + "->" + action.pendingHistoryAfter
+						+ ":header=" + action.headerQueued
+					);
+				case TuiSmokeClearArchiveActionKind.ResetUiState:
+					trace.push(
+						"tui.clear_archive.reset_ui="
+						+ "transcript=" + action.transcriptCellsBefore + "->" + action.transcriptCellsAfter
+						+ ":deferred=" + action.deferredHistoryBefore + "->" + action.deferredHistoryAfter
+						+ ":overlay=" + action.overlayCleared
+						+ ":backtrack=" + action.backtrackCleared
+						+ ":reflow=" + action.reflowCleared
+						+ ":replay=" + action.replayBufferCleared
+						+ ":skill_warnings=" + action.skillWarningsBefore + "->" + action.skillWarningsAfter
+						+ ":session=" + action.sessionPreserved
+						+ ":composer=" + action.composerPreserved
+					);
+				case TuiSmokeClearArchiveActionKind.QueueClearHeader:
+					trace.push(
+						"tui.clear_archive.header="
+						+ "queued=" + action.headerQueued
+						+ ":frame=" + action.frameScheduled
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeClearArchiveActionKind.StartFreshSession:
+					trace.push(
+						"tui.clear_archive.start_fresh="
+						+ "source=" + action.sessionStartSource
+						+ ":started=" + action.freshSessionStarted
+						+ ":initial=" + action.initialUserMessageSubmitted
+						+ ":text=" + action.userMessageText
+					);
+				case TuiSmokeClearArchiveActionKind.SkillWarnings:
+					trace.push(
+						"tui.clear_archive.skill_warnings="
+						+ "active=" + action.activeSkillWarningsBefore + "->" + action.activeSkillWarningsAfter
+						+ ":cached=" + action.skillWarningsBefore + "->" + action.skillWarningsAfter
+					);
+				case TuiSmokeClearArchiveActionKind.ArchiveRequest:
+					trace.push(
+						"tui.clear_archive.archive_request="
+						+ "thread=" + action.threadId
+						+ ":active=" + action.activeThreadBefore
+						+ ":side=" + action.sideConversationActive
+						+ ":requested=" + action.archiveRequested
+						+ ":error=" + action.errorInserted
+					);
+				case TuiSmokeClearArchiveActionKind.ArchiveResult:
+					trace.push(
+						"tui.clear_archive.archive_result="
+						+ "thread=" + action.threadId
+						+ ":success=" + action.archiveSucceeded
+						+ ":exit=" + action.exitRequested
+						+ ":reason=" + action.exitReason
+					);
+				case TuiSmokeClearArchiveActionKind.ShutdownFeedback:
+					trace.push(
+						"tui.clear_archive.shutdown_feedback="
+						+ "mode=" + action.exitMode
+						+ ":shown=" + action.shutdownFeedbackShown
+						+ ":input_disabled=" + action.inputDisabled
+						+ ":server_shutdown=" + action.appServerShutdownRequested
+						+ ":pending_thread=" + action.pendingShutdownThreadBefore + "->" + action.pendingShutdownThreadAfter
+					);
+				case TuiSmokeClearArchiveActionKind.Failure:
+					trace.push(
+						"tui.clear_archive.failure="
+						+ action.failureCode
+						+ ":error=" + action.errorMessage
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.clear_archive.unknown");
 					return false;
 			}
 		}

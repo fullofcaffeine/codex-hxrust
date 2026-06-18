@@ -20,6 +20,8 @@ Local codex-hxrust builds use the live sibling checkout through `haxe_libraries/
 
 Work directly in `../haxe.rust` when fixing compiler/runtime limitations. The compiler must remain a general Haxe-to-Rust backend: never add Codex-specific code, fixtures, paths, naming, or assumptions to haxe.rust. Codex-specific pressure fixtures belong in this repo; haxe.rust fixes need generic minimal repros and generic tests.
 
+Before changing `../haxe.rust`, verify it is up to date with its remote `origin` by fetching and rebasing or otherwise reconciling remote changes without overwriting unrelated local work. After making a haxe.rust fix, commit and push it directly in that repository; do not leave compiler/runtime improvements stranded locally while codex-hxrust has already adapted to them.
+
 When the Codex port exposes a haxe.rust limitation:
 
 1. Reduce the limitation to the smallest Haxe/haxe.rust fixture or failing example.

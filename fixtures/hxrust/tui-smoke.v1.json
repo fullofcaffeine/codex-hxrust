@@ -10821,6 +10821,419 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.failure=live_effects_rejected:error=side fork requires live app-server transport:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> side conversation no live rejection\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.failure=live_effects_rejected:error=side fork requires live app-server transport:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "clear-archive-clear-ui-reset-preserves-session",
+      "frame": {
+        "name": "clear-archive-clear-ui-reset-preserves-session",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "clear archive clear ui reset preserves session"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "clear_archive",
+          "clearArchive": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "clear_terminal_ui",
+                "mode": "ctrl_l_clear_only",
+                "clearBackend": "ansi_scrollback_and_visible",
+                "pendingHistoryBefore": 2,
+                "pendingHistoryAfter": 0,
+                "headerQueued": false
+              },
+              {
+                "kind": "reset_ui_state",
+                "transcriptCellsBefore": 4,
+                "transcriptCellsAfter": 0,
+                "deferredHistoryBefore": 1,
+                "deferredHistoryAfter": 0,
+                "skillWarningsBefore": 1,
+                "skillWarningsAfter": 0,
+                "sessionPreserved": true,
+                "composerPreserved": true,
+                "overlayCleared": true,
+                "backtrackCleared": true,
+                "reflowCleared": true,
+                "replayBufferCleared": true
+              },
+              {
+                "kind": "queue_clear_header",
+                "headerQueued": true,
+                "frameScheduled": true,
+                "requestRedraw": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.clear_archive.plan=headless\ntui.clear_archive.clear_terminal=ctrl_l_clear_only:backend=ansi_scrollback_and_visible:pending=2->0:header=false\ntui.clear_archive.reset_ui=transcript=4->0:deferred=1->0:overlay=true:backtrack=true:reflow=true:replay=true:skill_warnings=1->0:session=true:composer=true\ntui.clear_archive.header=queued=true:frame=true:redraw=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> clear archive clear ui reset preserves session\ninput> \ntrace:\ntui.clear_archive.plan=headless\ntui.clear_archive.clear_terminal=ctrl_l_clear_only:backend=ansi_scrollback_and_visible:pending=2->0:header=false\ntui.clear_archive.reset_ui=transcript=4->0:deferred=1->0:overlay=true:backtrack=true:reflow=true:replay=true:skill_warnings=1->0:session=true:composer=true\ntui.clear_archive.header=queued=true:frame=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "clear-archive-clear-event-starts-fresh-session",
+      "frame": {
+        "name": "clear-archive-clear-event-starts-fresh-session",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "clear archive clear event starts fresh session"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "clear_archive",
+          "clearArchive": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "clear_terminal_ui",
+                "mode": "app_event_clear_ui",
+                "clearBackend": "visible_or_ansi",
+                "pendingHistoryBefore": 3,
+                "pendingHistoryAfter": 0,
+                "headerQueued": false
+              },
+              {
+                "kind": "reset_ui_state",
+                "transcriptCellsBefore": 3,
+                "transcriptCellsAfter": 0,
+                "deferredHistoryBefore": 2,
+                "deferredHistoryAfter": 0,
+                "skillWarningsBefore": 1,
+                "skillWarningsAfter": 0,
+                "sessionPreserved": true,
+                "composerPreserved": true,
+                "overlayCleared": true,
+                "backtrackCleared": true,
+                "reflowCleared": true,
+                "replayBufferCleared": true
+              },
+              {
+                "kind": "start_fresh_session",
+                "sessionStartSource": "clear",
+                "freshSessionStarted": true,
+                "initialUserMessageSubmitted": true,
+                "userMessageText": "PLAN IMPLEMENTATION"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.clear_archive.plan=headless\ntui.clear_archive.clear_terminal=app_event_clear_ui:backend=visible_or_ansi:pending=3->0:header=false\ntui.clear_archive.reset_ui=transcript=3->0:deferred=2->0:overlay=true:backtrack=true:reflow=true:replay=true:skill_warnings=1->0:session=true:composer=true\ntui.clear_archive.start_fresh=source=clear:started=true:initial=true:text=PLAN IMPLEMENTATION\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> clear archive clear event starts fresh session\ninput> \ntrace:\ntui.clear_archive.plan=headless\ntui.clear_archive.clear_terminal=app_event_clear_ui:backend=visible_or_ansi:pending=3->0:header=false\ntui.clear_archive.reset_ui=transcript=3->0:deferred=2->0:overlay=true:backtrack=true:reflow=true:replay=true:skill_warnings=1->0:session=true:composer=true\ntui.clear_archive.start_fresh=source=clear:started=true:initial=true:text=PLAN IMPLEMENTATION\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "clear-archive-skill-warning-rerender-after-clear",
+      "frame": {
+        "name": "clear-archive-skill-warning-rerender-after-clear",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "clear archive skill warning rerender after clear"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "clear_archive",
+          "clearArchive": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "skill_warnings",
+                "activeSkillWarningsBefore": 1,
+                "activeSkillWarningsAfter": 0,
+                "skillWarningsBefore": 1,
+                "skillWarningsAfter": 1
+              },
+              {
+                "kind": "reset_ui_state",
+                "transcriptCellsBefore": 1,
+                "transcriptCellsAfter": 0,
+                "deferredHistoryBefore": 0,
+                "deferredHistoryAfter": 0,
+                "skillWarningsBefore": 1,
+                "skillWarningsAfter": 0,
+                "sessionPreserved": true,
+                "composerPreserved": true,
+                "overlayCleared": true,
+                "backtrackCleared": true,
+                "reflowCleared": true,
+                "replayBufferCleared": true
+              },
+              {
+                "kind": "skill_warnings",
+                "activeSkillWarningsBefore": 0,
+                "activeSkillWarningsAfter": 1,
+                "skillWarningsBefore": 0,
+                "skillWarningsAfter": 1
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.clear_archive.plan=headless\ntui.clear_archive.skill_warnings=active=1->0:cached=1->1\ntui.clear_archive.reset_ui=transcript=1->0:deferred=0->0:overlay=true:backtrack=true:reflow=true:replay=true:skill_warnings=1->0:session=true:composer=true\ntui.clear_archive.skill_warnings=active=0->1:cached=0->1\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> clear archive skill warning rerender after clear\ninput> \ntrace:\ntui.clear_archive.plan=headless\ntui.clear_archive.skill_warnings=active=1->0:cached=1->1\ntui.clear_archive.reset_ui=transcript=1->0:deferred=0->0:overlay=true:backtrack=true:reflow=true:replay=true:skill_warnings=1->0:session=true:composer=true\ntui.clear_archive.skill_warnings=active=0->1:cached=0->1\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "clear-archive-archive-refusals",
+      "frame": {
+        "name": "clear-archive-archive-refusals",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "clear archive archive refusals"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "clear_archive",
+          "clearArchive": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "archive_request",
+                "threadId": "",
+                "activeThreadBefore": false,
+                "sideConversationActive": false,
+                "archiveRequested": false,
+                "errorInserted": true
+              },
+              {
+                "kind": "archive_request",
+                "threadId": "side-1",
+                "activeThreadBefore": true,
+                "sideConversationActive": true,
+                "archiveRequested": false,
+                "errorInserted": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.clear_archive.plan=headless\ntui.clear_archive.archive_request=thread=:active=false:side=false:requested=false:error=true\ntui.clear_archive.archive_request=thread=side-1:active=true:side=true:requested=false:error=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> clear archive archive refusals\ninput> \ntrace:\ntui.clear_archive.plan=headless\ntui.clear_archive.archive_request=thread=:active=false:side=false:requested=false:error=true\ntui.clear_archive.archive_request=thread=side-1:active=true:side=true:requested=false:error=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "clear-archive-archive-success-exit",
+      "frame": {
+        "name": "clear-archive-archive-success-exit",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "clear archive archive success exit"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "clear_archive",
+          "clearArchive": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "archive_request",
+                "threadId": "main",
+                "activeThreadBefore": true,
+                "sideConversationActive": false,
+                "archiveRequested": true,
+                "errorInserted": false
+              },
+              {
+                "kind": "archive_result",
+                "threadId": "main",
+                "archiveSucceeded": true,
+                "exitRequested": true,
+                "exitReason": "user_requested"
+              },
+              {
+                "kind": "shutdown_feedback",
+                "exitMode": "shutdown_first",
+                "shutdownFeedbackShown": true,
+                "inputDisabled": true,
+                "appServerShutdownRequested": true,
+                "pendingShutdownThreadBefore": true,
+                "pendingShutdownThreadAfter": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.clear_archive.plan=headless\ntui.clear_archive.archive_request=thread=main:active=true:side=false:requested=true:error=false\ntui.clear_archive.archive_result=thread=main:success=true:exit=true:reason=user_requested\ntui.clear_archive.shutdown_feedback=mode=shutdown_first:shown=true:input_disabled=true:server_shutdown=true:pending_thread=true->false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> clear archive archive success exit\ninput> \ntrace:\ntui.clear_archive.plan=headless\ntui.clear_archive.archive_request=thread=main:active=true:side=false:requested=true:error=false\ntui.clear_archive.archive_result=thread=main:success=true:exit=true:reason=user_requested\ntui.clear_archive.shutdown_feedback=mode=shutdown_first:shown=true:input_disabled=true:server_shutdown=true:pending_thread=true->false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "clear-archive-no-live-rejection",
+      "frame": {
+        "name": "clear-archive-no-live-rejection",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "clear archive no live rejection"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "clear_archive",
+          "clearArchive": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "failure",
+                "failureCode": "live_effects_rejected",
+                "errorMessage": "clear archive live terminal and app-server calls are disabled",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.clear_archive.plan=headless\ntui.clear_archive.failure=live_effects_rejected:error=clear archive live terminal and app-server calls are disabled:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> clear archive no live rejection\ninput> \ntrace:\ntui.clear_archive.plan=headless\ntui.clear_archive.failure=live_effects_rejected:error=clear archive live terminal and app-server calls are disabled:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
