@@ -211,6 +211,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ComposerPopupKey:
+					if (!traceComposerPopupKey(event.composerPopupKey, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1465,6 +1470,163 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.composer_popup_sync.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceComposerPopupKey(plan:TuiSmokeComposerPopupKeyPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveInput || plan.allowLiveFileProbe || !plan.enabled()) {
+			trace.push("tui.composer_popup_key.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.composer_popup_key.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeComposerPopupKeyActionKind.Dispatch:
+					trace.push(
+						"tui.composer_popup_key.dispatch="
+						+ action.popupBefore
+						+ ":key=" + action.keyName
+						+ ":popup=" + action.popupTransitionText()
+						+ ":consumed=" + action.keyConsumed
+						+ ":sync=" + action.syncAfterKey
+					);
+				case TuiSmokeComposerPopupKeyActionKind.ShortcutOverlay:
+					trace.push(
+						"tui.composer_popup_key.shortcut_overlay="
+						+ action.popupBefore
+						+ ":key=" + action.keyName
+						+ ":handled=" + action.shortcutOverlayHandled
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeComposerPopupKeyActionKind.FooterEscHint:
+					trace.push(
+						"tui.composer_popup_key.footer_esc="
+						+ action.popupBefore
+						+ ":key=" + action.keyName
+						+ ":mode_changed=" + action.footerModeChanged
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeComposerPopupKeyActionKind.MoveSelection:
+					trace.push(
+						"tui.composer_popup_key.selection="
+						+ action.popupBefore
+						+ ":key=" + action.keyName
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":scroll=" + action.scrollTransitionText()
+						+ ":matches=" + action.matchCount
+					);
+				case TuiSmokeComposerPopupKeyActionKind.Dismiss:
+					trace.push(
+						"tui.composer_popup_key.dismiss="
+						+ action.popupBefore
+						+ ":key=" + action.keyName
+						+ ":token=" + action.token
+						+ ":stored=" + action.dismissedTokenStored
+						+ ":popup=" + action.popupTransitionText()
+						+ ":sync=" + action.syncAfterKey
+					);
+				case TuiSmokeComposerPopupKeyActionKind.CompleteCommand:
+					trace.push(
+						"tui.composer_popup_key.command.complete="
+						+ action.commandName
+						+ ":key=" + action.keyName
+						+ ":completed=" + action.commandCompleted
+						+ ":inline_args=" + action.inlineArgsPreserved
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeComposerPopupKeyActionKind.DispatchCommand:
+					trace.push(
+						"tui.composer_popup_key.command.dispatch="
+						+ action.commandName
+						+ ":key=" + action.keyName
+						+ ":command=" + action.commandDispatched
+						+ ":service_tier=" + action.serviceTierDispatched
+						+ ":history=" + action.historyStaged
+						+ ":text_cleared=" + action.textCleared
+					);
+				case TuiSmokeComposerPopupKeyActionKind.AcceptFile:
+					trace.push(
+						"tui.composer_popup_key.file.accept="
+						+ action.selectedPath
+						+ ":key=" + action.keyName
+						+ ":selected=" + action.selectedAvailable
+						+ ":draft=" + action.draftUpdated
+						+ ":path_inserted=" + action.pathInserted
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeComposerPopupKeyActionKind.AcceptImage:
+					trace.push(
+						"tui.composer_popup_key.image.accept="
+						+ action.selectedPath
+						+ ":key=" + action.keyName
+						+ ":dimensions=" + action.imageDimensionsAvailable
+						+ ":attached=" + action.imageAttached
+						+ ":path_fallback=" + action.pathInserted
+						+ ":live_probe=" + !action.liveProbeRejected
+					);
+				case TuiSmokeComposerPopupKeyActionKind.AcceptMention:
+					trace.push(
+						"tui.composer_popup_key.mention.accept="
+						+ action.insertText
+						+ ":key=" + action.keyName
+						+ ":path=" + action.selectedPath
+						+ ":binding=" + action.mentionBindingStored
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeComposerPopupKeyActionKind.SwitchMentionMode:
+					trace.push(
+						"tui.composer_popup_key.mentions_v2.mode="
+						+ action.searchModeTransitionText()
+						+ ":key=" + action.keyName
+						+ ":allowed=" + action.modeSwitchAllowed
+						+ ":selected=" + action.selectionTransitionText()
+					);
+				case TuiSmokeComposerPopupKeyActionKind.AcceptMentionsV2File:
+					trace.push(
+						"tui.composer_popup_key.mentions_v2.file="
+						+ action.selectedPath
+						+ ":key=" + action.keyName
+						+ ":draft=" + action.draftUpdated
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeComposerPopupKeyActionKind.AcceptMentionsV2Tool:
+					trace.push(
+						"tui.composer_popup_key.mentions_v2.tool="
+						+ action.insertText
+						+ ":key=" + action.keyName
+						+ ":path=" + action.selectedPath
+						+ ":binding=" + action.mentionBindingStored
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeComposerPopupKeyActionKind.FallbackEnter:
+					trace.push(
+						"tui.composer_popup_key.fallback_enter="
+						+ action.popupBefore
+						+ ":selected=" + action.selectedAvailable
+						+ ":submit_without_popup=" + action.submitWithoutPopup
+						+ ":without_popup=" + action.fallbackWithoutPopup
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeComposerPopupKeyActionKind.BasicInput:
+					trace.push(
+						"tui.composer_popup_key.basic_input="
+						+ action.popupBefore
+						+ ":key=" + action.keyName
+						+ ":forwarded=" + action.inputForwarded
+						+ ":sync=" + action.syncAfterKey
+					);
+				case TuiSmokeComposerPopupKeyActionKind.Failure:
+					trace.push(
+						"tui.composer_popup_key.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+						+ ":live_probe=" + action.liveProbeRejected
+					);
+				case _:
+					trace.push("tui.composer_popup_key.unknown");
 					return false;
 			}
 		}

@@ -33,6 +33,7 @@ typedef TuiSmokeEventFields = {
 	final composerSubmission:Null<TuiSmokeComposerSubmissionPlan>;
 	final composerEditing:Null<TuiSmokeComposerEditingPlan>;
 	final composerPopupSync:Null<TuiSmokeComposerPopupSyncPlan>;
+	final composerPopupKey:Null<TuiSmokeComposerPopupKeyPlan>;
 }
 
 class TuiSmokeEvent {
@@ -68,6 +69,7 @@ class TuiSmokeEvent {
 	public final composerSubmission:Null<TuiSmokeComposerSubmissionPlan>;
 	public final composerEditing:Null<TuiSmokeComposerEditingPlan>;
 	public final composerPopupSync:Null<TuiSmokeComposerPopupSyncPlan>;
+	public final composerPopupKey:Null<TuiSmokeComposerPopupKeyPlan>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -102,5 +104,6 @@ class TuiSmokeEvent {
 		this.composerSubmission = fields.composerSubmission;
 		this.composerEditing = fields.composerEditing;
 		this.composerPopupSync = fields.composerPopupSync;
+		this.composerPopupKey = fields.composerPopupKey;
 	}
 }

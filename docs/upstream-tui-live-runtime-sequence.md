@@ -2185,6 +2185,20 @@ Model selected raw Codex composer popup synchronization behavior:
 
 Status: HXCX-TUI-36 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic popup synchronization evidence only, not a live file-search or popup UI implementation.
 
+### HXCX-TUI-37: Composer Popup Key Handling Lifecycle
+
+Model selected raw Codex active composer popup key behavior:
+
+- preserve top-level `ChatComposer::handle_key_event` dispatch in `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs`: ignore disabled input/release events, route history search first, dispatch by `ActivePopup`, reset Vim mode after successful dispatch, then call `sync_popups`;
+- preserve slash-command popup key handling in `../codex/codex-rs/tui/src/bottom_pane/chat_composer/slash_input.rs`: shortcut overlay ownership, Esc footer hint before dismissal, Up/Ctrl-P and Down/Ctrl-N selection movement, Tab completion or immediate command dispatch, `/` text completion, Enter command dispatch, and no-selection Enter fallback to no-popup handling;
+- preserve file popup key handling in `chat_composer.rs`: shortcut overlay ownership, Esc dismissal with the current `@token` stored as `dismissed_file_token`, Up/Down selection movement, Enter/Tab selection acceptance, no-selection Enter fallback to no-popup handling, and selected path insertion;
+- preserve selected image behavior without live filesystem probing: upstream calls `image::image_dimensions`, attaches confirmed images, and falls back to text path insertion on errors; fixtures record this as no-live evidence rather than probing real files;
+- preserve legacy skill mention popup key handling: selection movement, Esc dismissal with `dismissed_mention_token`, Enter/Tab selected mention insertion, optional path binding, and normal-input fallback;
+- preserve mentions-v2 popup key handling: editable-token-gated left/right search-mode switching, Esc dismissal token storage, Tab selection acceptance, Enter selection acceptance, no-selection Enter fallback to no-popup submit handling, file/tool insertion routes, and normal-input fallback;
+- keep the evidence deterministic and independent of live terminal rendering, live file search, live image probing, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-37 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic active-popup key lifecycle evidence only, not a full live popup UI or terminal input backend.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

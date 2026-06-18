@@ -7763,6 +7763,288 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.composer_popup_sync.plan=headless\ntui.composer_popup_sync.mentions_v2=:token=:popup=none->mention_v2:search=true:files=0:catalog=4\ntui.composer_popup_sync.mentions_v2=src:token=src:popup=mention_v2->mention_v2:search=true:files=2:catalog=4\ntui.composer_popup_sync.dismissed=src:file_match=false:mention_match=true:popup=mention_v2->mention_v2\ntui.composer_popup_sync.clear_inactive=mention_v2->none:file_token=false:mention_token=false:mentions_v2_token=false\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer mentions v2 dismissed\ninput> \ntrace:\ntui.composer_popup_sync.plan=headless\ntui.composer_popup_sync.mentions_v2=:token=:popup=none->mention_v2:search=true:files=0:catalog=4\ntui.composer_popup_sync.mentions_v2=src:token=src:popup=mention_v2->mention_v2:search=true:files=2:catalog=4\ntui.composer_popup_sync.dismissed=src:file_match=false:mention_match=true:popup=mention_v2->mention_v2\ntui.composer_popup_sync.clear_inactive=mention_v2->none:file_token=false:mention_token=false:mentions_v2_token=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-popup-key-command-dispatch",
+      "frame": {
+        "name": "composer-popup-key-command-dispatch",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer popup command keys"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_popup_key",
+          "composerPopupKey": {
+            "allowLiveInput": false,
+            "allowLiveFileProbe": false,
+            "actions": [
+              {
+                "kind": "dispatch",
+                "popupBefore": "command",
+                "popupAfter": "command",
+                "keyName": "down",
+                "keyConsumed": true,
+                "syncAfterKey": true
+              },
+              {
+                "kind": "move_selection",
+                "popupBefore": "command",
+                "popupAfter": "command",
+                "keyName": "down",
+                "selectedBefore": 0,
+                "selectedAfter": 1,
+                "scrollBefore": 0,
+                "scrollAfter": 0,
+                "matchCount": 5
+              },
+              {
+                "kind": "complete_command",
+                "popupBefore": "command",
+                "popupAfter": "none",
+                "keyName": "tab",
+                "commandName": "review",
+                "commandCompleted": true,
+                "inlineArgsPreserved": true
+              },
+              {
+                "kind": "dispatch_command",
+                "popupBefore": "command",
+                "popupAfter": "none",
+                "keyName": "enter",
+                "commandName": "compact",
+                "commandDispatched": true,
+                "historyStaged": true,
+                "textCleared": true
+              },
+              {
+                "kind": "dismiss",
+                "popupBefore": "command",
+                "popupAfter": "none",
+                "keyName": "escape",
+                "syncAfterKey": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_popup_key.plan=headless\ntui.composer_popup_key.dispatch=command:key=down:popup=command->command:consumed=true:sync=true\ntui.composer_popup_key.selection=command:key=down:selected=0->1:scroll=0->0:matches=5\ntui.composer_popup_key.command.complete=review:key=tab:completed=true:inline_args=true:popup=command->none\ntui.composer_popup_key.command.dispatch=compact:key=enter:command=true:service_tier=false:history=true:text_cleared=true\ntui.composer_popup_key.dismiss=command:key=escape:token=:stored=false:popup=command->none:sync=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer popup command keys\ninput> \ntrace:\ntui.composer_popup_key.plan=headless\ntui.composer_popup_key.dispatch=command:key=down:popup=command->command:consumed=true:sync=true\ntui.composer_popup_key.selection=command:key=down:selected=0->1:scroll=0->0:matches=5\ntui.composer_popup_key.command.complete=review:key=tab:completed=true:inline_args=true:popup=command->none\ntui.composer_popup_key.command.dispatch=compact:key=enter:command=true:service_tier=false:history=true:text_cleared=true\ntui.composer_popup_key.dismiss=command:key=escape:token=:stored=false:popup=command->none:sync=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-popup-key-file-skill-accept",
+      "frame": {
+        "name": "composer-popup-key-file-skill-accept",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer popup file skill accept"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_popup_key",
+          "composerPopupKey": {
+            "allowLiveInput": false,
+            "allowLiveFileProbe": false,
+            "actions": [
+              {
+                "kind": "move_selection",
+                "popupBefore": "file",
+                "popupAfter": "file",
+                "keyName": "ctrl-n",
+                "selectedBefore": 1,
+                "selectedAfter": 2,
+                "scrollBefore": 0,
+                "scrollAfter": 1,
+                "matchCount": 8
+              },
+              {
+                "kind": "dismiss",
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "keyName": "escape",
+                "token": "src",
+                "dismissedTokenStored": true,
+                "syncAfterKey": true
+              },
+              {
+                "kind": "accept_file",
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "keyName": "enter",
+                "selectedPath": "src/main.rs",
+                "candidateKind": "file",
+                "selectedAvailable": true,
+                "draftUpdated": true,
+                "pathInserted": true
+              },
+              {
+                "kind": "accept_image",
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "keyName": "tab",
+                "selectedPath": "assets/diagram.png",
+                "imagePath": true,
+                "imageDimensionsAvailable": false,
+                "imageAttached": false,
+                "pathInserted": true,
+                "liveProbeRejected": true
+              },
+              {
+                "kind": "accept_mention",
+                "popupBefore": "skill",
+                "popupAfter": "none",
+                "keyName": "enter",
+                "insertText": "@review",
+                "selectedPath": "skills/review.md",
+                "candidateKind": "skill",
+                "mentionBindingStored": true,
+                "draftUpdated": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_popup_key.plan=headless\ntui.composer_popup_key.selection=file:key=ctrl-n:selected=1->2:scroll=0->1:matches=8\ntui.composer_popup_key.dismiss=file:key=escape:token=src:stored=true:popup=file->none:sync=true\ntui.composer_popup_key.file.accept=src/main.rs:key=enter:selected=true:draft=true:path_inserted=true:popup=file->none\ntui.composer_popup_key.image.accept=assets/diagram.png:key=tab:dimensions=false:attached=false:path_fallback=true:live_probe=false\ntui.composer_popup_key.mention.accept=@review:key=enter:path=skills/review.md:binding=true:popup=skill->none\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer popup file skill accept\ninput> \ntrace:\ntui.composer_popup_key.plan=headless\ntui.composer_popup_key.selection=file:key=ctrl-n:selected=1->2:scroll=0->1:matches=8\ntui.composer_popup_key.dismiss=file:key=escape:token=src:stored=true:popup=file->none:sync=true\ntui.composer_popup_key.file.accept=src/main.rs:key=enter:selected=true:draft=true:path_inserted=true:popup=file->none\ntui.composer_popup_key.image.accept=assets/diagram.png:key=tab:dimensions=false:attached=false:path_fallback=true:live_probe=false\ntui.composer_popup_key.mention.accept=@review:key=enter:path=skills/review.md:binding=true:popup=skill->none\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-popup-key-mentions-v2-fallback",
+      "frame": {
+        "name": "composer-popup-key-mentions-v2-fallback",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer popup mentions v2 fallback"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_popup_key",
+          "composerPopupKey": {
+            "allowLiveInput": false,
+            "allowLiveFileProbe": false,
+            "actions": [
+              {
+                "kind": "switch_mention_mode",
+                "popupBefore": "mention_v2",
+                "popupAfter": "mention_v2",
+                "keyName": "right",
+                "searchModeBefore": "all",
+                "searchModeAfter": "files",
+                "selectedBefore": 2,
+                "selectedAfter": 0,
+                "modeSwitchAllowed": true
+              },
+              {
+                "kind": "accept_mentions_v2_file",
+                "popupBefore": "mention_v2",
+                "popupAfter": "none",
+                "keyName": "tab",
+                "selectedPath": "docs/protocol.md",
+                "candidateKind": "file",
+                "draftUpdated": true
+              },
+              {
+                "kind": "accept_mentions_v2_tool",
+                "popupBefore": "mention_v2",
+                "popupAfter": "none",
+                "keyName": "enter",
+                "insertText": "@plan",
+                "selectedPath": "tools/plan.md",
+                "candidateKind": "tool",
+                "mentionBindingStored": true,
+                "draftUpdated": true
+              },
+              {
+                "kind": "fallback_enter",
+                "popupBefore": "mention_v2",
+                "popupAfter": "none",
+                "keyName": "enter",
+                "selectedAvailable": false,
+                "submitWithoutPopup": true,
+                "fallbackWithoutPopup": true
+              },
+              {
+                "kind": "basic_input",
+                "popupBefore": "mention_v2",
+                "popupAfter": "mention_v2",
+                "keyName": "char-x",
+                "inputForwarded": true,
+                "syncAfterKey": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_popup_key.plan=headless\ntui.composer_popup_key.mentions_v2.mode=all->files:key=right:allowed=true:selected=2->0\ntui.composer_popup_key.mentions_v2.file=docs/protocol.md:key=tab:draft=true:popup=mention_v2->none\ntui.composer_popup_key.mentions_v2.tool=@plan:key=enter:path=tools/plan.md:binding=true:popup=mention_v2->none\ntui.composer_popup_key.fallback_enter=mention_v2:selected=false:submit_without_popup=true:without_popup=true:popup=mention_v2->none\ntui.composer_popup_key.basic_input=mention_v2:key=char-x:forwarded=true:sync=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer popup mentions v2 fallback\ninput> \ntrace:\ntui.composer_popup_key.plan=headless\ntui.composer_popup_key.mentions_v2.mode=all->files:key=right:allowed=true:selected=2->0\ntui.composer_popup_key.mentions_v2.file=docs/protocol.md:key=tab:draft=true:popup=mention_v2->none\ntui.composer_popup_key.mentions_v2.tool=@plan:key=enter:path=tools/plan.md:binding=true:popup=mention_v2->none\ntui.composer_popup_key.fallback_enter=mention_v2:selected=false:submit_without_popup=true:without_popup=true:popup=mention_v2->none\ntui.composer_popup_key.basic_input=mention_v2:key=char-x:forwarded=true:sync=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

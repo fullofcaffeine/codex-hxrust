@@ -92,7 +92,71 @@ class TuiSmokeFixtureLoader {
 				composerAttachment: optionalComposerAttachmentPlan(value, "composerAttachment"),
 				composerSubmission: optionalComposerSubmissionPlan(value, "composerSubmission"),
 				composerEditing: optionalComposerEditingPlan(value, "composerEditing"),
-				composerPopupSync: optionalComposerPopupSyncPlan(value, "composerPopupSync")
+				composerPopupSync: optionalComposerPopupSyncPlan(value, "composerPopupSync"),
+				composerPopupKey: optionalComposerPopupKeyPlan(value, "composerPopupKey")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalComposerPopupKeyPlan(object:Value, name:String):Null<TuiSmokeComposerPopupKeyPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeComposerPopupKeyPlan({
+					allowLiveInput: optionalBoolField(value, "allowLiveInput", false),
+					allowLiveFileProbe: optionalBoolField(value, "allowLiveFileProbe", false),
+					actions: composerPopupKeyActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function composerPopupKeyActions(values:Array<Value>):Array<TuiSmokeComposerPopupKeyAction> {
+		final out:Array<TuiSmokeComposerPopupKeyAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeComposerPopupKeyAction({
+				kind: TuiSmokeComposerPopupKeyActionKind.fromString(stringField(value, "kind", "")),
+				popupBefore: TuiSmokeComposerPopupKind.fromString(optionalStringField(value, "popupBefore", "unknown")),
+				popupAfter: TuiSmokeComposerPopupKind.fromString(optionalStringField(value, "popupAfter", "unknown")),
+				candidateKind: TuiSmokeMentionCandidateKind.fromString(optionalStringField(value, "candidateKind", "unknown")),
+				searchModeBefore: TuiSmokeMentionSearchModeKind.fromString(optionalStringField(value, "searchModeBefore", "unknown")),
+				searchModeAfter: TuiSmokeMentionSearchModeKind.fromString(optionalStringField(value, "searchModeAfter", "unknown")),
+				keyName: optionalStringField(value, "keyName", ""),
+				commandName: optionalStringField(value, "commandName", ""),
+				token: optionalStringField(value, "token", ""),
+				selectedPath: optionalStringField(value, "selectedPath", ""),
+				insertText: optionalStringField(value, "insertText", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				selectedBefore: optionalIntField(value, "selectedBefore", 0),
+				selectedAfter: optionalIntField(value, "selectedAfter", 0),
+				scrollBefore: optionalIntField(value, "scrollBefore", 0),
+				scrollAfter: optionalIntField(value, "scrollAfter", 0),
+				matchCount: optionalIntField(value, "matchCount", 0),
+				selectedAvailable: optionalBoolField(value, "selectedAvailable", false),
+				dismissedTokenStored: optionalBoolField(value, "dismissedTokenStored", false),
+				draftUpdated: optionalBoolField(value, "draftUpdated", false),
+				textCleared: optionalBoolField(value, "textCleared", false),
+				commandCompleted: optionalBoolField(value, "commandCompleted", false),
+				commandDispatched: optionalBoolField(value, "commandDispatched", false),
+				serviceTierDispatched: optionalBoolField(value, "serviceTierDispatched", false),
+				historyStaged: optionalBoolField(value, "historyStaged", false),
+				inlineArgsPreserved: optionalBoolField(value, "inlineArgsPreserved", false),
+				imagePath: optionalBoolField(value, "imagePath", false),
+				imageDimensionsAvailable: optionalBoolField(value, "imageDimensionsAvailable", false),
+				imageAttached: optionalBoolField(value, "imageAttached", false),
+				pathInserted: optionalBoolField(value, "pathInserted", false),
+				mentionBindingStored: optionalBoolField(value, "mentionBindingStored", false),
+				modeSwitchAllowed: optionalBoolField(value, "modeSwitchAllowed", false),
+				fallbackWithoutPopup: optionalBoolField(value, "fallbackWithoutPopup", false),
+				submitWithoutPopup: optionalBoolField(value, "submitWithoutPopup", false),
+				inputForwarded: optionalBoolField(value, "inputForwarded", false),
+				shortcutOverlayHandled: optionalBoolField(value, "shortcutOverlayHandled", false),
+				footerModeChanged: optionalBoolField(value, "footerModeChanged", false),
+				keyConsumed: optionalBoolField(value, "keyConsumed", false),
+				syncAfterKey: optionalBoolField(value, "syncAfterKey", false),
+				redrawRequested: optionalBoolField(value, "redrawRequested", false),
+				liveProbeRejected: optionalBoolField(value, "liveProbeRejected", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
