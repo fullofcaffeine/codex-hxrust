@@ -26,4 +26,7 @@ thread-replays: 0
 thread-replay-requests: 0
 thread-replay-skipped-requests: 0
 thread-replay-suppressed-notices: 0
+thread-replay-turns: 0
+thread-replay-items: 0
+thread-replay-completions: 0
 terminal: restored

@@ -127,6 +127,9 @@ class TuiSmokeEventLoop {
 			+ "\nthread-replay-requests: " + appServer.replayedThreadRequests()
 			+ "\nthread-replay-skipped-requests: " + appServer.skippedThreadReplayRequests()
 			+ "\nthread-replay-suppressed-notices: " + appServer.suppressedThreadReplayNotices()
+			+ "\nthread-replay-turns: " + appServer.replayedThreadTurns()
+			+ "\nthread-replay-items: " + appServer.replayedThreadItems()
+			+ "\nthread-replay-completions: " + appServer.replayedThreadCompletions()
 			+ "\nterminal: restored";
 		final ok = exit == request.expectedExit
 			&& traceText == request.expectedTrace
@@ -154,6 +157,9 @@ class TuiSmokeEventLoop {
 			threadReplayRequestCount: appServer.replayedThreadRequests(),
 			threadReplaySkippedRequestCount: appServer.skippedThreadReplayRequests(),
 			threadReplaySuppressedNoticeCount: appServer.suppressedThreadReplayNotices(),
+			threadReplayTurnCount: appServer.replayedThreadTurns(),
+			threadReplayItemCount: appServer.replayedThreadItems(),
+			threadReplayCompletionCount: appServer.replayedThreadCompletions(),
 			terminalRestored: terminal.wasRestored()
 		});
 	}
@@ -206,6 +212,9 @@ class TuiSmokeEventLoop {
 			threadReplayRequestCount: 0,
 			threadReplaySkippedRequestCount: 0,
 			threadReplaySuppressedNoticeCount: 0,
+			threadReplayTurnCount: 0,
+			threadReplayItemCount: 0,
+			threadReplayCompletionCount: 0,
 			terminalRestored: false
 		});
 	}

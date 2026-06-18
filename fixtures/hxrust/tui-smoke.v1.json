@@ -15,6 +15,8 @@
       "../codex/codex-rs/tui/src/app/input.rs",
       "../codex/codex-rs/tui/src/app/pending_interactive_replay.rs",
       "../codex/codex-rs/tui/src/app/replay_filter.rs",
+      "../codex/codex-rs/tui/src/chatwidget/replay.rs",
+      "../codex/codex-rs/tui/src/chatwidget/tests/history_replay.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol_requests.rs",
       "../codex/codex-rs/tui/src/tui.rs",
@@ -126,7 +128,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "tui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: ready | model: gpt-5.2-codex\nsystem> headless app loop\nassistant> waiting for raw Codex events\ninput> continue raw TUI\ntrace:\ntui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 2\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: ready | model: gpt-5.2-codex\nsystem> headless app loop\nassistant> waiting for raw Codex events\ninput> continue raw TUI\ntrace:\ntui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 2\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "resize-render-shutdown-first-loop",
@@ -166,7 +168,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "tui.resize\napp.exit=shutdown_first",
-      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: idle | model: gpt-5.2-codex\nuser> fixture prompt\nassistant> fixture response\ninput> \ntrace:\ntui.resize\napp.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: idle | model: gpt-5.2-codex\nuser> fixture prompt\nassistant> fixture response\ninput> \ntrace:\ntui.resize\napp.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "queued-startup-commit-draw-order",
@@ -225,7 +227,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "queue.enqueue=startup_status\nqueue.enqueue=commit_tick\napp.event.startup_status=startup-ready\napp.event.commit_tick\ntui.draw\nqueue.enqueue=exit\napp.event.exit=shutdown_first",
-      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: startup-ready | model: gpt-5.2-codex\nsystem> queued app events\nassistant> commit tick precedes render\ninput> \ntrace:\nqueue.enqueue=startup_status\nqueue.enqueue=commit_tick\napp.event.startup_status=startup-ready\napp.event.commit_tick\ntui.draw\nqueue.enqueue=exit\napp.event.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 3\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: startup-ready | model: gpt-5.2-codex\nsystem> queued app events\nassistant> commit tick precedes render\ninput> \ntrace:\nqueue.enqueue=startup_status\nqueue.enqueue=commit_tick\napp.event.startup_status=startup-ready\napp.event.commit_tick\ntui.draw\nqueue.enqueue=exit\napp.event.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 3\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "terminal-key-exit-precedes-later-queued-exit",
@@ -275,7 +277,7 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "tui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: ready | model: gpt-5.2-codex\nuser> press q before queued exit\nassistant> later app events stay untouched\ninput> \ntrace:\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: ready | model: gpt-5.2-codex\nuser> press q before queued exit\nassistant> later app events stay untouched\ninput> \ntrace:\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "app-server-status-delta-before-draw",
@@ -333,7 +335,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "queue.enqueue=commit_tick\nserver.thread_status=thread-main:running\nserver.assistant_delta=thread-main:server says hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Server\nstatus: running | model: gpt-5.2-codex\nsystem> server events\nassistant> server says hello\ninput> \ntrace:\nqueue.enqueue=commit_tick\nserver.thread_status=thread-main:running\nserver.assistant_delta=thread-main:server says hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 2\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Server\nstatus: running | model: gpt-5.2-codex\nsystem> server events\nassistant> server says hello\ninput> \ntrace:\nqueue.enqueue=commit_tick\nserver.thread_status=thread-main:running\nserver.assistant_delta=thread-main:server says hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 2\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "app-server-stream-close-ignores-later-events",
@@ -390,7 +392,7 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "server.stream_closed\nserver.ignored_after_close\ntui.draw\nserver.ignored_after_close\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Server\nstatus: idle | model: gpt-5.2-codex\nuser> server close\ninput> \ntrace:\nserver.stream_closed\nserver.ignored_after_close\ntui.draw\nserver.ignored_after_close\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 1\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Server\nstatus: idle | model: gpt-5.2-codex\nuser> server close\ninput> \ntrace:\nserver.stream_closed\nserver.ignored_after_close\ntui.draw\nserver.ignored_after_close\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 1\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "app-server-supported-request-targeting",
@@ -473,7 +475,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "server.request.command_approval=req-cmd:thread-main:primary:approval-1:active\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1:active\nqueue.enqueue=commit_tick\nserver.request.permissions_approval=req-perm:thread-side:side:perm-1:buffered\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1:active\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Requests\nstatus: idle | model: gpt-5.2-codex\nsystem> server requests\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1:active\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1:active\nqueue.enqueue=commit_tick\nserver.request.permissions_approval=req-perm:thread-side:side:perm-1:buffered\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1:active\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 4\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Requests\nstatus: idle | model: gpt-5.2-codex\nsystem> server requests\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1:active\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1:active\nqueue.enqueue=commit_tick\nserver.request.permissions_approval=req-perm:thread-side:side:perm-1:buffered\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1:active\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 4\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "app-server-unsupported-and-threadless-requests",
@@ -535,7 +537,7 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "server.request.reject=req-dynamic:Dynamic tool calls are not available in TUI yet.\nserver.request.threadless=auth_tokens_refresh:req-auth\nserver.request.missing_thread=command_approval:req-missing-thread\ntui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Requests\nstatus: idle | model: gpt-5.2-codex\nuser> unsupported server request\ninput> \ntrace:\nserver.request.reject=req-dynamic:Dynamic tool calls are not available in TUI yet.\nserver.request.threadless=auth_tokens_refresh:req-auth\nserver.request.missing_thread=command_approval:req-missing-thread\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 1\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Requests\nstatus: idle | model: gpt-5.2-codex\nuser> unsupported server request\ninput> \ntrace:\nserver.request.reject=req-dynamic:Dynamic tool calls are not available in TUI yet.\nserver.request.threadless=auth_tokens_refresh:req-auth\nserver.request.missing_thread=command_approval:req-missing-thread\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 1\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "app-server-request-resolution-routing",
@@ -650,7 +652,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "server.request.command_approval=req-cmd:thread-main:primary:approval-1:active\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1:active\nserver.request.permissions_approval=req-perm:thread-main:primary:perm-1:active\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1:active\nserver.resolution.command_approval=req-cmd:approval-1:accept\nqueue.enqueue=commit_tick\nserver.resolution.file_change_approval=req-file:patch-1:accept\nserver.resolution.permissions_approval=req-perm:perm-1:session\nserver.resolution.tool_user_input=req-input:tool-1:confirmed\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Resolutions\nstatus: idle | model: gpt-5.2-codex\nsystem> server resolutions\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1:active\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1:active\nserver.request.permissions_approval=req-perm:thread-main:primary:perm-1:active\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1:active\nserver.resolution.command_approval=req-cmd:approval-1:accept\nqueue.enqueue=commit_tick\nserver.resolution.file_change_approval=req-file:patch-1:accept\nserver.resolution.permissions_approval=req-perm:perm-1:session\nserver.resolution.tool_user_input=req-input:tool-1:confirmed\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 4\nserver-rejections: 0\nserver-resolutions: 4\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Resolutions\nstatus: idle | model: gpt-5.2-codex\nsystem> server resolutions\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1:active\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1:active\nserver.request.permissions_approval=req-perm:thread-main:primary:perm-1:active\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1:active\nserver.resolution.command_approval=req-cmd:approval-1:accept\nqueue.enqueue=commit_tick\nserver.resolution.file_change_approval=req-file:patch-1:accept\nserver.resolution.permissions_approval=req-perm:perm-1:session\nserver.resolution.tool_user_input=req-input:tool-1:confirmed\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 4\nserver-rejections: 0\nserver-resolutions: 4\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "app-server-request-resolved-dismissal-and-stale-resolution",
@@ -719,7 +721,7 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "server.request.command_approval=req-cmd:thread-main:primary:approval-1:active\nserver.resolution.server_request_resolved=req-cmd:approval-1:dismissed\nserver.resolution.stale=command_approval:approval-1\nserver.resolution.unknown\ntui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Resolutions\nstatus: idle | model: gpt-5.2-codex\nuser> dismiss request\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1:active\nserver.resolution.server_request_resolved=req-cmd:approval-1:dismissed\nserver.resolution.stale=command_approval:approval-1\nserver.resolution.unknown\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 1\nserver-rejections: 0\nserver-resolutions: 1\nserver-stale-resolutions: 2\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Resolutions\nstatus: idle | model: gpt-5.2-codex\nuser> dismiss request\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1:active\nserver.resolution.server_request_resolved=req-cmd:approval-1:dismissed\nserver.resolution.stale=command_approval:approval-1\nserver.resolution.unknown\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 1\nserver-rejections: 0\nserver-resolutions: 1\nserver-stale-resolutions: 2\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "active-thread-primary-drain-and-side-switch-delivery",
@@ -795,7 +797,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "server.request.command_approval=req-main:thread-main:primary:approval-main:active\nthread.deliver=thread-main:req-main:approval-main\nserver.request.permissions_approval=req-side:thread-side:side:perm-side:buffered\nqueue.enqueue=commit_tick\nthread.active=thread-side\nthread.deliver=thread-side:req-side:perm-side\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Active Thread\nstatus: idle | model: gpt-5.2-codex\nsystem> active thread delivery\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nthread.deliver=thread-main:req-main:approval-main\nserver.request.permissions_approval=req-side:thread-side:side:perm-side:buffered\nqueue.enqueue=commit_tick\nthread.active=thread-side\nthread.deliver=thread-side:req-side:perm-side\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 2\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 2\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Active Thread\nstatus: idle | model: gpt-5.2-codex\nsystem> active thread delivery\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nthread.deliver=thread-main:req-main:approval-main\nserver.request.permissions_approval=req-side:thread-side:side:perm-side:buffered\nqueue.enqueue=commit_tick\nthread.active=thread-side\nthread.deliver=thread-side:req-side:perm-side\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 2\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 2\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "active-thread-evicts-buffered-side-request",
@@ -873,7 +875,7 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "server.request.command_approval=req-main:thread-main:primary:approval-main:active\nserver.request.file_change_approval=req-side:thread-side:side:patch-side:buffered\nthread.evict=req-side:patch-side\nthread.evict.stale=req-missing\nthread.active=thread-side\nthread.deliver.empty=thread-side\ntui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Active Thread\nstatus: idle | model: gpt-5.2-codex\nuser> evict buffered request\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nserver.request.file_change_approval=req-side:thread-side:side:patch-side:buffered\nthread.evict=req-side:patch-side\nthread.evict.stale=req-missing\nthread.active=thread-side\nthread.deliver.empty=thread-side\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 2\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 1\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Active Thread\nstatus: idle | model: gpt-5.2-codex\nuser> evict buffered request\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nserver.request.file_change_approval=req-side:thread-side:side:patch-side:buffered\nthread.evict=req-side:patch-side\nthread.evict.stale=req-missing\nthread.active=thread-side\nthread.deliver.empty=thread-side\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 2\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 1\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "active-thread-notification-primary-and-side-switch-delivery",
@@ -946,7 +948,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "thread.notification.thread_status=note-main-status:thread-main:primary:running:active\nthread.deliver.notification=thread-main:note-main-status:running\nthread.notification.assistant_delta=note-side-delta:thread-side:side:side hello:buffered\nqueue.enqueue=commit_tick\nthread.active=thread-side\nthread.deliver.notification=thread-side:note-side-delta:side hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Notifications\nstatus: running | model: gpt-5.2-codex\nsystem> active notification delivery\nassistant> side hello\ninput> \ntrace:\nthread.notification.thread_status=note-main-status:thread-main:primary:running:active\nthread.deliver.notification=thread-main:note-main-status:running\nthread.notification.assistant_delta=note-side-delta:thread-side:side:side hello:buffered\nqueue.enqueue=commit_tick\nthread.active=thread-side\nthread.deliver.notification=thread-side:note-side-delta:side hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 2\nthread-notification-deliveries: 2\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Notifications\nstatus: running | model: gpt-5.2-codex\nsystem> active notification delivery\nassistant> side hello\ninput> \ntrace:\nthread.notification.thread_status=note-main-status:thread-main:primary:running:active\nthread.deliver.notification=thread-main:note-main-status:running\nthread.notification.assistant_delta=note-side-delta:thread-side:side:side hello:buffered\nqueue.enqueue=commit_tick\nthread.active=thread-side\nthread.deliver.notification=thread-side:note-side-delta:side hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 2\nthread-notification-deliveries: 2\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "active-thread-evicts-buffered-side-notification",
@@ -1023,7 +1025,7 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "server.request.command_approval=req-main:thread-main:primary:approval-main:active\nthread.notification.warning=note-side-warning:thread-side:side:side warning:buffered\nthread.notification.evict=note-side-warning:side warning\nthread.notification.evict.stale=note-missing\nthread.active=thread-side\nthread.deliver.empty=thread-side\ntui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Notifications\nstatus: idle | model: gpt-5.2-codex\nuser> evict buffered notification\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nthread.notification.warning=note-side-warning:thread-side:side:side warning:buffered\nthread.notification.evict=note-side-warning:side warning\nthread.notification.evict.stale=note-missing\nthread.active=thread-side\nthread.deliver.empty=thread-side\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 1\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 1\nthread-notification-deliveries: 0\nthread-notification-evictions: 1\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Notifications\nstatus: idle | model: gpt-5.2-codex\nuser> evict buffered notification\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nthread.notification.warning=note-side-warning:thread-side:side:side warning:buffered\nthread.notification.evict=note-side-warning:side warning\nthread.notification.evict.stale=note-missing\nthread.active=thread-side\nthread.deliver.empty=thread-side\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 1\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 1\nthread-notification-deliveries: 0\nthread-notification-evictions: 1\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "thread-replay-keeps-pending-request-and-suppresses-notice",
@@ -1102,7 +1104,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "server.request.command_approval=req-main:thread-main:primary:approval-main:active\nserver.request.tool_user_input=req-side-input:thread-side:side:input-side:buffered\nthread.notification.warning=note-side-warning:thread-side:side:side warning:buffered\nqueue.enqueue=commit_tick\nthread.replay.active=thread-side\nthread.replay.pending_interactive=thread-side\nthread.replay.request=thread-side:req-side-input:input-side:thread_snapshot\nthread.replay.notice_suppressed=thread-side:note-side-warning:side warning\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> pending replay filter\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nserver.request.tool_user_input=req-side-input:thread-side:side:input-side:buffered\nthread.notification.warning=note-side-warning:thread-side:side:side warning:buffered\nqueue.enqueue=commit_tick\nthread.replay.active=thread-side\nthread.replay.pending_interactive=thread-side\nthread.replay.request=thread-side:req-side-input:input-side:thread_snapshot\nthread.replay.notice_suppressed=thread-side:note-side-warning:side warning\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 2\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 1\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 1\nthread-replay-requests: 1\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 1\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> pending replay filter\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nserver.request.tool_user_input=req-side-input:thread-side:side:input-side:buffered\nthread.notification.warning=note-side-warning:thread-side:side:side warning:buffered\nqueue.enqueue=commit_tick\nthread.replay.active=thread-side\nthread.replay.pending_interactive=thread-side\nthread.replay.request=thread-side:req-side-input:input-side:thread_snapshot\nthread.replay.notice_suppressed=thread-side:note-side-warning:side warning\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 2\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 1\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 1\nthread-replay-requests: 1\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 1\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "thread-replay-filters-resolved-and-evicted-requests",
@@ -1197,7 +1199,181 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "server.request.command_approval=req-main:thread-main:primary:approval-main:active\nserver.request.tool_user_input=req-resolved:thread-side:side:input-resolved:buffered\nserver.resolution.server_request_resolved=req-resolved:input-resolved:dismissed\nthread.replay.active=thread-side\nthread.replay.skip.request=thread-side:req-resolved:input-resolved:non_pending\nthread.replay.empty=thread-side\nserver.request.permissions_approval=req-evicted:thread-evict:side:perm-evicted:buffered\nthread.evict=req-evicted:perm-evicted\nthread.replay.active=thread-evict\nthread.replay.empty=thread-evict\ntui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nuser> resolved prompts stay filtered\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nserver.request.tool_user_input=req-resolved:thread-side:side:input-resolved:buffered\nserver.resolution.server_request_resolved=req-resolved:input-resolved:dismissed\nthread.replay.active=thread-side\nthread.replay.skip.request=thread-side:req-resolved:input-resolved:non_pending\nthread.replay.empty=thread-side\nserver.request.permissions_approval=req-evicted:thread-evict:side:perm-evicted:buffered\nthread.evict=req-evicted:perm-evicted\nthread.replay.active=thread-evict\nthread.replay.empty=thread-evict\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 3\nserver-rejections: 0\nserver-resolutions: 1\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 1\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 2\nthread-replay-requests: 0\nthread-replay-skipped-requests: 1\nthread-replay-suppressed-notices: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nuser> resolved prompts stay filtered\ninput> \ntrace:\nserver.request.command_approval=req-main:thread-main:primary:approval-main:active\nserver.request.tool_user_input=req-resolved:thread-side:side:input-resolved:buffered\nserver.resolution.server_request_resolved=req-resolved:input-resolved:dismissed\nthread.replay.active=thread-side\nthread.replay.skip.request=thread-side:req-resolved:input-resolved:non_pending\nthread.replay.empty=thread-side\nserver.request.permissions_approval=req-evicted:thread-evict:side:perm-evicted:buffered\nthread.evict=req-evicted:perm-evicted\nthread.replay.active=thread-evict\nthread.replay.empty=thread-evict\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 3\nserver-rejections: 0\nserver-resolutions: 1\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 1\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 2\nthread-replay-requests: 0\nthread-replay-skipped-requests: 1\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "thread-replay-turn-history-order-and-completion",
+      "frame": {
+        "name": "thread-replay-turn-history-order-and-completion",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "turn replay order"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "commit_tick"
+          }
+        },
+        {
+          "kind": "thread_replay",
+          "threadReplay": {
+            "kind": "snapshot_active",
+            "threadId": "thread-main",
+            "turns": [
+              {
+                "turnId": "turn-1",
+                "status": "completed",
+                "items": [
+                  {
+                    "kind": "user_message",
+                    "itemId": "user-1",
+                    "text": "hello from user"
+                  },
+                  {
+                    "kind": "agent_message",
+                    "itemId": "assistant-1",
+                    "text": "assistant reply"
+                  }
+                ]
+              },
+              {
+                "turnId": "turn-2",
+                "status": "completed",
+                "items": [
+                  {
+                    "kind": "user_message",
+                    "itemId": "user-2",
+                    "text": "next prompt"
+                  },
+                  {
+                    "kind": "reasoning",
+                    "itemId": "reason-2",
+                    "text": "thinking summary"
+                  },
+                  {
+                    "kind": "agent_message",
+                    "itemId": "assistant-2",
+                    "text": "second reply"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "queue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.turn=thread-main:turn-1:completed:thread_snapshot\nthread.replay.item=thread-main:turn-1:user-1:user_message:hello from user:thread_snapshot\nthread.replay.item=thread-main:turn-1:assistant-1:agent_message:assistant reply:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-1:completed:thread_snapshot\nthread.replay.turn=thread-main:turn-2:completed:thread_snapshot\nthread.replay.item=thread-main:turn-2:user-2:user_message:next prompt:thread_snapshot\nthread.replay.item=thread-main:turn-2:reason-2:reasoning:thinking summary:thread_snapshot\nthread.replay.item=thread-main:turn-2:assistant-2:agent_message:second reply:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-2:completed:thread_snapshot\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> turn replay order\nuser> hello from user\nassistant> assistant reply\nuser> next prompt\nassistant> thinking summary\nassistant> second reply\ninput> \ntrace:\nqueue.enqueue=commit_tick\nthread.replay.active=thread-main\nthread.replay.turn=thread-main:turn-1:completed:thread_snapshot\nthread.replay.item=thread-main:turn-1:user-1:user_message:hello from user:thread_snapshot\nthread.replay.item=thread-main:turn-1:assistant-1:agent_message:assistant reply:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-1:completed:thread_snapshot\nthread.replay.turn=thread-main:turn-2:completed:thread_snapshot\nthread.replay.item=thread-main:turn-2:user-2:user_message:next prompt:thread_snapshot\nthread.replay.item=thread-main:turn-2:reason-2:reasoning:thinking summary:thread_snapshot\nthread.replay.item=thread-main:turn-2:assistant-2:agent_message:second reply:thread_snapshot\nthread.replay.turn_complete=thread-main:turn-2:completed:thread_snapshot\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 1\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 2\nthread-replay-items: 5\nthread-replay-completions: 2\nterminal: restored"
+    },
+    {
+      "name": "thread-replay-turns-compose-with-pending-filter",
+      "frame": {
+        "name": "thread-replay-turns-compose-with-pending-filter",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "user",
+            "text": "replay composition"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "app_server_request",
+          "appServerRequest": {
+            "kind": "tool_user_input",
+            "requestId": "req-side-input",
+            "threadId": "thread-side",
+            "turnId": "turn-side",
+            "itemId": "input-side"
+          }
+        },
+        {
+          "kind": "thread_notification",
+          "threadNotification": {
+            "kind": "warning",
+            "notificationId": "note-side-warning",
+            "threadId": "thread-side",
+            "message": "side warning"
+          }
+        },
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "commit_tick"
+          }
+        },
+        {
+          "kind": "thread_replay",
+          "threadReplay": {
+            "kind": "snapshot_active",
+            "threadId": "thread-side",
+            "turns": [
+              {
+                "turnId": "turn-side",
+                "status": "completed",
+                "items": [
+                  {
+                    "kind": "user_message",
+                    "itemId": "user-side",
+                    "text": "side question"
+                  },
+                  {
+                    "kind": "agent_message",
+                    "itemId": "assistant-side",
+                    "text": "side answer"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "server.request.tool_user_input=req-side-input:thread-side:primary:input-side:active\nthread.notification.warning=note-side-warning:thread-side:primary:side warning:active\nqueue.enqueue=commit_tick\nthread.replay.active=thread-side\nthread.replay.pending_interactive=thread-side\nthread.replay.turn=thread-side:turn-side:completed:thread_snapshot\nthread.replay.item=thread-side:turn-side:user-side:user_message:side question:thread_snapshot\nthread.replay.item=thread-side:turn-side:assistant-side:agent_message:side answer:thread_snapshot\nthread.replay.turn_complete=thread-side:turn-side:completed:thread_snapshot\nthread.replay.request=thread-side:req-side-input:input-side:thread_snapshot\nthread.replay.notice_suppressed=thread-side:note-side-warning:side warning\napp.event.commit_tick\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nuser> replay composition\nuser> side question\nassistant> side answer\ninput> \ntrace:\nserver.request.tool_user_input=req-side-input:thread-side:primary:input-side:active\nthread.notification.warning=note-side-warning:thread-side:primary:side warning:active\nqueue.enqueue=commit_tick\nthread.replay.active=thread-side\nthread.replay.pending_interactive=thread-side\nthread.replay.turn=thread-side:turn-side:completed:thread_snapshot\nthread.replay.item=thread-side:turn-side:user-side:user_message:side question:thread_snapshot\nthread.replay.item=thread-side:turn-side:assistant-side:agent_message:side answer:thread_snapshot\nthread.replay.turn_complete=thread-side:turn-side:completed:thread_snapshot\nthread.replay.request=thread-side:req-side-input:input-side:thread_snapshot\nthread.replay.notice_suppressed=thread-side:note-side-warning:side warning\napp.event.commit_tick\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 1\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 1\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 1\nthread-replay-requests: 1\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 1\nthread-replay-turns: 1\nthread-replay-items: 2\nthread-replay-completions: 1\nterminal: restored"
     }
   ]
 }

@@ -167,9 +167,39 @@ class TuiSmokeFixtureLoader {
 			case value:
 				new TuiSmokeThreadReplayAction({
 					kind: TuiSmokeThreadReplayActionKind.fromString(stringField(value, "kind", "")),
-					threadId: optionalStringField(value, "threadId", "")
+					threadId: optionalStringField(value, "threadId", ""),
+					turns: optionalThreadTurns(value, "turns")
 				});
 		}
+	}
+
+	static function optionalThreadTurns(object:Value, name:String):Array<TuiSmokeThreadTurn> {
+		return switch optionalField(object, name) {
+			case JNull: [];
+			case JArray(values):
+				final out:Array<TuiSmokeThreadTurn> = [];
+				for (value in values) {
+					out.push(new TuiSmokeThreadTurn({
+						turnId: stringField(value, "turnId", ""),
+						status: TuiSmokeThreadTurnStatus.fromString(optionalStringField(value, "status", "unknown")),
+						items: threadItems(optionalArrayField(value, "items"))
+					}));
+				}
+				out;
+			case _: throw "expected array field: " + name;
+		}
+	}
+
+	static function threadItems(values:Array<Value>):Array<TuiSmokeThreadItem> {
+		final out:Array<TuiSmokeThreadItem> = [];
+		for (value in values) {
+			out.push(new TuiSmokeThreadItem({
+				kind: TuiSmokeThreadItemKind.fromString(stringField(value, "kind", "")),
+				itemId: optionalStringField(value, "itemId", ""),
+				text: optionalStringField(value, "text", "")
+			}));
+		}
+		return out;
 	}
 
 	static function transcriptRows(values:Array<Value>):Array<TuiSmokeTranscriptRow> {
@@ -213,6 +243,14 @@ class TuiSmokeFixtureLoader {
 
 	static function arrayField(object:Value, name:String):Array<Value> {
 		return switch valueField(object, name) {
+			case JArray(values): values;
+			case _: throw "expected array field: " + name;
+		}
+	}
+
+	static function optionalArrayField(object:Value, name:String):Array<Value> {
+		return switch optionalField(object, name) {
+			case JNull: [];
 			case JArray(values): values;
 			case _: throw "expected array field: " + name;
 		}

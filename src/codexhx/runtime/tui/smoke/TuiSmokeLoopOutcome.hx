@@ -22,6 +22,9 @@ typedef TuiSmokeLoopOutcomeFields = {
 	final threadReplayRequestCount:Int;
 	final threadReplaySkippedRequestCount:Int;
 	final threadReplaySuppressedNoticeCount:Int;
+	final threadReplayTurnCount:Int;
+	final threadReplayItemCount:Int;
+	final threadReplayCompletionCount:Int;
 	final terminalRestored:Bool;
 }
 
@@ -47,6 +50,9 @@ class TuiSmokeLoopOutcome {
 	public final threadReplayRequestCount:Int;
 	public final threadReplaySkippedRequestCount:Int;
 	public final threadReplaySuppressedNoticeCount:Int;
+	public final threadReplayTurnCount:Int;
+	public final threadReplayItemCount:Int;
+	public final threadReplayCompletionCount:Int;
 	public final terminalRestored:Bool;
 
 	public function new(fields:TuiSmokeLoopOutcomeFields) {
@@ -71,6 +77,9 @@ class TuiSmokeLoopOutcome {
 		this.threadReplayRequestCount = fields.threadReplayRequestCount;
 		this.threadReplaySkippedRequestCount = fields.threadReplaySkippedRequestCount;
 		this.threadReplaySuppressedNoticeCount = fields.threadReplaySuppressedNoticeCount;
+		this.threadReplayTurnCount = fields.threadReplayTurnCount;
+		this.threadReplayItemCount = fields.threadReplayItemCount;
+		this.threadReplayCompletionCount = fields.threadReplayCompletionCount;
 		this.terminalRestored = fields.terminalRestored;
 	}
 }

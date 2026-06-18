@@ -15,6 +15,9 @@ class TuiSmokeAppServerFacade {
 	var replayedRequestCount:Int;
 	var skippedReplayRequestCount:Int;
 	var suppressedReplayNoticeCount:Int;
+	var replayedTurnCount:Int;
+	var replayedItemCount:Int;
+	var replayedCompletionCount:Int;
 	var closed:Bool;
 	var primaryThreadId:String;
 	var activeThreadId:String;
@@ -38,6 +41,9 @@ class TuiSmokeAppServerFacade {
 		this.replayedRequestCount = 0;
 		this.skippedReplayRequestCount = 0;
 		this.suppressedReplayNoticeCount = 0;
+		this.replayedTurnCount = 0;
+		this.replayedItemCount = 0;
+		this.replayedCompletionCount = 0;
 		this.closed = false;
 		this.primaryThreadId = "";
 		this.activeThreadId = "";
@@ -167,7 +173,7 @@ class TuiSmokeAppServerFacade {
 					activeThreadId = action.threadId;
 					trace.push("thread.replay.active=" + activeThreadId);
 				}
-				replayActiveSnapshot(state, trace);
+				replayActiveSnapshot(action, state, trace);
 				TuiSmokeExitKind.Rendered;
 			case _:
 				trace.push("thread.replay.unknown");
@@ -288,6 +294,18 @@ class TuiSmokeAppServerFacade {
 		return suppressedReplayNoticeCount;
 	}
 
+	public function replayedThreadTurns():Int {
+		return replayedTurnCount;
+	}
+
+	public function replayedThreadItems():Int {
+		return replayedItemCount;
+	}
+
+	public function replayedThreadCompletions():Int {
+		return replayedCompletionCount;
+	}
+
 	function deliverActive(state:TuiSmokeAppState, trace:Array<String>):Void {
 		if (activeThreadId.length == 0) {
 			trace.push("thread.deliver.stale=no_active");
@@ -319,7 +337,7 @@ class TuiSmokeAppServerFacade {
 		if (delivered == 0) trace.push("thread.deliver.empty=" + activeThreadId);
 	}
 
-	function replayActiveSnapshot(state:TuiSmokeAppState, trace:Array<String>):Void {
+	function replayActiveSnapshot(action:TuiSmokeThreadReplayAction, state:TuiSmokeAppState, trace:Array<String>):Void {
 		if (activeThreadId.length == 0) {
 			trace.push("thread.replay.stale=no_active");
 			return;
@@ -328,6 +346,10 @@ class TuiSmokeAppServerFacade {
 		final suppressNotices = snapshotHasPendingInteractiveRequest(activeThreadId);
 		if (suppressNotices) trace.push("thread.replay.pending_interactive=" + activeThreadId);
 		var replayed = 0;
+		for (turn in action.turns) {
+			replayTurn(turn, state, trace);
+			replayed = replayed + 1;
+		}
 		for (event in bufferedEvents) {
 			final request = event.request;
 			final notification = event.notification;
@@ -352,6 +374,38 @@ class TuiSmokeAppServerFacade {
 			}
 		}
 		if (replayed == 0) trace.push("thread.replay.empty=" + activeThreadId);
+	}
+
+	function replayTurn(turn:TuiSmokeThreadTurn, state:TuiSmokeAppState, trace:Array<String>):Void {
+		replayedTurnCount = replayedTurnCount + 1;
+		trace.push("thread.replay.turn=" + activeThreadId + ":" + turn.turnId + ":" + turn.status + ":thread_snapshot");
+		if (turn.status == TuiSmokeThreadTurnStatus.InProgress) state.updateStatus("working");
+		for (item in turn.items) {
+			replayItem(turn.turnId, item, state, trace);
+		}
+		if (turn.isTerminal()) {
+			replayedCompletionCount = replayedCompletionCount + 1;
+			trace.push("thread.replay.turn_complete=" + activeThreadId + ":" + turn.turnId + ":" + turn.status + ":thread_snapshot");
+		}
+	}
+
+	function replayItem(turnId:String, item:TuiSmokeThreadItem, state:TuiSmokeAppState, trace:Array<String>):Void {
+		replayedItemCount = replayedItemCount + 1;
+		if (item.kind != TuiSmokeThreadItemKind.Unknown) {
+			state.appendTranscript(new TuiSmokeTranscriptRow({
+				source: item.transcriptSource(),
+				text: item.text
+			}));
+		}
+		trace.push(
+			"thread.replay.item="
+			+ activeThreadId
+			+ ":" + turnId
+			+ ":" + item.itemId
+			+ ":" + item.kind
+			+ ":" + item.text
+			+ ":thread_snapshot"
+		);
 	}
 
 	function evictQueued(requestId:String, trace:Array<String>):Void {
