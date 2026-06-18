@@ -121,6 +121,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.TerminalMode:
+					if (!traceTerminalMode(event.terminalModePlan, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -446,6 +451,92 @@ class TuiSmokeEventLoop {
 			}
 		}
 		return true;
+	}
+
+	static function traceTerminalMode(plan:TuiSmokeTerminalModePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminalMode || !plan.enabled()) {
+			trace.push("tui.terminal_modes.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.terminal_modes.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeTerminalModeActionKind.Init:
+					trace.push(
+						"tui.terminal_modes.init="
+						+ "stdin=" + action.stdinTerminal
+						+ ":stdout=" + action.stdoutTerminal
+						+ ":set_modes=" + action.rawMode
+						+ ":flush=" + action.flushInput
+						+ ":panic_hook=" + action.panicHook
+						+ ":keyboard_supported=" + action.supported
+					);
+				case TuiSmokeTerminalModeActionKind.SetModes:
+					trace.push(
+						"tui.terminal_modes.set_modes="
+						+ "vt=" + action.virtualTerminalProcessing
+						+ ":bracketed_paste=" + action.bracketedPaste
+						+ ":raw=" + action.rawMode
+						+ ":keyboard_push=" + action.pushKeyboardEnhancement
+						+ ":focus=" + action.focusChange
+					);
+				case TuiSmokeTerminalModeActionKind.Restore:
+					traceRestore("restore", action, trace);
+				case TuiSmokeTerminalModeActionKind.RestoreAfterExit:
+					traceRestore("restore_after_exit", action, trace);
+				case TuiSmokeTerminalModeActionKind.RestoreKeepRaw:
+					traceRestore("restore_keep_raw", action, trace);
+				case TuiSmokeTerminalModeActionKind.KeyboardDecision:
+					trace.push(
+						"tui.keyboard_enhancement.decision="
+						+ "disabled=" + action.keyboardEnhancementDisabled
+						+ ":env=" + action.envOverride
+						+ ":wsl=" + action.wsl
+						+ ":vscode=" + action.vscodeTerminal
+						+ ":tmux=" + action.tmuxSession
+						+ ":tmux_csi_u=" + action.tmuxCsiU
+					);
+				case TuiSmokeTerminalModeActionKind.KeyboardPush:
+					trace.push(
+						"tui.keyboard_enhancement.push="
+						+ "disambiguate_escape=true:report_event_types=true:report_alternate_keys=true"
+					);
+				case TuiSmokeTerminalModeActionKind.KeyboardPop:
+					trace.push("tui.keyboard_enhancement.pop_stack=" + action.popKeyboardEnhancement);
+				case TuiSmokeTerminalModeActionKind.KeyboardReset:
+					trace.push("tui.keyboard_enhancement.reset_after_exit=" + action.resetKeyboardEnhancement + ":ansi=ESC[<u");
+				case TuiSmokeTerminalModeActionKind.ModifyOtherKeys:
+					trace.push(
+						"tui.keyboard_enhancement.modify_other_keys="
+						+ (action.modifyOtherKeys ? "enable" : "disable")
+						+ ":tmux=" + action.tmuxSession
+						+ ":csi_u=" + action.tmuxCsiU
+					);
+				case TuiSmokeTerminalModeActionKind.FlushInput:
+					trace.push("tui.terminal_modes.flush_input=" + action.flushInput);
+				case TuiSmokeTerminalModeActionKind.PanicHook:
+					trace.push("tui.terminal_modes.panic_hook.restore_after_exit=" + action.panicHook);
+				case TuiSmokeTerminalModeActionKind.Failure:
+					trace.push("tui.terminal_modes.failure=" + action.failureCode + ":supported=" + action.supported);
+				case _:
+					trace.push("tui.terminal_modes.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceRestore(label:String, action:TuiSmokeTerminalModeAction, trace:Array<String>):Void {
+		trace.push(
+			"tui.terminal_modes." + label + "="
+			+ "raw=" + action.rawModeRestore
+			+ ":keyboard=" + action.keyboardRestore
+			+ ":disable_bracketed_paste=" + action.bracketedPaste
+			+ ":disable_focus=" + action.focusChange
+			+ ":cursor_default=" + action.cursorDefault
+			+ ":cursor_show=" + action.cursorShow
+			+ ":stderr_finish=" + action.terminalStderrFinish
+		);
 	}
 
 	static function rejected(code:String):TuiSmokeLoopOutcome {

@@ -74,7 +74,55 @@ class TuiSmokeFixtureLoader {
 				threadNotification: optionalThreadNotification(value, "threadNotification"),
 				threadDelivery: optionalThreadDelivery(value, "threadDelivery"),
 				threadReplay: optionalThreadReplay(value, "threadReplay"),
-				eventStream: optionalEventStreamPlan(value, "eventStream")
+				eventStream: optionalEventStreamPlan(value, "eventStream"),
+				terminalModePlan: optionalTerminalModePlan(value, "terminalModePlan")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTerminalModePlan(object:Value, name:String):Null<TuiSmokeTerminalModePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTerminalModePlan({
+					allowLiveTerminalMode: optionalBoolField(value, "allowLiveTerminalMode", false),
+					actions: terminalModeActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function terminalModeActions(values:Array<Value>):Array<TuiSmokeTerminalModeAction> {
+		final out:Array<TuiSmokeTerminalModeAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTerminalModeAction({
+				kind: TuiSmokeTerminalModeActionKind.fromString(stringField(value, "kind", "")),
+				rawModeRestore: TuiSmokeRawModeRestoreKind.fromString(optionalStringField(value, "rawModeRestore", "none")),
+				keyboardRestore: TuiSmokeKeyboardRestoreKind.fromString(optionalStringField(value, "keyboardRestore", "none")),
+				virtualTerminalProcessing: optionalBoolField(value, "virtualTerminalProcessing", false),
+				bracketedPaste: optionalBoolField(value, "bracketedPaste", false),
+				rawMode: optionalBoolField(value, "rawMode", false),
+				focusChange: optionalBoolField(value, "focusChange", false),
+				mouseCapture: optionalBoolField(value, "mouseCapture", false),
+				cursorDefault: optionalBoolField(value, "cursorDefault", false),
+				cursorShow: optionalBoolField(value, "cursorShow", false),
+				keyboardEnhancementDisabled: optionalBoolField(value, "keyboardEnhancementDisabled", false),
+				envOverride: optionalStringField(value, "envOverride", "none"),
+				wsl: optionalBoolField(value, "wsl", false),
+				vscodeTerminal: optionalBoolField(value, "vscodeTerminal", false),
+				tmuxSession: optionalBoolField(value, "tmuxSession", false),
+				tmuxCsiU: optionalBoolField(value, "tmuxCsiU", false),
+				pushKeyboardEnhancement: optionalBoolField(value, "pushKeyboardEnhancement", false),
+				popKeyboardEnhancement: optionalBoolField(value, "popKeyboardEnhancement", false),
+				resetKeyboardEnhancement: optionalBoolField(value, "resetKeyboardEnhancement", false),
+				modifyOtherKeys: optionalBoolField(value, "modifyOtherKeys", false),
+				stdinTerminal: optionalBoolField(value, "stdinTerminal", true),
+				stdoutTerminal: optionalBoolField(value, "stdoutTerminal", true),
+				flushInput: optionalBoolField(value, "flushInput", false),
+				panicHook: optionalBoolField(value, "panicHook", false),
+				terminalStderrFinish: optionalBoolField(value, "terminalStderrFinish", false),
+				supported: optionalBoolField(value, "supported", true),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

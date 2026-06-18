@@ -3120,6 +3120,197 @@
       "expectedExit": "cancelled",
       "expectedTrace": "tui.event_stream.broker.initial=running\ntui.event_stream.create=state=running:draw_subscription=true:shared_broker=true\ntui.event_stream.pause=running->paused:drop_source=true\ntui.event_stream.poll=pending:order=input_first:state=paused->paused:recreate_source=false\ntui.event_stream.leave_alt_screen=true\ntui.event_stream.restore_terminal=mode_keep_raw:false\ntui.event_stream.stderr=pause\ntui.event_stream.stderr=resume\ntui.event_stream.set_modes=true\ntui.event_stream.flush_stale_input=true\ntui.event_stream.enter_alt_screen=true\ntui.event_stream.resume=paused->start:wake=true\ntui.event_stream.poll=key:order=input_first:state=start->running:recreate_source=true\ntui.event_stream.map=key:ctrl-c->key:ctrl-c:focused=true:palette_requery=false\ntui.draw\ntui.key=ctrl-c",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> event stream restore\ninput> \ntrace:\ntui.event_stream.broker.initial=running\ntui.event_stream.create=state=running:draw_subscription=true:shared_broker=true\ntui.event_stream.pause=running->paused:drop_source=true\ntui.event_stream.poll=pending:order=input_first:state=paused->paused:recreate_source=false\ntui.event_stream.leave_alt_screen=true\ntui.event_stream.restore_terminal=mode_keep_raw:false\ntui.event_stream.stderr=pause\ntui.event_stream.stderr=resume\ntui.event_stream.set_modes=true\ntui.event_stream.flush_stale_input=true\ntui.event_stream.enter_alt_screen=true\ntui.event_stream.resume=paused->start:wake=true\ntui.event_stream.poll=key:order=input_first:state=start->running:recreate_source=true\ntui.event_stream.map=key:ctrl-c->key:ctrl-c:focused=true:palette_requery=false\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "terminal-mode-init-keyboard-stack-restore",
+      "frame": {
+        "name": "terminal-mode-init-keyboard-stack-restore",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "terminal modes"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "terminal_mode",
+          "terminalModePlan": {
+            "allowLiveTerminalMode": false,
+            "actions": [
+              {
+                "kind": "init",
+                "stdinTerminal": true,
+                "stdoutTerminal": true,
+                "rawMode": true,
+                "flushInput": true,
+                "panicHook": true,
+                "supported": true
+              },
+              {
+                "kind": "set_modes",
+                "virtualTerminalProcessing": true,
+                "bracketedPaste": true,
+                "rawMode": true,
+                "pushKeyboardEnhancement": true,
+                "focusChange": true
+              },
+              {
+                "kind": "keyboard_decision",
+                "keyboardEnhancementDisabled": false,
+                "envOverride": "none",
+                "wsl": false,
+                "vscodeTerminal": false,
+                "tmuxSession": true,
+                "tmuxCsiU": true
+              },
+              {
+                "kind": "keyboard_push"
+              },
+              {
+                "kind": "modify_other_keys",
+                "modifyOtherKeys": true,
+                "tmuxSession": true,
+                "tmuxCsiU": true
+              },
+              {
+                "kind": "restore",
+                "rawModeRestore": "disable",
+                "keyboardRestore": "pop_stack",
+                "bracketedPaste": true,
+                "focusChange": true,
+                "cursorDefault": true,
+                "cursorShow": true
+              },
+              {
+                "kind": "keyboard_pop",
+                "popKeyboardEnhancement": true
+              },
+              {
+                "kind": "modify_other_keys",
+                "modifyOtherKeys": false,
+                "tmuxSession": true,
+                "tmuxCsiU": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.terminal_modes.plan=headless\ntui.terminal_modes.init=stdin=true:stdout=true:set_modes=true:flush=true:panic_hook=true:keyboard_supported=true\ntui.terminal_modes.set_modes=vt=true:bracketed_paste=true:raw=true:keyboard_push=true:focus=true\ntui.keyboard_enhancement.decision=disabled=false:env=none:wsl=false:vscode=false:tmux=true:tmux_csi_u=true\ntui.keyboard_enhancement.push=disambiguate_escape=true:report_event_types=true:report_alternate_keys=true\ntui.keyboard_enhancement.modify_other_keys=enable:tmux=true:csi_u=true\ntui.terminal_modes.restore=raw=disable:keyboard=pop_stack:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=false\ntui.keyboard_enhancement.pop_stack=true\ntui.keyboard_enhancement.modify_other_keys=disable:tmux=true:csi_u=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> terminal modes\ninput> \ntrace:\ntui.terminal_modes.plan=headless\ntui.terminal_modes.init=stdin=true:stdout=true:set_modes=true:flush=true:panic_hook=true:keyboard_supported=true\ntui.terminal_modes.set_modes=vt=true:bracketed_paste=true:raw=true:keyboard_push=true:focus=true\ntui.keyboard_enhancement.decision=disabled=false:env=none:wsl=false:vscode=false:tmux=true:tmux_csi_u=true\ntui.keyboard_enhancement.push=disambiguate_escape=true:report_event_types=true:report_alternate_keys=true\ntui.keyboard_enhancement.modify_other_keys=enable:tmux=true:csi_u=true\ntui.terminal_modes.restore=raw=disable:keyboard=pop_stack:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=false\ntui.keyboard_enhancement.pop_stack=true\ntui.keyboard_enhancement.modify_other_keys=disable:tmux=true:csi_u=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "terminal-mode-wsl-vscode-exit-reset",
+      "frame": {
+        "name": "terminal-mode-wsl-vscode-exit-reset",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "terminal reset"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "terminal_mode",
+          "terminalModePlan": {
+            "allowLiveTerminalMode": false,
+            "actions": [
+              {
+                "kind": "keyboard_decision",
+                "keyboardEnhancementDisabled": true,
+                "envOverride": "none",
+                "wsl": true,
+                "vscodeTerminal": true,
+                "tmuxSession": false,
+                "tmuxCsiU": false
+              },
+              {
+                "kind": "set_modes",
+                "virtualTerminalProcessing": true,
+                "bracketedPaste": true,
+                "rawMode": true,
+                "pushKeyboardEnhancement": false,
+                "focusChange": true
+              },
+              {
+                "kind": "restore_keep_raw",
+                "rawModeRestore": "keep",
+                "keyboardRestore": "pop_stack",
+                "bracketedPaste": true,
+                "focusChange": true,
+                "cursorDefault": true,
+                "cursorShow": true
+              },
+              {
+                "kind": "restore_after_exit",
+                "rawModeRestore": "disable",
+                "keyboardRestore": "reset_after_exit",
+                "bracketedPaste": true,
+                "focusChange": true,
+                "cursorDefault": true,
+                "cursorShow": true,
+                "terminalStderrFinish": true
+              },
+              {
+                "kind": "keyboard_reset",
+                "resetKeyboardEnhancement": true
+              },
+              {
+                "kind": "flush_input",
+                "flushInput": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "stdin_not_terminal",
+                "supported": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.terminal_modes.plan=headless\ntui.keyboard_enhancement.decision=disabled=true:env=none:wsl=true:vscode=true:tmux=false:tmux_csi_u=false\ntui.terminal_modes.set_modes=vt=true:bracketed_paste=true:raw=true:keyboard_push=false:focus=true\ntui.terminal_modes.restore_keep_raw=raw=keep:keyboard=pop_stack:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=false\ntui.terminal_modes.restore_after_exit=raw=disable:keyboard=reset_after_exit:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=true\ntui.keyboard_enhancement.reset_after_exit=true:ansi=ESC[<u\ntui.terminal_modes.flush_input=true\ntui.terminal_modes.failure=stdin_not_terminal:supported=false\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> terminal reset\ninput> \ntrace:\ntui.terminal_modes.plan=headless\ntui.keyboard_enhancement.decision=disabled=true:env=none:wsl=true:vscode=true:tmux=false:tmux_csi_u=false\ntui.terminal_modes.set_modes=vt=true:bracketed_paste=true:raw=true:keyboard_push=false:focus=true\ntui.terminal_modes.restore_keep_raw=raw=keep:keyboard=pop_stack:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=false\ntui.terminal_modes.restore_after_exit=raw=disable:keyboard=reset_after_exit:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=true\ntui.keyboard_enhancement.reset_after_exit=true:ansi=ESC[<u\ntui.terminal_modes.flush_input=true\ntui.terminal_modes.failure=stdin_not_terminal:supported=false\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
