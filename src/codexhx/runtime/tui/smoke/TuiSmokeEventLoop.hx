@@ -227,14 +227,19 @@ class TuiSmokeEventLoop {
 			trace.push(action.scheduleAccepted ? "tui.frame.schedule=immediate" : "tui.frame.schedule_in=debounce");
 			trace.push("tui.resize_draw.pending_history.clear=true");
 		}
-		if (!action.pendingReflow) return;
+		if (!action.pendingReflow) {
+			traceViewportResize(action.viewport, trace);
+			return;
+		}
 		if (!action.pendingDue) {
 			trace.push("tui.resize_draw.reflow.rearm=" + action.remainingMs + "ms");
 			trace.push("tui.frame.schedule_in=" + action.remainingMs + "ms");
+			traceViewportResize(action.viewport, trace);
 			return;
 		}
 		if (action.overlayActive) {
 			trace.push("tui.resize_draw.reflow.defer=overlay");
+			traceViewportResize(action.viewport, trace);
 			return;
 		}
 		if (action.runReflow) {
@@ -249,6 +254,7 @@ class TuiSmokeEventLoop {
 		if (action.followUpDraw) {
 			trace.push("tui.frame.schedule_in=debounce_followup");
 		}
+		traceViewportResize(action.viewport, trace);
 	}
 
 	static function traceResizeRepaint(repaint:TuiSmokeResizeRepaintPlan, trace:Array<String>):Void {
@@ -278,6 +284,45 @@ class TuiSmokeEventLoop {
 				+ ":wrap=" + repaint.wrapPolicy
 			);
 			trace.push("tui.frame.schedule=history_insert");
+		}
+	}
+
+	static function traceViewportResize(viewport:TuiSmokeViewportResizePlan, trace:Array<String>):Void {
+		if (viewport == null) return;
+		trace.push(
+			"tui.viewport.resize="
+			+ "from=" + viewport.previousAreaText()
+			+ ":to=" + viewport.nextAreaText()
+			+ ":requested_height=" + viewport.requestedHeight
+		);
+		trace.push(
+			"tui.viewport.height="
+			+ "shrank=" + viewport.terminalHeightShrank
+			+ ":grew=" + viewport.terminalHeightGrew
+			+ ":bottom_aligned=" + viewport.bottomAligned
+		);
+		if (viewport.scrollBy > 0) {
+			if (viewport.terminalHeightShrank) {
+				trace.push("tui.viewport.scroll_region_up=suppressed:shrink:rows=" + viewport.scrollBy);
+			} else {
+				trace.push("tui.viewport.scroll_region_up=0.." + viewport.previousY + ":rows=" + viewport.scrollBy);
+			}
+		}
+		if (viewport.changed()) {
+			trace.push("tui.viewport.set_area=" + viewport.nextAreaText());
+			trace.push("tui.viewport.clear_after=0," + viewport.clearAfterY);
+		} else {
+			trace.push("tui.viewport.set_area=unchanged");
+		}
+		trace.push(
+			"tui.viewport.pending_history.flush="
+			+ "batches=" + viewport.pendingHistoryBatches
+			+ ":rows=" + viewport.pendingHistoryRows
+			+ ":mode=" + viewport.insertMode()
+			+ ":wrap=" + viewport.wrapPolicy
+		);
+		if (viewport.needsFullRepaint) {
+			trace.push("tui.viewport.invalidate=true");
 		}
 	}
 

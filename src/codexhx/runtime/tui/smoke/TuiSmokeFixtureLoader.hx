@@ -98,7 +98,36 @@ class TuiSmokeFixtureLoader {
 					runReflow: optionalBoolField(value, "runReflow", false),
 					streamTime: optionalBoolField(value, "streamTime", false),
 					followUpDraw: optionalBoolField(value, "followUpDraw", false),
-					repaint: optionalResizeRepaintPlan(value, "repaint")
+					repaint: optionalResizeRepaintPlan(value, "repaint"),
+					viewport: optionalViewportResizePlan(value, "viewport")
+				});
+		}
+	}
+
+	static function optionalViewportResizePlan(object:Value, name:String):Null<TuiSmokeViewportResizePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeViewportResizePlan({
+					requestedHeight: optionalIntField(value, "requestedHeight", 0),
+					previousX: optionalIntField(value, "previousX", 0),
+					previousY: optionalIntField(value, "previousY", 0),
+					previousWidth: optionalIntField(value, "previousWidth", 0),
+					previousHeight: optionalIntField(value, "previousHeight", 0),
+					nextX: optionalIntField(value, "nextX", 0),
+					nextY: optionalIntField(value, "nextY", 0),
+					nextWidth: optionalIntField(value, "nextWidth", 0),
+					nextHeight: optionalIntField(value, "nextHeight", 0),
+					terminalHeightShrank: optionalBoolField(value, "terminalHeightShrank", false),
+					terminalHeightGrew: optionalBoolField(value, "terminalHeightGrew", false),
+					bottomAligned: optionalBoolField(value, "bottomAligned", false),
+					scrollBy: optionalIntField(value, "scrollBy", 0),
+					pendingHistoryBatches: optionalIntField(value, "pendingHistoryBatches", 0),
+					pendingHistoryRows: optionalIntField(value, "pendingHistoryRows", 0),
+					zellijRaw: optionalBoolField(value, "zellijRaw", false),
+					wrapPolicy: TuiSmokeHistoryWrapPolicy.fromString(optionalStringField(value, "wrapPolicy", "terminal")),
+					clearAfterY: optionalIntField(value, "clearAfterY", 0),
+					needsFullRepaint: optionalBoolField(value, "needsFullRepaint", false)
 				});
 		}
 	}

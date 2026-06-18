@@ -291,6 +291,18 @@ Extend resize draw evidence into repaint/scrollback insertion intent:
 
 Status: HXCX-TUI-15 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/resize_reflow.rs:70`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:72`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:211`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:245`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:248`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:253`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:434`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:439`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:444`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:448`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:451`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:453`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:498`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:549`, `../codex/codex-rs/tui/src/tui.rs:773`, `../codex/codex-rs/tui/src/tui.rs:792`, `../codex/codex-rs/tui/src/tui.rs:809`, `../codex/codex-rs/tui/src/tui.rs:855`, `../codex/codex-rs/tui/src/tui.rs:1002`, and `../codex/codex-rs/tui/tests/suite/resize_reflow.rs:190`. This is repaint/scrollback intent evidence only, not live terminal clearing, terminal backend mutation, ratatui rendering, live frame scheduling, model traffic, tool execution, or Cafex behavior.
 
+### HXCX-TUI-16: Headless Raw Codex TUI Inline Viewport Resize Sync Facade
+
+Extend repaint evidence into inline viewport resize synchronization:
+
+- viewport resize records previous area, next area, requested height, height shrink/grow, and bottom alignment;
+- shrink overflow suppresses scroll-region movement so resize replay owns rebuilding scrollback;
+- non-shrink overflow records scroll-region-up intent before viewport update;
+- viewport updates record clear-after-position and full repaint invalidation intent;
+- pending history flush records batch/row counts, wrap policy, and Zellij raw mode selection before draw.
+
+Status: HXCX-TUI-16 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/tui.rs:792`, `../codex/codex-rs/tui/src/tui.rs:800`, `../codex/codex-rs/tui/src/tui.rs:809`, `../codex/codex-rs/tui/src/tui.rs:812`, `../codex/codex-rs/tui/src/tui.rs:819`, `../codex/codex-rs/tui/src/tui.rs:821`, `../codex/codex-rs/tui/src/tui.rs:825`, `../codex/codex-rs/tui/src/tui.rs:829`, `../codex/codex-rs/tui/src/tui.rs:831`, `../codex/codex-rs/tui/src/tui.rs:840`, `../codex/codex-rs/tui/src/tui.rs:850`, `../codex/codex-rs/tui/src/tui.rs:855`, `../codex/codex-rs/tui/src/tui.rs:1002`, `../codex/codex-rs/tui/src/tui.rs:1020`, `../codex/codex-rs/tui/src/tui.rs:1022`, `../codex/codex-rs/tui/src/app/resize_reflow.rs:378`, and `../codex/codex-rs/tui/tests/suite/resize_reflow.rs:323`. This is inline viewport synchronization evidence only, not live terminal backend mutation, real scroll-region writes, terminal clearing, ratatui rendering, live frame scheduling, model traffic, tool execution, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:
