@@ -3846,6 +3846,148 @@
       "expectedExit": "cancelled",
       "expectedTrace": "tui.frame_scheduler.plan=headless\ntui.frame_scheduler.create=spawn_task=true:broadcast_capacity=1\ntui.frame_scheduler.request=delayed:source=resize_reflow.rearm:delay=120ms:at=120ms\ntui.frame_scheduler.request=delayed:source=resize_reflow.final_width_sample:delay=20ms:at=20ms\ntui.frame_scheduler.coalesce=prev=120ms:request=20ms:next=20ms:requests=2:coalesced=1\ntui.frame_scheduler.emit=deadline=20ms:draw=true:emitted=1\ntui.frame_scheduler.draw_stream=lagged:true->draw\ntui.frame_scheduler.sender_dropped=closed:true\ntui.frame_scheduler.failure=draw_receiver_closed\ntui.draw\ntui.key=ctrl-c",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> frame scheduler close\ninput> \ntrace:\ntui.frame_scheduler.plan=headless\ntui.frame_scheduler.create=spawn_task=true:broadcast_capacity=1\ntui.frame_scheduler.request=delayed:source=resize_reflow.rearm:delay=120ms:at=120ms\ntui.frame_scheduler.request=delayed:source=resize_reflow.final_width_sample:delay=20ms:at=20ms\ntui.frame_scheduler.coalesce=prev=120ms:request=20ms:next=20ms:requests=2:coalesced=1\ntui.frame_scheduler.emit=deadline=20ms:draw=true:emitted=1\ntui.frame_scheduler.draw_stream=lagged:true->draw\ntui.frame_scheduler.sender_dropped=closed:true\ntui.frame_scheduler.failure=draw_receiver_closed\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "draw-dispatch-paste-burst-skips-frame",
+      "frame": {
+        "name": "draw-dispatch-paste-burst-skips-frame",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "draw dispatch skip"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "draw_dispatch",
+          "drawDispatch": {
+            "allowLiveDispatch": false,
+            "event": "draw",
+            "renderMode": "skipped",
+            "resizeReflowEnabled": false,
+            "preRender": false,
+            "sizeChanged": false,
+            "statusRefresh": false,
+            "clearPendingHistory": false,
+            "reflowDue": false,
+            "reflowRan": false,
+            "rearmDelayMs": 0,
+            "overlayActive": false,
+            "overlayHandled": false,
+            "backtrackRenderPending": true,
+            "backtrackRebuilt": true,
+            "pendingNotification": true,
+            "pasteBurstFlushed": false,
+            "pasteBurstCapturing": true,
+            "pasteBurstSkippedFrame": true,
+            "pasteBurstFollowupMs": 12,
+            "preDrawTick": false,
+            "desiredHeight": 0,
+            "renderedWidth": 0,
+            "renderedHeight": 0,
+            "cursorSet": false,
+            "ambientPetDraw": false,
+            "petPreviewDraw": false,
+            "petPreviewClear": false,
+            "externalEditorLaunch": false,
+            "followUpFrame": true
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.draw_dispatch.plan=headless\ntui.draw_dispatch.event=draw:resize_reflow=false:pre_render=false:size_changed=false:status_refresh=false\ntui.draw_dispatch.reflow=clear_pending_history=false:due=false:ran=false:rearm=0ms\ntui.draw_dispatch.pre_admission=backtrack_pending=true:backtrack_rebuilt=true:notification=true\ntui.draw_dispatch.paste_burst=flushed=false:capturing=true:skip=true:followup=12ms\ntui.draw_dispatch.render=skipped:continue\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> draw dispatch skip\ninput> \ntrace:\ntui.draw_dispatch.plan=headless\ntui.draw_dispatch.event=draw:resize_reflow=false:pre_render=false:size_changed=false:status_refresh=false\ntui.draw_dispatch.reflow=clear_pending_history=false:due=false:ran=false:rearm=0ms\ntui.draw_dispatch.pre_admission=backtrack_pending=true:backtrack_rebuilt=true:notification=true\ntui.draw_dispatch.paste_burst=flushed=false:capturing=true:skip=true:followup=12ms\ntui.draw_dispatch.render=skipped:continue\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "draw-dispatch-resize-reflow-main-render",
+      "frame": {
+        "name": "draw-dispatch-resize-reflow-main-render",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "draw dispatch render"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "draw_dispatch",
+          "drawDispatch": {
+            "allowLiveDispatch": false,
+            "event": "resize",
+            "renderMode": "resize_reflow",
+            "resizeReflowEnabled": true,
+            "preRender": true,
+            "sizeChanged": true,
+            "statusRefresh": true,
+            "clearPendingHistory": true,
+            "reflowDue": true,
+            "reflowRan": true,
+            "rearmDelayMs": 0,
+            "overlayActive": false,
+            "overlayHandled": false,
+            "backtrackRenderPending": false,
+            "backtrackRebuilt": false,
+            "pendingNotification": false,
+            "pasteBurstFlushed": true,
+            "pasteBurstCapturing": false,
+            "pasteBurstSkippedFrame": false,
+            "pasteBurstFollowupMs": 0,
+            "preDrawTick": true,
+            "desiredHeight": 12,
+            "renderedWidth": 80,
+            "renderedHeight": 12,
+            "cursorSet": true,
+            "ambientPetDraw": true,
+            "petPreviewDraw": true,
+            "petPreviewClear": false,
+            "externalEditorLaunch": true,
+            "followUpFrame": true
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.draw_dispatch.plan=headless\ntui.draw_dispatch.event=resize:resize_reflow=true:pre_render=true:size_changed=true:status_refresh=true\ntui.draw_dispatch.reflow=clear_pending_history=true:due=true:ran=true:rearm=0ms\ntui.draw_dispatch.pre_admission=backtrack_pending=false:backtrack_rebuilt=false:notification=false\ntui.draw_dispatch.paste_burst=flushed=true:capturing=false:skip=false:followup=0ms\ntui.draw_dispatch.render=resize_reflow:pre_draw_tick=true:desired_height=12:area=80x12:cursor=true\ntui.draw_dispatch.post_draw=ambient_pet=true:pet_preview=true:pet_clear=false:external_editor=true:followup_frame=true\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> draw dispatch render\ninput> \ntrace:\ntui.draw_dispatch.plan=headless\ntui.draw_dispatch.event=resize:resize_reflow=true:pre_render=true:size_changed=true:status_refresh=true\ntui.draw_dispatch.reflow=clear_pending_history=true:due=true:ran=true:rearm=0ms\ntui.draw_dispatch.pre_admission=backtrack_pending=false:backtrack_rebuilt=false:notification=false\ntui.draw_dispatch.paste_burst=flushed=true:capturing=false:skip=false:followup=0ms\ntui.draw_dispatch.render=resize_reflow:pre_draw_tick=true:desired_height=12:area=80x12:cursor=true\ntui.draw_dispatch.post_draw=ambient_pet=true:pet_preview=true:pet_clear=false:external_editor=true:followup_frame=true\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

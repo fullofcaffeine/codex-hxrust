@@ -78,10 +78,51 @@ class TuiSmokeFixtureLoader {
 				terminalModePlan: optionalTerminalModePlan(value, "terminalModePlan"),
 				altScreen: optionalAltScreenPlan(value, "altScreen"),
 				drawComposition: optionalDrawCompositionPlan(value, "drawComposition"),
-				frameScheduler: optionalFrameSchedulerPlan(value, "frameScheduler")
+				frameScheduler: optionalFrameSchedulerPlan(value, "frameScheduler"),
+				drawDispatch: optionalDrawDispatchPlan(value, "drawDispatch")
 			}));
 		}
 		return out;
+	}
+
+	static function optionalDrawDispatchPlan(object:Value, name:String):Null<TuiSmokeDrawDispatchPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeDrawDispatchPlan({
+					allowLiveDispatch: optionalBoolField(value, "allowLiveDispatch", false),
+					event: TuiSmokeDrawDispatchEventKind.fromString(optionalStringField(value, "event", "unknown")),
+					renderMode: TuiSmokeDrawDispatchRenderMode.fromString(optionalStringField(value, "renderMode", "unknown")),
+					resizeReflowEnabled: optionalBoolField(value, "resizeReflowEnabled", false),
+					preRender: optionalBoolField(value, "preRender", false),
+					sizeChanged: optionalBoolField(value, "sizeChanged", false),
+					statusRefresh: optionalBoolField(value, "statusRefresh", false),
+					clearPendingHistory: optionalBoolField(value, "clearPendingHistory", false),
+					reflowDue: optionalBoolField(value, "reflowDue", false),
+					reflowRan: optionalBoolField(value, "reflowRan", false),
+					rearmDelayMs: optionalIntField(value, "rearmDelayMs", 0),
+					overlayActive: optionalBoolField(value, "overlayActive", false),
+					overlayHandled: optionalBoolField(value, "overlayHandled", false),
+					backtrackRenderPending: optionalBoolField(value, "backtrackRenderPending", false),
+					backtrackRebuilt: optionalBoolField(value, "backtrackRebuilt", false),
+					pendingNotification: optionalBoolField(value, "pendingNotification", false),
+					pasteBurstFlushed: optionalBoolField(value, "pasteBurstFlushed", false),
+					pasteBurstCapturing: optionalBoolField(value, "pasteBurstCapturing", false),
+					pasteBurstSkippedFrame: optionalBoolField(value, "pasteBurstSkippedFrame", false),
+					pasteBurstFollowupMs: optionalIntField(value, "pasteBurstFollowupMs", 0),
+					preDrawTick: optionalBoolField(value, "preDrawTick", false),
+					desiredHeight: optionalIntField(value, "desiredHeight", 0),
+					renderedWidth: optionalIntField(value, "renderedWidth", 0),
+					renderedHeight: optionalIntField(value, "renderedHeight", 0),
+					cursorSet: optionalBoolField(value, "cursorSet", false),
+					ambientPetDraw: optionalBoolField(value, "ambientPetDraw", false),
+					petPreviewDraw: optionalBoolField(value, "petPreviewDraw", false),
+					petPreviewClear: optionalBoolField(value, "petPreviewClear", false),
+					externalEditorLaunch: optionalBoolField(value, "externalEditorLaunch", false),
+					followUpFrame: optionalBoolField(value, "followUpFrame", false),
+					failureCode: optionalStringField(value, "failureCode", "")
+				});
+		}
 	}
 
 	static function optionalFrameSchedulerPlan(object:Value, name:String):Null<TuiSmokeFrameSchedulerPlan> {

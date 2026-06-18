@@ -141,6 +141,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.DrawDispatch:
+					if (!traceDrawDispatch(event.drawDispatch, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -733,6 +738,75 @@ class TuiSmokeEventLoop {
 					trace.push("tui.frame_scheduler.unknown");
 					return false;
 			}
+		}
+		return true;
+	}
+
+	static function traceDrawDispatch(plan:TuiSmokeDrawDispatchPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveDispatch || !plan.enabled()) {
+			trace.push("tui.draw_dispatch.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.draw_dispatch.plan=headless");
+		trace.push(
+			"tui.draw_dispatch.event="
+			+ plan.event
+			+ ":resize_reflow=" + plan.resizeReflowEnabled
+			+ ":pre_render=" + plan.preRender
+			+ ":size_changed=" + plan.sizeChanged
+			+ ":status_refresh=" + plan.statusRefresh
+		);
+		trace.push(
+			"tui.draw_dispatch.reflow="
+			+ "clear_pending_history=" + plan.clearPendingHistory
+			+ ":due=" + plan.reflowDue
+			+ ":ran=" + plan.reflowRan
+			+ ":rearm=" + plan.rearmDelayMs + "ms"
+		);
+		if (plan.overlayActive) {
+			trace.push(
+				"tui.draw_dispatch.overlay="
+				+ plan.renderMode
+				+ ":handled=" + plan.overlayHandled
+				+ ":draw=u16_max"
+			);
+			return true;
+		}
+		trace.push(
+			"tui.draw_dispatch.pre_admission="
+			+ "backtrack_pending=" + plan.backtrackRenderPending
+			+ ":backtrack_rebuilt=" + plan.backtrackRebuilt
+			+ ":notification=" + plan.pendingNotification
+		);
+		trace.push(
+			"tui.draw_dispatch.paste_burst="
+			+ "flushed=" + plan.pasteBurstFlushed
+			+ ":capturing=" + plan.pasteBurstCapturing
+			+ ":skip=" + plan.pasteBurstSkippedFrame
+			+ ":followup=" + plan.pasteBurstFollowupMs + "ms"
+		);
+		if (plan.pasteBurstSkippedFrame) {
+			trace.push("tui.draw_dispatch.render=skipped:continue");
+			return true;
+		}
+		trace.push(
+			"tui.draw_dispatch.render="
+			+ plan.renderMode
+			+ ":pre_draw_tick=" + plan.preDrawTick
+			+ ":desired_height=" + plan.desiredHeight
+			+ ":area=" + plan.renderedAreaText()
+			+ ":cursor=" + plan.cursorSet
+		);
+		trace.push(
+			"tui.draw_dispatch.post_draw="
+			+ "ambient_pet=" + plan.ambientPetDraw
+			+ ":pet_preview=" + plan.petPreviewDraw
+			+ ":pet_clear=" + plan.petPreviewClear
+			+ ":external_editor=" + plan.externalEditorLaunch
+			+ ":followup_frame=" + plan.followUpFrame
+		);
+		if (plan.failureCode != "") {
+			trace.push("tui.draw_dispatch.failure=" + plan.failureCode);
 		}
 		return true;
 	}

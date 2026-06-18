@@ -20,6 +20,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final AltScreen = "alt_screen";
 	final DrawComposition = "draw_composition";
 	final FrameScheduler = "frame_scheduler";
+	final DrawDispatch = "draw_dispatch";
 	final Unknown = "unknown";
 
 	public static function fromString(value:String):TuiSmokeEventKind {
@@ -43,6 +44,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "alt_screen": AltScreen;
 			case "draw_composition": DrawComposition;
 			case "frame_scheduler": FrameScheduler;
+			case "draw_dispatch": DrawDispatch;
 			case _: Unknown;
 		}
 	}
