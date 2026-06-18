@@ -6303,6 +6303,337 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.file_mention_popup.plan=headless\ntui.file_mention_popup.sync=ask @codex:token=codex:query=codex:popup=none->mention_v2:mentions_v2=true:redraw=true\ntui.file_mention_popup.file.search_start=codex:sent=true:same_query_skipped=false:live_rejected=false\ntui.file_mention_popup.mention.activate=codex:created=true:popup=none->mention_v2:mode=all:files=4:dirs=1:skills=2:plugins=1:tools=3\ntui.file_mention_popup.file.result=old:accepted=false:stale=true:matches=3:visible=0:rows=0:selected=0->0:scroll=0->0\ntui.file_mention_popup.mention.mode=all->tools:query=codex:selected=0->0\ntui.file_mention_popup.selection=mention_v2:selected=0->1:scroll=0->0\ntui.file_mention_popup.mention.insert=@codex-cli:candidate=plugin:path=.codex/plugins/codex-cli:binding=true:draft=true:popup=mention_v2->none\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> file mention popup mentions v2 tool insert\ninput> \ntrace:\ntui.file_mention_popup.plan=headless\ntui.file_mention_popup.sync=ask @codex:token=codex:query=codex:popup=none->mention_v2:mentions_v2=true:redraw=true\ntui.file_mention_popup.file.search_start=codex:sent=true:same_query_skipped=false:live_rejected=false\ntui.file_mention_popup.mention.activate=codex:created=true:popup=none->mention_v2:mode=all:files=4:dirs=1:skills=2:plugins=1:tools=3\ntui.file_mention_popup.file.result=old:accepted=false:stale=true:matches=3:visible=0:rows=0:selected=0->0:scroll=0->0\ntui.file_mention_popup.mention.mode=all->tools:query=codex:selected=0->0\ntui.file_mention_popup.selection=mention_v2:selected=0->1:scroll=0->0\ntui.file_mention_popup.mention.insert=@codex-cli:candidate=plugin:path=.codex/plugins/codex-cli:binding=true:draft=true:popup=mention_v2->none\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "history-search-local-match-accept",
+      "frame": {
+        "name": "history-search-local-match-accept",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "history search local match accept"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "history_search",
+          "historySearch": {
+            "allowLiveHistoryLookup": false,
+            "actions": [
+              {
+                "kind": "begin",
+                "keyName": "ctrl-r",
+                "activeBefore": false,
+                "activeAfter": true,
+                "statusAfter": "idle",
+                "originalDraft": "draft",
+                "pasteFlushed": false,
+                "fileQueryCleared": false,
+                "popupsCleared": true,
+                "remoteImageSelectionCleared": true,
+                "searchReset": true
+              },
+              {
+                "kind": "query_edit",
+                "queryBefore": "",
+                "queryAfter": "git",
+                "statusBefore": "idle",
+                "statusAfter": "searching",
+                "draftRestored": true,
+                "direction": "older"
+              },
+              {
+                "kind": "search_result",
+                "result": "found",
+                "statusBefore": "searching",
+                "statusAfter": "match",
+                "previewText": "git status",
+                "matchCount": 1,
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "draftPreviewed": true,
+                "draftRestored": false
+              },
+              {
+                "kind": "footer_render",
+                "footerLine": "reverse-i-search: git enter accept esc cancel",
+                "footerMode": true,
+                "statusAfter": "match"
+              },
+              {
+                "kind": "highlight",
+                "queryAfter": "git",
+                "highlightCount": 1,
+                "previewText": "git status"
+              },
+              {
+                "kind": "accept",
+                "acceptedText": "git status",
+                "activeBefore": true,
+                "activeAfter": false,
+                "statusBefore": "match",
+                "statusAfter": "inactive",
+                "cursorBefore": 0,
+                "cursorAfter": 10,
+                "draftAccepted": true,
+                "searchReset": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.history_search.plan=headless\ntui.history_search.begin=ctrl-r:active=false->true:status=idle:original=draft:paste_flushed=false:file_query_cleared=false:popups_cleared=true:remote_images_cleared=true:search_reset=true\ntui.history_search.query=->git:status=idle->searching:restore_original=true:direction=older\ntui.history_search.result=found:status=searching->match:preview=git status:matches=1:selected=0->0:draft_previewed=true:draft_restored=false\ntui.history_search.footer=reverse-i-search: git enter accept esc cancel:mode=true:status=match\ntui.history_search.highlight=git:ranges=1:preview=git status\ntui.history_search.accept=git status:active=true->false:status=match->inactive:cursor=0->10:draft_accepted=true:search_reset=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> history search local match accept\ninput> \ntrace:\ntui.history_search.plan=headless\ntui.history_search.begin=ctrl-r:active=false->true:status=idle:original=draft:paste_flushed=false:file_query_cleared=false:popups_cleared=true:remote_images_cleared=true:search_reset=true\ntui.history_search.query=->git:status=idle->searching:restore_original=true:direction=older\ntui.history_search.result=found:status=searching->match:preview=git status:matches=1:selected=0->0:draft_previewed=true:draft_restored=false\ntui.history_search.footer=reverse-i-search: git enter accept esc cancel:mode=true:status=match\ntui.history_search.highlight=git:ranges=1:preview=git status\ntui.history_search.accept=git status:active=true->false:status=match->inactive:cursor=0->10:draft_accepted=true:search_reset=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "history-search-persistent-pending-cancel",
+      "frame": {
+        "name": "history-search-persistent-pending-cancel",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "history search persistent pending cancel"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "history_search",
+          "historySearch": {
+            "allowLiveHistoryLookup": false,
+            "actions": [
+              {
+                "kind": "begin",
+                "keyName": "ctrl-r",
+                "activeBefore": false,
+                "activeAfter": true,
+                "statusAfter": "idle",
+                "originalDraft": "draft",
+                "pasteFlushed": true,
+                "fileQueryCleared": true,
+                "popupsCleared": true,
+                "remoteImageSelectionCleared": true,
+                "searchReset": true
+              },
+              {
+                "kind": "query_edit",
+                "queryBefore": "",
+                "queryAfter": "release",
+                "statusBefore": "idle",
+                "statusAfter": "searching",
+                "draftRestored": true,
+                "direction": "older"
+              },
+              {
+                "kind": "lookup_request",
+                "persistentOffset": 2,
+                "logId": 7,
+                "direction": "older",
+                "pendingStored": true,
+                "noLiveLookup": true
+              },
+              {
+                "kind": "search_result",
+                "result": "pending",
+                "statusBefore": "searching",
+                "statusAfter": "searching",
+                "previewText": "",
+                "matchCount": 0,
+                "selectedBefore": 0,
+                "selectedAfter": 0
+              },
+              {
+                "kind": "lookup_response",
+                "persistentOffset": 2,
+                "logId": 7,
+                "result": "found",
+                "statusBefore": "searching",
+                "statusAfter": "match",
+                "previewText": "release notes"
+              },
+              {
+                "kind": "navigate",
+                "direction": "older",
+                "result": "at_boundary",
+                "statusBefore": "match",
+                "statusAfter": "match",
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "previewText": "release notes"
+              },
+              {
+                "kind": "cancel",
+                "keyName": "ctrl-c",
+                "activeBefore": true,
+                "activeAfter": false,
+                "restoredText": "draft",
+                "navigationReset": true,
+                "ctrlCConsumed": true,
+                "redrawRequested": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.history_search.plan=headless\ntui.history_search.begin=ctrl-r:active=false->true:status=idle:original=draft:paste_flushed=true:file_query_cleared=true:popups_cleared=true:remote_images_cleared=true:search_reset=true\ntui.history_search.query=->release:status=idle->searching:restore_original=true:direction=older\ntui.history_search.lookup_request=offset=2:log=7:direction=older:pending=true:live=false\ntui.history_search.result=pending:status=searching->searching:preview=:matches=0:selected=0->0:draft_previewed=false:draft_restored=false\ntui.history_search.lookup_response=offset=2:log=7:result=found:status=searching->match:preview=release notes\ntui.history_search.navigate=older:result=at_boundary:status=match->match:selected=0->0:preview=release notes\ntui.history_search.cancel=ctrl-c:active=true->false:restored=draft:navigation_reset=true:ctrl_c=true:redraw=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> history search persistent pending cancel\ninput> \ntrace:\ntui.history_search.plan=headless\ntui.history_search.begin=ctrl-r:active=false->true:status=idle:original=draft:paste_flushed=true:file_query_cleared=true:popups_cleared=true:remote_images_cleared=true:search_reset=true\ntui.history_search.query=->release:status=idle->searching:restore_original=true:direction=older\ntui.history_search.lookup_request=offset=2:log=7:direction=older:pending=true:live=false\ntui.history_search.result=pending:status=searching->searching:preview=:matches=0:selected=0->0:draft_previewed=false:draft_restored=false\ntui.history_search.lookup_response=offset=2:log=7:result=found:status=searching->match:preview=release notes\ntui.history_search.navigate=older:result=at_boundary:status=match->match:selected=0->0:preview=release notes\ntui.history_search.cancel=ctrl-c:active=true->false:restored=draft:navigation_reset=true:ctrl_c=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "history-search-remap-no-match-suppression",
+      "frame": {
+        "name": "history-search-remap-no-match-suppression",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "history search remap no match suppression"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "history_search",
+          "historySearch": {
+            "allowLiveHistoryLookup": false,
+            "actions": [
+              {
+                "kind": "suppress_popups",
+                "fileQueryCleared": true,
+                "popupsCleared": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "keymap",
+                "keyName": "f2",
+                "remapped": true,
+                "fallbackSuppressed": true,
+                "keyConsumed": true
+              },
+              {
+                "kind": "begin",
+                "keyName": "f2",
+                "activeBefore": false,
+                "activeAfter": true,
+                "statusAfter": "idle",
+                "originalDraft": "",
+                "pasteFlushed": false,
+                "fileQueryCleared": true,
+                "popupsCleared": true,
+                "remoteImageSelectionCleared": true,
+                "searchReset": true
+              },
+              {
+                "kind": "query_edit",
+                "queryBefore": "",
+                "queryAfter": "zzz",
+                "statusBefore": "idle",
+                "statusAfter": "searching",
+                "draftRestored": true,
+                "direction": "older"
+              },
+              {
+                "kind": "search_result",
+                "result": "not_found",
+                "statusBefore": "searching",
+                "statusAfter": "no_match",
+                "previewText": "",
+                "matchCount": 0,
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "draftPreviewed": false,
+                "draftRestored": true
+              },
+              {
+                "kind": "footer_render",
+                "footerLine": "reverse-i-search: zzz no match",
+                "footerMode": true,
+                "statusAfter": "no_match"
+              },
+              {
+                "kind": "query_edit",
+                "queryBefore": "zzz",
+                "queryAfter": "",
+                "statusBefore": "no_match",
+                "statusAfter": "idle",
+                "draftRestored": true,
+                "direction": "older"
+              },
+              {
+                "kind": "cancel",
+                "keyName": "esc",
+                "activeBefore": true,
+                "activeAfter": false,
+                "restoredText": "",
+                "navigationReset": true,
+                "ctrlCConsumed": false,
+                "redrawRequested": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.history_search.plan=headless\ntui.history_search.suppress_popups=file_query_cleared=true:popups_cleared=true:frame=true\ntui.history_search.keymap=f2:remapped=true:fallback_suppressed=true:consumed=true\ntui.history_search.begin=f2:active=false->true:status=idle:original=:paste_flushed=false:file_query_cleared=true:popups_cleared=true:remote_images_cleared=true:search_reset=true\ntui.history_search.query=->zzz:status=idle->searching:restore_original=true:direction=older\ntui.history_search.result=not_found:status=searching->no_match:preview=:matches=0:selected=0->0:draft_previewed=false:draft_restored=true\ntui.history_search.footer=reverse-i-search: zzz no match:mode=true:status=no_match\ntui.history_search.query=zzz->:status=no_match->idle:restore_original=true:direction=older\ntui.history_search.cancel=esc:active=true->false:restored=:navigation_reset=true:ctrl_c=false:redraw=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> history search remap no match suppression\ninput> \ntrace:\ntui.history_search.plan=headless\ntui.history_search.suppress_popups=file_query_cleared=true:popups_cleared=true:frame=true\ntui.history_search.keymap=f2:remapped=true:fallback_suppressed=true:consumed=true\ntui.history_search.begin=f2:active=false->true:status=idle:original=:paste_flushed=false:file_query_cleared=true:popups_cleared=true:remote_images_cleared=true:search_reset=true\ntui.history_search.query=->zzz:status=idle->searching:restore_original=true:direction=older\ntui.history_search.result=not_found:status=searching->no_match:preview=:matches=0:selected=0->0:draft_previewed=false:draft_restored=true\ntui.history_search.footer=reverse-i-search: zzz no match:mode=true:status=no_match\ntui.history_search.query=zzz->:status=no_match->idle:restore_original=true:direction=older\ntui.history_search.cancel=esc:active=true->false:restored=:navigation_reset=true:ctrl_c=false:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

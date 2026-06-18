@@ -87,7 +87,74 @@ class TuiSmokeFixtureLoader {
 				appLinkOverlay: optionalAppLinkPlan(value, "appLinkOverlay"),
 				hooksBrowser: optionalHooksBrowserPlan(value, "hooksBrowser"),
 				slashCommandPopup: optionalSlashPopupPlan(value, "slashCommandPopup"),
-				fileMentionPopup: optionalFileMentionPopupPlan(value, "fileMentionPopup")
+				fileMentionPopup: optionalFileMentionPopupPlan(value, "fileMentionPopup"),
+				historySearch: optionalHistorySearchPlan(value, "historySearch")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalHistorySearchPlan(object:Value, name:String):Null<TuiSmokeHistorySearchPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeHistorySearchPlan({
+					allowLiveHistoryLookup: optionalBoolField(value, "allowLiveHistoryLookup", false),
+					actions: historySearchActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function historySearchActions(values:Array<Value>):Array<TuiSmokeHistorySearchAction> {
+		final out:Array<TuiSmokeHistorySearchAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeHistorySearchAction({
+				kind: TuiSmokeHistorySearchActionKind.fromString(stringField(value, "kind", "")),
+				direction: TuiSmokeHistorySearchDirectionKind.fromString(optionalStringField(value, "direction", "unknown")),
+				result: TuiSmokeHistorySearchResultKind.fromString(optionalStringField(value, "result", "unknown")),
+				statusBefore: TuiSmokeHistorySearchStatusKind.fromString(optionalStringField(value, "statusBefore", "unknown")),
+				statusAfter: TuiSmokeHistorySearchStatusKind.fromString(optionalStringField(value, "statusAfter", "unknown")),
+				keyName: optionalStringField(value, "keyName", ""),
+				inputText: optionalStringField(value, "inputText", ""),
+				queryBefore: optionalStringField(value, "queryBefore", ""),
+				queryAfter: optionalStringField(value, "queryAfter", ""),
+				originalDraft: optionalStringField(value, "originalDraft", ""),
+				previewText: optionalStringField(value, "previewText", ""),
+				acceptedText: optionalStringField(value, "acceptedText", ""),
+				restoredText: optionalStringField(value, "restoredText", ""),
+				footerLine: optionalStringField(value, "footerLine", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				matchCount: optionalIntField(value, "matchCount", 0),
+				selectedBefore: optionalIntField(value, "selectedBefore", 0),
+				selectedAfter: optionalIntField(value, "selectedAfter", 0),
+				persistentOffset: optionalIntField(value, "persistentOffset", 0),
+				logId: optionalIntField(value, "logId", 0),
+				highlightCount: optionalIntField(value, "highlightCount", 0),
+				cursorBefore: optionalIntField(value, "cursorBefore", 0),
+				cursorAfter: optionalIntField(value, "cursorAfter", 0),
+				activeBefore: optionalBoolField(value, "activeBefore", false),
+				activeAfter: optionalBoolField(value, "activeAfter", false),
+				pasteFlushed: optionalBoolField(value, "pasteFlushed", false),
+				fileQueryCleared: optionalBoolField(value, "fileQueryCleared", false),
+				popupsCleared: optionalBoolField(value, "popupsCleared", false),
+				remoteImageSelectionCleared: optionalBoolField(value, "remoteImageSelectionCleared", false),
+				searchReset: optionalBoolField(value, "searchReset", false),
+				navigationReset: optionalBoolField(value, "navigationReset", false),
+				lookupRequested: optionalBoolField(value, "lookupRequested", false),
+				pendingStored: optionalBoolField(value, "pendingStored", false),
+				draftRestored: optionalBoolField(value, "draftRestored", false),
+				draftPreviewed: optionalBoolField(value, "draftPreviewed", false),
+				draftAccepted: optionalBoolField(value, "draftAccepted", false),
+				footerMode: optionalBoolField(value, "footerMode", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				redrawRequested: optionalBoolField(value, "redrawRequested", false),
+				keyConsumed: optionalBoolField(value, "keyConsumed", false),
+				releaseIgnored: optionalBoolField(value, "releaseIgnored", false),
+				ctrlCConsumed: optionalBoolField(value, "ctrlCConsumed", false),
+				remapped: optionalBoolField(value, "remapped", false),
+				fallbackSuppressed: optionalBoolField(value, "fallbackSuppressed", false),
+				noLiveLookup: optionalBoolField(value, "noLiveLookup", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

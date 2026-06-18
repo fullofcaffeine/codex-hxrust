@@ -186,6 +186,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.HistorySearch:
+					if (!traceHistorySearch(event.historySearch, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1324,6 +1329,136 @@ class TuiSmokeEventLoop {
 					trace.push("tui.app_link.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.app_link.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceHistorySearch(plan:TuiSmokeHistorySearchPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveHistoryLookup || !plan.enabled()) {
+			trace.push("tui.history_search.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.history_search.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeHistorySearchActionKind.Begin:
+					trace.push(
+						"tui.history_search.begin="
+						+ action.keyName
+						+ ":active=" + action.activeTransitionText()
+						+ ":status=" + action.statusAfter
+						+ ":original=" + action.originalDraft
+						+ ":paste_flushed=" + action.pasteFlushed
+						+ ":file_query_cleared=" + action.fileQueryCleared
+						+ ":popups_cleared=" + action.popupsCleared
+						+ ":remote_images_cleared=" + action.remoteImageSelectionCleared
+						+ ":search_reset=" + action.searchReset
+					);
+				case TuiSmokeHistorySearchActionKind.QueryEdit:
+					trace.push(
+						"tui.history_search.query="
+						+ action.queryTransitionText()
+						+ ":status=" + action.statusTransitionText()
+						+ ":restore_original=" + action.draftRestored
+						+ ":direction=" + action.direction
+					);
+				case TuiSmokeHistorySearchActionKind.SearchResult:
+					trace.push(
+						"tui.history_search.result="
+						+ action.result
+						+ ":status=" + action.statusTransitionText()
+						+ ":preview=" + action.previewText
+						+ ":matches=" + action.matchCount
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":draft_previewed=" + action.draftPreviewed
+						+ ":draft_restored=" + action.draftRestored
+					);
+				case TuiSmokeHistorySearchActionKind.Navigate:
+					trace.push(
+						"tui.history_search.navigate="
+						+ action.direction
+						+ ":result=" + action.result
+						+ ":status=" + action.statusTransitionText()
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":preview=" + action.previewText
+					);
+				case TuiSmokeHistorySearchActionKind.Accept:
+					trace.push(
+						"tui.history_search.accept="
+						+ action.acceptedText
+						+ ":active=" + action.activeTransitionText()
+						+ ":status=" + action.statusTransitionText()
+						+ ":cursor=" + action.cursorTransitionText()
+						+ ":draft_accepted=" + action.draftAccepted
+						+ ":search_reset=" + action.searchReset
+					);
+				case TuiSmokeHistorySearchActionKind.Cancel:
+					trace.push(
+						"tui.history_search.cancel="
+						+ action.keyName
+						+ ":active=" + action.activeTransitionText()
+						+ ":restored=" + action.restoredText
+						+ ":navigation_reset=" + action.navigationReset
+						+ ":ctrl_c=" + action.ctrlCConsumed
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeHistorySearchActionKind.LookupRequest:
+					trace.push(
+						"tui.history_search.lookup_request="
+						+ "offset=" + action.persistentOffset
+						+ ":log=" + action.logId
+						+ ":direction=" + action.direction
+						+ ":pending=" + action.pendingStored
+						+ ":live=" + !action.noLiveLookup
+					);
+				case TuiSmokeHistorySearchActionKind.LookupResponse:
+					trace.push(
+						"tui.history_search.lookup_response="
+						+ "offset=" + action.persistentOffset
+						+ ":log=" + action.logId
+						+ ":result=" + action.result
+						+ ":status=" + action.statusTransitionText()
+						+ ":preview=" + action.previewText
+					);
+				case TuiSmokeHistorySearchActionKind.FooterRender:
+					trace.push(
+						"tui.history_search.footer="
+						+ action.footerLine
+						+ ":mode=" + action.footerMode
+						+ ":status=" + action.statusAfter
+					);
+				case TuiSmokeHistorySearchActionKind.Highlight:
+					trace.push(
+						"tui.history_search.highlight="
+						+ action.queryAfter
+						+ ":ranges=" + action.highlightCount
+						+ ":preview=" + action.previewText
+					);
+				case TuiSmokeHistorySearchActionKind.Keymap:
+					trace.push(
+						"tui.history_search.keymap="
+						+ action.keyName
+						+ ":remapped=" + action.remapped
+						+ ":fallback_suppressed=" + action.fallbackSuppressed
+						+ ":consumed=" + action.keyConsumed
+					);
+				case TuiSmokeHistorySearchActionKind.SuppressPopups:
+					trace.push(
+						"tui.history_search.suppress_popups="
+						+ "file_query_cleared=" + action.fileQueryCleared
+						+ ":popups_cleared=" + action.popupsCleared
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeHistorySearchActionKind.Failure:
+					trace.push(
+						"tui.history_search.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.history_search.unknown");
 					return false;
 			}
 		}
