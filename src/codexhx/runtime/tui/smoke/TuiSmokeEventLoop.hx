@@ -261,6 +261,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.SideConversation:
+					if (!traceSideConversation(event.sideConversation, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1694,6 +1699,118 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_interrupt_quit.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceSideConversation(plan:TuiSmokeSideConversationPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.side_conversation.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.side_conversation.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeSideConversationActionKind.SyncUi:
+					trace.push(
+						"tui.side_conversation.sync_ui="
+						+ "active=" + action.sideConversationActiveBefore + "->" + action.sideConversationActiveAfter
+						+ ":notice_suppressed=" + action.noticeSuppressedBefore + "->" + action.noticeSuppressedAfter
+						+ ":rename_blocked=" + action.renameBlockedBefore + "->" + action.renameBlockedAfter
+						+ ":parent_main=" + action.parentIsMain
+						+ ":status=" + action.status
+						+ ":label=" + action.label
+					);
+				case TuiSmokeSideConversationActionKind.StartBlock:
+					trace.push(
+						"tui.side_conversation.start_block="
+						+ action.blockMessage
+						+ ":side_threads=" + action.sideThreadsBefore + "->" + action.sideThreadsAfter
+						+ ":restored=" + action.restoredComposer
+					);
+				case TuiSmokeSideConversationActionKind.ForkThread:
+					trace.push(
+						"tui.side_conversation.fork="
+						+ "parent=" + action.parentThreadId
+						+ ":child=" + action.childThreadId
+						+ ":side_threads=" + action.sideThreadsBefore + "->" + action.sideThreadsAfter
+						+ ":ephemeral=" + action.forkConfigEphemeral
+						+ ":developer=" + action.developerInstructionsAdded
+						+ ":model=" + action.modelInherited
+						+ ":tier=" + action.serviceTierInherited
+					);
+				case TuiSmokeSideConversationActionKind.InjectBoundary:
+					trace.push(
+						"tui.side_conversation.inject_boundary="
+						+ "child=" + action.childThreadId
+						+ ":hidden=" + action.hiddenBoundaryPrompt
+						+ ":injected=" + action.boundaryInjected
+					);
+				case TuiSmokeSideConversationActionKind.SwitchThread:
+					trace.push(
+						"tui.side_conversation.switch="
+						+ "target=" + action.targetThreadId
+						+ ":child=" + action.switchedToChild
+						+ ":parent=" + action.switchedToParent
+						+ ":submitted_initial=" + action.submittedInitialUserMessage
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeSideConversationActionKind.ParentStatusChange:
+					trace.push(
+						"tui.side_conversation.parent_status="
+						+ action.statusChange
+						+ ":status=" + action.status
+						+ ":actionable=" + action.parentStatusActionable
+						+ ":synced=" + action.statusSynced
+						+ ":label=" + action.label
+					);
+				case TuiSmokeSideConversationActionKind.MaybeReturn:
+					trace.push(
+						"tui.side_conversation.maybe_return="
+						+ "overlay=" + action.overlayActive
+						+ ":modal=" + action.modalOrPopupActive
+						+ ":composer_empty=" + action.composerEmpty
+						+ ":requested=" + action.returnRequested
+						+ ":returned=" + action.returnedToParent
+					);
+				case TuiSmokeSideConversationActionKind.RestoreUserMessage:
+					trace.push(
+						"tui.side_conversation.restore_user_message="
+						+ "text=" + action.userMessageText
+						+ ":remote_images=" + action.remoteImageCount
+						+ ":local_images=" + action.localImageCount
+						+ ":mentions=" + action.mentionBindingCount
+						+ ":restored=" + action.restoredComposer
+					);
+				case TuiSmokeSideConversationActionKind.DiscardSide:
+					trace.push(
+						"tui.side_conversation.discard="
+						+ "child=" + action.childThreadId
+						+ ":interrupt=" + action.interruptSubmitted
+						+ ":startup=" + action.startupInterruptUsed
+						+ ":turn=" + action.turnInterruptUsed
+						+ ":unsubscribe=" + action.threadUnsubscribed
+						+ ":local=" + action.localStateDiscarded
+						+ ":listener=" + action.listenerAborted
+						+ ":channel=" + action.channelRemoved
+						+ ":navigation=" + action.navigationRemoved
+						+ ":active_cleared=" + action.activeThreadCleared
+						+ ":approvals=" + action.approvalsRefreshed
+					);
+				case TuiSmokeSideConversationActionKind.Failure:
+					trace.push(
+						"tui.side_conversation.failure="
+						+ action.failureCode
+						+ ":error=" + action.errorMessage
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.side_conversation.unknown");
 					return false;
 			}
 		}

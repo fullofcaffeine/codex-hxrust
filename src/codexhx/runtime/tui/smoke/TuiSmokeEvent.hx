@@ -43,6 +43,7 @@ typedef TuiSmokeEventFields = {
 	final chatWidgetStreamLifecycle:Null<TuiSmokeChatWidgetStreamLifecyclePlan>;
 	final chatWidgetInterruptQuit:Null<TuiSmokeChatWidgetInterruptQuitPlan>;
 	final chatWidgetInterruptedRestore:Null<TuiSmokeChatWidgetInterruptedRestorePlan>;
+	final sideConversation:Null<TuiSmokeSideConversationPlan>;
 }
 
 class TuiSmokeEvent {
@@ -88,6 +89,7 @@ class TuiSmokeEvent {
 	public final chatWidgetStreamLifecycle:Null<TuiSmokeChatWidgetStreamLifecyclePlan>;
 	public final chatWidgetInterruptQuit:Null<TuiSmokeChatWidgetInterruptQuitPlan>;
 	public final chatWidgetInterruptedRestore:Null<TuiSmokeChatWidgetInterruptedRestorePlan>;
+	public final sideConversation:Null<TuiSmokeSideConversationPlan>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -132,5 +134,6 @@ class TuiSmokeEvent {
 		this.chatWidgetStreamLifecycle = fields.chatWidgetStreamLifecycle;
 		this.chatWidgetInterruptQuit = fields.chatWidgetInterruptQuit;
 		this.chatWidgetInterruptedRestore = fields.chatWidgetInterruptedRestore;
+		this.sideConversation = fields.sideConversation;
 	}
 }

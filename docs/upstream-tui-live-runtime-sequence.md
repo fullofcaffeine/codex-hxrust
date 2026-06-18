@@ -2342,6 +2342,22 @@ Model selected raw Codex ChatWidget interrupted-turn restoration behavior:
 
 Status: HXCX-TUI-46 extends `fixtures/hxrust/tui-smoke.v1.json` with typed ChatWidget interrupted-turn notice, cancel-edit restore, queued input restore, pending-steer submission, and no-live evidence fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic interrupted-turn restore evidence only, not a full live input loop, live renderer, transport, or terminal overlay.
 
+### HXCX-TUI-47: Side-Conversation Start, Return, And Discard Lifecycle
+
+Model selected raw Codex side-conversation behavior:
+
+- preserve the side-conversation contract in `../codex/codex-rs/tui/src/app/side.rs`: side threads are ephemeral forks for lightweight exploration, inherited history is reference context only, and hidden side developer instructions/boundary prompt prevent the side assistant from continuing the main task by accident;
+- preserve `SideParentStatus`, `SideParentStatusChange::for_notification`, and `SideParentStatus::for_request` in `app/side.rs`: parent request/completion/closed/interrupted/failed state is tracked while the side thread is visible and rendered as actionable/non-actionable parent status;
+- preserve `sync_side_thread_ui` in `app/side.rs`: normal threads clear side labels, rename blocks, side-active state, and interrupted-turn notice suppression; side threads set the rename block, activate the side context label, suppress interrupted-turn notices, and include parent/main status plus `Ctrl+C to return`;
+- preserve `maybe_return_from_side` in `app/side.rs`: side return is only eligible when no overlay is active, no ChatWidget modal/popup is active, the composer is empty, and an active side parent exists;
+- preserve `select_agent_thread_and_discard_side`, `discard_side_thread`, `discard_thread_local_state`, `interrupt_side_thread`, and cleanup-failure recovery in `app/side.rs`: returning or navigating away interrupts active/startup side work, unsubscribes from the side thread, aborts listeners, removes event channels, removes side state and navigation state, refreshes approvals or clears the active thread, and keeps the side visible if cleanup fails;
+- preserve `handle_start_side`, `side_start_block_message`, `side_start_error_message`, `side_fork_config`, `install_side_thread_snapshot`, and `restore_side_user_message` in `app/side.rs`: start blocks restore the user message to the composer, successful starts fork an ephemeral child with inherited model/effort/service tier plus side developer instructions, inject the hidden side boundary prompt, select the child thread, and submit the initial user message only after switching succeeds;
+- preserve `AppEvent::StartSide`, `AppEvent::SelectAgentThread`, and `AppEvent::RestoreCancelledTurn` dispatch anchors in `../codex/codex-rs/tui/src/app/event_dispatch.rs`: side lifecycle remains app-owned and is not pushed into haxe.rust or a ChatWidget-only abstraction;
+- preserve related ChatWidget anchors in `../codex/codex-rs/tui/src/chatwidget.rs` and `../codex/codex-rs/tui/src/chatwidget/input_restore.rs`: side activity toggles `InterruptedTurnNoticeMode::Suppress`, blocks rename, updates side context labels, and restores user messages to the composer through the same typed composer restoration path as interrupted input;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-47 extends `fixtures/hxrust/tui-smoke.v1.json` with typed side-conversation start, parent-status suppression, return/discard, composer restore, and no-live evidence fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic side-conversation lifecycle evidence only, not a full live fork transport, thread event listener, renderer, or terminal overlay.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

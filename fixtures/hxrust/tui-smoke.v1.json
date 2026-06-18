@@ -10460,6 +10460,367 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=true:submit_after=true->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=2->0:queued=0->0:rejected=0->0:pending_merged=true:queued_merged=false:composer_merged=false:text=steer one | steer two\ntui.chat_widget_interrupted_restore.failure=live_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupted restore submit pending no live\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=true:submit_after=true->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=2->0:queued=0->0:rejected=0->0:pending_merged=true:queued_merged=false:composer_merged=false:text=steer one | steer two\ntui.chat_widget_interrupted_restore.failure=live_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "side-conversation-start-success",
+      "frame": {
+        "name": "side-conversation-start-success",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "side conversation start success"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "fork_thread",
+                "parentThreadId": "main",
+                "childThreadId": "side-1",
+                "sideThreadsBefore": 0,
+                "sideThreadsAfter": 1,
+                "forkConfigEphemeral": true,
+                "developerInstructionsAdded": true,
+                "modelInherited": true,
+                "serviceTierInherited": true
+              },
+              {
+                "kind": "inject_boundary",
+                "childThreadId": "side-1",
+                "hiddenBoundaryPrompt": true,
+                "boundaryInjected": true
+              },
+              {
+                "kind": "switch_thread",
+                "targetThreadId": "side-1",
+                "switchedToChild": true,
+                "switchedToParent": false,
+                "submittedInitialUserMessage": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "sync_ui",
+                "parentIsMain": true,
+                "status": "",
+                "label": "Side from main thread | Ctrl+C to return",
+                "sideConversationActiveBefore": false,
+                "sideConversationActiveAfter": true,
+                "noticeSuppressedBefore": false,
+                "noticeSuppressedAfter": true,
+                "renameBlockedBefore": false,
+                "renameBlockedAfter": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.fork=parent=main:child=side-1:side_threads=0->1:ephemeral=true:developer=true:model=true:tier=true\ntui.side_conversation.inject_boundary=child=side-1:hidden=true:injected=true\ntui.side_conversation.switch=target=side-1:child=true:parent=false:submitted_initial=true:redraw=true\ntui.side_conversation.sync_ui=active=false->true:notice_suppressed=false->true:rename_blocked=false->true:parent_main=true:status=:label=Side from main thread | Ctrl+C to return\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> side conversation start success\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.fork=parent=main:child=side-1:side_threads=0->1:ephemeral=true:developer=true:model=true:tier=true\ntui.side_conversation.inject_boundary=child=side-1:hidden=true:injected=true\ntui.side_conversation.switch=target=side-1:child=true:parent=false:submitted_initial=true:redraw=true\ntui.side_conversation.sync_ui=active=false->true:notice_suppressed=false->true:rename_blocked=false->true:parent_main=true:status=:label=Side from main thread | Ctrl+C to return\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "side-conversation-parent-status-suppresses-interrupt-notice",
+      "frame": {
+        "name": "side-conversation-parent-status-suppresses-interrupt-notice",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "side conversation parent status suppresses interrupt notice"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "sync_ui",
+                "parentIsMain": true,
+                "status": "",
+                "label": "Side from main thread | Ctrl+C to return",
+                "sideConversationActiveBefore": false,
+                "sideConversationActiveAfter": true,
+                "noticeSuppressedBefore": false,
+                "noticeSuppressedAfter": true,
+                "renameBlockedBefore": false,
+                "renameBlockedAfter": true
+              },
+              {
+                "kind": "parent_status_change",
+                "statusChange": "set",
+                "status": "interrupted",
+                "parentStatusActionable": false,
+                "statusSynced": true,
+                "label": "Side from main thread | main interrupted | Ctrl+C to return"
+              },
+              {
+                "kind": "parent_status_change",
+                "statusChange": "clear_actionable",
+                "status": "needs_approval",
+                "parentStatusActionable": true,
+                "statusSynced": true,
+                "label": "Side from main thread | Ctrl+C to return"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.sync_ui=active=false->true:notice_suppressed=false->true:rename_blocked=false->true:parent_main=true:status=:label=Side from main thread | Ctrl+C to return\ntui.side_conversation.parent_status=set:status=interrupted:actionable=false:synced=true:label=Side from main thread | main interrupted | Ctrl+C to return\ntui.side_conversation.parent_status=clear_actionable:status=needs_approval:actionable=true:synced=true:label=Side from main thread | Ctrl+C to return\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> side conversation parent status suppresses interrupt notice\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.sync_ui=active=false->true:notice_suppressed=false->true:rename_blocked=false->true:parent_main=true:status=:label=Side from main thread | Ctrl+C to return\ntui.side_conversation.parent_status=set:status=interrupted:actionable=false:synced=true:label=Side from main thread | main interrupted | Ctrl+C to return\ntui.side_conversation.parent_status=clear_actionable:status=needs_approval:actionable=true:synced=true:label=Side from main thread | Ctrl+C to return\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "side-conversation-return-discards-side",
+      "frame": {
+        "name": "side-conversation-return-discards-side",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "side conversation return discards side"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "maybe_return",
+                "overlayActive": false,
+                "modalOrPopupActive": false,
+                "composerEmpty": true,
+                "returnRequested": true,
+                "returnedToParent": true
+              },
+              {
+                "kind": "switch_thread",
+                "targetThreadId": "main",
+                "switchedToChild": false,
+                "switchedToParent": true,
+                "submittedInitialUserMessage": false,
+                "requestRedraw": true
+              },
+              {
+                "kind": "discard_side",
+                "childThreadId": "side-1",
+                "interruptSubmitted": true,
+                "startupInterruptUsed": false,
+                "turnInterruptUsed": true,
+                "threadUnsubscribed": true,
+                "localStateDiscarded": true,
+                "listenerAborted": true,
+                "channelRemoved": true,
+                "navigationRemoved": true,
+                "activeThreadCleared": false,
+                "approvalsRefreshed": true
+              },
+              {
+                "kind": "sync_ui",
+                "parentIsMain": true,
+                "status": "",
+                "label": "",
+                "sideConversationActiveBefore": true,
+                "sideConversationActiveAfter": false,
+                "noticeSuppressedBefore": true,
+                "noticeSuppressedAfter": false,
+                "renameBlockedBefore": true,
+                "renameBlockedAfter": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.maybe_return=overlay=false:modal=false:composer_empty=true:requested=true:returned=true\ntui.side_conversation.switch=target=main:child=false:parent=true:submitted_initial=false:redraw=true\ntui.side_conversation.discard=child=side-1:interrupt=true:startup=false:turn=true:unsubscribe=true:local=true:listener=true:channel=true:navigation=true:active_cleared=false:approvals=true\ntui.side_conversation.sync_ui=active=true->false:notice_suppressed=true->false:rename_blocked=true->false:parent_main=true:status=:label=\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> side conversation return discards side\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.maybe_return=overlay=false:modal=false:composer_empty=true:requested=true:returned=true\ntui.side_conversation.switch=target=main:child=false:parent=true:submitted_initial=false:redraw=true\ntui.side_conversation.discard=child=side-1:interrupt=true:startup=false:turn=true:unsubscribe=true:local=true:listener=true:channel=true:navigation=true:active_cleared=false:approvals=true\ntui.side_conversation.sync_ui=active=true->false:notice_suppressed=true->false:rename_blocked=true->false:parent_main=true:status=:label=\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "side-conversation-start-block-restores-composer",
+      "frame": {
+        "name": "side-conversation-start-block-restores-composer",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "side conversation start block restores composer"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "start_block",
+                "blockMessage": "already_open",
+                "sideThreadsBefore": 1,
+                "sideThreadsAfter": 1,
+                "restoredComposer": true
+              },
+              {
+                "kind": "restore_user_message",
+                "userMessageText": "/side check parent state",
+                "remoteImageCount": 1,
+                "localImageCount": 0,
+                "mentionBindingCount": 1,
+                "restoredComposer": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.start_block=already_open:side_threads=1->1:restored=true\ntui.side_conversation.restore_user_message=text=/side check parent state:remote_images=1:local_images=0:mentions=1:restored=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> side conversation start block restores composer\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.start_block=already_open:side_threads=1->1:restored=true\ntui.side_conversation.restore_user_message=text=/side check parent state:remote_images=1:local_images=0:mentions=1:restored=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "side-conversation-no-live-rejection",
+      "frame": {
+        "name": "side-conversation-no-live-rejection",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "side conversation no live rejection"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "failure",
+                "failureCode": "live_effects_rejected",
+                "errorMessage": "side fork requires live app-server transport",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.failure=live_effects_rejected:error=side fork requires live app-server transport:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> side conversation no live rejection\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.failure=live_effects_rejected:error=side fork requires live app-server transport:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

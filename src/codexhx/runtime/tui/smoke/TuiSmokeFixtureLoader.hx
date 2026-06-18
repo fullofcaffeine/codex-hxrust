@@ -102,7 +102,85 @@ class TuiSmokeFixtureLoader {
 				chatWidgetStreamStatus: optionalChatWidgetStreamStatusPlan(value, "chatWidgetStreamStatus"),
 				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
-				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore")
+				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
+				sideConversation: optionalSideConversationPlan(value, "sideConversation")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalSideConversationPlan(object:Value, name:String):Null<TuiSmokeSideConversationPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSideConversationPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: sideConversationActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function sideConversationActions(values:Array<Value>):Array<TuiSmokeSideConversationAction> {
+		final out:Array<TuiSmokeSideConversationAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSideConversationAction({
+				kind: TuiSmokeSideConversationActionKind.fromString(stringField(value, "kind", "")),
+				parentThreadId: optionalStringField(value, "parentThreadId", ""),
+				childThreadId: optionalStringField(value, "childThreadId", ""),
+				targetThreadId: optionalStringField(value, "targetThreadId", ""),
+				status: optionalStringField(value, "status", ""),
+				statusChange: optionalStringField(value, "statusChange", ""),
+				label: optionalStringField(value, "label", ""),
+				blockMessage: optionalStringField(value, "blockMessage", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				userMessageText: optionalStringField(value, "userMessageText", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				sideThreadsBefore: optionalIntField(value, "sideThreadsBefore", 0),
+				sideThreadsAfter: optionalIntField(value, "sideThreadsAfter", 0),
+				remoteImageCount: optionalIntField(value, "remoteImageCount", 0),
+				localImageCount: optionalIntField(value, "localImageCount", 0),
+				mentionBindingCount: optionalIntField(value, "mentionBindingCount", 0),
+				parentIsMain: optionalBoolField(value, "parentIsMain", false),
+				sideConversationActiveBefore: optionalBoolField(value, "sideConversationActiveBefore", false),
+				sideConversationActiveAfter: optionalBoolField(value, "sideConversationActiveAfter", false),
+				noticeSuppressedBefore: optionalBoolField(value, "noticeSuppressedBefore", false),
+				noticeSuppressedAfter: optionalBoolField(value, "noticeSuppressedAfter", false),
+				renameBlockedBefore: optionalBoolField(value, "renameBlockedBefore", false),
+				renameBlockedAfter: optionalBoolField(value, "renameBlockedAfter", false),
+				overlayActive: optionalBoolField(value, "overlayActive", false),
+				modalOrPopupActive: optionalBoolField(value, "modalOrPopupActive", false),
+				composerEmpty: optionalBoolField(value, "composerEmpty", false),
+				parentStatusActionable: optionalBoolField(value, "parentStatusActionable", false),
+				forkConfigEphemeral: optionalBoolField(value, "forkConfigEphemeral", false),
+				developerInstructionsAdded: optionalBoolField(value, "developerInstructionsAdded", false),
+				modelInherited: optionalBoolField(value, "modelInherited", false),
+				serviceTierInherited: optionalBoolField(value, "serviceTierInherited", false),
+				boundaryInjected: optionalBoolField(value, "boundaryInjected", false),
+				hiddenBoundaryPrompt: optionalBoolField(value, "hiddenBoundaryPrompt", false),
+				switchedToChild: optionalBoolField(value, "switchedToChild", false),
+				switchedToParent: optionalBoolField(value, "switchedToParent", false),
+				submittedInitialUserMessage: optionalBoolField(value, "submittedInitialUserMessage", false),
+				restoredComposer: optionalBoolField(value, "restoredComposer", false),
+				returnRequested: optionalBoolField(value, "returnRequested", false),
+				returnedToParent: optionalBoolField(value, "returnedToParent", false),
+				interruptSubmitted: optionalBoolField(value, "interruptSubmitted", false),
+				startupInterruptUsed: optionalBoolField(value, "startupInterruptUsed", false),
+				turnInterruptUsed: optionalBoolField(value, "turnInterruptUsed", false),
+				threadUnsubscribed: optionalBoolField(value, "threadUnsubscribed", false),
+				localStateDiscarded: optionalBoolField(value, "localStateDiscarded", false),
+				listenerAborted: optionalBoolField(value, "listenerAborted", false),
+				channelRemoved: optionalBoolField(value, "channelRemoved", false),
+				navigationRemoved: optionalBoolField(value, "navigationRemoved", false),
+				activeThreadCleared: optionalBoolField(value, "activeThreadCleared", false),
+				approvalsRefreshed: optionalBoolField(value, "approvalsRefreshed", false),
+				statusSynced: optionalBoolField(value, "statusSynced", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
