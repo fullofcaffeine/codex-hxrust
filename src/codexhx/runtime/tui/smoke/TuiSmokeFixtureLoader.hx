@@ -86,7 +86,69 @@ class TuiSmokeFixtureLoader {
 				mcpElicitationOverlay: optionalMcpElicitationPlan(value, "mcpElicitationOverlay"),
 				appLinkOverlay: optionalAppLinkPlan(value, "appLinkOverlay"),
 				hooksBrowser: optionalHooksBrowserPlan(value, "hooksBrowser"),
-				slashCommandPopup: optionalSlashPopupPlan(value, "slashCommandPopup")
+				slashCommandPopup: optionalSlashPopupPlan(value, "slashCommandPopup"),
+				fileMentionPopup: optionalFileMentionPopupPlan(value, "fileMentionPopup")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalFileMentionPopupPlan(object:Value, name:String):Null<TuiSmokeFileMentionPopupPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeFileMentionPopupPlan({
+					allowLiveFileSearch: optionalBoolField(value, "allowLiveFileSearch", false),
+					actions: fileMentionPopupActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function fileMentionPopupActions(values:Array<Value>):Array<TuiSmokeFileMentionPopupAction> {
+		final out:Array<TuiSmokeFileMentionPopupAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeFileMentionPopupAction({
+				kind: TuiSmokeFileMentionPopupActionKind.fromString(stringField(value, "kind", "")),
+				popupBefore: TuiSmokeFileMentionPopupKind.fromString(optionalStringField(value, "popupBefore", "unknown")),
+				popupAfter: TuiSmokeFileMentionPopupKind.fromString(optionalStringField(value, "popupAfter", "unknown")),
+				candidateKind: TuiSmokeMentionCandidateKind.fromString(optionalStringField(value, "candidateKind", "unknown")),
+				searchModeBefore: TuiSmokeMentionSearchModeKind.fromString(optionalStringField(value, "searchModeBefore", "unknown")),
+				searchModeAfter: TuiSmokeMentionSearchModeKind.fromString(optionalStringField(value, "searchModeAfter", "unknown")),
+				inputText: optionalStringField(value, "inputText", ""),
+				token: optionalStringField(value, "token", ""),
+				query: optionalStringField(value, "query", ""),
+				selectedPath: optionalStringField(value, "selectedPath", ""),
+				insertText: optionalStringField(value, "insertText", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				matchCount: optionalIntField(value, "matchCount", 0),
+				visibleCount: optionalIntField(value, "visibleCount", 0),
+				rowCount: optionalIntField(value, "rowCount", 0),
+				selectedBefore: optionalIntField(value, "selectedBefore", 0),
+				selectedAfter: optionalIntField(value, "selectedAfter", 0),
+				scrollBefore: optionalIntField(value, "scrollBefore", 0),
+				scrollAfter: optionalIntField(value, "scrollAfter", 0),
+				maxRows: optionalIntField(value, "maxRows", 0),
+				fileCandidateCount: optionalIntField(value, "fileCandidateCount", 0),
+				directoryCandidateCount: optionalIntField(value, "directoryCandidateCount", 0),
+				skillCandidateCount: optionalIntField(value, "skillCandidateCount", 0),
+				pluginCandidateCount: optionalIntField(value, "pluginCandidateCount", 0),
+				toolCandidateCount: optionalIntField(value, "toolCandidateCount", 0),
+				mentionsV2Enabled: optionalBoolField(value, "mentionsV2Enabled", false),
+				slashPopupSuppressed: optionalBoolField(value, "slashPopupSuppressed", false),
+				queryStartSent: optionalBoolField(value, "queryStartSent", false),
+				queryClearSent: optionalBoolField(value, "queryClearSent", false),
+				sameQuerySkipped: optionalBoolField(value, "sameQuerySkipped", false),
+				resultAccepted: optionalBoolField(value, "resultAccepted", false),
+				resultStale: optionalBoolField(value, "resultStale", false),
+				popupCreated: optionalBoolField(value, "popupCreated", false),
+				popupDismissed: optionalBoolField(value, "popupDismissed", false),
+				dismissedTokenStored: optionalBoolField(value, "dismissedTokenStored", false),
+				bindingStored: optionalBoolField(value, "bindingStored", false),
+				draftUpdated: optionalBoolField(value, "draftUpdated", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				redrawRequested: optionalBoolField(value, "redrawRequested", false),
+				liveSearchRejected: optionalBoolField(value, "liveSearchRejected", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

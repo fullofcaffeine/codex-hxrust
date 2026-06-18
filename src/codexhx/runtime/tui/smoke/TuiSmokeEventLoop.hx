@@ -181,6 +181,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.FileMentionPopup:
+					if (!traceFileMentionPopup(event.fileMentionPopup, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1319,6 +1324,152 @@ class TuiSmokeEventLoop {
 					trace.push("tui.app_link.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.app_link.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceFileMentionPopup(plan:TuiSmokeFileMentionPopupPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveFileSearch || !plan.enabled()) {
+			trace.push("tui.file_mention_popup.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.file_mention_popup.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeFileMentionPopupActionKind.Sync:
+					trace.push(
+						"tui.file_mention_popup.sync="
+						+ action.inputText
+						+ ":token=" + action.token
+						+ ":query=" + action.query
+						+ ":popup=" + action.popupTransitionText()
+						+ ":mentions_v2=" + action.mentionsV2Enabled
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeFileMentionPopupActionKind.ActivateFile:
+					trace.push(
+						"tui.file_mention_popup.file.activate="
+						+ action.query
+						+ ":created=" + action.popupCreated
+						+ ":popup=" + action.popupTransitionText()
+						+ ":rows=" + action.rowCount
+						+ ":max_rows=" + action.maxRows
+					);
+				case TuiSmokeFileMentionPopupActionKind.FileSearchStart:
+					trace.push(
+						"tui.file_mention_popup.file.search_start="
+						+ action.query
+						+ ":sent=" + action.queryStartSent
+						+ ":same_query_skipped=" + action.sameQuerySkipped
+						+ ":live_rejected=" + action.liveSearchRejected
+					);
+				case TuiSmokeFileMentionPopupActionKind.FileSearchResult:
+					trace.push(
+						"tui.file_mention_popup.file.result="
+						+ action.query
+						+ ":accepted=" + action.resultAccepted
+						+ ":stale=" + action.resultStale
+						+ ":matches=" + action.matchCount
+						+ ":visible=" + action.visibleCount
+						+ ":rows=" + action.rowCount
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":scroll=" + action.scrollTransitionText()
+					);
+				case TuiSmokeFileMentionPopupActionKind.MoveSelection:
+					trace.push(
+						"tui.file_mention_popup.selection="
+						+ action.popupAfter
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":scroll=" + action.scrollTransitionText()
+					);
+				case TuiSmokeFileMentionPopupActionKind.InsertFile:
+					trace.push(
+						"tui.file_mention_popup.file.insert="
+						+ action.selectedPath
+						+ ":candidate=" + action.candidateKind
+						+ ":draft=" + action.draftUpdated
+						+ ":popup=" + action.popupTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeFileMentionPopupActionKind.DismissFile:
+					trace.push(
+						"tui.file_mention_popup.file.dismiss="
+						+ action.token
+						+ ":stored=" + action.dismissedTokenStored
+						+ ":popup=" + action.popupTransitionText()
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeFileMentionPopupActionKind.ActivateMention:
+					trace.push(
+						"tui.file_mention_popup.mention.activate="
+						+ action.query
+						+ ":created=" + action.popupCreated
+						+ ":popup=" + action.popupTransitionText()
+						+ ":mode=" + action.searchModeAfter
+						+ ":files=" + action.fileCandidateCount
+						+ ":dirs=" + action.directoryCandidateCount
+						+ ":skills=" + action.skillCandidateCount
+						+ ":plugins=" + action.pluginCandidateCount
+						+ ":tools=" + action.toolCandidateCount
+					);
+				case TuiSmokeFileMentionPopupActionKind.SwitchMentionMode:
+					trace.push(
+						"tui.file_mention_popup.mention.mode="
+						+ action.searchModeTransitionText()
+						+ ":query=" + action.query
+						+ ":selected=" + action.selectionTransitionText()
+					);
+				case TuiSmokeFileMentionPopupActionKind.InsertMention:
+					trace.push(
+						"tui.file_mention_popup.mention.insert="
+						+ action.insertText
+						+ ":candidate=" + action.candidateKind
+						+ ":path=" + action.selectedPath
+						+ ":binding=" + action.bindingStored
+						+ ":draft=" + action.draftUpdated
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeFileMentionPopupActionKind.DismissMention:
+					trace.push(
+						"tui.file_mention_popup.mention.dismiss="
+						+ action.token
+						+ ":stored=" + action.dismissedTokenStored
+						+ ":popup=" + action.popupTransitionText()
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeFileMentionPopupActionKind.ClearQuery:
+					trace.push(
+						"tui.file_mention_popup.file.clear_query="
+						+ action.query
+						+ ":sent=" + action.queryClearSent
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeFileMentionPopupActionKind.Hide:
+					trace.push(
+						"tui.file_mention_popup.hide="
+						+ action.inputText
+						+ ":popup=" + action.popupTransitionText()
+						+ ":reason=" + action.failureCode
+					);
+				case TuiSmokeFileMentionPopupActionKind.SuppressSlash:
+					trace.push(
+						"tui.file_mention_popup.suppress_slash="
+						+ action.inputText
+						+ ":token=" + action.token
+						+ ":suppressed=" + action.slashPopupSuppressed
+						+ ":popup=" + action.popupTransitionText()
+					);
+				case TuiSmokeFileMentionPopupActionKind.Failure:
+					trace.push(
+						"tui.file_mention_popup.failure="
+						+ action.failureCode
+						+ ":live_rejected=" + action.liveSearchRejected
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.file_mention_popup.unknown");
 					return false;
 			}
 		}
