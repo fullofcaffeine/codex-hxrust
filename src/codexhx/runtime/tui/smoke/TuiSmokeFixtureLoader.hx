@@ -105,7 +105,43 @@ class TuiSmokeFixtureLoader {
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
 				clearArchive: optionalClearArchivePlan(value, "clearArchive"),
-				resumeFork: optionalResumeForkPlan(value, "resumeFork")
+				resumeFork: optionalResumeForkPlan(value, "resumeFork"),
+				terminalTitle: optionalTerminalTitlePlan(value, "terminalTitle")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTerminalTitlePlan(object:Value, name:String):Null<TuiSmokeTerminalTitlePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTerminalTitlePlan({
+					allowLiveTitleWrite: optionalBoolField(value, "allowLiveTitleWrite", false),
+					actions: terminalTitleActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function terminalTitleActions(values:Array<Value>):Array<TuiSmokeTerminalTitleAction> {
+		final out:Array<TuiSmokeTerminalTitleAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTerminalTitleAction({
+				kind: TuiSmokeTerminalTitleActionKind.fromString(stringField(value, "kind", "")),
+				rawTitle: optionalStringField(value, "rawTitle", ""),
+				sanitizedTitle: optionalStringField(value, "sanitizedTitle", ""),
+				lastTitleBefore: optionalStringField(value, "lastTitleBefore", ""),
+				lastTitleAfter: optionalStringField(value, "lastTitleAfter", ""),
+				stdoutTerminal: optionalBoolField(value, "stdoutTerminal", false),
+				liveWriteAllowed: optionalBoolField(value, "liveWriteAllowed", false),
+				applied: optionalBoolField(value, "applied", false),
+				noVisibleContent: optionalBoolField(value, "noVisibleContent", false),
+				duplicateSkipped: optionalBoolField(value, "duplicateSkipped", false),
+				cleared: optionalBoolField(value, "cleared", false),
+				maxChars: optionalIntField(value, "maxChars", 0),
+				invalidItemCount: optionalIntField(value, "invalidItemCount", 0),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

@@ -276,6 +276,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.TerminalTitle:
+					if (!traceTerminalTitle(event.terminalTitle, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1803,6 +1808,71 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.clear_archive.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceTerminalTitle(plan:TuiSmokeTerminalTitlePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTitleWrite || !plan.enabled()) {
+			trace.push("tui.terminal_title.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.terminal_title.plan=headless");
+		for (action in plan.actions) {
+			if (!action.sanitizedMatches()) {
+				trace.push(
+					"tui.terminal_title.sanitize_mismatch="
+					+ action.sanitizedTitle
+					+ ":computed=" + action.computedSanitizedTitle()
+				);
+				return false;
+			}
+			switch action.kind {
+				case TuiSmokeTerminalTitleActionKind.Set:
+					trace.push(
+						"tui.terminal_title.set="
+						+ "raw_chars=" + action.rawTitle.length
+						+ ":sanitized=" + action.sanitizedTitle
+						+ ":stdout=" + action.stdoutTerminal
+						+ ":applied=" + action.applied
+						+ ":last=" + action.lastTitleBefore + "->" + action.lastTitleAfter
+						+ ":max=" + action.effectiveMaxChars()
+						+ ":live=" + action.liveWriteAllowed
+					);
+				case TuiSmokeTerminalTitleActionKind.NoVisibleContent:
+					trace.push(
+						"tui.terminal_title.no_visible_content="
+						+ "raw_chars=" + action.rawTitle.length
+						+ ":clear=" + action.cleared
+						+ ":last=" + action.lastTitleBefore + "->" + action.lastTitleAfter
+						+ ":stdout=" + action.stdoutTerminal
+					);
+				case TuiSmokeTerminalTitleActionKind.SkipDuplicate:
+					trace.push(
+						"tui.terminal_title.skip_duplicate="
+						+ "title=" + action.sanitizedTitle
+						+ ":skipped=" + action.duplicateSkipped
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeTerminalTitleActionKind.ClearManaged:
+					trace.push(
+						"tui.terminal_title.clear_managed="
+						+ "had_title=" + (action.lastTitleBefore != "")
+						+ ":cleared=" + action.cleared
+						+ ":last=" + action.lastTitleBefore + "->" + action.lastTitleAfter
+						+ ":stdout=" + action.stdoutTerminal
+					);
+				case TuiSmokeTerminalTitleActionKind.Failure:
+					trace.push(
+						"tui.terminal_title.failure="
+						+ action.failureCode
+						+ ":invalid_items=" + action.invalidItemCount
+						+ ":live=" + action.liveWriteAllowed
+					);
+				case _:
+					trace.push("tui.terminal_title.unknown");
 					return false;
 			}
 		}

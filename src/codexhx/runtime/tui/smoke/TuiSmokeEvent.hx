@@ -46,6 +46,7 @@ typedef TuiSmokeEventFields = {
 	final sideConversation:Null<TuiSmokeSideConversationPlan>;
 	final clearArchive:Null<TuiSmokeClearArchivePlan>;
 	final resumeFork:Null<TuiSmokeResumeForkPlan>;
+	final terminalTitle:Null<TuiSmokeTerminalTitlePlan>;
 }
 
 @:build(codexhx.macros.FieldRecordConstructor.build())
@@ -98,4 +99,5 @@ class TuiSmokeEvent {
 	public final sideConversation:Null<TuiSmokeSideConversationPlan>;
 	public final clearArchive:Null<TuiSmokeClearArchivePlan>;
 	public final resumeFork:Null<TuiSmokeResumeForkPlan>;
+	public final terminalTitle:Null<TuiSmokeTerminalTitlePlan>;
 }

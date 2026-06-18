@@ -18,12 +18,14 @@
       "../codex/codex-rs/tui/src/app/replay_filter.rs",
       "../codex/codex-rs/tui/src/resume_picker.rs",
       "../codex/codex-rs/tui/src/session_resume.rs",
+      "../codex/codex-rs/tui/src/terminal_title.rs",
       "../codex/codex-rs/tui/src/chatwidget/replay.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/history_replay.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol_requests.rs",
       "../codex/codex-rs/tui/src/chatwidget/session_flow.rs",
       "../codex/codex-rs/tui/src/chatwidget/slash_dispatch.rs",
+      "../codex/codex-rs/tui/src/chatwidget/status_surfaces.rs",
       "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/src/tui/event_stream.rs",
       "../codex/codex-rs/tui/src/tui/keyboard_modes.rs",
@@ -11553,6 +11555,95 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.terminal_modes.plan=headless\ntui.terminal_modes.init=stdin=false:stdout=true:set_modes=false:flush=true:panic_hook=true:keyboard_supported=false\ntui.keyboard_enhancement.decision=disabled=true:env=auto:wsl=true:vscode=true:tmux=false:tmux_csi_u=false\ntui.terminal_modes.failure=stdin_not_terminal:supported=false\ntui.terminal_modes.restore_after_exit=raw=disable:keyboard=reset_after_exit:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: starting | model: gpt-5.2-codex\nsystem> terminal capability gate no live takeover\ninput> \ntrace:\ntui.terminal_modes.plan=headless\ntui.terminal_modes.init=stdin=false:stdout=true:set_modes=false:flush=true:panic_hook=true:keyboard_supported=false\ntui.keyboard_enhancement.decision=disabled=true:env=auto:wsl=true:vscode=true:tmux=false:tmux_csi_u=false\ntui.terminal_modes.failure=stdin_not_terminal:supported=false\ntui.terminal_modes.restore_after_exit=raw=disable:keyboard=reset_after_exit:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "terminal-title-sanitize-cache-and-clear",
+      "frame": {
+        "name": "terminal-title-sanitize-cache-and-clear",
+        "title": "Codex TUI Smoke Terminal",
+        "status": "running",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "terminal title no live osc write"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "terminal_title",
+          "terminalTitle": {
+            "allowLiveTitleWrite": false,
+            "actions": [
+              {
+                "kind": "set",
+                "rawTitle": " Codex\t\u202eraw\n title\u0007 ",
+                "sanitizedTitle": "Codex raw title",
+                "lastTitleBefore": "",
+                "lastTitleAfter": "Codex raw title",
+                "stdoutTerminal": false,
+                "liveWriteAllowed": false,
+                "applied": true,
+                "maxChars": 24
+              },
+              {
+                "kind": "skip_duplicate",
+                "rawTitle": "Codex raw title",
+                "sanitizedTitle": "Codex raw title",
+                "lastTitleBefore": "Codex raw title",
+                "lastTitleAfter": "Codex raw title",
+                "duplicateSkipped": true,
+                "frameScheduled": true,
+                "maxChars": 24
+              },
+              {
+                "kind": "clear_managed",
+                "lastTitleBefore": "Codex raw title",
+                "lastTitleAfter": "",
+                "stdoutTerminal": false,
+                "cleared": true
+              },
+              {
+                "kind": "no_visible_content",
+                "rawTitle": "\u202e\u0007\t",
+                "sanitizedTitle": "",
+                "lastTitleBefore": "ghost title",
+                "lastTitleAfter": "",
+                "stdoutTerminal": false,
+                "noVisibleContent": true,
+                "cleared": true,
+                "maxChars": 24
+              },
+              {
+                "kind": "failure",
+                "failureCode": "invalid_terminal_title_item",
+                "invalidItemCount": 1,
+                "liveWriteAllowed": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.terminal_title.plan=headless\ntui.terminal_title.set=raw_chars=20:sanitized=Codex raw title:stdout=false:applied=true:last=->Codex raw title:max=24:live=false\ntui.terminal_title.skip_duplicate=title=Codex raw title:skipped=true:frame=true\ntui.terminal_title.clear_managed=had_title=true:cleared=true:last=Codex raw title->:stdout=false\ntui.terminal_title.no_visible_content=raw_chars=3:clear=true:last=ghost title->:stdout=false\ntui.terminal_title.failure=invalid_terminal_title_item:invalid_items=1:live=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> terminal title no live osc write\ninput> \ntrace:\ntui.terminal_title.plan=headless\ntui.terminal_title.set=raw_chars=20:sanitized=Codex raw title:stdout=false:applied=true:last=->Codex raw title:max=24:live=false\ntui.terminal_title.skip_duplicate=title=Codex raw title:skipped=true:frame=true\ntui.terminal_title.clear_managed=had_title=true:cleared=true:last=Codex raw title->:stdout=false\ntui.terminal_title.no_visible_content=raw_chars=3:clear=true:last=ghost title->:stdout=false\ntui.terminal_title.failure=invalid_terminal_title_item:invalid_items=1:live=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

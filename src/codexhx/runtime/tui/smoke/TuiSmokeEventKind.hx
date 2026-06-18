@@ -47,6 +47,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final SideConversation = "side_conversation";
 	final ClearArchive = "clear_archive";
 	final ResumeFork = "resume_fork";
+	final TerminalTitle = "terminal_title";
 	final Unknown = "unknown";
 
 	public static function fromString(value:String):TuiSmokeEventKind {
@@ -97,6 +98,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "side_conversation": SideConversation;
 			case "clear_archive": ClearArchive;
 			case "resume_fork": ResumeFork;
+			case "terminal_title": TerminalTitle;
 			case _: Unknown;
 		}
 	}

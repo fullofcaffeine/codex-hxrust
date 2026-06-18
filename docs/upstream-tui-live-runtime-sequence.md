@@ -2398,6 +2398,18 @@ Model the first raw Codex terminal ownership preflight before live crossterm tak
 
 Status: HXCX-TUI-50 extends `fixtures/hxrust/tui-smoke.v1.json` with a terminal capability gate and restore-after-exit fixture and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic terminal preflight/restore evidence only, not live crossterm/ratatui terminal ownership.
 
+### HXCX-TUI-51: Terminal Title Sanitization And Cache Lifecycle
+
+Model selected raw Codex terminal-title behavior without writing OSC sequences:
+
+- preserve the low-level title boundary in `../codex/codex-rs/tui/src/terminal_title.rs`: untrusted title text is sanitized before use, control characters and bidi/invisible formatting characters are stripped, whitespace runs collapse, and output is bounded by the configured title character cap;
+- preserve title write policy from `terminal_title.rs`: stdout-not-a-terminal is treated as applied/no-op evidence, no-visible-content is distinct from clearing, and live OSC writes remain disabled in the smoke fixture;
+- preserve ChatWidget cache behavior from `../codex/codex-rs/tui/src/chatwidget/status_surfaces.rs`: duplicate sanitized titles skip redundant writes, empty selections clear the managed title, and no-visible-content clears the title managed by Codex rather than restoring an unknown shell title;
+- preserve invalid terminal-title config reporting as typed evidence without letting invalid items poison the upstream-shaped core or produce live terminal side effects;
+- keep the evidence deterministic and independent of live OSC title writes, ratatui rendering, alternate-screen takeover, live input loops, app-server mutation, model/tool execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-51 extends `fixtures/hxrust/tui-smoke.v1.json` with typed terminal-title sanitize/cache/clear evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic title-boundary evidence only, not live terminal title ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
