@@ -116,6 +116,11 @@ class TuiSmokeEventLoop {
 						exit = replayExit;
 						running = false;
 					}
+				case TuiSmokeEventKind.EventStream:
+					if (!traceEventStream(event.eventStream, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -373,6 +378,74 @@ class TuiSmokeEventLoop {
 			? plan.appliedViewportY + plan.appliedViewportHeight - 1
 			: viewport.nextY + viewport.nextHeight - 1;
 		trace.push("tui.suspend.cursor_y.set=" + cursorY);
+	}
+
+	static function traceEventStream(plan:TuiSmokeEventStreamPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveEventSource || !plan.enabled()) {
+			trace.push("tui.event_stream.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.event_stream.broker.initial=" + plan.initialState);
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeEventStreamActionKind.CreateStream:
+					trace.push(
+						"tui.event_stream.create="
+						+ "state=" + action.stateAfter
+						+ ":draw_subscription=" + action.drawSubscription
+						+ ":shared_broker=" + action.sharedBroker
+					);
+				case TuiSmokeEventStreamActionKind.Pause:
+					trace.push(
+						"tui.event_stream.pause="
+						+ action.stateTransitionText()
+						+ ":drop_source=" + action.dropSource
+					);
+				case TuiSmokeEventStreamActionKind.Resume:
+					trace.push(
+						"tui.event_stream.resume="
+						+ action.stateTransitionText()
+						+ ":wake=" + action.wakeResume
+					);
+				case TuiSmokeEventStreamActionKind.Poll:
+					trace.push(
+						"tui.event_stream.poll="
+						+ action.mappedEvent
+						+ ":order=" + action.pollOrder
+						+ ":state=" + action.stateTransitionText()
+						+ ":recreate_source=" + action.recreateSource
+					);
+				case TuiSmokeEventStreamActionKind.SourceEvent:
+					trace.push(
+						"tui.event_stream.map="
+						+ action.mappedText()
+						+ ":focused=" + action.terminalFocused
+						+ ":palette_requery=" + action.paletteRequery
+					);
+				case TuiSmokeEventStreamActionKind.DrawEvent:
+					trace.push("tui.event_stream.draw=ready:lagged=false->draw");
+				case TuiSmokeEventStreamActionKind.LaggedDraw:
+					trace.push("tui.event_stream.draw=ready:lagged=true->draw");
+				case TuiSmokeEventStreamActionKind.FlushStaleInput:
+					trace.push("tui.event_stream.flush_stale_input=true");
+				case TuiSmokeEventStreamActionKind.RestoreTerminal:
+					trace.push("tui.event_stream.restore_terminal=mode_keep_raw:" + action.keepRaw);
+				case TuiSmokeEventStreamActionKind.PauseStderr:
+					trace.push("tui.event_stream.stderr=pause");
+				case TuiSmokeEventStreamActionKind.ResumeStderr:
+					trace.push("tui.event_stream.stderr=resume");
+				case TuiSmokeEventStreamActionKind.SetModes:
+					trace.push("tui.event_stream.set_modes=true");
+				case TuiSmokeEventStreamActionKind.LeaveAltScreen:
+					trace.push("tui.event_stream.leave_alt_screen=" + action.altScreenActive);
+				case TuiSmokeEventStreamActionKind.EnterAltScreen:
+					trace.push("tui.event_stream.enter_alt_screen=" + action.altScreenActive);
+				case _:
+					trace.push("tui.event_stream.unknown");
+					return false;
+			}
+		}
+		return true;
 	}
 
 	static function rejected(code:String):TuiSmokeLoopOutcome {

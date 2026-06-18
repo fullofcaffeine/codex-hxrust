@@ -315,6 +315,18 @@ Extend inline viewport sync evidence into suspend/resume restoration:
 
 Status: HXCX-TUI-17 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/tui/job_control.rs:27`, `../codex/codex-rs/tui/src/tui/job_control.rs:64`, `../codex/codex-rs/tui/src/tui/job_control.rs:73`, `../codex/codex-rs/tui/src/tui/job_control.rs:82`, `../codex/codex-rs/tui/src/tui/job_control.rs:94`, `../codex/codex-rs/tui/src/tui/job_control.rs:98`, `../codex/codex-rs/tui/src/tui/job_control.rs:102`, `../codex/codex-rs/tui/src/tui/job_control.rs:111`, `../codex/codex-rs/tui/src/tui/job_control.rs:123`, `../codex/codex-rs/tui/src/tui/job_control.rs:144`, `../codex/codex-rs/tui/src/tui/job_control.rs:155`, `../codex/codex-rs/tui/src/tui/job_control.rs:158`, `../codex/codex-rs/tui/src/tui/job_control.rs:161`, `../codex/codex-rs/tui/src/tui/job_control.rs:166`, `../codex/codex-rs/tui/src/tui.rs:1002`, `../codex/codex-rs/tui/src/tui.rs:1011`, `../codex/codex-rs/tui/src/tui.rs:1017`, `../codex/codex-rs/tui/src/tui.rs:1022`, `../codex/codex-rs/tui/src/tui.rs:1035`, `../codex/codex-rs/tui/src/tui.rs:1040`, and `../codex/codex-rs/tui/src/tui.rs:1046`. This is suspend/resume viewport evidence only, not live SIGTSTP delivery, terminal mode mutation, alternate-screen control, terminal backend mutation, ratatui rendering, model traffic, tool execution, or Cafex behavior.
 
+### HXCX-TUI-18: Headless Raw Codex TUI Event-Stream Pause/Resume Facade
+
+Extend suspend/resume evidence into the event-stream lifecycle around terminal handoff:
+
+- event broker state records `Running`, `Paused`, and `Start` transitions;
+- pause drops the underlying input source so external terminal programs can own stdin;
+- resume wakes paused/pending streams and recreates the source on the next poll;
+- draw events, lagged draw events, key, resize, paste, focus-gained, and focus-lost mapping intent is typed;
+- restored-terminal flow records alt-screen leave/enter, terminal/stderr restoration, mode reset, and stale input flushing before event resume.
+
+Status: HXCX-TUI-18 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/tui/event_stream.rs:47`, `../codex/codex-rs/tui/src/tui/event_stream.rs:57`, `../codex/codex-rs/tui/src/tui/event_stream.rs:63`, `../codex/codex-rs/tui/src/tui/event_stream.rs:89`, `../codex/codex-rs/tui/src/tui/event_stream.rs:98`, `../codex/codex-rs/tui/src/tui/event_stream.rs:108`, `../codex/codex-rs/tui/src/tui/event_stream.rs:132`, `../codex/codex-rs/tui/src/tui/event_stream.rs:173`, `../codex/codex-rs/tui/src/tui/event_stream.rs:224`, `../codex/codex-rs/tui/src/tui/event_stream.rs:236`, `../codex/codex-rs/tui/src/tui/event_stream.rs:268`, `../codex/codex-rs/tui/src/tui/event_stream.rs:459`, `../codex/codex-rs/tui/src/tui/event_stream.rs:470`, `../codex/codex-rs/tui/src/tui/event_stream.rs:484`, `../codex/codex-rs/tui/src/tui.rs:618`, `../codex/codex-rs/tui/src/tui.rs:623`, `../codex/codex-rs/tui/src/tui.rs:629`, `../codex/codex-rs/tui/src/tui.rs:639`, `../codex/codex-rs/tui/src/tui.rs:663`, and `../codex/codex-rs/tui/src/tui.rs:670`. This is event-stream lifecycle evidence only, not live crossterm EventStream ownership, Tokio stream execution, terminal mode mutation, alternate-screen control, ratatui rendering, model traffic, tool execution, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

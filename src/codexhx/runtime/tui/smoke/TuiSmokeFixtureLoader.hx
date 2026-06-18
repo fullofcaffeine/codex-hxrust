@@ -73,7 +73,46 @@ class TuiSmokeFixtureLoader {
 				appServerResolution: optionalAppServerResolution(value, "appServerResolution"),
 				threadNotification: optionalThreadNotification(value, "threadNotification"),
 				threadDelivery: optionalThreadDelivery(value, "threadDelivery"),
-				threadReplay: optionalThreadReplay(value, "threadReplay")
+				threadReplay: optionalThreadReplay(value, "threadReplay"),
+				eventStream: optionalEventStreamPlan(value, "eventStream")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalEventStreamPlan(object:Value, name:String):Null<TuiSmokeEventStreamPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeEventStreamPlan({
+					initialState: TuiSmokeEventStreamBrokerState.fromString(optionalStringField(value, "initialState", "unknown")),
+					actions: eventStreamActions(optionalArrayField(value, "actions")),
+					allowLiveEventSource: optionalBoolField(value, "allowLiveEventSource", false)
+				});
+		}
+	}
+
+	static function eventStreamActions(values:Array<Value>):Array<TuiSmokeEventStreamAction> {
+		final out:Array<TuiSmokeEventStreamAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeEventStreamAction({
+				kind: TuiSmokeEventStreamActionKind.fromString(stringField(value, "kind", "")),
+				stateBefore: TuiSmokeEventStreamBrokerState.fromString(optionalStringField(value, "stateBefore", "unknown")),
+				stateAfter: TuiSmokeEventStreamBrokerState.fromString(optionalStringField(value, "stateAfter", "unknown")),
+				sourceEvent: TuiSmokeEventStreamEventKind.fromString(optionalStringField(value, "sourceEvent", "none")),
+				mappedEvent: TuiSmokeMappedTuiEventKind.fromString(optionalStringField(value, "mappedEvent", "none")),
+				pollOrder: TuiSmokeEventStreamPollOrder.fromString(optionalStringField(value, "pollOrder", "unknown")),
+				key: TuiSmokeKeyKind.fromString(optionalStringField(value, "key", "none")),
+				paste: optionalStringField(value, "paste", ""),
+				dropSource: optionalBoolField(value, "dropSource", false),
+				wakeResume: optionalBoolField(value, "wakeResume", false),
+				recreateSource: optionalBoolField(value, "recreateSource", false),
+				drawSubscription: optionalBoolField(value, "drawSubscription", false),
+				sharedBroker: optionalBoolField(value, "sharedBroker", false),
+				terminalFocused: optionalBoolField(value, "terminalFocused", true),
+				paletteRequery: optionalBoolField(value, "paletteRequery", false),
+				altScreenActive: optionalBoolField(value, "altScreenActive", false),
+				keepRaw: optionalBoolField(value, "keepRaw", false)
 			}));
 		}
 		return out;

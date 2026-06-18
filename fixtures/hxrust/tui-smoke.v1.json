@@ -2908,6 +2908,218 @@
       "expectedExit": "cancelled",
       "expectedTrace": "tui.resize_draw.size=100x30:last=100x30:width=unchanged:height_changed=false\ntui.suspend.capture=action=restore_alt:alt=true:cursor_y=29\ntui.suspend.leave_alt_screen=true:alt_scroll=true\ntui.resume.prepare=restore_alt:cursor_y=5:saved=0,12,100x18\ntui.resume.apply=restore_alt_screen:0,0,100x30:enter=true:alt_scroll=true:clear=true\ntui.viewport.resize=from=0,0,100x30:to=0,18,100x12:requested_height=12\ntui.viewport.height=shrank=false:grew=false:bottom_aligned=false\ntui.viewport.set_area=0,18,100x12\ntui.viewport.clear_after=0,0\ntui.viewport.pending_history.flush=batches=0:rows=0:mode=standard:wrap=terminal\ntui.viewport.invalidate=true\ntui.suspend.cursor_y.set=29\ntui.draw\ntui.key=ctrl-c",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> alt resume\ninput> \ntrace:\ntui.resize_draw.size=100x30:last=100x30:width=unchanged:height_changed=false\ntui.suspend.capture=action=restore_alt:alt=true:cursor_y=29\ntui.suspend.leave_alt_screen=true:alt_scroll=true\ntui.resume.prepare=restore_alt:cursor_y=5:saved=0,12,100x18\ntui.resume.apply=restore_alt_screen:0,0,100x30:enter=true:alt_scroll=true:clear=true\ntui.viewport.resize=from=0,0,100x30:to=0,18,100x12:requested_height=12\ntui.viewport.height=shrank=false:grew=false:bottom_aligned=false\ntui.viewport.set_area=0,18,100x12\ntui.viewport.clear_after=0,0\ntui.viewport.pending_history.flush=batches=0:rows=0:mode=standard:wrap=terminal\ntui.viewport.invalidate=true\ntui.suspend.cursor_y.set=29\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "event-stream-round-robin-mapping",
+      "frame": {
+        "name": "event-stream-round-robin-mapping",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "event stream mapping"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "event_stream",
+          "eventStream": {
+            "initialState": "running",
+            "allowLiveEventSource": false,
+            "actions": [
+              {
+                "kind": "create_stream",
+                "stateAfter": "running",
+                "drawSubscription": true,
+                "sharedBroker": true
+              },
+              {
+                "kind": "source_event",
+                "sourceEvent": "focus_lost",
+                "mappedEvent": "skipped",
+                "terminalFocused": false
+              },
+              {
+                "kind": "draw_event"
+              },
+              {
+                "kind": "poll",
+                "mappedEvent": "draw",
+                "pollOrder": "draw_first",
+                "stateBefore": "running",
+                "stateAfter": "running"
+              },
+              {
+                "kind": "source_event",
+                "sourceEvent": "key",
+                "mappedEvent": "key",
+                "key": "q",
+                "terminalFocused": false
+              },
+              {
+                "kind": "poll",
+                "mappedEvent": "key",
+                "pollOrder": "input_first",
+                "stateBefore": "running",
+                "stateAfter": "running"
+              },
+              {
+                "kind": "source_event",
+                "sourceEvent": "resize",
+                "mappedEvent": "resize",
+                "terminalFocused": false
+              },
+              {
+                "kind": "source_event",
+                "sourceEvent": "paste",
+                "mappedEvent": "paste",
+                "paste": "hello",
+                "terminalFocused": false
+              },
+              {
+                "kind": "source_event",
+                "sourceEvent": "focus_gained",
+                "mappedEvent": "draw",
+                "terminalFocused": true,
+                "paletteRequery": true
+              },
+              {
+                "kind": "lagged_draw"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.event_stream.broker.initial=running\ntui.event_stream.create=state=running:draw_subscription=true:shared_broker=true\ntui.event_stream.map=focus_lost->skipped:focused=false:palette_requery=false\ntui.event_stream.draw=ready:lagged=false->draw\ntui.event_stream.poll=draw:order=draw_first:state=running->running:recreate_source=false\ntui.event_stream.map=key:q->key:q:focused=false:palette_requery=false\ntui.event_stream.poll=key:order=input_first:state=running->running:recreate_source=false\ntui.event_stream.map=resize->resize:focused=false:palette_requery=false\ntui.event_stream.map=paste:5->paste:5:focused=false:palette_requery=false\ntui.event_stream.map=focus_gained->draw:focused=true:palette_requery=true\ntui.event_stream.draw=ready:lagged=true->draw\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> event stream mapping\ninput> \ntrace:\ntui.event_stream.broker.initial=running\ntui.event_stream.create=state=running:draw_subscription=true:shared_broker=true\ntui.event_stream.map=focus_lost->skipped:focused=false:palette_requery=false\ntui.event_stream.draw=ready:lagged=false->draw\ntui.event_stream.poll=draw:order=draw_first:state=running->running:recreate_source=false\ntui.event_stream.map=key:q->key:q:focused=false:palette_requery=false\ntui.event_stream.poll=key:order=input_first:state=running->running:recreate_source=false\ntui.event_stream.map=resize->resize:focused=false:palette_requery=false\ntui.event_stream.map=paste:5->paste:5:focused=false:palette_requery=false\ntui.event_stream.map=focus_gained->draw:focused=true:palette_requery=true\ntui.event_stream.draw=ready:lagged=true->draw\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "event-stream-pause-resume-restored-terminal",
+      "frame": {
+        "name": "event-stream-pause-resume-restored-terminal",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "event stream restore"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "event_stream",
+          "eventStream": {
+            "initialState": "running",
+            "allowLiveEventSource": false,
+            "actions": [
+              {
+                "kind": "create_stream",
+                "stateAfter": "running",
+                "drawSubscription": true,
+                "sharedBroker": true
+              },
+              {
+                "kind": "pause",
+                "stateBefore": "running",
+                "stateAfter": "paused",
+                "dropSource": true
+              },
+              {
+                "kind": "poll",
+                "mappedEvent": "pending",
+                "pollOrder": "input_first",
+                "stateBefore": "paused",
+                "stateAfter": "paused"
+              },
+              {
+                "kind": "leave_alt_screen",
+                "altScreenActive": true
+              },
+              {
+                "kind": "restore_terminal",
+                "keepRaw": false
+              },
+              {
+                "kind": "pause_stderr"
+              },
+              {
+                "kind": "resume_stderr"
+              },
+              {
+                "kind": "set_modes"
+              },
+              {
+                "kind": "flush_stale_input"
+              },
+              {
+                "kind": "enter_alt_screen",
+                "altScreenActive": true
+              },
+              {
+                "kind": "resume",
+                "stateBefore": "paused",
+                "stateAfter": "start",
+                "wakeResume": true
+              },
+              {
+                "kind": "poll",
+                "mappedEvent": "key",
+                "pollOrder": "input_first",
+                "stateBefore": "start",
+                "stateAfter": "running",
+                "recreateSource": true
+              },
+              {
+                "kind": "source_event",
+                "sourceEvent": "key",
+                "mappedEvent": "key",
+                "key": "ctrl-c"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.event_stream.broker.initial=running\ntui.event_stream.create=state=running:draw_subscription=true:shared_broker=true\ntui.event_stream.pause=running->paused:drop_source=true\ntui.event_stream.poll=pending:order=input_first:state=paused->paused:recreate_source=false\ntui.event_stream.leave_alt_screen=true\ntui.event_stream.restore_terminal=mode_keep_raw:false\ntui.event_stream.stderr=pause\ntui.event_stream.stderr=resume\ntui.event_stream.set_modes=true\ntui.event_stream.flush_stale_input=true\ntui.event_stream.enter_alt_screen=true\ntui.event_stream.resume=paused->start:wake=true\ntui.event_stream.poll=key:order=input_first:state=start->running:recreate_source=true\ntui.event_stream.map=key:ctrl-c->key:ctrl-c:focused=true:palette_requery=false\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> event stream restore\ninput> \ntrace:\ntui.event_stream.broker.initial=running\ntui.event_stream.create=state=running:draw_subscription=true:shared_broker=true\ntui.event_stream.pause=running->paused:drop_source=true\ntui.event_stream.poll=pending:order=input_first:state=paused->paused:recreate_source=false\ntui.event_stream.leave_alt_screen=true\ntui.event_stream.restore_terminal=mode_keep_raw:false\ntui.event_stream.stderr=pause\ntui.event_stream.stderr=resume\ntui.event_stream.set_modes=true\ntui.event_stream.flush_stale_input=true\ntui.event_stream.enter_alt_screen=true\ntui.event_stream.resume=paused->start:wake=true\ntui.event_stream.poll=key:order=input_first:state=start->running:recreate_source=true\ntui.event_stream.map=key:ctrl-c->key:ctrl-c:focused=true:palette_requery=false\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
