@@ -7,6 +7,7 @@ typedef TuiSmokeEventFields = {
 	final input:String;
 	final exitMode:TuiSmokeExitMode;
 	final appEvent:Null<TuiSmokeAppEvent>;
+	final appServerEvent:Null<TuiSmokeAppServerEvent>;
 }
 
 class TuiSmokeEvent {
@@ -16,6 +17,7 @@ class TuiSmokeEvent {
 	public final input:String;
 	public final exitMode:TuiSmokeExitMode;
 	public final appEvent:Null<TuiSmokeAppEvent>;
+	public final appServerEvent:Null<TuiSmokeAppServerEvent>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -24,5 +26,6 @@ class TuiSmokeEvent {
 		this.input = fields.input == null ? "" : fields.input;
 		this.exitMode = fields.exitMode == null ? TuiSmokeExitMode.Unknown : fields.exitMode;
 		this.appEvent = fields.appEvent;
+		this.appServerEvent = fields.appServerEvent;
 	}
 }

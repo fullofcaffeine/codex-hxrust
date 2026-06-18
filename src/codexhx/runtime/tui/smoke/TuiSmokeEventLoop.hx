@@ -10,6 +10,7 @@ class TuiSmokeEventLoop {
 
 		final state = new TuiSmokeAppState(request.frame);
 		final appQueue = new TuiSmokeAppEventQueue();
+		final appServer = new TuiSmokeAppServerFacade();
 		final trace:Array<String> = [];
 		var snapshot = "";
 		var exit = TuiSmokeExitKind.Rendered;
@@ -62,6 +63,12 @@ class TuiSmokeEventLoop {
 				case TuiSmokeEventKind.EnqueueApp:
 					final sent = appQueue.send(event.appEvent);
 					trace.push(sent ? "queue.enqueue=" + event.appEvent.kind : "queue.enqueue=rejected");
+				case TuiSmokeEventKind.AppServer:
+					final serverExit = appServer.handle(event.appServerEvent, state, trace);
+					if (serverExit != TuiSmokeExitKind.Rendered) {
+						exit = serverExit;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -76,6 +83,7 @@ class TuiSmokeEventLoop {
 			+ "\nexit: " + exit
 			+ "\nrenders: " + renderCount
 			+ "\napp-events: " + appQueue.logged()
+			+ "\nserver-events: " + appServer.handled()
 			+ "\nterminal: restored";
 		final ok = exit == request.expectedExit
 			&& traceText == request.expectedTrace
@@ -89,6 +97,7 @@ class TuiSmokeEventLoop {
 			trace: traceText,
 			renderCount: renderCount,
 			appEventLogCount: appQueue.logged(),
+			appServerEventCount: appServer.handled(),
 			terminalRestored: terminal.wasRestored()
 		});
 	}
@@ -127,6 +136,7 @@ class TuiSmokeEventLoop {
 			trace: "",
 			renderCount: 0,
 			appEventLogCount: 0,
+			appServerEventCount: 0,
 			terminalRestored: false
 		});
 	}

@@ -8,6 +8,7 @@ typedef TuiSmokeLoopOutcomeFields = {
 	final trace:String;
 	final renderCount:Int;
 	final appEventLogCount:Int;
+	final appServerEventCount:Int;
 	final terminalRestored:Bool;
 }
 
@@ -19,6 +20,7 @@ class TuiSmokeLoopOutcome {
 	public final trace:String;
 	public final renderCount:Int;
 	public final appEventLogCount:Int;
+	public final appServerEventCount:Int;
 	public final terminalRestored:Bool;
 
 	public function new(fields:TuiSmokeLoopOutcomeFields) {
@@ -29,6 +31,7 @@ class TuiSmokeLoopOutcome {
 		this.trace = fields.trace == null ? "" : fields.trace;
 		this.renderCount = fields.renderCount;
 		this.appEventLogCount = fields.appEventLogCount;
+		this.appServerEventCount = fields.appServerEventCount;
 		this.terminalRestored = fields.terminalRestored;
 	}
 }

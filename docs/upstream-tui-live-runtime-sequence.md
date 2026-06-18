@@ -135,6 +135,18 @@ Add the first queued app-event facade to the generated smoke binary:
 
 Status: HXCX-TUI-2 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app_event_sender.rs:22`, `../codex/codex-rs/tui/src/app_event_sender.rs:28`, `../codex/codex-rs/tui/src/app_event_sender.rs:34`, `../codex/codex-rs/tui/src/app.rs:779`, `../codex/codex-rs/tui/src/app.rs:1181`, `../codex/codex-rs/tui/src/tui/event_stream.rs:132`, `../codex/codex-rs/tui/src/tui/event_stream.rs:236`, and the HXCX-TUI-1 `AppEvent` anchors. This is queue-ordering evidence only, not Tokio channel ownership, live app-server event handling, background task cleanup, or Cafex behavior.
 
+### HXCX-TUI-3: Headless Raw Codex TUI App-Server Event Facade
+
+Add a typed app-server event facade to the generated smoke binary:
+
+- thread status notification updates the headless TUI status row;
+- assistant delta appends a transcript row before the next draw;
+- stream-close disables later app-server event mutation;
+- disconnected transport records fatal-style rejection without live transport;
+- ordering is deterministic relative to queued app events and draw/key events.
+
+Status: HXCX-TUI-3 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app.rs:1188`, `../codex/codex-rs/tui/src/app/app_server_events.rs:23`, `../codex/codex-rs/tui/src/app/app_server_events.rs:35`, `../codex/codex-rs/tui/src/app/app_server_events.rs:43`, `../codex/codex-rs/tui/src/app/app_server_events.rs:73`, `../codex/codex-rs/tui/src/app/app_server_event_targets.rs:7`, `../codex/codex-rs/tui/src/app/app_server_event_targets.rs:40`, `../codex/codex-rs/tui/src/app_server_session.rs:377`, and `../codex/codex-rs/app-server-client/src/lib.rs:112`. This is app-server event ordering evidence only, not JSON-RPC decoding, Tokio stream ownership, live request routing, active-thread queue fanout, server-request approval UI, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:
