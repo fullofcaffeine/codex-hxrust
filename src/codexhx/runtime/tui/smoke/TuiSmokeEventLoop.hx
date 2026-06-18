@@ -161,6 +161,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.McpElicitationOverlay:
+					if (!traceMcpElicitationOverlay(event.mcpElicitationOverlay, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1173,6 +1178,161 @@ class TuiSmokeEventLoop {
 					trace.push("tui.user_input.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.user_input.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceMcpElicitationOverlay(plan:TuiSmokeMcpElicitationPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveElicitation || !plan.enabled()) {
+			trace.push("tui.mcp_elicitation.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.mcp_elicitation.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeMcpElicitationActionKind.NoteServerRequest:
+					trace.push(
+						"tui.mcp_elicitation.pending.note="
+						+ action.mode
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":thread=" + action.threadId
+						+ ":message_chars=" + action.messageChars
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case TuiSmokeMcpElicitationActionKind.ParseForm:
+					trace.push(
+						"tui.mcp_elicitation.parse="
+						+ action.mode
+						+ ":fields=" + action.fieldCount
+						+ ":required=" + action.requiredFieldCount
+						+ ":optional=" + action.optionalFieldCount
+						+ ":secret=" + action.secretFieldCount
+						+ ":approval_params=" + action.approvalDisplayParamCount
+					);
+				case TuiSmokeMcpElicitationActionKind.ShowModal:
+					trace.push(
+						"tui.mcp_elicitation.show=modal"
+						+ ":mode=" + action.mode
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":fields=" + action.fieldCount
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":pause_status=" + action.statusTimerPaused
+						+ ":composer_disabled=" + action.composerDisabled
+						+ ":focus=" + action.hasInputFocus
+					);
+				case TuiSmokeMcpElicitationActionKind.ShowAppLink:
+					trace.push(
+						"tui.mcp_elicitation.show=app_link"
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":tool=" + action.toolId
+						+ ":name=" + action.toolName
+						+ ":install_url=" + action.toolSuggestionHasInstallUrl
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":pause_status=" + action.statusTimerPaused
+					);
+				case TuiSmokeMcpElicitationActionKind.EnqueueActive:
+					trace.push(
+						"tui.mcp_elicitation.enqueue_active="
+						+ action.mode
+						+ ":request=" + action.requestId
+						+ ":queue=" + action.queueTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeMcpElicitationActionKind.SelectOption:
+					trace.push(
+						"tui.mcp_elicitation.select="
+						+ action.fieldId
+						+ ":input=" + action.fieldInput
+						+ ":options=" + action.optionCount
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":answered=" + action.answerTransitionText()
+					);
+				case TuiSmokeMcpElicitationActionKind.DraftInput:
+					trace.push(
+						"tui.mcp_elicitation.draft="
+						+ action.fieldId
+						+ ":input=" + action.fieldInput
+						+ ":chars=" + action.draftTransitionText()
+						+ ":paste_burst=" + action.pendingPasteCount
+						+ ":answered=" + action.answerTransitionText()
+					);
+				case TuiSmokeMcpElicitationActionKind.MoveField:
+					trace.push(
+						"tui.mcp_elicitation.move_field="
+						+ action.fieldTransitionText()
+						+ ":saved_draft_chars=" + action.draftCharsBefore
+						+ ":restored_draft_chars=" + action.draftCharsAfter
+						+ ":input=" + action.fieldInput
+					);
+				case TuiSmokeMcpElicitationActionKind.ValidationError:
+					trace.push(
+						"tui.mcp_elicitation.validation="
+						+ action.failureCode
+						+ ":required_unanswered=" + action.requiredUnansweredBefore
+						+ ":jump=" + action.fieldTransitionText()
+					);
+				case TuiSmokeMcpElicitationActionKind.Submit:
+					trace.push(
+						"tui.mcp_elicitation.submit="
+						+ action.mode
+						+ ":decision=" + action.decision
+						+ ":content_fields=" + action.contentFieldCount
+						+ ":meta_persisted=" + action.metaPersisted
+						+ ":required_unanswered=" + action.requiredUnansweredTransitionText()
+						+ ":command=" + action.appCommandSent
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeMcpElicitationActionKind.Cancel:
+					trace.push(
+						"tui.mcp_elicitation.cancel="
+						+ action.mode
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":command=" + action.appCommandSent
+						+ ":complete=" + action.completeTransitionText()
+					);
+				case TuiSmokeMcpElicitationActionKind.Resolve:
+					trace.push(
+						"tui.mcp_elicitation.resolve="
+						+ action.mode
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":decision=" + action.decision
+						+ ":content_fields=" + action.contentFieldCount
+						+ ":meta_persisted=" + action.metaPersisted
+						+ ":sent=" + action.resolutionSent
+					);
+				case TuiSmokeMcpElicitationActionKind.DismissResolved:
+					trace.push(
+						"tui.mcp_elicitation.dismiss_resolved="
+						+ action.mode
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":matched=" + action.resolvedDismissed
+						+ ":stale=" + action.staleResolution
+						+ ":queue=" + action.queueTransitionText()
+						+ ":views=" + action.viewStackTransitionText()
+						+ ":resume_status=" + action.statusTimerResumed
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeMcpElicitationActionKind.UnsupportedReject:
+					trace.push(
+						"tui.mcp_elicitation.unsupported="
+						+ action.mode
+						+ ":server=" + action.serverName
+						+ ":request=" + action.requestId
+						+ ":rejected=" + action.unsupportedRejected
+						+ ":failure=" + action.failureCode
+					);
+				case TuiSmokeMcpElicitationActionKind.Failure:
+					trace.push("tui.mcp_elicitation.failure=" + action.failureCode);
+				case _:
+					trace.push("tui.mcp_elicitation.unknown");
 					return false;
 			}
 		}

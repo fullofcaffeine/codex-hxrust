@@ -82,7 +82,76 @@ class TuiSmokeFixtureLoader {
 				drawDispatch: optionalDrawDispatchPlan(value, "drawDispatch"),
 				overlayRouting: optionalOverlayRoutingPlan(value, "overlayRouting"),
 				approvalOverlay: optionalApprovalPlan(value, "approvalOverlay"),
-				userInputOverlay: optionalUserInputPlan(value, "userInputOverlay")
+				userInputOverlay: optionalUserInputPlan(value, "userInputOverlay"),
+				mcpElicitationOverlay: optionalMcpElicitationPlan(value, "mcpElicitationOverlay")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalMcpElicitationPlan(object:Value, name:String):Null<TuiSmokeMcpElicitationPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeMcpElicitationPlan({
+					allowLiveElicitation: optionalBoolField(value, "allowLiveElicitation", false),
+					actions: mcpElicitationActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function mcpElicitationActions(values:Array<Value>):Array<TuiSmokeMcpElicitationAction> {
+		final out:Array<TuiSmokeMcpElicitationAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeMcpElicitationAction({
+				kind: TuiSmokeMcpElicitationActionKind.fromString(stringField(value, "kind", "")),
+				mode: TuiSmokeMcpElicitationModeKind.fromString(optionalStringField(value, "mode", "unknown")),
+				fieldInput: TuiSmokeMcpElicitationFieldInputKind.fromString(optionalStringField(value, "fieldInput", "unknown")),
+				decision: TuiSmokeMcpElicitationDecisionKind.fromString(optionalStringField(value, "decision", "unknown")),
+				requestId: optionalStringField(value, "requestId", ""),
+				serverName: optionalStringField(value, "serverName", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				fieldId: optionalStringField(value, "fieldId", ""),
+				toolId: optionalStringField(value, "toolId", ""),
+				toolName: optionalStringField(value, "toolName", ""),
+				messageChars: optionalIntField(value, "messageChars", 0),
+				fieldCount: optionalIntField(value, "fieldCount", 0),
+				requiredFieldCount: optionalIntField(value, "requiredFieldCount", 0),
+				optionalFieldCount: optionalIntField(value, "optionalFieldCount", 0),
+				secretFieldCount: optionalIntField(value, "secretFieldCount", 0),
+				approvalDisplayParamCount: optionalIntField(value, "approvalDisplayParamCount", 0),
+				currentIndexBefore: optionalIntField(value, "currentIndexBefore", 0),
+				currentIndexAfter: optionalIntField(value, "currentIndexAfter", 0),
+				optionCount: optionalIntField(value, "optionCount", 0),
+				selectedOptionBefore: optionalIntField(value, "selectedOptionBefore", -1),
+				selectedOptionAfter: optionalIntField(value, "selectedOptionAfter", -1),
+				draftCharsBefore: optionalIntField(value, "draftCharsBefore", 0),
+				draftCharsAfter: optionalIntField(value, "draftCharsAfter", 0),
+				pendingPasteCount: optionalIntField(value, "pendingPasteCount", 0),
+				answeredBefore: optionalIntField(value, "answeredBefore", 0),
+				answeredAfter: optionalIntField(value, "answeredAfter", 0),
+				requiredUnansweredBefore: optionalIntField(value, "requiredUnansweredBefore", 0),
+				requiredUnansweredAfter: optionalIntField(value, "requiredUnansweredAfter", 0),
+				queueBefore: optionalIntField(value, "queueBefore", 0),
+				queueAfter: optionalIntField(value, "queueAfter", 0),
+				viewStackBefore: optionalIntField(value, "viewStackBefore", 0),
+				viewStackAfter: optionalIntField(value, "viewStackAfter", 0),
+				hasInputFocus: optionalBoolField(value, "hasInputFocus", false),
+				composerDisabled: optionalBoolField(value, "composerDisabled", false),
+				statusTimerPaused: optionalBoolField(value, "statusTimerPaused", false),
+				statusTimerResumed: optionalBoolField(value, "statusTimerResumed", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				appCommandSent: optionalBoolField(value, "appCommandSent", false),
+				resolutionSent: optionalBoolField(value, "resolutionSent", false),
+				resolvedDismissed: optionalBoolField(value, "resolvedDismissed", false),
+				staleResolution: optionalBoolField(value, "staleResolution", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false),
+				completeBefore: optionalBoolField(value, "completeBefore", false),
+				completeAfter: optionalBoolField(value, "completeAfter", false),
+				contentFieldCount: optionalIntField(value, "contentFieldCount", 0),
+				metaPersisted: optionalBoolField(value, "metaPersisted", false),
+				toolSuggestionHasInstallUrl: optionalBoolField(value, "toolSuggestionHasInstallUrl", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

@@ -4805,6 +4805,336 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.user_input.plan=headless\ntui.user_input.pending.note=options:request=ui-3:turn=turn-3:item=item-3:questions=1:secret_questions=0:unsupported=false\ntui.user_input.show=modal:request=options:request_id=ui-3:questions=1:views=0->1:pause_status=true:composer_disabled=true:focus=options\ntui.user_input.enqueue_active=mixed:request=ui-4:queue=0->1:frame=true\ntui.user_input.dismiss_resolved=options:request=ui-3:matched=true:stale=false:queue=1->0:views=1->1:resume_status=false:frame=true\ntui.user_input.dismiss_resolved=mixed:request=ui-4:matched=true:stale=false:queue=0->0:views=1->0:resume_status=true:frame=true\ntui.user_input.unsupported=secret:request=ui-secret:rejected=true:failure=secret_user_input_not_rendered_headless\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> user input fifo dismiss\ninput> \ntrace:\ntui.user_input.plan=headless\ntui.user_input.pending.note=options:request=ui-3:turn=turn-3:item=item-3:questions=1:secret_questions=0:unsupported=false\ntui.user_input.show=modal:request=options:request_id=ui-3:questions=1:views=0->1:pause_status=true:composer_disabled=true:focus=options\ntui.user_input.enqueue_active=mixed:request=ui-4:queue=0->1:frame=true\ntui.user_input.dismiss_resolved=options:request=ui-3:matched=true:stale=false:queue=1->0:views=1->1:resume_status=false:frame=true\ntui.user_input.dismiss_resolved=mixed:request=ui-4:matched=true:stale=false:queue=0->0:views=1->0:resume_status=true:frame=true\ntui.user_input.unsupported=secret:request=ui-secret:rejected=true:failure=secret_user_input_not_rendered_headless\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "mcp-elicit-form-content-submit",
+      "frame": {
+        "name": "mcp-elicit-form-content-submit",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "mcp elicitation form content"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "mcp_elicitation_overlay",
+          "mcpElicitationOverlay": {
+            "allowLiveElicitation": false,
+            "actions": [
+              {
+                "kind": "note_server_request",
+                "mode": "form_content",
+                "serverName": "demo-server",
+                "requestId": "mcp-1",
+                "threadId": "thread-1",
+                "messageChars": 28
+              },
+              {
+                "kind": "parse_form",
+                "mode": "form_content",
+                "fieldCount": 2,
+                "requiredFieldCount": 1,
+                "optionalFieldCount": 1,
+                "secretFieldCount": 0
+              },
+              {
+                "kind": "show_modal",
+                "mode": "form_content",
+                "serverName": "demo-server",
+                "requestId": "mcp-1",
+                "fieldCount": 2,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true,
+                "composerDisabled": true,
+                "hasInputFocus": true
+              },
+              {
+                "kind": "draft_input",
+                "fieldId": "project",
+                "fieldInput": "text",
+                "draftCharsBefore": 0,
+                "draftCharsAfter": 11,
+                "answeredBefore": 0,
+                "answeredAfter": 1
+              },
+              {
+                "kind": "move_field",
+                "fieldInput": "boolean_select",
+                "currentIndexBefore": 0,
+                "currentIndexAfter": 1,
+                "draftCharsBefore": 11,
+                "draftCharsAfter": 0
+              },
+              {
+                "kind": "select_option",
+                "fieldId": "send_logs",
+                "fieldInput": "boolean_select",
+                "optionCount": 2,
+                "selectedOptionBefore": 0,
+                "selectedOptionAfter": 1,
+                "answeredBefore": 1,
+                "answeredAfter": 2
+              },
+              {
+                "kind": "submit",
+                "mode": "form_content",
+                "decision": "accept",
+                "contentFieldCount": 2,
+                "requiredUnansweredBefore": 0,
+                "requiredUnansweredAfter": 0,
+                "appCommandSent": true,
+                "completeBefore": false,
+                "completeAfter": true
+              },
+              {
+                "kind": "resolve",
+                "mode": "form_content",
+                "serverName": "demo-server",
+                "requestId": "mcp-1",
+                "decision": "accept",
+                "contentFieldCount": 2,
+                "resolutionSent": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.mcp_elicitation.plan=headless\ntui.mcp_elicitation.pending.note=form_content:server=demo-server:request=mcp-1:thread=thread-1:message_chars=28:unsupported=false\ntui.mcp_elicitation.parse=form_content:fields=2:required=1:optional=1:secret=0:approval_params=0\ntui.mcp_elicitation.show=modal:mode=form_content:server=demo-server:request=mcp-1:fields=2:views=0->1:pause_status=true:composer_disabled=true:focus=true\ntui.mcp_elicitation.draft=project:input=text:chars=0->11:paste_burst=0:answered=0->1\ntui.mcp_elicitation.move_field=0->1:saved_draft_chars=11:restored_draft_chars=0:input=boolean_select\ntui.mcp_elicitation.select=send_logs:input=boolean_select:options=2:selected=0->1:answered=1->2\ntui.mcp_elicitation.submit=form_content:decision=accept:content_fields=2:meta_persisted=false:required_unanswered=0->0:command=true:complete=false->true\ntui.mcp_elicitation.resolve=form_content:server=demo-server:request=mcp-1:decision=accept:content_fields=2:meta_persisted=false:sent=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> mcp elicitation form content\ninput> \ntrace:\ntui.mcp_elicitation.plan=headless\ntui.mcp_elicitation.pending.note=form_content:server=demo-server:request=mcp-1:thread=thread-1:message_chars=28:unsupported=false\ntui.mcp_elicitation.parse=form_content:fields=2:required=1:optional=1:secret=0:approval_params=0\ntui.mcp_elicitation.show=modal:mode=form_content:server=demo-server:request=mcp-1:fields=2:views=0->1:pause_status=true:composer_disabled=true:focus=true\ntui.mcp_elicitation.draft=project:input=text:chars=0->11:paste_burst=0:answered=0->1\ntui.mcp_elicitation.move_field=0->1:saved_draft_chars=11:restored_draft_chars=0:input=boolean_select\ntui.mcp_elicitation.select=send_logs:input=boolean_select:options=2:selected=0->1:answered=1->2\ntui.mcp_elicitation.submit=form_content:decision=accept:content_fields=2:meta_persisted=false:required_unanswered=0->0:command=true:complete=false->true\ntui.mcp_elicitation.resolve=form_content:server=demo-server:request=mcp-1:decision=accept:content_fields=2:meta_persisted=false:sent=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "mcp-elicit-approval-validation-persist",
+      "frame": {
+        "name": "mcp-elicit-approval-validation-persist",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "mcp elicitation approval"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "mcp_elicitation_overlay",
+          "mcpElicitationOverlay": {
+            "allowLiveElicitation": false,
+            "actions": [
+              {
+                "kind": "parse_form",
+                "mode": "approval_action",
+                "fieldCount": 1,
+                "requiredFieldCount": 1,
+                "approvalDisplayParamCount": 2
+              },
+              {
+                "kind": "show_modal",
+                "mode": "approval_action",
+                "serverName": "tools",
+                "requestId": "mcp-2",
+                "fieldCount": 1,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true,
+                "composerDisabled": true,
+                "hasInputFocus": true
+              },
+              {
+                "kind": "validation_error",
+                "failureCode": "required_fields_unanswered",
+                "requiredUnansweredBefore": 1,
+                "currentIndexBefore": 0,
+                "currentIndexAfter": 0
+              },
+              {
+                "kind": "select_option",
+                "fieldId": "__approval",
+                "fieldInput": "approval_select",
+                "optionCount": 4,
+                "selectedOptionBefore": 0,
+                "selectedOptionAfter": 1,
+                "answeredBefore": 0,
+                "answeredAfter": 1
+              },
+              {
+                "kind": "submit",
+                "mode": "approval_action",
+                "decision": "accept",
+                "contentFieldCount": 0,
+                "metaPersisted": true,
+                "requiredUnansweredBefore": 0,
+                "requiredUnansweredAfter": 0,
+                "appCommandSent": true,
+                "completeBefore": false,
+                "completeAfter": true
+              },
+              {
+                "kind": "resolve",
+                "mode": "approval_action",
+                "serverName": "tools",
+                "requestId": "mcp-2",
+                "decision": "accept",
+                "metaPersisted": true,
+                "resolutionSent": true
+              },
+              {
+                "kind": "cancel",
+                "mode": "approval_action",
+                "serverName": "tools",
+                "requestId": "mcp-3",
+                "decision": "cancel",
+                "appCommandSent": true,
+                "completeBefore": false,
+                "completeAfter": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "tui.mcp_elicitation.plan=headless\ntui.mcp_elicitation.parse=approval_action:fields=1:required=1:optional=0:secret=0:approval_params=2\ntui.mcp_elicitation.show=modal:mode=approval_action:server=tools:request=mcp-2:fields=1:views=0->1:pause_status=true:composer_disabled=true:focus=true\ntui.mcp_elicitation.validation=required_fields_unanswered:required_unanswered=1:jump=0->0\ntui.mcp_elicitation.select=__approval:input=approval_select:options=4:selected=0->1:answered=0->1\ntui.mcp_elicitation.submit=approval_action:decision=accept:content_fields=0:meta_persisted=true:required_unanswered=0->0:command=true:complete=false->true\ntui.mcp_elicitation.resolve=approval_action:server=tools:request=mcp-2:decision=accept:content_fields=0:meta_persisted=true:sent=true\ntui.mcp_elicitation.cancel=approval_action:server=tools:request=mcp-3:command=true:complete=false->true\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> mcp elicitation approval\ninput> \ntrace:\ntui.mcp_elicitation.plan=headless\ntui.mcp_elicitation.parse=approval_action:fields=1:required=1:optional=0:secret=0:approval_params=2\ntui.mcp_elicitation.show=modal:mode=approval_action:server=tools:request=mcp-2:fields=1:views=0->1:pause_status=true:composer_disabled=true:focus=true\ntui.mcp_elicitation.validation=required_fields_unanswered:required_unanswered=1:jump=0->0\ntui.mcp_elicitation.select=__approval:input=approval_select:options=4:selected=0->1:answered=0->1\ntui.mcp_elicitation.submit=approval_action:decision=accept:content_fields=0:meta_persisted=true:required_unanswered=0->0:command=true:complete=false->true\ntui.mcp_elicitation.resolve=approval_action:server=tools:request=mcp-2:decision=accept:content_fields=0:meta_persisted=true:sent=true\ntui.mcp_elicitation.cancel=approval_action:server=tools:request=mcp-3:command=true:complete=false->true\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "mcp-elicit-applink-dismiss-unsupported",
+      "frame": {
+        "name": "mcp-elicit-applink-dismiss-unsupported",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "mcp elicitation app link"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "mcp_elicitation_overlay",
+          "mcpElicitationOverlay": {
+            "allowLiveElicitation": false,
+            "actions": [
+              {
+                "kind": "show_app_link",
+                "mode": "tool_suggestion",
+                "serverName": "apps",
+                "requestId": "mcp-4",
+                "toolId": "calendar",
+                "toolName": "Calendar",
+                "toolSuggestionHasInstallUrl": true,
+                "viewStackBefore": 0,
+                "viewStackAfter": 1,
+                "statusTimerPaused": true
+              },
+              {
+                "kind": "enqueue_active",
+                "mode": "form_content",
+                "requestId": "mcp-5",
+                "queueBefore": 0,
+                "queueAfter": 1,
+                "frameScheduled": true
+              },
+              {
+                "kind": "dismiss_resolved",
+                "mode": "tool_suggestion",
+                "serverName": "apps",
+                "requestId": "mcp-4",
+                "resolvedDismissed": true,
+                "staleResolution": false,
+                "queueBefore": 1,
+                "queueAfter": 0,
+                "viewStackBefore": 1,
+                "viewStackAfter": 1,
+                "statusTimerResumed": false,
+                "frameScheduled": true
+              },
+              {
+                "kind": "dismiss_resolved",
+                "mode": "form_content",
+                "serverName": "apps",
+                "requestId": "mcp-5",
+                "resolvedDismissed": true,
+                "staleResolution": false,
+                "queueBefore": 0,
+                "queueAfter": 0,
+                "viewStackBefore": 1,
+                "viewStackAfter": 0,
+                "statusTimerResumed": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "unsupported_reject",
+                "mode": "unsupported",
+                "serverName": "bad",
+                "requestId": "mcp-bad",
+                "unsupportedRejected": true,
+                "failureCode": "unsupported_mcp_elicitation_schema"
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.mcp_elicitation.plan=headless\ntui.mcp_elicitation.show=app_link:server=apps:request=mcp-4:tool=calendar:name=Calendar:install_url=true:views=0->1:pause_status=true\ntui.mcp_elicitation.enqueue_active=form_content:request=mcp-5:queue=0->1:frame=true\ntui.mcp_elicitation.dismiss_resolved=tool_suggestion:server=apps:request=mcp-4:matched=true:stale=false:queue=1->0:views=1->1:resume_status=false:frame=true\ntui.mcp_elicitation.dismiss_resolved=form_content:server=apps:request=mcp-5:matched=true:stale=false:queue=0->0:views=1->0:resume_status=true:frame=true\ntui.mcp_elicitation.unsupported=unsupported:server=bad:request=mcp-bad:rejected=true:failure=unsupported_mcp_elicitation_schema\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> mcp elicitation app link\ninput> \ntrace:\ntui.mcp_elicitation.plan=headless\ntui.mcp_elicitation.show=app_link:server=apps:request=mcp-4:tool=calendar:name=Calendar:install_url=true:views=0->1:pause_status=true\ntui.mcp_elicitation.enqueue_active=form_content:request=mcp-5:queue=0->1:frame=true\ntui.mcp_elicitation.dismiss_resolved=tool_suggestion:server=apps:request=mcp-4:matched=true:stale=false:queue=1->0:views=1->1:resume_status=false:frame=true\ntui.mcp_elicitation.dismiss_resolved=form_content:server=apps:request=mcp-5:matched=true:stale=false:queue=0->0:views=1->0:resume_status=true:frame=true\ntui.mcp_elicitation.unsupported=unsupported:server=bad:request=mcp-bad:rejected=true:failure=unsupported_mcp_elicitation_schema\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
