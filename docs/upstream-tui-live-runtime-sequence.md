@@ -2213,6 +2213,21 @@ Model selected raw Codex active composer popup layout/render behavior:
 
 Status: HXCX-TUI-38 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic popup layout/render evidence only, not a full ratatui terminal renderer.
 
+### HXCX-TUI-39: Composer Footer Status Hint Render Lifecycle
+
+Model selected raw Codex composer footer/status/hint behavior:
+
+- preserve `FooterProps` and `FooterMode` from `../codex/codex-rs/tui/src/bottom_pane/footer.rs`, including `ComposerEmpty`, `ComposerHasDraft`, `HistorySearch`, `QuitShortcutReminder`, `ShortcutOverlay`, and `EscHint`;
+- preserve upstream footer height semantics from `footer_height`: one-line passive/footer modes, the extra queued-prompt line while a draft exists and a task is running, and passive status-line layout overriding ordinary passive footer lines where applicable;
+- preserve `ChatComposer::footer_props`, `footer_mode`, `footer_spacing`, and `status_line_text` in `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs`: history search wins, visible quit-shortcut reminders can override base empty/draft mode, expired quit hints fall back to the base mode, and non-empty footer content contributes spacing;
+- preserve `render_with_mask_and_textarea_right_reserve` footer fallback behavior when `ActivePopup::None`: cycle hint, shortcut hint, queued-prompt hint, custom footer/status override, status hyperlink annotation, and ordinary footer-line rendering remain distinct traceable decisions;
+- preserve quit shortcut hint lifecycle: `show_quit_shortcut_hint`, `clear_quit_shortcut_hint`, and `quit_shortcut_hint_visible` carry explicit visibility/expiry intent without needing wall-clock or terminal effects in fixtures;
+- preserve shortcut overlay ownership and paste-burst suppression: `?` can show shortcut overlay from ordinary composer modes, activity resets the footer mode, and active paste bursts suppress the shortcuts hint path;
+- preserve collaboration-mode indicator and passive status-line visibility as separate facts from footer mode selection;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-39 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic footer/status hint render evidence only, not a full ratatui footer renderer.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

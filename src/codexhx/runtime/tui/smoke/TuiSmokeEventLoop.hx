@@ -221,6 +221,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ComposerFooterRender:
+					if (!traceComposerFooterRender(event.composerFooterRender, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1555,6 +1560,97 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.composer_popup_render.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceComposerFooterRender(plan:TuiSmokeComposerFooterRenderPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || !plan.enabled()) {
+			trace.push("tui.composer_footer_render.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.composer_footer_render.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeComposerFooterRenderActionKind.Props:
+					trace.push(
+						"tui.composer_footer_render.props="
+						+ action.modeAfter
+						+ ":base=" + action.baseMode
+						+ ":focus=" + action.hasInputFocus
+						+ ":task=" + action.taskRunning
+						+ ":empty=" + action.inputEmpty
+						+ ":history=" + action.historySearchActive
+						+ ":quit_visible=" + action.quitHintVisible
+						+ ":status_enabled=" + action.statusLineEnabled
+						+ ":collab=" + action.collaborationModesEnabled
+						+ ":indicator=" + action.collaborationIndicatorVisible
+					);
+				case TuiSmokeComposerFooterRenderActionKind.Height:
+					trace.push(
+						"tui.composer_footer_render.height="
+						+ action.modeAfter
+						+ ":" + action.heightText()
+						+ ":passive_status=" + action.passiveStatusActive
+						+ ":queue=" + action.showQueueHint
+					);
+				case TuiSmokeComposerFooterRenderActionKind.PassiveStatus, TuiSmokeComposerFooterRenderActionKind.StatusLine:
+					trace.push(
+						"tui.composer_footer_render.status="
+						+ action.statusText
+						+ ":enabled=" + action.statusLineEnabled
+						+ ":passive=" + action.passiveStatusActive
+						+ ":hyperlink=" + action.statusHyperlinkActive
+						+ ":mode=" + action.modeAfter
+					);
+				case TuiSmokeComposerFooterRenderActionKind.ShortcutOverlay:
+					trace.push(
+						"tui.composer_footer_render.shortcut_overlay="
+						+ action.modeTransitionText()
+						+ ":key=" + action.keyName
+						+ ":active=" + action.shortcutOverlayActive
+						+ ":paste_burst=" + action.pasteBurstActive
+						+ ":shortcuts=" + action.showShortcutsHint
+						+ ":cycle=" + action.showCycleHint
+					);
+				case TuiSmokeComposerFooterRenderActionKind.QuitShortcut:
+					trace.push(
+						"tui.composer_footer_render.quit="
+						+ action.modeTransitionText()
+						+ ":key=" + action.keyName
+						+ ":visible=" + action.quitHintVisible
+						+ ":expired=" + action.quitHintExpired
+						+ ":ctrl_c=" + action.ctrlCQuitHint
+					);
+				case TuiSmokeComposerFooterRenderActionKind.EscHint:
+					trace.push(
+						"tui.composer_footer_render.esc="
+						+ action.modeTransitionText()
+						+ ":key=" + action.keyName
+						+ ":backtrack=" + action.escBacktrackHint
+					);
+				case TuiSmokeComposerFooterRenderActionKind.FooterFallback:
+					trace.push(
+						"tui.composer_footer_render.fallback="
+						+ action.modeAfter
+						+ ":lines=" + action.lineCount
+						+ ":hints=" + action.hintCount
+						+ ":shortcuts=" + action.showShortcutsHint
+						+ ":queue=" + action.showQueueHint
+						+ ":cycle=" + action.showCycleHint
+						+ ":terminal=" + !action.noLiveTerminal
+						+ ":ratatui=" + !action.noRatatuiRender
+					);
+				case TuiSmokeComposerFooterRenderActionKind.Failure:
+					trace.push(
+						"tui.composer_footer_render.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.composer_footer_render.unknown");
 					return false;
 			}
 		}

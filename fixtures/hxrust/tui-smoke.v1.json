@@ -8330,6 +8330,279 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.composer_popup_render.plan=headless\ntui.composer_popup_render.rows=skill:rows=4:visible=4:max=8:selected=2:scroll=0:window=0..4:inset=2/0:wrap=false\ntui.composer_popup_render.footer=skill:mode=unknown:height=2:rendered=true\ntui.composer_popup_render.rows=mention_v2:rows=9:visible=8:max=8:selected=8:scroll=1:window=1..9:inset=2/0:wrap=false\ntui.composer_popup_render.scroll=mention_v2:selected=8:visible=true:scroll=1:window=1..9\ntui.composer_popup_render.footer=mention_v2:mode=files:height=2:rendered=true\ntui.composer_popup_render.empty=mention_v2:message=no matches:waiting=false:visible=1:no_live=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer popup skill mentions render\ninput> \ntrace:\ntui.composer_popup_render.plan=headless\ntui.composer_popup_render.rows=skill:rows=4:visible=4:max=8:selected=2:scroll=0:window=0..4:inset=2/0:wrap=false\ntui.composer_popup_render.footer=skill:mode=unknown:height=2:rendered=true\ntui.composer_popup_render.rows=mention_v2:rows=9:visible=8:max=8:selected=8:scroll=1:window=1..9:inset=2/0:wrap=false\ntui.composer_popup_render.scroll=mention_v2:selected=8:visible=true:scroll=1:window=1..9\ntui.composer_popup_render.footer=mention_v2:mode=files:height=2:rendered=true\ntui.composer_popup_render.empty=mention_v2:message=no matches:waiting=false:visible=1:no_live=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-footer-render-mode-height",
+      "frame": {
+        "name": "composer-footer-render-mode-height",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer footer mode height"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_footer_render",
+          "composerFooterRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "props",
+                "modeAfter": "composer_empty",
+                "baseMode": "composer_empty",
+                "hasInputFocus": true,
+                "taskRunning": false,
+                "inputEmpty": true,
+                "historySearchActive": false,
+                "quitHintVisible": false,
+                "statusLineEnabled": false,
+                "collaborationModesEnabled": true,
+                "collaborationIndicatorVisible": true
+              },
+              {
+                "kind": "height",
+                "modeAfter": "composer_empty",
+                "footerHeight": 1,
+                "spacing": 1,
+                "totalHeight": 2,
+                "passiveStatusActive": false,
+                "showQueueHint": false
+              },
+              {
+                "kind": "props",
+                "modeAfter": "composer_has_draft",
+                "baseMode": "composer_has_draft",
+                "hasInputFocus": true,
+                "taskRunning": true,
+                "inputEmpty": false,
+                "historySearchActive": false,
+                "quitHintVisible": false,
+                "statusLineEnabled": false
+              },
+              {
+                "kind": "height",
+                "modeAfter": "composer_has_draft",
+                "footerHeight": 2,
+                "spacing": 1,
+                "totalHeight": 3,
+                "passiveStatusActive": false,
+                "showQueueHint": true
+              },
+              {
+                "kind": "props",
+                "modeAfter": "history_search",
+                "baseMode": "composer_has_draft",
+                "hasInputFocus": true,
+                "taskRunning": false,
+                "inputEmpty": false,
+                "historySearchActive": true,
+                "quitHintVisible": false,
+                "statusLineEnabled": false
+              },
+              {
+                "kind": "height",
+                "modeAfter": "history_search",
+                "footerHeight": 1,
+                "spacing": 1,
+                "totalHeight": 2,
+                "passiveStatusActive": false,
+                "showQueueHint": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_footer_render.plan=headless\ntui.composer_footer_render.props=composer_empty:base=composer_empty:focus=true:task=false:empty=true:history=false:quit_visible=false:status_enabled=false:collab=true:indicator=true\ntui.composer_footer_render.height=composer_empty:lines=1:spacing=1:total=2:passive_status=false:queue=false\ntui.composer_footer_render.props=composer_has_draft:base=composer_has_draft:focus=true:task=true:empty=false:history=false:quit_visible=false:status_enabled=false:collab=false:indicator=false\ntui.composer_footer_render.height=composer_has_draft:lines=2:spacing=1:total=3:passive_status=false:queue=true\ntui.composer_footer_render.props=history_search:base=composer_has_draft:focus=true:task=false:empty=false:history=true:quit_visible=false:status_enabled=false:collab=false:indicator=false\ntui.composer_footer_render.height=history_search:lines=1:spacing=1:total=2:passive_status=false:queue=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer footer mode height\ninput> \ntrace:\ntui.composer_footer_render.plan=headless\ntui.composer_footer_render.props=composer_empty:base=composer_empty:focus=true:task=false:empty=true:history=false:quit_visible=false:status_enabled=false:collab=true:indicator=true\ntui.composer_footer_render.height=composer_empty:lines=1:spacing=1:total=2:passive_status=false:queue=false\ntui.composer_footer_render.props=composer_has_draft:base=composer_has_draft:focus=true:task=true:empty=false:history=false:quit_visible=false:status_enabled=false:collab=false:indicator=false\ntui.composer_footer_render.height=composer_has_draft:lines=2:spacing=1:total=3:passive_status=false:queue=true\ntui.composer_footer_render.props=history_search:base=composer_has_draft:focus=true:task=false:empty=false:history=true:quit_visible=false:status_enabled=false:collab=false:indicator=false\ntui.composer_footer_render.height=history_search:lines=1:spacing=1:total=2:passive_status=false:queue=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-footer-render-status-shortcuts",
+      "frame": {
+        "name": "composer-footer-render-status-shortcuts",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer footer status shortcuts"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_footer_render",
+          "composerFooterRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "status_line",
+                "modeAfter": "composer_empty",
+                "statusText": "branch main - model gpt-5.2-codex",
+                "statusLineEnabled": true,
+                "passiveStatusActive": true,
+                "statusHyperlinkActive": false
+              },
+              {
+                "kind": "shortcut_overlay",
+                "modeBefore": "composer_empty",
+                "modeAfter": "shortcut_overlay",
+                "keyName": "?",
+                "shortcutOverlayActive": true,
+                "pasteBurstActive": false,
+                "showShortcutsHint": true,
+                "showCycleHint": true,
+                "collaborationIndicatorVisible": true
+              },
+              {
+                "kind": "shortcut_overlay",
+                "modeBefore": "composer_empty",
+                "modeAfter": "composer_empty",
+                "keyName": "?",
+                "shortcutOverlayActive": false,
+                "pasteBurstActive": true,
+                "showShortcutsHint": false,
+                "showCycleHint": false
+              },
+              {
+                "kind": "footer_fallback",
+                "modeAfter": "composer_empty",
+                "lineCount": 1,
+                "hintCount": 2,
+                "showShortcutsHint": true,
+                "showCycleHint": true,
+                "showQueueHint": false,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_footer_render.plan=headless\ntui.composer_footer_render.status=branch main - model gpt-5.2-codex:enabled=true:passive=true:hyperlink=false:mode=composer_empty\ntui.composer_footer_render.shortcut_overlay=composer_empty->shortcut_overlay:key=?:active=true:paste_burst=false:shortcuts=true:cycle=true\ntui.composer_footer_render.shortcut_overlay=composer_empty->composer_empty:key=?:active=false:paste_burst=true:shortcuts=false:cycle=false\ntui.composer_footer_render.fallback=composer_empty:lines=1:hints=2:shortcuts=true:queue=false:cycle=true:terminal=false:ratatui=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer footer status shortcuts\ninput> \ntrace:\ntui.composer_footer_render.plan=headless\ntui.composer_footer_render.status=branch main - model gpt-5.2-codex:enabled=true:passive=true:hyperlink=false:mode=composer_empty\ntui.composer_footer_render.shortcut_overlay=composer_empty->shortcut_overlay:key=?:active=true:paste_burst=false:shortcuts=true:cycle=true\ntui.composer_footer_render.shortcut_overlay=composer_empty->composer_empty:key=?:active=false:paste_burst=true:shortcuts=false:cycle=false\ntui.composer_footer_render.fallback=composer_empty:lines=1:hints=2:shortcuts=true:queue=false:cycle=true:terminal=false:ratatui=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-footer-render-quit-esc",
+      "frame": {
+        "name": "composer-footer-render-quit-esc",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer footer quit esc"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_footer_render",
+          "composerFooterRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "quit_shortcut",
+                "modeBefore": "composer_empty",
+                "modeAfter": "quit_shortcut_reminder",
+                "keyName": "ctrl-c",
+                "quitHintVisible": true,
+                "quitHintExpired": false,
+                "ctrlCQuitHint": true
+              },
+              {
+                "kind": "quit_shortcut",
+                "modeBefore": "quit_shortcut_reminder",
+                "modeAfter": "composer_has_draft",
+                "keyName": "ctrl-c",
+                "quitHintVisible": false,
+                "quitHintExpired": true,
+                "inputEmpty": false
+              },
+              {
+                "kind": "esc_hint",
+                "modeBefore": "composer_has_draft",
+                "modeAfter": "esc_hint",
+                "keyName": "escape",
+                "escBacktrackHint": true
+              },
+              {
+                "kind": "footer_fallback",
+                "modeAfter": "esc_hint",
+                "lineCount": 1,
+                "hintCount": 0,
+                "showShortcutsHint": false,
+                "showQueueHint": false,
+                "showCycleHint": false,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_footer_render.plan=headless\ntui.composer_footer_render.quit=composer_empty->quit_shortcut_reminder:key=ctrl-c:visible=true:expired=false:ctrl_c=true\ntui.composer_footer_render.quit=quit_shortcut_reminder->composer_has_draft:key=ctrl-c:visible=false:expired=true:ctrl_c=false\ntui.composer_footer_render.esc=composer_has_draft->esc_hint:key=escape:backtrack=true\ntui.composer_footer_render.fallback=esc_hint:lines=1:hints=0:shortcuts=false:queue=false:cycle=false:terminal=false:ratatui=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer footer quit esc\ninput> \ntrace:\ntui.composer_footer_render.plan=headless\ntui.composer_footer_render.quit=composer_empty->quit_shortcut_reminder:key=ctrl-c:visible=true:expired=false:ctrl_c=true\ntui.composer_footer_render.quit=quit_shortcut_reminder->composer_has_draft:key=ctrl-c:visible=false:expired=true:ctrl_c=false\ntui.composer_footer_render.esc=composer_has_draft->esc_hint:key=escape:backtrack=true\ntui.composer_footer_render.fallback=esc_hint:lines=1:hints=0:shortcuts=false:queue=false:cycle=false:terminal=false:ratatui=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

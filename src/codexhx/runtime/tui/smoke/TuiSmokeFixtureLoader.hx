@@ -94,7 +94,63 @@ class TuiSmokeFixtureLoader {
 				composerEditing: optionalComposerEditingPlan(value, "composerEditing"),
 				composerPopupSync: optionalComposerPopupSyncPlan(value, "composerPopupSync"),
 				composerPopupKey: optionalComposerPopupKeyPlan(value, "composerPopupKey"),
-				composerPopupRender: optionalComposerPopupRenderPlan(value, "composerPopupRender")
+				composerPopupRender: optionalComposerPopupRenderPlan(value, "composerPopupRender"),
+				composerFooterRender: optionalComposerFooterRenderPlan(value, "composerFooterRender")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalComposerFooterRenderPlan(object:Value, name:String):Null<TuiSmokeComposerFooterRenderPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeComposerFooterRenderPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					actions: composerFooterRenderActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function composerFooterRenderActions(values:Array<Value>):Array<TuiSmokeComposerFooterRenderAction> {
+		final out:Array<TuiSmokeComposerFooterRenderAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeComposerFooterRenderAction({
+				kind: TuiSmokeComposerFooterRenderActionKind.fromString(stringField(value, "kind", "")),
+				modeBefore: TuiSmokeComposerFooterModeKind.fromString(optionalStringField(value, "modeBefore", "unknown")),
+				modeAfter: TuiSmokeComposerFooterModeKind.fromString(optionalStringField(value, "modeAfter", "unknown")),
+				baseMode: TuiSmokeComposerFooterModeKind.fromString(optionalStringField(value, "baseMode", "unknown")),
+				keyName: optionalStringField(value, "keyName", ""),
+				statusText: optionalStringField(value, "statusText", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				footerHeight: optionalIntField(value, "footerHeight", 0),
+				spacing: optionalIntField(value, "spacing", 0),
+				totalHeight: optionalIntField(value, "totalHeight", 0),
+				lineCount: optionalIntField(value, "lineCount", 0),
+				hintCount: optionalIntField(value, "hintCount", 0),
+				width: optionalIntField(value, "width", 0),
+				hasInputFocus: optionalBoolField(value, "hasInputFocus", false),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				inputEmpty: optionalBoolField(value, "inputEmpty", false),
+				historySearchActive: optionalBoolField(value, "historySearchActive", false),
+				quitHintVisible: optionalBoolField(value, "quitHintVisible", false),
+				quitHintExpired: optionalBoolField(value, "quitHintExpired", false),
+				shortcutOverlayActive: optionalBoolField(value, "shortcutOverlayActive", false),
+				collaborationModesEnabled: optionalBoolField(value, "collaborationModesEnabled", false),
+				collaborationIndicatorVisible: optionalBoolField(value, "collaborationIndicatorVisible", false),
+				showCycleHint: optionalBoolField(value, "showCycleHint", false),
+				showShortcutsHint: optionalBoolField(value, "showShortcutsHint", false),
+				showQueueHint: optionalBoolField(value, "showQueueHint", false),
+				pasteBurstActive: optionalBoolField(value, "pasteBurstActive", false),
+				statusLineEnabled: optionalBoolField(value, "statusLineEnabled", false),
+				passiveStatusActive: optionalBoolField(value, "passiveStatusActive", false),
+				statusHyperlinkActive: optionalBoolField(value, "statusHyperlinkActive", false),
+				escBacktrackHint: optionalBoolField(value, "escBacktrackHint", false),
+				ctrlCQuitHint: optionalBoolField(value, "ctrlCQuitHint", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
