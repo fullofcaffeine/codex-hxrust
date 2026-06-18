@@ -81,8 +81,14 @@ class TuiSmokeEventLoop {
 						exit = resolutionExit;
 						running = false;
 					}
+				case TuiSmokeEventKind.ThreadNotification:
+					final notificationExit = appServer.handleThreadNotification(event.threadNotification, trace);
+					if (notificationExit != TuiSmokeExitKind.Rendered) {
+						exit = notificationExit;
+						running = false;
+					}
 				case TuiSmokeEventKind.ThreadDelivery:
-					final deliveryExit = appServer.handleThreadDelivery(event.threadDelivery, trace);
+					final deliveryExit = appServer.handleThreadDelivery(event.threadDelivery, state, trace);
 					if (deliveryExit != TuiSmokeExitKind.Rendered) {
 						exit = deliveryExit;
 						running = false;
@@ -108,6 +114,9 @@ class TuiSmokeEventLoop {
 			+ "\nserver-stale-resolutions: " + appServer.staleResolutions()
 			+ "\nserver-deliveries: " + appServer.deliveredRequests()
 			+ "\nserver-evictions: " + appServer.evictedRequests()
+			+ "\nthread-notifications: " + appServer.handledThreadNotifications()
+			+ "\nthread-notification-deliveries: " + appServer.deliveredThreadNotifications()
+			+ "\nthread-notification-evictions: " + appServer.evictedThreadNotifications()
 			+ "\nterminal: restored";
 		final ok = exit == request.expectedExit
 			&& traceText == request.expectedTrace
@@ -128,6 +137,9 @@ class TuiSmokeEventLoop {
 			appServerStaleResolutionCount: appServer.staleResolutions(),
 			appServerDeliveredRequestCount: appServer.deliveredRequests(),
 			appServerEvictedRequestCount: appServer.evictedRequests(),
+			threadNotificationCount: appServer.handledThreadNotifications(),
+			threadNotificationDeliveryCount: appServer.deliveredThreadNotifications(),
+			threadNotificationEvictionCount: appServer.evictedThreadNotifications(),
 			terminalRestored: terminal.wasRestored()
 		});
 	}
@@ -173,6 +185,9 @@ class TuiSmokeEventLoop {
 			appServerStaleResolutionCount: 0,
 			appServerDeliveredRequestCount: 0,
 			appServerEvictedRequestCount: 0,
+			threadNotificationCount: 0,
+			threadNotificationDeliveryCount: 0,
+			threadNotificationEvictionCount: 0,
 			terminalRestored: false
 		});
 	}

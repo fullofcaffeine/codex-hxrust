@@ -19,4 +19,7 @@ server-resolutions: 0
 server-stale-resolutions: 0
 server-deliveries: 0
 server-evictions: 0
+thread-notifications: 0
+thread-notification-deliveries: 0
+thread-notification-evictions: 0
 terminal: restored

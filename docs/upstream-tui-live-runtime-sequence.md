@@ -184,6 +184,18 @@ Extend the server-request facade with thread-buffer delivery evidence:
 
 Status: HXCX-TUI-6 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/app_server_events.rs:192`, `../codex/codex-rs/tui/src/app/app_server_events.rs:194`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1003`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1027`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1127`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1136`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1168`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1248`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1428`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1440`, `../codex/codex-rs/tui/src/app/thread_events.rs:19`, `../codex/codex-rs/tui/src/app/thread_events.rs:53`, `../codex/codex-rs/tui/src/app/thread_events.rs:135`, and `../codex/codex-rs/tui/src/chatwidget/protocol_requests.rs:9`. This is active-thread delivery intent evidence only, not Tokio channel ownership, snapshot replay ownership, approval popup UI ownership, live app-server transport, model traffic, tool execution, or Cafex behavior.
 
+### HXCX-TUI-7: Headless Raw Codex TUI Active-Thread Notification Delivery Facade
+
+Extend the active-thread delivery facade with thread notification buffering evidence:
+
+- primary-thread notification delivery through an explicit active drain;
+- side-thread notification buffering while another thread is active;
+- active-thread switch replay/delivery for queued side-thread notifications;
+- stale and evicted queued notification receipts;
+- deterministic ordering relative to queued app events, draw, and key events.
+
+Status: HXCX-TUI-7 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app.rs:1188`, `../codex/codex-rs/tui/src/app/app_server_events.rs:120`, `../codex/codex-rs/tui/src/app_server_session.rs:377`, `../codex/codex-rs/tui/src/app_event.rs:198`, `../codex/codex-rs/tui/src/app/thread_routing.rs:860`, `../codex/codex-rs/tui/src/app/thread_routing.rs:900`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1127`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1132`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1160`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1428`, `../codex/codex-rs/tui/src/app/thread_routing.rs:1435`, `../codex/codex-rs/tui/src/app/thread_events.rs:19`, `../codex/codex-rs/tui/src/app/thread_events.rs:53`, `../codex/codex-rs/tui/src/app/thread_events.rs:100`, `../codex/codex-rs/tui/src/app/replay_filter.rs:24`, and `../codex/codex-rs/tui/src/chatwidget/protocol.rs:4`. This is active-thread notification delivery intent evidence only, not Tokio channel ownership, snapshot replay ownership, live app-server transport, model traffic, tool execution, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

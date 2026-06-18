@@ -15,6 +15,9 @@ typedef TuiSmokeLoopOutcomeFields = {
 	final appServerStaleResolutionCount:Int;
 	final appServerDeliveredRequestCount:Int;
 	final appServerEvictedRequestCount:Int;
+	final threadNotificationCount:Int;
+	final threadNotificationDeliveryCount:Int;
+	final threadNotificationEvictionCount:Int;
 	final terminalRestored:Bool;
 }
 
@@ -33,6 +36,9 @@ class TuiSmokeLoopOutcome {
 	public final appServerStaleResolutionCount:Int;
 	public final appServerDeliveredRequestCount:Int;
 	public final appServerEvictedRequestCount:Int;
+	public final threadNotificationCount:Int;
+	public final threadNotificationDeliveryCount:Int;
+	public final threadNotificationEvictionCount:Int;
 	public final terminalRestored:Bool;
 
 	public function new(fields:TuiSmokeLoopOutcomeFields) {
@@ -50,6 +56,9 @@ class TuiSmokeLoopOutcome {
 		this.appServerStaleResolutionCount = fields.appServerStaleResolutionCount;
 		this.appServerDeliveredRequestCount = fields.appServerDeliveredRequestCount;
 		this.appServerEvictedRequestCount = fields.appServerEvictedRequestCount;
+		this.threadNotificationCount = fields.threadNotificationCount;
+		this.threadNotificationDeliveryCount = fields.threadNotificationDeliveryCount;
+		this.threadNotificationEvictionCount = fields.threadNotificationEvictionCount;
 		this.terminalRestored = fields.terminalRestored;
 	}
 }

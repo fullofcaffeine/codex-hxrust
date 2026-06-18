@@ -55,7 +55,7 @@ Profile policy for the scaffold:
 | `thread-read-create-goal-tool.hxml` | Compile the HXCX-4.40 raw `create_goal` tool executor harness through portable haxe.rust. |
 | `thread-read-update-goal-tool.hxml` | Compile the HXCX-4.41 raw `update_goal` tool executor harness through portable haxe.rust. |
 | `thread-read-goal-tool-dispatch.hxml` | Compile the HXCX-4.42 raw goal tool executor dispatch harness through portable haxe.rust. |
-| `tui-smoke.hxml` | Compile the HXCX-TUI-0/HXCX-TUI-1/HXCX-TUI-2/HXCX-TUI-3/HXCX-TUI-4/HXCX-TUI-5/HXCX-TUI-6 generated TUI smoke binary, headless app-loop shell, app-event queue facade, app-server event facade, server-request facade, request-resolution facade, and active-thread request delivery facade through metal haxe.rust. |
+| `tui-smoke.hxml` | Compile the HXCX-TUI-0/HXCX-TUI-1/HXCX-TUI-2/HXCX-TUI-3/HXCX-TUI-4/HXCX-TUI-5/HXCX-TUI-6/HXCX-TUI-7 generated TUI smoke binary, headless app-loop shell, app-event queue facade, app-server event facade, server-request facade, request-resolution facade, active-thread request delivery facade, and active-thread notification delivery facade through metal haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |
