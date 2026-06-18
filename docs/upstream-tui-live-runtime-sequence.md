@@ -2386,6 +2386,18 @@ Model selected raw Codex resume/fork behavior:
 
 Status: HXCX-TUI-49 extends `fixtures/hxrust/tui-smoke.v1.json` with typed direct resume lookup/attach, picker-driven fork selection, current-session fork attach intent, missing-target refusal, and no-live/no-filesystem evidence fixtures and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic resume/fork lifecycle evidence only, not live app-server mutation, live picker rendering, crossterm/ratatui ownership, persistent thread reads, or model traffic.
 
+### HXCX-TUI-50: Terminal Capability Gate And Restore Order
+
+Model the first raw Codex terminal ownership preflight before live crossterm takeover:
+
+- preserve terminal capability gating from `../codex/codex-rs/tui/src/tui.rs`: stdin/stdout terminal checks, setup intent, input flush intent, panic-hook installation, and fail-closed unsupported-terminal evidence are explicit before any live terminal mutation;
+- preserve keyboard enhancement decisions from `../codex/codex-rs/tui/src/tui/keyboard_modes.rs`: environment override, WSL/VS Code auto-disable, tmux/CSI-u facts, and reset-after-exit intent stay visible as typed trace data;
+- preserve terminal probe scope from `../codex/codex-rs/tui/src/tui/terminal_probe.rs`: keyboard-support evidence is treated as a startup capability fact, not as an implicit renderer side effect;
+- preserve stderr guard/restore intent from `../codex/codex-rs/tui/src/tui/terminal_stderr.rs` and restore-after-exit ordering from `tui.rs`: bracketed paste, focus-change, cursor style/show, raw mode, keyboard reporting, and stderr finish are restored even when setup refuses live ownership;
+- keep the evidence deterministic and independent of live crossterm raw mode, ratatui rendering, alternate-screen takeover, live input loops, app-server mutation, model/tool execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-50 extends `fixtures/hxrust/tui-smoke.v1.json` with a terminal capability gate and restore-after-exit fixture and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic terminal preflight/restore evidence only, not live crossterm/ratatui terminal ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

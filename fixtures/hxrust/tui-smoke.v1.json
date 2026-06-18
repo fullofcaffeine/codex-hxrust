@@ -26,6 +26,9 @@
       "../codex/codex-rs/tui/src/chatwidget/slash_dispatch.rs",
       "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/src/tui/event_stream.rs",
+      "../codex/codex-rs/tui/src/tui/keyboard_modes.rs",
+      "../codex/codex-rs/tui/src/tui/terminal_probe.rs",
+      "../codex/codex-rs/tui/src/tui/terminal_stderr.rs",
       "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
       "../codex/codex-rs/tui/tests/suite/status_indicator.rs",
       "../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs",
@@ -11473,6 +11476,83 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.resume_fork.plan=headless\ntui.resume_fork.lookup=id_or_name=missing-thread:requested=true:success=false:target=\ntui.resume_fork.failure=session_not_found:error=No saved chat found matching missing-thread.:source=slash_resume:target=missing-thread:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume fork missing target refusal\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.lookup=id_or_name=missing-thread:requested=true:success=false:target=\ntui.resume_fork.failure=session_not_found:error=No saved chat found matching missing-thread.:source=slash_resume:target=missing-thread:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "terminal-capability-gate-restore-order",
+      "frame": {
+        "name": "terminal-capability-gate-restore-order",
+        "title": "Codex TUI Smoke Terminal",
+        "status": "starting",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "terminal capability gate no live takeover"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "terminal_mode",
+          "terminalModePlan": {
+            "allowLiveTerminalMode": false,
+            "actions": [
+              {
+                "kind": "init",
+                "stdinTerminal": false,
+                "stdoutTerminal": true,
+                "rawMode": false,
+                "flushInput": true,
+                "panicHook": true,
+                "supported": false
+              },
+              {
+                "kind": "keyboard_decision",
+                "keyboardEnhancementDisabled": true,
+                "envOverride": "auto",
+                "wsl": true,
+                "vscodeTerminal": true,
+                "tmuxSession": false,
+                "tmuxCsiU": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "stdin_not_terminal",
+                "supported": false
+              },
+              {
+                "kind": "restore_after_exit",
+                "rawModeRestore": "disable",
+                "keyboardRestore": "reset_after_exit",
+                "bracketedPaste": true,
+                "focusChange": true,
+                "cursorDefault": true,
+                "cursorShow": true,
+                "terminalStderrFinish": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.terminal_modes.plan=headless\ntui.terminal_modes.init=stdin=false:stdout=true:set_modes=false:flush=true:panic_hook=true:keyboard_supported=false\ntui.keyboard_enhancement.decision=disabled=true:env=auto:wsl=true:vscode=true:tmux=false:tmux_csi_u=false\ntui.terminal_modes.failure=stdin_not_terminal:supported=false\ntui.terminal_modes.restore_after_exit=raw=disable:keyboard=reset_after_exit:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: starting | model: gpt-5.2-codex\nsystem> terminal capability gate no live takeover\ninput> \ntrace:\ntui.terminal_modes.plan=headless\ntui.terminal_modes.init=stdin=false:stdout=true:set_modes=false:flush=true:panic_hook=true:keyboard_supported=false\ntui.keyboard_enhancement.decision=disabled=true:env=auto:wsl=true:vscode=true:tmux=false:tmux_csi_u=false\ntui.terminal_modes.failure=stdin_not_terminal:supported=false\ntui.terminal_modes.restore_after_exit=raw=disable:keyboard=reset_after_exit:disable_bracketed_paste=true:disable_focus=true:cursor_default=true:cursor_show=true:stderr_finish=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
