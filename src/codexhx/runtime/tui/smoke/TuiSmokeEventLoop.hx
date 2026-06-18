@@ -171,6 +171,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.HooksBrowser:
+					if (!traceHooksBrowser(event.hooksBrowser, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1309,6 +1314,141 @@ class TuiSmokeEventLoop {
 					trace.push("tui.app_link.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.app_link.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceHooksBrowser(plan:TuiSmokeHooksBrowserPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveHooks || !plan.enabled()) {
+			trace.push("tui.hooks_browser.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.hooks_browser.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeHooksBrowserActionKind.OpenBrowser:
+					trace.push(
+						"tui.hooks_browser.open="
+						+ action.pageAfter
+						+ ":events=" + action.eventCount
+						+ ":hooks=" + action.hookCount
+						+ ":needs_review=" + action.needsReviewCount
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeHooksBrowserActionKind.RenderEvents:
+					trace.push(
+						"tui.hooks_browser.render_events="
+						+ "events=" + action.eventCount
+						+ ":installed=" + action.installedCount
+						+ ":active=" + action.activeCount
+						+ ":needs_review=" + action.needsReviewCount
+						+ ":warnings=" + action.warningCount
+						+ ":errors=" + action.errorCount
+						+ ":rows=" + action.visibleRows
+						+ ":rendered=" + action.rendered
+					);
+				case TuiSmokeHooksBrowserActionKind.MoveSelection:
+					trace.push(
+						"tui.hooks_browser.selection="
+						+ action.pageBefore
+						+ ":event=" + action.eventName
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":scroll=" + action.scrollTransitionText()
+					);
+				case TuiSmokeHooksBrowserActionKind.OpenEvent:
+					trace.push(
+						"tui.hooks_browser.open_event="
+						+ action.eventName
+						+ ":page=" + action.pageTransitionText()
+						+ ":handlers=" + action.hookCount
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeHooksBrowserActionKind.ReturnToEvents:
+					trace.push(
+						"tui.hooks_browser.return="
+						+ action.eventName
+						+ ":page=" + action.pageTransitionText()
+						+ ":selected=" + action.selectionTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeHooksBrowserActionKind.RenderHandlers:
+					trace.push(
+						"tui.hooks_browser.render_handlers="
+						+ action.eventName
+						+ ":handlers=" + action.hookCount
+						+ ":active=" + action.activeCount
+						+ ":needs_review=" + action.needsReviewCount
+						+ ":rows=" + action.visibleRows
+						+ ":details=" + action.detailLines
+						+ ":command_lines=" + action.commandDetailLines
+						+ ":rendered=" + action.rendered
+					);
+				case TuiSmokeHooksBrowserActionKind.ToggleHook:
+					trace.push(
+						"tui.hooks_browser.toggle="
+						+ action.hookKey
+						+ ":event=" + action.eventName
+						+ ":source=" + action.hookSource
+						+ ":enabled=" + action.enabledTransitionText()
+						+ ":sent=" + action.setHookEnabledSent
+					);
+				case TuiSmokeHooksBrowserActionKind.TrustHook:
+					trace.push(
+						"tui.hooks_browser.trust="
+						+ action.hookKey
+						+ ":event=" + action.eventName
+						+ ":trust=" + action.trustTransitionText()
+						+ ":sent=" + action.trustHookSent
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeHooksBrowserActionKind.TrustAll:
+					trace.push(
+						"tui.hooks_browser.trust_all="
+						+ action.eventName
+						+ ":updates=" + action.updatesCount
+						+ ":needs_review=" + action.needsReviewCount
+						+ ":sent=" + action.trustHooksSent
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeHooksBrowserActionKind.ManagedNoOp:
+					trace.push(
+						"tui.hooks_browser.managed_noop="
+						+ action.hookKey
+						+ ":event=" + action.eventName
+						+ ":managed=" + action.managed
+						+ ":enabled=" + action.enabledTransitionText()
+						+ ":sent=" + action.setHookEnabledSent
+					);
+				case TuiSmokeHooksBrowserActionKind.ReviewNoOp:
+					trace.push(
+						"tui.hooks_browser.review_noop="
+						+ action.hookKey
+						+ ":event=" + action.eventName
+						+ ":needs_review=" + action.needsReview
+						+ ":trust=" + action.trustTransitionText()
+						+ ":sent=" + action.setHookEnabledSent
+					);
+				case TuiSmokeHooksBrowserActionKind.Close:
+					trace.push(
+						"tui.hooks_browser.close="
+						+ action.pageBefore
+						+ ":complete=" + action.completeTransitionText()
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeHooksBrowserActionKind.Failure:
+					trace.push(
+						"tui.hooks_browser.failure="
+						+ action.failureCode
+						+ ":warnings=" + action.warningCount
+						+ ":errors=" + action.errorCount
+						+ ":rejected=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.hooks_browser.unknown");
 					return false;
 			}
 		}

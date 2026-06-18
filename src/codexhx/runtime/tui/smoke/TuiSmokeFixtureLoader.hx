@@ -84,7 +84,64 @@ class TuiSmokeFixtureLoader {
 				approvalOverlay: optionalApprovalPlan(value, "approvalOverlay"),
 				userInputOverlay: optionalUserInputPlan(value, "userInputOverlay"),
 				mcpElicitationOverlay: optionalMcpElicitationPlan(value, "mcpElicitationOverlay"),
-				appLinkOverlay: optionalAppLinkPlan(value, "appLinkOverlay")
+				appLinkOverlay: optionalAppLinkPlan(value, "appLinkOverlay"),
+				hooksBrowser: optionalHooksBrowserPlan(value, "hooksBrowser")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalHooksBrowserPlan(object:Value, name:String):Null<TuiSmokeHooksBrowserPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeHooksBrowserPlan({
+					allowLiveHooks: optionalBoolField(value, "allowLiveHooks", false),
+					actions: hooksBrowserActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function hooksBrowserActions(values:Array<Value>):Array<TuiSmokeHooksBrowserAction> {
+		final out:Array<TuiSmokeHooksBrowserAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeHooksBrowserAction({
+				kind: TuiSmokeHooksBrowserActionKind.fromString(stringField(value, "kind", "")),
+				pageBefore: TuiSmokeHooksBrowserPageKind.fromString(optionalStringField(value, "pageBefore", "unknown")),
+				pageAfter: TuiSmokeHooksBrowserPageKind.fromString(optionalStringField(value, "pageAfter", "unknown")),
+				eventName: optionalStringField(value, "eventName", ""),
+				hookKey: optionalStringField(value, "hookKey", ""),
+				hookSource: TuiSmokeHookSourceKind.fromString(optionalStringField(value, "hookSource", "unknown")),
+				trustBefore: TuiSmokeHookTrustKind.fromString(optionalStringField(value, "trustBefore", "unknown")),
+				trustAfter: TuiSmokeHookTrustKind.fromString(optionalStringField(value, "trustAfter", "unknown")),
+				eventCount: optionalIntField(value, "eventCount", 0),
+				hookCount: optionalIntField(value, "hookCount", 0),
+				activeCount: optionalIntField(value, "activeCount", 0),
+				installedCount: optionalIntField(value, "installedCount", 0),
+				needsReviewCount: optionalIntField(value, "needsReviewCount", 0),
+				warningCount: optionalIntField(value, "warningCount", 0),
+				errorCount: optionalIntField(value, "errorCount", 0),
+				visibleRows: optionalIntField(value, "visibleRows", 0),
+				detailLines: optionalIntField(value, "detailLines", 0),
+				commandDetailLines: optionalIntField(value, "commandDetailLines", 0),
+				updatesCount: optionalIntField(value, "updatesCount", 0),
+				selectedBefore: optionalIntField(value, "selectedBefore", 0),
+				selectedAfter: optionalIntField(value, "selectedAfter", 0),
+				scrollBefore: optionalIntField(value, "scrollBefore", 0),
+				scrollAfter: optionalIntField(value, "scrollAfter", 0),
+				enabledBefore: optionalBoolField(value, "enabledBefore", false),
+				enabledAfter: optionalBoolField(value, "enabledAfter", false),
+				managed: optionalBoolField(value, "managed", false),
+				needsReview: optionalBoolField(value, "needsReview", false),
+				setHookEnabledSent: optionalBoolField(value, "setHookEnabledSent", false),
+				trustHookSent: optionalBoolField(value, "trustHookSent", false),
+				trustHooksSent: optionalBoolField(value, "trustHooksSent", false),
+				completeBefore: optionalBoolField(value, "completeBefore", false),
+				completeAfter: optionalBoolField(value, "completeAfter", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				rendered: optionalBoolField(value, "rendered", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

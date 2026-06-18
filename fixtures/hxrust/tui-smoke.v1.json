@@ -5407,6 +5407,322 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.app_link.plan=headless\ntui.app_link.show=enable:app=calendar:title=Calendar:actions=3:views=0->1:pause_status=true:composer_disabled=true\ntui.app_link.toggle_enabled=calendar:enabled=false->true:event=true:decision=accept:command=true\ntui.app_link.dismiss_resolved=enable:server=codex_apps:request=link-2:matched=true:stale=false:views=1->0:resume_status=true:frame=true\ntui.app_link.cancel=install:decision=decline:command=true:complete=false->true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> app link enable dismiss\ninput> \ntrace:\ntui.app_link.plan=headless\ntui.app_link.show=enable:app=calendar:title=Calendar:actions=3:views=0->1:pause_status=true:composer_disabled=true\ntui.app_link.toggle_enabled=calendar:enabled=false->true:event=true:decision=accept:command=true\ntui.app_link.dismiss_resolved=enable:server=codex_apps:request=link-2:matched=true:stale=false:views=1->0:resume_status=true:frame=true\ntui.app_link.cancel=install:decision=decline:command=true:complete=false->true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "hooks-browser-events-review-open-trust-all",
+      "frame": {
+        "name": "hooks-browser-events-review-open-trust-all",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 64,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "hooks browser review events"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "hooks_browser",
+          "hooksBrowser": {
+            "allowLiveHooks": false,
+            "actions": [
+              {
+                "kind": "open_browser",
+                "pageAfter": "events",
+                "eventCount": 3,
+                "hookCount": 4,
+                "needsReviewCount": 1,
+                "selectedBefore": 0,
+                "selectedAfter": 1,
+                "frameScheduled": true
+              },
+              {
+                "kind": "render_events",
+                "eventCount": 3,
+                "installedCount": 4,
+                "activeCount": 2,
+                "needsReviewCount": 1,
+                "visibleRows": 3,
+                "rendered": true
+              },
+              {
+                "kind": "move_selection",
+                "pageBefore": "events",
+                "eventName": "PostToolUse",
+                "selectedBefore": 1,
+                "selectedAfter": 2,
+                "scrollBefore": 0,
+                "scrollAfter": 0
+              },
+              {
+                "kind": "trust_all",
+                "eventName": "*",
+                "updatesCount": 1,
+                "needsReviewCount": 1,
+                "trustHooksSent": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "render_events",
+                "eventCount": 3,
+                "installedCount": 4,
+                "activeCount": 3,
+                "needsReviewCount": 0,
+                "visibleRows": 3,
+                "rendered": true
+              },
+              {
+                "kind": "close",
+                "pageBefore": "events",
+                "completeBefore": false,
+                "completeAfter": true,
+                "frameScheduled": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.hooks_browser.plan=headless\ntui.hooks_browser.open=events:events=3:hooks=4:needs_review=1:selected=0->1:frame=true\ntui.hooks_browser.render_events=events=3:installed=4:active=2:needs_review=1:warnings=0:errors=0:rows=3:rendered=true\ntui.hooks_browser.selection=events:event=PostToolUse:selected=1->2:scroll=0->0\ntui.hooks_browser.trust_all=*:updates=1:needs_review=1:sent=true:frame=true\ntui.hooks_browser.render_events=events=3:installed=4:active=3:needs_review=0:warnings=0:errors=0:rows=3:rendered=true\ntui.hooks_browser.close=events:complete=false->true:frame=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> hooks browser review events\ninput> \ntrace:\ntui.hooks_browser.plan=headless\ntui.hooks_browser.open=events:events=3:hooks=4:needs_review=1:selected=0->1:frame=true\ntui.hooks_browser.render_events=events=3:installed=4:active=2:needs_review=1:warnings=0:errors=0:rows=3:rendered=true\ntui.hooks_browser.selection=events:event=PostToolUse:selected=1->2:scroll=0->0\ntui.hooks_browser.trust_all=*:updates=1:needs_review=1:sent=true:frame=true\ntui.hooks_browser.render_events=events=3:installed=4:active=3:needs_review=0:warnings=0:errors=0:rows=3:rendered=true\ntui.hooks_browser.close=events:complete=false->true:frame=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "hooks-browser-handlers-toggle-trust",
+      "frame": {
+        "name": "hooks-browser-handlers-toggle-trust",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 64,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "hooks browser handler actions"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "hooks_browser",
+          "hooksBrowser": {
+            "allowLiveHooks": false,
+            "actions": [
+              {
+                "kind": "open_browser",
+                "pageAfter": "events",
+                "eventCount": 2,
+                "hookCount": 3,
+                "needsReviewCount": 1,
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "frameScheduled": true
+              },
+              {
+                "kind": "open_event",
+                "eventName": "PreToolUse",
+                "pageBefore": "events",
+                "pageAfter": "handlers",
+                "hookCount": 3,
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "frameScheduled": true
+              },
+              {
+                "kind": "render_handlers",
+                "eventName": "PreToolUse",
+                "hookCount": 3,
+                "activeCount": 1,
+                "needsReviewCount": 1,
+                "visibleRows": 3,
+                "detailLines": 5,
+                "commandDetailLines": 2,
+                "rendered": true
+              },
+              {
+                "kind": "toggle_hook",
+                "eventName": "PreToolUse",
+                "hookKey": "user.audit",
+                "hookSource": "user",
+                "enabledBefore": true,
+                "enabledAfter": false,
+                "setHookEnabledSent": true
+              },
+              {
+                "kind": "trust_hook",
+                "eventName": "PreToolUse",
+                "hookKey": "project.guard",
+                "trustBefore": "modified",
+                "trustAfter": "trusted",
+                "trustHookSent": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "return_to_events",
+                "eventName": "PreToolUse",
+                "pageBefore": "handlers",
+                "pageAfter": "events",
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "frameScheduled": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.hooks_browser.plan=headless\ntui.hooks_browser.open=events:events=2:hooks=3:needs_review=1:selected=0->0:frame=true\ntui.hooks_browser.open_event=PreToolUse:page=events->handlers:handlers=3:selected=0->0:frame=true\ntui.hooks_browser.render_handlers=PreToolUse:handlers=3:active=1:needs_review=1:rows=3:details=5:command_lines=2:rendered=true\ntui.hooks_browser.toggle=user.audit:event=PreToolUse:source=user:enabled=true->false:sent=true\ntui.hooks_browser.trust=project.guard:event=PreToolUse:trust=modified->trusted:sent=true:frame=true\ntui.hooks_browser.return=PreToolUse:page=handlers->events:selected=0->0:frame=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> hooks browser handler actions\ninput> \ntrace:\ntui.hooks_browser.plan=headless\ntui.hooks_browser.open=events:events=2:hooks=3:needs_review=1:selected=0->0:frame=true\ntui.hooks_browser.open_event=PreToolUse:page=events->handlers:handlers=3:selected=0->0:frame=true\ntui.hooks_browser.render_handlers=PreToolUse:handlers=3:active=1:needs_review=1:rows=3:details=5:command_lines=2:rendered=true\ntui.hooks_browser.toggle=user.audit:event=PreToolUse:source=user:enabled=true->false:sent=true\ntui.hooks_browser.trust=project.guard:event=PreToolUse:trust=modified->trusted:sent=true:frame=true\ntui.hooks_browser.return=PreToolUse:page=handlers->events:selected=0->0:frame=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "hooks-browser-managed-empty-issues",
+      "frame": {
+        "name": "hooks-browser-managed-empty-issues",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 64,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "hooks browser managed empty issues"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "hooks_browser",
+          "hooksBrowser": {
+            "allowLiveHooks": false,
+            "actions": [
+              {
+                "kind": "open_browser",
+                "pageAfter": "events",
+                "eventCount": 2,
+                "hookCount": 1,
+                "needsReviewCount": 1,
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "frameScheduled": true
+              },
+              {
+                "kind": "render_events",
+                "eventCount": 2,
+                "installedCount": 1,
+                "activeCount": 1,
+                "needsReviewCount": 1,
+                "warningCount": 1,
+                "errorCount": 1,
+                "visibleRows": 2,
+                "rendered": true
+              },
+              {
+                "kind": "open_event",
+                "eventName": "SessionStart",
+                "pageBefore": "events",
+                "pageAfter": "handlers",
+                "hookCount": 0,
+                "selectedBefore": 0,
+                "selectedAfter": 0,
+                "frameScheduled": true
+              },
+              {
+                "kind": "render_handlers",
+                "eventName": "SessionStart",
+                "hookCount": 0,
+                "activeCount": 0,
+                "needsReviewCount": 0,
+                "visibleRows": 0,
+                "detailLines": 0,
+                "commandDetailLines": 0,
+                "rendered": true
+              },
+              {
+                "kind": "managed_no_op",
+                "eventName": "SessionStart",
+                "hookKey": "managed.policy",
+                "managed": true,
+                "enabledBefore": true,
+                "enabledAfter": true,
+                "setHookEnabledSent": false
+              },
+              {
+                "kind": "review_no_op",
+                "eventName": "SessionStart",
+                "hookKey": "project.changed",
+                "needsReview": true,
+                "trustBefore": "untrusted",
+                "trustAfter": "untrusted",
+                "setHookEnabledSent": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "hooks_browser_config_issues",
+                "warningCount": 1,
+                "errorCount": 1,
+                "unsupportedRejected": false
+              },
+              {
+                "kind": "close",
+                "pageBefore": "handlers",
+                "completeBefore": false,
+                "completeAfter": true,
+                "frameScheduled": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.hooks_browser.plan=headless\ntui.hooks_browser.open=events:events=2:hooks=1:needs_review=1:selected=0->0:frame=true\ntui.hooks_browser.render_events=events=2:installed=1:active=1:needs_review=1:warnings=1:errors=1:rows=2:rendered=true\ntui.hooks_browser.open_event=SessionStart:page=events->handlers:handlers=0:selected=0->0:frame=true\ntui.hooks_browser.render_handlers=SessionStart:handlers=0:active=0:needs_review=0:rows=0:details=0:command_lines=0:rendered=true\ntui.hooks_browser.managed_noop=managed.policy:event=SessionStart:managed=true:enabled=true->true:sent=false\ntui.hooks_browser.review_noop=project.changed:event=SessionStart:needs_review=true:trust=untrusted->untrusted:sent=false\ntui.hooks_browser.failure=hooks_browser_config_issues:warnings=1:errors=1:rejected=false\ntui.hooks_browser.close=handlers:complete=false->true:frame=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> hooks browser managed empty issues\ninput> \ntrace:\ntui.hooks_browser.plan=headless\ntui.hooks_browser.open=events:events=2:hooks=1:needs_review=1:selected=0->0:frame=true\ntui.hooks_browser.render_events=events=2:installed=1:active=1:needs_review=1:warnings=1:errors=1:rows=2:rendered=true\ntui.hooks_browser.open_event=SessionStart:page=events->handlers:handlers=0:selected=0->0:frame=true\ntui.hooks_browser.render_handlers=SessionStart:handlers=0:active=0:needs_review=0:rows=0:details=0:command_lines=0:rendered=true\ntui.hooks_browser.managed_noop=managed.policy:event=SessionStart:managed=true:enabled=true->true:sent=false\ntui.hooks_browser.review_noop=project.changed:event=SessionStart:needs_review=true:trust=untrusted->untrusted:sent=false\ntui.hooks_browser.failure=hooks_browser_config_issues:warnings=1:errors=1:rejected=false\ntui.hooks_browser.close=handlers:complete=false->true:frame=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
