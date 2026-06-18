@@ -29,6 +29,7 @@ typedef TuiSmokeEventFields = {
 	final slashCommandPopup:Null<TuiSmokeSlashPopupPlan>;
 	final fileMentionPopup:Null<TuiSmokeFileMentionPopupPlan>;
 	final historySearch:Null<TuiSmokeHistorySearchPlan>;
+	final composerAttachment:Null<TuiSmokeComposerAttachmentPlan>;
 }
 
 class TuiSmokeEvent {
@@ -60,6 +61,7 @@ class TuiSmokeEvent {
 	public final slashCommandPopup:Null<TuiSmokeSlashPopupPlan>;
 	public final fileMentionPopup:Null<TuiSmokeFileMentionPopupPlan>;
 	public final historySearch:Null<TuiSmokeHistorySearchPlan>;
+	public final composerAttachment:Null<TuiSmokeComposerAttachmentPlan>;
 
 	public function new(fields:TuiSmokeEventFields) {
 		this.kind = fields.kind == null ? TuiSmokeEventKind.Unknown : fields.kind;
@@ -90,5 +92,6 @@ class TuiSmokeEvent {
 		this.slashCommandPopup = fields.slashCommandPopup;
 		this.fileMentionPopup = fields.fileMentionPopup;
 		this.historySearch = fields.historySearch;
+		this.composerAttachment = fields.composerAttachment;
 	}
 }

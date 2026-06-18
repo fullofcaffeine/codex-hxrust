@@ -22,7 +22,14 @@
       "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/src/tui/event_stream.rs",
       "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
-      "../codex/codex-rs/tui/tests/suite/status_indicator.rs"
+      "../codex/codex-rs/tui/tests/suite/status_indicator.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/chat_composer/attachment_state.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/paste_burst.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/mod.rs",
+      "../codex/codex-rs/tui/src/chatwidget/interaction.rs",
+      "../codex/codex-rs/tui/src/chatwidget/input_restore.rs",
+      "../codex/codex-rs/tui/src/chatwidget/input_submission.rs"
     ],
     "notes": "Minimal generated-binary smoke proof only. It uses a headless terminal facade and fixture frame; it does not claim ratatui/crossterm ownership, live app-server transport, or a full interactive TUI."
   },
@@ -6634,6 +6641,314 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.history_search.plan=headless\ntui.history_search.suppress_popups=file_query_cleared=true:popups_cleared=true:frame=true\ntui.history_search.keymap=f2:remapped=true:fallback_suppressed=true:consumed=true\ntui.history_search.begin=f2:active=false->true:status=idle:original=:paste_flushed=false:file_query_cleared=true:popups_cleared=true:remote_images_cleared=true:search_reset=true\ntui.history_search.query=->zzz:status=idle->searching:restore_original=true:direction=older\ntui.history_search.result=not_found:status=searching->no_match:preview=:matches=0:selected=0->0:draft_previewed=false:draft_restored=true\ntui.history_search.footer=reverse-i-search: zzz no match:mode=true:status=no_match\ntui.history_search.query=zzz->:status=no_match->idle:restore_original=true:direction=older\ntui.history_search.cancel=esc:active=true->false:restored=:navigation_reset=true:ctrl_c=false:redraw=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> history search remap no match suppression\ninput> \ntrace:\ntui.history_search.plan=headless\ntui.history_search.suppress_popups=file_query_cleared=true:popups_cleared=true:frame=true\ntui.history_search.keymap=f2:remapped=true:fallback_suppressed=true:consumed=true\ntui.history_search.begin=f2:active=false->true:status=idle:original=:paste_flushed=false:file_query_cleared=true:popups_cleared=true:remote_images_cleared=true:search_reset=true\ntui.history_search.query=->zzz:status=idle->searching:restore_original=true:direction=older\ntui.history_search.result=not_found:status=searching->no_match:preview=:matches=0:selected=0->0:draft_previewed=false:draft_restored=true\ntui.history_search.footer=reverse-i-search: zzz no match:mode=true:status=no_match\ntui.history_search.query=zzz->:status=no_match->idle:restore_original=true:direction=older\ntui.history_search.cancel=esc:active=true->false:restored=:navigation_reset=true:ctrl_c=false:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-attachment-small-large-paste-submit",
+      "frame": {
+        "name": "composer-attachment-small-large-paste-submit",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer paste placeholder submission"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_attachment",
+          "composerAttachment": {
+            "allowLiveFilesystem": false,
+            "actions": [
+              {
+                "kind": "handle_paste",
+                "pasteKind": "small_text",
+                "normalizedText": "hello",
+                "charCount": 5,
+                "threshold": 1000,
+                "textInserted": true,
+                "pendingBefore": 0,
+                "pendingAfter": 0,
+                "needsRedraw": true
+              },
+              {
+                "kind": "large_paste_placeholder",
+                "attachmentKind": "large_paste",
+                "placeholder": "[Pasted Content 1001 chars]",
+                "charCount": 1001,
+                "pendingBefore": 0,
+                "pendingAfter": 1,
+                "textElementBefore": 0,
+                "textElementAfter": 1,
+                "placeholderInserted": true,
+                "pendingStored": true
+              },
+              {
+                "kind": "expand_pending_pastes",
+                "attachmentKind": "large_paste",
+                "pendingBefore": 1,
+                "pendingAfter": 0,
+                "textElementBefore": 1,
+                "textElementAfter": 0,
+                "pendingExpanded": true,
+                "pendingCleared": true
+              },
+              {
+                "kind": "prepare_submission",
+                "attachmentKind": "submission",
+                "pendingBefore": 1,
+                "pendingAfter": 0,
+                "textElementBefore": 1,
+                "textElementAfter": 0,
+                "localImagesPruned": false,
+                "submissionSuppressed": false,
+                "submissionPrepared": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_attachment.plan=headless\ntui.composer_attachment.paste=small_text:chars=5:threshold=1000:normalized=hello:text_inserted=true:placeholder=false:pending=0->0:redraw=true\ntui.composer_attachment.large_paste=[Pasted Content 1001 chars]:chars=1001:pending=0->1:elements=0->1\ntui.composer_attachment.expand_pending=pending=1->0:elements=1->0:expanded=true:cleared=true\ntui.composer_attachment.prepare_submission=submission:pending=1->0:elements=1->0:local_pruned=false:suppressed=false:prepared=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer paste placeholder submission\ninput> \ntrace:\ntui.composer_attachment.plan=headless\ntui.composer_attachment.paste=small_text:chars=5:threshold=1000:normalized=hello:text_inserted=true:placeholder=false:pending=0->0:redraw=true\ntui.composer_attachment.large_paste=[Pasted Content 1001 chars]:chars=1001:pending=0->1:elements=0->1\ntui.composer_attachment.expand_pending=pending=1->0:elements=1->0:expanded=true:cleared=true\ntui.composer_attachment.prepare_submission=submission:pending=1->0:elements=1->0:local_pruned=false:suppressed=false:prepared=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-attachment-image-remote-restore",
+      "frame": {
+        "name": "composer-attachment-image-remote-restore",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer remote local draft restore"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_attachment",
+          "composerAttachment": {
+            "allowLiveFilesystem": false,
+            "actions": [
+              {
+                "kind": "set_remote_images",
+                "attachmentKind": "remote_image",
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 1,
+                "selectedRemoteBefore": -1,
+                "selectedRemoteAfter": -1,
+                "remoteRelabeledLocals": true
+              },
+              {
+                "kind": "attach_local_image",
+                "attachmentKind": "local_image",
+                "placeholder": "[Image #2]",
+                "path": "/tmp/chart.png",
+                "localImageBefore": 0,
+                "localImageAfter": 1,
+                "remoteImageAfter": 1,
+                "imageAttached": true
+              },
+              {
+                "kind": "snapshot_draft",
+                "attachmentKind": "draft",
+                "textElementAfter": 1,
+                "localImageAfter": 1,
+                "remoteImageAfter": 1,
+                "pendingAfter": 1,
+                "draftSnapshotStored": true
+              },
+              {
+                "kind": "restore_draft",
+                "attachmentKind": "draft",
+                "cursorBefore": 0,
+                "cursorAfter": 27,
+                "localImageBefore": 0,
+                "localImageAfter": 1,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 1,
+                "pendingBefore": 0,
+                "pendingAfter": 1,
+                "draftRestored": true
+              },
+              {
+                "kind": "apply_history_entry",
+                "attachmentKind": "history_entry",
+                "localImageAfter": 1,
+                "remoteImageAfter": 1,
+                "pendingAfter": 1,
+                "historyEntryApplied": true
+              },
+              {
+                "kind": "drain_submission",
+                "attachmentKind": "submission",
+                "localImageBefore": 1,
+                "localImageAfter": 0,
+                "remoteImageBefore": 1,
+                "remoteImageAfter": 0,
+                "remoteImagesTaken": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_attachment.plan=headless\ntui.composer_attachment.remote_images=0->1:selected=-1->-1:relabel_locals=true\ntui.composer_attachment.local_image=[Image #2]:path=/tmp/chart.png:local=0->1:remote=1:attached=true\ntui.composer_attachment.snapshot=draft:text_elements=1:local=1:remote=1:pending=1:stored=true\ntui.composer_attachment.restore=draft:cursor=0->27:local=0->1:remote=0->1:pending=0->1:restored=true\ntui.composer_attachment.history_entry=history_entry:local=1:remote=1:pending=1:applied=true\ntui.composer_attachment.drain_submission=submission:local=1->0:remote_taken=true:remote=1->0\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer remote local draft restore\ninput> \ntrace:\ntui.composer_attachment.plan=headless\ntui.composer_attachment.remote_images=0->1:selected=-1->-1:relabel_locals=true\ntui.composer_attachment.local_image=[Image #2]:path=/tmp/chart.png:local=0->1:remote=1:attached=true\ntui.composer_attachment.snapshot=draft:text_elements=1:local=1:remote=1:pending=1:stored=true\ntui.composer_attachment.restore=draft:cursor=0->27:local=0->1:remote=0->1:pending=0->1:restored=true\ntui.composer_attachment.history_entry=history_entry:local=1:remote=1:pending=1:applied=true\ntui.composer_attachment.drain_submission=submission:local=1->0:remote_taken=true:remote=1->0\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-attachment-paste-burst-image-fallback",
+      "frame": {
+        "name": "composer-attachment-paste-burst-image-fallback",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer paste burst image fallback"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_attachment",
+          "composerAttachment": {
+            "allowLiveFilesystem": false,
+            "actions": [
+              {
+                "kind": "paste_burst_char",
+                "pasteKind": "paste_burst",
+                "inputText": "a",
+                "burstBefore": "inactive",
+                "burstAfter": "pending_first_char",
+                "buffered": false,
+                "pendingBefore": 0,
+                "pendingAfter": 0
+              },
+              {
+                "kind": "paste_burst_char",
+                "pasteKind": "paste_burst",
+                "inputText": "b",
+                "burstBefore": "pending_first_char",
+                "burstAfter": "buffering",
+                "buffered": true,
+                "pendingBefore": 0,
+                "pendingAfter": 0
+              },
+              {
+                "kind": "paste_burst_char",
+                "pasteKind": "paste_burst",
+                "inputText": "enter",
+                "burstBefore": "buffering",
+                "burstAfter": "buffering",
+                "buffered": true,
+                "newlineCaptured": true,
+                "pendingBefore": 0,
+                "pendingAfter": 0
+              },
+              {
+                "kind": "paste_burst_flush",
+                "pasteKind": "paste_burst",
+                "burstBefore": "buffering",
+                "burstAfter": "flushed",
+                "flushed": true,
+                "charCount": 1201,
+                "pendingBefore": 0,
+                "pendingAfter": 1,
+                "needsRedraw": true
+              },
+              {
+                "kind": "frame_schedule",
+                "burstAfter": "flushed",
+                "frameScheduled": true,
+                "needsRedraw": true
+              },
+              {
+                "kind": "insert_selected_file",
+                "pasteKind": "selected_file",
+                "path": "/tmp/not-really.png",
+                "imagePasteEnabled": true,
+                "imageDimensionsChecked": false,
+                "imageAttached": false,
+                "pathInsertedFallback": true,
+                "noLiveFilesystem": true
+              },
+              {
+                "kind": "select_remote_image",
+                "keyName": "up",
+                "selectedRemoteBefore": -1,
+                "selectedRemoteAfter": 0,
+                "needsRedraw": true
+              },
+              {
+                "kind": "delete_remote_image",
+                "keyName": "delete",
+                "remoteImageBefore": 1,
+                "remoteImageAfter": 0,
+                "selectedRemoteBefore": 0,
+                "selectedRemoteAfter": -1,
+                "remoteRelabeledLocals": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_attachment.plan=headless\ntui.composer_attachment.burst_char=a:state=inactive->pending_first_char:buffered=false:newline=false:pending=0->0\ntui.composer_attachment.burst_char=b:state=pending_first_char->buffering:buffered=true:newline=false:pending=0->0\ntui.composer_attachment.burst_char=enter:state=buffering->buffering:buffered=true:newline=true:pending=0->0\ntui.composer_attachment.burst_flush=paste_burst:state=buffering->flushed:flushed=true:chars=1201:pending=0->1:redraw=true\ntui.composer_attachment.frame=scheduled=true:redraw=true:burst=flushed\ntui.composer_attachment.selected_file=/tmp/not-really.png:image_path=true:dimensions_checked=false:attached=false:fallback=true:no_live_fs=true\ntui.composer_attachment.remote_select=up:selected=-1->0:redraw=true\ntui.composer_attachment.remote_delete=delete:remote=1->0:selected=0->-1:relabel_locals=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer paste burst image fallback\ninput> \ntrace:\ntui.composer_attachment.plan=headless\ntui.composer_attachment.burst_char=a:state=inactive->pending_first_char:buffered=false:newline=false:pending=0->0\ntui.composer_attachment.burst_char=b:state=pending_first_char->buffering:buffered=true:newline=false:pending=0->0\ntui.composer_attachment.burst_char=enter:state=buffering->buffering:buffered=true:newline=true:pending=0->0\ntui.composer_attachment.burst_flush=paste_burst:state=buffering->flushed:flushed=true:chars=1201:pending=0->1:redraw=true\ntui.composer_attachment.frame=scheduled=true:redraw=true:burst=flushed\ntui.composer_attachment.selected_file=/tmp/not-really.png:image_path=true:dimensions_checked=false:attached=false:fallback=true:no_live_fs=true\ntui.composer_attachment.remote_select=up:selected=-1->0:redraw=true\ntui.composer_attachment.remote_delete=delete:remote=1->0:selected=0->-1:relabel_locals=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

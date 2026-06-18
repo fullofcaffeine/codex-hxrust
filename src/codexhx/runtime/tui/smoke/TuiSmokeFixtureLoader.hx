@@ -88,7 +88,80 @@ class TuiSmokeFixtureLoader {
 				hooksBrowser: optionalHooksBrowserPlan(value, "hooksBrowser"),
 				slashCommandPopup: optionalSlashPopupPlan(value, "slashCommandPopup"),
 				fileMentionPopup: optionalFileMentionPopupPlan(value, "fileMentionPopup"),
-				historySearch: optionalHistorySearchPlan(value, "historySearch")
+				historySearch: optionalHistorySearchPlan(value, "historySearch"),
+				composerAttachment: optionalComposerAttachmentPlan(value, "composerAttachment")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalComposerAttachmentPlan(object:Value, name:String):Null<TuiSmokeComposerAttachmentPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeComposerAttachmentPlan({
+					allowLiveFilesystem: optionalBoolField(value, "allowLiveFilesystem", false),
+					actions: composerAttachmentActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function composerAttachmentActions(values:Array<Value>):Array<TuiSmokeComposerAttachmentAction> {
+		final out:Array<TuiSmokeComposerAttachmentAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeComposerAttachmentAction({
+				kind: TuiSmokeComposerAttachmentActionKind.fromString(stringField(value, "kind", "")),
+				pasteKind: TuiSmokeComposerPasteKind.fromString(optionalStringField(value, "pasteKind", "unknown")),
+				attachmentKind: TuiSmokeComposerAttachmentKind.fromString(optionalStringField(value, "attachmentKind", "unknown")),
+				burstBefore: TuiSmokeComposerPasteBurstStateKind.fromString(optionalStringField(value, "burstBefore", "unknown")),
+				burstAfter: TuiSmokeComposerPasteBurstStateKind.fromString(optionalStringField(value, "burstAfter", "unknown")),
+				inputText: optionalStringField(value, "inputText", ""),
+				normalizedText: optionalStringField(value, "normalizedText", ""),
+				placeholder: optionalStringField(value, "placeholder", ""),
+				path: optionalStringField(value, "path", ""),
+				remoteUrl: optionalStringField(value, "remoteUrl", ""),
+				keyName: optionalStringField(value, "keyName", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				charCount: optionalIntField(value, "charCount", 0),
+				threshold: optionalIntField(value, "threshold", 0),
+				pendingBefore: optionalIntField(value, "pendingBefore", 0),
+				pendingAfter: optionalIntField(value, "pendingAfter", 0),
+				textElementBefore: optionalIntField(value, "textElementBefore", 0),
+				textElementAfter: optionalIntField(value, "textElementAfter", 0),
+				localImageBefore: optionalIntField(value, "localImageBefore", 0),
+				localImageAfter: optionalIntField(value, "localImageAfter", 0),
+				remoteImageBefore: optionalIntField(value, "remoteImageBefore", 0),
+				remoteImageAfter: optionalIntField(value, "remoteImageAfter", 0),
+				selectedRemoteBefore: optionalIntField(value, "selectedRemoteBefore", -1),
+				selectedRemoteAfter: optionalIntField(value, "selectedRemoteAfter", -1),
+				cursorBefore: optionalIntField(value, "cursorBefore", 0),
+				cursorAfter: optionalIntField(value, "cursorAfter", 0),
+				needsRedraw: optionalBoolField(value, "needsRedraw", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				pasteBurstDisabled: optionalBoolField(value, "pasteBurstDisabled", false),
+				buffered: optionalBoolField(value, "buffered", false),
+				flushed: optionalBoolField(value, "flushed", false),
+				newlineCaptured: optionalBoolField(value, "newlineCaptured", false),
+				placeholderInserted: optionalBoolField(value, "placeholderInserted", false),
+				pendingStored: optionalBoolField(value, "pendingStored", false),
+				pendingExpanded: optionalBoolField(value, "pendingExpanded", false),
+				pendingCleared: optionalBoolField(value, "pendingCleared", false),
+				imagePasteEnabled: optionalBoolField(value, "imagePasteEnabled", false),
+				imageDimensionsChecked: optionalBoolField(value, "imageDimensionsChecked", false),
+				imageAttached: optionalBoolField(value, "imageAttached", false),
+				pathInsertedFallback: optionalBoolField(value, "pathInsertedFallback", false),
+				textInserted: optionalBoolField(value, "textInserted", false),
+				selectionCleared: optionalBoolField(value, "selectionCleared", false),
+				remoteRelabeledLocals: optionalBoolField(value, "remoteRelabeledLocals", false),
+				draftSnapshotStored: optionalBoolField(value, "draftSnapshotStored", false),
+				draftRestored: optionalBoolField(value, "draftRestored", false),
+				historyEntryApplied: optionalBoolField(value, "historyEntryApplied", false),
+				submissionSuppressed: optionalBoolField(value, "submissionSuppressed", false),
+				submissionPrepared: optionalBoolField(value, "submissionPrepared", false),
+				localImagesPruned: optionalBoolField(value, "localImagesPruned", false),
+				remoteImagesTaken: optionalBoolField(value, "remoteImagesTaken", false),
+				noLiveFilesystem: optionalBoolField(value, "noLiveFilesystem", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

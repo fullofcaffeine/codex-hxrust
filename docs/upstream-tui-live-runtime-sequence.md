@@ -2127,6 +2127,20 @@ Model the next selected raw Codex approval overlay keymap conflict behavior:
 
 Status: HXCX-4.140 extends `fixtures/hxrust/model-stream-item-reducer.v1.json` and validates the slice through `harness/check-model-stream-item-reducer.sh`. No new haxe.rust limitation was exposed. This is deterministic keymap evidence only, not live keyboard input, live terminal rendering, live app-server calls, interactive TUI overlay ownership, live Tokio task ownership, live provider traffic, native input queue ownership, native tool future execution, real workspace mutation, WebSocket transport, SSE frame parsing, unauthorized retry execution, auth refresh, inference trace persistence, realtime/audio behavior, or Cafex behavior.
 
+### HXCX-TUI-33: Composer Paste And Attachment Lifecycle
+
+Model selected raw Codex composer paste and attachment behavior:
+
+- preserve explicit `handle_paste` routing for small pasted text, large-paste placeholders, image path detection, and paste-burst flushes in `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs`;
+- preserve `LARGE_PASTE_CHAR_THRESHOLD` behavior: insert `[Pasted Content N chars]`, store the full payload in `pending_pastes`, and expand it during submission while keeping text element spans aligned;
+- preserve paste-burst state facts from `../codex/codex-rs/tui/src/bottom_pane/paste_burst.rs`: first-char hold, begin buffering, newline capture while active, due flush, redraw request, and follow-up frame scheduling through `chatwidget/interaction.rs`;
+- preserve local/remote image numbering from `chat_composer/attachment_state.rs`, including remote-image prefixes, relabeling local placeholders after remote image changes, selected remote deletion, and submission drain semantics;
+- preserve draft/history restore surfaces: `snapshot_draft`, `restore_draft`, `apply_history_entry`, pending-paste retention when placeholders remain, and cursor restoration;
+- preserve selected image insertion fallback when image-dimension probing fails, but keep the fixture no-live by rejecting actual filesystem probing;
+- keep the evidence deterministic and independent of live terminal rendering, live input loops, model/tool execution, ratatui mutation, command execution, filesystem mutation, and Cafex behavior.
+
+Status: HXCX-TUI-33 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic composer lifecycle evidence only, not a full composer implementation or live terminal backend.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

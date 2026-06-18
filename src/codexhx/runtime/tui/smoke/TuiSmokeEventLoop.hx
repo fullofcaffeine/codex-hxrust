@@ -191,6 +191,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ComposerAttachment:
+					if (!traceComposerAttachment(event.composerAttachment, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1329,6 +1334,170 @@ class TuiSmokeEventLoop {
 					trace.push("tui.app_link.failure=" + action.failureCode);
 				case _:
 					trace.push("tui.app_link.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceComposerAttachment(plan:TuiSmokeComposerAttachmentPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveFilesystem || !plan.enabled()) {
+			trace.push("tui.composer_attachment.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.composer_attachment.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeComposerAttachmentActionKind.HandlePaste:
+					trace.push(
+						"tui.composer_attachment.paste="
+						+ action.pasteKind
+						+ ":chars=" + action.charCount
+						+ ":threshold=" + action.threshold
+						+ ":normalized=" + action.normalizedText
+						+ ":text_inserted=" + action.textInserted
+						+ ":placeholder=" + action.placeholderInserted
+						+ ":pending=" + action.pendingTransitionText()
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerAttachmentActionKind.PasteBurstChar:
+					trace.push(
+						"tui.composer_attachment.burst_char="
+						+ action.inputText
+						+ ":state=" + action.burstBefore + "->" + action.burstAfter
+						+ ":buffered=" + action.buffered
+						+ ":newline=" + action.newlineCaptured
+						+ ":pending=" + action.pendingTransitionText()
+					);
+				case TuiSmokeComposerAttachmentActionKind.PasteBurstFlush:
+					trace.push(
+						"tui.composer_attachment.burst_flush="
+						+ action.pasteKind
+						+ ":state=" + action.burstBefore + "->" + action.burstAfter
+						+ ":flushed=" + action.flushed
+						+ ":chars=" + action.charCount
+						+ ":pending=" + action.pendingTransitionText()
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerAttachmentActionKind.LargePastePlaceholder:
+					trace.push(
+						"tui.composer_attachment.large_paste="
+						+ action.placeholder
+						+ ":chars=" + action.charCount
+						+ ":pending=" + action.pendingTransitionText()
+						+ ":elements=" + action.elementTransitionText()
+					);
+				case TuiSmokeComposerAttachmentActionKind.ExpandPendingPastes:
+					trace.push(
+						"tui.composer_attachment.expand_pending="
+						+ "pending=" + action.pendingTransitionText()
+						+ ":elements=" + action.elementTransitionText()
+						+ ":expanded=" + action.pendingExpanded
+						+ ":cleared=" + action.pendingCleared
+					);
+				case TuiSmokeComposerAttachmentActionKind.AttachLocalImage:
+					trace.push(
+						"tui.composer_attachment.local_image="
+						+ action.placeholder
+						+ ":path=" + action.path
+						+ ":local=" + action.localImageTransitionText()
+						+ ":remote=" + action.remoteImageAfter
+						+ ":attached=" + action.imageAttached
+					);
+				case TuiSmokeComposerAttachmentActionKind.SetRemoteImages:
+					trace.push(
+						"tui.composer_attachment.remote_images="
+						+ action.remoteImageTransitionText()
+						+ ":selected=" + action.selectedRemoteTransitionText()
+						+ ":relabel_locals=" + action.remoteRelabeledLocals
+					);
+				case TuiSmokeComposerAttachmentActionKind.SelectRemoteImage:
+					trace.push(
+						"tui.composer_attachment.remote_select="
+						+ action.keyName
+						+ ":selected=" + action.selectedRemoteTransitionText()
+						+ ":redraw=" + action.needsRedraw
+					);
+				case TuiSmokeComposerAttachmentActionKind.DeleteRemoteImage:
+					trace.push(
+						"tui.composer_attachment.remote_delete="
+						+ action.keyName
+						+ ":remote=" + action.remoteImageTransitionText()
+						+ ":selected=" + action.selectedRemoteTransitionText()
+						+ ":relabel_locals=" + action.remoteRelabeledLocals
+					);
+				case TuiSmokeComposerAttachmentActionKind.SnapshotDraft:
+					trace.push(
+						"tui.composer_attachment.snapshot="
+						+ action.attachmentKind
+						+ ":text_elements=" + action.textElementAfter
+						+ ":local=" + action.localImageAfter
+						+ ":remote=" + action.remoteImageAfter
+						+ ":pending=" + action.pendingAfter
+						+ ":stored=" + action.draftSnapshotStored
+					);
+				case TuiSmokeComposerAttachmentActionKind.RestoreDraft:
+					trace.push(
+						"tui.composer_attachment.restore="
+						+ action.attachmentKind
+						+ ":cursor=" + action.cursorTransitionText()
+						+ ":local=" + action.localImageTransitionText()
+						+ ":remote=" + action.remoteImageTransitionText()
+						+ ":pending=" + action.pendingTransitionText()
+						+ ":restored=" + action.draftRestored
+					);
+				case TuiSmokeComposerAttachmentActionKind.ApplyHistoryEntry:
+					trace.push(
+						"tui.composer_attachment.history_entry="
+						+ action.attachmentKind
+						+ ":local=" + action.localImageAfter
+						+ ":remote=" + action.remoteImageAfter
+						+ ":pending=" + action.pendingAfter
+						+ ":applied=" + action.historyEntryApplied
+					);
+				case TuiSmokeComposerAttachmentActionKind.PrepareSubmission:
+					trace.push(
+						"tui.composer_attachment.prepare_submission="
+						+ action.attachmentKind
+						+ ":pending=" + action.pendingTransitionText()
+						+ ":elements=" + action.elementTransitionText()
+						+ ":local_pruned=" + action.localImagesPruned
+						+ ":suppressed=" + action.submissionSuppressed
+						+ ":prepared=" + action.submissionPrepared
+					);
+				case TuiSmokeComposerAttachmentActionKind.DrainSubmission:
+					trace.push(
+						"tui.composer_attachment.drain_submission="
+						+ action.attachmentKind
+						+ ":local=" + action.localImageTransitionText()
+						+ ":remote_taken=" + action.remoteImagesTaken
+						+ ":remote=" + action.remoteImageTransitionText()
+					);
+				case TuiSmokeComposerAttachmentActionKind.InsertSelectedFile:
+					trace.push(
+						"tui.composer_attachment.selected_file="
+						+ action.path
+						+ ":image_path=" + action.imagePasteEnabled
+						+ ":dimensions_checked=" + action.imageDimensionsChecked
+						+ ":attached=" + action.imageAttached
+						+ ":fallback=" + action.pathInsertedFallback
+						+ ":no_live_fs=" + action.noLiveFilesystem
+					);
+				case TuiSmokeComposerAttachmentActionKind.FrameSchedule:
+					trace.push(
+						"tui.composer_attachment.frame="
+						+ "scheduled=" + action.frameScheduled
+						+ ":redraw=" + action.needsRedraw
+						+ ":burst=" + action.burstAfter
+					);
+				case TuiSmokeComposerAttachmentActionKind.Failure:
+					trace.push(
+						"tui.composer_attachment.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.composer_attachment.unknown");
 					return false;
 			}
 		}
