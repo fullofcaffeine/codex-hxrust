@@ -236,6 +236,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetActiveStream:
+					if (!traceChatWidgetActiveStream(event.chatWidgetActiveStream, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1570,6 +1575,116 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.composer_popup_render.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceChatWidgetActiveStream(plan:TuiSmokeChatWidgetActiveStreamPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_active_stream.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_active_stream.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeChatWidgetActiveStreamActionKind.AgentDelta:
+					trace.push(
+						"tui.chat_widget_active_stream.agent_delta="
+						+ "text=" + action.text
+						+ ":stream=" + action.streamControllerPresent
+						+ ":width=" + action.streamWidth
+						+ ":queued=" + action.streamQueueText()
+						+ ":pushed=" + action.pushed
+						+ ":commit_animation=" + action.startedCommitAnimation
+						+ ":catch_up=" + action.ranCatchUpTick
+						+ ":redraw=" + action.requestRedraw
+						+ ":model=" + !action.noModelCall
+					);
+				case TuiSmokeChatWidgetActiveStreamActionKind.PlanDelta:
+					trace.push(
+						"tui.chat_widget_active_stream.plan_delta="
+						+ "text=" + action.text
+						+ ":plan_stream=" + action.planStreamControllerPresent
+						+ ":width=" + action.planStreamWidth
+						+ ":buffer=" + action.planBufferLength
+						+ ":queued=" + action.streamQueueText()
+						+ ":pushed=" + action.pushed
+						+ ":commit_animation=" + action.startedCommitAnimation
+						+ ":catch_up=" + action.ranCatchUpTick
+						+ ":redraw=" + action.requestRedraw
+						+ ":model=" + !action.noModelCall
+					);
+				case TuiSmokeChatWidgetActiveStreamActionKind.CommitTick:
+					trace.push(
+						"tui.chat_widget_active_stream.commit_tick="
+						+ "queued=" + action.streamQueueText()
+						+ ":cells=" + action.committedCells
+						+ ":status_hidden=" + action.statusHidden
+						+ ":active_tail=" + action.activeTailPresent
+						+ ":revision=" + action.revisionText()
+					);
+				case TuiSmokeChatWidgetActiveStreamActionKind.Resize:
+					trace.push(
+						"tui.chat_widget_active_stream.resize="
+						+ action.previousWidth + "->" + action.width
+						+ ":stream_reserved=" + action.streamReservedCols
+						+ ":stream_width=" + action.streamWidth
+						+ ":plan_reserved=" + action.planReservedCols
+						+ ":plan_width=" + action.planStreamWidth
+						+ ":tail_synced=" + action.activeTailPresent
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeChatWidgetActiveStreamActionKind.ActiveTail:
+					trace.push(
+						"tui.chat_widget_active_stream.active_tail="
+						+ "present=" + action.activeTailPresent
+						+ ":cell=" + action.activeCellPresent
+						+ ":hook=" + action.activeHookPresent
+						+ ":revision=" + action.revisionAfter
+						+ ":continuation=" + action.liveTailPresent
+						+ ":animation=" + action.animationTick
+						+ ":lines=" + action.transcriptLineCount
+						+ ":hyperlinks=" + action.hyperlinkLineCount
+					);
+				case TuiSmokeChatWidgetActiveStreamActionKind.FlushAnswer:
+					trace.push(
+						"tui.chat_widget_active_stream.flush_answer="
+						+ "live_tail=" + action.liveTailPresent
+						+ ":tail_cleared=" + action.activeTailCleared
+						+ ":reflow=" + action.scrollbackReflow
+						+ ":history=" + action.historyInserted
+						+ ":deferred=" + action.deferredHistoryCell
+						+ ":consolidate=" + action.sourceConsolidated
+					);
+				case TuiSmokeChatWidgetActiveStreamActionKind.PlanComplete:
+					trace.push(
+						"tui.chat_widget_active_stream.plan_complete="
+						+ "live_tail=" + action.liveTailPresent
+						+ ":buffer=" + action.planBufferLength
+						+ ":tail_cleared=" + action.activeTailCleared
+						+ ":history=" + action.historyInserted
+						+ ":stream_history=" + action.deferredHistoryCell
+						+ ":consolidate=" + action.sourceConsolidated
+						+ ":restore_pending=" + action.statusRestorePending
+						+ ":restored=" + action.statusRestored
+					);
+				case TuiSmokeChatWidgetActiveStreamActionKind.RenderMode:
+					trace.push(
+						"tui.chat_widget_active_stream.render_mode="
+						+ action.renderMode
+						+ ":stream=" + action.streamControllerPresent
+						+ ":plan_stream=" + action.planStreamControllerPresent
+					);
+				case TuiSmokeChatWidgetActiveStreamActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_active_stream.failure="
+						+ action.failureCode
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_active_stream.unknown");
 					return false;
 			}
 		}

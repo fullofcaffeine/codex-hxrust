@@ -97,7 +97,71 @@ class TuiSmokeFixtureLoader {
 				composerPopupRender: optionalComposerPopupRenderPlan(value, "composerPopupRender"),
 				composerFooterRender: optionalComposerFooterRenderPlan(value, "composerFooterRender"),
 				composerTextareaRender: optionalComposerTextareaRenderPlan(value, "composerTextareaRender"),
-				chatWidgetComposerRender: optionalChatWidgetComposerRenderPlan(value, "chatWidgetComposerRender")
+				chatWidgetComposerRender: optionalChatWidgetComposerRenderPlan(value, "chatWidgetComposerRender"),
+				chatWidgetActiveStream: optionalChatWidgetActiveStreamPlan(value, "chatWidgetActiveStream")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalChatWidgetActiveStreamPlan(object:Value, name:String):Null<TuiSmokeChatWidgetActiveStreamPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeChatWidgetActiveStreamPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: chatWidgetActiveStreamActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function chatWidgetActiveStreamActions(values:Array<Value>):Array<TuiSmokeChatWidgetActiveStreamAction> {
+		final out:Array<TuiSmokeChatWidgetActiveStreamAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeChatWidgetActiveStreamAction({
+				kind: TuiSmokeChatWidgetActiveStreamActionKind.fromString(stringField(value, "kind", "")),
+				renderMode: optionalStringField(value, "renderMode", ""),
+				scrollbackReflow: optionalStringField(value, "scrollbackReflow", ""),
+				text: optionalStringField(value, "text", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				width: optionalIntField(value, "width", 0),
+				previousWidth: optionalIntField(value, "previousWidth", 0),
+				streamReservedCols: optionalIntField(value, "streamReservedCols", 0),
+				planReservedCols: optionalIntField(value, "planReservedCols", 0),
+				streamWidth: optionalIntField(value, "streamWidth", 0),
+				planStreamWidth: optionalIntField(value, "planStreamWidth", 0),
+				queuedLinesBefore: optionalIntField(value, "queuedLinesBefore", 0),
+				queuedLinesAfter: optionalIntField(value, "queuedLinesAfter", 0),
+				committedCells: optionalIntField(value, "committedCells", 0),
+				revisionBefore: optionalIntField(value, "revisionBefore", 0),
+				revisionAfter: optionalIntField(value, "revisionAfter", 0),
+				animationTick: optionalIntField(value, "animationTick", -1),
+				transcriptLineCount: optionalIntField(value, "transcriptLineCount", 0),
+				hyperlinkLineCount: optionalIntField(value, "hyperlinkLineCount", 0),
+				planBufferLength: optionalIntField(value, "planBufferLength", 0),
+				activeCellPresent: optionalBoolField(value, "activeCellPresent", false),
+				activeHookPresent: optionalBoolField(value, "activeHookPresent", false),
+				streamControllerPresent: optionalBoolField(value, "streamControllerPresent", false),
+				planStreamControllerPresent: optionalBoolField(value, "planStreamControllerPresent", false),
+				pushed: optionalBoolField(value, "pushed", false),
+				startedCommitAnimation: optionalBoolField(value, "startedCommitAnimation", false),
+				ranCatchUpTick: optionalBoolField(value, "ranCatchUpTick", false),
+				statusHidden: optionalBoolField(value, "statusHidden", false),
+				statusRestorePending: optionalBoolField(value, "statusRestorePending", false),
+				statusRestored: optionalBoolField(value, "statusRestored", false),
+				activeTailPresent: optionalBoolField(value, "activeTailPresent", false),
+				liveTailPresent: optionalBoolField(value, "liveTailPresent", false),
+				activeTailCleared: optionalBoolField(value, "activeTailCleared", false),
+				sourceConsolidated: optionalBoolField(value, "sourceConsolidated", false),
+				historyInserted: optionalBoolField(value, "historyInserted", false),
+				deferredHistoryCell: optionalBoolField(value, "deferredHistoryCell", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

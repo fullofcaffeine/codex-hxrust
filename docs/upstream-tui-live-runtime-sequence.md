@@ -2260,6 +2260,22 @@ Model selected raw Codex ChatWidget composer integration behavior:
 
 Status: HXCX-TUI-41 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic ChatWidget composer render integration evidence only, not a full live ChatWidget renderer or input dispatcher.
 
+### HXCX-TUI-42: ChatWidget Active Stream Live-Tail Render
+
+Model selected raw Codex ChatWidget active stream/live-tail behavior:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/streaming.rs` ownership of assistant, plan, and reasoning deltas, including stream-tail cells, commit ticks, and interrupt deferral;
+- preserve `on_agent_message_delta` and `handle_streaming_delta` routing into the agent `StreamController`, plus commit-animation and catch-up tick scheduling when queued lines are accepted;
+- preserve `on_plan_delta` behavior: plan-mode gating, `plan_delta_buffer` accumulation, active exec flush before plan stream creation, `PlanStreamController` width/render-mode setup, commit-animation scheduling, active-tail sync, and redraw request;
+- preserve `run_commit_tick_with_scope`: stream queues drain through adaptive chunking, committed cells hide the status indicator, visible history is inserted through the same active-cell/history boundary, and active cell revision changes are surfaced for overlay caches;
+- preserve `flush_answer_stream_with_separator`: live table tails request required scrollback reflow with deferred history cells, plain tails use ordinary history insertion plus conditional consolidation, active tails are cleared before finalization, and commit animation stops when controllers are idle;
+- preserve `on_plan_item_completed`: live plan table tails skip provisional stream history, source-backed proposed-plan cells are inserted from final/streamed plan text, consolidation is requested where needed, and status restoration remains deferred until stream queues are idle;
+- preserve `current_stream_width`, `set_raw_output_mode`, and `on_terminal_resize` in `../codex/codex-rs/tui/src/chatwidget.rs`: stream and plan controllers receive wrapper-aware widths, raw/rich render mode changes are propagated to both controllers, active tails are resynced on resize, and first render-width observation schedules redraw;
+- preserve transcript overlay live-tail helpers in `chatwidget.rs`: `active_cell_transcript_key` returns revision, stream-continuation, and animation tick; `active_cell_transcript_hyperlink_lines` joins active and hook cells with a separator only when both have visible lines;
+- keep the evidence deterministic and independent of live terminal rendering, ratatui buffer mutation, live input loops, model/tool execution, command execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-42 extends `fixtures/hxrust/tui-smoke.v1.json` and validates the slice through `harness/check-tui-smoke.sh`. No new haxe.rust limitation was exposed. This is deterministic ChatWidget active stream/live-tail evidence only, not a full live stream renderer or terminal overlay.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

@@ -39,6 +39,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ComposerFooterRender = "composer_footer_render";
 	final ComposerTextareaRender = "composer_textarea_render";
 	final ChatWidgetComposerRender = "chat_widget_composer_render";
+	final ChatWidgetActiveStream = "chat_widget_active_stream";
 	final Unknown = "unknown";
 
 	public static function fromString(value:String):TuiSmokeEventKind {
@@ -81,6 +82,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "composer_footer_render": ComposerFooterRender;
 			case "composer_textarea_render": ComposerTextareaRender;
 			case "chat_widget_composer_render": ChatWidgetComposerRender;
+			case "chat_widget_active_stream": ChatWidgetActiveStream;
 			case _: Unknown;
 		}
 	}
