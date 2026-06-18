@@ -10,6 +10,7 @@ typedef ModelKeymapDefaultPruningOutcomeFields = {
 	final reasoningFallbackPruningPreserved:Bool;
 	final explicitReasoningEditorConflictPreserved:Bool;
 	final legacyListOverlapPruningPreserved:Bool;
+	final legacyListPruneAllDefaultsPreserved:Bool;
 	final eventOrderingPreserved:Bool;
 	final liveNetworkAttempted:Bool;
 	final realFilesystemMutated:Bool;
@@ -27,6 +28,7 @@ class ModelKeymapDefaultPruningOutcome {
 	public final reasoningFallbackPruningPreserved:Bool;
 	public final explicitReasoningEditorConflictPreserved:Bool;
 	public final legacyListOverlapPruningPreserved:Bool;
+	public final legacyListPruneAllDefaultsPreserved:Bool;
 	public final eventOrderingPreserved:Bool;
 	public final liveNetworkAttempted:Bool;
 	public final realFilesystemMutated:Bool;
@@ -43,6 +45,7 @@ class ModelKeymapDefaultPruningOutcome {
 		this.reasoningFallbackPruningPreserved = fields.reasoningFallbackPruningPreserved;
 		this.explicitReasoningEditorConflictPreserved = fields.explicitReasoningEditorConflictPreserved;
 		this.legacyListOverlapPruningPreserved = fields.legacyListOverlapPruningPreserved;
+		this.legacyListPruneAllDefaultsPreserved = fields.legacyListPruneAllDefaultsPreserved;
 		this.eventOrderingPreserved = fields.eventOrderingPreserved;
 		this.liveNetworkAttempted = fields.liveNetworkAttempted;
 		this.realFilesystemMutated = fields.realFilesystemMutated;
@@ -60,6 +63,7 @@ class ModelKeymapDefaultPruningOutcome {
 			+ ";reasoningFallbackPruningPreserved=" + boolText(reasoningFallbackPruningPreserved)
 			+ ";explicitReasoningEditorConflictPreserved=" + boolText(explicitReasoningEditorConflictPreserved)
 			+ ";legacyListOverlapPruningPreserved=" + boolText(legacyListOverlapPruningPreserved)
+			+ ";legacyListPruneAllDefaultsPreserved=" + boolText(legacyListPruneAllDefaultsPreserved)
 			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
 			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
 			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)

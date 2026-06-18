@@ -19,12 +19,20 @@ class ModelKeymapDefaultPruningPolicy {
 			&& matches(request.legacyListMoveDownConfigured, named("page-down", false, false, false))
 			&& sameBindings(request.legacyListPageUpPruned, [character("b", true, false, false)])
 			&& sameBindings(request.legacyListPageDownPruned, [character("f", true, false, false)]);
+		final legacyListPruneAllDefaultsPreserved = sameBindings(request.legacyListPruneAllMoveUpConfigured, [
+			named("page-up", false, false, false),
+			character("b", true, false, false)
+		]) && sameBindings(request.legacyListPruneAllRuntimeMoveUp, [
+			named("page-up", false, false, false),
+			character("b", true, false, false)
+		]) && request.legacyListPruneAllPageUpPruned.length == 0;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = tailMainSurfaceDefaultsPreserved
 			&& listPageAndJumpDefaultsPreserved
 			&& reasoningFallbackPruningPreserved
 			&& explicitReasoningEditorConflictPreserved
 			&& legacyListOverlapPruningPreserved
+			&& legacyListPruneAllDefaultsPreserved
 			&& eventOrderingPreserved;
 		final decisionKind = ok
 			? ModelKeymapDefaultPruningDecisionKind.KeymapDefaultPruningPreserved
@@ -40,6 +48,7 @@ class ModelKeymapDefaultPruningPolicy {
 			reasoningFallbackPruningPreserved: reasoningFallbackPruningPreserved,
 			explicitReasoningEditorConflictPreserved: explicitReasoningEditorConflictPreserved,
 			legacyListOverlapPruningPreserved: legacyListOverlapPruningPreserved,
+			legacyListPruneAllDefaultsPreserved: legacyListPruneAllDefaultsPreserved,
 			eventOrderingPreserved: eventOrderingPreserved,
 			liveNetworkAttempted: false,
 			realFilesystemMutated: false,
@@ -147,6 +156,7 @@ class ModelKeymapDefaultPruningPolicy {
 			reasoningFallbackPruningPreserved: false,
 			explicitReasoningEditorConflictPreserved: false,
 			legacyListOverlapPruningPreserved: false,
+			legacyListPruneAllDefaultsPreserved: false,
 			eventOrderingPreserved: false,
 			liveNetworkAttempted: false,
 			realFilesystemMutated: false,

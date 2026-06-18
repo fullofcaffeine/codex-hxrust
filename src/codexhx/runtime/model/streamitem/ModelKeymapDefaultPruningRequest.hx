@@ -15,6 +15,9 @@ typedef ModelKeymapDefaultPruningRequestFields = {
 	final legacyListMoveDownConfigured:Null<ModelKeymapBinding>;
 	final legacyListPageUpPruned:Array<ModelKeymapBinding>;
 	final legacyListPageDownPruned:Array<ModelKeymapBinding>;
+	final legacyListPruneAllMoveUpConfigured:Array<ModelKeymapBinding>;
+	final legacyListPruneAllRuntimeMoveUp:Array<ModelKeymapBinding>;
+	final legacyListPruneAllPageUpPruned:Array<ModelKeymapBinding>;
 	final previousEventCount:Int;
 	final eventOrderIndex:Int;
 	final secretProbe:String;
@@ -35,6 +38,9 @@ class ModelKeymapDefaultPruningRequest {
 	public final legacyListMoveDownConfigured:Null<ModelKeymapBinding>;
 	public final legacyListPageUpPruned:Array<ModelKeymapBinding>;
 	public final legacyListPageDownPruned:Array<ModelKeymapBinding>;
+	public final legacyListPruneAllMoveUpConfigured:Array<ModelKeymapBinding>;
+	public final legacyListPruneAllRuntimeMoveUp:Array<ModelKeymapBinding>;
+	public final legacyListPruneAllPageUpPruned:Array<ModelKeymapBinding>;
 	public final previousEventCount:Int;
 	public final eventOrderIndex:Int;
 	public final secretProbe:String;
@@ -54,6 +60,9 @@ class ModelKeymapDefaultPruningRequest {
 		this.legacyListMoveDownConfigured = fields.legacyListMoveDownConfigured;
 		this.legacyListPageUpPruned = fields.legacyListPageUpPruned == null ? [] : fields.legacyListPageUpPruned;
 		this.legacyListPageDownPruned = fields.legacyListPageDownPruned == null ? [] : fields.legacyListPageDownPruned;
+		this.legacyListPruneAllMoveUpConfigured = fields.legacyListPruneAllMoveUpConfigured == null ? [] : fields.legacyListPruneAllMoveUpConfigured;
+		this.legacyListPruneAllRuntimeMoveUp = fields.legacyListPruneAllRuntimeMoveUp == null ? [] : fields.legacyListPruneAllRuntimeMoveUp;
+		this.legacyListPruneAllPageUpPruned = fields.legacyListPruneAllPageUpPruned == null ? [] : fields.legacyListPruneAllPageUpPruned;
 		this.previousEventCount = fields.previousEventCount;
 		this.eventOrderIndex = fields.eventOrderIndex;
 		this.secretProbe = fields.secretProbe == null ? "" : fields.secretProbe;

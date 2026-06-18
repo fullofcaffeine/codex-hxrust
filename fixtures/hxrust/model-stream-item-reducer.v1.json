@@ -7684,12 +7684,13 @@
 	          "reasoningFallbackPruningPreserved": true,
 	          "explicitReasoningEditorConflictPreserved": true,
 	          "legacyListOverlapPruningPreserved": true,
+	          "legacyListPruneAllDefaultsPreserved": true,
 	          "eventOrderingPreserved": true,
 	          "liveNetworkAttempted": false,
 	          "realFilesystemMutated": false,
 	          "toolExecutedOutsideFixture": false,
 	          "errorMessage": "",
-	          "summaryContains": "decisionKind=keymap_default_pruning_preserved;tailMainSurfaceDefaultsPreserved=true;listPageAndJumpDefaultsPreserved=true;reasoningFallbackPruningPreserved=true;explicitReasoningEditorConflictPreserved=true;legacyListOverlapPruningPreserved=true;eventOrderingPreserved=true",
+	          "summaryContains": "decisionKind=keymap_default_pruning_preserved;tailMainSurfaceDefaultsPreserved=true;listPageAndJumpDefaultsPreserved=true;reasoningFallbackPruningPreserved=true;explicitReasoningEditorConflictPreserved=true;legacyListOverlapPruningPreserved=true;legacyListPruneAllDefaultsPreserved=true;eventOrderingPreserved=true",
 	          "tailMainSurfaceDefaults": [
 	            {
 	              "actionKind": "edit_queued_message",
@@ -7936,7 +7937,34 @@
 	              "functionNumber": -1,
 	              "ctrlModifier": true
 	            }
-	          ]
+	          ],
+	          "legacyListPruneAllMoveUpConfigured": [
+	            {
+	              "kind": "named",
+	              "keyName": "page-up",
+	              "functionNumber": -1
+	            },
+	            {
+	              "kind": "character",
+	              "keyName": "b",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            }
+	          ],
+	          "legacyListPruneAllRuntimeMoveUp": [
+	            {
+	              "kind": "named",
+	              "keyName": "page-up",
+	              "functionNumber": -1
+	            },
+	            {
+	              "kind": "character",
+	              "keyName": "b",
+	              "functionNumber": -1,
+	              "ctrlModifier": true
+	            }
+	          ],
+	          "legacyListPruneAllPageUpPruned": []
 	        }
 	      ],
 	      "keymapOverlapConflictExpects": [

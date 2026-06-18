@@ -5300,6 +5300,9 @@ class ModelStreamItemReducerHarness {
 			legacyListMoveDownConfigured: keymapBinding(objectField(expectValue, "legacyListMoveDownConfigured")),
 			legacyListPageUpPruned: keymapBindings(expectValue, "legacyListPageUpPruned"),
 			legacyListPageDownPruned: keymapBindings(expectValue, "legacyListPageDownPruned"),
+			legacyListPruneAllMoveUpConfigured: keymapBindings(expectValue, "legacyListPruneAllMoveUpConfigured"),
+			legacyListPruneAllRuntimeMoveUp: keymapBindings(expectValue, "legacyListPruneAllRuntimeMoveUp"),
+			legacyListPruneAllPageUpPruned: keymapBindings(expectValue, "legacyListPruneAllPageUpPruned"),
 			previousEventCount: intField(expectValue, "previousEventCount", 0),
 			eventOrderIndex: intField(expectValue, "eventOrderIndex", 0),
 			secretProbe: secretProbe
@@ -5316,6 +5319,7 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "reasoningFallbackPruningPreserved", false)), boolText(outcome.reasoningFallbackPruningPreserved));
 		assertEquals(boolText(boolField(expectValue, "explicitReasoningEditorConflictPreserved", false)), boolText(outcome.explicitReasoningEditorConflictPreserved));
 		assertEquals(boolText(boolField(expectValue, "legacyListOverlapPruningPreserved", false)), boolText(outcome.legacyListOverlapPruningPreserved));
+		assertEquals(boolText(boolField(expectValue, "legacyListPruneAllDefaultsPreserved", false)), boolText(outcome.legacyListPruneAllDefaultsPreserved));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
 		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
