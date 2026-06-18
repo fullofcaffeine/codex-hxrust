@@ -163,6 +163,7 @@ class TuiSmokeFixtureLoader {
 					inputState: optionalThreadInputState(value, "inputState"),
 					turns: optionalThreadTurns(value, "turns"),
 					snapshotRequests: appServerRequests(optionalArrayField(value, "snapshotRequests")),
+					snapshotEvents: threadReplayEvents(optionalArrayField(value, "snapshotEvents")),
 					traceRequestSurfaces: optionalBoolField(value, "traceRequestSurfaces", false),
 					resizeReflowEnabled: optionalBoolField(value, "resizeReflowEnabled", false),
 					resumeRestoredQueue: optionalBoolField(value, "resumeRestoredQueue", false)
@@ -220,6 +221,24 @@ class TuiSmokeFixtureLoader {
 				kind: TuiSmokeThreadItemKind.fromString(stringField(value, "kind", "")),
 				itemId: optionalStringField(value, "itemId", ""),
 				text: optionalStringField(value, "text", "")
+			}));
+		}
+		return out;
+	}
+
+	static function threadReplayEvents(values:Array<Value>):Array<TuiSmokeThreadReplayEvent> {
+		final out:Array<TuiSmokeThreadReplayEvent> = [];
+		for (value in values) {
+			out.push(new TuiSmokeThreadReplayEvent({
+				kind: TuiSmokeThreadReplayEventKind.fromString(stringField(value, "kind", "")),
+				eventId: optionalStringField(value, "eventId", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				notification: optionalThreadNotification(value, "notification"),
+				text: optionalStringField(value, "text", ""),
+				category: optionalStringField(value, "category", ""),
+				result: optionalStringField(value, "result", ""),
+				success: optionalBoolField(value, "success", false),
+				includeLogs: optionalBoolField(value, "includeLogs", false)
 			}));
 		}
 		return out;

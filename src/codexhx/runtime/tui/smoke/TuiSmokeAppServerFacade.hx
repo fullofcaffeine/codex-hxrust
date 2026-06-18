@@ -383,6 +383,9 @@ class TuiSmokeAppServerFacade {
 				}
 			}
 		}
+		for (snapshotEvent in action.snapshotEvents) {
+			if (replaySnapshotEvent(snapshotEvent, suppressNotices, state, trace)) replayed = replayed + 1;
+		}
 		if (replayed == 0) trace.push("thread.replay.empty=" + activeThreadId);
 		if (shouldBufferReplay) trace.push("thread.replay.buffer.end=" + activeThreadId);
 		if (traceEnvelope) trace.push("thread.replay.autosend_suppressed=false");
@@ -412,6 +415,71 @@ class TuiSmokeAppServerFacade {
 		return true;
 	}
 
+	function replaySnapshotEvent(
+		event:TuiSmokeThreadReplayEvent,
+		suppressNotices:Bool,
+		state:TuiSmokeAppState,
+		trace:Array<String>
+	):Bool {
+		if (event == null || event.threadId != activeThreadId) return false;
+		return switch event.kind {
+			case TuiSmokeThreadReplayEventKind.Notification:
+				replaySnapshotNotification(event, suppressNotices, state, trace);
+			case TuiSmokeThreadReplayEventKind.HistoryEntryResponse:
+				replayHistoryEntryResponse(event, state, trace);
+			case TuiSmokeThreadReplayEventKind.FeedbackSubmission:
+				replayFeedbackSubmission(event, state, trace);
+			case _:
+				false;
+		}
+	}
+
+	function replaySnapshotNotification(
+		event:TuiSmokeThreadReplayEvent,
+		suppressNotices:Bool,
+		state:TuiSmokeAppState,
+		trace:Array<String>
+	):Bool {
+		final notification = event.notification;
+		if (notification == null) return false;
+		if (suppressNotices && isNotice(notification)) {
+			suppressedReplayNoticeCount = suppressedReplayNoticeCount + 1;
+			trace.push("thread.replay.notice_suppressed=" + activeThreadId + ":" + notification.notificationId + ":" + notification.displayText());
+			return false;
+		}
+		applyDeliveredNotification(notification, state);
+		trace.push("thread.replay.notification=" + activeThreadId + ":" + notification.notificationId + ":" + notification.displayText() + ":thread_snapshot");
+		return true;
+	}
+
+	function replayHistoryEntryResponse(event:TuiSmokeThreadReplayEvent, state:TuiSmokeAppState, trace:Array<String>):Bool {
+		state.appendTranscript(new TuiSmokeTranscriptRow({
+			source: TuiSmokeTranscriptSource.System,
+			text: "history: " + event.displayText()
+		}));
+		trace.push("thread.replay.history_entry=" + activeThreadId + ":" + event.eventId + ":" + event.displayText() + ":thread_snapshot");
+		return true;
+	}
+
+	function replayFeedbackSubmission(event:TuiSmokeThreadReplayEvent, state:TuiSmokeAppState, trace:Array<String>):Bool {
+		final prefix = event.success ? "feedback: " : "feedback-error: ";
+		state.appendTranscript(new TuiSmokeTranscriptRow({
+			source: TuiSmokeTranscriptSource.System,
+			text: prefix + event.displayText()
+		}));
+		trace.push(
+			"thread.replay.feedback="
+			+ activeThreadId
+			+ ":" + event.eventId
+			+ ":" + event.category
+			+ ":" + (event.success ? "ok" : "error")
+			+ ":" + event.displayText()
+			+ ":logs=" + event.includeLogs
+			+ ":thread_snapshot"
+		);
+		return true;
+	}
+
 	function traceReplayRequestSurface(
 		request:TuiSmokeAppServerRequest,
 		action:TuiSmokeThreadReplayAction,
@@ -432,6 +500,7 @@ class TuiSmokeAppServerFacade {
 		return action.session != null
 			|| action.inputState != null
 			|| action.snapshotRequests.length > 0
+			|| action.snapshotEvents.length > 0
 			|| action.traceRequestSurfaces
 			|| action.resizeReflowEnabled
 			|| action.resumeRestoredQueue;
