@@ -160,6 +160,18 @@ Extend the app-server facade with request routing evidence:
 
 Status: HXCX-TUI-4 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/app_server_events.rs:48`, `../codex/codex-rs/tui/src/app/app_server_events.rs:156`, `../codex/codex-rs/tui/src/app/app_server_events.rs:162`, `../codex/codex-rs/tui/src/app/app_server_events.rs:185`, `../codex/codex-rs/tui/src/app/app_server_event_targets.rs:7`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:56`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:72`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:116`, `../codex/codex-rs/tui/src/app_server_session.rs:1109`, `../codex/codex-rs/tui/src/app_server_session.rs:1117`, `../codex/codex-rs/tui/src/app.rs:574`, `../codex/codex-rs/tui/src/app.rs:1219`, and `../codex/codex-rs/tui/src/app_event.rs:198`. This is request-routing evidence only, not live JSON-RPC resolution, approval popup UI, actual command/file/tool execution, Tokio channel ownership, or Cafex behavior.
 
+### HXCX-TUI-5: Headless Raw Codex TUI Server-Request Resolution Facade
+
+Extend the server-request facade with pending request resolution evidence:
+
+- command approval, file-change approval, permissions approval, and tool user-input answer resolution DTOs;
+- pending request lookup by upstream-shaped keys, including tool input answer lookup by turn id;
+- `ServerRequestResolved`-style dismissal by app-server request id;
+- stale and unknown resolution refusal without terminating the headless loop;
+- deterministic ordering relative to queued app events, draw, and key events.
+
+Status: HXCX-TUI-5 extends `fixtures/hxrust/tui-smoke.v1.json`, `fixtures/hxrust/tui-smoke.snapshot.txt`, and `harness/check-tui-smoke.sh`. Upstream anchors are `../codex/codex-rs/tui/src/app/app_server_requests.rs:160`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:169`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:186`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:201`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:220`, `../codex/codex-rs/tui/src/app/app_server_requests.rs:261`, `../codex/codex-rs/tui/src/app/app_server_events.rs:66`, `../codex/codex-rs/tui/src/app/app_server_events.rs:71`, `../codex/codex-rs/tui/src/app_server_session.rs:1117`, `../codex/codex-rs/tui/src/app_command.rs:70`, `../codex/codex-rs/tui/src/app_command.rs:75`, `../codex/codex-rs/tui/src/app_command.rs:86`, and `../codex/codex-rs/tui/src/app_command.rs:90`. This is request-resolution intent evidence only, not live JSON-RPC response dispatch, approval popup UI ownership, command execution, filesystem mutation, model traffic, or Cafex behavior.
+
 ### HXCX-4.10: Turn Runtime State Reducers
 
 Lift the selected `ChatWidget` turn lifecycle into pure Haxe state:

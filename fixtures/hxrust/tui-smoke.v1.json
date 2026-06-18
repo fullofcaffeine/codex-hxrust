@@ -120,7 +120,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "tui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: ready | model: gpt-5.2-codex\nsystem> headless app loop\nassistant> waiting for raw Codex events\ninput> continue raw TUI\ntrace:\ntui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 2\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: ready | model: gpt-5.2-codex\nsystem> headless app loop\nassistant> waiting for raw Codex events\ninput> continue raw TUI\ntrace:\ntui.draw\napp.status=ready\napp.input=continue raw TUI\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 2\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nterminal: restored"
     },
     {
       "name": "resize-render-shutdown-first-loop",
@@ -160,7 +160,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "tui.resize\napp.exit=shutdown_first",
-      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: idle | model: gpt-5.2-codex\nuser> fixture prompt\nassistant> fixture response\ninput> \ntrace:\ntui.resize\napp.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Loop\nstatus: idle | model: gpt-5.2-codex\nuser> fixture prompt\nassistant> fixture response\ninput> \ntrace:\ntui.resize\napp.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nterminal: restored"
     },
     {
       "name": "queued-startup-commit-draw-order",
@@ -219,7 +219,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "queue.enqueue=startup_status\nqueue.enqueue=commit_tick\napp.event.startup_status=startup-ready\napp.event.commit_tick\ntui.draw\nqueue.enqueue=exit\napp.event.exit=shutdown_first",
-      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: startup-ready | model: gpt-5.2-codex\nsystem> queued app events\nassistant> commit tick precedes render\ninput> \ntrace:\nqueue.enqueue=startup_status\nqueue.enqueue=commit_tick\napp.event.startup_status=startup-ready\napp.event.commit_tick\ntui.draw\nqueue.enqueue=exit\napp.event.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 3\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: startup-ready | model: gpt-5.2-codex\nsystem> queued app events\nassistant> commit tick precedes render\ninput> \ntrace:\nqueue.enqueue=startup_status\nqueue.enqueue=commit_tick\napp.event.startup_status=startup-ready\napp.event.commit_tick\ntui.draw\nqueue.enqueue=exit\napp.event.exit=shutdown_first\nexit: cancelled\nrenders: 1\napp-events: 3\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nterminal: restored"
     },
     {
       "name": "terminal-key-exit-precedes-later-queued-exit",
@@ -269,7 +269,7 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "tui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: ready | model: gpt-5.2-codex\nuser> press q before queued exit\nassistant> later app events stay untouched\ninput> \ntrace:\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Queue\nstatus: ready | model: gpt-5.2-codex\nuser> press q before queued exit\nassistant> later app events stay untouched\ninput> \ntrace:\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nterminal: restored"
     },
     {
       "name": "app-server-status-delta-before-draw",
@@ -327,7 +327,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "queue.enqueue=commit_tick\nserver.thread_status=thread-main:running\nserver.assistant_delta=thread-main:server says hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Server\nstatus: running | model: gpt-5.2-codex\nsystem> server events\nassistant> server says hello\ninput> \ntrace:\nqueue.enqueue=commit_tick\nserver.thread_status=thread-main:running\nserver.assistant_delta=thread-main:server says hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 2\nserver-requests: 0\nserver-rejections: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Server\nstatus: running | model: gpt-5.2-codex\nsystem> server events\nassistant> server says hello\ninput> \ntrace:\nqueue.enqueue=commit_tick\nserver.thread_status=thread-main:running\nserver.assistant_delta=thread-main:server says hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 2\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nterminal: restored"
     },
     {
       "name": "app-server-stream-close-ignores-later-events",
@@ -384,7 +384,7 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "server.stream_closed\nserver.ignored_after_close\ntui.draw\nserver.ignored_after_close\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Server\nstatus: idle | model: gpt-5.2-codex\nuser> server close\ninput> \ntrace:\nserver.stream_closed\nserver.ignored_after_close\ntui.draw\nserver.ignored_after_close\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 1\nserver-requests: 0\nserver-rejections: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Server\nstatus: idle | model: gpt-5.2-codex\nuser> server close\ninput> \ntrace:\nserver.stream_closed\nserver.ignored_after_close\ntui.draw\nserver.ignored_after_close\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 1\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nterminal: restored"
     },
     {
       "name": "app-server-supported-request-targeting",
@@ -467,7 +467,7 @@
       ],
       "expectedExit": "cancelled",
       "expectedTrace": "server.request.command_approval=req-cmd:thread-main:primary:approval-1\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1\nqueue.enqueue=commit_tick\nserver.request.permissions_approval=req-perm:thread-side:side:perm-1\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
-      "expectedSnapshot": "Codex TUI Smoke Requests\nstatus: idle | model: gpt-5.2-codex\nsystem> server requests\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1\nqueue.enqueue=commit_tick\nserver.request.permissions_approval=req-perm:thread-side:side:perm-1\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 4\nserver-rejections: 0\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Requests\nstatus: idle | model: gpt-5.2-codex\nsystem> server requests\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1\nqueue.enqueue=commit_tick\nserver.request.permissions_approval=req-perm:thread-side:side:perm-1\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 4\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nterminal: restored"
     },
     {
       "name": "app-server-unsupported-and-threadless-requests",
@@ -529,7 +529,191 @@
       ],
       "expectedExit": "quit",
       "expectedTrace": "server.request.reject=req-dynamic:Dynamic tool calls are not available in TUI yet.\nserver.request.threadless=auth_tokens_refresh:req-auth\nserver.request.missing_thread=command_approval:req-missing-thread\ntui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Requests\nstatus: idle | model: gpt-5.2-codex\nuser> unsupported server request\ninput> \ntrace:\nserver.request.reject=req-dynamic:Dynamic tool calls are not available in TUI yet.\nserver.request.threadless=auth_tokens_refresh:req-auth\nserver.request.missing_thread=command_approval:req-missing-thread\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 1\nterminal: restored"
+      "expectedSnapshot": "Codex TUI Smoke Requests\nstatus: idle | model: gpt-5.2-codex\nuser> unsupported server request\ninput> \ntrace:\nserver.request.reject=req-dynamic:Dynamic tool calls are not available in TUI yet.\nserver.request.threadless=auth_tokens_refresh:req-auth\nserver.request.missing_thread=command_approval:req-missing-thread\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 1\nserver-resolutions: 0\nserver-stale-resolutions: 0\nterminal: restored"
+    },
+    {
+      "name": "app-server-request-resolution-routing",
+      "frame": {
+        "name": "app-server-request-resolution-routing",
+        "title": "Codex TUI Smoke Resolutions",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "server resolutions"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "app_server_request",
+          "appServerRequest": {
+            "kind": "command_approval",
+            "requestId": "req-cmd",
+            "threadId": "thread-main",
+            "turnId": "turn-1",
+            "itemId": "cmd-1",
+            "approvalId": "approval-1"
+          }
+        },
+        {
+          "kind": "app_server_request",
+          "appServerRequest": {
+            "kind": "file_change_approval",
+            "requestId": "req-file",
+            "threadId": "thread-main",
+            "turnId": "turn-1",
+            "itemId": "patch-1"
+          }
+        },
+        {
+          "kind": "app_server_request",
+          "appServerRequest": {
+            "kind": "permissions_approval",
+            "requestId": "req-perm",
+            "threadId": "thread-main",
+            "turnId": "turn-1",
+            "itemId": "perm-1"
+          }
+        },
+        {
+          "kind": "app_server_request",
+          "appServerRequest": {
+            "kind": "tool_user_input",
+            "requestId": "req-input",
+            "threadId": "thread-main",
+            "turnId": "turn-1",
+            "itemId": "tool-1"
+          }
+        },
+        {
+          "kind": "app_server_resolution",
+          "appServerResolution": {
+            "kind": "command_approval",
+            "id": "approval-1",
+            "decision": "accept"
+          }
+        },
+        {
+          "kind": "enqueue_app",
+          "appEvent": {
+            "kind": "commit_tick"
+          }
+        },
+        {
+          "kind": "app_server_resolution",
+          "appServerResolution": {
+            "kind": "file_change_approval",
+            "id": "patch-1",
+            "decision": "accept"
+          }
+        },
+        {
+          "kind": "app_server_resolution",
+          "appServerResolution": {
+            "kind": "permissions_approval",
+            "id": "perm-1",
+            "decision": "session"
+          }
+        },
+        {
+          "kind": "app_server_resolution",
+          "appServerResolution": {
+            "kind": "tool_user_input",
+            "id": "turn-1",
+            "response": "confirmed"
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "ctrl-c"
+        }
+      ],
+      "expectedExit": "cancelled",
+      "expectedTrace": "server.request.command_approval=req-cmd:thread-main:primary:approval-1\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1\nserver.request.permissions_approval=req-perm:thread-main:primary:perm-1\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1\nserver.resolution.command_approval=req-cmd:approval-1:accept\nqueue.enqueue=commit_tick\nserver.resolution.file_change_approval=req-file:patch-1:accept\nserver.resolution.permissions_approval=req-perm:perm-1:session\nserver.resolution.tool_user_input=req-input:tool-1:confirmed\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c",
+      "expectedSnapshot": "Codex TUI Smoke Resolutions\nstatus: idle | model: gpt-5.2-codex\nsystem> server resolutions\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1\nserver.request.file_change_approval=req-file:thread-main:primary:patch-1\nserver.request.permissions_approval=req-perm:thread-main:primary:perm-1\nserver.request.tool_user_input=req-input:thread-main:primary:tool-1\nserver.resolution.command_approval=req-cmd:approval-1:accept\nqueue.enqueue=commit_tick\nserver.resolution.file_change_approval=req-file:patch-1:accept\nserver.resolution.permissions_approval=req-perm:perm-1:session\nserver.resolution.tool_user_input=req-input:tool-1:confirmed\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 4\nserver-rejections: 0\nserver-resolutions: 4\nserver-stale-resolutions: 0\nterminal: restored"
+    },
+    {
+      "name": "app-server-request-resolved-dismissal-and-stale-resolution",
+      "frame": {
+        "name": "app-server-request-resolved-dismissal-and-stale-resolution",
+        "title": "Codex TUI Smoke Resolutions",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "user",
+            "text": "dismiss request"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "app_server_request",
+          "appServerRequest": {
+            "kind": "command_approval",
+            "requestId": "req-cmd",
+            "threadId": "thread-main",
+            "turnId": "turn-1",
+            "itemId": "cmd-1",
+            "approvalId": "approval-1"
+          }
+        },
+        {
+          "kind": "app_server_resolution",
+          "appServerResolution": {
+            "kind": "server_request_resolved",
+            "requestId": "req-cmd"
+          }
+        },
+        {
+          "kind": "app_server_resolution",
+          "appServerResolution": {
+            "kind": "command_approval",
+            "id": "approval-1",
+            "decision": "accept"
+          }
+        },
+        {
+          "kind": "app_server_resolution",
+          "appServerResolution": {
+            "kind": "unknown",
+            "id": "mystery"
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "server.request.command_approval=req-cmd:thread-main:primary:approval-1\nserver.resolution.server_request_resolved=req-cmd:approval-1:dismissed\nserver.resolution.stale=command_approval:approval-1\nserver.resolution.unknown\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Resolutions\nstatus: idle | model: gpt-5.2-codex\nuser> dismiss request\ninput> \ntrace:\nserver.request.command_approval=req-cmd:thread-main:primary:approval-1\nserver.resolution.server_request_resolved=req-cmd:approval-1:dismissed\nserver.resolution.stale=command_approval:approval-1\nserver.resolution.unknown\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 1\nserver-rejections: 0\nserver-resolutions: 1\nserver-stale-resolutions: 2\nterminal: restored"
     }
   ]
 }

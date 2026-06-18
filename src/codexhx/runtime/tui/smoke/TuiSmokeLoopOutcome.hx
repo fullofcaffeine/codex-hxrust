@@ -11,6 +11,8 @@ typedef TuiSmokeLoopOutcomeFields = {
 	final appServerEventCount:Int;
 	final appServerRequestCount:Int;
 	final appServerRejectedRequestCount:Int;
+	final appServerResolutionCount:Int;
+	final appServerStaleResolutionCount:Int;
 	final terminalRestored:Bool;
 }
 
@@ -25,6 +27,8 @@ class TuiSmokeLoopOutcome {
 	public final appServerEventCount:Int;
 	public final appServerRequestCount:Int;
 	public final appServerRejectedRequestCount:Int;
+	public final appServerResolutionCount:Int;
+	public final appServerStaleResolutionCount:Int;
 	public final terminalRestored:Bool;
 
 	public function new(fields:TuiSmokeLoopOutcomeFields) {
@@ -38,6 +42,8 @@ class TuiSmokeLoopOutcome {
 		this.appServerEventCount = fields.appServerEventCount;
 		this.appServerRequestCount = fields.appServerRequestCount;
 		this.appServerRejectedRequestCount = fields.appServerRejectedRequestCount;
+		this.appServerResolutionCount = fields.appServerResolutionCount;
+		this.appServerStaleResolutionCount = fields.appServerStaleResolutionCount;
 		this.terminalRestored = fields.terminalRestored;
 	}
 }
