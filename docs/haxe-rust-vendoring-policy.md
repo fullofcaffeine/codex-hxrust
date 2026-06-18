@@ -13,11 +13,13 @@ Source: `reference/haxe-rust.pin.json`
 | Local path | `../haxe.rust` |
 | Remote | `git@github.com:fullofcaffeine/reflaxe.rust.git` |
 | Branch | `main` |
-| Commit | `1f91e9e67f5fc04eca1806aa04e2cd50c2b2033d` |
+| Commit | `9f593cb18b0e7e3afc049577a56694f3c99ee831` |
 | Package | `reflaxe.rust` `1.0.0` |
 | License | `GPL-3.0` |
 
 The current checkout is the compiler/runtime backend for the experiment, not source owned by `codex-hxrust`. Compiler fixes are made directly in `../haxe.rust`; this repo records the pin and pressure-test mapping.
+
+The pin is reproducibility metadata, not the local dependency resolver. Day-to-day Haxe builds use scoped library hxml files under `haxe_libraries/`, and `haxe_libraries/reflaxe.rust.hxml` points directly at `../haxe.rust/src` and `../haxe.rust/std`. Local edits in `../haxe.rust` are therefore visible immediately to codex-hxrust gates; no pin update is required just to test an uncommitted compiler change.
 
 Current local patch record: `reference/haxe-rust-local-patches.v1.json`.
 
@@ -35,8 +37,8 @@ Latest audit note: `reference/haxe-rust-audit-2026-06-10.md`.
 ## Recommended Flow
 
 1. Keep `reference/haxe-rust.pin.json` as the pin of record.
-2. In G1, the scaffold doctor must read the pin and verify that `../haxe.rust` exists at the expected commit.
-3. Generated builds should use a path reference to `../haxe.rust` during local development.
+2. In G1, the scaffold doctor must read the pin and report whether `../haxe.rust` matches, is ahead, or is dirty, without implying that the pin selects local build files.
+3. Generated builds use scoped path references to `../haxe.rust` during local development.
 4. Work directly in `../haxe.rust` for compiler/runtime fixes; keep those fixes generic and commit/push that repository directly.
 5. After haxe.rust gates pass, update this repo's pin and rerun codex-hxrust gates.
 6. CI can clone/check out haxe.rust beside this repo using the pin JSON.

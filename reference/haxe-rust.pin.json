@@ -12,5 +12,5 @@
   "vendoringDecision": "external_pinned_checkout_for_G1",
   "policy": "docs/haxe-rust-vendoring-policy.md",
   "localPatches": "reference/haxe-rust-local-patches.v1.json",
-  "usage": "Use as an external pinned checkout for G1. Revisit submodule only if CI/reproducibility needs require it; avoid subtree/vendor copy unless a frozen release bundle is explicitly approved."
+  "usage": "Reproducibility metadata for the known-good haxe.rust revision. Local scoped Haxe builds resolve directly through haxe_libraries/reflaxe.rust.hxml to ../haxe.rust; this pin does not select files during local development. Update only after the committed haxe.rust revision is validated for codex-hxrust."
 }
