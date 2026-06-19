@@ -251,6 +251,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetMcpStartup:
+					if (!traceMcpStartup(event.chatWidgetMcpStartup, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -2937,6 +2942,94 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_stream_status.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceMcpStartup(plan:TuiSmokeMcpStartupPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_mcp_startup.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_mcp_startup.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeMcpStartupActionKind.SetExpectedServers:
+					trace.push(
+						"tui.chat_widget_mcp_startup.expected="
+						+ action.expectedServers
+						+ ":count=" + action.expectedCount
+						+ ":ignore=" + action.ignoreUntilNextStartBefore + "->" + action.ignoreUntilNextStartAfter
+					);
+				case TuiSmokeMcpStartupActionKind.StatusUpdate:
+					trace.push(
+						"tui.chat_widget_mcp_startup.update="
+						+ action.server
+						+ ":" + action.status
+						+ ":complete=" + action.completeWhenSettled
+						+ ":ignore=" + action.ignoreUntilNextStartBefore + "->" + action.ignoreUntilNextStartAfter
+						+ ":pending=" + action.pendingCountBefore + "->" + action.pendingCountAfter
+						+ ":active=" + action.activeCountBefore + "->" + action.activeCountAfter
+						+ ":starting=" + action.startingServers
+						+ ":header=" + action.header
+						+ ":warning=" + action.warningInserted
+						+ ":duplicate=" + action.duplicateWarningSuppressed
+						+ ":task=" + action.taskRunningBefore + "->" + action.taskRunningAfter
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeMcpStartupActionKind.FinishAfterLag:
+					trace.push(
+						"tui.chat_widget_mcp_startup.finish_after_lag="
+						+ "active=" + action.activeServers
+						+ ":failed=" + action.failedServers
+						+ ":cancelled=" + action.cancelledServers
+						+ ":ignore=" + action.ignoreUntilNextStartBefore + "->" + action.ignoreUntilNextStartAfter
+						+ ":allow_terminal=" + action.allowTerminalOnlyBefore + "->" + action.allowTerminalOnlyAfter
+						+ ":summary=" + action.summaryInserted
+						+ ":text=" + action.summaryText
+						+ ":task=" + action.taskRunningBefore + "->" + action.taskRunningAfter
+						+ ":drain=" + action.queuedInputDrainRequested
+						+ ":submitted=" + action.queuedInputSubmitted
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeMcpStartupActionKind.FinishStartup:
+					trace.push(
+						"tui.chat_widget_mcp_startup.finish="
+						+ "failed=" + action.failedServers
+						+ ":cancelled=" + action.cancelledServers
+						+ ":owned=" + action.statusHeaderOwned
+						+ ":restore_status=" + action.statusRestored
+						+ ":ignore=" + action.ignoreUntilNextStartBefore + "->" + action.ignoreUntilNextStartAfter
+						+ ":summary=" + action.summaryInserted
+						+ ":task=" + action.taskRunningBefore + "->" + action.taskRunningAfter
+						+ ":drain=" + action.queuedInputDrainRequested
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeMcpStartupActionKind.PendingRoundPromotion:
+					trace.push(
+						"tui.chat_widget_mcp_startup.pending_round="
+						+ action.pendingServers
+						+ ":count=" + action.pendingCountBefore + "->" + action.pendingCountAfter
+						+ ":activated=" + action.pendingRoundActivated
+						+ ":saw_starting=" + action.sawStartingBefore + "->" + action.sawStartingAfter
+						+ ":allow_terminal=" + action.allowTerminalOnlyBefore + "->" + action.allowTerminalOnlyAfter
+						+ ":active=" + action.activeCountBefore + "->" + action.activeCountAfter
+						+ ":task=" + action.taskRunningBefore + "->" + action.taskRunningAfter
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeMcpStartupActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_mcp_startup.failure="
+						+ action.failureCode
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_mcp_startup.unknown");
 					return false;
 			}
 		}

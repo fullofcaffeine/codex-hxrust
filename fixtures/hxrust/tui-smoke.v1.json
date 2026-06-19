@@ -51,7 +51,8 @@
       "../codex/codex-rs/tui/src/chatwidget/user_messages.rs",
       "../codex/codex-rs/tui/src/chatwidget/input_queue.rs",
       "../codex/codex-rs/tui/src/chatwidget/input_flow.rs",
-      "../codex/codex-rs/tui/src/chatwidget/turn_lifecycle.rs"
+      "../codex/codex-rs/tui/src/chatwidget/turn_lifecycle.rs",
+      "../codex/codex-rs/tui/src/chatwidget/mcp_startup.rs"
     ],
     "notes": "Minimal generated-binary smoke proof only. It uses a headless terminal facade and fixture frame; it does not claim ratatui/crossterm ownership, live app-server transport, or a full interactive TUI."
   },
@@ -12951,6 +12952,197 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.capture_thread_input=composer=draft with @workspace:remote_images=1:local_images=2:elements=3:mentions=1:pastes=1:pending=2:pending_history=1:compare_keys=1:rejected=1:rejected_history=0:queued=2:queued_history=1:user_turn_pending=true:mode=plan:active_mode=plan:task=true:agent=true:sleep=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=true:cleared=false:composer=->draft with @workspace:pending=0->2:pending_history=2:compare_keys=2:rejected=0->1:rejected_history=1:queued=0->2:queued_history=2:user_turn_pending=false->true:mode=plan:active_mode=plan:mode_restored=true:agent=false->true:task=false->true:sleep=false->true:remote_cleared=false:pastes_cleared=false:model_surfaces=true:status_surfaces=true:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=false:cleared=true:composer=draft with @workspace->:pending=2->0:pending_history=0:compare_keys=0:rejected=1->0:rejected_history=0:queued=2->0:queued_history=0:user_turn_pending=true->false:mode=:active_mode=:mode_restored=false:agent=true->false:task=true->false:sleep=true->false:remote_cleared=true:pastes_cleared=true:model_surfaces=false:status_surfaces=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.failure=live_thread_input_restore_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget thread input state restore\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.capture_thread_input=composer=draft with @workspace:remote_images=1:local_images=2:elements=3:mentions=1:pastes=1:pending=2:pending_history=1:compare_keys=1:rejected=1:rejected_history=0:queued=2:queued_history=1:user_turn_pending=true:mode=plan:active_mode=plan:task=true:agent=true:sleep=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=true:cleared=false:composer=->draft with @workspace:pending=0->2:pending_history=2:compare_keys=2:rejected=0->1:rejected_history=1:queued=0->2:queued_history=2:user_turn_pending=false->true:mode=plan:active_mode=plan:mode_restored=true:agent=false->true:task=false->true:sleep=false->true:remote_cleared=false:pastes_cleared=false:model_surfaces=true:status_surfaces=true:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=false:cleared=true:composer=draft with @workspace->:pending=2->0:pending_history=0:compare_keys=0:rejected=1->0:rejected_history=0:queued=2->0:queued_history=0:user_turn_pending=true->false:mode=:active_mode=:mode_restored=false:agent=true->false:task=true->false:sleep=true->false:remote_cleared=true:pastes_cleared=true:model_surfaces=false:status_surfaces=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.failure=live_thread_input_restore_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-mcp-startup-status-headless",
+      "frame": {
+        "name": "chatwidget-mcp-startup-status-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget mcp startup status"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_mcp_startup",
+          "chatWidgetMcpStartup": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "set_expected_servers",
+                "expectedServers": "alpha,beta",
+                "expectedCount": 2,
+                "ignoreUntilNextStartBefore": false,
+                "ignoreUntilNextStartAfter": false
+              },
+              {
+                "kind": "status_update",
+                "server": "alpha",
+                "status": "starting",
+                "completeWhenSettled": true,
+                "activeCountBefore": 0,
+                "activeCountAfter": 1,
+                "pendingCountBefore": 0,
+                "pendingCountAfter": 0,
+                "startingServers": "alpha",
+                "header": "Starting MCP servers (0/1): alpha",
+                "taskRunningBefore": false,
+                "taskRunningAfter": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "status_update",
+                "server": "alpha",
+                "status": "failed",
+                "completeWhenSettled": true,
+                "activeCountBefore": 1,
+                "activeCountAfter": 1,
+                "warningText": "MCP client for `alpha` failed to start: handshake failed",
+                "warningInserted": true,
+                "taskRunningBefore": true,
+                "taskRunningAfter": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "status_update",
+                "server": "alpha",
+                "status": "failed",
+                "completeWhenSettled": true,
+                "activeCountBefore": 1,
+                "activeCountAfter": 1,
+                "warningText": "MCP client for `alpha` failed to start: handshake failed",
+                "duplicateWarningSuppressed": true,
+                "taskRunningBefore": true,
+                "taskRunningAfter": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "status_update",
+                "server": "beta",
+                "status": "starting",
+                "completeWhenSettled": true,
+                "activeCountBefore": 1,
+                "activeCountAfter": 2,
+                "startingServers": "beta",
+                "header": "Starting MCP servers (1/2): beta",
+                "taskRunningBefore": true,
+                "taskRunningAfter": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "finish_after_lag",
+                "activeServers": "alpha,beta",
+                "failedServers": "alpha",
+                "cancelledServers": "beta",
+                "summaryText": "MCP startup interrupted: beta | MCP startup incomplete (failed: alpha)",
+                "ignoreUntilNextStartBefore": false,
+                "ignoreUntilNextStartAfter": true,
+                "summaryInserted": true,
+                "taskRunningBefore": true,
+                "taskRunningAfter": false,
+                "queuedInputDrainRequested": true,
+                "queuedInputSubmitted": false,
+                "requestRedraw": true
+              },
+              {
+                "kind": "status_update",
+                "server": "beta",
+                "status": "starting",
+                "completeWhenSettled": true,
+                "ignoreUntilNextStartBefore": true,
+                "ignoreUntilNextStartAfter": true,
+                "pendingCountBefore": 0,
+                "pendingCountAfter": 1,
+                "pendingServers": "beta",
+                "sawStartingBefore": false,
+                "sawStartingAfter": true,
+                "taskRunningBefore": false,
+                "taskRunningAfter": false,
+                "requestRedraw": false
+              },
+              {
+                "kind": "finish_after_lag",
+                "activeServers": "",
+                "failedServers": "",
+                "cancelledServers": "",
+                "ignoreUntilNextStartBefore": true,
+                "ignoreUntilNextStartAfter": true,
+                "allowTerminalOnlyBefore": false,
+                "allowTerminalOnlyAfter": true,
+                "summaryInserted": false,
+                "taskRunningBefore": false,
+                "taskRunningAfter": false,
+                "queuedInputDrainRequested": false,
+                "requestRedraw": false
+              },
+              {
+                "kind": "pending_round_promotion",
+                "pendingServers": "alpha,beta",
+                "pendingCountBefore": 2,
+                "pendingCountAfter": 0,
+                "activeCountBefore": 0,
+                "activeCountAfter": 2,
+                "pendingRoundActivated": true,
+                "sawStartingBefore": true,
+                "sawStartingAfter": false,
+                "allowTerminalOnlyBefore": true,
+                "allowTerminalOnlyAfter": false,
+                "taskRunningBefore": false,
+                "taskRunningAfter": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "finish_startup",
+                "failedServers": "",
+                "cancelledServers": "",
+                "statusHeaderOwned": true,
+                "statusRestored": false,
+                "ignoreUntilNextStartBefore": false,
+                "ignoreUntilNextStartAfter": true,
+                "summaryInserted": false,
+                "taskRunningBefore": true,
+                "taskRunningAfter": false,
+                "queuedInputDrainRequested": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_mcp_startup_rejected",
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_mcp_startup.plan=headless\ntui.chat_widget_mcp_startup.expected=alpha,beta:count=2:ignore=false->false\ntui.chat_widget_mcp_startup.update=alpha:starting:complete=true:ignore=false->false:pending=0->0:active=0->1:starting=alpha:header=Starting MCP servers (0/1): alpha:warning=false:duplicate=false:task=false->true:redraw=true\ntui.chat_widget_mcp_startup.update=alpha:failed:complete=true:ignore=false->false:pending=0->0:active=1->1:starting=:header=:warning=true:duplicate=false:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.update=alpha:failed:complete=true:ignore=false->false:pending=0->0:active=1->1:starting=:header=:warning=false:duplicate=true:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.update=beta:starting:complete=true:ignore=false->false:pending=0->0:active=1->2:starting=beta:header=Starting MCP servers (1/2): beta:warning=false:duplicate=false:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.finish_after_lag=active=alpha,beta:failed=alpha:cancelled=beta:ignore=false->true:allow_terminal=false->false:summary=true:text=MCP startup interrupted: beta | MCP startup incomplete (failed: alpha):task=true->false:drain=true:submitted=false:redraw=true\ntui.chat_widget_mcp_startup.update=beta:starting:complete=true:ignore=true->true:pending=0->1:active=0->0:starting=:header=:warning=false:duplicate=false:task=false->false:redraw=false\ntui.chat_widget_mcp_startup.finish_after_lag=active=:failed=:cancelled=:ignore=true->true:allow_terminal=false->true:summary=false:text=:task=false->false:drain=false:submitted=false:redraw=false\ntui.chat_widget_mcp_startup.pending_round=alpha,beta:count=2->0:activated=true:saw_starting=true->false:allow_terminal=true->false:active=0->2:task=false->true:redraw=true\ntui.chat_widget_mcp_startup.finish=failed=:cancelled=:owned=true:restore_status=false:ignore=false->true:summary=false:task=true->false:drain=true:redraw=true\ntui.chat_widget_mcp_startup.failure=live_mcp_startup_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget mcp startup status\ninput> \ntrace:\ntui.chat_widget_mcp_startup.plan=headless\ntui.chat_widget_mcp_startup.expected=alpha,beta:count=2:ignore=false->false\ntui.chat_widget_mcp_startup.update=alpha:starting:complete=true:ignore=false->false:pending=0->0:active=0->1:starting=alpha:header=Starting MCP servers (0/1): alpha:warning=false:duplicate=false:task=false->true:redraw=true\ntui.chat_widget_mcp_startup.update=alpha:failed:complete=true:ignore=false->false:pending=0->0:active=1->1:starting=:header=:warning=true:duplicate=false:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.update=alpha:failed:complete=true:ignore=false->false:pending=0->0:active=1->1:starting=:header=:warning=false:duplicate=true:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.update=beta:starting:complete=true:ignore=false->false:pending=0->0:active=1->2:starting=beta:header=Starting MCP servers (1/2): beta:warning=false:duplicate=false:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.finish_after_lag=active=alpha,beta:failed=alpha:cancelled=beta:ignore=false->true:allow_terminal=false->false:summary=true:text=MCP startup interrupted: beta | MCP startup incomplete (failed: alpha):task=true->false:drain=true:submitted=false:redraw=true\ntui.chat_widget_mcp_startup.update=beta:starting:complete=true:ignore=true->true:pending=0->1:active=0->0:starting=:header=:warning=false:duplicate=false:task=false->false:redraw=false\ntui.chat_widget_mcp_startup.finish_after_lag=active=:failed=:cancelled=:ignore=true->true:allow_terminal=false->true:summary=false:text=:task=false->false:drain=false:submitted=false:redraw=false\ntui.chat_widget_mcp_startup.pending_round=alpha,beta:count=2->0:activated=true:saw_starting=true->false:allow_terminal=true->false:active=0->2:task=false->true:redraw=true\ntui.chat_widget_mcp_startup.finish=failed=:cancelled=:owned=true:restore_status=false:ignore=false->true:summary=false:task=true->false:drain=true:redraw=true\ntui.chat_widget_mcp_startup.failure=live_mcp_startup_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

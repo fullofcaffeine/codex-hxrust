@@ -101,6 +101,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetActiveStream: optionalChatWidgetActiveStreamPlan(value, "chatWidgetActiveStream"),
 				chatWidgetStreamStatus: optionalChatWidgetStreamStatusPlan(value, "chatWidgetStreamStatus"),
 				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle"),
+				chatWidgetMcpStartup: optionalMcpStartupPlan(value, "chatWidgetMcpStartup"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -787,6 +788,70 @@ class TuiSmokeFixtureLoader {
 					actions: chatWidgetStreamLifecycleActions(optionalArrayField(value, "actions"))
 				});
 		}
+	}
+
+	static function optionalMcpStartupPlan(object:Value, name:String):Null<TuiSmokeMcpStartupPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeMcpStartupPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: mcpStartupActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function mcpStartupActions(values:Array<Value>):Array<TuiSmokeMcpStartupAction> {
+		final out:Array<TuiSmokeMcpStartupAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeMcpStartupAction({
+				kind: TuiSmokeMcpStartupActionKind.fromString(stringField(value, "kind", "")),
+				server: optionalStringField(value, "server", ""),
+				status: optionalStringField(value, "status", ""),
+				expectedServers: optionalStringField(value, "expectedServers", ""),
+				activeServers: optionalStringField(value, "activeServers", ""),
+				pendingServers: optionalStringField(value, "pendingServers", ""),
+				startingServers: optionalStringField(value, "startingServers", ""),
+				failedServers: optionalStringField(value, "failedServers", ""),
+				cancelledServers: optionalStringField(value, "cancelledServers", ""),
+				header: optionalStringField(value, "header", ""),
+				warningText: optionalStringField(value, "warningText", ""),
+				summaryText: optionalStringField(value, "summaryText", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				expectedCount: optionalIntField(value, "expectedCount", 0),
+				activeCountBefore: optionalIntField(value, "activeCountBefore", 0),
+				activeCountAfter: optionalIntField(value, "activeCountAfter", 0),
+				pendingCountBefore: optionalIntField(value, "pendingCountBefore", 0),
+				pendingCountAfter: optionalIntField(value, "pendingCountAfter", 0),
+				completedCount: optionalIntField(value, "completedCount", 0),
+				totalCount: optionalIntField(value, "totalCount", 0),
+				completeWhenSettled: optionalBoolField(value, "completeWhenSettled", false),
+				ignoreUntilNextStartBefore: optionalBoolField(value, "ignoreUntilNextStartBefore", false),
+				ignoreUntilNextStartAfter: optionalBoolField(value, "ignoreUntilNextStartAfter", false),
+				allowTerminalOnlyBefore: optionalBoolField(value, "allowTerminalOnlyBefore", false),
+				allowTerminalOnlyAfter: optionalBoolField(value, "allowTerminalOnlyAfter", false),
+				sawStartingBefore: optionalBoolField(value, "sawStartingBefore", false),
+				sawStartingAfter: optionalBoolField(value, "sawStartingAfter", false),
+				pendingRoundActivated: optionalBoolField(value, "pendingRoundActivated", false),
+				duplicateWarningSuppressed: optionalBoolField(value, "duplicateWarningSuppressed", false),
+				warningInserted: optionalBoolField(value, "warningInserted", false),
+				summaryInserted: optionalBoolField(value, "summaryInserted", false),
+				statusHeaderOwned: optionalBoolField(value, "statusHeaderOwned", false),
+				statusRestored: optionalBoolField(value, "statusRestored", false),
+				queuedInputDrainRequested: optionalBoolField(value, "queuedInputDrainRequested", false),
+				queuedInputSubmitted: optionalBoolField(value, "queuedInputSubmitted", false),
+				taskRunningBefore: optionalBoolField(value, "taskRunningBefore", false),
+				taskRunningAfter: optionalBoolField(value, "taskRunningAfter", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
 	}
 
 	static function chatWidgetStreamLifecycleActions(values:Array<Value>):Array<TuiSmokeChatWidgetStreamLifecycleAction> {

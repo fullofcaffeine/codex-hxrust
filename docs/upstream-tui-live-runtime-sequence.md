@@ -2548,6 +2548,19 @@ Model selected raw Codex thread-input snapshot behavior without live app/model d
 
 Status: HXCX-TUI-62 extends `fixtures/hxrust/tui-smoke.v1.json` with typed thread-input capture, restore(Some), restore(None), collaboration-mode, queue-history, compare-key, task-running, sleep-inhibitor, pending-preview, redraw, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic thread input state evidence only, not live model/app dispatch.
 
+### HXCX-TUI-63: ChatWidget MCP Startup Status Boundary
+
+Model selected raw Codex MCP startup state handling without live app/model dispatch:
+
+- preserve `update_mcp_startup_status` anchors from `../codex/codex-rs/tui/src/chatwidget/mcp_startup.rs`: active startup rounds record per-server `Starting`, `Ready`, `Failed`, and `Cancelled` states; duplicate failures with the same error suppress duplicate warnings; startup headers show single-server booting text or multi-server completed/total progress;
+- preserve expected-server completion semantics: app-server-backed startup only completes automatically when every expected server has reported a non-starting state, then failed and cancelled server names are sorted into summary warnings;
+- preserve `finish_mcp_startup_after_lag`: active partial rounds settle by treating missing or still-starting expected servers as cancelled, include runtime servers not present in the expected set, and switch to ignore-until-next-start mode after finishing;
+- preserve stale-update protection: after a finish, updates buffer into a pending next round and do not reopen task-running status until the pending map is coherent enough to promote;
+- preserve terminal-only next-round allowance: a lag finish while ignoring updates can allow a full non-starting pending round to promote, so terminal-provided ready/failure events still settle correctly;
+- preserve status/task side effects: MCP startup contributes to bottom-pane task-running state, restores previous working/review status only when appropriate, attempts queued-input drain after finish, requests redraw for active state changes, and never performs live terminal/model/tool effects in the smoke fixture.
+
+Status: HXCX-TUI-63 extends `fixtures/hxrust/tui-smoke.v1.json` with typed expected-server setup, status updates, warning dedupe, lag finish, stale update buffering, terminal-only pending-round promotion, finish summaries, task-running/status, queued-drain intent, redraw, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic MCP startup state evidence only, not live app-server transport or MCP process startup.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
