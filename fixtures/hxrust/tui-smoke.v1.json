@@ -18795,6 +18795,136 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.session_archive_command.plan=headless\ntui.session_archive_command.thread_list_request=id=31:method=thread/list:action=archive:scope=active:archived=false:include_non_interactive=false:cursor=:limit=100:sort=updated_at:direction=:state_db_only=false:search=Design Session\ntui.session_archive_command.thread_list_response=id=31:method=thread/list:rows=100:next=cursor-2:backwards=cursor-prev-1\ntui.session_archive_command.thread_list_request=id=32:method=thread/list:action=archive:scope=active:archived=false:include_non_interactive=false:cursor=cursor-2:limit=100:sort=updated_at:direction=:state_db_only=false:search=Design Session\ntui.session_archive_command.thread_list_response=id=32:method=thread/list:rows=1:next=:backwards=cursor-prev-2\ntui.session_archive_command.thread_list_request=id=33:method=thread/list:action=unarchive:scope=archived:archived=true:include_non_interactive=false:cursor=:limit=100:sort=updated_at:direction=:state_db_only=false:search=Missing Session\ntui.session_archive_command.thread_list_response=id=33:method=thread/list:rows=0:next=:backwards=\ntui.session_archive_command.failure=thread_list_transport_error:error=failed to list sessions while resolving session name: app-server transport closed:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=true:unsupported=false\ntui.session_archive_command.failure=live_thread_list_rejected:error=session archive thread/list live app-server request is disabled:no_live=true:no_model=true:no_app_server=true:no_fs=true:wrapped=false:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> session archive thread list filter boundary\ninput> \ntrace:\ntui.session_archive_command.plan=headless\ntui.session_archive_command.thread_list_request=id=31:method=thread/list:action=archive:scope=active:archived=false:include_non_interactive=false:cursor=:limit=100:sort=updated_at:direction=:state_db_only=false:search=Design Session\ntui.session_archive_command.thread_list_response=id=31:method=thread/list:rows=100:next=cursor-2:backwards=cursor-prev-1\ntui.session_archive_command.thread_list_request=id=32:method=thread/list:action=archive:scope=active:archived=false:include_non_interactive=false:cursor=cursor-2:limit=100:sort=updated_at:direction=:state_db_only=false:search=Design Session\ntui.session_archive_command.thread_list_response=id=32:method=thread/list:rows=1:next=:backwards=cursor-prev-2\ntui.session_archive_command.thread_list_request=id=33:method=thread/list:action=unarchive:scope=archived:archived=true:include_non_interactive=false:cursor=:limit=100:sort=updated_at:direction=:state_db_only=false:search=Missing Session\ntui.session_archive_command.thread_list_response=id=33:method=thread/list:rows=0:next=:backwards=\ntui.session_archive_command.failure=thread_list_transport_error:error=failed to list sessions while resolving session name: app-server transport closed:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=true:unsupported=false\ntui.session_archive_command.failure=live_thread_list_rejected:error=session archive thread/list live app-server request is disabled:no_live=true:no_model=true:no_app_server=true:no_fs=true:wrapped=false:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "session-archive-thread-list-row-projection-boundary",
+      "frame": {
+        "name": "session-archive-thread-list-row-projection-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "session archive thread list row projection boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "session_archive_command",
+          "sessionArchiveCommand": {
+            "allowLiveTerminal": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "thread_list_response",
+                "requestId": "41",
+                "method": "thread/list",
+                "rowCount": 3,
+                "nextCursor": "",
+                "backwardsCursor": "cursor-prev-rows"
+              },
+              {
+                "kind": "thread_list_row",
+                "requestId": "41",
+                "rowIndex": 0,
+                "threadId": "019e7341-b56d-7a32-b9a0-9239e2377bd1",
+                "threadName": "Design Session",
+                "preview": "first message",
+                "displayPreview": "Design Session",
+                "sourceKind": "cli",
+                "cwd": "/workspace/codex",
+                "path": "/home/me/.codex/sessions/rollout-design.jsonl",
+                "gitBranch": "main",
+                "createdAt": 1770000000,
+                "updatedAt": 1770003600,
+                "archivedMatchesFilter": true,
+                "rowAccepted": true
+              },
+              {
+                "kind": "thread_list_row",
+                "requestId": "41",
+                "rowIndex": 1,
+                "threadId": "019e7341-b56d-7a32-b9a0-9239e2377bd3",
+                "threadName": "",
+                "preview": "",
+                "displayPreview": "(no message yet)",
+                "sourceKind": "vscode",
+                "cwd": "/workspace/other",
+                "path": "",
+                "gitBranch": "",
+                "createdAt": 1770001000,
+                "updatedAt": 1770001200,
+                "archivedMatchesFilter": true,
+                "rowAccepted": true
+              },
+              {
+                "kind": "thread_list_row_rejected",
+                "requestId": "41",
+                "rowIndex": 2,
+                "threadId": "not-a-thread-id",
+                "errorMessage": "invalid thread id",
+                "validThreadId": false,
+                "rowAccepted": false
+              },
+              {
+                "kind": "thread_list_response",
+                "requestId": "42",
+                "method": "thread/list",
+                "rowCount": 1,
+                "nextCursor": "",
+                "backwardsCursor": "cursor-prev-archived"
+              },
+              {
+                "kind": "thread_list_row",
+                "requestId": "42",
+                "rowIndex": 0,
+                "threadId": "019e7341-b56d-7a32-b9a0-9239e2377bd2",
+                "threadName": "Restored Session",
+                "preview": "archived first message",
+                "displayPreview": "Restored Session",
+                "sourceKind": "cli",
+                "cwd": "/workspace/codex",
+                "path": "/home/me/.codex/archived_sessions/rollout-restored.jsonl",
+                "gitBranch": "restore",
+                "createdAt": 1769990000,
+                "updatedAt": 1769997200,
+                "archivedMatchesFilter": true,
+                "rowAccepted": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "thread_list_row_rejected",
+                "errorMessage": "malformed app-server thread/list row skipped",
+                "unsupportedRejected": false,
+                "noFilesystemMutation": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.session_archive_command.plan=headless\ntui.session_archive_command.thread_list_response=id=41:method=thread/list:rows=3:next=:backwards=cursor-prev-rows\ntui.session_archive_command.thread_list_row=id=41:idx=0:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:name=Design Session:display=Design Session:source=cli:cwd=/workspace/codex:path=/home/me/.codex/sessions/rollout-design.jsonl:branch=main:created=1770000000:updated=1770003600:archived_match=true:accepted=true\ntui.session_archive_command.thread_list_row=id=41:idx=1:thread=019e7341-b56d-7a32-b9a0-9239e2377bd3:name=:display=(no message yet):source=vscode:cwd=/workspace/other:path=:branch=:created=1770001000:updated=1770001200:archived_match=true:accepted=true\ntui.session_archive_command.thread_list_row_rejected=id=41:idx=2:thread=not-a-thread-id:reason=invalid thread id:valid_thread=false:accepted=false\ntui.session_archive_command.thread_list_response=id=42:method=thread/list:rows=1:next=:backwards=cursor-prev-archived\ntui.session_archive_command.thread_list_row=id=42:idx=0:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session:display=Restored Session:source=cli:cwd=/workspace/codex:path=/home/me/.codex/archived_sessions/rollout-restored.jsonl:branch=restore:created=1769990000:updated=1769997200:archived_match=true:accepted=true\ntui.session_archive_command.failure=thread_list_row_rejected:error=malformed app-server thread/list row skipped:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=false:unsupported=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> session archive thread list row projection boundary\ninput> \ntrace:\ntui.session_archive_command.plan=headless\ntui.session_archive_command.thread_list_response=id=41:method=thread/list:rows=3:next=:backwards=cursor-prev-rows\ntui.session_archive_command.thread_list_row=id=41:idx=0:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:name=Design Session:display=Design Session:source=cli:cwd=/workspace/codex:path=/home/me/.codex/sessions/rollout-design.jsonl:branch=main:created=1770000000:updated=1770003600:archived_match=true:accepted=true\ntui.session_archive_command.thread_list_row=id=41:idx=1:thread=019e7341-b56d-7a32-b9a0-9239e2377bd3:name=:display=(no message yet):source=vscode:cwd=/workspace/other:path=:branch=:created=1770001000:updated=1770001200:archived_match=true:accepted=true\ntui.session_archive_command.thread_list_row_rejected=id=41:idx=2:thread=not-a-thread-id:reason=invalid thread id:valid_thread=false:accepted=false\ntui.session_archive_command.thread_list_response=id=42:method=thread/list:rows=1:next=:backwards=cursor-prev-archived\ntui.session_archive_command.thread_list_row=id=42:idx=0:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session:display=Restored Session:source=cli:cwd=/workspace/codex:path=/home/me/.codex/archived_sessions/rollout-restored.jsonl:branch=restore:created=1769990000:updated=1769997200:archived_match=true:accepted=true\ntui.session_archive_command.failure=thread_list_row_rejected:error=malformed app-server thread/list row skipped:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=false:unsupported=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

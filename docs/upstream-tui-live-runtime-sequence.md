@@ -2952,6 +2952,19 @@ Extend HXCX-TUI-91/HXCX-TUI-92 from resolver-level lookup evidence into the raw 
 
 Status: HXCX-TUI-94 extends `fixtures/hxrust/tui-smoke.v1.json` with typed `thread/list` request params, active-vs-archived filter evidence, source-kind gating through `include_non_interactive=false`, pagination and empty-result response cursors, wrapped list transport failure, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic app-server list-filter evidence only, not live JSON-RPC transport, state DB/rollout querying, resume picker rendering, or persistent session archive mutation.
 
+### HXCX-TUI-95: Thread-List Row Projection Boundary
+
+Extend HXCX-TUI-94 from `thread/list` request/response metadata into selected raw Codex row projection consumed by session archive and resume picker flows, without live app-server transport, state DB/rollout querying, filesystem mutation, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/app-server-protocol/src/protocol/v2/thread_data.rs` row shape: `Thread` rows carry id, optional path, preview, created/updated timestamps, cwd, source, optional git metadata, and optional name;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `row_from_app_server_thread`: invalid thread ids are skipped, preview text is trimmed, empty preview renders as `(no message yet)`, thread names override preview for display, timestamps are parsed from Unix seconds, and cwd/git branch are preserved for search/footer metadata;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `load_app_server_page`: response `data` rows are projected with `filter_map`, `next_cursor` remains an app-server page cursor, and `num_scanned_files` counts response rows before invalid rows are dropped;
+- preserve `../codex/codex-rs/tui/src/session_archive_commands.rs` `session_target_from_app_server_thread`: archive command name resolution rejects invalid app-server thread ids and carries the returned optional session name;
+- preserve active and archived-scope row evidence while keeping backwards cursor presence visible from `ThreadListResponse`;
+- keep malformed row refusal deterministic, with no live JSON-RPC transport, persistent archive movement, state DB repair, filesystem mutation, or Cafex behavior.
+
+Status: HXCX-TUI-95 extends `fixtures/hxrust/tui-smoke.v1.json` with typed `ThreadListResponse.data` row projection evidence, display-title fallback, source/cwd/path/git/timestamp summaries, invalid thread-id row rejection, active and archived filter consistency, backwards cursor evidence, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic row projection evidence only, not full picker rendering, transcript preview loading, state DB/rollout querying, or persistent session archive mutation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

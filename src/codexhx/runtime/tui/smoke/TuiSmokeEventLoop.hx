@@ -2059,6 +2059,33 @@ class TuiSmokeEventLoop {
 						+ ":next=" + action.nextCursor
 						+ ":backwards=" + action.backwardsCursor
 					);
+				case TuiSmokeSessionArchiveCommandActionKind.ThreadListRow:
+					trace.push(
+						"tui.session_archive_command.thread_list_row="
+						+ "id=" + action.requestId
+						+ ":idx=" + action.rowIndex
+						+ ":thread=" + action.threadId
+						+ ":name=" + action.threadName
+						+ ":display=" + action.displayPreview
+						+ ":source=" + action.sourceKind
+						+ ":cwd=" + action.cwd
+						+ ":path=" + action.path
+						+ ":branch=" + action.gitBranch
+						+ ":created=" + action.createdAt
+						+ ":updated=" + action.updatedAt
+						+ ":archived_match=" + action.archivedMatchesFilter
+						+ ":accepted=" + action.rowAccepted
+					);
+				case TuiSmokeSessionArchiveCommandActionKind.ThreadListRowRejected:
+					trace.push(
+						"tui.session_archive_command.thread_list_row_rejected="
+						+ "id=" + action.requestId
+						+ ":idx=" + action.rowIndex
+						+ ":thread=" + action.threadId
+						+ ":reason=" + action.errorMessage
+						+ ":valid_thread=" + action.validThreadId
+						+ ":accepted=" + action.rowAccepted
+					);
 				case TuiSmokeSessionArchiveCommandActionKind.RpcRequest:
 					trace.push(
 						"tui.session_archive_command.rpc_request="

@@ -6,6 +6,8 @@ enum abstract TuiSmokeSessionArchiveCommandActionKind(String) to String {
 	final ResolveName = "resolve_name";
 	final ThreadListRequest = "thread_list_request";
 	final ThreadListResponse = "thread_list_response";
+	final ThreadListRow = "thread_list_row";
+	final ThreadListRowRejected = "thread_list_row_rejected";
 	final RpcRequest = "rpc_request";
 	final RpcResponse = "rpc_response";
 	final CommandResult = "command_result";
@@ -19,6 +21,8 @@ enum abstract TuiSmokeSessionArchiveCommandActionKind(String) to String {
 			case "resolve_name": ResolveName;
 			case "thread_list_request": ThreadListRequest;
 			case "thread_list_response": ThreadListResponse;
+			case "thread_list_row": ThreadListRow;
+			case "thread_list_row_rejected": ThreadListRowRejected;
 			case "rpc_request": RpcRequest;
 			case "rpc_response": RpcResponse;
 			case "command_result": CommandResult;
