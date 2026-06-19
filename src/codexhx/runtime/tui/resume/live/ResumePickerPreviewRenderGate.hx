@@ -4,7 +4,6 @@ import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPoll;
 import codexhx.runtime.asyncruntime.AsyncStreamItem;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
-import codexhx.runtime.tui.resume.ResumePickerDensity;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
 import codexhx.runtime.tui.resume.ResumePickerState;
@@ -21,21 +20,17 @@ import codexhx.runtime.tui.resume.host.ResumePickerThreadListResponse;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadReadRequest;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadReadResponse;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadRow;
-import codexhx.runtime.tui.resume.host.TempHomeResumePickerConfigPersistence;
-import sys.io.File;
 
-class ResumePickerNoCredentialGate {
-	public static function run(codexHome:String):ResumePickerNoCredentialGateReport {
+class ResumePickerPreviewRenderGate {
+	public static function run():ResumePickerPreviewRenderGateReport {
 		final source = fixtureSource();
 		final loader = new DeterministicResumePickerBackgroundLoader(source, 8);
 		final scheduler = new DeterministicResumePickerFrameScheduler();
 		final renderer = new DeterministicResumePickerTerminalRenderer();
-		final persistence = new TempHomeResumePickerConfigPersistence(codexHome);
 		final state = ResumePickerState.initial();
 		final eventSummaries:Array<String> = [];
 		var pageLoads = 0;
-		var transcriptLoads = 0;
-		var keyEvents = 0;
+		var previewLoads = 0;
 
 		state.opened = true;
 		state.action = ResumePickerActionKind.Resume;
@@ -52,112 +47,48 @@ class ResumePickerNoCredentialGate {
 			pageLoads = pageLoads + 1;
 			state.scannedRows = 2;
 			state.acceptedRows = 2;
-			state.invalidRows = 0;
 			state.loadedRows = 2;
 			state.filteredRows = 2;
 			state.selectedIndex = 0;
 			state.selectedThreadId = "thread-a";
 			state.selectedLabel = "Resume kernel";
-			state.visibleRows = visibleRows(0);
-			state.nextCursor = "cursor-2";
-			state.nextCursorPresent = true;
+			state.visibleRows = visibleRows([]);
 			state.footerProgressLabel = "50%";
-			state.emptyStateMessage = "";
 		}
 		scheduler.requestFrame("page-loaded");
 		renderer.render(state);
 
-		final keys = [
-			new ResumePickerNoCredentialKeyEvent({kind: ResumePickerNoCredentialKeyKind.Down, keyName: "Down"}),
-			new ResumePickerNoCredentialKeyEvent({kind: ResumePickerNoCredentialKeyKind.OpenTranscript, keyName: "Enter"}),
-			new ResumePickerNoCredentialKeyEvent({kind: ResumePickerNoCredentialKeyKind.ToggleDensity, keyName: "d"})
-		];
+		state.expandedThreadId = "thread-a";
+		state.previewState = "loading";
+		state.visibleRows = visibleRows(["loading preview..."]);
+		scheduler.requestFrame("preview-loading");
+		renderer.render(state);
 
-		for (key in keys) {
-			keyEvents = keyEvents + 1;
-			switch key.kind {
-				case ResumePickerNoCredentialKeyKind.Down:
-					state.selectedIndex = 1;
-					state.selectedThreadId = "thread-b";
-					state.selectedLabel = "Host facade";
-					state.visibleRows = visibleRows(1);
-					state.footerProgressLabel = "100%";
-					scheduler.requestFrame("key:" + key.keyName);
-					renderer.render(state);
-				case ResumePickerNoCredentialKeyKind.OpenTranscript:
-					state.pendingThreadId = state.selectedThreadId;
-					state.transcriptState = "loading";
-					state.transcriptLoadingFrameShown = true;
-					state.loadingOverlayMessage = "Loading transcript...";
-					scheduler.requestFrame("key:" + key.keyName);
-					renderer.render(state);
-					loader.enqueue(ResumePickerBackgroundRequest.transcriptLoad(transcriptRequest()));
-					final transcriptEvent = expectEvent(loader.pollEvent(AsyncContext.fixture("transcript")));
-					eventSummaries.push(transcriptEvent.summary());
-					if (transcriptEvent.kind == ResumePickerHostEventKind.TranscriptLoaded) {
-						transcriptLoads = transcriptLoads + 1;
-						state.transcriptState = "loaded";
-						state.transcriptCellCount = 3;
-						state.overlayOpen = true;
-						state.pendingThreadId = "thread-b";
-						state.loadingOverlayMessage = "";
-					}
-					scheduler.requestFrame("transcript-loaded");
-					renderer.render(state);
-				case ResumePickerNoCredentialKeyKind.ToggleDensity:
-					state.density = ResumePickerDensity.Dense;
-					final poll = persistence.persistDensity(state.density).poll(AsyncContext.fixture("persist-density"));
-					switch poll {
-						case Ready(outcome, _, _):
-							if (!outcome.ok) throw "density persistence failed: " + outcome.summary();
-						case _:
-							throw "density persistence did not complete";
-					}
-					scheduler.requestFrame("key:" + key.keyName);
-					renderer.render(state);
-				case ResumePickerNoCredentialKeyKind.Unknown:
-			}
+		loader.enqueue(ResumePickerBackgroundRequest.previewLoad(previewRequest()));
+		final previewEvent = expectEvent(loader.pollEvent(AsyncContext.fixture("preview")));
+		eventSummaries.push(previewEvent.summary());
+		if (previewEvent.kind == ResumePickerHostEventKind.PreviewLoaded) {
+			previewLoads = previewLoads + 1;
+			state.previewState = "loaded";
+			state.previewRendered = true;
+			state.previewLineCount = 2;
+			state.previewUserLineCount = 1;
+			state.previewAssistantLineCount = 1;
+			state.visibleRows = visibleRows(["user: continue", "assistant: preview ready"]);
+			state.footerProgressLabel = "100%";
 		}
+		scheduler.requestFrame("preview-loaded");
+		renderer.render(state);
 
-		final configText = File.getContent(persistence.configPath());
-		return new ResumePickerNoCredentialGateReport({
+		return new ResumePickerPreviewRenderGateReport({
 			pageLoads: pageLoads,
-			transcriptLoads: transcriptLoads,
-			keyEvents: keyEvents,
+			previewLoads: previewLoads,
 			frameRequests: scheduler.requestCount(),
 			renderCount: renderer.renderCount(),
-			overlayOpened: state.overlayOpen,
-			densityPersisted: configText.indexOf("session_picker_view = \"dense\"") >= 0,
-			configPath: persistence.configPath(),
-			configText: configText,
-			finalSummary: state.summary(),
 			finalSnapshot: renderer.lastSnapshot(),
 			renderSnapshots: renderer.allSnapshots(),
 			eventSummaries: eventSummaries
 		});
-	}
-
-	static function visibleRows(selectedIndex:Int):Array<ResumePickerVisibleRow> {
-		return [
-			new ResumePickerVisibleRow({
-				threadId: "thread-a",
-				title: "Resume kernel",
-				cwd: "/workspace/codex-hxrust",
-				updatedAt: "2026-06-19T12:00:00Z",
-				turnCount: 3,
-				selected: selectedIndex == 0,
-				previewLines: []
-			}),
-			new ResumePickerVisibleRow({
-				threadId: "thread-b",
-				title: "Host facade",
-				cwd: "/workspace/codex-hxrust",
-				updatedAt: "2026-06-19T12:05:00Z",
-				turnCount: 5,
-				selected: selectedIndex == 1,
-				previewLines: []
-			})
-		];
 	}
 
 	static function pageRequest():ResumePickerThreadListRequest {
@@ -174,13 +105,13 @@ class ResumePickerNoCredentialGate {
 		});
 	}
 
-	static function transcriptRequest():ResumePickerThreadReadRequest {
+	static function previewRequest():ResumePickerThreadReadRequest {
 		return new ResumePickerThreadReadRequest({
-			requestId: "transcript-1",
-			threadId: "thread-b",
+			requestId: "preview-1",
+			threadId: "thread-a",
 			includeTurns: true,
-			previewOnly: false,
-			maxPreviewLines: 0
+			previewOnly: true,
+			maxPreviewLines: 4
 		});
 	}
 
@@ -213,13 +144,36 @@ class ResumePickerNoCredentialGate {
 			reachedScanCap: false
 		}));
 		source.addRead(new ResumePickerThreadReadResponse({
-			requestId: "transcript-1",
-			threadId: "thread-b",
-			previewLines: [],
-			transcriptCells: ["user: continue", "assistant: host facade ready", "plan: render gate"],
+			requestId: "preview-1",
+			threadId: "thread-a",
+			previewLines: ["user: continue", "assistant: preview ready"],
+			transcriptCells: [],
 			truncated: false
 		}));
 		return source;
+	}
+
+	static function visibleRows(previewLines:Array<String>):Array<ResumePickerVisibleRow> {
+		return [
+			new ResumePickerVisibleRow({
+				threadId: "thread-a",
+				title: "Resume kernel",
+				cwd: "/workspace/codex-hxrust",
+				updatedAt: "2026-06-19T12:00:00Z",
+				turnCount: 3,
+				selected: true,
+				previewLines: previewLines
+			}),
+			new ResumePickerVisibleRow({
+				threadId: "thread-b",
+				title: "Host facade",
+				cwd: "/workspace/codex-hxrust",
+				updatedAt: "2026-06-19T12:05:00Z",
+				turnCount: 5,
+				selected: false,
+				previewLines: []
+			})
+		];
 	}
 
 	static function expectEvent(poll:AsyncPoll<AsyncStreamItem<ResumePickerHostEvent>>):ResumePickerHostEvent {

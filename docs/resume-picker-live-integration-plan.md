@@ -15,6 +15,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-host-facade.sh` validates the runtime-neutral host contracts for deterministic app-server thread sources, background loader events, frame scheduling, terminal-renderer snapshots, backpressure, cancellation, and in-memory density persistence.
 - `harness/check-resume-picker-no-credential-gate.sh` now validates the first combined no-credential generated-Rust gate: fixture-backed thread list/read through the host facade, deterministic key events, frame requests, terminal/test rendering, transcript overlay open, and temp Codex-home density persistence.
 - `harness/check-resume-picker-render-snapshot.sh` validates stable normalized test-backend screen snapshots for the no-credential picker path, including visible rows, selected row marker, loading overlay, transcript overlay, footer, and temp-home config evidence.
+- `harness/check-resume-picker-preview-render.sh` validates fixture-backed `thread/read` preview rendering through the same normalized test-backend surface, including selected row, loading preview evidence, preview lines, and footer state.
 
 ## Upstream Anchors
 
@@ -102,7 +103,7 @@ Status: `harness/check-resume-picker-render-snapshot.sh` adds the first normaliz
 5. Replace smoke-only behaviors incrementally.
    - Page load: typed fixture intent -> generated Rust app-server request path.
    - Selection/render: pure state text evidence -> ratatui/VT100 snapshot.
-   - Preview: request intent -> app-server `thread/read(include_turns=true)` through host facade.
+   - Preview: request intent -> app-server `thread/read(include_turns=true)` through host facade and normalized preview-line render snapshot.
    - Full transcript: pending-open fixture -> loaded `TranscriptOverlay` state and render snapshot.
    - Toolbar/density: persistence intent -> temp-home `config.toml` mutation through `ConfigEditsBuilder` equivalent.
    - Footer/progress: label fixture -> rendered footer snapshot at multiple widths.
@@ -140,6 +141,7 @@ Near-term gates:
 - `harness/check-resume-picker-host-facade.sh` for runtime-neutral host contracts, deterministic in-memory implementations, backpressure/cancellation, and portable haxe.rust-generated Rust validation.
 - `harness/check-resume-picker-no-credential-gate.sh` for the first combined no-credential generated-Rust app-server facade, deterministic key, frame/render, transcript overlay, and temp-home density persistence gate.
 - `harness/check-resume-picker-render-snapshot.sh` for normalized VT100/test-backend-style screen snapshots before any live crossterm automation.
+- `harness/check-resume-picker-preview-render.sh` for normalized preview-line render snapshots driven by fixture-backed `thread/read previewOnly=true`.
 
 Exit criteria for "first live resume picker slice":
 

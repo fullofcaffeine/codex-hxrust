@@ -39,6 +39,9 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 		} else {
 			for (row in state.visibleRows) {
 				lines.push(renderRow(row));
+				for (previewLine in row.previewLines) {
+					lines.push("    preview: " + previewLine);
+				}
 			}
 		}
 		if (state.loadingOverlayMessage.length > 0) {

@@ -7,6 +7,7 @@ typedef ResumePickerVisibleRowFields = {
 	final updatedAt:String;
 	final turnCount:Int;
 	final selected:Bool;
+	final previewLines:Array<String>;
 }
 
 @:build(codexhx.macros.FieldRecordConstructor.build())
@@ -17,4 +18,5 @@ class ResumePickerVisibleRow {
 	public final updatedAt:String;
 	public final turnCount:Int;
 	public final selected:Bool;
+	public final previewLines:Array<String>;
 }

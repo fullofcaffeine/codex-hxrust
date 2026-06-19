@@ -3106,6 +3106,17 @@ Replace counter-only rendering proof for the no-credential resume picker path wi
 
 Status: HXCX-TUI-106 adds `ResumePickerVisibleRow`, upgrades `DeterministicResumePickerTerminalRenderer` from state-summary strings to normalized screen snapshots, extends the no-credential report with render snapshots, and adds `test/ResumePickerRenderSnapshotHarness.hx`, `hxml/resume-picker-render-snapshot.hxml`, and `harness/check-resume-picker-render-snapshot.sh`. The gate validates six stable snapshots through Haxe interpreter execution, portable haxe.rust generation, generated Cargo `check`, generated Cargo `test`, and generated binary execution. This is normalized test-backend render evidence only, not live crossterm/ratatui ownership.
 
+### HXCX-TUI-107: Resume Picker Transcript Preview Render Snapshot Gate
+
+Extend the normalized resume picker renderer from selected-row and transcript-overlay evidence into inline transcript preview evidence:
+
+- drive `thread/read previewOnly=true` through the runtime-neutral host facade and deterministic background loader;
+- render preview-loading and preview-loaded states for the expanded selected row;
+- assert selected row, preview lines, footer progress, and host preview event evidence in a generated-Rust harness;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-107 extends `ResumePickerVisibleRow` with typed preview lines, teaches `DeterministicResumePickerTerminalRenderer` to render indented preview lines, and adds `ResumePickerPreviewRenderGate`, `ResumePickerPreviewRenderGateReport`, `test/ResumePickerPreviewRenderHarness.hx`, `hxml/resume-picker-preview-render.hxml`, and `harness/check-resume-picker-preview-render.sh`. The gate validates fixture-backed page load plus preview `thread/read`, preview-loading snapshot, loaded preview-line snapshot, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
