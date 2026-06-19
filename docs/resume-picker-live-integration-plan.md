@@ -19,6 +19,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-pagination-render.sh` validates fixture-backed second-page ingestion, next-cursor render evidence, loading-older state, visible loaded rows, and footer progress through the same normalized test-backend surface.
 - `harness/check-resume-picker-empty-error-render.sh` validates normalized empty/loading/no-results and app-server page-failure render states, including visible error labels and footer state.
 - `harness/check-resume-picker-transcript-overlay-render.sh` validates fixture-backed full transcript loading, loading overlay state, loaded transcript detail cells, and empty-transcript fallback cells through the normalized test-backend surface.
+- `harness/check-resume-picker-toolbar-footer-render.sh` validates normalized toolbar focus/value display plus wide, compact, key-only, and loading footer/progress variants through the normalized test-backend surface.
 
 ## Upstream Anchors
 
@@ -117,6 +118,8 @@ Status: empty/error render states now have generated-Rust normalized evidence in
 
 Status: transcript overlay detail now has generated-Rust normalized evidence in `harness/check-resume-picker-transcript-overlay-render.sh`. The gate renders pending full-transcript loading, loaded transcript detail cells, and the empty-transcript fallback cell through fixture-backed `thread/read` calls on the host facade. This is still deterministic test-backend evidence, not pager overlay ownership, live app-server fanout, live crossterm input, ratatui frame ownership, state DB/rollout querying, or Cafex behavior.
 
+Status: toolbar/footer width variants now have generated-Rust normalized evidence in `harness/check-resume-picker-toolbar-footer-render.sh`. The gate renders Filter/Sort toolbar focus and value states plus wide, compact, key-only, and loading footer/progress variants. This is still deterministic test-backend evidence, not live crossterm input, ratatui layout ownership, app-server fanout, state DB/rollout querying, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -154,6 +157,7 @@ Near-term gates:
 - `harness/check-resume-picker-pagination-render.sh` for normalized pagination/load-more snapshots driven by fixture-backed first and second page loads.
 - `harness/check-resume-picker-empty-error-render.sh` for normalized empty/loading/no-results and page-failure render snapshots.
 - `harness/check-resume-picker-transcript-overlay-render.sh` for normalized full-transcript loading, loaded detail, and empty-fallback transcript snapshots.
+- `harness/check-resume-picker-toolbar-footer-render.sh` for normalized toolbar focus/value and footer width/fallback snapshots.
 
 Exit criteria for "first live resume picker slice":
 

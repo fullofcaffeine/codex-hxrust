@@ -3150,6 +3150,17 @@ Extend the normalized resume picker renderer from overlay-open count evidence in
 
 Status: HXCX-TUI-110 adds typed `ResumePickerState.transcriptCells`, teaches `DeterministicResumePickerTerminalRenderer` to render normalized transcript cell lines when an overlay is open, and adds `ResumePickerTranscriptOverlayRenderGate`, `ResumePickerTranscriptOverlayRenderGateReport`, `test/ResumePickerTranscriptOverlayRenderHarness.hx`, `hxml/resume-picker-transcript-overlay-render.hxml`, and `harness/check-resume-picker-transcript-overlay-render.sh`. The gate validates pending loading overlay, loaded detail cells, empty-fallback cell rendering, footer state, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal, ratatui, or pager overlay ownership.
 
+### HXCX-TUI-111: Resume Picker Toolbar Footer Width Render Snapshot Gate
+
+Extend the normalized resume picker renderer from transcript detail evidence into toolbar and footer layout evidence:
+
+- render Filter and Sort toolbar focus/value states, including wide and compact toolbar modes;
+- render wide, compact, key-only, and loading footer/progress variants through the deterministic terminal renderer;
+- assert toolbar labels, footer hint modes, width/fallback flags, progress text, and frame/render counts in a generated-Rust harness;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-111 teaches `DeterministicResumePickerTerminalRenderer` to emit optional normalized toolbar-detail and footer-hints lines, and adds `ResumePickerToolbarFooterRenderGate`, `ResumePickerToolbarFooterRenderGateReport`, `test/ResumePickerToolbarFooterRenderHarness.hx`, `hxml/resume-picker-toolbar-footer-render.hxml`, and `harness/check-resume-picker-toolbar-footer-render.sh`. The gate validates filter/sort toolbar focus, wide/compact/key-only/loading footer variants, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

@@ -33,6 +33,9 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 		final lines:Array<String> = [];
 		lines.push("resume-picker action=" + state.action + " density=" + state.density);
 		lines.push("toolbar sort=" + state.sortKey + " filter=" + state.filterMode + " query=" + emptyLabel(state.query));
+		if (state.toolbarRenderMode.length > 0 || state.toolbarFocus != "filter") {
+			lines.push("toolbar-detail focus=" + state.toolbarFocus + " mode=" + emptyLabel(state.toolbarRenderMode));
+		}
 		lines.push("rows loaded=" + state.loadedRows + " filtered=" + state.filteredRows + " scanned=" + state.scannedRows + " accepted=" + state.acceptedRows);
 		if (state.visibleRows.length == 0) {
 			lines.push(state.emptyStateMessage.length == 0 ? "  no rows loaded" : "  empty: " + state.emptyStateMessage);
@@ -59,6 +62,18 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 		}
 		if (state.inlineErrorShown || state.lastError.length > 0 || state.lastFailureCode.length > 0) {
 			lines.push("error code=" + emptyLabel(state.lastFailureCode) + " message=" + emptyLabel(state.lastError));
+		}
+		if (state.footerHintMode.length > 0 || state.footerWidth > 0 || state.compactFallback || state.keyOnlyFallback) {
+			lines.push("footer-hints mode="
+				+ emptyLabel(state.footerHintMode)
+				+ " width="
+				+ state.footerWidth
+				+ " compact="
+				+ boolLabel(state.compactFallback)
+				+ " keyOnly="
+				+ boolLabel(state.keyOnlyFallback)
+				+ " loading="
+				+ boolLabel(state.loadingPending));
 		}
 		lines.push("footer " + emptyLabel(state.footerProgressLabel) + " selected=" + state.selectedIndex + " selectedThread=" + emptyLabel(state.selectedThreadId));
 		return lines.join("\n");
