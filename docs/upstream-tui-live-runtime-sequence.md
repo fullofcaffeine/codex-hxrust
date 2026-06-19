@@ -2614,6 +2614,19 @@ Model selected raw Codex non-command tool lifecycle bookkeeping without live too
 
 Status: HXCX-TUI-67 extends `fixtures/hxrust/tui-smoke.v1.json` with typed patch/file-change, view-image, image-generation, MCP tool, web-search, collaborator, sub-agent, queued-dispatch, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic tool lifecycle state evidence only, not live tool execution or full transcript cell rendering.
 
+### HXCX-TUI-68: ChatWidget Hook Lifecycle Boundary
+
+Model selected raw Codex hook lifecycle and hooks browser bookkeeping without live hook execution:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/hook_lifecycle.rs` start behavior: visible turn activity is recorded, answer/completed hook output is flushed before display, an existing active hook cell receives the run in place, otherwise a new active hook cell is created, the active-cell revision is bumped, and redraw is requested;
+- preserve hook completion paths: matched active runs complete in place, unmatched completions can be added to an existing active cell, no-active completions can create a completed hook cell, empty completed cells can be discarded, completed persistent output is flushed, idle active cells are finished, and redraw is requested;
+- preserve completed-output and idle finishing behavior: completed persistent runs are taken into history, empty active hook cells are cleared, inserted history requests the final-message separator, and `should_flush` active cells are moved into history;
+- preserve timer/visibility scheduling: due visibility advances can bump the active-cell revision and finish idle cells, visible running hooks schedule a short frame delay, and pending hook-cell deadlines schedule future frames;
+- preserve `../codex/codex-rs/tui/src/chatwidget/hooks.rs` list behavior: hooks output sends a fetch request for the current cwd, stale loaded results are ignored, errors insert an error message, successful loads open the hooks browser entry, and opening the browser requests redraw;
+- keep the evidence deterministic and independent of live hook execution, filesystem mutation, ratatui rendering, app-server mutation, model/provider calls, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-68 extends `fixtures/hxrust/tui-smoke.v1.json` with typed hook start/completion, completed-output flush, idle finish, visibility/timer scheduling, hooks list fetch/load/browser, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic hook lifecycle state evidence only, not live hook execution or full hook-cell rendering.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

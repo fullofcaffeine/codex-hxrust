@@ -106,6 +106,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetStatusState: optionalStatusStatePlan(value, "chatWidgetStatusState"),
 				chatWidgetCommandLifecycle: optionalCommandLifecyclePlan(value, "chatWidgetCommandLifecycle"),
 				chatWidgetToolLifecycle: optionalToolLifecyclePlan(value, "chatWidgetToolLifecycle"),
+				chatWidgetHookLifecycle: optionalHookLifecyclePlan(value, "chatWidgetHookLifecycle"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -1068,6 +1069,82 @@ class TuiSmokeFixtureLoader {
 				noLiveToolExecution: optionalBoolField(value, "noLiveToolExecution", false),
 				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
 				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalHookLifecyclePlan(object:Value, name:String):Null<TuiSmokeHookLifecyclePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeHookLifecyclePlan({
+					allowLiveHookExecution: optionalBoolField(value, "allowLiveHookExecution", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: hookLifecycleActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function hookLifecycleActions(values:Array<Value>):Array<TuiSmokeHookLifecycleAction> {
+		final out:Array<TuiSmokeHookLifecycleAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeHookLifecycleAction({
+				kind: TuiSmokeHookLifecycleActionKind.fromString(stringField(value, "kind", "")),
+				runId: optionalStringField(value, "runId", ""),
+				hookName: optionalStringField(value, "hookName", ""),
+				eventKind: optionalStringField(value, "eventKind", ""),
+				status: optionalStringField(value, "status", ""),
+				output: optionalStringField(value, "output", ""),
+				cwd: optionalStringField(value, "cwd", ""),
+				loadedCwd: optionalStringField(value, "loadedCwd", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				browserEntry: optionalStringField(value, "browserEntry", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				activeCellBefore: optionalStringField(value, "activeCellBefore", ""),
+				activeCellAfter: optionalStringField(value, "activeCellAfter", ""),
+				activeRunCountBefore: optionalIntField(value, "activeRunCountBefore", 0),
+				activeRunCountAfter: optionalIntField(value, "activeRunCountAfter", 0),
+				completedRunCountBefore: optionalIntField(value, "completedRunCountBefore", 0),
+				completedRunCountAfter: optionalIntField(value, "completedRunCountAfter", 0),
+				historyCellCount: optionalIntField(value, "historyCellCount", 0),
+				revisionBefore: optionalIntField(value, "revisionBefore", 0),
+				revisionAfter: optionalIntField(value, "revisionAfter", 0),
+				timerDelayMs: optionalIntField(value, "timerDelayMs", 0),
+				fetchCount: optionalIntField(value, "fetchCount", 0),
+				activeCellPresentBefore: optionalBoolField(value, "activeCellPresentBefore", false),
+				activeCellPresentAfter: optionalBoolField(value, "activeCellPresentAfter", false),
+				existingActiveCell: optionalBoolField(value, "existingActiveCell", false),
+				completedExistingRun: optionalBoolField(value, "completedExistingRun", false),
+				addedCompletedRun: optionalBoolField(value, "addedCompletedRun", false),
+				createdCompletedCell: optionalBoolField(value, "createdCompletedCell", false),
+				completedCellEmpty: optionalBoolField(value, "completedCellEmpty", false),
+				completedOutputFlushed: optionalBoolField(value, "completedOutputFlushed", false),
+				persistentOutputTaken: optionalBoolField(value, "persistentOutputTaken", false),
+				activeCellEmpty: optionalBoolField(value, "activeCellEmpty", false),
+				activeCellCleared: optionalBoolField(value, "activeCellCleared", false),
+				shouldFlush: optionalBoolField(value, "shouldFlush", false),
+				historyInserted: optionalBoolField(value, "historyInserted", false),
+				needsFinalSeparator: optionalBoolField(value, "needsFinalSeparator", false),
+				answerStreamFlushed: optionalBoolField(value, "answerStreamFlushed", false),
+				visibleTurnActivityRecorded: optionalBoolField(value, "visibleTurnActivityRecorded", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				advancedVisibility: optionalBoolField(value, "advancedVisibility", false),
+				finishIdle: optionalBoolField(value, "finishIdle", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				visibleRunningRun: optionalBoolField(value, "visibleRunningRun", false),
+				deadlineScheduled: optionalBoolField(value, "deadlineScheduled", false),
+				staleCwdIgnored: optionalBoolField(value, "staleCwdIgnored", false),
+				errorInserted: optionalBoolField(value, "errorInserted", false),
+				browserOpened: optionalBoolField(value, "browserOpened", false),
+				fetchRequested: optionalBoolField(value, "fetchRequested", false),
+				noLiveHookExecution: optionalBoolField(value, "noLiveHookExecution", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)

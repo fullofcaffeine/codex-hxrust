@@ -46,6 +46,7 @@ typedef TuiSmokeEventFields = {
 	final chatWidgetStatusState:Null<TuiSmokeStatusStatePlan>;
 	final chatWidgetCommandLifecycle:Null<TuiSmokeCommandLifecyclePlan>;
 	final chatWidgetToolLifecycle:Null<TuiSmokeToolLifecyclePlan>;
+	final chatWidgetHookLifecycle:Null<TuiSmokeHookLifecyclePlan>;
 	final chatWidgetInterruptQuit:Null<TuiSmokeChatWidgetInterruptQuitPlan>;
 	final chatWidgetInterruptedRestore:Null<TuiSmokeChatWidgetInterruptedRestorePlan>;
 	final sideConversation:Null<TuiSmokeSideConversationPlan>;
@@ -110,6 +111,7 @@ class TuiSmokeEvent {
 	public final chatWidgetStatusState:Null<TuiSmokeStatusStatePlan>;
 	public final chatWidgetCommandLifecycle:Null<TuiSmokeCommandLifecyclePlan>;
 	public final chatWidgetToolLifecycle:Null<TuiSmokeToolLifecyclePlan>;
+	public final chatWidgetHookLifecycle:Null<TuiSmokeHookLifecyclePlan>;
 	public final chatWidgetInterruptQuit:Null<TuiSmokeChatWidgetInterruptQuitPlan>;
 	public final chatWidgetInterruptedRestore:Null<TuiSmokeChatWidgetInterruptedRestorePlan>;
 	public final sideConversation:Null<TuiSmokeSideConversationPlan>;

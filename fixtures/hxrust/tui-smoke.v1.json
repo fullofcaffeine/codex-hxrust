@@ -36,6 +36,8 @@
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
       "../codex/codex-rs/tui/src/chatwidget/command_lifecycle.rs",
       "../codex/codex-rs/tui/src/chatwidget/tool_lifecycle.rs",
+      "../codex/codex-rs/tui/src/chatwidget/hook_lifecycle.rs",
+      "../codex/codex-rs/tui/src/chatwidget/hooks.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/exec_flow.rs",
       "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/src/tui/event_stream.rs",
@@ -13964,6 +13966,229 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.patch_begin=changes=2:history=true:activity=true\ntui.chat_widget_tool_lifecycle.file_change=success:failure_history=false:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.file_change=failed:failure_history=true:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.view_image=example.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.image_generation=call-image-generation:prompt=A tiny blue square:path=/tmp/ig-1.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_start=mcp-1:server=filesystem:tool=read_file:active=exec->mcp:answer_flush=true:flushed=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-1:result=ok:matched=true:duration_ms=42:error=:flushed=true:extra=false:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-2:result=error:matched=false:duration_ms=7:error=permission denied:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-3:result=missing_result:matched=false:duration_ms=0:error=MCP tool call completed without a result:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=begin:matched=false:active=none->web_search:history=false:redraw=true:work=false\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=end_matched:matched=true:active=web_search->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-2:query=codex tui:action=end_unmatched:matched=false:active=none->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.collab_event=collab cell:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=in_progress:spawn_cache=0->1:cached=true:removed=false:history=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=completed:spawn_cache=1->0:cached=false:removed=true:history=true\ntui.chat_widget_tool_lifecycle.sub_agent=thread-child:summary=sub-agent reported progress:history=true\ntui.chat_widget_tool_lifecycle.queued_dispatch=mcp_tool_call:started=true:completed=true:started_count=1:completed_count=1\ntui.chat_widget_tool_lifecycle.failure=live_tool_lifecycle_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget tool lifecycle\ninput> \ntrace:\ntui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.patch_begin=changes=2:history=true:activity=true\ntui.chat_widget_tool_lifecycle.file_change=success:failure_history=false:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.file_change=failed:failure_history=true:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.view_image=example.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.image_generation=call-image-generation:prompt=A tiny blue square:path=/tmp/ig-1.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_start=mcp-1:server=filesystem:tool=read_file:active=exec->mcp:answer_flush=true:flushed=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-1:result=ok:matched=true:duration_ms=42:error=:flushed=true:extra=false:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-2:result=error:matched=false:duration_ms=7:error=permission denied:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-3:result=missing_result:matched=false:duration_ms=0:error=MCP tool call completed without a result:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=begin:matched=false:active=none->web_search:history=false:redraw=true:work=false\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=end_matched:matched=true:active=web_search->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-2:query=codex tui:action=end_unmatched:matched=false:active=none->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.collab_event=collab cell:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=in_progress:spawn_cache=0->1:cached=true:removed=false:history=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=completed:spawn_cache=1->0:cached=false:removed=true:history=true\ntui.chat_widget_tool_lifecycle.sub_agent=thread-child:summary=sub-agent reported progress:history=true\ntui.chat_widget_tool_lifecycle.queued_dispatch=mcp_tool_call:started=true:completed=true:started_count=1:completed_count=1\ntui.chat_widget_tool_lifecycle.failure=live_tool_lifecycle_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-hook-lifecycle-headless",
+      "frame": {
+        "name": "chatwidget-hook-lifecycle-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget hook lifecycle"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_hook_lifecycle",
+          "chatWidgetHookLifecycle": {
+            "allowLiveHookExecution": false,
+            "allowFilesystemMutation": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "hook_started",
+                "runId": "hook-pre-1",
+                "hookName": "lint",
+                "eventKind": "PreToolUse",
+                "activeCellPresentBefore": false,
+                "activeCellPresentAfter": true,
+                "activeRunCountBefore": 0,
+                "activeRunCountAfter": 1,
+                "existingActiveCell": false,
+                "completedOutputFlushed": true,
+                "answerStreamFlushed": true,
+                "visibleTurnActivityRecorded": true,
+                "revisionBefore": 0,
+                "revisionAfter": 1,
+                "requestRedraw": true
+              },
+              {
+                "kind": "hook_started",
+                "runId": "hook-post-1",
+                "hookName": "format",
+                "eventKind": "PostToolUse",
+                "activeCellPresentBefore": true,
+                "activeCellPresentAfter": true,
+                "activeRunCountBefore": 1,
+                "activeRunCountAfter": 2,
+                "existingActiveCell": true,
+                "completedOutputFlushed": false,
+                "answerStreamFlushed": true,
+                "visibleTurnActivityRecorded": true,
+                "revisionBefore": 1,
+                "revisionAfter": 2,
+                "requestRedraw": true
+              },
+              {
+                "kind": "hook_completed",
+                "runId": "hook-pre-1",
+                "hookName": "lint",
+                "status": "success",
+                "activeCellPresentBefore": true,
+                "activeCellPresentAfter": true,
+                "completedExistingRun": true,
+                "addedCompletedRun": false,
+                "createdCompletedCell": false,
+                "completedCellEmpty": false,
+                "completedOutputFlushed": true,
+                "finishIdle": false,
+                "historyInserted": true,
+                "revisionBefore": 2,
+                "revisionAfter": 3,
+                "requestRedraw": true
+              },
+              {
+                "kind": "hook_completed",
+                "runId": "hook-session-1",
+                "hookName": "setup",
+                "status": "blocked",
+                "activeCellPresentBefore": true,
+                "activeCellPresentAfter": true,
+                "completedExistingRun": false,
+                "addedCompletedRun": true,
+                "createdCompletedCell": false,
+                "completedCellEmpty": false,
+                "completedOutputFlushed": false,
+                "finishIdle": false,
+                "historyInserted": false,
+                "revisionBefore": 3,
+                "revisionAfter": 4,
+                "requestRedraw": true
+              },
+              {
+                "kind": "hook_completed",
+                "runId": "hook-quiet-1",
+                "hookName": "quiet",
+                "status": "success",
+                "activeCellPresentBefore": false,
+                "activeCellPresentAfter": false,
+                "completedExistingRun": false,
+                "addedCompletedRun": false,
+                "createdCompletedCell": true,
+                "completedCellEmpty": true,
+                "completedOutputFlushed": false,
+                "finishIdle": true,
+                "historyInserted": false,
+                "revisionBefore": 4,
+                "revisionAfter": 5,
+                "requestRedraw": true
+              },
+              {
+                "kind": "flush_completed_output",
+                "persistentOutputTaken": true,
+                "activeCellEmpty": true,
+                "activeCellCleared": true,
+                "historyInserted": true,
+                "needsFinalSeparator": true,
+                "historyCellCount": 1,
+                "revisionBefore": 5,
+                "revisionAfter": 6
+              },
+              {
+                "kind": "finish_active_cell",
+                "activeCellEmpty": false,
+                "shouldFlush": true,
+                "activeCellCleared": true,
+                "historyInserted": true,
+                "needsFinalSeparator": true,
+                "revisionBefore": 6,
+                "revisionAfter": 7
+              },
+              {
+                "kind": "update_due_visibility",
+                "advancedVisibility": true,
+                "finishIdle": true,
+                "activeCellPresentBefore": true,
+                "activeCellPresentAfter": false,
+                "revisionBefore": 7,
+                "revisionAfter": 8
+              },
+              {
+                "kind": "schedule_timer",
+                "visibleRunningRun": true,
+                "frameScheduled": true,
+                "timerDelayMs": 50,
+                "deadlineScheduled": true
+              },
+              {
+                "kind": "hooks_list_fetch",
+                "cwd": "/repo",
+                "fetchRequested": true,
+                "fetchCount": 1
+              },
+              {
+                "kind": "hooks_loaded",
+                "cwd": "/old",
+                "loadedCwd": "/repo",
+                "staleCwdIgnored": true,
+                "errorInserted": false,
+                "browserOpened": false,
+                "requestRedraw": false,
+                "errorMessage": ""
+              },
+              {
+                "kind": "hooks_loaded",
+                "cwd": "/repo",
+                "loadedCwd": "/repo",
+                "staleCwdIgnored": false,
+                "errorInserted": true,
+                "browserOpened": false,
+                "requestRedraw": false,
+                "errorMessage": "bad hooks config"
+              },
+              {
+                "kind": "hooks_loaded",
+                "cwd": "/repo",
+                "loadedCwd": "/repo",
+                "staleCwdIgnored": false,
+                "errorInserted": false,
+                "browserOpened": true,
+                "requestRedraw": true,
+                "errorMessage": ""
+              },
+              {
+                "kind": "open_hooks_browser",
+                "browserEntry": "2 hooks",
+                "browserOpened": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_hook_lifecycle_rejected",
+                "noLiveHookExecution": true,
+                "noFilesystemMutation": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_hook_lifecycle.plan=headless\ntui.chat_widget_hook_lifecycle.started=hook-pre-1:hook=lint:event=PreToolUse:active=false->true:runs=0->1:existing=false:completed_flush=true:answer_flush=true:activity=true:revision=0->1:redraw=true\ntui.chat_widget_hook_lifecycle.started=hook-post-1:hook=format:event=PostToolUse:active=true->true:runs=1->2:existing=true:completed_flush=false:answer_flush=true:activity=true:revision=1->2:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-pre-1:hook=lint:status=success:matched=true:added=false:created=false:empty=false:output_flush=true:finish_idle=false:history=true:active=true->true:revision=2->3:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-session-1:hook=setup:status=blocked:matched=false:added=true:created=false:empty=false:output_flush=false:finish_idle=false:history=false:active=true->true:revision=3->4:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-quiet-1:hook=quiet:status=success:matched=false:added=false:created=true:empty=true:output_flush=false:finish_idle=true:history=false:active=false->false:revision=4->5:redraw=true\ntui.chat_widget_hook_lifecycle.flush_completed=taken=true:empty_after=true:cleared=true:history=true:separator=true:cells=1:revision=5->6\ntui.chat_widget_hook_lifecycle.finish_active=empty=false:should_flush=true:cleared=true:history=true:separator=true:revision=6->7\ntui.chat_widget_hook_lifecycle.visibility=advanced=true:finish_idle=true:active=true->false:revision=7->8\ntui.chat_widget_hook_lifecycle.timer=visible=true:frame=true:delay_ms=50:deadline=true\ntui.chat_widget_hook_lifecycle.fetch_hooks=cwd=/repo:requested=true:count=1\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/old:loaded=/repo:stale=true:error=false:browser=false:redraw=false:message=\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/repo:loaded=/repo:stale=false:error=true:browser=false:redraw=false:message=bad hooks config\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/repo:loaded=/repo:stale=false:error=false:browser=true:redraw=true:message=\ntui.chat_widget_hook_lifecycle.open_browser=2 hooks:browser=true:redraw=true\ntui.chat_widget_hook_lifecycle.failure=live_hook_lifecycle_rejected:no_hook=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget hook lifecycle\ninput> \ntrace:\ntui.chat_widget_hook_lifecycle.plan=headless\ntui.chat_widget_hook_lifecycle.started=hook-pre-1:hook=lint:event=PreToolUse:active=false->true:runs=0->1:existing=false:completed_flush=true:answer_flush=true:activity=true:revision=0->1:redraw=true\ntui.chat_widget_hook_lifecycle.started=hook-post-1:hook=format:event=PostToolUse:active=true->true:runs=1->2:existing=true:completed_flush=false:answer_flush=true:activity=true:revision=1->2:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-pre-1:hook=lint:status=success:matched=true:added=false:created=false:empty=false:output_flush=true:finish_idle=false:history=true:active=true->true:revision=2->3:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-session-1:hook=setup:status=blocked:matched=false:added=true:created=false:empty=false:output_flush=false:finish_idle=false:history=false:active=true->true:revision=3->4:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-quiet-1:hook=quiet:status=success:matched=false:added=false:created=true:empty=true:output_flush=false:finish_idle=true:history=false:active=false->false:revision=4->5:redraw=true\ntui.chat_widget_hook_lifecycle.flush_completed=taken=true:empty_after=true:cleared=true:history=true:separator=true:cells=1:revision=5->6\ntui.chat_widget_hook_lifecycle.finish_active=empty=false:should_flush=true:cleared=true:history=true:separator=true:revision=6->7\ntui.chat_widget_hook_lifecycle.visibility=advanced=true:finish_idle=true:active=true->false:revision=7->8\ntui.chat_widget_hook_lifecycle.timer=visible=true:frame=true:delay_ms=50:deadline=true\ntui.chat_widget_hook_lifecycle.fetch_hooks=cwd=/repo:requested=true:count=1\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/old:loaded=/repo:stale=true:error=false:browser=false:redraw=false:message=\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/repo:loaded=/repo:stale=false:error=true:browser=false:redraw=false:message=bad hooks config\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/repo:loaded=/repo:stale=false:error=false:browser=true:redraw=true:message=\ntui.chat_widget_hook_lifecycle.open_browser=2 hooks:browser=true:redraw=true\ntui.chat_widget_hook_lifecycle.failure=live_hook_lifecycle_rejected:no_hook=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

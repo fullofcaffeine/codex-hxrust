@@ -276,6 +276,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetHookLifecycle:
+					if (!traceHookLifecycle(event.chatWidgetHookLifecycle, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3506,6 +3511,133 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_tool_lifecycle.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceHookLifecycle(plan:TuiSmokeHookLifecyclePlan, trace:Array<String>):Bool {
+		if (
+			plan == null
+			|| plan.allowLiveHookExecution
+			|| plan.allowFilesystemMutation
+			|| plan.allowRatatuiRender
+			|| plan.allowModelCall
+			|| !plan.enabled()
+		) {
+			trace.push("tui.chat_widget_hook_lifecycle.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_hook_lifecycle.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeHookLifecycleActionKind.HookStarted:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.started="
+						+ action.runId
+						+ ":hook=" + action.hookName
+						+ ":event=" + action.eventKind
+						+ ":active=" + action.activeCellPresentBefore + "->" + action.activeCellPresentAfter
+						+ ":runs=" + action.activeRunCountBefore + "->" + action.activeRunCountAfter
+						+ ":existing=" + action.existingActiveCell
+						+ ":completed_flush=" + action.completedOutputFlushed
+						+ ":answer_flush=" + action.answerStreamFlushed
+						+ ":activity=" + action.visibleTurnActivityRecorded
+						+ ":revision=" + action.revisionBefore + "->" + action.revisionAfter
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeHookLifecycleActionKind.HookCompleted:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.completed="
+						+ action.runId
+						+ ":hook=" + action.hookName
+						+ ":status=" + action.status
+						+ ":matched=" + action.completedExistingRun
+						+ ":added=" + action.addedCompletedRun
+						+ ":created=" + action.createdCompletedCell
+						+ ":empty=" + action.completedCellEmpty
+						+ ":output_flush=" + action.completedOutputFlushed
+						+ ":finish_idle=" + action.finishIdle
+						+ ":history=" + action.historyInserted
+						+ ":active=" + action.activeCellPresentBefore + "->" + action.activeCellPresentAfter
+						+ ":revision=" + action.revisionBefore + "->" + action.revisionAfter
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeHookLifecycleActionKind.FlushCompletedOutput:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.flush_completed="
+						+ "taken=" + action.persistentOutputTaken
+						+ ":empty_after=" + action.activeCellEmpty
+						+ ":cleared=" + action.activeCellCleared
+						+ ":history=" + action.historyInserted
+						+ ":separator=" + action.needsFinalSeparator
+						+ ":cells=" + action.historyCellCount
+						+ ":revision=" + action.revisionBefore + "->" + action.revisionAfter
+					);
+				case TuiSmokeHookLifecycleActionKind.FinishActiveCell:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.finish_active="
+						+ "empty=" + action.activeCellEmpty
+						+ ":should_flush=" + action.shouldFlush
+						+ ":cleared=" + action.activeCellCleared
+						+ ":history=" + action.historyInserted
+						+ ":separator=" + action.needsFinalSeparator
+						+ ":revision=" + action.revisionBefore + "->" + action.revisionAfter
+					);
+				case TuiSmokeHookLifecycleActionKind.UpdateDueVisibility:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.visibility="
+						+ "advanced=" + action.advancedVisibility
+						+ ":finish_idle=" + action.finishIdle
+						+ ":active=" + action.activeCellPresentBefore + "->" + action.activeCellPresentAfter
+						+ ":revision=" + action.revisionBefore + "->" + action.revisionAfter
+					);
+				case TuiSmokeHookLifecycleActionKind.ScheduleTimer:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.timer="
+						+ "visible=" + action.visibleRunningRun
+						+ ":frame=" + action.frameScheduled
+						+ ":delay_ms=" + action.timerDelayMs
+						+ ":deadline=" + action.deadlineScheduled
+					);
+				case TuiSmokeHookLifecycleActionKind.HooksListFetch:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.fetch_hooks="
+						+ "cwd=" + action.cwd
+						+ ":requested=" + action.fetchRequested
+						+ ":count=" + action.fetchCount
+					);
+				case TuiSmokeHookLifecycleActionKind.HooksLoaded:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.hooks_loaded="
+						+ "cwd=" + action.cwd
+						+ ":loaded=" + action.loadedCwd
+						+ ":stale=" + action.staleCwdIgnored
+						+ ":error=" + action.errorInserted
+						+ ":browser=" + action.browserOpened
+						+ ":redraw=" + action.requestRedraw
+						+ ":message=" + action.errorMessage
+					);
+				case TuiSmokeHookLifecycleActionKind.OpenHooksBrowser:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.open_browser="
+						+ action.browserEntry
+						+ ":browser=" + action.browserOpened
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeHookLifecycleActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_hook_lifecycle.failure="
+						+ action.failureCode
+						+ ":no_hook=" + action.noLiveHookExecution
+						+ ":no_fs=" + action.noFilesystemMutation
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_hook_lifecycle.unknown");
 					return false;
 			}
 		}
