@@ -2818,6 +2818,18 @@ Model selected raw Codex raw-output rendering behavior without live terminal mut
 
 Status: HXCX-TUI-83 extends `fixtures/hxrust/tui-smoke.v1.json` with typed raw-output mode/notice/status, rich-versus-raw cell selection, active stream propagation, command/tool output visibility, copy/transcript preservation, resize sync, slash command, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic raw-output render-mode evidence only, not the full ratatui renderer, real terminal selection, live command/tool execution, config-file persistence, app-server transport, or model traffic.
 
+### HXCX-TUI-84: ChatWidget Status-Surface Render Boundary
+
+Model selected raw Codex status-surface rendering behavior without live terminal mutation, ratatui rendering, app-server mutation, command execution, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/status_surfaces.rs` render-facing selection contracts: status-line and terminal-title item choices stay typed, status-line item counts and visible counts are explicit, model/branch/git-summary/raw-output indicators remain separately observable, and branch/git-summary refresh needs are not hidden inside untyped strings;
+- preserve invalid-item warning behavior: unsupported status-surface items produce visible warnings once, repeated invalid inputs are deduped, and warning visibility remains separate from warning accounting;
+- preserve terminal-title preview semantics: preview item lists can start without committing or reverting, and later live title setup remains a distinct boundary from deterministic preview evidence;
+- preserve `../codex/codex-rs/tui/src/chatwidget/status_controls.rs` status refresh coupling: run-state/status header/details changes can produce rendered status text, bump render revisions, request redraw, and schedule a frame;
+- preserve `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs` status-line visibility pressure: this slice records visible status-line text and segments but does not claim full ratatui layout, spacing, or terminal rendering parity.
+
+Status: HXCX-TUI-84 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-surface render selection, model/branch/git/raw indicators, warning dedupe/visibility, title preview, status refresh/redraw scheduling, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic status-surface render intent only, not the full ratatui renderer, real terminal title mutation, live git watcher, config-file persistence, app-server transport, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

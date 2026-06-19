@@ -261,6 +261,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetStatusSurfaceRender:
+					if (!traceStatusSurfaceRender(event.chatWidgetStatusSurfaceRender, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetStatusState:
 					if (!traceStatusState(event.chatWidgetStatusState, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3293,6 +3298,89 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_status_surface.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceStatusSurfaceRender(plan:TuiSmokeStatusSurfaceRenderPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_status_surface_render.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_status_surface_render.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeStatusSurfaceRenderActionKind.SelectItems:
+					trace.push(
+						"tui.chat_widget_status_surface_render.select="
+						+ "surface=" + action.surface
+						+ ":items=" + action.itemIds
+						+ ":count=" + action.itemCount
+						+ ":visible=" + action.visibleCount
+						+ ":status_line=" + action.statusLineEnabled
+						+ ":title=" + action.terminalTitleEnabled
+					);
+				case TuiSmokeStatusSurfaceRenderActionKind.Indicator:
+					trace.push(
+						"tui.chat_widget_status_surface_render.indicator="
+						+ action.indicator
+						+ ":model=" + action.model
+						+ ":branch=" + action.branch
+						+ ":git=" + action.gitSummary
+						+ ":raw=" + action.rawOutputLabel
+						+ ":model_visible=" + action.modelVisible
+						+ ":branch_visible=" + action.branchVisible
+						+ ":git_visible=" + action.gitSummaryVisible
+						+ ":raw_visible=" + action.rawOutputVisible
+						+ ":activity_visible=" + action.activityVisible
+						+ ":segments=" + action.segmentCount
+						+ ":branch_request=" + action.branchRequested
+						+ ":git_request=" + action.gitSummaryRequested
+						+ ":hyperlink=" + action.hyperlinkAnnotated
+					);
+				case TuiSmokeStatusSurfaceRenderActionKind.Warning:
+					trace.push(
+						"tui.chat_widget_status_surface_render.warning="
+						+ action.warningCode
+						+ ":message=" + action.warningMessage
+						+ ":visible=" + action.warningsVisible
+						+ ":deduped=" + action.warningDeduped
+						+ ":count=" + action.warningCount
+						+ ":dedupe_count=" + action.dedupeCount
+					);
+				case TuiSmokeStatusSurfaceRenderActionKind.Preview:
+					trace.push(
+						"tui.chat_widget_status_surface_render.preview="
+						+ action.surface
+						+ ":items=" + action.previewItems
+						+ ":started=" + action.previewStarted
+						+ ":committed=" + action.previewCommitted
+						+ ":reverted=" + action.previewReverted
+					);
+				case TuiSmokeStatusSurfaceRenderActionKind.Refresh:
+					trace.push(
+						"tui.chat_widget_status_surface_render.refresh="
+						+ "run=" + action.runState
+						+ ":header=" + action.statusHeader
+						+ ":details=" + action.statusDetails
+						+ ":text=" + action.renderedText
+						+ ":revision=" + action.revisionBefore + "->" + action.revisionAfter
+						+ ":redraw=" + action.redrawRequested
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeStatusSurfaceRenderActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_status_surface_render.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_status_surface_render.unknown");
 					return false;
 			}
 		}

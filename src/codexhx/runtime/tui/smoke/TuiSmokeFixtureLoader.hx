@@ -103,6 +103,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle"),
 				chatWidgetMcpStartup: optionalMcpStartupPlan(value, "chatWidgetMcpStartup"),
 				chatWidgetStatusSurface: optionalStatusSurfacePlan(value, "chatWidgetStatusSurface"),
+				chatWidgetStatusSurfaceRender: optionalStatusSurfaceRenderPlan(value, "chatWidgetStatusSurfaceRender"),
 				chatWidgetStatusState: optionalStatusStatePlan(value, "chatWidgetStatusState"),
 				chatWidgetCommandLifecycle: optionalCommandLifecyclePlan(value, "chatWidgetCommandLifecycle"),
 				chatWidgetToolLifecycle: optionalToolLifecyclePlan(value, "chatWidgetToolLifecycle"),
@@ -1557,6 +1558,73 @@ class TuiSmokeFixtureLoader {
 				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalStatusSurfaceRenderPlan(object:Value, name:String):Null<TuiSmokeStatusSurfaceRenderPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeStatusSurfaceRenderPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: statusSurfaceRenderActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function statusSurfaceRenderActions(values:Array<Value>):Array<TuiSmokeStatusSurfaceRenderAction> {
+		final out:Array<TuiSmokeStatusSurfaceRenderAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeStatusSurfaceRenderAction({
+				kind: TuiSmokeStatusSurfaceRenderActionKind.fromString(stringField(value, "kind", "")),
+				source: optionalStringField(value, "source", ""),
+				surface: optionalStringField(value, "surface", ""),
+				itemIds: optionalStringField(value, "itemIds", ""),
+				indicator: optionalStringField(value, "indicator", ""),
+				model: optionalStringField(value, "model", ""),
+				branch: optionalStringField(value, "branch", ""),
+				gitSummary: optionalStringField(value, "gitSummary", ""),
+				rawOutputLabel: optionalStringField(value, "rawOutputLabel", ""),
+				runState: optionalStringField(value, "runState", ""),
+				statusHeader: optionalStringField(value, "statusHeader", ""),
+				statusDetails: optionalStringField(value, "statusDetails", ""),
+				warningCode: optionalStringField(value, "warningCode", ""),
+				warningMessage: optionalStringField(value, "warningMessage", ""),
+				previewItems: optionalStringField(value, "previewItems", ""),
+				renderedText: optionalStringField(value, "renderedText", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				itemCount: optionalIntField(value, "itemCount", 0),
+				visibleCount: optionalIntField(value, "visibleCount", 0),
+				segmentCount: optionalIntField(value, "segmentCount", 0),
+				warningCount: optionalIntField(value, "warningCount", 0),
+				dedupeCount: optionalIntField(value, "dedupeCount", 0),
+				revisionBefore: optionalIntField(value, "revisionBefore", 0),
+				revisionAfter: optionalIntField(value, "revisionAfter", 0),
+				statusLineEnabled: optionalBoolField(value, "statusLineEnabled", false),
+				terminalTitleEnabled: optionalBoolField(value, "terminalTitleEnabled", false),
+				modelVisible: optionalBoolField(value, "modelVisible", false),
+				branchVisible: optionalBoolField(value, "branchVisible", false),
+				gitSummaryVisible: optionalBoolField(value, "gitSummaryVisible", false),
+				rawOutputVisible: optionalBoolField(value, "rawOutputVisible", false),
+				activityVisible: optionalBoolField(value, "activityVisible", false),
+				warningsVisible: optionalBoolField(value, "warningsVisible", false),
+				warningDeduped: optionalBoolField(value, "warningDeduped", false),
+				previewStarted: optionalBoolField(value, "previewStarted", false),
+				previewCommitted: optionalBoolField(value, "previewCommitted", false),
+				previewReverted: optionalBoolField(value, "previewReverted", false),
+				branchRequested: optionalBoolField(value, "branchRequested", false),
+				gitSummaryRequested: optionalBoolField(value, "gitSummaryRequested", false),
+				hyperlinkAnnotated: optionalBoolField(value, "hyperlinkAnnotated", false),
+				redrawRequested: optionalBoolField(value, "redrawRequested", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
