@@ -3031,6 +3031,19 @@ Extend HXCX-TUI-99 from keyboard/loading behavior into selected raw Codex resume
 
 Status: HXCX-TUI-100 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker density toggle success/failure, query preservation, config persistence intent, inline error surfacing, toolbar focus cycling, Sort/Filter activation, toolbar render mode, provider/cwd filter preservation, and no-live/no-render/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic density/toolbar/persistence evidence only, not live crossterm input, real config writes, live app-server fanout, state DB/rollout querying, ratatui rendering, or persistent session mutation.
 
+### HXCX-TUI-101: Resume Picker Footer Progress Render Boundary
+
+Extend HXCX-TUI-100 from density and toolbar behavior into selected raw Codex resume picker footer, progress, loading, and inline render-state behavior, without live terminal ownership, app-server transport, state DB/rollout querying, filesystem mutation, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `picker_footer_progress_label`: progress labels use selected position, known loaded total, an ellipsis while loading, scroll percent, compact fallbacks for narrow widths, and the frozen footer percent while a page load is pending;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `footer_hint_lines`, `hint_line_for_row`, and hint fitting: normal mode chooses wide/compact/key-only fallbacks by width, search mode changes the Esc label to clear-search intent, and transcript-loading mode replaces normal hints with loading/ctrl-c guidance;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` list render state: more-above and more-below indicators reserve rows, pending pagination changes the bottom label to loading-more, and in-list loading older sessions appears only when there is remaining space;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `render_empty_state_line`: empty states distinguish initial loading, search still scanning, search scan-cap exhaustion, search no-results, older-page loading, and no-sessions-yet;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `render_transcript_loading_overlay`: pending transcript open renders the centered `Loading transcript…` overlay after the loading frame is noted;
+- keep no-live/no-render behavior deterministic, with no live terminal backend mutation, real app-server pagination, filesystem mutation, or Cafex behavior.
+
+Status: HXCX-TUI-101 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker footer progress labels, frozen loading percent, hint fit modes, more indicators, loading older line intent, empty/search/scan-cap render messages, transcript loading overlay text, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic footer/progress/render-state evidence only, not live crossterm input, real ratatui snapshots, live app-server fanout, state DB/rollout querying, or persistent session mutation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

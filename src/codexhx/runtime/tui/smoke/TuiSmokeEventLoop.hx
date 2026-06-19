@@ -2910,6 +2910,53 @@ class TuiSmokeEventLoop {
 						+ ":filter=" + action.filterModeAfter
 						+ ":cwd_present=" + (action.cwdFilter != "")
 					);
+				case TuiSmokeResumeForkActionKind.PickerFooterProgress:
+					trace.push(
+						"tui.resume_fork.picker_footer_progress="
+						+ "label=" + action.footerProgressLabel
+						+ ":percent=" + action.footerPercent
+						+ ":frozen=" + action.frozenFooterPercent
+						+ ":loading=" + action.loadingPending
+						+ ":width=" + action.footerWidth
+					);
+				case TuiSmokeResumeForkActionKind.PickerFooterHints:
+					trace.push(
+						"tui.resume_fork.picker_footer_hints="
+						+ "mode=" + action.footerHintMode
+						+ ":query=" + action.query
+						+ ":loading=" + action.loadingPending
+						+ ":compact=" + action.compactFallback
+						+ ":key_only=" + action.keyOnlyFallback
+						+ ":width=" + action.footerWidth
+					);
+				case TuiSmokeResumeForkActionKind.PickerListRenderState:
+					trace.push(
+						"tui.resume_fork.picker_list_render_state="
+						+ "above=" + action.moreAbove
+						+ ":below=" + action.moreBelow
+						+ ":loading=" + action.loadingPending
+						+ ":loading_older=" + action.loadingOlderShown
+						+ ":loaded=" + action.loadedRows
+						+ ":view_rows=" + action.viewRows
+					);
+				case TuiSmokeResumeForkActionKind.PickerEmptyState:
+					trace.push(
+						"tui.resume_fork.picker_empty_state="
+						+ action.emptyStateMessage
+						+ ":query=" + action.query
+						+ ":search_active=" + action.searchActive
+						+ ":loading=" + action.loadingPending
+						+ ":scan_cap=" + action.reachedScanCap
+						+ ":scanned=" + action.scannedRows
+					);
+				case TuiSmokeResumeForkActionKind.PickerTranscriptLoadingOverlay:
+					trace.push(
+						"tui.resume_fork.picker_transcript_loading_overlay="
+						+ action.loadingOverlayMessage
+						+ ":pending=" + action.pendingThreadId
+						+ ":shown=" + action.loadingFrameShown
+						+ ":no_render=" + action.noRatatuiRender
+					);
 				case TuiSmokeResumeForkActionKind.PickerSelection:
 					trace.push(
 						"tui.resume_fork.picker_selection="

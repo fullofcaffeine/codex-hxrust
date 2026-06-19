@@ -37,6 +37,10 @@ typedef TuiSmokeResumeForkActionFields = {
 	final toolbarFocusBefore:String;
 	final toolbarFocusAfter:String;
 	final toolbarRenderMode:String;
+	final footerProgressLabel:String;
+	final footerHintMode:String;
+	final emptyStateMessage:String;
+	final loadingOverlayMessage:String;
 	final failureCode:String;
 	final errorMessage:String;
 	final pageSize:Int;
@@ -47,6 +51,9 @@ typedef TuiSmokeResumeForkActionFields = {
 	final scrollTopBefore:Int;
 	final scrollTopAfter:Int;
 	final viewRows:Int;
+	final footerPercent:Int;
+	final frozenFooterPercent:Int;
+	final footerWidth:Int;
 	final requestToken:Int;
 	final searchToken:Int;
 	final scannedRows:Int;
@@ -84,6 +91,12 @@ typedef TuiSmokeResumeForkActionFields = {
 	final persistenceSucceeded:Bool;
 	final inlineErrorShown:Bool;
 	final queryPreserved:Bool;
+	final loadingPending:Bool;
+	final moreAbove:Bool;
+	final moreBelow:Bool;
+	final loadingOlderShown:Bool;
+	final compactFallback:Bool;
+	final keyOnlyFallback:Bool;
 	final showAll:Bool;
 	final includeNonInteractive:Bool;
 	final selected:Bool;
@@ -163,6 +176,10 @@ class TuiSmokeResumeForkAction {
 	public final toolbarFocusBefore:String;
 	public final toolbarFocusAfter:String;
 	public final toolbarRenderMode:String;
+	public final footerProgressLabel:String;
+	public final footerHintMode:String;
+	public final emptyStateMessage:String;
+	public final loadingOverlayMessage:String;
 	public final failureCode:String;
 	public final errorMessage:String;
 	public final pageSize:Int;
@@ -173,6 +190,9 @@ class TuiSmokeResumeForkAction {
 	public final scrollTopBefore:Int;
 	public final scrollTopAfter:Int;
 	public final viewRows:Int;
+	public final footerPercent:Int;
+	public final frozenFooterPercent:Int;
+	public final footerWidth:Int;
 	public final requestToken:Int;
 	public final searchToken:Int;
 	public final scannedRows:Int;
@@ -210,6 +230,12 @@ class TuiSmokeResumeForkAction {
 	public final persistenceSucceeded:Bool;
 	public final inlineErrorShown:Bool;
 	public final queryPreserved:Bool;
+	public final loadingPending:Bool;
+	public final moreAbove:Bool;
+	public final moreBelow:Bool;
+	public final loadingOlderShown:Bool;
+	public final compactFallback:Bool;
+	public final keyOnlyFallback:Bool;
 	public final showAll:Bool;
 	public final includeNonInteractive:Bool;
 	public final selected:Bool;

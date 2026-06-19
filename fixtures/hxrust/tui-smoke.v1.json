@@ -12428,6 +12428,205 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume picker density toolbar persistence\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_density_toggle=comfortable->dense:key=ctrl_o:query_preserved=true:persist_configured=true:persist_attempted=true:persist_success=true:inline_error=false:frame=true\ntui.resume_fork.picker_density_toggle=comfortable->dense:key=raw_ctrl_o:query_preserved=true:persist_configured=true:persist_attempted=true:persist_success=false:inline_error=true:frame=true\ntui.resume_fork.picker_toolbar_focus=key=tab:filter->sort:frame=true\ntui.resume_fork.picker_toolbar_focus=key=backtab:sort->filter:frame=true\ntui.resume_fork.picker_toolbar_focus=key=tab:filter->sort:frame=true\ntui.resume_fork.picker_toolbar_activate=focus=sort:key=ctrl_l:sort=updated_at->created_at:filter=cwd->cwd:cwd=/workspace/codex:show_all=false:query_preserved=true:reset=true:frame=true\ntui.resume_fork.picker_toolbar_focus=key=backtab:sort->filter:frame=true\ntui.resume_fork.picker_toolbar_activate=focus=filter:key=right:sort=created_at->created_at:filter=cwd->all:cwd=/workspace/codex:show_all=true:query_preserved=true:reset=true:frame=true\ntui.resume_fork.picker_toolbar_render=mode=wide:focus=filter:sort=created_at:filter=all:cwd_present=true\ntui.resume_fork.picker_toolbar_render=mode=compact:focus=sort:sort=updated_at:filter=all:cwd_present=false\ntui.resume_fork.failure=live_resume_picker_density_toolbar_rejected:error=resume picker density toolbar persistence requires live ratatui and config writes:source=resume_picker:target=density-toolbar:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "resume-picker-footer-progress-render-boundary",
+      "frame": {
+        "name": "resume-picker-footer-progress-render-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "resume picker footer progress render"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resume_fork",
+          "resumeFork": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "picker_open",
+                "action": "resume",
+                "source": "startup",
+                "context": "picker",
+                "showAll": false,
+                "includeNonInteractive": false,
+                "remoteWorkspace": false,
+                "altScreenEntered": true
+              },
+              {
+                "kind": "picker_footer_progress",
+                "footerProgressLabel": "3 / 10 · 0%",
+                "footerPercent": 0,
+                "frozenFooterPercent": 0,
+                "loadingPending": false,
+                "footerWidth": 80
+              },
+              {
+                "kind": "picker_footer_progress",
+                "footerProgressLabel": "10 / 10… · 37%",
+                "footerPercent": 37,
+                "frozenFooterPercent": 37,
+                "loadingPending": true,
+                "footerWidth": 80
+              },
+              {
+                "kind": "picker_footer_progress",
+                "footerProgressLabel": "100%",
+                "footerPercent": 100,
+                "frozenFooterPercent": 0,
+                "loadingPending": false,
+                "footerWidth": 8
+              },
+              {
+                "kind": "picker_footer_hints",
+                "footerHintMode": "wide",
+                "query": "",
+                "loadingPending": false,
+                "compactFallback": false,
+                "keyOnlyFallback": false,
+                "footerWidth": 220
+              },
+              {
+                "kind": "picker_footer_hints",
+                "footerHintMode": "compact",
+                "query": "beta",
+                "loadingPending": false,
+                "compactFallback": true,
+                "keyOnlyFallback": false,
+                "footerWidth": 96
+              },
+              {
+                "kind": "picker_footer_hints",
+                "footerHintMode": "key_only",
+                "query": "",
+                "loadingPending": false,
+                "compactFallback": true,
+                "keyOnlyFallback": true,
+                "footerWidth": 28
+              },
+              {
+                "kind": "picker_footer_hints",
+                "footerHintMode": "transcript_loading",
+                "query": "",
+                "loadingPending": true,
+                "compactFallback": false,
+                "keyOnlyFallback": false,
+                "footerWidth": 80
+              },
+              {
+                "kind": "picker_list_render_state",
+                "moreAbove": true,
+                "moreBelow": true,
+                "loadingPending": false,
+                "loadingOlderShown": false,
+                "loadedRows": 5,
+                "viewRows": 5
+              },
+              {
+                "kind": "picker_list_render_state",
+                "moreAbove": false,
+                "moreBelow": true,
+                "loadingPending": true,
+                "loadingOlderShown": true,
+                "loadedRows": 10,
+                "viewRows": 6
+              },
+              {
+                "kind": "picker_empty_state",
+                "emptyStateMessage": "Loading sessions…",
+                "query": "",
+                "searchActive": false,
+                "loadingPending": true,
+                "reachedScanCap": false,
+                "scannedRows": 0
+              },
+              {
+                "kind": "picker_empty_state",
+                "emptyStateMessage": "Searching…",
+                "query": "target",
+                "searchActive": true,
+                "loadingPending": true,
+                "reachedScanCap": false,
+                "scannedRows": 1
+              },
+              {
+                "kind": "picker_empty_state",
+                "emptyStateMessage": "Search scanned first 13 sessions; more may exist",
+                "query": "missing",
+                "searchActive": false,
+                "loadingPending": false,
+                "reachedScanCap": true,
+                "scannedRows": 13
+              },
+              {
+                "kind": "picker_empty_state",
+                "emptyStateMessage": "No results for your search",
+                "query": "missing",
+                "searchActive": false,
+                "loadingPending": false,
+                "reachedScanCap": false,
+                "scannedRows": 13
+              },
+              {
+                "kind": "picker_empty_state",
+                "emptyStateMessage": "No sessions yet",
+                "query": "",
+                "searchActive": false,
+                "loadingPending": false,
+                "reachedScanCap": false,
+                "scannedRows": 0
+              },
+              {
+                "kind": "picker_transcript_loading_overlay",
+                "loadingOverlayMessage": "Loading transcript…",
+                "pendingThreadId": "thread-loading",
+                "loadingFrameShown": true,
+                "noRatatuiRender": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_resume_picker_footer_render_rejected",
+                "errorMessage": "resume picker footer progress render requires live ratatui",
+                "source": "resume_picker",
+                "idOrName": "footer-progress",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_footer_progress=label=3 / 10 · 0%:percent=0:frozen=0:loading=false:width=80\ntui.resume_fork.picker_footer_progress=label=10 / 10… · 37%:percent=37:frozen=37:loading=true:width=80\ntui.resume_fork.picker_footer_progress=label=100%:percent=100:frozen=0:loading=false:width=8\ntui.resume_fork.picker_footer_hints=mode=wide:query=:loading=false:compact=false:key_only=false:width=220\ntui.resume_fork.picker_footer_hints=mode=compact:query=beta:loading=false:compact=true:key_only=false:width=96\ntui.resume_fork.picker_footer_hints=mode=key_only:query=:loading=false:compact=true:key_only=true:width=28\ntui.resume_fork.picker_footer_hints=mode=transcript_loading:query=:loading=true:compact=false:key_only=false:width=80\ntui.resume_fork.picker_list_render_state=above=true:below=true:loading=false:loading_older=false:loaded=5:view_rows=5\ntui.resume_fork.picker_list_render_state=above=false:below=true:loading=true:loading_older=true:loaded=10:view_rows=6\ntui.resume_fork.picker_empty_state=Loading sessions…:query=:search_active=false:loading=true:scan_cap=false:scanned=0\ntui.resume_fork.picker_empty_state=Searching…:query=target:search_active=true:loading=true:scan_cap=false:scanned=1\ntui.resume_fork.picker_empty_state=Search scanned first 13 sessions; more may exist:query=missing:search_active=false:loading=false:scan_cap=true:scanned=13\ntui.resume_fork.picker_empty_state=No results for your search:query=missing:search_active=false:loading=false:scan_cap=false:scanned=13\ntui.resume_fork.picker_empty_state=No sessions yet:query=:search_active=false:loading=false:scan_cap=false:scanned=0\ntui.resume_fork.picker_transcript_loading_overlay=Loading transcript…:pending=thread-loading:shown=true:no_render=true\ntui.resume_fork.failure=live_resume_picker_footer_render_rejected:error=resume picker footer progress render requires live ratatui:source=resume_picker:target=footer-progress:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume picker footer progress render\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_footer_progress=label=3 / 10 · 0%:percent=0:frozen=0:loading=false:width=80\ntui.resume_fork.picker_footer_progress=label=10 / 10… · 37%:percent=37:frozen=37:loading=true:width=80\ntui.resume_fork.picker_footer_progress=label=100%:percent=100:frozen=0:loading=false:width=8\ntui.resume_fork.picker_footer_hints=mode=wide:query=:loading=false:compact=false:key_only=false:width=220\ntui.resume_fork.picker_footer_hints=mode=compact:query=beta:loading=false:compact=true:key_only=false:width=96\ntui.resume_fork.picker_footer_hints=mode=key_only:query=:loading=false:compact=true:key_only=true:width=28\ntui.resume_fork.picker_footer_hints=mode=transcript_loading:query=:loading=true:compact=false:key_only=false:width=80\ntui.resume_fork.picker_list_render_state=above=true:below=true:loading=false:loading_older=false:loaded=5:view_rows=5\ntui.resume_fork.picker_list_render_state=above=false:below=true:loading=true:loading_older=true:loaded=10:view_rows=6\ntui.resume_fork.picker_empty_state=Loading sessions…:query=:search_active=false:loading=true:scan_cap=false:scanned=0\ntui.resume_fork.picker_empty_state=Searching…:query=target:search_active=true:loading=true:scan_cap=false:scanned=1\ntui.resume_fork.picker_empty_state=Search scanned first 13 sessions; more may exist:query=missing:search_active=false:loading=false:scan_cap=true:scanned=13\ntui.resume_fork.picker_empty_state=No results for your search:query=missing:search_active=false:loading=false:scan_cap=false:scanned=13\ntui.resume_fork.picker_empty_state=No sessions yet:query=:search_active=false:loading=false:scan_cap=false:scanned=0\ntui.resume_fork.picker_transcript_loading_overlay=Loading transcript…:pending=thread-loading:shown=true:no_render=true\ntui.resume_fork.failure=live_resume_picker_footer_render_rejected:error=resume picker footer progress render requires live ratatui:source=resume_picker:target=footer-progress:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "resume-fork-missing-target-refusal",
       "frame": {
         "name": "resume-fork-missing-target-refusal",
