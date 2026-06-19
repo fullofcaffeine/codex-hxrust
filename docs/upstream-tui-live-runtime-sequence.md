@@ -3282,6 +3282,17 @@ Extend the normalized resume picker renderer from no-results recovery into curre
 
 Status: HXCX-TUI-122 adds `ResumePickerReloadSelectionPreservationRenderGate`, `ResumePickerReloadSelectionPreservationRenderGateReport`, `test/ResumePickerReloadSelectionPreservationRenderHarness.hx`, `hxml/resume-picker-reload-selection-preservation-render.hxml`, and `harness/check-resume-picker-reload-selection-preservation-render.sh`. The gate validates active selected-row rendering, stable-thread selection preservation across reload, deterministic first-row fallback when the prior selection disappears, footer/status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-123: Resume Picker Reload Scroll Preservation Render Snapshot Gate
+
+Extend the normalized resume picker renderer from selection preservation into scroll-window reload behavior:
+
+- render an active scrolled list with a selected row visible inside the scroll window;
+- apply a current reload where the selected row remains visible and preserve `scrollTop`/top-row navigation evidence;
+- apply a current reload where the result count shrinks and render deterministic scroll clamping plus footer/status evidence;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-123 adds `ResumePickerReloadScrollPreservationRenderGate`, `ResumePickerReloadScrollPreservationRenderGateReport`, `test/ResumePickerReloadScrollPreservationRenderHarness.hx`, `hxml/resume-picker-reload-scroll-preservation-render.hxml`, and `harness/check-resume-picker-reload-scroll-preservation-render.sh`. The gate validates active scrolled-list rendering, current reload scroll/top-row preservation, current shrink reload scroll clamping, footer/status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
