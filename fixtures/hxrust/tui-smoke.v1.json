@@ -11531,6 +11531,177 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume fork picker fork selection\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=fork:source=startup:context=picker:show_all=true:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_selection=action=fork:selected=true:target=thread-parent:label=Parent thread:loaded=10:page_size=5:exit_alt=true\ntui.resume_fork.fork_request=parent=thread-parent:target=thread-parent:requested=true:app_server=true:mutation=true:current_shutdown=false\ntui.resume_fork.fork_attach=parent=thread-parent:child=thread-child:success=true:chat_replaced=true:primary_enqueued=true:initial=false:summary=true:frame=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "resume-picker-app-server-page-loading-boundary",
+      "frame": {
+        "name": "resume-picker-app-server-page-loading-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "resume picker app-server page loading"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resume_fork",
+          "resumeFork": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "picker_open",
+                "action": "resume",
+                "source": "startup",
+                "context": "picker",
+                "showAll": false,
+                "includeNonInteractive": false,
+                "remoteWorkspace": false,
+                "altScreenEntered": true
+              },
+              {
+                "kind": "picker_page_request",
+                "action": "resume",
+                "requestToken": 0,
+                "searchToken": 0,
+                "query": "design",
+                "cursor": "",
+                "cwdFilter": "/workspace/codex",
+                "showAll": false,
+                "sortKey": "updated_at",
+                "searchActive": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_page_ingest",
+                "requestToken": 0,
+                "scannedRows": 3,
+                "acceptedRows": 2,
+                "invalidRows": 1,
+                "loadedRows": 2,
+                "filteredRows": 0,
+                "nextCursor": "cursor-2",
+                "nextCursorPresent": true,
+                "reachedScanCap": false,
+                "pendingPageDownCompleted": false
+              },
+              {
+                "kind": "picker_search_continue",
+                "searchToken": 0,
+                "query": "design",
+                "filteredRows": 0,
+                "nextCursorPresent": true,
+                "reachedScanCap": false,
+                "lookupRequested": true,
+                "searchActive": true
+              },
+              {
+                "kind": "picker_page_request",
+                "action": "resume",
+                "requestToken": 1,
+                "searchToken": 0,
+                "query": "design",
+                "cursor": "cursor-2",
+                "cwdFilter": "/workspace/codex",
+                "showAll": false,
+                "sortKey": "updated_at",
+                "searchActive": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_page_ingest",
+                "requestToken": 1,
+                "scannedRows": 1,
+                "acceptedRows": 1,
+                "invalidRows": 0,
+                "loadedRows": 3,
+                "filteredRows": 1,
+                "nextCursor": "",
+                "nextCursorPresent": false,
+                "reachedScanCap": false,
+                "pendingPageDownCompleted": true
+              },
+              {
+                "kind": "picker_search_continue",
+                "searchToken": 0,
+                "query": "design",
+                "filteredRows": 1,
+                "nextCursorPresent": false,
+                "reachedScanCap": false,
+                "lookupRequested": false,
+                "searchActive": false
+              },
+              {
+                "kind": "picker_sort_toggle",
+                "sortKeyBefore": "updated_at",
+                "sortKeyAfter": "created_at",
+                "loadedRows": 0,
+                "filteredRows": 0,
+                "lookupRequested": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_filter_toggle",
+                "filterModeBefore": "cwd",
+                "filterModeAfter": "all",
+                "cwdFilter": "/workspace/codex",
+                "showAll": true,
+                "lookupRequested": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_page_ingest",
+                "requestToken": 99,
+                "staleIgnored": true,
+                "scannedRows": 10,
+                "acceptedRows": 0,
+                "invalidRows": 0,
+                "loadedRows": 0,
+                "filteredRows": 0,
+                "nextCursor": "stale-cursor",
+                "nextCursorPresent": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_resume_picker_page_loading_rejected",
+                "errorMessage": "resume picker app-server page loading requires live app-server and ratatui",
+                "source": "resume_picker",
+                "idOrName": "design",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_page_request=action=resume:token=0:search_token=0:query=design:cursor=:cwd=/workspace/codex:show_all=false:sort=updated_at:search_active=true:frame=true\ntui.resume_fork.picker_page_ingest=token=0:stale=false:scanned=3:accepted=2:invalid=1:loaded=2:filtered=0:next=cursor-2:has_next=true:scan_cap=false:page_down=false\ntui.resume_fork.picker_search_continue=token=0:query=design:filtered=0:next=true:scan_cap=false:requested=true:search_active=true\ntui.resume_fork.picker_page_request=action=resume:token=1:search_token=0:query=design:cursor=cursor-2:cwd=/workspace/codex:show_all=false:sort=updated_at:search_active=true:frame=true\ntui.resume_fork.picker_page_ingest=token=1:stale=false:scanned=1:accepted=1:invalid=0:loaded=3:filtered=1:next=:has_next=false:scan_cap=false:page_down=true\ntui.resume_fork.picker_search_continue=token=0:query=design:filtered=1:next=false:scan_cap=false:requested=false:search_active=false\ntui.resume_fork.picker_sort_toggle=updated_at->created_at:reset=true:loaded=0:filtered=0:frame=true\ntui.resume_fork.picker_filter_toggle=cwd->all:cwd=/workspace/codex:show_all=true:reset=true:frame=true\ntui.resume_fork.picker_page_ingest=token=99:stale=true:scanned=10:accepted=0:invalid=0:loaded=0:filtered=0:next=stale-cursor:has_next=true:scan_cap=false:page_down=false\ntui.resume_fork.failure=live_resume_picker_page_loading_rejected:error=resume picker app-server page loading requires live app-server and ratatui:source=resume_picker:target=design:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume picker app-server page loading\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_page_request=action=resume:token=0:search_token=0:query=design:cursor=:cwd=/workspace/codex:show_all=false:sort=updated_at:search_active=true:frame=true\ntui.resume_fork.picker_page_ingest=token=0:stale=false:scanned=3:accepted=2:invalid=1:loaded=2:filtered=0:next=cursor-2:has_next=true:scan_cap=false:page_down=false\ntui.resume_fork.picker_search_continue=token=0:query=design:filtered=0:next=true:scan_cap=false:requested=true:search_active=true\ntui.resume_fork.picker_page_request=action=resume:token=1:search_token=0:query=design:cursor=cursor-2:cwd=/workspace/codex:show_all=false:sort=updated_at:search_active=true:frame=true\ntui.resume_fork.picker_page_ingest=token=1:stale=false:scanned=1:accepted=1:invalid=0:loaded=3:filtered=1:next=:has_next=false:scan_cap=false:page_down=true\ntui.resume_fork.picker_search_continue=token=0:query=design:filtered=1:next=false:scan_cap=false:requested=false:search_active=false\ntui.resume_fork.picker_sort_toggle=updated_at->created_at:reset=true:loaded=0:filtered=0:frame=true\ntui.resume_fork.picker_filter_toggle=cwd->all:cwd=/workspace/codex:show_all=true:reset=true:frame=true\ntui.resume_fork.picker_page_ingest=token=99:stale=true:scanned=10:accepted=0:invalid=0:loaded=0:filtered=0:next=stale-cursor:has_next=true:scan_cap=false:page_down=false\ntui.resume_fork.failure=live_resume_picker_page_loading_rejected:error=resume picker app-server page loading requires live app-server and ratatui:source=resume_picker:target=design:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "resume-fork-missing-target-refusal",
       "frame": {
         "name": "resume-fork-missing-target-refusal",

@@ -2965,6 +2965,19 @@ Extend HXCX-TUI-94 from `thread/list` request/response metadata into selected ra
 
 Status: HXCX-TUI-95 extends `fixtures/hxrust/tui-smoke.v1.json` with typed `ThreadListResponse.data` row projection evidence, display-title fallback, source/cwd/path/git/timestamp summaries, invalid thread-id row rejection, active and archived filter consistency, backwards cursor evidence, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic row projection evidence only, not full picker rendering, transcript preview loading, state DB/rollout querying, or persistent session archive mutation.
 
+### HXCX-TUI-96: Resume Picker App-Server Page Loading Boundary
+
+Extend HXCX-TUI-95 from row projection into selected raw Codex resume picker page loading behavior, without live app-server transport, state DB/rollout querying, filesystem mutation, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `start_initial_load`: initial picker loads clear rows, pagination, seen-row state, and selection, allocate request/search tokens, mark loading pending, request a frame, and enqueue `PickerLoadRequest::Page` with cursor `None`, the active cwd filter, provider filter, sort key, and optional search token;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `load_app_server_page` and `thread_list_params`: app-server `thread/list` page loads pass cursor, cwd/provider filters, sort key, and include-non-interactive source-kind policy, while `num_scanned_files` counts all response rows before invalid rows are skipped;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `ingest_page`: accepted rows are deduped into the picker, next cursor and scan-cap state are updated, scanned row counts accumulate, filters are reapplied, and pending page-down completion is surfaced after the page arrives;
+- preserve search continuation behavior: an active search keeps requesting additional pages while there are no filtered rows, a next cursor exists, the scan cap is not reached, and the search token still matches; it stops once a filtered row appears, no next cursor remains, or the scan cap is reached;
+- preserve sort/filter restart behavior: sort toggles between `UpdatedAt` and `CreatedAt`, cwd/all filtering toggles restart from the first page, and both schedule fresh page loads rather than mutating an existing cursor in place;
+- preserve stale background completion refusal by request token, with no live terminal, app-server, model, or filesystem effects.
+
+Status: HXCX-TUI-96 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker page-request, page-ingest, search-continuation, sort-toggle, filter-toggle, stale-token refusal, invalid-row accounting, accepted-vs-scanned count, cursor propagation, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic picker page-loading evidence only, not transcript preview loading, live app-server fanout, state DB/rollout querying, ratatui rendering, or persistent session mutation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

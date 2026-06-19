@@ -2659,6 +2659,64 @@ class TuiSmokeEventLoop {
 						+ ":remote=" + action.remoteWorkspace
 						+ ":alt=" + action.altScreenEntered
 					);
+				case TuiSmokeResumeForkActionKind.PickerPageRequest:
+					trace.push(
+						"tui.resume_fork.picker_page_request="
+						+ "action=" + action.action
+						+ ":token=" + action.requestToken
+						+ ":search_token=" + action.searchToken
+						+ ":query=" + action.query
+						+ ":cursor=" + action.cursor
+						+ ":cwd=" + action.cwdFilter
+						+ ":show_all=" + action.showAll
+						+ ":sort=" + action.sortKey
+						+ ":search_active=" + action.searchActive
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerPageIngest:
+					trace.push(
+						"tui.resume_fork.picker_page_ingest="
+						+ "token=" + action.requestToken
+						+ ":stale=" + action.staleIgnored
+						+ ":scanned=" + action.scannedRows
+						+ ":accepted=" + action.acceptedRows
+						+ ":invalid=" + action.invalidRows
+						+ ":loaded=" + action.loadedRows
+						+ ":filtered=" + action.filteredRows
+						+ ":next=" + action.nextCursor
+						+ ":has_next=" + action.nextCursorPresent
+						+ ":scan_cap=" + action.reachedScanCap
+						+ ":page_down=" + action.pendingPageDownCompleted
+					);
+				case TuiSmokeResumeForkActionKind.PickerSearchContinue:
+					trace.push(
+						"tui.resume_fork.picker_search_continue="
+						+ "token=" + action.searchToken
+						+ ":query=" + action.query
+						+ ":filtered=" + action.filteredRows
+						+ ":next=" + action.nextCursorPresent
+						+ ":scan_cap=" + action.reachedScanCap
+						+ ":requested=" + action.lookupRequested
+						+ ":search_active=" + action.searchActive
+					);
+				case TuiSmokeResumeForkActionKind.PickerSortToggle:
+					trace.push(
+						"tui.resume_fork.picker_sort_toggle="
+						+ action.sortKeyBefore + "->" + action.sortKeyAfter
+						+ ":reset=" + action.lookupRequested
+						+ ":loaded=" + action.loadedRows
+						+ ":filtered=" + action.filteredRows
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerFilterToggle:
+					trace.push(
+						"tui.resume_fork.picker_filter_toggle="
+						+ action.filterModeBefore + "->" + action.filterModeAfter
+						+ ":cwd=" + action.cwdFilter
+						+ ":show_all=" + action.showAll
+						+ ":reset=" + action.lookupRequested
+						+ ":frame=" + action.frameScheduled
+					);
 				case TuiSmokeResumeForkActionKind.PickerSelection:
 					trace.push(
 						"tui.resume_fork.picker_selection="

@@ -2,6 +2,11 @@ package codexhx.runtime.tui.smoke;
 
 enum abstract TuiSmokeResumeForkActionKind(String) to String {
 	final PickerOpen = "picker_open";
+	final PickerPageRequest = "picker_page_request";
+	final PickerPageIngest = "picker_page_ingest";
+	final PickerSearchContinue = "picker_search_continue";
+	final PickerSortToggle = "picker_sort_toggle";
+	final PickerFilterToggle = "picker_filter_toggle";
 	final PickerSelection = "picker_selection";
 	final Lookup = "lookup";
 	final StartupGate = "startup_gate";
@@ -16,6 +21,11 @@ enum abstract TuiSmokeResumeForkActionKind(String) to String {
 	public static function fromString(value:String):TuiSmokeResumeForkActionKind {
 		return switch value {
 			case "picker_open": PickerOpen;
+			case "picker_page_request": PickerPageRequest;
+			case "picker_page_ingest": PickerPageIngest;
+			case "picker_search_continue": PickerSearchContinue;
+			case "picker_sort_toggle": PickerSortToggle;
+			case "picker_filter_toggle": PickerFilterToggle;
 			case "picker_selection": PickerSelection;
 			case "lookup": Lookup;
 			case "startup_gate": StartupGate;
