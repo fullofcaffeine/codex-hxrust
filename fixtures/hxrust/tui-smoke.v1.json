@@ -12733,6 +12733,83 @@
             "allowModelCall": false,
             "actions": [
               {
+                "kind": "record_cancel_edit_candidate",
+                "promptText": "draft before cancel",
+                "cancelEditEligibleBefore": false,
+                "cancelEditEligibleAfter": true,
+                "cancelEditArmedBefore": false,
+                "cancelEditArmedAfter": false,
+                "cancelEditPromptBefore": false,
+                "cancelEditPromptAfter": true
+              },
+              {
+                "kind": "record_visible_turn_activity",
+                "cancelEditEligibleBefore": true,
+                "cancelEditEligibleAfter": false,
+                "cancelEditArmedBefore": true,
+                "cancelEditArmedAfter": false,
+                "cancelEditPromptBefore": true,
+                "cancelEditPromptAfter": true
+              },
+              {
+                "kind": "arm_cancel_edit",
+                "cancelEditEligibleBefore": true,
+                "cancelEditArmedBefore": false,
+                "cancelEditArmedAfter": true,
+                "cancelEditPromptBefore": true,
+                "composerEmpty": true,
+                "pendingSteersBefore": 0,
+                "queuedMessagesBefore": 0,
+                "sideConversationActive": false
+              },
+              {
+                "kind": "take_cancel_edit",
+                "reason": "Interrupted",
+                "cancelEditEligibleBefore": true,
+                "cancelEditEligibleAfter": true,
+                "cancelEditArmedBefore": true,
+                "cancelEditArmedAfter": false,
+                "cancelEditPromptBefore": true,
+                "cancelEditPromptAfter": false,
+                "cancelEditPromptTaken": true
+              },
+              {
+                "kind": "clear_cancel_edit",
+                "cancelEditEligibleBefore": true,
+                "cancelEditEligibleAfter": false,
+                "cancelEditArmedBefore": true,
+                "cancelEditArmedAfter": false,
+                "cancelEditPromptBefore": true,
+                "cancelEditPromptAfter": false
+              },
+              {
+                "kind": "initial_user_message",
+                "initialMessage": "hello from startup",
+                "initialMessageSubmitted": true,
+                "initialMessageSuppressed": false,
+                "elevatedSandboxBlocked": false,
+                "queuedMessagesBefore": 0,
+                "queuedMessagesAfter": 0
+              },
+              {
+                "kind": "initial_user_message",
+                "initialMessage": "blocked startup",
+                "initialMessageSubmitted": false,
+                "initialMessageSuppressed": true,
+                "elevatedSandboxBlocked": false,
+                "queuedMessagesBefore": 0,
+                "queuedMessagesAfter": 0
+              },
+              {
+                "kind": "initial_user_message",
+                "initialMessage": "windows elevated",
+                "initialMessageSubmitted": false,
+                "initialMessageSuppressed": false,
+                "elevatedSandboxBlocked": true,
+                "queuedMessagesBefore": 0,
+                "queuedMessagesAfter": 0
+              },
+              {
                 "kind": "queue_pop_next",
                 "queueSource": "rejected_steers",
                 "popOrder": "rejected_first_merge_all",
@@ -12772,6 +12849,26 @@
                 "restoredText": "latest queued display"
               },
               {
+                "kind": "enqueue_rejected_steer",
+                "enqueueRejectedSteerSucceeded": true,
+                "pendingSteersBefore": 1,
+                "pendingSteersAfter": 0,
+                "rejectedSteersBefore": 0,
+                "rejectedSteersAfter": 1,
+                "rejectedSteerHistoryRecords": 1,
+                "pendingPreviewRefreshed": true
+              },
+              {
+                "kind": "enqueue_rejected_steer",
+                "enqueueRejectedSteerSucceeded": false,
+                "pendingSteersBefore": 0,
+                "pendingSteersAfter": 0,
+                "rejectedSteersBefore": 1,
+                "rejectedSteersAfter": 1,
+                "rejectedSteerHistoryRecords": 1,
+                "pendingPreviewRefreshed": false
+              },
+              {
                 "kind": "drain_pending_messages",
                 "pendingSteersBefore": 1,
                 "pendingSteersAfter": 0,
@@ -12799,6 +12896,10 @@
                 "cursorAtEnd": true
               },
               {
+                "kind": "queue_autosend",
+                "queueAutosendSuppressed": true
+              },
+              {
                 "kind": "failure",
                 "failureCode": "live_queue_restore_effects_rejected",
                 "noLiveTerminal": true,
@@ -12818,8 +12919,8 @@
         }
       ],
       "expectedExit": "quit",
-      "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.queue_pop_next=source=rejected_steers:order=rejected_first_merge_all:queued=2->2:rejected=2->0:history=override:fallback=true:override=true:text=rejected display one\nrejected raw two\ntui.chat_widget_interrupted_restore.queue_pop_next=source=queued_user_messages:order=fifo_front:queued=2->1:rejected=0->0:history=user_message_text:fallback=true:override=false:text=first queued raw\ntui.chat_widget_interrupted_restore.queue_pop_latest=source=queued_user_messages:order=lifo_back_before_rejected:queued=2->1:rejected=1->1:history=override:fallback=false:override=true:text=latest queued display\ntui.chat_widget_interrupted_restore.drain_pending=pending=1->0:queued=2->0:rejected=1->0:pending_merged=true:queued_merged=true:composer_merged=true:text=rejected restore\npending steer\nqueued follow-up\ncurrent draft\ntui.chat_widget_interrupted_restore.restore_shape=text=remote [Image #2] first\n[Image #3] second @workspace:remote_images=1:local_images=2:labels=[Image #1],[Image #2]->[Image #2],[Image #3]:remapped=true:elements=3:ranges=7..17,24..34,42..52:rebased=true:mentions=1:cursor_end=true\ntui.chat_widget_interrupted_restore.failure=live_queue_restore_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget queue restore operations\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.queue_pop_next=source=rejected_steers:order=rejected_first_merge_all:queued=2->2:rejected=2->0:history=override:fallback=true:override=true:text=rejected display one\nrejected raw two\ntui.chat_widget_interrupted_restore.queue_pop_next=source=queued_user_messages:order=fifo_front:queued=2->1:rejected=0->0:history=user_message_text:fallback=true:override=false:text=first queued raw\ntui.chat_widget_interrupted_restore.queue_pop_latest=source=queued_user_messages:order=lifo_back_before_rejected:queued=2->1:rejected=1->1:history=override:fallback=false:override=true:text=latest queued display\ntui.chat_widget_interrupted_restore.drain_pending=pending=1->0:queued=2->0:rejected=1->0:pending_merged=true:queued_merged=true:composer_merged=true:text=rejected restore\npending steer\nqueued follow-up\ncurrent draft\ntui.chat_widget_interrupted_restore.restore_shape=text=remote [Image #2] first\n[Image #3] second @workspace:remote_images=1:local_images=2:labels=[Image #1],[Image #2]->[Image #2],[Image #3]:remapped=true:elements=3:ranges=7..17,24..34,42..52:rebased=true:mentions=1:cursor_end=true\ntui.chat_widget_interrupted_restore.failure=live_queue_restore_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+      "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.record_cancel_edit=prompt=draft before cancel:eligible=false->true:armed=false->false:prompt_state=false->true\ntui.chat_widget_interrupted_restore.visible_turn_activity=eligible=true->false:armed=true->false:prompt_state=true->true\ntui.chat_widget_interrupted_restore.arm_cancel_edit=eligible=true:composer_empty=true:pending=0:queued=0:side=false:armed=false->true\ntui.chat_widget_interrupted_restore.take_cancel_edit=reason=Interrupted:eligible=true->true:armed=true->false:prompt_state=true->false:taken=true\ntui.chat_widget_interrupted_restore.clear_cancel_edit=eligible=true->false:armed=true->false:prompt_state=true->false\ntui.chat_widget_interrupted_restore.initial_message=hello from startup:submitted=true:suppressed=false:sandbox_blocked=false:queued=0->0\ntui.chat_widget_interrupted_restore.initial_message=blocked startup:submitted=false:suppressed=true:sandbox_blocked=false:queued=0->0\ntui.chat_widget_interrupted_restore.initial_message=windows elevated:submitted=false:suppressed=false:sandbox_blocked=true:queued=0->0\ntui.chat_widget_interrupted_restore.queue_pop_next=source=rejected_steers:order=rejected_first_merge_all:queued=2->2:rejected=2->0:history=override:fallback=true:override=true:text=rejected display one\nrejected raw two\ntui.chat_widget_interrupted_restore.queue_pop_next=source=queued_user_messages:order=fifo_front:queued=2->1:rejected=0->0:history=user_message_text:fallback=true:override=false:text=first queued raw\ntui.chat_widget_interrupted_restore.queue_pop_latest=source=queued_user_messages:order=lifo_back_before_rejected:queued=2->1:rejected=1->1:history=override:fallback=false:override=true:text=latest queued display\ntui.chat_widget_interrupted_restore.enqueue_rejected=success=true:pending=1->0:rejected=0->1:history=1:preview=true\ntui.chat_widget_interrupted_restore.enqueue_rejected=success=false:pending=0->0:rejected=1->1:history=1:preview=false\ntui.chat_widget_interrupted_restore.drain_pending=pending=1->0:queued=2->0:rejected=1->0:pending_merged=true:queued_merged=true:composer_merged=true:text=rejected restore\npending steer\nqueued follow-up\ncurrent draft\ntui.chat_widget_interrupted_restore.restore_shape=text=remote [Image #2] first\n[Image #3] second @workspace:remote_images=1:local_images=2:labels=[Image #1],[Image #2]->[Image #2],[Image #3]:remapped=true:elements=3:ranges=7..17,24..34,42..52:rebased=true:mentions=1:cursor_end=true\ntui.chat_widget_interrupted_restore.queue_autosend=suppressed=true\ntui.chat_widget_interrupted_restore.failure=live_queue_restore_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget queue restore operations\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.record_cancel_edit=prompt=draft before cancel:eligible=false->true:armed=false->false:prompt_state=false->true\ntui.chat_widget_interrupted_restore.visible_turn_activity=eligible=true->false:armed=true->false:prompt_state=true->true\ntui.chat_widget_interrupted_restore.arm_cancel_edit=eligible=true:composer_empty=true:pending=0:queued=0:side=false:armed=false->true\ntui.chat_widget_interrupted_restore.take_cancel_edit=reason=Interrupted:eligible=true->true:armed=true->false:prompt_state=true->false:taken=true\ntui.chat_widget_interrupted_restore.clear_cancel_edit=eligible=true->false:armed=true->false:prompt_state=true->false\ntui.chat_widget_interrupted_restore.initial_message=hello from startup:submitted=true:suppressed=false:sandbox_blocked=false:queued=0->0\ntui.chat_widget_interrupted_restore.initial_message=blocked startup:submitted=false:suppressed=true:sandbox_blocked=false:queued=0->0\ntui.chat_widget_interrupted_restore.initial_message=windows elevated:submitted=false:suppressed=false:sandbox_blocked=true:queued=0->0\ntui.chat_widget_interrupted_restore.queue_pop_next=source=rejected_steers:order=rejected_first_merge_all:queued=2->2:rejected=2->0:history=override:fallback=true:override=true:text=rejected display one\nrejected raw two\ntui.chat_widget_interrupted_restore.queue_pop_next=source=queued_user_messages:order=fifo_front:queued=2->1:rejected=0->0:history=user_message_text:fallback=true:override=false:text=first queued raw\ntui.chat_widget_interrupted_restore.queue_pop_latest=source=queued_user_messages:order=lifo_back_before_rejected:queued=2->1:rejected=1->1:history=override:fallback=false:override=true:text=latest queued display\ntui.chat_widget_interrupted_restore.enqueue_rejected=success=true:pending=1->0:rejected=0->1:history=1:preview=true\ntui.chat_widget_interrupted_restore.enqueue_rejected=success=false:pending=0->0:rejected=1->1:history=1:preview=false\ntui.chat_widget_interrupted_restore.drain_pending=pending=1->0:queued=2->0:rejected=1->0:pending_merged=true:queued_merged=true:composer_merged=true:text=rejected restore\npending steer\nqueued follow-up\ncurrent draft\ntui.chat_widget_interrupted_restore.restore_shape=text=remote [Image #2] first\n[Image #3] second @workspace:remote_images=1:local_images=2:labels=[Image #1],[Image #2]->[Image #2],[Image #3]:remapped=true:elements=3:ranges=7..17,24..34,42..52:rebased=true:mentions=1:cursor_end=true\ntui.chat_widget_interrupted_restore.queue_autosend=suppressed=true\ntui.chat_widget_interrupted_restore.failure=live_queue_restore_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-thread-input-state-restore-headless",

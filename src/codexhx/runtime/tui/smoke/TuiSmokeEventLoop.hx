@@ -2638,6 +2638,13 @@ class TuiSmokeEventLoop {
 						+ ":armed=" + action.cancelEditArmedBefore + "->" + action.cancelEditArmedAfter
 						+ ":prompt_state=" + action.cancelEditPromptBefore + "->" + action.cancelEditPromptAfter
 					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RecordVisibleTurnActivity:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.visible_turn_activity="
+						+ "eligible=" + action.cancelEditEligibleBefore + "->" + action.cancelEditEligibleAfter
+						+ ":armed=" + action.cancelEditArmedBefore + "->" + action.cancelEditArmedAfter
+						+ ":prompt_state=" + action.cancelEditPromptBefore + "->" + action.cancelEditPromptAfter
+					);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.ArmCancelEdit:
 					trace.push(
 						"tui.chat_widget_interrupted_restore.arm_cancel_edit="
@@ -2647,6 +2654,31 @@ class TuiSmokeEventLoop {
 						+ ":queued=" + action.queuedMessagesBefore
 						+ ":side=" + action.sideConversationActive
 						+ ":armed=" + action.cancelEditArmedBefore + "->" + action.cancelEditArmedAfter
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.TakeCancelEdit:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.take_cancel_edit="
+						+ "reason=" + action.reason
+						+ ":eligible=" + action.cancelEditEligibleBefore + "->" + action.cancelEditEligibleAfter
+						+ ":armed=" + action.cancelEditArmedBefore + "->" + action.cancelEditArmedAfter
+						+ ":prompt_state=" + action.cancelEditPromptBefore + "->" + action.cancelEditPromptAfter
+						+ ":taken=" + action.cancelEditPromptTaken
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.ClearCancelEdit:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.clear_cancel_edit="
+						+ "eligible=" + action.cancelEditEligibleBefore + "->" + action.cancelEditEligibleAfter
+						+ ":armed=" + action.cancelEditArmedBefore + "->" + action.cancelEditArmedAfter
+						+ ":prompt_state=" + action.cancelEditPromptBefore + "->" + action.cancelEditPromptAfter
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.InitialUserMessage:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.initial_message="
+						+ action.initialMessage
+						+ ":submitted=" + action.initialMessageSubmitted
+						+ ":suppressed=" + action.initialMessageSuppressed
+						+ ":sandbox_blocked=" + action.elevatedSandboxBlocked
+						+ ":queued=" + action.queuedMessagesBefore + "->" + action.queuedMessagesAfter
 					);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.InterruptedTurn:
 					trace.push(
@@ -2683,6 +2715,15 @@ class TuiSmokeEventLoop {
 						+ ":fallback=" + action.historyFallback
 						+ ":override=" + action.historyOverrideApplied
 						+ ":text=" + action.restoredText
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.EnqueueRejectedSteer:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.enqueue_rejected="
+						+ "success=" + action.enqueueRejectedSteerSucceeded
+						+ ":pending=" + action.pendingSteersBefore + "->" + action.pendingSteersAfter
+						+ ":rejected=" + action.rejectedSteersBefore + "->" + action.rejectedSteersAfter
+						+ ":history=" + action.rejectedSteerHistoryRecords
+						+ ":preview=" + action.pendingPreviewRefreshed
 					);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.CaptureThreadInputState:
 					trace.push(
@@ -2782,6 +2823,11 @@ class TuiSmokeEventLoop {
 						+ action.noticeMode
 						+ ":suppressed=" + action.noticeSuppressed
 						+ ":text=" + action.noticeText
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.QueueAutosend:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.queue_autosend="
+						+ "suppressed=" + action.queueAutosendSuppressed
 					);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.Failure:
 					trace.push(

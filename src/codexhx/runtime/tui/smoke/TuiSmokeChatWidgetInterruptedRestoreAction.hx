@@ -6,6 +6,7 @@ typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 	final noticeMode:String;
 	final noticeText:String;
 	final failureCode:String;
+	final initialMessage:String;
 	final promptText:String;
 	final restoredText:String;
 	final composerText:String;
@@ -71,6 +72,12 @@ typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 	final textElementsRebased:Bool;
 	final cursorAtEnd:Bool;
 	final cancelledTurnRestoreEventSent:Bool;
+	final cancelEditPromptTaken:Bool;
+	final initialMessageSubmitted:Bool;
+	final initialMessageSuppressed:Bool;
+	final elevatedSandboxBlocked:Bool;
+	final enqueueRejectedSteerSucceeded:Bool;
+	final queueAutosendSuppressed:Bool;
 	final pendingPreviewRefreshed:Bool;
 	final threadRollbackSent:Bool;
 	final requestRedraw:Bool;
@@ -87,6 +94,7 @@ class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final noticeMode:String;
 	public final noticeText:String;
 	public final failureCode:String;
+	public final initialMessage:String;
 	public final promptText:String;
 	public final restoredText:String;
 	public final composerText:String;
@@ -152,6 +160,12 @@ class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final textElementsRebased:Bool;
 	public final cursorAtEnd:Bool;
 	public final cancelledTurnRestoreEventSent:Bool;
+	public final cancelEditPromptTaken:Bool;
+	public final initialMessageSubmitted:Bool;
+	public final initialMessageSuppressed:Bool;
+	public final elevatedSandboxBlocked:Bool;
+	public final enqueueRejectedSteerSucceeded:Bool;
+	public final queueAutosendSuppressed:Bool;
 	public final pendingPreviewRefreshed:Bool;
 	public final threadRollbackSent:Bool;
 	public final requestRedraw:Bool;
