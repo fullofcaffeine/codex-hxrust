@@ -6,6 +6,8 @@ enum abstract TuiSmokeChatWidgetInterruptedRestoreActionKind(String) to String {
 	final InterruptedTurn = "interrupted_turn";
 	final QueuePopNext = "queue_pop_next";
 	final QueuePopLatest = "queue_pop_latest";
+	final CaptureThreadInputState = "capture_thread_input_state";
+	final RestoreThreadInputState = "restore_thread_input_state";
 	final DrainPendingMessages = "drain_pending_messages";
 	final RestoreComposer = "restore_composer";
 	final RestoreMessageShape = "restore_message_shape";
@@ -21,6 +23,8 @@ enum abstract TuiSmokeChatWidgetInterruptedRestoreActionKind(String) to String {
 			case "interrupted_turn": InterruptedTurn;
 			case "queue_pop_next": QueuePopNext;
 			case "queue_pop_latest": QueuePopLatest;
+			case "capture_thread_input_state": CaptureThreadInputState;
+			case "restore_thread_input_state": RestoreThreadInputState;
 			case "drain_pending_messages": DrainPendingMessages;
 			case "restore_composer": RestoreComposer;
 			case "restore_message_shape": RestoreMessageShape;

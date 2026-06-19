@@ -2639,6 +2639,56 @@ class TuiSmokeEventLoop {
 						+ ":override=" + action.historyOverrideApplied
 						+ ":text=" + action.restoredText
 					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.CaptureThreadInputState:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.capture_thread_input="
+						+ "composer=" + action.composerText
+						+ ":remote_images=" + action.remoteImageCount
+						+ ":local_images=" + action.localImageCount
+						+ ":elements=" + action.textElementCount
+						+ ":mentions=" + action.mentionBindingCount
+						+ ":pastes=" + action.pendingPasteCount
+						+ ":pending=" + action.pendingSteersBefore
+						+ ":pending_history=" + action.pendingSteerHistoryRecords
+						+ ":compare_keys=" + action.pendingSteerCompareKeys
+						+ ":rejected=" + action.rejectedSteersBefore
+						+ ":rejected_history=" + action.rejectedSteerHistoryRecords
+						+ ":queued=" + action.queuedMessagesBefore
+						+ ":queued_history=" + action.queuedUserMessageHistoryRecords
+						+ ":user_turn_pending=" + action.userTurnPendingBefore
+						+ ":mode=" + action.currentCollaborationMode
+						+ ":active_mode=" + action.activeCollaborationMode
+						+ ":task=" + action.taskRunningBefore
+						+ ":agent=" + action.agentTurnRunningBefore
+						+ ":sleep=" + action.sleepInhibitorRunningBefore
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RestoreThreadInputState:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.restore_thread_input="
+						+ "present=" + action.inputStatePresent
+						+ ":cleared=" + action.inputStateCleared
+						+ ":composer=" + action.composerText + "->" + action.restoredText
+						+ ":pending=" + action.pendingSteersBefore + "->" + action.pendingSteersAfter
+						+ ":pending_history=" + action.pendingSteerHistoryRecords
+						+ ":compare_keys=" + action.pendingSteerCompareKeys
+						+ ":rejected=" + action.rejectedSteersBefore + "->" + action.rejectedSteersAfter
+						+ ":rejected_history=" + action.rejectedSteerHistoryRecords
+						+ ":queued=" + action.queuedMessagesBefore + "->" + action.queuedMessagesAfter
+						+ ":queued_history=" + action.queuedUserMessageHistoryRecords
+						+ ":user_turn_pending=" + action.userTurnPendingBefore + "->" + action.userTurnPendingAfter
+						+ ":mode=" + action.currentCollaborationMode
+						+ ":active_mode=" + action.activeCollaborationMode
+						+ ":mode_restored=" + action.collaborationModeRestored
+						+ ":agent=" + action.agentTurnRunningBefore + "->" + action.agentTurnRunningAfter
+						+ ":task=" + action.taskRunningBefore + "->" + action.taskRunningAfter
+						+ ":sleep=" + action.sleepInhibitorRunningBefore + "->" + action.sleepInhibitorRunningAfter
+						+ ":remote_cleared=" + action.remoteImagesCleared
+						+ ":pastes_cleared=" + action.pendingPastesCleared
+						+ ":model_surfaces=" + action.modelSurfacesRefreshed
+						+ ":status_surfaces=" + action.statusSurfacesRefreshed
+						+ ":preview=" + action.pendingPreviewRefreshed
+						+ ":redraw=" + action.requestRedraw
+					);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.DrainPendingMessages:
 					trace.push(
 						"tui.chat_widget_interrupted_restore.drain_pending="

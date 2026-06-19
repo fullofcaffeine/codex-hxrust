@@ -2535,6 +2535,19 @@ Model selected raw Codex queue pop and composer-restore behavior without live ap
 
 Status: HXCX-TUI-61 extends `fixtures/hxrust/tui-smoke.v1.json` with typed queue pop, history fallback/override, ordered merge, placeholder remap, text-element rebase, mention preservation, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic queue restore operation evidence only, not live model/app dispatch.
 
+### HXCX-TUI-62: ChatWidget Thread Input State Restore Boundary
+
+Model selected raw Codex thread-input snapshot behavior without live app/model dispatch:
+
+- preserve `capture_thread_input_state` anchors from `../codex/codex-rs/tui/src/chatwidget/input_restore.rs`: composer text, local images, remote images, text elements, mention bindings, pending pastes, pending steers/history/compare keys, rejected steers/history, queued messages/history, `user_turn_pending_start`, collaboration mode, active collaboration mask, task-running, and agent-turn-running state are captured together;
+- preserve `restore_thread_input_state(Some(..))`: collaboration mode and active mask are restored, model-dependent surfaces refresh, composer content and pending pastes are restored, missing pending/rejected/queued history records are resized to `UserMessageText`, missing pending-steer compare keys fall back to message/image counts, pending preview refreshes, and redraw is requested;
+- preserve `restore_thread_input_state(None)`: running state is cleared, input queues are cleared, remote images and composer/pending-paste state reset, pending preview refreshes, and redraw is requested;
+- preserve `TurnLifecycleState::restore_running` anchors from `../codex/codex-rs/tui/src/chatwidget/turn_lifecycle.rs`: agent-turn-running, goal-status start time, and sleep-inhibitor turn-running state stay synchronized during restore;
+- preserve the upstream task-running nuance: restored `task_running` can keep the bottom pane working even when the agent-running flag alone would not, and status surfaces refresh when that fallback is applied;
+- keep the evidence deterministic and independent of live terminal input, sleep-inhibitor OS handles, ratatui rendering, app command dispatch, model/provider calls, shell execution, filesystem mutation, app-server mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-62 extends `fixtures/hxrust/tui-smoke.v1.json` with typed thread-input capture, restore(Some), restore(None), collaboration-mode, queue-history, compare-key, task-running, sleep-inhibitor, pending-preview, redraw, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic thread input state evidence only, not live model/app dispatch.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
