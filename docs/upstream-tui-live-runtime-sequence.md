@@ -2574,6 +2574,19 @@ Model selected raw Codex status-line and terminal-title refresh behavior without
 
 Status: HXCX-TUI-64 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-surface selection, invalid-warning dedupe, branch/git-summary request/reset, line/hyperlink/title refresh, duplicate/empty/no-visible title handling, setup/preview/revert/commit, stale update ignoring, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic status-surface state evidence only, not live terminal title/status-line ownership.
 
+### HXCX-TUI-65: ChatWidget Status State Boundary
+
+Model selected raw Codex status indicator state without live widget rendering:
+
+- preserve `StatusIndicatorState::working` and `StatusState::default` anchors from `../codex/codex-rs/tui/src/chatwidget/status_state.rs`: the initial status is `Working`, uses `STATUS_DETAILS_DEFAULT_MAX_LINES`, starts with an empty pending guardian-review set, and maps terminal-title status to `Working`;
+- preserve `TerminalTitleStatusKind` as the compact title vocabulary: `Working`, `WaitingForBackgroundTerminal`, and default `Thinking` stay separate from the richer status-header text used by footer/status widgets;
+- preserve `PendingGuardianReviewStatus::start_or_update`: repeated ids update in place, one pending review renders a single-review header/detail/max-line shape, parallel reviews aggregate count/detail lines, and more than three details emit an overflow row;
+- preserve `PendingGuardianReviewStatus::finish` and `status_indicator_state`: removing a missing id reports no change, removing existing ids changes the aggregate, and an empty set returns no guardian-specific status;
+- preserve `StatusState::remember_retry_status_header` and `take_retry_status_header`: the retry header snapshots the current status only while empty and can be consumed exactly once;
+- keep the evidence deterministic and independent of live ratatui rendering, terminal writes, app-server mutation, model/provider calls, network transport, filesystem/git probing, and Cafex behavior.
+
+Status: HXCX-TUI-65 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status defaulting, status replacement, guardian review aggregation/update/finish, terminal-title status buckets, retry-header remember/take-once behavior, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic status-state evidence only, not live status-widget rendering.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

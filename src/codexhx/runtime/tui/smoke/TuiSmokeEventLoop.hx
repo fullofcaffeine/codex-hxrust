@@ -261,6 +261,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetStatusState:
+					if (!traceStatusState(event.chatWidgetStatusState, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3152,6 +3157,95 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_status_surface.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceStatusState(plan:TuiSmokeStatusStatePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_status_state.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_status_state.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeStatusStateActionKind.DefaultState:
+					trace.push(
+						"tui.chat_widget_status_state.default="
+						+ "header=" + action.header
+						+ ":details=" + action.details
+						+ ":max=" + action.detailsMaxLines
+						+ ":title_kind=" + action.terminalTitleStatusKind
+						+ ":guardian_empty=" + action.guardianEmpty
+						+ ":pending_restore=false"
+					);
+				case TuiSmokeStatusStateActionKind.SetStatus:
+					trace.push(
+						"tui.chat_widget_status_state.set_status="
+						+ "header=" + action.header
+						+ ":details=" + action.details
+						+ ":max=" + action.detailsMaxLines
+						+ ":guardian_review=" + action.guardianReviewHeader
+					);
+				case TuiSmokeStatusStateActionKind.GuardianStartOrUpdate:
+					trace.push(
+						"tui.chat_widget_status_state.guardian_start="
+						+ "id=" + action.id
+						+ ":detail=" + action.detail
+						+ ":entries=" + action.entries
+						+ ":count=" + action.entryCount
+						+ ":header=" + action.header
+						+ ":details=" + action.details
+						+ ":max=" + action.detailsMaxLines
+						+ ":overflow=" + action.overflowCount
+						+ ":status=" + action.statusPresent
+					);
+				case TuiSmokeStatusStateActionKind.GuardianFinish:
+					trace.push(
+						"tui.chat_widget_status_state.guardian_finish="
+						+ "id=" + action.id
+						+ ":changed=" + action.changed
+						+ ":entries=" + action.entries
+						+ ":count=" + action.entryCount
+						+ ":empty=" + action.guardianEmpty
+						+ ":status=" + action.statusPresent
+						+ ":header=" + action.header
+						+ ":details=" + action.details
+					);
+				case TuiSmokeStatusStateActionKind.RetryHeaderRemember:
+					trace.push(
+						"tui.chat_widget_status_state.retry_remember="
+						+ "current=" + action.header
+						+ ":before=" + action.retryHeaderBefore
+						+ ":after=" + action.retryHeaderAfter
+						+ ":remembered=" + action.retryHeaderRemembered
+					);
+				case TuiSmokeStatusStateActionKind.RetryHeaderTake:
+					trace.push(
+						"tui.chat_widget_status_state.retry_take="
+						+ "before=" + action.retryHeaderBefore
+						+ ":taken=" + action.takenHeader
+						+ ":after=" + action.retryHeaderAfter
+						+ ":took=" + action.retryHeaderTaken
+					);
+				case TuiSmokeStatusStateActionKind.TerminalTitleStatusKind:
+					trace.push(
+						"tui.chat_widget_status_state.title_kind="
+						+ action.terminalTitleStatusKind
+					);
+				case TuiSmokeStatusStateActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_status_state.failure="
+						+ action.failureCode
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_status_state.unknown");
 					return false;
 			}
 		}

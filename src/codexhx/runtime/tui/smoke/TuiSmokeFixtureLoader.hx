@@ -103,6 +103,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle"),
 				chatWidgetMcpStartup: optionalMcpStartupPlan(value, "chatWidgetMcpStartup"),
 				chatWidgetStatusSurface: optionalStatusSurfacePlan(value, "chatWidgetStatusSurface"),
+				chatWidgetStatusState: optionalStatusStatePlan(value, "chatWidgetStatusState"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -874,6 +875,52 @@ class TuiSmokeFixtureLoader {
 				terminalTitlePreviewReverted: optionalBoolField(value, "terminalTitlePreviewReverted", false),
 				terminalTitleSetupCommitted: optionalBoolField(value, "terminalTitleSetupCommitted", false),
 				originalSnapshotCleared: optionalBoolField(value, "originalSnapshotCleared", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalStatusStatePlan(object:Value, name:String):Null<TuiSmokeStatusStatePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeStatusStatePlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: statusStateActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function statusStateActions(values:Array<Value>):Array<TuiSmokeStatusStateAction> {
+		final out:Array<TuiSmokeStatusStateAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeStatusStateAction({
+				kind: TuiSmokeStatusStateActionKind.fromString(stringField(value, "kind", "")),
+				id: optionalStringField(value, "id", ""),
+				header: optionalStringField(value, "header", ""),
+				details: optionalStringField(value, "details", ""),
+				detail: optionalStringField(value, "detail", ""),
+				entries: optionalStringField(value, "entries", ""),
+				terminalTitleStatusKind: optionalStringField(value, "terminalTitleStatusKind", ""),
+				retryHeaderBefore: optionalStringField(value, "retryHeaderBefore", ""),
+				retryHeaderAfter: optionalStringField(value, "retryHeaderAfter", ""),
+				takenHeader: optionalStringField(value, "takenHeader", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				entryCount: optionalIntField(value, "entryCount", 0),
+				detailsMaxLines: optionalIntField(value, "detailsMaxLines", 0),
+				overflowCount: optionalIntField(value, "overflowCount", 0),
+				changed: optionalBoolField(value, "changed", false),
+				guardianEmpty: optionalBoolField(value, "guardianEmpty", false),
+				statusPresent: optionalBoolField(value, "statusPresent", false),
+				guardianReviewHeader: optionalBoolField(value, "guardianReviewHeader", false),
+				retryHeaderRemembered: optionalBoolField(value, "retryHeaderRemembered", false),
+				retryHeaderTaken: optionalBoolField(value, "retryHeaderTaken", false),
 				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
