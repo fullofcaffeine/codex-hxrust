@@ -105,6 +105,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetStatusSurface: optionalStatusSurfacePlan(value, "chatWidgetStatusSurface"),
 				chatWidgetStatusState: optionalStatusStatePlan(value, "chatWidgetStatusState"),
 				chatWidgetCommandLifecycle: optionalCommandLifecyclePlan(value, "chatWidgetCommandLifecycle"),
+				chatWidgetToolLifecycle: optionalToolLifecyclePlan(value, "chatWidgetToolLifecycle"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -999,6 +1000,74 @@ class TuiSmokeFixtureLoader {
 				requestRedraw: optionalBoolField(value, "requestRedraw", false),
 				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
 				noProcessSpawn: optionalBoolField(value, "noProcessSpawn", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalToolLifecyclePlan(object:Value, name:String):Null<TuiSmokeToolLifecyclePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeToolLifecyclePlan({
+					allowLiveToolExecution: optionalBoolField(value, "allowLiveToolExecution", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: toolLifecycleActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function toolLifecycleActions(values:Array<Value>):Array<TuiSmokeToolLifecycleAction> {
+		final out:Array<TuiSmokeToolLifecycleAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeToolLifecycleAction({
+				kind: TuiSmokeToolLifecycleActionKind.fromString(stringField(value, "kind", "")),
+				callId: optionalStringField(value, "callId", ""),
+				itemKind: optionalStringField(value, "itemKind", ""),
+				status: optionalStringField(value, "status", ""),
+				server: optionalStringField(value, "server", ""),
+				tool: optionalStringField(value, "tool", ""),
+				path: optionalStringField(value, "path", ""),
+				query: optionalStringField(value, "query", ""),
+				action: optionalStringField(value, "action", ""),
+				resultKind: optionalStringField(value, "resultKind", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				revisedPrompt: optionalStringField(value, "revisedPrompt", ""),
+				savedPath: optionalStringField(value, "savedPath", ""),
+				collabTool: optionalStringField(value, "collabTool", ""),
+				collabStatus: optionalStringField(value, "collabStatus", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				summary: optionalStringField(value, "summary", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				changeCount: optionalIntField(value, "changeCount", 0),
+				durationMs: optionalIntField(value, "durationMs", 0),
+				queuedStartedCount: optionalIntField(value, "queuedStartedCount", 0),
+				queuedCompletedCount: optionalIntField(value, "queuedCompletedCount", 0),
+				pendingSpawnCountBefore: optionalIntField(value, "pendingSpawnCountBefore", 0),
+				pendingSpawnCountAfter: optionalIntField(value, "pendingSpawnCountAfter", 0),
+				activeCellBefore: optionalStringField(value, "activeCellBefore", ""),
+				activeCellAfter: optionalStringField(value, "activeCellAfter", ""),
+				activeCellMatched: optionalBoolField(value, "activeCellMatched", false),
+				activeCellFlushed: optionalBoolField(value, "activeCellFlushed", false),
+				answerStreamFlushed: optionalBoolField(value, "answerStreamFlushed", false),
+				historyInserted: optionalBoolField(value, "historyInserted", false),
+				extraHistoryInserted: optionalBoolField(value, "extraHistoryInserted", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				hadWorkActivity: optionalBoolField(value, "hadWorkActivity", false),
+				visibleTurnActivityRecorded: optionalBoolField(value, "visibleTurnActivityRecorded", false),
+				spawnRequestCached: optionalBoolField(value, "spawnRequestCached", false),
+				spawnRequestRemoved: optionalBoolField(value, "spawnRequestRemoved", false),
+				queuedToStarted: optionalBoolField(value, "queuedToStarted", false),
+				queuedToCompleted: optionalBoolField(value, "queuedToCompleted", false),
+				noLiveToolExecution: optionalBoolField(value, "noLiveToolExecution", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)

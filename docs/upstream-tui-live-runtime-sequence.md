@@ -2600,6 +2600,20 @@ Model selected raw Codex command lifecycle bookkeeping without live process exec
 
 Status: HXCX-TUI-66 extends `fixtures/hxrust/tui-smoke.v1.json` with typed unified exec process tracking, recent-output trimming, start gating, wait streak updates, duplicate wait suppression, active/orphan/new completion targets, task-complete suppression, user-shell drain intent, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic command lifecycle state evidence only, not live command execution or full exec-cell rendering.
 
+### HXCX-TUI-67: ChatWidget Tool Lifecycle Boundary
+
+Model selected raw Codex non-command tool lifecycle bookkeeping without live tool execution:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/tool_lifecycle.rs` patch/file-change behavior: patch begin records visible turn activity and adds an edited-files history cell, successful file-change completion only marks work activity, and failed completion adds a patch failure history cell;
+- preserve view-image and image-generation surfaces: view-image flushes answer stream, records the image call, and requests redraw; image generation begin flushes answer stream and end records revised prompt/saved path history;
+- preserve MCP tool call lifecycle: start flushes answer/active cells and installs an active MCP cell, completion maps success/error/missing-result into the cell result, matched active cells complete in place, unmatched completion creates a new active cell before flushing, optional extra cells are inserted, and work activity is recorded;
+- preserve web search lifecycle: begin installs an active web-search cell, matched end updates/completes/flushes it, unmatched end adds a standalone history cell, and completed searches mark work activity;
+- preserve collaborator tool/activity behavior: plain collab events flush answer stream and redraw, spawn-agent in-progress caches spawn summaries, non-in-progress spawn results remove cached summaries, and sub-agent activity delegates to collab event insertion when a history cell exists;
+- preserve queued item dispatch: queued command/MCP starts and command/file-change/MCP completions route to the same immediate handlers already covered by command and tool lifecycle slices;
+- keep the evidence deterministic and independent of live tool execution, filesystem mutation, image decoding, MCP/network calls, app-server mutation, model/provider calls, ratatui rendering, and Cafex behavior.
+
+Status: HXCX-TUI-67 extends `fixtures/hxrust/tui-smoke.v1.json` with typed patch/file-change, view-image, image-generation, MCP tool, web-search, collaborator, sub-agent, queued-dispatch, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic tool lifecycle state evidence only, not live tool execution or full transcript cell rendering.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

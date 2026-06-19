@@ -35,6 +35,7 @@
       "../codex/codex-rs/tui/src/chatwidget/status_state.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
       "../codex/codex-rs/tui/src/chatwidget/command_lifecycle.rs",
+      "../codex/codex-rs/tui/src/chatwidget/tool_lifecycle.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/exec_flow.rs",
       "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/src/tui/event_stream.rs",
@@ -13751,6 +13752,218 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_command_lifecycle.plan=headless\ntui.chat_widget_command_lifecycle.process_begin=call-1:process=proc-1:command=just fix:count=0->1:footer=just fix:synced=true\ntui.chat_widget_command_lifecycle.output=call-1:tracked=true:chunks=0->3:recent=line2|line3|line4:trimmed=true:redraw=true\ntui.chat_widget_command_lifecycle.started=call-1:source=UnifiedExecStartup:command=just fix:parsed=standard:task=true:unified=true:startup=true:standard=true:status=true:running=0->1:grouped=true:wait_duplicate=false:suppressed=false:redraw=true\ntui.chat_widget_command_lifecycle.started=call-unknown:source=UnifiedExecStartup:command=printf mystery:parsed=unknown:task=true:unified=true:startup=true:standard=false:status=true:running=1->1:grouped=false:wait_duplicate=false:suppressed=false:redraw=false\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-1:stdin=:display=just fix:task=true:status=Waiting for background terminal:details=just fix:created=true:updated=false:flushed=false:history=false:redraw=true\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-late:stdin=:display=sleep 5:task=true:status=Waiting for background terminal:details=sleep 5:created=false:updated=true:flushed=false:history=false:redraw=true\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-1:stdin=ls:display=just fix:task=true:status=:details=:created=false:updated=false:flushed=true:history=true:redraw=false\ntui.chat_widget_command_lifecycle.started=call-wait:source=UnifiedExecInteraction:command=ls:parsed=standard:task=true:unified=true:startup=false:standard=true:status=true:running=1->1:grouped=false:wait_duplicate=true:suppressed=true:redraw=false\ntui.chat_widget_command_lifecycle.completed=call-1:source=UnifiedExecStartup:target=ActiveTracked:exit=0:duration_ms=1250:running=1->0:active=exec:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-orphan:source=UnifiedExecStartup:target=OrphanHistoryWhileActiveExec:exit=0:duration_ms=50:running=0->0:active=exploring:flushed=false:history=true:redraw=true:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-new:source=Agent:target=NewCell:exit=2:duration_ms=80:running=0->0:active=none:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-after-task:source=UnifiedExecStartup:target=SuppressedAfterTaskComplete:exit=0:duration_ms=0:running=0->0:active=none:flushed=false:history=false:redraw=false:suppressed_after_task=true:drain=false:work=false\ntui.chat_widget_command_lifecycle.completed=call-shell:source=UserShell:target=NewCell:exit=0:duration_ms=10:running=0->0:active=none:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=true:work=true\ntui.chat_widget_command_lifecycle.process_end=call-1:process=proc-1:count=1->0:footer=:synced=true\ntui.chat_widget_command_lifecycle.failure=live_command_lifecycle_rejected:no_live=true:no_process=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget command lifecycle\ninput> \ntrace:\ntui.chat_widget_command_lifecycle.plan=headless\ntui.chat_widget_command_lifecycle.process_begin=call-1:process=proc-1:command=just fix:count=0->1:footer=just fix:synced=true\ntui.chat_widget_command_lifecycle.output=call-1:tracked=true:chunks=0->3:recent=line2|line3|line4:trimmed=true:redraw=true\ntui.chat_widget_command_lifecycle.started=call-1:source=UnifiedExecStartup:command=just fix:parsed=standard:task=true:unified=true:startup=true:standard=true:status=true:running=0->1:grouped=true:wait_duplicate=false:suppressed=false:redraw=true\ntui.chat_widget_command_lifecycle.started=call-unknown:source=UnifiedExecStartup:command=printf mystery:parsed=unknown:task=true:unified=true:startup=true:standard=false:status=true:running=1->1:grouped=false:wait_duplicate=false:suppressed=false:redraw=false\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-1:stdin=:display=just fix:task=true:status=Waiting for background terminal:details=just fix:created=true:updated=false:flushed=false:history=false:redraw=true\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-late:stdin=:display=sleep 5:task=true:status=Waiting for background terminal:details=sleep 5:created=false:updated=true:flushed=false:history=false:redraw=true\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-1:stdin=ls:display=just fix:task=true:status=:details=:created=false:updated=false:flushed=true:history=true:redraw=false\ntui.chat_widget_command_lifecycle.started=call-wait:source=UnifiedExecInteraction:command=ls:parsed=standard:task=true:unified=true:startup=false:standard=true:status=true:running=1->1:grouped=false:wait_duplicate=true:suppressed=true:redraw=false\ntui.chat_widget_command_lifecycle.completed=call-1:source=UnifiedExecStartup:target=ActiveTracked:exit=0:duration_ms=1250:running=1->0:active=exec:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-orphan:source=UnifiedExecStartup:target=OrphanHistoryWhileActiveExec:exit=0:duration_ms=50:running=0->0:active=exploring:flushed=false:history=true:redraw=true:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-new:source=Agent:target=NewCell:exit=2:duration_ms=80:running=0->0:active=none:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-after-task:source=UnifiedExecStartup:target=SuppressedAfterTaskComplete:exit=0:duration_ms=0:running=0->0:active=none:flushed=false:history=false:redraw=false:suppressed_after_task=true:drain=false:work=false\ntui.chat_widget_command_lifecycle.completed=call-shell:source=UserShell:target=NewCell:exit=0:duration_ms=10:running=0->0:active=none:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=true:work=true\ntui.chat_widget_command_lifecycle.process_end=call-1:process=proc-1:count=1->0:footer=:synced=true\ntui.chat_widget_command_lifecycle.failure=live_command_lifecycle_rejected:no_live=true:no_process=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-tool-lifecycle-headless",
+      "frame": {
+        "name": "chatwidget-tool-lifecycle-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget tool lifecycle"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_tool_lifecycle",
+          "chatWidgetToolLifecycle": {
+            "allowLiveToolExecution": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "patch_apply_begin",
+                "changeCount": 2,
+                "historyInserted": true,
+                "visibleTurnActivityRecorded": true
+              },
+              {
+                "kind": "file_change_completed",
+                "status": "success",
+                "historyInserted": false,
+                "hadWorkActivity": true,
+                "queuedToCompleted": true
+              },
+              {
+                "kind": "file_change_completed",
+                "status": "failed",
+                "historyInserted": true,
+                "hadWorkActivity": true,
+                "queuedToCompleted": true
+              },
+              {
+                "kind": "view_image",
+                "path": "example.png",
+                "answerStreamFlushed": true,
+                "historyInserted": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "image_generation",
+                "callId": "call-image-generation",
+                "revisedPrompt": "A tiny blue square",
+                "savedPath": "/tmp/ig-1.png",
+                "answerStreamFlushed": true,
+                "historyInserted": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "mcp_tool_started",
+                "callId": "mcp-1",
+                "server": "filesystem",
+                "tool": "read_file",
+                "activeCellBefore": "exec",
+                "activeCellAfter": "mcp",
+                "answerStreamFlushed": true,
+                "activeCellFlushed": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "mcp_tool_completed",
+                "callId": "mcp-1",
+                "resultKind": "ok",
+                "durationMs": 42,
+                "activeCellMatched": true,
+                "activeCellFlushed": true,
+                "extraHistoryInserted": false,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "mcp_tool_completed",
+                "callId": "mcp-2",
+                "resultKind": "error",
+                "errorMessage": "permission denied",
+                "durationMs": 7,
+                "activeCellMatched": false,
+                "activeCellFlushed": true,
+                "extraHistoryInserted": true,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "mcp_tool_completed",
+                "callId": "mcp-3",
+                "resultKind": "missing_result",
+                "errorMessage": "MCP tool call completed without a result",
+                "durationMs": 0,
+                "activeCellMatched": false,
+                "activeCellFlushed": true,
+                "extraHistoryInserted": true,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "web_search",
+                "callId": "web-1",
+                "query": "haxe rust",
+                "action": "begin",
+                "activeCellBefore": "none",
+                "activeCellAfter": "web_search",
+                "historyInserted": false,
+                "requestRedraw": true,
+                "hadWorkActivity": false
+              },
+              {
+                "kind": "web_search",
+                "callId": "web-1",
+                "query": "haxe rust",
+                "action": "end_matched",
+                "activeCellBefore": "web_search",
+                "activeCellAfter": "none",
+                "activeCellMatched": true,
+                "activeCellFlushed": true,
+                "historyInserted": true,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "web_search",
+                "callId": "web-2",
+                "query": "codex tui",
+                "action": "end_unmatched",
+                "activeCellBefore": "none",
+                "activeCellAfter": "none",
+                "activeCellMatched": false,
+                "historyInserted": true,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "collab_event",
+                "summary": "collab cell",
+                "answerStreamFlushed": true,
+                "historyInserted": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "collab_agent_tool",
+                "callId": "spawn-1",
+                "collabTool": "spawn_agent",
+                "collabStatus": "in_progress",
+                "pendingSpawnCountBefore": 0,
+                "pendingSpawnCountAfter": 1,
+                "spawnRequestCached": true,
+                "historyInserted": true
+              },
+              {
+                "kind": "collab_agent_tool",
+                "callId": "spawn-1",
+                "collabTool": "spawn_agent",
+                "collabStatus": "completed",
+                "pendingSpawnCountBefore": 1,
+                "pendingSpawnCountAfter": 0,
+                "spawnRequestRemoved": true,
+                "historyInserted": true
+              },
+              {
+                "kind": "sub_agent_activity",
+                "threadId": "thread-child",
+                "summary": "sub-agent reported progress",
+                "historyInserted": true
+              },
+              {
+                "kind": "queued_item_dispatch",
+                "itemKind": "mcp_tool_call",
+                "queuedToStarted": true,
+                "queuedToCompleted": true,
+                "queuedStartedCount": 1,
+                "queuedCompletedCount": 1
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_tool_lifecycle_rejected",
+                "noLiveToolExecution": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.patch_begin=changes=2:history=true:activity=true\ntui.chat_widget_tool_lifecycle.file_change=success:failure_history=false:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.file_change=failed:failure_history=true:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.view_image=example.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.image_generation=call-image-generation:prompt=A tiny blue square:path=/tmp/ig-1.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_start=mcp-1:server=filesystem:tool=read_file:active=exec->mcp:answer_flush=true:flushed=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-1:result=ok:matched=true:duration_ms=42:error=:flushed=true:extra=false:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-2:result=error:matched=false:duration_ms=7:error=permission denied:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-3:result=missing_result:matched=false:duration_ms=0:error=MCP tool call completed without a result:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=begin:matched=false:active=none->web_search:history=false:redraw=true:work=false\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=end_matched:matched=true:active=web_search->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-2:query=codex tui:action=end_unmatched:matched=false:active=none->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.collab_event=collab cell:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=in_progress:spawn_cache=0->1:cached=true:removed=false:history=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=completed:spawn_cache=1->0:cached=false:removed=true:history=true\ntui.chat_widget_tool_lifecycle.sub_agent=thread-child:summary=sub-agent reported progress:history=true\ntui.chat_widget_tool_lifecycle.queued_dispatch=mcp_tool_call:started=true:completed=true:started_count=1:completed_count=1\ntui.chat_widget_tool_lifecycle.failure=live_tool_lifecycle_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget tool lifecycle\ninput> \ntrace:\ntui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.patch_begin=changes=2:history=true:activity=true\ntui.chat_widget_tool_lifecycle.file_change=success:failure_history=false:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.file_change=failed:failure_history=true:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.view_image=example.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.image_generation=call-image-generation:prompt=A tiny blue square:path=/tmp/ig-1.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_start=mcp-1:server=filesystem:tool=read_file:active=exec->mcp:answer_flush=true:flushed=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-1:result=ok:matched=true:duration_ms=42:error=:flushed=true:extra=false:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-2:result=error:matched=false:duration_ms=7:error=permission denied:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-3:result=missing_result:matched=false:duration_ms=0:error=MCP tool call completed without a result:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=begin:matched=false:active=none->web_search:history=false:redraw=true:work=false\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=end_matched:matched=true:active=web_search->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-2:query=codex tui:action=end_unmatched:matched=false:active=none->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.collab_event=collab cell:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=in_progress:spawn_cache=0->1:cached=true:removed=false:history=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=completed:spawn_cache=1->0:cached=false:removed=true:history=true\ntui.chat_widget_tool_lifecycle.sub_agent=thread-child:summary=sub-agent reported progress:history=true\ntui.chat_widget_tool_lifecycle.queued_dispatch=mcp_tool_call:started=true:completed=true:started_count=1:completed_count=1\ntui.chat_widget_tool_lifecycle.failure=live_tool_lifecycle_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
