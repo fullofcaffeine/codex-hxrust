@@ -32,6 +32,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-no-results-reload-recovery-render.sh` validates normalized current no-results reload and later recovery evidence, including active-list replacement, empty state/footer transitions, restored rows, and frame/render counts through the normalized test-backend surface.
 - `harness/check-resume-picker-reload-selection-preservation-render.sh` validates normalized reload selection preservation evidence, including stable-thread selection carry-forward and deterministic fallback selection when the prior row disappears.
 - `harness/check-resume-picker-reload-scroll-preservation-render.sh` validates normalized reload scroll preservation evidence, including stable top-row/window carry-forward while the selected row remains visible and deterministic scroll clamping when the result count shrinks.
+- `harness/check-resume-picker-reload-preview-invalidation-render.sh` validates normalized reload preview invalidation evidence, including loaded preview carry-forward for the same selected thread and preview/pending transcript cache clearing when a reload selects a different thread.
 
 ## Upstream Anchors
 
@@ -156,6 +157,8 @@ Status: reload selection preservation now has generated-Rust normalized evidence
 
 Status: reload scroll preservation now has generated-Rust normalized evidence in `harness/check-resume-picker-reload-scroll-preservation-render.sh`. The gate renders a scrolled active list, applies a current reload that preserves `scrollTop` and selected-row visibility, then applies a current shrink reload that clamps `scrollTop` to zero while keeping deterministic selection/footer evidence. This is still deterministic test-backend evidence, not live app-server fanout, live crossterm input, ratatui layout ownership, state DB/rollout querying, Tokio task ownership, or Cafex behavior.
 
+Status: reload preview invalidation now has generated-Rust normalized evidence in `harness/check-resume-picker-reload-preview-invalidation-render.sh`. The gate renders a selected row with loaded preview lines, applies a current reload where the same selected thread keeps the preview attached, then applies a current reload selecting a different thread and verifies preview, expanded-thread, pending-thread, and transcript-preview cache state are cleared. This is still deterministic test-backend evidence, not live app-server fanout, live crossterm input, ratatui layout ownership, state DB/rollout querying, Tokio task ownership, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -206,6 +209,7 @@ Near-term gates:
 - `harness/check-resume-picker-no-results-reload-recovery-render.sh` for normalized current no-results reload and later recovery snapshots with active-list replacement, empty state/footer transitions, restored rows, and frame/render counts.
 - `harness/check-resume-picker-reload-selection-preservation-render.sh` for normalized stable-thread selection preservation and deterministic fallback selection snapshots across current reloads.
 - `harness/check-resume-picker-reload-scroll-preservation-render.sh` for normalized current reload scroll/top-row preservation and shrink-clamp snapshots.
+- `harness/check-resume-picker-reload-preview-invalidation-render.sh` for normalized current reload preview preservation/invalidation snapshots and cache-clearing summaries.
 
 Exit criteria for "first live resume picker slice":
 

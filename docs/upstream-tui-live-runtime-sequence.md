@@ -3293,6 +3293,17 @@ Extend the normalized resume picker renderer from selection preservation into sc
 
 Status: HXCX-TUI-123 adds `ResumePickerReloadScrollPreservationRenderGate`, `ResumePickerReloadScrollPreservationRenderGateReport`, `test/ResumePickerReloadScrollPreservationRenderHarness.hx`, `hxml/resume-picker-reload-scroll-preservation-render.hxml`, and `harness/check-resume-picker-reload-scroll-preservation-render.sh`. The gate validates active scrolled-list rendering, current reload scroll/top-row preservation, current shrink reload scroll clamping, footer/status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-124: Resume Picker Reload Preview Invalidation Render Snapshot Gate
+
+Extend the normalized resume picker renderer from scroll preservation into preview cache behavior across reloads:
+
+- render a selected row with loaded preview lines from a fixture-backed preview read;
+- apply a current reload where the same selected thread remains selected and keep the preview attached;
+- apply a current reload that selects a different thread and render stale preview invalidation plus expanded/pending transcript-preview cache clearing;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-124 adds `ResumePickerReloadPreviewInvalidationRenderGate`, `ResumePickerReloadPreviewInvalidationRenderGateReport`, `test/ResumePickerReloadPreviewInvalidationRenderHarness.hx`, `hxml/resume-picker-reload-preview-invalidation-render.hxml`, and `harness/check-resume-picker-reload-preview-invalidation-render.sh`. The gate validates selected-row preview rendering, stable-thread preview preservation, selection-change preview invalidation, expanded/pending transcript-preview cache clearing summaries, footer/status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

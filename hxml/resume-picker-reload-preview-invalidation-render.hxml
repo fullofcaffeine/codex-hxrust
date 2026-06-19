@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/resume-picker-reload-preview-invalidation-render
+-D rust_crate=codex_hxrust_resume_picker_reload_preview_invalidation_render
+-D rust_cargo_subcommand=check
+-main ResumePickerReloadPreviewInvalidationRenderHarness
