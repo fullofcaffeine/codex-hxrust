@@ -3238,6 +3238,17 @@ Extend the normalized resume picker renderer from scan-cap pagination evidence i
 
 Status: HXCX-TUI-118 adds `ResumePickerQueryReloadRenderGate`, `ResumePickerQueryReloadRenderGateReport`, `test/ResumePickerQueryReloadRenderHarness.hx`, `hxml/resume-picker-query-reload-render.hxml`, and `harness/check-resume-picker-query-reload-render.sh`. The gate validates initial page rendering, query reset/loading rendering, `thread/list` query/cursor provenance, fixture-backed query result rendering, footer/recovery evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-119: Resume Picker Sort/Filter Reload Render Snapshot Gate
+
+Extend the normalized resume picker renderer from query reload evidence into sort/filter reload evidence:
+
+- render an initial queried page with `updated_at` plus `cwd` toolbar state and cursor evidence;
+- render sort/filter reset state with `created_at` plus `all`, active query preservation, cleared cursor/list state, and footer/status evidence;
+- render fixture-backed reloaded results while preserving request provenance for sort, filter, query, cwd, show-all, and include-non-interactive policy;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-119 adds `ResumePickerSortFilterReloadRenderGate`, `ResumePickerSortFilterReloadRenderGateReport`, `test/ResumePickerSortFilterReloadRenderHarness.hx`, `hxml/resume-picker-sort-filter-reload-render.hxml`, and `harness/check-resume-picker-sort-filter-reload-render.sh`. The gate validates initial queried page rendering, sort/filter reset/loading rendering, active query preservation, `thread/list` sort/filter/cwd/show-all provenance, fixture-backed reloaded result rendering, footer/recovery evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
