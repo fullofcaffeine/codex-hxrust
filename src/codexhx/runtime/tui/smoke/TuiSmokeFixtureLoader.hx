@@ -124,6 +124,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetKeymapRawOutput: optionalKeymapRawOutputPlan(value, "chatWidgetKeymapRawOutput"),
 				chatWidgetRawOutputRender: optionalRawOutputRenderPlan(value, "chatWidgetRawOutputRender"),
 				chatWidgetSlashCommand: optionalSlashCommandPlan(value, "chatWidgetSlashCommand"),
+				chatWidgetStatusCard: optionalStatusCardPlan(value, "chatWidgetStatusCard"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -1678,6 +1679,68 @@ class TuiSmokeFixtureLoader {
 				statusRefreshing: optionalBoolField(value, "statusRefreshing", false),
 				submissionDrained: optionalBoolField(value, "submissionDrained", false),
 				redrawRequested: optionalBoolField(value, "redrawRequested", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalStatusCardPlan(object:Value, name:String):Null<TuiSmokeStatusCardPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeStatusCardPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: statusCardActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function statusCardActions(values:Array<Value>):Array<TuiSmokeStatusCardAction> {
+		final out:Array<TuiSmokeStatusCardAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeStatusCardAction({
+				kind: TuiSmokeStatusCardActionKind.fromString(stringField(value, "kind", "")),
+				commandRow: optionalStringField(value, "commandRow", ""),
+				model: optionalStringField(value, "model", ""),
+				modelDetails: optionalStringField(value, "modelDetails", ""),
+				provider: optionalStringField(value, "provider", ""),
+				runtimeProvider: optionalStringField(value, "runtimeProvider", ""),
+				account: optionalStringField(value, "account", ""),
+				directory: optionalStringField(value, "directory", ""),
+				permissions: optionalStringField(value, "permissions", ""),
+				agentsSummary: optionalStringField(value, "agentsSummary", ""),
+				threadName: optionalStringField(value, "threadName", ""),
+				sessionId: optionalStringField(value, "sessionId", ""),
+				forkedFrom: optionalStringField(value, "forkedFrom", ""),
+				collaborationMode: optionalStringField(value, "collaborationMode", ""),
+				rateLimitState: optionalStringField(value, "rateLimitState", ""),
+				rateLimitLabel: optionalStringField(value, "rateLimitLabel", ""),
+				rateLimitSummary: optionalStringField(value, "rateLimitSummary", ""),
+				rateLimitReset: optionalStringField(value, "rateLimitReset", ""),
+				rateLimitDetails: optionalStringField(value, "rateLimitDetails", ""),
+				rateLimitWarning: optionalStringField(value, "rateLimitWarning", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				totalTokens: optionalIntField(value, "totalTokens", 0),
+				inputTokens: optionalIntField(value, "inputTokens", 0),
+				outputTokens: optionalIntField(value, "outputTokens", 0),
+				contextUsed: optionalIntField(value, "contextUsed", 0),
+				contextWindow: optionalIntField(value, "contextWindow", 0),
+				contextPercentRemaining: optionalIntField(value, "contextPercentRemaining", 0),
+				rowCount: optionalIntField(value, "rowCount", 0),
+				rateLimitRowCount: optionalIntField(value, "rateLimitRowCount", 0),
+				refreshingRateLimits: optionalBoolField(value, "refreshingRateLimits", false),
+				showChatGptUsageLink: optionalBoolField(value, "showChatGptUsageLink", false),
+				remoteConnectionVisible: optionalBoolField(value, "remoteConnectionVisible", false),
+				tokenUsageVisible: optionalBoolField(value, "tokenUsageVisible", false),
+				contextWindowVisible: optionalBoolField(value, "contextWindowVisible", false),
+				statusOutputInserted: optionalBoolField(value, "statusOutputInserted", false),
+				refreshCompleted: optionalBoolField(value, "refreshCompleted", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),

@@ -366,6 +366,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetStatusCard:
+					if (!traceStatusCard(event.chatWidgetStatusCard, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -5249,6 +5254,95 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_slash_command.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceStatusCard(plan:TuiSmokeStatusCardPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_status_card.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_status_card.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeStatusCardActionKind.Summary:
+					trace.push(
+						"tui.chat_widget_status_card.summary="
+						+ "command=" + action.commandRow
+						+ ":rows=" + action.rowCount
+						+ ":inserted=" + action.statusOutputInserted
+						+ ":usage_link=" + action.showChatGptUsageLink
+						+ ":remote=" + action.remoteConnectionVisible
+					);
+				case TuiSmokeStatusCardActionKind.ModelProvider:
+					trace.push(
+						"tui.chat_widget_status_card.model="
+						+ action.model
+						+ ":details=" + action.modelDetails
+						+ ":provider=" + action.provider
+						+ ":runtime=" + action.runtimeProvider
+						+ ":account=" + action.account
+					);
+				case TuiSmokeStatusCardActionKind.Permissions:
+					trace.push(
+						"tui.chat_widget_status_card.permissions="
+						+ action.permissions
+						+ ":dir=" + action.directory
+						+ ":agents=" + action.agentsSummary
+					);
+				case TuiSmokeStatusCardActionKind.ThreadSession:
+					trace.push(
+						"tui.chat_widget_status_card.thread="
+						+ action.threadName
+						+ ":session=" + action.sessionId
+						+ ":forked_from=" + action.forkedFrom
+						+ ":collab=" + action.collaborationMode
+					);
+				case TuiSmokeStatusCardActionKind.TokenUsage:
+					trace.push(
+						"tui.chat_widget_status_card.tokens="
+						+ "total=" + action.totalTokens
+						+ ":input=" + action.inputTokens
+						+ ":output=" + action.outputTokens
+						+ ":visible=" + action.tokenUsageVisible
+						+ ":context=" + action.contextUsed + "/" + action.contextWindow
+						+ ":context_left=" + action.contextPercentRemaining
+						+ ":context_visible=" + action.contextWindowVisible
+					);
+				case TuiSmokeStatusCardActionKind.RateLimit:
+					trace.push(
+						"tui.chat_widget_status_card.rate_limit="
+						+ action.rateLimitState
+						+ ":label=" + action.rateLimitLabel
+						+ ":summary=" + action.rateLimitSummary
+						+ ":reset=" + action.rateLimitReset
+						+ ":details=" + action.rateLimitDetails
+						+ ":warning=" + action.rateLimitWarning
+						+ ":rows=" + action.rateLimitRowCount
+						+ ":refreshing=" + action.refreshingRateLimits
+					);
+				case TuiSmokeStatusCardActionKind.Refresh:
+					trace.push(
+						"tui.chat_widget_status_card.refresh="
+						+ action.rateLimitState
+						+ ":rows=" + action.rateLimitRowCount
+						+ ":completed=" + action.refreshCompleted
+						+ ":refreshing=" + action.refreshingRateLimits
+					);
+				case TuiSmokeStatusCardActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_status_card.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_status_card.unknown");
 					return false;
 			}
 		}

@@ -1,0 +1,88 @@
+package codexhx.runtime.tui.smoke;
+
+typedef TuiSmokeStatusCardActionFields = {
+	final kind:TuiSmokeStatusCardActionKind;
+	final commandRow:String;
+	final model:String;
+	final modelDetails:String;
+	final provider:String;
+	final runtimeProvider:String;
+	final account:String;
+	final directory:String;
+	final permissions:String;
+	final agentsSummary:String;
+	final threadName:String;
+	final sessionId:String;
+	final forkedFrom:String;
+	final collaborationMode:String;
+	final rateLimitState:String;
+	final rateLimitLabel:String;
+	final rateLimitSummary:String;
+	final rateLimitReset:String;
+	final rateLimitDetails:String;
+	final rateLimitWarning:String;
+	final failureCode:String;
+	final totalTokens:Int;
+	final inputTokens:Int;
+	final outputTokens:Int;
+	final contextUsed:Int;
+	final contextWindow:Int;
+	final contextPercentRemaining:Int;
+	final rowCount:Int;
+	final rateLimitRowCount:Int;
+	final refreshingRateLimits:Bool;
+	final showChatGptUsageLink:Bool;
+	final remoteConnectionVisible:Bool;
+	final tokenUsageVisible:Bool;
+	final contextWindowVisible:Bool;
+	final statusOutputInserted:Bool;
+	final refreshCompleted:Bool;
+	final noRatatuiRender:Bool;
+	final noModelCall:Bool;
+	final noAppServerMutation:Bool;
+	final unsupportedRejected:Bool;
+}
+
+@:build(codexhx.macros.FieldRecordConstructor.build())
+class TuiSmokeStatusCardAction {
+	public final kind:TuiSmokeStatusCardActionKind;
+	public final commandRow:String;
+	public final model:String;
+	public final modelDetails:String;
+	public final provider:String;
+	public final runtimeProvider:String;
+	public final account:String;
+	public final directory:String;
+	public final permissions:String;
+	public final agentsSummary:String;
+	public final threadName:String;
+	public final sessionId:String;
+	public final forkedFrom:String;
+	public final collaborationMode:String;
+	public final rateLimitState:String;
+	public final rateLimitLabel:String;
+	public final rateLimitSummary:String;
+	public final rateLimitReset:String;
+	public final rateLimitDetails:String;
+	public final rateLimitWarning:String;
+	public final failureCode:String;
+	public final totalTokens:Int;
+	public final inputTokens:Int;
+	public final outputTokens:Int;
+	public final contextUsed:Int;
+	public final contextWindow:Int;
+	public final contextPercentRemaining:Int;
+	public final rowCount:Int;
+	public final rateLimitRowCount:Int;
+	public final refreshingRateLimits:Bool;
+	public final showChatGptUsageLink:Bool;
+	public final remoteConnectionVisible:Bool;
+	public final tokenUsageVisible:Bool;
+	public final contextWindowVisible:Bool;
+	public final statusOutputInserted:Bool;
+	public final refreshCompleted:Bool;
+	public final noRatatuiRender:Bool;
+	public final noModelCall:Bool;
+	public final noAppServerMutation:Bool;
+	public final unsupportedRejected:Bool;
+}

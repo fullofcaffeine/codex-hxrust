@@ -66,6 +66,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ChatWidgetRawOutputRender = "chat_widget_raw_output_render";
 	final ChatWidgetInterruptQuit = "chat_widget_interrupt_quit";
 	final ChatWidgetSlashCommand = "chat_widget_slash_command";
+	final ChatWidgetStatusCard = "chat_widget_status_card";
 	final ChatWidgetInterruptedRestore = "chat_widget_interrupted_restore";
 	final SideConversation = "side_conversation";
 	final ClearArchive = "clear_archive";
@@ -145,6 +146,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "chat_widget_keymap_raw_output": ChatWidgetKeymapRawOutput;
 			case "chat_widget_raw_output_render": ChatWidgetRawOutputRender;
 			case "chat_widget_slash_command": ChatWidgetSlashCommand;
+			case "chat_widget_status_card": ChatWidgetStatusCard;
 			case "chat_widget_interrupt_quit": ChatWidgetInterruptQuit;
 			case "chat_widget_interrupted_restore": ChatWidgetInterruptedRestore;
 			case "side_conversation": SideConversation;

@@ -17613,6 +17613,155 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_slash_command.plan=headless\ntui.chat_widget_slash_command.dispatch=raw:source=live:history=true->true:task=false:side=false:allowed=true:redraw=true\ntui.chat_widget_slash_command.raw=raw:args=:raw=false->true:config=true:notice=true:surfaces=true:event=true\ntui.chat_widget_slash_command.inline_args=raw:args=off:supports=true:trimmed=true:fallback=false\ntui.chat_widget_slash_command.raw=raw:args=off:raw=true->false:config=true:notice=true:surfaces=true:event=true\ntui.chat_widget_slash_command.app_event=RawOutputModeChanged(false):command=raw:sent=true\ntui.chat_widget_slash_command.dispatch=status:source=queued:history=true->true:task=true:side=true:allowed=true:redraw=true\ntui.chat_widget_slash_command.status=status:card=session:model:permissions:tokens:inserted=true:prefetch=false:request=0:refreshing=false:event=false\ntui.chat_widget_slash_command.status=status:card=session:model:permissions:limits:inserted=true:prefetch=true:request=7:refreshing=true:event=true\ntui.chat_widget_slash_command.availability=clear:task=true:side=false:side_allowed=false:allowed=false:drained=true:redraw=true\ntui.chat_widget_slash_command.availability=goal:task=false:side=true:side_allowed=false:allowed=false:drained=true:redraw=false\ntui.chat_widget_slash_command.failure=live_slash_command_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget slash command raw status\ninput> \ntrace:\ntui.chat_widget_slash_command.plan=headless\ntui.chat_widget_slash_command.dispatch=raw:source=live:history=true->true:task=false:side=false:allowed=true:redraw=true\ntui.chat_widget_slash_command.raw=raw:args=:raw=false->true:config=true:notice=true:surfaces=true:event=true\ntui.chat_widget_slash_command.inline_args=raw:args=off:supports=true:trimmed=true:fallback=false\ntui.chat_widget_slash_command.raw=raw:args=off:raw=true->false:config=true:notice=true:surfaces=true:event=true\ntui.chat_widget_slash_command.app_event=RawOutputModeChanged(false):command=raw:sent=true\ntui.chat_widget_slash_command.dispatch=status:source=queued:history=true->true:task=true:side=true:allowed=true:redraw=true\ntui.chat_widget_slash_command.status=status:card=session:model:permissions:tokens:inserted=true:prefetch=false:request=0:refreshing=false:event=false\ntui.chat_widget_slash_command.status=status:card=session:model:permissions:limits:inserted=true:prefetch=true:request=7:refreshing=true:event=true\ntui.chat_widget_slash_command.availability=clear:task=true:side=false:side_allowed=false:allowed=false:drained=true:redraw=true\ntui.chat_widget_slash_command.availability=goal:task=false:side=true:side_allowed=false:allowed=false:drained=true:redraw=false\ntui.chat_widget_slash_command.failure=live_slash_command_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-status-card-output-headless",
+      "frame": {
+        "name": "chatwidget-status-card-output-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget status card output"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_status_card",
+          "chatWidgetStatusCard": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "summary",
+                "commandRow": "/status",
+                "rowCount": 12,
+                "statusOutputInserted": true,
+                "showChatGptUsageLink": true,
+                "remoteConnectionVisible": true
+              },
+              {
+                "kind": "model_provider",
+                "model": "gpt-5.2-codex",
+                "modelDetails": "reasoning effort medium, reasoning summaries auto",
+                "provider": "openai",
+                "runtimeProvider": "responses",
+                "account": "dev@example.com (Plus)"
+              },
+              {
+                "kind": "permissions",
+                "permissions": "workspace-write on /workspace plus network disabled",
+                "directory": "/workspace/tests",
+                "agentsSummary": "<none>"
+              },
+              {
+                "kind": "thread_session",
+                "threadName": "Status card parity",
+                "sessionId": "11111111-2222-3333-4444-555555555555",
+                "forkedFrom": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+                "collaborationMode": "Code"
+              },
+              {
+                "kind": "token_usage",
+                "totalTokens": 2200,
+                "inputTokens": 1400,
+                "outputTokens": 600,
+                "tokenUsageVisible": true,
+                "contextUsed": 2000,
+                "contextWindow": 200000,
+                "contextPercentRemaining": 99,
+                "contextWindowVisible": true
+              },
+              {
+                "kind": "rate_limit",
+                "rateLimitState": "available",
+                "rateLimitLabel": "5h limit",
+                "rateLimitSummary": "55% left",
+                "rateLimitReset": "in 15m",
+                "rateLimitDetails": "",
+                "rateLimitWarning": "",
+                "rateLimitRowCount": 3,
+                "refreshingRateLimits": false
+              },
+              {
+                "kind": "rate_limit",
+                "rateLimitState": "available",
+                "rateLimitLabel": "Credits",
+                "rateLimitSummary": "38 credits",
+                "rateLimitReset": "",
+                "rateLimitDetails": "",
+                "rateLimitWarning": "",
+                "rateLimitRowCount": 3,
+                "refreshingRateLimits": false
+              },
+              {
+                "kind": "rate_limit",
+                "rateLimitState": "stale",
+                "rateLimitLabel": "5h limit",
+                "rateLimitSummary": "28% left",
+                "rateLimitReset": "in 10m",
+                "rateLimitWarning": "limits may be stale - start new turn to refresh.",
+                "rateLimitRowCount": 2,
+                "refreshingRateLimits": false
+              },
+              {
+                "kind": "rate_limit",
+                "rateLimitState": "missing",
+                "rateLimitLabel": "Limits",
+                "rateLimitSummary": "refresh requested; run /status again shortly.",
+                "rateLimitRowCount": 1,
+                "refreshingRateLimits": true
+              },
+              {
+                "kind": "rate_limit",
+                "rateLimitState": "unavailable",
+                "rateLimitLabel": "Limits",
+                "rateLimitSummary": "not available for this account",
+                "rateLimitRowCount": 1,
+                "refreshingRateLimits": false
+              },
+              {
+                "kind": "refresh",
+                "rateLimitState": "available",
+                "rateLimitRowCount": 3,
+                "refreshCompleted": true,
+                "refreshingRateLimits": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_status_card_render_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.summary=command=/status:rows=12:inserted=true:usage_link=true:remote=true\ntui.chat_widget_status_card.model=gpt-5.2-codex:details=reasoning effort medium, reasoning summaries auto:provider=openai:runtime=responses:account=dev@example.com (Plus)\ntui.chat_widget_status_card.permissions=workspace-write on /workspace plus network disabled:dir=/workspace/tests:agents=<none>\ntui.chat_widget_status_card.thread=Status card parity:session=11111111-2222-3333-4444-555555555555:forked_from=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:collab=Code\ntui.chat_widget_status_card.tokens=total=2200:input=1400:output=600:visible=true:context=2000/200000:context_left=99:context_visible=true\ntui.chat_widget_status_card.rate_limit=available:label=5h limit:summary=55% left:reset=in 15m:details=:warning=:rows=3:refreshing=false\ntui.chat_widget_status_card.rate_limit=available:label=Credits:summary=38 credits:reset=:details=:warning=:rows=3:refreshing=false\ntui.chat_widget_status_card.rate_limit=stale:label=5h limit:summary=28% left:reset=in 10m:details=:warning=limits may be stale - start new turn to refresh.:rows=2:refreshing=false\ntui.chat_widget_status_card.rate_limit=missing:label=Limits:summary=refresh requested; run /status again shortly.:reset=:details=:warning=:rows=1:refreshing=true\ntui.chat_widget_status_card.rate_limit=unavailable:label=Limits:summary=not available for this account:reset=:details=:warning=:rows=1:refreshing=false\ntui.chat_widget_status_card.refresh=available:rows=3:completed=true:refreshing=false\ntui.chat_widget_status_card.failure=live_status_card_render_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget status card output\ninput> \ntrace:\ntui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.summary=command=/status:rows=12:inserted=true:usage_link=true:remote=true\ntui.chat_widget_status_card.model=gpt-5.2-codex:details=reasoning effort medium, reasoning summaries auto:provider=openai:runtime=responses:account=dev@example.com (Plus)\ntui.chat_widget_status_card.permissions=workspace-write on /workspace plus network disabled:dir=/workspace/tests:agents=<none>\ntui.chat_widget_status_card.thread=Status card parity:session=11111111-2222-3333-4444-555555555555:forked_from=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:collab=Code\ntui.chat_widget_status_card.tokens=total=2200:input=1400:output=600:visible=true:context=2000/200000:context_left=99:context_visible=true\ntui.chat_widget_status_card.rate_limit=available:label=5h limit:summary=55% left:reset=in 15m:details=:warning=:rows=3:refreshing=false\ntui.chat_widget_status_card.rate_limit=available:label=Credits:summary=38 credits:reset=:details=:warning=:rows=3:refreshing=false\ntui.chat_widget_status_card.rate_limit=stale:label=5h limit:summary=28% left:reset=in 10m:details=:warning=limits may be stale - start new turn to refresh.:rows=2:refreshing=false\ntui.chat_widget_status_card.rate_limit=missing:label=Limits:summary=refresh requested; run /status again shortly.:reset=:details=:warning=:rows=1:refreshing=true\ntui.chat_widget_status_card.rate_limit=unavailable:label=Limits:summary=not available for this account:reset=:details=:warning=:rows=1:refreshing=false\ntui.chat_widget_status_card.refresh=available:rows=3:completed=true:refreshing=false\ntui.chat_widget_status_card.failure=live_status_card_render_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

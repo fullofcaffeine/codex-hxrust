@@ -2842,6 +2842,18 @@ Model selected raw Codex ChatWidget slash-command dispatch behavior without live
 
 Status: HXCX-TUI-85 extends `fixtures/hxrust/tui-smoke.v1.json` with typed slash-command dispatch, `/raw` bare and inline-arg mode effects, `/status` card and rate-limit refresh intent, app-event emission, task/side availability guards, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic ChatWidget slash-command effect evidence only, not the full popup lifecycle, live command execution, full `/status` ratatui card rendering, config-file persistence, app-server transport, or model traffic.
 
+### HXCX-TUI-86: ChatWidget Status-Card Output Boundary
+
+Model selected raw Codex `/status` card output behavior without live terminal mutation, ratatui rendering, app-server mutation, command execution, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/status/card.rs` card composition: the status output is a composite history cell rooted in the literal `/status` command row, then model/provider/account, directory, permissions, Agents.md summary, thread/session/fork/collaboration metadata, token usage, context window, and rate-limit rows;
+- preserve model/provider detail rows: Responses-backed providers include reasoning effort and reasoning summary details, runtime provider display can differ from configured provider, and ChatGPT usage-link visibility depends on OpenAI-auth-backed providers;
+- preserve permission/session rows from `card.rs`: permission labels summarize active approval/sandbox/workspace roots, thread names are omitted when empty, session and fork ids appear together, and collaboration mode is a normal status row;
+- preserve token usage behavior: API-key style status output shows total, non-cached input, output, and context-window usage while ChatGPT subscriber hiding can be modeled in later cases;
+- preserve `../codex/codex-rs/tui/src/status/rate_limits.rs` display-state contracts: available rows include window labels/resets and credit rows, stale rows add the correct warning, missing refreshing rows use the "refresh requested" message, unavailable rows show account unavailability, and `StatusHistoryHandle::finish_rate_limit_refresh` clears the refreshing state after a refresh.
+
+Status: HXCX-TUI-86 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-card summary, model/provider/account, permissions, thread/session/collaboration, token/context, available/stale/missing/unavailable rate-limit, refresh-completion, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic `/status` card row evidence only, not full ratatui span rendering, terminal width wrapping, live rate-limit fetching, account auth, app-server transport, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
