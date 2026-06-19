@@ -306,6 +306,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ClipboardPaste:
+					if (!traceClipboardPaste(event.clipboardPaste, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -2041,6 +2046,73 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.clipboard_copy.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceClipboardPaste(plan:TuiSmokeClipboardPastePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveClipboard || plan.allowProcessSpawn || plan.allowFilesystemMutation || !plan.enabled()) {
+			trace.push("tui.clipboard_paste.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.clipboard_paste.plan=headless");
+		for (action in plan.actions) {
+			if (!action.decisionMatches()) {
+				trace.push("tui.clipboard_paste.decision_mismatch=" + action.computedDecision() + ":expected=" + action.expectedDecision);
+				return false;
+			}
+			switch action.kind {
+				case TuiSmokeClipboardPasteActionKind.Probe:
+					trace.push(
+						"tui.clipboard_paste.probe="
+						+ action.computedDecision()
+						+ ":wsl=" + action.wslSession
+						+ ":native_clipboard=" + action.nativeClipboardAvailable
+						+ ":native_file=" + action.nativeFileAvailable
+						+ ":native_image=" + action.nativeImageAvailable
+						+ ":wsl_attempt=" + action.wslFallbackAttempted
+					);
+				case TuiSmokeClipboardPasteActionKind.ImageAccept:
+					if (!action.placeholderMatches() || !action.localImageCountMatches()) {
+						trace.push("tui.clipboard_paste.image_mismatch=placeholder=" + action.computedPlaceholder() + ":local_after=" + action.localImageCountAfter);
+						return false;
+					}
+					trace.push(
+						"tui.clipboard_paste.image="
+						+ action.computedDecision()
+						+ ":placeholder=" + action.computedPlaceholder()
+						+ ":path=" + action.tempPath
+						+ ":format=" + action.formatLabel()
+						+ ":dimensions=" + action.width + "x" + action.height
+						+ ":bytes=" + action.imageBytes
+						+ ":local=" + action.localImageCountBefore + "->" + action.localImageCountAfter
+					);
+				case TuiSmokeClipboardPasteActionKind.WslPath:
+					if (!action.wslPathMatches()) {
+						trace.push("tui.clipboard_paste.wsl_path_mismatch=" + action.computedWslPath() + ":expected=" + action.wslPath);
+						return false;
+					}
+					trace.push("tui.clipboard_paste.wsl_path=" + action.windowsPath + "->" + action.computedWslPath());
+				case TuiSmokeClipboardPasteActionKind.Refusal:
+					trace.push(
+						"tui.clipboard_paste.refusal="
+						+ action.computedDecision()
+						+ ":source=" + action.source
+						+ ":bytes=" + action.imageBytes
+						+ ":max=" + action.maxImageBytes
+					);
+				case TuiSmokeClipboardPasteActionKind.Failure:
+					trace.push(
+						"tui.clipboard_paste.failure="
+						+ action.failureCode
+						+ ":clipboard=" + action.liveClipboardAllowed
+						+ ":process=" + action.processSpawnAllowed
+						+ ":filesystem=" + action.filesystemMutationAllowed
+					);
+				case _:
+					trace.push("tui.clipboard_paste.unknown");
 					return false;
 			}
 		}

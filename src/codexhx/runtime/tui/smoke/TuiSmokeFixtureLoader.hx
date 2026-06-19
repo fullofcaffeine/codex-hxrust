@@ -111,7 +111,57 @@ class TuiSmokeFixtureLoader {
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
 				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe"),
-				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy")
+				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy"),
+				clipboardPaste: optionalClipboardPastePlan(value, "clipboardPaste")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalClipboardPastePlan(object:Value, name:String):Null<TuiSmokeClipboardPastePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeClipboardPastePlan({
+					allowLiveClipboard: optionalBoolField(value, "allowLiveClipboard", false),
+					allowProcessSpawn: optionalBoolField(value, "allowProcessSpawn", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					actions: clipboardPasteActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function clipboardPasteActions(values:Array<Value>):Array<TuiSmokeClipboardPasteAction> {
+		final out:Array<TuiSmokeClipboardPasteAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeClipboardPasteAction({
+				kind: TuiSmokeClipboardPasteActionKind.fromString(stringField(value, "kind", "")),
+				source: optionalStringField(value, "source", ""),
+				errorKind: optionalStringField(value, "errorKind", ""),
+				wslSession: optionalBoolField(value, "wslSession", false),
+				nativeClipboardAvailable: optionalBoolField(value, "nativeClipboardAvailable", false),
+				nativeImageAvailable: optionalBoolField(value, "nativeImageAvailable", false),
+				nativeFileAvailable: optionalBoolField(value, "nativeFileAvailable", false),
+				wslFallbackAttempted: optionalBoolField(value, "wslFallbackAttempted", false),
+				wslFallbackSucceeded: optionalBoolField(value, "wslFallbackSucceeded", false),
+				windowsPath: optionalStringField(value, "windowsPath", ""),
+				wslPath: optionalStringField(value, "wslPath", ""),
+				tempPath: optionalStringField(value, "tempPath", ""),
+				width: optionalIntField(value, "width", 0),
+				height: optionalIntField(value, "height", 0),
+				format: optionalStringField(value, "format", "png"),
+				imageBytes: optionalIntField(value, "imageBytes", 0),
+				maxImageBytes: optionalIntField(value, "maxImageBytes", 10000000),
+				placeholder: optionalStringField(value, "placeholder", ""),
+				remoteImageCount: optionalIntField(value, "remoteImageCount", 0),
+				localImageCountBefore: optionalIntField(value, "localImageCountBefore", 0),
+				localImageCountAfter: optionalIntField(value, "localImageCountAfter", 0),
+				insertedPlaceholder: optionalBoolField(value, "insertedPlaceholder", false),
+				expectedDecision: optionalStringField(value, "expectedDecision", ""),
+				liveClipboardAllowed: optionalBoolField(value, "liveClipboardAllowed", false),
+				processSpawnAllowed: optionalBoolField(value, "processSpawnAllowed", false),
+				filesystemMutationAllowed: optionalBoolField(value, "filesystemMutationAllowed", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

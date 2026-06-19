@@ -52,6 +52,7 @@ typedef TuiSmokeEventFields = {
 	final terminalPalette:Null<TuiSmokeTerminalPalettePlan>;
 	final terminalStartupProbe:Null<TuiSmokeTerminalStartupProbePlan>;
 	final clipboardCopy:Null<TuiSmokeClipboardCopyPlan>;
+	final clipboardPaste:Null<TuiSmokeClipboardPastePlan>;
 }
 
 @:build(codexhx.macros.FieldRecordConstructor.build())
@@ -110,4 +111,5 @@ class TuiSmokeEvent {
 	public final terminalPalette:Null<TuiSmokeTerminalPalettePlan>;
 	public final terminalStartupProbe:Null<TuiSmokeTerminalStartupProbePlan>;
 	public final clipboardCopy:Null<TuiSmokeClipboardCopyPlan>;
+	public final clipboardPaste:Null<TuiSmokeClipboardPastePlan>;
 }

@@ -2472,6 +2472,18 @@ Model selected raw Codex clipboard-copy behavior without touching real clipboard
 
 Status: HXCX-TUI-56 extends `fixtures/hxrust/tui-smoke.v1.json` with typed clipboard route, tmux readiness, OSC 52 shaping, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic clipboard-boundary evidence only, not live clipboard ownership.
 
+### HXCX-TUI-57: Clipboard Paste Image Intake Boundary
+
+Model selected raw Codex clipboard-paste image behavior without touching real clipboards, processes, or filesystems:
+
+- preserve image intake anchors from `../codex/codex-rs/tui/src/clipboard_paste.rs`: native paste prefers clipboard file-list image paths when available, otherwise encodes clipboard image bytes as PNG, maps `ClipboardUnavailable`, `NoImage`, `EncodeFailed`, and `IoError`, and reports `PNG`, `JPEG`, or generic `IMG` labels;
+- preserve WSL fallback intent from `clipboard_paste.rs`: only WSL sessions with native clipboard unavailability or no-image errors try PowerShell/Pwsh fallback, and returned Windows temp paths are converted to WSL `/mnt/<drive>/...` paths before composer handoff;
+- preserve composer handoff from `../codex/codex-rs/tui/src/bottom_pane/chat_composer/attachment_state.rs` and `chat_composer.rs`: accepted local images insert stable `[Image #N]` placeholders, numbering accounts for existing remote and local attachments, and local attachment counts advance only when a placeholder is inserted;
+- preserve refusal evidence for no image, unsupported payloads, and oversized payloads without synthesizing live clipboard contents;
+- keep the evidence deterministic and independent of live clipboard reads, arboard/native GUI handles, PowerShell/Pwsh process spawning, temp-file writes, image decoding, ratatui rendering, app-server mutation, model/tool execution, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-57 extends `fixtures/hxrust/tui-smoke.v1.json` with typed clipboard paste probes, image acceptance, WSL path conversion, refusal cases, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic image-intake evidence only, not live clipboard or filesystem ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
