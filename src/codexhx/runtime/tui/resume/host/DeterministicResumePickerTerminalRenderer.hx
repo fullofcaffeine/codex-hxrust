@@ -68,8 +68,17 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 				}
 			}
 		}
-		if (state.moreBelow || state.loadingOlderShown) {
-			lines.push("page next=" + emptyLabel(state.nextCursor) + " moreBelow=" + boolLabel(state.moreBelow) + " loadingOlder=" + boolLabel(state.loadingOlderShown));
+		if (state.nextCursorPresent || state.moreBelow || state.loadingOlderShown || state.reachedScanCap) {
+			lines.push("page next="
+				+ emptyLabel(state.nextCursor)
+				+ " moreBelow="
+				+ boolLabel(state.moreBelow)
+				+ " loadingOlder="
+				+ boolLabel(state.loadingOlderShown)
+				+ " scanCap="
+				+ boolLabel(state.reachedScanCap)
+				+ " nextPresent="
+				+ boolLabel(state.nextCursorPresent));
 		}
 		if (state.loadingOverlayMessage.length > 0) {
 			lines.push("overlay loading thread=" + emptyLabel(state.pendingThreadId) + " message=" + state.loadingOverlayMessage);

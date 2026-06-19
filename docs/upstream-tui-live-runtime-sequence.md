@@ -3216,6 +3216,17 @@ Extend the normalized resume picker renderer from bounded loader backpressure ev
 
 Status: HXCX-TUI-116 teaches `DeterministicResumePickerTerminalRenderer` to include `invalid` row counts and `cwd` row metadata, and adds `ResumePickerInvalidRowProjectionRenderGate`, `ResumePickerInvalidRowProjectionRenderGateReport`, `test/ResumePickerInvalidRowProjectionRenderHarness.hx`, `hxml/resume-picker-invalid-row-projection-render.hxml`, and `harness/check-resume-picker-invalid-row-projection-render.sh`. The gate validates three accepted rows out of five scanned rows, two invalid/skipped rows, fallback display rows, timestamp/cwd metadata, loader status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-117: Resume Picker Scan-Cap Render Snapshot Gate
+
+Extend the normalized resume picker renderer from row projection evidence into reached-scan-cap pagination evidence:
+
+- render reached-scan-cap pages with next-cursor, `moreBelow`, loading-older, and explicit `scanCap=true` evidence;
+- render ordinary non-capped pages with `scanCap=false`, next-cursor policy, and footer/list recovery;
+- keep the final recovered list visible with no remaining next cursor;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-117 teaches `DeterministicResumePickerTerminalRenderer` to include normalized `scanCap` and `nextPresent` page evidence, and adds `ResumePickerScanCapRenderGate`, `ResumePickerScanCapRenderGateReport`, `test/ResumePickerScanCapRenderHarness.hx`, `hxml/resume-picker-scan-cap-render.hxml`, and `harness/check-resume-picker-scan-cap-render.sh`. The gate validates capped-page rendering, capped-cursor loading state, non-capped cursor pagination, final list recovery, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
