@@ -266,6 +266,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetCommandLifecycle:
+					if (!traceCommandLifecycle(event.chatWidgetCommandLifecycle, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3246,6 +3251,118 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_status_state.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceCommandLifecycle(plan:TuiSmokeCommandLifecyclePlan, trace:Array<String>):Bool {
+		if (
+			plan == null
+			|| plan.allowLiveTerminal
+			|| plan.allowProcessSpawn
+			|| plan.allowRatatuiRender
+			|| plan.allowModelCall
+			|| !plan.enabled()
+		) {
+			trace.push("tui.chat_widget_command_lifecycle.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_command_lifecycle.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeCommandLifecycleActionKind.ProcessBegin:
+					trace.push(
+						"tui.chat_widget_command_lifecycle.process_begin="
+						+ action.callId
+						+ ":process=" + action.processId
+						+ ":command=" + action.commandDisplay
+						+ ":count=" + action.processCountBefore + "->" + action.processCountAfter
+						+ ":footer=" + action.footerProcesses
+						+ ":synced=" + action.footerSynced
+					);
+				case TuiSmokeCommandLifecycleActionKind.OutputChunk:
+					trace.push(
+						"tui.chat_widget_command_lifecycle.output="
+						+ action.callId
+						+ ":tracked=" + action.outputTracked
+						+ ":chunks=" + action.recentChunkCountBefore + "->" + action.recentChunkCountAfter
+						+ ":recent=" + action.recentChunks
+						+ ":trimmed=" + action.recentChunksTrimmed
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeCommandLifecycleActionKind.ProcessEnd:
+					trace.push(
+						"tui.chat_widget_command_lifecycle.process_end="
+						+ action.callId
+						+ ":process=" + action.processId
+						+ ":count=" + action.processCountBefore + "->" + action.processCountAfter
+						+ ":footer=" + action.footerProcesses
+						+ ":synced=" + action.footerSynced
+					);
+				case TuiSmokeCommandLifecycleActionKind.CommandStarted:
+					trace.push(
+						"tui.chat_widget_command_lifecycle.started="
+						+ action.callId
+						+ ":source=" + action.source
+						+ ":command=" + action.command
+						+ ":parsed=" + action.parsedKind
+						+ ":task=" + action.taskRunning
+						+ ":unified=" + action.unifiedSource
+						+ ":startup=" + action.startupSource
+						+ ":standard=" + action.standardToolCall
+						+ ":status=" + action.statusEnsured
+						+ ":running=" + action.runningCommandCountBefore + "->" + action.runningCommandCountAfter
+						+ ":grouped=" + action.commandGrouped
+						+ ":wait_duplicate=" + action.waitDuplicateSuppressed
+						+ ":suppressed=" + action.suppressedExecCall
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeCommandLifecycleActionKind.TerminalInteraction:
+					trace.push(
+						"tui.chat_widget_command_lifecycle.terminal_interaction="
+						+ action.processId
+						+ ":stdin=" + action.stdin
+						+ ":display=" + action.commandDisplay
+						+ ":task=" + action.taskRunning
+						+ ":status=" + action.statusHeader
+						+ ":details=" + action.statusDetails
+						+ ":created=" + action.waitStreakCreated
+						+ ":updated=" + action.waitStreakUpdated
+						+ ":flushed=" + action.waitStreakFlushed
+						+ ":history=" + action.historyInserted
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeCommandLifecycleActionKind.CommandCompleted:
+					trace.push(
+						"tui.chat_widget_command_lifecycle.completed="
+						+ action.callId
+						+ ":source=" + action.source
+						+ ":target=" + action.endTarget
+						+ ":exit=" + action.exitCode
+						+ ":duration_ms=" + action.durationMs
+						+ ":running=" + action.runningCommandCountBefore + "->" + action.runningCommandCountAfter
+						+ ":active=" + action.activeCell
+						+ ":flushed=" + action.activeCellFlushed
+						+ ":history=" + action.historyInserted
+						+ ":redraw=" + action.activeCellRedrawn
+						+ ":suppressed_after_task=" + action.suppressedAfterTaskComplete
+						+ ":drain=" + action.queuedInputDrainRequested
+						+ ":work=" + action.hadWorkActivity
+					);
+				case TuiSmokeCommandLifecycleActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_command_lifecycle.failure="
+						+ action.failureCode
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_process=" + action.noProcessSpawn
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_command_lifecycle.unknown");
 					return false;
 			}
 		}

@@ -33,6 +33,9 @@
       "../codex/codex-rs/tui/src/chatwidget/status_surfaces.rs",
       "../codex/codex-rs/tui/src/chatwidget/status_controls.rs",
       "../codex/codex-rs/tui/src/chatwidget/status_state.rs",
+      "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
+      "../codex/codex-rs/tui/src/chatwidget/command_lifecycle.rs",
+      "../codex/codex-rs/tui/src/chatwidget/tests/exec_flow.rs",
       "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/src/tui/event_stream.rs",
       "../codex/codex-rs/tui/src/tui/keyboard_modes.rs",
@@ -13509,6 +13512,245 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_status_state.plan=headless\ntui.chat_widget_status_state.default=header=Working:details=:max=3:title_kind=Working:guardian_empty=true:pending_restore=false\ntui.chat_widget_status_state.set_status=header=Thinking:details=reading stream:max=3:guardian_review=false\ntui.chat_widget_status_state.guardian_start=id=a:detail=first:entries=a:first:count=1:header=Reviewing approval request:details=first:max=1:overflow=0:status=true\ntui.chat_widget_status_state.guardian_start=id=b:detail=second:entries=a:first,b:second:count=2:header=Reviewing 2 approval requests:details=first;second:max=4:overflow=0:status=true\ntui.chat_widget_status_state.guardian_start=id=a:detail=first updated:entries=a:first updated,b:second,c:third,d:fourth:count=4:header=Reviewing 4 approval requests:details=first updated;second;third;+1 more:max=4:overflow=1:status=true\ntui.chat_widget_status_state.guardian_finish=id=x:changed=false:entries=a:first updated,b:second,c:third,d:fourth:count=4:empty=false:status=true:header=Reviewing 4 approval requests:details=first updated;second;third;+1 more\ntui.chat_widget_status_state.guardian_finish=id=a:changed=true:entries=b:second,c:third,d:fourth:count=3:empty=false:status=true:header=Reviewing 3 approval requests:details=second;third;fourth\ntui.chat_widget_status_state.guardian_finish=id=b,c,d:changed=true:entries=:count=0:empty=true:status=false:header=:details=\ntui.chat_widget_status_state.retry_remember=current=Thinking:before=:after=Thinking:remembered=true\ntui.chat_widget_status_state.retry_remember=current=Working:before=Thinking:after=Thinking:remembered=false\ntui.chat_widget_status_state.retry_take=before=Thinking:taken=Thinking:after=:took=true\ntui.chat_widget_status_state.retry_take=before=:taken=:after=:took=false\ntui.chat_widget_status_state.title_kind=Working\ntui.chat_widget_status_state.title_kind=WaitingForBackgroundTerminal\ntui.chat_widget_status_state.title_kind=Thinking\ntui.chat_widget_status_state.failure=live_status_state_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget status state\ninput> \ntrace:\ntui.chat_widget_status_state.plan=headless\ntui.chat_widget_status_state.default=header=Working:details=:max=3:title_kind=Working:guardian_empty=true:pending_restore=false\ntui.chat_widget_status_state.set_status=header=Thinking:details=reading stream:max=3:guardian_review=false\ntui.chat_widget_status_state.guardian_start=id=a:detail=first:entries=a:first:count=1:header=Reviewing approval request:details=first:max=1:overflow=0:status=true\ntui.chat_widget_status_state.guardian_start=id=b:detail=second:entries=a:first,b:second:count=2:header=Reviewing 2 approval requests:details=first;second:max=4:overflow=0:status=true\ntui.chat_widget_status_state.guardian_start=id=a:detail=first updated:entries=a:first updated,b:second,c:third,d:fourth:count=4:header=Reviewing 4 approval requests:details=first updated;second;third;+1 more:max=4:overflow=1:status=true\ntui.chat_widget_status_state.guardian_finish=id=x:changed=false:entries=a:first updated,b:second,c:third,d:fourth:count=4:empty=false:status=true:header=Reviewing 4 approval requests:details=first updated;second;third;+1 more\ntui.chat_widget_status_state.guardian_finish=id=a:changed=true:entries=b:second,c:third,d:fourth:count=3:empty=false:status=true:header=Reviewing 3 approval requests:details=second;third;fourth\ntui.chat_widget_status_state.guardian_finish=id=b,c,d:changed=true:entries=:count=0:empty=true:status=false:header=:details=\ntui.chat_widget_status_state.retry_remember=current=Thinking:before=:after=Thinking:remembered=true\ntui.chat_widget_status_state.retry_remember=current=Working:before=Thinking:after=Thinking:remembered=false\ntui.chat_widget_status_state.retry_take=before=Thinking:taken=Thinking:after=:took=true\ntui.chat_widget_status_state.retry_take=before=:taken=:after=:took=false\ntui.chat_widget_status_state.title_kind=Working\ntui.chat_widget_status_state.title_kind=WaitingForBackgroundTerminal\ntui.chat_widget_status_state.title_kind=Thinking\ntui.chat_widget_status_state.failure=live_status_state_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-command-lifecycle-headless",
+      "frame": {
+        "name": "chatwidget-command-lifecycle-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget command lifecycle"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_command_lifecycle",
+          "chatWidgetCommandLifecycle": {
+            "allowLiveTerminal": false,
+            "allowProcessSpawn": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "process_begin",
+                "callId": "call-1",
+                "processId": "proc-1",
+                "commandDisplay": "just fix",
+                "processCountBefore": 0,
+                "processCountAfter": 1,
+                "footerProcesses": "just fix",
+                "footerSynced": true
+              },
+              {
+                "kind": "output_chunk",
+                "callId": "call-1",
+                "recentChunkCountBefore": 0,
+                "recentChunkCountAfter": 3,
+                "recentChunks": "line2|line3|line4",
+                "outputTracked": true,
+                "recentChunksTrimmed": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "command_started",
+                "callId": "call-1",
+                "source": "UnifiedExecStartup",
+                "command": "just fix",
+                "parsedKind": "standard",
+                "taskRunning": true,
+                "unifiedSource": true,
+                "startupSource": true,
+                "standardToolCall": true,
+                "statusEnsured": true,
+                "runningCommandCountBefore": 0,
+                "runningCommandCountAfter": 1,
+                "commandGrouped": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "command_started",
+                "callId": "call-unknown",
+                "source": "UnifiedExecStartup",
+                "command": "printf mystery",
+                "parsedKind": "unknown",
+                "taskRunning": true,
+                "unifiedSource": true,
+                "startupSource": true,
+                "standardToolCall": false,
+                "statusEnsured": true,
+                "runningCommandCountBefore": 1,
+                "runningCommandCountAfter": 1,
+                "commandGrouped": false,
+                "requestRedraw": false
+              },
+              {
+                "kind": "terminal_interaction",
+                "processId": "proc-1",
+                "commandDisplay": "just fix",
+                "stdin": "",
+                "taskRunning": true,
+                "statusHeader": "Waiting for background terminal",
+                "statusDetails": "just fix",
+                "waitStreakCreated": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "terminal_interaction",
+                "processId": "proc-late",
+                "commandDisplay": "sleep 5",
+                "stdin": "",
+                "taskRunning": true,
+                "statusHeader": "Waiting for background terminal",
+                "statusDetails": "sleep 5",
+                "waitStreakUpdated": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "terminal_interaction",
+                "processId": "proc-1",
+                "commandDisplay": "just fix",
+                "stdin": "ls",
+                "taskRunning": true,
+                "statusHeader": "",
+                "statusDetails": "",
+                "waitStreakFlushed": true,
+                "historyInserted": true,
+                "requestRedraw": false
+              },
+              {
+                "kind": "command_started",
+                "callId": "call-wait",
+                "source": "UnifiedExecInteraction",
+                "command": "ls",
+                "parsedKind": "standard",
+                "taskRunning": true,
+                "unifiedSource": true,
+                "standardToolCall": true,
+                "statusEnsured": true,
+                "runningCommandCountBefore": 1,
+                "runningCommandCountAfter": 1,
+                "commandGrouped": false,
+                "waitDuplicateSuppressed": true,
+                "suppressedExecCall": true,
+                "requestRedraw": false
+              },
+              {
+                "kind": "command_completed",
+                "callId": "call-1",
+                "source": "UnifiedExecStartup",
+                "endTarget": "ActiveTracked",
+                "activeCell": "exec",
+                "exitCode": 0,
+                "durationMs": 1250,
+                "runningCommandCountBefore": 1,
+                "runningCommandCountAfter": 0,
+                "activeCellFlushed": true,
+                "historyInserted": true,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "command_completed",
+                "callId": "call-orphan",
+                "source": "UnifiedExecStartup",
+                "endTarget": "OrphanHistoryWhileActiveExec",
+                "activeCell": "exploring",
+                "exitCode": 0,
+                "durationMs": 50,
+                "runningCommandCountBefore": 0,
+                "runningCommandCountAfter": 0,
+                "historyInserted": true,
+                "activeCellRedrawn": true,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "command_completed",
+                "callId": "call-new",
+                "source": "Agent",
+                "endTarget": "NewCell",
+                "activeCell": "none",
+                "exitCode": 2,
+                "durationMs": 80,
+                "runningCommandCountBefore": 0,
+                "runningCommandCountAfter": 0,
+                "activeCellFlushed": true,
+                "historyInserted": true,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "command_completed",
+                "callId": "call-after-task",
+                "source": "UnifiedExecStartup",
+                "endTarget": "SuppressedAfterTaskComplete",
+                "activeCell": "none",
+                "exitCode": 0,
+                "durationMs": 0,
+                "runningCommandCountBefore": 0,
+                "runningCommandCountAfter": 0,
+                "suppressedAfterTaskComplete": true,
+                "historyInserted": false,
+                "hadWorkActivity": false
+              },
+              {
+                "kind": "command_completed",
+                "callId": "call-shell",
+                "source": "UserShell",
+                "endTarget": "NewCell",
+                "activeCell": "none",
+                "exitCode": 0,
+                "durationMs": 10,
+                "runningCommandCountBefore": 0,
+                "runningCommandCountAfter": 0,
+                "activeCellFlushed": true,
+                "historyInserted": true,
+                "queuedInputDrainRequested": true,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "process_end",
+                "callId": "call-1",
+                "processId": "proc-1",
+                "processCountBefore": 1,
+                "processCountAfter": 0,
+                "footerProcesses": "",
+                "footerSynced": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_command_lifecycle_rejected",
+                "noLiveTerminal": true,
+                "noProcessSpawn": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_command_lifecycle.plan=headless\ntui.chat_widget_command_lifecycle.process_begin=call-1:process=proc-1:command=just fix:count=0->1:footer=just fix:synced=true\ntui.chat_widget_command_lifecycle.output=call-1:tracked=true:chunks=0->3:recent=line2|line3|line4:trimmed=true:redraw=true\ntui.chat_widget_command_lifecycle.started=call-1:source=UnifiedExecStartup:command=just fix:parsed=standard:task=true:unified=true:startup=true:standard=true:status=true:running=0->1:grouped=true:wait_duplicate=false:suppressed=false:redraw=true\ntui.chat_widget_command_lifecycle.started=call-unknown:source=UnifiedExecStartup:command=printf mystery:parsed=unknown:task=true:unified=true:startup=true:standard=false:status=true:running=1->1:grouped=false:wait_duplicate=false:suppressed=false:redraw=false\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-1:stdin=:display=just fix:task=true:status=Waiting for background terminal:details=just fix:created=true:updated=false:flushed=false:history=false:redraw=true\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-late:stdin=:display=sleep 5:task=true:status=Waiting for background terminal:details=sleep 5:created=false:updated=true:flushed=false:history=false:redraw=true\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-1:stdin=ls:display=just fix:task=true:status=:details=:created=false:updated=false:flushed=true:history=true:redraw=false\ntui.chat_widget_command_lifecycle.started=call-wait:source=UnifiedExecInteraction:command=ls:parsed=standard:task=true:unified=true:startup=false:standard=true:status=true:running=1->1:grouped=false:wait_duplicate=true:suppressed=true:redraw=false\ntui.chat_widget_command_lifecycle.completed=call-1:source=UnifiedExecStartup:target=ActiveTracked:exit=0:duration_ms=1250:running=1->0:active=exec:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-orphan:source=UnifiedExecStartup:target=OrphanHistoryWhileActiveExec:exit=0:duration_ms=50:running=0->0:active=exploring:flushed=false:history=true:redraw=true:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-new:source=Agent:target=NewCell:exit=2:duration_ms=80:running=0->0:active=none:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-after-task:source=UnifiedExecStartup:target=SuppressedAfterTaskComplete:exit=0:duration_ms=0:running=0->0:active=none:flushed=false:history=false:redraw=false:suppressed_after_task=true:drain=false:work=false\ntui.chat_widget_command_lifecycle.completed=call-shell:source=UserShell:target=NewCell:exit=0:duration_ms=10:running=0->0:active=none:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=true:work=true\ntui.chat_widget_command_lifecycle.process_end=call-1:process=proc-1:count=1->0:footer=:synced=true\ntui.chat_widget_command_lifecycle.failure=live_command_lifecycle_rejected:no_live=true:no_process=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget command lifecycle\ninput> \ntrace:\ntui.chat_widget_command_lifecycle.plan=headless\ntui.chat_widget_command_lifecycle.process_begin=call-1:process=proc-1:command=just fix:count=0->1:footer=just fix:synced=true\ntui.chat_widget_command_lifecycle.output=call-1:tracked=true:chunks=0->3:recent=line2|line3|line4:trimmed=true:redraw=true\ntui.chat_widget_command_lifecycle.started=call-1:source=UnifiedExecStartup:command=just fix:parsed=standard:task=true:unified=true:startup=true:standard=true:status=true:running=0->1:grouped=true:wait_duplicate=false:suppressed=false:redraw=true\ntui.chat_widget_command_lifecycle.started=call-unknown:source=UnifiedExecStartup:command=printf mystery:parsed=unknown:task=true:unified=true:startup=true:standard=false:status=true:running=1->1:grouped=false:wait_duplicate=false:suppressed=false:redraw=false\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-1:stdin=:display=just fix:task=true:status=Waiting for background terminal:details=just fix:created=true:updated=false:flushed=false:history=false:redraw=true\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-late:stdin=:display=sleep 5:task=true:status=Waiting for background terminal:details=sleep 5:created=false:updated=true:flushed=false:history=false:redraw=true\ntui.chat_widget_command_lifecycle.terminal_interaction=proc-1:stdin=ls:display=just fix:task=true:status=:details=:created=false:updated=false:flushed=true:history=true:redraw=false\ntui.chat_widget_command_lifecycle.started=call-wait:source=UnifiedExecInteraction:command=ls:parsed=standard:task=true:unified=true:startup=false:standard=true:status=true:running=1->1:grouped=false:wait_duplicate=true:suppressed=true:redraw=false\ntui.chat_widget_command_lifecycle.completed=call-1:source=UnifiedExecStartup:target=ActiveTracked:exit=0:duration_ms=1250:running=1->0:active=exec:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-orphan:source=UnifiedExecStartup:target=OrphanHistoryWhileActiveExec:exit=0:duration_ms=50:running=0->0:active=exploring:flushed=false:history=true:redraw=true:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-new:source=Agent:target=NewCell:exit=2:duration_ms=80:running=0->0:active=none:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=false:work=true\ntui.chat_widget_command_lifecycle.completed=call-after-task:source=UnifiedExecStartup:target=SuppressedAfterTaskComplete:exit=0:duration_ms=0:running=0->0:active=none:flushed=false:history=false:redraw=false:suppressed_after_task=true:drain=false:work=false\ntui.chat_widget_command_lifecycle.completed=call-shell:source=UserShell:target=NewCell:exit=0:duration_ms=10:running=0->0:active=none:flushed=true:history=true:redraw=false:suppressed_after_task=false:drain=true:work=true\ntui.chat_widget_command_lifecycle.process_end=call-1:process=proc-1:count=1->0:footer=:synced=true\ntui.chat_widget_command_lifecycle.failure=live_command_lifecycle_rejected:no_live=true:no_process=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

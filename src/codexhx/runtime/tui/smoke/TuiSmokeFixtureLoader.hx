@@ -104,6 +104,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetMcpStartup: optionalMcpStartupPlan(value, "chatWidgetMcpStartup"),
 				chatWidgetStatusSurface: optionalStatusSurfacePlan(value, "chatWidgetStatusSurface"),
 				chatWidgetStatusState: optionalStatusStatePlan(value, "chatWidgetStatusState"),
+				chatWidgetCommandLifecycle: optionalCommandLifecyclePlan(value, "chatWidgetCommandLifecycle"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -922,6 +923,82 @@ class TuiSmokeFixtureLoader {
 				retryHeaderRemembered: optionalBoolField(value, "retryHeaderRemembered", false),
 				retryHeaderTaken: optionalBoolField(value, "retryHeaderTaken", false),
 				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalCommandLifecyclePlan(object:Value, name:String):Null<TuiSmokeCommandLifecyclePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeCommandLifecyclePlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowProcessSpawn: optionalBoolField(value, "allowProcessSpawn", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: commandLifecycleActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function commandLifecycleActions(values:Array<Value>):Array<TuiSmokeCommandLifecycleAction> {
+		final out:Array<TuiSmokeCommandLifecycleAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeCommandLifecycleAction({
+				kind: TuiSmokeCommandLifecycleActionKind.fromString(stringField(value, "kind", "")),
+				callId: optionalStringField(value, "callId", ""),
+				processId: optionalStringField(value, "processId", ""),
+				source: optionalStringField(value, "source", ""),
+				command: optionalStringField(value, "command", ""),
+				commandDisplay: optionalStringField(value, "commandDisplay", ""),
+				parsedKind: optionalStringField(value, "parsedKind", ""),
+				activeCell: optionalStringField(value, "activeCell", ""),
+				endTarget: optionalStringField(value, "endTarget", ""),
+				stdout: optionalStringField(value, "stdout", ""),
+				stderr: optionalStringField(value, "stderr", ""),
+				aggregatedOutput: optionalStringField(value, "aggregatedOutput", ""),
+				recentChunks: optionalStringField(value, "recentChunks", ""),
+				footerProcesses: optionalStringField(value, "footerProcesses", ""),
+				statusHeader: optionalStringField(value, "statusHeader", ""),
+				statusDetails: optionalStringField(value, "statusDetails", ""),
+				stdin: optionalStringField(value, "stdin", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				recentChunkCountBefore: optionalIntField(value, "recentChunkCountBefore", 0),
+				recentChunkCountAfter: optionalIntField(value, "recentChunkCountAfter", 0),
+				processCountBefore: optionalIntField(value, "processCountBefore", 0),
+				processCountAfter: optionalIntField(value, "processCountAfter", 0),
+				runningCommandCountBefore: optionalIntField(value, "runningCommandCountBefore", 0),
+				runningCommandCountAfter: optionalIntField(value, "runningCommandCountAfter", 0),
+				exitCode: optionalIntField(value, "exitCode", 0),
+				durationMs: optionalIntField(value, "durationMs", 0),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				unifiedSource: optionalBoolField(value, "unifiedSource", false),
+				startupSource: optionalBoolField(value, "startupSource", false),
+				standardToolCall: optionalBoolField(value, "standardToolCall", false),
+				statusEnsured: optionalBoolField(value, "statusEnsured", false),
+				answerStreamFlushed: optionalBoolField(value, "answerStreamFlushed", false),
+				footerSynced: optionalBoolField(value, "footerSynced", false),
+				outputTracked: optionalBoolField(value, "outputTracked", false),
+				recentChunksTrimmed: optionalBoolField(value, "recentChunksTrimmed", false),
+				waitStreakCreated: optionalBoolField(value, "waitStreakCreated", false),
+				waitStreakUpdated: optionalBoolField(value, "waitStreakUpdated", false),
+				waitStreakFlushed: optionalBoolField(value, "waitStreakFlushed", false),
+				waitDuplicateSuppressed: optionalBoolField(value, "waitDuplicateSuppressed", false),
+				commandGrouped: optionalBoolField(value, "commandGrouped", false),
+				activeCellFlushed: optionalBoolField(value, "activeCellFlushed", false),
+				historyInserted: optionalBoolField(value, "historyInserted", false),
+				activeCellRedrawn: optionalBoolField(value, "activeCellRedrawn", false),
+				suppressedAfterTaskComplete: optionalBoolField(value, "suppressedAfterTaskComplete", false),
+				suppressedExecCall: optionalBoolField(value, "suppressedExecCall", false),
+				queuedInputDrainRequested: optionalBoolField(value, "queuedInputDrainRequested", false),
+				hadWorkActivity: optionalBoolField(value, "hadWorkActivity", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noProcessSpawn: optionalBoolField(value, "noProcessSpawn", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)

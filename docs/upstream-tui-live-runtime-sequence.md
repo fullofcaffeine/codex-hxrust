@@ -2587,6 +2587,19 @@ Model selected raw Codex status indicator state without live widget rendering:
 
 Status: HXCX-TUI-65 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status defaulting, status replacement, guardian review aggregation/update/finish, terminal-title status buckets, retry-header remember/take-once behavior, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic status-state evidence only, not live status-widget rendering.
 
+### HXCX-TUI-66: ChatWidget Command Lifecycle Boundary
+
+Model selected raw Codex command lifecycle bookkeeping without live process execution:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/exec_state.rs` helpers: unified exec startup/interaction sources are recognized as unified sources, standard parsed tool calls are separated from unknown command shapes, unified wait streaks keep the first non-empty command display, and duplicate wait displays can be suppressed;
+- preserve `track_unified_exec_process_begin`, `track_unified_exec_output_chunk`, `track_unified_exec_process_end`, and footer sync from `../codex/codex-rs/tui/src/chatwidget/command_lifecycle.rs`: process ids fall back to call ids, shell wrappers are reduced into command displays, recent output chunks keep only the last three non-empty lines, and the bottom-pane footer mirrors the active process list;
+- preserve command start gating: unified exec startup tracks the process before display decisions, hidden status indicators are restored while a task is running, unknown unified exec commands keep status visible without materializing a standard tool-call cell, and duplicate unified wait interactions suppress repeated exec rows;
+- preserve terminal interaction behavior: empty stdin means background polling and updates the waiting status plus wait streak, non-empty stdin flushes a matching wait streak into history and records the interaction, and post-task-complete interactions are suppressed;
+- preserve command completion targets: active tracked calls complete their current exec cell, orphan completion while another active exec cell is running inserts standalone history, end-without-begin builds a new cell from the event payload, unified exec completion after task complete is suppressed, and user-shell completion can request queued-input drain;
+- keep the evidence deterministic and independent of live shell/process spawning, terminal input, ratatui rendering, app-server mutation, model/provider calls, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-66 extends `fixtures/hxrust/tui-smoke.v1.json` with typed unified exec process tracking, recent-output trimming, start gating, wait streak updates, duplicate wait suppression, active/orphan/new completion targets, task-complete suppression, user-shell drain intent, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic command lifecycle state evidence only, not live command execution or full exec-cell rendering.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

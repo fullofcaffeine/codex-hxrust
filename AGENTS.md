@@ -18,7 +18,9 @@ The `../haxe.rust` checkout is part of the work surface for this project. Do **n
 
 Local codex-hxrust builds use the live sibling checkout through `haxe_libraries/reflaxe.rust.hxml`, which adds `../haxe.rust/src` and `../haxe.rust/std` to the Haxe classpath. That means edits in `../haxe.rust` are reflected immediately in this repo's Haxe/haxe.rust gates. The pin does not select files for local scoped builds; it records the committed known-good compiler revision for reproducibility.
 
-Work directly in `../haxe.rust` when fixing compiler/runtime limitations. Before making any change there, read `../haxe.rust/AGENTS.md` in full and follow that repository's current instructions, including its Beads workflow, test expectations, commit-message conventions, push/landing rules, and any local branch or release discipline. Do not assume codex-hxrust conventions apply inside haxe.rust unless that repo's instructions say so.
+Work directly in `../haxe.rust` when fixing compiler/runtime limitations. Before making any change there, read `../haxe.rust/AGENTS.md` in full and follow that repository's current instructions, including its test expectations, commit-message conventions, push/landing rules, and any local branch or release discipline. Do not assume codex-hxrust conventions apply inside haxe.rust unless that repo's instructions say so.
+
+`bd` issue tracking is repository-local. If haxe.rust has an active `.beads` setup and its `AGENTS.md` asks for Beads, run `bd` from `../haxe.rust` when claiming or closing haxe.rust work. Do not run this repo's `bd` and assume it scopes into haxe.rust. If haxe.rust Beads are unavailable, unclear, or not useful for the current compiler pressure note, track the follow-up from codex-hxrust Beads/docs instead and keep the haxe.rust source change itself governed by haxe.rust's local instructions.
 
 The compiler must remain a general Haxe-to-Rust backend: never add Codex-specific code, fixtures, paths, naming, or assumptions to haxe.rust. Codex-specific pressure fixtures belong in this repo; haxe.rust fixes need generic minimal repros and generic tests.
 
