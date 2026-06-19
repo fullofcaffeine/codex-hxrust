@@ -3044,6 +3044,19 @@ Extend HXCX-TUI-100 from density and toolbar behavior into selected raw Codex re
 
 Status: HXCX-TUI-101 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker footer progress labels, frozen loading percent, hint fit modes, more indicators, loading older line intent, empty/search/scan-cap render messages, transcript loading overlay text, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic footer/progress/render-state evidence only, not live crossterm input, real ratatui snapshots, live app-server fanout, state DB/rollout querying, or persistent session mutation.
 
+### HXCX-TUI-102: Resume Picker Live App-Server Terminal Integration Plan
+
+Bridge the completed deterministic resume picker smoke boundaries into the first live upstream/raw Codex haxe->rust TUI implementation sequence:
+
+- preserve the upstream split between `../codex/codex-rs/tui/src/resume_picker.rs` pure picker state and effectful loader/render/persistence surfaces: `PickerState`, `spawn_app_server_page_loader`, `load_app_server_page`, `load_transcript_preview`, `toggle_density`, and `persist_density`;
+- preserve the app-server contract from `../codex/codex-rs/tui/src/app_server_session.rs`: `AppServerSession`, `thread_list`, and `thread_read`, including no-credential fixture-backed routes before credentialed provider traffic;
+- preserve transcript overlay behavior from `../codex/codex-rs/tui/src/thread_transcript.rs` and `../codex/codex-rs/tui/src/pager_overlay.rs`: `load_session_transcript`, `thread_to_transcript_cells`, `Overlay::new_transcript`, and `TranscriptOverlay`;
+- preserve terminal and frame scheduling ownership from `../codex/codex-rs/tui/src/tui.rs`, `../codex/codex-rs/tui/src/custom_terminal.rs`, and `../codex/codex-rs/tui/src/tui/frame_requester.rs`: crossterm terminal initialization, ratatui frame draws, restore guards, `FrameRequester`, and `FrameScheduler`;
+- preserve config persistence from `../codex/codex-rs/core/src/config/edit.rs` `ConfigEditsBuilder::set_session_picker_view`, with temp-home gates before real user config mutation;
+- keep haxe.rust pressure generic: async task/channel lowering, terminal/frame borrow lifetimes, RAII restore guards, trait-object/renderable support, low-clone collections, and native result/error boundaries must be fixed in `../haxe.rust` with product-neutral fixtures if they block production-quality output.
+
+Status: HXCX-TUI-102 adds the detailed live integration plan in `docs/resume-picker-live-integration-plan.md` and leaves the Beads queue with upstream/raw implementation work before Cafex adapter work. This is planning and sequencing evidence only, not a live generated TUI binary yet.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
