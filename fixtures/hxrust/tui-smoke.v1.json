@@ -16497,6 +16497,187 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_review_mode.plan=headless\ntui.chat_widget_review_mode.popup=items=4:opened=true:branch=true:uncommitted=true:commit=true:custom=true:child_accept=true\ntui.chat_widget_review_mode.picker=branch:items=3:branches=3:commits=0:search=true:target=BaseBranch:review=true\ntui.chat_widget_review_mode.picker=commit:items=2:branches=0:commits=2:search=true:target=Commit:review=true\ntui.chat_widget_review_mode.custom=prompt=please audit dependencies:empty_ignored=true:review=true\ntui.chat_widget_review_mode.enter_exit=hint=feature branch:entered=true:exited=true:banner=true:prompt_suppressed=true:assistant_rendered=true\ntui.chat_widget_review_mode.steer_queue=pending=2:queued=1:rejected=2:submitted=2:pending_submitted=true:non_steerable=true:prepended=true:merged=true:preserved=true\ntui.chat_widget_review_mode.warning=esc_review_steers:inserted=true:interrupt=false:pending=1\ntui.chat_widget_review_mode.tokens=pre=30:review=97:restored=30:saved=true:restored_flag=true\ntui.chat_widget_review_mode.guardian=InProgress:risk=:summary=curl:header=Reviewing approval request:details=curl:parallel=1:remaining=1:status=true:history=false:warning=false:denial_stored=false:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=Denied:risk=High:summary=rm_rf:header=:details=rm_rf:parallel=1:remaining=0:status=false:history=true:warning=true:denial_stored=true:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=Approved:risk=Low:summary=git_status:header=:details=git_status:parallel=1:remaining=0:status=false:history=true:warning=false:denial_stored=false:approval_submit=true:remaining_visible=false\ntui.chat_widget_review_mode.guardian=TimedOut:risk=Medium:summary=python_script:header=:details=python_script:parallel=1:remaining=0:status=false:history=true:warning=true:denial_stored=false:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=InProgress:risk=:summary=curl,python:header=Reviewing 2 approval requests:details=curl,python:parallel=2:remaining=2:status=true:history=false:warning=false:denial_stored=false:approval_submit=false:remaining_visible=true\ntui.chat_widget_review_mode.guardian=Denied:risk=High:summary=curl:header=Reviewing approval request:details=python:parallel=2:remaining=1:status=true:history=true:warning=true:denial_stored=true:approval_submit=false:remaining_visible=true\ntui.chat_widget_review_mode.failure=live_review_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget review mode\ninput> \ntrace:\ntui.chat_widget_review_mode.plan=headless\ntui.chat_widget_review_mode.popup=items=4:opened=true:branch=true:uncommitted=true:commit=true:custom=true:child_accept=true\ntui.chat_widget_review_mode.picker=branch:items=3:branches=3:commits=0:search=true:target=BaseBranch:review=true\ntui.chat_widget_review_mode.picker=commit:items=2:branches=0:commits=2:search=true:target=Commit:review=true\ntui.chat_widget_review_mode.custom=prompt=please audit dependencies:empty_ignored=true:review=true\ntui.chat_widget_review_mode.enter_exit=hint=feature branch:entered=true:exited=true:banner=true:prompt_suppressed=true:assistant_rendered=true\ntui.chat_widget_review_mode.steer_queue=pending=2:queued=1:rejected=2:submitted=2:pending_submitted=true:non_steerable=true:prepended=true:merged=true:preserved=true\ntui.chat_widget_review_mode.warning=esc_review_steers:inserted=true:interrupt=false:pending=1\ntui.chat_widget_review_mode.tokens=pre=30:review=97:restored=30:saved=true:restored_flag=true\ntui.chat_widget_review_mode.guardian=InProgress:risk=:summary=curl:header=Reviewing approval request:details=curl:parallel=1:remaining=1:status=true:history=false:warning=false:denial_stored=false:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=Denied:risk=High:summary=rm_rf:header=:details=rm_rf:parallel=1:remaining=0:status=false:history=true:warning=true:denial_stored=true:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=Approved:risk=Low:summary=git_status:header=:details=git_status:parallel=1:remaining=0:status=false:history=true:warning=false:denial_stored=false:approval_submit=true:remaining_visible=false\ntui.chat_widget_review_mode.guardian=TimedOut:risk=Medium:summary=python_script:header=:details=python_script:parallel=1:remaining=0:status=false:history=true:warning=true:denial_stored=false:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=InProgress:risk=:summary=curl,python:header=Reviewing 2 approval requests:details=curl,python:parallel=2:remaining=2:status=true:history=false:warning=false:denial_stored=false:approval_submit=false:remaining_visible=true\ntui.chat_widget_review_mode.guardian=Denied:risk=High:summary=curl:header=Reviewing approval request:details=python:parallel=2:remaining=1:status=true:history=true:warning=true:denial_stored=true:approval_submit=false:remaining_visible=true\ntui.chat_widget_review_mode.failure=live_review_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-transcript-history-headless",
+      "frame": {
+        "name": "chatwidget-transcript-history-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget transcript history"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_transcript_history",
+          "chatWidgetTranscriptHistory": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "cell",
+                "cellKind": "HistoryCell",
+                "renderMode": "Rich",
+                "width": 72,
+                "displayLines": 2,
+                "rawLines": 2,
+                "transcriptLines": 2,
+                "height": 2,
+                "visible": true,
+                "hyperlinkAnnotated": true
+              },
+              {
+                "kind": "user",
+                "source": "live",
+                "visibleUserTurns": 1,
+                "displayLines": 4,
+                "rawLines": 2,
+                "trailingBlankTrimmed": true,
+                "remoteImagesSummarized": true,
+                "textElementsStyled": true,
+                "inserted": true
+              },
+              {
+                "kind": "assistant",
+                "source": "stream_delta",
+                "streamStarted": true,
+                "streamConsolidated": true,
+                "separatorInserted": true,
+                "copyRecorded": true,
+                "copyEntries": 1,
+                "activeCell": true
+              },
+              {
+                "kind": "reasoning",
+                "source": "summary_block",
+                "transcriptOnly": false,
+                "displayLines": 1,
+                "transcriptLines": 1,
+                "status": "High level reasoning",
+                "revision": 1
+              },
+              {
+                "kind": "reasoning",
+                "source": "raw_reasoning",
+                "transcriptOnly": true,
+                "displayLines": 0,
+                "transcriptLines": 1,
+                "status": "Thinking",
+                "revision": 2
+              },
+              {
+                "kind": "notice",
+                "cellKind": "info",
+                "message": "Model interrupted to submit steer instructions",
+                "noticeHintShown": true,
+                "inserted": true
+              },
+              {
+                "kind": "notice",
+                "cellKind": "warning",
+                "message": "MCP startup incomplete",
+                "warningDeduped": true,
+                "inserted": true
+              },
+              {
+                "kind": "notice",
+                "cellKind": "error",
+                "message": "Oversized input",
+                "errorInserted": true,
+                "inserted": true
+              },
+              {
+                "kind": "tool",
+                "toolName": "find_docs",
+                "status": "Completed",
+                "displayLines": 3,
+                "rawLines": 2,
+                "toolExtraImageCell": true,
+                "inserted": true
+              },
+              {
+                "kind": "command",
+                "command": "cargo test",
+                "status": "Succeeded",
+                "exitCode": 0,
+                "commandGrouped": true,
+                "orphanHistoryInserted": false,
+                "displayLines": 3,
+                "transcriptLines": 4
+              },
+              {
+                "kind": "command",
+                "command": "python script.py",
+                "status": "Failed",
+                "exitCode": 1,
+                "commandGrouped": false,
+                "orphanHistoryInserted": true,
+                "displayLines": 2,
+                "transcriptLines": 3
+              },
+              {
+                "kind": "transcript_mode",
+                "renderMode": "Raw",
+                "richMode": false,
+                "rawMode": true,
+                "activeRevisionBumped": true,
+                "hyperlinkAnnotated": false,
+                "transcriptLines": 12
+              },
+              {
+                "kind": "transcript_mode",
+                "renderMode": "Rich",
+                "richMode": true,
+                "rawMode": false,
+                "activeRevisionBumped": true,
+                "hyperlinkAnnotated": true,
+                "transcriptLines": 12
+              },
+              {
+                "kind": "copy_history",
+                "source": "assistant_final",
+                "visibleUserTurns": 2,
+                "copyEntries": 2,
+                "copyRecorded": true,
+                "revision": 2
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_transcript_history_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_transcript_history.plan=headless\ntui.chat_widget_transcript_history.cell=HistoryCell:mode=Rich:width=72:display=2:raw=2:transcript=2:height=2:visible=true:hyperlinks=true\ntui.chat_widget_transcript_history.user=live:turns=1:display=4:raw=2:trim=true:images=true:elements=true:inserted=true\ntui.chat_widget_transcript_history.assistant=stream_delta:stream=true:consolidated=true:separator=true:copy=true:entries=1:active=true\ntui.chat_widget_transcript_history.reasoning=summary_block:transcript_only=false:display=1:transcript=1:status=High level reasoning:revision=1\ntui.chat_widget_transcript_history.reasoning=raw_reasoning:transcript_only=true:display=0:transcript=1:status=Thinking:revision=2\ntui.chat_widget_transcript_history.notice=info:message=Model interrupted to submit steer instructions:hint=true:deduped=false:error=false:inserted=true\ntui.chat_widget_transcript_history.notice=warning:message=MCP startup incomplete:hint=false:deduped=true:error=false:inserted=true\ntui.chat_widget_transcript_history.notice=error:message=Oversized input:hint=false:deduped=false:error=true:inserted=true\ntui.chat_widget_transcript_history.tool=find_docs:status=Completed:display=3:raw=2:image_extra=true:inserted=true\ntui.chat_widget_transcript_history.command=cargo test:status=Succeeded:exit=0:grouped=true:orphan=false:display=3:transcript=4\ntui.chat_widget_transcript_history.command=python script.py:status=Failed:exit=1:grouped=false:orphan=true:display=2:transcript=3\ntui.chat_widget_transcript_history.mode=Raw:rich=false:raw=true:active_revision=true:hyperlinks=false:transcript=12\ntui.chat_widget_transcript_history.mode=Rich:rich=true:raw=false:active_revision=true:hyperlinks=true:transcript=12\ntui.chat_widget_transcript_history.copy=turns=2:entries=2:recorded=true:revision=2:source=assistant_final\ntui.chat_widget_transcript_history.failure=live_transcript_history_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget transcript history\ninput> \ntrace:\ntui.chat_widget_transcript_history.plan=headless\ntui.chat_widget_transcript_history.cell=HistoryCell:mode=Rich:width=72:display=2:raw=2:transcript=2:height=2:visible=true:hyperlinks=true\ntui.chat_widget_transcript_history.user=live:turns=1:display=4:raw=2:trim=true:images=true:elements=true:inserted=true\ntui.chat_widget_transcript_history.assistant=stream_delta:stream=true:consolidated=true:separator=true:copy=true:entries=1:active=true\ntui.chat_widget_transcript_history.reasoning=summary_block:transcript_only=false:display=1:transcript=1:status=High level reasoning:revision=1\ntui.chat_widget_transcript_history.reasoning=raw_reasoning:transcript_only=true:display=0:transcript=1:status=Thinking:revision=2\ntui.chat_widget_transcript_history.notice=info:message=Model interrupted to submit steer instructions:hint=true:deduped=false:error=false:inserted=true\ntui.chat_widget_transcript_history.notice=warning:message=MCP startup incomplete:hint=false:deduped=true:error=false:inserted=true\ntui.chat_widget_transcript_history.notice=error:message=Oversized input:hint=false:deduped=false:error=true:inserted=true\ntui.chat_widget_transcript_history.tool=find_docs:status=Completed:display=3:raw=2:image_extra=true:inserted=true\ntui.chat_widget_transcript_history.command=cargo test:status=Succeeded:exit=0:grouped=true:orphan=false:display=3:transcript=4\ntui.chat_widget_transcript_history.command=python script.py:status=Failed:exit=1:grouped=false:orphan=true:display=2:transcript=3\ntui.chat_widget_transcript_history.mode=Raw:rich=false:raw=true:active_revision=true:hyperlinks=false:transcript=12\ntui.chat_widget_transcript_history.mode=Rich:rich=true:raw=false:active_revision=true:hyperlinks=true:transcript=12\ntui.chat_widget_transcript_history.copy=turns=2:entries=2:recorded=true:revision=2:source=assistant_final\ntui.chat_widget_transcript_history.failure=live_transcript_history_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

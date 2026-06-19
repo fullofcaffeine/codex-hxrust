@@ -117,6 +117,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetModelSettings: optionalModelSettingsPlan(value, "chatWidgetModelSettings"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
+				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -258,6 +259,73 @@ class TuiSmokeFixtureLoader {
 				denialStored: optionalBoolField(value, "denialStored", false),
 				approvalSubmitted: optionalBoolField(value, "approvalSubmitted", false),
 				remainingStatusVisible: optionalBoolField(value, "remainingStatusVisible", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTranscriptHistoryPlan(object:Value, name:String):Null<TuiSmokeTranscriptHistoryPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTranscriptHistoryPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: transcriptHistoryActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function transcriptHistoryActions(values:Array<Value>):Array<TuiSmokeTranscriptHistoryAction> {
+		final out:Array<TuiSmokeTranscriptHistoryAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTranscriptHistoryAction({
+				kind: TuiSmokeTranscriptHistoryActionKind.fromString(stringField(value, "kind", "")),
+				cellKind: optionalStringField(value, "cellKind", ""),
+				renderMode: optionalStringField(value, "renderMode", ""),
+				source: optionalStringField(value, "source", ""),
+				message: optionalStringField(value, "message", ""),
+				rawText: optionalStringField(value, "rawText", ""),
+				transcriptText: optionalStringField(value, "transcriptText", ""),
+				toolName: optionalStringField(value, "toolName", ""),
+				status: optionalStringField(value, "status", ""),
+				command: optionalStringField(value, "command", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				width: optionalIntField(value, "width", 0),
+				displayLines: optionalIntField(value, "displayLines", 0),
+				rawLines: optionalIntField(value, "rawLines", 0),
+				transcriptLines: optionalIntField(value, "transcriptLines", 0),
+				height: optionalIntField(value, "height", 0),
+				visibleUserTurns: optionalIntField(value, "visibleUserTurns", 0),
+				copyEntries: optionalIntField(value, "copyEntries", 0),
+				revision: optionalIntField(value, "revision", 0),
+				exitCode: optionalIntField(value, "exitCode", 0),
+				inserted: optionalBoolField(value, "inserted", false),
+				visible: optionalBoolField(value, "visible", false),
+				rawMode: optionalBoolField(value, "rawMode", false),
+				richMode: optionalBoolField(value, "richMode", false),
+				hyperlinkAnnotated: optionalBoolField(value, "hyperlinkAnnotated", false),
+				transcriptOnly: optionalBoolField(value, "transcriptOnly", false),
+				activeCell: optionalBoolField(value, "activeCell", false),
+				activeRevisionBumped: optionalBoolField(value, "activeRevisionBumped", false),
+				streamStarted: optionalBoolField(value, "streamStarted", false),
+				streamConsolidated: optionalBoolField(value, "streamConsolidated", false),
+				separatorInserted: optionalBoolField(value, "separatorInserted", false),
+				copyRecorded: optionalBoolField(value, "copyRecorded", false),
+				trailingBlankTrimmed: optionalBoolField(value, "trailingBlankTrimmed", false),
+				remoteImagesSummarized: optionalBoolField(value, "remoteImagesSummarized", false),
+				textElementsStyled: optionalBoolField(value, "textElementsStyled", false),
+				noticeHintShown: optionalBoolField(value, "noticeHintShown", false),
+				warningDeduped: optionalBoolField(value, "warningDeduped", false),
+				errorInserted: optionalBoolField(value, "errorInserted", false),
+				commandGrouped: optionalBoolField(value, "commandGrouped", false),
+				orphanHistoryInserted: optionalBoolField(value, "orphanHistoryInserted", false),
+				toolExtraImageCell: optionalBoolField(value, "toolExtraImageCell", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),

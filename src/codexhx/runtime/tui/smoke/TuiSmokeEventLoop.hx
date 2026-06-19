@@ -331,6 +331,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetTranscriptHistory:
+					if (!traceTranscriptHistory(event.chatWidgetTranscriptHistory, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4412,6 +4417,127 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_review_mode.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceTranscriptHistory(plan:TuiSmokeTranscriptHistoryPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_transcript_history.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_transcript_history.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeTranscriptHistoryActionKind.Cell:
+					trace.push(
+						"tui.chat_widget_transcript_history.cell="
+						+ action.cellKind
+						+ ":mode=" + action.renderMode
+						+ ":width=" + action.width
+						+ ":display=" + action.displayLines
+						+ ":raw=" + action.rawLines
+						+ ":transcript=" + action.transcriptLines
+						+ ":height=" + action.height
+						+ ":visible=" + action.visible
+						+ ":hyperlinks=" + action.hyperlinkAnnotated
+					);
+				case TuiSmokeTranscriptHistoryActionKind.User:
+					trace.push(
+						"tui.chat_widget_transcript_history.user="
+						+ action.source
+						+ ":turns=" + action.visibleUserTurns
+						+ ":display=" + action.displayLines
+						+ ":raw=" + action.rawLines
+						+ ":trim=" + action.trailingBlankTrimmed
+						+ ":images=" + action.remoteImagesSummarized
+						+ ":elements=" + action.textElementsStyled
+						+ ":inserted=" + action.inserted
+					);
+				case TuiSmokeTranscriptHistoryActionKind.Assistant:
+					trace.push(
+						"tui.chat_widget_transcript_history.assistant="
+						+ action.source
+						+ ":stream=" + action.streamStarted
+						+ ":consolidated=" + action.streamConsolidated
+						+ ":separator=" + action.separatorInserted
+						+ ":copy=" + action.copyRecorded
+						+ ":entries=" + action.copyEntries
+						+ ":active=" + action.activeCell
+					);
+				case TuiSmokeTranscriptHistoryActionKind.Reasoning:
+					trace.push(
+						"tui.chat_widget_transcript_history.reasoning="
+						+ action.source
+						+ ":transcript_only=" + action.transcriptOnly
+						+ ":display=" + action.displayLines
+						+ ":transcript=" + action.transcriptLines
+						+ ":status=" + action.status
+						+ ":revision=" + action.revision
+					);
+				case TuiSmokeTranscriptHistoryActionKind.Notice:
+					trace.push(
+						"tui.chat_widget_transcript_history.notice="
+						+ action.cellKind
+						+ ":message=" + action.message
+						+ ":hint=" + action.noticeHintShown
+						+ ":deduped=" + action.warningDeduped
+						+ ":error=" + action.errorInserted
+						+ ":inserted=" + action.inserted
+					);
+				case TuiSmokeTranscriptHistoryActionKind.Tool:
+					trace.push(
+						"tui.chat_widget_transcript_history.tool="
+						+ action.toolName
+						+ ":status=" + action.status
+						+ ":display=" + action.displayLines
+						+ ":raw=" + action.rawLines
+						+ ":image_extra=" + action.toolExtraImageCell
+						+ ":inserted=" + action.inserted
+					);
+				case TuiSmokeTranscriptHistoryActionKind.Command:
+					trace.push(
+						"tui.chat_widget_transcript_history.command="
+						+ action.command
+						+ ":status=" + action.status
+						+ ":exit=" + action.exitCode
+						+ ":grouped=" + action.commandGrouped
+						+ ":orphan=" + action.orphanHistoryInserted
+						+ ":display=" + action.displayLines
+						+ ":transcript=" + action.transcriptLines
+					);
+				case TuiSmokeTranscriptHistoryActionKind.TranscriptMode:
+					trace.push(
+						"tui.chat_widget_transcript_history.mode="
+						+ action.renderMode
+						+ ":rich=" + action.richMode
+						+ ":raw=" + action.rawMode
+						+ ":active_revision=" + action.activeRevisionBumped
+						+ ":hyperlinks=" + action.hyperlinkAnnotated
+						+ ":transcript=" + action.transcriptLines
+					);
+				case TuiSmokeTranscriptHistoryActionKind.CopyHistory:
+					trace.push(
+						"tui.chat_widget_transcript_history.copy="
+						+ "turns=" + action.visibleUserTurns
+						+ ":entries=" + action.copyEntries
+						+ ":recorded=" + action.copyRecorded
+						+ ":revision=" + action.revision
+						+ ":source=" + action.source
+					);
+				case TuiSmokeTranscriptHistoryActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_transcript_history.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_transcript_history.unknown");
 					return false;
 			}
 		}

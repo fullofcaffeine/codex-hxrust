@@ -2758,6 +2758,18 @@ Model selected raw Codex review-mode and guardian-review behavior without live a
 
 Status: HXCX-TUI-78 extends `fixtures/hxrust/tui-smoke.v1.json` with typed review popup, picker, custom prompt, review enter/exit, steer queue, Esc warning, token restoration, guardian status/outcome, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic review-mode and guardian state evidence only, not live popup rendering, app-server mutation, command execution, renderer ownership, or model traffic.
 
+### HXCX-TUI-79: ChatWidget Transcript And History-Cell Boundary
+
+Model selected raw Codex transcript/history-cell behavior without live ratatui rendering, app-server mutation, command execution, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/history_cell/mod.rs` `HistoryCell` contracts: rich display lines, raw copy-friendly lines, transcript overlay lines, hyperlink annotation, width-dependent height, transcript height, and active-cell revision invalidation stay explicit;
+- preserve `../codex/codex-rs/tui/src/history_cell/messages.rs` user/assistant/reasoning behavior: user messages trim trailing blank lines, preserve styled text elements, summarize remote images, increment visible user turns, streamed assistant deltas consolidate into copyable markdown, and reasoning can be visible or transcript-only while still driving status headers;
+- preserve `../codex/codex-rs/tui/src/history_cell/notices.rs` notice surfaces: info cells can carry hints, warnings are prefixed/dedupable through ChatWidget warning state, errors render as explicit history cells, and policy/deprecation notices remain distinct future extensions;
+- preserve selected command/tool projection boundaries from `command_lifecycle.rs`, `tool_lifecycle.rs`, `exec.rs`, and `mcp.rs`: command output can group or emit orphan history, transcript rows can differ from display rows, completed tool calls may add image-output companion cells, and none of this slice executes a real command or tool;
+- keep the evidence deterministic and independent of live terminal rendering, app-server updates, command/tool execution, filesystem mutation, model/provider calls, and Cafex behavior.
+
+Status: HXCX-TUI-79 extends `fixtures/hxrust/tui-smoke.v1.json` with typed history-cell, user, assistant, reasoning, notice, tool, command, transcript-mode, copy-history, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic transcript/history state evidence only, not the full ratatui renderer, live transcript overlay, command runner, tool runtime, or app-server transport.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
