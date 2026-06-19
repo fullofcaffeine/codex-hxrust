@@ -9,6 +9,12 @@ typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 	final promptText:String;
 	final restoredText:String;
 	final composerText:String;
+	final queueSource:String;
+	final popOrder:String;
+	final historyRecord:String;
+	final localImageLabelsBefore:String;
+	final localImageLabelsAfter:String;
+	final textElementRanges:String;
 	final queuedMessagesBefore:Int;
 	final queuedMessagesAfter:Int;
 	final pendingSteersBefore:Int;
@@ -18,6 +24,7 @@ typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 	final remoteImageCount:Int;
 	final localImageCount:Int;
 	final mentionBindingCount:Int;
+	final textElementCount:Int;
 	final cancelEditEligibleBefore:Bool;
 	final cancelEditEligibleAfter:Bool;
 	final cancelEditArmedBefore:Bool;
@@ -36,6 +43,11 @@ typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 	final queuedMerged:Bool;
 	final composerMerged:Bool;
 	final composerRestored:Bool;
+	final historyFallback:Bool;
+	final historyOverrideApplied:Bool;
+	final localPlaceholdersRemapped:Bool;
+	final textElementsRebased:Bool;
+	final cursorAtEnd:Bool;
 	final cancelledTurnRestoreEventSent:Bool;
 	final pendingPreviewRefreshed:Bool;
 	final threadRollbackSent:Bool;
@@ -56,6 +68,12 @@ class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final promptText:String;
 	public final restoredText:String;
 	public final composerText:String;
+	public final queueSource:String;
+	public final popOrder:String;
+	public final historyRecord:String;
+	public final localImageLabelsBefore:String;
+	public final localImageLabelsAfter:String;
+	public final textElementRanges:String;
 	public final queuedMessagesBefore:Int;
 	public final queuedMessagesAfter:Int;
 	public final pendingSteersBefore:Int;
@@ -65,6 +83,7 @@ class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final remoteImageCount:Int;
 	public final localImageCount:Int;
 	public final mentionBindingCount:Int;
+	public final textElementCount:Int;
 	public final cancelEditEligibleBefore:Bool;
 	public final cancelEditEligibleAfter:Bool;
 	public final cancelEditArmedBefore:Bool;
@@ -83,6 +102,11 @@ class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final queuedMerged:Bool;
 	public final composerMerged:Bool;
 	public final composerRestored:Bool;
+	public final historyFallback:Bool;
+	public final historyOverrideApplied:Bool;
+	public final localPlaceholdersRemapped:Bool;
+	public final textElementsRebased:Bool;
+	public final cursorAtEnd:Bool;
 	public final cancelledTurnRestoreEventSent:Bool;
 	public final pendingPreviewRefreshed:Bool;
 	public final threadRollbackSent:Bool;

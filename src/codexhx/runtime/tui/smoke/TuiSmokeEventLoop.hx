@@ -2615,6 +2615,30 @@ class TuiSmokeEventLoop {
 						+ ":preview=" + action.pendingPreviewRefreshed
 						+ ":redraw=" + action.requestRedraw
 					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.QueuePopNext:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.queue_pop_next="
+						+ "source=" + action.queueSource
+						+ ":order=" + action.popOrder
+						+ ":queued=" + action.queuedMessagesBefore + "->" + action.queuedMessagesAfter
+						+ ":rejected=" + action.rejectedSteersBefore + "->" + action.rejectedSteersAfter
+						+ ":history=" + action.historyRecord
+						+ ":fallback=" + action.historyFallback
+						+ ":override=" + action.historyOverrideApplied
+						+ ":text=" + action.restoredText
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.QueuePopLatest:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.queue_pop_latest="
+						+ "source=" + action.queueSource
+						+ ":order=" + action.popOrder
+						+ ":queued=" + action.queuedMessagesBefore + "->" + action.queuedMessagesAfter
+						+ ":rejected=" + action.rejectedSteersBefore + "->" + action.rejectedSteersAfter
+						+ ":history=" + action.historyRecord
+						+ ":fallback=" + action.historyFallback
+						+ ":override=" + action.historyOverrideApplied
+						+ ":text=" + action.restoredText
+					);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.DrainPendingMessages:
 					trace.push(
 						"tui.chat_widget_interrupted_restore.drain_pending="
@@ -2634,6 +2658,20 @@ class TuiSmokeEventLoop {
 						+ ":local_images=" + action.localImageCount
 						+ ":mentions=" + action.mentionBindingCount
 						+ ":restored=" + action.composerRestored
+					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RestoreMessageShape:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.restore_shape="
+						+ "text=" + action.restoredText
+						+ ":remote_images=" + action.remoteImageCount
+						+ ":local_images=" + action.localImageCount
+						+ ":labels=" + action.localImageLabelsBefore + "->" + action.localImageLabelsAfter
+						+ ":remapped=" + action.localPlaceholdersRemapped
+						+ ":elements=" + action.textElementCount
+						+ ":ranges=" + action.textElementRanges
+						+ ":rebased=" + action.textElementsRebased
+						+ ":mentions=" + action.mentionBindingCount
+						+ ":cursor_end=" + action.cursorAtEnd
 					);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RestoreCancelledTurn:
 					trace.push(

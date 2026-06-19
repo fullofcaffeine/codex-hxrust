@@ -2522,6 +2522,19 @@ Model selected raw Codex `ChatWidget` input queue behavior without live app/mode
 
 Status: HXCX-TUI-60 extends `fixtures/hxrust/tui-smoke.v1.json` with typed queued/pending/rejected preview separation, missing-history fallback, follow-up detection, clear/reset flags, autosend suppression preservation, modal-cleared drain intent, pending/running drain gates, and no-live dispatch evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic input queue state evidence only, not live model/app dispatch.
 
+### HXCX-TUI-61: ChatWidget Queue Restore Operation Boundary
+
+Model selected raw Codex queue pop and composer-restore behavior without live app/model dispatch:
+
+- preserve `pop_next_queued_user_message` anchors from `../codex/codex-rs/tui/src/chatwidget/input_restore.rs`: rejected steers drain before ordinary queued messages, all rejected steers merge into one queued follow-up, missing history records fall back to `UserMessageText`, and ordinary queued messages drain FIFO from the front;
+- preserve `pop_latest_queued_user_message` and edit-queued-message anchors from `input_restore.rs` and `../codex/codex-rs/tui/src/chatwidget/interaction.rs`: ordinary queued messages restore LIFO from the back before rejected steers, history overrides replace the restored composer text, and the pending-input preview refreshes after edit restore;
+- preserve `drain_pending_messages_for_restore` ordering from `input_restore.rs`: rejected steers, pending steers, queued follow-ups, and current composer draft merge in that order, with no outbound model/tool submission during interrupted-turn restore;
+- preserve user-message shape helpers from `../codex/codex-rs/tui/src/chatwidget/user_messages.rs`: history overrides apply only when non-empty, preview/restore fall back to raw message text otherwise, text element byte ranges rebase during merge, and local image placeholders are remapped after remote-image labels so restored composer state matches attachment order;
+- preserve `restore_user_message_to_composer` state handoff: restored text, local image paths, remote image URLs, text elements, mention bindings, and cursor-at-end intent survive the restore operation;
+- keep the evidence deterministic and independent of live terminal input, ratatui rendering, app command dispatch, model/provider calls, shell execution, filesystem mutation, app-server mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-61 extends `fixtures/hxrust/tui-smoke.v1.json` with typed queue pop, history fallback/override, ordered merge, placeholder remap, text-element rebase, mention preservation, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic queue restore operation evidence only, not live model/app dispatch.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
