@@ -2904,6 +2904,22 @@ class TuiSmokeEventLoop {
 						"tui.chat_widget_interrupted_restore.queue_autosend="
 						+ "suppressed=" + action.queueAutosendSuppressed
 					);
+				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RetryStatus:
+					trace.push(
+						"tui.chat_widget_interrupted_restore.retry_status="
+						+ "current=" + action.currentStatusHeader
+						+ ":message=" + action.noticeText
+						+ ":details=" + action.retryDetails
+						+ ":will_retry=" + action.willRetry
+						+ ":replay=" + action.fromReplay
+						+ ":remembered=" + action.retryStatusRemembered
+						+ ":stored=" + action.retryStatusHeaderBefore + "->" + action.retryStatusHeaderAfter
+						+ ":shown=" + action.retryStatusShown
+						+ ":visible=" + action.statusIndicatorVisible
+						+ ":taken=" + action.retryStatusTaken
+						+ ":restored=" + action.retryStatusRestored
+						+ ":header=" + action.restoredStatusHeader
+					);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.Failure:
 					trace.push(
 						"tui.chat_widget_interrupted_restore.failure="

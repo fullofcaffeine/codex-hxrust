@@ -19,6 +19,7 @@ enum abstract TuiSmokeChatWidgetInterruptedRestoreActionKind(String) to String {
 	final RestoreCancelledTurn = "restore_cancelled_turn";
 	final NoticeMode = "notice_mode";
 	final QueueAutosend = "queue_autosend";
+	final RetryStatus = "retry_status";
 	final Failure = "failure";
 	final Unknown = "unknown";
 
@@ -42,6 +43,7 @@ enum abstract TuiSmokeChatWidgetInterruptedRestoreActionKind(String) to String {
 			case "restore_cancelled_turn": RestoreCancelledTurn;
 			case "notice_mode": NoticeMode;
 			case "queue_autosend": QueueAutosend;
+			case "retry_status": RetryStatus;
 			case "failure": Failure;
 			case _: Unknown;
 		}

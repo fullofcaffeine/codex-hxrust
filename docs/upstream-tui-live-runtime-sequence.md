@@ -2878,6 +2878,17 @@ Model selected raw Codex `/status` rate-limit refresh delivery behavior without 
 
 Status: HXCX-TUI-88 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-card refresh request, overlapping refresh delivery, stale completion, cached snapshot, startup prefetch, non-refresh provider gate, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic `/status` refresh-delivery evidence only, not live account fetching, app-server transport, account auth, ratatui rendering, or model traffic.
 
+### HXCX-TUI-89: ChatWidget Interrupted-Turn Retry Status And Prompt Restore Boundary
+
+Extend the earlier HXCX-TUI-46 interrupted-turn coverage with selected retry-status and prompt-restore details from raw Codex, without live terminal mutation, app-server transport, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/status_state.rs` retry-header behavior: retry errors remember the current status header only once, and `take_retry_status_header` clears it after restoration;
+- preserve `../codex/codex-rs/tui/src/chatwidget/streaming.rs` and `protocol.rs` retry routing: live `will_retry` errors show a retry status indicator with details, replayed retry errors do not create history/status side effects, and the next non-retry live notification restores the remembered header;
+- preserve `../codex/codex-rs/tui/src/chatwidget/input_restore.rs` prompt restore behavior around interruption: output-free cancel-edit interruption emits `RestoreCancelledTurn`, while interrupted queued messages restore into the composer instead of auto-submitting;
+- preserve upstream composer tests from `../codex/codex-rs/tui/src/chatwidget/tests/composer_submission.rs`: restored queued messages keep FIFO order and are prepended before existing draft text.
+
+Status: HXCX-TUI-89 extends `fixtures/hxrust/tui-smoke.v1.json` with typed retry-status header preservation/restoration, replay retry suppression, cancel-edit prompt restore, queued-message composer restore, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic ChatWidget retry/interruption restore evidence only, not live SSE recovery, app-server transport, full composer rendering, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
