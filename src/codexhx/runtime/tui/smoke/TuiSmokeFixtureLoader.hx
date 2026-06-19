@@ -109,6 +109,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetHookLifecycle: optionalHookLifecyclePlan(value, "chatWidgetHookLifecycle"),
 				chatWidgetInputSubmission: optionalInputSubmissionPlan(value, "chatWidgetInputSubmission"),
 				chatWidgetTurnRuntime: optionalTurnRuntimePlan(value, "chatWidgetTurnRuntime"),
+				chatWidgetSessionFlow: optionalSessionFlowPlan(value, "chatWidgetSessionFlow"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -1355,6 +1356,102 @@ class TuiSmokeFixtureLoader {
 				posted: optionalBoolField(value, "posted", false),
 				noLiveProcess: optionalBoolField(value, "noLiveProcess", false),
 				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalSessionFlowPlan(object:Value, name:String):Null<TuiSmokeSessionFlowPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSessionFlowPlan({
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: sessionFlowActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function sessionFlowActions(values:Array<Value>):Array<TuiSmokeSessionFlowAction> {
+		final out:Array<TuiSmokeSessionFlowAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSessionFlowAction({
+				kind: TuiSmokeSessionFlowActionKind.fromString(stringField(value, "kind", "")),
+				display: optionalStringField(value, "display", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				previousThreadId: optionalStringField(value, "previousThreadId", ""),
+				threadName: optionalStringField(value, "threadName", ""),
+				forkedFromId: optionalStringField(value, "forkedFromId", ""),
+				forkParentTitle: optionalStringField(value, "forkParentTitle", ""),
+				logId: optionalStringField(value, "logId", ""),
+				cwd: optionalStringField(value, "cwd", ""),
+				workspaceRoots: optionalStringField(value, "workspaceRoots", ""),
+				model: optionalStringField(value, "model", ""),
+				reasoningEffort: optionalStringField(value, "reasoningEffort", ""),
+				collaborationMode: optionalStringField(value, "collaborationMode", ""),
+				serviceTier: optionalStringField(value, "serviceTier", ""),
+				personality: optionalStringField(value, "personality", ""),
+				approvalPolicy: optionalStringField(value, "approvalPolicy", ""),
+				activePermissionProfile: optionalStringField(value, "activePermissionProfile", ""),
+				instructionSourceCount: optionalIntField(value, "instructionSourceCount", 0),
+				historyEntryCount: optionalIntField(value, "historyEntryCount", 0),
+				queuedBefore: optionalIntField(value, "queuedBefore", 0),
+				queuedAfter: optionalIntField(value, "queuedAfter", 0),
+				skillsCount: optionalIntField(value, "skillsCount", 0),
+				connectorCount: optionalIntField(value, "connectorCount", 0),
+				initialMessage: optionalStringField(value, "initialMessage", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				copyHistoryReset: optionalBoolField(value, "copyHistoryReset", false),
+				historyMetadataSet: optionalBoolField(value, "historyMetadataSet", false),
+				skillsCleared: optionalBoolField(value, "skillsCleared", false),
+				networkProxySet: optionalBoolField(value, "networkProxySet", false),
+				queueSubmissionsCleared: optionalBoolField(value, "queueSubmissionsCleared", false),
+				reviewDenialsReset: optionalBoolField(value, "reviewDenialsReset", false),
+				planNudgeRefreshed: optionalBoolField(value, "planNudgeRefreshed", false),
+				turnLifecycleReset: optionalBoolField(value, "turnLifecycleReset", false),
+				goalStatusCleared: optionalBoolField(value, "goalStatusCleared", false),
+				collaborationIndicatorUpdated: optionalBoolField(value, "collaborationIndicatorUpdated", false),
+				rolloutPathSet: optionalBoolField(value, "rolloutPathSet", false),
+				cwdSynced: optionalBoolField(value, "cwdSynced", false),
+				workspaceRootsSynced: optionalBoolField(value, "workspaceRootsSynced", false),
+				approvalPolicySynced: optionalBoolField(value, "approvalPolicySynced", false),
+				permissionProfileSynced: optionalBoolField(value, "permissionProfileSynced", false),
+				permissionFallbackApplied: optionalBoolField(value, "permissionFallbackApplied", false),
+				personalitySynced: optionalBoolField(value, "personalitySynced", false),
+				projectRootCacheCleared: optionalBoolField(value, "projectRootCacheCleared", false),
+				collaborationMaskInitialized: optionalBoolField(value, "collaborationMaskInitialized", false),
+				effectiveCollaborationSet: optionalBoolField(value, "effectiveCollaborationSet", false),
+				modelDisplayRefreshed: optionalBoolField(value, "modelDisplayRefreshed", false),
+				statusSurfacesRefreshed: optionalBoolField(value, "statusSurfacesRefreshed", false),
+				serviceTierCommandsSynced: optionalBoolField(value, "serviceTierCommandsSynced", false),
+				personalityCommandSynced: optionalBoolField(value, "personalityCommandSynced", false),
+				pluginsCommandSynced: optionalBoolField(value, "pluginsCommandSynced", false),
+				goalCommandSynced: optionalBoolField(value, "goalCommandSynced", false),
+				pluginMentionsRefreshed: optionalBoolField(value, "pluginMentionsRefreshed", false),
+				sessionInfoInserted: optionalBoolField(value, "sessionInfoInserted", false),
+				activeSessionHeaderCleared: optionalBoolField(value, "activeSessionHeaderCleared", false),
+				activeCellRevisionBumped: optionalBoolField(value, "activeCellRevisionBumped", false),
+				copySourceReset: optionalBoolField(value, "copySourceReset", false),
+				skillsReloadRequested: optionalBoolField(value, "skillsReloadRequested", false),
+				connectorsPrefetched: optionalBoolField(value, "connectorsPrefetched", false),
+				initialMessageSubmitted: optionalBoolField(value, "initialMessageSubmitted", false),
+				initialMessageSuppressed: optionalBoolField(value, "initialMessageSuppressed", false),
+				elevatedSandboxBlocked: optionalBoolField(value, "elevatedSandboxBlocked", false),
+				forkNoticeInserted: optionalBoolField(value, "forkNoticeInserted", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				suppressRedraw: optionalBoolField(value, "suppressRedraw", false),
+				threadMatched: optionalBoolField(value, "threadMatched", false),
+				renameConfirmationInserted: optionalBoolField(value, "renameConfirmationInserted", false),
+				queuedInputDrainAttempted: optionalBoolField(value, "queuedInputDrainAttempted", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)

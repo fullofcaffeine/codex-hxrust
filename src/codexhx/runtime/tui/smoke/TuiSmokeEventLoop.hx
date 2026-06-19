@@ -291,6 +291,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetSessionFlow:
+					if (!traceSessionFlow(event.chatWidgetSessionFlow, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4018,6 +4023,117 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_turn_runtime.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceSessionFlow(plan:TuiSmokeSessionFlowPlan, trace:Array<String>):Bool {
+		if (
+			plan == null
+			|| plan.allowFilesystemMutation
+			|| plan.allowNetwork
+			|| plan.allowRatatuiRender
+			|| plan.allowModelCall
+			|| !plan.enabled()
+		) {
+			trace.push("tui.chat_widget_session_flow.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_session_flow.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeSessionFlowActionKind.ConfigureSession:
+					trace.push(
+						"tui.chat_widget_session_flow.configure="
+						+ action.display
+						+ ":thread=" + action.previousThreadId + "->" + action.threadId
+						+ ":name=" + action.threadName
+						+ ":history=" + action.logId + "/" + action.historyEntryCount
+						+ ":copy_reset=" + action.copyHistoryReset
+						+ ":queue_clear=" + action.queueSubmissionsCleared
+						+ ":review_reset=" + action.reviewDenialsReset
+						+ ":turn_reset=" + action.turnLifecycleReset
+						+ ":goal_clear=" + action.goalStatusCleared
+						+ ":cwd=" + action.cwd
+						+ ":roots=" + action.workspaceRoots
+						+ ":approval=" + action.approvalPolicy
+						+ ":permission=" + action.activePermissionProfile
+						+ ":fallback=" + action.permissionFallbackApplied
+						+ ":model=" + action.model
+						+ ":effort=" + action.reasoningEffort
+						+ ":collab=" + action.collaborationMode
+						+ ":mask=" + action.collaborationMaskInitialized
+						+ ":effective=" + action.effectiveCollaborationSet
+					);
+				case TuiSmokeSessionFlowActionKind.SessionHeader:
+					trace.push(
+						"tui.chat_widget_session_flow.header="
+						+ action.display
+						+ ":inserted=" + action.sessionInfoInserted
+						+ ":cleared=" + action.activeSessionHeaderCleared
+						+ ":revision=" + action.activeCellRevisionBumped
+						+ ":service=" + action.serviceTier
+						+ ":copy_source_reset=" + action.copySourceReset
+						+ ":redraw=" + action.requestRedraw
+						+ ":suppress=" + action.suppressRedraw
+					);
+				case TuiSmokeSessionFlowActionKind.SkillsConnectors:
+					trace.push(
+						"tui.chat_widget_session_flow.skills_connectors="
+						+ "cleared=" + action.skillsCleared
+						+ ":reload=" + action.skillsReloadRequested
+						+ ":skills=" + action.skillsCount
+						+ ":connectors=" + action.connectorCount
+						+ ":prefetch=" + action.connectorsPrefetched
+						+ ":service_cmd=" + action.serviceTierCommandsSynced
+						+ ":personality_cmd=" + action.personalityCommandSynced
+						+ ":plugins_cmd=" + action.pluginsCommandSynced
+						+ ":goal_cmd=" + action.goalCommandSynced
+						+ ":plugin_mentions=" + action.pluginMentionsRefreshed
+					);
+				case TuiSmokeSessionFlowActionKind.InitialUserMessage:
+					trace.push(
+						"tui.chat_widget_session_flow.initial_message="
+						+ action.initialMessage
+						+ ":submitted=" + action.initialMessageSubmitted
+						+ ":suppressed=" + action.initialMessageSuppressed
+						+ ":sandbox_blocked=" + action.elevatedSandboxBlocked
+						+ ":queued=" + action.queuedBefore + "->" + action.queuedAfter
+					);
+				case TuiSmokeSessionFlowActionKind.ForkedThreadEvent:
+					trace.push(
+						"tui.chat_widget_session_flow.fork_notice="
+						+ action.forkedFromId
+						+ ":title=" + action.forkParentTitle
+						+ ":inserted=" + action.forkNoticeInserted
+						+ ":display=" + action.display
+					);
+				case TuiSmokeSessionFlowActionKind.ThreadNameUpdated:
+					trace.push(
+						"tui.chat_widget_session_flow.thread_name="
+						+ action.threadId
+						+ ":matched=" + action.threadMatched
+						+ ":name=" + action.threadName
+						+ ":confirm=" + action.renameConfirmationInserted
+						+ ":surfaces=" + action.statusSurfacesRefreshed
+						+ ":redraw=" + action.requestRedraw
+						+ ":drain=" + action.queuedInputDrainAttempted
+					);
+				case TuiSmokeSessionFlowActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_session_flow.failure="
+						+ action.failureCode
+						+ ":error=" + action.errorMessage
+						+ ":no_fs=" + action.noFilesystemMutation
+						+ ":no_network=" + action.noNetwork
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_session_flow.unknown");
 					return false;
 			}
 		}

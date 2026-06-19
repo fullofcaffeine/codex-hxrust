@@ -14752,6 +14752,227 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_turn_runtime.plan=headless\ntui.chat_widget_turn_runtime.task_running=agent=true:mcp=false:bottom=false->true:nudge=true:surfaces=true\ntui.chat_widget_turn_runtime.task_running=agent=false:mcp=true:bottom=false->true:nudge=true:surfaces=true\ntui.chat_widget_turn_runtime.task_started=pending=true->false:transcript=true:chunking=true:plan_stream=true:metrics=true:telemetry=true:quit=true:hook=true->false:status=true:interrupt=true:title=true:reasoning=true:pet=Running:redraw=true\ntui.chat_widget_turn_runtime.metrics=responses_ws:120ms:merged=true:websocket=true:history=true\ntui.chat_widget_turn_runtime.task_completed=last=Done:copy=turn_complete:notify=Done:answer_flush=true:plan_final=true:plan_consolidated=true:wait_flush=true:runtime=true:separator=true:elapsed=12:replay=false\ntui.chat_widget_turn_runtime.task_completed=last=Replay done:copy=existing_item:notify=item markdown:answer_flush=true:plan_final=false:plan_consolidated=false:wait_flush=true:runtime=false:separator=false:elapsed=0:replay=true\ntui.chat_widget_turn_runtime.cleanup=pending=true->false:turn=false:task=false:commands=2->0:suppressed=1->0:status_refresh=true:git_refresh=true:pet=Review:redraw=true\ntui.chat_widget_turn_runtime.follow_up=queued=true:started=true:goal=none:notify=false:pending=1->0:preview=true\ntui.chat_widget_turn_runtime.follow_up=queued=false:started=false:goal=continuing:notify=false:pending=0->0:preview=true\ntui.chat_widget_turn_runtime.follow_up=queued=false:started=false:goal=none:notify=true:pending=0->0:preview=true\ntui.chat_widget_turn_runtime.plan_prompt=eligible=true:mode=Plan:plan_seen=true:modal=false:rate_limit=false:opened=true:notify=true:context=72% used\ntui.chat_widget_turn_runtime.plan_prompt=eligible=false:mode=Plan:plan_seen=true:modal=false:rate_limit=true:opened=false:notify=false:context=\ntui.chat_widget_turn_runtime.rate_limit=pending:shown=true:task=false:opened=true\ntui.chat_widget_turn_runtime.notification=agent-turn-complete:allowed=true:priority=0:existing=-1:stored=true:posted=true:display=Done:redraw=true\ntui.chat_widget_turn_runtime.notification=plan-mode-prompt:allowed=true:priority=1:existing=0:stored=true:posted=false:display=Plan mode prompt: Implement plan:redraw=true\ntui.chat_widget_turn_runtime.notification=agent-turn-complete:allowed=true:priority=0:existing=1:stored=false:posted=false:display=ignored lower priority:redraw=false\ntui.chat_widget_turn_runtime.warning=fallback_model_metadata:displayed=true:deduped=false:history=true:redraw=true\ntui.chat_widget_turn_runtime.warning=fallback_model_metadata:displayed=false:deduped=true:history=false:redraw=false\ntui.chat_widget_turn_runtime.finalize=active_cell=true:hook=true:turn=false:task=false:commands=2->0:streams=true:cancel=true:status_refresh=true:rate_prompt=true\ntui.chat_widget_turn_runtime.error=server_overloaded:message=Codex is currently experiencing high load.:error_cell=true:cyber=false:owner_nudge=false:queue_drain=true:pet=Failed\ntui.chat_widget_turn_runtime.error=workspace_member_credits:message=Usage limit reached.:error_cell=true:cyber=false:owner_nudge=true:queue_drain=true:pet=Failed\ntui.chat_widget_turn_runtime.plan_update=2/3:progress=true:history=true:surfaces=true\ntui.chat_widget_turn_runtime.interrupted=budget_limited:message=Goal budget reached - the turn was stopped.\ntui.chat_widget_turn_runtime.interrupted=user_abort:message=Conversation interrupted - tell the model what to do differently.\ntui.chat_widget_turn_runtime.failure=live_turn_runtime_effects_rejected:no_process=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget turn runtime\ninput> \ntrace:\ntui.chat_widget_turn_runtime.plan=headless\ntui.chat_widget_turn_runtime.task_running=agent=true:mcp=false:bottom=false->true:nudge=true:surfaces=true\ntui.chat_widget_turn_runtime.task_running=agent=false:mcp=true:bottom=false->true:nudge=true:surfaces=true\ntui.chat_widget_turn_runtime.task_started=pending=true->false:transcript=true:chunking=true:plan_stream=true:metrics=true:telemetry=true:quit=true:hook=true->false:status=true:interrupt=true:title=true:reasoning=true:pet=Running:redraw=true\ntui.chat_widget_turn_runtime.metrics=responses_ws:120ms:merged=true:websocket=true:history=true\ntui.chat_widget_turn_runtime.task_completed=last=Done:copy=turn_complete:notify=Done:answer_flush=true:plan_final=true:plan_consolidated=true:wait_flush=true:runtime=true:separator=true:elapsed=12:replay=false\ntui.chat_widget_turn_runtime.task_completed=last=Replay done:copy=existing_item:notify=item markdown:answer_flush=true:plan_final=false:plan_consolidated=false:wait_flush=true:runtime=false:separator=false:elapsed=0:replay=true\ntui.chat_widget_turn_runtime.cleanup=pending=true->false:turn=false:task=false:commands=2->0:suppressed=1->0:status_refresh=true:git_refresh=true:pet=Review:redraw=true\ntui.chat_widget_turn_runtime.follow_up=queued=true:started=true:goal=none:notify=false:pending=1->0:preview=true\ntui.chat_widget_turn_runtime.follow_up=queued=false:started=false:goal=continuing:notify=false:pending=0->0:preview=true\ntui.chat_widget_turn_runtime.follow_up=queued=false:started=false:goal=none:notify=true:pending=0->0:preview=true\ntui.chat_widget_turn_runtime.plan_prompt=eligible=true:mode=Plan:plan_seen=true:modal=false:rate_limit=false:opened=true:notify=true:context=72% used\ntui.chat_widget_turn_runtime.plan_prompt=eligible=false:mode=Plan:plan_seen=true:modal=false:rate_limit=true:opened=false:notify=false:context=\ntui.chat_widget_turn_runtime.rate_limit=pending:shown=true:task=false:opened=true\ntui.chat_widget_turn_runtime.notification=agent-turn-complete:allowed=true:priority=0:existing=-1:stored=true:posted=true:display=Done:redraw=true\ntui.chat_widget_turn_runtime.notification=plan-mode-prompt:allowed=true:priority=1:existing=0:stored=true:posted=false:display=Plan mode prompt: Implement plan:redraw=true\ntui.chat_widget_turn_runtime.notification=agent-turn-complete:allowed=true:priority=0:existing=1:stored=false:posted=false:display=ignored lower priority:redraw=false\ntui.chat_widget_turn_runtime.warning=fallback_model_metadata:displayed=true:deduped=false:history=true:redraw=true\ntui.chat_widget_turn_runtime.warning=fallback_model_metadata:displayed=false:deduped=true:history=false:redraw=false\ntui.chat_widget_turn_runtime.finalize=active_cell=true:hook=true:turn=false:task=false:commands=2->0:streams=true:cancel=true:status_refresh=true:rate_prompt=true\ntui.chat_widget_turn_runtime.error=server_overloaded:message=Codex is currently experiencing high load.:error_cell=true:cyber=false:owner_nudge=false:queue_drain=true:pet=Failed\ntui.chat_widget_turn_runtime.error=workspace_member_credits:message=Usage limit reached.:error_cell=true:cyber=false:owner_nudge=true:queue_drain=true:pet=Failed\ntui.chat_widget_turn_runtime.plan_update=2/3:progress=true:history=true:surfaces=true\ntui.chat_widget_turn_runtime.interrupted=budget_limited:message=Goal budget reached - the turn was stopped.\ntui.chat_widget_turn_runtime.interrupted=user_abort:message=Conversation interrupted - tell the model what to do differently.\ntui.chat_widget_turn_runtime.failure=live_turn_runtime_effects_rejected:no_process=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-session-flow-headless",
+      "frame": {
+        "name": "chatwidget-session-flow-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget session flow"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_session_flow",
+          "chatWidgetSessionFlow": {
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "configure_session",
+                "display": "Normal",
+                "previousThreadId": "thread-old",
+                "threadId": "thread-main",
+                "threadName": "Main thread",
+                "logId": "log-1",
+                "historyEntryCount": 7,
+                "copyHistoryReset": true,
+                "historyMetadataSet": true,
+                "skillsCleared": true,
+                "networkProxySet": true,
+                "queueSubmissionsCleared": true,
+                "reviewDenialsReset": true,
+                "planNudgeRefreshed": true,
+                "turnLifecycleReset": true,
+                "goalStatusCleared": true,
+                "collaborationIndicatorUpdated": true,
+                "rolloutPathSet": true,
+                "cwd": "/repo",
+                "workspaceRoots": "/repo,/repo/tools",
+                "cwdSynced": true,
+                "workspaceRootsSynced": true,
+                "approvalPolicy": "on-request",
+                "approvalPolicySynced": true,
+                "activePermissionProfile": "workspace-write",
+                "permissionProfileSynced": true,
+                "permissionFallbackApplied": false,
+                "model": "gpt-5.2-codex",
+                "reasoningEffort": "high",
+                "collaborationMode": "default",
+                "collaborationMaskInitialized": true,
+                "effectiveCollaborationSet": false
+              },
+              {
+                "kind": "configure_session",
+                "display": "Quiet",
+                "previousThreadId": "thread-main",
+                "threadId": "thread-main",
+                "threadName": "Main thread",
+                "logId": "log-1",
+                "historyEntryCount": 8,
+                "copyHistoryReset": true,
+                "historyMetadataSet": true,
+                "skillsCleared": true,
+                "networkProxySet": false,
+                "queueSubmissionsCleared": true,
+                "reviewDenialsReset": false,
+                "planNudgeRefreshed": true,
+                "turnLifecycleReset": true,
+                "goalStatusCleared": true,
+                "collaborationIndicatorUpdated": true,
+                "rolloutPathSet": true,
+                "cwd": "/repo",
+                "workspaceRoots": "/repo",
+                "cwdSynced": true,
+                "workspaceRootsSynced": true,
+                "approvalPolicy": "never",
+                "approvalPolicySynced": true,
+                "activePermissionProfile": "read-only",
+                "permissionProfileSynced": false,
+                "permissionFallbackApplied": true,
+                "model": "gpt-5.2-codex-mini",
+                "reasoningEffort": "medium",
+                "collaborationMode": "plan",
+                "collaborationMaskInitialized": false,
+                "effectiveCollaborationSet": true
+              },
+              {
+                "kind": "session_header",
+                "display": "Normal",
+                "sessionInfoInserted": true,
+                "activeSessionHeaderCleared": false,
+                "activeCellRevisionBumped": false,
+                "serviceTier": "priority",
+                "copySourceReset": true,
+                "requestRedraw": true,
+                "suppressRedraw": false
+              },
+              {
+                "kind": "session_header",
+                "display": "Quiet",
+                "sessionInfoInserted": false,
+                "activeSessionHeaderCleared": true,
+                "activeCellRevisionBumped": true,
+                "serviceTier": "auto",
+                "copySourceReset": true,
+                "requestRedraw": false,
+                "suppressRedraw": true
+              },
+              {
+                "kind": "skills_connectors",
+                "skillsCleared": true,
+                "skillsReloadRequested": true,
+                "skillsCount": 3,
+                "connectorCount": 2,
+                "connectorsPrefetched": true,
+                "serviceTierCommandsSynced": true,
+                "personalityCommandSynced": true,
+                "pluginsCommandSynced": true,
+                "goalCommandSynced": true,
+                "pluginMentionsRefreshed": true
+              },
+              {
+                "kind": "initial_user_message",
+                "initialMessage": "hello from startup",
+                "initialMessageSubmitted": true,
+                "initialMessageSuppressed": false,
+                "elevatedSandboxBlocked": false,
+                "queuedBefore": 0,
+                "queuedAfter": 0
+              },
+              {
+                "kind": "initial_user_message",
+                "initialMessage": "blocked startup",
+                "initialMessageSubmitted": false,
+                "initialMessageSuppressed": true,
+                "elevatedSandboxBlocked": false,
+                "queuedBefore": 0,
+                "queuedAfter": 0
+              },
+              {
+                "kind": "initial_user_message",
+                "initialMessage": "windows elevated",
+                "initialMessageSubmitted": false,
+                "initialMessageSuppressed": false,
+                "elevatedSandboxBlocked": true,
+                "queuedBefore": 0,
+                "queuedAfter": 0
+              },
+              {
+                "kind": "forked_thread_event",
+                "display": "Normal",
+                "forkedFromId": "thread-parent",
+                "forkParentTitle": "Parent thread",
+                "forkNoticeInserted": true
+              },
+              {
+                "kind": "forked_thread_event",
+                "display": "Normal",
+                "forkedFromId": "thread-parent-2",
+                "forkParentTitle": "",
+                "forkNoticeInserted": true
+              },
+              {
+                "kind": "thread_name_updated",
+                "threadId": "thread-main",
+                "threadMatched": true,
+                "threadName": "Renamed thread",
+                "renameConfirmationInserted": true,
+                "statusSurfacesRefreshed": true,
+                "requestRedraw": true,
+                "queuedInputDrainAttempted": true
+              },
+              {
+                "kind": "thread_name_updated",
+                "threadId": "thread-other",
+                "threadMatched": false,
+                "threadName": "Ignored rename",
+                "renameConfirmationInserted": false,
+                "statusSurfacesRefreshed": false,
+                "requestRedraw": false,
+                "queuedInputDrainAttempted": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_session_flow_effects_rejected",
+                "errorMessage": "session flow fixture must stay headless",
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_session_flow.plan=headless\ntui.chat_widget_session_flow.configure=Normal:thread=thread-old->thread-main:name=Main thread:history=log-1/7:copy_reset=true:queue_clear=true:review_reset=true:turn_reset=true:goal_clear=true:cwd=/repo:roots=/repo,/repo/tools:approval=on-request:permission=workspace-write:fallback=false:model=gpt-5.2-codex:effort=high:collab=default:mask=true:effective=false\ntui.chat_widget_session_flow.configure=Quiet:thread=thread-main->thread-main:name=Main thread:history=log-1/8:copy_reset=true:queue_clear=true:review_reset=false:turn_reset=true:goal_clear=true:cwd=/repo:roots=/repo:approval=never:permission=read-only:fallback=true:model=gpt-5.2-codex-mini:effort=medium:collab=plan:mask=false:effective=true\ntui.chat_widget_session_flow.header=Normal:inserted=true:cleared=false:revision=false:service=priority:copy_source_reset=true:redraw=true:suppress=false\ntui.chat_widget_session_flow.header=Quiet:inserted=false:cleared=true:revision=true:service=auto:copy_source_reset=true:redraw=false:suppress=true\ntui.chat_widget_session_flow.skills_connectors=cleared=true:reload=true:skills=3:connectors=2:prefetch=true:service_cmd=true:personality_cmd=true:plugins_cmd=true:goal_cmd=true:plugin_mentions=true\ntui.chat_widget_session_flow.initial_message=hello from startup:submitted=true:suppressed=false:sandbox_blocked=false:queued=0->0\ntui.chat_widget_session_flow.initial_message=blocked startup:submitted=false:suppressed=true:sandbox_blocked=false:queued=0->0\ntui.chat_widget_session_flow.initial_message=windows elevated:submitted=false:suppressed=false:sandbox_blocked=true:queued=0->0\ntui.chat_widget_session_flow.fork_notice=thread-parent:title=Parent thread:inserted=true:display=Normal\ntui.chat_widget_session_flow.fork_notice=thread-parent-2:title=:inserted=true:display=Normal\ntui.chat_widget_session_flow.thread_name=thread-main:matched=true:name=Renamed thread:confirm=true:surfaces=true:redraw=true:drain=true\ntui.chat_widget_session_flow.thread_name=thread-other:matched=false:name=Ignored rename:confirm=false:surfaces=false:redraw=false:drain=false\ntui.chat_widget_session_flow.failure=live_session_flow_effects_rejected:error=session flow fixture must stay headless:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget session flow\ninput> \ntrace:\ntui.chat_widget_session_flow.plan=headless\ntui.chat_widget_session_flow.configure=Normal:thread=thread-old->thread-main:name=Main thread:history=log-1/7:copy_reset=true:queue_clear=true:review_reset=true:turn_reset=true:goal_clear=true:cwd=/repo:roots=/repo,/repo/tools:approval=on-request:permission=workspace-write:fallback=false:model=gpt-5.2-codex:effort=high:collab=default:mask=true:effective=false\ntui.chat_widget_session_flow.configure=Quiet:thread=thread-main->thread-main:name=Main thread:history=log-1/8:copy_reset=true:queue_clear=true:review_reset=false:turn_reset=true:goal_clear=true:cwd=/repo:roots=/repo:approval=never:permission=read-only:fallback=true:model=gpt-5.2-codex-mini:effort=medium:collab=plan:mask=false:effective=true\ntui.chat_widget_session_flow.header=Normal:inserted=true:cleared=false:revision=false:service=priority:copy_source_reset=true:redraw=true:suppress=false\ntui.chat_widget_session_flow.header=Quiet:inserted=false:cleared=true:revision=true:service=auto:copy_source_reset=true:redraw=false:suppress=true\ntui.chat_widget_session_flow.skills_connectors=cleared=true:reload=true:skills=3:connectors=2:prefetch=true:service_cmd=true:personality_cmd=true:plugins_cmd=true:goal_cmd=true:plugin_mentions=true\ntui.chat_widget_session_flow.initial_message=hello from startup:submitted=true:suppressed=false:sandbox_blocked=false:queued=0->0\ntui.chat_widget_session_flow.initial_message=blocked startup:submitted=false:suppressed=true:sandbox_blocked=false:queued=0->0\ntui.chat_widget_session_flow.initial_message=windows elevated:submitted=false:suppressed=false:sandbox_blocked=true:queued=0->0\ntui.chat_widget_session_flow.fork_notice=thread-parent:title=Parent thread:inserted=true:display=Normal\ntui.chat_widget_session_flow.fork_notice=thread-parent-2:title=:inserted=true:display=Normal\ntui.chat_widget_session_flow.thread_name=thread-main:matched=true:name=Renamed thread:confirm=true:surfaces=true:redraw=true:drain=true\ntui.chat_widget_session_flow.thread_name=thread-other:matched=false:name=Ignored rename:confirm=false:surfaces=false:redraw=false:drain=false\ntui.chat_widget_session_flow.failure=live_session_flow_effects_rejected:error=session flow fixture must stay headless:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

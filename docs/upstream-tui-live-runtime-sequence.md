@@ -2653,6 +2653,18 @@ Model selected raw Codex task runtime bookkeeping without live model, shell, ter
 
 Status: HXCX-TUI-70 extends `fixtures/hxrust/tui-smoke.v1.json` with typed task-running, task-start, runtime-metrics, task-completion, cleanup, follow-up, plan-prompt, rate-limit-prompt, notification, warning, finalize/error, plan-update, interrupted-message, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic turn runtime state evidence only, not live model/provider submission, desktop notification delivery, or full runtime ownership.
 
+### HXCX-TUI-71: ChatWidget Session Flow Boundary
+
+Model selected raw Codex session configuration and thread-header behavior without live filesystem, network, model, or render effects:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/session_flow.rs` session configuration reset behavior: copy history is reset, history metadata is installed, skills are cleared, network proxy and thread id are updated, queue submissions are cleared, review denials reset only on thread change, plan nudge and turn lifecycle reset, goal status is cleared, fork/current rollout/cwd/workspace roots are synced, and permission snapshots can fall back to replacement when constrained sync fails;
+- preserve model/collaboration/service state sync: default model/reasoning effort update the collaboration mode, explicit collaboration mode sets the effective mode while missing collaboration mode initializes the mask, model display/status surfaces/service-tier/personality/plugins/goal commands and plugin mentions refresh;
+- preserve display-mode behavior: normal sessions apply a session-info header, quiet/side sessions clear an active session header and bump the active-cell revision, copy-source flags reset, skills reload for cwd, connector prefetch is requested only when enabled, redraw respects suppression, and initial user-message submission is gated by suppression/elevated Windows sandbox setup;
+- preserve fork and rename behavior: normal forked sessions emit a fork notice with or without parent title, matching thread-name updates insert rename confirmation, update the thread name, refresh status surfaces, request redraw, and attempt queued-input drain, while nonmatching updates are ignored;
+- keep the evidence deterministic and independent of live filesystem mutation, connector/network prefetch, ratatui rendering, app-server mutation, credentialed model/provider calls, and Cafex behavior.
+
+Status: HXCX-TUI-71 extends `fixtures/hxrust/tui-smoke.v1.json` with typed normal/quiet session configuration, header insert/removal, skills/connectors refresh, initial-message gates, fork notices, thread-name updates, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic session-flow state evidence only, not live app-server session ownership or full header rendering.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
