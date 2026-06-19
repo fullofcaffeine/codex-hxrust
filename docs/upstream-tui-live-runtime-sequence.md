@@ -3260,6 +3260,17 @@ Extend the normalized resume picker renderer from sort/filter reload evidence in
 
 Status: HXCX-TUI-120 adds `ResumePickerStaleReloadResponseRenderGate`, `ResumePickerStaleReloadResponseRenderGateReport`, `test/ResumePickerStaleReloadResponseRenderHarness.hx`, `hxml/resume-picker-stale-reload-response-render.hxml`, and `harness/check-resume-picker-stale-reload-response-render.sh`. The gate validates active result rendering, stale query response refusal, stale sort response refusal, active row/selection/cursor/footer preservation, stale-refusal status rendering, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-121: Resume Picker No-Results Reload Recovery Render Snapshot Gate
+
+Extend the normalized resume picker renderer from stale-response refusal into current empty-result and recovery behavior:
+
+- render an active result page before the query changes;
+- apply a current empty query response and render no-results state, cleared rows, cleared selection, and footer/status evidence;
+- apply a later current recovery response and render restored rows, selection, and recovery footer/status evidence;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-121 adds `ResumePickerNoResultsReloadRecoveryRenderGate`, `ResumePickerNoResultsReloadRecoveryRenderGateReport`, `test/ResumePickerNoResultsReloadRecoveryRenderHarness.hx`, `hxml/resume-picker-no-results-reload-recovery-render.hxml`, and `harness/check-resume-picker-no-results-reload-recovery-render.sh`. The gate validates active result rendering, current no-results reload rendering, cleared row/selection/footer evidence, current recovery reload rendering, restored row/selection/footer evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

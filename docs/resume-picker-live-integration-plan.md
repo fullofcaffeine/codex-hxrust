@@ -29,6 +29,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-query-reload-render.sh` validates normalized query reload evidence, including initial page state, query reset/loading state, fixture-backed search results, request/query provenance, footer/recovery evidence, and frame/render counts through the normalized test-backend surface.
 - `harness/check-resume-picker-sort-filter-reload-render.sh` validates normalized sort/filter reload evidence, including active query preservation, cursor/list reset, cwd/show-all request policy, fixture-backed reloaded results, footer/recovery evidence, and frame/render counts through the normalized test-backend surface.
 - `harness/check-resume-picker-stale-reload-response-render.sh` validates normalized stale query/sort reload response refusal evidence, including active row/selection/cursor preservation, stale refusal status, and frame/render counts through the normalized test-backend surface.
+- `harness/check-resume-picker-no-results-reload-recovery-render.sh` validates normalized current no-results reload and later recovery evidence, including active-list replacement, empty state/footer transitions, restored rows, and frame/render counts through the normalized test-backend surface.
 
 ## Upstream Anchors
 
@@ -147,6 +148,8 @@ Status: sort/filter reload now has generated-Rust normalized evidence in `harnes
 
 Status: stale reload response refusal now has generated-Rust normalized evidence in `harness/check-resume-picker-stale-reload-response-render.sh`. The gate renders an active query/sort result page, feeds older query and sort page responses through the host facade, refuses to apply them, and proves active rows, query/sort/filter text, selected thread, cursor, and footer remain stable while stale-refusal status is rendered. This is still deterministic test-backend evidence, not live app-server fanout, live crossterm input, ratatui layout ownership, state DB/rollout querying, Tokio task ownership, or Cafex behavior.
 
+Status: no-results reload recovery now has generated-Rust normalized evidence in `harness/check-resume-picker-no-results-reload-recovery-render.sh`. The gate renders an active list, applies a current empty query response that legitimately replaces rows with a no-results state, then applies a later current recovery response that restores visible rows and selection. This is still deterministic test-backend evidence, not live app-server fanout, live crossterm input, ratatui layout ownership, state DB/rollout querying, Tokio task ownership, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -194,6 +197,7 @@ Near-term gates:
 - `harness/check-resume-picker-query-reload-render.sh` for normalized query reload snapshots with initial page state, query reset/loading state, request/query provenance, fixture-backed query results, footer/recovery evidence, and frame/render counts.
 - `harness/check-resume-picker-sort-filter-reload-render.sh` for normalized sort/filter reload snapshots with query preservation, cursor/list reset, request sort/filter/cwd/show-all provenance, fixture-backed reloaded results, footer/recovery evidence, and frame/render counts.
 - `harness/check-resume-picker-stale-reload-response-render.sh` for normalized stale query/sort reload response refusal snapshots with active row/selection/cursor preservation, stale-refusal status, and frame/render counts.
+- `harness/check-resume-picker-no-results-reload-recovery-render.sh` for normalized current no-results reload and later recovery snapshots with active-list replacement, empty state/footer transitions, restored rows, and frame/render counts.
 
 Exit criteria for "first live resume picker slice":
 
