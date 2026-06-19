@@ -111,6 +111,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetTurnRuntime: optionalTurnRuntimePlan(value, "chatWidgetTurnRuntime"),
 				chatWidgetSessionFlow: optionalSessionFlowPlan(value, "chatWidgetSessionFlow"),
 				chatWidgetReplayProtocol: optionalReplayProtocolPlan(value, "chatWidgetReplayProtocol"),
+				chatWidgetRateLimit: optionalRateLimitPlan(value, "chatWidgetRateLimit"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -123,6 +124,79 @@ class TuiSmokeFixtureLoader {
 				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe"),
 				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy"),
 				clipboardPaste: optionalClipboardPastePlan(value, "clipboardPaste")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalRateLimitPlan(object:Value, name:String):Null<TuiSmokeRateLimitPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeRateLimitPlan({
+					allowLiveAccountRefresh: optionalBoolField(value, "allowLiveAccountRefresh", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: rateLimitActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function rateLimitActions(values:Array<Value>):Array<TuiSmokeRateLimitAction> {
+		final out:Array<TuiSmokeRateLimitAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeRateLimitAction({
+				kind: TuiSmokeRateLimitActionKind.fromString(stringField(value, "kind", "")),
+				source: optionalStringField(value, "source", ""),
+				limitId: optionalStringField(value, "limitId", ""),
+				label: optionalStringField(value, "label", ""),
+				fallbackLabel: optionalStringField(value, "fallbackLabel", ""),
+				promptStateBefore: optionalStringField(value, "promptStateBefore", ""),
+				promptStateAfter: optionalStringField(value, "promptStateAfter", ""),
+				model: optionalStringField(value, "model", ""),
+				nudgeModel: optionalStringField(value, "nudgeModel", ""),
+				planTypeBefore: optionalStringField(value, "planTypeBefore", ""),
+				planTypeAfter: optionalStringField(value, "planTypeAfter", ""),
+				reachedType: optionalStringField(value, "reachedType", ""),
+				errorKind: optionalStringField(value, "errorKind", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				windowMinutes: optionalIntField(value, "windowMinutes", 0),
+				usedPercent: optionalIntField(value, "usedPercent", 0),
+				thresholdPercent: optionalIntField(value, "thresholdPercent", 0),
+				remainingPercent: optionalIntField(value, "remainingPercent", 0),
+				warningCount: optionalIntField(value, "warningCount", 0),
+				primaryIndexBefore: optionalIntField(value, "primaryIndexBefore", 0),
+				primaryIndexAfter: optionalIntField(value, "primaryIndexAfter", 0),
+				secondaryIndexBefore: optionalIntField(value, "secondaryIndexBefore", 0),
+				secondaryIndexAfter: optionalIntField(value, "secondaryIndexAfter", 0),
+				entriesBefore: optionalIntField(value, "entriesBefore", 0),
+				entriesAfter: optionalIntField(value, "entriesAfter", 0),
+				capReached: optionalBoolField(value, "capReached", false),
+				warningEmitted: optionalBoolField(value, "warningEmitted", false),
+				creditsPreserved: optionalBoolField(value, "creditsPreserved", false),
+				individualLimitPreserved: optionalBoolField(value, "individualLimitPreserved", false),
+				planTypePreserved: optionalBoolField(value, "planTypePreserved", false),
+				codexReachedTypeStored: optionalBoolField(value, "codexReachedTypeStored", false),
+				promptPending: optionalBoolField(value, "promptPending", false),
+				promptShown: optionalBoolField(value, "promptShown", false),
+				hiddenNotice: optionalBoolField(value, "hiddenNotice", false),
+				lowerCostModel: optionalBoolField(value, "lowerCostModel", false),
+				nonCodexLimit: optionalBoolField(value, "nonCodexLimit", false),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				deferred: optionalBoolField(value, "deferred", false),
+				shownOnce: optionalBoolField(value, "shownOnce", false),
+				popupOpened: optionalBoolField(value, "popupOpened", false),
+				rateLimitRefreshRequested: optionalBoolField(value, "rateLimitRefreshRequested", false),
+				staleCreditsRemapped: optionalBoolField(value, "staleCreditsRemapped", false),
+				ownerNudgeSuppressed: optionalBoolField(value, "ownerNudgeSuppressed", false),
+				missingStateSuppressed: optionalBoolField(value, "missingStateSuppressed", false),
+				classified: optionalBoolField(value, "classified", false),
+				cyberPolicy: optionalBoolField(value, "cyberPolicy", false),
+				noLiveAccountRefresh: optionalBoolField(value, "noLiveAccountRefresh", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

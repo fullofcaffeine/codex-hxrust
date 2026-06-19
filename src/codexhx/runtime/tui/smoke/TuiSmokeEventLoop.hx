@@ -301,6 +301,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetRateLimit:
+					if (!traceRateLimit(event.chatWidgetRateLimit, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4185,6 +4190,108 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_session_flow.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceRateLimit(plan:TuiSmokeRateLimitPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveAccountRefresh || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_rate_limit.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_rate_limit.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeRateLimitActionKind.DurationLabel:
+					trace.push(
+						"tui.chat_widget_rate_limit.duration="
+						+ "window=" + action.windowMinutes
+						+ ":label=" + action.label
+						+ ":fallback=" + action.fallbackLabel
+						+ ":secondary=" + (action.source == "secondary")
+					);
+				case TuiSmokeRateLimitActionKind.WarningThreshold:
+					trace.push(
+						"tui.chat_widget_rate_limit.warning="
+						+ action.source
+						+ ":used=" + action.usedPercent
+						+ ":threshold=" + action.thresholdPercent
+						+ ":remaining=" + action.remainingPercent
+						+ ":warnings=" + action.warningCount
+						+ ":primary=" + action.primaryIndexBefore + "->" + action.primaryIndexAfter
+						+ ":secondary=" + action.secondaryIndexBefore + "->" + action.secondaryIndexAfter
+						+ ":cap=" + action.capReached
+						+ ":emitted=" + action.warningEmitted
+					);
+				case TuiSmokeRateLimitActionKind.SnapshotPreservation:
+					trace.push(
+						"tui.chat_widget_rate_limit.snapshot="
+						+ action.source
+						+ ":limit=" + action.limitId
+						+ ":entries=" + action.entriesBefore + "->" + action.entriesAfter
+						+ ":credits=" + action.creditsPreserved
+						+ ":individual=" + action.individualLimitPreserved
+						+ ":plan=" + action.planTypeBefore + "->" + action.planTypeAfter
+						+ ":plan_preserved=" + action.planTypePreserved
+						+ ":reached=" + action.reachedType
+						+ ":codex_reached=" + action.codexReachedTypeStored
+					);
+				case TuiSmokeRateLimitActionKind.SeparateLimitEntries:
+					trace.push(
+						"tui.chat_widget_rate_limit.entries="
+						+ action.limitId
+						+ ":entries=" + action.entriesBefore + "->" + action.entriesAfter
+						+ ":label=" + action.label
+						+ ":non_codex=" + action.nonCodexLimit
+					);
+				case TuiSmokeRateLimitActionKind.SwitchPrompt:
+					trace.push(
+						"tui.chat_widget_rate_limit.switch_prompt="
+						+ action.promptStateBefore + "->" + action.promptStateAfter
+						+ ":model=" + action.model
+						+ ":nudge=" + action.nudgeModel
+						+ ":used=" + action.usedPercent
+						+ ":pending=" + action.promptPending
+						+ ":shown=" + action.promptShown
+						+ ":hidden=" + action.hiddenNotice
+						+ ":lower_cost=" + action.lowerCostModel
+						+ ":non_codex=" + action.nonCodexLimit
+						+ ":task=" + action.taskRunning
+						+ ":deferred=" + action.deferred
+						+ ":once=" + action.shownOnce
+					);
+				case TuiSmokeRateLimitActionKind.MemberPrompt:
+					trace.push(
+						"tui.chat_widget_rate_limit.member_prompt="
+						+ action.reachedType
+						+ ":error=" + action.errorKind
+						+ ":popup=" + action.popupOpened
+						+ ":refresh=" + action.rateLimitRefreshRequested
+						+ ":stale_remap=" + action.staleCreditsRemapped
+						+ ":owner_suppressed=" + action.ownerNudgeSuppressed
+						+ ":missing_suppressed=" + action.missingStateSuppressed
+					);
+				case TuiSmokeRateLimitActionKind.ErrorKind:
+					trace.push(
+						"tui.chat_widget_rate_limit.error_kind="
+						+ action.errorKind
+						+ ":message=" + action.errorMessage
+						+ ":classified=" + action.classified
+						+ ":cyber=" + action.cyberPolicy
+					);
+				case TuiSmokeRateLimitActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_rate_limit.failure="
+						+ action.failureCode
+						+ ":no_account=" + action.noLiveAccountRefresh
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_rate_limit.unknown");
 					return false;
 			}
 		}

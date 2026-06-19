@@ -2678,6 +2678,20 @@ Model selected raw Codex replay and server-notification routing without live app
 
 Status: HXCX-TUI-72 extends `fixtures/hxrust/tui-smoke.v1.json` with typed replay-turn, replay-item, server-notification, turn-completion, retryable/nonretryable error, live-only suppression, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic replay/protocol routing evidence only, not a full live app-server replay transport, renderer, or realtime backend.
 
+### HXCX-TUI-73: ChatWidget Rate-Limit Prompt Boundary
+
+Model selected raw Codex rate-limit warning, snapshot, prompt, and error-classification behavior without live account refreshes, model calls, or terminal rendering:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/rate_limits.rs` duration labeling: approximate 5h/daily/weekly/monthly/annual windows get stable labels, unsupported windows fall back to generic primary or secondary usage labels, and cap-reached snapshots suppress threshold warning emission;
+- preserve `RateLimitWarningState` thresholds from `rate_limits.rs` and `../codex/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs`: 75/90/95 percent thresholds advance monotonically, emit only the highest newly crossed warning, and do not emit once a primary or secondary cap is reached;
+- preserve snapshot state merging in `rate_limits.rs`: rolling updates can inherit credits and individual-limit metadata from full account snapshots, plan type is retained when later snapshots omit it, Codex limit reached types are stored for later error prompts, and non-Codex limit ids keep separate status entries;
+- preserve rate-limit switch prompt gating: high Codex usage can move the prompt from idle to pending, task-running state defers showing, lower-cost model usage skips the nudge, hidden notices suppress it, and the prompt is shown once per session with the configured nudge model;
+- preserve workspace-member prompt routing from `rate_limits.rs` and status/layout tests: member credits and member usage-limit states open the correct prompt and request a rate-limit refresh, usage-limit errors can remap stale member-credits state, owner-limit and missing-state cases do not open the owner nudge;
+- preserve `app_server_rate_limit_error_kind` and `is_app_server_cyber_policy_error`: server-overloaded, usage-limit, generic 429, and cyber-policy errors stay distinguishable before higher-level turn-runtime handling;
+- keep the evidence deterministic and independent of live account/network refreshes, ratatui rendering, credentialed model/provider calls, filesystem mutation, and Cafex behavior.
+
+Status: HXCX-TUI-73 extends `fixtures/hxrust/tui-smoke.v1.json` with typed duration-label, warning-threshold, snapshot-preservation, switch-prompt, workspace-member-prompt, error-kind, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic rate-limit state evidence only, not live account transport or popup rendering ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

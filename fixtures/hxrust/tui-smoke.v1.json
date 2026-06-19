@@ -25,6 +25,7 @@
       "../codex/codex-rs/tui/src/notifications/bel.rs",
       "../codex/codex-rs/tui/src/chatwidget/replay.rs",
       "../codex/codex-rs/tui/src/chatwidget/notifications.rs",
+      "../codex/codex-rs/tui/src/chatwidget/rate_limits.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/history_replay.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol_requests.rs",
@@ -15322,6 +15323,249 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_replay_protocol.plan=headless\ntui.chat_widget_replay_protocol.replay_turn=ResumeInitialMessages:status=InProgress:turn=turn-running:items=2:task_started=true:completion=false:task_complete=false:interrupted=false:failed=false:last_error_cleared=true:from_replay=true\ntui.chat_widget_replay_protocol.replay_turn=ThreadSnapshot:status=Completed:turn=turn-done:items=4:task_started=false:completion=true:task_complete=true:interrupted=false:failed=false:last_error_cleared=true:from_replay=true\ntui.chat_widget_replay_protocol.replay_item=UserMessage:kind=ResumeInitialMessages:turn=turn-done:from_replay=true:user=true:history=true:agent=false:plan=false:reasoning=0:raw=false:final=false:cmd=false/false:file=false/false:mcp=false/false:web=false:image=false/false:review=false/false:context=false:collab=false:subagent=false:redraw=false\ntui.chat_widget_replay_protocol.replay_item=Reasoning:kind=ThreadSnapshot:turn=turn-done:from_replay=true:user=false:history=false:agent=false:plan=false:reasoning=2:raw=false:final=true:cmd=false/false:file=false/false:mcp=false/false:web=false:image=false/false:review=false/false:context=false:collab=false:subagent=false:redraw=false\ntui.chat_widget_replay_protocol.replay_item=ToolBundle:kind=ThreadSnapshot:turn=turn-tools:from_replay=true:user=false:history=false:agent=false:plan=false:reasoning=0:raw=false:final=false:cmd=true/true:file=true/true:mcp=true/true:web=true:image=true/true:review=true/true:context=true:collab=true:subagent=true:redraw=true\ntui.chat_widget_replay_protocol.notification=McpServerStatusUpdated:kind=Live:from_replay=false:resume_initial=false:snapshot=false:misrouted=true:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.notification=TurnStarted:kind=ResumeInitialMessages:from_replay=true:resume_initial=true:snapshot=false:misrouted=false:last_turn=true:task_started=false:retry_header=false:live_suppressed=false\ntui.chat_widget_replay_protocol.notification=TurnStarted:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=true:task_started=true:retry_header=true:live_suppressed=false\ntui.chat_widget_replay_protocol.notification=ThreadClosed:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.notification=ThreadRealtimeStarted:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.turn_completed=Completed:kind=ThreadSnapshot:turn=turn-done:dedupe_clear=true:task_complete=true:interrupted=false:budget=false:failed=false:finalized=false:last_error_set=false:last_error_cleared=true:duration=234\ntui.chat_widget_replay_protocol.turn_completed=Interrupted:kind=Live:turn=turn-budget:dedupe_clear=true:task_complete=false:interrupted=true:budget=true:failed=false:finalized=true:last_error_set=false:last_error_cleared=true:duration=0\ntui.chat_widget_replay_protocol.turn_completed=Failed:kind=Live:turn=turn-failed:dedupe_clear=true:task_complete=false:interrupted=false:budget=false:failed=true:finalized=true:last_error_set=false:last_error_cleared=true:duration=0\ntui.chat_widget_replay_protocol.error=retryable network:retryable=true:from_replay=false:stream=true:non_retry=false:last_error_set=false:retry_header=false\ntui.chat_widget_replay_protocol.error=replayed retry:retryable=true:from_replay=true:stream=false:non_retry=false:last_error_set=false:retry_header=false\ntui.chat_widget_replay_protocol.error=fatal provider error:retryable=false:from_replay=false:stream=false:non_retry=true:last_error_set=true:retry_header=true\ntui.chat_widget_replay_protocol.failure=live_replay_protocol_effects_rejected:no_live=true:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget replay protocol\ninput> \ntrace:\ntui.chat_widget_replay_protocol.plan=headless\ntui.chat_widget_replay_protocol.replay_turn=ResumeInitialMessages:status=InProgress:turn=turn-running:items=2:task_started=true:completion=false:task_complete=false:interrupted=false:failed=false:last_error_cleared=true:from_replay=true\ntui.chat_widget_replay_protocol.replay_turn=ThreadSnapshot:status=Completed:turn=turn-done:items=4:task_started=false:completion=true:task_complete=true:interrupted=false:failed=false:last_error_cleared=true:from_replay=true\ntui.chat_widget_replay_protocol.replay_item=UserMessage:kind=ResumeInitialMessages:turn=turn-done:from_replay=true:user=true:history=true:agent=false:plan=false:reasoning=0:raw=false:final=false:cmd=false/false:file=false/false:mcp=false/false:web=false:image=false/false:review=false/false:context=false:collab=false:subagent=false:redraw=false\ntui.chat_widget_replay_protocol.replay_item=Reasoning:kind=ThreadSnapshot:turn=turn-done:from_replay=true:user=false:history=false:agent=false:plan=false:reasoning=2:raw=false:final=true:cmd=false/false:file=false/false:mcp=false/false:web=false:image=false/false:review=false/false:context=false:collab=false:subagent=false:redraw=false\ntui.chat_widget_replay_protocol.replay_item=ToolBundle:kind=ThreadSnapshot:turn=turn-tools:from_replay=true:user=false:history=false:agent=false:plan=false:reasoning=0:raw=false:final=false:cmd=true/true:file=true/true:mcp=true/true:web=true:image=true/true:review=true/true:context=true:collab=true:subagent=true:redraw=true\ntui.chat_widget_replay_protocol.notification=McpServerStatusUpdated:kind=Live:from_replay=false:resume_initial=false:snapshot=false:misrouted=true:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.notification=TurnStarted:kind=ResumeInitialMessages:from_replay=true:resume_initial=true:snapshot=false:misrouted=false:last_turn=true:task_started=false:retry_header=false:live_suppressed=false\ntui.chat_widget_replay_protocol.notification=TurnStarted:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=true:task_started=true:retry_header=true:live_suppressed=false\ntui.chat_widget_replay_protocol.notification=ThreadClosed:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.notification=ThreadRealtimeStarted:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.turn_completed=Completed:kind=ThreadSnapshot:turn=turn-done:dedupe_clear=true:task_complete=true:interrupted=false:budget=false:failed=false:finalized=false:last_error_set=false:last_error_cleared=true:duration=234\ntui.chat_widget_replay_protocol.turn_completed=Interrupted:kind=Live:turn=turn-budget:dedupe_clear=true:task_complete=false:interrupted=true:budget=true:failed=false:finalized=true:last_error_set=false:last_error_cleared=true:duration=0\ntui.chat_widget_replay_protocol.turn_completed=Failed:kind=Live:turn=turn-failed:dedupe_clear=true:task_complete=false:interrupted=false:budget=false:failed=true:finalized=true:last_error_set=false:last_error_cleared=true:duration=0\ntui.chat_widget_replay_protocol.error=retryable network:retryable=true:from_replay=false:stream=true:non_retry=false:last_error_set=false:retry_header=false\ntui.chat_widget_replay_protocol.error=replayed retry:retryable=true:from_replay=true:stream=false:non_retry=false:last_error_set=false:retry_header=false\ntui.chat_widget_replay_protocol.error=fatal provider error:retryable=false:from_replay=false:stream=false:non_retry=true:last_error_set=true:retry_header=true\ntui.chat_widget_replay_protocol.failure=live_replay_protocol_effects_rejected:no_live=true:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-rate-limit-headless",
+      "frame": {
+        "name": "chatwidget-rate-limit-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget rate limits"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_rate_limit",
+          "chatWidgetRateLimit": {
+            "allowLiveAccountRefresh": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "duration_label",
+                "source": "primary",
+                "windowMinutes": 300,
+                "label": "5h",
+                "fallbackLabel": ""
+              },
+              {
+                "kind": "duration_label",
+                "source": "secondary",
+                "windowMinutes": 17,
+                "label": "",
+                "fallbackLabel": "secondary usage"
+              },
+              {
+                "kind": "warning_threshold",
+                "source": "primary",
+                "usedPercent": 92,
+                "thresholdPercent": 90,
+                "remainingPercent": 10,
+                "warningCount": 1,
+                "primaryIndexBefore": 0,
+                "primaryIndexAfter": 2,
+                "secondaryIndexBefore": 0,
+                "secondaryIndexAfter": 0,
+                "capReached": false,
+                "warningEmitted": true
+              },
+              {
+                "kind": "warning_threshold",
+                "source": "secondary",
+                "usedPercent": 100,
+                "thresholdPercent": 95,
+                "remainingPercent": 0,
+                "warningCount": 0,
+                "primaryIndexBefore": 2,
+                "primaryIndexAfter": 2,
+                "secondaryIndexBefore": 0,
+                "secondaryIndexAfter": 0,
+                "capReached": true,
+                "warningEmitted": false
+              },
+              {
+                "kind": "snapshot_preservation",
+                "source": "rolling",
+                "limitId": "codex",
+                "entriesBefore": 1,
+                "entriesAfter": 1,
+                "creditsPreserved": true,
+                "individualLimitPreserved": true,
+                "planTypeBefore": "Team",
+                "planTypeAfter": "Team",
+                "planTypePreserved": true,
+                "reachedType": "WorkspaceMemberCreditsDepleted",
+                "codexReachedTypeStored": true
+              },
+              {
+                "kind": "separate_limit_entries",
+                "limitId": "images",
+                "label": "image generation",
+                "entriesBefore": 1,
+                "entriesAfter": 2,
+                "nonCodexLimit": true
+              },
+              {
+                "kind": "switch_prompt",
+                "promptStateBefore": "Idle",
+                "promptStateAfter": "Pending",
+                "model": "gpt-5.4",
+                "nudgeModel": "gpt-5.4-mini",
+                "usedPercent": 90,
+                "promptPending": true,
+                "promptShown": false,
+                "hiddenNotice": false,
+                "lowerCostModel": false,
+                "nonCodexLimit": false,
+                "taskRunning": true,
+                "deferred": true,
+                "shownOnce": false
+              },
+              {
+                "kind": "switch_prompt",
+                "promptStateBefore": "Pending",
+                "promptStateAfter": "Shown",
+                "model": "gpt-5.4",
+                "nudgeModel": "gpt-5.4-mini",
+                "usedPercent": 95,
+                "promptPending": false,
+                "promptShown": true,
+                "hiddenNotice": false,
+                "lowerCostModel": false,
+                "nonCodexLimit": false,
+                "taskRunning": false,
+                "deferred": false,
+                "shownOnce": true
+              },
+              {
+                "kind": "switch_prompt",
+                "promptStateBefore": "Idle",
+                "promptStateAfter": "Idle",
+                "model": "gpt-5.4-mini",
+                "nudgeModel": "gpt-5.4-mini",
+                "usedPercent": 95,
+                "promptPending": false,
+                "promptShown": false,
+                "hiddenNotice": false,
+                "lowerCostModel": true,
+                "nonCodexLimit": false,
+                "taskRunning": false,
+                "deferred": false,
+                "shownOnce": false
+              },
+              {
+                "kind": "switch_prompt",
+                "promptStateBefore": "Idle",
+                "promptStateAfter": "Idle",
+                "model": "gpt-5.4",
+                "nudgeModel": "gpt-5.4-mini",
+                "usedPercent": 95,
+                "promptPending": false,
+                "promptShown": false,
+                "hiddenNotice": true,
+                "lowerCostModel": false,
+                "nonCodexLimit": false,
+                "taskRunning": false,
+                "deferred": false,
+                "shownOnce": false
+              },
+              {
+                "kind": "member_prompt",
+                "reachedType": "WorkspaceMemberCreditsDepleted",
+                "errorKind": "UsageLimit",
+                "popupOpened": true,
+                "rateLimitRefreshRequested": true,
+                "staleCreditsRemapped": false,
+                "ownerNudgeSuppressed": false,
+                "missingStateSuppressed": false
+              },
+              {
+                "kind": "member_prompt",
+                "reachedType": "WorkspaceMemberCreditsDepleted",
+                "errorKind": "UsageLimit",
+                "popupOpened": true,
+                "rateLimitRefreshRequested": true,
+                "staleCreditsRemapped": true,
+                "ownerNudgeSuppressed": false,
+                "missingStateSuppressed": false
+              },
+              {
+                "kind": "member_prompt",
+                "reachedType": "WorkspaceOwnerUsageLimitReached",
+                "errorKind": "UsageLimit",
+                "popupOpened": false,
+                "rateLimitRefreshRequested": false,
+                "staleCreditsRemapped": false,
+                "ownerNudgeSuppressed": true,
+                "missingStateSuppressed": false
+              },
+              {
+                "kind": "member_prompt",
+                "reachedType": "",
+                "errorKind": "UsageLimit",
+                "popupOpened": false,
+                "rateLimitRefreshRequested": false,
+                "staleCreditsRemapped": false,
+                "ownerNudgeSuppressed": false,
+                "missingStateSuppressed": true
+              },
+              {
+                "kind": "error_kind",
+                "errorKind": "ServerOverloaded",
+                "errorMessage": "server overloaded",
+                "classified": true,
+                "cyberPolicy": false
+              },
+              {
+                "kind": "error_kind",
+                "errorKind": "Generic",
+                "errorMessage": "response too many failed attempts 429",
+                "classified": true,
+                "cyberPolicy": false
+              },
+              {
+                "kind": "error_kind",
+                "errorKind": "CyberPolicy",
+                "errorMessage": "cyber policy",
+                "classified": false,
+                "cyberPolicy": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_rate_limit_effects_rejected",
+                "noLiveAccountRefresh": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_rate_limit.plan=headless\ntui.chat_widget_rate_limit.duration=window=300:label=5h:fallback=:secondary=false\ntui.chat_widget_rate_limit.duration=window=17:label=:fallback=secondary usage:secondary=true\ntui.chat_widget_rate_limit.warning=primary:used=92:threshold=90:remaining=10:warnings=1:primary=0->2:secondary=0->0:cap=false:emitted=true\ntui.chat_widget_rate_limit.warning=secondary:used=100:threshold=95:remaining=0:warnings=0:primary=2->2:secondary=0->0:cap=true:emitted=false\ntui.chat_widget_rate_limit.snapshot=rolling:limit=codex:entries=1->1:credits=true:individual=true:plan=Team->Team:plan_preserved=true:reached=WorkspaceMemberCreditsDepleted:codex_reached=true\ntui.chat_widget_rate_limit.entries=images:entries=1->2:label=image generation:non_codex=true\ntui.chat_widget_rate_limit.switch_prompt=Idle->Pending:model=gpt-5.4:nudge=gpt-5.4-mini:used=90:pending=true:shown=false:hidden=false:lower_cost=false:non_codex=false:task=true:deferred=true:once=false\ntui.chat_widget_rate_limit.switch_prompt=Pending->Shown:model=gpt-5.4:nudge=gpt-5.4-mini:used=95:pending=false:shown=true:hidden=false:lower_cost=false:non_codex=false:task=false:deferred=false:once=true\ntui.chat_widget_rate_limit.switch_prompt=Idle->Idle:model=gpt-5.4-mini:nudge=gpt-5.4-mini:used=95:pending=false:shown=false:hidden=false:lower_cost=true:non_codex=false:task=false:deferred=false:once=false\ntui.chat_widget_rate_limit.switch_prompt=Idle->Idle:model=gpt-5.4:nudge=gpt-5.4-mini:used=95:pending=false:shown=false:hidden=true:lower_cost=false:non_codex=false:task=false:deferred=false:once=false\ntui.chat_widget_rate_limit.member_prompt=WorkspaceMemberCreditsDepleted:error=UsageLimit:popup=true:refresh=true:stale_remap=false:owner_suppressed=false:missing_suppressed=false\ntui.chat_widget_rate_limit.member_prompt=WorkspaceMemberCreditsDepleted:error=UsageLimit:popup=true:refresh=true:stale_remap=true:owner_suppressed=false:missing_suppressed=false\ntui.chat_widget_rate_limit.member_prompt=WorkspaceOwnerUsageLimitReached:error=UsageLimit:popup=false:refresh=false:stale_remap=false:owner_suppressed=true:missing_suppressed=false\ntui.chat_widget_rate_limit.member_prompt=:error=UsageLimit:popup=false:refresh=false:stale_remap=false:owner_suppressed=false:missing_suppressed=true\ntui.chat_widget_rate_limit.error_kind=ServerOverloaded:message=server overloaded:classified=true:cyber=false\ntui.chat_widget_rate_limit.error_kind=Generic:message=response too many failed attempts 429:classified=true:cyber=false\ntui.chat_widget_rate_limit.error_kind=CyberPolicy:message=cyber policy:classified=false:cyber=true\ntui.chat_widget_rate_limit.failure=live_rate_limit_effects_rejected:no_account=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget rate limits\ninput> \ntrace:\ntui.chat_widget_rate_limit.plan=headless\ntui.chat_widget_rate_limit.duration=window=300:label=5h:fallback=:secondary=false\ntui.chat_widget_rate_limit.duration=window=17:label=:fallback=secondary usage:secondary=true\ntui.chat_widget_rate_limit.warning=primary:used=92:threshold=90:remaining=10:warnings=1:primary=0->2:secondary=0->0:cap=false:emitted=true\ntui.chat_widget_rate_limit.warning=secondary:used=100:threshold=95:remaining=0:warnings=0:primary=2->2:secondary=0->0:cap=true:emitted=false\ntui.chat_widget_rate_limit.snapshot=rolling:limit=codex:entries=1->1:credits=true:individual=true:plan=Team->Team:plan_preserved=true:reached=WorkspaceMemberCreditsDepleted:codex_reached=true\ntui.chat_widget_rate_limit.entries=images:entries=1->2:label=image generation:non_codex=true\ntui.chat_widget_rate_limit.switch_prompt=Idle->Pending:model=gpt-5.4:nudge=gpt-5.4-mini:used=90:pending=true:shown=false:hidden=false:lower_cost=false:non_codex=false:task=true:deferred=true:once=false\ntui.chat_widget_rate_limit.switch_prompt=Pending->Shown:model=gpt-5.4:nudge=gpt-5.4-mini:used=95:pending=false:shown=true:hidden=false:lower_cost=false:non_codex=false:task=false:deferred=false:once=true\ntui.chat_widget_rate_limit.switch_prompt=Idle->Idle:model=gpt-5.4-mini:nudge=gpt-5.4-mini:used=95:pending=false:shown=false:hidden=false:lower_cost=true:non_codex=false:task=false:deferred=false:once=false\ntui.chat_widget_rate_limit.switch_prompt=Idle->Idle:model=gpt-5.4:nudge=gpt-5.4-mini:used=95:pending=false:shown=false:hidden=true:lower_cost=false:non_codex=false:task=false:deferred=false:once=false\ntui.chat_widget_rate_limit.member_prompt=WorkspaceMemberCreditsDepleted:error=UsageLimit:popup=true:refresh=true:stale_remap=false:owner_suppressed=false:missing_suppressed=false\ntui.chat_widget_rate_limit.member_prompt=WorkspaceMemberCreditsDepleted:error=UsageLimit:popup=true:refresh=true:stale_remap=true:owner_suppressed=false:missing_suppressed=false\ntui.chat_widget_rate_limit.member_prompt=WorkspaceOwnerUsageLimitReached:error=UsageLimit:popup=false:refresh=false:stale_remap=false:owner_suppressed=true:missing_suppressed=false\ntui.chat_widget_rate_limit.member_prompt=:error=UsageLimit:popup=false:refresh=false:stale_remap=false:owner_suppressed=false:missing_suppressed=true\ntui.chat_widget_rate_limit.error_kind=ServerOverloaded:message=server overloaded:classified=true:cyber=false\ntui.chat_widget_rate_limit.error_kind=Generic:message=response too many failed attempts 429:classified=true:cyber=false\ntui.chat_widget_rate_limit.error_kind=CyberPolicy:message=cyber policy:classified=false:cyber=true\ntui.chat_widget_rate_limit.failure=live_rate_limit_effects_rejected:no_account=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
