@@ -26,6 +26,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-host-backpressure-render.sh` validates normalized bounded-loader backpressure states for best-effort frame drops, lossless page request backpressure, skipped/pending counts, and post-drain recovery through the normalized test-backend surface.
 - `harness/check-resume-picker-invalid-row-projection-render.sh` validates normalized app-server row projection evidence for scanned/accepted/invalid row counts, skipped invalid rows, fallback display titles/previews, timestamp/cwd metadata, and frame/render counts through the normalized test-backend surface.
 - `harness/check-resume-picker-scan-cap-render.sh` validates normalized reached-scan-cap and non-scan-cap pagination evidence, including next-cursor policy, loading-older state, footer/list recovery, and frame/render counts through the normalized test-backend surface.
+- `harness/check-resume-picker-query-reload-render.sh` validates normalized query reload evidence, including initial page state, query reset/loading state, fixture-backed search results, request/query provenance, footer/recovery evidence, and frame/render counts through the normalized test-backend surface.
 
 ## Upstream Anchors
 
@@ -138,6 +139,8 @@ Status: invalid row projection now has generated-Rust normalized evidence in `ha
 
 Status: reached-scan-cap pagination now has generated-Rust normalized evidence in `harness/check-resume-picker-scan-cap-render.sh`. The gate renders a capped page with `scanCap=true`, continues loading from the capped cursor, renders an ordinary non-capped page with `scanCap=false` and a follow-up cursor, then renders final list recovery with no next cursor. This is still deterministic test-backend evidence, not live app-server fanout, live crossterm input, ratatui layout ownership, state DB/rollout querying, Tokio task ownership, or Cafex behavior.
 
+Status: query reload now has generated-Rust normalized evidence in `harness/check-resume-picker-query-reload-render.sh`. The gate renders an initial page, resets list/cursor state for a new search query, records request provenance for `thread/list` query/cursor parameters, then renders fixture-backed query results and footer recovery. This is still deterministic test-backend evidence, not live app-server fanout, live crossterm input, ratatui layout ownership, state DB/rollout querying, Tokio task ownership, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -182,6 +185,7 @@ Near-term gates:
 - `harness/check-resume-picker-host-backpressure-render.sh` for normalized bounded-loader best-effort drop, lossless backpressure, skipped/pending count, and recovery snapshots.
 - `harness/check-resume-picker-invalid-row-projection-render.sh` for normalized row projection snapshots with scanned/accepted/invalid count evidence, display fallbacks, timestamp/cwd metadata, and skipped invalid row evidence.
 - `harness/check-resume-picker-scan-cap-render.sh` for normalized reached-scan-cap and non-scan-cap pagination snapshots with next-cursor policy, loading-older state, footer/list recovery, and frame/render counts.
+- `harness/check-resume-picker-query-reload-render.sh` for normalized query reload snapshots with initial page state, query reset/loading state, request/query provenance, fixture-backed query results, footer/recovery evidence, and frame/render counts.
 
 Exit criteria for "first live resume picker slice":
 

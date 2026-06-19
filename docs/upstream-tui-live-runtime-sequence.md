@@ -3227,6 +3227,17 @@ Extend the normalized resume picker renderer from row projection evidence into r
 
 Status: HXCX-TUI-117 teaches `DeterministicResumePickerTerminalRenderer` to include normalized `scanCap` and `nextPresent` page evidence, and adds `ResumePickerScanCapRenderGate`, `ResumePickerScanCapRenderGateReport`, `test/ResumePickerScanCapRenderHarness.hx`, `hxml/resume-picker-scan-cap-render.hxml`, and `harness/check-resume-picker-scan-cap-render.sh`. The gate validates capped-page rendering, capped-cursor loading state, non-capped cursor pagination, final list recovery, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-118: Resume Picker Query Reload Render Snapshot Gate
+
+Extend the normalized resume picker renderer from scan-cap pagination evidence into query/search reload evidence:
+
+- render an initial page with ordinary cursor state before query changes;
+- render query reset/loading state with the search text visible, rows/cursor cleared, and footer/status evidence;
+- render fixture-backed query results and preserve request/query/cursor provenance for the host `thread/list` call;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-118 adds `ResumePickerQueryReloadRenderGate`, `ResumePickerQueryReloadRenderGateReport`, `test/ResumePickerQueryReloadRenderHarness.hx`, `hxml/resume-picker-query-reload-render.hxml`, and `harness/check-resume-picker-query-reload-render.sh`. The gate validates initial page rendering, query reset/loading rendering, `thread/list` query/cursor provenance, fixture-backed query result rendering, footer/recovery evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
