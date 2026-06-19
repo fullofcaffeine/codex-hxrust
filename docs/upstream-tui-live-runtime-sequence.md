@@ -3194,6 +3194,17 @@ Extend the normalized resume picker renderer from density persistence evidence i
 
 Status: HXCX-TUI-114 adds normalized `ResumePickerState.loaderEventStatus` and `loaderEventDetail` render evidence, plus `ResumePickerLoaderCancellationRenderGate`, `ResumePickerLoaderCancellationRenderGateReport`, `test/ResumePickerLoaderCancellationRenderHarness.hx`, `hxml/resume-picker-loader-cancellation-render.hxml`, and `harness/check-resume-picker-loader-cancellation-render.sh`. The gate validates stale page/preview/transcript event refusal, stable baseline/final picker state, loader cancellation evidence, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-115: Resume Picker Host Backpressure Render Snapshot Gate
+
+Extend the normalized resume picker renderer from loader cancellation evidence into bounded loader backpressure evidence:
+
+- render best-effort frame drop evidence when a bounded loader stream is full;
+- render lossless page request backpressure evidence with pending/skipped counts preserved;
+- drain the queued event, retry the lossless request, and render recovered page state after the stream accepts it;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-115 adds `ResumePickerHostBackpressureRenderGate`, `ResumePickerHostBackpressureRenderGateReport`, `test/ResumePickerHostBackpressureRenderHarness.hx`, `hxml/resume-picker-host-backpressure-render.hxml`, and `harness/check-resume-picker-host-backpressure-render.sh`. The gate validates best-effort frame drop, lossless page backpressure, skipped/pending counts, post-drain recovery, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

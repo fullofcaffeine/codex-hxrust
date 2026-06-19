@@ -23,6 +23,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-keyboard-navigation-render.sh` validates normalized keyboard navigation render states for selection movement, page/end-style scroll evidence, search query display, query clear restoration, and frame/render counts through the normalized test-backend surface.
 - `harness/check-resume-picker-density-persistence-render.sh` validates normalized density persistence render states for temp-home config write success and persistence failure/error/footer evidence through the normalized test-backend surface.
 - `harness/check-resume-picker-loader-cancellation-render.sh` validates normalized background-loader stale page/preview/transcript refusal and cancellation render states through the normalized test-backend surface.
+- `harness/check-resume-picker-host-backpressure-render.sh` validates normalized bounded-loader backpressure states for best-effort frame drops, lossless page request backpressure, skipped/pending counts, and post-drain recovery through the normalized test-backend surface.
 
 ## Upstream Anchors
 
@@ -129,6 +130,8 @@ Status: density persistence success/failure variants now have generated-Rust nor
 
 Status: background-loader cancellation and stale-event variants now have generated-Rust normalized evidence in `harness/check-resume-picker-loader-cancellation-render.sh`. The gate renders accepted baseline page state, stale page/preview/transcript events ignored without mutating visible picker state, and loader cancellation evidence. This is still deterministic test-backend evidence, not live app-server fanout, live crossterm input, ratatui layout ownership, state DB/rollout querying, Tokio task ownership, or Cafex behavior.
 
+Status: bounded-loader backpressure variants now have generated-Rust normalized evidence in `harness/check-resume-picker-host-backpressure-render.sh`. The gate renders best-effort frame drop evidence, lossless page request backpressure evidence, skipped/pending counts, and recovered page rendering after draining the stream. This is still deterministic test-backend evidence, not live app-server fanout, live crossterm input, ratatui layout ownership, state DB/rollout querying, Tokio task ownership, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -170,6 +173,7 @@ Near-term gates:
 - `harness/check-resume-picker-keyboard-navigation-render.sh` for normalized selection movement, page/end-style navigation, search query, and query-clear/start-fresh snapshots.
 - `harness/check-resume-picker-density-persistence-render.sh` for normalized density config persistence success and failure/error/footer snapshots.
 - `harness/check-resume-picker-loader-cancellation-render.sh` for normalized background-loader stale event refusal and cancellation snapshots.
+- `harness/check-resume-picker-host-backpressure-render.sh` for normalized bounded-loader best-effort drop, lossless backpressure, skipped/pending count, and recovery snapshots.
 
 Exit criteria for "first live resume picker slice":
 
