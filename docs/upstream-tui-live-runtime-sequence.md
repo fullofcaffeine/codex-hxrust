@@ -2901,6 +2901,19 @@ Extend the earlier HXCX-TUI-48 clear/archive coverage with selected raw Codex ar
 
 Status: HXCX-TUI-90 extends `fixtures/hxrust/tui-smoke.v1.json` with typed archived-session resume/fork guidance, shared unarchive command RPC intent, archive-success session exit, shutdown feedback, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic archive/unarchive boundary evidence only, not live session mutation, app-server transport, persistent rollout repair, or an interactive unarchive UI.
 
+### HXCX-TUI-91: Session Archive Command Resolver Boundary
+
+Extend HXCX-TUI-90 with selected raw Codex `codex archive` / `codex unarchive` command resolver behavior, without live app-server mutation, rollout reads, filesystem mutation, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/session_archive_commands.rs` UUID handling: valid `ThreadId` targets resolve directly and skip name lookup;
+- preserve exact-name lookup behavior: archive searches active sessions, unarchive searches archived sessions, lookup pages use `ThreadSortKey::UpdatedAt`, limit 100, non-interactive source kinds excluded, and the resolver keeps paging until an exact `thread.name` match or exhaustion;
+- preserve not-found errors: missing names report `No active session found matching '<target>'.` or `No archived session found matching '<target>'.` based on action scope;
+- preserve success-message shape: unnamed UUID targets render `Archived session <id>.`, named archive targets render `Archived session <name> (<id>).`, and unarchive prefers the name returned by `thread/unarchive` before the resolved lookup name;
+- preserve `../codex/codex-rs/tui/src/app_server_session.rs` request intent boundaries: archive/unarchive remain typed app-server RPC requests and do not become direct filesystem mutation or haxe.rust-specific behavior;
+- keep the evidence deterministic and independent of live app-server mutation, network transport, rollout/state DB access, terminal takeover, model/tool execution, filesystem mutation, and Cafex behavior.
+
+Status: HXCX-TUI-91 extends `fixtures/hxrust/tui-smoke.v1.json` with typed UUID resolution, paged exact-name lookup, active-vs-archived scope selection, not-found failure, archive/unarchive success-message formatting, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic command resolver evidence only, not a live CLI command, app-server session mutation, or persistent archive repair flow.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

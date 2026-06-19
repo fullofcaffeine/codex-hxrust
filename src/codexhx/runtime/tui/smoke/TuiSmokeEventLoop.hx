@@ -391,6 +391,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.SessionArchiveCommand:
+					if (!traceSessionArchiveCommand(event.sessionArchiveCommand, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ResumeFork:
 					if (!traceResumeFork(event.resumeFork, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -1975,6 +1980,84 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.clear_archive.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceSessionArchiveCommand(plan:TuiSmokeSessionArchiveCommandPlan, trace:Array<String>):Bool {
+		if (
+			plan == null
+			|| plan.allowLiveTerminal
+			|| plan.allowModelCall
+			|| plan.allowAppServerMutation
+			|| plan.allowFilesystemMutation
+			|| !plan.enabled()
+		) {
+			trace.push("tui.session_archive_command.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.session_archive_command.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeSessionArchiveCommandActionKind.ResolveUuid:
+					trace.push(
+						"tui.session_archive_command.resolve_uuid="
+						+ "action=" + action.action
+						+ ":target=" + action.target
+						+ ":parsed=" + action.uuidParsed
+						+ ":thread=" + action.threadId
+						+ ":lookup=" + action.lookupRequested
+					);
+				case TuiSmokeSessionArchiveCommandActionKind.LookupPage:
+					trace.push(
+						"tui.session_archive_command.lookup_page="
+						+ "action=" + action.action
+						+ ":scope=" + action.searchScope
+						+ ":archived=" + action.archivedScope
+						+ ":include_non_interactive=" + action.includeNonInteractive
+						+ ":target=" + action.target
+						+ ":cursor=" + action.cursor
+						+ ":next=" + action.nextCursor
+						+ ":rows=" + action.rowCount
+						+ ":limit=" + action.pageSize
+					);
+				case TuiSmokeSessionArchiveCommandActionKind.ResolveName:
+					trace.push(
+						"tui.session_archive_command.resolve_name="
+						+ "action=" + action.action
+						+ ":target=" + action.target
+						+ ":scope=" + action.searchScope
+						+ ":matched=" + action.exactNameMatched
+						+ ":resolved=" + action.resolved
+						+ ":thread=" + action.threadId
+						+ ":name=" + action.threadName
+					);
+				case TuiSmokeSessionArchiveCommandActionKind.CommandResult:
+					trace.push(
+						"tui.session_archive_command.result="
+						+ "action=" + action.action
+						+ ":thread=" + action.threadId
+						+ ":name=" + action.threadName
+						+ ":archive=" + action.archiveRequested
+						+ ":unarchive=" + action.unarchiveRequested
+						+ ":success=" + action.mutationSucceeded
+						+ ":message=" + action.successMessage
+					);
+				case TuiSmokeSessionArchiveCommandActionKind.Failure:
+					trace.push(
+						"tui.session_archive_command.failure="
+						+ action.failureCode
+						+ ":error=" + action.errorMessage
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":no_fs=" + action.noFilesystemMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.session_archive_command.unknown");
 					return false;
 			}
 		}

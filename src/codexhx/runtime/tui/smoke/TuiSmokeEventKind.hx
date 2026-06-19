@@ -70,6 +70,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ChatWidgetInterruptedRestore = "chat_widget_interrupted_restore";
 	final SideConversation = "side_conversation";
 	final ClearArchive = "clear_archive";
+	final SessionArchiveCommand = "session_archive_command";
 	final ResumeFork = "resume_fork";
 	final TerminalTitle = "terminal_title";
 	final DesktopNotification = "desktop_notification";
@@ -151,6 +152,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "chat_widget_interrupted_restore": ChatWidgetInterruptedRestore;
 			case "side_conversation": SideConversation;
 			case "clear_archive": ClearArchive;
+			case "session_archive_command": SessionArchiveCommand;
 			case "resume_fork": ResumeFork;
 			case "terminal_title": TerminalTitle;
 			case "desktop_notification": DesktopNotification;

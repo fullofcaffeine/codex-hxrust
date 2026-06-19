@@ -18276,6 +18276,181 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.clear_archive.plan=headless\ntui.clear_archive.archived_guidance=action=resume:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:path=/Users/me/.codex/archived_sessions/rollout.jsonl:command=codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0:error=true\ntui.clear_archive.archived_guidance=action=fork:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:path=/Users/me/.codex/archived_sessions/rollout.jsonl:command=codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0:error=true\ntui.clear_archive.unarchive_command=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:requested=true:success=true:exit=false\ntui.clear_archive.archive_request=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:active=true:side=false:requested=true:error=false\ntui.clear_archive.archive_result=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:success=true:exit=true:reason=user_requested\ntui.clear_archive.shutdown_feedback=mode=shutdown_first:shown=true:input_disabled=true:server_shutdown=true:pending_thread=true->false\ntui.clear_archive.failure=live_archive_unarchive_rejected:error=clear archive session mutations require app-server transport:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> clear archive archived guidance and unarchive command\ninput> \ntrace:\ntui.clear_archive.plan=headless\ntui.clear_archive.archived_guidance=action=resume:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:path=/Users/me/.codex/archived_sessions/rollout.jsonl:command=codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0:error=true\ntui.clear_archive.archived_guidance=action=fork:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:path=/Users/me/.codex/archived_sessions/rollout.jsonl:command=codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0:error=true\ntui.clear_archive.unarchive_command=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:requested=true:success=true:exit=false\ntui.clear_archive.archive_request=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:active=true:side=false:requested=true:error=false\ntui.clear_archive.archive_result=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:success=true:exit=true:reason=user_requested\ntui.clear_archive.shutdown_feedback=mode=shutdown_first:shown=true:input_disabled=true:server_shutdown=true:pending_thread=true->false\ntui.clear_archive.failure=live_archive_unarchive_rejected:error=clear archive session mutations require app-server transport:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "session-archive-command-resolver-boundary",
+      "frame": {
+        "name": "session-archive-command-resolver-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "session archive command resolver boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "session_archive_command",
+          "sessionArchiveCommand": {
+            "allowLiveTerminal": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "resolve_uuid",
+                "action": "archive",
+                "target": "019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "threadId": "019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "uuidParsed": true,
+                "lookupRequested": false
+              },
+              {
+                "kind": "command_result",
+                "action": "archive",
+                "threadId": "019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "archiveRequested": true,
+                "mutationSucceeded": true,
+                "successMessage": "Archived session 019e72f4-e09a-70f2-b2c2-a153a57b8cc0."
+              },
+              {
+                "kind": "lookup_page",
+                "action": "archive",
+                "target": "Design Session",
+                "searchScope": "active",
+                "archivedScope": false,
+                "includeNonInteractive": false,
+                "cursor": "",
+                "nextCursor": "cursor-2",
+                "rowCount": 100,
+                "pageSize": 100
+              },
+              {
+                "kind": "lookup_page",
+                "action": "archive",
+                "target": "Design Session",
+                "searchScope": "active",
+                "archivedScope": false,
+                "includeNonInteractive": false,
+                "cursor": "cursor-2",
+                "nextCursor": "",
+                "rowCount": 1,
+                "pageSize": 100
+              },
+              {
+                "kind": "resolve_name",
+                "action": "archive",
+                "target": "Design Session",
+                "searchScope": "active",
+                "threadId": "019e7341-b56d-7a32-b9a0-9239e2377bd1",
+                "threadName": "Design Session",
+                "exactNameMatched": true,
+                "resolved": true
+              },
+              {
+                "kind": "command_result",
+                "action": "archive",
+                "threadId": "019e7341-b56d-7a32-b9a0-9239e2377bd1",
+                "threadName": "Design Session",
+                "archiveRequested": true,
+                "mutationSucceeded": true,
+                "successMessage": "Archived session Design Session (019e7341-b56d-7a32-b9a0-9239e2377bd1)."
+              },
+              {
+                "kind": "lookup_page",
+                "action": "unarchive",
+                "target": "Restored Session",
+                "searchScope": "archived",
+                "archivedScope": true,
+                "includeNonInteractive": false,
+                "cursor": "",
+                "nextCursor": "",
+                "rowCount": 1,
+                "pageSize": 100
+              },
+              {
+                "kind": "resolve_name",
+                "action": "unarchive",
+                "target": "Restored Session",
+                "searchScope": "archived",
+                "threadId": "019e7341-b56d-7a32-b9a0-9239e2377bd2",
+                "threadName": "Restored Session",
+                "exactNameMatched": true,
+                "resolved": true
+              },
+              {
+                "kind": "command_result",
+                "action": "unarchive",
+                "threadId": "019e7341-b56d-7a32-b9a0-9239e2377bd2",
+                "threadName": "Restored Session",
+                "unarchiveRequested": true,
+                "mutationSucceeded": true,
+                "successMessage": "Unarchived session Restored Session (019e7341-b56d-7a32-b9a0-9239e2377bd2)."
+              },
+              {
+                "kind": "lookup_page",
+                "action": "unarchive",
+                "target": "Missing Session",
+                "searchScope": "archived",
+                "archivedScope": true,
+                "includeNonInteractive": false,
+                "cursor": "",
+                "nextCursor": "",
+                "rowCount": 0,
+                "pageSize": 100
+              },
+              {
+                "kind": "resolve_name",
+                "action": "unarchive",
+                "target": "Missing Session",
+                "searchScope": "archived",
+                "exactNameMatched": false,
+                "resolved": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "not_found",
+                "errorMessage": "No archived session found matching 'Missing Session'.",
+                "unsupportedRejected": false,
+                "noAppServerMutation": true,
+                "noFilesystemMutation": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_archive_command_rejected",
+                "errorMessage": "session archive command live app-server mutation is disabled",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "noFilesystemMutation": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.session_archive_command.plan=headless\ntui.session_archive_command.resolve_uuid=action=archive:target=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:parsed=true:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:lookup=false\ntui.session_archive_command.result=action=archive:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:name=:archive=true:unarchive=false:success=true:message=Archived session 019e72f4-e09a-70f2-b2c2-a153a57b8cc0.\ntui.session_archive_command.lookup_page=action=archive:scope=active:archived=false:include_non_interactive=false:target=Design Session:cursor=:next=cursor-2:rows=100:limit=100\ntui.session_archive_command.lookup_page=action=archive:scope=active:archived=false:include_non_interactive=false:target=Design Session:cursor=cursor-2:next=:rows=1:limit=100\ntui.session_archive_command.resolve_name=action=archive:target=Design Session:scope=active:matched=true:resolved=true:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:name=Design Session\ntui.session_archive_command.result=action=archive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:name=Design Session:archive=true:unarchive=false:success=true:message=Archived session Design Session (019e7341-b56d-7a32-b9a0-9239e2377bd1).\ntui.session_archive_command.lookup_page=action=unarchive:scope=archived:archived=true:include_non_interactive=false:target=Restored Session:cursor=:next=:rows=1:limit=100\ntui.session_archive_command.resolve_name=action=unarchive:target=Restored Session:scope=archived:matched=true:resolved=true:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session\ntui.session_archive_command.result=action=unarchive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session:archive=false:unarchive=true:success=true:message=Unarchived session Restored Session (019e7341-b56d-7a32-b9a0-9239e2377bd2).\ntui.session_archive_command.lookup_page=action=unarchive:scope=archived:archived=true:include_non_interactive=false:target=Missing Session:cursor=:next=:rows=0:limit=100\ntui.session_archive_command.resolve_name=action=unarchive:target=Missing Session:scope=archived:matched=false:resolved=false:thread=:name=\ntui.session_archive_command.failure=not_found:error=No archived session found matching 'Missing Session'.:no_live=false:no_model=false:no_app_server=true:no_fs=true:unsupported=false\ntui.session_archive_command.failure=live_archive_command_rejected:error=session archive command live app-server mutation is disabled:no_live=true:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> session archive command resolver boundary\ninput> \ntrace:\ntui.session_archive_command.plan=headless\ntui.session_archive_command.resolve_uuid=action=archive:target=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:parsed=true:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:lookup=false\ntui.session_archive_command.result=action=archive:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:name=:archive=true:unarchive=false:success=true:message=Archived session 019e72f4-e09a-70f2-b2c2-a153a57b8cc0.\ntui.session_archive_command.lookup_page=action=archive:scope=active:archived=false:include_non_interactive=false:target=Design Session:cursor=:next=cursor-2:rows=100:limit=100\ntui.session_archive_command.lookup_page=action=archive:scope=active:archived=false:include_non_interactive=false:target=Design Session:cursor=cursor-2:next=:rows=1:limit=100\ntui.session_archive_command.resolve_name=action=archive:target=Design Session:scope=active:matched=true:resolved=true:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:name=Design Session\ntui.session_archive_command.result=action=archive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:name=Design Session:archive=true:unarchive=false:success=true:message=Archived session Design Session (019e7341-b56d-7a32-b9a0-9239e2377bd1).\ntui.session_archive_command.lookup_page=action=unarchive:scope=archived:archived=true:include_non_interactive=false:target=Restored Session:cursor=:next=:rows=1:limit=100\ntui.session_archive_command.resolve_name=action=unarchive:target=Restored Session:scope=archived:matched=true:resolved=true:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session\ntui.session_archive_command.result=action=unarchive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session:archive=false:unarchive=true:success=true:message=Unarchived session Restored Session (019e7341-b56d-7a32-b9a0-9239e2377bd2).\ntui.session_archive_command.lookup_page=action=unarchive:scope=archived:archived=true:include_non_interactive=false:target=Missing Session:cursor=:next=:rows=0:limit=100\ntui.session_archive_command.resolve_name=action=unarchive:target=Missing Session:scope=archived:matched=false:resolved=false:thread=:name=\ntui.session_archive_command.failure=not_found:error=No archived session found matching 'Missing Session'.:no_live=false:no_model=false:no_app_server=true:no_fs=true:unsupported=false\ntui.session_archive_command.failure=live_archive_command_rejected:error=session archive command live app-server mutation is disabled:no_live=true:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

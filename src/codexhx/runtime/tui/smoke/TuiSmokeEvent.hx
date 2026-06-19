@@ -69,6 +69,7 @@ typedef TuiSmokeEventFields = {
 	final chatWidgetInterruptedRestore:Null<TuiSmokeChatWidgetInterruptedRestorePlan>;
 	final sideConversation:Null<TuiSmokeSideConversationPlan>;
 	final clearArchive:Null<TuiSmokeClearArchivePlan>;
+	final sessionArchiveCommand:Null<TuiSmokeSessionArchiveCommandPlan>;
 	final resumeFork:Null<TuiSmokeResumeForkPlan>;
 	final terminalTitle:Null<TuiSmokeTerminalTitlePlan>;
 	final desktopNotification:Null<TuiSmokeDesktopNotificationPlan>;
@@ -152,6 +153,7 @@ class TuiSmokeEvent {
 	public final chatWidgetInterruptedRestore:Null<TuiSmokeChatWidgetInterruptedRestorePlan>;
 	public final sideConversation:Null<TuiSmokeSideConversationPlan>;
 	public final clearArchive:Null<TuiSmokeClearArchivePlan>;
+	public final sessionArchiveCommand:Null<TuiSmokeSessionArchiveCommandPlan>;
 	public final resumeFork:Null<TuiSmokeResumeForkPlan>;
 	public final terminalTitle:Null<TuiSmokeTerminalTitlePlan>;
 	public final desktopNotification:Null<TuiSmokeDesktopNotificationPlan>;

@@ -129,6 +129,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
 				clearArchive: optionalClearArchivePlan(value, "clearArchive"),
+				sessionArchiveCommand: optionalSessionArchiveCommandPlan(value, "sessionArchiveCommand"),
 				resumeFork: optionalResumeForkPlan(value, "resumeFork"),
 				terminalTitle: optionalTerminalTitlePlan(value, "terminalTitle"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
@@ -1381,6 +1382,56 @@ class TuiSmokeFixtureLoader {
 				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalSessionArchiveCommandPlan(object:Value, name:String):Null<TuiSmokeSessionArchiveCommandPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSessionArchiveCommandPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					actions: sessionArchiveCommandActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function sessionArchiveCommandActions(values:Array<Value>):Array<TuiSmokeSessionArchiveCommandAction> {
+		final out:Array<TuiSmokeSessionArchiveCommandAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSessionArchiveCommandAction({
+				kind: TuiSmokeSessionArchiveCommandActionKind.fromString(stringField(value, "kind", "")),
+				action: optionalStringField(value, "action", ""),
+				target: optionalStringField(value, "target", ""),
+				searchScope: optionalStringField(value, "searchScope", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				threadName: optionalStringField(value, "threadName", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				successMessage: optionalStringField(value, "successMessage", ""),
+				cursor: optionalStringField(value, "cursor", ""),
+				nextCursor: optionalStringField(value, "nextCursor", ""),
+				pageSize: optionalIntField(value, "pageSize", 0),
+				rowCount: optionalIntField(value, "rowCount", 0),
+				uuidParsed: optionalBoolField(value, "uuidParsed", false),
+				lookupRequested: optionalBoolField(value, "lookupRequested", false),
+				archivedScope: optionalBoolField(value, "archivedScope", false),
+				includeNonInteractive: optionalBoolField(value, "includeNonInteractive", false),
+				exactNameMatched: optionalBoolField(value, "exactNameMatched", false),
+				resolved: optionalBoolField(value, "resolved", false),
+				archiveRequested: optionalBoolField(value, "archiveRequested", false),
+				unarchiveRequested: optionalBoolField(value, "unarchiveRequested", false),
+				mutationSucceeded: optionalBoolField(value, "mutationSucceeded", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
