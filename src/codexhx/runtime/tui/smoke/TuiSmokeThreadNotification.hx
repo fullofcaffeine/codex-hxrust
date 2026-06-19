@@ -25,7 +25,10 @@ class TuiSmokeThreadNotification {
 				status.length > 0 ? status : notificationId;
 			case TuiSmokeThreadNotificationKind.AssistantDelta:
 				delta.length > 0 ? delta : notificationId;
-			case TuiSmokeThreadNotificationKind.Warning | TuiSmokeThreadNotificationKind.ThreadClosed:
+			case TuiSmokeThreadNotificationKind.Warning
+				| TuiSmokeThreadNotificationKind.ThreadArchived
+				| TuiSmokeThreadNotificationKind.ThreadUnarchived
+				| TuiSmokeThreadNotificationKind.ThreadClosed:
 				message.length > 0 ? message : notificationId;
 			case _:
 				notificationId;

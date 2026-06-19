@@ -2927,6 +2927,18 @@ Extend HXCX-TUI-91 from command target resolution into the app-server RPC bounda
 
 Status: HXCX-TUI-92 extends `fixtures/hxrust/tui-smoke.v1.json` with typed archive/unarchive RPC request method/params, empty archive response, unarchive thread response, returned-name preference, invalid thread-id rejection, wrapped transport error evidence, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic app-server RPC boundary evidence only, not live JSON-RPC transport, session archive mutation, notification fanout, or persistent rollout movement.
 
+### HXCX-TUI-93: App-Server Archive Notification Routing Boundary
+
+Extend HXCX-TUI-92 from archive/unarchive RPC intent into selected raw Codex `thread/archived` and `thread/unarchived` server-notification routing, without live app-server mutation, rollout movement, filesystem access, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/app-server-protocol/src/protocol/common.rs` notification method names: `ThreadArchived` serializes as `thread/archived` and `ThreadUnarchived` serializes as `thread/unarchived`;
+- preserve `../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs` payload shape: both notifications carry `thread_id` and no extra rollout/session data;
+- preserve `../codex/codex-rs/tui/src/app/app_server_event_targets.rs` targeting behavior: archived/unarchived notifications are thread-scoped by their payload thread id, route to the active thread immediately when active, and buffer or evict through the same inactive-thread queueing path as other thread notifications;
+- preserve `../codex/codex-rs/tui/src/chatwidget/protocol.rs` ChatWidget suppression behavior: `ThreadArchived` and `ThreadUnarchived` are accepted by routing but do not directly render transcript rows or status text;
+- keep missing-thread and no-live behavior deterministic, with no live JSON-RPC transport, app-server fanout, persistent session archive mutation, filesystem mutation, or Cafex behavior.
+
+Status: HXCX-TUI-93 extends `fixtures/hxrust/tui-smoke.v1.json` with typed active archive notification routing, inactive unarchive notification buffering/eviction, missing-thread rejection, ChatWidget suppression trace evidence, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic notification routing evidence only, not live app-server notification fanout, persistent archive state movement, full thread-id validation, or interactive TUI rendering.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

@@ -330,6 +330,9 @@ class TuiSmokeAppServerFacade {
 				deliveredNotificationCount = deliveredNotificationCount + 1;
 				applyDeliveredNotification(notification, state);
 				trace.push("thread.deliver.notification=" + activeThreadId + ":" + notification.notificationId + ":" + notification.displayText());
+				if (isChatWidgetSuppressed(notification)) {
+					trace.push("thread.deliver.notification_suppressed=" + activeThreadId + ":" + notification.notificationId + ":" + notification.kind);
+				}
 			} else {
 				i = i + 1;
 			}
@@ -383,6 +386,9 @@ class TuiSmokeAppServerFacade {
 					replayed = replayed + 1;
 					applyDeliveredNotification(notification, state);
 					trace.push("thread.replay.notification=" + activeThreadId + ":" + notification.notificationId + ":" + notification.displayText() + ":thread_snapshot");
+					if (isChatWidgetSuppressed(notification)) {
+						trace.push("thread.replay.notification_suppressed=" + activeThreadId + ":" + notification.notificationId + ":" + notification.kind);
+					}
 				}
 			}
 		}
@@ -500,6 +506,9 @@ class TuiSmokeAppServerFacade {
 		}
 		applyDeliveredNotification(notification, state);
 		trace.push("thread.replay.notification=" + activeThreadId + ":" + notification.notificationId + ":" + notification.displayText() + ":thread_snapshot");
+		if (isChatWidgetSuppressed(notification)) {
+			trace.push("thread.replay.notification_suppressed=" + activeThreadId + ":" + notification.notificationId + ":" + notification.kind);
+		}
 		return true;
 	}
 
@@ -669,6 +678,8 @@ class TuiSmokeAppServerFacade {
 					source: TuiSmokeTranscriptSource.System,
 					text: notification.message
 				}));
+			case TuiSmokeThreadNotificationKind.ThreadArchived | TuiSmokeThreadNotificationKind.ThreadUnarchived:
+				return;
 			case TuiSmokeThreadNotificationKind.ThreadClosed:
 				state.updateStatus("closed");
 			case _:
@@ -767,6 +778,11 @@ class TuiSmokeAppServerFacade {
 
 	static function isNotice(notification:TuiSmokeThreadNotification):Bool {
 		return notification.kind == TuiSmokeThreadNotificationKind.Warning;
+	}
+
+	static function isChatWidgetSuppressed(notification:TuiSmokeThreadNotification):Bool {
+		return notification.kind == TuiSmokeThreadNotificationKind.ThreadArchived
+			|| notification.kind == TuiSmokeThreadNotificationKind.ThreadUnarchived;
 	}
 
 	function takePendingForResolution(resolution:TuiSmokeAppServerResolution):Null<TuiSmokeAppServerRequest> {

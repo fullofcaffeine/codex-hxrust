@@ -1002,6 +1002,88 @@
       "expectedSnapshot": "Codex TUI Smoke Notifications\nstatus: running | model: gpt-5.2-codex\nsystem> active notification delivery\nassistant> side hello\ninput> \ntrace:\nthread.notification.thread_status=note-main-status:thread-main:primary:running:active\nthread.deliver.notification=thread-main:note-main-status:running\nthread.notification.assistant_delta=note-side-delta:thread-side:side:side hello:buffered\nqueue.enqueue=commit_tick\nthread.active=thread-side\nthread.deliver.notification=thread-side:note-side-delta:side hello\napp.event.commit_tick\ntui.draw\ntui.key=ctrl-c\nexit: cancelled\nrenders: 1\napp-events: 1\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 2\nthread-notification-deliveries: 2\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "app-server-archive-notification-routing",
+      "frame": {
+        "name": "app-server-archive-notification-routing",
+        "title": "Codex TUI Smoke Notifications",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 48,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "archive notification routing"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "thread_notification",
+          "threadNotification": {
+            "kind": "thread_archived",
+            "notificationId": "note-main-archived",
+            "threadId": "thread-main",
+            "message": "archived"
+          }
+        },
+        {
+          "kind": "thread_delivery",
+          "threadDelivery": {
+            "kind": "drain_active"
+          }
+        },
+        {
+          "kind": "thread_notification",
+          "threadNotification": {
+            "kind": "thread_unarchived",
+            "notificationId": "note-side-unarchived",
+            "threadId": "thread-side",
+            "message": "unarchived"
+          }
+        },
+        {
+          "kind": "thread_delivery",
+          "threadDelivery": {
+            "kind": "evict_notification",
+            "requestId": "note-side-unarchived"
+          }
+        },
+        {
+          "kind": "thread_notification",
+          "threadNotification": {
+            "kind": "thread_archived",
+            "notificationId": "note-missing-thread",
+            "message": "missing thread"
+          }
+        },
+        {
+          "kind": "thread_delivery",
+          "threadDelivery": {
+            "kind": "switch_active",
+            "threadId": "thread-side"
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "thread.notification.thread_archived=note-main-archived:thread-main:primary:archived:active\nthread.deliver.notification=thread-main:note-main-archived:archived\nthread.deliver.notification_suppressed=thread-main:note-main-archived:thread_archived\nthread.notification.thread_unarchived=note-side-unarchived:thread-side:side:unarchived:buffered\nthread.notification.evict=note-side-unarchived:unarchived\nthread.notification.missing_thread=thread_archived:note-missing-thread\nthread.active=thread-side\nthread.deliver.empty=thread-side\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Notifications\nstatus: idle | model: gpt-5.2-codex\nsystem> archive notification routing\ninput> \ntrace:\nthread.notification.thread_archived=note-main-archived:thread-main:primary:archived:active\nthread.deliver.notification=thread-main:note-main-archived:archived\nthread.deliver.notification_suppressed=thread-main:note-main-archived:thread_archived\nthread.notification.thread_unarchived=note-side-unarchived:thread-side:side:unarchived:buffered\nthread.notification.evict=note-side-unarchived:unarchived\nthread.notification.missing_thread=thread_archived:note-missing-thread\nthread.active=thread-side\nthread.deliver.empty=thread-side\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 2\nthread-notification-deliveries: 1\nthread-notification-evictions: 1\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "active-thread-evicts-buffered-side-notification",
       "frame": {
         "name": "active-thread-evicts-buffered-side-notification",

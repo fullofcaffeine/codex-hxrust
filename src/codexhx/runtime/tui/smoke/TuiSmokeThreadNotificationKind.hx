@@ -4,6 +4,8 @@ enum abstract TuiSmokeThreadNotificationKind(String) to String {
 	final ThreadStatus = "thread_status";
 	final AssistantDelta = "assistant_delta";
 	final Warning = "warning";
+	final ThreadArchived = "thread_archived";
+	final ThreadUnarchived = "thread_unarchived";
 	final ThreadClosed = "thread_closed";
 	final Unknown = "unknown";
 
@@ -12,6 +14,8 @@ enum abstract TuiSmokeThreadNotificationKind(String) to String {
 			case "thread_status": ThreadStatus;
 			case "assistant_delta": AssistantDelta;
 			case "warning": Warning;
+			case "thread_archived": ThreadArchived;
+			case "thread_unarchived": ThreadUnarchived;
 			case "thread_closed": ThreadClosed;
 			case _: Unknown;
 		}
