@@ -3271,6 +3271,17 @@ Extend the normalized resume picker renderer from stale-response refusal into cu
 
 Status: HXCX-TUI-121 adds `ResumePickerNoResultsReloadRecoveryRenderGate`, `ResumePickerNoResultsReloadRecoveryRenderGateReport`, `test/ResumePickerNoResultsReloadRecoveryRenderHarness.hx`, `hxml/resume-picker-no-results-reload-recovery-render.hxml`, and `harness/check-resume-picker-no-results-reload-recovery-render.sh`. The gate validates active result rendering, current no-results reload rendering, cleared row/selection/footer evidence, current recovery reload rendering, restored row/selection/footer evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-122: Resume Picker Reload Selection Preservation Render Snapshot Gate
+
+Extend the normalized resume picker renderer from no-results recovery into current reload selection behavior:
+
+- render an active selected row before reload;
+- apply a current reload where that selected thread remains and render stable-thread selection preservation at the new index;
+- apply a current reload where the selected thread is absent and render deterministic fallback selection evidence;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-122 adds `ResumePickerReloadSelectionPreservationRenderGate`, `ResumePickerReloadSelectionPreservationRenderGateReport`, `test/ResumePickerReloadSelectionPreservationRenderHarness.hx`, `hxml/resume-picker-reload-selection-preservation-render.hxml`, and `harness/check-resume-picker-reload-selection-preservation-render.sh`. The gate validates active selected-row rendering, stable-thread selection preservation across reload, deterministic first-row fallback when the prior selection disappears, footer/status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
