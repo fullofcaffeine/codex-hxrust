@@ -39,26 +39,26 @@ jobs:
         working-directory: codex-hxrust
         run: npm ci --ignore-scripts --no-audit --no-fund
 
-      - name: Install Neko runtime for haxelib
+      - name: Install Haxe/Neko for formatting
         run: |
           sudo apt-get update
-          sudo apt-get install -y neko
+          sudo apt-get install -y haxe neko
 
-      - name: Install Haxe via lix
-        working-directory: codex-hxrust
+      - name: Configure haxelib
         run: |
           set -euo pipefail
-          npx lix download haxe "${{ env.HAXE_VERSION }}"
-          npx lix use haxe "${{ env.HAXE_VERSION }}"
-          echo "$(pwd)/node_modules/.bin" >> "$GITHUB_PATH"
-          export PATH="$(pwd)/node_modules/.bin:$PATH"
+          mkdir -p "$HOME/haxelib"
+          haxelib setup "$HOME/haxelib"
           haxe -version
+          haxelib version
 
       - name: Install Haxe formatter
         run: haxelib install formatter --quiet
 
       - name: Check Haxe formatting
         working-directory: codex-hxrust
+        env:
+          HAXELIB_BIN: /usr/bin/haxelib
         run: npm run format:haxe:check
 
   haxe-rust-smoke:
