@@ -1,8 +1,10 @@
 # codex-hxrust
 
-`codex-hxrust` is an experiment to port all of OpenAI Codex to pure Haxe that emits Rust through [`haxe.rust`](../haxe.rust), including the app-server, runtime, tools, state, and TUI surfaces.
+`codex-hxrust` is a work-in-progress Haxe implementation of OpenAI Codex that targets Rust through the external `haxe.rust` backend.
 
-The repository has public-readiness scaffolding in place: repo-managed hooks, Haxe formatting, staged and full-history gitleaks checks, GitHub CI, Dependabot, and generated-Rust smoke gates. It is still a port-in-progress, not a production Codex replacement.
+The goal is whole-Codex parity, not a headless-only subset: app-server protocol, runtime behavior, tool execution, state, persistence, and the interactive TUI are all in scope. This repository is public and has publication safeguards in place, but it is still an active porting project rather than a production Codex replacement.
+
+Public-readiness scaffolding includes repo-managed hooks, Haxe formatting, staged and full-history gitleaks checks, GitHub CI, Dependabot, and generated-Rust smoke gates.
 
 The strategy is upstream-first:
 
@@ -11,7 +13,7 @@ The strategy is upstream-first:
 3. Add Cafex/Cafetera compatibility later as an adapter/conformance layer.
 4. Treat haxe.rust limitations found during the port as upstreamable compiler/runtime work.
 
-Headless/core slices are the first proving ground because they are easier to gate without credentials or terminal interactivity. They are not the final scope. The end goal is whole-Codex parity, including the interactive TUI and live runtime behavior, with TUI work sequenced after enough protocol, state, tool, and runtime foundations exist to support it cleanly.
+Headless/core slices are the first proving ground because they are easier to gate without credentials or terminal interactivity. They are not the final scope. TUI work is sequenced after enough protocol, state, tool, and runtime foundations exist to support it cleanly.
 
 The current upstream TUI/live-runtime roadmap is [docs/upstream-tui-live-runtime-sequence.md](docs/upstream-tui-live-runtime-sequence.md). It keeps raw Codex TUI/runtime work ahead of Cafex adapter expansion.
 
