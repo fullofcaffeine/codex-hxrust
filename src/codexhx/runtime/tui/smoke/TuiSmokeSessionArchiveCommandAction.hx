@@ -16,6 +16,9 @@ typedef TuiSmokeSessionArchiveCommandActionFields = {
 	final successMessage:String;
 	final cursor:String;
 	final nextCursor:String;
+	final backwardsCursor:String;
+	final sortKey:String;
+	final sortDirection:String;
 	final pageSize:Int;
 	final rowCount:Int;
 	final validThreadId:Bool;
@@ -23,6 +26,7 @@ typedef TuiSmokeSessionArchiveCommandActionFields = {
 	final lookupRequested:Bool;
 	final archivedScope:Bool;
 	final includeNonInteractive:Bool;
+	final useStateDbOnly:Bool;
 	final exactNameMatched:Bool;
 	final resolved:Bool;
 	final archiveRequested:Bool;
@@ -56,6 +60,9 @@ class TuiSmokeSessionArchiveCommandAction {
 	public final successMessage:String;
 	public final cursor:String;
 	public final nextCursor:String;
+	public final backwardsCursor:String;
+	public final sortKey:String;
+	public final sortDirection:String;
 	public final pageSize:Int;
 	public final rowCount:Int;
 	public final validThreadId:Bool;
@@ -63,6 +70,7 @@ class TuiSmokeSessionArchiveCommandAction {
 	public final lookupRequested:Bool;
 	public final archivedScope:Bool;
 	public final includeNonInteractive:Bool;
+	public final useStateDbOnly:Bool;
 	public final exactNameMatched:Bool;
 	public final resolved:Bool;
 	public final archiveRequested:Bool;

@@ -18661,6 +18661,140 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.session_archive_command.plan=headless\ntui.session_archive_command.rpc_request=id=21:method=thread/archive:action=archive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:valid=true:archive=true:unarchive=false\ntui.session_archive_command.rpc_response=id=21:method=thread/archive:empty=true:thread=:name=:has_thread=false:success=true\ntui.session_archive_command.rpc_request=id=24:method=thread/unarchive:action=unarchive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:valid=true:archive=false:unarchive=true\ntui.session_archive_command.rpc_response=id=24:method=thread/unarchive:empty=false:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session From Server:has_thread=true:success=true\ntui.session_archive_command.result=action=unarchive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session From Server:archive=false:unarchive=true:success=true:message=Unarchived session Restored Session From Server (019e7341-b56d-7a32-b9a0-9239e2377bd2).\ntui.session_archive_command.failure=invalid_thread_id:error=invalid thread id for thread/archive request:no_live=false:no_model=false:no_app_server=true:no_fs=true:wrapped=false:unsupported=false\ntui.session_archive_command.failure=archive_transport_error:error=failed to archive session: app-server transport closed:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=true:unsupported=false\ntui.session_archive_command.failure=unarchive_transport_error:error=failed to unarchive session: app-server returned JSON-RPC error:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=true:unsupported=false\ntui.session_archive_command.failure=live_archive_rpc_rejected:error=session archive RPC live app-server mutation is disabled:no_live=true:no_model=true:no_app_server=true:no_fs=true:wrapped=false:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> session archive command rpc boundary\ninput> \ntrace:\ntui.session_archive_command.plan=headless\ntui.session_archive_command.rpc_request=id=21:method=thread/archive:action=archive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:valid=true:archive=true:unarchive=false\ntui.session_archive_command.rpc_response=id=21:method=thread/archive:empty=true:thread=:name=:has_thread=false:success=true\ntui.session_archive_command.rpc_request=id=24:method=thread/unarchive:action=unarchive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:valid=true:archive=false:unarchive=true\ntui.session_archive_command.rpc_response=id=24:method=thread/unarchive:empty=false:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session From Server:has_thread=true:success=true\ntui.session_archive_command.result=action=unarchive:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session From Server:archive=false:unarchive=true:success=true:message=Unarchived session Restored Session From Server (019e7341-b56d-7a32-b9a0-9239e2377bd2).\ntui.session_archive_command.failure=invalid_thread_id:error=invalid thread id for thread/archive request:no_live=false:no_model=false:no_app_server=true:no_fs=true:wrapped=false:unsupported=false\ntui.session_archive_command.failure=archive_transport_error:error=failed to archive session: app-server transport closed:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=true:unsupported=false\ntui.session_archive_command.failure=unarchive_transport_error:error=failed to unarchive session: app-server returned JSON-RPC error:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=true:unsupported=false\ntui.session_archive_command.failure=live_archive_rpc_rejected:error=session archive RPC live app-server mutation is disabled:no_live=true:no_model=true:no_app_server=true:no_fs=true:wrapped=false:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "session-archive-thread-list-filter-boundary",
+      "frame": {
+        "name": "session-archive-thread-list-filter-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "session archive thread list filter boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "session_archive_command",
+          "sessionArchiveCommand": {
+            "allowLiveTerminal": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "thread_list_request",
+                "requestId": "31",
+                "method": "thread/list",
+                "action": "archive",
+                "target": "Design Session",
+                "searchScope": "active",
+                "archivedScope": false,
+                "includeNonInteractive": false,
+                "cursor": "",
+                "pageSize": 100,
+                "sortKey": "updated_at",
+                "sortDirection": "",
+                "useStateDbOnly": false
+              },
+              {
+                "kind": "thread_list_response",
+                "requestId": "31",
+                "method": "thread/list",
+                "rowCount": 100,
+                "nextCursor": "cursor-2",
+                "backwardsCursor": "cursor-prev-1"
+              },
+              {
+                "kind": "thread_list_request",
+                "requestId": "32",
+                "method": "thread/list",
+                "action": "archive",
+                "target": "Design Session",
+                "searchScope": "active",
+                "archivedScope": false,
+                "includeNonInteractive": false,
+                "cursor": "cursor-2",
+                "pageSize": 100,
+                "sortKey": "updated_at",
+                "sortDirection": "",
+                "useStateDbOnly": false
+              },
+              {
+                "kind": "thread_list_response",
+                "requestId": "32",
+                "method": "thread/list",
+                "rowCount": 1,
+                "nextCursor": "",
+                "backwardsCursor": "cursor-prev-2"
+              },
+              {
+                "kind": "thread_list_request",
+                "requestId": "33",
+                "method": "thread/list",
+                "action": "unarchive",
+                "target": "Missing Session",
+                "searchScope": "archived",
+                "archivedScope": true,
+                "includeNonInteractive": false,
+                "cursor": "",
+                "pageSize": 100,
+                "sortKey": "updated_at",
+                "sortDirection": "",
+                "useStateDbOnly": false
+              },
+              {
+                "kind": "thread_list_response",
+                "requestId": "33",
+                "method": "thread/list",
+                "rowCount": 0,
+                "nextCursor": "",
+                "backwardsCursor": ""
+              },
+              {
+                "kind": "failure",
+                "failureCode": "thread_list_transport_error",
+                "errorMessage": "failed to list sessions while resolving session name: app-server transport closed",
+                "errorWrapped": true,
+                "unsupportedRejected": false,
+                "noFilesystemMutation": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_thread_list_rejected",
+                "errorMessage": "session archive thread/list live app-server request is disabled",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "noFilesystemMutation": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.session_archive_command.plan=headless\ntui.session_archive_command.thread_list_request=id=31:method=thread/list:action=archive:scope=active:archived=false:include_non_interactive=false:cursor=:limit=100:sort=updated_at:direction=:state_db_only=false:search=Design Session\ntui.session_archive_command.thread_list_response=id=31:method=thread/list:rows=100:next=cursor-2:backwards=cursor-prev-1\ntui.session_archive_command.thread_list_request=id=32:method=thread/list:action=archive:scope=active:archived=false:include_non_interactive=false:cursor=cursor-2:limit=100:sort=updated_at:direction=:state_db_only=false:search=Design Session\ntui.session_archive_command.thread_list_response=id=32:method=thread/list:rows=1:next=:backwards=cursor-prev-2\ntui.session_archive_command.thread_list_request=id=33:method=thread/list:action=unarchive:scope=archived:archived=true:include_non_interactive=false:cursor=:limit=100:sort=updated_at:direction=:state_db_only=false:search=Missing Session\ntui.session_archive_command.thread_list_response=id=33:method=thread/list:rows=0:next=:backwards=\ntui.session_archive_command.failure=thread_list_transport_error:error=failed to list sessions while resolving session name: app-server transport closed:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=true:unsupported=false\ntui.session_archive_command.failure=live_thread_list_rejected:error=session archive thread/list live app-server request is disabled:no_live=true:no_model=true:no_app_server=true:no_fs=true:wrapped=false:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> session archive thread list filter boundary\ninput> \ntrace:\ntui.session_archive_command.plan=headless\ntui.session_archive_command.thread_list_request=id=31:method=thread/list:action=archive:scope=active:archived=false:include_non_interactive=false:cursor=:limit=100:sort=updated_at:direction=:state_db_only=false:search=Design Session\ntui.session_archive_command.thread_list_response=id=31:method=thread/list:rows=100:next=cursor-2:backwards=cursor-prev-1\ntui.session_archive_command.thread_list_request=id=32:method=thread/list:action=archive:scope=active:archived=false:include_non_interactive=false:cursor=cursor-2:limit=100:sort=updated_at:direction=:state_db_only=false:search=Design Session\ntui.session_archive_command.thread_list_response=id=32:method=thread/list:rows=1:next=:backwards=cursor-prev-2\ntui.session_archive_command.thread_list_request=id=33:method=thread/list:action=unarchive:scope=archived:archived=true:include_non_interactive=false:cursor=:limit=100:sort=updated_at:direction=:state_db_only=false:search=Missing Session\ntui.session_archive_command.thread_list_response=id=33:method=thread/list:rows=0:next=:backwards=\ntui.session_archive_command.failure=thread_list_transport_error:error=failed to list sessions while resolving session name: app-server transport closed:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=true:unsupported=false\ntui.session_archive_command.failure=live_thread_list_rejected:error=session archive thread/list live app-server request is disabled:no_live=true:no_model=true:no_app_server=true:no_fs=true:wrapped=false:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

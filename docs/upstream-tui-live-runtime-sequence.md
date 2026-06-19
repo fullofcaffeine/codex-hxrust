@@ -2939,6 +2939,19 @@ Extend HXCX-TUI-92 from archive/unarchive RPC intent into selected raw Codex `th
 
 Status: HXCX-TUI-93 extends `fixtures/hxrust/tui-smoke.v1.json` with typed active archive notification routing, inactive unarchive notification buffering/eviction, missing-thread rejection, ChatWidget suppression trace evidence, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic notification routing evidence only, not live app-server notification fanout, persistent archive state movement, full thread-id validation, or interactive TUI rendering.
 
+### HXCX-TUI-94: Session Archive Thread-List Filter Boundary
+
+Extend HXCX-TUI-91/HXCX-TUI-92 from resolver-level lookup evidence into the raw Codex `thread/list` app-server request/response boundary used while resolving archive/unarchive command names, without live app-server transport, rollout reads, state DB repair, filesystem mutation, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/session_archive_commands.rs` lookup request construction: session name resolution calls `thread/list` with limit 100, `ThreadSortKey::UpdatedAt`, `source_kinds` from `resume_source_kinds(false)`, `archived=false` for archive, `archived=true` for unarchive, `cwd=None`, `use_state_db_only=false`, and `search_term` equal to the requested session name;
+- preserve pagination behavior from the same loop: the resolver keeps passing `next_cursor` into the next request until an exact `thread.name` match or an empty cursor terminates the search;
+- preserve `../codex/codex-rs/app-server-protocol/src/protocol/common.rs` method identity: `ThreadList` serializes as `thread/list` and carries no single thread-id serialization key;
+- preserve `../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs` params/response shape: `ThreadListParams` owns optional cursor/limit/sort/source/archived/cwd/search fields plus `use_state_db_only`, and `ThreadListResponse` returns `data`, `next_cursor`, and `backwards_cursor`;
+- preserve the archived-filter contract from upstream protocol docs: `archived=true` lists archived threads, while false or null lists non-archived threads;
+- keep transport failure wrapping and no-live rejection deterministic, with no app-server mutation, filesystem mutation, state DB repair, persistent archive movement, or Cafex behavior.
+
+Status: HXCX-TUI-94 extends `fixtures/hxrust/tui-smoke.v1.json` with typed `thread/list` request params, active-vs-archived filter evidence, source-kind gating through `include_non_interactive=false`, pagination and empty-result response cursors, wrapped list transport failure, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic app-server list-filter evidence only, not live JSON-RPC transport, state DB/rollout querying, resume picker rendering, or persistent session archive mutation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
