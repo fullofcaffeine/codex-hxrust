@@ -2561,6 +2561,19 @@ Model selected raw Codex MCP startup state handling without live app/model dispa
 
 Status: HXCX-TUI-63 extends `fixtures/hxrust/tui-smoke.v1.json` with typed expected-server setup, status updates, warning dedupe, lag finish, stale update buffering, terminal-only pending-round promotion, finish summaries, task-running/status, queued-drain intent, redraw, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic MCP startup state evidence only, not live app-server transport or MCP process startup.
 
+### HXCX-TUI-64: ChatWidget Status Surface Boundary
+
+Model selected raw Codex status-line and terminal-title refresh behavior without live terminal rendering:
+
+- preserve `StatusSurfaceSelections` anchors from `../codex/codex-rs/tui/src/chatwidget/status_surfaces.rs`: status-line and terminal-title configured item lists parse together, invalid item warnings are emitted once per thread, and branch/git-summary needs are derived from both surfaces before either one is refreshed;
+- preserve shared-state sync: when configured surfaces no longer use git branch or git summary fields, cached branch/summary values and pending lookup flags reset; when they do use them, pending refreshes are requested only when the lookup is not already complete;
+- preserve status-line refresh behavior: empty configured status-line selections disable and clear the line, rendered segments derive only from available selected values, and pull-request hyperlinks are attached only when the PR-number item is selected and a URL exists;
+- preserve terminal-title refresh behavior: empty selections clear the managed title, duplicate sanitized titles skip redundant writes while preserving animation scheduling, and no-visible-content clears Codex-managed terminal title state;
+- preserve `../codex/codex-rs/tui/src/chatwidget/status_controls.rs` setup paths: `set_status` refreshes status surfaces only when the terminal title config depends on run-state/status, status-line setup persists explicit item IDs, terminal-title preview snapshots original config, preview revert restores it, and setup commits the selected title items;
+- keep the evidence deterministic and independent of live terminal writes, ratatui rendering, app-server mutation, filesystem/git probing, model/provider calls, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-64 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-surface selection, invalid-warning dedupe, branch/git-summary request/reset, line/hyperlink/title refresh, duplicate/empty/no-visible title handling, setup/preview/revert/commit, stale update ignoring, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic status-surface state evidence only, not live terminal title/status-line ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

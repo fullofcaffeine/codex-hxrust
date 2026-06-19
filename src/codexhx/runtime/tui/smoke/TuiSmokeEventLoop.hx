@@ -256,6 +256,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetStatusSurface:
+					if (!traceStatusSurface(event.chatWidgetStatusSurface, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3030,6 +3035,123 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_mcp_startup.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceStatusSurface(plan:TuiSmokeStatusSurfacePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_status_surface.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_status_surface.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeStatusSurfaceActionKind.RefreshSurfaces:
+					trace.push(
+						"tui.chat_widget_status_surface.refresh="
+						+ "status_items=" + action.statusLineItems
+						+ ":title_items=" + action.terminalTitleItems
+						+ ":status_invalid=" + action.invalidStatusLineItems
+						+ ":title_invalid=" + action.invalidTerminalTitleItems
+						+ ":status_warn=" + action.statusInvalidWarningInserted
+						+ ":status_warn_suppressed=" + action.statusInvalidWarningSuppressed
+						+ ":title_warn=" + action.titleInvalidWarningInserted
+						+ ":title_warn_suppressed=" + action.titleInvalidWarningSuppressed
+						+ ":branch=uses:" + action.usesGitBranch + ",reset:" + action.branchReset + ",request:" + action.branchRequested
+						+ ":git_summary=uses:" + action.usesGitSummary + ",reset:" + action.gitSummaryReset + ",request:" + action.gitSummaryRequested
+						+ ":line=" + action.statusLineText
+						+ ":segments=" + action.statusLineSegmentCount
+						+ ":enabled=" + action.statusLineEnabled
+						+ ":hyperlink=" + action.statusLineHyperlink
+						+ ":hyperlink_cleared=" + action.hyperlinkCleared
+						+ ":title=" + action.terminalTitle
+						+ ":terminal_set=" + action.terminalTitleSet
+						+ ":terminal_clear=" + action.terminalTitleCleared
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeStatusSurfaceActionKind.RefreshTerminalTitle:
+					trace.push(
+						"tui.chat_widget_status_surface.refresh_title="
+						+ "items=" + action.terminalTitleItems
+						+ ":empty=" + action.terminalTitleEmptySelection
+						+ ":title=" + action.terminalTitle
+						+ ":last=" + action.lastTerminalTitleBefore + "->" + action.lastTerminalTitleAfter
+						+ ":set=" + action.terminalTitleSet
+						+ ":clear=" + action.terminalTitleCleared
+						+ ":duplicate=" + action.terminalTitleSkippedDuplicate
+						+ ":no_visible=" + action.terminalTitleNoVisibleContent
+						+ ":frame=" + action.frameScheduled
+						+ ":delay_ms=" + action.frameDelayMs
+					);
+				case TuiSmokeStatusSurfaceActionKind.SetStatus:
+					trace.push(
+						"tui.chat_widget_status_surface.set_status="
+						+ "header=" + action.statusHeader
+						+ ":details=" + action.statusDetails
+						+ ":title_uses=" + action.titleUsesStatus
+						+ ":refreshed=" + action.statusSurfacesRefreshed
+					);
+				case TuiSmokeStatusSurfaceActionKind.SetupStatusLine:
+					trace.push(
+						"tui.chat_widget_status_surface.setup_status_line="
+						+ "items=" + action.configuredItems
+						+ ":committed=" + action.statusLineSetupCommitted
+						+ ":cancelled=" + action.statusLineSetupCancelled
+						+ ":refreshed=" + action.statusSurfacesRefreshed
+					);
+				case TuiSmokeStatusSurfaceActionKind.StatusLineBranch:
+					trace.push(
+						"tui.chat_widget_status_surface.branch_update="
+						+ "cwd=" + action.cwd
+						+ ":branch=" + action.branch
+						+ ":stale=" + action.branchStaleIgnored
+						+ ":refreshed=" + action.statusSurfacesRefreshed
+					);
+				case TuiSmokeStatusSurfaceActionKind.StatusLineGitSummary:
+					trace.push(
+						"tui.chat_widget_status_surface.git_summary_update="
+						+ "cwd=" + action.cwd
+						+ ":summary=" + action.gitSummary
+						+ ":stale=" + action.gitSummaryStaleIgnored
+						+ ":refreshed=" + action.statusSurfacesRefreshed
+					);
+				case TuiSmokeStatusSurfaceActionKind.PreviewTerminalTitle:
+					trace.push(
+						"tui.chat_widget_status_surface.preview_title="
+						+ "original=" + action.originalItems
+						+ ":preview=" + action.configuredItems
+						+ ":started=" + action.terminalTitlePreviewStarted
+						+ ":refreshed=" + action.statusSurfacesRefreshed
+					);
+				case TuiSmokeStatusSurfaceActionKind.RevertTerminalTitlePreview:
+					trace.push(
+						"tui.chat_widget_status_surface.revert_title="
+						+ "original=" + action.originalItems
+						+ ":reverted=" + action.terminalTitlePreviewReverted
+						+ ":refreshed=" + action.statusSurfacesRefreshed
+					);
+				case TuiSmokeStatusSurfaceActionKind.SetupTerminalTitle:
+					trace.push(
+						"tui.chat_widget_status_surface.setup_title="
+						+ "items=" + action.configuredItems
+						+ ":committed=" + action.terminalTitleSetupCommitted
+						+ ":original_cleared=" + action.originalSnapshotCleared
+						+ ":refreshed=" + action.statusSurfacesRefreshed
+					);
+				case TuiSmokeStatusSurfaceActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_status_surface.failure="
+						+ action.failureCode
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_status_surface.unknown");
 					return false;
 			}
 		}

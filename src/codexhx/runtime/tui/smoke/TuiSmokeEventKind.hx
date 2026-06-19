@@ -43,6 +43,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ChatWidgetStreamStatus = "chat_widget_stream_status";
 	final ChatWidgetStreamLifecycle = "chat_widget_stream_lifecycle";
 	final ChatWidgetMcpStartup = "chat_widget_mcp_startup";
+	final ChatWidgetStatusSurface = "chat_widget_status_surface";
 	final ChatWidgetInterruptQuit = "chat_widget_interrupt_quit";
 	final ChatWidgetInterruptedRestore = "chat_widget_interrupted_restore";
 	final SideConversation = "side_conversation";
@@ -101,6 +102,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "chat_widget_stream_status": ChatWidgetStreamStatus;
 			case "chat_widget_stream_lifecycle": ChatWidgetStreamLifecycle;
 			case "chat_widget_mcp_startup": ChatWidgetMcpStartup;
+			case "chat_widget_status_surface": ChatWidgetStatusSurface;
 			case "chat_widget_interrupt_quit": ChatWidgetInterruptQuit;
 			case "chat_widget_interrupted_restore": ChatWidgetInterruptedRestore;
 			case "side_conversation": SideConversation;

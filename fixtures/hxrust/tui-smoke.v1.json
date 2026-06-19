@@ -30,6 +30,7 @@
       "../codex/codex-rs/tui/src/chatwidget/session_flow.rs",
       "../codex/codex-rs/tui/src/chatwidget/slash_dispatch.rs",
       "../codex/codex-rs/tui/src/chatwidget/status_surfaces.rs",
+      "../codex/codex-rs/tui/src/chatwidget/status_controls.rs",
       "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/src/tui/event_stream.rs",
       "../codex/codex-rs/tui/src/tui/keyboard_modes.rs",
@@ -13143,6 +13144,193 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_mcp_startup.plan=headless\ntui.chat_widget_mcp_startup.expected=alpha,beta:count=2:ignore=false->false\ntui.chat_widget_mcp_startup.update=alpha:starting:complete=true:ignore=false->false:pending=0->0:active=0->1:starting=alpha:header=Starting MCP servers (0/1): alpha:warning=false:duplicate=false:task=false->true:redraw=true\ntui.chat_widget_mcp_startup.update=alpha:failed:complete=true:ignore=false->false:pending=0->0:active=1->1:starting=:header=:warning=true:duplicate=false:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.update=alpha:failed:complete=true:ignore=false->false:pending=0->0:active=1->1:starting=:header=:warning=false:duplicate=true:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.update=beta:starting:complete=true:ignore=false->false:pending=0->0:active=1->2:starting=beta:header=Starting MCP servers (1/2): beta:warning=false:duplicate=false:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.finish_after_lag=active=alpha,beta:failed=alpha:cancelled=beta:ignore=false->true:allow_terminal=false->false:summary=true:text=MCP startup interrupted: beta | MCP startup incomplete (failed: alpha):task=true->false:drain=true:submitted=false:redraw=true\ntui.chat_widget_mcp_startup.update=beta:starting:complete=true:ignore=true->true:pending=0->1:active=0->0:starting=:header=:warning=false:duplicate=false:task=false->false:redraw=false\ntui.chat_widget_mcp_startup.finish_after_lag=active=:failed=:cancelled=:ignore=true->true:allow_terminal=false->true:summary=false:text=:task=false->false:drain=false:submitted=false:redraw=false\ntui.chat_widget_mcp_startup.pending_round=alpha,beta:count=2->0:activated=true:saw_starting=true->false:allow_terminal=true->false:active=0->2:task=false->true:redraw=true\ntui.chat_widget_mcp_startup.finish=failed=:cancelled=:owned=true:restore_status=false:ignore=false->true:summary=false:task=true->false:drain=true:redraw=true\ntui.chat_widget_mcp_startup.failure=live_mcp_startup_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget mcp startup status\ninput> \ntrace:\ntui.chat_widget_mcp_startup.plan=headless\ntui.chat_widget_mcp_startup.expected=alpha,beta:count=2:ignore=false->false\ntui.chat_widget_mcp_startup.update=alpha:starting:complete=true:ignore=false->false:pending=0->0:active=0->1:starting=alpha:header=Starting MCP servers (0/1): alpha:warning=false:duplicate=false:task=false->true:redraw=true\ntui.chat_widget_mcp_startup.update=alpha:failed:complete=true:ignore=false->false:pending=0->0:active=1->1:starting=:header=:warning=true:duplicate=false:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.update=alpha:failed:complete=true:ignore=false->false:pending=0->0:active=1->1:starting=:header=:warning=false:duplicate=true:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.update=beta:starting:complete=true:ignore=false->false:pending=0->0:active=1->2:starting=beta:header=Starting MCP servers (1/2): beta:warning=false:duplicate=false:task=true->true:redraw=true\ntui.chat_widget_mcp_startup.finish_after_lag=active=alpha,beta:failed=alpha:cancelled=beta:ignore=false->true:allow_terminal=false->false:summary=true:text=MCP startup interrupted: beta | MCP startup incomplete (failed: alpha):task=true->false:drain=true:submitted=false:redraw=true\ntui.chat_widget_mcp_startup.update=beta:starting:complete=true:ignore=true->true:pending=0->1:active=0->0:starting=:header=:warning=false:duplicate=false:task=false->false:redraw=false\ntui.chat_widget_mcp_startup.finish_after_lag=active=:failed=:cancelled=:ignore=true->true:allow_terminal=false->true:summary=false:text=:task=false->false:drain=false:submitted=false:redraw=false\ntui.chat_widget_mcp_startup.pending_round=alpha,beta:count=2->0:activated=true:saw_starting=true->false:allow_terminal=true->false:active=0->2:task=false->true:redraw=true\ntui.chat_widget_mcp_startup.finish=failed=:cancelled=:owned=true:restore_status=false:ignore=false->true:summary=false:task=true->false:drain=true:redraw=true\ntui.chat_widget_mcp_startup.failure=live_mcp_startup_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-status-surfaces-headless",
+      "frame": {
+        "name": "chatwidget-status-surfaces-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget status surfaces"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_status_surface",
+          "chatWidgetStatusSurface": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "refresh_surfaces",
+                "statusLineItems": "model-name,bogus-item,git-branch,pull-request",
+                "terminalTitleItems": "activity,project-name,status,git-branch,ghost-title",
+                "invalidStatusLineItems": "bogus-item",
+                "invalidTerminalTitleItems": "ghost-title",
+                "statusLineText": "gpt-5.2-codex main PR #42",
+                "statusLineHyperlink": "https://github.example/pr/42",
+                "terminalTitle": "working codex-hxrust main",
+                "statusLineSegmentCount": 3,
+                "threadPresent": true,
+                "statusLineEnabled": true,
+                "usesGitBranch": true,
+                "usesGitSummary": true,
+                "branchRequested": true,
+                "gitSummaryRequested": true,
+                "statusInvalidWarningInserted": true,
+                "titleInvalidWarningInserted": true,
+                "terminalTitleSet": true
+              },
+              {
+                "kind": "refresh_surfaces",
+                "statusLineItems": "model-name,bogus-item",
+                "terminalTitleItems": "activity,ghost-title",
+                "invalidStatusLineItems": "bogus-item",
+                "invalidTerminalTitleItems": "ghost-title",
+                "statusLineText": "gpt-5.2-codex",
+                "terminalTitle": "working",
+                "statusLineSegmentCount": 1,
+                "threadPresent": true,
+                "statusLineEnabled": true,
+                "usesGitBranch": false,
+                "usesGitSummary": false,
+                "branchReset": true,
+                "gitSummaryReset": true,
+                "statusInvalidWarningSuppressed": true,
+                "titleInvalidWarningSuppressed": true,
+                "hyperlinkCleared": true,
+                "terminalTitleSet": true
+              },
+              {
+                "kind": "refresh_terminal_title",
+                "terminalTitleItems": "activity,project-name",
+                "terminalTitle": "working codex-hxrust",
+                "lastTerminalTitleBefore": "working codex-hxrust",
+                "lastTerminalTitleAfter": "working codex-hxrust",
+                "terminalTitleSkippedDuplicate": true,
+                "frameScheduled": true,
+                "frameDelayMs": 250
+              },
+              {
+                "kind": "refresh_terminal_title",
+                "terminalTitleItems": "",
+                "lastTerminalTitleBefore": "working codex-hxrust",
+                "lastTerminalTitleAfter": "",
+                "terminalTitleEmptySelection": true,
+                "terminalTitleCleared": true
+              },
+              {
+                "kind": "refresh_terminal_title",
+                "terminalTitleItems": "spinner",
+                "terminalTitle": "",
+                "lastTerminalTitleBefore": "codex-hxrust",
+                "lastTerminalTitleAfter": "",
+                "terminalTitleNoVisibleContent": true,
+                "terminalTitleCleared": true
+              },
+              {
+                "kind": "set_status",
+                "statusHeader": "Working",
+                "statusDetails": "waiting for tools",
+                "titleUsesStatus": true,
+                "statusSurfacesRefreshed": true
+              },
+              {
+                "kind": "set_status",
+                "statusHeader": "Ready",
+                "statusDetails": "",
+                "titleUsesStatus": false,
+                "statusSurfacesRefreshed": false
+              },
+              {
+                "kind": "setup_status_line",
+                "configuredItems": "model-name,git-branch",
+                "statusLineSetupCommitted": true,
+                "statusSurfacesRefreshed": true
+              },
+              {
+                "kind": "status_line_branch",
+                "cwd": "/repo",
+                "branch": "main",
+                "statusSurfacesRefreshed": true
+              },
+              {
+                "kind": "status_line_branch",
+                "cwd": "/old",
+                "branch": "stale",
+                "branchStaleIgnored": true,
+                "statusSurfacesRefreshed": false
+              },
+              {
+                "kind": "status_line_git_summary",
+                "cwd": "/repo",
+                "gitSummary": "PR #42 +3 -1",
+                "statusSurfacesRefreshed": true
+              },
+              {
+                "kind": "status_line_git_summary",
+                "cwd": "/old",
+                "gitSummary": "PR #7",
+                "gitSummaryStaleIgnored": true,
+                "statusSurfacesRefreshed": false
+              },
+              {
+                "kind": "preview_terminal_title",
+                "originalItems": "activity,project-name",
+                "configuredItems": "status,project-name",
+                "terminalTitlePreviewStarted": true,
+                "statusSurfacesRefreshed": true
+              },
+              {
+                "kind": "revert_terminal_title_preview",
+                "originalItems": "activity,project-name",
+                "terminalTitlePreviewReverted": true,
+                "statusSurfacesRefreshed": true
+              },
+              {
+                "kind": "setup_terminal_title",
+                "configuredItems": "status,model-name",
+                "terminalTitleSetupCommitted": true,
+                "originalSnapshotCleared": true,
+                "statusSurfacesRefreshed": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_status_surface_rejected",
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_status_surface.plan=headless\ntui.chat_widget_status_surface.refresh=status_items=model-name,bogus-item,git-branch,pull-request:title_items=activity,project-name,status,git-branch,ghost-title:status_invalid=bogus-item:title_invalid=ghost-title:status_warn=true:status_warn_suppressed=false:title_warn=true:title_warn_suppressed=false:branch=uses:true,reset:false,request:true:git_summary=uses:true,reset:false,request:true:line=gpt-5.2-codex main PR #42:segments=3:enabled=true:hyperlink=https://github.example/pr/42:hyperlink_cleared=false:title=working codex-hxrust main:terminal_set=true:terminal_clear=false:frame=false\ntui.chat_widget_status_surface.refresh=status_items=model-name,bogus-item:title_items=activity,ghost-title:status_invalid=bogus-item:title_invalid=ghost-title:status_warn=false:status_warn_suppressed=true:title_warn=false:title_warn_suppressed=true:branch=uses:false,reset:true,request:false:git_summary=uses:false,reset:true,request:false:line=gpt-5.2-codex:segments=1:enabled=true:hyperlink=:hyperlink_cleared=true:title=working:terminal_set=true:terminal_clear=false:frame=false\ntui.chat_widget_status_surface.refresh_title=items=activity,project-name:empty=false:title=working codex-hxrust:last=working codex-hxrust->working codex-hxrust:set=false:clear=false:duplicate=true:no_visible=false:frame=true:delay_ms=250\ntui.chat_widget_status_surface.refresh_title=items=:empty=true:title=:last=working codex-hxrust->:set=false:clear=true:duplicate=false:no_visible=false:frame=false:delay_ms=0\ntui.chat_widget_status_surface.refresh_title=items=spinner:empty=false:title=:last=codex-hxrust->:set=false:clear=true:duplicate=false:no_visible=true:frame=false:delay_ms=0\ntui.chat_widget_status_surface.set_status=header=Working:details=waiting for tools:title_uses=true:refreshed=true\ntui.chat_widget_status_surface.set_status=header=Ready:details=:title_uses=false:refreshed=false\ntui.chat_widget_status_surface.setup_status_line=items=model-name,git-branch:committed=true:cancelled=false:refreshed=true\ntui.chat_widget_status_surface.branch_update=cwd=/repo:branch=main:stale=false:refreshed=true\ntui.chat_widget_status_surface.branch_update=cwd=/old:branch=stale:stale=true:refreshed=false\ntui.chat_widget_status_surface.git_summary_update=cwd=/repo:summary=PR #42 +3 -1:stale=false:refreshed=true\ntui.chat_widget_status_surface.git_summary_update=cwd=/old:summary=PR #7:stale=true:refreshed=false\ntui.chat_widget_status_surface.preview_title=original=activity,project-name:preview=status,project-name:started=true:refreshed=true\ntui.chat_widget_status_surface.revert_title=original=activity,project-name:reverted=true:refreshed=true\ntui.chat_widget_status_surface.setup_title=items=status,model-name:committed=true:original_cleared=true:refreshed=true\ntui.chat_widget_status_surface.failure=live_status_surface_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget status surfaces\ninput> \ntrace:\ntui.chat_widget_status_surface.plan=headless\ntui.chat_widget_status_surface.refresh=status_items=model-name,bogus-item,git-branch,pull-request:title_items=activity,project-name,status,git-branch,ghost-title:status_invalid=bogus-item:title_invalid=ghost-title:status_warn=true:status_warn_suppressed=false:title_warn=true:title_warn_suppressed=false:branch=uses:true,reset:false,request:true:git_summary=uses:true,reset:false,request:true:line=gpt-5.2-codex main PR #42:segments=3:enabled=true:hyperlink=https://github.example/pr/42:hyperlink_cleared=false:title=working codex-hxrust main:terminal_set=true:terminal_clear=false:frame=false\ntui.chat_widget_status_surface.refresh=status_items=model-name,bogus-item:title_items=activity,ghost-title:status_invalid=bogus-item:title_invalid=ghost-title:status_warn=false:status_warn_suppressed=true:title_warn=false:title_warn_suppressed=true:branch=uses:false,reset:true,request:false:git_summary=uses:false,reset:true,request:false:line=gpt-5.2-codex:segments=1:enabled=true:hyperlink=:hyperlink_cleared=true:title=working:terminal_set=true:terminal_clear=false:frame=false\ntui.chat_widget_status_surface.refresh_title=items=activity,project-name:empty=false:title=working codex-hxrust:last=working codex-hxrust->working codex-hxrust:set=false:clear=false:duplicate=true:no_visible=false:frame=true:delay_ms=250\ntui.chat_widget_status_surface.refresh_title=items=:empty=true:title=:last=working codex-hxrust->:set=false:clear=true:duplicate=false:no_visible=false:frame=false:delay_ms=0\ntui.chat_widget_status_surface.refresh_title=items=spinner:empty=false:title=:last=codex-hxrust->:set=false:clear=true:duplicate=false:no_visible=true:frame=false:delay_ms=0\ntui.chat_widget_status_surface.set_status=header=Working:details=waiting for tools:title_uses=true:refreshed=true\ntui.chat_widget_status_surface.set_status=header=Ready:details=:title_uses=false:refreshed=false\ntui.chat_widget_status_surface.setup_status_line=items=model-name,git-branch:committed=true:cancelled=false:refreshed=true\ntui.chat_widget_status_surface.branch_update=cwd=/repo:branch=main:stale=false:refreshed=true\ntui.chat_widget_status_surface.branch_update=cwd=/old:branch=stale:stale=true:refreshed=false\ntui.chat_widget_status_surface.git_summary_update=cwd=/repo:summary=PR #42 +3 -1:stale=false:refreshed=true\ntui.chat_widget_status_surface.git_summary_update=cwd=/old:summary=PR #7:stale=true:refreshed=false\ntui.chat_widget_status_surface.preview_title=original=activity,project-name:preview=status,project-name:started=true:refreshed=true\ntui.chat_widget_status_surface.revert_title=original=activity,project-name:reverted=true:refreshed=true\ntui.chat_widget_status_surface.setup_title=items=status,model-name:committed=true:original_cleared=true:refreshed=true\ntui.chat_widget_status_surface.failure=live_status_surface_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

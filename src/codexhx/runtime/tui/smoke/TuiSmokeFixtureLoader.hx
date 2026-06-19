@@ -102,6 +102,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetStreamStatus: optionalChatWidgetStreamStatusPlan(value, "chatWidgetStreamStatus"),
 				chatWidgetStreamLifecycle: optionalChatWidgetStreamLifecyclePlan(value, "chatWidgetStreamLifecycle"),
 				chatWidgetMcpStartup: optionalMcpStartupPlan(value, "chatWidgetMcpStartup"),
+				chatWidgetStatusSurface: optionalStatusSurfacePlan(value, "chatWidgetStatusSurface"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -801,6 +802,85 @@ class TuiSmokeFixtureLoader {
 					actions: mcpStartupActions(optionalArrayField(value, "actions"))
 				});
 		}
+	}
+
+	static function optionalStatusSurfacePlan(object:Value, name:String):Null<TuiSmokeStatusSurfacePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeStatusSurfacePlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: statusSurfaceActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function statusSurfaceActions(values:Array<Value>):Array<TuiSmokeStatusSurfaceAction> {
+		final out:Array<TuiSmokeStatusSurfaceAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeStatusSurfaceAction({
+				kind: TuiSmokeStatusSurfaceActionKind.fromString(stringField(value, "kind", "")),
+				statusLineItems: optionalStringField(value, "statusLineItems", ""),
+				terminalTitleItems: optionalStringField(value, "terminalTitleItems", ""),
+				invalidStatusLineItems: optionalStringField(value, "invalidStatusLineItems", ""),
+				invalidTerminalTitleItems: optionalStringField(value, "invalidTerminalTitleItems", ""),
+				statusLineText: optionalStringField(value, "statusLineText", ""),
+				statusLineHyperlink: optionalStringField(value, "statusLineHyperlink", ""),
+				terminalTitle: optionalStringField(value, "terminalTitle", ""),
+				lastTerminalTitleBefore: optionalStringField(value, "lastTerminalTitleBefore", ""),
+				lastTerminalTitleAfter: optionalStringField(value, "lastTerminalTitleAfter", ""),
+				statusHeader: optionalStringField(value, "statusHeader", ""),
+				statusDetails: optionalStringField(value, "statusDetails", ""),
+				configuredItems: optionalStringField(value, "configuredItems", ""),
+				originalItems: optionalStringField(value, "originalItems", ""),
+				cwd: optionalStringField(value, "cwd", ""),
+				branch: optionalStringField(value, "branch", ""),
+				gitSummary: optionalStringField(value, "gitSummary", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				statusLineItemCount: optionalIntField(value, "statusLineItemCount", 0),
+				terminalTitleItemCount: optionalIntField(value, "terminalTitleItemCount", 0),
+				statusLineSegmentCount: optionalIntField(value, "statusLineSegmentCount", 0),
+				invalidWarningCount: optionalIntField(value, "invalidWarningCount", 0),
+				frameDelayMs: optionalIntField(value, "frameDelayMs", 0),
+				threadPresent: optionalBoolField(value, "threadPresent", false),
+				statusLineEnabled: optionalBoolField(value, "statusLineEnabled", false),
+				terminalTitleEmptySelection: optionalBoolField(value, "terminalTitleEmptySelection", false),
+				usesGitBranch: optionalBoolField(value, "usesGitBranch", false),
+				usesGitSummary: optionalBoolField(value, "usesGitSummary", false),
+				branchReset: optionalBoolField(value, "branchReset", false),
+				branchRequested: optionalBoolField(value, "branchRequested", false),
+				branchStaleIgnored: optionalBoolField(value, "branchStaleIgnored", false),
+				gitSummaryReset: optionalBoolField(value, "gitSummaryReset", false),
+				gitSummaryRequested: optionalBoolField(value, "gitSummaryRequested", false),
+				gitSummaryStaleIgnored: optionalBoolField(value, "gitSummaryStaleIgnored", false),
+				statusInvalidWarningInserted: optionalBoolField(value, "statusInvalidWarningInserted", false),
+				statusInvalidWarningSuppressed: optionalBoolField(value, "statusInvalidWarningSuppressed", false),
+				titleInvalidWarningInserted: optionalBoolField(value, "titleInvalidWarningInserted", false),
+				titleInvalidWarningSuppressed: optionalBoolField(value, "titleInvalidWarningSuppressed", false),
+				statusLineCleared: optionalBoolField(value, "statusLineCleared", false),
+				hyperlinkCleared: optionalBoolField(value, "hyperlinkCleared", false),
+				terminalTitleCleared: optionalBoolField(value, "terminalTitleCleared", false),
+				terminalTitleSkippedDuplicate: optionalBoolField(value, "terminalTitleSkippedDuplicate", false),
+				terminalTitleNoVisibleContent: optionalBoolField(value, "terminalTitleNoVisibleContent", false),
+				terminalTitleSet: optionalBoolField(value, "terminalTitleSet", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				titleUsesStatus: optionalBoolField(value, "titleUsesStatus", false),
+				statusSurfacesRefreshed: optionalBoolField(value, "statusSurfacesRefreshed", false),
+				statusLineSetupCommitted: optionalBoolField(value, "statusLineSetupCommitted", false),
+				statusLineSetupCancelled: optionalBoolField(value, "statusLineSetupCancelled", false),
+				terminalTitlePreviewStarted: optionalBoolField(value, "terminalTitlePreviewStarted", false),
+				terminalTitlePreviewReverted: optionalBoolField(value, "terminalTitlePreviewReverted", false),
+				terminalTitleSetupCommitted: optionalBoolField(value, "terminalTitleSetupCommitted", false),
+				originalSnapshotCleared: optionalBoolField(value, "originalSnapshotCleared", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
 	}
 
 	static function mcpStartupActions(values:Array<Value>):Array<TuiSmokeMcpStartupAction> {
