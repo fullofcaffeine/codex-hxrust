@@ -17193,6 +17193,157 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_keymap_raw_output.plan=headless\ntui.chat_widget_keymap_raw_output.raw_default=action=global.toggle_raw_output:binding=alt-r:matched=true:surface=app\ntui.chat_widget_keymap_raw_output.raw_remap=action=global.toggle_raw_output:binding=f12:previous=alt-r:remapped=true:default_pruned=true\ntui.chat_widget_keymap_raw_output.toggle=binding=f12:raw=false->true:toggled=true:frame=true:live_terminal=false\ntui.chat_widget_keymap_raw_output.unbind=action=composer.toggle_shortcuts:bindings=0:unbound=true:fallback_suppressed=true\ntui.chat_widget_keymap_raw_output.editor_aliases=newline=5:delete_word=alt-d:modified_delete=4:preserved=true\ntui.chat_widget_keymap_raw_output.main_assign=action=global.toggle_fast_mode:binding=ctrl-shift-f:surface=app:assigned=true:conflict=false\ntui.chat_widget_keymap_raw_output.main_conflict=action=global.toggle_fast_mode:binding=ctrl-l:conflict=clear_terminal:rejected=true\ntui.chat_widget_keymap_raw_output.fixed_conflict=action=composer.submit:binding=ctrl-v:conflict=fixed.paste_image:rejected=true\ntui.chat_widget_keymap_raw_output.fixed_unbind_remap=action=global.copy:binding=alt-.:conflict=chat.increase_reasoning_effort:unbound=true:assigned=true\ntui.chat_widget_keymap_raw_output.default_pruning=surface=list:defaults=6->4:legacy_pruned=true:conflict=false\ntui.chat_widget_keymap_raw_output.binding_input=path=tui.keymap.composer.submit:string_or_array=true:deduped=2->1:fallback=global_to_composer:invalid_path=tui.keymap.global.open_transcript\ntui.chat_widget_keymap_raw_output.failure=live_keymap_raw_output_effects_rejected:no_terminal=true:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget keymap raw output\ninput> \ntrace:\ntui.chat_widget_keymap_raw_output.plan=headless\ntui.chat_widget_keymap_raw_output.raw_default=action=global.toggle_raw_output:binding=alt-r:matched=true:surface=app\ntui.chat_widget_keymap_raw_output.raw_remap=action=global.toggle_raw_output:binding=f12:previous=alt-r:remapped=true:default_pruned=true\ntui.chat_widget_keymap_raw_output.toggle=binding=f12:raw=false->true:toggled=true:frame=true:live_terminal=false\ntui.chat_widget_keymap_raw_output.unbind=action=composer.toggle_shortcuts:bindings=0:unbound=true:fallback_suppressed=true\ntui.chat_widget_keymap_raw_output.editor_aliases=newline=5:delete_word=alt-d:modified_delete=4:preserved=true\ntui.chat_widget_keymap_raw_output.main_assign=action=global.toggle_fast_mode:binding=ctrl-shift-f:surface=app:assigned=true:conflict=false\ntui.chat_widget_keymap_raw_output.main_conflict=action=global.toggle_fast_mode:binding=ctrl-l:conflict=clear_terminal:rejected=true\ntui.chat_widget_keymap_raw_output.fixed_conflict=action=composer.submit:binding=ctrl-v:conflict=fixed.paste_image:rejected=true\ntui.chat_widget_keymap_raw_output.fixed_unbind_remap=action=global.copy:binding=alt-.:conflict=chat.increase_reasoning_effort:unbound=true:assigned=true\ntui.chat_widget_keymap_raw_output.default_pruning=surface=list:defaults=6->4:legacy_pruned=true:conflict=false\ntui.chat_widget_keymap_raw_output.binding_input=path=tui.keymap.composer.submit:string_or_array=true:deduped=2->1:fallback=global_to_composer:invalid_path=tui.keymap.global.open_transcript\ntui.chat_widget_keymap_raw_output.failure=live_keymap_raw_output_effects_rejected:no_terminal=true:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-raw-output-render-headless",
+      "frame": {
+        "name": "chatwidget-raw-output-render-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget raw output render"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_raw_output_render",
+          "chatWidgetRawOutputRender": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "mode_set",
+                "renderMode": "Raw",
+                "rawOutputBefore": false,
+                "rawOutputAfter": true,
+                "configUpdated": true,
+                "renderModePropagated": true,
+                "redrawRequested": true,
+                "rawEventEmitted": true
+              },
+              {
+                "kind": "notice",
+                "notice": "Raw output mode on: transcript text is shown for clean terminal selection.",
+                "noticeInserted": true,
+                "rawOutputAfter": true
+              },
+              {
+                "kind": "status_line",
+                "status": "raw output",
+                "statusVisible": true,
+                "rawOutputAfter": true
+              },
+              {
+                "kind": "render_cell",
+                "cellKind": "AgentMarkdownCell",
+                "renderMode": "Raw",
+                "width": 72,
+                "displayLines": 5,
+                "rawLines": 3,
+                "visibleLines": 3,
+                "plainSelection": true,
+                "hyperlinkAnnotated": false
+              },
+              {
+                "kind": "render_cell",
+                "cellKind": "AgentMarkdownCell",
+                "renderMode": "Rich",
+                "width": 72,
+                "displayLines": 5,
+                "rawLines": 3,
+                "visibleLines": 5,
+                "plainSelection": false,
+                "hyperlinkAnnotated": true
+              },
+              {
+                "kind": "active_stream",
+                "source": "assistant_tail",
+                "renderMode": "Raw",
+                "width": 72,
+                "revisionBefore": 4,
+                "revisionAfter": 5,
+                "activeTailSynced": true,
+                "redrawRequested": true
+              },
+              {
+                "kind": "command_output",
+                "command": "cargo test",
+                "commandGrouped": true,
+                "stdoutVisible": true,
+                "stderrVisible": true,
+                "displayLines": 4,
+                "rawLines": 4
+              },
+              {
+                "kind": "tool_output",
+                "toolName": "find_docs",
+                "status": "Completed",
+                "displayLines": 3,
+                "rawLines": 2,
+                "hiddenLines": 1,
+                "toolExtraImageCell": true
+              },
+              {
+                "kind": "copy_transcript",
+                "source": "assistant_final",
+                "copyLines": 3,
+                "transcriptLines": 4,
+                "copyPreserved": true,
+                "transcriptPreserved": true
+              },
+              {
+                "kind": "resize_sync",
+                "previousWidth": 72,
+                "width": 96,
+                "renderMode": "Raw",
+                "activeTailSynced": true,
+                "activeRevisionBumped": true,
+                "redrawRequested": true
+              },
+              {
+                "kind": "slash_command",
+                "slashCommand": "/raw off",
+                "rawOutputBefore": true,
+                "rawOutputAfter": false,
+                "rawEventEmitted": true,
+                "noticeInserted": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_raw_output_render_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_raw_output_render.plan=headless\ntui.chat_widget_raw_output_render.mode=Raw:raw=false->true:config=true:propagated=true:redraw=true:event=true\ntui.chat_widget_raw_output_render.notice=Raw output mode on: transcript text is shown for clean terminal selection.:inserted=true:raw=true\ntui.chat_widget_raw_output_render.status=raw output:visible=true:raw=true\ntui.chat_widget_raw_output_render.cell=AgentMarkdownCell:mode=Raw:width=72:display=5:raw=3:visible=3:plain=true:links=false\ntui.chat_widget_raw_output_render.cell=AgentMarkdownCell:mode=Rich:width=72:display=5:raw=3:visible=5:plain=false:links=true\ntui.chat_widget_raw_output_render.active_stream=assistant_tail:mode=Raw:width=72:revision=4->5:tail_synced=true:redraw=true\ntui.chat_widget_raw_output_render.command=cargo test:grouped=true:stdout=true:stderr=true:display=4:raw=4\ntui.chat_widget_raw_output_render.tool=find_docs:status=Completed:display=3:raw=2:hidden=1:image_extra=true\ntui.chat_widget_raw_output_render.copy_transcript=assistant_final:copy=3:transcript=4:copy_preserved=true:transcript_preserved=true\ntui.chat_widget_raw_output_render.resize=72->96:mode=Raw:tail_synced=true:revision_bumped=true:redraw=true\ntui.chat_widget_raw_output_render.slash=/raw off:raw=true->false:event=true:notice=true\ntui.chat_widget_raw_output_render.failure=live_raw_output_render_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget raw output render\ninput> \ntrace:\ntui.chat_widget_raw_output_render.plan=headless\ntui.chat_widget_raw_output_render.mode=Raw:raw=false->true:config=true:propagated=true:redraw=true:event=true\ntui.chat_widget_raw_output_render.notice=Raw output mode on: transcript text is shown for clean terminal selection.:inserted=true:raw=true\ntui.chat_widget_raw_output_render.status=raw output:visible=true:raw=true\ntui.chat_widget_raw_output_render.cell=AgentMarkdownCell:mode=Raw:width=72:display=5:raw=3:visible=3:plain=true:links=false\ntui.chat_widget_raw_output_render.cell=AgentMarkdownCell:mode=Rich:width=72:display=5:raw=3:visible=5:plain=false:links=true\ntui.chat_widget_raw_output_render.active_stream=assistant_tail:mode=Raw:width=72:revision=4->5:tail_synced=true:redraw=true\ntui.chat_widget_raw_output_render.command=cargo test:grouped=true:stdout=true:stderr=true:display=4:raw=4\ntui.chat_widget_raw_output_render.tool=find_docs:status=Completed:display=3:raw=2:hidden=1:image_extra=true\ntui.chat_widget_raw_output_render.copy_transcript=assistant_final:copy=3:transcript=4:copy_preserved=true:transcript_preserved=true\ntui.chat_widget_raw_output_render.resize=72->96:mode=Raw:tail_synced=true:revision_bumped=true:redraw=true\ntui.chat_widget_raw_output_render.slash=/raw off:raw=true->false:event=true:notice=true\ntui.chat_widget_raw_output_render.failure=live_raw_output_render_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

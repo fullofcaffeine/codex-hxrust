@@ -62,6 +62,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ChatWidgetTranscriptOverlay = "chat_widget_transcript_overlay";
 	final ChatWidgetBacktrackOverlay = "chat_widget_backtrack_overlay";
 	final ChatWidgetKeymapRawOutput = "chat_widget_keymap_raw_output";
+	final ChatWidgetRawOutputRender = "chat_widget_raw_output_render";
 	final ChatWidgetInterruptQuit = "chat_widget_interrupt_quit";
 	final ChatWidgetInterruptedRestore = "chat_widget_interrupted_restore";
 	final SideConversation = "side_conversation";
@@ -139,6 +140,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "chat_widget_transcript_overlay": ChatWidgetTranscriptOverlay;
 			case "chat_widget_backtrack_overlay": ChatWidgetBacktrackOverlay;
 			case "chat_widget_keymap_raw_output": ChatWidgetKeymapRawOutput;
+			case "chat_widget_raw_output_render": ChatWidgetRawOutputRender;
 			case "chat_widget_interrupt_quit": ChatWidgetInterruptQuit;
 			case "chat_widget_interrupted_restore": ChatWidgetInterruptedRestore;
 			case "side_conversation": SideConversation;

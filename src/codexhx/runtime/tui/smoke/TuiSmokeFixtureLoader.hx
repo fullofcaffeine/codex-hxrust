@@ -121,6 +121,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetTranscriptOverlay: optionalTranscriptOverlayPlan(value, "chatWidgetTranscriptOverlay"),
 				chatWidgetBacktrackOverlay: optionalBacktrackOverlayPlan(value, "chatWidgetBacktrackOverlay"),
 				chatWidgetKeymapRawOutput: optionalKeymapRawOutputPlan(value, "chatWidgetKeymapRawOutput"),
+				chatWidgetRawOutputRender: optionalRawOutputRenderPlan(value, "chatWidgetRawOutputRender"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -533,6 +534,72 @@ class TuiSmokeFixtureLoader {
 				rawOutputToggled: optionalBoolField(value, "rawOutputToggled", false),
 				frameScheduled: optionalBoolField(value, "frameScheduled", false),
 				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalRawOutputRenderPlan(object:Value, name:String):Null<TuiSmokeRawOutputRenderPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeRawOutputRenderPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: rawOutputRenderActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function rawOutputRenderActions(values:Array<Value>):Array<TuiSmokeRawOutputRenderAction> {
+		final out:Array<TuiSmokeRawOutputRenderAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeRawOutputRenderAction({
+				kind: TuiSmokeRawOutputRenderActionKind.fromString(stringField(value, "kind", "")),
+				source: optionalStringField(value, "source", ""),
+				cellKind: optionalStringField(value, "cellKind", ""),
+				renderMode: optionalStringField(value, "renderMode", ""),
+				status: optionalStringField(value, "status", ""),
+				command: optionalStringField(value, "command", ""),
+				toolName: optionalStringField(value, "toolName", ""),
+				notice: optionalStringField(value, "notice", ""),
+				slashCommand: optionalStringField(value, "slashCommand", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				width: optionalIntField(value, "width", 0),
+				previousWidth: optionalIntField(value, "previousWidth", 0),
+				displayLines: optionalIntField(value, "displayLines", 0),
+				rawLines: optionalIntField(value, "rawLines", 0),
+				transcriptLines: optionalIntField(value, "transcriptLines", 0),
+				copyLines: optionalIntField(value, "copyLines", 0),
+				visibleLines: optionalIntField(value, "visibleLines", 0),
+				hiddenLines: optionalIntField(value, "hiddenLines", 0),
+				revisionBefore: optionalIntField(value, "revisionBefore", 0),
+				revisionAfter: optionalIntField(value, "revisionAfter", 0),
+				rawOutputBefore: optionalBoolField(value, "rawOutputBefore", false),
+				rawOutputAfter: optionalBoolField(value, "rawOutputAfter", false),
+				configUpdated: optionalBoolField(value, "configUpdated", false),
+				noticeInserted: optionalBoolField(value, "noticeInserted", false),
+				statusVisible: optionalBoolField(value, "statusVisible", false),
+				richMode: optionalBoolField(value, "richMode", false),
+				rawMode: optionalBoolField(value, "rawMode", false),
+				hyperlinkAnnotated: optionalBoolField(value, "hyperlinkAnnotated", false),
+				plainSelection: optionalBoolField(value, "plainSelection", false),
+				transcriptPreserved: optionalBoolField(value, "transcriptPreserved", false),
+				copyPreserved: optionalBoolField(value, "copyPreserved", false),
+				commandGrouped: optionalBoolField(value, "commandGrouped", false),
+				stdoutVisible: optionalBoolField(value, "stdoutVisible", false),
+				stderrVisible: optionalBoolField(value, "stderrVisible", false),
+				toolExtraImageCell: optionalBoolField(value, "toolExtraImageCell", false),
+				activeRevisionBumped: optionalBoolField(value, "activeRevisionBumped", false),
+				activeTailSynced: optionalBoolField(value, "activeTailSynced", false),
+				renderModePropagated: optionalBoolField(value, "renderModePropagated", false),
+				redrawRequested: optionalBoolField(value, "redrawRequested", false),
+				rawEventEmitted: optionalBoolField(value, "rawEventEmitted", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),

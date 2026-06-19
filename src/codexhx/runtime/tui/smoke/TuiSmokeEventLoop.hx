@@ -351,6 +351,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetRawOutputRender:
+					if (!traceRawOutputRender(event.chatWidgetRawOutputRender, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4949,6 +4954,123 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_keymap_raw_output.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceRawOutputRender(plan:TuiSmokeRawOutputRenderPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_raw_output_render.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_raw_output_render.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeRawOutputRenderActionKind.ModeSet:
+					trace.push(
+						"tui.chat_widget_raw_output_render.mode="
+						+ action.renderMode
+						+ ":raw=" + action.rawOutputBefore + "->" + action.rawOutputAfter
+						+ ":config=" + action.configUpdated
+						+ ":propagated=" + action.renderModePropagated
+						+ ":redraw=" + action.redrawRequested
+						+ ":event=" + action.rawEventEmitted
+					);
+				case TuiSmokeRawOutputRenderActionKind.Notice:
+					trace.push(
+						"tui.chat_widget_raw_output_render.notice="
+						+ action.notice
+						+ ":inserted=" + action.noticeInserted
+						+ ":raw=" + action.rawOutputAfter
+					);
+				case TuiSmokeRawOutputRenderActionKind.StatusLine:
+					trace.push(
+						"tui.chat_widget_raw_output_render.status="
+						+ action.status
+						+ ":visible=" + action.statusVisible
+						+ ":raw=" + action.rawOutputAfter
+					);
+				case TuiSmokeRawOutputRenderActionKind.RenderCell:
+					trace.push(
+						"tui.chat_widget_raw_output_render.cell="
+						+ action.cellKind
+						+ ":mode=" + action.renderMode
+						+ ":width=" + action.width
+						+ ":display=" + action.displayLines
+						+ ":raw=" + action.rawLines
+						+ ":visible=" + action.visibleLines
+						+ ":plain=" + action.plainSelection
+						+ ":links=" + action.hyperlinkAnnotated
+					);
+				case TuiSmokeRawOutputRenderActionKind.ActiveStream:
+					trace.push(
+						"tui.chat_widget_raw_output_render.active_stream="
+						+ action.source
+						+ ":mode=" + action.renderMode
+						+ ":width=" + action.width
+						+ ":revision=" + action.revisionBefore + "->" + action.revisionAfter
+						+ ":tail_synced=" + action.activeTailSynced
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeRawOutputRenderActionKind.CommandOutput:
+					trace.push(
+						"tui.chat_widget_raw_output_render.command="
+						+ action.command
+						+ ":grouped=" + action.commandGrouped
+						+ ":stdout=" + action.stdoutVisible
+						+ ":stderr=" + action.stderrVisible
+						+ ":display=" + action.displayLines
+						+ ":raw=" + action.rawLines
+					);
+				case TuiSmokeRawOutputRenderActionKind.ToolOutput:
+					trace.push(
+						"tui.chat_widget_raw_output_render.tool="
+						+ action.toolName
+						+ ":status=" + action.status
+						+ ":display=" + action.displayLines
+						+ ":raw=" + action.rawLines
+						+ ":hidden=" + action.hiddenLines
+						+ ":image_extra=" + action.toolExtraImageCell
+					);
+				case TuiSmokeRawOutputRenderActionKind.CopyTranscript:
+					trace.push(
+						"tui.chat_widget_raw_output_render.copy_transcript="
+						+ action.source
+						+ ":copy=" + action.copyLines
+						+ ":transcript=" + action.transcriptLines
+						+ ":copy_preserved=" + action.copyPreserved
+						+ ":transcript_preserved=" + action.transcriptPreserved
+					);
+				case TuiSmokeRawOutputRenderActionKind.ResizeSync:
+					trace.push(
+						"tui.chat_widget_raw_output_render.resize="
+						+ action.previousWidth + "->" + action.width
+						+ ":mode=" + action.renderMode
+						+ ":tail_synced=" + action.activeTailSynced
+						+ ":revision_bumped=" + action.activeRevisionBumped
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeRawOutputRenderActionKind.SlashCommand:
+					trace.push(
+						"tui.chat_widget_raw_output_render.slash="
+						+ action.slashCommand
+						+ ":raw=" + action.rawOutputBefore + "->" + action.rawOutputAfter
+						+ ":event=" + action.rawEventEmitted
+						+ ":notice=" + action.noticeInserted
+					);
+				case TuiSmokeRawOutputRenderActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_raw_output_render.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_raw_output_render.unknown");
 					return false;
 			}
 		}

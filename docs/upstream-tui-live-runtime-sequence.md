@@ -2806,6 +2806,18 @@ Model selected raw Codex keymap/runtime behavior without live keyboard input, li
 
 Status: HXCX-TUI-82 extends `fixtures/hxrust/tui-smoke.v1.json` with typed raw-output default/remap/toggle, explicit unbind, editor aliases, main-surface assignment/conflict, fixed-shortcut conflict/unbind-remap, default pruning, binding input, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic runtime keymap evidence only, not the full keyboard event loop, real terminal raw-output rendering, config-file loading, ratatui renderer, app-server transport, or model traffic.
 
+### HXCX-TUI-83: ChatWidget Raw-Output Render-Mode Boundary
+
+Model selected raw Codex raw-output rendering behavior without live terminal mutation, ratatui rendering, app-server mutation, command execution, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget.rs` raw-output ownership: `set_raw_output_mode` updates ChatWidget state and config, `set_raw_output_mode_and_notify` inserts the user-facing rich/raw notice, slash `/raw` command paths emit `RawOutputModeChanged`, and the status line shows `raw output` only when enabled;
+- preserve `../codex/codex-rs/tui/src/history_cell/mod.rs` render-mode selection: rich mode uses display hyperlink lines, raw mode uses raw lines for clean terminal selection, and transcript lines remain a separate source for overlay/copy behavior;
+- preserve command/tool history-cell visibility: command output keeps stdout/stderr visibility and grouping facts, tool output can have raw/display differences plus companion image cells, and raw-output rendering does not execute a command or tool;
+- preserve active stream and resize propagation: raw/rich render mode is propagated to active stream/plan controllers, active tails are resynced, active revisions bump when render-affecting state changes, and redraw is requested;
+- preserve copy/transcript separation: final assistant copy lines and transcript lines remain stable evidence surfaces even when display mode changes.
+
+Status: HXCX-TUI-83 extends `fixtures/hxrust/tui-smoke.v1.json` with typed raw-output mode/notice/status, rich-versus-raw cell selection, active stream propagation, command/tool output visibility, copy/transcript preservation, resize sync, slash command, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic raw-output render-mode evidence only, not the full ratatui renderer, real terminal selection, live command/tool execution, config-file persistence, app-server transport, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
