@@ -14,6 +14,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `src/codexhx/runtime/tui/resume/` now owns the first pure Haxe resume picker kernel. `harness/check-resume-picker-kernel.sh` runs the same fixture evidence through the Haxe interpreter, portable haxe.rust generation, generated Cargo `check`, generated Cargo `test`, and the generated binary.
 - `harness/check-resume-picker-host-facade.sh` validates the runtime-neutral host contracts for deterministic app-server thread sources, background loader events, frame scheduling, terminal-renderer snapshots, backpressure, cancellation, and in-memory density persistence.
 - `harness/check-resume-picker-no-credential-gate.sh` now validates the first combined no-credential generated-Rust gate: fixture-backed thread list/read through the host facade, deterministic key events, frame requests, terminal/test rendering, transcript overlay open, and temp Codex-home density persistence.
+- `harness/check-resume-picker-render-snapshot.sh` validates stable normalized test-backend screen snapshots for the no-credential picker path, including visible rows, selected row marker, loading overlay, transcript overlay, footer, and temp-home config evidence.
 
 ## Upstream Anchors
 
@@ -96,6 +97,8 @@ Status: `codexhx.runtime.tui.resume.live.ResumePickerNoCredentialGate` composes 
    - Then add an opt-in real crossterm runner for manual/live validation. The automated gate should remain credential-free and non-destructive.
    - Confirm terminal restore behavior and raw-mode safety before any default live terminal gate.
 
+Status: `harness/check-resume-picker-render-snapshot.sh` adds the first normalized terminal/test-backend snapshot gate for the resume picker path. It asserts six generated-Rust render snapshots across open, page load, selection movement, transcript loading, transcript loaded, and density persistence. The snapshot is text-normalized evidence only: it is not live crossterm takeover, ratatui frame lifetime ownership, state DB mutation, model traffic, or Cafex behavior.
+
 5. Replace smoke-only behaviors incrementally.
    - Page load: typed fixture intent -> generated Rust app-server request path.
    - Selection/render: pure state text evidence -> ratatui/VT100 snapshot.
@@ -136,7 +139,7 @@ Near-term gates:
 - `harness/check-resume-picker-kernel.sh` for Haxe interpreter tests plus haxe.rust-generated Cargo `check`, `test`, and binary execution for the pure picker kernel.
 - `harness/check-resume-picker-host-facade.sh` for runtime-neutral host contracts, deterministic in-memory implementations, backpressure/cancellation, and portable haxe.rust-generated Rust validation.
 - `harness/check-resume-picker-no-credential-gate.sh` for the first combined no-credential generated-Rust app-server facade, deterministic key, frame/render, transcript overlay, and temp-home density persistence gate.
-- A new VT100/test-backend render gate before any live crossterm automation.
+- `harness/check-resume-picker-render-snapshot.sh` for normalized VT100/test-backend-style screen snapshots before any live crossterm automation.
 
 Exit criteria for "first live resume picker slice":
 

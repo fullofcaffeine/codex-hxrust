@@ -11,6 +11,8 @@ typedef ResumePickerNoCredentialGateReportFields = {
 	final configPath:String;
 	final configText:String;
 	final finalSummary:String;
+	final finalSnapshot:String;
+	final renderSnapshots:Array<String>;
 	final eventSummaries:Array<String>;
 }
 
@@ -26,6 +28,8 @@ class ResumePickerNoCredentialGateReport {
 	public final configPath:String;
 	public final configText:String;
 	public final finalSummary:String;
+	public final finalSnapshot:String;
+	public final renderSnapshots:Array<String>;
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
@@ -38,6 +42,7 @@ class ResumePickerNoCredentialGateReport {
 			+ ";densityPersisted=" + (densityPersisted ? "true" : "false")
 			+ ";configPath=" + configPath
 			+ ";final=" + finalSummary
+			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
 			+ ";events=[" + eventSummaries.join("##") + "]";
 	}
 }

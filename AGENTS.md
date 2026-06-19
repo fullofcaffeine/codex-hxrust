@@ -56,7 +56,7 @@ Keep Beads ordered so mainstream/raw Codex parity work is ready before Cafex ada
 
 If a Cafex/Cafetera item floats to the top of the ready queue before its upstream-shaped core is strong enough, fix the queue first: reprioritize or dependency-gate the Cafex item and file/select the missing raw Codex slice. Do this as Beads hygiene, not as an ad hoc skip rule.
 
-Cafex work is a compatibility layer that comes after the upstream-shaped Haxe core is strong enough for the slice being claimed. Keep Cafex adapter changes under `codexhx.adapters.cafex` and related fixtures/docs, and do not let Cafex behavior leak into upstream-shaped core modules or into `../haxe.rust`.
+Cafex work is a separate later revision/adaptation layer after the 1:1 upstream Codex port is complete enough to stand on its own. Do not treat Cafex parity as part of the first-port acceptance path. Keep Cafex adapter changes under `codexhx.adapters.cafex` and related fixtures/docs, and do not let Cafex behavior leak into upstream-shaped core modules or into `../haxe.rust`.
 
 ## Testing Strategy
 

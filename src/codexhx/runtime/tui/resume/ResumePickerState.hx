@@ -72,6 +72,7 @@ typedef ResumePickerStateFields = {
 	final moreAbove:Bool;
 	final moreBelow:Bool;
 	final loadingOlderShown:Bool;
+	final visibleRows:Array<ResumePickerVisibleRow>;
 	final effects:Array<ResumePickerEffect>;
 }
 
@@ -153,6 +154,7 @@ class ResumePickerState {
 	public var moreAbove:Bool;
 	public var moreBelow:Bool;
 	public var loadingOlderShown:Bool;
+	public var visibleRows:Array<ResumePickerVisibleRow>;
 	public var effects:Array<ResumePickerEffect>;
 
 	public static function initial():ResumePickerState {
@@ -228,6 +230,7 @@ class ResumePickerState {
 			moreAbove: false,
 			moreBelow: false,
 			loadingOlderShown: false,
+			visibleRows: [],
 			effects: []
 		});
 	}
@@ -305,6 +308,7 @@ class ResumePickerState {
 			moreAbove: moreAbove,
 			moreBelow: moreBelow,
 			loadingOlderShown: loadingOlderShown,
+			visibleRows: visibleRows.copy(),
 			effects: effects.copy()
 		});
 	}

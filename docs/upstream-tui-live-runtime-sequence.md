@@ -3095,6 +3095,17 @@ Compose the pure picker state and runtime-neutral host facade into the first gen
 
 Status: HXCX-TUI-105 adds `src/codexhx/runtime/tui/resume/live/`, `src/codexhx/runtime/tui/resume/host/TempHomeResumePickerConfigPersistence.hx`, `test/ResumePickerNoCredentialGateHarness.hx`, `hxml/resume-picker-no-credential-gate.hxml`, and `harness/check-resume-picker-no-credential-gate.sh`. The gate validates fixture-backed page load, transcript load, three deterministic key events, six frame requests, six renders, overlay opening, and temp-home `config.toml` density persistence through the Haxe interpreter and portable haxe.rust-generated Cargo `check`, `test`, and binary execution. This is the first combined no-credential generated-Rust resume picker gate, not live crossterm/ratatui ownership or production app-server transport.
 
+### HXCX-TUI-106: Resume Picker VT100/Test-Backend Render Snapshot Gate
+
+Replace counter-only rendering proof for the no-credential resume picker path with stable normalized screen snapshots:
+
+- carry typed visible row data in `ResumePickerState` so render output is not stringly or fixture-hidden;
+- render open, page-loaded, selection-moved, transcript-loading, transcript-loaded, and density-persisted states through the deterministic terminal renderer;
+- assert visible rows, selected row marker, footer progress, loading overlay, transcript overlay, and temp-home density config evidence in a generated-Rust harness;
+- keep the gate credential-free and non-destructive, with no live crossterm takeover, ratatui frame lifetime ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-106 adds `ResumePickerVisibleRow`, upgrades `DeterministicResumePickerTerminalRenderer` from state-summary strings to normalized screen snapshots, extends the no-credential report with render snapshots, and adds `test/ResumePickerRenderSnapshotHarness.hx`, `hxml/resume-picker-render-snapshot.hxml`, and `harness/check-resume-picker-render-snapshot.sh`. The gate validates six stable snapshots through Haxe interpreter execution, portable haxe.rust generation, generated Cargo `check`, generated Cargo `test`, and generated binary execution. This is normalized test-backend render evidence only, not live crossterm/ratatui ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

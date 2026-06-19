@@ -59,6 +59,7 @@ Profile policy for the scaffold:
 | `resume-picker-kernel.hxml` | Compile the HXCX-TUI-103 resume picker pure state/effect kernel harness through portable haxe.rust. |
 | `resume-picker-host-facade.hxml` | Compile the HXCX-TUI-104 resume picker runtime-neutral host facade harness through portable haxe.rust. |
 | `resume-picker-no-credential-gate.hxml` | Compile the HXCX-TUI-105 resume picker no-credential app-server/render/config gate through portable haxe.rust. |
+| `resume-picker-render-snapshot.hxml` | Compile the HXCX-TUI-106 resume picker normalized VT100/test-backend render snapshot gate through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |

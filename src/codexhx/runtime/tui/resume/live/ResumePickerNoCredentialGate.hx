@@ -8,6 +8,7 @@ import codexhx.runtime.tui.resume.ResumePickerDensity;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
 import codexhx.runtime.tui.resume.ResumePickerState;
+import codexhx.runtime.tui.resume.ResumePickerVisibleRow;
 import codexhx.runtime.tui.resume.host.DeterministicResumePickerBackgroundLoader;
 import codexhx.runtime.tui.resume.host.DeterministicResumePickerFrameScheduler;
 import codexhx.runtime.tui.resume.host.DeterministicResumePickerTerminalRenderer;
@@ -49,11 +50,15 @@ class ResumePickerNoCredentialGate {
 		eventSummaries.push(pageEvent.summary());
 		if (pageEvent.kind == ResumePickerHostEventKind.PageLoaded) {
 			pageLoads = pageLoads + 1;
+			state.scannedRows = 2;
+			state.acceptedRows = 2;
+			state.invalidRows = 0;
 			state.loadedRows = 2;
 			state.filteredRows = 2;
 			state.selectedIndex = 0;
 			state.selectedThreadId = "thread-a";
 			state.selectedLabel = "Resume kernel";
+			state.visibleRows = visibleRows(0);
 			state.nextCursor = "cursor-2";
 			state.nextCursorPresent = true;
 			state.footerProgressLabel = "50%";
@@ -75,6 +80,7 @@ class ResumePickerNoCredentialGate {
 					state.selectedIndex = 1;
 					state.selectedThreadId = "thread-b";
 					state.selectedLabel = "Host facade";
+					state.visibleRows = visibleRows(1);
 					state.footerProgressLabel = "100%";
 					scheduler.requestFrame("key:" + key.keyName);
 					renderer.render(state);
@@ -125,8 +131,31 @@ class ResumePickerNoCredentialGate {
 			configPath: persistence.configPath(),
 			configText: configText,
 			finalSummary: state.summary(),
+			finalSnapshot: renderer.lastSnapshot(),
+			renderSnapshots: renderer.allSnapshots(),
 			eventSummaries: eventSummaries
 		});
+	}
+
+	static function visibleRows(selectedIndex:Int):Array<ResumePickerVisibleRow> {
+		return [
+			new ResumePickerVisibleRow({
+				threadId: "thread-a",
+				title: "Resume kernel",
+				cwd: "/workspace/codex-hxrust",
+				updatedAt: "2026-06-19T12:00:00Z",
+				turnCount: 3,
+				selected: selectedIndex == 0
+			}),
+			new ResumePickerVisibleRow({
+				threadId: "thread-b",
+				title: "Host facade",
+				cwd: "/workspace/codex-hxrust",
+				updatedAt: "2026-06-19T12:05:00Z",
+				turnCount: 5,
+				selected: selectedIndex == 1
+			})
+		];
 	}
 
 	static function pageRequest():ResumePickerThreadListRequest {
