@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout codex-hxrust
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: codex-hxrust
           fetch-depth: 0
@@ -64,7 +64,7 @@ jobs:
       HAXE_RUST_CHECKOUT_TOKEN: ${{ secrets.HAXE_RUST_CHECKOUT_TOKEN }}
     steps:
       - name: Checkout codex-hxrust
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: codex-hxrust
 
@@ -76,7 +76,7 @@ jobs:
 
       - name: Checkout haxe.rust sibling
         if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: ${{ env.HAXE_RUST_REPOSITORY }}
           path: haxe.rust
