@@ -78,6 +78,9 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 		if (state.configPersistenceStatus.length > 0 || state.configPersistencePath.length > 0) {
 			lines.push("config persistence=" + emptyLabel(state.configPersistenceStatus) + " path=" + emptyLabel(state.configPersistencePath));
 		}
+		if (state.loaderEventStatus.length > 0 || state.loaderEventDetail.length > 0) {
+			lines.push("loader status=" + emptyLabel(state.loaderEventStatus) + " detail=" + emptyLabel(state.loaderEventDetail));
+		}
 		if (state.footerHintMode.length > 0 || state.footerWidth > 0 || state.compactFallback || state.keyOnlyFallback) {
 			lines.push("footer-hints mode="
 				+ emptyLabel(state.footerHintMode)

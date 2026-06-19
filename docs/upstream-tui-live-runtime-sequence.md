@@ -3183,6 +3183,17 @@ Extend the normalized resume picker renderer from keyboard navigation evidence i
 
 Status: HXCX-TUI-113 adds normalized `ResumePickerState.configPersistenceStatus` and `configPersistencePath` render evidence, plus `ResumePickerDensityPersistenceRenderGate`, `ResumePickerDensityPersistenceRenderGateReport`, `test/ResumePickerDensityPersistenceRenderHarness.hx`, `hxml/resume-picker-density-persistence-render.hxml`, and `harness/check-resume-picker-density-persistence-render.sh`. The gate validates temp-home dense config write success, persistence-unconfigured failure, visible error/config/footer evidence, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live user config mutation, terminal ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-114: Resume Picker Loader Cancellation And Stale Event Render Snapshot Gate
+
+Extend the normalized resume picker renderer from density persistence evidence into background-loader cancellation and stale event evidence:
+
+- render accepted baseline page state through the runtime-neutral background loader and host event facade;
+- render stale page, preview, and transcript host events as ignored without mutating loaded rows, selected row, preview state, transcript state, or overlay state;
+- render loader cancellation evidence and preserve frame-safe recovery after ignored events;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-114 adds normalized `ResumePickerState.loaderEventStatus` and `loaderEventDetail` render evidence, plus `ResumePickerLoaderCancellationRenderGate`, `ResumePickerLoaderCancellationRenderGateReport`, `test/ResumePickerLoaderCancellationRenderHarness.hx`, `hxml/resume-picker-loader-cancellation-render.hxml`, and `harness/check-resume-picker-loader-cancellation-render.sh`. The gate validates stale page/preview/transcript event refusal, stable baseline/final picker state, loader cancellation evidence, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
