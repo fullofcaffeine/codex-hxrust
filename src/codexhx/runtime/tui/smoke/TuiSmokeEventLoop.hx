@@ -321,6 +321,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetGoalMenu:
+					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4205,6 +4210,92 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_session_flow.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceGoalMenu(plan:TuiSmokeGoalMenuPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_goal_menu.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_goal_menu.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeGoalMenuActionKind.Summary:
+					trace.push(
+						"tui.chat_widget_goal_menu.summary="
+						+ action.status
+						+ ":objective=" + action.objective
+						+ ":budget=" + action.tokenBudget
+						+ ":tokens=" + action.tokensUsed
+						+ ":time=" + action.timeUsedSeconds
+						+ ":hint=" + action.commandHint
+						+ ":inserted=" + action.summaryInserted
+					);
+				case TuiSmokeGoalMenuActionKind.Indicator:
+					trace.push(
+						"tui.chat_widget_goal_menu.indicator="
+						+ action.status
+						+ ":kind=" + action.indicator
+						+ ":usage=" + action.usage
+						+ ":budget=" + action.budgetPresent
+						+ ":active_elapsed=" + action.activeTurnElapsedSeconds
+					);
+				case TuiSmokeGoalMenuActionKind.EditPrompt:
+					trace.push(
+						"tui.chat_widget_goal_menu.edit="
+						+ action.status
+						+ ":edited=" + action.editedStatus
+						+ ":opened=" + action.editPromptOpened
+						+ ":set_objective=" + action.setObjectiveEvent
+					);
+				case TuiSmokeGoalMenuActionKind.ResumePrompt:
+					trace.push(
+						"tui.chat_widget_goal_menu.resume="
+						+ action.status
+						+ ":opened=" + action.resumePromptOpened
+						+ ":default=" + action.resumeDefaultSelected
+						+ ":set_status=" + action.setStatusEvent
+						+ ":leave_paused=" + action.leavePausedSelected
+					);
+				case TuiSmokeGoalMenuActionKind.Validation:
+					trace.push(
+						"tui.chat_widget_goal_menu.validation="
+						+ action.validationSource
+						+ ":chars=" + action.actualChars + "/" + action.maxChars
+						+ ":allowed=" + action.allowed
+						+ ":error=" + action.errorInserted
+						+ ":composer_cleared=" + action.composerCleared
+						+ ":pending_drained=" + action.pendingSubmissionDrained
+					);
+				case TuiSmokeGoalMenuActionKind.InterruptPause:
+					trace.push(
+						"tui.chat_widget_goal_menu.interrupt_pause="
+						+ action.status
+						+ ":active_paused=" + action.activeGoalPaused
+						+ ":set_status=" + action.setStatusEvent
+					);
+				case TuiSmokeGoalMenuActionKind.Clear:
+					trace.push(
+						"tui.chat_widget_goal_menu.clear="
+						+ action.status
+						+ ":current=" + action.currentGoalCleared
+						+ ":indicator=" + action.collaborationIndicatorUpdated
+					);
+				case TuiSmokeGoalMenuActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_goal_menu.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_goal_menu.unknown");
 					return false;
 			}
 		}

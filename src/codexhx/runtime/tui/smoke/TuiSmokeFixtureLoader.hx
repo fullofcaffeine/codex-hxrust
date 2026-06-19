@@ -115,6 +115,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
 				chatWidgetPermissionSelection: optionalPermissionSelectionPlan(value, "chatWidgetPermissionSelection"),
 				chatWidgetModelSettings: optionalModelSettingsPlan(value, "chatWidgetModelSettings"),
+				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -127,6 +128,62 @@ class TuiSmokeFixtureLoader {
 				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe"),
 				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy"),
 				clipboardPaste: optionalClipboardPastePlan(value, "clipboardPaste")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalGoalMenuPlan(object:Value, name:String):Null<TuiSmokeGoalMenuPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeGoalMenuPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: goalMenuActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function goalMenuActions(values:Array<Value>):Array<TuiSmokeGoalMenuAction> {
+		final out:Array<TuiSmokeGoalMenuAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeGoalMenuAction({
+				kind: TuiSmokeGoalMenuActionKind.fromString(stringField(value, "kind", "")),
+				status: optionalStringField(value, "status", ""),
+				objective: optionalStringField(value, "objective", ""),
+				commandHint: optionalStringField(value, "commandHint", ""),
+				indicator: optionalStringField(value, "indicator", ""),
+				usage: optionalStringField(value, "usage", ""),
+				validationSource: optionalStringField(value, "validationSource", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				tokenBudget: optionalIntField(value, "tokenBudget", 0),
+				tokensUsed: optionalIntField(value, "tokensUsed", 0),
+				timeUsedSeconds: optionalIntField(value, "timeUsedSeconds", 0),
+				actualChars: optionalIntField(value, "actualChars", 0),
+				maxChars: optionalIntField(value, "maxChars", 0),
+				activeTurnElapsedSeconds: optionalIntField(value, "activeTurnElapsedSeconds", 0),
+				budgetPresent: optionalBoolField(value, "budgetPresent", false),
+				summaryInserted: optionalBoolField(value, "summaryInserted", false),
+				editPromptOpened: optionalBoolField(value, "editPromptOpened", false),
+				editedStatus: optionalStringField(value, "editedStatus", ""),
+				setObjectiveEvent: optionalBoolField(value, "setObjectiveEvent", false),
+				resumePromptOpened: optionalBoolField(value, "resumePromptOpened", false),
+				resumeDefaultSelected: optionalBoolField(value, "resumeDefaultSelected", false),
+				setStatusEvent: optionalBoolField(value, "setStatusEvent", false),
+				leavePausedSelected: optionalBoolField(value, "leavePausedSelected", false),
+				allowed: optionalBoolField(value, "allowed", false),
+				errorInserted: optionalBoolField(value, "errorInserted", false),
+				composerCleared: optionalBoolField(value, "composerCleared", false),
+				pendingSubmissionDrained: optionalBoolField(value, "pendingSubmissionDrained", false),
+				activeGoalPaused: optionalBoolField(value, "activeGoalPaused", false),
+				currentGoalCleared: optionalBoolField(value, "currentGoalCleared", false),
+				collaborationIndicatorUpdated: optionalBoolField(value, "collaborationIndicatorUpdated", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

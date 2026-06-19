@@ -2732,6 +2732,20 @@ Model selected raw Codex model/settings popup behavior without live ratatui rend
 
 Status: HXCX-TUI-76 extends `fixtures/hxrust/tui-smoke.v1.json` with typed model picker, all-models, reasoning, plan-scope, service-tier, personality, realtime-audio, experimental-feature, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic model/settings popup state evidence only, not live popup rendering, config persistence, audio-device ownership, provider transport, or model traffic.
 
+### HXCX-TUI-77: ChatWidget Goal Menu And Status Boundary
+
+Model selected raw Codex `/goal` menu and status behavior without live app-server mutation, ratatui rendering, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/goal_menu.rs` goal summary rows: status labels, objective, elapsed time, token usage/budget, and the status-specific command hint for active, paused/blocked/usage-limited, budget-limited, and complete goals;
+- preserve edit prompt status mapping: active stays active, paused/blocked/usage-limited retain status, and budget-limited/complete goals restart as active when edited;
+- preserve resume-paused prompt behavior: default selected resume action emits `SetThreadGoalStatus(Active)`, while "Leave paused" dismisses without a status event;
+- preserve `../codex/codex-rs/tui/src/chatwidget/goal_status.rs` compact indicators: active usage includes live active-turn elapsed time or token budget, stopped budget usage includes token budget when present, and complete usage prefers token totals for budgeted goals or elapsed time otherwise;
+- preserve `../codex/codex-rs/tui/src/chatwidget/goal_validation.rs` objective length refusal for live, pasted, and queued sources, including live composer clearing and pending submission draining only for live input;
+- preserve active-goal interrupt/clear state intent: Ctrl+C pauses an active goal turn, and thread goal clearing removes current goal status and refreshes the collaboration indicator;
+- keep the evidence deterministic and independent of live app-server updates, terminal rendering, model/provider calls, and Cafex behavior.
+
+Status: HXCX-TUI-77 extends `fixtures/hxrust/tui-smoke.v1.json` with typed goal summary, status indicator, edit prompt, resume prompt, validation, interrupt pause, clear, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic goal menu/status state evidence only, not live app-server mutation, renderer ownership, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

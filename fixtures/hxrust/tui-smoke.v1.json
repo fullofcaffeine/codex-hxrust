@@ -16109,6 +16109,200 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_model_settings.plan=headless\ntui.chat_widget_model_settings.model_popup=session=true:catalog=true:auto=3:other=2:items=4:current=true:all_row=true:warning=true:open_all=true\ntui.chat_widget_model_settings.all_models=items=2:model=gpt-5.2-codex:current=true:default=false:reasoning_event=true:single_auto=false\ntui.chat_widget_model_settings.all_models=items=1:model=gpt-4.1-mini:current=false:default=true:reasoning_event=false:single_auto=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=high:warning=true:plan=false:update_model=true:update_reasoning=true:persist=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=medium:warning=false:plan=true:update_model=false:update_reasoning=false:persist=false\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=true:all_modes=false:update_model=true:update_reasoning=false:update_plan=true:persist_model=false:persist_plan=true:notify=true\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=false:all_modes=true:update_model=true:update_reasoning=true:update_plan=true:persist_model=true:persist_plan=true:notify=true\ntui.chat_widget_model_settings.service_tier=fast:configured=default:effective=fast:fast_feature=true:toggle_allowed=true:override=true:persist=true:refresh=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=true:popup=true:error=false:override=true:persist=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=false:popup=false:error=true:override=false:persist=false\ntui.chat_widget_model_settings.audio=microphone:devices=3:selected=Studio Mic:default_row=true:unavailable=true:persist=true:restart_prompt=true:restart=true\ntui.chat_widget_model_settings.experimental=features=2:stable_omitted=true:save_on_exit=true:popup=true\ntui.chat_widget_model_settings.failure=live_model_settings_effects_rejected:no_render=true:no_model=true:no_config=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget model settings\ninput> \ntrace:\ntui.chat_widget_model_settings.plan=headless\ntui.chat_widget_model_settings.model_popup=session=true:catalog=true:auto=3:other=2:items=4:current=true:all_row=true:warning=true:open_all=true\ntui.chat_widget_model_settings.all_models=items=2:model=gpt-5.2-codex:current=true:default=false:reasoning_event=true:single_auto=false\ntui.chat_widget_model_settings.all_models=items=1:model=gpt-4.1-mini:current=false:default=true:reasoning_event=false:single_auto=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=high:warning=true:plan=false:update_model=true:update_reasoning=true:persist=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=medium:warning=false:plan=true:update_model=false:update_reasoning=false:persist=false\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=true:all_modes=false:update_model=true:update_reasoning=false:update_plan=true:persist_model=false:persist_plan=true:notify=true\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=false:all_modes=true:update_model=true:update_reasoning=true:update_plan=true:persist_model=true:persist_plan=true:notify=true\ntui.chat_widget_model_settings.service_tier=fast:configured=default:effective=fast:fast_feature=true:toggle_allowed=true:override=true:persist=true:refresh=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=true:popup=true:error=false:override=true:persist=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=false:popup=false:error=true:override=false:persist=false\ntui.chat_widget_model_settings.audio=microphone:devices=3:selected=Studio Mic:default_row=true:unavailable=true:persist=true:restart_prompt=true:restart=true\ntui.chat_widget_model_settings.experimental=features=2:stable_omitted=true:save_on_exit=true:popup=true\ntui.chat_widget_model_settings.failure=live_model_settings_effects_rejected:no_render=true:no_model=true:no_config=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-goal-menu-headless",
+      "frame": {
+        "name": "chatwidget-goal-menu-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget goal menu"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_goal_menu",
+          "chatWidgetGoalMenu": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "summary",
+                "status": "Active",
+                "objective": "ship codexhx",
+                "tokenBudget": 50000,
+                "tokensUsed": 12500,
+                "timeUsedSeconds": 90,
+                "commandHint": "edit,pause,clear",
+                "summaryInserted": true
+              },
+              {
+                "kind": "summary",
+                "status": "Paused",
+                "objective": "ship codexhx",
+                "tokenBudget": 50000,
+                "tokensUsed": 12500,
+                "timeUsedSeconds": 90,
+                "commandHint": "edit,resume,clear",
+                "summaryInserted": true
+              },
+              {
+                "kind": "summary",
+                "status": "BudgetLimited",
+                "objective": "ship codexhx",
+                "tokenBudget": 50000,
+                "tokensUsed": 63876,
+                "timeUsedSeconds": 120,
+                "commandHint": "edit,clear",
+                "summaryInserted": true
+              },
+              {
+                "kind": "indicator",
+                "status": "Active",
+                "indicator": "Active",
+                "usage": "12.5K / 50K",
+                "budgetPresent": true,
+                "activeTurnElapsedSeconds": 60
+              },
+              {
+                "kind": "indicator",
+                "status": "Paused",
+                "indicator": "Paused",
+                "usage": "",
+                "budgetPresent": false,
+                "activeTurnElapsedSeconds": 0
+              },
+              {
+                "kind": "indicator",
+                "status": "Blocked",
+                "indicator": "Blocked",
+                "usage": "",
+                "budgetPresent": false,
+                "activeTurnElapsedSeconds": 0
+              },
+              {
+                "kind": "indicator",
+                "status": "UsageLimited",
+                "indicator": "UsageLimited",
+                "usage": "",
+                "budgetPresent": false,
+                "activeTurnElapsedSeconds": 0
+              },
+              {
+                "kind": "indicator",
+                "status": "BudgetLimited",
+                "indicator": "BudgetLimited",
+                "usage": "63.9K / 50K tokens",
+                "budgetPresent": true,
+                "activeTurnElapsedSeconds": 0
+              },
+              {
+                "kind": "indicator",
+                "status": "Complete",
+                "indicator": "Complete",
+                "usage": "10h 12m",
+                "budgetPresent": false,
+                "activeTurnElapsedSeconds": 0
+              },
+              {
+                "kind": "edit_prompt",
+                "status": "Paused",
+                "editedStatus": "Paused",
+                "editPromptOpened": true,
+                "setObjectiveEvent": true
+              },
+              {
+                "kind": "edit_prompt",
+                "status": "Complete",
+                "editedStatus": "Active",
+                "editPromptOpened": true,
+                "setObjectiveEvent": true
+              },
+              {
+                "kind": "resume_prompt",
+                "status": "Paused",
+                "resumePromptOpened": true,
+                "resumeDefaultSelected": true,
+                "setStatusEvent": true,
+                "leavePausedSelected": false
+              },
+              {
+                "kind": "resume_prompt",
+                "status": "Paused",
+                "resumePromptOpened": true,
+                "resumeDefaultSelected": false,
+                "setStatusEvent": false,
+                "leavePausedSelected": true
+              },
+              {
+                "kind": "validation",
+                "validationSource": "Live",
+                "actualChars": 12001,
+                "maxChars": 12000,
+                "allowed": false,
+                "errorInserted": true,
+                "composerCleared": true,
+                "pendingSubmissionDrained": true
+              },
+              {
+                "kind": "validation",
+                "validationSource": "Queued",
+                "actualChars": 12001,
+                "maxChars": 12000,
+                "allowed": false,
+                "errorInserted": true,
+                "composerCleared": false,
+                "pendingSubmissionDrained": false
+              },
+              {
+                "kind": "interrupt_pause",
+                "status": "Active",
+                "activeGoalPaused": true,
+                "setStatusEvent": true
+              },
+              {
+                "kind": "clear",
+                "status": "Active",
+                "currentGoalCleared": true,
+                "collaborationIndicatorUpdated": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_goal_menu_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_goal_menu.plan=headless\ntui.chat_widget_goal_menu.summary=Active:objective=ship codexhx:budget=50000:tokens=12500:time=90:hint=edit,pause,clear:inserted=true\ntui.chat_widget_goal_menu.summary=Paused:objective=ship codexhx:budget=50000:tokens=12500:time=90:hint=edit,resume,clear:inserted=true\ntui.chat_widget_goal_menu.summary=BudgetLimited:objective=ship codexhx:budget=50000:tokens=63876:time=120:hint=edit,clear:inserted=true\ntui.chat_widget_goal_menu.indicator=Active:kind=Active:usage=12.5K / 50K:budget=true:active_elapsed=60\ntui.chat_widget_goal_menu.indicator=Paused:kind=Paused:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=Blocked:kind=Blocked:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=UsageLimited:kind=UsageLimited:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=BudgetLimited:kind=BudgetLimited:usage=63.9K / 50K tokens:budget=true:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=Complete:kind=Complete:usage=10h 12m:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.edit=Paused:edited=Paused:opened=true:set_objective=true\ntui.chat_widget_goal_menu.edit=Complete:edited=Active:opened=true:set_objective=true\ntui.chat_widget_goal_menu.resume=Paused:opened=true:default=true:set_status=true:leave_paused=false\ntui.chat_widget_goal_menu.resume=Paused:opened=true:default=false:set_status=false:leave_paused=true\ntui.chat_widget_goal_menu.validation=Live:chars=12001/12000:allowed=false:error=true:composer_cleared=true:pending_drained=true\ntui.chat_widget_goal_menu.validation=Queued:chars=12001/12000:allowed=false:error=true:composer_cleared=false:pending_drained=false\ntui.chat_widget_goal_menu.interrupt_pause=Active:active_paused=true:set_status=true\ntui.chat_widget_goal_menu.clear=Active:current=true:indicator=true\ntui.chat_widget_goal_menu.failure=live_goal_menu_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget goal menu\ninput> \ntrace:\ntui.chat_widget_goal_menu.plan=headless\ntui.chat_widget_goal_menu.summary=Active:objective=ship codexhx:budget=50000:tokens=12500:time=90:hint=edit,pause,clear:inserted=true\ntui.chat_widget_goal_menu.summary=Paused:objective=ship codexhx:budget=50000:tokens=12500:time=90:hint=edit,resume,clear:inserted=true\ntui.chat_widget_goal_menu.summary=BudgetLimited:objective=ship codexhx:budget=50000:tokens=63876:time=120:hint=edit,clear:inserted=true\ntui.chat_widget_goal_menu.indicator=Active:kind=Active:usage=12.5K / 50K:budget=true:active_elapsed=60\ntui.chat_widget_goal_menu.indicator=Paused:kind=Paused:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=Blocked:kind=Blocked:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=UsageLimited:kind=UsageLimited:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=BudgetLimited:kind=BudgetLimited:usage=63.9K / 50K tokens:budget=true:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=Complete:kind=Complete:usage=10h 12m:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.edit=Paused:edited=Paused:opened=true:set_objective=true\ntui.chat_widget_goal_menu.edit=Complete:edited=Active:opened=true:set_objective=true\ntui.chat_widget_goal_menu.resume=Paused:opened=true:default=true:set_status=true:leave_paused=false\ntui.chat_widget_goal_menu.resume=Paused:opened=true:default=false:set_status=false:leave_paused=true\ntui.chat_widget_goal_menu.validation=Live:chars=12001/12000:allowed=false:error=true:composer_cleared=true:pending_drained=true\ntui.chat_widget_goal_menu.validation=Queued:chars=12001/12000:allowed=false:error=true:composer_cleared=false:pending_drained=false\ntui.chat_widget_goal_menu.interrupt_pause=Active:active_paused=true:set_status=true\ntui.chat_widget_goal_menu.clear=Active:current=true:indicator=true\ntui.chat_widget_goal_menu.failure=live_goal_menu_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
