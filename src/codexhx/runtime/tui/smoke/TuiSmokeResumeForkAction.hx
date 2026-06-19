@@ -10,8 +10,12 @@ typedef TuiSmokeResumeForkActionFields = {
 	final threadId:String;
 	final parentThreadId:String;
 	final childThreadId:String;
+	final expandedThreadId:String;
 	final targetLabel:String;
 	final targetPath:String;
+	final previewState:String;
+	final previewCacheBefore:String;
+	final previewCacheAfter:String;
 	final query:String;
 	final cursor:String;
 	final nextCursor:String;
@@ -25,6 +29,7 @@ typedef TuiSmokeResumeForkActionFields = {
 	final errorMessage:String;
 	final pageSize:Int;
 	final loadedRows:Int;
+	final selectedIndex:Int;
 	final requestToken:Int;
 	final searchToken:Int;
 	final scannedRows:Int;
@@ -32,6 +37,9 @@ typedef TuiSmokeResumeForkActionFields = {
 	final invalidRows:Int;
 	final filteredRows:Int;
 	final turnCount:Int;
+	final previewLineCount:Int;
+	final userLineCount:Int;
+	final assistantLineCount:Int;
 	final altScreenEntered:Bool;
 	final altScreenExited:Bool;
 	final pickerStarted:Bool;
@@ -40,6 +48,10 @@ typedef TuiSmokeResumeForkActionFields = {
 	final nextCursorPresent:Bool;
 	final reachedScanCap:Bool;
 	final pendingPageDownCompleted:Bool;
+	final expansionToggled:Bool;
+	final cacheInserted:Bool;
+	final includeTurns:Bool;
+	final previewRendered:Bool;
 	final showAll:Bool;
 	final includeNonInteractive:Bool;
 	final selected:Bool;
@@ -92,8 +104,12 @@ class TuiSmokeResumeForkAction {
 	public final threadId:String;
 	public final parentThreadId:String;
 	public final childThreadId:String;
+	public final expandedThreadId:String;
 	public final targetLabel:String;
 	public final targetPath:String;
+	public final previewState:String;
+	public final previewCacheBefore:String;
+	public final previewCacheAfter:String;
 	public final query:String;
 	public final cursor:String;
 	public final nextCursor:String;
@@ -107,6 +123,7 @@ class TuiSmokeResumeForkAction {
 	public final errorMessage:String;
 	public final pageSize:Int;
 	public final loadedRows:Int;
+	public final selectedIndex:Int;
 	public final requestToken:Int;
 	public final searchToken:Int;
 	public final scannedRows:Int;
@@ -114,6 +131,9 @@ class TuiSmokeResumeForkAction {
 	public final invalidRows:Int;
 	public final filteredRows:Int;
 	public final turnCount:Int;
+	public final previewLineCount:Int;
+	public final userLineCount:Int;
+	public final assistantLineCount:Int;
 	public final altScreenEntered:Bool;
 	public final altScreenExited:Bool;
 	public final pickerStarted:Bool;
@@ -122,6 +142,10 @@ class TuiSmokeResumeForkAction {
 	public final nextCursorPresent:Bool;
 	public final reachedScanCap:Bool;
 	public final pendingPageDownCompleted:Bool;
+	public final expansionToggled:Bool;
+	public final cacheInserted:Bool;
+	public final includeTurns:Bool;
+	public final previewRendered:Bool;
 	public final showAll:Bool;
 	public final includeNonInteractive:Bool;
 	public final selected:Bool;

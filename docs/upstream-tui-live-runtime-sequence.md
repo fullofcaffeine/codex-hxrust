@@ -2978,6 +2978,19 @@ Extend HXCX-TUI-95 from row projection into selected raw Codex resume picker pag
 
 Status: HXCX-TUI-96 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker page-request, page-ingest, search-continuation, sort-toggle, filter-toggle, stale-token refusal, invalid-row accounting, accepted-vs-scanned count, cursor propagation, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic picker page-loading evidence only, not transcript preview loading, live app-server fanout, state DB/rollout querying, ratatui rendering, or persistent session mutation.
 
+### HXCX-TUI-97: Resume Picker Transcript Preview Boundary
+
+Extend HXCX-TUI-96 from page loading into selected raw Codex resume picker transcript preview behavior, without live app-server transport, state DB/rollout querying, filesystem mutation, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `PickerLoadRequest::Preview`: the picker loader routes preview requests by selected `ThreadId` separately from page and full transcript requests;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `toggle_selected_expansion`: Ctrl+E expands only the selected row with a valid thread id, collapses when the selected thread is already expanded, inserts a `TranscriptPreviewState::Loading` cache entry only on cache miss, sends one preview request for that miss, and schedules a frame;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `load_transcript_preview`: app-server preview loading calls `thread_read(thread_id, include_turns=true)`, projects user and assistant transcript items, parses assistant markdown relative to the thread cwd, drops empty lines, and keeps the last six preview lines;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `BackgroundEvent::Preview`: preview completion stores `Loaded(lines)` or `Failed` by thread id and schedules a frame. Unlike page loading, preview completion has no request-token stale check; selected and expanded row identity controls whether a cached preview is rendered;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `render_transcript_preview_lines`: loading, failed, empty, user, and assistant preview states render only for the selected expanded row, while unselected cached completions remain non-rendering cache state;
+- keep no-live/no-render behavior deterministic, with no live JSON-RPC transport, full transcript overlay opening, state DB reads, filesystem mutation, or Cafex behavior.
+
+Status: HXCX-TUI-97 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker preview toggle, cache miss/loading insertion, `thread/read includeTurns=true` request intent, loaded/failed preview completion, selected-row render gating, unselected cache non-rendering, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic transcript preview evidence only, not full transcript overlay loading, live app-server fanout, state DB/rollout querying, ratatui rendering, or persistent session mutation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
