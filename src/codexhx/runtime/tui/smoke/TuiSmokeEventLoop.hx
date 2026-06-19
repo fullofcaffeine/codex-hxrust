@@ -296,6 +296,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.TerminalStartupProbe:
+					if (!traceTerminalStartupProbe(event.terminalStartupProbe, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1897,6 +1902,77 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.terminal_palette.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceTerminalStartupProbe(plan:TuiSmokeTerminalStartupProbePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveProbe || !plan.enabled()) {
+			trace.push("tui.terminal_startup_probe.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.terminal_startup_probe.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeTerminalStartupProbeActionKind.BatchParse:
+					if (!action.batchComplete()) {
+						trace.push(
+							"tui.terminal_startup_probe.batch_mismatch="
+							+ "cursor=" + action.parsedCursor()
+							+ ":fg=" + action.computedForeground()
+							+ ":bg=" + action.computedBackground()
+							+ ":keyboard=" + action.parsedKeyboardSupported()
+						);
+						return false;
+					}
+					trace.push(
+						"tui.terminal_startup_probe.batch="
+						+ "cursor=" + action.parsedCursor()
+						+ ":fg=" + action.computedForeground()
+						+ ":bg=" + action.computedBackground()
+						+ ":keyboard=" + action.parsedKeyboardSupported()
+						+ ":complete=" + action.complete
+					);
+				case TuiSmokeTerminalStartupProbeActionKind.KeyboardSupport:
+					if (!action.keyboardMatches()) {
+						trace.push(
+							"tui.terminal_startup_probe.keyboard_mismatch="
+							+ "supported=" + action.parsedKeyboardSupported()
+							+ ":fallback=" + action.parsedFallbackSeen()
+						);
+						return false;
+					}
+					trace.push(
+						"tui.terminal_startup_probe.keyboard="
+						+ "supported=" + action.keyboardSupported
+						+ ":fallback=" + action.fallbackSeen
+					);
+				case TuiSmokeTerminalStartupProbeActionKind.HandleSource:
+					trace.push(
+						"tui.terminal_startup_probe.handle="
+						+ action.handleSource
+						+ ":stdio=" + action.duplicatedStdio
+						+ ":tty_fallback=" + action.controllingTerminalFallback
+						+ ":flags_restored=" + action.originalFlagsRestored
+					);
+				case TuiSmokeTerminalStartupProbeActionKind.TimeoutFallback:
+					trace.push(
+						"tui.terminal_startup_probe.timeout="
+						+ "ms=" + action.timeoutMs
+						+ ":cursor=" + action.parsedCursor()
+						+ ":colors_complete=" + action.defaultColorsComplete()
+						+ ":keyboard=" + action.parsedKeyboardSupported()
+					);
+				case TuiSmokeTerminalStartupProbeActionKind.Failure:
+					trace.push(
+						"tui.terminal_startup_probe.failure="
+						+ action.failureCode
+						+ ":live=" + action.liveProbeAllowed
+					);
+				case _:
+					trace.push("tui.terminal_startup_probe.unknown");
 					return false;
 			}
 		}

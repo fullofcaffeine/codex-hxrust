@@ -33,7 +33,7 @@
       "../codex/codex-rs/tui/src/tui.rs",
       "../codex/codex-rs/tui/src/tui/event_stream.rs",
       "../codex/codex-rs/tui/src/tui/keyboard_modes.rs",
-      "../codex/codex-rs/tui/src/tui/terminal_probe.rs",
+      "../codex/codex-rs/tui/src/terminal_probe.rs",
       "../codex/codex-rs/tui/src/tui/terminal_stderr.rs",
       "../codex/codex-rs/tui/src/terminal_hyperlinks.rs",
       "../codex/codex-rs/tui/src/terminal_palette.rs",
@@ -11956,6 +11956,85 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.terminal_palette.plan=headless\ntui.terminal_palette.osc_color=slot=10:color=255,127,0\ntui.terminal_palette.osc_color=slot=11:color=0,128,255\ntui.terminal_palette.rgb=payload=rgb:00/80/ff:color=0,128,255\ntui.terminal_palette.rgb=payload=rgba:ffff/8000/0000/ffff:color=255,127,0\ntui.terminal_palette.default_colors=fg=238,238,238:bg=17,17,17:valid=true\ntui.terminal_palette.default_colors=fg=238,238,238:bg=:valid=false\ntui.terminal_palette.cache=startup_attempted=true:startup=238,238,238/17,17,17:requery=false:result=238,238,238/17,17,17:skip_unavailable=false\ntui.terminal_palette.cache=startup_attempted=true:startup=:requery=true:result=attempted-unavailable:skip_unavailable=true\ntui.terminal_palette.failure=live_palette_query_rejected:live=false\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> terminal palette no live osc query\ninput> \ntrace:\ntui.terminal_palette.plan=headless\ntui.terminal_palette.osc_color=slot=10:color=255,127,0\ntui.terminal_palette.osc_color=slot=11:color=0,128,255\ntui.terminal_palette.rgb=payload=rgb:00/80/ff:color=0,128,255\ntui.terminal_palette.rgb=payload=rgba:ffff/8000/0000/ffff:color=255,127,0\ntui.terminal_palette.default_colors=fg=238,238,238:bg=17,17,17:valid=true\ntui.terminal_palette.default_colors=fg=238,238,238:bg=:valid=false\ntui.terminal_palette.cache=startup_attempted=true:startup=238,238,238/17,17,17:requery=false:result=238,238,238/17,17,17:skip_unavailable=false\ntui.terminal_palette.cache=startup_attempted=true:startup=:requery=true:result=attempted-unavailable:skip_unavailable=true\ntui.terminal_palette.failure=live_palette_query_rejected:live=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "terminal-startup-probe-headless",
+      "frame": {
+        "name": "terminal-startup-probe-headless",
+        "title": "Codex TUI Smoke Terminal",
+        "status": "running",
+        "model": "gpt-5.2-codex",
+        "width": 56,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "startup terminal probe no live tty"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "terminal_startup_probe",
+          "terminalStartupProbe": {
+            "allowLiveProbe": false,
+            "actions": [
+              {
+                "kind": "batch_parse",
+                "buffer": "\u001b[20;10R\u001b]11;rgb:1111/1111/1111\u0007\u001b[?64;1;2c\u001b]10;rgb:eeee/eeee/eeee\u001b\\\u001b[?7u",
+                "cursorX": 9,
+                "cursorY": 19,
+                "foreground": "238,238,238",
+                "background": "17,17,17",
+                "queryKeyboard": true,
+                "keyboardSupported": true,
+                "fallbackSeen": true,
+                "complete": true
+              },
+              {
+                "kind": "keyboard_support",
+                "buffer": "\u001b[?64;1;2c",
+                "keyboardSupported": false,
+                "fallbackSeen": true
+              },
+              {
+                "kind": "handle_source",
+                "handleSource": "duplicated_stdio",
+                "duplicatedStdio": true,
+                "controllingTerminalFallback": false,
+                "originalFlagsRestored": true
+              },
+              {
+                "kind": "timeout_fallback",
+                "buffer": "\u001b]10;rgb:eeee/eeee/eeee\u001b\\",
+                "timeoutMs": 100
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_startup_probe_rejected",
+                "liveProbeAllowed": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.terminal_startup_probe.plan=headless\ntui.terminal_startup_probe.batch=cursor=9,19:fg=238,238,238:bg=17,17,17:keyboard=true:complete=true\ntui.terminal_startup_probe.keyboard=supported=false:fallback=true\ntui.terminal_startup_probe.handle=duplicated_stdio:stdio=true:tty_fallback=false:flags_restored=true\ntui.terminal_startup_probe.timeout=ms=100:cursor=:colors_complete=false:keyboard=false\ntui.terminal_startup_probe.failure=live_startup_probe_rejected:live=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> startup terminal probe no live tty\ninput> \ntrace:\ntui.terminal_startup_probe.plan=headless\ntui.terminal_startup_probe.batch=cursor=9,19:fg=238,238,238:bg=17,17,17:keyboard=true:complete=true\ntui.terminal_startup_probe.keyboard=supported=false:fallback=true\ntui.terminal_startup_probe.handle=duplicated_stdio:stdio=true:tty_fallback=false:flags_restored=true\ntui.terminal_startup_probe.timeout=ms=100:cursor=:colors_complete=false:keyboard=false\ntui.terminal_startup_probe.failure=live_startup_probe_rejected:live=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

@@ -50,6 +50,7 @@ typedef TuiSmokeEventFields = {
 	final desktopNotification:Null<TuiSmokeDesktopNotificationPlan>;
 	final terminalHyperlink:Null<TuiSmokeTerminalHyperlinkPlan>;
 	final terminalPalette:Null<TuiSmokeTerminalPalettePlan>;
+	final terminalStartupProbe:Null<TuiSmokeTerminalStartupProbePlan>;
 }
 
 @:build(codexhx.macros.FieldRecordConstructor.build())
@@ -106,4 +107,5 @@ class TuiSmokeEvent {
 	public final desktopNotification:Null<TuiSmokeDesktopNotificationPlan>;
 	public final terminalHyperlink:Null<TuiSmokeTerminalHyperlinkPlan>;
 	public final terminalPalette:Null<TuiSmokeTerminalPalettePlan>;
+	public final terminalStartupProbe:Null<TuiSmokeTerminalStartupProbePlan>;
 }

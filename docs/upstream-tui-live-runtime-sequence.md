@@ -2448,6 +2448,18 @@ Model selected raw Codex terminal-palette probe behavior without sending live te
 
 Status: HXCX-TUI-54 extends `fixtures/hxrust/tui-smoke.v1.json` with typed terminal-palette OSC parser/cache evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic palette-probe evidence only, not live terminal color querying.
 
+### HXCX-TUI-55: Terminal Startup Probe Boundary
+
+Model selected raw Codex startup terminal-probe behavior without owning live terminal input:
+
+- preserve bounded startup probe scope from `../codex/codex-rs/tui/src/terminal_probe.rs`: cursor position, OSC 10/11 default colors, and keyboard enhancement support are queried under one caller-provided deadline before crossterm starts;
+- preserve handle selection from `terminal_probe.rs`: duplicated stdio is preferred, `/dev/tty` is a fallback when stdio is redirected or unavailable, reader nonblocking flags are restored, and failures fall back instead of blocking startup;
+- preserve batched response parsing from `update_startup_probe`: cursor position uses terminal one-based rows/columns mapped to zero-based positions, OSC foreground/background can arrive in either order, and keyboard support can be detected alongside terminal fallback responses;
+- preserve incomplete/timeout semantics: missing cursor, missing paired default colors, or missing keyboard response remain optional probe facts, not startup failures;
+- keep the evidence deterministic and independent of live terminal probe writes, direct tty reads, crossterm event queues, ratatui rendering, alternate-screen takeover, live input loops, app-server mutation, model/tool execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-55 extends `fixtures/hxrust/tui-smoke.v1.json` with typed terminal startup-probe parse/timeout/handle-source evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic startup-probe evidence only, not live terminal probing.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

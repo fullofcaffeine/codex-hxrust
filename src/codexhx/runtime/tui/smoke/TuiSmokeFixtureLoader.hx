@@ -109,7 +109,45 @@ class TuiSmokeFixtureLoader {
 				terminalTitle: optionalTerminalTitlePlan(value, "terminalTitle"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
-				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette")
+				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
+				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTerminalStartupProbePlan(object:Value, name:String):Null<TuiSmokeTerminalStartupProbePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTerminalStartupProbePlan({
+					allowLiveProbe: optionalBoolField(value, "allowLiveProbe", false),
+					actions: terminalStartupProbeActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function terminalStartupProbeActions(values:Array<Value>):Array<TuiSmokeTerminalStartupProbeAction> {
+		final out:Array<TuiSmokeTerminalStartupProbeAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTerminalStartupProbeAction({
+				kind: TuiSmokeTerminalStartupProbeActionKind.fromString(stringField(value, "kind", "")),
+				buffer: optionalStringField(value, "buffer", ""),
+				cursorX: optionalIntField(value, "cursorX", -1),
+				cursorY: optionalIntField(value, "cursorY", -1),
+				foreground: optionalStringField(value, "foreground", ""),
+				background: optionalStringField(value, "background", ""),
+				queryKeyboard: optionalBoolField(value, "queryKeyboard", false),
+				keyboardSupported: optionalBoolField(value, "keyboardSupported", false),
+				fallbackSeen: optionalBoolField(value, "fallbackSeen", false),
+				complete: optionalBoolField(value, "complete", false),
+				handleSource: optionalStringField(value, "handleSource", ""),
+				duplicatedStdio: optionalBoolField(value, "duplicatedStdio", false),
+				controllingTerminalFallback: optionalBoolField(value, "controllingTerminalFallback", false),
+				originalFlagsRestored: optionalBoolField(value, "originalFlagsRestored", false),
+				timeoutMs: optionalIntField(value, "timeoutMs", 0),
+				liveProbeAllowed: optionalBoolField(value, "liveProbeAllowed", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;
