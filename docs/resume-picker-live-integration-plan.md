@@ -12,6 +12,8 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `fixtures/hxrust/tui-smoke.v1.json` is still deterministic evidence: no live crossterm input, no live app-server fanout, no ratatui snapshot ownership, no state DB reads, no real config mutation, no model traffic, and no Cafex behavior.
 - `harness/check-tui-smoke.sh` remains the current regression gate for the fixture boundary.
 - `src/codexhx/runtime/tui/resume/` now owns the first pure Haxe resume picker kernel. `harness/check-resume-picker-kernel.sh` runs the same fixture evidence through the Haxe interpreter, portable haxe.rust generation, generated Cargo `check`, generated Cargo `test`, and the generated binary.
+- `harness/check-resume-picker-host-facade.sh` validates the runtime-neutral host contracts for deterministic app-server thread sources, background loader events, frame scheduling, terminal-renderer snapshots, backpressure, cancellation, and in-memory density persistence.
+- `harness/check-resume-picker-no-credential-gate.sh` now validates the first combined no-credential generated-Rust gate: fixture-backed thread list/read through the host facade, deterministic key events, frame requests, terminal/test rendering, transcript overlay open, and temp Codex-home density persistence.
 
 ## Upstream Anchors
 
@@ -87,6 +89,8 @@ Status: `codexhx.runtime.tui.resume.host` owns the first runtime-neutral host fa
    - Prove page load, cursor pagination, preview load, and full transcript load through generated Rust without provider credentials or model traffic.
    - Keep upstream `AppServerSession` semantics visible: request ids, include-turns flags, cursor propagation, and error mapping.
 
+Status: `codexhx.runtime.tui.resume.live.ResumePickerNoCredentialGate` composes the host facade into the first credential-free generated-Rust app loop slice. The gate loads fixture-backed threads, applies deterministic key events, requests and renders frames through the test terminal renderer, opens the selected transcript overlay, and writes `session_picker_view = "dense"` into a temp Codex home. This is still a deterministic facade gate: it does not claim live JSON-RPC transport, crossterm input, ratatui frame ownership, state DB/rollout querying, provider traffic, or real user config mutation.
+
 4. Add the terminal/render smoke runner.
    - First use a VT100/test backend to render the Haxe picker through generated Rust and compare stable snapshots or normalized screen text.
    - Then add an opt-in real crossterm runner for manual/live validation. The automated gate should remain credential-free and non-destructive.
@@ -131,7 +135,7 @@ Near-term gates:
 - `harness/check-tui-smoke.sh`
 - `harness/check-resume-picker-kernel.sh` for Haxe interpreter tests plus haxe.rust-generated Cargo `check`, `test`, and binary execution for the pure picker kernel.
 - `harness/check-resume-picker-host-facade.sh` for runtime-neutral host contracts, deterministic in-memory implementations, backpressure/cancellation, and portable haxe.rust-generated Rust validation.
-- A new no-credential generated Rust gate for the app-server facade once the host boundary exists.
+- `harness/check-resume-picker-no-credential-gate.sh` for the first combined no-credential generated-Rust app-server facade, deterministic key, frame/render, transcript overlay, and temp-home density persistence gate.
 - A new VT100/test-backend render gate before any live crossterm automation.
 
 Exit criteria for "first live resume picker slice":

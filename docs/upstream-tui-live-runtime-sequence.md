@@ -3082,6 +3082,19 @@ Define the first host seam that can satisfy resume picker effect intents without
 
 Status: HXCX-TUI-104 adds `src/codexhx/runtime/tui/resume/host/`, `test/ResumePickerHostFacadeHarness.hx`, `hxml/resume-picker-host-facade.hxml`, and `harness/check-resume-picker-host-facade.sh`. The gate validates deterministic app-server thread source, background loader page/preview/transcript/frame events, lossless versus best-effort backpressure, cancellation, frame scheduling, terminal renderer snapshots, configured and unconfigured density persistence, and portable haxe.rust-generated Rust output. This is host-contract evidence only, not live JSON-RPC transport, crossterm input, ratatui rendering, config file mutation, state DB/rollout querying, or pager overlay ownership.
 
+### HXCX-TUI-105: Resume Picker No-Credential App-Server Render Gate
+
+Compose the pure picker state and runtime-neutral host facade into the first generated-Rust no-credential resume picker app-loop proof:
+
+- load fixture-backed thread/list and thread/read responses through the same typed host facade used by future production app-server implementations;
+- accept deterministic key events for selection movement, transcript open, and density toggle without exposing live crossterm details in app-facing Haxe;
+- request frames and render through the terminal/test renderer after open, page load, key movement, transcript loading, transcript loaded, and density persistence;
+- open the selected transcript overlay after `thread/read(include_turns=true)` completes and preserve selected thread evidence;
+- persist the dense picker view into a temp Codex home, never the user's real config;
+- keep the slice mainstream/raw Codex only, with no Cafex behavior and no model credentials, live JSON-RPC transport, real terminal takeover, state DB/rollout querying, or Codex-specific haxe.rust compiler assumptions.
+
+Status: HXCX-TUI-105 adds `src/codexhx/runtime/tui/resume/live/`, `src/codexhx/runtime/tui/resume/host/TempHomeResumePickerConfigPersistence.hx`, `test/ResumePickerNoCredentialGateHarness.hx`, `hxml/resume-picker-no-credential-gate.hxml`, and `harness/check-resume-picker-no-credential-gate.sh`. The gate validates fixture-backed page load, transcript load, three deterministic key events, six frame requests, six renders, overlay opening, and temp-home `config.toml` density persistence through the Haxe interpreter and portable haxe.rust-generated Cargo `check`, `test`, and binary execution. This is the first combined no-credential generated-Rust resume picker gate, not live crossterm/ratatui ownership or production app-server transport.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
