@@ -37,6 +37,18 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 			lines.push("toolbar-detail focus=" + state.toolbarFocus + " mode=" + emptyLabel(state.toolbarRenderMode));
 		}
 		lines.push("rows loaded=" + state.loadedRows + " filtered=" + state.filteredRows + " scanned=" + state.scannedRows + " accepted=" + state.acceptedRows);
+		if (state.scrollTop > 0 || state.moreAbove || state.pendingPageDownCompleted) {
+			lines.push("navigation selected="
+				+ state.selectedIndex
+				+ " scrollTop="
+				+ state.scrollTop
+				+ " viewRows="
+				+ state.viewRows
+				+ " moreAbove="
+				+ boolLabel(state.moreAbove)
+				+ " pageDownCompleted="
+				+ boolLabel(state.pendingPageDownCompleted));
+		}
 		if (state.visibleRows.length == 0) {
 			lines.push(state.emptyStateMessage.length == 0 ? "  no rows loaded" : "  empty: " + state.emptyStateMessage);
 		} else {

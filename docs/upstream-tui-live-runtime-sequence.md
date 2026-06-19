@@ -3161,6 +3161,17 @@ Extend the normalized resume picker renderer from transcript detail evidence int
 
 Status: HXCX-TUI-111 teaches `DeterministicResumePickerTerminalRenderer` to emit optional normalized toolbar-detail and footer-hints lines, and adds `ResumePickerToolbarFooterRenderGate`, `ResumePickerToolbarFooterRenderGateReport`, `test/ResumePickerToolbarFooterRenderHarness.hx`, `hxml/resume-picker-toolbar-footer-render.hxml`, and `harness/check-resume-picker-toolbar-footer-render.sh`. The gate validates filter/sort toolbar focus, wide/compact/key-only/loading footer variants, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui layout ownership.
 
+### HXCX-TUI-112: Resume Picker Keyboard Navigation Render Snapshot Gate
+
+Extend the normalized resume picker renderer from toolbar/footer evidence into visible keyboard navigation evidence:
+
+- render initial selection, down movement, page/end-style movement, search query display, and query-clear/start-fresh restoration through the deterministic terminal renderer;
+- surface selected index, scroll top, viewport row count, more-above evidence, and page-down completion evidence in normalized render snapshots;
+- assert visible selected rows, query text, footer state, frame counts, and render counts in a generated-Rust harness;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-112 teaches `DeterministicResumePickerTerminalRenderer` to emit an optional normalized navigation line, and adds `ResumePickerKeyboardNavigationRenderGate`, `ResumePickerKeyboardNavigationRenderGateReport`, `test/ResumePickerKeyboardNavigationRenderHarness.hx`, `hxml/resume-picker-keyboard-navigation-render.hxml`, and `harness/check-resume-picker-keyboard-navigation-render.sh`. The gate validates selection movement, page/end-style scroll evidence, search query display, query-clear/start-fresh restoration, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
