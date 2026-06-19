@@ -3315,6 +3315,17 @@ Extend the normalized resume picker renderer from preview invalidation into tran
 
 Status: HXCX-TUI-125 adds `ResumePickerReloadTranscriptOverlayInvalidationRenderGate`, `ResumePickerReloadTranscriptOverlayInvalidationRenderGateReport`, `test/ResumePickerReloadTranscriptOverlayInvalidationRenderHarness.hx`, `hxml/resume-picker-reload-transcript-overlay-invalidation-render.hxml`, and `harness/check-resume-picker-reload-transcript-overlay-invalidation-render.sh`. The gate validates selected-row transcript overlay rendering, stable-thread overlay preservation, selection-change overlay invalidation, pending transcript/cell clearing summaries, footer/status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-126: Resume Picker Reload Failure Preservation Render Snapshot Gate
+
+Extend the normalized resume picker renderer from overlay invalidation into current reload failure handling:
+
+- render an active list with selected row, active query, and stable footer state;
+- apply a current reload failure from the deterministic background loader and preserve the prior rows, selection, query, and scroll while surfacing loader/error/footer evidence;
+- apply a later successful current reload and render recovery with cleared error state;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-126 adds `ResumePickerReloadFailurePreservationRenderGate`, `ResumePickerReloadFailurePreservationRenderGateReport`, `test/ResumePickerReloadFailurePreservationRenderHarness.hx`, `hxml/resume-picker-reload-failure-preservation-render.hxml`, and `harness/check-resume-picker-reload-failure-preservation-render.sh`. The gate validates prior row/selection/query preservation across a current reload failure, visible error/loader/footer state, later successful recovery, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

@@ -5,7 +5,7 @@
   "localPath": "../haxe.rust",
   "remote": "git@github.com:fullofcaffeine/reflaxe.rust.git",
   "branch": "main",
-  "commit": "8b7b97b24f19577dda522e7d0cae33853a4ff44c",
+  "commit": "09cce6b924d2ce1409a35d9b5f9e35a4d9d0f4bc",
   "packageName": "reflaxe.rust",
   "packageVersion": "1.0.0",
   "license": "GPL-3.0",
