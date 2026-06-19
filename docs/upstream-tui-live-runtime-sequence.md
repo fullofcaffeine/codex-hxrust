@@ -3249,6 +3249,17 @@ Extend the normalized resume picker renderer from query reload evidence into sor
 
 Status: HXCX-TUI-119 adds `ResumePickerSortFilterReloadRenderGate`, `ResumePickerSortFilterReloadRenderGateReport`, `test/ResumePickerSortFilterReloadRenderHarness.hx`, `hxml/resume-picker-sort-filter-reload-render.hxml`, and `harness/check-resume-picker-sort-filter-reload-render.sh`. The gate validates initial queried page rendering, sort/filter reset/loading rendering, active query preservation, `thread/list` sort/filter/cwd/show-all provenance, fixture-backed reloaded result rendering, footer/recovery evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-120: Resume Picker Stale Reload Response Render Snapshot Gate
+
+Extend the normalized resume picker renderer from sort/filter reload evidence into stale reload response refusal evidence:
+
+- render an active query/sort result page as the state that must be preserved;
+- feed older query and sort page responses through the host facade and render stale-refusal evidence instead of applying their rows/cursors;
+- prove active query/sort/filter text, selected row, cursor, visible rows, and footer remain stable;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-120 adds `ResumePickerStaleReloadResponseRenderGate`, `ResumePickerStaleReloadResponseRenderGateReport`, `test/ResumePickerStaleReloadResponseRenderHarness.hx`, `hxml/resume-picker-stale-reload-response-render.hxml`, and `harness/check-resume-picker-stale-reload-response-render.sh`. The gate validates active result rendering, stale query response refusal, stale sort response refusal, active row/selection/cursor/footer preservation, stale-refusal status rendering, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
