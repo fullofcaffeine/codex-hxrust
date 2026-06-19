@@ -3326,6 +3326,17 @@ Extend the normalized resume picker renderer from overlay invalidation into curr
 
 Status: HXCX-TUI-126 adds `ResumePickerReloadFailurePreservationRenderGate`, `ResumePickerReloadFailurePreservationRenderGateReport`, `test/ResumePickerReloadFailurePreservationRenderHarness.hx`, `hxml/resume-picker-reload-failure-preservation-render.hxml`, and `harness/check-resume-picker-reload-failure-preservation-render.sh`. The gate validates prior row/selection/query preservation across a current reload failure, visible error/loader/footer state, later successful recovery, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-127: Resume Picker Live App-Server Boundary Render Snapshot Gate
+
+Extend the normalized resume picker renderer from deterministic reload failure handling into the typed app-server request boundary:
+
+- route `thread/list` reload requests through the host facade and in-memory app-server source while recording request id, cursor, query, sort, filter, cwd, show-all, and include-non-interactive provenance;
+- prove bounded lossless loader backpressure accounting before the queued reload can surface;
+- map a source/app-server failure into visible picker error state without dropping the prior rows/selection;
+- render later recovery and keep the gate credential-free, model-free, state-DB-free, and Cafex-free.
+
+Status: HXCX-TUI-127 adds request-provenance logging to `InMemoryResumePickerThreadSource`, plus `ResumePickerLiveAppServerBoundaryRenderGate`, `ResumePickerLiveAppServerBoundaryRenderGateReport`, `test/ResumePickerLiveAppServerBoundaryRenderHarness.hx`, `hxml/resume-picker-live-app-server-boundary-render.hxml`, and `harness/check-resume-picker-live-app-server-boundary-render.sh`. The gate validates typed `thread/list` request id/provenance preservation, bounded lossless backpressure, app-server source failure mapping, visible normalized error/recovery rendering, no credential/model/state DB mutation, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still deterministic typed-boundary evidence only, not live JSON-RPC transport, terminal ownership, Tokio task ownership, ratatui input/layout ownership, SQLite/state DB mutation, or Cafex behavior.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

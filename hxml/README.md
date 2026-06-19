@@ -80,6 +80,7 @@ Profile policy for the scaffold:
 | `resume-picker-reload-preview-invalidation-render.hxml` | Compile the HXCX-TUI-124 resume picker normalized reload preview invalidation render snapshot gate through portable haxe.rust. |
 | `resume-picker-reload-transcript-overlay-invalidation-render.hxml` | Compile the HXCX-TUI-125 resume picker normalized reload transcript overlay invalidation render snapshot gate through portable haxe.rust. |
 | `resume-picker-reload-failure-preservation-render.hxml` | Compile the HXCX-TUI-126 resume picker normalized reload failure preservation render snapshot gate through portable haxe.rust. |
+| `resume-picker-live-app-server-boundary-render.hxml` | Compile the HXCX-TUI-127 resume picker normalized live app-server boundary render snapshot gate through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |
