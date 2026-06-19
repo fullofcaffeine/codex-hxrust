@@ -3304,6 +3304,17 @@ Extend the normalized resume picker renderer from scroll preservation into previ
 
 Status: HXCX-TUI-124 adds `ResumePickerReloadPreviewInvalidationRenderGate`, `ResumePickerReloadPreviewInvalidationRenderGateReport`, `test/ResumePickerReloadPreviewInvalidationRenderHarness.hx`, `hxml/resume-picker-reload-preview-invalidation-render.hxml`, and `harness/check-resume-picker-reload-preview-invalidation-render.sh`. The gate validates selected-row preview rendering, stable-thread preview preservation, selection-change preview invalidation, expanded/pending transcript-preview cache clearing summaries, footer/status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-125: Resume Picker Reload Transcript Overlay Invalidation Render Snapshot Gate
+
+Extend the normalized resume picker renderer from preview invalidation into transcript overlay cache behavior across reloads:
+
+- render a selected row with loaded transcript overlay detail from a fixture-backed transcript read;
+- apply a current reload where the same selected/pending thread remains valid and keep the overlay detail attached;
+- apply a current reload that selects a different thread and render stale overlay invalidation plus pending transcript/cell clearing;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-125 adds `ResumePickerReloadTranscriptOverlayInvalidationRenderGate`, `ResumePickerReloadTranscriptOverlayInvalidationRenderGateReport`, `test/ResumePickerReloadTranscriptOverlayInvalidationRenderHarness.hx`, `hxml/resume-picker-reload-transcript-overlay-invalidation-render.hxml`, and `harness/check-resume-picker-reload-transcript-overlay-invalidation-render.sh`. The gate validates selected-row transcript overlay rendering, stable-thread overlay preservation, selection-change overlay invalidation, pending transcript/cell clearing summaries, footer/status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
