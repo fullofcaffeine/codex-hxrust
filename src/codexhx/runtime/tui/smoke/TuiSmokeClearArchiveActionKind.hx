@@ -8,6 +8,8 @@ enum abstract TuiSmokeClearArchiveActionKind(String) to String {
 	final SkillWarnings = "skill_warnings";
 	final ArchiveRequest = "archive_request";
 	final ArchiveResult = "archive_result";
+	final ArchivedGuidance = "archived_guidance";
+	final UnarchiveCommand = "unarchive_command";
 	final ShutdownFeedback = "shutdown_feedback";
 	final Failure = "failure";
 	final Unknown = "unknown";
@@ -21,6 +23,8 @@ enum abstract TuiSmokeClearArchiveActionKind(String) to String {
 			case "skill_warnings": SkillWarnings;
 			case "archive_request": ArchiveRequest;
 			case "archive_result": ArchiveResult;
+			case "archived_guidance": ArchivedGuidance;
+			case "unarchive_command": UnarchiveCommand;
 			case "shutdown_feedback": ShutdownFeedback;
 			case "failure": Failure;
 			case _: Unknown;

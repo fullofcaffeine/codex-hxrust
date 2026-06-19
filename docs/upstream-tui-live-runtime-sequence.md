@@ -2889,6 +2889,18 @@ Extend the earlier HXCX-TUI-46 interrupted-turn coverage with selected retry-sta
 
 Status: HXCX-TUI-89 extends `fixtures/hxrust/tui-smoke.v1.json` with typed retry-status header preservation/restoration, replay retry suppression, cancel-edit prompt restore, queued-message composer restore, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic ChatWidget retry/interruption restore evidence only, not live SSE recovery, app-server transport, full composer rendering, or model traffic.
 
+### HXCX-TUI-90: Clear/Archive Archived-Session Guidance And Unarchive Command Boundary
+
+Extend the earlier HXCX-TUI-48 clear/archive coverage with selected raw Codex archived-session and unarchive command behavior, without live terminal mutation, app-server transport, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/app.rs` `session_start_error` and archived-session guidance behavior: resume/fork startup failures for archived sessions collapse the app-server error into the user-facing `codex unarchive <thread-id>` guidance instead of leaking rollout paths or nested RPC details;
+- preserve `../codex/codex-rs/tui/src/session_archive_commands.rs`: `codex archive` and `codex unarchive` are thin app-server clients that resolve UUID or exact session name, scope lookup to active or archived sessions, call `thread/archive` or `thread/unarchive`, and return a deterministic success message;
+- preserve `../codex/codex-rs/tui/src/app_server_session.rs` typed archive/unarchive request boundaries: both commands remain app-server RPC intents, not filesystem mutation or Codex-specific haxe.rust behavior;
+- preserve the HXCX-TUI-48 TUI archive-success exit contract in `../codex/codex-rs/tui/src/app/event_dispatch.rs`: archiving the current main thread exits with user-requested intent and shutdown-first feedback while refusals stay non-exiting;
+- keep the evidence deterministic and independent of live app-server mutation, rollout reads, filesystem mutation, model/tool execution, network transport, terminal takeover, and Cafex behavior.
+
+Status: HXCX-TUI-90 extends `fixtures/hxrust/tui-smoke.v1.json` with typed archived-session resume/fork guidance, shared unarchive command RPC intent, archive-success session exit, shutdown feedback, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic archive/unarchive boundary evidence only, not live session mutation, app-server transport, persistent rollout repair, or an interactive unarchive UI.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

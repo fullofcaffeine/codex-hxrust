@@ -19,6 +19,7 @@
       "../codex/codex-rs/tui/src/status_indicator_widget.rs",
       "../codex/codex-rs/tui/src/resume_picker.rs",
       "../codex/codex-rs/tui/src/session_resume.rs",
+      "../codex/codex-rs/tui/src/session_archive_commands.rs",
       "../codex/codex-rs/tui/src/terminal_title.rs",
       "../codex/codex-rs/tui/src/notifications/mod.rs",
       "../codex/codex-rs/tui/src/notifications/osc9.rs",
@@ -18173,6 +18174,108 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.retry_status=current=Working:message=Reconnecting... 1/5:details=Idle timeout waiting for SSE:will_retry=true:replay=false:remembered=true:stored=->Working:shown=true:visible=true:taken=false:restored=false:header=Reconnecting... 1/5\ntui.chat_widget_interrupted_restore.retry_status=current=Reconnecting... 1/5:message=agent delta:details=:will_retry=false:replay=false:remembered=false:stored=Working->:shown=false:visible=true:taken=true:restored=true:header=Working\ntui.chat_widget_interrupted_restore.retry_status=current=Idle:message=Reconnecting... 2/5:details=Idle timeout waiting for SSE:will_retry=true:replay=true:remembered=false:stored=->:shown=false:visible=false:taken=false:restored=false:header=Idle\ntui.chat_widget_interrupted_restore.record_cancel_edit=prompt=revise this prompt:eligible=false->true:armed=false->false:prompt_state=false->true\ntui.chat_widget_interrupted_restore.arm_cancel_edit=eligible=true:composer_empty=true:pending=0:queued=0:side=false:armed=false->true\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=false:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.restore_cancelled_turn=prompt=revise this prompt:event=true:rollback=true:composer=true\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=0->0:queued=2->0:rejected=0->0:pending_merged=false:queued_merged=true:composer_merged=true:text=first queued\nsecond queued\ncurrent draft\ntui.chat_widget_interrupted_restore.restore_composer=text=first queued\nsecond queued\ncurrent draft:remote_images=0:local_images=0:mentions=0:restored=true\ntui.chat_widget_interrupted_restore.failure=live_interrupted_restore_retry_status_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget interrupted restore retry status\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.retry_status=current=Working:message=Reconnecting... 1/5:details=Idle timeout waiting for SSE:will_retry=true:replay=false:remembered=true:stored=->Working:shown=true:visible=true:taken=false:restored=false:header=Reconnecting... 1/5\ntui.chat_widget_interrupted_restore.retry_status=current=Reconnecting... 1/5:message=agent delta:details=:will_retry=false:replay=false:remembered=false:stored=Working->:shown=false:visible=true:taken=true:restored=true:header=Working\ntui.chat_widget_interrupted_restore.retry_status=current=Idle:message=Reconnecting... 2/5:details=Idle timeout waiting for SSE:will_retry=true:replay=true:remembered=false:stored=->:shown=false:visible=false:taken=false:restored=false:header=Idle\ntui.chat_widget_interrupted_restore.record_cancel_edit=prompt=revise this prompt:eligible=false->true:armed=false->false:prompt_state=false->true\ntui.chat_widget_interrupted_restore.arm_cancel_edit=eligible=true:composer_empty=true:pending=0:queued=0:side=false:armed=false->true\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=false:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.restore_cancelled_turn=prompt=revise this prompt:event=true:rollback=true:composer=true\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=0->0:queued=2->0:rejected=0->0:pending_merged=false:queued_merged=true:composer_merged=true:text=first queued\nsecond queued\ncurrent draft\ntui.chat_widget_interrupted_restore.restore_composer=text=first queued\nsecond queued\ncurrent draft:remote_images=0:local_images=0:mentions=0:restored=true\ntui.chat_widget_interrupted_restore.failure=live_interrupted_restore_retry_status_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "clear-archive-archived-guidance-unarchive-session-exit",
+      "frame": {
+        "name": "clear-archive-archived-guidance-unarchive-session-exit",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "clear archive archived guidance and unarchive command"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "clear_archive",
+          "clearArchive": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "archived_guidance",
+                "mode": "resume",
+                "threadId": "019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "archivedSessionPath": "/Users/me/.codex/archived_sessions/rollout.jsonl",
+                "unarchiveCommand": "codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "errorInserted": true
+              },
+              {
+                "kind": "archived_guidance",
+                "mode": "fork",
+                "threadId": "019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "archivedSessionPath": "/Users/me/.codex/archived_sessions/rollout.jsonl",
+                "unarchiveCommand": "codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "errorInserted": true
+              },
+              {
+                "kind": "unarchive_command",
+                "threadId": "019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "unarchiveRequested": true,
+                "unarchiveSucceeded": true,
+                "exitRequested": false
+              },
+              {
+                "kind": "archive_request",
+                "threadId": "019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "activeThreadBefore": true,
+                "sideConversationActive": false,
+                "archiveRequested": true,
+                "errorInserted": false
+              },
+              {
+                "kind": "archive_result",
+                "threadId": "019e72f4-e09a-70f2-b2c2-a153a57b8cc0",
+                "archiveSucceeded": true,
+                "exitRequested": true,
+                "exitReason": "user_requested"
+              },
+              {
+                "kind": "shutdown_feedback",
+                "exitMode": "shutdown_first",
+                "shutdownFeedbackShown": true,
+                "inputDisabled": true,
+                "appServerShutdownRequested": true,
+                "pendingShutdownThreadBefore": true,
+                "pendingShutdownThreadAfter": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_archive_unarchive_rejected",
+                "errorMessage": "clear archive session mutations require app-server transport",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.clear_archive.plan=headless\ntui.clear_archive.archived_guidance=action=resume:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:path=/Users/me/.codex/archived_sessions/rollout.jsonl:command=codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0:error=true\ntui.clear_archive.archived_guidance=action=fork:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:path=/Users/me/.codex/archived_sessions/rollout.jsonl:command=codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0:error=true\ntui.clear_archive.unarchive_command=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:requested=true:success=true:exit=false\ntui.clear_archive.archive_request=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:active=true:side=false:requested=true:error=false\ntui.clear_archive.archive_result=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:success=true:exit=true:reason=user_requested\ntui.clear_archive.shutdown_feedback=mode=shutdown_first:shown=true:input_disabled=true:server_shutdown=true:pending_thread=true->false\ntui.clear_archive.failure=live_archive_unarchive_rejected:error=clear archive session mutations require app-server transport:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> clear archive archived guidance and unarchive command\ninput> \ntrace:\ntui.clear_archive.plan=headless\ntui.clear_archive.archived_guidance=action=resume:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:path=/Users/me/.codex/archived_sessions/rollout.jsonl:command=codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0:error=true\ntui.clear_archive.archived_guidance=action=fork:thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:path=/Users/me/.codex/archived_sessions/rollout.jsonl:command=codex unarchive 019e72f4-e09a-70f2-b2c2-a153a57b8cc0:error=true\ntui.clear_archive.unarchive_command=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:requested=true:success=true:exit=false\ntui.clear_archive.archive_request=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:active=true:side=false:requested=true:error=false\ntui.clear_archive.archive_result=thread=019e72f4-e09a-70f2-b2c2-a153a57b8cc0:success=true:exit=true:reason=user_requested\ntui.clear_archive.shutdown_feedback=mode=shutdown_first:shown=true:input_disabled=true:server_shutdown=true:pending_thread=true->false\ntui.clear_archive.failure=live_archive_unarchive_rejected:error=clear archive session mutations require app-server transport:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

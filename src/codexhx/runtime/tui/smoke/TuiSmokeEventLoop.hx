@@ -1937,6 +1937,23 @@ class TuiSmokeEventLoop {
 						+ ":exit=" + action.exitRequested
 						+ ":reason=" + action.exitReason
 					);
+				case TuiSmokeClearArchiveActionKind.ArchivedGuidance:
+					trace.push(
+						"tui.clear_archive.archived_guidance="
+						+ "action=" + action.mode
+						+ ":thread=" + action.threadId
+						+ ":path=" + action.archivedSessionPath
+						+ ":command=" + action.unarchiveCommand
+						+ ":error=" + action.errorInserted
+					);
+				case TuiSmokeClearArchiveActionKind.UnarchiveCommand:
+					trace.push(
+						"tui.clear_archive.unarchive_command="
+						+ "thread=" + action.threadId
+						+ ":requested=" + action.unarchiveRequested
+						+ ":success=" + action.unarchiveSucceeded
+						+ ":exit=" + action.exitRequested
+					);
 				case TuiSmokeClearArchiveActionKind.ShutdownFeedback:
 					trace.push(
 						"tui.clear_archive.shutdown_feedback="

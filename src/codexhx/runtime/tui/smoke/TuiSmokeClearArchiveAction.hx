@@ -11,6 +11,8 @@ typedef TuiSmokeClearArchiveActionFields = {
 	final clearBackend:String;
 	final exitMode:String;
 	final exitReason:String;
+	final archivedSessionPath:String;
+	final unarchiveCommand:String;
 	final transcriptCellsBefore:Int;
 	final transcriptCellsAfter:Int;
 	final deferredHistoryBefore:Int;
@@ -35,6 +37,8 @@ typedef TuiSmokeClearArchiveActionFields = {
 	final initialUserMessageSubmitted:Bool;
 	final archiveRequested:Bool;
 	final archiveSucceeded:Bool;
+	final unarchiveRequested:Bool;
+	final unarchiveSucceeded:Bool;
 	final sideConversationActive:Bool;
 	final errorInserted:Bool;
 	final pendingShutdownThreadBefore:Bool;
@@ -63,6 +67,8 @@ class TuiSmokeClearArchiveAction {
 	public final clearBackend:String;
 	public final exitMode:String;
 	public final exitReason:String;
+	public final archivedSessionPath:String;
+	public final unarchiveCommand:String;
 	public final transcriptCellsBefore:Int;
 	public final transcriptCellsAfter:Int;
 	public final deferredHistoryBefore:Int;
@@ -87,6 +93,8 @@ class TuiSmokeClearArchiveAction {
 	public final initialUserMessageSubmitted:Bool;
 	public final archiveRequested:Bool;
 	public final archiveSucceeded:Bool;
+	public final unarchiveRequested:Bool;
+	public final unarchiveSucceeded:Bool;
 	public final sideConversationActive:Bool;
 	public final errorInserted:Bool;
 	public final pendingShutdownThreadBefore:Bool;
