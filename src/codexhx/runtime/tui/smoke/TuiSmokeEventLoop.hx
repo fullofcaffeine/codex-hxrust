@@ -306,6 +306,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetWindowsSandbox:
+					if (!traceWindowsSandbox(event.chatWidgetWindowsSandbox, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4190,6 +4195,102 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_session_flow.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceWindowsSandbox(plan:TuiSmokeWindowsSandboxPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowOsSandboxMutation || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_windows_sandbox.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_windows_sandbox.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeWindowsSandboxActionKind.ModeAllowed:
+					trace.push(
+						"tui.chat_widget_windows_sandbox.mode_allowed="
+						+ action.mode
+						+ ":allowed=" + action.allowed
+					);
+				case TuiSmokeWindowsSandboxActionKind.SetupRequired:
+					trace.push(
+						"tui.chat_widget_windows_sandbox.setup_required="
+						+ "elevated=" + action.elevatedLevel
+						+ ":source=" + action.configSourcePresent
+						+ ":complete=" + action.setupComplete
+						+ ":required=" + action.setupRequired
+					);
+				case TuiSmokeWindowsSandboxActionKind.EnablePrompt:
+					trace.push(
+						"tui.chat_widget_windows_sandbox.enable_prompt="
+						+ action.promptKind
+						+ ":preset=" + action.presetId
+						+ ":legacy_nux=" + action.legacyNuxEnabled
+						+ ":allow_unelevated=" + action.allowUnelevated
+						+ ":admin=" + action.adminActionShown
+						+ ":fallback=" + action.unelevatedFallbackShown
+						+ ":quit=" + action.quitActionShown
+						+ ":cancel_reopens=" + action.cancelReopens
+						+ ":telemetry=" + action.telemetryRecorded
+						+ ":elevated_event=" + action.elevatedSetupEvent
+						+ ":legacy_event=" + action.legacySetupEvent
+					);
+				case TuiSmokeWindowsSandboxActionKind.FallbackPrompt:
+					trace.push(
+						"tui.chat_widget_windows_sandbox.fallback_prompt="
+						+ action.promptKind
+						+ ":preset=" + action.presetId
+						+ ":allow_unelevated=" + action.allowUnelevated
+						+ ":retry=" + action.retryActionShown
+						+ ":legacy=" + action.unelevatedFallbackShown
+						+ ":quit=" + action.quitActionShown
+						+ ":cancel_reopens=" + action.cancelReopens
+						+ ":fallback_event=" + action.fallbackPromptEvent
+						+ ":elevated_event=" + action.elevatedSetupEvent
+						+ ":legacy_event=" + action.legacySetupEvent
+					);
+				case TuiSmokeWindowsSandboxActionKind.StartupPrompt:
+					trace.push(
+						"tui.chat_widget_windows_sandbox.startup_prompt="
+						+ "show_now=" + action.showNow
+						+ ":required=" + action.setupRequired
+						+ ":popup=" + action.popupOpened
+						+ ":enable_event=" + action.enablePromptEvent
+						+ ":quit=" + action.quitActionShown
+					);
+				case TuiSmokeWindowsSandboxActionKind.InitialPromptGate:
+					trace.push(
+						"tui.chat_widget_windows_sandbox.initial_prompt="
+						+ action.initialMessage
+						+ ":required=" + action.setupRequired
+						+ ":held=" + action.initialMessageHeld
+						+ ":submitted=" + action.initialMessageSubmitted
+						+ ":mode=" + action.mode
+					);
+				case TuiSmokeWindowsSandboxActionKind.WorldWritableWarning:
+					trace.push(
+						"tui.chat_widget_windows_sandbox.world_writable="
+						+ "shown=" + action.warningShown
+						+ ":remembered=" + action.rememberedWarning
+						+ ":failed_scan=" + action.failedScan
+						+ ":paths=" + action.samplePaths
+						+ ":extra=" + action.extraCount
+						+ ":items=" + action.itemCount
+					);
+				case TuiSmokeWindowsSandboxActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_windows_sandbox.failure="
+						+ action.failureCode
+						+ ":no_os=" + action.noOsSandboxMutation
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_windows_sandbox.unknown");
 					return false;
 			}
 		}

@@ -53,6 +53,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ChatWidgetSessionFlow = "chat_widget_session_flow";
 	final ChatWidgetReplayProtocol = "chat_widget_replay_protocol";
 	final ChatWidgetRateLimit = "chat_widget_rate_limit";
+	final ChatWidgetWindowsSandbox = "chat_widget_windows_sandbox";
 	final ChatWidgetInterruptQuit = "chat_widget_interrupt_quit";
 	final ChatWidgetInterruptedRestore = "chat_widget_interrupted_restore";
 	final SideConversation = "side_conversation";
@@ -121,6 +122,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "chat_widget_session_flow": ChatWidgetSessionFlow;
 			case "chat_widget_replay_protocol": ChatWidgetReplayProtocol;
 			case "chat_widget_rate_limit": ChatWidgetRateLimit;
+			case "chat_widget_windows_sandbox": ChatWidgetWindowsSandbox;
 			case "chat_widget_interrupt_quit": ChatWidgetInterruptQuit;
 			case "chat_widget_interrupted_restore": ChatWidgetInterruptedRestore;
 			case "side_conversation": SideConversation;

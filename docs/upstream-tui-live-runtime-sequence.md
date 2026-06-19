@@ -2692,6 +2692,20 @@ Model selected raw Codex rate-limit warning, snapshot, prompt, and error-classif
 
 Status: HXCX-TUI-73 extends `fixtures/hxrust/tui-smoke.v1.json` with typed duration-label, warning-threshold, snapshot-preservation, switch-prompt, workspace-member-prompt, error-kind, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic rate-limit state evidence only, not live account transport or popup rendering ownership.
 
+### HXCX-TUI-74: ChatWidget Windows Sandbox Prompt Boundary
+
+Model selected raw Codex Windows sandbox prompt behavior without mutating OS sandbox state, opening a live terminal popup, or submitting model traffic:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/windows_sandbox_prompts.rs` mode-admission and setup-required gates: configured requirements decide whether unelevated fallback is allowed, elevated mode with a config source and incomplete setup blocks startup progress, and completed setup clears the requirement;
+- preserve enable-prompt behavior: legacy pre-NUX flow emits the legacy setup event, elevated NUX prompts show the Administrator setup action, optionally show the non-admin fallback, always offer quit, record telemetry, and reopen on cancel when a sandbox choice is required;
+- preserve fallback-prompt behavior: failed elevated setup offers retry, optionally offers non-admin fallback, always offers quit, and reopens on cancel when the organization or current setup state still requires a choice;
+- preserve startup prompt gating from `maybe_prompt_windows_sandbox_enable`: startup only opens the sandbox prompt when `show_now` is true and setup is required; otherwise startup proceeds without a modal;
+- preserve `../codex/codex-rs/tui/src/chatwidget/tests/permissions.rs` initial-message deferral: configured initial prompts are held while required elevated setup is incomplete and submitted only after the selected mode no longer requires setup;
+- preserve world-writable warning boundaries: non-Windows/no-warning paths are explicit no-ops, warning prompts can include sample paths and failed-scan copy, and remember actions are distinct from session-only acceptance;
+- keep the evidence deterministic and independent of real Windows feature toggles, Administrator elevation, filesystem ACL scans, ratatui rendering, model/provider calls, and Cafex behavior.
+
+Status: HXCX-TUI-74 extends `fixtures/hxrust/tui-smoke.v1.json` with typed mode-allowance, setup-required, enable-prompt, fallback-prompt, startup-gate, initial-message gate, world-writable warning, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic Windows sandbox prompt evidence only, not real OS sandbox setup or popup rendering ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

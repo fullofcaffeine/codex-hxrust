@@ -112,6 +112,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetSessionFlow: optionalSessionFlowPlan(value, "chatWidgetSessionFlow"),
 				chatWidgetReplayProtocol: optionalReplayProtocolPlan(value, "chatWidgetReplayProtocol"),
 				chatWidgetRateLimit: optionalRateLimitPlan(value, "chatWidgetRateLimit"),
+				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -124,6 +125,66 @@ class TuiSmokeFixtureLoader {
 				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe"),
 				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy"),
 				clipboardPaste: optionalClipboardPastePlan(value, "clipboardPaste")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalWindowsSandboxPlan(object:Value, name:String):Null<TuiSmokeWindowsSandboxPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeWindowsSandboxPlan({
+					allowOsSandboxMutation: optionalBoolField(value, "allowOsSandboxMutation", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: windowsSandboxActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function windowsSandboxActions(values:Array<Value>):Array<TuiSmokeWindowsSandboxAction> {
+		final out:Array<TuiSmokeWindowsSandboxAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeWindowsSandboxAction({
+				kind: TuiSmokeWindowsSandboxActionKind.fromString(stringField(value, "kind", "")),
+				mode: optionalStringField(value, "mode", ""),
+				promptKind: optionalStringField(value, "promptKind", ""),
+				presetId: optionalStringField(value, "presetId", ""),
+				initialMessage: optionalStringField(value, "initialMessage", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				samplePaths: optionalStringField(value, "samplePaths", ""),
+				extraCount: optionalIntField(value, "extraCount", 0),
+				itemCount: optionalIntField(value, "itemCount", 0),
+				allowed: optionalBoolField(value, "allowed", false),
+				elevatedLevel: optionalBoolField(value, "elevatedLevel", false),
+				configSourcePresent: optionalBoolField(value, "configSourcePresent", false),
+				setupComplete: optionalBoolField(value, "setupComplete", false),
+				setupRequired: optionalBoolField(value, "setupRequired", false),
+				showNow: optionalBoolField(value, "showNow", false),
+				popupOpened: optionalBoolField(value, "popupOpened", false),
+				legacyNuxEnabled: optionalBoolField(value, "legacyNuxEnabled", false),
+				allowUnelevated: optionalBoolField(value, "allowUnelevated", false),
+				unelevatedFallbackShown: optionalBoolField(value, "unelevatedFallbackShown", false),
+				adminActionShown: optionalBoolField(value, "adminActionShown", false),
+				retryActionShown: optionalBoolField(value, "retryActionShown", false),
+				quitActionShown: optionalBoolField(value, "quitActionShown", false),
+				cancelReopens: optionalBoolField(value, "cancelReopens", false),
+				telemetryRecorded: optionalBoolField(value, "telemetryRecorded", false),
+				elevatedSetupEvent: optionalBoolField(value, "elevatedSetupEvent", false),
+				legacySetupEvent: optionalBoolField(value, "legacySetupEvent", false),
+				fallbackPromptEvent: optionalBoolField(value, "fallbackPromptEvent", false),
+				enablePromptEvent: optionalBoolField(value, "enablePromptEvent", false),
+				exitEvent: optionalBoolField(value, "exitEvent", false),
+				initialMessageHeld: optionalBoolField(value, "initialMessageHeld", false),
+				initialMessageSubmitted: optionalBoolField(value, "initialMessageSubmitted", false),
+				failedScan: optionalBoolField(value, "failedScan", false),
+				warningShown: optionalBoolField(value, "warningShown", false),
+				rememberedWarning: optionalBoolField(value, "rememberedWarning", false),
+				noOsSandboxMutation: optionalBoolField(value, "noOsSandboxMutation", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

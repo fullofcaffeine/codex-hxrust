@@ -1,0 +1,84 @@
+package codexhx.runtime.tui.smoke;
+
+typedef TuiSmokeWindowsSandboxActionFields = {
+	final kind:TuiSmokeWindowsSandboxActionKind;
+	final mode:String;
+	final promptKind:String;
+	final presetId:String;
+	final initialMessage:String;
+	final failureCode:String;
+	final samplePaths:String;
+	final extraCount:Int;
+	final itemCount:Int;
+	final allowed:Bool;
+	final elevatedLevel:Bool;
+	final configSourcePresent:Bool;
+	final setupComplete:Bool;
+	final setupRequired:Bool;
+	final showNow:Bool;
+	final popupOpened:Bool;
+	final legacyNuxEnabled:Bool;
+	final allowUnelevated:Bool;
+	final unelevatedFallbackShown:Bool;
+	final adminActionShown:Bool;
+	final retryActionShown:Bool;
+	final quitActionShown:Bool;
+	final cancelReopens:Bool;
+	final telemetryRecorded:Bool;
+	final elevatedSetupEvent:Bool;
+	final legacySetupEvent:Bool;
+	final fallbackPromptEvent:Bool;
+	final enablePromptEvent:Bool;
+	final exitEvent:Bool;
+	final initialMessageHeld:Bool;
+	final initialMessageSubmitted:Bool;
+	final failedScan:Bool;
+	final warningShown:Bool;
+	final rememberedWarning:Bool;
+	final noOsSandboxMutation:Bool;
+	final noRatatuiRender:Bool;
+	final noModelCall:Bool;
+	final unsupportedRejected:Bool;
+}
+
+@:build(codexhx.macros.FieldRecordConstructor.build())
+class TuiSmokeWindowsSandboxAction {
+	public final kind:TuiSmokeWindowsSandboxActionKind;
+	public final mode:String;
+	public final promptKind:String;
+	public final presetId:String;
+	public final initialMessage:String;
+	public final failureCode:String;
+	public final samplePaths:String;
+	public final extraCount:Int;
+	public final itemCount:Int;
+	public final allowed:Bool;
+	public final elevatedLevel:Bool;
+	public final configSourcePresent:Bool;
+	public final setupComplete:Bool;
+	public final setupRequired:Bool;
+	public final showNow:Bool;
+	public final popupOpened:Bool;
+	public final legacyNuxEnabled:Bool;
+	public final allowUnelevated:Bool;
+	public final unelevatedFallbackShown:Bool;
+	public final adminActionShown:Bool;
+	public final retryActionShown:Bool;
+	public final quitActionShown:Bool;
+	public final cancelReopens:Bool;
+	public final telemetryRecorded:Bool;
+	public final elevatedSetupEvent:Bool;
+	public final legacySetupEvent:Bool;
+	public final fallbackPromptEvent:Bool;
+	public final enablePromptEvent:Bool;
+	public final exitEvent:Bool;
+	public final initialMessageHeld:Bool;
+	public final initialMessageSubmitted:Bool;
+	public final failedScan:Bool;
+	public final warningShown:Bool;
+	public final rememberedWarning:Bool;
+	public final noOsSandboxMutation:Bool;
+	public final noRatatuiRender:Bool;
+	public final noModelCall:Bool;
+	public final unsupportedRejected:Bool;
+}
