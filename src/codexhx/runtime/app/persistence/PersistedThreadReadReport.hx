@@ -12,7 +12,8 @@ class PersistedThreadReadReport {
 	public function okCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.ok) count = count + 1;
+			if (outcome.ok)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -26,10 +27,7 @@ class PersistedThreadReadReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";reads=" + Std.string(outcomes.length)
-			+ ";ok=" + Std.string(okCount())
-			+ ";failed=" + Std.string(failureCount())
+		return "schema=" + schema + ";reads=" + Std.string(outcomes.length) + ";ok=" + Std.string(okCount()) + ";failed=" + Std.string(failureCount())
 			+ ";outcomes=[" + parts.join("||") + "]";
 	}
 }

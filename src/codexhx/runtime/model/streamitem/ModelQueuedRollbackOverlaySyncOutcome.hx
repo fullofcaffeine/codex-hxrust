@@ -96,33 +96,17 @@ class ModelQueuedRollbackOverlaySyncOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";numTurns=" + numTurns
-			+ ";transcriptCellCountBefore=" + transcriptCellCountBefore
-			+ ";transcriptCellCountAfter=" + transcriptCellCountAfter
-			+ ";userCountBefore=" + userCountBefore
-			+ ";userCountAfter=" + userCountAfter
-			+ ";overlayActive=" + boolText(overlayActive)
-			+ ";overlayCommittedCellCountAfter=" + overlayCommittedCellCountAfter
-			+ ";overlayCommittedCountSynced=" + boolText(overlayCommittedCountSynced)
-			+ ";deferredHistoryLineCountBefore=" + deferredHistoryLineCountBefore
-			+ ";deferredHistoryLineCountAfter=" + deferredHistoryLineCountAfter
-			+ ";deferredHistoryCleared=" + boolText(deferredHistoryCleared)
-			+ ";previewSelectionBefore=" + noneIfNegative(previewSelectionBefore)
-			+ ";previewSelectionAfter=" + noneIfNegative(previewSelectionAfter)
-			+ ";previewSelectionClamped=" + boolText(previewSelectionClamped)
-			+ ";agentCopyHistoryUserCountAfter=" + agentCopyHistoryUserCountAfter
-			+ ";agentCopyHistoryTruncated=" + boolText(agentCopyHistoryTruncated)
-			+ ";backtrackRenderPending=" + boolText(backtrackRenderPending)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";numTurns=" + numTurns
+			+ ";transcriptCellCountBefore=" + transcriptCellCountBefore + ";transcriptCellCountAfter=" + transcriptCellCountAfter + ";userCountBefore="
+			+ userCountBefore + ";userCountAfter=" + userCountAfter + ";overlayActive=" + boolText(overlayActive) + ";overlayCommittedCellCountAfter="
+			+ overlayCommittedCellCountAfter + ";overlayCommittedCountSynced=" + boolText(overlayCommittedCountSynced) + ";deferredHistoryLineCountBefore="
+			+ deferredHistoryLineCountBefore + ";deferredHistoryLineCountAfter=" + deferredHistoryLineCountAfter + ";deferredHistoryCleared="
+			+ boolText(deferredHistoryCleared) + ";previewSelectionBefore=" + noneIfNegative(previewSelectionBefore) + ";previewSelectionAfter="
+			+ noneIfNegative(previewSelectionAfter) + ";previewSelectionClamped=" + boolText(previewSelectionClamped) + ";agentCopyHistoryUserCountAfter="
+			+ agentCopyHistoryUserCountAfter + ";agentCopyHistoryTruncated=" + boolText(agentCopyHistoryTruncated) + ";backtrackRenderPending="
+			+ boolText(backtrackRenderPending) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveOnlyEffectsSuppressed="
+			+ boolText(liveOnlyEffectsSuppressed) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

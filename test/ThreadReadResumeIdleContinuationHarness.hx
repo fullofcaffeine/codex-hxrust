@@ -30,7 +30,8 @@ class ThreadReadResumeIdleContinuationHarness {
 			assertEquals(boolText(boolField(expect, "skipped", false)), boolText(outcome.skipped));
 			assertEquals(stringField(expect, "sequence", ""), outcome.sequence);
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -41,95 +42,45 @@ class ThreadReadResumeIdleContinuationHarness {
 			final caseObject = objectValue(value);
 			final operation:ThreadReadTokenUsageReplayDeliveryOperation = cast stringField(caseObject, "operation", "");
 			final status = optionalStringField(caseObject, "goalStatus");
-			out.push(new ThreadReadResumeIdleContinuationRequest(
-				operation,
-				snapshotOutcome(operation, stringField(caseObject, "snapshot", "")),
-				boolField(caseObject, "activeTurnPresent", false),
-				boolField(caseObject, "triggerMailboxPending", false),
-				boolField(caseObject, "toolsVisible", false),
-				boolField(caseObject, "threadManagerAvailable", false),
-				boolField(caseObject, "liveThreadAvailable", false),
-				boolField(caseObject, "automaticStartAccepted", false),
-				goal(status)
-			));
+			out.push(new ThreadReadResumeIdleContinuationRequest(operation, snapshotOutcome(operation, stringField(caseObject, "snapshot", "")),
+				boolField(caseObject, "activeTurnPresent", false), boolField(caseObject, "triggerMailboxPending", false),
+				boolField(caseObject, "toolsVisible", false), boolField(caseObject, "threadManagerAvailable", false),
+				boolField(caseObject, "liveThreadAvailable", false), boolField(caseObject, "automaticStartAccepted", false), goal(status)));
 		}
 		return out;
 	}
 
-	static function snapshotOutcome(
-		operation:ThreadReadTokenUsageReplayDeliveryOperation,
-		kind:String
-	):ThreadReadResumeGoalSnapshotOutcome {
+	static function snapshotOutcome(operation:ThreadReadTokenUsageReplayDeliveryOperation, kind:String):ThreadReadResumeGoalSnapshotOutcome {
 		if (kind == "updated_delivered") {
-			return ThreadReadResumeGoalSnapshotOutcome.updated(
-				operation,
-				"response->thread/tokenUsage/updated->thread/goal/updated",
-				"emit_idle_lifecycle",
-				"none",
-				"stored goal snapshot delivered with status=active"
-			);
+			return ThreadReadResumeGoalSnapshotOutcome.updated(operation, "response->thread/tokenUsage/updated->thread/goal/updated", "emit_idle_lifecycle",
+				"none", "stored goal snapshot delivered with status=active");
 		}
 		if (kind == "updated_loaded_after_pending") {
-			return ThreadReadResumeGoalSnapshotOutcome.updated(
-				operation,
-				"response->thread/tokenUsage/updated->thread/goal/updated",
-				"emit_idle_lifecycle",
-				"after_goal_snapshot",
-				"stored goal snapshot delivered with status=active"
-			);
+			return ThreadReadResumeGoalSnapshotOutcome.updated(operation, "response->thread/tokenUsage/updated->thread/goal/updated", "emit_idle_lifecycle",
+				"after_goal_snapshot", "stored goal snapshot delivered with status=active");
 		}
 		if (kind == "updated_no_token_usage") {
-			return ThreadReadResumeGoalSnapshotOutcome.updated(
-				operation,
-				"response->thread/goal/updated",
-				"snapshot_only",
-				"none",
-				"stored goal snapshot delivered"
-			);
+			return ThreadReadResumeGoalSnapshotOutcome.updated(operation, "response->thread/goal/updated", "snapshot_only", "none",
+				"stored goal snapshot delivered");
 		}
 		if (kind == "cleared_no_goal") {
-			return ThreadReadResumeGoalSnapshotOutcome.cleared(
-				operation,
-				"response->thread/goal/cleared",
-				"none"
-			);
+			return ThreadReadResumeGoalSnapshotOutcome.cleared(operation, "response->thread/goal/cleared", "none");
 		}
 		if (kind == "goals_disabled") {
-			return ThreadReadResumeGoalSnapshotOutcome.makeSkipped(
-				operation,
-				"skipped_goals_feature_disabled",
-				"response->thread/tokenUsage/updated",
-				"goals feature disabled; upstream returns before snapshot and idle continuation"
-			);
+			return ThreadReadResumeGoalSnapshotOutcome.makeSkipped(operation, "skipped_goals_feature_disabled", "response->thread/tokenUsage/updated",
+				"goals feature disabled; upstream returns before snapshot and idle continuation");
 		}
 		if (kind == "fork_skip") {
-			return ThreadReadResumeGoalSnapshotOutcome.makeSkipped(
-				operation,
-				"skipped_fork_has_no_resume_goal_snapshot",
-				"response->thread/tokenUsage/updated",
-				"upstream fork delivery replays token usage but does not emit a resume goal snapshot"
-			);
+			return ThreadReadResumeGoalSnapshotOutcome.makeSkipped(operation, "skipped_fork_has_no_resume_goal_snapshot",
+				"response->thread/tokenUsage/updated", "upstream fork delivery replays token usage but does not emit a resume goal snapshot");
 		}
-		return ThreadReadResumeGoalSnapshotOutcome.failure(
-			operation,
-			"response_not_ready",
-			"resume goal snapshot must be ordered after the JSON-RPC response"
-		);
+		return ThreadReadResumeGoalSnapshotOutcome.failure(operation, "response_not_ready", "resume goal snapshot must be ordered after the JSON-RPC response");
 	}
 
 	static function goal(status:String):ThreadGoal {
-		if (status.length == 0) return null;
-		return new ThreadGoal(
-			threadId(),
-			"keep polishing",
-			status,
-			true,
-			100000,
-			1200,
-			300,
-			200000,
-			200100
-		);
+		if (status.length == 0)
+			return null;
+		return new ThreadGoal(threadId(), "keep polishing", status, true, 100000, 1200, 300, 200000, 200100);
 	}
 
 	static function threadId():String {
@@ -208,7 +159,8 @@ class ThreadReadResumeIdleContinuationHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -225,7 +177,8 @@ class ThreadReadResumeIdleContinuationHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -234,10 +187,12 @@ class ThreadReadResumeIdleContinuationHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

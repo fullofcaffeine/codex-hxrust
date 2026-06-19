@@ -11,11 +11,8 @@ class ThreadReadTokenUsageOwnerResolver {
 
 	public static function resolve(request:ThreadReadTokenUsageOwnerRequest):ThreadReadTokenUsageOwnerOutcome {
 		if (request.turns.length == 0) {
-			return ThreadReadTokenUsageOwnerOutcome.failure(
-				"empty_thread",
-				ThreadReadTokenUsageOwnerReason.EmptyThread,
-				"cannot attribute replayed token usage without reconstructed turns"
-			);
+			return ThreadReadTokenUsageOwnerOutcome.failure("empty_thread", ThreadReadTokenUsageOwnerReason.EmptyThread,
+				"cannot attribute replayed token usage without reconstructed turns");
 		}
 
 		final owner = request.ownerHint;
@@ -46,7 +43,8 @@ class ThreadReadTokenUsageOwnerResolver {
 	static function findTurnIndex(turns:Array<ThreadReadTurnSummary>, turnId:String):Int {
 		var i = 0;
 		while (i < turns.length) {
-			if (turns[i].id == turnId) return i;
+			if (turns[i].id == turnId)
+				return i;
 			i = i + 1;
 		}
 		return -1;

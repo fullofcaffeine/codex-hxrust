@@ -26,7 +26,8 @@ class ThreadReadTokenUsageOwnerHarness {
 			assertEquals(Std.string(intField(expect, "turnIndex", -1)), Std.string(outcome.turnIndex));
 			assertEquals(stringField(expect, "reason", ""), outcome.reason);
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -52,11 +53,7 @@ class ThreadReadTokenUsageOwnerHarness {
 		final value = optionalField(caseObject, "ownerHint");
 		return switch value {
 			case JObject(_, _):
-				ThreadReadTokenUsageTurnOwnerHint.fromRaw(
-					stringField(value, "id", ""),
-					intField(value, "position", 0),
-					hasField(value, "position")
-				);
+				ThreadReadTokenUsageTurnOwnerHint.fromRaw(stringField(value, "id", ""), intField(value, "position", 0), hasField(value, "position"));
 			case JNull:
 				null;
 			case _:
@@ -124,7 +121,8 @@ class ThreadReadTokenUsageOwnerHarness {
 			case JObject(keys, _):
 				var i = 0;
 				while (i < keys.length) {
-					if (keys[i] == name) return true;
+					if (keys[i] == name)
+						return true;
 					i = i + 1;
 				}
 				false;
@@ -138,7 +136,8 @@ class ThreadReadTokenUsageOwnerHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -155,7 +154,8 @@ class ThreadReadTokenUsageOwnerHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -164,10 +164,12 @@ class ThreadReadTokenUsageOwnerHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

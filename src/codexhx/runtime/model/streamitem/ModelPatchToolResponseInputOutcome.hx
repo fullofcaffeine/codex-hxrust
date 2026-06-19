@@ -19,25 +19,10 @@ class ModelPatchToolResponseInputOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		callId:String,
-		responseKind:ModelPatchToolOutputItemKind,
-		admissionKind:ModelPatchToolResponseAdmissionKind,
-		responseOrderIndex:Int,
-		nextInputCount:Int,
-		outputText:String,
-		success:Bool,
-		followUpRequestRequired:Bool,
-		toolFutureDrained:Bool,
-		conversationItemRecorded:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, callId:String, responseKind:ModelPatchToolOutputItemKind,
+			admissionKind:ModelPatchToolResponseAdmissionKind, responseOrderIndex:Int, nextInputCount:Int, outputText:String, success:Bool,
+			followUpRequestRequired:Bool, toolFutureDrained:Bool, conversationItemRecorded:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -58,23 +43,12 @@ class ModelPatchToolResponseInputOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";callId=" + noneIfEmpty(callId)
-			+ ";responseKind=" + responseKind
-			+ ";admissionKind=" + admissionKind
-			+ ";responseOrderIndex=" + Std.string(responseOrderIndex)
-			+ ";nextInputCount=" + Std.string(nextInputCount)
-			+ ";success=" + boolText(success)
-			+ ";followUpRequestRequired=" + boolText(followUpRequestRequired)
-			+ ";toolFutureDrained=" + boolText(toolFutureDrained)
-			+ ";conversationItemRecorded=" + boolText(conversationItemRecorded)
-			+ ";outputText=" + outputText
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";callId=" + noneIfEmpty(callId) + ";responseKind=" + responseKind
+			+ ";admissionKind=" + admissionKind + ";responseOrderIndex=" + Std.string(responseOrderIndex) + ";nextInputCount=" + Std.string(nextInputCount)
+			+ ";success=" + boolText(success) + ";followUpRequestRequired=" + boolText(followUpRequestRequired) + ";toolFutureDrained="
+			+ boolText(toolFutureDrained) + ";conversationItemRecorded=" + boolText(conversationItemRecorded) + ";outputText=" + outputText
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

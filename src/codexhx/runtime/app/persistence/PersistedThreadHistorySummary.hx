@@ -20,10 +20,7 @@ class PersistedThreadHistorySummary {
 	}
 
 	public function summary():String {
-		return "turns=" + Std.string(visibleTurnCount)
-			+ ";history=" + Std.string(historyItemCount)
-			+ ";persisted=" + Std.string(persistedItemCount)
-			+ ";pending=" + Std.string(pendingPersistCount)
-			+ ";mode=" + mode();
+		return "turns=" + Std.string(visibleTurnCount) + ";history=" + Std.string(historyItemCount) + ";persisted=" + Std.string(persistedItemCount)
+			+ ";pending=" + Std.string(pendingPersistCount) + ";mode=" + mode();
 	}
 }

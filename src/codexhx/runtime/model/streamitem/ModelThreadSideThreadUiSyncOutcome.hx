@@ -25,31 +25,12 @@ class ModelThreadSideThreadUiSyncOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		statusChangeRequestId:String,
-		decisionKind:ModelThreadSideThreadUiSyncDecisionKind,
-		storedParentStatusBefore:ModelThreadSideParentStatusKind,
-		storedParentStatusAfter:ModelThreadSideParentStatusKind,
-		statusChanged:Bool,
-		syncTriggered:Bool,
-		sideUiCleared:Bool,
-		sideConversationActive:Bool,
-		contextLabel:String,
-		renameBlocked:Bool,
-		interruptedTurnNoticeSuppressed:Bool,
-		interruptedTurnNoticeDefaultRestored:Bool,
-		statusLabelApplied:Bool,
-		statusClearApplied:Bool,
-		repeatedSameStatusNoop:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, statusChangeRequestId:String, decisionKind:ModelThreadSideThreadUiSyncDecisionKind,
+			storedParentStatusBefore:ModelThreadSideParentStatusKind, storedParentStatusAfter:ModelThreadSideParentStatusKind, statusChanged:Bool,
+			syncTriggered:Bool, sideUiCleared:Bool, sideConversationActive:Bool, contextLabel:String, renameBlocked:Bool,
+			interruptedTurnNoticeSuppressed:Bool, interruptedTurnNoticeDefaultRestored:Bool, statusLabelApplied:Bool, statusClearApplied:Bool,
+			repeatedSameStatusNoop:Bool, eventOrderingPreserved:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool,
+			errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -76,29 +57,16 @@ class ModelThreadSideThreadUiSyncOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";statusChangeRequest=" + noneIfEmpty(statusChangeRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";storedParentStatusBefore=" + storedParentStatusBefore
-			+ ";storedParentStatusAfter=" + storedParentStatusAfter
-			+ ";statusChanged=" + boolText(statusChanged)
-			+ ";syncTriggered=" + boolText(syncTriggered)
-			+ ";sideUiCleared=" + boolText(sideUiCleared)
-			+ ";sideConversationActive=" + boolText(sideConversationActive)
-			+ ";contextLabel=" + noneIfEmpty(contextLabel)
-			+ ";renameBlocked=" + boolText(renameBlocked)
-			+ ";interruptedTurnNoticeSuppressed=" + boolText(interruptedTurnNoticeSuppressed)
-			+ ";interruptedTurnNoticeDefaultRestored=" + boolText(interruptedTurnNoticeDefaultRestored)
-			+ ";statusLabelApplied=" + boolText(statusLabelApplied)
-			+ ";statusClearApplied=" + boolText(statusClearApplied)
-			+ ";repeatedSameStatusNoop=" + boolText(repeatedSameStatusNoop)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";statusChangeRequest=" + noneIfEmpty(statusChangeRequestId)
+			+ ";decisionKind=" + decisionKind + ";storedParentStatusBefore=" + storedParentStatusBefore + ";storedParentStatusAfter="
+			+ storedParentStatusAfter + ";statusChanged=" + boolText(statusChanged) + ";syncTriggered=" + boolText(syncTriggered) + ";sideUiCleared="
+			+ boolText(sideUiCleared) + ";sideConversationActive=" + boolText(sideConversationActive) + ";contextLabel=" + noneIfEmpty(contextLabel)
+			+ ";renameBlocked=" + boolText(renameBlocked) + ";interruptedTurnNoticeSuppressed=" + boolText(interruptedTurnNoticeSuppressed)
+			+ ";interruptedTurnNoticeDefaultRestored=" + boolText(interruptedTurnNoticeDefaultRestored) + ";statusLabelApplied="
+			+ boolText(statusLabelApplied) + ";statusClearApplied=" + boolText(statusClearApplied) + ";repeatedSameStatusNoop="
+			+ boolText(repeatedSameStatusNoop) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

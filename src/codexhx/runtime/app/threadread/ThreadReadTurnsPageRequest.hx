@@ -9,13 +9,7 @@ class ThreadReadTurnsPageRequest {
 	public final sortDirection:ThreadReadTurnSortDirection;
 	public final itemsView:ThreadReadTurnItemsView;
 
-	public function new(
-		threadId:ThreadId,
-		cursor:String,
-		limit:Int,
-		sortDirection:ThreadReadTurnSortDirection,
-		itemsView:ThreadReadTurnItemsView
-	) {
+	public function new(threadId:ThreadId, cursor:String, limit:Int, sortDirection:ThreadReadTurnSortDirection, itemsView:ThreadReadTurnItemsView) {
 		this.threadId = threadId;
 		this.cursor = cursor;
 		this.limit = limit;

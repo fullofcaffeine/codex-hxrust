@@ -30,9 +30,7 @@ class ThreadReadTokenUsageReplayOutcome {
 	}
 
 	public function summary():String {
-		return "ok=" + (ok ? "true" : "false")
-			+ ";code=" + code
-			+ ";message=" + message
-			+ ";notification=" + (notification == null ? "none" : notification.summary());
+		return "ok=" + (ok ? "true" : "false") + ";code=" + code + ";message=" + message + ";notification="
+			+ (notification == null ? "none" : notification.summary());
 	}
 }

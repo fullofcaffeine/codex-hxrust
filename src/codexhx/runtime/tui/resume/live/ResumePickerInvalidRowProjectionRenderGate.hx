@@ -77,8 +77,10 @@ class ResumePickerInvalidRowProjectionRenderGate {
 		state.selectedIndex = 1;
 		state.selectedThreadId = "thread-preview";
 		state.visibleRows = [
-			visibleRow(row("thread-named", "Named thread", "/workspace/codex-hxrust", "2026-06-19T12:00:00Z", 4), false, ["upstream name overrides raw preview"]),
-			visibleRow(row("thread-preview", "assistant: trimmed preview", "/workspace/codex-hxrust/crates/codex", "2026-06-19T12:10:00Z", 7), true, ["assistant: trimmed preview"]),
+			visibleRow(row("thread-named", "Named thread", "/workspace/codex-hxrust", "2026-06-19T12:00:00Z", 4), false,
+				["upstream name overrides raw preview"]),
+			visibleRow(row("thread-preview", "assistant: trimmed preview", "/workspace/codex-hxrust/crates/codex", "2026-06-19T12:10:00Z", 7), true,
+				["assistant: trimmed preview"]),
 			visibleRow(row("thread-empty", "(no message yet)", "/tmp/empty-session", "2026-06-19T12:20:00Z", 0), false, ["(no message yet)"])
 		];
 		state.nextCursor = "";

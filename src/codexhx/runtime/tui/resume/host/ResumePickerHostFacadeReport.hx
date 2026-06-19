@@ -27,15 +27,8 @@ class ResumePickerHostFacadeReport {
 	public final summaries:Array<String>;
 
 	public function summary():String {
-		return "page=" + pageEvents
-			+ ";preview=" + previewEvents
-			+ ";transcript=" + transcriptEvents
-			+ ";frame=" + frameEvents
-			+ ";failures=" + failureEvents
-			+ ";frameRequests=" + frameRequests
-			+ ";renders=" + renders
-			+ ";density=" + persistedDensity
-			+ ";skipped=" + skippedEvents
+		return "page=" + pageEvents + ";preview=" + previewEvents + ";transcript=" + transcriptEvents + ";frame=" + frameEvents + ";failures="
+			+ failureEvents + ";frameRequests=" + frameRequests + ";renders=" + renders + ";density=" + persistedDensity + ";skipped=" + skippedEvents
 			+ ";events=[" + summaries.join("##") + "]";
 	}
 }

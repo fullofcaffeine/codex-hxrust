@@ -17,23 +17,10 @@ class ModelPendingInteractiveReplayRequest {
 	public final snapshotRequested:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		reconstructionOutcome:ModelTurnReplayReconstructionOutcome,
-		eventKind:ModelPendingInteractiveReplayEventKind,
-		promptKind:ModelPendingInteractivePromptKind,
-		turnId:String,
-		activeTurnIdBefore:String,
-		restoredInProgressTurnId:String,
-		pendingPromptCountBefore:Int,
-		pendingPromptCountForTurnBefore:Int,
-		requestMatchesPendingPrompt:Bool,
-		outboundOpCanChangeState:Bool,
-		outboundOpMatchesPrompt:Bool,
-		terminalMatchesActiveTurn:Bool,
-		snapshotRequested:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, reconstructionOutcome:ModelTurnReplayReconstructionOutcome, eventKind:ModelPendingInteractiveReplayEventKind,
+			promptKind:ModelPendingInteractivePromptKind, turnId:String, activeTurnIdBefore:String, restoredInProgressTurnId:String,
+			pendingPromptCountBefore:Int, pendingPromptCountForTurnBefore:Int, requestMatchesPendingPrompt:Bool, outboundOpCanChangeState:Bool,
+			outboundOpMatchesPrompt:Bool, terminalMatchesActiveTurn:Bool, snapshotRequested:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.reconstructionOutcome = reconstructionOutcome;
 		this.eventKind = eventKind == null ? ModelPendingInteractiveReplayEventKind.Snapshot : eventKind;

@@ -30,17 +30,8 @@ class ResumePickerKernelReport {
 	}
 
 	public function summary():String {
-		return "plans=" + planCount
-			+ ";commands=" + commandCount
-			+ ";page=" + pageRequests
-			+ ";preview=" + previewRequests
-			+ ";transcript=" + transcriptRequests
-			+ ";frames=" + frameRequests
-			+ ";persist=" + persistDensityRequests
-			+ ";overlay=" + overlayOpenRequests
-			+ ";load_more=" + loadMoreRequests
-			+ ";start_fresh=" + startFreshRequests
-			+ ";errors=" + errorSurfaces
-			+ ";final=" + finalState.summary();
+		return "plans=" + planCount + ";commands=" + commandCount + ";page=" + pageRequests + ";preview=" + previewRequests + ";transcript="
+			+ transcriptRequests + ";frames=" + frameRequests + ";persist=" + persistDensityRequests + ";overlay=" + overlayOpenRequests + ";load_more="
+			+ loadMoreRequests + ";start_fresh=" + startFreshRequests + ";errors=" + errorSurfaces + ";final=" + finalState.summary();
 	}
 }

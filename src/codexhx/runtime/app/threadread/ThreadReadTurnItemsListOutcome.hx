@@ -16,13 +16,7 @@ class ThreadReadTurnItemsListOutcome {
 	}
 
 	public static function unsupported(threadId:String, turnId:String):ThreadReadTurnItemsListOutcome {
-		return new ThreadReadTurnItemsListOutcome(
-			false,
-			"method_not_found",
-			"thread/turns/items/list is not supported yet",
-			threadId,
-			turnId
-		);
+		return new ThreadReadTurnItemsListOutcome(false, "method_not_found", "thread/turns/items/list is not supported yet", threadId, turnId);
 	}
 
 	public static function failure(code:String, message:String):ThreadReadTurnItemsListOutcome {
@@ -30,10 +24,7 @@ class ThreadReadTurnItemsListOutcome {
 	}
 
 	public function summary():String {
-		return "turn-items:" + code
-			+ ";ok=" + (ok ? "true" : "false")
-			+ ";thread=" + (threadId.length == 0 ? "null" : threadId)
-			+ ";turn=" + (turnId.length == 0 ? "null" : turnId)
-			+ ";message=" + message;
+		return "turn-items:" + code + ";ok=" + (ok ? "true" : "false") + ";thread=" + (threadId.length == 0 ? "null" : threadId) + ";turn="
+			+ (turnId.length == 0 ? "null" : turnId) + ";message=" + message;
 	}
 }

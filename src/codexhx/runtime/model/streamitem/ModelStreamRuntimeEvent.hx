@@ -10,16 +10,8 @@ class ModelStreamRuntimeEvent {
 	public final text:String;
 	public final index:Int;
 
-	public function new(
-		kind:ModelStreamRuntimeEventKind,
-		itemKind:ModelStreamOutputItemKind,
-		itemId:String,
-		callId:String,
-		toolName:String,
-		delta:String,
-		text:String,
-		index:Int
-	) {
+	public function new(kind:ModelStreamRuntimeEventKind, itemKind:ModelStreamOutputItemKind, itemId:String, callId:String, toolName:String, delta:String,
+			text:String, index:Int) {
 		this.kind = kind;
 		this.itemKind = itemKind;
 		this.itemId = itemId;
@@ -31,14 +23,8 @@ class ModelStreamRuntimeEvent {
 	}
 
 	public function summary():String {
-		return "event=" + kind
-			+ ";itemKind=" + itemKind
-			+ ";itemId=" + noneIfEmpty(itemId)
-			+ ";callId=" + noneIfEmpty(callId)
-			+ ";tool=" + noneIfEmpty(toolName)
-			+ ";delta=" + delta
-			+ ";text=" + text
-			+ ";index=" + Std.string(index);
+		return "event=" + kind + ";itemKind=" + itemKind + ";itemId=" + noneIfEmpty(itemId) + ";callId=" + noneIfEmpty(callId) + ";tool="
+			+ noneIfEmpty(toolName) + ";delta=" + delta + ";text=" + text + ";index=" + Std.string(index);
 	}
 
 	static function noneIfEmpty(value:String):String {

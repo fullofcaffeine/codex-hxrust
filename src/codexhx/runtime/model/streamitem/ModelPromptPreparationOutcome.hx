@@ -25,31 +25,11 @@ class ModelPromptPreparationOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		hookRecordingRequestId:String,
-		decisionKind:ModelPromptPreparationDecisionKind,
-		promptPrepared:Bool,
-		historyClonedForPrompt:Bool,
-		forPromptNormalized:Bool,
-		modelSupportsImages:Bool,
-		imageItemCountBefore:Int,
-		imageItemCountAfter:Int,
-		promptItemCount:Int,
-		recordedPendingInputCount:Int,
-		nextSamplingRequestIndex:Int,
-		currentWindowIdRead:Bool,
-		windowId:String,
-		turnMetadataHeaderPresent:Bool,
-		dispatchPreconditionsMet:Bool,
-		breakBeforePrompt:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, hookRecordingRequestId:String, decisionKind:ModelPromptPreparationDecisionKind,
+			promptPrepared:Bool, historyClonedForPrompt:Bool, forPromptNormalized:Bool, modelSupportsImages:Bool, imageItemCountBefore:Int,
+			imageItemCountAfter:Int, promptItemCount:Int, recordedPendingInputCount:Int, nextSamplingRequestIndex:Int, currentWindowIdRead:Bool,
+			windowId:String, turnMetadataHeaderPresent:Bool, dispatchPreconditionsMet:Bool, breakBeforePrompt:Bool, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -76,29 +56,15 @@ class ModelPromptPreparationOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";hookRecordingRequest=" + hookRecordingRequestId
-			+ ";decisionKind=" + decisionKind
-			+ ";promptPrepared=" + boolText(promptPrepared)
-			+ ";historyClonedForPrompt=" + boolText(historyClonedForPrompt)
-			+ ";forPromptNormalized=" + boolText(forPromptNormalized)
-			+ ";modelSupportsImages=" + boolText(modelSupportsImages)
-			+ ";imageItemCountBefore=" + Std.string(imageItemCountBefore)
-			+ ";imageItemCountAfter=" + Std.string(imageItemCountAfter)
-			+ ";promptItemCount=" + Std.string(promptItemCount)
-			+ ";recordedPendingInputCount=" + Std.string(recordedPendingInputCount)
-			+ ";nextSamplingRequestIndex=" + Std.string(nextSamplingRequestIndex)
-			+ ";currentWindowIdRead=" + boolText(currentWindowIdRead)
-			+ ";windowId=" + noneIfEmpty(windowId)
-			+ ";turnMetadataHeaderPresent=" + boolText(turnMetadataHeaderPresent)
-			+ ";dispatchPreconditionsMet=" + boolText(dispatchPreconditionsMet)
-			+ ";breakBeforePrompt=" + boolText(breakBeforePrompt)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";hookRecordingRequest=" + hookRecordingRequestId + ";decisionKind="
+			+ decisionKind + ";promptPrepared=" + boolText(promptPrepared) + ";historyClonedForPrompt=" + boolText(historyClonedForPrompt)
+			+ ";forPromptNormalized=" + boolText(forPromptNormalized) + ";modelSupportsImages=" + boolText(modelSupportsImages) + ";imageItemCountBefore="
+			+ Std.string(imageItemCountBefore) + ";imageItemCountAfter=" + Std.string(imageItemCountAfter) + ";promptItemCount="
+			+ Std.string(promptItemCount) + ";recordedPendingInputCount=" + Std.string(recordedPendingInputCount) + ";nextSamplingRequestIndex="
+			+ Std.string(nextSamplingRequestIndex) + ";currentWindowIdRead=" + boolText(currentWindowIdRead) + ";windowId=" + noneIfEmpty(windowId)
+			+ ";turnMetadataHeaderPresent=" + boolText(turnMetadataHeaderPresent) + ";dispatchPreconditionsMet=" + boolText(dispatchPreconditionsMet)
+			+ ";breakBeforePrompt=" + boolText(breakBeforePrompt) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

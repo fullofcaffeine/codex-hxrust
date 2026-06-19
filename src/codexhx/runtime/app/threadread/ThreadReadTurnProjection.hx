@@ -15,7 +15,8 @@ class ThreadReadTurnProjection {
 		while (index < items.length) {
 			final item = items[index];
 			final validation = validateItem(item, index);
-			if (!validation.ok) return validation;
+			if (!validation.ok)
+				return validation;
 			applyItem(state, item, index);
 			index = index + 1;
 		}
@@ -30,11 +31,15 @@ class ThreadReadTurnProjection {
 		if (!RolloutSummaryItemKind.isValid(item.kind)) {
 			return ThreadReadTurnProjectionOutcome.failure("invalid_rollout_item_kind", "unsupported rollout item kind at index " + Std.string(index));
 		}
-		if ((item.kind == RolloutSummaryItemKind.TurnStarted || item.kind == RolloutSummaryItemKind.TurnComplete || item.kind == RolloutSummaryItemKind.TurnAborted)
+		if ((item.kind == RolloutSummaryItemKind.TurnStarted
+			|| item.kind == RolloutSummaryItemKind.TurnComplete
+			|| item.kind == RolloutSummaryItemKind.TurnAborted)
 			&& item.turnId.length == 0) {
 			return ThreadReadTurnProjectionOutcome.failure("missing_turn_id", "turn boundary item requires turnId at index " + Std.string(index));
 		}
-		if ((item.kind == RolloutSummaryItemKind.UserMessage || item.kind == RolloutSummaryItemKind.AgentMessage || item.kind == RolloutSummaryItemKind.CommandExecution)
+		if ((item.kind == RolloutSummaryItemKind.UserMessage
+			|| item.kind == RolloutSummaryItemKind.AgentMessage
+			|| item.kind == RolloutSummaryItemKind.CommandExecution)
 			&& item.text.length == 0) {
 			return ThreadReadTurnProjectionOutcome.failure("missing_item_text", "renderable rollout item requires text at index " + Std.string(index));
 		}
@@ -48,7 +53,8 @@ class ThreadReadTurnProjection {
 			return;
 		}
 		if (item.kind == RolloutSummaryItemKind.UserMessage) {
-			if (state.hasImplicitCurrent()) state.finishCurrent();
+			if (state.hasImplicitCurrent())
+				state.finishCurrent();
 			state.ensureCurrent("rollout-" + Std.string(index), false, index);
 			state.addItem(ThreadReadTurnItemKind.UserMessage, item.text);
 			return;
@@ -69,7 +75,8 @@ class ThreadReadTurnProjection {
 			return;
 		}
 		if (item.kind == RolloutSummaryItemKind.TurnComplete) {
-			if (state.markStatus(item.turnId, ThreadReadTurnStatus.Completed)) state.finishCurrent();
+			if (state.markStatus(item.turnId, ThreadReadTurnStatus.Completed))
+				state.finishCurrent();
 			return;
 		}
 		if (item.kind == RolloutSummaryItemKind.TurnAborted) {
@@ -84,6 +91,7 @@ class ThreadReadTurnProjection {
 
 class ProjectionState {
 	public final turns:Array<ThreadReadTurnSummary>;
+
 	var currentId:String;
 	var currentStatus:ThreadReadTurnStatus;
 	var currentItems:Array<ThreadReadTurnItemSummary>;
@@ -112,7 +120,8 @@ class ProjectionState {
 	}
 
 	public function ensureCurrent(fallbackId:String, explicit:Bool, index:Int):Void {
-		if (!currentOpen) open(fallbackId, explicit, index);
+		if (!currentOpen)
+			open(fallbackId, explicit, index);
 	}
 
 	public function addItem(kind:ThreadReadTurnItemKind, text:String):Void {
@@ -120,7 +129,8 @@ class ProjectionState {
 	}
 
 	public function markActive(status:ThreadReadTurnStatus):Void {
-		if (currentOpen) currentStatus = status;
+		if (currentOpen)
+			currentStatus = status;
 	}
 
 	public function markStatus(turnId:String, status:ThreadReadTurnStatus):Bool {
@@ -140,7 +150,8 @@ class ProjectionState {
 	}
 
 	public function finishCurrent():Void {
-		if (!currentOpen) return;
+		if (!currentOpen)
+			return;
 		if (currentItems.length > 0 || currentExplicit) {
 			turns.push(new ThreadReadTurnSummary(currentId, currentStatus, currentItems));
 		}

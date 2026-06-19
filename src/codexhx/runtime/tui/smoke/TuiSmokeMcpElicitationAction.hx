@@ -102,7 +102,6 @@ class TuiSmokeMcpElicitationAction {
 	public final toolSuggestionHasInstallUrl:Bool;
 	public final failureCode:String;
 
-
 	public function queueTransitionText():String {
 		return queueBefore + "->" + queueAfter;
 	}

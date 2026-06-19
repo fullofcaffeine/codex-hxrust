@@ -16,21 +16,27 @@ class DeterministicAsyncTask<T> implements AsyncTask<T> {
 	}
 
 	public function complete(value:T):Void {
-		if (cancelled || failedError != null) return;
+		if (cancelled || failedError != null)
+			return;
 		this.ready = true;
 		this.value = value;
 	}
 
 	public function fail(code:String, message:String, recoverable:Bool):Void {
-		if (cancelled || ready) return;
+		if (cancelled || ready)
+			return;
 		this.failedError = new AsyncError(code, message, recoverable);
 	}
 
 	public function poll(context:AsyncContext):AsyncPoll<T> {
-		if (context.isCancelled()) return AsyncPoll.Cancelled(context.cancellation.cancelReason(), 0, 0);
-		if (cancelled) return AsyncPoll.Cancelled(reason, 0, 0);
-		if (failedError != null) return AsyncPoll.Failed(failedError, 0, 0);
-		if (ready) return AsyncPoll.Ready(value, 0, 0);
+		if (context.isCancelled())
+			return AsyncPoll.Cancelled(context.cancellation.cancelReason(), 0, 0);
+		if (cancelled)
+			return AsyncPoll.Cancelled(reason, 0, 0);
+		if (failedError != null)
+			return AsyncPoll.Failed(failedError, 0, 0);
+		if (ready)
+			return AsyncPoll.Ready(value, 0, 0);
 		return AsyncPoll.Pending(0, 0);
 	}
 

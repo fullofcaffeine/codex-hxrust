@@ -6,7 +6,8 @@ class TuiSmokeTerminalTitleSanitizer {
 	}
 
 	public static function sanitize(title:String, maxChars:Int):String {
-		if (title == null || maxChars <= 0) return "";
+		if (title == null || maxChars <= 0)
+			return "";
 
 		final out = new StringBuf();
 		var charsWritten = 0;
@@ -31,7 +32,8 @@ class TuiSmokeTerminalTitleSanitizer {
 				}
 				pendingSpace = false;
 			}
-			if (charsWritten >= maxChars) break;
+			if (charsWritten >= maxChars)
+				break;
 			out.addChar(code);
 			charsWritten = charsWritten + 1;
 			i = i + 1;
@@ -44,7 +46,8 @@ class TuiSmokeTerminalTitleSanitizer {
 	}
 
 	static function isDisallowed(code:Int):Bool {
-		if (code < 32 || code == 127) return true;
+		if (code < 32 || code == 127)
+			return true;
 		return switch code {
 			case 0x061C | 0x200B | 0x200C | 0x200D | 0x200E | 0x200F | 0x202A | 0x202B | 0x202C | 0x202D | 0x202E | 0x2066 | 0x2067 | 0x2068 | 0x2069:
 				true;

@@ -12,7 +12,8 @@ class ThreadReadTryStartTurnIfIdleReport {
 	public function acceptedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.accepted) count = count + 1;
+			if (outcome.accepted)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadTryStartTurnIfIdleReport {
 	public function rejectedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.rejected) count = count + 1;
+			if (outcome.rejected)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadTryStartTurnIfIdleReport {
 	public function noopCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.code == "empty_input_noop") count = count + 1;
+			if (outcome.code == "empty_input_noop")
+				count = count + 1;
 		}
 		return count;
 	}
@@ -36,7 +39,8 @@ class ThreadReadTryStartTurnIfIdleReport {
 	public function failureCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.ok) count = count + 1;
+			if (!outcome.ok)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -44,7 +48,8 @@ class ThreadReadTryStartTurnIfIdleReport {
 	public function returnedUnchangedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.returnedItemUnchanged) count = count + 1;
+			if (outcome.returnedItemUnchanged)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -54,13 +59,8 @@ class ThreadReadTryStartTurnIfIdleReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";accepted=" + Std.string(acceptedCount())
-			+ ";rejected=" + Std.string(rejectedCount())
-			+ ";noop=" + Std.string(noopCount())
-			+ ";failed=" + Std.string(failureCount())
-			+ ";returnedUnchanged=" + Std.string(returnedUnchangedCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";accepted=" + Std.string(acceptedCount()) + ";rejected="
+			+ Std.string(rejectedCount()) + ";noop=" + Std.string(noopCount()) + ";failed=" + Std.string(failureCount()) + ";returnedUnchanged="
+			+ Std.string(returnedUnchangedCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

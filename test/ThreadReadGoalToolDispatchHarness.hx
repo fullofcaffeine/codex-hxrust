@@ -70,44 +70,24 @@ class ThreadReadGoalToolDispatchHarness {
 	}
 
 	static function getRequest(request:Value):ThreadReadGetGoalToolRequest {
-		return new ThreadReadGetGoalToolRequest(
-			stringField(request, "threadId", ""),
-			stringField(request, "argumentsJson", ""),
-			dbOutcomeKind(stringField(request, "dbOutcomeKind", "")),
-			stringField(request, "dbErrorMessage", ""),
-			goalValue(valueField(request, "goal"))
-		);
+		return new ThreadReadGetGoalToolRequest(stringField(request, "threadId", ""), stringField(request, "argumentsJson", ""),
+			dbOutcomeKind(stringField(request, "dbOutcomeKind", "")), stringField(request, "dbErrorMessage", ""), goalValue(valueField(request, "goal")));
 	}
 
 	static function createRequest(request:Value):ThreadReadCreateGoalToolRequest {
-		return new ThreadReadCreateGoalToolRequest(
-			stringField(request, "threadId", ""),
-			stringField(request, "turnId", ""),
-			stringField(request, "argumentsJson", ""),
-			insertOutcomeKind(stringField(request, "insertOutcomeKind", "")),
-			stringField(request, "insertErrorMessage", ""),
-			previewOutcomeKind(stringField(request, "previewOutcomeKind", "")),
-			stringField(request, "previewErrorMessage", ""),
-			goalValue(valueField(request, "insertedGoal"))
-		);
+		return new ThreadReadCreateGoalToolRequest(stringField(request, "threadId", ""), stringField(request, "turnId", ""),
+			stringField(request, "argumentsJson", ""), insertOutcomeKind(stringField(request, "insertOutcomeKind", "")),
+			stringField(request, "insertErrorMessage", ""), previewOutcomeKind(stringField(request, "previewOutcomeKind", "")),
+			stringField(request, "previewErrorMessage", ""), goalValue(valueField(request, "insertedGoal")));
 	}
 
 	static function updateRequest(request:Value):ThreadReadUpdateGoalToolRequest {
-		return new ThreadReadUpdateGoalToolRequest(
-			stringField(request, "threadId", ""),
-			stringField(request, "turnId", ""),
-			stringField(request, "callId", ""),
-			stringField(request, "argumentsJson", ""),
-			accountingOutcomeKind(stringField(request, "accountingOutcomeKind", "")),
-			stringField(request, "accountingErrorMessage", ""),
-			metricsReadOutcomeKind(stringField(request, "metricsReadOutcomeKind", "")),
-			stringField(request, "metricsReadErrorMessage", ""),
-			stringField(request, "previousStatus", ""),
-			updateOutcomeKind(stringField(request, "updateOutcomeKind", "")),
-			stringField(request, "updateErrorMessage", ""),
-			stringField(request, "clearedTurnId", ""),
-			goalValue(valueField(request, "updatedGoal"))
-		);
+		return new ThreadReadUpdateGoalToolRequest(stringField(request, "threadId", ""), stringField(request, "turnId", ""),
+			stringField(request, "callId", ""), stringField(request, "argumentsJson", ""),
+			accountingOutcomeKind(stringField(request, "accountingOutcomeKind", "")), stringField(request, "accountingErrorMessage", ""),
+			metricsReadOutcomeKind(stringField(request, "metricsReadOutcomeKind", "")), stringField(request, "metricsReadErrorMessage", ""),
+			stringField(request, "previousStatus", ""), updateOutcomeKind(stringField(request, "updateOutcomeKind", "")),
+			stringField(request, "updateErrorMessage", ""), stringField(request, "clearedTurnId", ""), goalValue(valueField(request, "updatedGoal")));
 	}
 
 	static function toolKind(value:String):ThreadReadGoalToolKind {
@@ -181,7 +161,8 @@ class ThreadReadGoalToolDispatchHarness {
 			case JNull: null;
 			case _:
 				final parsed = ThreadGoal.parseApp(value);
-				if (!parsed.ok) throw "invalid goal fixture: " + parsed.errorCode;
+				if (!parsed.ok)
+					throw "invalid goal fixture: " + parsed.errorCode;
 				parsed.value;
 		}
 	}
@@ -246,7 +227,8 @@ class ThreadReadGoalToolDispatchHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -263,7 +245,8 @@ class ThreadReadGoalToolDispatchHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -272,10 +255,12 @@ class ThreadReadGoalToolDispatchHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

@@ -81,28 +81,15 @@ class ModelThreadSnapshotTurnHistoryReplayOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";replayKind=" + replayKind
-			+ ";decisionKind=" + decisionKind
-			+ ";turnCount=" + turnCount
-			+ ";replayedItemCount=" + replayedItemCount
-			+ ";userMessageCount=" + userMessageCount
-			+ ";agentMessageCount=" + agentMessageCount
-			+ ";terminalTurnCompletedNotificationCount=" + terminalTurnCompletedNotificationCount
-			+ ";userMessagesInExpectedOrder=" + boolText(userMessagesInExpectedOrder)
-			+ ";agentMessagesInExpectedOrder=" + boolText(agentMessagesInExpectedOrder)
-			+ ";turnOrderPreserved=" + boolText(turnOrderPreserved)
-			+ ";itemOrderPreserved=" + boolText(itemOrderPreserved)
-			+ ";sessionAppliedBeforeTurns=" + boolText(sessionAppliedBeforeTurns)
-			+ ";queueAutosendSuppressed=" + boolText(queueAutosendSuppressed)
-			+ ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";replayKind=" + replayKind + ";decisionKind=" + decisionKind
+			+ ";turnCount=" + turnCount + ";replayedItemCount=" + replayedItemCount + ";userMessageCount=" + userMessageCount + ";agentMessageCount="
+			+ agentMessageCount + ";terminalTurnCompletedNotificationCount=" + terminalTurnCompletedNotificationCount + ";userMessagesInExpectedOrder="
+			+ boolText(userMessagesInExpectedOrder) + ";agentMessagesInExpectedOrder=" + boolText(agentMessagesInExpectedOrder) + ";turnOrderPreserved="
+			+ boolText(turnOrderPreserved) + ";itemOrderPreserved=" + boolText(itemOrderPreserved) + ";sessionAppliedBeforeTurns="
+			+ boolText(sessionAppliedBeforeTurns) + ";queueAutosendSuppressed=" + boolText(queueAutosendSuppressed) + ";liveOnlyEffectsSuppressed="
+			+ boolText(liveOnlyEffectsSuppressed) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -22,28 +22,10 @@ class ModelPatchProjectionOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		itemId:String,
-		fileChangeItemProjected:Bool,
-		legacyBeginProjected:Bool,
-		legacyEndProjected:Bool,
-		turnDiffProjected:Bool,
-		status:ModelPatchApplyStatus,
-		autoApproved:Bool,
-		stdoutVisible:Bool,
-		stderrVisible:Bool,
-		changeCount:Int,
-		turnDiff:String,
-		eventKinds:Array<ModelPatchProjectionEventKind>,
-		changes:Array<ModelPatchFileChangeProjection>,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, itemId:String, fileChangeItemProjected:Bool, legacyBeginProjected:Bool,
+			legacyEndProjected:Bool, turnDiffProjected:Bool, status:ModelPatchApplyStatus, autoApproved:Bool, stdoutVisible:Bool, stderrVisible:Bool,
+			changeCount:Int, turnDiff:String, eventKinds:Array<ModelPatchProjectionEventKind>, changes:Array<ModelPatchFileChangeProjection>,
+			liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -68,29 +50,18 @@ class ModelPatchProjectionOutcome {
 
 	public function summary():String {
 		final parts:Array<String> = [];
-		for (change in changes) parts.push(change.summary());
+		for (change in changes)
+			parts.push(change.summary());
 		final events:Array<String> = [];
-		for (kind in eventKinds) events.push(kind);
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";itemId=" + noneIfEmpty(itemId)
-			+ ";fileChangeItemProjected=" + boolText(fileChangeItemProjected)
-			+ ";legacyBeginProjected=" + boolText(legacyBeginProjected)
-			+ ";legacyEndProjected=" + boolText(legacyEndProjected)
-			+ ";turnDiffProjected=" + boolText(turnDiffProjected)
-			+ ";status=" + status
-			+ ";autoApproved=" + boolText(autoApproved)
-			+ ";stdoutVisible=" + boolText(stdoutVisible)
-			+ ";stderrVisible=" + boolText(stderrVisible)
-			+ ";changeCount=" + Std.string(changeCount)
-			+ ";turnDiff=" + turnDiff
-			+ ";events=[" + events.join("|") + "]"
-			+ ";changes=[" + parts.join("||") + "]"
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		for (kind in eventKinds)
+			events.push(kind);
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";itemId=" + noneIfEmpty(itemId) + ";fileChangeItemProjected="
+			+ boolText(fileChangeItemProjected) + ";legacyBeginProjected=" + boolText(legacyBeginProjected) + ";legacyEndProjected="
+			+ boolText(legacyEndProjected) + ";turnDiffProjected=" + boolText(turnDiffProjected) + ";status=" + status + ";autoApproved="
+			+ boolText(autoApproved) + ";stdoutVisible=" + boolText(stdoutVisible) + ";stderrVisible=" + boolText(stderrVisible) + ";changeCount="
+			+ Std.string(changeCount) + ";turnDiff=" + turnDiff + ";events=[" + events.join("|") + "]" + ";changes=[" + parts.join("||") + "]"
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

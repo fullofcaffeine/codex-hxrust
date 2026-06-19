@@ -27,29 +27,10 @@ class ModelStreamItemReducerOutcome {
 	public final errorMessage:String;
 	public final sequence:String;
 
-	function new(
-		ok:Bool,
-		code:String,
-		request:ModelStreamItemReducerRequest,
-		route:ModelStreamRouteOutcome,
-		runtimeEvents:Array<ModelStreamRuntimeEvent>,
-		startedCount:Int,
-		completedCount:Int,
-		assistantDeltaCount:Int,
-		reasoningDeltaCount:Int,
-		rawReasoningDeltaCount:Int,
-		toolInputDeltaCount:Int,
-		toolInputDeltaIgnoredCount:Int,
-		toolArgumentDiffEventCount:Int,
-		toolCallCount:Int,
-		needsFollowUp:Bool,
-		lastAgentMessage:String,
-		terminalResponseId:String,
-		totalTokens:Int,
-		liveNetworkAttempted:Bool,
-		errorMessage:String,
-		sequence:String
-	) {
+	function new(ok:Bool, code:String, request:ModelStreamItemReducerRequest, route:ModelStreamRouteOutcome, runtimeEvents:Array<ModelStreamRuntimeEvent>,
+			startedCount:Int, completedCount:Int, assistantDeltaCount:Int, reasoningDeltaCount:Int, rawReasoningDeltaCount:Int, toolInputDeltaCount:Int,
+			toolInputDeltaIgnoredCount:Int, toolArgumentDiffEventCount:Int, toolCallCount:Int, needsFollowUp:Bool, lastAgentMessage:String,
+			terminalResponseId:String, totalTokens:Int, liveNetworkAttempted:Bool, errorMessage:String, sequence:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = request.requestId;
@@ -75,141 +56,46 @@ class ModelStreamItemReducerOutcome {
 		this.sequence = sequence;
 	}
 
-	public static function reduced(
-		request:ModelStreamItemReducerRequest,
-		route:ModelStreamRouteOutcome,
-		runtimeEvents:Array<ModelStreamRuntimeEvent>,
-		startedCount:Int,
-		completedCount:Int,
-		assistantDeltaCount:Int,
-		reasoningDeltaCount:Int,
-		rawReasoningDeltaCount:Int,
-		toolInputDeltaCount:Int,
-		toolInputDeltaIgnoredCount:Int,
-		toolArgumentDiffEventCount:Int,
-		toolCallCount:Int,
-		needsFollowUp:Bool,
-		lastAgentMessage:String,
-		terminalResponseId:String,
-		totalTokens:Int,
-		sequence:String
-	):ModelStreamItemReducerOutcome {
-		return new ModelStreamItemReducerOutcome(
-			true,
-			"model_stream_items_reduced",
-			request,
-			route,
-			runtimeEvents,
-			startedCount,
-			completedCount,
-			assistantDeltaCount,
-			reasoningDeltaCount,
-			rawReasoningDeltaCount,
-			toolInputDeltaCount,
-			toolInputDeltaIgnoredCount,
-			toolArgumentDiffEventCount,
-			toolCallCount,
-			needsFollowUp,
-			lastAgentMessage,
-			terminalResponseId,
-			totalTokens,
-			false,
-			"",
-			sequence
-		);
+	public static function reduced(request:ModelStreamItemReducerRequest, route:ModelStreamRouteOutcome, runtimeEvents:Array<ModelStreamRuntimeEvent>,
+			startedCount:Int, completedCount:Int, assistantDeltaCount:Int, reasoningDeltaCount:Int, rawReasoningDeltaCount:Int, toolInputDeltaCount:Int,
+			toolInputDeltaIgnoredCount:Int, toolArgumentDiffEventCount:Int, toolCallCount:Int, needsFollowUp:Bool, lastAgentMessage:String,
+			terminalResponseId:String, totalTokens:Int, sequence:String):ModelStreamItemReducerOutcome {
+		return new ModelStreamItemReducerOutcome(true, "model_stream_items_reduced", request, route, runtimeEvents, startedCount, completedCount,
+			assistantDeltaCount, reasoningDeltaCount, rawReasoningDeltaCount, toolInputDeltaCount, toolInputDeltaIgnoredCount, toolArgumentDiffEventCount,
+			toolCallCount, needsFollowUp, lastAgentMessage, terminalResponseId, totalTokens, false, "", sequence);
 	}
 
-	public static function denied(
-		request:ModelStreamItemReducerRequest,
-		route:ModelStreamRouteOutcome,
-		errorMessage:String,
-		sequence:String
-	):ModelStreamItemReducerOutcome {
-		return new ModelStreamItemReducerOutcome(
-			false,
-			"model_stream_route_denied",
-			request,
-			route,
-			[errorEvent(ModelStreamRuntimeEventKind.RouteDenied, errorMessage)],
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			false,
-			"",
-			"",
-			0,
-			false,
-			errorMessage,
-			sequence
-		);
+	public static function denied(request:ModelStreamItemReducerRequest, route:ModelStreamRouteOutcome, errorMessage:String,
+			sequence:String):ModelStreamItemReducerOutcome {
+		return new ModelStreamItemReducerOutcome(false, "model_stream_route_denied", request, route,
+			[errorEvent(ModelStreamRuntimeEventKind.RouteDenied, errorMessage)], 0, 0, 0, 0, 0, 0, 0, 0, 0, false, "", "", 0, false, errorMessage, sequence);
 	}
 
-	public static function failed(
-		request:ModelStreamItemReducerRequest,
-		route:ModelStreamRouteOutcome,
-		runtimeEvents:Array<ModelStreamRuntimeEvent>,
-		errorMessage:String,
-		sequence:String
-	):ModelStreamItemReducerOutcome {
+	public static function failed(request:ModelStreamItemReducerRequest, route:ModelStreamRouteOutcome, runtimeEvents:Array<ModelStreamRuntimeEvent>,
+			errorMessage:String, sequence:String):ModelStreamItemReducerOutcome {
 		final events = runtimeEvents == null ? [] : runtimeEvents;
 		events.push(errorEvent(ModelStreamRuntimeEventKind.ReducerError, errorMessage));
-		return new ModelStreamItemReducerOutcome(
-			false,
-			"model_stream_item_reducer_failed",
-			request,
-			route,
-			events,
-			countEvents(events, ModelStreamRuntimeEventKind.ItemStarted),
-			countEvents(events, ModelStreamRuntimeEventKind.ItemCompleted),
-			countEvents(events, ModelStreamRuntimeEventKind.AgentMessageContentDelta),
-			countEvents(events, ModelStreamRuntimeEventKind.ReasoningContentDelta),
-			countEvents(events, ModelStreamRuntimeEventKind.ReasoningRawContentDelta),
-			countEvents(events, ModelStreamRuntimeEventKind.ToolCallInputDelta),
+		return new ModelStreamItemReducerOutcome(false, "model_stream_item_reducer_failed", request, route, events,
+			countEvents(events, ModelStreamRuntimeEventKind.ItemStarted), countEvents(events, ModelStreamRuntimeEventKind.ItemCompleted),
+			countEvents(events, ModelStreamRuntimeEventKind.AgentMessageContentDelta), countEvents(events, ModelStreamRuntimeEventKind.ReasoningContentDelta),
+			countEvents(events, ModelStreamRuntimeEventKind.ReasoningRawContentDelta), countEvents(events, ModelStreamRuntimeEventKind.ToolCallInputDelta),
 			countEvents(events, ModelStreamRuntimeEventKind.ToolCallInputDeltaIgnored),
-			countEvents(events, ModelStreamRuntimeEventKind.ToolArgumentDiffUpdated),
-			countEvents(events, ModelStreamRuntimeEventKind.ToolCallQueued),
-			false,
-			"",
-			"",
-			0,
-			false,
-			errorMessage,
-			sequence
-		);
+			countEvents(events, ModelStreamRuntimeEventKind.ToolArgumentDiffUpdated), countEvents(events, ModelStreamRuntimeEventKind.ToolCallQueued), false,
+			"", "", 0, false, errorMessage, sequence);
 	}
 
 	public function summary():String {
 		final eventParts:Array<String> = [];
-		for (event in runtimeEvents) eventParts.push(event.summary());
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";routeCode=" + routeCode
-			+ ";provider=" + providerId
-			+ ";model=" + selectedModelId
-			+ ";started=" + Std.string(startedCount)
-			+ ";completed=" + Std.string(completedCount)
-			+ ";assistantDeltas=" + Std.string(assistantDeltaCount)
-			+ ";reasoningDeltas=" + Std.string(reasoningDeltaCount)
-			+ ";rawReasoningDeltas=" + Std.string(rawReasoningDeltaCount)
-			+ ";toolCalls=" + Std.string(toolCallCount)
-			+ ";needsFollowUp=" + boolText(needsFollowUp)
-			+ ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage)
-			+ ";terminalResponseId=" + noneIfEmpty(terminalResponseId)
-			+ ";totalTokens=" + Std.string(totalTokens)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";toolInputDeltas=" + Std.string(toolInputDeltaCount)
-			+ ";toolInputDeltaIgnored=" + Std.string(toolInputDeltaIgnoredCount)
-			+ ";toolArgumentDiffEvents=" + Std.string(toolArgumentDiffEventCount)
-			+ ";error=" + errorMessage
-			+ ";sequence=" + sequence
-			+ ";events=[" + eventParts.join("##") + "]";
+		for (event in runtimeEvents)
+			eventParts.push(event.summary());
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";routeCode=" + routeCode + ";provider=" + providerId + ";model="
+			+ selectedModelId + ";started=" + Std.string(startedCount) + ";completed=" + Std.string(completedCount) + ";assistantDeltas="
+			+ Std.string(assistantDeltaCount) + ";reasoningDeltas=" + Std.string(reasoningDeltaCount) + ";rawReasoningDeltas="
+			+ Std.string(rawReasoningDeltaCount) + ";toolCalls=" + Std.string(toolCallCount) + ";needsFollowUp=" + boolText(needsFollowUp)
+			+ ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage) + ";terminalResponseId=" + noneIfEmpty(terminalResponseId) + ";totalTokens="
+			+ Std.string(totalTokens) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";toolInputDeltas=" + Std.string(toolInputDeltaCount)
+			+ ";toolInputDeltaIgnored=" + Std.string(toolInputDeltaIgnoredCount) + ";toolArgumentDiffEvents=" + Std.string(toolArgumentDiffEventCount)
+			+ ";error=" + errorMessage + ";sequence=" + sequence + ";events=[" + eventParts.join("##") + "]";
 	}
 
 	static function errorEvent(kind:ModelStreamRuntimeEventKind, message:String):ModelStreamRuntimeEvent {
@@ -218,7 +104,9 @@ class ModelStreamItemReducerOutcome {
 
 	static function countEvents(events:Array<ModelStreamRuntimeEvent>, kind:ModelStreamRuntimeEventKind):Int {
 		var count = 0;
-		for (event in events) if (event.kind == kind) count = count + 1;
+		for (event in events)
+			if (event.kind == kind)
+				count = count + 1;
 		return count;
 	}
 

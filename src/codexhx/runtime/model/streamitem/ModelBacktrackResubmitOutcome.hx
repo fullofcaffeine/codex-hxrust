@@ -72,25 +72,14 @@ class ModelBacktrackResubmitOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";userCountSinceLastSession=" + userCountSinceLastSession
-			+ ";selectedNthUserMessage=" + selectedNthUserMessage
-			+ ";rollbackTurnCount=" + rollbackTurnCount
-			+ ";composerRemoteImageCountAfterRollback=" + composerRemoteImageCountAfterRollback
-			+ ";submittedImageItemCount=" + submittedImageItemCount
-			+ ";submittedTextItemCount=" + submittedTextItemCount
-			+ ";dataImageUrlPreserved=" + boolText(dataImageUrlPreserved)
-			+ ";imageItemBeforeTextItem=" + boolText(imageItemBeforeTextItem)
-			+ ";rollbackSubmitted=" + boolText(rollbackSubmitted)
-			+ ";userTurnSubmitted=" + boolText(userTurnSubmitted)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";userCountSinceLastSession="
+			+ userCountSinceLastSession + ";selectedNthUserMessage=" + selectedNthUserMessage + ";rollbackTurnCount=" + rollbackTurnCount
+			+ ";composerRemoteImageCountAfterRollback=" + composerRemoteImageCountAfterRollback + ";submittedImageItemCount=" + submittedImageItemCount
+			+ ";submittedTextItemCount=" + submittedTextItemCount + ";dataImageUrlPreserved=" + boolText(dataImageUrlPreserved) + ";imageItemBeforeTextItem="
+			+ boolText(imageItemBeforeTextItem) + ";rollbackSubmitted=" + boolText(rollbackSubmitted) + ";userTurnSubmitted=" + boolText(userTurnSubmitted)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

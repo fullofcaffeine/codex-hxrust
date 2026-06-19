@@ -17,21 +17,10 @@ class ThreadReadUpdateGoalToolRequest {
 	public final clearedTurnId:String;
 	public final updatedGoal:ThreadGoal;
 
-	public function new(
-		threadId:String,
-		turnId:String,
-		callId:String,
-		argumentsJson:String,
-		accountingOutcomeKind:ThreadReadUpdateGoalToolAccountingOutcomeKind,
-		accountingErrorMessage:String,
-		metricsReadOutcomeKind:ThreadReadUpdateGoalToolMetricsReadOutcomeKind,
-		metricsReadErrorMessage:String,
-		previousStatus:String,
-		updateOutcomeKind:ThreadReadUpdateGoalToolUpdateOutcomeKind,
-		updateErrorMessage:String,
-		clearedTurnId:String,
-		updatedGoal:ThreadGoal
-	) {
+	public function new(threadId:String, turnId:String, callId:String, argumentsJson:String,
+			accountingOutcomeKind:ThreadReadUpdateGoalToolAccountingOutcomeKind, accountingErrorMessage:String,
+			metricsReadOutcomeKind:ThreadReadUpdateGoalToolMetricsReadOutcomeKind, metricsReadErrorMessage:String, previousStatus:String,
+			updateOutcomeKind:ThreadReadUpdateGoalToolUpdateOutcomeKind, updateErrorMessage:String, clearedTurnId:String, updatedGoal:ThreadGoal) {
 		this.threadId = threadId;
 		this.turnId = turnId;
 		this.callId = callId;

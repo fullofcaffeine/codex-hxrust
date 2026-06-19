@@ -36,7 +36,8 @@ class TuiSmokeAppState {
 	}
 
 	public function appendTranscript(row:TuiSmokeTranscriptRow):Void {
-		if (row != null) transcript.push(row);
+		if (row != null)
+			transcript.push(row);
 	}
 
 	public function frame():TuiSmokeFrameRequest {

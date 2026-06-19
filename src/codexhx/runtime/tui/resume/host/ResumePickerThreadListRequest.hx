@@ -30,11 +30,17 @@ class ResumePickerThreadListRequest {
 	public final includeNonInteractive:Bool;
 
 	public function summary():String {
-		return "id=" + requestId
-			+ ";cursor=" + cursor
-			+ ";query=" + query
-			+ ";pageSize=" + pageSize
-			+ ";sort=" + sortKey
-			+ ";filter=" + filterMode;
+		return "id="
+			+ requestId
+			+ ";cursor="
+			+ cursor
+			+ ";query="
+			+ query
+			+ ";pageSize="
+			+ pageSize
+			+ ";sort="
+			+ sortKey
+			+ ";filter="
+			+ filterMode;
 	}
 }

@@ -20,26 +20,9 @@ class ModelRequestEnvelope {
 	public final toolSpecCount:Int;
 	public final inputItemCount:Int;
 
-	public function new(
-		modelId:String,
-		providerId:String,
-		route:String,
-		endpoint:String,
-		stream:Bool,
-		store:Bool,
-		parallelToolCalls:Bool,
-		reasoningIncluded:Bool,
-		reasoningContext:String,
-		includeEncryptedReasoning:Bool,
-		textControls:String,
-		serviceTier:String,
-		promptCacheKey:Bool,
-		clientMetadata:Bool,
-		requestCompression:Bool,
-		liveNetworkAttempted:Bool,
-		toolSpecCount:Int,
-		inputItemCount:Int
-	) {
+	public function new(modelId:String, providerId:String, route:String, endpoint:String, stream:Bool, store:Bool, parallelToolCalls:Bool,
+			reasoningIncluded:Bool, reasoningContext:String, includeEncryptedReasoning:Bool, textControls:String, serviceTier:String, promptCacheKey:Bool,
+			clientMetadata:Bool, requestCompression:Bool, liveNetworkAttempted:Bool, toolSpecCount:Int, inputItemCount:Int) {
 		this.modelId = modelId;
 		this.providerId = providerId;
 		this.route = route;
@@ -61,24 +44,12 @@ class ModelRequestEnvelope {
 	}
 
 	public function summary():String {
-		return "model=" + modelId
-			+ ";provider=" + providerId
-			+ ";route=" + route
-			+ ";endpoint=" + endpoint
-			+ ";stream=" + boolText(stream)
-			+ ";store=" + boolText(store)
-			+ ";parallelToolCalls=" + boolText(parallelToolCalls)
-			+ ";reasoningIncluded=" + boolText(reasoningIncluded)
-			+ ";reasoningContext=" + reasoningContext
-			+ ";includeEncryptedReasoning=" + boolText(includeEncryptedReasoning)
-			+ ";textControls=" + textControls
-			+ ";serviceTier=" + serviceTier
-			+ ";promptCacheKey=" + boolText(promptCacheKey)
-			+ ";clientMetadata=" + boolText(clientMetadata)
-			+ ";requestCompression=" + boolText(requestCompression)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";toolSpecCount=" + Std.string(toolSpecCount)
-			+ ";inputItemCount=" + Std.string(inputItemCount);
+		return "model=" + modelId + ";provider=" + providerId + ";route=" + route + ";endpoint=" + endpoint + ";stream=" + boolText(stream) + ";store="
+			+ boolText(store) + ";parallelToolCalls=" + boolText(parallelToolCalls) + ";reasoningIncluded=" + boolText(reasoningIncluded)
+			+ ";reasoningContext=" + reasoningContext + ";includeEncryptedReasoning=" + boolText(includeEncryptedReasoning) + ";textControls=" + textControls
+			+ ";serviceTier=" + serviceTier + ";promptCacheKey=" + boolText(promptCacheKey) + ";clientMetadata=" + boolText(clientMetadata)
+			+ ";requestCompression=" + boolText(requestCompression) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";toolSpecCount="
+			+ Std.string(toolSpecCount) + ";inputItemCount=" + Std.string(inputItemCount);
 	}
 
 	static function boolText(value:Bool):String {

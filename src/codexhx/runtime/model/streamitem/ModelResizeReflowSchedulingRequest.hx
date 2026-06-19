@@ -16,22 +16,9 @@ class ModelResizeReflowSchedulingRequest {
 	public final eventOrderIndex:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		resizeReflowOutcome:ModelTerminalResizeReflowOutcome,
-		terminalResizeReflowEnabled:Bool,
-		currentWidth:Int,
-		currentHeight:Int,
-		lastKnownWidth:Int,
-		lastKnownHeight:Int,
-		previousObservedWidth:Int,
-		previousReflowWidth:Int,
-		previousPendingWidth:Int,
-		streamTimeSensitive:Bool,
-		previousEventCount:Int,
-		eventOrderIndex:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, resizeReflowOutcome:ModelTerminalResizeReflowOutcome, terminalResizeReflowEnabled:Bool, currentWidth:Int,
+			currentHeight:Int, lastKnownWidth:Int, lastKnownHeight:Int, previousObservedWidth:Int, previousReflowWidth:Int, previousPendingWidth:Int,
+			streamTimeSensitive:Bool, previousEventCount:Int, eventOrderIndex:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.resizeReflowOutcome = resizeReflowOutcome;
 		this.terminalResizeReflowEnabled = terminalResizeReflowEnabled;

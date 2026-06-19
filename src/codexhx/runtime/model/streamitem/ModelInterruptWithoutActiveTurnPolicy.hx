@@ -2,33 +2,21 @@ package codexhx.runtime.model.streamitem;
 
 class ModelInterruptWithoutActiveTurnPolicy {
 	public static function apply(request:ModelInterruptWithoutActiveTurnRequest):ModelInterruptWithoutActiveTurnOutcome {
-		if (request == null) return failure("", "missing interrupt without active turn request");
+		if (request == null)
+			return failure("", "missing interrupt without active turn request");
 
 		final activeTurnPresent = request.activeTurnId.length > 0;
-		final canSubmit = request.appCommandInterrupt
-			&& request.primaryThreadRegistered
-			&& request.threadId.length > 0
-			&& request.appServerSessionAvailable;
+		final canSubmit = request.appCommandInterrupt && request.primaryThreadRegistered && request.threadId.length > 0 && request.appServerSessionAvailable;
 		final turnInterruptSubmitted = canSubmit && activeTurnPresent;
 		final startupInterruptSubmitted = canSubmit && !activeTurnPresent;
-		final handled = (turnInterruptSubmitted || startupInterruptSubmitted) && (!startupInterruptSubmitted || request.startupInterruptSucceeded);
+		final handled = (turnInterruptSubmitted || startupInterruptSubmitted)
+			&& (!startupInterruptSubmitted || request.startupInterruptSucceeded);
 		final retryAttempted = false;
 		final activeTurnRaceRetryUsed = false;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final decisionKind = turnInterruptSubmitted
-			? ModelInterruptWithoutActiveTurnDecisionKind.ActiveTurnInterruptSubmitted
-			: startupInterruptSubmitted
-				? ModelInterruptWithoutActiveTurnDecisionKind.StartupInterruptSubmitted
-				: ModelInterruptWithoutActiveTurnDecisionKind.InterruptNotHandled;
-		final ok = request.appCommandInterrupt
-			&& request.primaryThreadRegistered
-			&& !activeTurnPresent
-			&& startupInterruptSubmitted
-			&& request.startupInterruptSucceeded
-			&& handled
-			&& !turnInterruptSubmitted
-			&& !retryAttempted
-			&& eventOrderingPreserved;
+		final decisionKind = turnInterruptSubmitted ? ModelInterruptWithoutActiveTurnDecisionKind.ActiveTurnInterruptSubmitted : startupInterruptSubmitted ? ModelInterruptWithoutActiveTurnDecisionKind.StartupInterruptSubmitted : ModelInterruptWithoutActiveTurnDecisionKind.InterruptNotHandled;
+		final ok = request.appCommandInterrupt && request.primaryThreadRegistered && !activeTurnPresent && startupInterruptSubmitted
+			&& request.startupInterruptSucceeded && handled && !turnInterruptSubmitted && !retryAttempted && eventOrderingPreserved;
 
 		return new ModelInterruptWithoutActiveTurnOutcome({
 			ok: ok,

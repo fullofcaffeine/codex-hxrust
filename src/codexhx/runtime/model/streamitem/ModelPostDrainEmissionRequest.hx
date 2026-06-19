@@ -8,14 +8,8 @@ class ModelPostDrainEmissionRequest {
 	public final tokenInfoAvailable:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		drainOutcome:ModelInFlightToolDrainOutcome,
-		cancellationRequestedAfterDrain:Bool,
-		unifiedDiffAvailable:Bool,
-		tokenInfoAvailable:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, drainOutcome:ModelInFlightToolDrainOutcome, cancellationRequestedAfterDrain:Bool, unifiedDiffAvailable:Bool,
+			tokenInfoAvailable:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.drainOutcome = drainOutcome;
 		this.cancellationRequestedAfterDrain = cancellationRequestedAfterDrain;

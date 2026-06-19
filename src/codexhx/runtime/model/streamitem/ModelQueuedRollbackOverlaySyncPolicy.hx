@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelQueuedRollbackOverlaySyncPolicy {
 	public static function apply(request:ModelQueuedRollbackOverlaySyncRequest):ModelQueuedRollbackOverlaySyncOutcome {
-		if (request == null) return failure("", "missing queued rollback overlay sync request");
+		if (request == null)
+			return failure("", "missing queued rollback overlay sync request");
 
 		final transcriptCellCountBefore = request.transcriptCells.length;
 		final latestSessionStart = latestSessionStart(request.transcriptCells);
@@ -17,26 +18,21 @@ class ModelQueuedRollbackOverlaySyncPolicy {
 		final previewSelectionAfter = previewSelectionAfter(request.overlayPreviewActive, request.nthUserMessageBefore, userCountAfter);
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final overlayCommittedCellCountBefore = request.overlayActive ? transcriptCellCountBefore : 0;
-		final overlayCommittedCellCountAfter = request.overlayActive && changed ? transcriptCellCountAfter : overlayCommittedCellCountBefore;
+		final overlayCommittedCellCountAfter = request.overlayActive
+			&& changed ? transcriptCellCountAfter : overlayCommittedCellCountBefore;
 		final deferredHistoryLineCountAfter = changed ? 0 : request.deferredHistoryLineCountBefore;
 		final deferredHistoryCleared = changed && request.deferredHistoryLineCountBefore > 0 && deferredHistoryLineCountAfter == 0;
 		final previewSelectionClamped = changed && request.overlayPreviewActive && previewSelectionAfter != request.nthUserMessageBefore;
 		final backtrackRenderPending = changed;
 		final overlayCommittedCountSynced = !request.overlayActive || overlayCommittedCellCountAfter == transcriptCellCountAfter;
 		final agentCopyHistoryTruncated = changed && userCountAfter < userCountBefore;
-		final ok = changed
-			&& eventOrderingPreserved
-			&& overlayCommittedCountSynced
-			&& deferredHistoryLineCountAfter == 0
-			&& backtrackRenderPending;
+		final ok = changed && eventOrderingPreserved && overlayCommittedCountSynced && deferredHistoryLineCountAfter == 0 && backtrackRenderPending;
 
 		return new ModelQueuedRollbackOverlaySyncOutcome({
 			ok: ok,
 			code: ok ? "queued_rollback_overlay_sync_modeled" : "queued_rollback_overlay_sync_unchanged",
 			requestId: request.requestId,
-			decisionKind: ok
-				? ModelQueuedRollbackOverlaySyncDecisionKind.RollbackApplied
-				: ModelQueuedRollbackOverlaySyncDecisionKind.RollbackUnchanged,
+			decisionKind: ok ? ModelQueuedRollbackOverlaySyncDecisionKind.RollbackApplied : ModelQueuedRollbackOverlaySyncDecisionKind.RollbackUnchanged,
 			numTurns: request.numTurns,
 			transcriptCellCountBefore: transcriptCellCountBefore,
 			transcriptCellCountAfter: transcriptCellCountAfter,
@@ -69,7 +65,8 @@ class ModelQueuedRollbackOverlaySyncPolicy {
 		var start = 0;
 		var i = 0;
 		while (i < cells.length) {
-			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.SessionHeader) start = i + 1;
+			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.SessionHeader)
+				start = i + 1;
 			i = i + 1;
 		}
 		return start;
@@ -79,15 +76,18 @@ class ModelQueuedRollbackOverlaySyncPolicy {
 		final positions:Array<Int> = [];
 		var i = start;
 		while (i < cells.length) {
-			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.User) positions.push(i);
+			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.User)
+				positions.push(i);
 			i = i + 1;
 		}
 		return positions;
 	}
 
 	static function rollbackCutIndex(userPositions:Array<Int>, numTurns:Int):Int {
-		if (numTurns <= 0 || userPositions.length == 0) return -1;
-		if (numTurns >= userPositions.length) return userPositions[0];
+		if (numTurns <= 0 || userPositions.length == 0)
+			return -1;
+		if (numTurns >= userPositions.length)
+			return userPositions[0];
 		return userPositions[userPositions.length - numTurns];
 	}
 
@@ -96,17 +96,21 @@ class ModelQueuedRollbackOverlaySyncPolicy {
 		var i = start;
 		while (i < cells.length) {
 			final cell = cells[i];
-			if (cell.cellKind == ModelBacktrackTranscriptCellKind.User) out.push(cell.message);
+			if (cell.cellKind == ModelBacktrackTranscriptCellKind.User)
+				out.push(cell.message);
 			i = i + 1;
 		}
 		return out;
 	}
 
 	static function previewSelectionAfter(active:Bool, before:Int, userCountAfter:Int):Int {
-		if (!active) return -1;
-		if (userCountAfter <= 0) return -1;
+		if (!active)
+			return -1;
+		if (userCountAfter <= 0)
+			return -1;
 		final maxIndex = userCountAfter - 1;
-		if (before < 0) return 0;
+		if (before < 0)
+			return 0;
 		return before < maxIndex ? before : maxIndex;
 	}
 

@@ -22,8 +22,10 @@ class ResumePickerReloadSelectionPreservationRenderHarness {
 		assertContains(report.finalSnapshot, "loader status=selection_fallback_first_row detail=missing=thread-stable;selected=thread-fallback;index=0");
 		assertContains(report.finalSnapshot, "footer selection fallback selected=0 selectedThread=thread-fallback");
 		assertNotContains(report.finalSnapshot, "Stable selected kernel | thread-stable");
-		assertContains(report.summary(), "preserved:query=kernel;rows=3;selected=2;thread=thread-stable;footer=selection preserved;loader=selection_preserved_by_thread");
-		assertContains(report.summary(), "fallback:query=kernel;rows=2;selected=0;thread=thread-fallback;footer=selection fallback;loader=selection_fallback_first_row");
+		assertContains(report.summary(),
+			"preserved:query=kernel;rows=3;selected=2;thread=thread-stable;footer=selection preserved;loader=selection_preserved_by_thread");
+		assertContains(report.summary(),
+			"fallback:query=kernel;rows=2;selected=0;thread=thread-fallback;footer=selection fallback;loader=selection_fallback_first_row");
 		assertContains(report.summary(), "request=preserve-selection-page");
 		assertContains(report.summary(), "request=fallback-selection-page");
 
@@ -31,14 +33,17 @@ class ResumePickerReloadSelectionPreservationRenderHarness {
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) < 0) throw "expected `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) < 0)
+			throw "expected `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertNotContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) >= 0) throw "did not expect `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) >= 0)
+			throw "did not expect `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String, label:String):Void {
-		if (expected != actual) throw label + " expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw label + " expected " + expected + " but got " + actual;
 	}
 }

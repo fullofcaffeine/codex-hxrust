@@ -32,38 +32,13 @@ class ModelSamplingStreamEventHandoffOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		handoffKind:ModelSamplingStreamHandoffKind,
-		eventClass:ModelSamplingStreamEventClassKind,
-		attemptResultKind:ModelSamplingStreamAttemptResultKind,
-		attemptErrorKind:ModelSamplingStreamErrorKind,
-		terminal:Bool,
-		turnEnded:Bool,
-		continuationRequired:Bool,
-		retryScheduled:Bool,
-		unauthorizedRetryStatePrepared:Bool,
-		streamEventsConsumed:Bool,
-		responseCompleted:Bool,
-		streamClosedBeforeCompleted:Bool,
-		toolDrainRequired:Bool,
-		tokenCountEventDeferredUntilToolDrain:Bool,
-		turnDiffEventDeferredUntilToolDrain:Bool,
-		needsFollowUp:Bool,
-		terminalResponseId:String,
-		totalTokens:Int,
-		lastAgentMessage:String,
-		dispatchAttemptIndex:Int,
-		promptItemCount:Int,
-		liveProviderRequestAttempted:Bool,
-		providerStreamOpened:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, handoffKind:ModelSamplingStreamHandoffKind, eventClass:ModelSamplingStreamEventClassKind,
+			attemptResultKind:ModelSamplingStreamAttemptResultKind, attemptErrorKind:ModelSamplingStreamErrorKind, terminal:Bool, turnEnded:Bool,
+			continuationRequired:Bool, retryScheduled:Bool, unauthorizedRetryStatePrepared:Bool, streamEventsConsumed:Bool, responseCompleted:Bool,
+			streamClosedBeforeCompleted:Bool, toolDrainRequired:Bool, tokenCountEventDeferredUntilToolDrain:Bool, turnDiffEventDeferredUntilToolDrain:Bool,
+			needsFollowUp:Bool, terminalResponseId:String, totalTokens:Int, lastAgentMessage:String, dispatchAttemptIndex:Int, promptItemCount:Int,
+			liveProviderRequestAttempted:Bool, providerStreamOpened:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -97,36 +72,19 @@ class ModelSamplingStreamEventHandoffOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";handoffKind=" + handoffKind
-			+ ";eventClass=" + eventClass
-			+ ";attemptResultKind=" + attemptResultKind
-			+ ";attemptErrorKind=" + attemptErrorKind
-			+ ";terminal=" + boolText(terminal)
-			+ ";turnEnded=" + boolText(turnEnded)
-			+ ";continuationRequired=" + boolText(continuationRequired)
-			+ ";retryScheduled=" + boolText(retryScheduled)
-			+ ";unauthorizedRetryStatePrepared=" + boolText(unauthorizedRetryStatePrepared)
-			+ ";streamEventsConsumed=" + boolText(streamEventsConsumed)
-			+ ";responseCompleted=" + boolText(responseCompleted)
-			+ ";streamClosedBeforeCompleted=" + boolText(streamClosedBeforeCompleted)
-			+ ";toolDrainRequired=" + boolText(toolDrainRequired)
-			+ ";tokenCountEventDeferredUntilToolDrain=" + boolText(tokenCountEventDeferredUntilToolDrain)
-			+ ";turnDiffEventDeferredUntilToolDrain=" + boolText(turnDiffEventDeferredUntilToolDrain)
-			+ ";needsFollowUp=" + boolText(needsFollowUp)
-			+ ";terminalResponseId=" + noneIfEmpty(terminalResponseId)
-			+ ";totalTokens=" + Std.string(totalTokens)
-			+ ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage)
-			+ ";dispatchAttemptIndex=" + Std.string(dispatchAttemptIndex)
-			+ ";promptItemCount=" + Std.string(promptItemCount)
-			+ ";liveProviderRequestAttempted=" + boolText(liveProviderRequestAttempted)
-			+ ";providerStreamOpened=" + boolText(providerStreamOpened)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";handoffKind=" + handoffKind + ";eventClass=" + eventClass
+			+ ";attemptResultKind=" + attemptResultKind + ";attemptErrorKind=" + attemptErrorKind + ";terminal=" + boolText(terminal) + ";turnEnded="
+			+ boolText(turnEnded) + ";continuationRequired=" + boolText(continuationRequired) + ";retryScheduled=" + boolText(retryScheduled)
+			+ ";unauthorizedRetryStatePrepared=" + boolText(unauthorizedRetryStatePrepared) + ";streamEventsConsumed=" + boolText(streamEventsConsumed)
+			+ ";responseCompleted=" + boolText(responseCompleted) + ";streamClosedBeforeCompleted=" + boolText(streamClosedBeforeCompleted)
+			+ ";toolDrainRequired=" + boolText(toolDrainRequired) + ";tokenCountEventDeferredUntilToolDrain="
+			+ boolText(tokenCountEventDeferredUntilToolDrain) + ";turnDiffEventDeferredUntilToolDrain=" + boolText(turnDiffEventDeferredUntilToolDrain)
+			+ ";needsFollowUp=" + boolText(needsFollowUp) + ";terminalResponseId=" + noneIfEmpty(terminalResponseId) + ";totalTokens="
+			+ Std.string(totalTokens) + ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage) + ";dispatchAttemptIndex=" + Std.string(dispatchAttemptIndex)
+			+ ";promptItemCount=" + Std.string(promptItemCount) + ";liveProviderRequestAttempted=" + boolText(liveProviderRequestAttempted)
+			+ ";providerStreamOpened=" + boolText(providerStreamOpened) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -14,18 +14,9 @@ class ThreadReadIdleGoalProgressAccountingRequest {
 	public final updatedGoalId:String;
 	public final disposition:ThreadReadGoalAccountingDisposition;
 
-	public function new(
-		eventId:String,
-		idleProgressSnapshotAvailable:Bool,
-		snapshotExpectedGoalId:String,
-		snapshotTimeDeltaSeconds:Int,
-		previousStatus:String,
-		dbOutcomeKind:ThreadReadGoalAccountingDbOutcomeKind,
-		dbErrorCode:String,
-		updatedGoal:ThreadGoal,
-		updatedGoalId:String,
-		disposition:ThreadReadGoalAccountingDisposition
-	) {
+	public function new(eventId:String, idleProgressSnapshotAvailable:Bool, snapshotExpectedGoalId:String, snapshotTimeDeltaSeconds:Int,
+			previousStatus:String, dbOutcomeKind:ThreadReadGoalAccountingDbOutcomeKind, dbErrorCode:String, updatedGoal:ThreadGoal, updatedGoalId:String,
+			disposition:ThreadReadGoalAccountingDisposition) {
 		this.eventId = eventId;
 		this.idleProgressSnapshotAvailable = idleProgressSnapshotAvailable;
 		this.snapshotExpectedGoalId = snapshotExpectedGoalId;

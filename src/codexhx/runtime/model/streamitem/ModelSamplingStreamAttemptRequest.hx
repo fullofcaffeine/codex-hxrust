@@ -9,15 +9,8 @@ class ModelSamplingStreamAttemptRequest {
 	public final rateLimitUpdated:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		dispatchOutcome:ModelSamplingDispatchOutcome,
-		errorKind:ModelSamplingStreamErrorKind,
-		currentRetryCount:Int,
-		unauthorizedRecoveryAvailable:Bool,
-		rateLimitUpdated:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, dispatchOutcome:ModelSamplingDispatchOutcome, errorKind:ModelSamplingStreamErrorKind, currentRetryCount:Int,
+			unauthorizedRecoveryAvailable:Bool, rateLimitUpdated:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.dispatchOutcome = dispatchOutcome;
 		this.errorKind = errorKind;

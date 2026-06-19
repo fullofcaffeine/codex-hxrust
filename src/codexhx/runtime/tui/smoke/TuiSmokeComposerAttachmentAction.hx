@@ -127,7 +127,6 @@ class TuiSmokeComposerAttachmentAction {
 	public final noLiveFilesystem:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function pendingTransitionText():String {
 		return pendingBefore + "->" + pendingAfter;
 	}

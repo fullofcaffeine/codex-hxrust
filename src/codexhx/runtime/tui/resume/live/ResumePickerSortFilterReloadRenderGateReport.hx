@@ -23,12 +23,8 @@ class ResumePickerSortFilterReloadRenderGateReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads
-			+ ";sortFilterReloads=" + sortFilterReloads
-			+ ";frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";requests=[" + requestSummaries.join("##") + "]"
-			+ ";events=[" + eventSummaries.join("##") + "]";
+		return "pageLoads=" + pageLoads + ";sortFilterReloads=" + sortFilterReloads + ";frames=" + frameRequests + ";renders=" + renderCount
+			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";requests=[" + requestSummaries.join("##") + "]" + ";events=["
+			+ eventSummaries.join("##") + "]";
 	}
 }

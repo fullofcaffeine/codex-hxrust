@@ -16,22 +16,9 @@ class ModelTerminalResizeReflowRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		clearUiHeaderOutcome:ModelClearUiHeaderOutcome,
-		requestKind:ModelTerminalResizeReflowRequestKind,
-		maxRowsKind:ModelTerminalResizeReflowMaxRowsKind,
-		maxRows:Int,
-		terminalResizeReflowEnabled:Bool,
-		overlayActive:Bool,
-		terminalWidth:Int,
-		petReservedColumns:Int,
-		transcriptRows:Array<String>,
-		replayRows:Array<String>,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, clearUiHeaderOutcome:ModelClearUiHeaderOutcome, requestKind:ModelTerminalResizeReflowRequestKind,
+			maxRowsKind:ModelTerminalResizeReflowMaxRowsKind, maxRows:Int, terminalResizeReflowEnabled:Bool, overlayActive:Bool, terminalWidth:Int,
+			petReservedColumns:Int, transcriptRows:Array<String>, replayRows:Array<String>, eventOrderIndex:Int, previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.clearUiHeaderOutcome = clearUiHeaderOutcome;
 		this.requestKind = requestKind == null ? ModelTerminalResizeReflowRequestKind.RenderTranscript : requestKind;

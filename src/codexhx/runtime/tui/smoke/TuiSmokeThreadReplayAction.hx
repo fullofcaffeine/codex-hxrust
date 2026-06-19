@@ -28,7 +28,6 @@ class TuiSmokeThreadReplayAction {
 	public final resizeReflowEnabled:Bool;
 	public final resumeRestoredQueue:Bool;
 
-
 	public function shouldBufferReplay(hasSnapshotEvents:Bool):Bool {
 		final hasReplayBuffer = replayBuffer != null && replayBuffer.enabled();
 		return (resizeReflowEnabled || hasReplayBuffer)

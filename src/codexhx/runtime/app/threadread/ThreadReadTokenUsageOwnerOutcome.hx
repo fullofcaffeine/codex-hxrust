@@ -26,11 +26,7 @@ class ThreadReadTokenUsageOwnerOutcome {
 	}
 
 	public function summary():String {
-		return "ok=" + (ok ? "true" : "false")
-			+ ";code=" + code
-			+ ";turnId=" + turnId
-			+ ";turnIndex=" + Std.string(turnIndex)
-			+ ";reason=" + reason
+		return "ok=" + (ok ? "true" : "false") + ";code=" + code + ";turnId=" + turnId + ";turnIndex=" + Std.string(turnIndex) + ";reason=" + reason
 			+ ";message=" + message;
 	}
 }

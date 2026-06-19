@@ -10,13 +10,7 @@ class ThreadReadTurnItemsListRequest {
 	public final limit:Int;
 	public final sortDirection:ThreadReadTurnSortDirection;
 
-	public function new(
-		threadId:ThreadId,
-		turnId:TurnId,
-		cursor:String,
-		limit:Int,
-		sortDirection:ThreadReadTurnSortDirection
-	) {
+	public function new(threadId:ThreadId, turnId:TurnId, cursor:String, limit:Int, sortDirection:ThreadReadTurnSortDirection) {
 		this.threadId = threadId;
 		this.turnId = turnId;
 		this.cursor = cursor;

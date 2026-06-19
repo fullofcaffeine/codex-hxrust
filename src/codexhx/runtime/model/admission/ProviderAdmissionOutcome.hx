@@ -21,17 +21,8 @@ class ProviderAdmissionOutcome {
 	public final errorMessage:String;
 	public final sequence:String;
 
-	function new(
-		ok:Bool,
-		code:String,
-		request:ProviderAdmissionRequest,
-		credentialAccepted:Bool,
-		credentialBucket:String,
-		admittedNetworkKind:String,
-		accountVisible:String,
-		errorMessage:String,
-		sequence:String
-	) {
+	function new(ok:Bool, code:String, request:ProviderAdmissionRequest, credentialAccepted:Bool, credentialBucket:String, admittedNetworkKind:String,
+			accountVisible:String, errorMessage:String, sequence:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = request.requestId;
@@ -53,65 +44,22 @@ class ProviderAdmissionOutcome {
 		this.sequence = sequence;
 	}
 
-	public static function admitted(
-		request:ProviderAdmissionRequest,
-		credentialAccepted:Bool,
-		credentialBucket:String,
-		admittedNetworkKind:String,
-		accountVisible:String,
-		sequence:String
-	):ProviderAdmissionOutcome {
-		return new ProviderAdmissionOutcome(
-			true,
-			"provider_admitted",
-			request,
-			credentialAccepted,
-			credentialBucket,
-			admittedNetworkKind,
-			accountVisible,
-			"",
-			sequence
-		);
+	public static function admitted(request:ProviderAdmissionRequest, credentialAccepted:Bool, credentialBucket:String, admittedNetworkKind:String,
+			accountVisible:String, sequence:String):ProviderAdmissionOutcome {
+		return new ProviderAdmissionOutcome(true, "provider_admitted", request, credentialAccepted, credentialBucket, admittedNetworkKind, accountVisible, "",
+			sequence);
 	}
 
-	public static function denied(
-		request:ProviderAdmissionRequest,
-		code:String,
-		errorMessage:String,
-		sequence:String
-	):ProviderAdmissionOutcome {
-		return new ProviderAdmissionOutcome(
-			false,
-			code,
-			request,
-			false,
-			"none",
-			"none",
-			"none",
-			errorMessage,
-			sequence
-		);
+	public static function denied(request:ProviderAdmissionRequest, code:String, errorMessage:String, sequence:String):ProviderAdmissionOutcome {
+		return new ProviderAdmissionOutcome(false, code, request, false, "none", "none", "none", errorMessage, sequence);
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";provider=" + providerId
-			+ ";model=" + modelId
-			+ ";modelProvider=" + modelProviderId
-			+ ";requiresOpenAiAuth=" + boolText(requiresOpenAiAuth)
-			+ ";credentialKind=" + credentialKind
-			+ ";accountKind=" + accountKind
-			+ ";credentialAccepted=" + boolText(credentialAccepted)
-			+ ";credentialBucket=" + credentialBucket
-			+ ";providerEnvKeyName=" + providerEnvKeyNameBucket
-			+ ";providerEnvKeyPresent=" + boolText(providerEnvKeyPresent)
-			+ ";network=" + networkKind
-			+ ";liveNetworkAllowed=" + boolText(liveNetworkAllowed)
-			+ ";admittedNetwork=" + admittedNetworkKind
-			+ ";accountVisible=" + accountVisible
-			+ ";error=" + errorMessage
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";provider=" + providerId + ";model=" + modelId + ";modelProvider="
+			+ modelProviderId + ";requiresOpenAiAuth=" + boolText(requiresOpenAiAuth) + ";credentialKind=" + credentialKind + ";accountKind=" + accountKind
+			+ ";credentialAccepted=" + boolText(credentialAccepted) + ";credentialBucket=" + credentialBucket + ";providerEnvKeyName="
+			+ providerEnvKeyNameBucket + ";providerEnvKeyPresent=" + boolText(providerEnvKeyPresent) + ";network=" + networkKind + ";liveNetworkAllowed="
+			+ boolText(liveNetworkAllowed) + ";admittedNetwork=" + admittedNetworkKind + ";accountVisible=" + accountVisible + ";error=" + errorMessage
 			+ ";sequence=" + sequence;
 	}
 

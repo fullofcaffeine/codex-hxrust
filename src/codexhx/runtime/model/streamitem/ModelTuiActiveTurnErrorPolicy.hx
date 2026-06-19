@@ -26,7 +26,8 @@ class ModelTuiActiveTurnErrorPolicy {
 	static final ArchivedGuidanceNeedle = " is archived. Run `codex unarchive ";
 
 	public static function classify(request:ModelTuiActiveTurnErrorRequest):ModelTuiActiveTurnErrorOutcome {
-		if (request == null) return failure("", "missing active-turn error request");
+		if (request == null)
+			return failure("", "missing active-turn error request");
 		final ordered = request.eventOrderIndex == request.previousEventCount + 1;
 
 		return switch request.requestKind {
@@ -41,16 +42,10 @@ class ModelTuiActiveTurnErrorPolicy {
 		}
 	}
 
-	static function classifyNotSteerable(
-		request:ModelTuiActiveTurnErrorRequest,
-		ordered:Bool
-	):ModelTuiActiveTurnErrorOutcome {
+	static function classifyNotSteerable(request:ModelTuiActiveTurnErrorRequest, ordered:Bool):ModelTuiActiveTurnErrorOutcome {
 		final matched = request.method == "turn/steer" && request.hasStructuredTurnError && request.structuredNotSteerable;
-		final draft = blankDraft(
-			request,
-			matched ? ModelTuiActiveTurnErrorDecisionKind.StructuredNotSteerable : ModelTuiActiveTurnErrorDecisionKind.NoMatch,
-			ordered
-		);
+		final draft = blankDraft(request, matched ? ModelTuiActiveTurnErrorDecisionKind.StructuredNotSteerable : ModelTuiActiveTurnErrorDecisionKind.NoMatch,
+			ordered);
 		draft.userVisibleMessage = matched ? request.message : "";
 		draft.structuredTurnErrorExtracted = matched;
 		draft.shouldQueueRejectedSteer = matched;
@@ -58,11 +53,9 @@ class ModelTuiActiveTurnErrorPolicy {
 		return success(draft);
 	}
 
-	static function classifySteerRace(
-		request:ModelTuiActiveTurnErrorRequest,
-		ordered:Bool
-	):ModelTuiActiveTurnErrorOutcome {
-		if (request.method != "turn/steer") return noMatch(request, ordered);
+	static function classifySteerRace(request:ModelTuiActiveTurnErrorRequest, ordered:Bool):ModelTuiActiveTurnErrorOutcome {
+		if (request.method != "turn/steer")
+			return noMatch(request, ordered);
 		if (request.message == "no active turn to steer") {
 			final draft = blankDraft(request, ModelTuiActiveTurnErrorDecisionKind.SteerMissingActiveTurn, ordered);
 			draft.steerRaceDetected = true;
@@ -71,7 +64,8 @@ class ModelTuiActiveTurnErrorPolicy {
 			return success(draft);
 		}
 		final actualTurnId = extractBetween(request.message, SteerMismatchPrefix, SteerMismatchSeparator, "`");
-		if (actualTurnId.length == 0) return noMatch(request, ordered);
+		if (actualTurnId.length == 0)
+			return noMatch(request, ordered);
 		final draft = blankDraft(request, ModelTuiActiveTurnErrorDecisionKind.SteerExpectedTurnMismatch, ordered);
 		draft.actualTurnId = actualTurnId;
 		draft.steerRaceDetected = true;
@@ -79,13 +73,12 @@ class ModelTuiActiveTurnErrorPolicy {
 		return success(draft);
 	}
 
-	static function classifyInterruptRace(
-		request:ModelTuiActiveTurnErrorRequest,
-		ordered:Bool
-	):ModelTuiActiveTurnErrorOutcome {
-		if (request.method != "turn/interrupt") return noMatch(request, ordered);
+	static function classifyInterruptRace(request:ModelTuiActiveTurnErrorRequest, ordered:Bool):ModelTuiActiveTurnErrorOutcome {
+		if (request.method != "turn/interrupt")
+			return noMatch(request, ordered);
 		final actualTurnId = extractAfter(request.message, InterruptMismatchPrefix, InterruptMismatchSeparator);
-		if (actualTurnId.length == 0) return noMatch(request, ordered);
+		if (actualTurnId.length == 0)
+			return noMatch(request, ordered);
 		final draft = blankDraft(request, ModelTuiActiveTurnErrorDecisionKind.InterruptExpectedTurnMismatch, ordered);
 		draft.actualTurnId = actualTurnId;
 		draft.interruptRaceDetected = true;
@@ -93,17 +86,11 @@ class ModelTuiActiveTurnErrorPolicy {
 		return success(draft);
 	}
 
-	static function classifySessionStart(
-		request:ModelTuiActiveTurnErrorRequest,
-		ordered:Bool
-	):ModelTuiActiveTurnErrorOutcome {
+	static function classifySessionStart(request:ModelTuiActiveTurnErrorRequest, ordered:Bool):ModelTuiActiveTurnErrorOutcome {
 		final guidance = archivedSessionGuidance(request.message);
 		final matched = guidance.length > 0;
-		final draft = blankDraft(
-			request,
-			matched ? ModelTuiActiveTurnErrorDecisionKind.ArchivedSessionGuidance : ModelTuiActiveTurnErrorDecisionKind.NoMatch,
-			ordered
-		);
+		final draft = blankDraft(request, matched ? ModelTuiActiveTurnErrorDecisionKind.ArchivedSessionGuidance : ModelTuiActiveTurnErrorDecisionKind.NoMatch,
+			ordered);
 		draft.sanitizedSessionMessage = guidance;
 		draft.archivedGuidanceDetected = matched;
 		draft.shouldDisplayErrorMessage = matched;
@@ -114,11 +101,8 @@ class ModelTuiActiveTurnErrorPolicy {
 		return success(blankDraft(request, ModelTuiActiveTurnErrorDecisionKind.NoMatch, ordered));
 	}
 
-	static function blankDraft(
-		request:ModelTuiActiveTurnErrorRequest,
-		decisionKind:ModelTuiActiveTurnErrorDecisionKind,
-		eventOrderingPreserved:Bool
-	):ModelTuiActiveTurnErrorOutcomeDraft {
+	static function blankDraft(request:ModelTuiActiveTurnErrorRequest, decisionKind:ModelTuiActiveTurnErrorDecisionKind,
+			eventOrderingPreserved:Bool):ModelTuiActiveTurnErrorOutcomeDraft {
 		return {
 			request: request,
 			decisionKind: decisionKind,
@@ -201,28 +185,35 @@ class ModelTuiActiveTurnErrorPolicy {
 
 	static function archivedSessionGuidance(message:String):String {
 		final start = message.indexOf("session ");
-		if (start < 0) return "";
+		if (start < 0)
+			return "";
 		final candidate = message.substr(start);
-		if (candidate.indexOf(ArchivedGuidanceNeedle) < 0) return "";
+		if (candidate.indexOf(ArchivedGuidanceNeedle) < 0)
+			return "";
 		final codeIndex = candidate.indexOf(" (code ");
 		return codeIndex < 0 ? candidate : candidate.substr(0, codeIndex);
 	}
 
 	static function extractBetween(message:String, prefix:String, separator:String, suffix:String):String {
-		if (!startsWith(message, prefix)) return "";
+		if (!startsWith(message, prefix))
+			return "";
 		final rest = message.substr(prefix.length);
 		final separatorIndex = rest.indexOf(separator);
-		if (separatorIndex < 0) return "";
+		if (separatorIndex < 0)
+			return "";
 		final value = rest.substr(separatorIndex + separator.length);
-		if (suffix.length > 0 && !endsWith(value, suffix)) return "";
+		if (suffix.length > 0 && !endsWith(value, suffix))
+			return "";
 		return suffix.length > 0 ? value.substr(0, value.length - suffix.length) : value;
 	}
 
 	static function extractAfter(message:String, prefix:String, separator:String):String {
-		if (!startsWith(message, prefix)) return "";
+		if (!startsWith(message, prefix))
+			return "";
 		final rest = message.substr(prefix.length);
 		final separatorIndex = rest.indexOf(separator);
-		if (separatorIndex < 0) return "";
+		if (separatorIndex < 0)
+			return "";
 		return rest.substr(separatorIndex + separator.length);
 	}
 

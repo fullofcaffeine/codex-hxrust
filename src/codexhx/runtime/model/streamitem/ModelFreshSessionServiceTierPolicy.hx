@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelFreshSessionServiceTierPolicy {
 	public static function apply(request:ModelFreshSessionServiceTierRequest):ModelFreshSessionServiceTierOutcome {
-		if (request == null) return failure("", "missing fresh-session service-tier request");
+		if (request == null)
+			return failure("", "missing fresh-session service-tier request");
 
 		final configuredPresent = request.configuredServiceTier != ModelFreshSessionServiceTierValue.None;
 		final basePresent = request.baseConfigServiceTier != ModelFreshSessionServiceTierValue.None;
@@ -12,9 +13,7 @@ class ModelFreshSessionServiceTierPolicy {
 			ok: true,
 			code: "fresh_session_service_tier_modeled",
 			requestId: request.requestId,
-			decisionKind: configuredPresent
-				? ModelFreshSessionServiceTierDecisionKind.ConfiguredServiceTierPropagated
-				: ModelFreshSessionServiceTierDecisionKind.ConfiguredServiceTierCleared,
+			decisionKind: configuredPresent ? ModelFreshSessionServiceTierDecisionKind.ConfiguredServiceTierPropagated : ModelFreshSessionServiceTierDecisionKind.ConfiguredServiceTierCleared,
 			baseConfigServiceTier: request.baseConfigServiceTier,
 			configuredServiceTier: request.configuredServiceTier,
 			freshConfigServiceTier: freshConfigServiceTier,

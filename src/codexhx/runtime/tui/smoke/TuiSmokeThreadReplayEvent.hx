@@ -24,7 +24,6 @@ class TuiSmokeThreadReplayEvent {
 	public final success:Bool;
 	public final includeLogs:Bool;
 
-
 	public function displayText():String {
 		return switch kind {
 			case TuiSmokeThreadReplayEventKind.Notification:

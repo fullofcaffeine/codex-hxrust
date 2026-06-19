@@ -8,7 +8,8 @@ class ModelInterruptBacktrackKeymapPolicy {
 	static final FixedPasteImageName = "fixed.paste_image";
 
 	public static function apply(request:ModelInterruptBacktrackKeymapRequest):ModelInterruptBacktrackKeymapOutcome {
-		if (request == null) return failure("", "missing interrupt/backtrack keymap request");
+		if (request == null)
+			return failure("", "missing interrupt/backtrack keymap request");
 
 		final defaultEscInterruptPreserved = request.defaultInterruptBinding == EscBinding;
 		final fixedBacktrackEscPreserved = request.fixedBacktrackBinding == EscBinding;
@@ -24,16 +25,9 @@ class ModelInterruptBacktrackKeymapPolicy {
 			&& request.expectedInnerActionName == FixedPasteImageName;
 		final dispatchGatingDeferredToHandler = backtrackOverlapAllowed;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = backtrackOverlapAllowed
-			&& remapToF12Accepted
-			&& unbindAccepted
-			&& otherFixedShortcutRejected
-			&& conflictActionNamePreserved
-			&& dispatchGatingDeferredToHandler
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelInterruptBacktrackKeymapDecisionKind.InterruptBacktrackKeymapAccepted
-			: ModelInterruptBacktrackKeymapDecisionKind.InterruptBacktrackKeymapRejected;
+		final ok = backtrackOverlapAllowed && remapToF12Accepted && unbindAccepted && otherFixedShortcutRejected && conflictActionNamePreserved
+			&& dispatchGatingDeferredToHandler && eventOrderingPreserved;
+		final decisionKind = ok ? ModelInterruptBacktrackKeymapDecisionKind.InterruptBacktrackKeymapAccepted : ModelInterruptBacktrackKeymapDecisionKind.InterruptBacktrackKeymapRejected;
 
 		return new ModelInterruptBacktrackKeymapOutcome({
 			ok: ok,

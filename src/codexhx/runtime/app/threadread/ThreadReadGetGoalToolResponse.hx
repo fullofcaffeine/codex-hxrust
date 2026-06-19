@@ -18,15 +18,19 @@ class ThreadReadGetGoalToolResponse {
 	}
 
 	public static function fromGoal(goal:ThreadGoal):ThreadReadGetGoalToolResponse {
-		if (goal == null) return new ThreadReadGetGoalToolResponse(null, false, 0);
+		if (goal == null)
+			return new ThreadReadGetGoalToolResponse(null, false, 0);
 		final remaining = goal.remainingTokens();
 		return new ThreadReadGetGoalToolResponse(goal, remaining.present, remaining.value);
 	}
 
 	public function summary():String {
-		return "goalPresent=" + boolText(goal != null)
-			+ ";remainingTokens=" + (hasRemainingTokens ? Std.string(remainingTokens) : "null")
-			+ ";completionBudgetReport=" + (hasCompletionBudgetReport ? completionBudgetReport : "null");
+		return "goalPresent="
+			+ boolText(goal != null)
+			+ ";remainingTokens="
+			+ (hasRemainingTokens ? Std.string(remainingTokens) : "null")
+			+ ";completionBudgetReport="
+			+ (hasCompletionBudgetReport ? completionBudgetReport : "null");
 	}
 
 	static function boolText(value:Bool):String {

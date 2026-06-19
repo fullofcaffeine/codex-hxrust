@@ -15,21 +15,9 @@ class ModelThreadSnapshotReplayDispatchRequest {
 	public final pendingPrimaryEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		pendingReplayOutcome:ModelPendingInteractiveReplayOutcome,
-		replayKind:ModelTurnReplayKind,
-		eventKind:ModelThreadSnapshotReplayEventKind,
-		turnCount:Int,
-		bufferedEventCount:Int,
-		terminalResizeReflowEnabled:Bool,
-		inputStateAvailable:Bool,
-		suppressReplayNotices:Bool,
-		eventIsNotice:Bool,
-		snapshotRequestAllowed:Bool,
-		pendingPrimaryEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, pendingReplayOutcome:ModelPendingInteractiveReplayOutcome, replayKind:ModelTurnReplayKind,
+			eventKind:ModelThreadSnapshotReplayEventKind, turnCount:Int, bufferedEventCount:Int, terminalResizeReflowEnabled:Bool, inputStateAvailable:Bool,
+			suppressReplayNotices:Bool, eventIsNotice:Bool, snapshotRequestAllowed:Bool, pendingPrimaryEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.pendingReplayOutcome = pendingReplayOutcome;
 		this.replayKind = replayKind == null ? ModelTurnReplayKind.ThreadSnapshot : replayKind;

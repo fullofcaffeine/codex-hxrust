@@ -41,21 +41,11 @@ class ResumePickerLiveAppServerBoundaryRenderGateReport {
 	public final stateSummaries:Array<String>;
 
 	public function summary():String {
-		return "requestIdsPreserved=" + boolLabel(requestIdsPreserved)
-			+ ";provenancePreserved=" + boolLabel(provenancePreserved)
-			+ ";backpressureSeen=" + boolLabel(backpressureSeen)
-			+ ";errorMapped=" + boolLabel(errorMapped)
-			+ ";noCredentialOrModelTraffic=" + boolLabel(noCredentialOrModelTraffic)
-			+ ";stateDbUntouched=" + boolLabel(stateDbUntouched)
-			+ ";pageRequests=" + pageRequests
-			+ ";pending=" + pendingEvents
-			+ ";skipped=" + skippedEvents
-			+ ";frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";requests=[" + requestSummaries.join("##") + "]"
-			+ ";polls=[" + pollSummaries.join("##") + "]"
-			+ ";events=[" + eventSummaries.join("##") + "]"
+		return "requestIdsPreserved=" + boolLabel(requestIdsPreserved) + ";provenancePreserved=" + boolLabel(provenancePreserved) + ";backpressureSeen="
+			+ boolLabel(backpressureSeen) + ";errorMapped=" + boolLabel(errorMapped) + ";noCredentialOrModelTraffic=" + boolLabel(noCredentialOrModelTraffic)
+			+ ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";pageRequests=" + pageRequests + ";pending=" + pendingEvents + ";skipped="
+			+ skippedEvents + ";frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
+			+ ";requests=[" + requestSummaries.join("##") + "]" + ";polls=[" + pollSummaries.join("##") + "]" + ";events=[" + eventSummaries.join("##") + "]"
 			+ ";states=[" + stateSummaries.join("##") + "]";
 	}
 

@@ -13,17 +13,20 @@ class ThreadReadTurnsPager {
 	}
 
 	public static function page(turns:Array<ThreadReadTurnSummary>, request:ThreadReadTurnsPageRequest):ThreadReadTurnsPageOutcome {
-		if (request.threadId == null) return ThreadReadTurnsPageOutcome.failure("invalid_thread_id", "thread id must be a UUID");
+		if (request.threadId == null)
+			return ThreadReadTurnsPageOutcome.failure("invalid_thread_id", "thread id must be a UUID");
 		if (!ThreadReadTurnSortDirection.isValid(request.sortDirection)) {
 			return ThreadReadTurnsPageOutcome.failure("invalid_sort_direction", "sortDirection must be asc or desc");
 		}
 		if (!ThreadReadTurnItemsView.isValid(request.itemsView)) {
 			return ThreadReadTurnsPageOutcome.failure("invalid_turn_items_view", "itemsView must be notLoaded, summary, or full");
 		}
-		if (turns.length == 0) return ThreadReadTurnsPageOutcome.success(new ThreadReadTurnsPage([], "", ""));
+		if (turns.length == 0)
+			return ThreadReadTurnsPageOutcome.success(new ThreadReadTurnsPage([], "", ""));
 
 		final cursor = request.cursor.length == 0 ? null : ThreadReadTurnsCursor.parse(request.cursor);
-		if (cursor != null && !cursor.ok) return ThreadReadTurnsPageOutcome.failure(cursor.code, cursor.message);
+		if (cursor != null && !cursor.ok)
+			return ThreadReadTurnsPageOutcome.failure(cursor.code, cursor.message);
 
 		final anchor = cursor == null ? null : cursor.cursor;
 		final anchorIndex = anchor == null ? -1 : findTurnIndex(turns, anchor.turnId.toString());
@@ -52,7 +55,8 @@ class ThreadReadTurnsPager {
 		}
 
 		final more = keyed.length > pageSize;
-		while (keyed.length > pageSize) keyed.pop();
+		while (keyed.length > pageSize)
+			keyed.pop();
 
 		final pageTurns:Array<ThreadReadTurnSummary> = [];
 		for (entry in keyed) {
@@ -65,33 +69,42 @@ class ThreadReadTurnsPager {
 
 	static function clampLimit(limit:Int):Int {
 		final base = limit < 0 ? DEFAULT_LIMIT : limit;
-		if (base < 1) return 1;
-		if (base > MAX_LIMIT) return MAX_LIMIT;
+		if (base < 1)
+			return 1;
+		if (base > MAX_LIMIT)
+			return MAX_LIMIT;
 		return base;
 	}
 
 	static function findTurnIndex(turns:Array<ThreadReadTurnSummary>, turnId:String):Int {
 		var i = 0;
 		while (i < turns.length) {
-			if (turns[i].id == turnId) return i;
+			if (turns[i].id == turnId)
+				return i;
 			i = i + 1;
 		}
 		return -1;
 	}
 
 	static function applyItemsView(turn:ThreadReadTurnSummary, itemsView:ThreadReadTurnItemsView):ThreadReadTurnSummary {
-		if (itemsView == ThreadReadTurnItemsView.Full) return turn;
-		if (itemsView == ThreadReadTurnItemsView.NotLoaded) return new ThreadReadTurnSummary(turn.id, turn.status, []);
+		if (itemsView == ThreadReadTurnItemsView.Full)
+			return turn;
+		if (itemsView == ThreadReadTurnItemsView.NotLoaded)
+			return new ThreadReadTurnSummary(turn.id, turn.status, []);
 
 		var firstUser:Null<ThreadReadTurnItemSummary> = null;
 		var finalAgent:Null<ThreadReadTurnItemSummary> = null;
 		for (item in turn.items) {
-			if (firstUser == null && item.kind == ThreadReadTurnItemKind.UserMessage) firstUser = item;
-			if (item.kind == ThreadReadTurnItemKind.AgentMessage) finalAgent = item;
+			if (firstUser == null && item.kind == ThreadReadTurnItemKind.UserMessage)
+				firstUser = item;
+			if (item.kind == ThreadReadTurnItemKind.AgentMessage)
+				finalAgent = item;
 		}
 		final out:Array<ThreadReadTurnItemSummary> = [];
-		if (firstUser != null) out.push(firstUser);
-		if (finalAgent != null && finalAgent != firstUser) out.push(finalAgent);
+		if (firstUser != null)
+			out.push(firstUser);
+		if (finalAgent != null && finalAgent != firstUser)
+			out.push(finalAgent);
 		return new ThreadReadTurnSummary(turn.id, turn.status, out);
 	}
 }

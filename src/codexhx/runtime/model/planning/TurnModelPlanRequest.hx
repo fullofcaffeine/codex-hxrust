@@ -10,14 +10,8 @@ class TurnModelPlanRequest {
 	public final webSearchMode:TurnWebSearchMode;
 	public final requestedCapability:TurnModelToolCapabilityKind;
 
-	public function new(
-		requestId:String,
-		catalogRequest:ModelCatalogRequest,
-		features:TurnModelFeatureFlags,
-		extensionTools:TurnExtensionToolState,
-		webSearchMode:TurnWebSearchMode,
-		requestedCapability:TurnModelToolCapabilityKind
-	) {
+	public function new(requestId:String, catalogRequest:ModelCatalogRequest, features:TurnModelFeatureFlags, extensionTools:TurnExtensionToolState,
+			webSearchMode:TurnWebSearchMode, requestedCapability:TurnModelToolCapabilityKind) {
 		this.requestId = requestId;
 		this.catalogRequest = catalogRequest;
 		this.features = features;

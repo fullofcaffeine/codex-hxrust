@@ -78,29 +78,17 @@ class ModelClearOnlyUiResetOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";resetInvoked=" + boolText(resetInvoked)
-			+ ";overlayCleared=" + boolText(overlayCleared)
-			+ ";transcriptCleared=" + boolText(transcriptCleared)
-			+ ";deferredHistoryCleared=" + boolText(deferredHistoryCleared)
-			+ ";historyEmittedFlagReset=" + boolText(historyEmittedFlagReset)
-			+ ";transcriptReflowCleared=" + boolText(transcriptReflowCleared)
-			+ ";initialHistoryReplayBufferCleared=" + boolText(initialHistoryReplayBufferCleared)
-			+ ";backtrackPrimedCleared=" + boolText(backtrackPrimedCleared)
-			+ ";backtrackPreviewCleared=" + boolText(backtrackPreviewCleared)
-			+ ";backtrackPendingRollbackCleared=" + boolText(backtrackPendingRollbackCleared)
-			+ ";backtrackRenderPendingCleared=" + boolText(backtrackRenderPendingCleared)
-			+ ";skillWarningsCleared=" + boolText(skillWarningsCleared)
-			+ ";chatSessionThreadPreserved=" + boolText(chatSessionThreadPreserved)
-			+ ";composerDraftPreserved=" + boolText(composerDraftPreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";resetInvoked="
+			+ boolText(resetInvoked) + ";overlayCleared=" + boolText(overlayCleared) + ";transcriptCleared=" + boolText(transcriptCleared)
+			+ ";deferredHistoryCleared=" + boolText(deferredHistoryCleared) + ";historyEmittedFlagReset=" + boolText(historyEmittedFlagReset)
+			+ ";transcriptReflowCleared=" + boolText(transcriptReflowCleared) + ";initialHistoryReplayBufferCleared="
+			+ boolText(initialHistoryReplayBufferCleared) + ";backtrackPrimedCleared=" + boolText(backtrackPrimedCleared) + ";backtrackPreviewCleared="
+			+ boolText(backtrackPreviewCleared) + ";backtrackPendingRollbackCleared=" + boolText(backtrackPendingRollbackCleared)
+			+ ";backtrackRenderPendingCleared=" + boolText(backtrackRenderPendingCleared) + ";skillWarningsCleared=" + boolText(skillWarningsCleared)
+			+ ";chatSessionThreadPreserved=" + boolText(chatSessionThreadPreserved) + ";composerDraftPreserved=" + boolText(composerDraftPreserved)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

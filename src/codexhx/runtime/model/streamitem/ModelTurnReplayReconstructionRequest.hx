@@ -13,19 +13,9 @@ class ModelTurnReplayReconstructionRequest {
 	public final replayTurnHasItems:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		projectionOutcome:ModelTurnTerminalProjectionOutcome,
-		replayKind:ModelTurnReplayKind,
-		targetKind:ModelTurnReplayTargetKind,
-		activeTurnId:String,
-		historicalTurnId:String,
-		terminalTurnId:String,
-		activeTurnPresent:Bool,
-		turnWasInProgress:Bool,
-		replayTurnHasItems:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, projectionOutcome:ModelTurnTerminalProjectionOutcome, replayKind:ModelTurnReplayKind,
+			targetKind:ModelTurnReplayTargetKind, activeTurnId:String, historicalTurnId:String, terminalTurnId:String, activeTurnPresent:Bool,
+			turnWasInProgress:Bool, replayTurnHasItems:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.projectionOutcome = projectionOutcome;
 		this.replayKind = replayKind == null ? ModelTurnReplayKind.ThreadSnapshot : replayKind;

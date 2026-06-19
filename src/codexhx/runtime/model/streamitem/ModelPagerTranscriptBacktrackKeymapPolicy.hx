@@ -9,16 +9,15 @@ class ModelPagerTranscriptBacktrackKeymapPolicy {
 	static final EscBinding = "esc";
 
 	public static function apply(request:ModelPagerTranscriptBacktrackKeymapRequest):ModelPagerTranscriptBacktrackKeymapOutcome {
-		if (request == null) return failure("", "missing pager/transcript-backtrack keymap request");
+		if (request == null)
+			return failure("", "missing pager/transcript-backtrack keymap request");
 
 		final pagerActionNamePreserved = request.pagerActionName == PagerCloseActionName;
 		final pagerBindingPreserved = request.pagerBinding == LeftBinding;
 		final transcriptBacktrackActionNamePreserved = request.transcriptBacktrackActionName == TranscriptBacktrackActionName;
 		final transcriptLeftBindingPreserved = request.transcriptBacktrackBinding == LeftBinding;
 		final reservedCollisionDetected = request.pagerBinding == request.transcriptBacktrackBinding && request.pagerBinding != "";
-		final conflictRejected = pagerActionNamePreserved
-			&& transcriptBacktrackActionNamePreserved
-			&& reservedCollisionDetected;
+		final conflictRejected = pagerActionNamePreserved && transcriptBacktrackActionNamePreserved && reservedCollisionDetected;
 		final fixedBacktrackOverlapStillAllowed = request.interruptActionName == InterruptActionName
 			&& request.fixedBacktrackActionName == FixedBacktrackActionName
 			&& request.allowedBacktrackOverlapBinding == EscBinding;
@@ -34,9 +33,7 @@ class ModelPagerTranscriptBacktrackKeymapPolicy {
 			&& fixedBacktrackOverlapStillAllowed
 			&& noFalseInterruptBacktrackConflict
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictRejected
-			: ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictMissed;
+		final decisionKind = ok ? ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictRejected : ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictMissed;
 
 		return new ModelPagerTranscriptBacktrackKeymapOutcome({
 			ok: ok,

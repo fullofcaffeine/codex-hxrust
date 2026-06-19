@@ -43,7 +43,8 @@ class ProviderAdmissionHarness {
 			assertEquals(stringField(expect, "admittedNetworkKind", ""), outcome.admittedNetworkKind);
 			assertEquals(stringField(expect, "accountVisible", ""), outcome.accountVisible);
 			assertContains(outcome.summary(), stringField(expect, "summaryContains", ""));
-			if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+			if (secretProbe.length > 0)
+				assertNotContains(outcome.summary(), secretProbe);
 			i = i + 1;
 		}
 	}
@@ -52,44 +53,24 @@ class ProviderAdmissionHarness {
 		final out:Array<ProviderAdmissionRequest> = [];
 		for (value in values) {
 			final request = objectField(objectValue(value), "request");
-			out.push(new ProviderAdmissionRequest(
-				stringField(request, "requestId", ""),
-				providerValue(objectField(request, "provider")),
-				modelValue(objectField(request, "model")),
-				credentialKind(stringField(request, "credentialKind", "")),
-				accountKind(stringField(request, "accountKind", "")),
-				networkKind(stringField(request, "networkKind", "")),
-				boolField(request, "liveNetworkAllowed", false),
-				boolField(request, "hasCredentialMaterial", false),
-				stringField(request, "secretProbe", "")
-			));
+			out.push(new ProviderAdmissionRequest(stringField(request, "requestId", ""), providerValue(objectField(request, "provider")),
+				modelValue(objectField(request, "model")), credentialKind(stringField(request, "credentialKind", "")),
+				accountKind(stringField(request, "accountKind", "")), networkKind(stringField(request, "networkKind", "")),
+				boolField(request, "liveNetworkAllowed", false), boolField(request, "hasCredentialMaterial", false), stringField(request, "secretProbe", "")));
 		}
 		return out;
 	}
 
 	static function providerValue(value:Value):ProviderAdmissionProvider {
-		return new ProviderAdmissionProvider(
-			stringField(value, "providerId", ""),
-			stringField(value, "name", ""),
-			boolField(value, "hasBaseUrl", false),
-			stringField(value, "baseUrl", ""),
-			boolField(value, "envKeyConfigured", false),
-			boolField(value, "envKeyPresent", false),
-			boolField(value, "envKeyInstructionsPresent", false),
-			boolField(value, "requiresOpenAiAuth", false),
-			boolField(value, "supportsWebsockets", false),
-			boolField(value, "hasAwsAuth", false),
-			boolField(value, "hasCommandAuth", false),
-			boolField(value, "experimentalBearerTokenPresent", false)
-		);
+		return new ProviderAdmissionProvider(stringField(value, "providerId", ""), stringField(value, "name", ""), boolField(value, "hasBaseUrl", false),
+			stringField(value, "baseUrl", ""), boolField(value, "envKeyConfigured", false), boolField(value, "envKeyPresent", false),
+			boolField(value, "envKeyInstructionsPresent", false), boolField(value, "requiresOpenAiAuth", false),
+			boolField(value, "supportsWebsockets", false), boolField(value, "hasAwsAuth", false), boolField(value, "hasCommandAuth", false),
+			boolField(value, "experimentalBearerTokenPresent", false));
 	}
 
 	static function modelValue(value:Value):ProviderAdmissionModel {
-		return new ProviderAdmissionModel(
-			stringField(value, "modelId", ""),
-			stringField(value, "providerId", ""),
-			intField(value, "contextWindow", 0)
-		);
+		return new ProviderAdmissionModel(stringField(value, "modelId", ""), stringField(value, "providerId", ""), intField(value, "contextWindow", 0));
 	}
 
 	static function credentialKind(value:String):ProviderAdmissionCredentialKind {
@@ -182,7 +163,8 @@ class ProviderAdmissionHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -199,7 +181,8 @@ class ProviderAdmissionHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -208,14 +191,17 @@ class ProviderAdmissionHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 
 	static function assertNotContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) >= 0) throw "did not expect to find secret probe in summary";
+		if (needle.length > 0 && haystack.indexOf(needle) >= 0)
+			throw "did not expect to find secret probe in summary";
 	}
 }

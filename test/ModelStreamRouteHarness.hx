@@ -38,7 +38,8 @@ class ModelStreamRouteHarness {
 			assertEquals(Std.string(intField(expect, "itemsAdded", 0)), Std.string(outcome.itemsAdded));
 			assertEquals(Std.string(intField(expect, "totalTokens", 0)), Std.string(outcome.totalTokens));
 			assertContains(outcome.summary(), stringField(expect, "summaryContains", ""));
-			if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+			if (secretProbe.length > 0)
+				assertNotContains(outcome.summary(), secretProbe);
 			i = i + 1;
 		}
 	}
@@ -48,13 +49,8 @@ class ModelStreamRouteHarness {
 		for (value in values) {
 			final testCase = objectValue(value);
 			final envelopeId = stringField(testCase, "envelopeFixtureId", "");
-			out.push(new ModelStreamRouteRequest(
-				stringField(testCase, "requestId", ""),
-				envelopeRequestById(envelopeRoot, envelopeId),
-				stringField(testCase, "upstreamRequestId", ""),
-				events(arrayField(testCase, "events")),
-				stringField(testCase, "secretProbe", "")
-			));
+			out.push(new ModelStreamRouteRequest(stringField(testCase, "requestId", ""), envelopeRequestById(envelopeRoot, envelopeId),
+				stringField(testCase, "upstreamRequestId", ""), events(arrayField(testCase, "events")), stringField(testCase, "secretProbe", "")));
 		}
 		return out;
 	}
@@ -62,7 +58,8 @@ class ModelStreamRouteHarness {
 	public static function envelopeRequestById(root:Value, id:String):ModelRequestEnvelopeRequest {
 		for (value in arrayField(root, "cases")) {
 			final testCase = objectValue(value);
-			if (stringField(testCase, "id", "") == id) return ModelRequestEnvelopeHarness.requests([testCase])[0];
+			if (stringField(testCase, "id", "") == id)
+				return ModelRequestEnvelopeHarness.requests([testCase])[0];
 		}
 		throw "missing envelope fixture case: " + id;
 	}
@@ -71,20 +68,11 @@ class ModelStreamRouteHarness {
 		final out:Array<ModelStreamFixtureEvent> = [];
 		for (value in values) {
 			final event = objectValue(value);
-			out.push(new ModelStreamFixtureEvent(
-				eventKind(stringField(event, "kind", "")),
-				stringField(event, "itemId", ""),
-				stringField(event, "responseId", ""),
-				stringField(event, "upstreamRequestId", ""),
-				stringField(event, "errorCode", ""),
-				stringField(event, "errorMessage", ""),
-				intField(event, "inputTokens", 0),
-				intField(event, "outputTokens", 0),
-				intField(event, "cachedInputTokens", 0),
-				intField(event, "reasoningOutputTokens", 0),
-				intField(event, "totalTokens", 0),
-				boolField(event, "endTurn", false)
-			));
+			out.push(new ModelStreamFixtureEvent(eventKind(stringField(event, "kind", "")), stringField(event, "itemId", ""),
+				stringField(event, "responseId", ""), stringField(event, "upstreamRequestId", ""), stringField(event, "errorCode", ""),
+				stringField(event, "errorMessage", ""), intField(event, "inputTokens", 0), intField(event, "outputTokens", 0),
+				intField(event, "cachedInputTokens", 0), intField(event, "reasoningOutputTokens", 0), intField(event, "totalTokens", 0),
+				boolField(event, "endTurn", false)));
 		}
 		return out;
 	}
@@ -159,7 +147,8 @@ class ModelStreamRouteHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -176,21 +165,26 @@ class ModelStreamRouteHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (needle.length == 0) return;
-		if (value.indexOf(needle) < 0) throw "expected to find `" + needle + "` in `" + value + "`";
+		if (needle.length == 0)
+			return;
+		if (value.indexOf(needle) < 0)
+			throw "expected to find `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertNotContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) >= 0) throw "expected not to find `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) >= 0)
+			throw "expected not to find `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected `" + expected + "` but got `" + actual + "`";
+		if (expected != actual)
+			throw "expected `" + expected + "` but got `" + actual + "`";
 	}
 
 	static function boolText(value:Bool):String {

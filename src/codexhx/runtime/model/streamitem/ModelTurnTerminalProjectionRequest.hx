@@ -16,22 +16,9 @@ class ModelTurnTerminalProjectionRequest {
 	public final sawCopySourceThisTurn:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		threadId:String,
-		turnId:String,
-		lifecycleOutcome:ModelTurnLifecycleOutcome,
-		eventKind:ModelTurnTerminalProjectionEventKind,
-		priorTurnErrorMessage:String,
-		lastAgentMessageOverride:String,
-		abortReason:String,
-		pendingInterruptRequest:Bool,
-		fromReplay:Bool,
-		hasQueuedFollowUp:Bool,
-		activeGoalContinuing:Bool,
-		sawCopySourceThisTurn:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, threadId:String, turnId:String, lifecycleOutcome:ModelTurnLifecycleOutcome,
+			eventKind:ModelTurnTerminalProjectionEventKind, priorTurnErrorMessage:String, lastAgentMessageOverride:String, abortReason:String,
+			pendingInterruptRequest:Bool, fromReplay:Bool, hasQueuedFollowUp:Bool, activeGoalContinuing:Bool, sawCopySourceThisTurn:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.threadId = threadId == null ? "" : threadId;
 		this.turnId = turnId == null ? "" : turnId;

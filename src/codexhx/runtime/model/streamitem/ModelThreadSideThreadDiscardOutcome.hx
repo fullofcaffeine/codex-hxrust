@@ -27,33 +27,12 @@ class ModelThreadSideThreadDiscardOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		uiSyncRequestId:String,
-		decisionKind:ModelThreadSideThreadDiscardDecisionKind,
-		maybeReturnEligible:Bool,
-		returnFromSideAttempted:Bool,
-		returnFromSideSucceeded:Bool,
-		discardTargetSelected:Bool,
-		interruptKind:ModelThreadSideThreadInterruptKind,
-		interruptAttempted:Bool,
-		unsubscribeAttempted:Bool,
-		localStateRemoved:Bool,
-		activeThreadCleared:Bool,
-		pendingApprovalsRefreshed:Bool,
-		activeAgentLabelSynced:Bool,
-		cleanupFailureKeptVisible:Bool,
-		surfacePendingInactiveRequests:Bool,
-		serverRpcAttempted:Bool,
-		closedSideThreadLocalOnly:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, uiSyncRequestId:String, decisionKind:ModelThreadSideThreadDiscardDecisionKind,
+			maybeReturnEligible:Bool, returnFromSideAttempted:Bool, returnFromSideSucceeded:Bool, discardTargetSelected:Bool,
+			interruptKind:ModelThreadSideThreadInterruptKind, interruptAttempted:Bool, unsubscribeAttempted:Bool, localStateRemoved:Bool,
+			activeThreadCleared:Bool, pendingApprovalsRefreshed:Bool, activeAgentLabelSynced:Bool, cleanupFailureKeptVisible:Bool,
+			surfacePendingInactiveRequests:Bool, serverRpcAttempted:Bool, closedSideThreadLocalOnly:Bool, eventOrderingPreserved:Bool,
+			liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -82,31 +61,17 @@ class ModelThreadSideThreadDiscardOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";uiSyncRequest=" + noneIfEmpty(uiSyncRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";maybeReturnEligible=" + boolText(maybeReturnEligible)
-			+ ";returnFromSideAttempted=" + boolText(returnFromSideAttempted)
-			+ ";returnFromSideSucceeded=" + boolText(returnFromSideSucceeded)
-			+ ";discardTargetSelected=" + boolText(discardTargetSelected)
-			+ ";interruptKind=" + interruptKind
-			+ ";interruptAttempted=" + boolText(interruptAttempted)
-			+ ";unsubscribeAttempted=" + boolText(unsubscribeAttempted)
-			+ ";localStateRemoved=" + boolText(localStateRemoved)
-			+ ";activeThreadCleared=" + boolText(activeThreadCleared)
-			+ ";pendingApprovalsRefreshed=" + boolText(pendingApprovalsRefreshed)
-			+ ";activeAgentLabelSynced=" + boolText(activeAgentLabelSynced)
-			+ ";cleanupFailureKeptVisible=" + boolText(cleanupFailureKeptVisible)
-			+ ";surfacePendingInactiveRequests=" + boolText(surfacePendingInactiveRequests)
-			+ ";serverRpcAttempted=" + boolText(serverRpcAttempted)
-			+ ";closedSideThreadLocalOnly=" + boolText(closedSideThreadLocalOnly)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";uiSyncRequest=" + noneIfEmpty(uiSyncRequestId) + ";decisionKind="
+			+ decisionKind + ";maybeReturnEligible=" + boolText(maybeReturnEligible) + ";returnFromSideAttempted=" + boolText(returnFromSideAttempted)
+			+ ";returnFromSideSucceeded=" + boolText(returnFromSideSucceeded) + ";discardTargetSelected=" + boolText(discardTargetSelected)
+			+ ";interruptKind=" + interruptKind + ";interruptAttempted=" + boolText(interruptAttempted) + ";unsubscribeAttempted="
+			+ boolText(unsubscribeAttempted) + ";localStateRemoved=" + boolText(localStateRemoved) + ";activeThreadCleared=" + boolText(activeThreadCleared)
+			+ ";pendingApprovalsRefreshed=" + boolText(pendingApprovalsRefreshed) + ";activeAgentLabelSynced=" + boolText(activeAgentLabelSynced)
+			+ ";cleanupFailureKeptVisible=" + boolText(cleanupFailureKeptVisible) + ";surfacePendingInactiveRequests="
+			+ boolText(surfacePendingInactiveRequests) + ";serverRpcAttempted=" + boolText(serverRpcAttempted) + ";closedSideThreadLocalOnly="
+			+ boolText(closedSideThreadLocalOnly) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

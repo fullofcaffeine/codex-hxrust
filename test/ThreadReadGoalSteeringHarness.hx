@@ -36,7 +36,8 @@ class ThreadReadGoalSteeringHarness {
 			assertPromptContains(outcome.item == null ? "" : outcome.item.prompt, arrayField(expect, "promptContains"));
 			assertPromptNotContains(outcome.item == null ? "" : outcome.item.prompt, arrayField(expect, "promptNotContains"));
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -47,50 +48,35 @@ class ThreadReadGoalSteeringHarness {
 			final caseObject = objectValue(value);
 			final kind:ThreadReadGoalSteeringItemKind = cast stringField(caseObject, "kind", "");
 			final goalStatus = optionalStringField(caseObject, "goalStatus");
-			out.push(new ThreadReadGoalSteeringRequest(
-				kind,
-				goal(goalStatus, stringField(caseObject, "goalVariant", "")),
-				continuationOutcome(stringField(caseObject, "continuationDecision", "")),
-				boolField(caseObject, "objectiveChanged", false)
-			));
+			out.push(new ThreadReadGoalSteeringRequest(kind, goal(goalStatus, stringField(caseObject, "goalVariant", "")),
+				continuationOutcome(stringField(caseObject, "continuationDecision", "")), boolField(caseObject, "objectiveChanged", false)));
 		}
 		return out;
 	}
 
 	static function continuationOutcome(kind:String):ThreadReadResumeIdleContinuationOutcome {
 		if (kind == "started") {
-			return ThreadReadResumeIdleContinuationOutcome.makeStarted(
-				ThreadReadTokenUsageReplayDeliveryOperation.Resume,
-				"response->thread/goal/updated->thread/idle->goal/continue->turn/start"
-			);
+			return ThreadReadResumeIdleContinuationOutcome.makeStarted(ThreadReadTokenUsageReplayDeliveryOperation.Resume,
+				"response->thread/goal/updated->thread/idle->goal/continue->turn/start");
 		}
 		if (kind == "rejected") {
-			return ThreadReadResumeIdleContinuationOutcome.makeRejected(
-				ThreadReadTokenUsageReplayDeliveryOperation.Resume,
-				"response->thread/goal/updated->thread/idle->goal/continue"
-			);
+			return ThreadReadResumeIdleContinuationOutcome.makeRejected(ThreadReadTokenUsageReplayDeliveryOperation.Resume,
+				"response->thread/goal/updated->thread/idle->goal/continue");
 		}
 		if (kind == "snapshot_only") {
-			return ThreadReadResumeIdleContinuationOutcome.makeIdleOnly(
-				ThreadReadTokenUsageReplayDeliveryOperation.Resume,
-				"snapshot_only_goal_not_active",
-				"response->thread/goal/updated->thread/idle",
-				true,
-				"goal status paused clears active goal accounting and does not continue"
-			);
+			return ThreadReadResumeIdleContinuationOutcome.makeIdleOnly(ThreadReadTokenUsageReplayDeliveryOperation.Resume, "snapshot_only_goal_not_active",
+				"response->thread/goal/updated->thread/idle", true, "goal status paused clears active goal accounting and does not continue");
 		}
 		if (kind == "failure") {
-			return ThreadReadResumeIdleContinuationOutcome.failure(
-				ThreadReadTokenUsageReplayDeliveryOperation.Resume,
-				"snapshot_not_settled",
-				"resume idle lifecycle waits for response and goal snapshot ordering to settle"
-			);
+			return ThreadReadResumeIdleContinuationOutcome.failure(ThreadReadTokenUsageReplayDeliveryOperation.Resume, "snapshot_not_settled",
+				"resume idle lifecycle waits for response and goal snapshot ordering to settle");
 		}
 		return null;
 	}
 
 	static function goal(status:String, variant:String):ThreadGoal {
-		if (status.length == 0 || variant == "missing") return null;
+		if (status.length == 0 || variant == "missing")
+			return null;
 		if (variant == "budgeted_escaped") {
 			return new ThreadGoal(threadId(), "Ship <Codex> & keep quality", status, true, 5000, 1200, 300, 200000, 200100);
 		}
@@ -125,7 +111,8 @@ class ThreadReadGoalSteeringHarness {
 	static function assertPromptNotContains(prompt:String, values:Array<Value>):Void {
 		for (value in values) {
 			final needle = stringValue(value);
-			if (needle.length > 0 && prompt.indexOf(needle) >= 0) throw "expected not to find " + needle + " in " + prompt;
+			if (needle.length > 0 && prompt.indexOf(needle) >= 0)
+				throw "expected not to find " + needle + " in " + prompt;
 		}
 	}
 
@@ -189,7 +176,8 @@ class ThreadReadGoalSteeringHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -213,7 +201,8 @@ class ThreadReadGoalSteeringHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -222,10 +211,12 @@ class ThreadReadGoalSteeringHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

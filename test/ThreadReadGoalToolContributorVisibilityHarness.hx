@@ -37,17 +37,11 @@ class ThreadReadGoalToolContributorVisibilityHarness {
 		final out:Array<ThreadReadGoalToolContributorVisibilityRequest> = [];
 		for (value in values) {
 			final request = objectField(objectValue(value), "request");
-			out.push(new ThreadReadGoalToolContributorVisibilityRequest(
-				boolField(request, "runtimeAvailable", false),
-				boolField(request, "runtimeEnabled", false),
-				boolField(request, "toolsAvailableForThread", false),
-				stringField(request, "threadId", ""),
-				boolField(request, "stateDbAvailable", false),
-				boolField(request, "accountingStateAvailable", false),
-				boolField(request, "analyticsAvailable", false),
-				boolField(request, "eventEmitterAvailable", false),
-				boolField(request, "metricsAvailable", false)
-			));
+			out.push(new ThreadReadGoalToolContributorVisibilityRequest(boolField(request, "runtimeAvailable", false),
+				boolField(request, "runtimeEnabled", false), boolField(request, "toolsAvailableForThread", false), stringField(request, "threadId", ""),
+				boolField(request, "stateDbAvailable", false), boolField(request, "accountingStateAvailable", false),
+				boolField(request, "analyticsAvailable", false), boolField(request, "eventEmitterAvailable", false),
+				boolField(request, "metricsAvailable", false)));
 		}
 		return out;
 	}
@@ -129,7 +123,8 @@ class ThreadReadGoalToolContributorVisibilityHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -146,7 +141,8 @@ class ThreadReadGoalToolContributorVisibilityHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -155,10 +151,12 @@ class ThreadReadGoalToolContributorVisibilityHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

@@ -173,14 +173,8 @@ class ResumePickerSortFilterReloadRenderGate {
 		return expectEvent(loader.pollEvent(AsyncContext.fixture(request.requestId)));
 	}
 
-	static function pageRequest(
-		requestId:String,
-		cursor:String,
-		query:String,
-		sortKey:ResumePickerSortKey,
-		filterMode:ResumePickerFilterMode,
-		showAll:Bool
-	):ResumePickerThreadListRequest {
+	static function pageRequest(requestId:String, cursor:String, query:String, sortKey:ResumePickerSortKey, filterMode:ResumePickerFilterMode,
+			showAll:Bool):ResumePickerThreadListRequest {
 		return new ResumePickerThreadListRequest({
 			requestId: requestId,
 			cursor: cursor,
@@ -195,10 +189,8 @@ class ResumePickerSortFilterReloadRenderGate {
 	}
 
 	static function requestFacts(request:ResumePickerThreadListRequest):String {
-		return request.summary()
-			+ ";cwd=" + request.cwdFilter
-			+ ";showAll=" + boolLabel(request.showAll)
-			+ ";includeNonInteractive=" + boolLabel(request.includeNonInteractive);
+		return request.summary() + ";cwd=" + request.cwdFilter + ";showAll=" + boolLabel(request.showAll) + ";includeNonInteractive="
+			+ boolLabel(request.includeNonInteractive);
 	}
 
 	static function fixtureSource():InMemoryResumePickerThreadSource {

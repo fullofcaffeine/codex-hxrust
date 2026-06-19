@@ -3337,6 +3337,19 @@ Extend the normalized resume picker renderer from deterministic reload failure h
 
 Status: HXCX-TUI-127 adds request-provenance logging to `InMemoryResumePickerThreadSource`, plus `ResumePickerLiveAppServerBoundaryRenderGate`, `ResumePickerLiveAppServerBoundaryRenderGateReport`, `test/ResumePickerLiveAppServerBoundaryRenderHarness.hx`, `hxml/resume-picker-live-app-server-boundary-render.hxml`, and `harness/check-resume-picker-live-app-server-boundary-render.sh`. The gate validates typed `thread/list` request id/provenance preservation, bounded lossless backpressure, app-server source failure mapping, visible normalized error/recovery rendering, no credential/model/state DB mutation, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still deterministic typed-boundary evidence only, not live JSON-RPC transport, terminal ownership, Tokio task ownership, ratatui input/layout ownership, SQLite/state DB mutation, or Cafex behavior.
 
+### HXCX-TUI-128: Resume Picker JSON-RPC Thread/List Transport Render Gate
+
+Extend the typed app-server boundary into a fixture-backed JSON-RPC `thread/list` transport boundary:
+
+- encode resume picker page requests into upstream-shaped `thread/list` method/params;
+- preserve request ids, cursor/query/sort/filter/cwd/show-all/include-non-interactive evidence;
+- decode deterministic JSON-RPC `thread/list` results into typed picker rows;
+- map JSON-RPC error payloads into visible loader/error state while preserving existing rows;
+- render recovery after a later successful JSON-RPC response;
+- keep the gate credential-free, model-free, state-DB-free, and Cafex-free.
+
+Status: HXCX-TUI-128 adds `JsonRpcResumePickerThreadSource`, `ResumePickerJsonRpcThreadListTransportRenderGate`, `ResumePickerJsonRpcThreadListTransportRenderGateReport`, `test/ResumePickerJsonRpcThreadListTransportRenderHarness.hx`, `hxml/resume-picker-json-rpc-thread-list-transport-render.hxml`, and `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh`. The gate validates JSON-RPC method/params/request-id provenance, deterministic result decoding, app-server error mapping, transport event summaries, visible normalized error/recovery rendering, no credential/model/state DB mutation, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is deterministic fixture transport evidence only, not live socket ownership, Tokio stream ownership, terminal ownership, ratatui input/layout ownership, SQLite/state DB mutation, or Cafex behavior.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

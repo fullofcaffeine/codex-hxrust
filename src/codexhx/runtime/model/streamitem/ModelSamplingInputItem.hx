@@ -9,15 +9,8 @@ class ModelSamplingInputItem {
 	public final fromPendingInput:Bool;
 	public final recordedInHistory:Bool;
 
-	public function new(
-		kind:ModelSamplingInputItemKind,
-		orderIndex:Int,
-		callId:String,
-		responseKind:ModelPatchToolOutputItemKind,
-		text:String,
-		fromPendingInput:Bool,
-		recordedInHistory:Bool
-	) {
+	public function new(kind:ModelSamplingInputItemKind, orderIndex:Int, callId:String, responseKind:ModelPatchToolOutputItemKind, text:String,
+			fromPendingInput:Bool, recordedInHistory:Bool) {
 		this.kind = kind;
 		this.orderIndex = orderIndex < 0 ? 0 : orderIndex;
 		this.callId = callId == null ? "" : callId;
@@ -28,13 +21,8 @@ class ModelSamplingInputItem {
 	}
 
 	public function summary():String {
-		return "kind=" + kind
-			+ ";orderIndex=" + Std.string(orderIndex)
-			+ ";callId=" + noneIfEmpty(callId)
-			+ ";responseKind=" + responseKind
-			+ ";fromPendingInput=" + boolText(fromPendingInput)
-			+ ";recordedInHistory=" + boolText(recordedInHistory)
-			+ ";text=" + text;
+		return "kind=" + kind + ";orderIndex=" + Std.string(orderIndex) + ";callId=" + noneIfEmpty(callId) + ";responseKind=" + responseKind
+			+ ";fromPendingInput=" + boolText(fromPendingInput) + ";recordedInHistory=" + boolText(recordedInHistory) + ";text=" + text;
 	}
 
 	static function boolText(value:Bool):String {

@@ -14,15 +14,8 @@ class ModelRequestEnvelopeOutcome {
 	public final errorMessage:String;
 	public final sequence:String;
 
-	function new(
-		ok:Bool,
-		code:String,
-		request:ModelRequestEnvelopeRequest,
-		plan:TurnModelPlanOutcome,
-		envelope:ModelRequestEnvelope,
-		errorMessage:String,
-		sequence:String
-	) {
+	function new(ok:Bool, code:String, request:ModelRequestEnvelopeRequest, plan:TurnModelPlanOutcome, envelope:ModelRequestEnvelope, errorMessage:String,
+			sequence:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = request.requestId;
@@ -35,36 +28,20 @@ class ModelRequestEnvelopeOutcome {
 		this.sequence = sequence;
 	}
 
-	public static function accepted(
-		request:ModelRequestEnvelopeRequest,
-		plan:TurnModelPlanOutcome,
-		envelope:ModelRequestEnvelope,
-		sequence:String
-	):ModelRequestEnvelopeOutcome {
+	public static function accepted(request:ModelRequestEnvelopeRequest, plan:TurnModelPlanOutcome, envelope:ModelRequestEnvelope,
+			sequence:String):ModelRequestEnvelopeOutcome {
 		return new ModelRequestEnvelopeOutcome(true, "model_request_envelope_admitted", request, plan, envelope, "", sequence);
 	}
 
-	public static function denied(
-		request:ModelRequestEnvelopeRequest,
-		plan:TurnModelPlanOutcome,
-		code:String,
-		errorMessage:String,
-		sequence:String
-	):ModelRequestEnvelopeOutcome {
+	public static function denied(request:ModelRequestEnvelopeRequest, plan:TurnModelPlanOutcome, code:String, errorMessage:String,
+			sequence:String):ModelRequestEnvelopeOutcome {
 		return new ModelRequestEnvelopeOutcome(false, code, request, plan, null, errorMessage, sequence);
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";planCode=" + planCode
-			+ ";provider=" + providerId
-			+ ";model=" + selectedModelId
-			+ ";routeIntent=" + routeIntent
-			+ ";envelope={" + (envelope == null ? "none" : envelope.summary()) + "}"
-			+ ";error=" + errorMessage
-			+ ";sequence=" + sequence;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";planCode=" + planCode + ";provider=" + providerId + ";model="
+			+ selectedModelId + ";routeIntent=" + routeIntent + ";envelope={" + (envelope == null ? "none" : envelope.summary()) + "}" + ";error="
+			+ errorMessage + ";sequence=" + sequence;
 	}
 
 	static function boolText(value:Bool):String {

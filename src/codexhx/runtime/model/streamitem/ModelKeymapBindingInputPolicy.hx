@@ -4,7 +4,8 @@ class ModelKeymapBindingInputPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeymapBindingInputRequest):ModelKeymapBindingInputOutcome {
-		if (request == null) return failure("", "missing keymap binding input request");
+		if (request == null)
+			return failure("", "missing keymap binding input request");
 
 		final stringOrArrayInputValidated = request.invalidModifierRejected
 			&& request.invalidMultiBindingPath == "tui.keymap.composer.submit"
@@ -22,17 +23,9 @@ class ModelKeymapBindingInputPolicy {
 		final defaultCopyBindingPreserved = matches(request.defaultCopyBinding, character("o", true, false, false));
 		final defaultMainSurfaceActionsPreserved = defaultActionMatches(request.defaultMainSurfaceActions);
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = stringOrArrayInputValidated
-			&& invalidModifierPathPreserved
-			&& dedupeOrderPreserved
-			&& contextFallbackPreserved
-			&& invalidGlobalPathsPreserved
-			&& defaultCopyBindingPreserved
-			&& defaultMainSurfaceActionsPreserved
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapBindingInputDecisionKind.KeymapBindingInputsPreserved
-			: ModelKeymapBindingInputDecisionKind.KeymapBindingInputsRejected;
+		final ok = stringOrArrayInputValidated && invalidModifierPathPreserved && dedupeOrderPreserved && contextFallbackPreserved
+			&& invalidGlobalPathsPreserved && defaultCopyBindingPreserved && defaultMainSurfaceActionsPreserved && eventOrderingPreserved;
+		final decisionKind = ok ? ModelKeymapBindingInputDecisionKind.KeymapBindingInputsPreserved : ModelKeymapBindingInputDecisionKind.KeymapBindingInputsRejected;
 
 		return new ModelKeymapBindingInputOutcome({
 			ok: ok,
@@ -56,27 +49,22 @@ class ModelKeymapBindingInputPolicy {
 	}
 
 	static function defaultActionMatches(actions:Array<ModelKeymapDefaultActionCase>):Bool {
-		if (actions.length != 5) return false;
+		if (actions.length != 5)
+			return false;
 		return actionBindingsMatch(actions, ModelKeymapMainSurfaceActionKind.ClearTerminal, [character("l", true, false, false)])
 			&& actionBindingsMatch(actions, ModelKeymapMainSurfaceActionKind.ToggleFastMode, [])
 			&& actionBindingsMatch(actions, ModelKeymapMainSurfaceActionKind.InterruptTurn, [named("esc", false, false, false)])
-			&& actionBindingsMatch(actions, ModelKeymapMainSurfaceActionKind.DecreaseReasoningEffort, [
-				character(",", false, true, false),
-				named("down", false, false, true)
-			])
-			&& actionBindingsMatch(actions, ModelKeymapMainSurfaceActionKind.IncreaseReasoningEffort, [
-				character(".", false, true, false),
-				named("up", false, false, true)
-			]);
+			&& actionBindingsMatch(actions, ModelKeymapMainSurfaceActionKind.DecreaseReasoningEffort,
+				[character(",", false, true, false), named("down", false, false, true)])
+			&& actionBindingsMatch(actions, ModelKeymapMainSurfaceActionKind.IncreaseReasoningEffort,
+				[character(".", false, true, false), named("up", false, false, true)]);
 	}
 
-	static function actionBindingsMatch(
-		actions:Array<ModelKeymapDefaultActionCase>,
-		actionKind:ModelKeymapMainSurfaceActionKind,
-		expected:Array<ModelKeymapBinding>
-	):Bool {
+	static function actionBindingsMatch(actions:Array<ModelKeymapDefaultActionCase>, actionKind:ModelKeymapMainSurfaceActionKind,
+			expected:Array<ModelKeymapBinding>):Bool {
 		for (action in actions) {
-			if (action.actionKind == actionKind) return sameBindings(action.bindings, expected);
+			if (action.actionKind == actionKind)
+				return sameBindings(action.bindings, expected);
 		}
 		return false;
 	}
@@ -84,23 +72,28 @@ class ModelKeymapBindingInputPolicy {
 	static function dedupe(bindings:Array<ModelKeymapBinding>):Array<ModelKeymapBinding> {
 		final result:Array<ModelKeymapBinding> = [];
 		for (binding in bindings) {
-			if (!contains(result, binding)) result.push(binding);
+			if (!contains(result, binding))
+				result.push(binding);
 		}
 		return result;
 	}
 
 	static function sameBindings(actual:Array<ModelKeymapBinding>, expected:Array<ModelKeymapBinding>):Bool {
-		if (actual.length != expected.length) return false;
+		if (actual.length != expected.length)
+			return false;
 		for (i in 0...actual.length) {
-			if (!matches(actual[i], expected[i])) return false;
+			if (!matches(actual[i], expected[i]))
+				return false;
 		}
 		return true;
 	}
 
 	static function contains(actual:Array<ModelKeymapBinding>, expected:ModelKeymapBinding):Bool {
-		if (actual == null) return false;
+		if (actual == null)
+			return false;
 		for (binding in actual) {
-			if (matches(binding, expected)) return true;
+			if (matches(binding, expected))
+				return true;
 		}
 		return false;
 	}

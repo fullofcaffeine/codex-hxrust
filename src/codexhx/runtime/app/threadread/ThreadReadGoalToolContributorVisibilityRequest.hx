@@ -11,17 +11,8 @@ class ThreadReadGoalToolContributorVisibilityRequest {
 	public final eventEmitterAvailable:Bool;
 	public final metricsAvailable:Bool;
 
-	public function new(
-		runtimeAvailable:Bool,
-		runtimeEnabled:Bool,
-		toolsAvailableForThread:Bool,
-		threadId:String,
-		stateDbAvailable:Bool,
-		accountingStateAvailable:Bool,
-		analyticsAvailable:Bool,
-		eventEmitterAvailable:Bool,
-		metricsAvailable:Bool
-	) {
+	public function new(runtimeAvailable:Bool, runtimeEnabled:Bool, toolsAvailableForThread:Bool, threadId:String, stateDbAvailable:Bool,
+			accountingStateAvailable:Bool, analyticsAvailable:Bool, eventEmitterAvailable:Bool, metricsAvailable:Bool) {
 		this.runtimeAvailable = runtimeAvailable;
 		this.runtimeEnabled = runtimeEnabled;
 		this.toolsAvailableForThread = toolsAvailableForThread;

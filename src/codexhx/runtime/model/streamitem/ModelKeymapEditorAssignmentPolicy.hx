@@ -4,7 +4,8 @@ class ModelKeymapEditorAssignmentPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeymapEditorAssignmentRequest):ModelKeymapEditorAssignmentOutcome {
-		if (request == null) return failure("", "missing keymap editor assignment request");
+		if (request == null)
+			return failure("", "missing keymap editor assignment request");
 
 		final expectedBinding = character("u", true, false, true);
 		final actionKindPreserved = request.actionKind == ModelKeymapEditorAssignmentActionKind.KillWholeLine;
@@ -12,14 +13,8 @@ class ModelKeymapEditorAssignmentPolicy {
 		final configuredBindingPreserved = matches(request.configuredBinding, expectedBinding);
 		final runtimeBindingPreserved = matches(request.runtimeBinding, expectedBinding);
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = actionKindPreserved
-			&& defaultBindingEmptyPreserved
-			&& configuredBindingPreserved
-			&& runtimeBindingPreserved
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapEditorAssignmentDecisionKind.KeymapEditorAssignmentPreserved
-			: ModelKeymapEditorAssignmentDecisionKind.KeymapEditorAssignmentRejected;
+		final ok = actionKindPreserved && defaultBindingEmptyPreserved && configuredBindingPreserved && runtimeBindingPreserved && eventOrderingPreserved;
+		final decisionKind = ok ? ModelKeymapEditorAssignmentDecisionKind.KeymapEditorAssignmentPreserved : ModelKeymapEditorAssignmentDecisionKind.KeymapEditorAssignmentRejected;
 
 		return new ModelKeymapEditorAssignmentOutcome({
 			ok: ok,

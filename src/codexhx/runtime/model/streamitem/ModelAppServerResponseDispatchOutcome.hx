@@ -27,33 +27,12 @@ class ModelAppServerResponseDispatchOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		resolutionRequestId:String,
-		requestKind:ModelReplayedServerRequestKind,
-		dispatchKind:ModelAppServerResponseDispatchKind,
-		appServerRequestId:String,
-		payloadKind:ModelAppServerRequestResolutionPayloadKind,
-		appServerSessionAvailable:Bool,
-		serializedPayloadAvailable:Bool,
-		dispatchIntentRecorded:Bool,
-		resolveServerRequestIntent:Bool,
-		rejectServerRequestIntent:Bool,
-		jsonRpcErrorPayloadBuilt:Bool,
-		responseOrderingPreserved:Bool,
-		pendingReplayStateRefreshRequested:Bool,
-		missingSessionNoop:Bool,
-		serializationRefused:Bool,
-		dispatchFailureRecorded:Bool,
-		liveTransportAttempted:Bool,
-		liveTransportSuppressed:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, resolutionRequestId:String, requestKind:ModelReplayedServerRequestKind,
+			dispatchKind:ModelAppServerResponseDispatchKind, appServerRequestId:String, payloadKind:ModelAppServerRequestResolutionPayloadKind,
+			appServerSessionAvailable:Bool, serializedPayloadAvailable:Bool, dispatchIntentRecorded:Bool, resolveServerRequestIntent:Bool,
+			rejectServerRequestIntent:Bool, jsonRpcErrorPayloadBuilt:Bool, responseOrderingPreserved:Bool, pendingReplayStateRefreshRequested:Bool,
+			missingSessionNoop:Bool, serializationRefused:Bool, dispatchFailureRecorded:Bool, liveTransportAttempted:Bool, liveTransportSuppressed:Bool,
+			liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -82,31 +61,17 @@ class ModelAppServerResponseDispatchOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";resolutionRequest=" + noneIfEmpty(resolutionRequestId)
-			+ ";requestKind=" + requestKind
-			+ ";dispatchKind=" + dispatchKind
-			+ ";appServerRequestId=" + noneIfEmpty(appServerRequestId)
-			+ ";payloadKind=" + payloadKind
-			+ ";appServerSessionAvailable=" + boolText(appServerSessionAvailable)
-			+ ";serializedPayloadAvailable=" + boolText(serializedPayloadAvailable)
-			+ ";dispatchIntentRecorded=" + boolText(dispatchIntentRecorded)
-			+ ";resolveServerRequestIntent=" + boolText(resolveServerRequestIntent)
-			+ ";rejectServerRequestIntent=" + boolText(rejectServerRequestIntent)
-			+ ";jsonRpcErrorPayloadBuilt=" + boolText(jsonRpcErrorPayloadBuilt)
-			+ ";responseOrderingPreserved=" + boolText(responseOrderingPreserved)
-			+ ";pendingReplayStateRefreshRequested=" + boolText(pendingReplayStateRefreshRequested)
-			+ ";missingSessionNoop=" + boolText(missingSessionNoop)
-			+ ";serializationRefused=" + boolText(serializationRefused)
-			+ ";dispatchFailureRecorded=" + boolText(dispatchFailureRecorded)
-			+ ";liveTransportAttempted=" + boolText(liveTransportAttempted)
-			+ ";liveTransportSuppressed=" + boolText(liveTransportSuppressed)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";resolutionRequest=" + noneIfEmpty(resolutionRequestId) + ";requestKind="
+			+ requestKind + ";dispatchKind=" + dispatchKind + ";appServerRequestId=" + noneIfEmpty(appServerRequestId) + ";payloadKind=" + payloadKind
+			+ ";appServerSessionAvailable=" + boolText(appServerSessionAvailable) + ";serializedPayloadAvailable=" + boolText(serializedPayloadAvailable)
+			+ ";dispatchIntentRecorded=" + boolText(dispatchIntentRecorded) + ";resolveServerRequestIntent=" + boolText(resolveServerRequestIntent)
+			+ ";rejectServerRequestIntent=" + boolText(rejectServerRequestIntent) + ";jsonRpcErrorPayloadBuilt=" + boolText(jsonRpcErrorPayloadBuilt)
+			+ ";responseOrderingPreserved=" + boolText(responseOrderingPreserved) + ";pendingReplayStateRefreshRequested="
+			+ boolText(pendingReplayStateRefreshRequested) + ";missingSessionNoop=" + boolText(missingSessionNoop) + ";serializationRefused="
+			+ boolText(serializationRefused) + ";dispatchFailureRecorded=" + boolText(dispatchFailureRecorded) + ";liveTransportAttempted="
+			+ boolText(liveTransportAttempted) + ";liveTransportSuppressed=" + boolText(liveTransportSuppressed) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

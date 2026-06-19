@@ -72,7 +72,6 @@ class TuiSmokeApprovalAction {
 	public final conflictAction:String;
 	public final failureCode:String;
 
-
 	public function queueTransitionText():String {
 		return queueBefore + "->" + queueAfter;
 	}

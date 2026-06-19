@@ -43,11 +43,7 @@ class TuiSmokeAppServerRequest {
 				TuiSmokeReplayedServerRequestSurfaceKind.McpElicitation;
 			case TuiSmokeAppServerRequestKind.ToolUserInput:
 				TuiSmokeReplayedServerRequestSurfaceKind.ToolUserInput;
-			case TuiSmokeAppServerRequestKind.DynamicToolCall
-				| TuiSmokeAppServerRequestKind.AuthTokensRefresh
-				| TuiSmokeAppServerRequestKind.AttestationGenerate
-				| TuiSmokeAppServerRequestKind.LegacyPatchApproval
-				| TuiSmokeAppServerRequestKind.LegacyCommandApproval:
+			case TuiSmokeAppServerRequestKind.DynamicToolCall | TuiSmokeAppServerRequestKind.AuthTokensRefresh | TuiSmokeAppServerRequestKind.AttestationGenerate | TuiSmokeAppServerRequestKind.LegacyPatchApproval | TuiSmokeAppServerRequestKind.LegacyCommandApproval:
 				TuiSmokeReplayedServerRequestSurfaceKind.UnsupportedSuppressed;
 			case _:
 				TuiSmokeReplayedServerRequestSurfaceKind.Unknown;

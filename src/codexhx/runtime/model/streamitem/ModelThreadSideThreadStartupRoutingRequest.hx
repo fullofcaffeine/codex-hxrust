@@ -19,25 +19,11 @@ class ModelThreadSideThreadStartupRoutingRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		startOutcome:ModelThreadSideThreadStartOutcome,
-		notificationThreadScoped:Bool,
-		notificationTargetsVisibleThread:Bool,
-		notificationTargetsPrimaryThread:Bool,
-		targetThreadIsSideThread:Bool,
-		visibleThreadIsSideThread:Bool,
-		activeThreadChannel:Bool,
-		snapshotReplay:Bool,
-		snapshotSessionIsSideThread:Bool,
-		mcpServerName:String,
-		startupEventKind:ModelThreadSideThreadStartupEventKind,
-		startupErrorMessage:String,
-		expectedServerConfigured:Bool,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, startOutcome:ModelThreadSideThreadStartOutcome, notificationThreadScoped:Bool,
+			notificationTargetsVisibleThread:Bool, notificationTargetsPrimaryThread:Bool, targetThreadIsSideThread:Bool, visibleThreadIsSideThread:Bool,
+			activeThreadChannel:Bool, snapshotReplay:Bool, snapshotSessionIsSideThread:Bool, mcpServerName:String,
+			startupEventKind:ModelThreadSideThreadStartupEventKind, startupErrorMessage:String, expectedServerConfigured:Bool, eventOrderIndex:Int,
+			previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.startOutcome = startOutcome;
 		this.notificationThreadScoped = notificationThreadScoped;

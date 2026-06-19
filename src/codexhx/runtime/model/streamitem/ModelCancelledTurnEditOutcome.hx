@@ -78,26 +78,14 @@ class ModelCancelledTurnEditOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";userCountSinceLastSession=" + userCountSinceLastSession
-			+ ";selectedNthUserMessage=" + selectedNthUserMessage
-			+ ";rollbackTurnCount=" + rollbackTurnCount
-			+ ";usedBacktrackRollbackPath=" + boolText(usedBacktrackRollbackPath)
-			+ ";usedFirstPromptRollbackPath=" + boolText(usedFirstPromptRollbackPath)
-			+ ";promptTextElementCount=" + promptTextElementCount
-			+ ";promptLocalImageCount=" + promptLocalImageCount
-			+ ";promptRemoteImageCount=" + promptRemoteImageCount
-			+ ";remoteImagesApplied=" + boolText(remoteImagesApplied)
-			+ ";pendingRollbackRecorded=" + boolText(pendingRollbackRecorded)
-			+ ";threadRollbackSubmitted=" + boolText(threadRollbackSubmitted)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";userCountSinceLastSession="
+			+ userCountSinceLastSession + ";selectedNthUserMessage=" + selectedNthUserMessage + ";rollbackTurnCount=" + rollbackTurnCount
+			+ ";usedBacktrackRollbackPath=" + boolText(usedBacktrackRollbackPath) + ";usedFirstPromptRollbackPath=" + boolText(usedFirstPromptRollbackPath)
+			+ ";promptTextElementCount=" + promptTextElementCount + ";promptLocalImageCount=" + promptLocalImageCount + ";promptRemoteImageCount="
+			+ promptRemoteImageCount + ";remoteImagesApplied=" + boolText(remoteImagesApplied) + ";pendingRollbackRecorded="
+			+ boolText(pendingRollbackRecorded) + ";threadRollbackSubmitted=" + boolText(threadRollbackSubmitted) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

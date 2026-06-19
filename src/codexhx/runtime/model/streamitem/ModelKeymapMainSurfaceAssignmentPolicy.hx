@@ -4,7 +4,8 @@ class ModelKeymapMainSurfaceAssignmentPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeymapMainSurfaceAssignmentRequest):ModelKeymapMainSurfaceAssignmentOutcome {
-		if (request == null) return failure("", "missing keymap main-surface assignment request");
+		if (request == null)
+			return failure("", "missing keymap main-surface assignment request");
 
 		final expectedBinding = character("f", true, false, true);
 		final actionKindPreserved = request.actionKind == ModelKeymapMainSurfaceAssignmentActionKind.ToggleFastMode;
@@ -12,14 +13,8 @@ class ModelKeymapMainSurfaceAssignmentPolicy {
 		final configuredBindingPreserved = matches(request.configuredBinding, expectedBinding);
 		final runtimeBindingPreserved = matches(request.runtimeBinding, expectedBinding);
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = actionKindPreserved
-			&& defaultBindingEmptyPreserved
-			&& configuredBindingPreserved
-			&& runtimeBindingPreserved
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapMainSurfaceAssignmentDecisionKind.KeymapMainSurfaceAssignmentPreserved
-			: ModelKeymapMainSurfaceAssignmentDecisionKind.KeymapMainSurfaceAssignmentRejected;
+		final ok = actionKindPreserved && defaultBindingEmptyPreserved && configuredBindingPreserved && runtimeBindingPreserved && eventOrderingPreserved;
+		final decisionKind = ok ? ModelKeymapMainSurfaceAssignmentDecisionKind.KeymapMainSurfaceAssignmentPreserved : ModelKeymapMainSurfaceAssignmentDecisionKind.KeymapMainSurfaceAssignmentRejected;
 
 		return new ModelKeymapMainSurfaceAssignmentOutcome({
 			ok: ok,

@@ -26,9 +26,14 @@ class ThreadReadTurnProjectionOutcome {
 		for (turn in turns) {
 			parts.push(turn.summary());
 		}
-		return "projection:" + code
-			+ ";ok=" + (ok ? "true" : "false")
-			+ ";turns=" + Std.string(turns.length)
-			+ ";[" + parts.join("||") + "]";
+		return "projection:"
+			+ code
+			+ ";ok="
+			+ (ok ? "true" : "false")
+			+ ";turns="
+			+ Std.string(turns.length)
+			+ ";["
+			+ parts.join("||")
+			+ "]";
 	}
 }

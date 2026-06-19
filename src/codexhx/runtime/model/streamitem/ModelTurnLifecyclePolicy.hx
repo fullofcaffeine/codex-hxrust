@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelTurnLifecyclePolicy {
 	public static function finish(request:ModelTurnLifecycleRequest):ModelTurnLifecycleOutcome {
-		if (request == null) return failure("", "", "missing turn lifecycle request");
+		if (request == null)
+			return failure("", "", "missing turn lifecycle request");
 		final stopHookId = request.terminalStopHookOutcome == null ? "" : request.terminalStopHookOutcome.requestId;
 		final errorId = request.samplingErrorTerminalOutcome == null ? "" : request.samplingErrorTerminalOutcome.requestId;
 		final live = (request.terminalStopHookOutcome != null && request.terminalStopHookOutcome.liveNetworkAttempted)
@@ -13,34 +14,12 @@ class ModelTurnLifecyclePolicy {
 			|| (request.samplingErrorTerminalOutcome != null && request.samplingErrorTerminalOutcome.toolExecutedOutsideFixture);
 
 		if (request.taskCancellationRequested) {
-			return new ModelTurnLifecycleOutcome(
-				true,
-				"turn_lifecycle_modeled",
-				request.requestId,
-				request.turnId,
-				request.terminalKind,
-				ModelTurnLifecycleEventKind.CompletionSuppressedForCancellation,
-				stopHookId,
-				errorId,
-				request.rolloutFlushOk,
-				!request.rolloutFlushOk,
-				false,
-				false,
-				request.samplingErrorTerminalOutcome != null && request.samplingErrorTerminalOutcome.lifecycleErrorEmitted,
-				false,
-				false,
-				true,
-				request.terminalKind == ModelTurnLifecycleTerminalKind.CompletedAfterError,
-				false,
-				false,
-				"",
-				false,
-				false,
-				live,
-				fs,
-				tool,
-				"turn completion suppressed because task cancellation was requested"
-			);
+			return new ModelTurnLifecycleOutcome(true, "turn_lifecycle_modeled", request.requestId, request.turnId, request.terminalKind,
+				ModelTurnLifecycleEventKind.CompletionSuppressedForCancellation, stopHookId, errorId, request.rolloutFlushOk, !request.rolloutFlushOk, false,
+				false, request.samplingErrorTerminalOutcome != null
+				&& request.samplingErrorTerminalOutcome.lifecycleErrorEmitted, false, false, true,
+				request.terminalKind == ModelTurnLifecycleTerminalKind.CompletedAfterError, false, false, "", false, false, live, fs, tool,
+				"turn completion suppressed because task cancellation was requested");
 		}
 
 		return switch request.terminalKind {
@@ -53,84 +32,24 @@ class ModelTurnLifecyclePolicy {
 		}
 	}
 
-	static function complete(
-		request:ModelTurnLifecycleRequest,
-		stopHookId:String,
-		errorId:String,
-		completedAfterError:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool
-	):ModelTurnLifecycleOutcome {
+	static function complete(request:ModelTurnLifecycleRequest, stopHookId:String, errorId:String, completedAfterError:Bool, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool):ModelTurnLifecycleOutcome {
 		final message = request.lastAgentMessage.length > 0 ? request.lastAgentMessage : inheritedLastAgentMessage(request);
 		final activeCleared = request.activeTurnMatches;
-		return new ModelTurnLifecycleOutcome(
-			true,
-			"turn_lifecycle_modeled",
-			request.requestId,
-			request.turnId,
-			request.terminalKind,
-			ModelTurnLifecycleEventKind.TurnComplete,
-			stopHookId,
-			errorId,
-			request.rolloutFlushOk,
-			!request.rolloutFlushOk,
-			true,
-			false,
-			request.samplingErrorTerminalOutcome != null && request.samplingErrorTerminalOutcome.lifecycleErrorEmitted,
-			true,
-			false,
-			false,
-			completedAfterError,
-			false,
-			message.length > 0,
-			message,
-			activeCleared,
-			activeCleared && !request.hasPendingTriggerMailbox,
-			liveNetworkAttempted,
-			realFilesystemMutated,
-			toolExecutedOutsideFixture,
-			""
-		);
+		return new ModelTurnLifecycleOutcome(true, "turn_lifecycle_modeled", request.requestId, request.turnId, request.terminalKind,
+			ModelTurnLifecycleEventKind.TurnComplete, stopHookId, errorId, request.rolloutFlushOk, !request.rolloutFlushOk, true,
+			false, request.samplingErrorTerminalOutcome != null && request.samplingErrorTerminalOutcome.lifecycleErrorEmitted, true, false, false,
+			completedAfterError, false, message.length > 0, message, activeCleared, activeCleared && !request.hasPendingTriggerMailbox, liveNetworkAttempted,
+			realFilesystemMutated, toolExecutedOutsideFixture, "");
 	}
 
-	static function abort(
-		request:ModelTurnLifecycleRequest,
-		stopHookId:String,
-		errorId:String,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool
-	):ModelTurnLifecycleOutcome {
+	static function abort(request:ModelTurnLifecycleRequest, stopHookId:String, errorId:String, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool):ModelTurnLifecycleOutcome {
 		final reason = request.abortReason.length == 0 ? "unknown" : request.abortReason;
-		return new ModelTurnLifecycleOutcome(
-			true,
-			"turn_lifecycle_modeled",
-			request.requestId,
-			request.turnId,
-			ModelTurnLifecycleTerminalKind.Aborted,
-			ModelTurnLifecycleEventKind.TurnAborted,
-			stopHookId,
-			errorId,
-			request.rolloutFlushOk,
-			!request.rolloutFlushOk,
-			false,
-			true,
-			false,
-			false,
-			true,
-			false,
-			false,
-			request.interruptedMarkerEligible && reason == "interrupted",
-			false,
-			"",
-			true,
-			!request.hasPendingTriggerMailbox,
-			liveNetworkAttempted,
-			realFilesystemMutated,
-			toolExecutedOutsideFixture,
-			reason
-		);
+		return new ModelTurnLifecycleOutcome(true, "turn_lifecycle_modeled", request.requestId, request.turnId, ModelTurnLifecycleTerminalKind.Aborted,
+			ModelTurnLifecycleEventKind.TurnAborted, stopHookId, errorId, request.rolloutFlushOk, !request.rolloutFlushOk, false, true, false, false, true,
+			false, false, request.interruptedMarkerEligible && reason == "interrupted", false, "", true, !request.hasPendingTriggerMailbox,
+			liveNetworkAttempted, realFilesystemMutated, toolExecutedOutsideFixture, reason);
 	}
 
 	static function inheritedLastAgentMessage(request:ModelTurnLifecycleRequest):String {
@@ -144,33 +63,8 @@ class ModelTurnLifecyclePolicy {
 	}
 
 	static function failure(requestId:String, turnId:String, errorMessage:String):ModelTurnLifecycleOutcome {
-		return new ModelTurnLifecycleOutcome(
-			false,
-			"turn_lifecycle_failed",
-			requestId,
-			turnId,
-			ModelTurnLifecycleTerminalKind.Completed,
-			ModelTurnLifecycleEventKind.TurnComplete,
-			"",
-			"",
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			"",
-			false,
-			false,
-			false,
-			false,
-			false,
-			errorMessage
-		);
+		return new ModelTurnLifecycleOutcome(false, "turn_lifecycle_failed", requestId, turnId, ModelTurnLifecycleTerminalKind.Completed,
+			ModelTurnLifecycleEventKind.TurnComplete, "", "", false, false, false, false, false, false, false, false, false, false, false, "", false, false,
+			false, false, false, errorMessage);
 	}
 }

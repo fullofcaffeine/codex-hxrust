@@ -11,15 +11,8 @@ class ThreadReadGoalRuntimeRestoreRequest {
 	public final storedGoalId:String;
 	public final previousActiveGoalId:String;
 
-	public function new(
-		runtimePresent:Bool,
-		runtimeEnabled:Bool,
-		stateReadOk:Bool,
-		stateReadErrorCode:String,
-		storedGoal:ThreadGoal,
-		storedGoalId:String,
-		previousActiveGoalId:String
-	) {
+	public function new(runtimePresent:Bool, runtimeEnabled:Bool, stateReadOk:Bool, stateReadErrorCode:String, storedGoal:ThreadGoal, storedGoalId:String,
+			previousActiveGoalId:String) {
 		this.runtimePresent = runtimePresent;
 		this.runtimeEnabled = runtimeEnabled;
 		this.stateReadOk = stateReadOk;

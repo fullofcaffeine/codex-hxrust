@@ -12,18 +12,9 @@ class ModelThreadSideThreadUiSyncRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		statusChangeOutcome:ModelThreadSideParentStatusChangeOutcome,
-		activeThreadDisplayed:Bool,
-		sideThreadKnown:Bool,
-		parentIsMain:Bool,
-		parentThreadLabel:String,
-		storedParentStatusBefore:ModelThreadSideParentStatusKind,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, statusChangeOutcome:ModelThreadSideParentStatusChangeOutcome, activeThreadDisplayed:Bool, sideThreadKnown:Bool,
+			parentIsMain:Bool, parentThreadLabel:String, storedParentStatusBefore:ModelThreadSideParentStatusKind, eventOrderIndex:Int,
+			previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.statusChangeOutcome = statusChangeOutcome;
 		this.activeThreadDisplayed = activeThreadDisplayed;

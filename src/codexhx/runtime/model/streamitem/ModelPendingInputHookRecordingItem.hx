@@ -10,16 +10,8 @@ class ModelPendingInputHookRecordingItem {
 	public final hookActionKind:ModelPendingInputHookActionKind;
 	public final additionalContextCount:Int;
 
-	public function new(
-		sourceKind:ModelPostSamplingPendingInputSourceKind,
-		inputKind:ModelSamplingInputItemKind,
-		orderIndex:Int,
-		callId:String,
-		responseKind:ModelPatchToolOutputItemKind,
-		text:String,
-		hookActionKind:ModelPendingInputHookActionKind,
-		additionalContextCount:Int
-	) {
+	public function new(sourceKind:ModelPostSamplingPendingInputSourceKind, inputKind:ModelSamplingInputItemKind, orderIndex:Int, callId:String,
+			responseKind:ModelPatchToolOutputItemKind, text:String, hookActionKind:ModelPendingInputHookActionKind, additionalContextCount:Int) {
 		this.sourceKind = sourceKind == null ? ModelPostSamplingPendingInputSourceKind.ActiveTurn : sourceKind;
 		this.inputKind = inputKind == null ? ModelSamplingInputItemKind.PendingUserInput : inputKind;
 		this.orderIndex = orderIndex < 0 ? 0 : orderIndex;
@@ -43,15 +35,9 @@ class ModelPendingInputHookRecordingItem {
 	}
 
 	public function summary(inputRecorded:Bool, additionalContextRecorded:Bool):String {
-		return "sourceKind=" + sourceKind
-			+ ";inputKind=" + inputKind
-			+ ";orderIndex=" + Std.string(orderIndex)
-			+ ";callId=" + noneIfEmpty(callId)
-			+ ";responseKind=" + responseKind
-			+ ";hookActionKind=" + hookActionKind
-			+ ";inputRecorded=" + boolText(inputRecorded)
-			+ ";additionalContextRecorded=" + boolText(additionalContextRecorded)
-			+ ";additionalContextCount=" + Std.string(additionalContextCount)
+		return "sourceKind=" + sourceKind + ";inputKind=" + inputKind + ";orderIndex=" + Std.string(orderIndex) + ";callId=" + noneIfEmpty(callId)
+			+ ";responseKind=" + responseKind + ";hookActionKind=" + hookActionKind + ";inputRecorded=" + boolText(inputRecorded)
+			+ ";additionalContextRecorded=" + boolText(additionalContextRecorded) + ";additionalContextCount=" + Std.string(additionalContextCount)
 			+ ";text=" + text;
 	}
 

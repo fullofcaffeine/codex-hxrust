@@ -75,28 +75,15 @@ class ModelThreadSnapshotCollabMetadataReplayOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";replayKind=" + replayKind
-			+ ";decisionKind=" + decisionKind
-			+ ";navigationEntryCount=" + navigationEntryCount
-			+ ";reseededMetadataCount=" + reseededMetadataCount
-			+ ";replayedWaitItemCount=" + replayedWaitItemCount
-			+ ";namedWaitItemCount=" + namedWaitItemCount
-			+ ";replacementCreatedBeforeReplay=" + boolText(replacementCreatedBeforeReplay)
-			+ ";metadataReseededBeforeReplay=" + boolText(metadataReseededBeforeReplay)
-			+ ";agentNicknamePreserved=" + boolText(agentNicknamePreserved)
-			+ ";agentRolePreserved=" + boolText(agentRolePreserved)
-			+ ";waitItemRendered=" + boolText(waitItemRendered)
-			+ ";renderedWaitContainsMetadata=" + boolText(renderedWaitContainsMetadata)
-			+ ";fallbackThreadIdRendered=" + boolText(fallbackThreadIdRendered)
-			+ ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";renderedWaitSummary=" + renderedWaitSummary
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";replayKind=" + replayKind + ";decisionKind=" + decisionKind
+			+ ";navigationEntryCount=" + navigationEntryCount + ";reseededMetadataCount=" + reseededMetadataCount + ";replayedWaitItemCount="
+			+ replayedWaitItemCount + ";namedWaitItemCount=" + namedWaitItemCount + ";replacementCreatedBeforeReplay="
+			+ boolText(replacementCreatedBeforeReplay) + ";metadataReseededBeforeReplay=" + boolText(metadataReseededBeforeReplay)
+			+ ";agentNicknamePreserved=" + boolText(agentNicknamePreserved) + ";agentRolePreserved=" + boolText(agentRolePreserved) + ";waitItemRendered="
+			+ boolText(waitItemRendered) + ";renderedWaitContainsMetadata=" + boolText(renderedWaitContainsMetadata) + ";fallbackThreadIdRendered="
+			+ boolText(fallbackThreadIdRendered) + ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";renderedWaitSummary=" + renderedWaitSummary + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

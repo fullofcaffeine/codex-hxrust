@@ -18,17 +18,11 @@ class ThreadReadTokenUsageReplayNotification {
 	}
 
 	public function summary():String {
-		return "method=" + method()
-			+ ";threadId=" + threadId
-			+ ";turnId=" + turnId
-			+ ";" + tokenUsage.summary();
+		return "method=" + method() + ";threadId=" + threadId + ";turnId=" + turnId + ";" + tokenUsage.summary();
 	}
 
 	public function toJson():String {
-		return "{\"method\":" + JsonScalar.quote(method())
-			+ ",\"params\":{\"threadId\":" + JsonScalar.quote(threadId)
-			+ ",\"turnId\":" + JsonScalar.quote(turnId)
-			+ ",\"tokenUsage\":" + tokenUsage.toJson()
-			+ "}}";
+		return "{\"method\":" + JsonScalar.quote(method()) + ",\"params\":{\"threadId\":" + JsonScalar.quote(threadId) + ",\"turnId\":"
+			+ JsonScalar.quote(turnId) + ",\"tokenUsage\":" + tokenUsage.toJson() + "}}";
 	}
 }

@@ -57,21 +57,13 @@ class ModelSideBacktrackUnavailableMessageOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";backtrackPrimedAfter=" + boolText(backtrackPrimedAfter)
-			+ ";backtrackReset=" + boolText(backtrackReset)
-			+ ";errorHistoryCellInserted=" + boolText(errorHistoryCellInserted)
-			+ ";insertHistoryCellIntentRecorded=" + boolText(insertHistoryCellIntentRecorded)
-			+ ";snapshotNamePreserved=" + boolText(snapshotNamePreserved)
-			+ ";widthStableSnapshot=" + boolText(widthStableSnapshot)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";backtrackPrimedAfter="
+			+ boolText(backtrackPrimedAfter) + ";backtrackReset=" + boolText(backtrackReset) + ";errorHistoryCellInserted="
+			+ boolText(errorHistoryCellInserted) + ";insertHistoryCellIntentRecorded=" + boolText(insertHistoryCellIntentRecorded)
+			+ ";snapshotNamePreserved=" + boolText(snapshotNamePreserved) + ";widthStableSnapshot=" + boolText(widthStableSnapshot)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

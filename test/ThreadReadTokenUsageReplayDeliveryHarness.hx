@@ -35,7 +35,8 @@ class ThreadReadTokenUsageReplayDeliveryHarness {
 			assertEquals(stringField(expect, "connectionId", ""), outcome.connectionId);
 			assertEquals(boolText(boolField(expect, "broadcast", false)), boolText(outcome.broadcast));
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -44,24 +45,17 @@ class ThreadReadTokenUsageReplayDeliveryHarness {
 		final out:Array<ThreadReadTokenUsageReplayDeliveryRequest> = [];
 		for (value in values) {
 			final caseObject = objectValue(value);
-			out.push(new ThreadReadTokenUsageReplayDeliveryRequest(
-				cast stringField(caseObject, "operation", ""),
-				boolField(caseObject, "includeTurns", false),
-				boolField(caseObject, "responseReady", false),
-				stringField(caseObject, "connectionId", ""),
-				payload(stringField(caseObject, "payload", "valid"))
-			));
+			out.push(new ThreadReadTokenUsageReplayDeliveryRequest(cast stringField(caseObject, "operation", ""),
+				boolField(caseObject, "includeTurns", false), boolField(caseObject, "responseReady", false), stringField(caseObject, "connectionId", ""),
+				payload(stringField(caseObject, "payload", "valid"))));
 		}
 		return out;
 	}
 
 	static function payload(kind:String):ThreadReadTokenUsageReplayOutcome {
 		final usage = kind == "missing_usage" ? null : usageInfo();
-		final request = ThreadReadTokenUsageReplayRequest.fromRaw(
-			threadId(),
-			ThreadReadTokenUsageOwnerOutcome.selected("turn-owner", 0, ThreadReadTokenUsageOwnerReason.ExplicitOwner),
-			usage
-		);
+		final request = ThreadReadTokenUsageReplayRequest.fromRaw(threadId(),
+			ThreadReadTokenUsageOwnerOutcome.selected("turn-owner", 0, ThreadReadTokenUsageOwnerReason.ExplicitOwner), usage);
 		return ThreadReadTokenUsageReplayBuilder.build(request);
 	}
 
@@ -70,12 +64,8 @@ class ThreadReadTokenUsageReplayDeliveryHarness {
 	}
 
 	static function usageInfo():ThreadReadTokenUsageInfo {
-		return new ThreadReadTokenUsageInfo(
-			new ThreadReadTokenUsageBreakdown(150, 120, 20, 30, 10),
-			new ThreadReadTokenUsageBreakdown(90, 70, 15, 20, 5),
-			true,
-			200000
-		);
+		return new ThreadReadTokenUsageInfo(new ThreadReadTokenUsageBreakdown(150, 120, 20, 30, 10), new ThreadReadTokenUsageBreakdown(90, 70, 15, 20, 5),
+			true, 200000);
 	}
 
 	static function assertReport(root:Value, report:ThreadReadTokenUsageReplayDeliveryReport):Void {
@@ -139,7 +129,8 @@ class ThreadReadTokenUsageReplayDeliveryHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -156,7 +147,8 @@ class ThreadReadTokenUsageReplayDeliveryHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -165,10 +157,12 @@ class ThreadReadTokenUsageReplayDeliveryHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

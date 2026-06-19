@@ -6,7 +6,8 @@ class ModelKeymapEditorConflictPolicy {
 	static final MoveRightName = "move_right";
 
 	public static function apply(request:ModelKeymapEditorConflictRequest):ModelKeymapEditorConflictOutcome {
-		if (request == null) return failure("", "missing keymap editor conflict request");
+		if (request == null)
+			return failure("", "missing keymap editor conflict request");
 
 		final expectedBinding = character("h", true);
 		final moveLeftBindingPreserved = matches(request.configuredMoveLeft, expectedBinding);
@@ -17,14 +18,9 @@ class ModelKeymapEditorConflictPolicy {
 			&& request.expectedInnerActionName == MoveRightName;
 		final conflictRejectionPreserved = request.conflictRejected;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = moveLeftBindingPreserved
-			&& moveRightBindingPreserved
-			&& conflictActionNamesPreserved
-			&& conflictRejectionPreserved
+		final ok = moveLeftBindingPreserved && moveRightBindingPreserved && conflictActionNamesPreserved && conflictRejectionPreserved
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapEditorConflictDecisionKind.KeymapEditorConflictRejected
-			: ModelKeymapEditorConflictDecisionKind.KeymapEditorConflictMissed;
+		final decisionKind = ok ? ModelKeymapEditorConflictDecisionKind.KeymapEditorConflictRejected : ModelKeymapEditorConflictDecisionKind.KeymapEditorConflictMissed;
 
 		return new ModelKeymapEditorConflictOutcome({
 			ok: ok,

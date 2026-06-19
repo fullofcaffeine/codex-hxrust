@@ -17,10 +17,7 @@ class ResumePickerThreadReadRequest {
 	public final maxPreviewLines:Int;
 
 	public function summary():String {
-		return "id=" + requestId
-			+ ";thread=" + threadId
-			+ ";includeTurns=" + (includeTurns ? "true" : "false")
-			+ ";previewOnly=" + (previewOnly ? "true" : "false")
-			+ ";maxPreview=" + maxPreviewLines;
+		return "id=" + requestId + ";thread=" + threadId + ";includeTurns=" + (includeTurns ? "true" : "false") + ";previewOnly="
+			+ (previewOnly ? "true" : "false") + ";maxPreview=" + maxPreviewLines;
 	}
 }

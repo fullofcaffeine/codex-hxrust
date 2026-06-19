@@ -81,30 +81,54 @@ class ModelOverrideTurnContextSettingsUpdateOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";handled=" + boolText(handled)
-			+ ";threadSettingsUpdateSubmitted=" + boolText(threadSettingsUpdateSubmitted)
-			+ ";updateParamsCarriedRequestedSettings=" + boolText(updateParamsCarriedRequestedSettings)
-			+ ";cachedPrimarySessionUnchangedBeforeNotification=" + boolText(cachedPrimarySessionUnchangedBeforeNotification)
-			+ ";notificationReceived=" + boolText(notificationReceived)
-			+ ";notificationAppliedToCache=" + boolText(notificationAppliedToCache)
-			+ ";primarySessionModelPreserved=" + boolText(primarySessionModelPreserved)
-			+ ";primarySessionEffortPreserved=" + boolText(primarySessionEffortPreserved)
-			+ ";collaborationModeCached=" + boolText(collaborationModeCached)
-			+ ";collaborationSettingsRebasedToNotification=" + boolText(collaborationSettingsRebasedToNotification)
-			+ ";serviceTierCached=" + boolText(serviceTierCached)
-			+ ";approvalPolicyCached=" + boolText(approvalPolicyCached)
-			+ ";approvalsReviewerCached=" + boolText(approvalsReviewerCached)
-			+ ";activePermissionProfileSubmitted=" + boolText(activePermissionProfileSubmitted)
-			+ ";personalityCached=" + boolText(personalityCached)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code="
+			+ code
+			+ ";ok="
+			+ boolText(ok)
+			+ ";request="
+			+ requestId
+			+ ";decisionKind="
+			+ decisionKind
+			+ ";handled="
+			+ boolText(handled)
+			+ ";threadSettingsUpdateSubmitted="
+			+ boolText(threadSettingsUpdateSubmitted)
+			+ ";updateParamsCarriedRequestedSettings="
+			+ boolText(updateParamsCarriedRequestedSettings)
+			+ ";cachedPrimarySessionUnchangedBeforeNotification="
+			+ boolText(cachedPrimarySessionUnchangedBeforeNotification)
+			+ ";notificationReceived="
+			+ boolText(notificationReceived)
+			+ ";notificationAppliedToCache="
+			+ boolText(notificationAppliedToCache)
+			+ ";primarySessionModelPreserved="
+			+ boolText(primarySessionModelPreserved)
+			+ ";primarySessionEffortPreserved="
+			+ boolText(primarySessionEffortPreserved)
+			+ ";collaborationModeCached="
+			+ boolText(collaborationModeCached)
+			+ ";collaborationSettingsRebasedToNotification="
+			+ boolText(collaborationSettingsRebasedToNotification)
+			+ ";serviceTierCached="
+			+ boolText(serviceTierCached)
+			+ ";approvalPolicyCached="
+			+ boolText(approvalPolicyCached)
+			+ ";approvalsReviewerCached="
+			+ boolText(approvalsReviewerCached)
+			+ ";activePermissionProfileSubmitted="
+			+ boolText(activePermissionProfileSubmitted)
+			+ ";personalityCached="
+			+ boolText(personalityCached)
+			+ ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved)
+			+ ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture)
+			+ ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

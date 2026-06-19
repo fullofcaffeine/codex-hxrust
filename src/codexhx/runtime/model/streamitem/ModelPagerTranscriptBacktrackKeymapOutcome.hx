@@ -43,9 +43,7 @@ class ModelPagerTranscriptBacktrackKeymapOutcome {
 		this.ok = fields.ok;
 		this.code = fields.code == null ? "" : fields.code;
 		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.decisionKind = fields.decisionKind == null
-			? ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictMissed
-			: fields.decisionKind;
+		this.decisionKind = fields.decisionKind == null ? ModelPagerTranscriptBacktrackKeymapDecisionKind.PagerTranscriptBacktrackConflictMissed : fields.decisionKind;
 		this.pagerActionNamePreserved = fields.pagerActionNamePreserved;
 		this.pagerBindingPreserved = fields.pagerBindingPreserved;
 		this.transcriptBacktrackActionNamePreserved = fields.transcriptBacktrackActionNamePreserved;
@@ -62,23 +60,14 @@ class ModelPagerTranscriptBacktrackKeymapOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";pagerActionNamePreserved=" + boolText(pagerActionNamePreserved)
-			+ ";pagerBindingPreserved=" + boolText(pagerBindingPreserved)
-			+ ";transcriptBacktrackActionNamePreserved=" + boolText(transcriptBacktrackActionNamePreserved)
-			+ ";transcriptLeftBindingPreserved=" + boolText(transcriptLeftBindingPreserved)
-			+ ";reservedCollisionDetected=" + boolText(reservedCollisionDetected)
-			+ ";conflictRejected=" + boolText(conflictRejected)
-			+ ";fixedBacktrackOverlapStillAllowed=" + boolText(fixedBacktrackOverlapStillAllowed)
-			+ ";noFalseInterruptBacktrackConflict=" + boolText(noFalseInterruptBacktrackConflict)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";pagerActionNamePreserved="
+			+ boolText(pagerActionNamePreserved) + ";pagerBindingPreserved=" + boolText(pagerBindingPreserved) + ";transcriptBacktrackActionNamePreserved="
+			+ boolText(transcriptBacktrackActionNamePreserved) + ";transcriptLeftBindingPreserved=" + boolText(transcriptLeftBindingPreserved)
+			+ ";reservedCollisionDetected=" + boolText(reservedCollisionDetected) + ";conflictRejected=" + boolText(conflictRejected)
+			+ ";fixedBacktrackOverlapStillAllowed=" + boolText(fixedBacktrackOverlapStillAllowed) + ";noFalseInterruptBacktrackConflict="
+			+ boolText(noFalseInterruptBacktrackConflict) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

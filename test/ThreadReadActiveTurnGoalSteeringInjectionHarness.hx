@@ -45,24 +45,17 @@ class ThreadReadActiveTurnGoalSteeringInjectionHarness {
 		for (value in values) {
 			final caseObject = objectValue(value);
 			final host = objectField(caseObject, "host");
-			out.push(new ThreadReadActiveTurnGoalSteeringInjectionRequest(
-				steeringOutcome(objectField(caseObject, "steering")),
-				boolField(host, "threadManagerAvailable", false),
-				boolField(host, "liveThreadAvailable", false),
-				boolField(host, "activeTurnRunning", false)
-			));
+			out.push(new ThreadReadActiveTurnGoalSteeringInjectionRequest(steeringOutcome(objectField(caseObject, "steering")),
+				boolField(host, "threadManagerAvailable", false), boolField(host, "liveThreadAvailable", false), boolField(host, "activeTurnRunning", false)));
 		}
 		return out;
 	}
 
 	static function steeringOutcome(value:Value):ThreadReadGoalSteeringOutcome {
 		final kind:ThreadReadGoalSteeringItemKind = cast stringField(value, "kind", "");
-		return ThreadReadGoalSteeringBuilder.build(new ThreadReadGoalSteeringRequest(
-			kind,
-			goal(optionalStringField(value, "goalStatus"), stringField(value, "goalVariant", "")),
-			continuationOutcome(),
-			boolField(value, "objectiveChanged", false)
-		));
+		return ThreadReadGoalSteeringBuilder.build(new ThreadReadGoalSteeringRequest(kind,
+			goal(optionalStringField(value, "goalStatus"), stringField(value, "goalVariant", "")), continuationOutcome(),
+			boolField(value, "objectiveChanged", false)));
 	}
 
 	static function continuationOutcome():ThreadReadResumeIdleContinuationOutcome {
@@ -70,7 +63,8 @@ class ThreadReadActiveTurnGoalSteeringInjectionHarness {
 	}
 
 	static function goal(status:String, variant:String):ThreadGoal {
-		if (status.length == 0 || variant == "missing") return null;
+		if (status.length == 0 || variant == "missing")
+			return null;
 		if (variant == "budgeted_escaped") {
 			return new ThreadGoal(threadId(), "Ship <Codex> & keep quality", status, true, 5000, 1200, 300, 200000, 200100);
 		}
@@ -155,7 +149,8 @@ class ThreadReadActiveTurnGoalSteeringInjectionHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -172,7 +167,8 @@ class ThreadReadActiveTurnGoalSteeringInjectionHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -181,10 +177,12 @@ class ThreadReadActiveTurnGoalSteeringInjectionHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

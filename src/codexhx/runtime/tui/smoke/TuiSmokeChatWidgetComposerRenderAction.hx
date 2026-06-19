@@ -136,7 +136,6 @@ class TuiSmokeChatWidgetComposerRenderAction {
 	public final noLiveDispatch:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function areaText():String {
 		return width + "x" + height;
 	}

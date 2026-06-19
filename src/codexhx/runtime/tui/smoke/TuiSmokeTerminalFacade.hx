@@ -14,20 +14,24 @@ class TuiSmokeTerminalFacade {
 	}
 
 	public function setup(allowLiveTerminal:Bool):Bool {
-		if (mode != TuiSmokeTerminalMode.Headless) return false;
-		if (allowLiveTerminal) return false;
+		if (mode != TuiSmokeTerminalMode.Headless)
+			return false;
+		if (allowLiveTerminal)
+			return false;
 		setupComplete = true;
 		restored = false;
 		return true;
 	}
 
 	public function render(request:TuiSmokeFrameRequest):String {
-		if (!setupComplete) return "";
+		if (!setupComplete)
+			return "";
 		return TuiSmokeRenderer.renderFrame(request);
 	}
 
 	public function pollKey():TuiSmokeKeyKind {
-		if (keys.length == 0) return TuiSmokeKeyKind.None;
+		if (keys.length == 0)
+			return TuiSmokeKeyKind.None;
 		final key = keys[0];
 		keys.splice(0, 1);
 		return key;

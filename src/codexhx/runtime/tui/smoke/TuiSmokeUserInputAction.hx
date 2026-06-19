@@ -90,7 +90,6 @@ class TuiSmokeUserInputAction {
 	public final secretQuestionCount:Int;
 	public final failureCode:String;
 
-
 	public function queueTransitionText():String {
 		return queueBefore + "->" + queueAfter;
 	}

@@ -3,17 +3,17 @@ package codexhx.runtime.app.threadread;
 class ThreadReadGoalToolContributorVisibilityPolicy {
 	public static function buildCases(requests:Array<ThreadReadGoalToolContributorVisibilityRequest>):ThreadReadGoalToolContributorVisibilityReport {
 		final outcomes:Array<ThreadReadGoalToolContributorVisibilityOutcome> = [];
-		for (request in requests) outcomes.push(build(request));
+		for (request in requests)
+			outcomes.push(build(request));
 		return new ThreadReadGoalToolContributorVisibilityReport(outcomes);
 	}
 
 	public static function build(request:ThreadReadGoalToolContributorVisibilityRequest):ThreadReadGoalToolContributorVisibilityOutcome {
-		if (!request.runtimeAvailable) return ThreadReadGoalToolContributorVisibilityOutcome.runtimeMissing(request);
+		if (!request.runtimeAvailable)
+			return ThreadReadGoalToolContributorVisibilityOutcome.runtimeMissing(request);
 		if (!toolsVisible(request)) {
-			return ThreadReadGoalToolContributorVisibilityOutcome.toolsHidden(
-				request,
-				request.runtimeEnabled ? "tools_unavailable_for_thread" : "runtime_disabled_no_tools"
-			);
+			return ThreadReadGoalToolContributorVisibilityOutcome.toolsHidden(request,
+				request.runtimeEnabled ? "tools_unavailable_for_thread" : "runtime_disabled_no_tools");
 		}
 		return ThreadReadGoalToolContributorVisibilityOutcome.visible(request, visibleTools(request));
 	}
@@ -30,23 +30,9 @@ class ThreadReadGoalToolContributorVisibilityPolicy {
 		];
 	}
 
-	static function tool(
-		request:ThreadReadGoalToolContributorVisibilityRequest,
-		kind:ThreadReadGoalToolExecutorKind,
-		toolName:String,
-		orderIndex:Int
-	):ThreadReadGoalToolExecutorDescriptor {
-		return new ThreadReadGoalToolExecutorDescriptor(
-			kind,
-			"",
-			toolName,
-			request.threadId,
-			request.stateDbAvailable,
-			request.accountingStateAvailable,
-			request.analyticsAvailable,
-			request.eventEmitterAvailable,
-			request.metricsAvailable,
-			orderIndex
-		);
+	static function tool(request:ThreadReadGoalToolContributorVisibilityRequest, kind:ThreadReadGoalToolExecutorKind, toolName:String,
+			orderIndex:Int):ThreadReadGoalToolExecutorDescriptor {
+		return new ThreadReadGoalToolExecutorDescriptor(kind, "", toolName, request.threadId, request.stateDbAvailable, request.accountingStateAvailable,
+			request.analyticsAvailable, request.eventEmitterAvailable, request.metricsAvailable, orderIndex);
 	}
 }

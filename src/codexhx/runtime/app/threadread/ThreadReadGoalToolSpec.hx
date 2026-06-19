@@ -35,10 +35,7 @@ class ThreadReadGoalToolSpec {
 	}
 
 	public function summary():String {
-		return "toolName=" + toolName
-			+ ";strict=" + boolText(strict)
-			+ ";closedParameters=" + boolText(closedParameters)
-			+ ";required=" + requiredCsv()
+		return "toolName=" + toolName + ";strict=" + boolText(strict) + ";closedParameters=" + boolText(closedParameters) + ";required=" + requiredCsv()
 			+ ";statusEnum=" + statusEnumCsv();
 	}
 

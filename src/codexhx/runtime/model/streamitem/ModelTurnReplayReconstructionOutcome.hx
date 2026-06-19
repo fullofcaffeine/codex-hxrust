@@ -27,33 +27,12 @@ class ModelTurnReplayReconstructionOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		projectionRequestId:String,
-		replayKind:ModelTurnReplayKind,
-		targetKind:ModelTurnReplayTargetKind,
-		terminalTurnId:String,
-		reconstructedStatusKind:ModelTurnTerminalProjectedStatusKind,
-		currentTurnClosed:Bool,
-		currentTurnMarkedTerminal:Bool,
-		historicalTurnUpdated:Bool,
-		activeTurnPreserved:Bool,
-		fallbackAppliedToActive:Bool,
-		missingTerminalNoop:Bool,
-		failedStatusPreserved:Bool,
-		replayTurnCompletedNotificationSynthesized:Bool,
-		tuiReplayKindAttached:Bool,
-		tuiTaskStartedForInProgress:Bool,
-		resumeInitialStartSuppressed:Bool,
-		liveOnlyReplayEffectsSuppressed:Bool,
-		lastAgentMessageRemainsProjectionOnly:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, projectionRequestId:String, replayKind:ModelTurnReplayKind,
+			targetKind:ModelTurnReplayTargetKind, terminalTurnId:String, reconstructedStatusKind:ModelTurnTerminalProjectedStatusKind, currentTurnClosed:Bool,
+			currentTurnMarkedTerminal:Bool, historicalTurnUpdated:Bool, activeTurnPreserved:Bool, fallbackAppliedToActive:Bool, missingTerminalNoop:Bool,
+			failedStatusPreserved:Bool, replayTurnCompletedNotificationSynthesized:Bool, tuiReplayKindAttached:Bool, tuiTaskStartedForInProgress:Bool,
+			resumeInitialStartSuppressed:Bool, liveOnlyReplayEffectsSuppressed:Bool, lastAgentMessageRemainsProjectionOnly:Bool, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -82,31 +61,18 @@ class ModelTurnReplayReconstructionOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";projectionRequest=" + noneIfEmpty(projectionRequestId)
-			+ ";replayKind=" + replayKind
-			+ ";targetKind=" + targetKind
-			+ ";terminalTurn=" + noneIfEmpty(terminalTurnId)
-			+ ";reconstructedStatusKind=" + reconstructedStatusKind
-			+ ";currentTurnClosed=" + boolText(currentTurnClosed)
-			+ ";currentTurnMarkedTerminal=" + boolText(currentTurnMarkedTerminal)
-			+ ";historicalTurnUpdated=" + boolText(historicalTurnUpdated)
-			+ ";activeTurnPreserved=" + boolText(activeTurnPreserved)
-			+ ";fallbackAppliedToActive=" + boolText(fallbackAppliedToActive)
-			+ ";missingTerminalNoop=" + boolText(missingTerminalNoop)
-			+ ";failedStatusPreserved=" + boolText(failedStatusPreserved)
-			+ ";replayTurnCompletedNotificationSynthesized=" + boolText(replayTurnCompletedNotificationSynthesized)
-			+ ";tuiReplayKindAttached=" + boolText(tuiReplayKindAttached)
-			+ ";tuiTaskStartedForInProgress=" + boolText(tuiTaskStartedForInProgress)
-			+ ";resumeInitialStartSuppressed=" + boolText(resumeInitialStartSuppressed)
-			+ ";liveOnlyReplayEffectsSuppressed=" + boolText(liveOnlyReplayEffectsSuppressed)
-			+ ";lastAgentMessageRemainsProjectionOnly=" + boolText(lastAgentMessageRemainsProjectionOnly)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";projectionRequest=" + noneIfEmpty(projectionRequestId) + ";replayKind="
+			+ replayKind + ";targetKind=" + targetKind + ";terminalTurn=" + noneIfEmpty(terminalTurnId) + ";reconstructedStatusKind="
+			+ reconstructedStatusKind + ";currentTurnClosed=" + boolText(currentTurnClosed) + ";currentTurnMarkedTerminal="
+			+ boolText(currentTurnMarkedTerminal) + ";historicalTurnUpdated=" + boolText(historicalTurnUpdated) + ";activeTurnPreserved="
+			+ boolText(activeTurnPreserved) + ";fallbackAppliedToActive=" + boolText(fallbackAppliedToActive) + ";missingTerminalNoop="
+			+ boolText(missingTerminalNoop) + ";failedStatusPreserved=" + boolText(failedStatusPreserved) + ";replayTurnCompletedNotificationSynthesized="
+			+ boolText(replayTurnCompletedNotificationSynthesized) + ";tuiReplayKindAttached=" + boolText(tuiReplayKindAttached)
+			+ ";tuiTaskStartedForInProgress=" + boolText(tuiTaskStartedForInProgress) + ";resumeInitialStartSuppressed="
+			+ boolText(resumeInitialStartSuppressed) + ";liveOnlyReplayEffectsSuppressed=" + boolText(liveOnlyReplayEffectsSuppressed)
+			+ ";lastAgentMessageRemainsProjectionOnly=" + boolText(lastAgentMessageRemainsProjectionOnly) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

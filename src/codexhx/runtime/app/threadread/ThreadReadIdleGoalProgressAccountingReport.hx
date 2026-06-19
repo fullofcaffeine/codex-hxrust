@@ -12,7 +12,8 @@ class ThreadReadIdleGoalProgressAccountingReport {
 	public function updatedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.progressUpdated) count = count + 1;
+			if (outcome.progressUpdated)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadIdleGoalProgressAccountingReport {
 	public function unchangedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.code == "state_accounting_unchanged_idle_reset") count = count + 1;
+			if (outcome.code == "state_accounting_unchanged_idle_reset")
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadIdleGoalProgressAccountingReport {
 	public function missingSnapshotCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.code == "idle_progress_snapshot_missing") count = count + 1;
+			if (outcome.code == "idle_progress_snapshot_missing")
+				count = count + 1;
 		}
 		return count;
 	}
@@ -36,7 +39,8 @@ class ThreadReadIdleGoalProgressAccountingReport {
 	public function failureCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.ok) count = count + 1;
+			if (!outcome.ok)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -44,7 +48,8 @@ class ThreadReadIdleGoalProgressAccountingReport {
 	public function emittedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.threadGoalUpdatedEmitted) count = count + 1;
+			if (outcome.threadGoalUpdatedEmitted)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -52,7 +57,8 @@ class ThreadReadIdleGoalProgressAccountingReport {
 	public function activeGoalClearedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.activeGoalCleared) count = count + 1;
+			if (outcome.activeGoalCleared)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -60,7 +66,8 @@ class ThreadReadIdleGoalProgressAccountingReport {
 	public function idleBaselineResetCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.idleBaselineReset) count = count + 1;
+			if (outcome.idleBaselineReset)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -70,15 +77,9 @@ class ThreadReadIdleGoalProgressAccountingReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";updated=" + Std.string(updatedCount())
-			+ ";unchanged=" + Std.string(unchangedCount())
-			+ ";missingSnapshot=" + Std.string(missingSnapshotCount())
-			+ ";failed=" + Std.string(failureCount())
-			+ ";emitted=" + Std.string(emittedCount())
-			+ ";activeCleared=" + Std.string(activeGoalClearedCount())
-			+ ";idleBaselineReset=" + Std.string(idleBaselineResetCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";updated=" + Std.string(updatedCount()) + ";unchanged="
+			+ Std.string(unchangedCount()) + ";missingSnapshot=" + Std.string(missingSnapshotCount()) + ";failed=" + Std.string(failureCount()) + ";emitted="
+			+ Std.string(emittedCount()) + ";activeCleared=" + Std.string(activeGoalClearedCount()) + ";idleBaselineReset="
+			+ Std.string(idleBaselineResetCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

@@ -25,8 +25,10 @@ class ResumePickerNoResultsReloadRecoveryRenderHarness {
 		assertContains(report.finalSnapshot, "> Kernel tool calls | thread-kernel-tools | turns=13 | 2026-06-19T15:20:00Z | cwd=/workspace/codex-hxrust");
 		assertContains(report.finalSnapshot, "loader status=recovery_results_loaded detail=query=kernel;rows=2;previousEmpty=true");
 		assertContains(report.finalSnapshot, "footer recovered results 2/2 selected=1 selectedThread=thread-kernel-tools");
-		assertContains(report.summary(), "empty:query=zz-no-results;rows=0;filtered=0;selected=0;thread=;footer=no results;empty=No sessions match zz-no-results;loader=current_empty_results_loaded");
-		assertContains(report.summary(), "recovery:query=kernel;rows=2;filtered=2;selected=1;thread=thread-kernel-tools;footer=recovered results 2/2;empty=;loader=recovery_results_loaded");
+		assertContains(report.summary(),
+			"empty:query=zz-no-results;rows=0;filtered=0;selected=0;thread=;footer=no results;empty=No sessions match zz-no-results;loader=current_empty_results_loaded");
+		assertContains(report.summary(),
+			"recovery:query=kernel;rows=2;filtered=2;selected=1;thread=thread-kernel-tools;footer=recovered results 2/2;empty=;loader=recovery_results_loaded");
 		assertContains(report.summary(), "request=empty-page");
 		assertContains(report.summary(), "request=recovery-page");
 
@@ -34,14 +36,17 @@ class ResumePickerNoResultsReloadRecoveryRenderHarness {
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) < 0) throw "expected `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) < 0)
+			throw "expected `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertNotContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) >= 0) throw "did not expect `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) >= 0)
+			throw "did not expect `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String, label:String):Void {
-		if (expected != actual) throw label + " expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw label + " expected " + expected + " but got " + actual;
 	}
 }

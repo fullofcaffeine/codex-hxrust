@@ -6,12 +6,7 @@ class ThreadReadActiveTurnGoalSteeringInjectionRequest {
 	public final liveThreadAvailable:Bool;
 	public final activeTurnRunning:Bool;
 
-	public function new(
-		steeringOutcome:ThreadReadGoalSteeringOutcome,
-		threadManagerAvailable:Bool,
-		liveThreadAvailable:Bool,
-		activeTurnRunning:Bool
-	) {
+	public function new(steeringOutcome:ThreadReadGoalSteeringOutcome, threadManagerAvailable:Bool, liveThreadAvailable:Bool, activeTurnRunning:Bool) {
 		this.steeringOutcome = steeringOutcome;
 		this.threadManagerAvailable = threadManagerAvailable;
 		this.liveThreadAvailable = liveThreadAvailable;

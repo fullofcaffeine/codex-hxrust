@@ -22,7 +22,8 @@ class ThreadReadTurnProjectionHarness {
 			assertEquals(stringField(expect, "code", ""), outcome.code);
 			assertEquals(Std.string(intField(expect, "turnCount", 0)), Std.string(outcome.turns.length));
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -42,13 +43,8 @@ class ThreadReadTurnProjectionHarness {
 
 	static function rolloutItem(value:Value):RolloutSummaryItem {
 		final kind = stringField(value, "kind", "");
-		return new RolloutSummaryItem(
-			cast kind,
-			stringField(value, "turnId", ""),
-			stringField(value, "text", ""),
-			boolField(value, "affectsTurnStatus", false),
-			stringField(value, "status", "")
-		);
+		return new RolloutSummaryItem(cast kind, stringField(value, "turnId", ""), stringField(value, "text", ""),
+			boolField(value, "affectsTurnStatus", false), stringField(value, "status", ""));
 	}
 
 	static function assertReport(root:Value, report:ThreadReadTurnProjectionReport):Void {
@@ -111,7 +107,8 @@ class ThreadReadTurnProjectionHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -128,7 +125,8 @@ class ThreadReadTurnProjectionHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -137,10 +135,12 @@ class ThreadReadTurnProjectionHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

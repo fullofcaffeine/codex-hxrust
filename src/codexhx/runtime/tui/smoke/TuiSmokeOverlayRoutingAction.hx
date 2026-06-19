@@ -74,7 +74,6 @@ class TuiSmokeOverlayRoutingAction {
 	public final backtrackPreviewActiveAfter:Bool;
 	public final failureCode:String;
 
-
 	public function cellTransitionText():String {
 		return committedCellsBefore + "->" + committedCellsAfter;
 	}
@@ -92,7 +91,8 @@ class TuiSmokeOverlayRoutingAction {
 	}
 
 	public function renderedAreaText():String {
-		if (renderedWidth <= 0 || renderedHeight <= 0) return "none";
+		if (renderedWidth <= 0 || renderedHeight <= 0)
+			return "none";
 		return renderedWidth + "x" + renderedHeight;
 	}
 

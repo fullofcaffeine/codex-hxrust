@@ -32,7 +32,8 @@ class ResumePickerStaleReloadResponseRenderGate {
 		var activePageLoads = 0;
 		var stalePageRefusals = 0;
 
-		final activeEvent = loadPage(loader, pageRequest("active-sort-filter-page", "", "kernel", ResumePickerSortKey.CreatedAt, ResumePickerFilterMode.All, true));
+		final activeEvent = loadPage(loader,
+			pageRequest("active-sort-filter-page", "", "kernel", ResumePickerSortKey.CreatedAt, ResumePickerFilterMode.All, true));
 		eventSummaries.push(activeEvent.summary());
 		if (activeEvent.kind == ResumePickerHostEventKind.PageLoaded) {
 			activePageLoads = activePageLoads + 1;
@@ -53,7 +54,8 @@ class ResumePickerStaleReloadResponseRenderGate {
 		scheduler.requestFrame("stale-query-refused");
 		renderer.render(state);
 
-		final staleSortEvent = loadPage(loader, pageRequest("stale-sort-page", "old-cursor", "kernel", ResumePickerSortKey.UpdatedAt, ResumePickerFilterMode.Cwd, false));
+		final staleSortEvent = loadPage(loader,
+			pageRequest("stale-sort-page", "old-cursor", "kernel", ResumePickerSortKey.UpdatedAt, ResumePickerFilterMode.Cwd, false));
 		eventSummaries.push(staleSortEvent.summary());
 		if (staleSortEvent.kind == ResumePickerHostEventKind.PageLoaded) {
 			stalePageRefusals = stalePageRefusals + 1;
@@ -121,15 +123,9 @@ class ResumePickerStaleReloadResponseRenderGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query
-			+ ";sort=" + state.sortKey
-			+ ";filter=" + state.filterMode
-			+ ";selected=" + state.selectedIndex
-			+ ";thread=" + state.selectedThreadId
-			+ ";next=" + state.nextCursor
-			+ ";rows=" + state.loadedRows
-			+ ";footer=" + state.footerProgressLabel
-			+ ";loader=" + state.loaderEventStatus;
+		return "query=" + state.query + ";sort=" + state.sortKey + ";filter=" + state.filterMode + ";selected=" + state.selectedIndex + ";thread="
+			+ state.selectedThreadId + ";next=" + state.nextCursor + ";rows=" + state.loadedRows + ";footer=" + state.footerProgressLabel + ";loader="
+			+ state.loaderEventStatus;
 	}
 
 	static function loadPage(loader:DeterministicResumePickerBackgroundLoader, request:ResumePickerThreadListRequest):ResumePickerHostEvent {
@@ -137,14 +133,8 @@ class ResumePickerStaleReloadResponseRenderGate {
 		return expectEvent(loader.pollEvent(AsyncContext.fixture(request.requestId)));
 	}
 
-	static function pageRequest(
-		requestId:String,
-		cursor:String,
-		query:String,
-		sortKey:ResumePickerSortKey,
-		filterMode:ResumePickerFilterMode,
-		showAll:Bool
-	):ResumePickerThreadListRequest {
+	static function pageRequest(requestId:String, cursor:String, query:String, sortKey:ResumePickerSortKey, filterMode:ResumePickerFilterMode,
+			showAll:Bool):ResumePickerThreadListRequest {
 		return new ResumePickerThreadListRequest({
 			requestId: requestId,
 			cursor: cursor,
@@ -175,7 +165,9 @@ class ResumePickerStaleReloadResponseRenderGate {
 		}));
 		source.addPage(new ResumePickerThreadListResponse({
 			requestId: "stale-query-page",
-			rows: [row("thread-host", "Stale host result", "/workspace/codex-hxrust", "2026-06-19T14:05:00Z", 5)],
+			rows: [
+				row("thread-host", "Stale host result", "/workspace/codex-hxrust", "2026-06-19T14:05:00Z", 5)
+			],
 			nextCursor: "stale-query-cursor",
 			scannedRows: 1,
 			acceptedRows: 1,

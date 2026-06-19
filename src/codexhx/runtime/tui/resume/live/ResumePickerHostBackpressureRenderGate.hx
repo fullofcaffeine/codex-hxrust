@@ -71,7 +71,8 @@ class ResumePickerHostBackpressureRenderGate {
 		pollSummaries.push("page-2-recovered:" + recoveredPageSummary);
 		final pageTwoEvent = expectEvent(loader.pollEvent(AsyncContext.fixture("page-2")));
 		eventSummaries.push(pageTwoEvent.summary());
-		final recoverySucceeded = recoveredPageSummary.indexOf("kind=ready") >= 0 && pageTwoEvent.kind == ResumePickerHostEventKind.PageLoaded;
+		final recoverySucceeded = recoveredPageSummary.indexOf("kind=ready") >= 0
+			&& pageTwoEvent.kind == ResumePickerHostEventKind.PageLoaded;
 		if (recoverySucceeded) {
 			applyPageTwo(state);
 		}
@@ -115,7 +116,10 @@ class ResumePickerHostBackpressureRenderGate {
 		state.filteredRows = 2;
 		state.selectedIndex = 0;
 		state.selectedThreadId = "thread-a";
-		state.visibleRows = [visibleRow("thread-a", "Resume kernel", 3, true), visibleRow("thread-b", "Host facade", 5, false)];
+		state.visibleRows = [
+			visibleRow("thread-a", "Resume kernel", 3, true),
+			visibleRow("thread-b", "Host facade", 5, false)
+		];
 		state.nextCursor = "cursor-2";
 		state.nextCursorPresent = true;
 		state.moreBelow = true;

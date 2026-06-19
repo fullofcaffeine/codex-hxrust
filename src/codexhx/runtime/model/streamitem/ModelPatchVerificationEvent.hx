@@ -11,17 +11,8 @@ class ModelPatchVerificationEvent {
 	public final stdout:String;
 	public final stderr:String;
 
-	public function new(
-		kind:ModelPatchVerificationEventKind,
-		callId:String,
-		turnId:String,
-		autoApproved:Bool,
-		status:ModelPatchApplyStatus,
-		success:Bool,
-		changes:Array<ModelPatchFileChange>,
-		stdout:String,
-		stderr:String
-	) {
+	public function new(kind:ModelPatchVerificationEventKind, callId:String, turnId:String, autoApproved:Bool, status:ModelPatchApplyStatus, success:Bool,
+			changes:Array<ModelPatchFileChange>, stdout:String, stderr:String) {
 		this.kind = kind;
 		this.callId = callId == null ? "" : callId;
 		this.turnId = turnId == null ? "" : turnId;
@@ -35,16 +26,10 @@ class ModelPatchVerificationEvent {
 
 	public function summary():String {
 		final parts:Array<String> = [];
-		for (change in changes) parts.push(change.summary());
-		return "event=" + kind
-			+ ";callId=" + noneIfEmpty(callId)
-			+ ";turnId=" + noneIfEmpty(turnId)
-			+ ";autoApproved=" + boolText(autoApproved)
-			+ ";status=" + status
-			+ ";success=" + boolText(success)
-			+ ";stdout=" + stdout
-			+ ";stderr=" + stderr
-			+ ";changes=[" + parts.join("||") + "]";
+		for (change in changes)
+			parts.push(change.summary());
+		return "event=" + kind + ";callId=" + noneIfEmpty(callId) + ";turnId=" + noneIfEmpty(turnId) + ";autoApproved=" + boolText(autoApproved)
+			+ ";status=" + status + ";success=" + boolText(success) + ";stdout=" + stdout + ";stderr=" + stderr + ";changes=[" + parts.join("||") + "]";
 	}
 
 	static function boolText(value:Bool):String {

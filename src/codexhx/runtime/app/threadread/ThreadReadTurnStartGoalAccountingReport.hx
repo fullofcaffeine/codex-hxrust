@@ -12,7 +12,8 @@ class ThreadReadTurnStartGoalAccountingReport {
 	public function markedActiveCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.storedGoalMarkedActive) count = count + 1;
+			if (outcome.storedGoalMarkedActive)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadTurnStartGoalAccountingReport {
 	public function skippedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.storedGoalMarkedActive) count = count + 1;
+			if (!outcome.storedGoalMarkedActive)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadTurnStartGoalAccountingReport {
 	public function startTurnCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.startTurnCalled) count = count + 1;
+			if (outcome.startTurnCalled)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -36,7 +39,8 @@ class ThreadReadTurnStartGoalAccountingReport {
 	public function planClearedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.clearCurrentTurnGoalCalled) count = count + 1;
+			if (outcome.clearCurrentTurnGoalCalled)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -44,7 +48,8 @@ class ThreadReadTurnStartGoalAccountingReport {
 	public function stateLookupErrorCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.stateLookupError) count = count + 1;
+			if (outcome.stateLookupError)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -54,13 +59,8 @@ class ThreadReadTurnStartGoalAccountingReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";markedActive=" + Std.string(markedActiveCount())
-			+ ";skipped=" + Std.string(skippedCount())
-			+ ";startTurn=" + Std.string(startTurnCount())
-			+ ";planCleared=" + Std.string(planClearedCount())
-			+ ";stateLookupErrors=" + Std.string(stateLookupErrorCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";markedActive=" + Std.string(markedActiveCount()) + ";skipped="
+			+ Std.string(skippedCount()) + ";startTurn=" + Std.string(startTurnCount()) + ";planCleared=" + Std.string(planClearedCount())
+			+ ";stateLookupErrors=" + Std.string(stateLookupErrorCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

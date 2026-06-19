@@ -10,16 +10,8 @@ class ModelSamplingStreamEventHandoffRequest {
 	public final turnDiffPending:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		attemptOutcome:ModelSamplingStreamAttemptOutcome,
-		reducerOutcome:ModelStreamItemReducerOutcome,
-		streamClosedBeforeCompleted:Bool,
-		inFlightToolCount:Int,
-		tokenCountPending:Bool,
-		turnDiffPending:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, attemptOutcome:ModelSamplingStreamAttemptOutcome, reducerOutcome:ModelStreamItemReducerOutcome,
+			streamClosedBeforeCompleted:Bool, inFlightToolCount:Int, tokenCountPending:Bool, turnDiffPending:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.attemptOutcome = attemptOutcome;
 		this.reducerOutcome = reducerOutcome;

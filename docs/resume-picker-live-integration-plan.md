@@ -36,6 +36,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-reload-transcript-overlay-invalidation-render.sh` validates normalized reload transcript overlay invalidation evidence, including loaded overlay carry-forward for the same selected/pending thread and overlay/pending transcript clearing when a reload selects a different thread.
 - `harness/check-resume-picker-reload-failure-preservation-render.sh` validates normalized reload failure preservation evidence, including previous row/selection/query preservation, visible loader/error/footer state, and later successful recovery.
 - `harness/check-resume-picker-live-app-server-boundary-render.sh` validates normalized live app-server boundary evidence, including typed `thread/list` request provenance, bounded loader backpressure, app-server failure mapping, and credential/model/state-DB-free recovery rendering.
+- `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh` validates normalized JSON-RPC `thread/list` transport evidence, including request method/params/request-id preservation, fixture response decoding, JSON-RPC error mapping, recovery rendering, and credential/model/state-DB-free execution.
 
 ## Upstream Anchors
 
@@ -168,6 +169,8 @@ Status: reload failure preservation now has generated-Rust normalized evidence i
 
 Status: live app-server boundary evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-live-app-server-boundary-render.sh`. The gate routes `thread/list` requests through the typed host facade and in-memory app-server source, records request id/cursor/query/sort/filter/cwd/show-all/include-non-interactive provenance, proves bounded lossless backpressure accounting, maps a source failure into a visible app-server thread-list failure state, and renders later recovery. This is still credential-free deterministic boundary evidence, not live JSON-RPC transport, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, Tokio task ownership, or Cafex behavior.
 
+Status: JSON-RPC `thread/list` transport evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh`. The gate routes resume picker page requests through a fixture-backed JSON-RPC `thread/list` source, preserves public method/params/request-id shape, decodes deterministic result rows, maps JSON-RPC errors into visible loader/error state, drains transport event summaries, and renders later recovery. This is still credential-free deterministic transport evidence, not live socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -222,6 +225,7 @@ Near-term gates:
 - `harness/check-resume-picker-reload-transcript-overlay-invalidation-render.sh` for normalized current reload transcript overlay preservation/invalidation snapshots and overlay/pending-state clearing summaries.
 - `harness/check-resume-picker-reload-failure-preservation-render.sh` for normalized current reload failure preservation and later recovery snapshots.
 - `harness/check-resume-picker-live-app-server-boundary-render.sh` for normalized typed app-server `thread/list` request-boundary provenance, lossless backpressure, source-failure mapping, and recovery snapshots.
+- `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh` for normalized JSON-RPC `thread/list` transport provenance, fixture result decoding, JSON-RPC error mapping, transport events, and recovery snapshots.
 
 Exit criteria for "first live resume picker slice":
 

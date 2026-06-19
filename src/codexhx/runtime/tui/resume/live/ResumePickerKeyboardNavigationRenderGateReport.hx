@@ -15,8 +15,6 @@ class ResumePickerKeyboardNavigationRenderGateReport {
 	public final renderSnapshots:Array<String>;
 
 	public function summary():String {
-		return "frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n");
+		return "frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n");
 	}
 }

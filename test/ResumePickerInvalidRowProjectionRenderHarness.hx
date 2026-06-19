@@ -15,7 +15,8 @@ class ResumePickerInvalidRowProjectionRenderHarness {
 		assertContains(snapshots[0], "empty: Loading saved chats...");
 		assertContains(report.finalSnapshot, "rows loaded=3 filtered=3 scanned=5 accepted=3 invalid=2");
 		assertContains(report.finalSnapshot, "  Named thread | thread-named | turns=4 | 2026-06-19T12:00:00Z | cwd=/workspace/codex-hxrust");
-		assertContains(report.finalSnapshot, "> assistant: trimmed preview | thread-preview | turns=7 | 2026-06-19T12:10:00Z | cwd=/workspace/codex-hxrust/crates/codex");
+		assertContains(report.finalSnapshot,
+			"> assistant: trimmed preview | thread-preview | turns=7 | 2026-06-19T12:10:00Z | cwd=/workspace/codex-hxrust/crates/codex");
 		assertContains(report.finalSnapshot, "  (no message yet) | thread-empty | turns=0 | 2026-06-19T12:20:00Z | cwd=/tmp/empty-session");
 		assertContains(report.finalSnapshot, "    preview: assistant: trimmed preview");
 		assertContains(report.finalSnapshot, "    preview: (no message yet)");
@@ -28,10 +29,12 @@ class ResumePickerInvalidRowProjectionRenderHarness {
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) < 0) throw "expected `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) < 0)
+			throw "expected `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String, label:String):Void {
-		if (expected != actual) throw label + " expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw label + " expected " + expected + " but got " + actual;
 	}
 }

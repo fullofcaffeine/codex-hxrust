@@ -39,9 +39,12 @@ class StateSqliteOperationOutcome {
 
 	public function summary():String {
 		return operation
-			+ ":" + code
-			+ ";ok=" + (ok ? "true" : "false")
-			+ ";rows=" + Std.string(rowCount)
+			+ ":"
+			+ code
+			+ ";ok="
+			+ (ok ? "true" : "false")
+			+ ";rows="
+			+ Std.string(rowCount)
 			+ (row == null ? "" : ";" + row.summary());
 	}
 }

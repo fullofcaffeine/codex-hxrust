@@ -10,7 +10,8 @@ class ModelKeymapListConflictPolicy {
 	static final JumpTopName = "jump_top";
 
 	public static function apply(request:ModelKeymapListConflictRequest):ModelKeymapListConflictOutcome {
-		if (request == null) return failure("", "missing keymap list conflict request");
+		if (request == null)
+			return failure("", "missing keymap list conflict request");
 
 		final conflictKind = conflictKind(request);
 		final expectedBinding = expectedBindingFor(conflictKind);
@@ -19,14 +20,8 @@ class ModelKeymapListConflictPolicy {
 		final conflictActionNamesPreserved = conflictKind != ModelKeymapListConflictKind.Unknown;
 		final conflictRejectionPreserved = request.conflictRejected;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = outerBindingPreserved
-			&& innerBindingPreserved
-			&& conflictActionNamesPreserved
-			&& conflictRejectionPreserved
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapListConflictDecisionKind.KeymapListConflictRejected
-			: ModelKeymapListConflictDecisionKind.KeymapListConflictMissed;
+		final ok = outerBindingPreserved && innerBindingPreserved && conflictActionNamesPreserved && conflictRejectionPreserved && eventOrderingPreserved;
+		final decisionKind = ok ? ModelKeymapListConflictDecisionKind.KeymapListConflictRejected : ModelKeymapListConflictDecisionKind.KeymapListConflictMissed;
 
 		return new ModelKeymapListConflictOutcome({
 			ok: ok,

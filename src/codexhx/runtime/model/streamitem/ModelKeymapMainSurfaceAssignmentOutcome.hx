@@ -48,19 +48,11 @@ class ModelKeymapMainSurfaceAssignmentOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";actionKindPreserved=" + boolText(actionKindPreserved)
-			+ ";defaultBindingEmptyPreserved=" + boolText(defaultBindingEmptyPreserved)
-			+ ";configuredBindingPreserved=" + boolText(configuredBindingPreserved)
-			+ ";runtimeBindingPreserved=" + boolText(runtimeBindingPreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";actionKindPreserved="
+			+ boolText(actionKindPreserved) + ";defaultBindingEmptyPreserved=" + boolText(defaultBindingEmptyPreserved) + ";configuredBindingPreserved="
+			+ boolText(configuredBindingPreserved) + ";runtimeBindingPreserved=" + boolText(runtimeBindingPreserved) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

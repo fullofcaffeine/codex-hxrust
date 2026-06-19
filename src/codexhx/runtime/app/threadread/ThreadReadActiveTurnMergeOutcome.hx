@@ -28,10 +28,7 @@ class ThreadReadActiveTurnMergeOutcome {
 		for (turn in turns) {
 			parts.push(turn.summary());
 		}
-		return "merge:" + code
-			+ ";ok=" + (ok ? "true" : "false")
-			+ ";threadStatus=" + threadStatus
-			+ ";turns=" + Std.string(turns.length)
-			+ ";[" + parts.join("||") + "]";
+		return "merge:" + code + ";ok=" + (ok ? "true" : "false") + ";threadStatus=" + threadStatus + ";turns=" + Std.string(turns.length) + ";["
+			+ parts.join("||") + "]";
 	}
 }

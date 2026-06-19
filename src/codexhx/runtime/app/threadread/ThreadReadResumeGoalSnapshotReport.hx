@@ -12,7 +12,8 @@ class ThreadReadResumeGoalSnapshotReport {
 	public function snapshotCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.snapshotDelivered) count = count + 1;
+			if (outcome.snapshotDelivered)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadResumeGoalSnapshotReport {
 	public function updatedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.goalUpdated) count = count + 1;
+			if (outcome.goalUpdated)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadResumeGoalSnapshotReport {
 	public function clearedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.goalCleared) count = count + 1;
+			if (outcome.goalCleared)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -36,7 +39,8 @@ class ThreadReadResumeGoalSnapshotReport {
 	public function skippedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.skipped) count = count + 1;
+			if (outcome.skipped)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -44,7 +48,8 @@ class ThreadReadResumeGoalSnapshotReport {
 	public function failureCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.ok) count = count + 1;
+			if (!outcome.ok)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -54,13 +59,8 @@ class ThreadReadResumeGoalSnapshotReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";snapshots=" + Std.string(snapshotCount())
-			+ ";updated=" + Std.string(updatedCount())
-			+ ";cleared=" + Std.string(clearedCount())
-			+ ";skipped=" + Std.string(skippedCount())
-			+ ";failed=" + Std.string(failureCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";snapshots=" + Std.string(snapshotCount()) + ";updated="
+			+ Std.string(updatedCount()) + ";cleared=" + Std.string(clearedCount()) + ";skipped=" + Std.string(skippedCount()) + ";failed="
+			+ Std.string(failureCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

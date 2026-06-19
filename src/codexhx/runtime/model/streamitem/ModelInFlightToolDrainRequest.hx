@@ -9,15 +9,8 @@ class ModelInFlightToolDrainRequest {
 	public final turnDiffPending:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		handoffOutcome:ModelSamplingStreamEventHandoffOutcome,
-		responseInputOutcome:ModelPatchToolResponseInputOutcome,
-		items:Array<ModelInFlightToolDrainItem>,
-		tokenCountPending:Bool,
-		turnDiffPending:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, handoffOutcome:ModelSamplingStreamEventHandoffOutcome, responseInputOutcome:ModelPatchToolResponseInputOutcome,
+			items:Array<ModelInFlightToolDrainItem>, tokenCountPending:Bool, turnDiffPending:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.handoffOutcome = handoffOutcome;
 		this.responseInputOutcome = responseInputOutcome;

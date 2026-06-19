@@ -6,12 +6,7 @@ class ModelPatchToolResponseInputRequest {
 	public final previousResponseCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		followUpOutcome:ModelPatchToolFollowUpOutcome,
-		previousResponseCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, followUpOutcome:ModelPatchToolFollowUpOutcome, previousResponseCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.followUpOutcome = followUpOutcome;
 		this.previousResponseCount = previousResponseCount;

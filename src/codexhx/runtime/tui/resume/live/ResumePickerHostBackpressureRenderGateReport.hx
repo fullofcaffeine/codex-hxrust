@@ -29,15 +29,9 @@ class ResumePickerHostBackpressureRenderGateReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "bestEffortDropped=" + (bestEffortDropped ? "true" : "false")
-			+ ";losslessBackpressured=" + (losslessBackpressured ? "true" : "false")
-			+ ";recoverySucceeded=" + (recoverySucceeded ? "true" : "false")
-			+ ";skipped=" + skippedEvents
-			+ ";pending=" + pendingEvents
-			+ ";frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";polls=[" + pollSummaries.join("##") + "]"
-			+ ";events=[" + eventSummaries.join("##") + "]";
+		return "bestEffortDropped=" + (bestEffortDropped ? "true" : "false") + ";losslessBackpressured=" + (losslessBackpressured ? "true" : "false")
+			+ ";recoverySucceeded=" + (recoverySucceeded ? "true" : "false") + ";skipped=" + skippedEvents + ";pending=" + pendingEvents + ";frames="
+			+ frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";polls=[" + pollSummaries.join("##")
+			+ "]" + ";events=[" + eventSummaries.join("##") + "]";
 	}
 }

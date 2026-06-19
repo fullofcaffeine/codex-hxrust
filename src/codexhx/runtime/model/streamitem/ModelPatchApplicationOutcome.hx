@@ -14,20 +14,9 @@ class ModelPatchApplicationOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		status:ModelPatchApplyStatus,
-		stdout:String,
-		stderr:String,
-		beforeFiles:Array<ModelPatchVirtualFile>,
-		afterFiles:Array<ModelPatchVirtualFile>,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, status:ModelPatchApplyStatus, stdout:String, stderr:String,
+			beforeFiles:Array<ModelPatchVirtualFile>, afterFiles:Array<ModelPatchVirtualFile>, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -43,23 +32,16 @@ class ModelPatchApplicationOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";status=" + status
-			+ ";stdout=" + stdout
-			+ ";stderr=" + stderr
-			+ ";before=[" + fileSummaries(beforeFiles) + "]"
-			+ ";after=[" + fileSummaries(afterFiles) + "]"
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";status=" + status + ";stdout=" + stdout + ";stderr=" + stderr
+			+ ";before=[" + fileSummaries(beforeFiles) + "]" + ";after=[" + fileSummaries(afterFiles) + "]" + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function fileSummaries(files:Array<ModelPatchVirtualFile>):String {
 		final parts:Array<String> = [];
-		for (file in files) parts.push("path=" + file.path + ";content=" + file.content);
+		for (file in files)
+			parts.push("path=" + file.path + ";content=" + file.content);
 		return parts.join("||");
 	}
 

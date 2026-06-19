@@ -5,16 +5,15 @@ class ModelKeymapInvalidGlobalCopyPolicy {
 	static final ExpectedErrorPath = "tui.keymap.global.copy";
 
 	public static function apply(request:ModelKeymapInvalidGlobalCopyRequest):ModelKeymapInvalidGlobalCopyOutcome {
-		if (request == null) return failure("", "missing keymap invalid global copy request");
+		if (request == null)
+			return failure("", "missing keymap invalid global copy request");
 
 		final invalidBindingPreserved = matches(request.configuredGlobalCopy, character("o", false, true, false));
 		final errorPathPreserved = request.expectedErrorPath == ExpectedErrorPath;
 		final parseFailurePreserved = request.parseFailed;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = invalidBindingPreserved && errorPathPreserved && parseFailurePreserved && eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathPreserved
-			: ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathRejected;
+		final decisionKind = ok ? ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathPreserved : ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathRejected;
 
 		return new ModelKeymapInvalidGlobalCopyOutcome({
 			ok: ok,

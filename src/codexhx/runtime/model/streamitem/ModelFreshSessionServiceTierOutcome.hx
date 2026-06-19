@@ -54,21 +54,13 @@ class ModelFreshSessionServiceTierOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";baseConfigServiceTier=" + noneIfEmpty(baseConfigServiceTier)
-			+ ";configuredServiceTier=" + noneIfEmpty(configuredServiceTier)
-			+ ";freshConfigServiceTier=" + noneIfEmpty(freshConfigServiceTier)
-			+ ";serviceTierOverrodeBaseConfig=" + boolText(serviceTierOverrodeBaseConfig)
-			+ ";serviceTierClearedFromBaseConfig=" + boolText(serviceTierClearedFromBaseConfig)
-			+ ";baseConfigOtherwisePreserved=" + boolText(baseConfigOtherwisePreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";baseConfigServiceTier="
+			+ noneIfEmpty(baseConfigServiceTier) + ";configuredServiceTier=" + noneIfEmpty(configuredServiceTier) + ";freshConfigServiceTier="
+			+ noneIfEmpty(freshConfigServiceTier) + ";serviceTierOverrodeBaseConfig=" + boolText(serviceTierOverrodeBaseConfig)
+			+ ";serviceTierClearedFromBaseConfig=" + boolText(serviceTierClearedFromBaseConfig) + ";baseConfigOtherwisePreserved="
+			+ boolText(baseConfigOtherwisePreserved) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -11,13 +11,7 @@ enum abstract RolloutSummaryItemKind(String) from String to String {
 	var Compacted = "compacted";
 
 	public static function isValid(value:String):Bool {
-		return value == TurnStarted
-			|| value == UserMessage
-			|| value == AgentMessage
-			|| value == CommandExecution
-			|| value == TurnComplete
-			|| value == TurnAborted
-			|| value == Error
-			|| value == Compacted;
+		return value == TurnStarted || value == UserMessage || value == AgentMessage || value == CommandExecution || value == TurnComplete
+			|| value == TurnAborted || value == Error || value == Compacted;
 	}
 }

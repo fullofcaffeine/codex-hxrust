@@ -45,7 +45,8 @@ class TurnModelPlanHarness {
 			assertEquals(stringField(expect, "requestedCapability", ""), outcome.requestedCapability);
 			assertEquals(boolText(boolField(expect, "capabilityEnabled", false)), boolText(outcome.capabilityEnabled));
 			assertContains(outcome.summary(), stringField(expect, "summaryContains", ""));
-			if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+			if (secretProbe.length > 0)
+				assertNotContains(outcome.summary(), secretProbe);
 			i = i + 1;
 		}
 	}
@@ -54,114 +55,62 @@ class TurnModelPlanHarness {
 		final out:Array<TurnModelPlanRequest> = [];
 		for (value in values) {
 			final request = objectField(objectValue(value), "request");
-			out.push(new TurnModelPlanRequest(
-				stringField(request, "requestId", ""),
-				catalogRequest(objectField(request, "catalogRequest")),
-				featureFlags(objectField(request, "features")),
-				extensionToolState(objectField(request, "extensionTools")),
-				webSearchMode(stringField(request, "webSearchMode", "")),
-				toolCapabilityKind(stringField(request, "requestedCapability", ""))
-			));
+			out.push(new TurnModelPlanRequest(stringField(request, "requestId", ""), catalogRequest(objectField(request, "catalogRequest")),
+				featureFlags(objectField(request, "features")), extensionToolState(objectField(request, "extensionTools")),
+				webSearchMode(stringField(request, "webSearchMode", "")), toolCapabilityKind(stringField(request, "requestedCapability", ""))));
 		}
 		return out;
 	}
 
 	static function catalogRequest(request:Value):ModelCatalogRequest {
-		return new ModelCatalogRequest(
-			stringField(request, "requestId", ""),
-			admissionRequest(objectField(request, "admission")),
-			stringField(request, "catalogSource", ""),
-			refreshStrategy(stringField(request, "refreshStrategy", "")),
-			boolField(request, "includeHidden", false),
-			boolField(request, "allowLiveFetch", false),
-			boolField(request, "usesCodexBackend", false),
-			stringField(request, "requestedModelId", ""),
-			catalog(arrayField(request, "catalog"))
-		);
+		return new ModelCatalogRequest(stringField(request, "requestId", ""), admissionRequest(objectField(request, "admission")),
+			stringField(request, "catalogSource", ""), refreshStrategy(stringField(request, "refreshStrategy", "")),
+			boolField(request, "includeHidden", false), boolField(request, "allowLiveFetch", false), boolField(request, "usesCodexBackend", false),
+			stringField(request, "requestedModelId", ""), catalog(arrayField(request, "catalog")));
 	}
 
 	static function admissionRequest(request:Value):ProviderAdmissionRequest {
-		return new ProviderAdmissionRequest(
-			stringField(request, "requestId", ""),
-			providerValue(objectField(request, "provider")),
-			modelValue(objectField(request, "model")),
-			credentialKind(stringField(request, "credentialKind", "")),
-			accountKind(stringField(request, "accountKind", "")),
-			networkKind(stringField(request, "networkKind", "")),
-			boolField(request, "liveNetworkAllowed", false),
-			boolField(request, "hasCredentialMaterial", false),
-			stringField(request, "secretProbe", "")
-		);
+		return new ProviderAdmissionRequest(stringField(request, "requestId", ""), providerValue(objectField(request, "provider")),
+			modelValue(objectField(request, "model")), credentialKind(stringField(request, "credentialKind", "")),
+			accountKind(stringField(request, "accountKind", "")), networkKind(stringField(request, "networkKind", "")),
+			boolField(request, "liveNetworkAllowed", false), boolField(request, "hasCredentialMaterial", false), stringField(request, "secretProbe", ""));
 	}
 
 	static function providerValue(value:Value):ProviderAdmissionProvider {
-		return new ProviderAdmissionProvider(
-			stringField(value, "providerId", ""),
-			stringField(value, "name", ""),
-			boolField(value, "hasBaseUrl", false),
-			stringField(value, "baseUrl", ""),
-			boolField(value, "envKeyConfigured", false),
-			boolField(value, "envKeyPresent", false),
-			boolField(value, "envKeyInstructionsPresent", false),
-			boolField(value, "requiresOpenAiAuth", false),
-			boolField(value, "supportsWebsockets", false),
-			boolField(value, "hasAwsAuth", false),
-			boolField(value, "hasCommandAuth", false),
-			boolField(value, "experimentalBearerTokenPresent", false)
-		);
+		return new ProviderAdmissionProvider(stringField(value, "providerId", ""), stringField(value, "name", ""), boolField(value, "hasBaseUrl", false),
+			stringField(value, "baseUrl", ""), boolField(value, "envKeyConfigured", false), boolField(value, "envKeyPresent", false),
+			boolField(value, "envKeyInstructionsPresent", false), boolField(value, "requiresOpenAiAuth", false),
+			boolField(value, "supportsWebsockets", false), boolField(value, "hasAwsAuth", false), boolField(value, "hasCommandAuth", false),
+			boolField(value, "experimentalBearerTokenPresent", false));
 	}
 
 	static function modelValue(value:Value):ProviderAdmissionModel {
-		return new ProviderAdmissionModel(
-			stringField(value, "modelId", ""),
-			stringField(value, "providerId", ""),
-			intField(value, "contextWindow", 0)
-		);
+		return new ProviderAdmissionModel(stringField(value, "modelId", ""), stringField(value, "providerId", ""), intField(value, "contextWindow", 0));
 	}
 
 	static function catalog(values:Array<Value>):Array<ModelCatalogEntry> {
 		final out:Array<ModelCatalogEntry> = [];
 		for (value in values) {
 			final model = objectValue(value);
-			out.push(new ModelCatalogEntry(
-				stringField(model, "modelId", ""),
-				stringField(model, "providerId", ""),
-				stringField(model, "displayName", ""),
-				intField(model, "priority", 0),
-				visibility(stringField(model, "visibility", "")),
-				boolField(model, "supportedInApi", false),
-				intField(model, "contextWindow", 0),
-				intField(model, "maxContextWindow", 0),
-				boolField(model, "supportsSearchTool", false),
-				webSearchToolType(stringField(model, "webSearchToolType", "")),
-				toolMode(stringField(model, "toolMode", "")),
-				stringArrayField(model, "inputModalities"),
-				stringArrayField(model, "serviceTiers"),
-				stringField(model, "defaultServiceTier", ""),
-				stringArrayField(model, "additionalSpeedTiers"),
-				stringArrayField(model, "experimentalSupportedTools"),
-				boolField(model, "useResponsesLite", false)
-			));
+			out.push(new ModelCatalogEntry(stringField(model, "modelId", ""), stringField(model, "providerId", ""), stringField(model, "displayName", ""),
+				intField(model, "priority", 0), visibility(stringField(model, "visibility", "")), boolField(model, "supportedInApi", false),
+				intField(model, "contextWindow", 0), intField(model, "maxContextWindow", 0), boolField(model, "supportsSearchTool", false),
+				webSearchToolType(stringField(model, "webSearchToolType", "")), toolMode(stringField(model, "toolMode", "")),
+				stringArrayField(model, "inputModalities"), stringArrayField(model, "serviceTiers"), stringField(model, "defaultServiceTier", ""),
+				stringArrayField(model, "additionalSpeedTiers"), stringArrayField(model, "experimentalSupportedTools"),
+				boolField(model, "useResponsesLite", false)));
 		}
 		return out;
 	}
 
 	static function featureFlags(value:Value):TurnModelFeatureFlags {
-		return new TurnModelFeatureFlags(
-			boolField(value, "codeMode", false),
-			boolField(value, "codeModeOnly", false),
-			boolField(value, "standaloneWebSearch", false),
-			boolField(value, "imageGeneration", false),
-			boolField(value, "imageGenExt", false),
-			boolField(value, "deferredToolsAvailable", false)
-		);
+		return new TurnModelFeatureFlags(boolField(value, "codeMode", false), boolField(value, "codeModeOnly", false),
+			boolField(value, "standaloneWebSearch", false), boolField(value, "imageGeneration", false), boolField(value, "imageGenExt", false),
+			boolField(value, "deferredToolsAvailable", false));
 	}
 
 	static function extensionToolState(value:Value):TurnExtensionToolState {
-		return new TurnExtensionToolState(
-			boolField(value, "standaloneWebRunAvailable", false),
-			boolField(value, "standaloneImageGenerationAvailable", false)
-		);
+		return new TurnExtensionToolState(boolField(value, "standaloneWebRunAvailable", false), boolField(value, "standaloneImageGenerationAvailable", false));
 	}
 
 	static function credentialKind(value:String):ProviderAdmissionCredentialKind {
@@ -282,8 +231,10 @@ class TurnModelPlanHarness {
 		final out:Array<String> = [];
 		for (value in arrayField(object, name)) {
 			switch value {
-				case JString(text): out.push(text);
-				case _: throw "expected string array field: " + name;
+				case JString(text):
+					out.push(text);
+				case _:
+					throw "expected string array field: " + name;
 			}
 		}
 		return out;
@@ -322,7 +273,8 @@ class TurnModelPlanHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -339,7 +291,8 @@ class TurnModelPlanHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -348,14 +301,17 @@ class TurnModelPlanHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 
 	static function assertNotContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) >= 0) throw "did not expect to find secret probe in summary";
+		if (needle.length > 0 && haystack.indexOf(needle) >= 0)
+			throw "did not expect to find secret probe in summary";
 	}
 }

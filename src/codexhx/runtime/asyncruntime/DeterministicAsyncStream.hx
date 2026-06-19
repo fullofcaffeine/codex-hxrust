@@ -22,11 +22,15 @@ class DeterministicAsyncStream<T> implements AsyncStream<T> {
 	}
 
 	public function push(value:T, delivery:AsyncDeliveryKind):AsyncPoll<Bool> {
-		if (cancelled) return AsyncPoll.Cancelled(reason, items.length, skippedBestEffort);
-		if (closed) return AsyncPoll.Failed(new AsyncError("stream_closed", "cannot push after close", false), items.length, skippedBestEffort);
-		if (failedError != null) return AsyncPoll.Failed(failedError, items.length, skippedBestEffort);
+		if (cancelled)
+			return AsyncPoll.Cancelled(reason, items.length, skippedBestEffort);
+		if (closed)
+			return AsyncPoll.Failed(new AsyncError("stream_closed", "cannot push after close", false), items.length, skippedBestEffort);
+		if (failedError != null)
+			return AsyncPoll.Failed(failedError, items.length, skippedBestEffort);
 		if (items.length >= capacity) {
-			if (delivery == AsyncDeliveryKind.BestEffort) skippedBestEffort = skippedBestEffort + 1;
+			if (delivery == AsyncDeliveryKind.BestEffort)
+				skippedBestEffort = skippedBestEffort + 1;
 			final code = delivery == AsyncDeliveryKind.BestEffort ? "best_effort_dropped" : "lossless_backpressure";
 			return AsyncPoll.Backpressured(new AsyncError(code, "bounded async stream has no ready capacity", true), items.length, skippedBestEffort);
 		}
@@ -43,15 +47,19 @@ class DeterministicAsyncStream<T> implements AsyncStream<T> {
 	}
 
 	public function pollNext(context:AsyncContext):AsyncPoll<AsyncStreamItem<T>> {
-		if (context.isCancelled()) return AsyncPoll.Cancelled(context.cancellation.cancelReason(), items.length, skippedBestEffort);
-		if (cancelled) return AsyncPoll.Cancelled(reason, items.length, skippedBestEffort);
+		if (context.isCancelled())
+			return AsyncPoll.Cancelled(context.cancellation.cancelReason(), items.length, skippedBestEffort);
+		if (cancelled)
+			return AsyncPoll.Cancelled(reason, items.length, skippedBestEffort);
 		if (items.length > 0) {
 			final item = items[0];
 			items.splice(0, 1);
 			return AsyncPoll.Ready(item, items.length, skippedBestEffort);
 		}
-		if (failedError != null) return AsyncPoll.Failed(failedError, items.length, skippedBestEffort);
-		if (closed) return AsyncPoll.Closed(items.length, skippedBestEffort);
+		if (failedError != null)
+			return AsyncPoll.Failed(failedError, items.length, skippedBestEffort);
+		if (closed)
+			return AsyncPoll.Closed(items.length, skippedBestEffort);
 		return AsyncPoll.Pending(items.length, skippedBestEffort);
 	}
 

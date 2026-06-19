@@ -27,10 +27,7 @@ class AsyncPollSummary {
 
 	static function format(kind:AsyncPollKind, reason:AsyncCancelReason, pendingCount:Int, skippedCount:Int, error:Null<AsyncError>):String {
 		final errorSummary = error == null ? "none" : error.summary();
-		return "kind=" + kind
-			+ ";cancelReason=" + reason
-			+ ";pending=" + Std.string(pendingCount)
-			+ ";skipped=" + Std.string(skippedCount)
-			+ ";error=" + errorSummary;
+		return "kind=" + kind + ";cancelReason=" + reason + ";pending=" + Std.string(pendingCount) + ";skipped=" + Std.string(skippedCount) + ";error="
+			+ errorSummary;
 	}
 }

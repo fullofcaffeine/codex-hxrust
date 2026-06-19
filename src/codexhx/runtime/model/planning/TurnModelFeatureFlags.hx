@@ -8,14 +8,7 @@ class TurnModelFeatureFlags {
 	public final imageGenExt:Bool;
 	public final deferredToolsAvailable:Bool;
 
-	public function new(
-		codeMode:Bool,
-		codeModeOnly:Bool,
-		standaloneWebSearch:Bool,
-		imageGeneration:Bool,
-		imageGenExt:Bool,
-		deferredToolsAvailable:Bool
-	) {
+	public function new(codeMode:Bool, codeModeOnly:Bool, standaloneWebSearch:Bool, imageGeneration:Bool, imageGenExt:Bool, deferredToolsAvailable:Bool) {
 		this.codeMode = codeMode;
 		this.codeModeOnly = codeModeOnly;
 		this.standaloneWebSearch = standaloneWebSearch;

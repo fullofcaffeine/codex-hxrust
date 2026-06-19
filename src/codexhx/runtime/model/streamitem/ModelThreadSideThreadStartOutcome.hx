@@ -36,42 +36,13 @@ class ModelThreadSideThreadStartOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		cleanupRequestId:String,
-		decisionKind:ModelThreadSideThreadStartDecisionKind,
-		failureKind:ModelThreadSideThreadStartFailureKind,
-		startBlocked:Bool,
-		userMessageRestored:Bool,
-		sideUiSynced:Bool,
-		contextLabelCleared:Bool,
-		telemetryRecorded:Bool,
-		configRefreshAttempted:Bool,
-		forkAttempted:Bool,
-		forkConfigEphemeral:Bool,
-		parentModelApplied:Bool,
-		inheritedRuntimeSettings:Bool,
-		developerInstructionsAppended:Bool,
-		developerGuardrailsApplied:Bool,
-		boundaryPromptItemBuilt:Bool,
-		boundaryPromptInjected:Bool,
-		snapshotInstalled:Bool,
-		forkedParentTranscriptHidden:Bool,
-		sideThreadRegistered:Bool,
-		switchAttempted:Bool,
-		discardCleanupAttempted:Bool,
-		parentRestoreAttempted:Bool,
-		userMessageSubmitted:Bool,
-		errorMessageAdded:Bool,
-		runControlContinue:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, cleanupRequestId:String, decisionKind:ModelThreadSideThreadStartDecisionKind,
+			failureKind:ModelThreadSideThreadStartFailureKind, startBlocked:Bool, userMessageRestored:Bool, sideUiSynced:Bool, contextLabelCleared:Bool,
+			telemetryRecorded:Bool, configRefreshAttempted:Bool, forkAttempted:Bool, forkConfigEphemeral:Bool, parentModelApplied:Bool,
+			inheritedRuntimeSettings:Bool, developerInstructionsAppended:Bool, developerGuardrailsApplied:Bool, boundaryPromptItemBuilt:Bool,
+			boundaryPromptInjected:Bool, snapshotInstalled:Bool, forkedParentTranscriptHidden:Bool, sideThreadRegistered:Bool, switchAttempted:Bool,
+			discardCleanupAttempted:Bool, parentRestoreAttempted:Bool, userMessageSubmitted:Bool, errorMessageAdded:Bool, runControlContinue:Bool,
+			eventOrderingPreserved:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -109,40 +80,20 @@ class ModelThreadSideThreadStartOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";cleanupRequest=" + noneIfEmpty(cleanupRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";failureKind=" + failureKind
-			+ ";startBlocked=" + boolText(startBlocked)
-			+ ";userMessageRestored=" + boolText(userMessageRestored)
-			+ ";sideUiSynced=" + boolText(sideUiSynced)
-			+ ";contextLabelCleared=" + boolText(contextLabelCleared)
-			+ ";telemetryRecorded=" + boolText(telemetryRecorded)
-			+ ";configRefreshAttempted=" + boolText(configRefreshAttempted)
-			+ ";forkAttempted=" + boolText(forkAttempted)
-			+ ";forkConfigEphemeral=" + boolText(forkConfigEphemeral)
-			+ ";parentModelApplied=" + boolText(parentModelApplied)
-			+ ";inheritedRuntimeSettings=" + boolText(inheritedRuntimeSettings)
-			+ ";developerInstructionsAppended=" + boolText(developerInstructionsAppended)
-			+ ";developerGuardrailsApplied=" + boolText(developerGuardrailsApplied)
-			+ ";boundaryPromptItemBuilt=" + boolText(boundaryPromptItemBuilt)
-			+ ";boundaryPromptInjected=" + boolText(boundaryPromptInjected)
-			+ ";snapshotInstalled=" + boolText(snapshotInstalled)
-			+ ";forkedParentTranscriptHidden=" + boolText(forkedParentTranscriptHidden)
-			+ ";sideThreadRegistered=" + boolText(sideThreadRegistered)
-			+ ";switchAttempted=" + boolText(switchAttempted)
-			+ ";discardCleanupAttempted=" + boolText(discardCleanupAttempted)
-			+ ";parentRestoreAttempted=" + boolText(parentRestoreAttempted)
-			+ ";userMessageSubmitted=" + boolText(userMessageSubmitted)
-			+ ";errorMessageAdded=" + boolText(errorMessageAdded)
-			+ ";runControlContinue=" + boolText(runControlContinue)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";cleanupRequest=" + noneIfEmpty(cleanupRequestId) + ";decisionKind="
+			+ decisionKind + ";failureKind=" + failureKind + ";startBlocked=" + boolText(startBlocked) + ";userMessageRestored="
+			+ boolText(userMessageRestored) + ";sideUiSynced=" + boolText(sideUiSynced) + ";contextLabelCleared=" + boolText(contextLabelCleared)
+			+ ";telemetryRecorded=" + boolText(telemetryRecorded) + ";configRefreshAttempted=" + boolText(configRefreshAttempted) + ";forkAttempted="
+			+ boolText(forkAttempted) + ";forkConfigEphemeral=" + boolText(forkConfigEphemeral) + ";parentModelApplied=" + boolText(parentModelApplied)
+			+ ";inheritedRuntimeSettings=" + boolText(inheritedRuntimeSettings) + ";developerInstructionsAppended=" + boolText(developerInstructionsAppended)
+			+ ";developerGuardrailsApplied=" + boolText(developerGuardrailsApplied) + ";boundaryPromptItemBuilt=" + boolText(boundaryPromptItemBuilt)
+			+ ";boundaryPromptInjected=" + boolText(boundaryPromptInjected) + ";snapshotInstalled=" + boolText(snapshotInstalled)
+			+ ";forkedParentTranscriptHidden=" + boolText(forkedParentTranscriptHidden) + ";sideThreadRegistered=" + boolText(sideThreadRegistered)
+			+ ";switchAttempted=" + boolText(switchAttempted) + ";discardCleanupAttempted=" + boolText(discardCleanupAttempted) + ";parentRestoreAttempted="
+			+ boolText(parentRestoreAttempted) + ";userMessageSubmitted=" + boolText(userMessageSubmitted) + ";errorMessageAdded="
+			+ boolText(errorMessageAdded) + ";runControlContinue=" + boolText(runControlContinue) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

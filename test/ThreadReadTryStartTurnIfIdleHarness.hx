@@ -48,71 +48,53 @@ class ThreadReadTryStartTurnIfIdleHarness {
 		for (value in values) {
 			final caseObject = objectValue(value);
 			final host = objectField(caseObject, "host");
-			out.push(new ThreadReadTryStartTurnIfIdleRequest(
-				steeringOutcome(objectField(caseObject, "steering")),
-				boolField(host, "inputEmpty", false),
-				boolField(host, "pendingTriggerTurnBeforeReservation", false),
-				boolField(host, "collaborationPlanModeBeforeReservation", false),
-				activeTaskKind(stringField(host, "activeTaskKind", "none")),
-				boolField(host, "pendingTriggerTurnAfterReservation", false),
-				boolField(host, "collaborationPlanModeAfterTurnContext", false),
-				boolField(host, "pendingTriggerTurnAfterTurnContext", false),
-				boolField(host, "reservationLostBeforeStart", false)
-			));
+			out.push(new ThreadReadTryStartTurnIfIdleRequest(steeringOutcome(objectField(caseObject, "steering")), boolField(host, "inputEmpty", false),
+				boolField(host, "pendingTriggerTurnBeforeReservation", false), boolField(host, "collaborationPlanModeBeforeReservation", false),
+				activeTaskKind(stringField(host, "activeTaskKind", "none")), boolField(host, "pendingTriggerTurnAfterReservation", false),
+				boolField(host, "collaborationPlanModeAfterTurnContext", false), boolField(host, "pendingTriggerTurnAfterTurnContext", false),
+				boolField(host, "reservationLostBeforeStart", false)));
 		}
 		return out;
 	}
 
 	static function steeringOutcome(value:Value):ThreadReadGoalSteeringOutcome {
 		final kind:ThreadReadGoalSteeringItemKind = cast stringField(value, "kind", "");
-		return ThreadReadGoalSteeringBuilder.build(new ThreadReadGoalSteeringRequest(
-			kind,
+		return ThreadReadGoalSteeringBuilder.build(new ThreadReadGoalSteeringRequest(kind,
 			goal(optionalStringField(value, "goalStatus"), stringField(value, "goalVariant", "")),
-			continuationOutcome(stringField(value, "continuationDecision", "")),
-			boolField(value, "objectiveChanged", false)
-		));
+			continuationOutcome(stringField(value, "continuationDecision", "")), boolField(value, "objectiveChanged", false)));
 	}
 
 	static function activeTaskKind(value:String):ThreadReadTryStartTurnIfIdleActiveTaskKind {
-		if (value == "regular") return ThreadReadTryStartTurnIfIdleActiveTaskKind.Regular;
-		if (value == "review") return ThreadReadTryStartTurnIfIdleActiveTaskKind.Review;
+		if (value == "regular")
+			return ThreadReadTryStartTurnIfIdleActiveTaskKind.Regular;
+		if (value == "review")
+			return ThreadReadTryStartTurnIfIdleActiveTaskKind.Review;
 		return ThreadReadTryStartTurnIfIdleActiveTaskKind.None;
 	}
 
 	static function continuationOutcome(kind:String):ThreadReadResumeIdleContinuationOutcome {
 		if (kind == "started") {
-			return ThreadReadResumeIdleContinuationOutcome.makeStarted(
-				ThreadReadTokenUsageReplayDeliveryOperation.Resume,
-				"response->thread/goal/updated->thread/idle->goal/continue->turn/start"
-			);
+			return ThreadReadResumeIdleContinuationOutcome.makeStarted(ThreadReadTokenUsageReplayDeliveryOperation.Resume,
+				"response->thread/goal/updated->thread/idle->goal/continue->turn/start");
 		}
 		if (kind == "rejected") {
-			return ThreadReadResumeIdleContinuationOutcome.makeRejected(
-				ThreadReadTokenUsageReplayDeliveryOperation.Resume,
-				"response->thread/goal/updated->thread/idle->goal/continue"
-			);
+			return ThreadReadResumeIdleContinuationOutcome.makeRejected(ThreadReadTokenUsageReplayDeliveryOperation.Resume,
+				"response->thread/goal/updated->thread/idle->goal/continue");
 		}
 		if (kind == "snapshot_only") {
-			return ThreadReadResumeIdleContinuationOutcome.makeIdleOnly(
-				ThreadReadTokenUsageReplayDeliveryOperation.Resume,
-				"snapshot_only_goal_not_active",
-				"response->thread/goal/updated->thread/idle",
-				true,
-				"goal status paused clears active goal accounting and does not continue"
-			);
+			return ThreadReadResumeIdleContinuationOutcome.makeIdleOnly(ThreadReadTokenUsageReplayDeliveryOperation.Resume, "snapshot_only_goal_not_active",
+				"response->thread/goal/updated->thread/idle", true, "goal status paused clears active goal accounting and does not continue");
 		}
 		if (kind == "failure") {
-			return ThreadReadResumeIdleContinuationOutcome.failure(
-				ThreadReadTokenUsageReplayDeliveryOperation.Resume,
-				"snapshot_not_settled",
-				"resume idle lifecycle waits for response and goal snapshot ordering to settle"
-			);
+			return ThreadReadResumeIdleContinuationOutcome.failure(ThreadReadTokenUsageReplayDeliveryOperation.Resume, "snapshot_not_settled",
+				"resume idle lifecycle waits for response and goal snapshot ordering to settle");
 		}
 		return null;
 	}
 
 	static function goal(status:String, variant:String):ThreadGoal {
-		if (status.length == 0 || variant == "missing") return null;
+		if (status.length == 0 || variant == "missing")
+			return null;
 		if (variant == "budgeted_escaped") {
 			return new ThreadGoal(threadId(), "Ship <Codex> & keep quality", status, true, 5000, 1200, 300, 200000, 200100);
 		}
@@ -200,7 +182,8 @@ class ThreadReadTryStartTurnIfIdleHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -217,7 +200,8 @@ class ThreadReadTryStartTurnIfIdleHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -226,10 +210,12 @@ class ThreadReadTryStartTurnIfIdleHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

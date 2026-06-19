@@ -28,34 +28,12 @@ class ModelTurnLifecycleOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		turnId:String,
-		terminalKind:ModelTurnLifecycleTerminalKind,
-		projectedEventKind:ModelTurnLifecycleEventKind,
-		terminalStopHookRequestId:String,
-		samplingErrorTerminalRequestId:String,
-		rolloutFlushedBeforeTerminal:Bool,
-		rolloutWarningEmitted:Bool,
-		turnStopLifecycleEmitted:Bool,
-		turnAbortLifecycleEmitted:Bool,
-		turnErrorLifecycleAlreadyEmitted:Bool,
-		turnCompleteEmitted:Bool,
-		turnAbortedEmitted:Bool,
-		completionSuppressedForCancellation:Bool,
-		completedAfterError:Bool,
-		interruptedMarkerRecorded:Bool,
-		lastAgentMessageCarried:Bool,
-		lastAgentMessage:String,
-		activeTurnCleared:Bool,
-		threadIdleLifecycleEmitted:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, turnId:String, terminalKind:ModelTurnLifecycleTerminalKind,
+			projectedEventKind:ModelTurnLifecycleEventKind, terminalStopHookRequestId:String, samplingErrorTerminalRequestId:String,
+			rolloutFlushedBeforeTerminal:Bool, rolloutWarningEmitted:Bool, turnStopLifecycleEmitted:Bool, turnAbortLifecycleEmitted:Bool,
+			turnErrorLifecycleAlreadyEmitted:Bool, turnCompleteEmitted:Bool, turnAbortedEmitted:Bool, completionSuppressedForCancellation:Bool,
+			completedAfterError:Bool, interruptedMarkerRecorded:Bool, lastAgentMessageCarried:Bool, lastAgentMessage:String, activeTurnCleared:Bool,
+			threadIdleLifecycleEmitted:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -85,32 +63,18 @@ class ModelTurnLifecycleOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";turn=" + turnId
-			+ ";terminalKind=" + terminalKind
-			+ ";projectedEventKind=" + projectedEventKind
-			+ ";terminalStopHookRequest=" + noneIfEmpty(terminalStopHookRequestId)
-			+ ";samplingErrorTerminalRequest=" + noneIfEmpty(samplingErrorTerminalRequestId)
-			+ ";rolloutFlushedBeforeTerminal=" + boolText(rolloutFlushedBeforeTerminal)
-			+ ";rolloutWarningEmitted=" + boolText(rolloutWarningEmitted)
-			+ ";turnStopLifecycleEmitted=" + boolText(turnStopLifecycleEmitted)
-			+ ";turnAbortLifecycleEmitted=" + boolText(turnAbortLifecycleEmitted)
-			+ ";turnErrorLifecycleAlreadyEmitted=" + boolText(turnErrorLifecycleAlreadyEmitted)
-			+ ";turnCompleteEmitted=" + boolText(turnCompleteEmitted)
-			+ ";turnAbortedEmitted=" + boolText(turnAbortedEmitted)
-			+ ";completionSuppressedForCancellation=" + boolText(completionSuppressedForCancellation)
-			+ ";completedAfterError=" + boolText(completedAfterError)
-			+ ";interruptedMarkerRecorded=" + boolText(interruptedMarkerRecorded)
-			+ ";lastAgentMessageCarried=" + boolText(lastAgentMessageCarried)
-			+ ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage)
-			+ ";activeTurnCleared=" + boolText(activeTurnCleared)
-			+ ";threadIdleLifecycleEmitted=" + boolText(threadIdleLifecycleEmitted)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";turn=" + turnId + ";terminalKind=" + terminalKind
+			+ ";projectedEventKind=" + projectedEventKind + ";terminalStopHookRequest=" + noneIfEmpty(terminalStopHookRequestId)
+			+ ";samplingErrorTerminalRequest=" + noneIfEmpty(samplingErrorTerminalRequestId) + ";rolloutFlushedBeforeTerminal="
+			+ boolText(rolloutFlushedBeforeTerminal) + ";rolloutWarningEmitted=" + boolText(rolloutWarningEmitted) + ";turnStopLifecycleEmitted="
+			+ boolText(turnStopLifecycleEmitted) + ";turnAbortLifecycleEmitted=" + boolText(turnAbortLifecycleEmitted) + ";turnErrorLifecycleAlreadyEmitted="
+			+ boolText(turnErrorLifecycleAlreadyEmitted) + ";turnCompleteEmitted=" + boolText(turnCompleteEmitted) + ";turnAbortedEmitted="
+			+ boolText(turnAbortedEmitted) + ";completionSuppressedForCancellation=" + boolText(completionSuppressedForCancellation)
+			+ ";completedAfterError=" + boolText(completedAfterError) + ";interruptedMarkerRecorded=" + boolText(interruptedMarkerRecorded)
+			+ ";lastAgentMessageCarried=" + boolText(lastAgentMessageCarried) + ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage) + ";activeTurnCleared="
+			+ boolText(activeTurnCleared) + ";threadIdleLifecycleEmitted=" + boolText(threadIdleLifecycleEmitted) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

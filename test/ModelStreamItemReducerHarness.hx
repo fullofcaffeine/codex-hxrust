@@ -465,7 +465,8 @@ class ModelStreamItemReducerHarness {
 			assertEquals(stringField(expect, "terminalResponseId", ""), outcome.terminalResponseId);
 			assertEquals(Std.string(intField(expect, "totalTokens", 0)), Std.string(outcome.totalTokens));
 			assertContains(outcome.summary(), stringField(expect, "summaryContains", ""));
-			if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+			if (secretProbe.length > 0)
+				assertNotContains(outcome.summary(), secretProbe);
 			final topLevelIntegrations = assertTopLevelSamplingResultIntegrations(testCase, outcome, secretProbe);
 			final topLevelPendingInputDrains = assertTopLevelPostSamplingPendingInputDrains(testCase, topLevelIntegrations, secretProbe);
 			final topLevelHookRecordings = assertTopLevelPendingInputHookRecordings(testCase, topLevelPendingInputDrains, secretProbe);
@@ -476,27 +477,36 @@ class ModelStreamItemReducerHarness {
 			final topLevelTurnTerminalProjections = assertTopLevelTurnTerminalProjections(testCase, topLevelTurnLifecycles, secretProbe);
 			final topLevelTurnReplayReconstructions = assertTopLevelTurnReplayReconstructions(testCase, topLevelTurnTerminalProjections, secretProbe);
 			final topLevelPendingInteractiveReplays = assertTopLevelPendingInteractiveReplays(testCase, topLevelTurnReplayReconstructions, secretProbe);
-			final topLevelThreadSnapshotReplayDispatches = assertTopLevelThreadSnapshotReplayDispatches(testCase, topLevelPendingInteractiveReplays, secretProbe);
+			final topLevelThreadSnapshotReplayDispatches = assertTopLevelThreadSnapshotReplayDispatches(testCase, topLevelPendingInteractiveReplays,
+				secretProbe);
 			assertTopLevelThreadSnapshotTurnHistoryReplays(testCase, secretProbe);
 			assertTopLevelThreadSnapshotCollabMetadataReplays(testCase, secretProbe);
 			assertTopLevelThreadSnapshotSessionRefreshes(testCase, secretProbe);
-			final topLevelReplayedServerRequestSurfaces = assertTopLevelReplayedServerRequestSurfaces(testCase, topLevelThreadSnapshotReplayDispatches, secretProbe);
+			final topLevelReplayedServerRequestSurfaces = assertTopLevelReplayedServerRequestSurfaces(testCase, topLevelThreadSnapshotReplayDispatches,
+				secretProbe);
 			final topLevelAppServerRequestResolutions = assertTopLevelAppServerRequestResolutions(testCase, topLevelReplayedServerRequestSurfaces, secretProbe);
 			final topLevelAppServerResponseDispatches = assertTopLevelAppServerResponseDispatches(testCase, topLevelAppServerRequestResolutions, secretProbe);
 			final topLevelAppServerRequestEnqueues = assertTopLevelAppServerRequestEnqueues(testCase, topLevelAppServerResponseDispatches, secretProbe);
-			final topLevelAppServerQueuedRequestDeliveries = assertTopLevelAppServerQueuedRequestDeliveries(testCase, topLevelAppServerRequestEnqueues, secretProbe);
-			final topLevelThreadBufferedRequestEvictions = assertTopLevelThreadBufferedRequestEvictions(testCase, topLevelAppServerQueuedRequestDeliveries, secretProbe);
+			final topLevelAppServerQueuedRequestDeliveries = assertTopLevelAppServerQueuedRequestDeliveries(testCase, topLevelAppServerRequestEnqueues,
+				secretProbe);
+			final topLevelThreadBufferedRequestEvictions = assertTopLevelThreadBufferedRequestEvictions(testCase, topLevelAppServerQueuedRequestDeliveries,
+				secretProbe);
 			final topLevelThreadSessionRebases = assertTopLevelThreadSessionRebases(testCase, topLevelThreadBufferedRequestEvictions, secretProbe);
 			final topLevelThreadActiveTurns = assertTopLevelThreadActiveTurns(testCase, topLevelThreadSessionRebases, secretProbe);
 			final topLevelThreadSideParentPendingStatuses = assertTopLevelThreadSideParentPendingStatuses(testCase, topLevelThreadActiveTurns, secretProbe);
-			final topLevelThreadSideParentStatusChanges = assertTopLevelThreadSideParentStatusChanges(testCase, topLevelThreadSideParentPendingStatuses, secretProbe);
+			final topLevelThreadSideParentStatusChanges = assertTopLevelThreadSideParentStatusChanges(testCase, topLevelThreadSideParentPendingStatuses,
+				secretProbe);
 			final topLevelThreadSideThreadUiSyncs = assertTopLevelThreadSideThreadUiSyncs(testCase, topLevelThreadSideParentStatusChanges, secretProbe);
 			final topLevelThreadSideThreadDiscards = assertTopLevelThreadSideThreadDiscards(testCase, topLevelThreadSideThreadUiSyncs, secretProbe);
 			final topLevelThreadSideThreadStarts = assertTopLevelThreadSideThreadStarts(testCase, topLevelThreadSideThreadDiscards, secretProbe);
-			final topLevelThreadSideThreadStartupRoutings = assertTopLevelThreadSideThreadStartupRoutings(testCase, topLevelThreadSideThreadStarts, secretProbe);
-			final topLevelThreadSideThreadComposerHandoffs = assertTopLevelThreadSideThreadComposerHandoffs(testCase, topLevelThreadSideThreadStarts, topLevelThreadSideThreadStartupRoutings, secretProbe);
-			final topLevelThreadSideThreadNavigationCleanups = assertTopLevelThreadSideThreadNavigationCleanups(testCase, topLevelThreadSideThreadComposerHandoffs, secretProbe);
-			final topLevelActiveNonPrimaryShutdowns = assertTopLevelActiveNonPrimaryShutdowns(testCase, topLevelThreadSideThreadNavigationCleanups, secretProbe);
+			final topLevelThreadSideThreadStartupRoutings = assertTopLevelThreadSideThreadStartupRoutings(testCase, topLevelThreadSideThreadStarts,
+				secretProbe);
+			final topLevelThreadSideThreadComposerHandoffs = assertTopLevelThreadSideThreadComposerHandoffs(testCase, topLevelThreadSideThreadStarts,
+				topLevelThreadSideThreadStartupRoutings, secretProbe);
+			final topLevelThreadSideThreadNavigationCleanups = assertTopLevelThreadSideThreadNavigationCleanups(testCase,
+				topLevelThreadSideThreadComposerHandoffs, secretProbe);
+			final topLevelActiveNonPrimaryShutdowns = assertTopLevelActiveNonPrimaryShutdowns(testCase, topLevelThreadSideThreadNavigationCleanups,
+				secretProbe);
 			final topLevelClearUiHeaders = assertTopLevelClearUiHeaders(testCase, topLevelActiveNonPrimaryShutdowns, secretProbe);
 			final topLevelTerminalResizeReflows = assertTopLevelTerminalResizeReflows(testCase, topLevelClearUiHeaders, secretProbe);
 			assertTopLevelResizeReflowSchedulings(testCase, topLevelTerminalResizeReflows, secretProbe);
@@ -549,14 +559,9 @@ class ModelStreamItemReducerHarness {
 		final out:Array<ModelStreamItemReducerRequest> = [];
 		for (value in values) {
 			final testCase = objectValue(value);
-			out.push(new ModelStreamItemReducerRequest(
-				stringField(testCase, "requestId", ""),
-				routeRequest(testCase, envelopeRoot, routeRoot),
-				itemEvents(arrayField(testCase, "events")),
-				boolField(testCase, "planMode", false),
-				boolField(testCase, "showRawReasoning", false),
-				stringField(testCase, "secretProbe", "")
-			));
+			out.push(new ModelStreamItemReducerRequest(stringField(testCase, "requestId", ""), routeRequest(testCase, envelopeRoot, routeRoot),
+				itemEvents(arrayField(testCase, "events")), boolField(testCase, "planMode", false), boolField(testCase, "showRawReasoning", false),
+				stringField(testCase, "secretProbe", "")));
 		}
 		return out;
 	}
@@ -566,36 +571,25 @@ class ModelStreamItemReducerHarness {
 		if (routeFixtureId.length > 0) {
 			for (value in arrayField(routeRoot, "cases")) {
 				final routeCase = objectValue(value);
-				if (stringField(routeCase, "id", "") == routeFixtureId) return ModelStreamRouteHarness.requests([routeCase], envelopeRoot)[0];
+				if (stringField(routeCase, "id", "") == routeFixtureId)
+					return ModelStreamRouteHarness.requests([routeCase], envelopeRoot)[0];
 			}
 			throw "missing stream route fixture case: " + routeFixtureId;
 		}
 		final route = objectField(testCase, "route");
-		return new ModelStreamRouteRequest(
-			stringField(route, "requestId", ""),
+		return new ModelStreamRouteRequest(stringField(route, "requestId", ""),
 			ModelStreamRouteHarness.envelopeRequestById(envelopeRoot, stringField(route, "envelopeFixtureId", "")),
-			stringField(route, "upstreamRequestId", ""),
-			ModelStreamRouteHarness.events(arrayField(route, "events")),
-			stringField(route, "secretProbe", "")
-		);
+			stringField(route, "upstreamRequestId", ""), ModelStreamRouteHarness.events(arrayField(route, "events")), stringField(route, "secretProbe", ""));
 	}
 
 	static function itemEvents(values:Array<Value>):Array<ModelStreamItemFixtureEvent> {
 		final out:Array<ModelStreamItemFixtureEvent> = [];
 		for (value in values) {
 			final event = objectValue(value);
-			out.push(new ModelStreamItemFixtureEvent(
-				eventKind(stringField(event, "kind", "")),
-				outputItem(optionalField(event, "item")),
-				stringField(event, "itemId", ""),
-				stringField(event, "callId", ""),
-				stringField(event, "delta", ""),
-				intField(event, "summaryIndex", 0),
-				intField(event, "contentIndex", 0),
-				stringField(event, "responseId", ""),
-				intField(event, "totalTokens", 0),
-				boolField(event, "endTurn", false)
-			));
+			out.push(new ModelStreamItemFixtureEvent(eventKind(stringField(event, "kind", "")), outputItem(optionalField(event, "item")),
+				stringField(event, "itemId", ""), stringField(event, "callId", ""), stringField(event, "delta", ""), intField(event, "summaryIndex", 0),
+				intField(event, "contentIndex", 0), stringField(event, "responseId", ""), intField(event, "totalTokens", 0),
+				boolField(event, "endTurn", false)));
 		}
 		return out;
 	}
@@ -603,21 +597,11 @@ class ModelStreamItemReducerHarness {
 	static function outputItem(value:Value):ModelStreamOutputItem {
 		return switch value {
 			case JObject(_, _):
-				new ModelStreamOutputItem(
-					itemKind(stringField(value, "kind", "")),
-					stringField(value, "itemId", ""),
-					stringField(value, "role", ""),
-					stringField(value, "text", ""),
-					stringField(value, "phase", ""),
-					stringArrayField(value, "summary"),
-					stringArrayField(value, "rawContent"),
-					stringField(value, "callId", ""),
-					stringField(value, "toolName", ""),
-					stringField(value, "namespace", ""),
-					stringField(value, "arguments", ""),
-					stringField(value, "customInput", ""),
-					stringField(value, "status", "")
-				);
+				new ModelStreamOutputItem(itemKind(stringField(value, "kind", "")), stringField(value, "itemId", ""), stringField(value, "role", ""),
+					stringField(value, "text", ""), stringField(value, "phase", ""), stringArrayField(value, "summary"),
+					stringArrayField(value, "rawContent"), stringField(value, "callId", ""), stringField(value, "toolName", ""),
+					stringField(value, "namespace", ""), stringField(value, "arguments", ""), stringField(value, "customInput", ""),
+					stringField(value, "status", ""));
 			case _:
 				null;
 		}
@@ -670,18 +654,11 @@ class ModelStreamItemReducerHarness {
 			case JObject(_, _):
 				final expect = objectField(verificationValue, "expect");
 				final beforeFiles = virtualFiles(arrayField(verificationValue, "files"));
-				final verification = ModelPatchVerificationPolicy.verify(new ModelPatchVerificationRequest(
-					stringField(verificationValue, "requestId", ""),
-					outcome,
-					stringField(verificationValue, "callId", ""),
-					stringField(verificationValue, "turnId", ""),
-					boolField(verificationValue, "autoApproved", false),
-					patchApplyStatus(stringField(verificationValue, "desiredStatus", "completed")),
-					stringField(verificationValue, "stdout", ""),
-					stringField(verificationValue, "stderr", ""),
-					beforeFiles,
-					stringField(verificationValue, "secretProbe", "")
-				));
+				final verification = ModelPatchVerificationPolicy.verify(new ModelPatchVerificationRequest(stringField(verificationValue, "requestId", ""),
+					outcome, stringField(verificationValue, "callId", ""), stringField(verificationValue, "turnId", ""),
+					boolField(verificationValue, "autoApproved", false), patchApplyStatus(stringField(verificationValue, "desiredStatus", "completed")),
+					stringField(verificationValue, "stdout", ""), stringField(verificationValue, "stderr", ""), beforeFiles,
+					stringField(verificationValue, "secretProbe", "")));
 				assertEquals(boolText(boolField(expect, "ok", false)), boolText(verification.ok));
 				assertEquals(stringField(expect, "code", ""), verification.code);
 				assertEquals(stringField(expect, "requestId", ""), verification.requestId);
@@ -690,7 +667,8 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(expect, "toolExecutedOutsideFixture", false)), boolText(verification.toolExecutedOutsideFixture));
 				assertContains(verification.summary(), stringField(expect, "summaryContains", ""));
 				final secretProbe = stringField(verificationValue, "secretProbe", "");
-				if (secretProbe.length > 0) assertNotContains(verification.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(verification.summary(), secretProbe);
 				final application = assertPatchApplication(verificationValue, verification, beforeFiles, secretProbe);
 				final approval = assertPatchApprovalDecision(verificationValue, verification, application, secretProbe);
 				final tracker = assertPatchTurnDiffTracker(verificationValue, verification, application, approval, secretProbe);
@@ -732,8 +710,10 @@ class ModelStreamItemReducerHarness {
 				final threadSideThreadDiscards = assertThreadSideThreadDiscards(verificationValue, threadSideThreadUiSyncs, secretProbe);
 				final threadSideThreadStarts = assertThreadSideThreadStarts(verificationValue, threadSideThreadDiscards, secretProbe);
 				final threadSideThreadStartupRoutings = assertThreadSideThreadStartupRoutings(verificationValue, threadSideThreadStarts, secretProbe);
-				final threadSideThreadComposerHandoffs = assertThreadSideThreadComposerHandoffs(verificationValue, threadSideThreadStarts, threadSideThreadStartupRoutings, secretProbe);
-				final threadSideThreadNavigationCleanups = assertThreadSideThreadNavigationCleanups(verificationValue, threadSideThreadComposerHandoffs, secretProbe);
+				final threadSideThreadComposerHandoffs = assertThreadSideThreadComposerHandoffs(verificationValue, threadSideThreadStarts,
+					threadSideThreadStartupRoutings, secretProbe);
+				final threadSideThreadNavigationCleanups = assertThreadSideThreadNavigationCleanups(verificationValue, threadSideThreadComposerHandoffs,
+					secretProbe);
 				final activeNonPrimaryShutdowns = assertActiveNonPrimaryShutdowns(verificationValue, threadSideThreadNavigationCleanups, secretProbe);
 				final clearUiHeaders = assertClearUiHeaders(verificationValue, activeNonPrimaryShutdowns, secretProbe);
 				final terminalResizeReflows = assertTerminalResizeReflows(verificationValue, clearUiHeaders, secretProbe);
@@ -784,30 +764,24 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertPatchApplication(
-		verificationValue:Value,
-		verification:ModelPatchVerificationOutcome,
-		beforeFiles:Array<ModelPatchVirtualFile>,
-		secretProbe:String
-	):ModelPatchApplicationOutcome {
+	static function assertPatchApplication(verificationValue:Value, verification:ModelPatchVerificationOutcome, beforeFiles:Array<ModelPatchVirtualFile>,
+			secretProbe:String):ModelPatchApplicationOutcome {
 		final applicationExpectValue = optionalField(verificationValue, "applicationExpect");
 		switch applicationExpectValue {
 			case JObject(_, _):
-				final application = ModelPatchApplicationPolicy.apply(new ModelPatchApplicationRequest(
-					stringField(applicationExpectValue, "requestId", ""),
-					verification,
-					beforeFiles,
-					secretProbe
-				));
+				final application = ModelPatchApplicationPolicy.apply(new ModelPatchApplicationRequest(stringField(applicationExpectValue, "requestId", ""),
+					verification, beforeFiles, secretProbe));
 				assertEquals(boolText(boolField(applicationExpectValue, "ok", false)), boolText(application.ok));
 				assertEquals(stringField(applicationExpectValue, "code", ""), application.code);
 				assertEquals(stringField(applicationExpectValue, "requestId", ""), application.requestId);
 				assertEquals(stringField(applicationExpectValue, "status", ""), application.status);
 				assertEquals(boolText(boolField(applicationExpectValue, "liveNetworkAttempted", false)), boolText(application.liveNetworkAttempted));
 				assertEquals(boolText(boolField(applicationExpectValue, "realFilesystemMutated", false)), boolText(application.realFilesystemMutated));
-				assertEquals(boolText(boolField(applicationExpectValue, "toolExecutedOutsideFixture", false)), boolText(application.toolExecutedOutsideFixture));
+				assertEquals(boolText(boolField(applicationExpectValue, "toolExecutedOutsideFixture", false)),
+					boolText(application.toolExecutedOutsideFixture));
 				assertContains(application.summary(), stringField(applicationExpectValue, "summaryContains", ""));
-				if (secretProbe.length > 0) assertNotContains(application.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(application.summary(), secretProbe);
 				return application;
 			case JNull:
 				return null;
@@ -816,30 +790,18 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertPatchApprovalDecision(
-		verificationValue:Value,
-		verification:ModelPatchVerificationOutcome,
-		application:ModelPatchApplicationOutcome,
-		secretProbe:String
-	):ModelPatchApprovalDecisionOutcome {
+	static function assertPatchApprovalDecision(verificationValue:Value, verification:ModelPatchVerificationOutcome, application:ModelPatchApplicationOutcome,
+			secretProbe:String):ModelPatchApprovalDecisionOutcome {
 		final approvalExpectValue = optionalField(verificationValue, "approvalExpect");
 		switch approvalExpectValue {
 			case JObject(_, _):
-				final approval = ModelPatchApprovalDecisionPolicy.decide(new ModelPatchApprovalDecisionRequest(
-					stringField(approvalExpectValue, "requestId", ""),
-					verification,
-					application,
-					stringField(approvalExpectValue, "environmentId", ""),
+				final approval = ModelPatchApprovalDecisionPolicy.decide(new ModelPatchApprovalDecisionRequest(stringField(approvalExpectValue, "requestId",
+					""), verification, application, stringField(approvalExpectValue, "environmentId", ""),
 					approvalRequirement(stringField(approvalExpectValue, "approvalRequirement", "skip")),
-					boolField(approvalExpectValue, "permissionsPreapproved", false),
-					stringField(approvalExpectValue, "additionalPermissionRoot", ""),
-					stringField(approvalExpectValue, "retryReason", ""),
-					boolField(approvalExpectValue, "sandboxApprovalAllowed", false),
-					sandboxAttempt(stringField(approvalExpectValue, "sandboxAttempt", "none")),
-					boolField(approvalExpectValue, "sandboxDenied", false),
-					reviewDecision(stringField(approvalExpectValue, "reviewDecision", "denied")),
-					secretProbe
-				));
+					boolField(approvalExpectValue, "permissionsPreapproved", false), stringField(approvalExpectValue, "additionalPermissionRoot", ""),
+					stringField(approvalExpectValue, "retryReason", ""), boolField(approvalExpectValue, "sandboxApprovalAllowed", false),
+					sandboxAttempt(stringField(approvalExpectValue, "sandboxAttempt", "none")), boolField(approvalExpectValue, "sandboxDenied", false),
+					reviewDecision(stringField(approvalExpectValue, "reviewDecision", "denied")), secretProbe));
 				assertEquals(boolText(boolField(approvalExpectValue, "ok", false)), boolText(approval.ok));
 				assertEquals(stringField(approvalExpectValue, "code", ""), approval.code);
 				assertEquals(stringField(approvalExpectValue, "requestId", ""), approval.requestId);
@@ -851,7 +813,8 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(approvalExpectValue, "realFilesystemMutated", false)), boolText(approval.realFilesystemMutated));
 				assertEquals(boolText(boolField(approvalExpectValue, "toolExecutedOutsideFixture", false)), boolText(approval.toolExecutedOutsideFixture));
 				assertContains(approval.summary(), stringField(approvalExpectValue, "summaryContains", ""));
-				if (secretProbe.length > 0) assertNotContains(approval.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(approval.summary(), secretProbe);
 				return approval;
 			case JNull:
 				return null;
@@ -860,31 +823,19 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertPatchTurnDiffTracker(
-		verificationValue:Value,
-		verification:ModelPatchVerificationOutcome,
-		application:ModelPatchApplicationOutcome,
-		approval:ModelPatchApprovalDecisionOutcome,
-		secretProbe:String
-	):ModelPatchTurnDiffTrackerOutcome {
+	static function assertPatchTurnDiffTracker(verificationValue:Value, verification:ModelPatchVerificationOutcome, application:ModelPatchApplicationOutcome,
+			approval:ModelPatchApprovalDecisionOutcome, secretProbe:String):ModelPatchTurnDiffTrackerOutcome {
 		final trackerExpectValue = optionalField(verificationValue, "trackerExpect");
 		switch trackerExpectValue {
 			case JObject(_, _):
-				final tracker = ModelPatchTurnDiffTrackerPolicy.update(new ModelPatchTurnDiffTrackerRequest(
-					stringField(trackerExpectValue, "requestId", ""),
-					verification,
-					application,
-					approval,
-					stringField(trackerExpectValue, "environmentId", ""),
+				final tracker = ModelPatchTurnDiffTrackerPolicy.update(new ModelPatchTurnDiffTrackerRequest(stringField(trackerExpectValue, "requestId", ""),
+					verification, application, approval, stringField(trackerExpectValue, "environmentId", ""),
 					toolEventStage(stringField(trackerExpectValue, "stage", "success")),
-					new ModelPatchAppliedDelta(
-						boolField(trackerExpectValue, "deltaKnown", false),
-						boolField(trackerExpectValue, "deltaExact", false),
-						boolField(trackerExpectValue, "deltaFromVerification", false) && verification != null && verification.endEvent != null ? verification.endEvent.changes : []
-					),
-					stringField(trackerExpectValue, "previousUnifiedDiff", ""),
-					secretProbe
-				));
+					new ModelPatchAppliedDelta(boolField(trackerExpectValue, "deltaKnown", false), boolField(trackerExpectValue, "deltaExact", false),
+						boolField(trackerExpectValue, "deltaFromVerification", false)
+						&& verification != null
+						&& verification.endEvent != null ? verification.endEvent.changes : []),
+					stringField(trackerExpectValue, "previousUnifiedDiff", ""), secretProbe));
 				assertEquals(boolText(boolField(trackerExpectValue, "ok", false)), boolText(tracker.ok));
 				assertEquals(stringField(trackerExpectValue, "code", ""), tracker.code);
 				assertEquals(stringField(trackerExpectValue, "requestId", ""), tracker.requestId);
@@ -895,7 +846,8 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(trackerExpectValue, "realFilesystemMutated", false)), boolText(tracker.realFilesystemMutated));
 				assertEquals(boolText(boolField(trackerExpectValue, "toolExecutedOutsideFixture", false)), boolText(tracker.toolExecutedOutsideFixture));
 				assertContains(tracker.summary(), stringField(trackerExpectValue, "summaryContains", ""));
-				if (secretProbe.length > 0) assertNotContains(tracker.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(tracker.summary(), secretProbe);
 				return tracker;
 			case JNull:
 				return null;
@@ -904,26 +856,14 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertPatchProjection(
-		verificationValue:Value,
-		verification:ModelPatchVerificationOutcome,
-		application:ModelPatchApplicationOutcome,
-		approval:ModelPatchApprovalDecisionOutcome,
-		tracker:ModelPatchTurnDiffTrackerOutcome,
-		secretProbe:String
-	):codexhx.runtime.model.streamitem.ModelPatchProjectionOutcome {
+	static function assertPatchProjection(verificationValue:Value, verification:ModelPatchVerificationOutcome, application:ModelPatchApplicationOutcome,
+			approval:ModelPatchApprovalDecisionOutcome, tracker:ModelPatchTurnDiffTrackerOutcome,
+			secretProbe:String):codexhx.runtime.model.streamitem.ModelPatchProjectionOutcome {
 		final projectionExpectValue = optionalField(verificationValue, "projectionExpect");
 		switch projectionExpectValue {
 			case JObject(_, _):
-				final projection = ModelPatchProjectionPolicy.project(new ModelPatchProjectionRequest(
-					stringField(projectionExpectValue, "requestId", ""),
-					verification,
-					application,
-					approval,
-					tracker,
-					boolField(projectionExpectValue, "includeLegacyEvents", false),
-					secretProbe
-				));
+				final projection = ModelPatchProjectionPolicy.project(new ModelPatchProjectionRequest(stringField(projectionExpectValue, "requestId", ""),
+					verification, application, approval, tracker, boolField(projectionExpectValue, "includeLegacyEvents", false), secretProbe));
 				assertEquals(boolText(boolField(projectionExpectValue, "ok", false)), boolText(projection.ok));
 				assertEquals(stringField(projectionExpectValue, "code", ""), projection.code);
 				assertEquals(stringField(projectionExpectValue, "requestId", ""), projection.requestId);
@@ -941,7 +881,8 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(projectionExpectValue, "realFilesystemMutated", false)), boolText(projection.realFilesystemMutated));
 				assertEquals(boolText(boolField(projectionExpectValue, "toolExecutedOutsideFixture", false)), boolText(projection.toolExecutedOutsideFixture));
 				assertContains(projection.summary(), stringField(projectionExpectValue, "summaryContains", ""));
-				if (secretProbe.length > 0) assertNotContains(projection.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(projection.summary(), secretProbe);
 				return projection;
 			case JNull:
 				return null;
@@ -950,23 +891,14 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertPatchToolFollowUp(
-		verificationValue:Value,
-		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
-		application:ModelPatchApplicationOutcome,
-		projection:codexhx.runtime.model.streamitem.ModelPatchProjectionOutcome,
-		secretProbe:String
-	):ModelPatchToolFollowUpOutcome {
+	static function assertPatchToolFollowUp(verificationValue:Value, reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
+			application:ModelPatchApplicationOutcome, projection:codexhx.runtime.model.streamitem.ModelPatchProjectionOutcome,
+			secretProbe:String):ModelPatchToolFollowUpOutcome {
 		final followUpExpectValue = optionalField(verificationValue, "toolFollowUpExpect");
 		switch followUpExpectValue {
 			case JObject(_, _):
-				final followUp = ModelPatchToolFollowUpPolicy.build(new ModelPatchToolFollowUpRequest(
-					stringField(followUpExpectValue, "requestId", ""),
-					reducerOutcome,
-					application,
-					projection,
-					secretProbe
-				));
+				final followUp = ModelPatchToolFollowUpPolicy.build(new ModelPatchToolFollowUpRequest(stringField(followUpExpectValue, "requestId", ""),
+					reducerOutcome, application, projection, secretProbe));
 				assertEquals(boolText(boolField(followUpExpectValue, "ok", false)), boolText(followUp.ok));
 				assertEquals(stringField(followUpExpectValue, "code", ""), followUp.code);
 				assertEquals(stringField(followUpExpectValue, "requestId", ""), followUp.requestId);
@@ -983,7 +915,8 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(followUpExpectValue, "realFilesystemMutated", false)), boolText(followUp.realFilesystemMutated));
 				assertEquals(boolText(boolField(followUpExpectValue, "toolExecutedOutsideFixture", false)), boolText(followUp.toolExecutedOutsideFixture));
 				assertContains(followUp.summary(), stringField(followUpExpectValue, "summaryContains", ""));
-				if (secretProbe.length > 0) assertNotContains(followUp.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(followUp.summary(), secretProbe);
 				return followUp;
 			case JNull:
 				return null;
@@ -992,20 +925,13 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertPatchToolResponseInput(
-		verificationValue:Value,
-		followUp:ModelPatchToolFollowUpOutcome,
-		secretProbe:String
-	):ModelPatchToolResponseInputOutcome {
+	static function assertPatchToolResponseInput(verificationValue:Value, followUp:ModelPatchToolFollowUpOutcome,
+			secretProbe:String):ModelPatchToolResponseInputOutcome {
 		final inputExpectValue = optionalField(verificationValue, "toolResponseInputExpect");
 		switch inputExpectValue {
 			case JObject(_, _):
-				final input = ModelPatchToolResponseInputPolicy.admit(new ModelPatchToolResponseInputRequest(
-					stringField(inputExpectValue, "requestId", ""),
-					followUp,
-					intField(inputExpectValue, "previousResponseCount", 0),
-					secretProbe
-				));
+				final input = ModelPatchToolResponseInputPolicy.admit(new ModelPatchToolResponseInputRequest(stringField(inputExpectValue, "requestId", ""),
+					followUp, intField(inputExpectValue, "previousResponseCount", 0), secretProbe));
 				assertEquals(boolText(boolField(inputExpectValue, "ok", false)), boolText(input.ok));
 				assertEquals(stringField(inputExpectValue, "code", ""), input.code);
 				assertEquals(stringField(inputExpectValue, "requestId", ""), input.requestId);
@@ -1022,7 +948,8 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(inputExpectValue, "realFilesystemMutated", false)), boolText(input.realFilesystemMutated));
 				assertEquals(boolText(boolField(inputExpectValue, "toolExecutedOutsideFixture", false)), boolText(input.toolExecutedOutsideFixture));
 				assertContains(input.summary(), stringField(inputExpectValue, "summaryContains", ""));
-				if (secretProbe.length > 0) assertNotContains(input.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(input.summary(), secretProbe);
 				return input;
 			case JNull:
 				return null;
@@ -1031,25 +958,15 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertSamplingContinuation(
-		verificationValue:Value,
-		responseInput:ModelPatchToolResponseInputOutcome,
-		secretProbe:String
-	):ModelSamplingContinuationOutcome {
+	static function assertSamplingContinuation(verificationValue:Value, responseInput:ModelPatchToolResponseInputOutcome,
+			secretProbe:String):ModelSamplingContinuationOutcome {
 		final expectValue = optionalField(verificationValue, "samplingContinuationExpect");
 		switch expectValue {
 			case JObject(_, _):
-				final continuation = ModelSamplingContinuationPolicy.plan(new ModelSamplingContinuationRequest(
-					stringField(expectValue, "requestId", ""),
-					responseInput,
-					boolField(expectValue, "hasPendingInput", false),
-					intField(expectValue, "pendingInputCount", 0),
-					boolField(expectValue, "tokenLimitReached", false),
-					intField(expectValue, "activeContextTokens", 0),
-					intField(expectValue, "estimatedTokenCount", 0),
-					intField(expectValue, "previousSamplingRequestCount", 0),
-					secretProbe
-				));
+				final continuation = ModelSamplingContinuationPolicy.plan(new ModelSamplingContinuationRequest(stringField(expectValue, "requestId", ""),
+					responseInput, boolField(expectValue, "hasPendingInput", false), intField(expectValue, "pendingInputCount", 0),
+					boolField(expectValue, "tokenLimitReached", false), intField(expectValue, "activeContextTokens", 0),
+					intField(expectValue, "estimatedTokenCount", 0), intField(expectValue, "previousSamplingRequestCount", 0), secretProbe));
 				assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(continuation.ok));
 				assertEquals(stringField(expectValue, "code", ""), continuation.code);
 				assertEquals(stringField(expectValue, "requestId", ""), continuation.requestId);
@@ -1059,9 +976,11 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(expectValue, "needsFollowUp", false)), boolText(continuation.needsFollowUp));
 				assertEquals(boolText(boolField(expectValue, "nextSamplingRequestRequired", false)), boolText(continuation.nextSamplingRequestRequired));
 				assertEquals(boolText(boolField(expectValue, "responseInputCarried", false)), boolText(continuation.responseInputCarried));
-				assertEquals(boolText(boolField(expectValue, "pendingInputDrainedBeforeNextRequest", false)), boolText(continuation.pendingInputDrainedBeforeNextRequest));
+				assertEquals(boolText(boolField(expectValue, "pendingInputDrainedBeforeNextRequest", false)),
+					boolText(continuation.pendingInputDrainedBeforeNextRequest));
 				assertEquals(boolText(boolField(expectValue, "autoCompactRequired", false)), boolText(continuation.autoCompactRequired));
-				assertEquals(boolText(boolField(expectValue, "canDrainPendingInputBeforeNextRequest", false)), boolText(continuation.canDrainPendingInputBeforeNextRequest));
+				assertEquals(boolText(boolField(expectValue, "canDrainPendingInputBeforeNextRequest", false)),
+					boolText(continuation.canDrainPendingInputBeforeNextRequest));
 				assertEquals(Std.string(intField(expectValue, "admittedResponseInputCount", 0)), Std.string(continuation.admittedResponseInputCount));
 				assertEquals(Std.string(intField(expectValue, "pendingInputCount", 0)), Std.string(continuation.pendingInputCount));
 				assertEquals(Std.string(intField(expectValue, "nextSamplingInputCount", 0)), Std.string(continuation.nextSamplingInputCount));
@@ -1072,7 +991,8 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(continuation.realFilesystemMutated));
 				assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(continuation.toolExecutedOutsideFixture));
 				assertContains(continuation.summary(), stringField(expectValue, "summaryContains", ""));
-				if (secretProbe.length > 0) assertNotContains(continuation.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(continuation.summary(), secretProbe);
 				return continuation;
 			case JNull:
 				return null;
@@ -1081,24 +1001,14 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertSamplingInputAssembly(
-		verificationValue:Value,
-		responseInput:ModelPatchToolResponseInputOutcome,
-		continuation:ModelSamplingContinuationOutcome,
-		secretProbe:String
-	):ModelSamplingInputAssemblyOutcome {
+	static function assertSamplingInputAssembly(verificationValue:Value, responseInput:ModelPatchToolResponseInputOutcome,
+			continuation:ModelSamplingContinuationOutcome, secretProbe:String):ModelSamplingInputAssemblyOutcome {
 		final expectValue = optionalField(verificationValue, "samplingInputAssemblyExpect");
 		switch expectValue {
 			case JObject(_, _):
-				final assembly = ModelSamplingInputAssemblyPolicy.assemble(new ModelSamplingInputAssemblyRequest(
-					stringField(expectValue, "requestId", ""),
-					responseInput,
-					continuation,
-					samplingInputItems(arrayField(expectValue, "pendingInputItems")),
-					intField(expectValue, "previousPromptItemCount", 0),
-					boolField(expectValue, "modelSupportsImages", false),
-					secretProbe
-				));
+				final assembly = ModelSamplingInputAssemblyPolicy.assemble(new ModelSamplingInputAssemblyRequest(stringField(expectValue, "requestId", ""),
+					responseInput, continuation, samplingInputItems(arrayField(expectValue, "pendingInputItems")),
+					intField(expectValue, "previousPromptItemCount", 0), boolField(expectValue, "modelSupportsImages", false), secretProbe));
 				assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(assembly.ok));
 				assertEquals(stringField(expectValue, "code", ""), assembly.code);
 				assertEquals(stringField(expectValue, "requestId", ""), assembly.requestId);
@@ -1119,7 +1029,8 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(assembly.realFilesystemMutated));
 				assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(assembly.toolExecutedOutsideFixture));
 				assertContains(assembly.summary(), stringField(expectValue, "summaryContains", ""));
-				if (secretProbe.length > 0) assertNotContains(assembly.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(assembly.summary(), secretProbe);
 				return assembly;
 			case JNull:
 				return null;
@@ -1128,28 +1039,17 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertSamplingDispatch(
-		verificationValue:Value,
-		assembly:ModelSamplingInputAssemblyOutcome,
-		secretProbe:String
-	):ModelSamplingDispatchOutcome {
+	static function assertSamplingDispatch(verificationValue:Value, assembly:ModelSamplingInputAssemblyOutcome,
+			secretProbe:String):ModelSamplingDispatchOutcome {
 		final expectValue = optionalField(verificationValue, "samplingDispatchExpect");
 		switch expectValue {
 			case JObject(_, _):
-				final dispatch = ModelSamplingDispatchPolicy.plan(new ModelSamplingDispatchRequest(
-					stringField(expectValue, "requestId", ""),
-					assembly,
+				final dispatch = ModelSamplingDispatchPolicy.plan(new ModelSamplingDispatchRequest(stringField(expectValue, "requestId", ""), assembly,
 					samplingDispatchTransportKind(stringField(expectValue, "requestedTransportKind", "responses_http")),
-					stringField(expectValue, "windowId", ""),
-					boolField(expectValue, "turnMetadataHeaderPresent", false),
-					intField(expectValue, "maxRetries", 0),
-					intField(expectValue, "previousDispatchCount", 0),
-					boolField(expectValue, "modelClientSessionReused", false),
-					boolField(expectValue, "stickyRoutingTokenPreserved", false),
-					boolField(expectValue, "cancellationChildTokenCreated", false),
-					boolField(expectValue, "liveProviderEnabled", false),
-					secretProbe
-				));
+					stringField(expectValue, "windowId", ""), boolField(expectValue, "turnMetadataHeaderPresent", false),
+					intField(expectValue, "maxRetries", 0), intField(expectValue, "previousDispatchCount", 0),
+					boolField(expectValue, "modelClientSessionReused", false), boolField(expectValue, "stickyRoutingTokenPreserved", false),
+					boolField(expectValue, "cancellationChildTokenCreated", false), boolField(expectValue, "liveProviderEnabled", false), secretProbe));
 				assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(dispatch.ok));
 				assertEquals(stringField(expectValue, "code", ""), dispatch.code);
 				assertEquals(stringField(expectValue, "requestId", ""), dispatch.requestId);
@@ -1173,7 +1073,8 @@ class ModelStreamItemReducerHarness {
 				assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(dispatch.realFilesystemMutated));
 				assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(dispatch.toolExecutedOutsideFixture));
 				assertContains(dispatch.summary(), stringField(expectValue, "summaryContains", ""));
-				if (secretProbe.length > 0) assertNotContains(dispatch.summary(), secretProbe);
+				if (secretProbe.length > 0)
+					assertNotContains(dispatch.summary(), secretProbe);
 				return dispatch;
 			case JNull:
 				return null;
@@ -1182,24 +1083,15 @@ class ModelStreamItemReducerHarness {
 		}
 	}
 
-	static function assertSamplingStreamAttempts(
-		verificationValue:Value,
-		dispatch:ModelSamplingDispatchOutcome,
-		secretProbe:String
-	):Array<ModelSamplingStreamAttemptOutcome> {
+	static function assertSamplingStreamAttempts(verificationValue:Value, dispatch:ModelSamplingDispatchOutcome,
+			secretProbe:String):Array<ModelSamplingStreamAttemptOutcome> {
 		final attempts:Array<ModelSamplingStreamAttemptOutcome> = [];
 		final values = arrayField(verificationValue, "samplingStreamAttemptExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
-			final attempt = ModelSamplingStreamAttemptPolicy.evaluate(new ModelSamplingStreamAttemptRequest(
-				stringField(expectValue, "requestId", ""),
-				dispatch,
-				samplingStreamErrorKind(stringField(expectValue, "errorKind", "none")),
-				intField(expectValue, "currentRetryCount", 0),
-				boolField(expectValue, "unauthorizedRecoveryAvailable", false),
-				boolField(expectValue, "rateLimitUpdated", false),
-				secretProbe
-			));
+			final attempt = ModelSamplingStreamAttemptPolicy.evaluate(new ModelSamplingStreamAttemptRequest(stringField(expectValue, "requestId", ""),
+				dispatch, samplingStreamErrorKind(stringField(expectValue, "errorKind", "none")), intField(expectValue, "currentRetryCount", 0),
+				boolField(expectValue, "unauthorizedRecoveryAvailable", false), boolField(expectValue, "rateLimitUpdated", false), secretProbe));
 			assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(attempt.ok));
 			assertEquals(stringField(expectValue, "code", ""), attempt.code);
 			assertEquals(stringField(expectValue, "requestId", ""), attempt.requestId);
@@ -1223,32 +1115,23 @@ class ModelStreamItemReducerHarness {
 			assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(attempt.realFilesystemMutated));
 			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(attempt.toolExecutedOutsideFixture));
 			assertContains(attempt.summary(), stringField(expectValue, "summaryContains", ""));
-			if (secretProbe.length > 0) assertNotContains(attempt.summary(), secretProbe);
+			if (secretProbe.length > 0)
+				assertNotContains(attempt.summary(), secretProbe);
 			attempts.push(attempt);
 		}
 		return attempts;
 	}
 
-	static function assertSamplingStreamEventHandoffs(
-		verificationValue:Value,
-		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
-		attempts:Array<ModelSamplingStreamAttemptOutcome>,
-		secretProbe:String
-	):Array<ModelSamplingStreamEventHandoffOutcome> {
+	static function assertSamplingStreamEventHandoffs(verificationValue:Value, reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
+			attempts:Array<ModelSamplingStreamAttemptOutcome>, secretProbe:String):Array<ModelSamplingStreamEventHandoffOutcome> {
 		final handoffs:Array<ModelSamplingStreamEventHandoffOutcome> = [];
 		final values = optionalArrayField(verificationValue, "samplingStreamEventHandoffExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
-			final handoff = ModelSamplingStreamEventHandoffPolicy.model(new ModelSamplingStreamEventHandoffRequest(
-				stringField(expectValue, "requestId", ""),
-				streamAttemptByRequestId(attempts, stringField(expectValue, "attemptRequestId", "")),
-				reducerOutcome,
-				boolField(expectValue, "streamClosedBeforeCompleted", false),
-				intField(expectValue, "inFlightToolCount", 0),
-				boolField(expectValue, "tokenCountPending", false),
-				boolField(expectValue, "turnDiffPending", false),
-				secretProbe
-			));
+			final handoff = ModelSamplingStreamEventHandoffPolicy.model(new ModelSamplingStreamEventHandoffRequest(stringField(expectValue, "requestId", ""),
+				streamAttemptByRequestId(attempts, stringField(expectValue, "attemptRequestId", "")), reducerOutcome,
+				boolField(expectValue, "streamClosedBeforeCompleted", false), intField(expectValue, "inFlightToolCount", 0),
+				boolField(expectValue, "tokenCountPending", false), boolField(expectValue, "turnDiffPending", false), secretProbe));
 			assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(handoff.ok));
 			assertEquals(stringField(expectValue, "code", ""), handoff.code);
 			assertEquals(stringField(expectValue, "requestId", ""), handoff.requestId);
@@ -1265,7 +1148,8 @@ class ModelStreamItemReducerHarness {
 			assertEquals(boolText(boolField(expectValue, "responseCompleted", false)), boolText(handoff.responseCompleted));
 			assertEquals(boolText(boolField(expectValue, "streamClosedBeforeCompleted", false)), boolText(handoff.streamClosedBeforeCompleted));
 			assertEquals(boolText(boolField(expectValue, "toolDrainRequired", false)), boolText(handoff.toolDrainRequired));
-			assertEquals(boolText(boolField(expectValue, "tokenCountEventDeferredUntilToolDrain", false)), boolText(handoff.tokenCountEventDeferredUntilToolDrain));
+			assertEquals(boolText(boolField(expectValue, "tokenCountEventDeferredUntilToolDrain", false)),
+				boolText(handoff.tokenCountEventDeferredUntilToolDrain));
 			assertEquals(boolText(boolField(expectValue, "turnDiffEventDeferredUntilToolDrain", false)), boolText(handoff.turnDiffEventDeferredUntilToolDrain));
 			assertEquals(boolText(boolField(expectValue, "needsFollowUp", false)), boolText(handoff.needsFollowUp));
 			assertEquals(stringField(expectValue, "terminalResponseId", ""), handoff.terminalResponseId);
@@ -1279,36 +1163,30 @@ class ModelStreamItemReducerHarness {
 			assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(handoff.realFilesystemMutated));
 			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(handoff.toolExecutedOutsideFixture));
 			assertContains(handoff.summary(), stringField(expectValue, "summaryContains", ""));
-			if (secretProbe.length > 0) assertNotContains(handoff.summary(), secretProbe);
+			if (secretProbe.length > 0)
+				assertNotContains(handoff.summary(), secretProbe);
 			handoffs.push(handoff);
 		}
 		return handoffs;
 	}
 
 	static function streamAttemptByRequestId(attempts:Array<ModelSamplingStreamAttemptOutcome>, requestId:String):ModelSamplingStreamAttemptOutcome {
-		for (attempt in attempts) if (attempt.requestId == requestId) return attempt;
+		for (attempt in attempts)
+			if (attempt.requestId == requestId)
+				return attempt;
 		throw "missing stream attempt outcome: " + requestId;
 	}
 
-	static function assertInFlightToolDrains(
-		verificationValue:Value,
-		responseInput:ModelPatchToolResponseInputOutcome,
-		handoffs:Array<ModelSamplingStreamEventHandoffOutcome>,
-		secretProbe:String
-	):Array<ModelInFlightToolDrainOutcome> {
+	static function assertInFlightToolDrains(verificationValue:Value, responseInput:ModelPatchToolResponseInputOutcome,
+			handoffs:Array<ModelSamplingStreamEventHandoffOutcome>, secretProbe:String):Array<ModelInFlightToolDrainOutcome> {
 		final drains:Array<ModelInFlightToolDrainOutcome> = [];
 		final values = optionalArrayField(verificationValue, "inFlightToolDrainExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
-			final drain = ModelInFlightToolDrainPolicy.drain(new ModelInFlightToolDrainRequest(
-				stringField(expectValue, "requestId", ""),
-				streamHandoffByRequestId(handoffs, stringField(expectValue, "handoffRequestId", "")),
-				responseInput,
-				inFlightDrainItems(arrayField(expectValue, "items")),
-				boolField(expectValue, "tokenCountPending", false),
-				boolField(expectValue, "turnDiffPending", false),
-				secretProbe
-			));
+			final drain = ModelInFlightToolDrainPolicy.drain(new ModelInFlightToolDrainRequest(stringField(expectValue, "requestId", ""),
+				streamHandoffByRequestId(handoffs, stringField(expectValue, "handoffRequestId", "")), responseInput,
+				inFlightDrainItems(arrayField(expectValue, "items")), boolField(expectValue, "tokenCountPending", false),
+				boolField(expectValue, "turnDiffPending", false), secretProbe));
 			assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(drain.ok));
 			assertEquals(stringField(expectValue, "code", ""), drain.code);
 			assertEquals(stringField(expectValue, "requestId", ""), drain.requestId);
@@ -1329,29 +1207,22 @@ class ModelStreamItemReducerHarness {
 			assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(drain.realFilesystemMutated));
 			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(drain.toolExecutedOutsideFixture));
 			assertContains(drain.summary(), stringField(expectValue, "summaryContains", ""));
-			if (secretProbe.length > 0) assertNotContains(drain.summary(), secretProbe);
+			if (secretProbe.length > 0)
+				assertNotContains(drain.summary(), secretProbe);
 			drains.push(drain);
 		}
 		return drains;
 	}
 
-	static function assertPostDrainEmissions(
-		verificationValue:Value,
-		drains:Array<ModelInFlightToolDrainOutcome>,
-		secretProbe:String
-	):Array<ModelPostDrainEmissionOutcome> {
+	static function assertPostDrainEmissions(verificationValue:Value, drains:Array<ModelInFlightToolDrainOutcome>,
+			secretProbe:String):Array<ModelPostDrainEmissionOutcome> {
 		final emissions:Array<ModelPostDrainEmissionOutcome> = [];
 		final values = optionalArrayField(verificationValue, "postDrainEmissionExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
-			final emission = ModelPostDrainEmissionPolicy.project(new ModelPostDrainEmissionRequest(
-				stringField(expectValue, "requestId", ""),
-				drainByRequestId(drains, stringField(expectValue, "drainRequestId", "")),
-				boolField(expectValue, "cancellationRequestedAfterDrain", false),
-				boolField(expectValue, "unifiedDiffAvailable", false),
-				boolField(expectValue, "tokenInfoAvailable", false),
-				secretProbe
-			));
+			final emission = ModelPostDrainEmissionPolicy.project(new ModelPostDrainEmissionRequest(stringField(expectValue, "requestId", ""),
+				drainByRequestId(drains, stringField(expectValue, "drainRequestId", "")), boolField(expectValue, "cancellationRequestedAfterDrain", false),
+				boolField(expectValue, "unifiedDiffAvailable", false), boolField(expectValue, "tokenInfoAvailable", false), secretProbe));
 			assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(emission.ok));
 			assertEquals(stringField(expectValue, "code", ""), emission.code);
 			assertEquals(stringField(expectValue, "requestId", ""), emission.requestId);
@@ -1372,86 +1243,54 @@ class ModelStreamItemReducerHarness {
 			assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(emission.realFilesystemMutated));
 			assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(emission.toolExecutedOutsideFixture));
 			assertContains(emission.summary(), stringField(expectValue, "summaryContains", ""));
-			if (secretProbe.length > 0) assertNotContains(emission.summary(), secretProbe);
+			if (secretProbe.length > 0)
+				assertNotContains(emission.summary(), secretProbe);
 			emissions.push(emission);
 		}
 		return emissions;
 	}
 
 	static function drainByRequestId(drains:Array<ModelInFlightToolDrainOutcome>, requestId:String):ModelInFlightToolDrainOutcome {
-		for (drain in drains) if (drain.requestId == requestId) return drain;
+		for (drain in drains)
+			if (drain.requestId == requestId)
+				return drain;
 		throw "missing in-flight tool drain outcome: " + requestId;
 	}
 
-	static function assertTopLevelSamplingResultIntegrations(
-		testCase:Value,
-		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
-		secretProbe:String
-	):Array<ModelSamplingResultIntegrationOutcome> {
+	static function assertTopLevelSamplingResultIntegrations(testCase:Value, reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
+			secretProbe:String):Array<ModelSamplingResultIntegrationOutcome> {
 		final integrations:Array<ModelSamplingResultIntegrationOutcome> = [];
 		final values = optionalArrayField(testCase, "samplingResultIntegrationExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
-			final syntheticEmission = new ModelPostDrainEmissionOutcome(
-				true,
-				"post_drain_emission_modeled",
-				stringField(expectValue, "postDrainRequestId", "synthetic-post-drain"),
-				ModelPostDrainEmissionKind.NoEmission,
-				ModelPostDrainCancellationKind.None,
-				false,
-				false,
-				false,
-				true,
-				false,
-				false,
-				false,
-				false,
-				false,
-				false,
-				boolField(expectValue, "samplingOutcomeReturned", true),
-				reducerOutcome.liveNetworkAttempted,
-				false,
-				false,
-				""
-			);
+			final syntheticEmission = new ModelPostDrainEmissionOutcome(true, "post_drain_emission_modeled",
+				stringField(expectValue, "postDrainRequestId", "synthetic-post-drain"), ModelPostDrainEmissionKind.NoEmission,
+				ModelPostDrainCancellationKind.None, false, false, false, true, false, false, false, false, false, false,
+				boolField(expectValue, "samplingOutcomeReturned", true), reducerOutcome.liveNetworkAttempted, false, false, "");
 			integrations.push(assertSamplingResultIntegration(expectValue, syntheticEmission, reducerOutcome, secretProbe));
 		}
 		return integrations;
 	}
 
-	static function assertSamplingResultIntegrations(
-		verificationValue:Value,
-		emissions:Array<ModelPostDrainEmissionOutcome>,
-		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
-		secretProbe:String
-	):Array<ModelSamplingResultIntegrationOutcome> {
+	static function assertSamplingResultIntegrations(verificationValue:Value, emissions:Array<ModelPostDrainEmissionOutcome>,
+			reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome, secretProbe:String):Array<ModelSamplingResultIntegrationOutcome> {
 		final integrations:Array<ModelSamplingResultIntegrationOutcome> = [];
 		final values = optionalArrayField(verificationValue, "samplingResultIntegrationExpects");
 		for (value in values) {
 			final expectValue = objectValue(value);
-			integrations.push(assertSamplingResultIntegration(expectValue, postDrainEmissionByRequestId(emissions, stringField(expectValue, "postDrainRequestId", "")), reducerOutcome, secretProbe));
+			integrations.push(assertSamplingResultIntegration(expectValue,
+				postDrainEmissionByRequestId(emissions, stringField(expectValue, "postDrainRequestId", "")), reducerOutcome, secretProbe));
 		}
 		return integrations;
 	}
 
-	static function assertSamplingResultIntegration(
-		expectValue:Value,
-		emission:ModelPostDrainEmissionOutcome,
-		reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome,
-		secretProbe:String
-	):ModelSamplingResultIntegrationOutcome {
-		final integration = ModelSamplingResultIntegrationPolicy.integrate(new ModelSamplingResultIntegrationRequest(
-			stringField(expectValue, "requestId", ""),
-			emission,
-			boolField(expectValue, "modelNeedsFollowUp", reducerOutcome.needsFollowUp),
-			boolField(expectValue, "hasPendingInput", false),
-			intField(expectValue, "pendingInputCount", 0),
-			boolField(expectValue, "tokenLimitReached", false),
-			stringField(expectValue, "lastAgentMessage", reducerOutcome.lastAgentMessage),
-			stringField(expectValue, "previousLastAgentMessage", ""),
-			samplingResultStatusKind(stringField(expectValue, "statusKind", "ok")),
-			secretProbe
-		));
+	static function assertSamplingResultIntegration(expectValue:Value, emission:ModelPostDrainEmissionOutcome,
+			reducerOutcome:codexhx.runtime.model.streamitem.ModelStreamItemReducerOutcome, secretProbe:String):ModelSamplingResultIntegrationOutcome {
+		final integration = ModelSamplingResultIntegrationPolicy.integrate(new ModelSamplingResultIntegrationRequest(stringField(expectValue, "requestId",
+			""), emission, boolField(expectValue, "modelNeedsFollowUp", reducerOutcome.needsFollowUp),
+			boolField(expectValue, "hasPendingInput", false), intField(expectValue, "pendingInputCount", 0),
+			boolField(expectValue, "tokenLimitReached", false), stringField(expectValue, "lastAgentMessage", reducerOutcome.lastAgentMessage),
+			stringField(expectValue, "previousLastAgentMessage", ""), samplingResultStatusKind(stringField(expectValue, "statusKind", "ok")), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(integration.ok));
 		assertEquals(stringField(expectValue, "code", ""), integration.code);
 		assertEquals(stringField(expectValue, "requestId", ""), integration.requestId);
@@ -1459,7 +1298,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(stringField(expectValue, "statusKind", ""), integration.statusKind);
 		assertEquals(boolText(boolField(expectValue, "needsFollowUp", false)), boolText(integration.needsFollowUp));
 		assertEquals(boolText(boolField(expectValue, "pendingInputDrainEnabled", false)), boolText(integration.pendingInputDrainEnabled));
-		assertEquals(boolText(boolField(expectValue, "canDrainPendingInputAfterAutoCompact", false)), boolText(integration.canDrainPendingInputAfterAutoCompact));
+		assertEquals(boolText(boolField(expectValue, "canDrainPendingInputAfterAutoCompact", false)),
+			boolText(integration.canDrainPendingInputAfterAutoCompact));
 		assertEquals(boolText(boolField(expectValue, "lastAgentMessageUpdated", false)), boolText(integration.lastAgentMessageUpdated));
 		assertEquals(stringField(expectValue, "integratedLastAgentMessage", ""), integration.lastAgentMessage);
 		assertEquals(boolText(boolField(expectValue, "samplingOutcomeReturned", false)), boolText(integration.samplingOutcomeReturned));
@@ -1472,45 +1312,36 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(integration.realFilesystemMutated));
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(integration.toolExecutedOutsideFixture));
 		assertContains(integration.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(integration.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(integration.summary(), secretProbe);
 		return integration;
 	}
 
-	static function assertTopLevelPostSamplingPendingInputDrains(
-		testCase:Value,
-		integrations:Array<ModelSamplingResultIntegrationOutcome>,
-		secretProbe:String
-	):Array<ModelPostSamplingPendingInputDrainOutcome> {
+	static function assertTopLevelPostSamplingPendingInputDrains(testCase:Value, integrations:Array<ModelSamplingResultIntegrationOutcome>,
+			secretProbe:String):Array<ModelPostSamplingPendingInputDrainOutcome> {
 		final drains:Array<ModelPostSamplingPendingInputDrainOutcome> = [];
 		final values = optionalArrayField(testCase, "postSamplingPendingInputDrainExpects");
-		for (value in values) drains.push(assertPostSamplingPendingInputDrain(objectValue(value), integrations, secretProbe));
+		for (value in values)
+			drains.push(assertPostSamplingPendingInputDrain(objectValue(value), integrations, secretProbe));
 		return drains;
 	}
 
-	static function assertPostSamplingPendingInputDrains(
-		verificationValue:Value,
-		integrations:Array<ModelSamplingResultIntegrationOutcome>,
-		secretProbe:String
-	):Array<ModelPostSamplingPendingInputDrainOutcome> {
+	static function assertPostSamplingPendingInputDrains(verificationValue:Value, integrations:Array<ModelSamplingResultIntegrationOutcome>,
+			secretProbe:String):Array<ModelPostSamplingPendingInputDrainOutcome> {
 		final drains:Array<ModelPostSamplingPendingInputDrainOutcome> = [];
 		final values = optionalArrayField(verificationValue, "postSamplingPendingInputDrainExpects");
-		for (value in values) drains.push(assertPostSamplingPendingInputDrain(objectValue(value), integrations, secretProbe));
+		for (value in values)
+			drains.push(assertPostSamplingPendingInputDrain(objectValue(value), integrations, secretProbe));
 		return drains;
 	}
 
-	static function assertPostSamplingPendingInputDrain(
-		expectValue:Value,
-		integrations:Array<ModelSamplingResultIntegrationOutcome>,
-		secretProbe:String
-	):ModelPostSamplingPendingInputDrainOutcome {
-		final drain = ModelPostSamplingPendingInputDrainPolicy.drain(new ModelPostSamplingPendingInputDrainRequest(
-			stringField(expectValue, "requestId", ""),
+	static function assertPostSamplingPendingInputDrain(expectValue:Value, integrations:Array<ModelSamplingResultIntegrationOutcome>,
+			secretProbe:String):ModelPostSamplingPendingInputDrainOutcome {
+		final drain = ModelPostSamplingPendingInputDrainPolicy.drain(new ModelPostSamplingPendingInputDrainRequest(stringField(expectValue, "requestId", ""),
 			samplingResultIntegrationByRequestId(integrations, stringField(expectValue, "integrationRequestId", "")),
 			postSamplingPendingInputItems(optionalArrayField(expectValue, "activeTurnItems")),
-			postSamplingPendingInputItems(optionalArrayField(expectValue, "mailboxItems")),
-			boolField(expectValue, "acceptsMailboxDelivery", true),
-			secretProbe
-		));
+			postSamplingPendingInputItems(optionalArrayField(expectValue, "mailboxItems")), boolField(expectValue, "acceptsMailboxDelivery", true),
+			secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(drain.ok));
 		assertEquals(stringField(expectValue, "code", ""), drain.code);
 		assertEquals(stringField(expectValue, "requestId", ""), drain.requestId);
@@ -1530,43 +1361,34 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(drain.realFilesystemMutated));
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(drain.toolExecutedOutsideFixture));
 		assertContains(drain.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(drain.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(drain.summary(), secretProbe);
 		return drain;
 	}
 
-	static function assertTopLevelPendingInputHookRecordings(
-		testCase:Value,
-		drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
-		secretProbe:String
-	):Array<ModelPendingInputHookRecordingOutcome> {
+	static function assertTopLevelPendingInputHookRecordings(testCase:Value, drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
+			secretProbe:String):Array<ModelPendingInputHookRecordingOutcome> {
 		final recordings:Array<ModelPendingInputHookRecordingOutcome> = [];
 		final values = optionalArrayField(testCase, "pendingInputHookRecordingExpects");
-		for (value in values) recordings.push(assertPendingInputHookRecording(objectValue(value), drains, secretProbe));
+		for (value in values)
+			recordings.push(assertPendingInputHookRecording(objectValue(value), drains, secretProbe));
 		return recordings;
 	}
 
-	static function assertPendingInputHookRecordings(
-		verificationValue:Value,
-		drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
-		secretProbe:String
-	):Array<ModelPendingInputHookRecordingOutcome> {
+	static function assertPendingInputHookRecordings(verificationValue:Value, drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
+			secretProbe:String):Array<ModelPendingInputHookRecordingOutcome> {
 		final recordings:Array<ModelPendingInputHookRecordingOutcome> = [];
 		final values = optionalArrayField(verificationValue, "pendingInputHookRecordingExpects");
-		for (value in values) recordings.push(assertPendingInputHookRecording(objectValue(value), drains, secretProbe));
+		for (value in values)
+			recordings.push(assertPendingInputHookRecording(objectValue(value), drains, secretProbe));
 		return recordings;
 	}
 
-	static function assertPendingInputHookRecording(
-		expectValue:Value,
-		drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
-		secretProbe:String
-	):ModelPendingInputHookRecordingOutcome {
-		final recording = ModelPendingInputHookRecordingPolicy.record(new ModelPendingInputHookRecordingRequest(
-			stringField(expectValue, "requestId", ""),
+	static function assertPendingInputHookRecording(expectValue:Value, drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
+			secretProbe:String):ModelPendingInputHookRecordingOutcome {
+		final recording = ModelPendingInputHookRecordingPolicy.record(new ModelPendingInputHookRecordingRequest(stringField(expectValue, "requestId", ""),
 			postSamplingPendingInputDrainByRequestId(drains, stringField(expectValue, "drainRequestId", "")),
-			pendingInputHookRecordingItems(optionalArrayField(expectValue, "items")),
-			secretProbe
-		));
+			pendingInputHookRecordingItems(optionalArrayField(expectValue, "items")), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(recording.ok));
 		assertEquals(stringField(expectValue, "code", ""), recording.code);
 		assertEquals(stringField(expectValue, "requestId", ""), recording.requestId);
@@ -1578,55 +1400,44 @@ class ModelStreamItemReducerHarness {
 		assertEquals(Std.string(intField(expectValue, "userInputRecordedCount", 0)), Std.string(recording.userInputRecordedCount));
 		assertEquals(Std.string(intField(expectValue, "responseItemRecordedCount", 0)), Std.string(recording.responseItemRecordedCount));
 		assertEquals(Std.string(intField(expectValue, "additionalContextRecordedCount", 0)), Std.string(recording.additionalContextRecordedCount));
-		assertEquals(Std.string(intField(expectValue, "blockedAdditionalContextRecordedCount", 0)), Std.string(recording.blockedAdditionalContextRecordedCount));
+		assertEquals(Std.string(intField(expectValue, "blockedAdditionalContextRecordedCount", 0)),
+			Std.string(recording.blockedAdditionalContextRecordedCount));
 		assertEquals(boolText(boolField(expectValue, "promptPrepContinues", false)), boolText(recording.promptPrepContinues));
 		assertEquals(boolText(boolField(expectValue, "breakBeforePrompt", false)), boolText(recording.breakBeforePrompt));
 		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(recording.liveNetworkAttempted));
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(recording.realFilesystemMutated));
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(recording.toolExecutedOutsideFixture));
 		assertContains(recording.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(recording.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(recording.summary(), secretProbe);
 		return recording;
 	}
 
-	static function assertTopLevelPromptPreparations(
-		testCase:Value,
-		hookRecordings:Array<ModelPendingInputHookRecordingOutcome>,
-		secretProbe:String
-	):Array<ModelPromptPreparationOutcome> {
+	static function assertTopLevelPromptPreparations(testCase:Value, hookRecordings:Array<ModelPendingInputHookRecordingOutcome>,
+			secretProbe:String):Array<ModelPromptPreparationOutcome> {
 		final preparations:Array<ModelPromptPreparationOutcome> = [];
 		final values = optionalArrayField(testCase, "promptPreparationExpects");
-		for (value in values) preparations.push(assertPromptPreparation(objectValue(value), hookRecordings, secretProbe));
+		for (value in values)
+			preparations.push(assertPromptPreparation(objectValue(value), hookRecordings, secretProbe));
 		return preparations;
 	}
 
-	static function assertPromptPreparations(
-		verificationValue:Value,
-		hookRecordings:Array<ModelPendingInputHookRecordingOutcome>,
-		secretProbe:String
-	):Array<ModelPromptPreparationOutcome> {
+	static function assertPromptPreparations(verificationValue:Value, hookRecordings:Array<ModelPendingInputHookRecordingOutcome>,
+			secretProbe:String):Array<ModelPromptPreparationOutcome> {
 		final preparations:Array<ModelPromptPreparationOutcome> = [];
 		final values = optionalArrayField(verificationValue, "promptPreparationExpects");
-		for (value in values) preparations.push(assertPromptPreparation(objectValue(value), hookRecordings, secretProbe));
+		for (value in values)
+			preparations.push(assertPromptPreparation(objectValue(value), hookRecordings, secretProbe));
 		return preparations;
 	}
 
-	static function assertPromptPreparation(
-		expectValue:Value,
-		hookRecordings:Array<ModelPendingInputHookRecordingOutcome>,
-		secretProbe:String
-	):ModelPromptPreparationOutcome {
-		final preparation = ModelPromptPreparationPolicy.prepare(new ModelPromptPreparationRequest(
-			stringField(expectValue, "requestId", ""),
+	static function assertPromptPreparation(expectValue:Value, hookRecordings:Array<ModelPendingInputHookRecordingOutcome>,
+			secretProbe:String):ModelPromptPreparationOutcome {
+		final preparation = ModelPromptPreparationPolicy.prepare(new ModelPromptPreparationRequest(stringField(expectValue, "requestId", ""),
 			pendingInputHookRecordingByRequestId(hookRecordings, stringField(expectValue, "hookRecordingRequestId", "")),
-			intField(expectValue, "historyItemCount", 0),
-			intField(expectValue, "imageItemCountBefore", 0),
-			boolField(expectValue, "modelSupportsImages", false),
-			stringField(expectValue, "windowId", ""),
-			boolField(expectValue, "metadataHeaderEnabled", false),
-			intField(expectValue, "nextSamplingRequestIndex", 0),
-			secretProbe
-		));
+			intField(expectValue, "historyItemCount", 0), intField(expectValue, "imageItemCountBefore", 0),
+			boolField(expectValue, "modelSupportsImages", false), stringField(expectValue, "windowId", ""),
+			boolField(expectValue, "metadataHeaderEnabled", false), intField(expectValue, "nextSamplingRequestIndex", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(preparation.ok));
 		assertEquals(stringField(expectValue, "code", ""), preparation.code);
 		assertEquals(stringField(expectValue, "requestId", ""), preparation.requestId);
@@ -1650,58 +1461,41 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(preparation.realFilesystemMutated));
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(preparation.toolExecutedOutsideFixture));
 		assertContains(preparation.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(preparation.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(preparation.summary(), secretProbe);
 		return preparation;
 	}
 
-	static function assertTopLevelTerminalStopHooks(
-		testCase:Value,
-		integrations:Array<ModelSamplingResultIntegrationOutcome>,
-		promptPreparations:Array<ModelPromptPreparationOutcome>,
-		secretProbe:String
-	):Array<ModelTerminalStopHookOutcome> {
+	static function assertTopLevelTerminalStopHooks(testCase:Value, integrations:Array<ModelSamplingResultIntegrationOutcome>,
+			promptPreparations:Array<ModelPromptPreparationOutcome>, secretProbe:String):Array<ModelTerminalStopHookOutcome> {
 		final outcomes:Array<ModelTerminalStopHookOutcome> = [];
 		final values = optionalArrayField(testCase, "terminalStopHookExpects");
-		for (value in values) outcomes.push(assertTerminalStopHook(objectValue(value), integrations, promptPreparations, secretProbe));
+		for (value in values)
+			outcomes.push(assertTerminalStopHook(objectValue(value), integrations, promptPreparations, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTerminalStopHooks(
-		verificationValue:Value,
-		integrations:Array<ModelSamplingResultIntegrationOutcome>,
-		promptPreparations:Array<ModelPromptPreparationOutcome>,
-		secretProbe:String
-	):Array<ModelTerminalStopHookOutcome> {
+	static function assertTerminalStopHooks(verificationValue:Value, integrations:Array<ModelSamplingResultIntegrationOutcome>,
+			promptPreparations:Array<ModelPromptPreparationOutcome>, secretProbe:String):Array<ModelTerminalStopHookOutcome> {
 		final outcomes:Array<ModelTerminalStopHookOutcome> = [];
 		final values = optionalArrayField(verificationValue, "terminalStopHookExpects");
-		for (value in values) outcomes.push(assertTerminalStopHook(objectValue(value), integrations, promptPreparations, secretProbe));
+		for (value in values)
+			outcomes.push(assertTerminalStopHook(objectValue(value), integrations, promptPreparations, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTerminalStopHook(
-		expectValue:Value,
-		integrations:Array<ModelSamplingResultIntegrationOutcome>,
-		promptPreparations:Array<ModelPromptPreparationOutcome>,
-		secretProbe:String
-	):ModelTerminalStopHookOutcome {
+	static function assertTerminalStopHook(expectValue:Value, integrations:Array<ModelSamplingResultIntegrationOutcome>,
+			promptPreparations:Array<ModelPromptPreparationOutcome>, secretProbe:String):ModelTerminalStopHookOutcome {
 		final promptPrepId = stringField(expectValue, "promptPreparationRequestId", "");
-		final outcome = ModelTerminalStopHookPolicy.run(new ModelTerminalStopHookRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelTerminalStopHookPolicy.run(new ModelTerminalStopHookRequest(stringField(expectValue, "requestId", ""),
 			samplingResultIntegrationByRequestId(integrations, stringField(expectValue, "integrationRequestId", "")),
 			promptPrepId.length == 0 ? null : promptPreparationByRequestId(promptPreparations, promptPrepId),
-			terminalStopHookTargetKind(stringField(expectValue, "targetKind", "stop")),
-			intField(expectValue, "previewRunCount", 0),
-			intField(expectValue, "completedRunCount", 0),
-			terminalStopHookRunStatusKind(stringField(expectValue, "completedRunStatusKind", "completed")),
-			boolField(expectValue, "shouldBlock", false),
-			intField(expectValue, "continuationFragmentCount", 0),
-			boolField(expectValue, "continuationPromptRenderable", false),
-			boolField(expectValue, "shouldStop", false),
-			boolField(expectValue, "legacyAfterAgentEnabled", false),
-			boolField(expectValue, "legacyAfterAgentAbort", false),
-			boolField(expectValue, "stopHookAlreadyActive", false),
-			secretProbe
-		));
+			terminalStopHookTargetKind(stringField(expectValue, "targetKind", "stop")), intField(expectValue, "previewRunCount", 0),
+			intField(expectValue, "completedRunCount", 0), terminalStopHookRunStatusKind(stringField(expectValue, "completedRunStatusKind", "completed")),
+			boolField(expectValue, "shouldBlock", false), intField(expectValue, "continuationFragmentCount", 0),
+			boolField(expectValue, "continuationPromptRenderable", false), boolField(expectValue, "shouldStop", false),
+			boolField(expectValue, "legacyAfterAgentEnabled", false), boolField(expectValue, "legacyAfterAgentAbort", false),
+			boolField(expectValue, "stopHookAlreadyActive", false), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -1732,48 +1526,37 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelSamplingErrorTerminals(
-		testCase:Value,
-		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
-		secretProbe:String
-	):Array<ModelSamplingErrorTerminalOutcome> {
+	static function assertTopLevelSamplingErrorTerminals(testCase:Value, terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+			secretProbe:String):Array<ModelSamplingErrorTerminalOutcome> {
 		final outcomes:Array<ModelSamplingErrorTerminalOutcome> = [];
 		final values = optionalArrayField(testCase, "samplingErrorTerminalExpects");
-		for (value in values) outcomes.push(assertSamplingErrorTerminal(objectValue(value), terminalStopHooks, secretProbe));
+		for (value in values)
+			outcomes.push(assertSamplingErrorTerminal(objectValue(value), terminalStopHooks, secretProbe));
 		return outcomes;
 	}
 
-	static function assertSamplingErrorTerminals(
-		verificationValue:Value,
-		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
-		secretProbe:String
-	):Array<ModelSamplingErrorTerminalOutcome> {
+	static function assertSamplingErrorTerminals(verificationValue:Value, terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+			secretProbe:String):Array<ModelSamplingErrorTerminalOutcome> {
 		final outcomes:Array<ModelSamplingErrorTerminalOutcome> = [];
 		final values = optionalArrayField(verificationValue, "samplingErrorTerminalExpects");
-		for (value in values) outcomes.push(assertSamplingErrorTerminal(objectValue(value), terminalStopHooks, secretProbe));
+		for (value in values)
+			outcomes.push(assertSamplingErrorTerminal(objectValue(value), terminalStopHooks, secretProbe));
 		return outcomes;
 	}
 
-	static function assertSamplingErrorTerminal(
-		expectValue:Value,
-		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
-		secretProbe:String
-	):ModelSamplingErrorTerminalOutcome {
+	static function assertSamplingErrorTerminal(expectValue:Value, terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+			secretProbe:String):ModelSamplingErrorTerminalOutcome {
 		final stopHookId = stringField(expectValue, "terminalStopHookRequestId", "");
-		final outcome = ModelSamplingErrorTerminalPolicy.handle(new ModelSamplingErrorTerminalRequest(
-			stringField(expectValue, "requestId", ""),
-			samplingErrorTerminalKind(stringField(expectValue, "errorKind", "generic_codex_error")),
-			stringField(expectValue, "previousLastAgentMessage", ""),
-			boolField(expectValue, "historyImagesReplaceable", false),
-			stringField(expectValue, "errorMessage", ""),
-			stringField(expectValue, "codexErrorInfo", ""),
-			stopHookId.length == 0 ? null : terminalStopHookByRequestId(terminalStopHooks, stopHookId),
-			secretProbe
-		));
+		final outcome = ModelSamplingErrorTerminalPolicy.handle(new ModelSamplingErrorTerminalRequest(stringField(expectValue, "requestId", ""),
+			samplingErrorTerminalKind(stringField(expectValue, "errorKind", "generic_codex_error")), stringField(expectValue, "previousLastAgentMessage", ""),
+			boolField(expectValue, "historyImagesReplaceable", false), stringField(expectValue, "errorMessage", ""),
+			stringField(expectValue, "codexErrorInfo", ""), stopHookId.length == 0 ? null : terminalStopHookByRequestId(terminalStopHooks, stopHookId),
+			secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -1797,57 +1580,41 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelTurnLifecycles(
-		testCase:Value,
-		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
-		samplingErrorTerminals:Array<ModelSamplingErrorTerminalOutcome>,
-		secretProbe:String
-	):Array<ModelTurnLifecycleOutcome> {
+	static function assertTopLevelTurnLifecycles(testCase:Value, terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+			samplingErrorTerminals:Array<ModelSamplingErrorTerminalOutcome>, secretProbe:String):Array<ModelTurnLifecycleOutcome> {
 		final outcomes:Array<ModelTurnLifecycleOutcome> = [];
 		final values = optionalArrayField(testCase, "turnLifecycleExpects");
-		for (value in values) outcomes.push(assertTurnLifecycle(objectValue(value), terminalStopHooks, samplingErrorTerminals, secretProbe));
+		for (value in values)
+			outcomes.push(assertTurnLifecycle(objectValue(value), terminalStopHooks, samplingErrorTerminals, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTurnLifecycles(
-		verificationValue:Value,
-		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
-		samplingErrorTerminals:Array<ModelSamplingErrorTerminalOutcome>,
-		secretProbe:String
-	):Array<ModelTurnLifecycleOutcome> {
+	static function assertTurnLifecycles(verificationValue:Value, terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+			samplingErrorTerminals:Array<ModelSamplingErrorTerminalOutcome>, secretProbe:String):Array<ModelTurnLifecycleOutcome> {
 		final outcomes:Array<ModelTurnLifecycleOutcome> = [];
 		final values = optionalArrayField(verificationValue, "turnLifecycleExpects");
-		for (value in values) outcomes.push(assertTurnLifecycle(objectValue(value), terminalStopHooks, samplingErrorTerminals, secretProbe));
+		for (value in values)
+			outcomes.push(assertTurnLifecycle(objectValue(value), terminalStopHooks, samplingErrorTerminals, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTurnLifecycle(
-		expectValue:Value,
-		terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
-		samplingErrorTerminals:Array<ModelSamplingErrorTerminalOutcome>,
-		secretProbe:String
-	):ModelTurnLifecycleOutcome {
+	static function assertTurnLifecycle(expectValue:Value, terminalStopHooks:Array<ModelTerminalStopHookOutcome>,
+			samplingErrorTerminals:Array<ModelSamplingErrorTerminalOutcome>, secretProbe:String):ModelTurnLifecycleOutcome {
 		final stopHookId = stringField(expectValue, "terminalStopHookRequestId", "");
 		final samplingErrorId = stringField(expectValue, "samplingErrorTerminalRequestId", "");
-		final outcome = ModelTurnLifecyclePolicy.finish(new ModelTurnLifecycleRequest(
-			stringField(expectValue, "requestId", ""),
-			stringField(expectValue, "turnId", ""),
-			turnLifecycleTerminalKind(stringField(expectValue, "terminalKind", "completed")),
+		final outcome = ModelTurnLifecyclePolicy.finish(new ModelTurnLifecycleRequest(stringField(expectValue, "requestId", ""),
+			stringField(expectValue, "turnId", ""), turnLifecycleTerminalKind(stringField(expectValue, "terminalKind", "completed")),
 			stopHookId.length == 0 ? null : terminalStopHookByRequestId(terminalStopHooks, stopHookId),
 			samplingErrorId.length == 0 ? null : samplingErrorTerminalByRequestId(samplingErrorTerminals, samplingErrorId),
-			stringField(expectValue, "lastAgentMessageInput", ""),
-			stringField(expectValue, "abortReason", ""),
-			boolField(expectValue, "taskCancellationRequested", false),
-			boolField(expectValue, "rolloutFlushOk", true),
-			boolField(expectValue, "activeTurnMatches", true),
-			boolField(expectValue, "hasPendingTriggerMailbox", false),
-			boolField(expectValue, "interruptedMarkerEligible", false),
-			secretProbe
-		));
+			stringField(expectValue, "lastAgentMessageInput", ""), stringField(expectValue, "abortReason", ""),
+			boolField(expectValue, "taskCancellationRequested", false), boolField(expectValue, "rolloutFlushOk", true),
+			boolField(expectValue, "activeTurnMatches", true), boolField(expectValue, "hasPendingTriggerMailbox", false),
+			boolField(expectValue, "interruptedMarkerEligible", false), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -1874,54 +1641,39 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelTurnTerminalProjections(
-		testCase:Value,
-		lifecycles:Array<ModelTurnLifecycleOutcome>,
-		secretProbe:String
-	):Array<ModelTurnTerminalProjectionOutcome> {
+	static function assertTopLevelTurnTerminalProjections(testCase:Value, lifecycles:Array<ModelTurnLifecycleOutcome>,
+			secretProbe:String):Array<ModelTurnTerminalProjectionOutcome> {
 		final outcomes:Array<ModelTurnTerminalProjectionOutcome> = [];
 		final values = optionalArrayField(testCase, "turnTerminalProjectionExpects");
-		for (value in values) outcomes.push(assertTurnTerminalProjection(objectValue(value), lifecycles, secretProbe));
+		for (value in values)
+			outcomes.push(assertTurnTerminalProjection(objectValue(value), lifecycles, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTurnTerminalProjections(
-		verificationValue:Value,
-		lifecycles:Array<ModelTurnLifecycleOutcome>,
-		secretProbe:String
-	):Array<ModelTurnTerminalProjectionOutcome> {
+	static function assertTurnTerminalProjections(verificationValue:Value, lifecycles:Array<ModelTurnLifecycleOutcome>,
+			secretProbe:String):Array<ModelTurnTerminalProjectionOutcome> {
 		final outcomes:Array<ModelTurnTerminalProjectionOutcome> = [];
 		final values = optionalArrayField(verificationValue, "turnTerminalProjectionExpects");
-		for (value in values) outcomes.push(assertTurnTerminalProjection(objectValue(value), lifecycles, secretProbe));
+		for (value in values)
+			outcomes.push(assertTurnTerminalProjection(objectValue(value), lifecycles, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTurnTerminalProjection(
-		expectValue:Value,
-		lifecycles:Array<ModelTurnLifecycleOutcome>,
-		secretProbe:String
-	):ModelTurnTerminalProjectionOutcome {
+	static function assertTurnTerminalProjection(expectValue:Value, lifecycles:Array<ModelTurnLifecycleOutcome>,
+			secretProbe:String):ModelTurnTerminalProjectionOutcome {
 		final lifecycleRequestId = stringField(expectValue, "lifecycleRequestId", "");
-		final outcome = ModelTurnTerminalProjectionPolicy.project(new ModelTurnTerminalProjectionRequest(
-			stringField(expectValue, "requestId", ""),
-			stringField(expectValue, "threadId", ""),
-			stringField(expectValue, "turnId", ""),
-			turnLifecycleByRequestId(lifecycles, lifecycleRequestId),
-			turnTerminalProjectionEventKind(stringField(expectValue, "eventKind", "turn_complete")),
-			stringField(expectValue, "priorTurnErrorMessage", ""),
-			stringField(expectValue, "lastAgentMessageOverride", ""),
-			stringField(expectValue, "abortReason", ""),
-			boolField(expectValue, "pendingInterruptRequest", false),
-			boolField(expectValue, "fromReplay", false),
-			boolField(expectValue, "hasQueuedFollowUp", false),
-			boolField(expectValue, "activeGoalContinuing", false),
-			boolField(expectValue, "sawCopySourceThisTurn", false),
-			secretProbe
-		));
+		final outcome = ModelTurnTerminalProjectionPolicy.project(new ModelTurnTerminalProjectionRequest(stringField(expectValue, "requestId", ""),
+			stringField(expectValue, "threadId", ""), stringField(expectValue, "turnId", ""), turnLifecycleByRequestId(lifecycles, lifecycleRequestId),
+			turnTerminalProjectionEventKind(stringField(expectValue, "eventKind", "turn_complete")), stringField(expectValue, "priorTurnErrorMessage", ""),
+			stringField(expectValue, "lastAgentMessageOverride", ""), stringField(expectValue, "abortReason", ""),
+			boolField(expectValue, "pendingInterruptRequest", false), boolField(expectValue, "fromReplay", false),
+			boolField(expectValue, "hasQueuedFollowUp", false), boolField(expectValue, "activeGoalContinuing", false),
+			boolField(expectValue, "sawCopySourceThisTurn", false), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -1940,9 +1692,11 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "threadHistoryFailedStatusPreserved", false)), boolText(outcome.threadHistoryFailedStatusPreserved));
 		assertEquals(boolText(boolField(expectValue, "turnCompletedNotificationEmitted", false)), boolText(outcome.turnCompletedNotificationEmitted));
 		assertEquals(boolText(boolField(expectValue, "appServerTurnFailedRecorded", false)), boolText(outcome.appServerTurnFailedRecorded));
-		assertEquals(boolText(boolField(expectValue, "lastAgentMessagePropagatedToCoreStatus", false)), boolText(outcome.lastAgentMessagePropagatedToCoreStatus));
+		assertEquals(boolText(boolField(expectValue, "lastAgentMessagePropagatedToCoreStatus", false)),
+			boolText(outcome.lastAgentMessagePropagatedToCoreStatus));
 		assertEquals(boolText(boolField(expectValue, "collabAgentStateHasMessage", false)), boolText(outcome.collabAgentStateHasMessage));
-		assertEquals(boolText(boolField(expectValue, "tuiReceivesLastAgentMessageFromTurnNotification", false)), boolText(outcome.tuiReceivesLastAgentMessageFromTurnNotification));
+		assertEquals(boolText(boolField(expectValue, "tuiReceivesLastAgentMessageFromTurnNotification", false)),
+			boolText(outcome.tuiReceivesLastAgentMessageFromTurnNotification));
 		assertEquals(boolText(boolField(expectValue, "tuiNotificationResponseUsesCopySource", false)), boolText(outcome.tuiNotificationResponseUsesCopySource));
 		assertEquals(boolText(boolField(expectValue, "tuiTaskCompletionHandled", false)), boolText(outcome.tuiTaskCompletionHandled));
 		assertEquals(boolText(boolField(expectValue, "tuiInterruptedHandled", false)), boolText(outcome.tuiInterruptedHandled));
@@ -1952,51 +1706,38 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelTurnReplayReconstructions(
-		testCase:Value,
-		projections:Array<ModelTurnTerminalProjectionOutcome>,
-		secretProbe:String
-	):Array<ModelTurnReplayReconstructionOutcome> {
+	static function assertTopLevelTurnReplayReconstructions(testCase:Value, projections:Array<ModelTurnTerminalProjectionOutcome>,
+			secretProbe:String):Array<ModelTurnReplayReconstructionOutcome> {
 		final outcomes:Array<ModelTurnReplayReconstructionOutcome> = [];
 		final values = optionalArrayField(testCase, "turnReplayReconstructionExpects");
-		for (value in values) outcomes.push(assertTurnReplayReconstruction(objectValue(value), projections, secretProbe));
+		for (value in values)
+			outcomes.push(assertTurnReplayReconstruction(objectValue(value), projections, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTurnReplayReconstructions(
-		verificationValue:Value,
-		projections:Array<ModelTurnTerminalProjectionOutcome>,
-		secretProbe:String
-	):Array<ModelTurnReplayReconstructionOutcome> {
+	static function assertTurnReplayReconstructions(verificationValue:Value, projections:Array<ModelTurnTerminalProjectionOutcome>,
+			secretProbe:String):Array<ModelTurnReplayReconstructionOutcome> {
 		final outcomes:Array<ModelTurnReplayReconstructionOutcome> = [];
 		final values = optionalArrayField(verificationValue, "turnReplayReconstructionExpects");
-		for (value in values) outcomes.push(assertTurnReplayReconstruction(objectValue(value), projections, secretProbe));
+		for (value in values)
+			outcomes.push(assertTurnReplayReconstruction(objectValue(value), projections, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTurnReplayReconstruction(
-		expectValue:Value,
-		projections:Array<ModelTurnTerminalProjectionOutcome>,
-		secretProbe:String
-	):ModelTurnReplayReconstructionOutcome {
+	static function assertTurnReplayReconstruction(expectValue:Value, projections:Array<ModelTurnTerminalProjectionOutcome>,
+			secretProbe:String):ModelTurnReplayReconstructionOutcome {
 		final projectionRequestId = stringField(expectValue, "projectionRequestId", "");
-		final outcome = ModelTurnReplayReconstructionPolicy.reconstruct(new ModelTurnReplayReconstructionRequest(
-			stringField(expectValue, "requestId", ""),
-			turnTerminalProjectionByRequestId(projections, projectionRequestId),
-			turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
-			turnReplayTargetKind(stringField(expectValue, "targetKind", "active_exact")),
-			stringField(expectValue, "activeTurnId", ""),
-			stringField(expectValue, "historicalTurnId", ""),
-			stringField(expectValue, "terminalTurnId", ""),
-			boolField(expectValue, "activeTurnPresent", false),
-			boolField(expectValue, "turnWasInProgress", false),
-			boolField(expectValue, "replayTurnHasItems", false),
-			secretProbe
-		));
+		final outcome = ModelTurnReplayReconstructionPolicy.reconstruct(new ModelTurnReplayReconstructionRequest(stringField(expectValue, "requestId", ""),
+			turnTerminalProjectionByRequestId(projections, projectionRequestId), turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
+			turnReplayTargetKind(stringField(expectValue, "targetKind", "active_exact")), stringField(expectValue, "activeTurnId", ""),
+			stringField(expectValue, "historicalTurnId", ""), stringField(expectValue, "terminalTurnId", ""),
+			boolField(expectValue, "activeTurnPresent", false), boolField(expectValue, "turnWasInProgress", false),
+			boolField(expectValue, "replayTurnHasItems", false), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2012,7 +1753,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "fallbackAppliedToActive", false)), boolText(outcome.fallbackAppliedToActive));
 		assertEquals(boolText(boolField(expectValue, "missingTerminalNoop", false)), boolText(outcome.missingTerminalNoop));
 		assertEquals(boolText(boolField(expectValue, "failedStatusPreserved", false)), boolText(outcome.failedStatusPreserved));
-		assertEquals(boolText(boolField(expectValue, "replayTurnCompletedNotificationSynthesized", false)), boolText(outcome.replayTurnCompletedNotificationSynthesized));
+		assertEquals(boolText(boolField(expectValue, "replayTurnCompletedNotificationSynthesized", false)),
+			boolText(outcome.replayTurnCompletedNotificationSynthesized));
 		assertEquals(boolText(boolField(expectValue, "tuiReplayKindAttached", false)), boolText(outcome.tuiReplayKindAttached));
 		assertEquals(boolText(boolField(expectValue, "tuiTaskStartedForInProgress", false)), boolText(outcome.tuiTaskStartedForInProgress));
 		assertEquals(boolText(boolField(expectValue, "resumeInitialStartSuppressed", false)), boolText(outcome.resumeInitialStartSuppressed));
@@ -2023,55 +1765,41 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelPendingInteractiveReplays(
-		testCase:Value,
-		reconstructions:Array<ModelTurnReplayReconstructionOutcome>,
-		secretProbe:String
-	):Array<ModelPendingInteractiveReplayOutcome> {
+	static function assertTopLevelPendingInteractiveReplays(testCase:Value, reconstructions:Array<ModelTurnReplayReconstructionOutcome>,
+			secretProbe:String):Array<ModelPendingInteractiveReplayOutcome> {
 		final outcomes:Array<ModelPendingInteractiveReplayOutcome> = [];
 		final values = optionalArrayField(testCase, "pendingInteractiveReplayExpects");
-		for (value in values) outcomes.push(assertPendingInteractiveReplay(objectValue(value), reconstructions, secretProbe));
+		for (value in values)
+			outcomes.push(assertPendingInteractiveReplay(objectValue(value), reconstructions, secretProbe));
 		return outcomes;
 	}
 
-	static function assertPendingInteractiveReplays(
-		verificationValue:Value,
-		reconstructions:Array<ModelTurnReplayReconstructionOutcome>,
-		secretProbe:String
-	):Array<ModelPendingInteractiveReplayOutcome> {
+	static function assertPendingInteractiveReplays(verificationValue:Value, reconstructions:Array<ModelTurnReplayReconstructionOutcome>,
+			secretProbe:String):Array<ModelPendingInteractiveReplayOutcome> {
 		final outcomes:Array<ModelPendingInteractiveReplayOutcome> = [];
 		final values = optionalArrayField(verificationValue, "pendingInteractiveReplayExpects");
-		for (value in values) outcomes.push(assertPendingInteractiveReplay(objectValue(value), reconstructions, secretProbe));
+		for (value in values)
+			outcomes.push(assertPendingInteractiveReplay(objectValue(value), reconstructions, secretProbe));
 		return outcomes;
 	}
 
-	static function assertPendingInteractiveReplay(
-		expectValue:Value,
-		reconstructions:Array<ModelTurnReplayReconstructionOutcome>,
-		secretProbe:String
-	):ModelPendingInteractiveReplayOutcome {
+	static function assertPendingInteractiveReplay(expectValue:Value, reconstructions:Array<ModelTurnReplayReconstructionOutcome>,
+			secretProbe:String):ModelPendingInteractiveReplayOutcome {
 		final reconstructionRequestId = stringField(expectValue, "reconstructionRequestId", "");
-		final outcome = ModelPendingInteractiveReplayPolicy.route(new ModelPendingInteractiveReplayRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelPendingInteractiveReplayPolicy.route(new ModelPendingInteractiveReplayRequest(stringField(expectValue, "requestId", ""),
 			reconstructionRequestId.length == 0 ? null : turnReplayReconstructionByRequestId(reconstructions, reconstructionRequestId),
 			pendingInteractiveReplayEventKind(stringField(expectValue, "eventKind", "snapshot")),
-			pendingInteractivePromptKind(stringField(expectValue, "promptKind", "none")),
-			stringField(expectValue, "turnId", ""),
-			stringField(expectValue, "activeTurnIdBefore", ""),
-			stringField(expectValue, "restoredInProgressTurnId", ""),
-			intField(expectValue, "pendingPromptCountBefore", 0),
-			intField(expectValue, "pendingPromptCountForTurnBefore", 0),
-			boolField(expectValue, "requestMatchesPendingPrompt", false),
-			boolField(expectValue, "outboundOpCanChangeState", false),
-			boolField(expectValue, "outboundOpMatchesPrompt", false),
-			boolField(expectValue, "terminalMatchesActiveTurn", false),
-			boolField(expectValue, "snapshotRequested", false),
-			secretProbe
-		));
+			pendingInteractivePromptKind(stringField(expectValue, "promptKind", "none")), stringField(expectValue, "turnId", ""),
+			stringField(expectValue, "activeTurnIdBefore", ""), stringField(expectValue, "restoredInProgressTurnId", ""),
+			intField(expectValue, "pendingPromptCountBefore", 0), intField(expectValue, "pendingPromptCountForTurnBefore", 0),
+			boolField(expectValue, "requestMatchesPendingPrompt", false), boolField(expectValue, "outboundOpCanChangeState", false),
+			boolField(expectValue, "outboundOpMatchesPrompt", false), boolField(expectValue, "terminalMatchesActiveTurn", false),
+			boolField(expectValue, "snapshotRequested", false), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2098,53 +1826,40 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelThreadSnapshotReplayDispatches(
-		testCase:Value,
-		pendingReplays:Array<ModelPendingInteractiveReplayOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSnapshotReplayDispatchOutcome> {
+	static function assertTopLevelThreadSnapshotReplayDispatches(testCase:Value, pendingReplays:Array<ModelPendingInteractiveReplayOutcome>,
+			secretProbe:String):Array<ModelThreadSnapshotReplayDispatchOutcome> {
 		final outcomes:Array<ModelThreadSnapshotReplayDispatchOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSnapshotReplayDispatchExpects");
-		for (value in values) outcomes.push(assertThreadSnapshotReplayDispatch(objectValue(value), pendingReplays, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSnapshotReplayDispatch(objectValue(value), pendingReplays, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSnapshotReplayDispatches(
-		verificationValue:Value,
-		pendingReplays:Array<ModelPendingInteractiveReplayOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSnapshotReplayDispatchOutcome> {
+	static function assertThreadSnapshotReplayDispatches(verificationValue:Value, pendingReplays:Array<ModelPendingInteractiveReplayOutcome>,
+			secretProbe:String):Array<ModelThreadSnapshotReplayDispatchOutcome> {
 		final outcomes:Array<ModelThreadSnapshotReplayDispatchOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSnapshotReplayDispatchExpects");
-		for (value in values) outcomes.push(assertThreadSnapshotReplayDispatch(objectValue(value), pendingReplays, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSnapshotReplayDispatch(objectValue(value), pendingReplays, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSnapshotReplayDispatch(
-		expectValue:Value,
-		pendingReplays:Array<ModelPendingInteractiveReplayOutcome>,
-		secretProbe:String
-	):ModelThreadSnapshotReplayDispatchOutcome {
+	static function assertThreadSnapshotReplayDispatch(expectValue:Value, pendingReplays:Array<ModelPendingInteractiveReplayOutcome>,
+			secretProbe:String):ModelThreadSnapshotReplayDispatchOutcome {
 		final pendingReplayRequestId = stringField(expectValue, "pendingReplayRequestId", "");
-		final outcome = ModelThreadSnapshotReplayDispatchPolicy.dispatch(new ModelThreadSnapshotReplayDispatchRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelThreadSnapshotReplayDispatchPolicy.dispatch(new ModelThreadSnapshotReplayDispatchRequest(stringField(expectValue, "requestId", ""),
 			pendingReplayRequestId.length == 0 ? null : pendingInteractiveReplayByRequestId(pendingReplays, pendingReplayRequestId),
 			turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
-			threadSnapshotReplayEventKind(stringField(expectValue, "eventKind", "replay_turns")),
-			intField(expectValue, "turnCount", 0),
-			intField(expectValue, "bufferedEventCount", 0),
-			boolField(expectValue, "terminalResizeReflowEnabled", false),
-			boolField(expectValue, "inputStateAvailable", false),
-			boolField(expectValue, "suppressReplayNotices", false),
-			boolField(expectValue, "eventIsNotice", false),
-			boolField(expectValue, "snapshotRequestAllowed", false),
-			intField(expectValue, "pendingPrimaryEventCount", 0),
-			secretProbe
-		));
+			threadSnapshotReplayEventKind(stringField(expectValue, "eventKind", "replay_turns")), intField(expectValue, "turnCount", 0),
+			intField(expectValue, "bufferedEventCount", 0), boolField(expectValue, "terminalResizeReflowEnabled", false),
+			boolField(expectValue, "inputStateAvailable", false), boolField(expectValue, "suppressReplayNotices", false),
+			boolField(expectValue, "eventIsNotice", false), boolField(expectValue, "snapshotRequestAllowed", false),
+			intField(expectValue, "pendingPrimaryEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2171,39 +1886,36 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function pendingInteractiveReplayByRequestId(outcomes:Array<ModelPendingInteractiveReplayOutcome>, requestId:String):ModelPendingInteractiveReplayOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function pendingInteractiveReplayByRequestId(outcomes:Array<ModelPendingInteractiveReplayOutcome>,
+			requestId:String):ModelPendingInteractiveReplayOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing pending interactive replay outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadSnapshotTurnHistoryReplays(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelThreadSnapshotTurnHistoryReplayOutcome> {
+	static function assertTopLevelThreadSnapshotTurnHistoryReplays(testCase:Value, secretProbe:String):Array<ModelThreadSnapshotTurnHistoryReplayOutcome> {
 		final outcomes:Array<ModelThreadSnapshotTurnHistoryReplayOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSnapshotTurnHistoryReplayExpects");
-		for (value in values) outcomes.push(assertThreadSnapshotTurnHistoryReplay(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSnapshotTurnHistoryReplay(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSnapshotTurnHistoryReplays(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelThreadSnapshotTurnHistoryReplayOutcome> {
+	static function assertThreadSnapshotTurnHistoryReplays(verificationValue:Value, secretProbe:String):Array<ModelThreadSnapshotTurnHistoryReplayOutcome> {
 		final outcomes:Array<ModelThreadSnapshotTurnHistoryReplayOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSnapshotTurnHistoryReplayExpects");
-		for (value in values) outcomes.push(assertThreadSnapshotTurnHistoryReplay(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSnapshotTurnHistoryReplay(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSnapshotTurnHistoryReplay(
-		expectValue:Value,
-		secretProbe:String
-	):ModelThreadSnapshotTurnHistoryReplayOutcome {
+	static function assertThreadSnapshotTurnHistoryReplay(expectValue:Value, secretProbe:String):ModelThreadSnapshotTurnHistoryReplayOutcome {
 		final outcome = ModelThreadSnapshotTurnHistoryReplayPolicy.replay(new ModelThreadSnapshotTurnHistoryReplayRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			replayKind: turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
@@ -2225,7 +1937,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(Std.string(intField(expectValue, "replayedItemCount", 0)), Std.string(outcome.replayedItemCount));
 		assertEquals(Std.string(intField(expectValue, "userMessageCount", 0)), Std.string(outcome.userMessageCount));
 		assertEquals(Std.string(intField(expectValue, "agentMessageCount", 0)), Std.string(outcome.agentMessageCount));
-		assertEquals(Std.string(intField(expectValue, "terminalTurnCompletedNotificationCount", 0)), Std.string(outcome.terminalTurnCompletedNotificationCount));
+		assertEquals(Std.string(intField(expectValue, "terminalTurnCompletedNotificationCount", 0)),
+			Std.string(outcome.terminalTurnCompletedNotificationCount));
 		assertStringArraysEqual(stringArrayField(expectValue, "transcriptUserMessages"), outcome.transcriptUserMessages);
 		assertStringArraysEqual(stringArrayField(expectValue, "transcriptAgentMessages"), outcome.transcriptAgentMessages);
 		assertEquals(boolText(boolField(expectValue, "userMessagesInExpectedOrder", false)), boolText(outcome.userMessagesInExpectedOrder));
@@ -2241,36 +1954,36 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		for (message in outcome.transcriptUserMessages) if (message.length > 0) assertNotContains(outcome.summary(), message);
-		for (message in outcome.transcriptAgentMessages) if (message.length > 0) assertNotContains(outcome.summary(), message);
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		for (message in outcome.transcriptUserMessages)
+			if (message.length > 0)
+				assertNotContains(outcome.summary(), message);
+		for (message in outcome.transcriptAgentMessages)
+			if (message.length > 0)
+				assertNotContains(outcome.summary(), message);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelThreadSnapshotCollabMetadataReplays(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelThreadSnapshotCollabMetadataReplayOutcome> {
+	static function assertTopLevelThreadSnapshotCollabMetadataReplays(testCase:Value,
+			secretProbe:String):Array<ModelThreadSnapshotCollabMetadataReplayOutcome> {
 		final outcomes:Array<ModelThreadSnapshotCollabMetadataReplayOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSnapshotCollabMetadataReplayExpects");
-		for (value in values) outcomes.push(assertThreadSnapshotCollabMetadataReplay(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSnapshotCollabMetadataReplay(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSnapshotCollabMetadataReplays(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelThreadSnapshotCollabMetadataReplayOutcome> {
+	static function assertThreadSnapshotCollabMetadataReplays(verificationValue:Value,
+			secretProbe:String):Array<ModelThreadSnapshotCollabMetadataReplayOutcome> {
 		final outcomes:Array<ModelThreadSnapshotCollabMetadataReplayOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSnapshotCollabMetadataReplayExpects");
-		for (value in values) outcomes.push(assertThreadSnapshotCollabMetadataReplay(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSnapshotCollabMetadataReplay(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSnapshotCollabMetadataReplay(
-		expectValue:Value,
-		secretProbe:String
-	):ModelThreadSnapshotCollabMetadataReplayOutcome {
+	static function assertThreadSnapshotCollabMetadataReplay(expectValue:Value, secretProbe:String):ModelThreadSnapshotCollabMetadataReplayOutcome {
 		final outcome = ModelThreadSnapshotCollabMetadataReplayPolicy.replay(new ModelThreadSnapshotCollabMetadataReplayRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			replayKind: turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
@@ -2304,34 +2017,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(stringField(expectValue, "renderedWaitSummary", ""), outcome.renderedWaitSummary);
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelThreadSnapshotSessionRefreshes(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelThreadSnapshotSessionRefreshOutcome> {
+	static function assertTopLevelThreadSnapshotSessionRefreshes(testCase:Value, secretProbe:String):Array<ModelThreadSnapshotSessionRefreshOutcome> {
 		final outcomes:Array<ModelThreadSnapshotSessionRefreshOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSnapshotSessionRefreshExpects");
-		for (value in values) outcomes.push(assertThreadSnapshotSessionRefresh(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSnapshotSessionRefresh(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSnapshotSessionRefreshes(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelThreadSnapshotSessionRefreshOutcome> {
+	static function assertThreadSnapshotSessionRefreshes(verificationValue:Value, secretProbe:String):Array<ModelThreadSnapshotSessionRefreshOutcome> {
 		final outcomes:Array<ModelThreadSnapshotSessionRefreshOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSnapshotSessionRefreshExpects");
-		for (value in values) outcomes.push(assertThreadSnapshotSessionRefresh(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSnapshotSessionRefresh(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSnapshotSessionRefresh(
-		expectValue:Value,
-		secretProbe:String
-	):ModelThreadSnapshotSessionRefreshOutcome {
+	static function assertThreadSnapshotSessionRefresh(expectValue:Value, secretProbe:String):ModelThreadSnapshotSessionRefreshOutcome {
 		final outcome = ModelThreadSnapshotSessionRefreshPolicy.apply(new ModelThreadSnapshotSessionRefreshRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			threadId: stringField(expectValue, "threadId", ""),
@@ -2373,49 +2080,40 @@ class ModelStreamItemReducerHarness {
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
 		assertNotContains(outcome.summary(), stringField(expectValue, "refreshedSessionCwd", ""));
-		for (turn in threadSnapshotSessionRefreshTurns(expectValue)) if (turn.userText.length > 0) assertNotContains(outcome.summary(), turn.userText);
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		for (turn in threadSnapshotSessionRefreshTurns(expectValue))
+			if (turn.userText.length > 0)
+				assertNotContains(outcome.summary(), turn.userText);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelReplayedServerRequestSurfaces(
-		testCase:Value,
-		dispatches:Array<ModelThreadSnapshotReplayDispatchOutcome>,
-		secretProbe:String
-	):Array<ModelReplayedServerRequestSurfaceOutcome> {
+	static function assertTopLevelReplayedServerRequestSurfaces(testCase:Value, dispatches:Array<ModelThreadSnapshotReplayDispatchOutcome>,
+			secretProbe:String):Array<ModelReplayedServerRequestSurfaceOutcome> {
 		final outcomes:Array<ModelReplayedServerRequestSurfaceOutcome> = [];
 		final values = optionalArrayField(testCase, "replayedServerRequestSurfaceExpects");
-		for (value in values) outcomes.push(assertReplayedServerRequestSurface(objectValue(value), dispatches, secretProbe));
+		for (value in values)
+			outcomes.push(assertReplayedServerRequestSurface(objectValue(value), dispatches, secretProbe));
 		return outcomes;
 	}
 
-	static function assertReplayedServerRequestSurfaces(
-		verificationValue:Value,
-		dispatches:Array<ModelThreadSnapshotReplayDispatchOutcome>,
-		secretProbe:String
-	):Array<ModelReplayedServerRequestSurfaceOutcome> {
+	static function assertReplayedServerRequestSurfaces(verificationValue:Value, dispatches:Array<ModelThreadSnapshotReplayDispatchOutcome>,
+			secretProbe:String):Array<ModelReplayedServerRequestSurfaceOutcome> {
 		final outcomes:Array<ModelReplayedServerRequestSurfaceOutcome> = [];
 		final values = optionalArrayField(verificationValue, "replayedServerRequestSurfaceExpects");
-		for (value in values) outcomes.push(assertReplayedServerRequestSurface(objectValue(value), dispatches, secretProbe));
+		for (value in values)
+			outcomes.push(assertReplayedServerRequestSurface(objectValue(value), dispatches, secretProbe));
 		return outcomes;
 	}
 
-	static function assertReplayedServerRequestSurface(
-		expectValue:Value,
-		dispatches:Array<ModelThreadSnapshotReplayDispatchOutcome>,
-		secretProbe:String
-	):ModelReplayedServerRequestSurfaceOutcome {
+	static function assertReplayedServerRequestSurface(expectValue:Value, dispatches:Array<ModelThreadSnapshotReplayDispatchOutcome>,
+			secretProbe:String):ModelReplayedServerRequestSurfaceOutcome {
 		final dispatchRequestId = stringField(expectValue, "dispatchRequestId", "");
-		final outcome = ModelReplayedServerRequestSurfacePolicy.surface(new ModelReplayedServerRequestSurfaceRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelReplayedServerRequestSurfacePolicy.surface(new ModelReplayedServerRequestSurfaceRequest(stringField(expectValue, "requestId", ""),
 			dispatchRequestId.length == 0 ? null : threadSnapshotReplayDispatchByRequestId(dispatches, dispatchRequestId),
 			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
-			turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")),
-			boolField(expectValue, "snapshotRequestAllowed", false),
-			boolField(expectValue, "liveRequest", false),
-			boolField(expectValue, "elicitationUrlRequest", false),
-			secretProbe
-		));
+			turnReplayKind(stringField(expectValue, "replayKind", "thread_snapshot")), boolField(expectValue, "snapshotRequestAllowed", false),
+			boolField(expectValue, "liveRequest", false), boolField(expectValue, "elicitationUrlRequest", false), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2440,62 +2138,49 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function threadSnapshotReplayDispatchByRequestId(outcomes:Array<ModelThreadSnapshotReplayDispatchOutcome>, requestId:String):ModelThreadSnapshotReplayDispatchOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadSnapshotReplayDispatchByRequestId(outcomes:Array<ModelThreadSnapshotReplayDispatchOutcome>,
+			requestId:String):ModelThreadSnapshotReplayDispatchOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread snapshot replay dispatch outcome: " + requestId;
 	}
 
-	static function assertTopLevelAppServerRequestResolutions(
-		testCase:Value,
-		surfaces:Array<ModelReplayedServerRequestSurfaceOutcome>,
-		secretProbe:String
-	):Array<ModelAppServerRequestResolutionOutcome> {
+	static function assertTopLevelAppServerRequestResolutions(testCase:Value, surfaces:Array<ModelReplayedServerRequestSurfaceOutcome>,
+			secretProbe:String):Array<ModelAppServerRequestResolutionOutcome> {
 		final outcomes:Array<ModelAppServerRequestResolutionOutcome> = [];
 		final values = optionalArrayField(testCase, "appServerRequestResolutionExpects");
-		for (value in values) outcomes.push(assertAppServerRequestResolution(objectValue(value), surfaces, secretProbe));
+		for (value in values)
+			outcomes.push(assertAppServerRequestResolution(objectValue(value), surfaces, secretProbe));
 		return outcomes;
 	}
 
-	static function assertAppServerRequestResolutions(
-		verificationValue:Value,
-		surfaces:Array<ModelReplayedServerRequestSurfaceOutcome>,
-		secretProbe:String
-	):Array<ModelAppServerRequestResolutionOutcome> {
+	static function assertAppServerRequestResolutions(verificationValue:Value, surfaces:Array<ModelReplayedServerRequestSurfaceOutcome>,
+			secretProbe:String):Array<ModelAppServerRequestResolutionOutcome> {
 		final outcomes:Array<ModelAppServerRequestResolutionOutcome> = [];
 		final values = optionalArrayField(verificationValue, "appServerRequestResolutionExpects");
-		for (value in values) outcomes.push(assertAppServerRequestResolution(objectValue(value), surfaces, secretProbe));
+		for (value in values)
+			outcomes.push(assertAppServerRequestResolution(objectValue(value), surfaces, secretProbe));
 		return outcomes;
 	}
 
-	static function assertAppServerRequestResolution(
-		expectValue:Value,
-		surfaces:Array<ModelReplayedServerRequestSurfaceOutcome>,
-		secretProbe:String
-	):ModelAppServerRequestResolutionOutcome {
+	static function assertAppServerRequestResolution(expectValue:Value, surfaces:Array<ModelReplayedServerRequestSurfaceOutcome>,
+			secretProbe:String):ModelAppServerRequestResolutionOutcome {
 		final surfaceRequestId = stringField(expectValue, "surfaceRequestId", "");
-		final outcome = ModelAppServerRequestResolutionPolicy.resolve(new ModelAppServerRequestResolutionRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelAppServerRequestResolutionPolicy.resolve(new ModelAppServerRequestResolutionRequest(stringField(expectValue, "requestId", ""),
 			replayedServerRequestSurfaceByRequestId(surfaces, surfaceRequestId),
 			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
 			appServerRequestResolutionCommandKind(stringField(expectValue, "commandKind", "user_input_answer")),
-			stringField(expectValue, "appServerRequestId", ""),
-			stringField(expectValue, "requestKey", ""),
-			stringField(expectValue, "commandKey", ""),
-			stringField(expectValue, "serverName", ""),
-			stringField(expectValue, "commandServerName", ""),
-			stringField(expectValue, "mcpRequestId", ""),
-			stringField(expectValue, "commandMcpRequestId", ""),
-			stringField(expectValue, "pendingItemId", ""),
-			intField(expectValue, "pendingRequestCountBefore", 0),
-			intField(expectValue, "userInputQueueLengthBefore", 0),
-			intField(expectValue, "userInputQueuePosition", -1),
-			boolField(expectValue, "duplicateResponse", false),
-			secretProbe
-		));
+			stringField(expectValue, "appServerRequestId", ""), stringField(expectValue, "requestKey", ""), stringField(expectValue, "commandKey", ""),
+			stringField(expectValue, "serverName", ""), stringField(expectValue, "commandServerName", ""), stringField(expectValue, "mcpRequestId", ""),
+			stringField(expectValue, "commandMcpRequestId", ""), stringField(expectValue, "pendingItemId", ""),
+			intField(expectValue, "pendingRequestCountBefore", 0), intField(expectValue, "userInputQueueLengthBefore", 0),
+			intField(expectValue, "userInputQueuePosition", -1), boolField(expectValue, "duplicateResponse", false), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2526,55 +2211,46 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function replayedServerRequestSurfaceByRequestId(outcomes:Array<ModelReplayedServerRequestSurfaceOutcome>, requestId:String):ModelReplayedServerRequestSurfaceOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function replayedServerRequestSurfaceByRequestId(outcomes:Array<ModelReplayedServerRequestSurfaceOutcome>,
+			requestId:String):ModelReplayedServerRequestSurfaceOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing replayed server request surface outcome: " + requestId;
 	}
 
-	static function assertTopLevelAppServerResponseDispatches(
-		testCase:Value,
-		resolutions:Array<ModelAppServerRequestResolutionOutcome>,
-		secretProbe:String
-	):Array<ModelAppServerResponseDispatchOutcome> {
+	static function assertTopLevelAppServerResponseDispatches(testCase:Value, resolutions:Array<ModelAppServerRequestResolutionOutcome>,
+			secretProbe:String):Array<ModelAppServerResponseDispatchOutcome> {
 		final outcomes:Array<ModelAppServerResponseDispatchOutcome> = [];
 		final values = optionalArrayField(testCase, "appServerResponseDispatchExpects");
-		for (value in values) outcomes.push(assertAppServerResponseDispatch(objectValue(value), resolutions, secretProbe));
+		for (value in values)
+			outcomes.push(assertAppServerResponseDispatch(objectValue(value), resolutions, secretProbe));
 		return outcomes;
 	}
 
-	static function assertAppServerResponseDispatches(
-		verificationValue:Value,
-		resolutions:Array<ModelAppServerRequestResolutionOutcome>,
-		secretProbe:String
-	):Array<ModelAppServerResponseDispatchOutcome> {
+	static function assertAppServerResponseDispatches(verificationValue:Value, resolutions:Array<ModelAppServerRequestResolutionOutcome>,
+			secretProbe:String):Array<ModelAppServerResponseDispatchOutcome> {
 		final outcomes:Array<ModelAppServerResponseDispatchOutcome> = [];
 		final values = optionalArrayField(verificationValue, "appServerResponseDispatchExpects");
-		for (value in values) outcomes.push(assertAppServerResponseDispatch(objectValue(value), resolutions, secretProbe));
+		for (value in values)
+			outcomes.push(assertAppServerResponseDispatch(objectValue(value), resolutions, secretProbe));
 		return outcomes;
 	}
 
-	static function assertAppServerResponseDispatch(
-		expectValue:Value,
-		resolutions:Array<ModelAppServerRequestResolutionOutcome>,
-		secretProbe:String
-	):ModelAppServerResponseDispatchOutcome {
+	static function assertAppServerResponseDispatch(expectValue:Value, resolutions:Array<ModelAppServerRequestResolutionOutcome>,
+			secretProbe:String):ModelAppServerResponseDispatchOutcome {
 		final resolutionRequestId = stringField(expectValue, "resolutionRequestId", "");
-		final outcome = ModelAppServerResponseDispatchPolicy.dispatch(new ModelAppServerResponseDispatchRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelAppServerResponseDispatchPolicy.dispatch(new ModelAppServerResponseDispatchRequest(stringField(expectValue, "requestId", ""),
 			appServerRequestResolutionByRequestId(resolutions, resolutionRequestId),
 			appServerResponseDispatchKind(stringField(expectValue, "dispatchKind", "resolve_response")),
-			boolField(expectValue, "appServerSessionAvailable", false),
-			boolField(expectValue, "serializedPayloadAvailable", false),
-			boolField(expectValue, "transportSendSucceeds", false),
-			stringField(expectValue, "unsupportedRejectReason", ""),
-			intField(expectValue, "previousDispatchCount", 0),
-			intField(expectValue, "responseOrderIndex", 0),
-			secretProbe
-		));
+			boolField(expectValue, "appServerSessionAvailable", false), boolField(expectValue, "serializedPayloadAvailable", false),
+			boolField(expectValue, "transportSendSucceeds", false), stringField(expectValue, "unsupportedRejectReason", ""),
+			intField(expectValue, "previousDispatchCount", 0), intField(expectValue, "responseOrderIndex", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2601,61 +2277,49 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function appServerRequestResolutionByRequestId(outcomes:Array<ModelAppServerRequestResolutionOutcome>, requestId:String):ModelAppServerRequestResolutionOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function appServerRequestResolutionByRequestId(outcomes:Array<ModelAppServerRequestResolutionOutcome>,
+			requestId:String):ModelAppServerRequestResolutionOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing app-server request resolution outcome: " + requestId;
 	}
 
-	static function assertTopLevelAppServerRequestEnqueues(
-		testCase:Value,
-		dispatches:Array<ModelAppServerResponseDispatchOutcome>,
-		secretProbe:String
-	):Array<ModelAppServerRequestEnqueueOutcome> {
+	static function assertTopLevelAppServerRequestEnqueues(testCase:Value, dispatches:Array<ModelAppServerResponseDispatchOutcome>,
+			secretProbe:String):Array<ModelAppServerRequestEnqueueOutcome> {
 		final outcomes:Array<ModelAppServerRequestEnqueueOutcome> = [];
 		final values = optionalArrayField(testCase, "appServerRequestEnqueueExpects");
-		for (value in values) outcomes.push(assertAppServerRequestEnqueue(objectValue(value), dispatches, secretProbe));
+		for (value in values)
+			outcomes.push(assertAppServerRequestEnqueue(objectValue(value), dispatches, secretProbe));
 		return outcomes;
 	}
 
-	static function assertAppServerRequestEnqueues(
-		verificationValue:Value,
-		dispatches:Array<ModelAppServerResponseDispatchOutcome>,
-		secretProbe:String
-	):Array<ModelAppServerRequestEnqueueOutcome> {
+	static function assertAppServerRequestEnqueues(verificationValue:Value, dispatches:Array<ModelAppServerResponseDispatchOutcome>,
+			secretProbe:String):Array<ModelAppServerRequestEnqueueOutcome> {
 		final outcomes:Array<ModelAppServerRequestEnqueueOutcome> = [];
 		final values = optionalArrayField(verificationValue, "appServerRequestEnqueueExpects");
-		for (value in values) outcomes.push(assertAppServerRequestEnqueue(objectValue(value), dispatches, secretProbe));
+		for (value in values)
+			outcomes.push(assertAppServerRequestEnqueue(objectValue(value), dispatches, secretProbe));
 		return outcomes;
 	}
 
-	static function assertAppServerRequestEnqueue(
-		expectValue:Value,
-		dispatches:Array<ModelAppServerResponseDispatchOutcome>,
-		secretProbe:String
-	):ModelAppServerRequestEnqueueOutcome {
+	static function assertAppServerRequestEnqueue(expectValue:Value, dispatches:Array<ModelAppServerResponseDispatchOutcome>,
+			secretProbe:String):ModelAppServerRequestEnqueueOutcome {
 		final responseDispatchRequestId = stringField(expectValue, "responseDispatchRequestId", "");
-		final outcome = ModelAppServerRequestEnqueuePolicy.enqueue(new ModelAppServerRequestEnqueueRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelAppServerRequestEnqueuePolicy.enqueue(new ModelAppServerRequestEnqueueRequest(stringField(expectValue, "requestId", ""),
 			responseDispatchRequestId.length == 0 ? null : appServerResponseDispatchByRequestId(dispatches, responseDispatchRequestId),
-			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
-			stringField(expectValue, "threadId", ""),
-			stringField(expectValue, "primaryThreadId", ""),
-			boolField(expectValue, "primaryThreadKnown", false),
-			stringField(expectValue, "activeThreadId", ""),
-			boolField(expectValue, "threadIdAvailable", false),
-			boolField(expectValue, "pendingRequestRecorded", false),
-			boolField(expectValue, "queueActive", false),
-			boolField(expectValue, "enqueueSucceeds", false),
-			intField(expectValue, "pendingPrimaryEventCountBefore", 0),
-			intField(expectValue, "threadQueueEventCountBefore", 0),
-			intField(expectValue, "previousRequestCount", 0),
-			intField(expectValue, "requestOrderIndex", 0),
-			secretProbe
-		));
+			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")), stringField(expectValue, "threadId", ""),
+			stringField(expectValue, "primaryThreadId", ""), boolField(expectValue, "primaryThreadKnown", false),
+			stringField(expectValue, "activeThreadId", ""), boolField(expectValue, "threadIdAvailable", false),
+			boolField(expectValue, "pendingRequestRecorded", false), boolField(expectValue, "queueActive", false),
+			boolField(expectValue, "enqueueSucceeds", false), intField(expectValue, "pendingPrimaryEventCountBefore", 0),
+			intField(expectValue, "threadQueueEventCountBefore", 0), intField(expectValue, "previousRequestCount", 0),
+			intField(expectValue, "requestOrderIndex", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2671,7 +2335,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "threadlessRequestIgnored", false)), boolText(outcome.threadlessRequestIgnored));
 		assertEquals(boolText(boolField(expectValue, "unsupportedAlreadyRejectedSkipped", false)), boolText(outcome.unsupportedAlreadyRejectedSkipped));
 		assertEquals(boolText(boolField(expectValue, "enqueueFailureRecorded", false)), boolText(outcome.enqueueFailureRecorded));
-		assertEquals(boolText(boolField(expectValue, "pendingInteractiveReplayRecordingIntended", false)), boolText(outcome.pendingInteractiveReplayRecordingIntended));
+		assertEquals(boolText(boolField(expectValue, "pendingInteractiveReplayRecordingIntended", false)),
+			boolText(outcome.pendingInteractiveReplayRecordingIntended));
 		assertEquals(boolText(boolField(expectValue, "chatWidgetDeliveryIntended", false)), boolText(outcome.chatWidgetDeliveryIntended));
 		assertEquals(boolText(boolField(expectValue, "sideParentStatusRefreshIntended", false)), boolText(outcome.sideParentStatusRefreshIntended));
 		assertEquals(boolText(boolField(expectValue, "refreshPendingApprovalsIntended", false)), boolText(outcome.refreshPendingApprovalsIntended));
@@ -2683,55 +2348,46 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function appServerResponseDispatchByRequestId(outcomes:Array<ModelAppServerResponseDispatchOutcome>, requestId:String):ModelAppServerResponseDispatchOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function appServerResponseDispatchByRequestId(outcomes:Array<ModelAppServerResponseDispatchOutcome>,
+			requestId:String):ModelAppServerResponseDispatchOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing app-server response dispatch outcome: " + requestId;
 	}
 
-	static function assertTopLevelAppServerQueuedRequestDeliveries(
-		testCase:Value,
-		enqueues:Array<ModelAppServerRequestEnqueueOutcome>,
-		secretProbe:String
-	):Array<ModelAppServerQueuedRequestDeliveryOutcome> {
+	static function assertTopLevelAppServerQueuedRequestDeliveries(testCase:Value, enqueues:Array<ModelAppServerRequestEnqueueOutcome>,
+			secretProbe:String):Array<ModelAppServerQueuedRequestDeliveryOutcome> {
 		final outcomes:Array<ModelAppServerQueuedRequestDeliveryOutcome> = [];
 		final values = optionalArrayField(testCase, "appServerQueuedRequestDeliveryExpects");
-		for (value in values) outcomes.push(assertAppServerQueuedRequestDelivery(objectValue(value), enqueues, secretProbe));
+		for (value in values)
+			outcomes.push(assertAppServerQueuedRequestDelivery(objectValue(value), enqueues, secretProbe));
 		return outcomes;
 	}
 
-	static function assertAppServerQueuedRequestDeliveries(
-		verificationValue:Value,
-		enqueues:Array<ModelAppServerRequestEnqueueOutcome>,
-		secretProbe:String
-	):Array<ModelAppServerQueuedRequestDeliveryOutcome> {
+	static function assertAppServerQueuedRequestDeliveries(verificationValue:Value, enqueues:Array<ModelAppServerRequestEnqueueOutcome>,
+			secretProbe:String):Array<ModelAppServerQueuedRequestDeliveryOutcome> {
 		final outcomes:Array<ModelAppServerQueuedRequestDeliveryOutcome> = [];
 		final values = optionalArrayField(verificationValue, "appServerQueuedRequestDeliveryExpects");
-		for (value in values) outcomes.push(assertAppServerQueuedRequestDelivery(objectValue(value), enqueues, secretProbe));
+		for (value in values)
+			outcomes.push(assertAppServerQueuedRequestDelivery(objectValue(value), enqueues, secretProbe));
 		return outcomes;
 	}
 
-	static function assertAppServerQueuedRequestDelivery(
-		expectValue:Value,
-		enqueues:Array<ModelAppServerRequestEnqueueOutcome>,
-		secretProbe:String
-	):ModelAppServerQueuedRequestDeliveryOutcome {
+	static function assertAppServerQueuedRequestDelivery(expectValue:Value, enqueues:Array<ModelAppServerRequestEnqueueOutcome>,
+			secretProbe:String):ModelAppServerQueuedRequestDeliveryOutcome {
 		final enqueueRequestId = stringField(expectValue, "enqueueRequestId", "");
-		final outcome = ModelAppServerQueuedRequestDeliveryPolicy.deliver(new ModelAppServerQueuedRequestDeliveryRequest(
-			stringField(expectValue, "requestId", ""),
-			appServerRequestEnqueueByRequestId(enqueues, enqueueRequestId),
-			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
-			boolField(expectValue, "requestStillPending", false),
-			boolField(expectValue, "activeThreadEvent", false),
-			boolField(expectValue, "replayDelivery", false),
-			boolField(expectValue, "pendingPrimaryDrained", false),
-			intField(expectValue, "previousDeliveryCount", 0),
-			intField(expectValue, "deliveryOrderIndex", 0),
-			secretProbe
-		));
+		final outcome = ModelAppServerQueuedRequestDeliveryPolicy.deliver(new ModelAppServerQueuedRequestDeliveryRequest(stringField(expectValue, "requestId",
+			""), appServerRequestEnqueueByRequestId(enqueues, enqueueRequestId),
+			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")), boolField(expectValue, "requestStillPending", false),
+			boolField(expectValue, "activeThreadEvent", false), boolField(expectValue, "replayDelivery", false),
+			boolField(expectValue, "pendingPrimaryDrained", false), intField(expectValue, "previousDeliveryCount", 0),
+			intField(expectValue, "deliveryOrderIndex", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2753,59 +2409,48 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function appServerRequestEnqueueByRequestId(outcomes:Array<ModelAppServerRequestEnqueueOutcome>, requestId:String):ModelAppServerRequestEnqueueOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function appServerRequestEnqueueByRequestId(outcomes:Array<ModelAppServerRequestEnqueueOutcome>,
+			requestId:String):ModelAppServerRequestEnqueueOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing app-server request enqueue outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadBufferedRequestEvictions(
-		testCase:Value,
-		deliveries:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
-		secretProbe:String
-	):Array<ModelThreadBufferedRequestEvictionOutcome> {
+	static function assertTopLevelThreadBufferedRequestEvictions(testCase:Value, deliveries:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
+			secretProbe:String):Array<ModelThreadBufferedRequestEvictionOutcome> {
 		final outcomes:Array<ModelThreadBufferedRequestEvictionOutcome> = [];
 		final values = optionalArrayField(testCase, "threadBufferedRequestEvictionExpects");
-		for (value in values) outcomes.push(assertThreadBufferedRequestEviction(objectValue(value), deliveries, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadBufferedRequestEviction(objectValue(value), deliveries, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadBufferedRequestEvictions(
-		verificationValue:Value,
-		deliveries:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
-		secretProbe:String
-	):Array<ModelThreadBufferedRequestEvictionOutcome> {
+	static function assertThreadBufferedRequestEvictions(verificationValue:Value, deliveries:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
+			secretProbe:String):Array<ModelThreadBufferedRequestEvictionOutcome> {
 		final outcomes:Array<ModelThreadBufferedRequestEvictionOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadBufferedRequestEvictionExpects");
-		for (value in values) outcomes.push(assertThreadBufferedRequestEviction(objectValue(value), deliveries, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadBufferedRequestEviction(objectValue(value), deliveries, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadBufferedRequestEviction(
-		expectValue:Value,
-		deliveries:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
-		secretProbe:String
-	):ModelThreadBufferedRequestEvictionOutcome {
+	static function assertThreadBufferedRequestEviction(expectValue:Value, deliveries:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
+			secretProbe:String):ModelThreadBufferedRequestEvictionOutcome {
 		final deliveryRequestId = stringField(expectValue, "deliveryRequestId", "");
-		final outcome = ModelThreadBufferedRequestEvictionPolicy.model(new ModelThreadBufferedRequestEvictionRequest(
-			stringField(expectValue, "requestId", ""),
-			appServerQueuedRequestDeliveryByRequestId(deliveries, deliveryRequestId),
+		final outcome = ModelThreadBufferedRequestEvictionPolicy.model(new ModelThreadBufferedRequestEvictionRequest(stringField(expectValue, "requestId",
+			""), appServerQueuedRequestDeliveryByRequestId(deliveries, deliveryRequestId),
 			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
 			threadBufferedEventKind(stringField(expectValue, "incomingEventKind", "request")),
-			threadBufferedEventKind(stringField(expectValue, "evictedEventKind", "notification")),
-			intField(expectValue, "bufferCapacity", 0),
-			intField(expectValue, "bufferEventCountBefore", 0),
-			intField(expectValue, "incomingOrderIndex", 0),
-			intField(expectValue, "evictedOrderIndex", 0),
-			boolField(expectValue, "targetRequestEvicted", false),
-			boolField(expectValue, "targetRequestWasPendingInteractive", false),
-			boolField(expectValue, "pendingReplayRecordedBefore", false),
-			boolField(expectValue, "snapshotFilterChecked", false),
-			secretProbe
-		));
+			threadBufferedEventKind(stringField(expectValue, "evictedEventKind", "notification")), intField(expectValue, "bufferCapacity", 0),
+			intField(expectValue, "bufferEventCountBefore", 0), intField(expectValue, "incomingOrderIndex", 0), intField(expectValue, "evictedOrderIndex", 0),
+			boolField(expectValue, "targetRequestEvicted", false), boolField(expectValue, "targetRequestWasPendingInteractive", false),
+			boolField(expectValue, "pendingReplayRecordedBefore", false), boolField(expectValue, "snapshotFilterChecked", false), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2828,55 +2473,46 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function appServerQueuedRequestDeliveryByRequestId(outcomes:Array<ModelAppServerQueuedRequestDeliveryOutcome>, requestId:String):ModelAppServerQueuedRequestDeliveryOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function appServerQueuedRequestDeliveryByRequestId(outcomes:Array<ModelAppServerQueuedRequestDeliveryOutcome>,
+			requestId:String):ModelAppServerQueuedRequestDeliveryOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing app-server queued request delivery outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadSessionRebases(
-		testCase:Value,
-		evictions:Array<ModelThreadBufferedRequestEvictionOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSessionRebaseOutcome> {
+	static function assertTopLevelThreadSessionRebases(testCase:Value, evictions:Array<ModelThreadBufferedRequestEvictionOutcome>,
+			secretProbe:String):Array<ModelThreadSessionRebaseOutcome> {
 		final outcomes:Array<ModelThreadSessionRebaseOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSessionRebaseExpects");
-		for (value in values) outcomes.push(assertThreadSessionRebase(objectValue(value), evictions, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSessionRebase(objectValue(value), evictions, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSessionRebases(
-		verificationValue:Value,
-		evictions:Array<ModelThreadBufferedRequestEvictionOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSessionRebaseOutcome> {
+	static function assertThreadSessionRebases(verificationValue:Value, evictions:Array<ModelThreadBufferedRequestEvictionOutcome>,
+			secretProbe:String):Array<ModelThreadSessionRebaseOutcome> {
 		final outcomes:Array<ModelThreadSessionRebaseOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSessionRebaseExpects");
-		for (value in values) outcomes.push(assertThreadSessionRebase(objectValue(value), evictions, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSessionRebase(objectValue(value), evictions, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSessionRebase(
-		expectValue:Value,
-		evictions:Array<ModelThreadBufferedRequestEvictionOutcome>,
-		secretProbe:String
-	):ModelThreadSessionRebaseOutcome {
+	static function assertThreadSessionRebase(expectValue:Value, evictions:Array<ModelThreadBufferedRequestEvictionOutcome>,
+			secretProbe:String):ModelThreadSessionRebaseOutcome {
 		final evictionRequestId = stringField(expectValue, "evictionRequestId", "");
-		final outcome = ModelThreadSessionRebasePolicy.rebase(new ModelThreadSessionRebaseRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelThreadSessionRebasePolicy.rebase(new ModelThreadSessionRebaseRequest(stringField(expectValue, "requestId", ""),
 			threadBufferedRequestEvictionByRequestId(evictions, evictionRequestId),
-			threadSessionRebaseEventKind(stringField(expectValue, "rebaseEventKind", "request")),
-			intField(expectValue, "bufferEventCountBefore", 0),
-			intField(expectValue, "eventOrderIndexBefore", 0),
-			intField(expectValue, "expectedOrderIndexAfter", 0),
-			boolField(expectValue, "pendingReplayRecordedBefore", false),
-			boolField(expectValue, "serverResolutionRecordedBefore", false),
-			boolField(expectValue, "snapshotFilterChecked", false),
-			secretProbe
-		));
+			threadSessionRebaseEventKind(stringField(expectValue, "rebaseEventKind", "request")), intField(expectValue, "bufferEventCountBefore", 0),
+			intField(expectValue, "eventOrderIndexBefore", 0), intField(expectValue, "expectedOrderIndexAfter", 0),
+			boolField(expectValue, "pendingReplayRecordedBefore", false), boolField(expectValue, "serverResolutionRecordedBefore", false),
+			boolField(expectValue, "snapshotFilterChecked", false), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2895,55 +2531,44 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function threadBufferedRequestEvictionByRequestId(outcomes:Array<ModelThreadBufferedRequestEvictionOutcome>, requestId:String):ModelThreadBufferedRequestEvictionOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadBufferedRequestEvictionByRequestId(outcomes:Array<ModelThreadBufferedRequestEvictionOutcome>,
+			requestId:String):ModelThreadBufferedRequestEvictionOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread buffered request eviction outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadActiveTurns(
-		testCase:Value,
-		rebases:Array<ModelThreadSessionRebaseOutcome>,
-		secretProbe:String
-	):Array<ModelThreadActiveTurnOutcome> {
+	static function assertTopLevelThreadActiveTurns(testCase:Value, rebases:Array<ModelThreadSessionRebaseOutcome>,
+			secretProbe:String):Array<ModelThreadActiveTurnOutcome> {
 		final outcomes:Array<ModelThreadActiveTurnOutcome> = [];
 		final values = optionalArrayField(testCase, "threadActiveTurnExpects");
-		for (value in values) outcomes.push(assertThreadActiveTurn(objectValue(value), rebases, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadActiveTurn(objectValue(value), rebases, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadActiveTurns(
-		verificationValue:Value,
-		rebases:Array<ModelThreadSessionRebaseOutcome>,
-		secretProbe:String
-	):Array<ModelThreadActiveTurnOutcome> {
+	static function assertThreadActiveTurns(verificationValue:Value, rebases:Array<ModelThreadSessionRebaseOutcome>,
+			secretProbe:String):Array<ModelThreadActiveTurnOutcome> {
 		final outcomes:Array<ModelThreadActiveTurnOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadActiveTurnExpects");
-		for (value in values) outcomes.push(assertThreadActiveTurn(objectValue(value), rebases, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadActiveTurn(objectValue(value), rebases, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadActiveTurn(
-		expectValue:Value,
-		rebases:Array<ModelThreadSessionRebaseOutcome>,
-		secretProbe:String
-	):ModelThreadActiveTurnOutcome {
+	static function assertThreadActiveTurn(expectValue:Value, rebases:Array<ModelThreadSessionRebaseOutcome>, secretProbe:String):ModelThreadActiveTurnOutcome {
 		final rebaseRequestId = stringField(expectValue, "rebaseRequestId", "");
-		final outcome = ModelThreadActiveTurnPolicy.apply(new ModelThreadActiveTurnRequest(
-			stringField(expectValue, "requestId", ""),
-			threadSessionRebaseByRequestId(rebases, rebaseRequestId),
-			threadActiveTurnEventKind(stringField(expectValue, "eventKind", "turns_restored")),
-			stringField(expectValue, "activeTurnIdBefore", ""),
-			stringField(expectValue, "eventTurnId", ""),
-			stringField(expectValue, "latestInProgressTurnId", ""),
-			boolField(expectValue, "turnsRestoredInOrder", false),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+		final outcome = ModelThreadActiveTurnPolicy.apply(new ModelThreadActiveTurnRequest(stringField(expectValue, "requestId", ""),
+			threadSessionRebaseByRequestId(rebases, rebaseRequestId), threadActiveTurnEventKind(stringField(expectValue, "eventKind", "turns_restored")),
+			stringField(expectValue, "activeTurnIdBefore", ""), stringField(expectValue, "eventTurnId", ""),
+			stringField(expectValue, "latestInProgressTurnId", ""), boolField(expectValue, "turnsRestoredInOrder", false),
+			intField(expectValue, "eventOrderIndex", 0), intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -2964,59 +2589,47 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
 	static function threadSessionRebaseByRequestId(outcomes:Array<ModelThreadSessionRebaseOutcome>, requestId:String):ModelThreadSessionRebaseOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread session rebase outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadSideParentPendingStatuses(
-		testCase:Value,
-		activeTurns:Array<ModelThreadActiveTurnOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideParentPendingOutcome> {
+	static function assertTopLevelThreadSideParentPendingStatuses(testCase:Value, activeTurns:Array<ModelThreadActiveTurnOutcome>,
+			secretProbe:String):Array<ModelThreadSideParentPendingOutcome> {
 		final outcomes:Array<ModelThreadSideParentPendingOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSideParentPendingStatusExpects");
-		for (value in values) outcomes.push(assertThreadSideParentPendingStatus(objectValue(value), activeTurns, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideParentPendingStatus(objectValue(value), activeTurns, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideParentPendingStatuses(
-		verificationValue:Value,
-		activeTurns:Array<ModelThreadActiveTurnOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideParentPendingOutcome> {
+	static function assertThreadSideParentPendingStatuses(verificationValue:Value, activeTurns:Array<ModelThreadActiveTurnOutcome>,
+			secretProbe:String):Array<ModelThreadSideParentPendingOutcome> {
 		final outcomes:Array<ModelThreadSideParentPendingOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSideParentPendingStatusExpects");
-		for (value in values) outcomes.push(assertThreadSideParentPendingStatus(objectValue(value), activeTurns, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideParentPendingStatus(objectValue(value), activeTurns, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideParentPendingStatus(
-		expectValue:Value,
-		activeTurns:Array<ModelThreadActiveTurnOutcome>,
-		secretProbe:String
-	):ModelThreadSideParentPendingOutcome {
+	static function assertThreadSideParentPendingStatus(expectValue:Value, activeTurns:Array<ModelThreadActiveTurnOutcome>,
+			secretProbe:String):ModelThreadSideParentPendingOutcome {
 		final activeTurnRequestId = stringField(expectValue, "activeTurnRequestId", "");
-		final outcome = ModelThreadSideParentPendingPolicy.apply(new ModelThreadSideParentPendingRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelThreadSideParentPendingPolicy.apply(new ModelThreadSideParentPendingRequest(stringField(expectValue, "requestId", ""),
 			threadActiveTurnByRequestId(activeTurns, activeTurnRequestId),
 			threadSideParentPendingEventKind(stringField(expectValue, "eventKind", "status_refresh")),
-			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")),
-			intField(expectValue, "pendingUserInputCountBefore", 0),
-			intField(expectValue, "pendingApprovalCountBefore", 0),
-			boolField(expectValue, "requestAddsUserInput", false),
-			boolField(expectValue, "requestAddsApproval", false),
-			boolField(expectValue, "requestRemovesUserInput", false),
-			boolField(expectValue, "requestRemovesApproval", false),
-			boolField(expectValue, "requestStatusFallbackAllowed", false),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+			replayedServerRequestKind(stringField(expectValue, "requestKind", "user_input")), intField(expectValue, "pendingUserInputCountBefore", 0),
+			intField(expectValue, "pendingApprovalCountBefore", 0), boolField(expectValue, "requestAddsUserInput", false),
+			boolField(expectValue, "requestAddsApproval", false), boolField(expectValue, "requestRemovesUserInput", false),
+			boolField(expectValue, "requestRemovesApproval", false), boolField(expectValue, "requestStatusFallbackAllowed", false),
+			intField(expectValue, "eventOrderIndex", 0), intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3039,48 +2652,38 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelThreadSideParentStatusChanges(
-		testCase:Value,
-		pendingStatuses:Array<ModelThreadSideParentPendingOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideParentStatusChangeOutcome> {
+	static function assertTopLevelThreadSideParentStatusChanges(testCase:Value, pendingStatuses:Array<ModelThreadSideParentPendingOutcome>,
+			secretProbe:String):Array<ModelThreadSideParentStatusChangeOutcome> {
 		final outcomes:Array<ModelThreadSideParentStatusChangeOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSideParentStatusChangeExpects");
-		for (value in values) outcomes.push(assertThreadSideParentStatusChange(objectValue(value), pendingStatuses, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideParentStatusChange(objectValue(value), pendingStatuses, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideParentStatusChanges(
-		verificationValue:Value,
-		pendingStatuses:Array<ModelThreadSideParentPendingOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideParentStatusChangeOutcome> {
+	static function assertThreadSideParentStatusChanges(verificationValue:Value, pendingStatuses:Array<ModelThreadSideParentPendingOutcome>,
+			secretProbe:String):Array<ModelThreadSideParentStatusChangeOutcome> {
 		final outcomes:Array<ModelThreadSideParentStatusChangeOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSideParentStatusChangeExpects");
-		for (value in values) outcomes.push(assertThreadSideParentStatusChange(objectValue(value), pendingStatuses, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideParentStatusChange(objectValue(value), pendingStatuses, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideParentStatusChange(
-		expectValue:Value,
-		pendingStatuses:Array<ModelThreadSideParentPendingOutcome>,
-		secretProbe:String
-	):ModelThreadSideParentStatusChangeOutcome {
+	static function assertThreadSideParentStatusChange(expectValue:Value, pendingStatuses:Array<ModelThreadSideParentPendingOutcome>,
+			secretProbe:String):ModelThreadSideParentStatusChangeOutcome {
 		final pendingRequestId = stringField(expectValue, "pendingRequestId", "");
-		final outcome = ModelThreadSideParentStatusChangePolicy.apply(new ModelThreadSideParentStatusChangeRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelThreadSideParentStatusChangePolicy.apply(new ModelThreadSideParentStatusChangeRequest(stringField(expectValue, "requestId", ""),
 			threadSideParentPendingStatusByRequestId(pendingStatuses, pendingRequestId),
 			threadSideParentStatusChangeEventKind(stringField(expectValue, "eventKind", "other_notification")),
 			threadSideParentTurnStatusKind(stringField(expectValue, "turnStatus", "none")),
-			threadSideParentStatusKind(stringField(expectValue, "sideParentStatusBefore", "none")),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+			threadSideParentStatusKind(stringField(expectValue, "sideParentStatusBefore", "none")), intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3103,58 +2706,45 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function threadSideParentPendingStatusByRequestId(
-		outcomes:Array<ModelThreadSideParentPendingOutcome>,
-		requestId:String
-	):ModelThreadSideParentPendingOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadSideParentPendingStatusByRequestId(outcomes:Array<ModelThreadSideParentPendingOutcome>,
+			requestId:String):ModelThreadSideParentPendingOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread side-parent pending status outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadSideThreadUiSyncs(
-		testCase:Value,
-		statusChanges:Array<ModelThreadSideParentStatusChangeOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadUiSyncOutcome> {
+	static function assertTopLevelThreadSideThreadUiSyncs(testCase:Value, statusChanges:Array<ModelThreadSideParentStatusChangeOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadUiSyncOutcome> {
 		final outcomes:Array<ModelThreadSideThreadUiSyncOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSideThreadUiSyncExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadUiSync(objectValue(value), statusChanges, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadUiSync(objectValue(value), statusChanges, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadUiSyncs(
-		verificationValue:Value,
-		statusChanges:Array<ModelThreadSideParentStatusChangeOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadUiSyncOutcome> {
+	static function assertThreadSideThreadUiSyncs(verificationValue:Value, statusChanges:Array<ModelThreadSideParentStatusChangeOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadUiSyncOutcome> {
 		final outcomes:Array<ModelThreadSideThreadUiSyncOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSideThreadUiSyncExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadUiSync(objectValue(value), statusChanges, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadUiSync(objectValue(value), statusChanges, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadUiSync(
-		expectValue:Value,
-		statusChanges:Array<ModelThreadSideParentStatusChangeOutcome>,
-		secretProbe:String
-	):ModelThreadSideThreadUiSyncOutcome {
+	static function assertThreadSideThreadUiSync(expectValue:Value, statusChanges:Array<ModelThreadSideParentStatusChangeOutcome>,
+			secretProbe:String):ModelThreadSideThreadUiSyncOutcome {
 		final statusChangeRequestId = stringField(expectValue, "statusChangeRequestId", "");
-		final outcome = ModelThreadSideThreadUiSyncPolicy.apply(new ModelThreadSideThreadUiSyncRequest(
-			stringField(expectValue, "requestId", ""),
-			threadSideParentStatusChangeByRequestId(statusChanges, statusChangeRequestId),
-			boolField(expectValue, "activeThreadDisplayed", false),
-			boolField(expectValue, "sideThreadKnown", false),
-			boolField(expectValue, "parentIsMain", false),
-			stringField(expectValue, "parentThreadLabel", ""),
-			threadSideParentStatusKind(stringField(expectValue, "storedParentStatusBefore", "none")),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+		final outcome = ModelThreadSideThreadUiSyncPolicy.apply(new ModelThreadSideThreadUiSyncRequest(stringField(expectValue, "requestId", ""),
+			threadSideParentStatusChangeByRequestId(statusChanges, statusChangeRequestId), boolField(expectValue, "activeThreadDisplayed", false),
+			boolField(expectValue, "sideThreadKnown", false), boolField(expectValue, "parentIsMain", false),
+			stringField(expectValue, "parentThreadLabel", ""), threadSideParentStatusKind(stringField(expectValue, "storedParentStatusBefore", "none")),
+			intField(expectValue, "eventOrderIndex", 0), intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3179,69 +2769,51 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function threadSideParentStatusChangeByRequestId(
-		outcomes:Array<ModelThreadSideParentStatusChangeOutcome>,
-		requestId:String
-	):ModelThreadSideParentStatusChangeOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadSideParentStatusChangeByRequestId(outcomes:Array<ModelThreadSideParentStatusChangeOutcome>,
+			requestId:String):ModelThreadSideParentStatusChangeOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread side-parent status-change outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadSideThreadDiscards(
-		testCase:Value,
-		uiSyncs:Array<ModelThreadSideThreadUiSyncOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadDiscardOutcome> {
+	static function assertTopLevelThreadSideThreadDiscards(testCase:Value, uiSyncs:Array<ModelThreadSideThreadUiSyncOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadDiscardOutcome> {
 		final outcomes:Array<ModelThreadSideThreadDiscardOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSideThreadDiscardExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadDiscard(objectValue(value), uiSyncs, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadDiscard(objectValue(value), uiSyncs, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadDiscards(
-		verificationValue:Value,
-		uiSyncs:Array<ModelThreadSideThreadUiSyncOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadDiscardOutcome> {
+	static function assertThreadSideThreadDiscards(verificationValue:Value, uiSyncs:Array<ModelThreadSideThreadUiSyncOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadDiscardOutcome> {
 		final outcomes:Array<ModelThreadSideThreadDiscardOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSideThreadDiscardExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadDiscard(objectValue(value), uiSyncs, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadDiscard(objectValue(value), uiSyncs, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadDiscard(
-		expectValue:Value,
-		uiSyncs:Array<ModelThreadSideThreadUiSyncOutcome>,
-		secretProbe:String
-	):ModelThreadSideThreadDiscardOutcome {
+	static function assertThreadSideThreadDiscard(expectValue:Value, uiSyncs:Array<ModelThreadSideThreadUiSyncOutcome>,
+			secretProbe:String):ModelThreadSideThreadDiscardOutcome {
 		final uiSyncRequestId = stringField(expectValue, "uiSyncRequestId", "");
-		final outcome = ModelThreadSideThreadDiscardPolicy.apply(new ModelThreadSideThreadDiscardRequest(
-			stringField(expectValue, "requestId", ""),
-			threadSideThreadUiSyncByRequestId(uiSyncs, uiSyncRequestId),
-			boolField(expectValue, "maybeReturnRequested", false),
-			boolField(expectValue, "overlayActive", false),
-			boolField(expectValue, "modalOrPopupActive", false),
-			boolField(expectValue, "composerEmpty", false),
-			boolField(expectValue, "activeSideParentKnown", false),
-			boolField(expectValue, "selectionSucceeded", false),
-			boolField(expectValue, "activeSideParentAfterSelectionKnown", false),
-			boolField(expectValue, "currentThreadDisplayed", false),
-			boolField(expectValue, "currentThreadIsSideThread", false),
-			boolField(expectValue, "targetIsCurrentThread", false),
-			boolField(expectValue, "sideThreadHasActiveTurn", false),
-			boolField(expectValue, "interruptSucceeded", false),
-			boolField(expectValue, "unsubscribeSucceeded", false),
-			boolField(expectValue, "discardedThreadWasActive", false),
-			boolField(expectValue, "closedSideThread", false),
-			boolField(expectValue, "keepVisibleAfterCleanupFailure", false),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+		final outcome = ModelThreadSideThreadDiscardPolicy.apply(new ModelThreadSideThreadDiscardRequest(stringField(expectValue, "requestId", ""),
+			threadSideThreadUiSyncByRequestId(uiSyncs, uiSyncRequestId), boolField(expectValue, "maybeReturnRequested", false),
+			boolField(expectValue, "overlayActive", false), boolField(expectValue, "modalOrPopupActive", false),
+			boolField(expectValue, "composerEmpty", false), boolField(expectValue, "activeSideParentKnown", false),
+			boolField(expectValue, "selectionSucceeded", false), boolField(expectValue, "activeSideParentAfterSelectionKnown", false),
+			boolField(expectValue, "currentThreadDisplayed", false), boolField(expectValue, "currentThreadIsSideThread", false),
+			boolField(expectValue, "targetIsCurrentThread", false), boolField(expectValue, "sideThreadHasActiveTurn", false),
+			boolField(expectValue, "interruptSucceeded", false), boolField(expectValue, "unsubscribeSucceeded", false),
+			boolField(expectValue, "discardedThreadWasActive", false), boolField(expectValue, "closedSideThread", false),
+			boolField(expectValue, "keepVisibleAfterCleanupFailure", false), intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3268,70 +2840,50 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function threadSideThreadUiSyncByRequestId(
-		outcomes:Array<ModelThreadSideThreadUiSyncOutcome>,
-		requestId:String
-	):ModelThreadSideThreadUiSyncOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadSideThreadUiSyncByRequestId(outcomes:Array<ModelThreadSideThreadUiSyncOutcome>, requestId:String):ModelThreadSideThreadUiSyncOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread side-thread UI sync outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadSideThreadStarts(
-		testCase:Value,
-		discards:Array<ModelThreadSideThreadDiscardOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadStartOutcome> {
+	static function assertTopLevelThreadSideThreadStarts(testCase:Value, discards:Array<ModelThreadSideThreadDiscardOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadStartOutcome> {
 		final outcomes:Array<ModelThreadSideThreadStartOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSideThreadStartExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadStart(objectValue(value), discards, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadStart(objectValue(value), discards, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadStarts(
-		verificationValue:Value,
-		discards:Array<ModelThreadSideThreadDiscardOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadStartOutcome> {
+	static function assertThreadSideThreadStarts(verificationValue:Value, discards:Array<ModelThreadSideThreadDiscardOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadStartOutcome> {
 		final outcomes:Array<ModelThreadSideThreadStartOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSideThreadStartExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadStart(objectValue(value), discards, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadStart(objectValue(value), discards, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadStart(
-		expectValue:Value,
-		discards:Array<ModelThreadSideThreadDiscardOutcome>,
-		secretProbe:String
-	):ModelThreadSideThreadStartOutcome {
+	static function assertThreadSideThreadStart(expectValue:Value, discards:Array<ModelThreadSideThreadDiscardOutcome>,
+			secretProbe:String):ModelThreadSideThreadStartOutcome {
 		final cleanupRequestId = stringField(expectValue, "cleanupRequestId", "");
-		final outcome = ModelThreadSideThreadStartPolicy.apply(new ModelThreadSideThreadStartRequest(
-			stringField(expectValue, "requestId", ""),
-			threadSideThreadDiscardByRequestId(discards, cleanupRequestId),
-			boolField(expectValue, "primaryThreadAvailable", false),
-			boolField(expectValue, "sideThreadAlreadyOpen", false),
-			stringField(expectValue, "parentModel", ""),
-			stringField(expectValue, "parentReasoningEffort", ""),
-			stringField(expectValue, "parentServiceTier", ""),
-			stringField(expectValue, "parentApprovalPolicy", ""),
-			stringField(expectValue, "parentPermissionProfile", ""),
-			stringField(expectValue, "parentApprovalsReviewer", ""),
-			stringField(expectValue, "existingDeveloperInstructions", ""),
-			boolField(expectValue, "userMessageProvided", false),
-			boolField(expectValue, "forkSucceeded", false),
-			stringField(expectValue, "forkErrorMessage", ""),
-			boolField(expectValue, "injectBoundarySucceeded", false),
-			boolField(expectValue, "switchSucceeded", false),
-			boolField(expectValue, "activeChildAfterSwitch", false),
-			boolField(expectValue, "discardCleanupSucceeded", false),
-			boolField(expectValue, "activeThreadRestoredToParent", false),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+		final outcome = ModelThreadSideThreadStartPolicy.apply(new ModelThreadSideThreadStartRequest(stringField(expectValue, "requestId", ""),
+			threadSideThreadDiscardByRequestId(discards, cleanupRequestId), boolField(expectValue, "primaryThreadAvailable", false),
+			boolField(expectValue, "sideThreadAlreadyOpen", false), stringField(expectValue, "parentModel", ""),
+			stringField(expectValue, "parentReasoningEffort", ""), stringField(expectValue, "parentServiceTier", ""),
+			stringField(expectValue, "parentApprovalPolicy", ""), stringField(expectValue, "parentPermissionProfile", ""),
+			stringField(expectValue, "parentApprovalsReviewer", ""), stringField(expectValue, "existingDeveloperInstructions", ""),
+			boolField(expectValue, "userMessageProvided", false), boolField(expectValue, "forkSucceeded", false),
+			stringField(expectValue, "forkErrorMessage", ""), boolField(expectValue, "injectBoundarySucceeded", false),
+			boolField(expectValue, "switchSucceeded", false), boolField(expectValue, "activeChildAfterSwitch", false),
+			boolField(expectValue, "discardCleanupSucceeded", false), boolField(expectValue, "activeThreadRestoredToParent", false),
+			intField(expectValue, "eventOrderIndex", 0), intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3358,7 +2910,8 @@ class ModelStreamItemReducerHarness {
 		final expectedSwitchAttempted = boolText(boolField(expectValue, "switchAttempted", false));
 		final actualSwitchAttempted = boolText(outcome.switchAttempted);
 		if (expectedSwitchAttempted != actualSwitchAttempted) {
-			throw "thread side-thread start " + stringField(expectValue, "requestId", "") + " expected switchAttempted `" + expectedSwitchAttempted + "` but got `" + actualSwitchAttempted + "`";
+			throw "thread side-thread start " + stringField(expectValue, "requestId", "") + " expected switchAttempted `" + expectedSwitchAttempted
+				+ "` but got `" + actualSwitchAttempted + "`";
 		}
 		assertEquals(boolText(boolField(expectValue, "discardCleanupAttempted", false)), boolText(outcome.discardCleanupAttempted));
 		assertEquals(boolText(boolField(expectValue, "parentRestoreAttempted", false)), boolText(outcome.parentRestoreAttempted));
@@ -3371,57 +2924,41 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelThreadSideThreadStartupRoutings(
-		testCase:Value,
-		starts:Array<ModelThreadSideThreadStartOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadStartupRoutingOutcome> {
+	static function assertTopLevelThreadSideThreadStartupRoutings(testCase:Value, starts:Array<ModelThreadSideThreadStartOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadStartupRoutingOutcome> {
 		final outcomes:Array<ModelThreadSideThreadStartupRoutingOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSideThreadStartupRoutingExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadStartupRouting(objectValue(value), starts, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadStartupRouting(objectValue(value), starts, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadStartupRoutings(
-		verificationValue:Value,
-		starts:Array<ModelThreadSideThreadStartOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadStartupRoutingOutcome> {
+	static function assertThreadSideThreadStartupRoutings(verificationValue:Value, starts:Array<ModelThreadSideThreadStartOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadStartupRoutingOutcome> {
 		final outcomes:Array<ModelThreadSideThreadStartupRoutingOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSideThreadStartupRoutingExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadStartupRouting(objectValue(value), starts, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadStartupRouting(objectValue(value), starts, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadStartupRouting(
-		expectValue:Value,
-		starts:Array<ModelThreadSideThreadStartOutcome>,
-		secretProbe:String
-	):ModelThreadSideThreadStartupRoutingOutcome {
+	static function assertThreadSideThreadStartupRouting(expectValue:Value, starts:Array<ModelThreadSideThreadStartOutcome>,
+			secretProbe:String):ModelThreadSideThreadStartupRoutingOutcome {
 		final startRequestId = stringField(expectValue, "startRequestId", "");
-		final outcome = ModelThreadSideThreadStartupRoutingPolicy.apply(new ModelThreadSideThreadStartupRoutingRequest(
-			stringField(expectValue, "requestId", ""),
-			threadSideThreadStartByRequestId(starts, startRequestId),
-			boolField(expectValue, "notificationThreadScoped", false),
-			boolField(expectValue, "notificationTargetsVisibleThread", false),
-			boolField(expectValue, "notificationTargetsPrimaryThread", false),
-			boolField(expectValue, "targetThreadIsSideThread", false),
-			boolField(expectValue, "visibleThreadIsSideThread", false),
-			boolField(expectValue, "activeThreadChannel", false),
-			boolField(expectValue, "snapshotReplay", false),
-			boolField(expectValue, "snapshotSessionIsSideThread", false),
-			stringField(expectValue, "mcpServerName", ""),
-			threadSideThreadStartupEventKind(stringField(expectValue, "startupEventKind", "starting")),
-			stringField(expectValue, "startupErrorMessage", ""),
-			boolField(expectValue, "expectedServerConfigured", false),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+		final outcome = ModelThreadSideThreadStartupRoutingPolicy.apply(new ModelThreadSideThreadStartupRoutingRequest(stringField(expectValue, "requestId",
+			""), threadSideThreadStartByRequestId(starts, startRequestId),
+			boolField(expectValue, "notificationThreadScoped", false), boolField(expectValue, "notificationTargetsVisibleThread", false),
+			boolField(expectValue, "notificationTargetsPrimaryThread", false), boolField(expectValue, "targetThreadIsSideThread", false),
+			boolField(expectValue, "visibleThreadIsSideThread", false), boolField(expectValue, "activeThreadChannel", false),
+			boolField(expectValue, "snapshotReplay", false), boolField(expectValue, "snapshotSessionIsSideThread", false),
+			stringField(expectValue, "mcpServerName", ""), threadSideThreadStartupEventKind(stringField(expectValue, "startupEventKind", "starting")),
+			stringField(expectValue, "startupErrorMessage", ""), boolField(expectValue, "expectedServerConfigured", false),
+			intField(expectValue, "eventOrderIndex", 0), intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3448,62 +2985,46 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function threadSideThreadStartByRequestId(
-		outcomes:Array<ModelThreadSideThreadStartOutcome>,
-		requestId:String
-	):ModelThreadSideThreadStartOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadSideThreadStartByRequestId(outcomes:Array<ModelThreadSideThreadStartOutcome>, requestId:String):ModelThreadSideThreadStartOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread side-thread start outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadSideThreadComposerHandoffs(
-		testCase:Value,
-		starts:Array<ModelThreadSideThreadStartOutcome>,
-		startupRoutings:Array<ModelThreadSideThreadStartupRoutingOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadComposerHandoffOutcome> {
+	static function assertTopLevelThreadSideThreadComposerHandoffs(testCase:Value, starts:Array<ModelThreadSideThreadStartOutcome>,
+			startupRoutings:Array<ModelThreadSideThreadStartupRoutingOutcome>, secretProbe:String):Array<ModelThreadSideThreadComposerHandoffOutcome> {
 		final outcomes:Array<ModelThreadSideThreadComposerHandoffOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSideThreadComposerHandoffExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadComposerHandoff(objectValue(value), starts, startupRoutings, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadComposerHandoff(objectValue(value), starts, startupRoutings, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadComposerHandoffs(
-		verificationValue:Value,
-		starts:Array<ModelThreadSideThreadStartOutcome>,
-		startupRoutings:Array<ModelThreadSideThreadStartupRoutingOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadComposerHandoffOutcome> {
+	static function assertThreadSideThreadComposerHandoffs(verificationValue:Value, starts:Array<ModelThreadSideThreadStartOutcome>,
+			startupRoutings:Array<ModelThreadSideThreadStartupRoutingOutcome>, secretProbe:String):Array<ModelThreadSideThreadComposerHandoffOutcome> {
 		final outcomes:Array<ModelThreadSideThreadComposerHandoffOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSideThreadComposerHandoffExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadComposerHandoff(objectValue(value), starts, startupRoutings, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadComposerHandoff(objectValue(value), starts, startupRoutings, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadComposerHandoff(
-		expectValue:Value,
-		starts:Array<ModelThreadSideThreadStartOutcome>,
-		startupRoutings:Array<ModelThreadSideThreadStartupRoutingOutcome>,
-		secretProbe:String
-	):ModelThreadSideThreadComposerHandoffOutcome {
+	static function assertThreadSideThreadComposerHandoff(expectValue:Value, starts:Array<ModelThreadSideThreadStartOutcome>,
+			startupRoutings:Array<ModelThreadSideThreadStartupRoutingOutcome>, secretProbe:String):ModelThreadSideThreadComposerHandoffOutcome {
 		final startRequestId = stringField(expectValue, "startRequestId", "");
 		final startupRoutingRequestId = stringField(expectValue, "startupRoutingRequestId", "");
-		final outcome = ModelThreadSideThreadComposerHandoffPolicy.apply(new ModelThreadSideThreadComposerHandoffRequest(
-			stringField(expectValue, "requestId", ""),
-			threadSideThreadStartByRequestId(starts, startRequestId),
-			threadSideThreadStartupRoutingByRequestIdOrNull(startupRoutings, startupRoutingRequestId),
-			boolField(expectValue, "userMessageProvided", false),
-			stringField(expectValue, "inlineUserMessageText", ""),
-			boolField(expectValue, "composerInitiallyEmpty", false),
-			stringField(expectValue, "sideContextLabelBefore", ""),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+		final outcome = ModelThreadSideThreadComposerHandoffPolicy.apply(new ModelThreadSideThreadComposerHandoffRequest(stringField(expectValue, "requestId",
+			""), threadSideThreadStartByRequestId(starts, startRequestId),
+			threadSideThreadStartupRoutingByRequestIdOrNull(startupRoutings, startupRoutingRequestId), boolField(expectValue, "userMessageProvided", false),
+			stringField(expectValue, "inlineUserMessageText", ""), boolField(expectValue, "composerInitiallyEmpty", false),
+			stringField(expectValue, "sideContextLabelBefore", ""), intField(expectValue, "eventOrderIndex", 0),
+			intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3527,70 +3048,53 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function threadSideThreadStartupRoutingByRequestIdOrNull(
-		outcomes:Array<ModelThreadSideThreadStartupRoutingOutcome>,
-		requestId:String
-	):ModelThreadSideThreadStartupRoutingOutcome {
-		if (requestId.length == 0) return null;
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadSideThreadStartupRoutingByRequestIdOrNull(outcomes:Array<ModelThreadSideThreadStartupRoutingOutcome>,
+			requestId:String):ModelThreadSideThreadStartupRoutingOutcome {
+		if (requestId.length == 0)
+			return null;
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread side-thread startup routing outcome: " + requestId;
 	}
 
-	static function assertTopLevelThreadSideThreadNavigationCleanups(
-		testCase:Value,
-		composerHandoffs:Array<ModelThreadSideThreadComposerHandoffOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadNavigationCleanupOutcome> {
+	static function assertTopLevelThreadSideThreadNavigationCleanups(testCase:Value, composerHandoffs:Array<ModelThreadSideThreadComposerHandoffOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadNavigationCleanupOutcome> {
 		final outcomes:Array<ModelThreadSideThreadNavigationCleanupOutcome> = [];
 		final values = optionalArrayField(testCase, "threadSideThreadNavigationCleanupExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadNavigationCleanup(objectValue(value), composerHandoffs, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadNavigationCleanup(objectValue(value), composerHandoffs, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadNavigationCleanups(
-		verificationValue:Value,
-		composerHandoffs:Array<ModelThreadSideThreadComposerHandoffOutcome>,
-		secretProbe:String
-	):Array<ModelThreadSideThreadNavigationCleanupOutcome> {
+	static function assertThreadSideThreadNavigationCleanups(verificationValue:Value, composerHandoffs:Array<ModelThreadSideThreadComposerHandoffOutcome>,
+			secretProbe:String):Array<ModelThreadSideThreadNavigationCleanupOutcome> {
 		final outcomes:Array<ModelThreadSideThreadNavigationCleanupOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadSideThreadNavigationCleanupExpects");
-		for (value in values) outcomes.push(assertThreadSideThreadNavigationCleanup(objectValue(value), composerHandoffs, secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadSideThreadNavigationCleanup(objectValue(value), composerHandoffs, secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadSideThreadNavigationCleanup(
-		expectValue:Value,
-		composerHandoffs:Array<ModelThreadSideThreadComposerHandoffOutcome>,
-		secretProbe:String
-	):ModelThreadSideThreadNavigationCleanupOutcome {
+	static function assertThreadSideThreadNavigationCleanup(expectValue:Value, composerHandoffs:Array<ModelThreadSideThreadComposerHandoffOutcome>,
+			secretProbe:String):ModelThreadSideThreadNavigationCleanupOutcome {
 		final composerHandoffRequestId = stringField(expectValue, "composerHandoffRequestId", "");
-		final outcome = ModelThreadSideThreadNavigationCleanupPolicy.apply(new ModelThreadSideThreadNavigationCleanupRequest(
-			stringField(expectValue, "requestId", ""),
-			threadSideThreadComposerHandoffByRequestId(composerHandoffs, composerHandoffRequestId),
-			boolField(expectValue, "currentDisplayedThreadIsSide", false),
-			boolField(expectValue, "targetIsCurrentSideThread", false),
-			boolField(expectValue, "targetIsParentThread", false),
-			boolField(expectValue, "selectedByParentSwitch", false),
-			boolField(expectValue, "selectTargetSucceeded", false),
-			boolField(expectValue, "discardClosedNotification", false),
-			boolField(expectValue, "activeThreadWasSideBeforeSwitch", false),
-			boolField(expectValue, "activeThreadIsDiscardTarget", false),
-			boolField(expectValue, "activeTurnPresent", false),
-			boolField(expectValue, "interruptSucceeded", false),
-			boolField(expectValue, "unsubscribeSucceeded", false),
-			boolField(expectValue, "threadEventChannelBefore", false),
-			boolField(expectValue, "sideThreadLocalStateBefore", false),
-			boolField(expectValue, "agentNavigationEntryBefore", false),
-			boolField(expectValue, "pendingInactiveRequests", false),
-			boolField(expectValue, "keepVisibleSelectSucceeded", false),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+		final outcome = ModelThreadSideThreadNavigationCleanupPolicy.apply(new ModelThreadSideThreadNavigationCleanupRequest(stringField(expectValue,
+			"requestId", ""), threadSideThreadComposerHandoffByRequestId(composerHandoffs, composerHandoffRequestId),
+			boolField(expectValue, "currentDisplayedThreadIsSide", false), boolField(expectValue, "targetIsCurrentSideThread", false),
+			boolField(expectValue, "targetIsParentThread", false), boolField(expectValue, "selectedByParentSwitch", false),
+			boolField(expectValue, "selectTargetSucceeded", false), boolField(expectValue, "discardClosedNotification", false),
+			boolField(expectValue, "activeThreadWasSideBeforeSwitch", false), boolField(expectValue, "activeThreadIsDiscardTarget", false),
+			boolField(expectValue, "activeTurnPresent", false), boolField(expectValue, "interruptSucceeded", false),
+			boolField(expectValue, "unsubscribeSucceeded", false), boolField(expectValue, "threadEventChannelBefore", false),
+			boolField(expectValue, "sideThreadLocalStateBefore", false), boolField(expectValue, "agentNavigationEntryBefore", false),
+			boolField(expectValue, "pendingInactiveRequests", false), boolField(expectValue, "keepVisibleSelectSucceeded", false),
+			intField(expectValue, "eventOrderIndex", 0), intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3622,51 +3126,38 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelActiveNonPrimaryShutdowns(
-		testCase:Value,
-		navigationCleanups:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
-		secretProbe:String
-	):Array<ModelActiveNonPrimaryShutdownOutcome> {
+	static function assertTopLevelActiveNonPrimaryShutdowns(testCase:Value, navigationCleanups:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
+			secretProbe:String):Array<ModelActiveNonPrimaryShutdownOutcome> {
 		final outcomes:Array<ModelActiveNonPrimaryShutdownOutcome> = [];
 		final values = optionalArrayField(testCase, "activeNonPrimaryShutdownExpects");
-		for (value in values) outcomes.push(assertActiveNonPrimaryShutdown(objectValue(value), navigationCleanups, secretProbe));
+		for (value in values)
+			outcomes.push(assertActiveNonPrimaryShutdown(objectValue(value), navigationCleanups, secretProbe));
 		return outcomes;
 	}
 
-	static function assertActiveNonPrimaryShutdowns(
-		verificationValue:Value,
-		navigationCleanups:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
-		secretProbe:String
-	):Array<ModelActiveNonPrimaryShutdownOutcome> {
+	static function assertActiveNonPrimaryShutdowns(verificationValue:Value, navigationCleanups:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
+			secretProbe:String):Array<ModelActiveNonPrimaryShutdownOutcome> {
 		final outcomes:Array<ModelActiveNonPrimaryShutdownOutcome> = [];
 		final values = optionalArrayField(verificationValue, "activeNonPrimaryShutdownExpects");
-		for (value in values) outcomes.push(assertActiveNonPrimaryShutdown(objectValue(value), navigationCleanups, secretProbe));
+		for (value in values)
+			outcomes.push(assertActiveNonPrimaryShutdown(objectValue(value), navigationCleanups, secretProbe));
 		return outcomes;
 	}
 
-	static function assertActiveNonPrimaryShutdown(
-		expectValue:Value,
-		navigationCleanups:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
-		secretProbe:String
-	):ModelActiveNonPrimaryShutdownOutcome {
+	static function assertActiveNonPrimaryShutdown(expectValue:Value, navigationCleanups:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
+			secretProbe:String):ModelActiveNonPrimaryShutdownOutcome {
 		final navigationCleanupRequestId = stringField(expectValue, "navigationCleanupRequestId", "");
-		final outcome = ModelActiveNonPrimaryShutdownPolicy.apply(new ModelActiveNonPrimaryShutdownRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelActiveNonPrimaryShutdownPolicy.apply(new ModelActiveNonPrimaryShutdownRequest(stringField(expectValue, "requestId", ""),
 			threadSideThreadNavigationCleanupByRequestId(navigationCleanups, navigationCleanupRequestId),
-			activeNonPrimaryShutdownEventKind(stringField(expectValue, "eventKind", "")),
-			stringField(expectValue, "activeThreadId", ""),
-			stringField(expectValue, "primaryThreadId", ""),
-			stringField(expectValue, "pendingShutdownExitThreadId", ""),
-			boolField(expectValue, "closedThreadIsSideThread", false),
-			boolField(expectValue, "primarySelectSucceeded", false),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+			activeNonPrimaryShutdownEventKind(stringField(expectValue, "eventKind", "")), stringField(expectValue, "activeThreadId", ""),
+			stringField(expectValue, "primaryThreadId", ""), stringField(expectValue, "pendingShutdownExitThreadId", ""),
+			boolField(expectValue, "closedThreadIsSideThread", false), boolField(expectValue, "primarySelectSucceeded", false),
+			intField(expectValue, "eventOrderIndex", 0), intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3701,59 +3192,41 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelClearUiHeaders(
-		testCase:Value,
-		activeShutdowns:Array<ModelActiveNonPrimaryShutdownOutcome>,
-		secretProbe:String
-	):Array<ModelClearUiHeaderOutcome> {
+	static function assertTopLevelClearUiHeaders(testCase:Value, activeShutdowns:Array<ModelActiveNonPrimaryShutdownOutcome>,
+			secretProbe:String):Array<ModelClearUiHeaderOutcome> {
 		final outcomes:Array<ModelClearUiHeaderOutcome> = [];
 		final values = optionalArrayField(testCase, "clearUiHeaderExpects");
-		for (value in values) outcomes.push(assertClearUiHeader(objectValue(value), activeShutdowns, secretProbe));
+		for (value in values)
+			outcomes.push(assertClearUiHeader(objectValue(value), activeShutdowns, secretProbe));
 		return outcomes;
 	}
 
-	static function assertClearUiHeaders(
-		verificationValue:Value,
-		activeShutdowns:Array<ModelActiveNonPrimaryShutdownOutcome>,
-		secretProbe:String
-	):Array<ModelClearUiHeaderOutcome> {
+	static function assertClearUiHeaders(verificationValue:Value, activeShutdowns:Array<ModelActiveNonPrimaryShutdownOutcome>,
+			secretProbe:String):Array<ModelClearUiHeaderOutcome> {
 		final outcomes:Array<ModelClearUiHeaderOutcome> = [];
 		final values = optionalArrayField(verificationValue, "clearUiHeaderExpects");
-		for (value in values) outcomes.push(assertClearUiHeader(objectValue(value), activeShutdowns, secretProbe));
+		for (value in values)
+			outcomes.push(assertClearUiHeader(objectValue(value), activeShutdowns, secretProbe));
 		return outcomes;
 	}
 
-	static function assertClearUiHeader(
-		expectValue:Value,
-		activeShutdowns:Array<ModelActiveNonPrimaryShutdownOutcome>,
-		secretProbe:String
-	):ModelClearUiHeaderOutcome {
+	static function assertClearUiHeader(expectValue:Value, activeShutdowns:Array<ModelActiveNonPrimaryShutdownOutcome>,
+			secretProbe:String):ModelClearUiHeaderOutcome {
 		final activeShutdownRequestId = stringField(expectValue, "activeShutdownRequestId", "");
-		final outcome = ModelClearUiHeaderPolicy.apply(new ModelClearUiHeaderRequest(
-			stringField(expectValue, "requestId", ""),
+		final outcome = ModelClearUiHeaderPolicy.apply(new ModelClearUiHeaderRequest(stringField(expectValue, "requestId", ""),
 			activeNonPrimaryShutdownByRequestId(activeShutdowns, activeShutdownRequestId),
-			clearUiHeaderRequestKind(stringField(expectValue, "requestKind", "")),
-			stringField(expectValue, "model", ""),
-			stringField(expectValue, "reasoningEffort", ""),
-			stringField(expectValue, "cwd", ""),
-			stringField(expectValue, "version", ""),
-			intField(expectValue, "width", 0),
-			boolField(expectValue, "redrawHeader", false),
-			boolField(expectValue, "altScreenActive", false),
-			intField(expectValue, "viewportYBefore", 0),
-			intField(expectValue, "transcriptCellCountBefore", 0),
-			intField(expectValue, "pendingHistoryLineCountBefore", 0),
-			stringField(expectValue, "staleNoticeProbe", ""),
-			stringField(expectValue, "staleTranscriptProbe", ""),
-			boolField(expectValue, "fastStatusEligible", false),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+			clearUiHeaderRequestKind(stringField(expectValue, "requestKind", "")), stringField(expectValue, "model", ""),
+			stringField(expectValue, "reasoningEffort", ""), stringField(expectValue, "cwd", ""), stringField(expectValue, "version", ""),
+			intField(expectValue, "width", 0), boolField(expectValue, "redrawHeader", false), boolField(expectValue, "altScreenActive", false),
+			intField(expectValue, "viewportYBefore", 0), intField(expectValue, "transcriptCellCountBefore", 0),
+			intField(expectValue, "pendingHistoryLineCountBefore", 0), stringField(expectValue, "staleNoticeProbe", ""),
+			stringField(expectValue, "staleTranscriptProbe", ""), boolField(expectValue, "fastStatusEligible", false),
+			intField(expectValue, "eventOrderIndex", 0), intField(expectValue, "previousEventCount", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3786,56 +3259,43 @@ class ModelStreamItemReducerHarness {
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
 		final staleNotice = stringField(expectValue, "staleNoticeProbe", "");
 		final staleTranscript = stringField(expectValue, "staleTranscriptProbe", "");
-		if (staleNotice.length > 0) assertNotContains(outcome.summary(), staleNotice);
-		if (staleTranscript.length > 0) assertNotContains(outcome.summary(), staleTranscript);
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (staleNotice.length > 0)
+			assertNotContains(outcome.summary(), staleNotice);
+		if (staleTranscript.length > 0)
+			assertNotContains(outcome.summary(), staleTranscript);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelTerminalResizeReflows(
-		testCase:Value,
-		clearUiHeaders:Array<ModelClearUiHeaderOutcome>,
-		secretProbe:String
-	):Array<ModelTerminalResizeReflowOutcome> {
+	static function assertTopLevelTerminalResizeReflows(testCase:Value, clearUiHeaders:Array<ModelClearUiHeaderOutcome>,
+			secretProbe:String):Array<ModelTerminalResizeReflowOutcome> {
 		final outcomes:Array<ModelTerminalResizeReflowOutcome> = [];
 		final values = optionalArrayField(testCase, "terminalResizeReflowExpects");
-		for (value in values) outcomes.push(assertTerminalResizeReflow(objectValue(value), clearUiHeaders, secretProbe));
+		for (value in values)
+			outcomes.push(assertTerminalResizeReflow(objectValue(value), clearUiHeaders, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTerminalResizeReflows(
-		verificationValue:Value,
-		clearUiHeaders:Array<ModelClearUiHeaderOutcome>,
-		secretProbe:String
-	):Array<ModelTerminalResizeReflowOutcome> {
+	static function assertTerminalResizeReflows(verificationValue:Value, clearUiHeaders:Array<ModelClearUiHeaderOutcome>,
+			secretProbe:String):Array<ModelTerminalResizeReflowOutcome> {
 		final outcomes:Array<ModelTerminalResizeReflowOutcome> = [];
 		final values = optionalArrayField(verificationValue, "terminalResizeReflowExpects");
-		for (value in values) outcomes.push(assertTerminalResizeReflow(objectValue(value), clearUiHeaders, secretProbe));
+		for (value in values)
+			outcomes.push(assertTerminalResizeReflow(objectValue(value), clearUiHeaders, secretProbe));
 		return outcomes;
 	}
 
-	static function assertTerminalResizeReflow(
-		expectValue:Value,
-		clearUiHeaders:Array<ModelClearUiHeaderOutcome>,
-		secretProbe:String
-	):ModelTerminalResizeReflowOutcome {
+	static function assertTerminalResizeReflow(expectValue:Value, clearUiHeaders:Array<ModelClearUiHeaderOutcome>,
+			secretProbe:String):ModelTerminalResizeReflowOutcome {
 		final clearUiHeaderRequestId = stringField(expectValue, "clearUiHeaderRequestId", "");
-		final outcome = ModelTerminalResizeReflowPolicy.apply(new ModelTerminalResizeReflowRequest(
-			stringField(expectValue, "requestId", ""),
-			clearUiHeaderByRequestId(clearUiHeaders, clearUiHeaderRequestId),
-			terminalResizeReflowRequestKind(stringField(expectValue, "requestKind", "")),
-			terminalResizeReflowMaxRowsKind(stringField(expectValue, "maxRowsKind", "")),
-			intField(expectValue, "maxRows", 0),
-			boolField(expectValue, "terminalResizeReflowEnabled", false),
-			boolField(expectValue, "overlayActive", false),
-			intField(expectValue, "terminalWidth", 0),
-			intField(expectValue, "petReservedColumns", 0),
-			stringArrayField(expectValue, "transcriptRows"),
-			stringArrayField(expectValue, "replayRows"),
-			intField(expectValue, "eventOrderIndex", 0),
-			intField(expectValue, "previousEventCount", 0),
-			secretProbe
-		));
+		final outcome = ModelTerminalResizeReflowPolicy.apply(new ModelTerminalResizeReflowRequest(stringField(expectValue, "requestId", ""),
+			clearUiHeaderByRequestId(clearUiHeaders, clearUiHeaderRequestId), terminalResizeReflowRequestKind(stringField(expectValue, "requestKind", "")),
+			terminalResizeReflowMaxRowsKind(stringField(expectValue, "maxRowsKind", "")), intField(expectValue, "maxRows", 0),
+			boolField(expectValue, "terminalResizeReflowEnabled", false), boolField(expectValue, "overlayActive", false),
+			intField(expectValue, "terminalWidth", 0), intField(expectValue, "petReservedColumns", 0), stringArrayField(expectValue, "transcriptRows"),
+			stringArrayField(expectValue, "replayRows"), intField(expectValue, "eventOrderIndex", 0), intField(expectValue, "previousEventCount", 0),
+			secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3867,59 +3327,45 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
 	static function clearUiHeaderByRequestId(outcomes:Array<ModelClearUiHeaderOutcome>, requestId:String):ModelClearUiHeaderOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing clear UI header outcome: " + requestId;
 	}
 
-	static function assertTopLevelResizeReflowSchedulings(
-		testCase:Value,
-		resizeReflows:Array<ModelTerminalResizeReflowOutcome>,
-		secretProbe:String
-	):Array<ModelResizeReflowSchedulingOutcome> {
+	static function assertTopLevelResizeReflowSchedulings(testCase:Value, resizeReflows:Array<ModelTerminalResizeReflowOutcome>,
+			secretProbe:String):Array<ModelResizeReflowSchedulingOutcome> {
 		final outcomes:Array<ModelResizeReflowSchedulingOutcome> = [];
 		final values = optionalArrayField(testCase, "resizeReflowSchedulingExpects");
-		for (value in values) outcomes.push(assertResizeReflowScheduling(objectValue(value), resizeReflows, secretProbe));
+		for (value in values)
+			outcomes.push(assertResizeReflowScheduling(objectValue(value), resizeReflows, secretProbe));
 		return outcomes;
 	}
 
-	static function assertResizeReflowSchedulings(
-		verificationValue:Value,
-		resizeReflows:Array<ModelTerminalResizeReflowOutcome>,
-		secretProbe:String
-	):Array<ModelResizeReflowSchedulingOutcome> {
+	static function assertResizeReflowSchedulings(verificationValue:Value, resizeReflows:Array<ModelTerminalResizeReflowOutcome>,
+			secretProbe:String):Array<ModelResizeReflowSchedulingOutcome> {
 		final outcomes:Array<ModelResizeReflowSchedulingOutcome> = [];
 		final values = optionalArrayField(verificationValue, "resizeReflowSchedulingExpects");
-		for (value in values) outcomes.push(assertResizeReflowScheduling(objectValue(value), resizeReflows, secretProbe));
+		for (value in values)
+			outcomes.push(assertResizeReflowScheduling(objectValue(value), resizeReflows, secretProbe));
 		return outcomes;
 	}
 
-	static function assertResizeReflowScheduling(
-		expectValue:Value,
-		resizeReflows:Array<ModelTerminalResizeReflowOutcome>,
-		secretProbe:String
-	):ModelResizeReflowSchedulingOutcome {
+	static function assertResizeReflowScheduling(expectValue:Value, resizeReflows:Array<ModelTerminalResizeReflowOutcome>,
+			secretProbe:String):ModelResizeReflowSchedulingOutcome {
 		final resizeReflowRequestId = stringField(expectValue, "resizeReflowRequestId", "");
-		final outcome = ModelResizeReflowSchedulingPolicy.apply(new ModelResizeReflowSchedulingRequest(
-			stringField(expectValue, "requestId", ""),
-			terminalResizeReflowByRequestId(resizeReflows, resizeReflowRequestId),
-			boolField(expectValue, "terminalResizeReflowEnabled", false),
-			intField(expectValue, "currentWidth", 0),
-			intField(expectValue, "currentHeight", 0),
-			intField(expectValue, "lastKnownWidth", 0),
-			intField(expectValue, "lastKnownHeight", 0),
-			intField(expectValue, "previousObservedWidth", -1),
-			intField(expectValue, "previousReflowWidth", -1),
-			intField(expectValue, "previousPendingWidth", -1),
-			boolField(expectValue, "streamTimeSensitive", false),
-			intField(expectValue, "previousEventCount", 0),
-			intField(expectValue, "eventOrderIndex", 0),
-			secretProbe
-		));
+		final outcome = ModelResizeReflowSchedulingPolicy.apply(new ModelResizeReflowSchedulingRequest(stringField(expectValue, "requestId", ""),
+			terminalResizeReflowByRequestId(resizeReflows, resizeReflowRequestId), boolField(expectValue, "terminalResizeReflowEnabled", false),
+			intField(expectValue, "currentWidth", 0), intField(expectValue, "currentHeight", 0), intField(expectValue, "lastKnownWidth", 0),
+			intField(expectValue, "lastKnownHeight", 0), intField(expectValue, "previousObservedWidth", -1), intField(expectValue, "previousReflowWidth", -1),
+			intField(expectValue, "previousPendingWidth", -1), boolField(expectValue, "streamTimeSensitive", false),
+			intField(expectValue, "previousEventCount", 0), intField(expectValue, "eventOrderIndex", 0), secretProbe));
 		assertEquals(boolText(boolField(expectValue, "ok", false)), boolText(outcome.ok));
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
@@ -3948,42 +3394,35 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function terminalResizeReflowByRequestId(
-		outcomes:Array<ModelTerminalResizeReflowOutcome>,
-		requestId:String
-	):ModelTerminalResizeReflowOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function terminalResizeReflowByRequestId(outcomes:Array<ModelTerminalResizeReflowOutcome>, requestId:String):ModelTerminalResizeReflowOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing terminal resize reflow outcome: " + requestId;
 	}
 
-	static function assertTopLevelFeedbackSubmissionRoutings(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelFeedbackSubmissionRoutingOutcome> {
+	static function assertTopLevelFeedbackSubmissionRoutings(testCase:Value, secretProbe:String):Array<ModelFeedbackSubmissionRoutingOutcome> {
 		final outcomes:Array<ModelFeedbackSubmissionRoutingOutcome> = [];
 		final values = optionalArrayField(testCase, "feedbackSubmissionRoutingExpects");
-		for (value in values) outcomes.push(assertFeedbackSubmissionRouting(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertFeedbackSubmissionRouting(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertFeedbackSubmissionRoutings(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelFeedbackSubmissionRoutingOutcome> {
+	static function assertFeedbackSubmissionRoutings(verificationValue:Value, secretProbe:String):Array<ModelFeedbackSubmissionRoutingOutcome> {
 		final outcomes:Array<ModelFeedbackSubmissionRoutingOutcome> = [];
 		final values = optionalArrayField(verificationValue, "feedbackSubmissionRoutingExpects");
-		for (value in values) outcomes.push(assertFeedbackSubmissionRouting(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertFeedbackSubmissionRouting(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertFeedbackSubmissionRouting(
-		expectValue:Value,
-		secretProbe:String
-	):ModelFeedbackSubmissionRoutingOutcome {
+	static function assertFeedbackSubmissionRouting(expectValue:Value, secretProbe:String):ModelFeedbackSubmissionRoutingOutcome {
 		final outcome = ModelFeedbackSubmissionRoutingPolicy.route(new ModelFeedbackSubmissionRoutingRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			requestKind: feedbackSubmissionRequestKind(stringField(expectValue, "requestKind", "")),
@@ -4032,30 +3471,23 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
-	static function assertTopLevelTuiActiveTurnErrors(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelTuiActiveTurnErrorOutcome> {
+	static function assertTopLevelTuiActiveTurnErrors(testCase:Value, secretProbe:String):Array<ModelTuiActiveTurnErrorOutcome> {
 		final outcomes:Array<ModelTuiActiveTurnErrorOutcome> = [];
 		final values = optionalArrayField(testCase, "tuiActiveTurnErrorExpects");
-		for (value in values) outcomes.push(assertTuiActiveTurnError(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertTuiActiveTurnError(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertTuiActiveTurnErrors(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelTuiActiveTurnErrorOutcome> {
+	static function assertTuiActiveTurnErrors(verificationValue:Value, secretProbe:String):Array<ModelTuiActiveTurnErrorOutcome> {
 		final outcomes:Array<ModelTuiActiveTurnErrorOutcome> = [];
 		final values = optionalArrayField(verificationValue, "tuiActiveTurnErrorExpects");
-		for (value in values) outcomes.push(assertTuiActiveTurnError(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertTuiActiveTurnError(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertTuiActiveTurnError(
-		expectValue:Value,
-		secretProbe:String
-	):ModelTuiActiveTurnErrorOutcome {
+	static function assertTuiActiveTurnError(expectValue:Value, secretProbe:String):ModelTuiActiveTurnErrorOutcome {
 		final outcome = ModelTuiActiveTurnErrorPolicy.classify(new ModelTuiActiveTurnErrorRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			requestKind: tuiActiveTurnErrorRequestKind(stringField(expectValue, "requestKind", "")),
@@ -4105,30 +3537,23 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
-	static function assertTopLevelFreshSessionServiceTiers(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelFreshSessionServiceTierOutcome> {
+	static function assertTopLevelFreshSessionServiceTiers(testCase:Value, secretProbe:String):Array<ModelFreshSessionServiceTierOutcome> {
 		final outcomes:Array<ModelFreshSessionServiceTierOutcome> = [];
 		final values = optionalArrayField(testCase, "freshSessionServiceTierExpects");
-		for (value in values) outcomes.push(assertFreshSessionServiceTier(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertFreshSessionServiceTier(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertFreshSessionServiceTiers(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelFreshSessionServiceTierOutcome> {
+	static function assertFreshSessionServiceTiers(verificationValue:Value, secretProbe:String):Array<ModelFreshSessionServiceTierOutcome> {
 		final outcomes:Array<ModelFreshSessionServiceTierOutcome> = [];
 		final values = optionalArrayField(verificationValue, "freshSessionServiceTierExpects");
-		for (value in values) outcomes.push(assertFreshSessionServiceTier(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertFreshSessionServiceTier(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertFreshSessionServiceTier(
-		expectValue:Value,
-		secretProbe:String
-	):ModelFreshSessionServiceTierOutcome {
+	static function assertFreshSessionServiceTier(expectValue:Value, secretProbe:String):ModelFreshSessionServiceTierOutcome {
 		final outcome = ModelFreshSessionServiceTierPolicy.apply(new ModelFreshSessionServiceTierRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			baseConfigServiceTier: freshSessionServiceTierValue(stringField(expectValue, "baseConfigServiceTier", "")),
@@ -4153,34 +3578,30 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelFreshSessionPreviousConversationShutdowns(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelFreshSessionPreviousConversationShutdownOutcome> {
+	static function assertTopLevelFreshSessionPreviousConversationShutdowns(testCase:Value,
+			secretProbe:String):Array<ModelFreshSessionPreviousConversationShutdownOutcome> {
 		final outcomes:Array<ModelFreshSessionPreviousConversationShutdownOutcome> = [];
 		final values = optionalArrayField(testCase, "freshSessionPreviousConversationShutdownExpects");
-		for (value in values) outcomes.push(assertFreshSessionPreviousConversationShutdown(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertFreshSessionPreviousConversationShutdown(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertFreshSessionPreviousConversationShutdowns(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelFreshSessionPreviousConversationShutdownOutcome> {
+	static function assertFreshSessionPreviousConversationShutdowns(verificationValue:Value,
+			secretProbe:String):Array<ModelFreshSessionPreviousConversationShutdownOutcome> {
 		final outcomes:Array<ModelFreshSessionPreviousConversationShutdownOutcome> = [];
 		final values = optionalArrayField(verificationValue, "freshSessionPreviousConversationShutdownExpects");
-		for (value in values) outcomes.push(assertFreshSessionPreviousConversationShutdown(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertFreshSessionPreviousConversationShutdown(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertFreshSessionPreviousConversationShutdown(
-		expectValue:Value,
-		secretProbe:String
-	):ModelFreshSessionPreviousConversationShutdownOutcome {
+	static function assertFreshSessionPreviousConversationShutdown(expectValue:Value, secretProbe:String):ModelFreshSessionPreviousConversationShutdownOutcome {
 		final outcome = ModelFreshSessionPreviousConversationShutdownPolicy.apply(new ModelFreshSessionPreviousConversationShutdownRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			previousThreadId: stringField(expectValue, "previousThreadId", ""),
@@ -4225,30 +3646,23 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
-	static function assertTopLevelInterruptWithoutActiveTurns(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelInterruptWithoutActiveTurnOutcome> {
+	static function assertTopLevelInterruptWithoutActiveTurns(testCase:Value, secretProbe:String):Array<ModelInterruptWithoutActiveTurnOutcome> {
 		final outcomes:Array<ModelInterruptWithoutActiveTurnOutcome> = [];
 		final values = optionalArrayField(testCase, "interruptWithoutActiveTurnExpects");
-		for (value in values) outcomes.push(assertInterruptWithoutActiveTurn(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertInterruptWithoutActiveTurn(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertInterruptWithoutActiveTurns(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelInterruptWithoutActiveTurnOutcome> {
+	static function assertInterruptWithoutActiveTurns(verificationValue:Value, secretProbe:String):Array<ModelInterruptWithoutActiveTurnOutcome> {
 		final outcomes:Array<ModelInterruptWithoutActiveTurnOutcome> = [];
 		final values = optionalArrayField(verificationValue, "interruptWithoutActiveTurnExpects");
-		for (value in values) outcomes.push(assertInterruptWithoutActiveTurn(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertInterruptWithoutActiveTurn(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertInterruptWithoutActiveTurn(
-		expectValue:Value,
-		secretProbe:String
-	):ModelInterruptWithoutActiveTurnOutcome {
+	static function assertInterruptWithoutActiveTurn(expectValue:Value, secretProbe:String):ModelInterruptWithoutActiveTurnOutcome {
 		final outcome = ModelInterruptWithoutActiveTurnPolicy.apply(new ModelInterruptWithoutActiveTurnRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			threadId: stringField(expectValue, "threadId", ""),
@@ -4283,35 +3697,29 @@ class ModelStreamItemReducerHarness {
 			assertNotContains(outcome.summary(), secretProbe);
 			assertNotContains(outcome.summary(), stringField(expectValue, "threadId", ""));
 			final activeTurnId = stringField(expectValue, "activeTurnId", "");
-			if (activeTurnId.length > 0) assertNotContains(outcome.summary(), activeTurnId);
+			if (activeTurnId.length > 0)
+				assertNotContains(outcome.summary(), activeTurnId);
 		}
 		return outcome;
 	}
 
-	static function assertTopLevelOverrideTurnContextSettingsUpdates(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelOverrideTurnContextSettingsUpdateOutcome> {
+	static function assertTopLevelOverrideTurnContextSettingsUpdates(testCase:Value, secretProbe:String):Array<ModelOverrideTurnContextSettingsUpdateOutcome> {
 		final outcomes:Array<ModelOverrideTurnContextSettingsUpdateOutcome> = [];
 		final values = optionalArrayField(testCase, "overrideTurnContextSettingsUpdateExpects");
-		for (value in values) outcomes.push(assertOverrideTurnContextSettingsUpdate(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertOverrideTurnContextSettingsUpdate(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertOverrideTurnContextSettingsUpdates(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelOverrideTurnContextSettingsUpdateOutcome> {
+	static function assertOverrideTurnContextSettingsUpdates(verificationValue:Value, secretProbe:String):Array<ModelOverrideTurnContextSettingsUpdateOutcome> {
 		final outcomes:Array<ModelOverrideTurnContextSettingsUpdateOutcome> = [];
 		final values = optionalArrayField(verificationValue, "overrideTurnContextSettingsUpdateExpects");
-		for (value in values) outcomes.push(assertOverrideTurnContextSettingsUpdate(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertOverrideTurnContextSettingsUpdate(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertOverrideTurnContextSettingsUpdate(
-		expectValue:Value,
-		secretProbe:String
-	):ModelOverrideTurnContextSettingsUpdateOutcome {
+	static function assertOverrideTurnContextSettingsUpdate(expectValue:Value, secretProbe:String):ModelOverrideTurnContextSettingsUpdateOutcome {
 		final outcome = ModelOverrideTurnContextSettingsUpdatePolicy.apply(new ModelOverrideTurnContextSettingsUpdateRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			threadId: stringField(expectValue, "threadId", ""),
@@ -4343,13 +3751,15 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "handled", false)), boolText(outcome.handled));
 		assertEquals(boolText(boolField(expectValue, "threadSettingsUpdateSubmitted", false)), boolText(outcome.threadSettingsUpdateSubmitted));
 		assertEquals(boolText(boolField(expectValue, "updateParamsCarriedRequestedSettings", false)), boolText(outcome.updateParamsCarriedRequestedSettings));
-		assertEquals(boolText(boolField(expectValue, "cachedPrimarySessionUnchangedBeforeNotification", false)), boolText(outcome.cachedPrimarySessionUnchangedBeforeNotification));
+		assertEquals(boolText(boolField(expectValue, "cachedPrimarySessionUnchangedBeforeNotification", false)),
+			boolText(outcome.cachedPrimarySessionUnchangedBeforeNotification));
 		assertEquals(boolText(boolField(expectValue, "notificationReceived", false)), boolText(outcome.notificationReceived));
 		assertEquals(boolText(boolField(expectValue, "notificationAppliedToCache", false)), boolText(outcome.notificationAppliedToCache));
 		assertEquals(boolText(boolField(expectValue, "primarySessionModelPreserved", false)), boolText(outcome.primarySessionModelPreserved));
 		assertEquals(boolText(boolField(expectValue, "primarySessionEffortPreserved", false)), boolText(outcome.primarySessionEffortPreserved));
 		assertEquals(boolText(boolField(expectValue, "collaborationModeCached", false)), boolText(outcome.collaborationModeCached));
-		assertEquals(boolText(boolField(expectValue, "collaborationSettingsRebasedToNotification", false)), boolText(outcome.collaborationSettingsRebasedToNotification));
+		assertEquals(boolText(boolField(expectValue, "collaborationSettingsRebasedToNotification", false)),
+			boolText(outcome.collaborationSettingsRebasedToNotification));
 		assertEquals(boolText(boolField(expectValue, "serviceTierCached", false)), boolText(outcome.serviceTierCached));
 		assertEquals(boolText(boolField(expectValue, "approvalPolicyCached", false)), boolText(outcome.approvalPolicyCached));
 		assertEquals(boolText(boolField(expectValue, "approvalsReviewerCached", false)), boolText(outcome.approvalsReviewerCached));
@@ -4368,30 +3778,25 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
-	static function assertTopLevelInactiveThreadSettingsNotifications(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelInactiveThreadSettingsNotificationOutcome> {
+	static function assertTopLevelInactiveThreadSettingsNotifications(testCase:Value,
+			secretProbe:String):Array<ModelInactiveThreadSettingsNotificationOutcome> {
 		final outcomes:Array<ModelInactiveThreadSettingsNotificationOutcome> = [];
 		final values = optionalArrayField(testCase, "inactiveThreadSettingsNotificationExpects");
-		for (value in values) outcomes.push(assertInactiveThreadSettingsNotification(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertInactiveThreadSettingsNotification(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertInactiveThreadSettingsNotifications(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelInactiveThreadSettingsNotificationOutcome> {
+	static function assertInactiveThreadSettingsNotifications(verificationValue:Value,
+			secretProbe:String):Array<ModelInactiveThreadSettingsNotificationOutcome> {
 		final outcomes:Array<ModelInactiveThreadSettingsNotificationOutcome> = [];
 		final values = optionalArrayField(verificationValue, "inactiveThreadSettingsNotificationExpects");
-		for (value in values) outcomes.push(assertInactiveThreadSettingsNotification(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertInactiveThreadSettingsNotification(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertInactiveThreadSettingsNotification(
-		expectValue:Value,
-		secretProbe:String
-	):ModelInactiveThreadSettingsNotificationOutcome {
+	static function assertInactiveThreadSettingsNotification(expectValue:Value, secretProbe:String):ModelInactiveThreadSettingsNotificationOutcome {
 		final outcome = ModelInactiveThreadSettingsNotificationPolicy.apply(new ModelInactiveThreadSettingsNotificationRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			primaryThreadId: stringField(expectValue, "primaryThreadId", ""),
@@ -4434,7 +3839,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "inactiveSessionModelPreserved", false)), boolText(outcome.inactiveSessionModelPreserved));
 		assertEquals(boolText(boolField(expectValue, "inactiveSessionEffortPreserved", false)), boolText(outcome.inactiveSessionEffortPreserved));
 		assertEquals(boolText(boolField(expectValue, "collaborationModeCached", false)), boolText(outcome.collaborationModeCached));
-		assertEquals(boolText(boolField(expectValue, "collaborationSettingsRebasedToNotification", false)), boolText(outcome.collaborationSettingsRebasedToNotification));
+		assertEquals(boolText(boolField(expectValue, "collaborationSettingsRebasedToNotification", false)),
+			boolText(outcome.collaborationSettingsRebasedToNotification));
 		assertEquals(boolText(boolField(expectValue, "modelProviderCached", false)), boolText(outcome.modelProviderCached));
 		assertEquals(boolText(boolField(expectValue, "serviceTierCached", false)), boolText(outcome.serviceTierCached));
 		assertEquals(boolText(boolField(expectValue, "approvalPolicyCached", false)), boolText(outcome.approvalPolicyCached));
@@ -4445,9 +3851,12 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "notificationBuffered", false)), boolText(outcome.notificationBuffered));
 		assertEquals(boolText(boolField(expectValue, "chatWidgetHandoffApplied", false)), boolText(outcome.chatWidgetHandoffApplied));
 		assertEquals(boolText(boolField(expectValue, "chatWidgetCollaborationModeActive", false)), boolText(outcome.chatWidgetCollaborationModeActive));
-		assertEquals(boolText(boolField(expectValue, "chatWidgetCurrentModelFromCollaborationSettings", false)), boolText(outcome.chatWidgetCurrentModelFromCollaborationSettings));
-		assertEquals(boolText(boolField(expectValue, "chatWidgetCurrentCollaborationModeModelPreservesSessionModel", false)), boolText(outcome.chatWidgetCurrentCollaborationModeModelPreservesSessionModel));
-		assertEquals(boolText(boolField(expectValue, "chatWidgetCurrentEffortFromNotification", false)), boolText(outcome.chatWidgetCurrentEffortFromNotification));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetCurrentModelFromCollaborationSettings", false)),
+			boolText(outcome.chatWidgetCurrentModelFromCollaborationSettings));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetCurrentCollaborationModeModelPreservesSessionModel", false)),
+			boolText(outcome.chatWidgetCurrentCollaborationModeModelPreservesSessionModel));
+		assertEquals(boolText(boolField(expectValue, "chatWidgetCurrentEffortFromNotification", false)),
+			boolText(outcome.chatWidgetCurrentEffortFromNotification));
 		assertEquals(boolText(boolField(expectValue, "chatWidgetPersonalityApplied", false)), boolText(outcome.chatWidgetPersonalityApplied));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
 		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
@@ -4465,30 +3874,23 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
-	static function assertTopLevelClearOnlyUiResets(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelClearOnlyUiResetOutcome> {
+	static function assertTopLevelClearOnlyUiResets(testCase:Value, secretProbe:String):Array<ModelClearOnlyUiResetOutcome> {
 		final outcomes:Array<ModelClearOnlyUiResetOutcome> = [];
 		final values = optionalArrayField(testCase, "clearOnlyUiResetExpects");
-		for (value in values) outcomes.push(assertClearOnlyUiReset(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertClearOnlyUiReset(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertClearOnlyUiResets(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelClearOnlyUiResetOutcome> {
+	static function assertClearOnlyUiResets(verificationValue:Value, secretProbe:String):Array<ModelClearOnlyUiResetOutcome> {
 		final outcomes:Array<ModelClearOnlyUiResetOutcome> = [];
 		final values = optionalArrayField(verificationValue, "clearOnlyUiResetExpects");
-		for (value in values) outcomes.push(assertClearOnlyUiReset(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertClearOnlyUiReset(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertClearOnlyUiReset(
-		expectValue:Value,
-		secretProbe:String
-	):ModelClearOnlyUiResetOutcome {
+	static function assertClearOnlyUiReset(expectValue:Value, secretProbe:String):ModelClearOnlyUiResetOutcome {
 		final outcome = ModelClearOnlyUiResetPolicy.apply(new ModelClearOnlyUiResetRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			threadId: stringField(expectValue, "threadId", ""),
@@ -4542,30 +3944,23 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
-	static function assertTopLevelClearOnlySkillWarningRerenders(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelClearOnlySkillWarningRerenderOutcome> {
+	static function assertTopLevelClearOnlySkillWarningRerenders(testCase:Value, secretProbe:String):Array<ModelClearOnlySkillWarningRerenderOutcome> {
 		final outcomes:Array<ModelClearOnlySkillWarningRerenderOutcome> = [];
 		final values = optionalArrayField(testCase, "clearOnlySkillWarningRerenderExpects");
-		for (value in values) outcomes.push(assertClearOnlySkillWarningRerender(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertClearOnlySkillWarningRerender(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertClearOnlySkillWarningRerenders(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelClearOnlySkillWarningRerenderOutcome> {
+	static function assertClearOnlySkillWarningRerenders(verificationValue:Value, secretProbe:String):Array<ModelClearOnlySkillWarningRerenderOutcome> {
 		final outcomes:Array<ModelClearOnlySkillWarningRerenderOutcome> = [];
 		final values = optionalArrayField(verificationValue, "clearOnlySkillWarningRerenderExpects");
-		for (value in values) outcomes.push(assertClearOnlySkillWarningRerender(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertClearOnlySkillWarningRerender(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertClearOnlySkillWarningRerender(
-		expectValue:Value,
-		secretProbe:String
-	):ModelClearOnlySkillWarningRerenderOutcome {
+	static function assertClearOnlySkillWarningRerender(expectValue:Value, secretProbe:String):ModelClearOnlySkillWarningRerenderOutcome {
 		final outcome = ModelClearOnlySkillWarningRerenderPolicy.apply(new ModelClearOnlySkillWarningRerenderRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			warningPath: stringField(expectValue, "warningPath", ""),
@@ -4603,30 +3998,23 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
-	static function assertTopLevelBacktrackEscVimInsertGuards(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelBacktrackEscVimInsertGuardOutcome> {
+	static function assertTopLevelBacktrackEscVimInsertGuards(testCase:Value, secretProbe:String):Array<ModelBacktrackEscVimInsertGuardOutcome> {
 		final outcomes:Array<ModelBacktrackEscVimInsertGuardOutcome> = [];
 		final values = optionalArrayField(testCase, "backtrackEscVimInsertGuardExpects");
-		for (value in values) outcomes.push(assertBacktrackEscVimInsertGuard(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertBacktrackEscVimInsertGuard(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertBacktrackEscVimInsertGuards(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelBacktrackEscVimInsertGuardOutcome> {
+	static function assertBacktrackEscVimInsertGuards(verificationValue:Value, secretProbe:String):Array<ModelBacktrackEscVimInsertGuardOutcome> {
 		final outcomes:Array<ModelBacktrackEscVimInsertGuardOutcome> = [];
 		final values = optionalArrayField(verificationValue, "backtrackEscVimInsertGuardExpects");
-		for (value in values) outcomes.push(assertBacktrackEscVimInsertGuard(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertBacktrackEscVimInsertGuard(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertBacktrackEscVimInsertGuard(
-		expectValue:Value,
-		secretProbe:String
-	):ModelBacktrackEscVimInsertGuardOutcome {
+	static function assertBacktrackEscVimInsertGuard(expectValue:Value, secretProbe:String):ModelBacktrackEscVimInsertGuardOutcome {
 		final outcome = ModelBacktrackEscVimInsertGuardPolicy.apply(new ModelBacktrackEscVimInsertGuardRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			keyIsEsc: boolField(expectValue, "keyIsEsc", false),
@@ -4660,34 +4048,30 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelSideConversationBacktrackEscVimGuards(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelSideConversationBacktrackEscVimGuardOutcome> {
+	static function assertTopLevelSideConversationBacktrackEscVimGuards(testCase:Value,
+			secretProbe:String):Array<ModelSideConversationBacktrackEscVimGuardOutcome> {
 		final outcomes:Array<ModelSideConversationBacktrackEscVimGuardOutcome> = [];
 		final values = optionalArrayField(testCase, "sideConversationBacktrackEscVimGuardExpects");
-		for (value in values) outcomes.push(assertSideConversationBacktrackEscVimGuard(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertSideConversationBacktrackEscVimGuard(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertSideConversationBacktrackEscVimGuards(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelSideConversationBacktrackEscVimGuardOutcome> {
+	static function assertSideConversationBacktrackEscVimGuards(verificationValue:Value,
+			secretProbe:String):Array<ModelSideConversationBacktrackEscVimGuardOutcome> {
 		final outcomes:Array<ModelSideConversationBacktrackEscVimGuardOutcome> = [];
 		final values = optionalArrayField(verificationValue, "sideConversationBacktrackEscVimGuardExpects");
-		for (value in values) outcomes.push(assertSideConversationBacktrackEscVimGuard(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertSideConversationBacktrackEscVimGuard(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertSideConversationBacktrackEscVimGuard(
-		expectValue:Value,
-		secretProbe:String
-	):ModelSideConversationBacktrackEscVimGuardOutcome {
+	static function assertSideConversationBacktrackEscVimGuard(expectValue:Value, secretProbe:String):ModelSideConversationBacktrackEscVimGuardOutcome {
 		final outcome = ModelSideConversationBacktrackEscVimGuardPolicy.apply(new ModelSideConversationBacktrackEscVimGuardRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			keyIsEsc: boolField(expectValue, "keyIsEsc", false),
@@ -4709,41 +4093,36 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "initialSideBacktrackEscRejected", false)), boolText(outcome.initialSideBacktrackEscRejected));
 		assertEquals(boolText(boolField(expectValue, "vimInsertEscTakesPrecedence", false)), boolText(outcome.vimInsertEscTakesPrecedence));
 		assertEquals(boolText(boolField(expectValue, "backtrackEscSuppressedDuringVimInsert", false)), boolText(outcome.backtrackEscSuppressedDuringVimInsert));
-		assertEquals(boolText(boolField(expectValue, "sideRejectionSuppressedDuringVimInsert", false)), boolText(outcome.sideRejectionSuppressedDuringVimInsert));
+		assertEquals(boolText(boolField(expectValue, "sideRejectionSuppressedDuringVimInsert", false)),
+			boolText(outcome.sideRejectionSuppressedDuringVimInsert));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
 		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelSideBacktrackUnavailableMessages(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelSideBacktrackUnavailableMessageOutcome> {
+	static function assertTopLevelSideBacktrackUnavailableMessages(testCase:Value, secretProbe:String):Array<ModelSideBacktrackUnavailableMessageOutcome> {
 		final outcomes:Array<ModelSideBacktrackUnavailableMessageOutcome> = [];
 		final values = optionalArrayField(testCase, "sideBacktrackUnavailableMessageExpects");
-		for (value in values) outcomes.push(assertSideBacktrackUnavailableMessage(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertSideBacktrackUnavailableMessage(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertSideBacktrackUnavailableMessages(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelSideBacktrackUnavailableMessageOutcome> {
+	static function assertSideBacktrackUnavailableMessages(verificationValue:Value, secretProbe:String):Array<ModelSideBacktrackUnavailableMessageOutcome> {
 		final outcomes:Array<ModelSideBacktrackUnavailableMessageOutcome> = [];
 		final values = optionalArrayField(verificationValue, "sideBacktrackUnavailableMessageExpects");
-		for (value in values) outcomes.push(assertSideBacktrackUnavailableMessage(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertSideBacktrackUnavailableMessage(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertSideBacktrackUnavailableMessage(
-		expectValue:Value,
-		secretProbe:String
-	):ModelSideBacktrackUnavailableMessageOutcome {
+	static function assertSideBacktrackUnavailableMessage(expectValue:Value, secretProbe:String):ModelSideBacktrackUnavailableMessageOutcome {
 		final outcome = ModelSideBacktrackUnavailableMessagePolicy.apply(new ModelSideBacktrackUnavailableMessageRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			backtrackPrimedBefore: boolField(expectValue, "backtrackPrimedBefore", false),
@@ -4780,30 +4159,23 @@ class ModelStreamItemReducerHarness {
 		return outcome;
 	}
 
-	static function assertTopLevelInterruptBacktrackKeymaps(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelInterruptBacktrackKeymapOutcome> {
+	static function assertTopLevelInterruptBacktrackKeymaps(testCase:Value, secretProbe:String):Array<ModelInterruptBacktrackKeymapOutcome> {
 		final outcomes:Array<ModelInterruptBacktrackKeymapOutcome> = [];
 		final values = optionalArrayField(testCase, "interruptBacktrackKeymapExpects");
-		for (value in values) outcomes.push(assertInterruptBacktrackKeymap(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertInterruptBacktrackKeymap(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertInterruptBacktrackKeymaps(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelInterruptBacktrackKeymapOutcome> {
+	static function assertInterruptBacktrackKeymaps(verificationValue:Value, secretProbe:String):Array<ModelInterruptBacktrackKeymapOutcome> {
 		final outcomes:Array<ModelInterruptBacktrackKeymapOutcome> = [];
 		final values = optionalArrayField(verificationValue, "interruptBacktrackKeymapExpects");
-		for (value in values) outcomes.push(assertInterruptBacktrackKeymap(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertInterruptBacktrackKeymap(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertInterruptBacktrackKeymap(
-		expectValue:Value,
-		secretProbe:String
-	):ModelInterruptBacktrackKeymapOutcome {
+	static function assertInterruptBacktrackKeymap(expectValue:Value, secretProbe:String):ModelInterruptBacktrackKeymapOutcome {
 		final outcome = ModelInterruptBacktrackKeymapPolicy.apply(new ModelInterruptBacktrackKeymapRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			defaultInterruptBinding: stringField(expectValue, "defaultInterruptBinding", ""),
@@ -4838,34 +4210,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelInterruptQuestionNavigationKeymaps(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelInterruptQuestionNavigationKeymapOutcome> {
+	static function assertTopLevelInterruptQuestionNavigationKeymaps(testCase:Value, secretProbe:String):Array<ModelInterruptQuestionNavigationKeymapOutcome> {
 		final outcomes:Array<ModelInterruptQuestionNavigationKeymapOutcome> = [];
 		final values = optionalArrayField(testCase, "interruptQuestionNavigationKeymapExpects");
-		for (value in values) outcomes.push(assertInterruptQuestionNavigationKeymap(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertInterruptQuestionNavigationKeymap(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertInterruptQuestionNavigationKeymaps(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelInterruptQuestionNavigationKeymapOutcome> {
+	static function assertInterruptQuestionNavigationKeymaps(verificationValue:Value, secretProbe:String):Array<ModelInterruptQuestionNavigationKeymapOutcome> {
 		final outcomes:Array<ModelInterruptQuestionNavigationKeymapOutcome> = [];
 		final values = optionalArrayField(verificationValue, "interruptQuestionNavigationKeymapExpects");
-		for (value in values) outcomes.push(assertInterruptQuestionNavigationKeymap(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertInterruptQuestionNavigationKeymap(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertInterruptQuestionNavigationKeymap(
-		expectValue:Value,
-		secretProbe:String
-	):ModelInterruptQuestionNavigationKeymapOutcome {
+	static function assertInterruptQuestionNavigationKeymap(expectValue:Value, secretProbe:String):ModelInterruptQuestionNavigationKeymapOutcome {
 		final outcome = ModelInterruptQuestionNavigationKeymapPolicy.apply(new ModelInterruptQuestionNavigationKeymapRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			interruptActionName: stringField(expectValue, "interruptActionName", ""),
@@ -4885,7 +4251,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(interruptQuestionNavigationKeymapDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
 		assertEquals(boolText(boolField(expectValue, "interruptActionNamePreserved", false)), boolText(outcome.interruptActionNamePreserved));
 		assertEquals(boolText(boolField(expectValue, "questionNavigationActionNamePreserved", false)), boolText(outcome.questionNavigationActionNamePreserved));
-		assertEquals(boolText(boolField(expectValue, "interruptRemapAcceptedBeforeValidation", false)), boolText(outcome.interruptRemapAcceptedBeforeValidation));
+		assertEquals(boolText(boolField(expectValue, "interruptRemapAcceptedBeforeValidation", false)),
+			boolText(outcome.interruptRemapAcceptedBeforeValidation));
 		assertEquals(boolText(boolField(expectValue, "questionNavigationBindingPreserved", false)), boolText(outcome.questionNavigationBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictingBindingDetected", false)), boolText(outcome.conflictingBindingDetected));
 		assertEquals(boolText(boolField(expectValue, "fixedBacktrackOverlapStillAllowed", false)), boolText(outcome.fixedBacktrackOverlapStillAllowed));
@@ -4897,34 +4264,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelPagerTranscriptBacktrackKeymaps(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelPagerTranscriptBacktrackKeymapOutcome> {
+	static function assertTopLevelPagerTranscriptBacktrackKeymaps(testCase:Value, secretProbe:String):Array<ModelPagerTranscriptBacktrackKeymapOutcome> {
 		final outcomes:Array<ModelPagerTranscriptBacktrackKeymapOutcome> = [];
 		final values = optionalArrayField(testCase, "pagerTranscriptBacktrackKeymapExpects");
-		for (value in values) outcomes.push(assertPagerTranscriptBacktrackKeymap(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertPagerTranscriptBacktrackKeymap(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertPagerTranscriptBacktrackKeymaps(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelPagerTranscriptBacktrackKeymapOutcome> {
+	static function assertPagerTranscriptBacktrackKeymaps(verificationValue:Value, secretProbe:String):Array<ModelPagerTranscriptBacktrackKeymapOutcome> {
 		final outcomes:Array<ModelPagerTranscriptBacktrackKeymapOutcome> = [];
 		final values = optionalArrayField(verificationValue, "pagerTranscriptBacktrackKeymapExpects");
-		for (value in values) outcomes.push(assertPagerTranscriptBacktrackKeymap(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertPagerTranscriptBacktrackKeymap(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertPagerTranscriptBacktrackKeymap(
-		expectValue:Value,
-		secretProbe:String
-	):ModelPagerTranscriptBacktrackKeymapOutcome {
+	static function assertPagerTranscriptBacktrackKeymap(expectValue:Value, secretProbe:String):ModelPagerTranscriptBacktrackKeymapOutcome {
 		final outcome = ModelPagerTranscriptBacktrackKeymapPolicy.apply(new ModelPagerTranscriptBacktrackKeymapRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			pagerActionName: stringField(expectValue, "pagerActionName", ""),
@@ -4944,7 +4305,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(pagerTranscriptBacktrackKeymapDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
 		assertEquals(boolText(boolField(expectValue, "pagerActionNamePreserved", false)), boolText(outcome.pagerActionNamePreserved));
 		assertEquals(boolText(boolField(expectValue, "pagerBindingPreserved", false)), boolText(outcome.pagerBindingPreserved));
-		assertEquals(boolText(boolField(expectValue, "transcriptBacktrackActionNamePreserved", false)), boolText(outcome.transcriptBacktrackActionNamePreserved));
+		assertEquals(boolText(boolField(expectValue, "transcriptBacktrackActionNamePreserved", false)),
+			boolText(outcome.transcriptBacktrackActionNamePreserved));
 		assertEquals(boolText(boolField(expectValue, "transcriptLeftBindingPreserved", false)), boolText(outcome.transcriptLeftBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "reservedCollisionDetected", false)), boolText(outcome.reservedCollisionDetected));
 		assertEquals(boolText(boolField(expectValue, "conflictRejected", false)), boolText(outcome.conflictRejected));
@@ -4956,34 +4318,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeyParserCases(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeyParserOutcome> {
+	static function assertTopLevelKeyParserCases(testCase:Value, secretProbe:String):Array<ModelKeyParserOutcome> {
 		final outcomes:Array<ModelKeyParserOutcome> = [];
 		final values = optionalArrayField(testCase, "keyParserExpects");
-		for (value in values) outcomes.push(assertKeyParserCaseSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeyParserCaseSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeyParserCases(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeyParserOutcome> {
+	static function assertKeyParserCases(verificationValue:Value, secretProbe:String):Array<ModelKeyParserOutcome> {
 		final outcomes:Array<ModelKeyParserOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keyParserExpects");
-		for (value in values) outcomes.push(assertKeyParserCaseSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeyParserCaseSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeyParserCaseSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeyParserOutcome {
+	static function assertKeyParserCaseSet(expectValue:Value, secretProbe:String):ModelKeyParserOutcome {
 		final cases:Array<ModelKeyParserCase> = [];
 		for (caseValue in arrayField(expectValue, "cases")) {
 			final caseObject = objectValue(caseValue);
@@ -5030,34 +4386,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapAliases(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapAliasOutcome> {
+	static function assertTopLevelKeymapAliases(testCase:Value, secretProbe:String):Array<ModelKeymapAliasOutcome> {
 		final outcomes:Array<ModelKeymapAliasOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapAliasExpects");
-		for (value in values) outcomes.push(assertKeymapAliasSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapAliasSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapAliases(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapAliasOutcome> {
+	static function assertKeymapAliases(verificationValue:Value, secretProbe:String):Array<ModelKeymapAliasOutcome> {
 		final outcomes:Array<ModelKeymapAliasOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapAliasExpects");
-		for (value in values) outcomes.push(assertKeymapAliasSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapAliasSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapAliasSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapAliasOutcome {
+	static function assertKeymapAliasSet(expectValue:Value, secretProbe:String):ModelKeymapAliasOutcome {
 		final outcome = ModelKeymapAliasPolicy.apply(new ModelKeymapAliasRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			composerToggleShortcutsConfiguredEmpty: boolField(expectValue, "composerToggleShortcutsConfiguredEmpty", false),
@@ -5093,7 +4443,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "deleteForwardWordAltDPreserved", false)), boolText(outcome.deleteForwardWordAltDPreserved));
 		assertEquals(boolText(boolField(expectValue, "modifiedDeletionAliasesPreserved", false)), boolText(outcome.modifiedDeletionAliasesPreserved));
 		assertEquals(boolText(boolField(expectValue, "composerToggleShiftQuestionPreserved", false)), boolText(outcome.composerToggleShiftQuestionPreserved));
-		assertEquals(boolText(boolField(expectValue, "approvalOpenFullscreenCtrlShiftAPreserved", false)), boolText(outcome.approvalOpenFullscreenCtrlShiftAPreserved));
+		assertEquals(boolText(boolField(expectValue, "approvalOpenFullscreenCtrlShiftAPreserved", false)),
+			boolText(outcome.approvalOpenFullscreenCtrlShiftAPreserved));
 		assertEquals(boolText(boolField(expectValue, "primaryBindingFirstPreserved", false)), boolText(outcome.primaryBindingFirstPreserved));
 		assertEquals(boolText(boolField(expectValue, "primaryBindingEmptyNonePreserved", false)), boolText(outcome.primaryBindingEmptyNonePreserved));
 		assertEquals(boolText(boolField(expectValue, "defaultsConflictValidationPreserved", false)), boolText(outcome.defaultsConflictValidationPreserved));
@@ -5103,7 +4454,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
@@ -5126,30 +4478,23 @@ class ModelStreamItemReducerHarness {
 		});
 	}
 
-	static function assertTopLevelKeymapShadows(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapShadowOutcome> {
+	static function assertTopLevelKeymapShadows(testCase:Value, secretProbe:String):Array<ModelKeymapShadowOutcome> {
 		final outcomes:Array<ModelKeymapShadowOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapShadowExpects");
-		for (value in values) outcomes.push(assertKeymapShadowSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapShadowSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapShadows(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapShadowOutcome> {
+	static function assertKeymapShadows(verificationValue:Value, secretProbe:String):Array<ModelKeymapShadowOutcome> {
 		final outcomes:Array<ModelKeymapShadowOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapShadowExpects");
-		for (value in values) outcomes.push(assertKeymapShadowSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapShadowSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapShadowSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapShadowOutcome {
+	static function assertKeymapShadowSet(expectValue:Value, secretProbe:String):ModelKeymapShadowOutcome {
 		final shadowCases:Array<ModelKeymapShadowCase> = [];
 		for (caseValue in arrayField(expectValue, "shadowCases")) {
 			final caseObject = objectValue(caseValue);
@@ -5188,34 +4533,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapBindingInputs(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapBindingInputOutcome> {
+	static function assertTopLevelKeymapBindingInputs(testCase:Value, secretProbe:String):Array<ModelKeymapBindingInputOutcome> {
 		final outcomes:Array<ModelKeymapBindingInputOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapBindingInputExpects");
-		for (value in values) outcomes.push(assertKeymapBindingInputSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapBindingInputSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapBindingInputs(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapBindingInputOutcome> {
+	static function assertKeymapBindingInputs(verificationValue:Value, secretProbe:String):Array<ModelKeymapBindingInputOutcome> {
 		final outcomes:Array<ModelKeymapBindingInputOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapBindingInputExpects");
-		for (value in values) outcomes.push(assertKeymapBindingInputSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapBindingInputSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapBindingInputSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapBindingInputOutcome {
+	static function assertKeymapBindingInputSet(expectValue:Value, secretProbe:String):ModelKeymapBindingInputOutcome {
 		final defaultMainSurfaceActions:Array<ModelKeymapDefaultActionCase> = [];
 		for (actionValue in arrayField(expectValue, "defaultMainSurfaceActions")) {
 			final actionObject = objectValue(actionValue);
@@ -5262,34 +4601,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapDefaultPrunings(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapDefaultPruningOutcome> {
+	static function assertTopLevelKeymapDefaultPrunings(testCase:Value, secretProbe:String):Array<ModelKeymapDefaultPruningOutcome> {
 		final outcomes:Array<ModelKeymapDefaultPruningOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapDefaultPruningExpects");
-		for (value in values) outcomes.push(assertKeymapDefaultPruningSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapDefaultPruningSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapDefaultPrunings(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapDefaultPruningOutcome> {
+	static function assertKeymapDefaultPrunings(verificationValue:Value, secretProbe:String):Array<ModelKeymapDefaultPruningOutcome> {
 		final outcomes:Array<ModelKeymapDefaultPruningOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapDefaultPruningExpects");
-		for (value in values) outcomes.push(assertKeymapDefaultPruningSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapDefaultPruningSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapDefaultPruningSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapDefaultPruningOutcome {
+	static function assertKeymapDefaultPruningSet(expectValue:Value, secretProbe:String):ModelKeymapDefaultPruningOutcome {
 		final outcome = ModelKeymapDefaultPruningPolicy.apply(new ModelKeymapDefaultPruningRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			tailMainSurfaceDefaults: keymapDefaultPruningCases(expectValue, "tailMainSurfaceDefaults"),
@@ -5322,7 +4655,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "tailMainSurfaceDefaultsPreserved", false)), boolText(outcome.tailMainSurfaceDefaultsPreserved));
 		assertEquals(boolText(boolField(expectValue, "listPageAndJumpDefaultsPreserved", false)), boolText(outcome.listPageAndJumpDefaultsPreserved));
 		assertEquals(boolText(boolField(expectValue, "reasoningFallbackPruningPreserved", false)), boolText(outcome.reasoningFallbackPruningPreserved));
-		assertEquals(boolText(boolField(expectValue, "explicitReasoningEditorConflictPreserved", false)), boolText(outcome.explicitReasoningEditorConflictPreserved));
+		assertEquals(boolText(boolField(expectValue, "explicitReasoningEditorConflictPreserved", false)),
+			boolText(outcome.explicitReasoningEditorConflictPreserved));
 		assertEquals(boolText(boolField(expectValue, "legacyListOverlapPruningPreserved", false)), boolText(outcome.legacyListOverlapPruningPreserved));
 		assertEquals(boolText(boolField(expectValue, "legacyListPruneAllDefaultsPreserved", false)), boolText(outcome.legacyListPruneAllDefaultsPreserved));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
@@ -5331,7 +4665,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
@@ -5347,30 +4682,23 @@ class ModelStreamItemReducerHarness {
 		return cases;
 	}
 
-	static function assertTopLevelKeymapOverlapConflicts(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapOverlapConflictOutcome> {
+	static function assertTopLevelKeymapOverlapConflicts(testCase:Value, secretProbe:String):Array<ModelKeymapOverlapConflictOutcome> {
 		final outcomes:Array<ModelKeymapOverlapConflictOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapOverlapConflictExpects");
-		for (value in values) outcomes.push(assertKeymapOverlapConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapOverlapConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapOverlapConflicts(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapOverlapConflictOutcome> {
+	static function assertKeymapOverlapConflicts(verificationValue:Value, secretProbe:String):Array<ModelKeymapOverlapConflictOutcome> {
 		final outcomes:Array<ModelKeymapOverlapConflictOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapOverlapConflictExpects");
-		for (value in values) outcomes.push(assertKeymapOverlapConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapOverlapConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapOverlapConflictSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapOverlapConflictOutcome {
+	static function assertKeymapOverlapConflictSet(expectValue:Value, secretProbe:String):ModelKeymapOverlapConflictOutcome {
 		final outcome = ModelKeymapOverlapConflictPolicy.apply(new ModelKeymapOverlapConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			explicitListLegacyOuterAction: keymapOverlapConflictActionKind(stringField(expectValue, "explicitListLegacyOuterAction", "")),
@@ -5406,46 +4734,42 @@ class ModelStreamItemReducerHarness {
 		assertEquals(keymapOverlapConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
 		assertEquals(boolText(boolField(expectValue, "explicitListLegacyConflictPreserved", false)), boolText(outcome.explicitListLegacyConflictPreserved));
 		assertEquals(boolText(boolField(expectValue, "appBindingPrunesListDefaultPreserved", false)), boolText(outcome.appBindingPrunesListDefaultPreserved));
-		assertEquals(boolText(boolField(expectValue, "approvalBindingPrunesListDefaultPreserved", false)), boolText(outcome.approvalBindingPrunesListDefaultPreserved));
+		assertEquals(boolText(boolField(expectValue, "approvalBindingPrunesListDefaultPreserved", false)),
+			boolText(outcome.approvalBindingPrunesListDefaultPreserved));
 		assertEquals(boolText(boolField(expectValue, "explicitListApprovalConflictPreserved", false)), boolText(outcome.explicitListApprovalConflictPreserved));
 		assertEquals(boolText(boolField(expectValue, "legacyVimChangePruningPreserved", false)), boolText(outcome.legacyVimChangePruningPreserved));
 		assertEquals(boolText(boolField(expectValue, "explicitVimChangeConflictPreserved", false)), boolText(outcome.explicitVimChangeConflictPreserved));
 		assertEquals(boolText(boolField(expectValue, "legacyVimSubstitutePruningPreserved", false)), boolText(outcome.legacyVimSubstitutePruningPreserved));
-		assertEquals(boolText(boolField(expectValue, "explicitVimSubstituteConflictPreserved", false)), boolText(outcome.explicitVimSubstituteConflictPreserved));
+		assertEquals(boolText(boolField(expectValue, "explicitVimSubstituteConflictPreserved", false)),
+			boolText(outcome.explicitVimSubstituteConflictPreserved));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
 		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapVimOperatorTextObjects(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapVimOperatorTextObjectOutcome> {
+	static function assertTopLevelKeymapVimOperatorTextObjects(testCase:Value, secretProbe:String):Array<ModelKeymapVimOperatorTextObjectOutcome> {
 		final outcomes:Array<ModelKeymapVimOperatorTextObjectOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapVimOperatorTextObjectExpects");
-		for (value in values) outcomes.push(assertKeymapVimOperatorTextObjectSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapVimOperatorTextObjectSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapVimOperatorTextObjects(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapVimOperatorTextObjectOutcome> {
+	static function assertKeymapVimOperatorTextObjects(verificationValue:Value, secretProbe:String):Array<ModelKeymapVimOperatorTextObjectOutcome> {
 		final outcomes:Array<ModelKeymapVimOperatorTextObjectOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapVimOperatorTextObjectExpects");
-		for (value in values) outcomes.push(assertKeymapVimOperatorTextObjectSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapVimOperatorTextObjectSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapVimOperatorTextObjectSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapVimOperatorTextObjectOutcome {
+	static function assertKeymapVimOperatorTextObjectSet(expectValue:Value, secretProbe:String):ModelKeymapVimOperatorTextObjectOutcome {
 		final outcome = ModelKeymapVimOperatorTextObjectPolicy.apply(new ModelKeymapVimOperatorTextObjectRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredMotionLeft: keymapBinding(objectField(expectValue, "configuredMotionLeft")),
@@ -5474,34 +4798,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapVimNormalDefaults(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapVimNormalDefaultsOutcome> {
+	static function assertTopLevelKeymapVimNormalDefaults(testCase:Value, secretProbe:String):Array<ModelKeymapVimNormalDefaultsOutcome> {
 		final outcomes:Array<ModelKeymapVimNormalDefaultsOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapVimNormalDefaultExpects");
-		for (value in values) outcomes.push(assertKeymapVimNormalDefaultSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapVimNormalDefaultSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapVimNormalDefaults(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapVimNormalDefaultsOutcome> {
+	static function assertKeymapVimNormalDefaults(verificationValue:Value, secretProbe:String):Array<ModelKeymapVimNormalDefaultsOutcome> {
 		final outcomes:Array<ModelKeymapVimNormalDefaultsOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapVimNormalDefaultExpects");
-		for (value in values) outcomes.push(assertKeymapVimNormalDefaultSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapVimNormalDefaultSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapVimNormalDefaultSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapVimNormalDefaultsOutcome {
+	static function assertKeymapVimNormalDefaultSet(expectValue:Value, secretProbe:String):ModelKeymapVimNormalDefaultsOutcome {
 		final outcome = ModelKeymapVimNormalDefaultsPolicy.apply(new ModelKeymapVimNormalDefaultsRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			enterInsert: keymapBindings(expectValue, "enterInsert"),
@@ -5531,34 +4849,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapInvalidGlobalCopies(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapInvalidGlobalCopyOutcome> {
+	static function assertTopLevelKeymapInvalidGlobalCopies(testCase:Value, secretProbe:String):Array<ModelKeymapInvalidGlobalCopyOutcome> {
 		final outcomes:Array<ModelKeymapInvalidGlobalCopyOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapInvalidGlobalCopyExpects");
-		for (value in values) outcomes.push(assertKeymapInvalidGlobalCopySet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapInvalidGlobalCopySet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapInvalidGlobalCopies(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapInvalidGlobalCopyOutcome> {
+	static function assertKeymapInvalidGlobalCopies(verificationValue:Value, secretProbe:String):Array<ModelKeymapInvalidGlobalCopyOutcome> {
 		final outcomes:Array<ModelKeymapInvalidGlobalCopyOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapInvalidGlobalCopyExpects");
-		for (value in values) outcomes.push(assertKeymapInvalidGlobalCopySet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapInvalidGlobalCopySet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapInvalidGlobalCopySet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapInvalidGlobalCopyOutcome {
+	static function assertKeymapInvalidGlobalCopySet(expectValue:Value, secretProbe:String):ModelKeymapInvalidGlobalCopyOutcome {
 		final outcome = ModelKeymapInvalidGlobalCopyPolicy.apply(new ModelKeymapInvalidGlobalCopyRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredGlobalCopy: keymapBinding(objectField(expectValue, "configuredGlobalCopy")),
@@ -5584,34 +4896,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapEditorAssignments(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapEditorAssignmentOutcome> {
+	static function assertTopLevelKeymapEditorAssignments(testCase:Value, secretProbe:String):Array<ModelKeymapEditorAssignmentOutcome> {
 		final outcomes:Array<ModelKeymapEditorAssignmentOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapEditorAssignmentExpects");
-		for (value in values) outcomes.push(assertKeymapEditorAssignmentSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapEditorAssignmentSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapEditorAssignments(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapEditorAssignmentOutcome> {
+	static function assertKeymapEditorAssignments(verificationValue:Value, secretProbe:String):Array<ModelKeymapEditorAssignmentOutcome> {
 		final outcomes:Array<ModelKeymapEditorAssignmentOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapEditorAssignmentExpects");
-		for (value in values) outcomes.push(assertKeymapEditorAssignmentSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapEditorAssignmentSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapEditorAssignmentSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapEditorAssignmentOutcome {
+	static function assertKeymapEditorAssignmentSet(expectValue:Value, secretProbe:String):ModelKeymapEditorAssignmentOutcome {
 		final outcome = ModelKeymapEditorAssignmentPolicy.apply(new ModelKeymapEditorAssignmentRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			actionKind: keymapEditorAssignmentActionKind(stringField(expectValue, "actionKind", "")),
@@ -5639,34 +4945,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapMainSurfaceAssignments(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapMainSurfaceAssignmentOutcome> {
+	static function assertTopLevelKeymapMainSurfaceAssignments(testCase:Value, secretProbe:String):Array<ModelKeymapMainSurfaceAssignmentOutcome> {
 		final outcomes:Array<ModelKeymapMainSurfaceAssignmentOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapMainSurfaceAssignmentExpects");
-		for (value in values) outcomes.push(assertKeymapMainSurfaceAssignmentSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapMainSurfaceAssignmentSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapMainSurfaceAssignments(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapMainSurfaceAssignmentOutcome> {
+	static function assertKeymapMainSurfaceAssignments(verificationValue:Value, secretProbe:String):Array<ModelKeymapMainSurfaceAssignmentOutcome> {
 		final outcomes:Array<ModelKeymapMainSurfaceAssignmentOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapMainSurfaceAssignmentExpects");
-		for (value in values) outcomes.push(assertKeymapMainSurfaceAssignmentSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapMainSurfaceAssignmentSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapMainSurfaceAssignmentSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapMainSurfaceAssignmentOutcome {
+	static function assertKeymapMainSurfaceAssignmentSet(expectValue:Value, secretProbe:String):ModelKeymapMainSurfaceAssignmentOutcome {
 		final outcome = ModelKeymapMainSurfaceAssignmentPolicy.apply(new ModelKeymapMainSurfaceAssignmentRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			actionKind: keymapMainSurfaceAssignmentActionKind(stringField(expectValue, "actionKind", "")),
@@ -5694,34 +4994,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapMainSurfaceConflicts(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapMainSurfaceConflictOutcome> {
+	static function assertTopLevelKeymapMainSurfaceConflicts(testCase:Value, secretProbe:String):Array<ModelKeymapMainSurfaceConflictOutcome> {
 		final outcomes:Array<ModelKeymapMainSurfaceConflictOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapMainSurfaceConflictExpects");
-		for (value in values) outcomes.push(assertKeymapMainSurfaceConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapMainSurfaceConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapMainSurfaceConflicts(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapMainSurfaceConflictOutcome> {
+	static function assertKeymapMainSurfaceConflicts(verificationValue:Value, secretProbe:String):Array<ModelKeymapMainSurfaceConflictOutcome> {
 		final outcomes:Array<ModelKeymapMainSurfaceConflictOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapMainSurfaceConflictExpects");
-		for (value in values) outcomes.push(assertKeymapMainSurfaceConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapMainSurfaceConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapMainSurfaceConflictSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapMainSurfaceConflictOutcome {
+	static function assertKeymapMainSurfaceConflictSet(expectValue:Value, secretProbe:String):ModelKeymapMainSurfaceConflictOutcome {
 		final outcome = ModelKeymapMainSurfaceConflictPolicy.apply(new ModelKeymapMainSurfaceConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredToggleFastModeBinding: keymapBinding(objectField(expectValue, "configuredToggleFastModeBinding")),
@@ -5742,7 +5036,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
 		assertEquals(keymapMainSurfaceConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
-		assertEquals(boolText(boolField(expectValue, "configuredToggleFastModeBindingPreserved", false)), boolText(outcome.configuredToggleFastModeBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "configuredToggleFastModeBindingPreserved", false)),
+			boolText(outcome.configuredToggleFastModeBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "defaultClearTerminalBindingPreserved", false)), boolText(outcome.defaultClearTerminalBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
@@ -5752,34 +5047,30 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapComposerFixedShortcutConflicts(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapComposerFixedShortcutConflictOutcome> {
+	static function assertTopLevelKeymapComposerFixedShortcutConflicts(testCase:Value,
+			secretProbe:String):Array<ModelKeymapComposerFixedShortcutConflictOutcome> {
 		final outcomes:Array<ModelKeymapComposerFixedShortcutConflictOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapComposerFixedShortcutConflictExpects");
-		for (value in values) outcomes.push(assertKeymapComposerFixedShortcutConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapComposerFixedShortcutConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapComposerFixedShortcutConflicts(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapComposerFixedShortcutConflictOutcome> {
+	static function assertKeymapComposerFixedShortcutConflicts(verificationValue:Value,
+			secretProbe:String):Array<ModelKeymapComposerFixedShortcutConflictOutcome> {
 		final outcomes:Array<ModelKeymapComposerFixedShortcutConflictOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapComposerFixedShortcutConflictExpects");
-		for (value in values) outcomes.push(assertKeymapComposerFixedShortcutConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapComposerFixedShortcutConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapComposerFixedShortcutConflictSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapComposerFixedShortcutConflictOutcome {
+	static function assertKeymapComposerFixedShortcutConflictSet(expectValue:Value, secretProbe:String):ModelKeymapComposerFixedShortcutConflictOutcome {
 		final outcome = ModelKeymapComposerFixedShortcutConflictPolicy.apply(new ModelKeymapComposerFixedShortcutConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredComposerSubmitBinding: keymapBinding(objectField(expectValue, "configuredComposerSubmitBinding")),
@@ -5800,7 +5091,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(stringField(expectValue, "code", ""), outcome.code);
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
 		assertEquals(keymapComposerFixedShortcutConflictDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
-		assertEquals(boolText(boolField(expectValue, "configuredComposerSubmitBindingPreserved", false)), boolText(outcome.configuredComposerSubmitBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "configuredComposerSubmitBindingPreserved", false)),
+			boolText(outcome.configuredComposerSubmitBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "fixedPasteImageBindingPreserved", false)), boolText(outcome.fixedPasteImageBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
@@ -5810,34 +5102,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapEditorConflicts(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapEditorConflictOutcome> {
+	static function assertTopLevelKeymapEditorConflicts(testCase:Value, secretProbe:String):Array<ModelKeymapEditorConflictOutcome> {
 		final outcomes:Array<ModelKeymapEditorConflictOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapEditorConflictExpects");
-		for (value in values) outcomes.push(assertKeymapEditorConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapEditorConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapEditorConflicts(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapEditorConflictOutcome> {
+	static function assertKeymapEditorConflicts(verificationValue:Value, secretProbe:String):Array<ModelKeymapEditorConflictOutcome> {
 		final outcomes:Array<ModelKeymapEditorConflictOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapEditorConflictExpects");
-		for (value in values) outcomes.push(assertKeymapEditorConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapEditorConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapEditorConflictSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapEditorConflictOutcome {
+	static function assertKeymapEditorConflictSet(expectValue:Value, secretProbe:String):ModelKeymapEditorConflictOutcome {
 		final outcome = ModelKeymapEditorConflictPolicy.apply(new ModelKeymapEditorConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredMoveLeft: keymapBinding(objectField(expectValue, "configuredMoveLeft")),
@@ -5868,34 +5154,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapEditorUnbindConflicts(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapEditorUnbindConflictOutcome> {
+	static function assertTopLevelKeymapEditorUnbindConflicts(testCase:Value, secretProbe:String):Array<ModelKeymapEditorUnbindConflictOutcome> {
 		final outcomes:Array<ModelKeymapEditorUnbindConflictOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapEditorUnbindConflictExpects");
-		for (value in values) outcomes.push(assertKeymapEditorUnbindConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapEditorUnbindConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapEditorUnbindConflicts(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapEditorUnbindConflictOutcome> {
+	static function assertKeymapEditorUnbindConflicts(verificationValue:Value, secretProbe:String):Array<ModelKeymapEditorUnbindConflictOutcome> {
 		final outcomes:Array<ModelKeymapEditorUnbindConflictOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapEditorUnbindConflictExpects");
-		for (value in values) outcomes.push(assertKeymapEditorUnbindConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapEditorUnbindConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapEditorUnbindConflictSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapEditorUnbindConflictOutcome {
+	static function assertKeymapEditorUnbindConflictSet(expectValue:Value, secretProbe:String):ModelKeymapEditorUnbindConflictOutcome {
 		final outcome = ModelKeymapEditorUnbindConflictPolicy.apply(new ModelKeymapEditorUnbindConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredKillWholeLine: keymapBinding(objectField(expectValue, "configuredKillWholeLine")),
@@ -5931,34 +5211,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapPagerConflicts(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapPagerConflictOutcome> {
+	static function assertTopLevelKeymapPagerConflicts(testCase:Value, secretProbe:String):Array<ModelKeymapPagerConflictOutcome> {
 		final outcomes:Array<ModelKeymapPagerConflictOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapPagerConflictExpects");
-		for (value in values) outcomes.push(assertKeymapPagerConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapPagerConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapPagerConflicts(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapPagerConflictOutcome> {
+	static function assertKeymapPagerConflicts(verificationValue:Value, secretProbe:String):Array<ModelKeymapPagerConflictOutcome> {
 		final outcomes:Array<ModelKeymapPagerConflictOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapPagerConflictExpects");
-		for (value in values) outcomes.push(assertKeymapPagerConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapPagerConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapPagerConflictSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapPagerConflictOutcome {
+	static function assertKeymapPagerConflictSet(expectValue:Value, secretProbe:String):ModelKeymapPagerConflictOutcome {
 		final outcome = ModelKeymapPagerConflictPolicy.apply(new ModelKeymapPagerConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredScrollUp: keymapBinding(objectField(expectValue, "configuredScrollUp")),
@@ -5989,34 +5263,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapListConflicts(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapListConflictOutcome> {
+	static function assertTopLevelKeymapListConflicts(testCase:Value, secretProbe:String):Array<ModelKeymapListConflictOutcome> {
 		final outcomes:Array<ModelKeymapListConflictOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapListConflictExpects");
-		for (value in values) outcomes.push(assertKeymapListConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapListConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapListConflicts(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapListConflictOutcome> {
+	static function assertKeymapListConflicts(verificationValue:Value, secretProbe:String):Array<ModelKeymapListConflictOutcome> {
 		final outcomes:Array<ModelKeymapListConflictOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapListConflictExpects");
-		for (value in values) outcomes.push(assertKeymapListConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapListConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapListConflictSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapListConflictOutcome {
+	static function assertKeymapListConflictSet(expectValue:Value, secretProbe:String):ModelKeymapListConflictOutcome {
 		final outcome = ModelKeymapListConflictPolicy.apply(new ModelKeymapListConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredOuterBinding: keymapBinding(objectField(expectValue, "configuredOuterBinding")),
@@ -6047,34 +5315,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapApprovalConflicts(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapApprovalConflictOutcome> {
+	static function assertTopLevelKeymapApprovalConflicts(testCase:Value, secretProbe:String):Array<ModelKeymapApprovalConflictOutcome> {
 		final outcomes:Array<ModelKeymapApprovalConflictOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapApprovalConflictExpects");
-		for (value in values) outcomes.push(assertKeymapApprovalConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapApprovalConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapApprovalConflicts(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapApprovalConflictOutcome> {
+	static function assertKeymapApprovalConflicts(verificationValue:Value, secretProbe:String):Array<ModelKeymapApprovalConflictOutcome> {
 		final outcomes:Array<ModelKeymapApprovalConflictOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapApprovalConflictExpects");
-		for (value in values) outcomes.push(assertKeymapApprovalConflictSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapApprovalConflictSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapApprovalConflictSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapApprovalConflictOutcome {
+	static function assertKeymapApprovalConflictSet(expectValue:Value, secretProbe:String):ModelKeymapApprovalConflictOutcome {
 		final outcome = ModelKeymapApprovalConflictPolicy.apply(new ModelKeymapApprovalConflictRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredApprove: optionalKeymapBinding(expectValue, "configuredApprove"),
@@ -6111,34 +5373,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelKeymapFixedShortcuts(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelKeymapFixedShortcutOutcome> {
+	static function assertTopLevelKeymapFixedShortcuts(testCase:Value, secretProbe:String):Array<ModelKeymapFixedShortcutOutcome> {
 		final outcomes:Array<ModelKeymapFixedShortcutOutcome> = [];
 		final values = optionalArrayField(testCase, "keymapFixedShortcutExpects");
-		for (value in values) outcomes.push(assertKeymapFixedShortcutSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapFixedShortcutSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapFixedShortcuts(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelKeymapFixedShortcutOutcome> {
+	static function assertKeymapFixedShortcuts(verificationValue:Value, secretProbe:String):Array<ModelKeymapFixedShortcutOutcome> {
 		final outcomes:Array<ModelKeymapFixedShortcutOutcome> = [];
 		final values = optionalArrayField(verificationValue, "keymapFixedShortcutExpects");
-		for (value in values) outcomes.push(assertKeymapFixedShortcutSet(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertKeymapFixedShortcutSet(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertKeymapFixedShortcutSet(
-		expectValue:Value,
-		secretProbe:String
-	):ModelKeymapFixedShortcutOutcome {
+	static function assertKeymapFixedShortcutSet(expectValue:Value, secretProbe:String):ModelKeymapFixedShortcutOutcome {
 		final outcome = ModelKeymapFixedShortcutPolicy.apply(new ModelKeymapFixedShortcutRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			configuredCopyBinding: keymapBinding(objectField(expectValue, "configuredCopyBinding")),
@@ -6163,7 +5419,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(stringField(expectValue, "requestId", ""), outcome.requestId);
 		assertEquals(keymapFixedShortcutDecisionKind(stringField(expectValue, "decisionKind", "")), outcome.decisionKind);
 		assertEquals(boolText(boolField(expectValue, "configuredCopyBindingPreserved", false)), boolText(outcome.configuredCopyBindingPreserved));
-		assertEquals(boolText(boolField(expectValue, "defaultIncreaseReasoningBindingPreserved", false)), boolText(outcome.defaultIncreaseReasoningBindingPreserved));
+		assertEquals(boolText(boolField(expectValue, "defaultIncreaseReasoningBindingPreserved", false)),
+			boolText(outcome.defaultIncreaseReasoningBindingPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictActionNamesPreserved", false)), boolText(outcome.conflictActionNamesPreserved));
 		assertEquals(boolText(boolField(expectValue, "conflictRejectionPreserved", false)), boolText(outcome.conflictRejectionPreserved));
 		assertEquals(boolText(boolField(expectValue, "originalActionUnboundPreserved", false)), boolText(outcome.originalActionUnboundPreserved));
@@ -6174,34 +5431,28 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelBacktrackSelections(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelBacktrackSelectionOutcome> {
+	static function assertTopLevelBacktrackSelections(testCase:Value, secretProbe:String):Array<ModelBacktrackSelectionOutcome> {
 		final outcomes:Array<ModelBacktrackSelectionOutcome> = [];
 		final values = optionalArrayField(testCase, "backtrackSelectionExpects");
-		for (value in values) outcomes.push(assertBacktrackSelection(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertBacktrackSelection(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertBacktrackSelections(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelBacktrackSelectionOutcome> {
+	static function assertBacktrackSelections(verificationValue:Value, secretProbe:String):Array<ModelBacktrackSelectionOutcome> {
 		final outcomes:Array<ModelBacktrackSelectionOutcome> = [];
 		final values = optionalArrayField(verificationValue, "backtrackSelectionExpects");
-		for (value in values) outcomes.push(assertBacktrackSelection(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertBacktrackSelection(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertBacktrackSelection(
-		expectValue:Value,
-		secretProbe:String
-	):ModelBacktrackSelectionOutcome {
+	static function assertBacktrackSelection(expectValue:Value, secretProbe:String):ModelBacktrackSelectionOutcome {
 		final outcome = ModelBacktrackSelectionPolicy.apply(new ModelBacktrackSelectionRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			primed: boolField(expectValue, "primed", false),
@@ -6230,7 +5481,8 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "composerPrefilled", false)), boolText(outcome.composerPrefilled));
 		assertEquals(boolText(boolField(expectValue, "pendingRollbackRecorded", false)), boolText(outcome.pendingRollbackRecorded));
 		assertEquals(boolText(boolField(expectValue, "threadRollbackSubmitted", false)), boolText(outcome.threadRollbackSubmitted));
-		assertEquals(boolText(boolField(expectValue, "duplicateHistoryIgnoredBeforeLastSession", false)), boolText(outcome.duplicateHistoryIgnoredBeforeLastSession));
+		assertEquals(boolText(boolField(expectValue, "duplicateHistoryIgnoredBeforeLastSession", false)),
+			boolText(outcome.duplicateHistoryIgnoredBeforeLastSession));
 		assertEquals(boolText(boolField(expectValue, "eventOrderingPreserved", false)), boolText(outcome.eventOrderingPreserved));
 		assertEquals(boolText(boolField(expectValue, "liveNetworkAttempted", false)), boolText(outcome.liveNetworkAttempted));
 		assertEquals(boolText(boolField(expectValue, "realFilesystemMutated", false)), boolText(outcome.realFilesystemMutated));
@@ -6240,34 +5492,28 @@ class ModelStreamItemReducerHarness {
 		assertNotContains(outcome.summary(), outcome.selectedPrefill);
 		assertNotContains(outcome.summary(), outcome.selectedLocalImagePath);
 		assertNotContains(outcome.summary(), outcome.selectedRemoteImageUrl);
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelBacktrackRollbacks(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelBacktrackRollbackOutcome> {
+	static function assertTopLevelBacktrackRollbacks(testCase:Value, secretProbe:String):Array<ModelBacktrackRollbackOutcome> {
 		final outcomes:Array<ModelBacktrackRollbackOutcome> = [];
 		final values = optionalArrayField(testCase, "backtrackRollbackExpects");
-		for (value in values) outcomes.push(assertBacktrackRollback(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertBacktrackRollback(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertBacktrackRollbacks(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelBacktrackRollbackOutcome> {
+	static function assertBacktrackRollbacks(verificationValue:Value, secretProbe:String):Array<ModelBacktrackRollbackOutcome> {
 		final outcomes:Array<ModelBacktrackRollbackOutcome> = [];
 		final values = optionalArrayField(verificationValue, "backtrackRollbackExpects");
-		for (value in values) outcomes.push(assertBacktrackRollback(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertBacktrackRollback(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertBacktrackRollback(
-		expectValue:Value,
-		secretProbe:String
-	):ModelBacktrackRollbackOutcome {
+	static function assertBacktrackRollback(expectValue:Value, secretProbe:String):ModelBacktrackRollbackOutcome {
 		final outcome = ModelBacktrackRollbackPolicy.apply(new ModelBacktrackRollbackRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			pendingRollback: boolField(expectValue, "pendingRollback", false),
@@ -6308,37 +5554,34 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (outcome.composerDraftBefore.length > 0) assertNotContains(outcome.summary(), outcome.composerDraftBefore);
-		if (outcome.composerDraftAfter.length > 0) assertNotContains(outcome.summary(), outcome.composerDraftAfter);
-		if (outcome.selectedRemoteImageUrl.length > 0) assertNotContains(outcome.summary(), outcome.selectedRemoteImageUrl);
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (outcome.composerDraftBefore.length > 0)
+			assertNotContains(outcome.summary(), outcome.composerDraftBefore);
+		if (outcome.composerDraftAfter.length > 0)
+			assertNotContains(outcome.summary(), outcome.composerDraftAfter);
+		if (outcome.selectedRemoteImageUrl.length > 0)
+			assertNotContains(outcome.summary(), outcome.selectedRemoteImageUrl);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelCancelledTurnEdits(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelCancelledTurnEditOutcome> {
+	static function assertTopLevelCancelledTurnEdits(testCase:Value, secretProbe:String):Array<ModelCancelledTurnEditOutcome> {
 		final outcomes:Array<ModelCancelledTurnEditOutcome> = [];
 		final values = optionalArrayField(testCase, "cancelledTurnEditExpects");
-		for (value in values) outcomes.push(assertCancelledTurnEdit(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertCancelledTurnEdit(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertCancelledTurnEdits(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelCancelledTurnEditOutcome> {
+	static function assertCancelledTurnEdits(verificationValue:Value, secretProbe:String):Array<ModelCancelledTurnEditOutcome> {
 		final outcomes:Array<ModelCancelledTurnEditOutcome> = [];
 		final values = optionalArrayField(verificationValue, "cancelledTurnEditExpects");
-		for (value in values) outcomes.push(assertCancelledTurnEdit(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertCancelledTurnEdit(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertCancelledTurnEdit(
-		expectValue:Value,
-		secretProbe:String
-	):ModelCancelledTurnEditOutcome {
+	static function assertCancelledTurnEdit(expectValue:Value, secretProbe:String):ModelCancelledTurnEditOutcome {
 		final outcome = ModelCancelledTurnEditPolicy.apply(new ModelCancelledTurnEditRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			pendingRollback: boolField(expectValue, "pendingRollback", false),
@@ -6376,37 +5619,34 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (outcome.promptText.length > 0) assertNotContains(outcome.summary(), outcome.promptText);
-		if (outcome.composerTextAfter.length > 0) assertNotContains(outcome.summary(), outcome.composerTextAfter);
-		if (outcome.promptRemoteImageUrl.length > 0) assertNotContains(outcome.summary(), outcome.promptRemoteImageUrl);
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (outcome.promptText.length > 0)
+			assertNotContains(outcome.summary(), outcome.promptText);
+		if (outcome.composerTextAfter.length > 0)
+			assertNotContains(outcome.summary(), outcome.composerTextAfter);
+		if (outcome.promptRemoteImageUrl.length > 0)
+			assertNotContains(outcome.summary(), outcome.promptRemoteImageUrl);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelBacktrackResubmits(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelBacktrackResubmitOutcome> {
+	static function assertTopLevelBacktrackResubmits(testCase:Value, secretProbe:String):Array<ModelBacktrackResubmitOutcome> {
 		final outcomes:Array<ModelBacktrackResubmitOutcome> = [];
 		final values = optionalArrayField(testCase, "backtrackResubmitExpects");
-		for (value in values) outcomes.push(assertBacktrackResubmit(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertBacktrackResubmit(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertBacktrackResubmits(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelBacktrackResubmitOutcome> {
+	static function assertBacktrackResubmits(verificationValue:Value, secretProbe:String):Array<ModelBacktrackResubmitOutcome> {
 		final outcomes:Array<ModelBacktrackResubmitOutcome> = [];
 		final values = optionalArrayField(verificationValue, "backtrackResubmitExpects");
-		for (value in values) outcomes.push(assertBacktrackResubmit(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertBacktrackResubmit(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertBacktrackResubmit(
-		expectValue:Value,
-		secretProbe:String
-	):ModelBacktrackResubmitOutcome {
+	static function assertBacktrackResubmit(expectValue:Value, secretProbe:String):ModelBacktrackResubmitOutcome {
 		final outcome = ModelBacktrackResubmitPolicy.apply(new ModelBacktrackResubmitRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			sessionConfigured: boolField(expectValue, "sessionConfigured", false),
@@ -6442,36 +5682,32 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		if (outcome.composerTextAfterRollback.length > 0) assertNotContains(outcome.summary(), outcome.composerTextAfterRollback);
-		if (outcome.submittedImageUrl.length > 0) assertNotContains(outcome.summary(), outcome.submittedImageUrl);
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (outcome.composerTextAfterRollback.length > 0)
+			assertNotContains(outcome.summary(), outcome.composerTextAfterRollback);
+		if (outcome.submittedImageUrl.length > 0)
+			assertNotContains(outcome.summary(), outcome.submittedImageUrl);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelQueuedRollbackOverlaySyncs(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelQueuedRollbackOverlaySyncOutcome> {
+	static function assertTopLevelQueuedRollbackOverlaySyncs(testCase:Value, secretProbe:String):Array<ModelQueuedRollbackOverlaySyncOutcome> {
 		final outcomes:Array<ModelQueuedRollbackOverlaySyncOutcome> = [];
 		final values = optionalArrayField(testCase, "queuedRollbackOverlaySyncExpects");
-		for (value in values) outcomes.push(assertQueuedRollbackOverlaySync(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertQueuedRollbackOverlaySync(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertQueuedRollbackOverlaySyncs(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelQueuedRollbackOverlaySyncOutcome> {
+	static function assertQueuedRollbackOverlaySyncs(verificationValue:Value, secretProbe:String):Array<ModelQueuedRollbackOverlaySyncOutcome> {
 		final outcomes:Array<ModelQueuedRollbackOverlaySyncOutcome> = [];
 		final values = optionalArrayField(verificationValue, "queuedRollbackOverlaySyncExpects");
-		for (value in values) outcomes.push(assertQueuedRollbackOverlaySync(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertQueuedRollbackOverlaySync(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertQueuedRollbackOverlaySync(
-		expectValue:Value,
-		secretProbe:String
-	):ModelQueuedRollbackOverlaySyncOutcome {
+	static function assertQueuedRollbackOverlaySync(expectValue:Value, secretProbe:String):ModelQueuedRollbackOverlaySyncOutcome {
 		final outcome = ModelQueuedRollbackOverlaySyncPolicy.apply(new ModelQueuedRollbackOverlaySyncRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			numTurns: intField(expectValue, "numTurns", 0),
@@ -6514,35 +5750,33 @@ class ModelStreamItemReducerHarness {
 		assertEquals(boolText(boolField(expectValue, "toolExecutedOutsideFixture", false)), boolText(outcome.toolExecutedOutsideFixture));
 		assertEquals(stringField(expectValue, "errorMessage", ""), outcome.errorMessage);
 		assertContains(outcome.summary(), stringField(expectValue, "summaryContains", ""));
-		for (message in outcome.userMessagesAfter) if (message.length > 0) assertNotContains(outcome.summary(), message);
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		for (message in outcome.userMessagesAfter)
+			if (message.length > 0)
+				assertNotContains(outcome.summary(), message);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
-	static function assertTopLevelThreadRollbackResponseActiveQueueFlushes(
-		testCase:Value,
-		secretProbe:String
-	):Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> {
+	static function assertTopLevelThreadRollbackResponseActiveQueueFlushes(testCase:Value,
+			secretProbe:String):Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> {
 		final outcomes:Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> = [];
 		final values = optionalArrayField(testCase, "threadRollbackResponseActiveQueueFlushExpects");
-		for (value in values) outcomes.push(assertThreadRollbackResponseActiveQueueFlush(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadRollbackResponseActiveQueueFlush(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadRollbackResponseActiveQueueFlushes(
-		verificationValue:Value,
-		secretProbe:String
-	):Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> {
+	static function assertThreadRollbackResponseActiveQueueFlushes(verificationValue:Value,
+			secretProbe:String):Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> {
 		final outcomes:Array<ModelThreadRollbackResponseActiveQueueFlushOutcome> = [];
 		final values = optionalArrayField(verificationValue, "threadRollbackResponseActiveQueueFlushExpects");
-		for (value in values) outcomes.push(assertThreadRollbackResponseActiveQueueFlush(objectValue(value), secretProbe));
+		for (value in values)
+			outcomes.push(assertThreadRollbackResponseActiveQueueFlush(objectValue(value), secretProbe));
 		return outcomes;
 	}
 
-	static function assertThreadRollbackResponseActiveQueueFlush(
-		expectValue:Value,
-		secretProbe:String
-	):ModelThreadRollbackResponseActiveQueueFlushOutcome {
+	static function assertThreadRollbackResponseActiveQueueFlush(expectValue:Value, secretProbe:String):ModelThreadRollbackResponseActiveQueueFlushOutcome {
 		final outcome = ModelThreadRollbackResponseActiveQueueFlushPolicy.apply(new ModelThreadRollbackResponseActiveQueueFlushRequest({
 			requestId: stringField(expectValue, "requestId", ""),
 			activeThreadId: stringField(expectValue, "activeThreadId", ""),
@@ -6584,7 +5818,8 @@ class ModelStreamItemReducerHarness {
 		assertNotContains(outcome.summary(), stringField(expectValue, "staleNotificationSummary", ""));
 		assertNotContains(outcome.summary(), stringField(expectValue, "activeThreadId", ""));
 		assertNotContains(outcome.summary(), stringField(expectValue, "rollbackThreadId", ""));
-		if (secretProbe.length > 0) assertNotContains(outcome.summary(), secretProbe);
+		if (secretProbe.length > 0)
+			assertNotContains(outcome.summary(), secretProbe);
 		return outcome;
 	}
 
@@ -6592,96 +5827,116 @@ class ModelStreamItemReducerHarness {
 		assertEquals(expected.join("\n"), actual.join("\n"));
 	}
 
-	static function activeNonPrimaryShutdownByRequestId(
-		outcomes:Array<ModelActiveNonPrimaryShutdownOutcome>,
-		requestId:String
-	):ModelActiveNonPrimaryShutdownOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function activeNonPrimaryShutdownByRequestId(outcomes:Array<ModelActiveNonPrimaryShutdownOutcome>,
+			requestId:String):ModelActiveNonPrimaryShutdownOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing active non-primary shutdown outcome: " + requestId;
 	}
 
-	static function threadSideThreadNavigationCleanupByRequestId(
-		outcomes:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
-		requestId:String
-	):ModelThreadSideThreadNavigationCleanupOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadSideThreadNavigationCleanupByRequestId(outcomes:Array<ModelThreadSideThreadNavigationCleanupOutcome>,
+			requestId:String):ModelThreadSideThreadNavigationCleanupOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread side-thread navigation cleanup outcome: " + requestId;
 	}
 
-	static function threadSideThreadComposerHandoffByRequestId(
-		outcomes:Array<ModelThreadSideThreadComposerHandoffOutcome>,
-		requestId:String
-	):ModelThreadSideThreadComposerHandoffOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadSideThreadComposerHandoffByRequestId(outcomes:Array<ModelThreadSideThreadComposerHandoffOutcome>,
+			requestId:String):ModelThreadSideThreadComposerHandoffOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread side-thread composer handoff outcome: " + requestId;
 	}
 
-	static function threadSideThreadDiscardByRequestId(
-		outcomes:Array<ModelThreadSideThreadDiscardOutcome>,
-		requestId:String
-	):ModelThreadSideThreadDiscardOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function threadSideThreadDiscardByRequestId(outcomes:Array<ModelThreadSideThreadDiscardOutcome>,
+			requestId:String):ModelThreadSideThreadDiscardOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread side-thread discard outcome: " + requestId;
 	}
 
 	static function threadActiveTurnByRequestId(outcomes:Array<ModelThreadActiveTurnOutcome>, requestId:String):ModelThreadActiveTurnOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing thread active-turn outcome: " + requestId;
 	}
 
-	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>, requestId:String):ModelTurnReplayReconstructionOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+	static function turnReplayReconstructionByRequestId(outcomes:Array<ModelTurnReplayReconstructionOutcome>,
+			requestId:String):ModelTurnReplayReconstructionOutcome {
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing turn replay reconstruction outcome: " + requestId;
 	}
 
 	static function turnTerminalProjectionByRequestId(outcomes:Array<ModelTurnTerminalProjectionOutcome>, requestId:String):ModelTurnTerminalProjectionOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing turn terminal projection outcome: " + requestId;
 	}
 
 	static function turnLifecycleByRequestId(outcomes:Array<ModelTurnLifecycleOutcome>, requestId:String):ModelTurnLifecycleOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing turn lifecycle outcome: " + requestId;
 	}
 
-	static function samplingResultIntegrationByRequestId(integrations:Array<ModelSamplingResultIntegrationOutcome>, requestId:String):ModelSamplingResultIntegrationOutcome {
-		for (integration in integrations) if (integration.requestId == requestId) return integration;
+	static function samplingResultIntegrationByRequestId(integrations:Array<ModelSamplingResultIntegrationOutcome>,
+			requestId:String):ModelSamplingResultIntegrationOutcome {
+		for (integration in integrations)
+			if (integration.requestId == requestId)
+				return integration;
 		throw "missing sampling result integration outcome: " + requestId;
 	}
 
 	static function terminalStopHookByRequestId(outcomes:Array<ModelTerminalStopHookOutcome>, requestId:String):ModelTerminalStopHookOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing terminal stop hook outcome: " + requestId;
 	}
 
 	static function samplingErrorTerminalByRequestId(outcomes:Array<ModelSamplingErrorTerminalOutcome>, requestId:String):ModelSamplingErrorTerminalOutcome {
-		for (outcome in outcomes) if (outcome.requestId == requestId) return outcome;
+		for (outcome in outcomes)
+			if (outcome.requestId == requestId)
+				return outcome;
 		throw "missing sampling error terminal outcome: " + requestId;
 	}
 
-	static function promptPreparationByRequestId(
-		preparations:Array<ModelPromptPreparationOutcome>,
-		requestId:String
-	):ModelPromptPreparationOutcome {
-		for (preparation in preparations) if (preparation.requestId == requestId) return preparation;
+	static function promptPreparationByRequestId(preparations:Array<ModelPromptPreparationOutcome>, requestId:String):ModelPromptPreparationOutcome {
+		for (preparation in preparations)
+			if (preparation.requestId == requestId)
+				return preparation;
 		throw "missing prompt preparation outcome: " + requestId;
 	}
 
-	static function pendingInputHookRecordingByRequestId(
-		recordings:Array<ModelPendingInputHookRecordingOutcome>,
-		requestId:String
-	):ModelPendingInputHookRecordingOutcome {
-		for (recording in recordings) if (recording.requestId == requestId) return recording;
+	static function pendingInputHookRecordingByRequestId(recordings:Array<ModelPendingInputHookRecordingOutcome>,
+			requestId:String):ModelPendingInputHookRecordingOutcome {
+		for (recording in recordings)
+			if (recording.requestId == requestId)
+				return recording;
 		throw "missing pending input hook recording outcome: " + requestId;
 	}
 
-	static function postSamplingPendingInputDrainByRequestId(drains:Array<ModelPostSamplingPendingInputDrainOutcome>, requestId:String):ModelPostSamplingPendingInputDrainOutcome {
-		for (drain in drains) if (drain.requestId == requestId) return drain;
+	static function postSamplingPendingInputDrainByRequestId(drains:Array<ModelPostSamplingPendingInputDrainOutcome>,
+			requestId:String):ModelPostSamplingPendingInputDrainOutcome {
+		for (drain in drains)
+			if (drain.requestId == requestId)
+				return drain;
 		throw "missing post-sampling pending input drain outcome: " + requestId;
 	}
 
 	static function postDrainEmissionByRequestId(emissions:Array<ModelPostDrainEmissionOutcome>, requestId:String):ModelPostDrainEmissionOutcome {
-		for (emission in emissions) if (emission.requestId == requestId) return emission;
+		for (emission in emissions)
+			if (emission.requestId == requestId)
+				return emission;
 		throw "missing post-drain emission outcome: " + requestId;
 	}
 
@@ -6695,7 +5950,9 @@ class ModelStreamItemReducerHarness {
 	}
 
 	static function streamHandoffByRequestId(handoffs:Array<ModelSamplingStreamEventHandoffOutcome>, requestId:String):ModelSamplingStreamEventHandoffOutcome {
-		for (handoff in handoffs) if (handoff.requestId == requestId) return handoff;
+		for (handoff in handoffs)
+			if (handoff.requestId == requestId)
+				return handoff;
 		throw "missing stream handoff outcome: " + requestId;
 	}
 
@@ -6703,16 +5960,10 @@ class ModelStreamItemReducerHarness {
 		final out:Array<ModelInFlightToolDrainItem> = [];
 		for (value in values) {
 			final item = objectValue(value);
-			out.push(new ModelInFlightToolDrainItem(
-				stringField(item, "callId", ""),
-				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")),
-				intField(item, "orderIndex", 0),
-				stringField(item, "outputText", ""),
-				boolField(item, "success", false),
-				inFlightFailureKind(stringField(item, "failureKind", "none")),
-				boolField(item, "fromResponseInput", false),
-				boolField(item, "externalContext", false)
-			));
+			out.push(new ModelInFlightToolDrainItem(stringField(item, "callId", ""),
+				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")), intField(item, "orderIndex", 0),
+				stringField(item, "outputText", ""), boolField(item, "success", false), inFlightFailureKind(stringField(item, "failureKind", "none")),
+				boolField(item, "fromResponseInput", false), boolField(item, "externalContext", false)));
 		}
 		return out;
 	}
@@ -6751,15 +6002,9 @@ class ModelStreamItemReducerHarness {
 		final out:Array<ModelSamplingInputItem> = [];
 		for (value in values) {
 			final item = objectValue(value);
-			out.push(new ModelSamplingInputItem(
-				samplingInputItemKind(stringField(item, "kind", "")),
-				intField(item, "orderIndex", 0),
-				stringField(item, "callId", ""),
-				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")),
-				stringField(item, "text", ""),
-				boolField(item, "fromPendingInput", false),
-				boolField(item, "recordedInHistory", false)
-			));
+			out.push(new ModelSamplingInputItem(samplingInputItemKind(stringField(item, "kind", "")), intField(item, "orderIndex", 0),
+				stringField(item, "callId", ""), toolOutputItemKind(stringField(item, "responseKind", "function_call_output")), stringField(item, "text", ""),
+				boolField(item, "fromPendingInput", false), boolField(item, "recordedInHistory", false)));
 		}
 		return out;
 	}
@@ -6768,14 +6013,9 @@ class ModelStreamItemReducerHarness {
 		final out:Array<ModelPostSamplingPendingInputDrainItem> = [];
 		for (value in values) {
 			final item = objectValue(value);
-			out.push(new ModelPostSamplingPendingInputDrainItem(
-				postSamplingPendingInputSourceKind(stringField(item, "sourceKind", "active_turn")),
-				samplingInputItemKind(stringField(item, "inputKind", "pending_user_input")),
-				intField(item, "orderIndex", 0),
-				stringField(item, "callId", ""),
-				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")),
-				stringField(item, "text", "")
-			));
+			out.push(new ModelPostSamplingPendingInputDrainItem(postSamplingPendingInputSourceKind(stringField(item, "sourceKind", "active_turn")),
+				samplingInputItemKind(stringField(item, "inputKind", "pending_user_input")), intField(item, "orderIndex", 0), stringField(item, "callId", ""),
+				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")), stringField(item, "text", "")));
 		}
 		return out;
 	}
@@ -6784,16 +6024,10 @@ class ModelStreamItemReducerHarness {
 		final out:Array<ModelPendingInputHookRecordingItem> = [];
 		for (value in values) {
 			final item = objectValue(value);
-			out.push(new ModelPendingInputHookRecordingItem(
-				postSamplingPendingInputSourceKind(stringField(item, "sourceKind", "active_turn")),
-				samplingInputItemKind(stringField(item, "inputKind", "pending_user_input")),
-				intField(item, "orderIndex", 0),
-				stringField(item, "callId", ""),
-				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")),
-				stringField(item, "text", ""),
-				pendingInputHookActionKind(stringField(item, "hookActionKind", "continue_input")),
-				intField(item, "additionalContextCount", 0)
-			));
+			out.push(new ModelPendingInputHookRecordingItem(postSamplingPendingInputSourceKind(stringField(item, "sourceKind", "active_turn")),
+				samplingInputItemKind(stringField(item, "inputKind", "pending_user_input")), intField(item, "orderIndex", 0), stringField(item, "callId", ""),
+				toolOutputItemKind(stringField(item, "responseKind", "function_call_output")), stringField(item, "text", ""),
+				pendingInputHookActionKind(stringField(item, "hookActionKind", "continue_input")), intField(item, "additionalContextCount", 0)));
 		}
 		return out;
 	}
@@ -8137,7 +7371,8 @@ class ModelStreamItemReducerHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -8154,21 +7389,26 @@ class ModelStreamItemReducerHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (needle.length == 0) return;
-		if (value.indexOf(needle) < 0) throw "expected to find `" + needle + "` in `" + value + "`";
+		if (needle.length == 0)
+			return;
+		if (value.indexOf(needle) < 0)
+			throw "expected to find `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertNotContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) >= 0) throw "expected not to find `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) >= 0)
+			throw "expected not to find `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected `" + expected + "` but got `" + actual + "`";
+		if (expected != actual)
+			throw "expected `" + expected + "` but got `" + actual + "`";
 	}
 
 	static function boolText(value:Bool):String {

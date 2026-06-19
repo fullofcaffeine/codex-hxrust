@@ -24,30 +24,11 @@ class ModelThreadSideThreadStartRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		cleanupOutcome:ModelThreadSideThreadDiscardOutcome,
-		primaryThreadAvailable:Bool,
-		sideThreadAlreadyOpen:Bool,
-		parentModel:String,
-		parentReasoningEffort:String,
-		parentServiceTier:String,
-		parentApprovalPolicy:String,
-		parentPermissionProfile:String,
-		parentApprovalsReviewer:String,
-		existingDeveloperInstructions:String,
-		userMessageProvided:Bool,
-		forkSucceeded:Bool,
-		forkErrorMessage:String,
-		injectBoundarySucceeded:Bool,
-		switchSucceeded:Bool,
-		activeChildAfterSwitch:Bool,
-		discardCleanupSucceeded:Bool,
-		activeThreadRestoredToParent:Bool,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, cleanupOutcome:ModelThreadSideThreadDiscardOutcome, primaryThreadAvailable:Bool, sideThreadAlreadyOpen:Bool,
+			parentModel:String, parentReasoningEffort:String, parentServiceTier:String, parentApprovalPolicy:String, parentPermissionProfile:String,
+			parentApprovalsReviewer:String, existingDeveloperInstructions:String, userMessageProvided:Bool, forkSucceeded:Bool, forkErrorMessage:String,
+			injectBoundarySucceeded:Bool, switchSucceeded:Bool, activeChildAfterSwitch:Bool, discardCleanupSucceeded:Bool, activeThreadRestoredToParent:Bool,
+			eventOrderIndex:Int, previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.cleanupOutcome = cleanupOutcome;
 		this.primaryThreadAvailable = primaryThreadAvailable;

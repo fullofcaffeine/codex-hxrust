@@ -151,7 +151,6 @@ class TuiSmokeComposerSubmissionAction {
 	public final noLiveDispatch:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function pendingTransitionText():String {
 		return pendingBefore + "->" + pendingAfter;
 	}

@@ -51,9 +51,7 @@ class ModelFreshSessionPreviousConversationShutdownOutcome {
 		this.ok = fields.ok;
 		this.code = fields.code == null ? "" : fields.code;
 		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.decisionKind = fields.decisionKind == null
-			? ModelFreshSessionPreviousConversationShutdownDecisionKind.NoPreviousConversationNoop
-			: fields.decisionKind;
+		this.decisionKind = fields.decisionKind == null ? ModelFreshSessionPreviousConversationShutdownDecisionKind.NoPreviousConversationNoop : fields.decisionKind;
 		this.previousConversationPresent = fields.previousConversationPresent;
 		this.shutdownCurrentThreadAttempted = fields.shutdownCurrentThreadAttempted;
 		this.pendingRollbackCleared = fields.pendingRollbackCleared;
@@ -74,27 +72,15 @@ class ModelFreshSessionPreviousConversationShutdownOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";previousConversationPresent=" + boolText(previousConversationPresent)
-			+ ";shutdownCurrentThreadAttempted=" + boolText(shutdownCurrentThreadAttempted)
-			+ ";pendingRollbackCleared=" + boolText(pendingRollbackCleared)
-			+ ";threadUnsubscribeAttempted=" + boolText(threadUnsubscribeAttempted)
-			+ ";threadUnsubscribeSucceeded=" + boolText(threadUnsubscribeSucceeded)
-			+ ";listenerAbortAttempted=" + boolText(listenerAbortAttempted)
-			+ ";listenerTaskRemoved=" + boolText(listenerTaskRemoved)
-			+ ";opShutdownSubmitted=" + boolText(opShutdownSubmitted)
-			+ ";opQueueLengthBefore=" + opQueueLengthBefore
-			+ ";opQueueLengthAfter=" + opQueueLengthAfter
-			+ ";duplicateShutdownSuppressed=" + boolText(duplicateShutdownSuppressed)
-			+ ";newSessionMayStartAfterShutdown=" + boolText(newSessionMayStartAfterShutdown)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";previousConversationPresent="
+			+ boolText(previousConversationPresent) + ";shutdownCurrentThreadAttempted=" + boolText(shutdownCurrentThreadAttempted)
+			+ ";pendingRollbackCleared=" + boolText(pendingRollbackCleared) + ";threadUnsubscribeAttempted=" + boolText(threadUnsubscribeAttempted)
+			+ ";threadUnsubscribeSucceeded=" + boolText(threadUnsubscribeSucceeded) + ";listenerAbortAttempted=" + boolText(listenerAbortAttempted)
+			+ ";listenerTaskRemoved=" + boolText(listenerTaskRemoved) + ";opShutdownSubmitted=" + boolText(opShutdownSubmitted) + ";opQueueLengthBefore="
+			+ opQueueLengthBefore + ";opQueueLengthAfter=" + opQueueLengthAfter + ";duplicateShutdownSuppressed=" + boolText(duplicateShutdownSuppressed)
+			+ ";newSessionMayStartAfterShutdown=" + boolText(newSessionMayStartAfterShutdown) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

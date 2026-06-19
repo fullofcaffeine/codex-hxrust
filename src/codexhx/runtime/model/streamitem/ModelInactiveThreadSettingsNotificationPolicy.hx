@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelInactiveThreadSettingsNotificationPolicy {
 	public static function apply(request:ModelInactiveThreadSettingsNotificationRequest):ModelInactiveThreadSettingsNotificationOutcome {
-		if (request == null) return failure("", "missing inactive-thread settings notification request");
+		if (request == null)
+			return failure("", "missing inactive-thread settings notification request");
 
 		final inactiveTarget = request.inactiveThreadId.length > 0
 			&& request.activeThreadId != request.inactiveThreadId
@@ -16,8 +17,10 @@ class ModelInactiveThreadSettingsNotificationPolicy {
 		final inactiveSessionUpdated = inactiveChannelRetained && request.inactiveSessionCached;
 		final defaultMode = request.notificationCollaborationMode == "default";
 		final primarySessionUnchanged = notificationAccepted && request.primaryThreadId == request.activeThreadId;
-		final inactiveSessionModelPreserved = inactiveSessionUpdated && (!defaultMode || request.notificationModel == request.initialInactiveModel);
-		final inactiveSessionEffortPreserved = inactiveSessionUpdated && (!defaultMode || request.notificationEffort == request.initialInactiveEffort);
+		final inactiveSessionModelPreserved = inactiveSessionUpdated
+			&& (!defaultMode || request.notificationModel == request.initialInactiveModel);
+		final inactiveSessionEffortPreserved = inactiveSessionUpdated
+			&& (!defaultMode || request.notificationEffort == request.initialInactiveEffort);
 		final collaborationModeCached = inactiveSessionUpdated && request.notificationCollaborationMode.length > 0;
 		final collaborationSettingsRebasedToNotification = collaborationModeCached
 			&& request.notificationCollaborationModel == request.notificationModel
@@ -42,11 +45,7 @@ class ModelInactiveThreadSettingsNotificationPolicy {
 			&& request.notificationEffort.length > 0;
 		final chatWidgetPersonalityApplied = chatWidgetHandoffApplied && personalityCached;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final decisionKind = notificationAccepted
-			? ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationCached
-			: request.notificationKindThreadSettingsUpdated
-				? ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationIgnored
-				: ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationUnavailable;
+		final decisionKind = notificationAccepted ? ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationCached : request.notificationKindThreadSettingsUpdated ? ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationIgnored : ModelInactiveThreadSettingsNotificationDecisionKind.InactiveThreadSettingsNotificationUnavailable;
 		final ok = notificationAccepted
 			&& inactiveChannelRetained
 			&& inactiveSessionUpdated

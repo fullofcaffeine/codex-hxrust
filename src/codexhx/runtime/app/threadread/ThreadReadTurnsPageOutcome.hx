@@ -22,8 +22,6 @@ class ThreadReadTurnsPageOutcome {
 	}
 
 	public function summary():String {
-		return "turns-page:" + code
-			+ ";ok=" + (ok ? "true" : "false")
-			+ (page == null ? "" : ";" + page.summary());
+		return "turns-page:" + code + ";ok=" + (ok ? "true" : "false") + (page == null ? "" : ";" + page.summary());
 	}
 }

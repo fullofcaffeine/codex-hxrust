@@ -16,22 +16,10 @@ class ModelThreadSideParentPendingRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		activeTurnOutcome:ModelThreadActiveTurnOutcome,
-		eventKind:ModelThreadSideParentPendingEventKind,
-		requestKind:ModelReplayedServerRequestKind,
-		pendingUserInputCountBefore:Int,
-		pendingApprovalCountBefore:Int,
-		requestAddsUserInput:Bool,
-		requestAddsApproval:Bool,
-		requestRemovesUserInput:Bool,
-		requestRemovesApproval:Bool,
-		requestStatusFallbackAllowed:Bool,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, activeTurnOutcome:ModelThreadActiveTurnOutcome, eventKind:ModelThreadSideParentPendingEventKind,
+			requestKind:ModelReplayedServerRequestKind, pendingUserInputCountBefore:Int, pendingApprovalCountBefore:Int, requestAddsUserInput:Bool,
+			requestAddsApproval:Bool, requestRemovesUserInput:Bool, requestRemovesApproval:Bool, requestStatusFallbackAllowed:Bool, eventOrderIndex:Int,
+			previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.activeTurnOutcome = activeTurnOutcome;
 		this.eventKind = eventKind == null ? ModelThreadSideParentPendingEventKind.StatusRefresh : eventKind;

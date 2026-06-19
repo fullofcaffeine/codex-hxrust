@@ -117,10 +117,8 @@ class ResumePickerReloadFailurePreservationRenderGate {
 		state.lastFailureCode = event.failureCode;
 		state.lastError = event.failureMessage;
 		state.loaderEventStatus = "reload_failed_preserved_previous_results";
-		state.loaderEventDetail = "request=" + event.requestId
-			+ ";code=" + event.failureCode
-			+ ";preservedThread=" + state.selectedThreadId
-			+ ";rows=" + state.loadedRows;
+		state.loaderEventDetail = "request=" + event.requestId + ";code=" + event.failureCode + ";preservedThread=" + state.selectedThreadId + ";rows="
+			+ state.loadedRows;
 		state.footerProgressLabel = "reload failed";
 		state.overlayOpen = false;
 		state.loadingOverlayMessage = "";
@@ -165,17 +163,10 @@ class ResumePickerReloadFailurePreservationRenderGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query
-			+ ";rows=" + state.loadedRows
-			+ ";filtered=" + state.filteredRows
-			+ ";selected=" + state.selectedIndex
-			+ ";thread=" + state.selectedThreadId
-			+ ";scrollTop=" + state.scrollTop
-			+ ";errorShown=" + boolLabel(state.inlineErrorShown)
-			+ ";failure=" + emptyLabel(state.lastFailureCode)
-			+ ";footer=" + state.footerProgressLabel
-			+ ";loader=" + state.loaderEventStatus
-			+ ";detail=" + state.loaderEventDetail;
+		return "query=" + state.query + ";rows=" + state.loadedRows + ";filtered=" + state.filteredRows + ";selected=" + state.selectedIndex + ";thread="
+			+ state.selectedThreadId + ";scrollTop=" + state.scrollTop + ";errorShown=" + boolLabel(state.inlineErrorShown) + ";failure="
+			+ emptyLabel(state.lastFailureCode) + ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail="
+			+ state.loaderEventDetail;
 	}
 
 	static function loadPage(loader:DeterministicResumePickerBackgroundLoader, request:ResumePickerThreadListRequest):ResumePickerHostEvent {

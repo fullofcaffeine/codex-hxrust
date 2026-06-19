@@ -96,7 +96,6 @@ class TuiSmokeComposerEditingAction {
 	public final noLiveInput:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function cursorTransitionText():String {
 		return cursorBefore + "->" + cursorAfter;
 	}

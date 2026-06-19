@@ -102,37 +102,68 @@ class ModelInactiveThreadSettingsNotificationOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";notificationAccepted=" + boolText(notificationAccepted)
-			+ ";inactiveChannelRetained=" + boolText(inactiveChannelRetained)
-			+ ";inactiveSessionUpdated=" + boolText(inactiveSessionUpdated)
-			+ ";primarySessionUnchanged=" + boolText(primarySessionUnchanged)
-			+ ";inactiveSessionModelPreserved=" + boolText(inactiveSessionModelPreserved)
-			+ ";inactiveSessionEffortPreserved=" + boolText(inactiveSessionEffortPreserved)
-			+ ";collaborationModeCached=" + boolText(collaborationModeCached)
-			+ ";collaborationSettingsRebasedToNotification=" + boolText(collaborationSettingsRebasedToNotification)
-			+ ";modelProviderCached=" + boolText(modelProviderCached)
-			+ ";serviceTierCached=" + boolText(serviceTierCached)
-			+ ";approvalPolicyCached=" + boolText(approvalPolicyCached)
-			+ ";approvalsReviewerCached=" + boolText(approvalsReviewerCached)
-			+ ";permissionProfileCached=" + boolText(permissionProfileCached)
-			+ ";activePermissionProfileCached=" + boolText(activePermissionProfileCached)
-			+ ";personalityCached=" + boolText(personalityCached)
-			+ ";notificationBuffered=" + boolText(notificationBuffered)
-			+ ";chatWidgetHandoffApplied=" + boolText(chatWidgetHandoffApplied)
-			+ ";chatWidgetCollaborationModeActive=" + boolText(chatWidgetCollaborationModeActive)
-			+ ";chatWidgetCurrentModelFromCollaborationSettings=" + boolText(chatWidgetCurrentModelFromCollaborationSettings)
-			+ ";chatWidgetCurrentCollaborationModeModelPreservesSessionModel=" + boolText(chatWidgetCurrentCollaborationModeModelPreservesSessionModel)
-			+ ";chatWidgetCurrentEffortFromNotification=" + boolText(chatWidgetCurrentEffortFromNotification)
-			+ ";chatWidgetPersonalityApplied=" + boolText(chatWidgetPersonalityApplied)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code="
+			+ code
+			+ ";ok="
+			+ boolText(ok)
+			+ ";request="
+			+ requestId
+			+ ";decisionKind="
+			+ decisionKind
+			+ ";notificationAccepted="
+			+ boolText(notificationAccepted)
+			+ ";inactiveChannelRetained="
+			+ boolText(inactiveChannelRetained)
+			+ ";inactiveSessionUpdated="
+			+ boolText(inactiveSessionUpdated)
+			+ ";primarySessionUnchanged="
+			+ boolText(primarySessionUnchanged)
+			+ ";inactiveSessionModelPreserved="
+			+ boolText(inactiveSessionModelPreserved)
+			+ ";inactiveSessionEffortPreserved="
+			+ boolText(inactiveSessionEffortPreserved)
+			+ ";collaborationModeCached="
+			+ boolText(collaborationModeCached)
+			+ ";collaborationSettingsRebasedToNotification="
+			+ boolText(collaborationSettingsRebasedToNotification)
+			+ ";modelProviderCached="
+			+ boolText(modelProviderCached)
+			+ ";serviceTierCached="
+			+ boolText(serviceTierCached)
+			+ ";approvalPolicyCached="
+			+ boolText(approvalPolicyCached)
+			+ ";approvalsReviewerCached="
+			+ boolText(approvalsReviewerCached)
+			+ ";permissionProfileCached="
+			+ boolText(permissionProfileCached)
+			+ ";activePermissionProfileCached="
+			+ boolText(activePermissionProfileCached)
+			+ ";personalityCached="
+			+ boolText(personalityCached)
+			+ ";notificationBuffered="
+			+ boolText(notificationBuffered)
+			+ ";chatWidgetHandoffApplied="
+			+ boolText(chatWidgetHandoffApplied)
+			+ ";chatWidgetCollaborationModeActive="
+			+ boolText(chatWidgetCollaborationModeActive)
+			+ ";chatWidgetCurrentModelFromCollaborationSettings="
+			+ boolText(chatWidgetCurrentModelFromCollaborationSettings)
+			+ ";chatWidgetCurrentCollaborationModeModelPreservesSessionModel="
+			+ boolText(chatWidgetCurrentCollaborationModeModelPreservesSessionModel)
+			+ ";chatWidgetCurrentEffortFromNotification="
+			+ boolText(chatWidgetCurrentEffortFromNotification)
+			+ ";chatWidgetPersonalityApplied="
+			+ boolText(chatWidgetPersonalityApplied)
+			+ ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved)
+			+ ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture)
+			+ ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

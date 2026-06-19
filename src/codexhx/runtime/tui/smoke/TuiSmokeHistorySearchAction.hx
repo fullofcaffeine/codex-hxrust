@@ -98,7 +98,6 @@ class TuiSmokeHistorySearchAction {
 	public final noLiveLookup:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function activeTransitionText():String {
 		return activeBefore + "->" + activeAfter;
 	}

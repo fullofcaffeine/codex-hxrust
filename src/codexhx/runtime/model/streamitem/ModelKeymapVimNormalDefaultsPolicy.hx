@@ -4,7 +4,8 @@ class ModelKeymapVimNormalDefaultsPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeymapVimNormalDefaultsRequest):ModelKeymapVimNormalDefaultsOutcome {
-		if (request == null) return failure("", "missing keymap vim-normal defaults request");
+		if (request == null)
+			return failure("", "missing keymap vim-normal defaults request");
 
 		final enterInsertDefaultsPreserved = sameBindings(request.enterInsert, [character("i"), named("insert")]);
 		final moveLeftDefaultsPreserved = sameBindings(request.moveLeft, [character("h"), named("left")]);
@@ -12,15 +13,9 @@ class ModelKeymapVimNormalDefaultsPolicy {
 		final moveUpDefaultsPreserved = sameBindings(request.moveUp, [character("k"), named("up")]);
 		final moveDownDefaultsPreserved = sameBindings(request.moveDown, [character("j"), named("down")]);
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = enterInsertDefaultsPreserved
-			&& moveLeftDefaultsPreserved
-			&& moveRightDefaultsPreserved
-			&& moveUpDefaultsPreserved
-			&& moveDownDefaultsPreserved
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsPreserved
-			: ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsRejected;
+		final ok = enterInsertDefaultsPreserved && moveLeftDefaultsPreserved && moveRightDefaultsPreserved && moveUpDefaultsPreserved
+			&& moveDownDefaultsPreserved && eventOrderingPreserved;
+		final decisionKind = ok ? ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsPreserved : ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsRejected;
 
 		return new ModelKeymapVimNormalDefaultsOutcome({
 			ok: ok,
@@ -41,9 +36,11 @@ class ModelKeymapVimNormalDefaultsPolicy {
 	}
 
 	static function sameBindings(actual:Array<ModelKeymapBinding>, expected:Array<ModelKeymapBinding>):Bool {
-		if (actual.length != expected.length) return false;
+		if (actual.length != expected.length)
+			return false;
 		for (i in 0...actual.length) {
-			if (!matches(actual[i], expected[i])) return false;
+			if (!matches(actual[i], expected[i]))
+				return false;
 		}
 		return true;
 	}

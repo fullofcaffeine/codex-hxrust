@@ -13,9 +13,11 @@ class ThreadReadTokenUsageReplayRequest {
 		this.tokenUsage = tokenUsage;
 	}
 
-	public static function fromRaw(threadId:String, ownerOutcome:ThreadReadTokenUsageOwnerOutcome, tokenUsage:Null<ThreadReadTokenUsageInfo>):Null<ThreadReadTokenUsageReplayRequest> {
+	public static function fromRaw(threadId:String, ownerOutcome:ThreadReadTokenUsageOwnerOutcome,
+			tokenUsage:Null<ThreadReadTokenUsageInfo>):Null<ThreadReadTokenUsageReplayRequest> {
 		final parsedThreadId = ThreadId.fromString(threadId);
-		if (parsedThreadId == null) return null;
+		if (parsedThreadId == null)
+			return null;
 		return new ThreadReadTokenUsageReplayRequest(parsedThreadId, ownerOutcome, tokenUsage);
 	}
 

@@ -35,41 +35,14 @@ class ModelActiveNonPrimaryShutdownOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		navigationCleanupRequestId:String,
-		decisionKind:ModelActiveNonPrimaryShutdownDecisionKind,
-		eventKind:ModelActiveNonPrimaryShutdownEventKind,
-		activeThreadId:String,
-		primaryThreadId:String,
-		pendingShutdownExitThreadId:String,
-		closedThreadId:String,
-		selectedPrimaryThreadId:String,
-		failoverTargetSelected:Bool,
-		nonShutdownIgnored:Bool,
-		primaryShutdownIgnored:Bool,
-		missingThreadIdsIgnored:Bool,
-		pendingShutdownExitIgnored:Bool,
-		otherPendingExitStillSwitches:Bool,
-		markAgentPickerClosed:Bool,
-		sideClosedLocalCleanupAttempted:Bool,
-		discardVisibleSideAttempted:Bool,
-		selectPrimaryThreadAttempted:Bool,
-		primarySelectSucceeded:Bool,
-		infoMessageIntended:Bool,
-		errorMessageDisplayed:Bool,
-		activeThreadClearedAfterFailedSwitch:Bool,
-		pendingShutdownExitMarkerCleared:Bool,
-		activeEventForwarded:Bool,
-		failoverBeforePendingExitClear:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, navigationCleanupRequestId:String, decisionKind:ModelActiveNonPrimaryShutdownDecisionKind,
+			eventKind:ModelActiveNonPrimaryShutdownEventKind, activeThreadId:String, primaryThreadId:String, pendingShutdownExitThreadId:String,
+			closedThreadId:String, selectedPrimaryThreadId:String, failoverTargetSelected:Bool, nonShutdownIgnored:Bool, primaryShutdownIgnored:Bool,
+			missingThreadIdsIgnored:Bool, pendingShutdownExitIgnored:Bool, otherPendingExitStillSwitches:Bool, markAgentPickerClosed:Bool,
+			sideClosedLocalCleanupAttempted:Bool, discardVisibleSideAttempted:Bool, selectPrimaryThreadAttempted:Bool, primarySelectSucceeded:Bool,
+			infoMessageIntended:Bool, errorMessageDisplayed:Bool, activeThreadClearedAfterFailedSwitch:Bool, pendingShutdownExitMarkerCleared:Bool,
+			activeEventForwarded:Bool, failoverBeforePendingExitClear:Bool, eventOrderingPreserved:Bool, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -106,39 +79,22 @@ class ModelActiveNonPrimaryShutdownOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";navigationCleanupRequest=" + noneIfEmpty(navigationCleanupRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";eventKind=" + eventKind
-			+ ";activeThreadId=" + noneIfEmpty(activeThreadId)
-			+ ";primaryThreadId=" + noneIfEmpty(primaryThreadId)
-			+ ";pendingShutdownExitThreadId=" + noneIfEmpty(pendingShutdownExitThreadId)
-			+ ";closedThreadId=" + noneIfEmpty(closedThreadId)
-			+ ";selectedPrimaryThreadId=" + noneIfEmpty(selectedPrimaryThreadId)
-			+ ";failoverTargetSelected=" + boolText(failoverTargetSelected)
-			+ ";nonShutdownIgnored=" + boolText(nonShutdownIgnored)
-			+ ";primaryShutdownIgnored=" + boolText(primaryShutdownIgnored)
-			+ ";missingThreadIdsIgnored=" + boolText(missingThreadIdsIgnored)
-			+ ";pendingShutdownExitIgnored=" + boolText(pendingShutdownExitIgnored)
-			+ ";otherPendingExitStillSwitches=" + boolText(otherPendingExitStillSwitches)
-			+ ";markAgentPickerClosed=" + boolText(markAgentPickerClosed)
-			+ ";sideClosedLocalCleanupAttempted=" + boolText(sideClosedLocalCleanupAttempted)
-			+ ";discardVisibleSideAttempted=" + boolText(discardVisibleSideAttempted)
-			+ ";selectPrimaryThreadAttempted=" + boolText(selectPrimaryThreadAttempted)
-			+ ";primarySelectSucceeded=" + boolText(primarySelectSucceeded)
-			+ ";infoMessageIntended=" + boolText(infoMessageIntended)
-			+ ";errorMessageDisplayed=" + boolText(errorMessageDisplayed)
-			+ ";activeThreadClearedAfterFailedSwitch=" + boolText(activeThreadClearedAfterFailedSwitch)
-			+ ";pendingShutdownExitMarkerCleared=" + boolText(pendingShutdownExitMarkerCleared)
-			+ ";activeEventForwarded=" + boolText(activeEventForwarded)
-			+ ";failoverBeforePendingExitClear=" + boolText(failoverBeforePendingExitClear)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";navigationCleanupRequest=" + noneIfEmpty(navigationCleanupRequestId)
+			+ ";decisionKind=" + decisionKind + ";eventKind=" + eventKind + ";activeThreadId=" + noneIfEmpty(activeThreadId) + ";primaryThreadId="
+			+ noneIfEmpty(primaryThreadId) + ";pendingShutdownExitThreadId=" + noneIfEmpty(pendingShutdownExitThreadId) + ";closedThreadId="
+			+ noneIfEmpty(closedThreadId) + ";selectedPrimaryThreadId=" + noneIfEmpty(selectedPrimaryThreadId) + ";failoverTargetSelected="
+			+ boolText(failoverTargetSelected) + ";nonShutdownIgnored=" + boolText(nonShutdownIgnored) + ";primaryShutdownIgnored="
+			+ boolText(primaryShutdownIgnored) + ";missingThreadIdsIgnored=" + boolText(missingThreadIdsIgnored) + ";pendingShutdownExitIgnored="
+			+ boolText(pendingShutdownExitIgnored) + ";otherPendingExitStillSwitches=" + boolText(otherPendingExitStillSwitches) + ";markAgentPickerClosed="
+			+ boolText(markAgentPickerClosed) + ";sideClosedLocalCleanupAttempted=" + boolText(sideClosedLocalCleanupAttempted)
+			+ ";discardVisibleSideAttempted=" + boolText(discardVisibleSideAttempted) + ";selectPrimaryThreadAttempted="
+			+ boolText(selectPrimaryThreadAttempted) + ";primarySelectSucceeded=" + boolText(primarySelectSucceeded) + ";infoMessageIntended="
+			+ boolText(infoMessageIntended) + ";errorMessageDisplayed=" + boolText(errorMessageDisplayed) + ";activeThreadClearedAfterFailedSwitch="
+			+ boolText(activeThreadClearedAfterFailedSwitch) + ";pendingShutdownExitMarkerCleared=" + boolText(pendingShutdownExitMarkerCleared)
+			+ ";activeEventForwarded=" + boolText(activeEventForwarded) + ";failoverBeforePendingExitClear=" + boolText(failoverBeforePendingExitClear)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

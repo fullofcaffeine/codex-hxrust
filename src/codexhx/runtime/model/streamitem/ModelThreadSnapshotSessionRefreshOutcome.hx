@@ -87,29 +87,16 @@ class ModelThreadSnapshotSessionRefreshOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";snapshotTurnCountAfter=" + snapshotTurnCountAfter
-			+ ";storeTurnCountAfter=" + storeTurnCountAfter
-			+ ";resumedTurnCount=" + resumedTurnCount
-			+ ";userMessageCount=" + userMessageCount
-			+ ";activeTurnIdAfter=" + noneIfEmpty(activeTurnIdAfter)
-			+ ";snapshotSessionReplaced=" + boolText(snapshotSessionReplaced)
-			+ ";snapshotTurnsReplaced=" + boolText(snapshotTurnsReplaced)
-			+ ";storeSessionReplaced=" + boolText(storeSessionReplaced)
-			+ ";storeTurnsReplaced=" + boolText(storeTurnsReplaced)
-			+ ";storeSnapshotMatchesRefreshedSnapshot=" + boolText(storeSnapshotMatchesRefreshedSnapshot)
-			+ ";bufferRebasedAfterRefresh=" + boolText(bufferRebasedAfterRefresh)
-			+ ";refreshedCwdPreserved=" + boolText(refreshedCwdPreserved)
-			+ ";resumedTurnsPersisted=" + boolText(resumedTurnsPersisted)
-			+ ";activeTurnRestoredFromResumedTurns=" + boolText(activeTurnRestoredFromResumedTurns)
-			+ ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";snapshotTurnCountAfter="
+			+ snapshotTurnCountAfter + ";storeTurnCountAfter=" + storeTurnCountAfter + ";resumedTurnCount=" + resumedTurnCount + ";userMessageCount="
+			+ userMessageCount + ";activeTurnIdAfter=" + noneIfEmpty(activeTurnIdAfter) + ";snapshotSessionReplaced=" + boolText(snapshotSessionReplaced)
+			+ ";snapshotTurnsReplaced=" + boolText(snapshotTurnsReplaced) + ";storeSessionReplaced=" + boolText(storeSessionReplaced)
+			+ ";storeTurnsReplaced=" + boolText(storeTurnsReplaced) + ";storeSnapshotMatchesRefreshedSnapshot="
+			+ boolText(storeSnapshotMatchesRefreshedSnapshot) + ";bufferRebasedAfterRefresh=" + boolText(bufferRebasedAfterRefresh)
+			+ ";refreshedCwdPreserved=" + boolText(refreshedCwdPreserved) + ";resumedTurnsPersisted=" + boolText(resumedTurnsPersisted)
+			+ ";activeTurnRestoredFromResumedTurns=" + boolText(activeTurnRestoredFromResumedTurns) + ";liveOnlyEffectsSuppressed="
+			+ boolText(liveOnlyEffectsSuppressed) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -7,7 +7,8 @@ import sys.io.File;
 class TuiSmokeFixtureLoader {
 	public static function load(path:String):Array<TuiSmokeFrameRequest> {
 		final parsed = CodexJson.parse(File.getContent(path));
-		if (!parsed.ok) throw parsed.errorCode + " at " + parsed.errorPath + ": " + parsed.errorMessage;
+		if (!parsed.ok)
+			throw parsed.errorCode + " at " + parsed.errorPath + ": " + parsed.errorMessage;
 		final cases = arrayField(parsed.value, "cases");
 		final out:Array<TuiSmokeFrameRequest> = [];
 		for (caseValue in cases) {
@@ -18,7 +19,8 @@ class TuiSmokeFixtureLoader {
 
 	public static function loadLoops(path:String):Array<TuiSmokeLoopRequest> {
 		final parsed = CodexJson.parse(File.getContent(path));
-		if (!parsed.ok) throw parsed.errorCode + " at " + parsed.errorPath + ": " + parsed.errorMessage;
+		if (!parsed.ok)
+			throw parsed.errorCode + " at " + parsed.errorPath + ": " + parsed.errorMessage;
 		final cases = arrayField(parsed.value, "loopCases");
 		final out:Array<TuiSmokeLoopRequest> = [];
 		for (caseValue in cases) {
@@ -47,14 +49,9 @@ class TuiSmokeFixtureLoader {
 	}
 
 	static function loopRequest(value:Value):TuiSmokeLoopRequest {
-		return new TuiSmokeLoopRequest(
-			stringField(value, "name", ""),
-			frameRequest(valueField(value, "frame")),
-			events(arrayField(value, "events")),
-			TuiSmokeExitKind.fromString(stringField(value, "expectedExit", "")),
-			stringField(value, "expectedTrace", ""),
-			stringField(value, "expectedSnapshot", "")
-		);
+		return new TuiSmokeLoopRequest(stringField(value, "name", ""), frameRequest(valueField(value, "frame")), events(arrayField(value, "events")),
+			TuiSmokeExitKind.fromString(stringField(value, "expectedExit", "")), stringField(value, "expectedTrace", ""),
+			stringField(value, "expectedSnapshot", ""));
 	}
 
 	static function events(values:Array<Value>):Array<TuiSmokeEvent> {
@@ -4414,11 +4411,8 @@ class TuiSmokeFixtureLoader {
 		return switch optionalField(object, name) {
 			case JNull: null;
 			case value:
-				new TuiSmokeAppEvent(
-					TuiSmokeAppEventKind.fromString(stringField(value, "kind", "")),
-					optionalStringField(value, "status", ""),
-					TuiSmokeExitMode.fromString(optionalStringField(value, "exitMode", "unknown"))
-				);
+				new TuiSmokeAppEvent(TuiSmokeAppEventKind.fromString(stringField(value, "kind", "")), optionalStringField(value, "status", ""),
+					TuiSmokeExitMode.fromString(optionalStringField(value, "exitMode", "unknown")));
 		}
 	}
 
@@ -4426,13 +4420,8 @@ class TuiSmokeFixtureLoader {
 		return switch optionalField(object, name) {
 			case JNull: null;
 			case value:
-				new TuiSmokeAppServerEvent(
-					TuiSmokeAppServerEventKind.fromString(stringField(value, "kind", "")),
-					optionalStringField(value, "threadId", ""),
-					optionalStringField(value, "status", ""),
-					optionalStringField(value, "delta", ""),
-					optionalStringField(value, "message", "")
-				);
+				new TuiSmokeAppServerEvent(TuiSmokeAppServerEventKind.fromString(stringField(value, "kind", "")), optionalStringField(value, "threadId", ""),
+					optionalStringField(value, "status", ""), optionalStringField(value, "delta", ""), optionalStringField(value, "message", ""));
 		}
 	}
 
@@ -4632,7 +4621,8 @@ class TuiSmokeFixtureLoader {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				throw "missing field: " + name;
@@ -4646,7 +4636,8 @@ class TuiSmokeFixtureLoader {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;

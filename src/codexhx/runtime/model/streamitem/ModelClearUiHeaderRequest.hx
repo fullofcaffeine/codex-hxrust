@@ -21,27 +21,10 @@ class ModelClearUiHeaderRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		activeShutdownOutcome:ModelActiveNonPrimaryShutdownOutcome,
-		requestKind:ModelClearUiHeaderRequestKind,
-		model:String,
-		reasoningEffort:String,
-		cwd:String,
-		version:String,
-		width:Int,
-		redrawHeader:Bool,
-		altScreenActive:Bool,
-		viewportYBefore:Int,
-		transcriptCellCountBefore:Int,
-		pendingHistoryLineCountBefore:Int,
-		staleNoticeProbe:String,
-		staleTranscriptProbe:String,
-		fastStatusEligible:Bool,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, activeShutdownOutcome:ModelActiveNonPrimaryShutdownOutcome, requestKind:ModelClearUiHeaderRequestKind, model:String,
+			reasoningEffort:String, cwd:String, version:String, width:Int, redrawHeader:Bool, altScreenActive:Bool, viewportYBefore:Int,
+			transcriptCellCountBefore:Int, pendingHistoryLineCountBefore:Int, staleNoticeProbe:String, staleTranscriptProbe:String, fastStatusEligible:Bool,
+			eventOrderIndex:Int, previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.activeShutdownOutcome = activeShutdownOutcome;
 		this.requestKind = requestKind == null ? ModelClearUiHeaderRequestKind.SlashClear : requestKind;

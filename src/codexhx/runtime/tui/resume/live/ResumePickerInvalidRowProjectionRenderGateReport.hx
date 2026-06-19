@@ -25,13 +25,7 @@ class ResumePickerInvalidRowProjectionRenderGateReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads
-			+ ";scanned=" + scannedRows
-			+ ";accepted=" + acceptedRows
-			+ ";invalid=" + invalidRows
-			+ ";frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";events=[" + eventSummaries.join("##") + "]";
+		return "pageLoads=" + pageLoads + ";scanned=" + scannedRows + ";accepted=" + acceptedRows + ";invalid=" + invalidRows + ";frames=" + frameRequests
+			+ ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";events=[" + eventSummaries.join("##") + "]";
 	}
 }

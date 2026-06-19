@@ -11,17 +11,9 @@ class ModelPatchTurnDiffTrackerRequest {
 	public final previousUnifiedDiff:String;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		verificationOutcome:ModelPatchVerificationOutcome,
-		applicationOutcome:ModelPatchApplicationOutcome,
-		approvalOutcome:ModelPatchApprovalDecisionOutcome,
-		environmentId:String,
-		stage:ModelPatchToolEventStageKind,
-		appliedDelta:ModelPatchAppliedDelta,
-		previousUnifiedDiff:String,
-		secretProbe:String
-	) {
+	public function new(requestId:String, verificationOutcome:ModelPatchVerificationOutcome, applicationOutcome:ModelPatchApplicationOutcome,
+			approvalOutcome:ModelPatchApprovalDecisionOutcome, environmentId:String, stage:ModelPatchToolEventStageKind, appliedDelta:ModelPatchAppliedDelta,
+			previousUnifiedDiff:String, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.verificationOutcome = verificationOutcome;
 		this.applicationOutcome = applicationOutcome;

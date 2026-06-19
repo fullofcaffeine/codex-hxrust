@@ -14,63 +14,34 @@ class ThreadReadGoalSteeringBuilder {
 
 	public static function build(request:ThreadReadGoalSteeringRequest):ThreadReadGoalSteeringOutcome {
 		if (request.goal == null) {
-			return ThreadReadGoalSteeringOutcome.makeSkipped(
-				request.kind,
-				"skipped_no_goal",
-				"cleared or missing goal does not produce a steering item"
-			);
+			return ThreadReadGoalSteeringOutcome.makeSkipped(request.kind, "skipped_no_goal", "cleared or missing goal does not produce a steering item");
 		}
 		if (request.kind == ThreadReadGoalSteeringItemKind.BudgetLimit) {
 			if (request.goal.status != ThreadGoalStatus.BudgetLimited) {
-				return ThreadReadGoalSteeringOutcome.makeSkipped(
-					request.kind,
-					"skipped_goal_not_budget_limited",
-					"budget-limit steering is emitted only for budget-limited goals"
-				);
+				return ThreadReadGoalSteeringOutcome.makeSkipped(request.kind, "skipped_goal_not_budget_limited",
+					"budget-limit steering is emitted only for budget-limited goals");
 			}
-			return ThreadReadGoalSteeringOutcome.makeEmitted(
-				request.kind,
-				contextItem(request.kind, budgetLimitPrompt(request.goal))
-			);
+			return ThreadReadGoalSteeringOutcome.makeEmitted(request.kind, contextItem(request.kind, budgetLimitPrompt(request.goal)));
 		}
 		if (request.goal.status != ThreadGoalStatus.Active) {
-			return ThreadReadGoalSteeringOutcome.makeSkipped(
-				request.kind,
-				"skipped_goal_not_active",
-				"only active goals produce continuation steering items"
-			);
+			return ThreadReadGoalSteeringOutcome.makeSkipped(request.kind, "skipped_goal_not_active", "only active goals produce continuation steering items");
 		}
 		if (request.kind == ThreadReadGoalSteeringItemKind.Continuation) {
 			if (request.continuationOutcome == null || !request.continuationOutcome.ok) {
-				return ThreadReadGoalSteeringOutcome.failure(
-					request.kind,
-					"continuation_not_settled",
-					"continuation steering waits for the resume idle continuation decision"
-				);
+				return ThreadReadGoalSteeringOutcome.failure(request.kind, "continuation_not_settled",
+					"continuation steering waits for the resume idle continuation decision");
 			}
 			if (!request.continuationOutcome.goalContinuationRequested) {
-				return ThreadReadGoalSteeringOutcome.makeSkipped(
-					request.kind,
-					"skipped_continuation_not_requested",
-					"resume idle continuation did not request a goal continuation item"
-				);
+				return ThreadReadGoalSteeringOutcome.makeSkipped(request.kind, "skipped_continuation_not_requested",
+					"resume idle continuation did not request a goal continuation item");
 			}
-			return ThreadReadGoalSteeringOutcome.makeEmitted(
-				request.kind,
-				contextItem(request.kind, continuationPrompt(request.goal))
-			);
+			return ThreadReadGoalSteeringOutcome.makeEmitted(request.kind, contextItem(request.kind, continuationPrompt(request.goal)));
 		}
 		if (!request.objectiveChanged) {
-			return ThreadReadGoalSteeringOutcome.makeSkipped(
-				request.kind,
-				"skipped_objective_unchanged",
-				"objective update steering is emitted only when the active goal objective changed"
-			);
+			return ThreadReadGoalSteeringOutcome.makeSkipped(request.kind, "skipped_objective_unchanged",
+				"objective update steering is emitted only when the active goal objective changed");
 		}
-		return ThreadReadGoalSteeringOutcome.makeEmitted(
-			request.kind,
-			contextItem(request.kind, objectiveUpdatedPrompt(request.goal))
-		);
+		return ThreadReadGoalSteeringOutcome.makeEmitted(request.kind, contextItem(request.kind, objectiveUpdatedPrompt(request.goal)));
 	}
 
 	static function contextItem(kind:ThreadReadGoalSteeringItemKind, prompt:String):ThreadReadGoalSteeringItem {
@@ -147,26 +118,20 @@ class ThreadReadGoalSteeringBuilder {
 	}
 
 	static function continuationRemainingTokens(goal:ThreadGoal):String {
-		if (!goal.hasTokenBudget) return "unbounded";
+		if (!goal.hasTokenBudget)
+			return "unbounded";
 		final remaining = goal.tokenBudget - goal.tokensUsed;
 		return Std.string(remaining < 0 ? 0 : remaining);
 	}
 
 	static function objectiveUpdatedRemainingTokens(goal:ThreadGoal):String {
-		if (!goal.hasTokenBudget) return "unknown";
+		if (!goal.hasTokenBudget)
+			return "unknown";
 		final remaining = goal.tokenBudget - goal.tokensUsed;
 		return Std.string(remaining < 0 ? 0 : remaining);
 	}
 
 	static function escapeXmlText(input:String):String {
-		return StringTools.replace(
-			StringTools.replace(
-				StringTools.replace(input, "&", "&amp;"),
-				"<",
-				"&lt;"
-			),
-			">",
-			"&gt;"
-		);
+		return StringTools.replace(StringTools.replace(StringTools.replace(input, "&", "&amp;"), "<", "&lt;"), ">", "&gt;");
 	}
 }

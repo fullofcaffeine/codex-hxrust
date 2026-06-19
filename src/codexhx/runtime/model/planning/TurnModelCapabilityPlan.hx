@@ -11,17 +11,8 @@ class TurnModelCapabilityPlan {
 	public final codeModeNestedTools:Bool;
 	public final toolSearch:Bool;
 
-	public function new(
-		hostedWebSearch:Bool,
-		hostedWebSearchExternalAccess:String,
-		hostedWebSearchContentTypes:String,
-		standaloneWebRun:Bool,
-		hostedImageGeneration:Bool,
-		standaloneImageGeneration:Bool,
-		namespaceTools:Bool,
-		codeModeNestedTools:Bool,
-		toolSearch:Bool
-	) {
+	public function new(hostedWebSearch:Bool, hostedWebSearchExternalAccess:String, hostedWebSearchContentTypes:String, standaloneWebRun:Bool,
+			hostedImageGeneration:Bool, standaloneImageGeneration:Bool, namespaceTools:Bool, codeModeNestedTools:Bool, toolSearch:Bool) {
 		this.hostedWebSearch = hostedWebSearch;
 		this.hostedWebSearchExternalAccess = hostedWebSearchExternalAccess;
 		this.hostedWebSearchContentTypes = hostedWebSearchContentTypes;
@@ -46,15 +37,10 @@ class TurnModelCapabilityPlan {
 	}
 
 	public function summary():String {
-		return "hostedWebSearch=" + boolText(hostedWebSearch)
-			+ ";hostedWebSearchExternalAccess=" + hostedWebSearchExternalAccess
-			+ ";hostedWebSearchContentTypes=" + hostedWebSearchContentTypes
-			+ ";standaloneWebRun=" + boolText(standaloneWebRun)
-			+ ";hostedImageGeneration=" + boolText(hostedImageGeneration)
-			+ ";standaloneImageGeneration=" + boolText(standaloneImageGeneration)
-			+ ";namespaceTools=" + boolText(namespaceTools)
-			+ ";codeModeNestedTools=" + boolText(codeModeNestedTools)
-			+ ";toolSearch=" + boolText(toolSearch);
+		return "hostedWebSearch=" + boolText(hostedWebSearch) + ";hostedWebSearchExternalAccess=" + hostedWebSearchExternalAccess
+			+ ";hostedWebSearchContentTypes=" + hostedWebSearchContentTypes + ";standaloneWebRun=" + boolText(standaloneWebRun) + ";hostedImageGeneration="
+			+ boolText(hostedImageGeneration) + ";standaloneImageGeneration=" + boolText(standaloneImageGeneration) + ";namespaceTools="
+			+ boolText(namespaceTools) + ";codeModeNestedTools=" + boolText(codeModeNestedTools) + ";toolSearch=" + boolText(toolSearch);
 	}
 
 	static function boolText(value:Bool):String {

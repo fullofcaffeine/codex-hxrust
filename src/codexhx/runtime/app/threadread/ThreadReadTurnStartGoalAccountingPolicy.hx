@@ -12,8 +12,10 @@ class ThreadReadTurnStartGoalAccountingPolicy {
 	}
 
 	public static function build(request:ThreadReadTurnStartGoalAccountingRequest):ThreadReadTurnStartGoalAccountingOutcome {
-		if (!request.runtimeAvailable) return ThreadReadTurnStartGoalAccountingOutcome.runtimeMissing();
-		if (!request.runtimeEnabled) return ThreadReadTurnStartGoalAccountingOutcome.runtimeDisabled();
+		if (!request.runtimeAvailable)
+			return ThreadReadTurnStartGoalAccountingOutcome.runtimeMissing();
+		if (!request.runtimeEnabled)
+			return ThreadReadTurnStartGoalAccountingOutcome.runtimeDisabled();
 		if (request.collaborationMode == ThreadReadTurnStartCollaborationMode.Plan) {
 			return ThreadReadTurnStartGoalAccountingOutcome.planMode(request.turnId);
 		}

@@ -43,9 +43,7 @@ class ModelInterruptQuestionNavigationKeymapOutcome {
 		this.ok = fields.ok;
 		this.code = fields.code == null ? "" : fields.code;
 		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.decisionKind = fields.decisionKind == null
-			? ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictMissed
-			: fields.decisionKind;
+		this.decisionKind = fields.decisionKind == null ? ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictMissed : fields.decisionKind;
 		this.interruptActionNamePreserved = fields.interruptActionNamePreserved;
 		this.questionNavigationActionNamePreserved = fields.questionNavigationActionNamePreserved;
 		this.interruptRemapAcceptedBeforeValidation = fields.interruptRemapAcceptedBeforeValidation;
@@ -62,23 +60,14 @@ class ModelInterruptQuestionNavigationKeymapOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";interruptActionNamePreserved=" + boolText(interruptActionNamePreserved)
-			+ ";questionNavigationActionNamePreserved=" + boolText(questionNavigationActionNamePreserved)
-			+ ";interruptRemapAcceptedBeforeValidation=" + boolText(interruptRemapAcceptedBeforeValidation)
-			+ ";questionNavigationBindingPreserved=" + boolText(questionNavigationBindingPreserved)
-			+ ";conflictingBindingDetected=" + boolText(conflictingBindingDetected)
-			+ ";fixedBacktrackOverlapStillAllowed=" + boolText(fixedBacktrackOverlapStillAllowed)
-			+ ";conflictRejected=" + boolText(conflictRejected)
-			+ ";noFalseBacktrackConflict=" + boolText(noFalseBacktrackConflict)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";interruptActionNamePreserved="
+			+ boolText(interruptActionNamePreserved) + ";questionNavigationActionNamePreserved=" + boolText(questionNavigationActionNamePreserved)
+			+ ";interruptRemapAcceptedBeforeValidation=" + boolText(interruptRemapAcceptedBeforeValidation) + ";questionNavigationBindingPreserved="
+			+ boolText(questionNavigationBindingPreserved) + ";conflictingBindingDetected=" + boolText(conflictingBindingDetected)
+			+ ";fixedBacktrackOverlapStillAllowed=" + boolText(fixedBacktrackOverlapStillAllowed) + ";conflictRejected=" + boolText(conflictRejected)
+			+ ";noFalseBacktrackConflict=" + boolText(noFalseBacktrackConflict) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

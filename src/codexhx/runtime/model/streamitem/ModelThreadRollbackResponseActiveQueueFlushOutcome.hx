@@ -75,28 +75,16 @@ class ModelThreadRollbackResponseActiveQueueFlushOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";numTurns=" + numTurns
-			+ ";activeThreadMatched=" + boolText(activeThreadMatched)
-			+ ";threadStoreRollbackApplied=" + boolText(threadStoreRollbackApplied)
-			+ ";receiverAttachedBefore=" + boolText(receiverAttachedBefore)
-			+ ";receiverAttachedAfter=" + boolText(receiverAttachedAfter)
-			+ ";receiverClearedAfterDisconnect=" + boolText(receiverClearedAfterDisconnect)
-			+ ";queuedActiveEventCountBefore=" + queuedActiveEventCountBefore
-			+ ";drainedActiveEventCount=" + drainedActiveEventCount
-			+ ";queuedActiveEventCountAfter=" + queuedActiveEventCountAfter
-			+ ";staleNotificationDiscarded=" + boolText(staleNotificationDiscarded)
-			+ ";applyThreadRollbackEventQueued=" + boolText(applyThreadRollbackEventQueued)
-			+ ";pendingBacktrackFinished=" + boolText(pendingBacktrackFinished)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";numTurns=" + numTurns
+			+ ";activeThreadMatched=" + boolText(activeThreadMatched) + ";threadStoreRollbackApplied=" + boolText(threadStoreRollbackApplied)
+			+ ";receiverAttachedBefore=" + boolText(receiverAttachedBefore) + ";receiverAttachedAfter=" + boolText(receiverAttachedAfter)
+			+ ";receiverClearedAfterDisconnect=" + boolText(receiverClearedAfterDisconnect) + ";queuedActiveEventCountBefore=" + queuedActiveEventCountBefore
+			+ ";drainedActiveEventCount=" + drainedActiveEventCount + ";queuedActiveEventCountAfter=" + queuedActiveEventCountAfter
+			+ ";staleNotificationDiscarded=" + boolText(staleNotificationDiscarded) + ";applyThreadRollbackEventQueued="
+			+ boolText(applyThreadRollbackEventQueued) + ";pendingBacktrackFinished=" + boolText(pendingBacktrackFinished) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

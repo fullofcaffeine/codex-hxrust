@@ -24,7 +24,8 @@ class ResumePickerDensityPersistenceRenderGate {
 
 		successState.density = ResumePickerDensity.Dense;
 		final successOutcome = expectReady(persistence.persistDensity(successState.density).poll(AsyncContext.fixture("persist-density-success")));
-		if (!successOutcome.ok) throw "expected density persistence success: " + successOutcome.summary();
+		if (!successOutcome.ok)
+			throw "expected density persistence success: " + successOutcome.summary();
 		successState.configPersistenceStatus = "persisted";
 		successState.configPersistencePath = persistence.configPath();
 		successState.footerProgressLabel = "density saved";

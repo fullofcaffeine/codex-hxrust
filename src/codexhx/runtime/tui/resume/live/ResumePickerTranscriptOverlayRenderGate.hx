@@ -133,7 +133,10 @@ class ResumePickerTranscriptOverlayRenderGate {
 		final source = new InMemoryResumePickerThreadSource();
 		source.addPage(new ResumePickerThreadListResponse({
 			requestId: "unused-page-anchor",
-			rows: [row("thread-detail", "Detail transcript", 3), row("thread-empty", "Empty fallback", 0)],
+			rows: [
+				row("thread-detail", "Detail transcript", 3),
+				row("thread-empty", "Empty fallback", 0)
+			],
 			nextCursor: "",
 			scannedRows: 2,
 			acceptedRows: 2,
@@ -188,7 +191,11 @@ class ResumePickerTranscriptOverlayRenderGate {
 	}
 
 	static function detailCells():Array<String> {
-		return ["user: continue", "assistant: transcript detail ready", "plan: render transcript cells"];
+		return [
+			"user: continue",
+			"assistant: transcript detail ready",
+			"plan: render transcript cells"
+		];
 	}
 
 	static function fallbackCells():Array<String> {

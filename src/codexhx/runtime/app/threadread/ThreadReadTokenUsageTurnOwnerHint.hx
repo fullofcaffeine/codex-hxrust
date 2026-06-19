@@ -15,8 +15,10 @@ class ThreadReadTokenUsageTurnOwnerHint {
 
 	public static function fromRaw(id:String, position:Int, hasPosition:Bool):Null<ThreadReadTokenUsageTurnOwnerHint> {
 		final turnId = TurnId.fromString(id);
-		if (turnId == null) return null;
-		if (hasPosition && position < 0) return null;
+		if (turnId == null)
+			return null;
+		if (hasPosition && position < 0)
+			return null;
 		return new ThreadReadTokenUsageTurnOwnerHint(turnId, position, hasPosition);
 	}
 

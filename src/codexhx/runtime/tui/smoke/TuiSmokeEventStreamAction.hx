@@ -43,7 +43,6 @@ class TuiSmokeEventStreamAction {
 	public final altScreenActive:Bool;
 	public final keepRaw:Bool;
 
-
 	public function stateTransitionText():String {
 		return stateBefore + "->" + stateAfter;
 	}

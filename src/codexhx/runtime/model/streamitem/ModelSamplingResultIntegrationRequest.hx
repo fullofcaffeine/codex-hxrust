@@ -12,18 +12,9 @@ class ModelSamplingResultIntegrationRequest {
 	public final statusKind:ModelSamplingResultIntegrationStatusKind;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		postDrainEmissionOutcome:ModelPostDrainEmissionOutcome,
-		modelNeedsFollowUp:Bool,
-		hasPendingInput:Bool,
-		pendingInputCount:Int,
-		tokenLimitReached:Bool,
-		lastAgentMessage:String,
-		previousLastAgentMessage:String,
-		statusKind:ModelSamplingResultIntegrationStatusKind,
-		secretProbe:String
-	) {
+	public function new(requestId:String, postDrainEmissionOutcome:ModelPostDrainEmissionOutcome, modelNeedsFollowUp:Bool, hasPendingInput:Bool,
+			pendingInputCount:Int, tokenLimitReached:Bool, lastAgentMessage:String, previousLastAgentMessage:String,
+			statusKind:ModelSamplingResultIntegrationStatusKind, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.postDrainEmissionOutcome = postDrainEmissionOutcome;
 		this.modelNeedsFollowUp = modelNeedsFollowUp;

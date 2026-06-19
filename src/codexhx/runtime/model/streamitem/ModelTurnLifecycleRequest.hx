@@ -15,21 +15,9 @@ class ModelTurnLifecycleRequest {
 	public final interruptedMarkerEligible:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		turnId:String,
-		terminalKind:ModelTurnLifecycleTerminalKind,
-		terminalStopHookOutcome:ModelTerminalStopHookOutcome,
-		samplingErrorTerminalOutcome:ModelSamplingErrorTerminalOutcome,
-		lastAgentMessage:String,
-		abortReason:String,
-		taskCancellationRequested:Bool,
-		rolloutFlushOk:Bool,
-		activeTurnMatches:Bool,
-		hasPendingTriggerMailbox:Bool,
-		interruptedMarkerEligible:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, turnId:String, terminalKind:ModelTurnLifecycleTerminalKind, terminalStopHookOutcome:ModelTerminalStopHookOutcome,
+			samplingErrorTerminalOutcome:ModelSamplingErrorTerminalOutcome, lastAgentMessage:String, abortReason:String, taskCancellationRequested:Bool,
+			rolloutFlushOk:Bool, activeTurnMatches:Bool, hasPendingTriggerMailbox:Bool, interruptedMarkerEligible:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.turnId = turnId == null ? "" : turnId;
 		this.terminalKind = terminalKind == null ? ModelTurnLifecycleTerminalKind.Completed : terminalKind;

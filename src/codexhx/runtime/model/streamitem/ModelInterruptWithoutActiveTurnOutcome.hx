@@ -60,23 +60,13 @@ class ModelInterruptWithoutActiveTurnOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";primaryThreadRegistered=" + boolText(primaryThreadRegistered)
-			+ ";activeTurnPresent=" + boolText(activeTurnPresent)
-			+ ";turnInterruptSubmitted=" + boolText(turnInterruptSubmitted)
-			+ ";startupInterruptSubmitted=" + boolText(startupInterruptSubmitted)
-			+ ";startupInterruptSucceeded=" + boolText(startupInterruptSucceeded)
-			+ ";handled=" + boolText(handled)
-			+ ";retryAttempted=" + boolText(retryAttempted)
-			+ ";activeTurnRaceRetryUsed=" + boolText(activeTurnRaceRetryUsed)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";primaryThreadRegistered="
+			+ boolText(primaryThreadRegistered) + ";activeTurnPresent=" + boolText(activeTurnPresent) + ";turnInterruptSubmitted="
+			+ boolText(turnInterruptSubmitted) + ";startupInterruptSubmitted=" + boolText(startupInterruptSubmitted) + ";startupInterruptSucceeded="
+			+ boolText(startupInterruptSucceeded) + ";handled=" + boolText(handled) + ";retryAttempted=" + boolText(retryAttempted)
+			+ ";activeTurnRaceRetryUsed=" + boolText(activeTurnRaceRetryUsed) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

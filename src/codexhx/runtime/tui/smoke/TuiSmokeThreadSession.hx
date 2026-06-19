@@ -15,7 +15,8 @@ class TuiSmokeThreadSession {
 	public final isSideThread:Bool;
 
 	public function displayFor(suppressReplayNotices:Bool):TuiSmokeThreadSessionDisplay {
-		if (isSideThread) return TuiSmokeThreadSessionDisplay.SideConversation;
+		if (isSideThread)
+			return TuiSmokeThreadSessionDisplay.SideConversation;
 		return suppressReplayNotices ? TuiSmokeThreadSessionDisplay.Quiet : TuiSmokeThreadSessionDisplay.Normal;
 	}
 }

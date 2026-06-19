@@ -10,14 +10,8 @@ class ModelStreamItemReducerRequest {
 	public final showRawReasoning:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		routeRequest:ModelStreamRouteRequest,
-		events:Array<ModelStreamItemFixtureEvent>,
-		planMode:Bool,
-		showRawReasoning:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, routeRequest:ModelStreamRouteRequest, events:Array<ModelStreamItemFixtureEvent>, planMode:Bool,
+			showRawReasoning:Bool, secretProbe:String) {
 		this.requestId = requestId;
 		this.routeRequest = routeRequest;
 		this.events = events == null ? [] : events;

@@ -6,18 +6,12 @@ class ModelStreamActiveToolCall {
 	public final callId:String;
 	public final toolName:String;
 	public final namespace:String;
+
 	var input:String;
 	var acceptedCount:Int;
 	var ignoredCount:Int;
 
-	public function new(
-		itemKind:ModelStreamOutputItemKind,
-		itemId:String,
-		callId:String,
-		toolName:String,
-		namespace:String,
-		initialInput:String
-	) {
+	public function new(itemKind:ModelStreamOutputItemKind, itemId:String, callId:String, toolName:String, namespace:String, initialInput:String) {
 		this.itemKind = itemKind;
 		this.itemId = itemId;
 		this.callId = callId;
@@ -29,18 +23,13 @@ class ModelStreamActiveToolCall {
 	}
 
 	public static function fromItem(item:ModelStreamOutputItem):ModelStreamActiveToolCall {
-		return new ModelStreamActiveToolCall(
-			item.kind,
-			item.itemId,
-			item.callId,
-			item.toolName,
-			item.namespace,
-			item.kind == ModelStreamOutputItemKind.CustomToolCall ? item.customInput : item.arguments
-		);
+		return new ModelStreamActiveToolCall(item.kind, item.itemId, item.callId, item.toolName, item.namespace,
+			item.kind == ModelStreamOutputItemKind.CustomToolCall ? item.customInput : item.arguments);
 	}
 
 	public function accepts(callId:String):Bool {
-		if (callId == null || callId.length == 0) return true;
+		if (callId == null || callId.length == 0)
+			return true;
 		return callId == this.callId;
 	}
 
@@ -68,7 +57,8 @@ class ModelStreamActiveToolCall {
 	}
 
 	public function displayName():String {
-		if (namespace.length > 0) return namespace + "." + toolName;
+		if (namespace.length > 0)
+			return namespace + "." + toolName;
 		return toolName;
 	}
 }

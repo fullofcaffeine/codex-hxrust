@@ -344,26 +344,15 @@ class ResumePickerState {
 	public function countEffect(kind:ResumePickerEffectKind):Int {
 		var count = 0;
 		for (effect in effects) {
-			if (effect.kind == kind) count = count + 1;
+			if (effect.kind == kind)
+				count = count + 1;
 		}
 		return count;
 	}
 
 	public function summary():String {
-		return "opened=" + opened
-			+ ":action=" + action
-			+ ":loaded=" + loadedRows
-			+ ":filtered=" + filteredRows
-			+ ":selected=" + selectedIndex
-			+ ":scroll=" + scrollTop
-			+ ":sort=" + sortKey
-			+ ":filter=" + filterMode
-			+ ":density=" + density
-			+ ":toolbar=" + toolbarFocus
-			+ ":footer=" + footerProgressLabel
-			+ ":empty=" + emptyStateMessage
-			+ ":pending=" + pendingThreadId
-			+ ":overlay=" + overlayOpen
-			+ ":effects=" + effects.length;
+		return "opened=" + opened + ":action=" + action + ":loaded=" + loadedRows + ":filtered=" + filteredRows + ":selected=" + selectedIndex + ":scroll="
+			+ scrollTop + ":sort=" + sortKey + ":filter=" + filterMode + ":density=" + density + ":toolbar=" + toolbarFocus + ":footer="
+			+ footerProgressLabel + ":empty=" + emptyStateMessage + ":pending=" + pendingThreadId + ":overlay=" + overlayOpen + ":effects=" + effects.length;
 	}
 }

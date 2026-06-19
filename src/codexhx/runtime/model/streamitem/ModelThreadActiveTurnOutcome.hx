@@ -21,27 +21,10 @@ class ModelThreadActiveTurnOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		rebaseRequestId:String,
-		eventKind:ModelThreadActiveTurnEventKind,
-		decisionKind:ModelThreadActiveTurnDecisionKind,
-		activeTurnIdBefore:String,
-		eventTurnId:String,
-		activeTurnIdAfter:String,
-		activeTurnChanged:Bool,
-		restoredFromTurns:Bool,
-		nonmatchingCompletionIgnored:Bool,
-		threadClosedCleared:Bool,
-		explicitClearApplied:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, rebaseRequestId:String, eventKind:ModelThreadActiveTurnEventKind,
+			decisionKind:ModelThreadActiveTurnDecisionKind, activeTurnIdBefore:String, eventTurnId:String, activeTurnIdAfter:String, activeTurnChanged:Bool,
+			restoredFromTurns:Bool, nonmatchingCompletionIgnored:Bool, threadClosedCleared:Bool, explicitClearApplied:Bool, eventOrderingPreserved:Bool,
+			liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -64,25 +47,14 @@ class ModelThreadActiveTurnOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";rebaseRequest=" + noneIfEmpty(rebaseRequestId)
-			+ ";eventKind=" + eventKind
-			+ ";decisionKind=" + decisionKind
-			+ ";activeTurnIdBefore=" + noneIfEmpty(activeTurnIdBefore)
-			+ ";eventTurnId=" + noneIfEmpty(eventTurnId)
-			+ ";activeTurnIdAfter=" + noneIfEmpty(activeTurnIdAfter)
-			+ ";activeTurnChanged=" + boolText(activeTurnChanged)
-			+ ";restoredFromTurns=" + boolText(restoredFromTurns)
-			+ ";nonmatchingCompletionIgnored=" + boolText(nonmatchingCompletionIgnored)
-			+ ";threadClosedCleared=" + boolText(threadClosedCleared)
-			+ ";explicitClearApplied=" + boolText(explicitClearApplied)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";rebaseRequest=" + noneIfEmpty(rebaseRequestId) + ";eventKind="
+			+ eventKind + ";decisionKind=" + decisionKind + ";activeTurnIdBefore=" + noneIfEmpty(activeTurnIdBefore) + ";eventTurnId="
+			+ noneIfEmpty(eventTurnId) + ";activeTurnIdAfter=" + noneIfEmpty(activeTurnIdAfter) + ";activeTurnChanged=" + boolText(activeTurnChanged)
+			+ ";restoredFromTurns=" + boolText(restoredFromTurns) + ";nonmatchingCompletionIgnored=" + boolText(nonmatchingCompletionIgnored)
+			+ ";threadClosedCleared=" + boolText(threadClosedCleared) + ";explicitClearApplied=" + boolText(explicitClearApplied)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

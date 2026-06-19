@@ -12,8 +12,10 @@ class ResumePickerStaleReloadResponseRenderHarness {
 		assertEquals("3", Std.string(snapshots.length), "snapshot count");
 		assertContains(report.activeSnapshot, "toolbar sort=created_at filter=all query=kernel");
 		assertContains(report.activeSnapshot, "> Archived kernel match | thread-archived | turns=2 | 2026-06-18T15:00:00Z | cwd=/archive/codex-hxrust");
-		assertContains(snapshots[1], "loader status=stale_query_response_ignored detail=request=stale-query-page;activeQuery=kernel;activeSort=created_at;activeFilter=all");
-		assertContains(snapshots[2], "loader status=stale_sort_response_ignored detail=request=stale-sort-page;activeQuery=kernel;activeSort=created_at;activeFilter=all");
+		assertContains(snapshots[1],
+			"loader status=stale_query_response_ignored detail=request=stale-query-page;activeQuery=kernel;activeSort=created_at;activeFilter=all");
+		assertContains(snapshots[2],
+			"loader status=stale_sort_response_ignored detail=request=stale-sort-page;activeQuery=kernel;activeSort=created_at;activeFilter=all");
 		assertContains(report.finalSnapshot, "toolbar sort=created_at filter=all query=kernel");
 		assertContains(report.finalSnapshot, "rows loaded=3 filtered=3 scanned=4 accepted=3 invalid=1");
 		assertContains(report.finalSnapshot, "> Archived kernel match | thread-archived | turns=2 | 2026-06-18T15:00:00Z | cwd=/archive/codex-hxrust");
@@ -24,9 +26,12 @@ class ResumePickerStaleReloadResponseRenderHarness {
 		assertNotContains(report.finalSnapshot, "Stale cwd result");
 		assertNotContains(report.finalSnapshot, "stale-query-cursor");
 		assertNotContains(report.finalSnapshot, "stale-sort-cursor");
-		assertContains(report.summary(), "active:query=kernel;sort=created_at;filter=all;selected=0;thread=thread-archived;next=;rows=3;footer=active all results 3/4;loader=active_results_loaded");
-		assertContains(report.summary(), "stale-query:query=kernel;sort=created_at;filter=all;selected=0;thread=thread-archived;next=;rows=3;footer=stale response ignored;loader=stale_query_response_ignored");
-		assertContains(report.summary(), "stale-sort:query=kernel;sort=created_at;filter=all;selected=0;thread=thread-archived;next=;rows=3;footer=stale response ignored;loader=stale_sort_response_ignored");
+		assertContains(report.summary(),
+			"active:query=kernel;sort=created_at;filter=all;selected=0;thread=thread-archived;next=;rows=3;footer=active all results 3/4;loader=active_results_loaded");
+		assertContains(report.summary(),
+			"stale-query:query=kernel;sort=created_at;filter=all;selected=0;thread=thread-archived;next=;rows=3;footer=stale response ignored;loader=stale_query_response_ignored");
+		assertContains(report.summary(),
+			"stale-sort:query=kernel;sort=created_at;filter=all;selected=0;thread=thread-archived;next=;rows=3;footer=stale response ignored;loader=stale_sort_response_ignored");
 		assertContains(report.summary(), "request=stale-query-page");
 		assertContains(report.summary(), "request=stale-sort-page");
 
@@ -34,14 +39,17 @@ class ResumePickerStaleReloadResponseRenderHarness {
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) < 0) throw "expected `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) < 0)
+			throw "expected `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertNotContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) >= 0) throw "did not expect `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) >= 0)
+			throw "did not expect `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String, label:String):Void {
-		if (expected != actual) throw label + " expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw label + " expected " + expected + " but got " + actual;
 	}
 }

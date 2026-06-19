@@ -15,19 +15,9 @@ class ThreadReadTurnErrorActiveGoalStopRequest {
 	public final storedGoal:ThreadGoal;
 	public final storedGoalId:String;
 
-	public function new(
-		turnId:String,
-		runtimeAvailable:Bool,
-		runtimeEnabled:Bool,
-		errorKind:ThreadReadTurnErrorKind,
-		goalStatePermitOk:Bool,
-		currentTurnIsActiveGoal:Bool,
-		accountingOutcome:ThreadReadActiveGoalProgressAccountingOutcome,
-		storedGoalLookupOutcomeKind:ThreadReadStoredGoalLookupOutcomeKind,
-		storedGoalLookupErrorCode:String,
-		storedGoal:ThreadGoal,
-		storedGoalId:String
-	) {
+	public function new(turnId:String, runtimeAvailable:Bool, runtimeEnabled:Bool, errorKind:ThreadReadTurnErrorKind, goalStatePermitOk:Bool,
+			currentTurnIsActiveGoal:Bool, accountingOutcome:ThreadReadActiveGoalProgressAccountingOutcome,
+			storedGoalLookupOutcomeKind:ThreadReadStoredGoalLookupOutcomeKind, storedGoalLookupErrorCode:String, storedGoal:ThreadGoal, storedGoalId:String) {
 		this.turnId = turnId;
 		this.runtimeAvailable = runtimeAvailable;
 		this.runtimeEnabled = runtimeEnabled;

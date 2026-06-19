@@ -4,7 +4,8 @@ class ModelKeymapDefaultPruningPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeymapDefaultPruningRequest):ModelKeymapDefaultPruningOutcome {
-		if (request == null) return failure("", "missing keymap default pruning request");
+		if (request == null)
+			return failure("", "missing keymap default pruning request");
 
 		final tailMainSurfaceDefaultsPreserved = tailMainSurfaceDefaultsMatch(request.tailMainSurfaceDefaults);
 		final listPageAndJumpDefaultsPreserved = listDefaultsMatch(request.listPageAndJumpDefaults);
@@ -19,13 +20,10 @@ class ModelKeymapDefaultPruningPolicy {
 			&& matches(request.legacyListMoveDownConfigured, named("page-down", false, false, false))
 			&& sameBindings(request.legacyListPageUpPruned, [character("b", true, false, false)])
 			&& sameBindings(request.legacyListPageDownPruned, [character("f", true, false, false)]);
-		final legacyListPruneAllDefaultsPreserved = sameBindings(request.legacyListPruneAllMoveUpConfigured, [
-			named("page-up", false, false, false),
-			character("b", true, false, false)
-		]) && sameBindings(request.legacyListPruneAllRuntimeMoveUp, [
-			named("page-up", false, false, false),
-			character("b", true, false, false)
-		]) && request.legacyListPruneAllPageUpPruned.length == 0;
+		final legacyListPruneAllDefaultsPreserved = sameBindings(request.legacyListPruneAllMoveUpConfigured,
+			[named("page-up", false, false, false), character("b", true, false, false)])
+			&& sameBindings(request.legacyListPruneAllRuntimeMoveUp, [named("page-up", false, false, false), character("b", true, false, false)])
+			&& request.legacyListPruneAllPageUpPruned.length == 0;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = tailMainSurfaceDefaultsPreserved
 			&& listPageAndJumpDefaultsPreserved
@@ -34,9 +32,7 @@ class ModelKeymapDefaultPruningPolicy {
 			&& legacyListOverlapPruningPreserved
 			&& legacyListPruneAllDefaultsPreserved
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapDefaultPruningDecisionKind.KeymapDefaultPruningPreserved
-			: ModelKeymapDefaultPruningDecisionKind.KeymapDefaultPruningRejected;
+		final decisionKind = ok ? ModelKeymapDefaultPruningDecisionKind.KeymapDefaultPruningPreserved : ModelKeymapDefaultPruningDecisionKind.KeymapDefaultPruningRejected;
 
 		return new ModelKeymapDefaultPruningOutcome({
 			ok: ok,
@@ -58,63 +54,58 @@ class ModelKeymapDefaultPruningPolicy {
 	}
 
 	static function tailMainSurfaceDefaultsMatch(actions:Array<ModelKeymapDefaultPruningCase>):Bool {
-		if (actions.length != 4) return false;
-		return actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.EditQueuedMessage, [
-			named("up", false, true, false),
-			named("left", false, false, true)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.HistorySearchPrevious, [
-			character("r", true, false, false)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.HistorySearchNext, [
-			character("s", true, false, false)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.KillWholeLine, []);
+		if (actions.length != 4)
+			return false;
+		return actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.EditQueuedMessage,
+			[named("up", false, true, false), named("left", false, false, true)])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.HistorySearchPrevious, [character("r", true, false, false)])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.HistorySearchNext, [character("s", true, false, false)])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.KillWholeLine, []);
 	}
 
 	static function listDefaultsMatch(actions:Array<ModelKeymapDefaultPruningCase>):Bool {
-		if (actions.length != 8) return false;
+		if (actions.length != 8)
+			return false;
 		return actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListMoveUp, [
 			named("up", false, false, false),
 			character("p", true, false, false),
 			character("k", true, false, false),
 			character("k", false, false, false)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListMoveDown, [
-			named("down", false, false, false),
-			character("n", true, false, false),
-			character("j", true, false, false),
-			character("j", false, false, false)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListMoveLeft, [
-			named("left", false, false, false),
-			character("h", true, false, false)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListMoveRight, [
-			named("right", false, false, false),
-			character("l", true, false, false)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListPageUp, [
-			named("page-up", false, false, false),
-			character("b", true, false, false)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListPageDown, [
-			named("page-down", false, false, false),
-			character("f", true, false, false)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListJumpTop, [
-			named("home", false, false, false)
-		]) && actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListJumpBottom, [
-			named("end", false, false, false)
-		]);
+		])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListMoveDown,
+				[
+					named("down", false, false, false),
+					character("n", true, false, false),
+					character("j", true, false, false),
+					character("j", false, false, false)
+				])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListMoveLeft,
+				[named("left", false, false, false), character("h", true, false, false)])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListMoveRight,
+				[named("right", false, false, false), character("l", true, false, false)])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListPageUp,
+				[named("page-up", false, false, false), character("b", true, false, false)])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListPageDown,
+				[named("page-down", false, false, false), character("f", true, false, false)])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListJumpTop, [named("home", false, false, false)])
+			&& actionBindingsMatch(actions, ModelKeymapDefaultPruningActionKind.ListJumpBottom, [named("end", false, false, false)]);
 	}
 
-	static function actionBindingsMatch(
-		actions:Array<ModelKeymapDefaultPruningCase>,
-		actionKind:ModelKeymapDefaultPruningActionKind,
-		expected:Array<ModelKeymapBinding>
-	):Bool {
+	static function actionBindingsMatch(actions:Array<ModelKeymapDefaultPruningCase>, actionKind:ModelKeymapDefaultPruningActionKind,
+			expected:Array<ModelKeymapBinding>):Bool {
 		for (action in actions) {
-			if (action.actionKind == actionKind) return sameBindings(action.bindings, expected);
+			if (action.actionKind == actionKind)
+				return sameBindings(action.bindings, expected);
 		}
 		return false;
 	}
 
 	static function sameBindings(actual:Array<ModelKeymapBinding>, expected:Array<ModelKeymapBinding>):Bool {
-		if (actual.length != expected.length) return false;
+		if (actual.length != expected.length)
+			return false;
 		for (i in 0...actual.length) {
-			if (!matches(actual[i], expected[i])) return false;
+			if (!matches(actual[i], expected[i]))
+				return false;
 		}
 		return true;
 	}

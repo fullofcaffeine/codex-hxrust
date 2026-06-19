@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelCancelledTurnEditPolicy {
 	public static function apply(request:ModelCancelledTurnEditRequest):ModelCancelledTurnEditOutcome {
-		if (request == null) return failure("", "missing cancelled-turn edit request");
+		if (request == null)
+			return failure("", "missing cancelled-turn edit request");
 
 		final latestSessionStart = latestSessionStart(request.transcriptCells);
 		final userCount = usersSinceLatestSession(request.transcriptCells, latestSessionStart);
@@ -42,9 +43,7 @@ class ModelCancelledTurnEditPolicy {
 			ok: true,
 			code: "cancelled_turn_edit_modeled",
 			requestId: request.requestId,
-			decisionKind: hasLocalHistory
-				? ModelCancelledTurnEditDecisionKind.RestoredPromptWithLocalRollback
-				: ModelCancelledTurnEditDecisionKind.RestoredFirstPromptWithoutLocalHistory,
+			decisionKind: hasLocalHistory ? ModelCancelledTurnEditDecisionKind.RestoredPromptWithLocalRollback : ModelCancelledTurnEditDecisionKind.RestoredFirstPromptWithoutLocalHistory,
 			userCountSinceLastSession: userCount,
 			selectedNthUserMessage: selectedNth,
 			rollbackTurnCount: 1,
@@ -71,7 +70,8 @@ class ModelCancelledTurnEditPolicy {
 		var start = 0;
 		var i = 0;
 		while (i < cells.length) {
-			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.SessionHeader) start = i + 1;
+			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.SessionHeader)
+				start = i + 1;
 			i = i + 1;
 		}
 		return start;
@@ -81,7 +81,8 @@ class ModelCancelledTurnEditPolicy {
 		var count = 0;
 		var i = start;
 		while (i < cells.length) {
-			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.User) count = count + 1;
+			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.User)
+				count = count + 1;
 			i = i + 1;
 		}
 		return count;

@@ -13,17 +13,9 @@ class ThreadReadResumeIdleContinuationRequest {
 	public final automaticStartAccepted:Bool;
 	public final goal:ThreadGoal;
 
-	public function new(
-		operation:ThreadReadTokenUsageReplayDeliveryOperation,
-		snapshotOutcome:ThreadReadResumeGoalSnapshotOutcome,
-		activeTurnPresent:Bool,
-		triggerMailboxPending:Bool,
-		toolsVisible:Bool,
-		threadManagerAvailable:Bool,
-		liveThreadAvailable:Bool,
-		automaticStartAccepted:Bool,
-		goal:ThreadGoal
-	) {
+	public function new(operation:ThreadReadTokenUsageReplayDeliveryOperation, snapshotOutcome:ThreadReadResumeGoalSnapshotOutcome, activeTurnPresent:Bool,
+			triggerMailboxPending:Bool, toolsVisible:Bool, threadManagerAvailable:Bool, liveThreadAvailable:Bool, automaticStartAccepted:Bool,
+			goal:ThreadGoal) {
 		this.operation = operation;
 		this.snapshotOutcome = snapshotOutcome;
 		this.activeTurnPresent = activeTurnPresent;

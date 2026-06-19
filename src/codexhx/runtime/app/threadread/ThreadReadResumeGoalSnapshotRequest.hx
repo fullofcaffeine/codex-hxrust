@@ -11,15 +11,8 @@ class ThreadReadResumeGoalSnapshotRequest {
 	public final tokenUsageDelivery:ThreadReadTokenUsageReplayDeliveryOutcome;
 	public final goal:ThreadGoal;
 
-	public function new(
-		operation:ThreadReadTokenUsageReplayDeliveryOperation,
-		responseReady:Bool,
-		goalsFeatureEnabled:Bool,
-		stateDbAvailable:Bool,
-		pendingRequestsReplayAfterSnapshot:Bool,
-		tokenUsageDelivery:ThreadReadTokenUsageReplayDeliveryOutcome,
-		goal:ThreadGoal
-	) {
+	public function new(operation:ThreadReadTokenUsageReplayDeliveryOperation, responseReady:Bool, goalsFeatureEnabled:Bool, stateDbAvailable:Bool,
+			pendingRequestsReplayAfterSnapshot:Bool, tokenUsageDelivery:ThreadReadTokenUsageReplayDeliveryOutcome, goal:ThreadGoal) {
 		this.operation = operation;
 		this.responseReady = responseReady;
 		this.goalsFeatureEnabled = goalsFeatureEnabled;

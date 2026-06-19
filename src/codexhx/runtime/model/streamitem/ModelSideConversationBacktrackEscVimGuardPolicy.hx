@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelSideConversationBacktrackEscVimGuardPolicy {
 	public static function apply(request:ModelSideConversationBacktrackEscVimGuardRequest):ModelSideConversationBacktrackEscVimGuardOutcome {
-		if (request == null) return failure("", "missing side-conversation backtrack Esc Vim guard request");
+		if (request == null)
+			return failure("", "missing side-conversation backtrack Esc Vim guard request");
 
 		final initialBacktrackEscHandled = request.keyIsEsc
 			&& !request.sideConversationActive
@@ -14,9 +15,7 @@ class ModelSideConversationBacktrackEscVimGuardPolicy {
 			&& request.normalBacktrackMode
 			&& request.composerEmptyInitially
 			&& !request.vimInsertModeActiveBeforeSideEsc;
-		final vimInsertEscTakesPrecedence = request.keyIsEsc
-			&& request.vimModeEnabled
-			&& request.vimInsertModeActiveAfterInsertKey;
+		final vimInsertEscTakesPrecedence = request.keyIsEsc && request.vimModeEnabled && request.vimInsertModeActiveAfterInsertKey;
 		final backtrackEscHandledDuringVimInsert = request.keyIsEsc
 			&& !request.sideConversationActive
 			&& request.normalBacktrackMode
@@ -35,11 +34,7 @@ class ModelSideConversationBacktrackEscVimGuardPolicy {
 			&& vimInsertEscTakesPrecedence
 			&& backtrackEscSuppressedDuringVimInsert
 			&& sideRejectionSuppressedDuringVimInsert;
-		final decisionKind = guardPreserved
-			? ModelSideConversationBacktrackEscVimGuardDecisionKind.SideBacktrackRejectionGuardPreserved
-			: vimInsertEscTakesPrecedence
-				? ModelSideConversationBacktrackEscVimGuardDecisionKind.VimInsertEscTakesPrecedence
-				: ModelSideConversationBacktrackEscVimGuardDecisionKind.SideBacktrackRejectionUnavailable;
+		final decisionKind = guardPreserved ? ModelSideConversationBacktrackEscVimGuardDecisionKind.SideBacktrackRejectionGuardPreserved : vimInsertEscTakesPrecedence ? ModelSideConversationBacktrackEscVimGuardDecisionKind.VimInsertEscTakesPrecedence : ModelSideConversationBacktrackEscVimGuardDecisionKind.SideBacktrackRejectionUnavailable;
 		final ok = guardPreserved && eventOrderingPreserved;
 
 		return new ModelSideConversationBacktrackEscVimGuardOutcome({

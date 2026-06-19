@@ -12,18 +12,9 @@ class ThreadReadGoalTokenUsageRecordRequest {
 	public final totalUsage:ThreadReadTokenUsageBreakdown;
 	public final otherUnflushedTokenDelta:Int;
 
-	public function new(
-		turnStoreLevelId:String,
-		currentTurnId:String,
-		runtimeAvailable:Bool,
-		runtimeEnabled:Bool,
-		turnKnown:Bool,
-		accountTokens:Bool,
-		previousCurrentUsage:ThreadReadTokenUsageBreakdown,
-		lastAccountedUsage:ThreadReadTokenUsageBreakdown,
-		totalUsage:ThreadReadTokenUsageBreakdown,
-		otherUnflushedTokenDelta:Int
-	) {
+	public function new(turnStoreLevelId:String, currentTurnId:String, runtimeAvailable:Bool, runtimeEnabled:Bool, turnKnown:Bool, accountTokens:Bool,
+			previousCurrentUsage:ThreadReadTokenUsageBreakdown, lastAccountedUsage:ThreadReadTokenUsageBreakdown, totalUsage:ThreadReadTokenUsageBreakdown,
+			otherUnflushedTokenDelta:Int) {
 		this.turnStoreLevelId = turnStoreLevelId;
 		this.currentTurnId = currentTurnId;
 		this.runtimeAvailable = runtimeAvailable;

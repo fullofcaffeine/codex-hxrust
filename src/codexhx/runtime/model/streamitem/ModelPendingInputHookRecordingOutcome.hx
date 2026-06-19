@@ -21,27 +21,10 @@ class ModelPendingInputHookRecordingOutcome {
 	public final orderedItemsSummary:String;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		drainRequestId:String,
-		decisionKind:ModelPendingInputHookRecordingDecisionKind,
-		hookItemCount:Int,
-		blockedInput:Bool,
-		acceptedUserInput:Bool,
-		userInputRecordedCount:Int,
-		responseItemRecordedCount:Int,
-		additionalContextRecordedCount:Int,
-		blockedAdditionalContextRecordedCount:Int,
-		promptPrepContinues:Bool,
-		breakBeforePrompt:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		orderedItemsSummary:String,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, drainRequestId:String, decisionKind:ModelPendingInputHookRecordingDecisionKind,
+			hookItemCount:Int, blockedInput:Bool, acceptedUserInput:Bool, userInputRecordedCount:Int, responseItemRecordedCount:Int,
+			additionalContextRecordedCount:Int, blockedAdditionalContextRecordedCount:Int, promptPrepContinues:Bool, breakBeforePrompt:Bool,
+			liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, orderedItemsSummary:String, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -64,25 +47,14 @@ class ModelPendingInputHookRecordingOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";drainRequest=" + drainRequestId
-			+ ";decisionKind=" + decisionKind
-			+ ";hookItemCount=" + Std.string(hookItemCount)
-			+ ";blockedInput=" + boolText(blockedInput)
-			+ ";acceptedUserInput=" + boolText(acceptedUserInput)
-			+ ";userInputRecordedCount=" + Std.string(userInputRecordedCount)
-			+ ";responseItemRecordedCount=" + Std.string(responseItemRecordedCount)
-			+ ";additionalContextRecordedCount=" + Std.string(additionalContextRecordedCount)
-			+ ";blockedAdditionalContextRecordedCount=" + Std.string(blockedAdditionalContextRecordedCount)
-			+ ";promptPrepContinues=" + boolText(promptPrepContinues)
-			+ ";breakBeforePrompt=" + boolText(breakBeforePrompt)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";orderedItems=[" + orderedItemsSummary + "]"
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";drainRequest=" + drainRequestId + ";decisionKind=" + decisionKind
+			+ ";hookItemCount=" + Std.string(hookItemCount) + ";blockedInput=" + boolText(blockedInput) + ";acceptedUserInput=" + boolText(acceptedUserInput)
+			+ ";userInputRecordedCount=" + Std.string(userInputRecordedCount) + ";responseItemRecordedCount=" + Std.string(responseItemRecordedCount)
+			+ ";additionalContextRecordedCount=" + Std.string(additionalContextRecordedCount) + ";blockedAdditionalContextRecordedCount="
+			+ Std.string(blockedAdditionalContextRecordedCount) + ";promptPrepContinues=" + boolText(promptPrepContinues) + ";breakBeforePrompt="
+			+ boolText(breakBeforePrompt) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";orderedItems=["
+			+ orderedItemsSummary + "]" + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

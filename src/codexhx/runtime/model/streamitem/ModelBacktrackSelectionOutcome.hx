@@ -78,26 +78,14 @@ class ModelBacktrackSelectionOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";userCountSinceLastSession=" + userCountSinceLastSession
-			+ ";selectedNthUserMessage=" + selectedNthUserMessage
-			+ ";selectedTextElementCount=" + selectedTextElementCount
-			+ ";selectedLocalImageCount=" + selectedLocalImageCount
-			+ ";selectedRemoteImageCount=" + selectedRemoteImageCount
-			+ ";rollbackTurnCount=" + rollbackTurnCount
-			+ ";remoteImagesApplied=" + boolText(remoteImagesApplied)
-			+ ";composerPrefilled=" + boolText(composerPrefilled)
-			+ ";pendingRollbackRecorded=" + boolText(pendingRollbackRecorded)
-			+ ";threadRollbackSubmitted=" + boolText(threadRollbackSubmitted)
-			+ ";duplicateHistoryIgnoredBeforeLastSession=" + boolText(duplicateHistoryIgnoredBeforeLastSession)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";userCountSinceLastSession="
+			+ userCountSinceLastSession + ";selectedNthUserMessage=" + selectedNthUserMessage + ";selectedTextElementCount=" + selectedTextElementCount
+			+ ";selectedLocalImageCount=" + selectedLocalImageCount + ";selectedRemoteImageCount=" + selectedRemoteImageCount + ";rollbackTurnCount="
+			+ rollbackTurnCount + ";remoteImagesApplied=" + boolText(remoteImagesApplied) + ";composerPrefilled=" + boolText(composerPrefilled)
+			+ ";pendingRollbackRecorded=" + boolText(pendingRollbackRecorded) + ";threadRollbackSubmitted=" + boolText(threadRollbackSubmitted)
+			+ ";duplicateHistoryIgnoredBeforeLastSession=" + boolText(duplicateHistoryIgnoredBeforeLastSession) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

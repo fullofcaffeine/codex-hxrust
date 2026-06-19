@@ -19,25 +19,9 @@ class ModelPatchToolFollowUpOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		callId:String,
-		responseKind:ModelPatchToolOutputItemKind,
-		outputText:String,
-		success:Bool,
-		followUpQueued:Bool,
-		modelNeedsFollowUp:Bool,
-		postToolUseResponseVisible:Bool,
-		stdoutVisible:Bool,
-		stderrVisible:Bool,
-		resultTextVisible:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, callId:String, responseKind:ModelPatchToolOutputItemKind, outputText:String, success:Bool,
+			followUpQueued:Bool, modelNeedsFollowUp:Bool, postToolUseResponseVisible:Bool, stdoutVisible:Bool, stderrVisible:Bool, resultTextVisible:Bool,
+			liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -58,23 +42,12 @@ class ModelPatchToolFollowUpOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";callId=" + noneIfEmpty(callId)
-			+ ";responseKind=" + responseKind
-			+ ";success=" + boolText(success)
-			+ ";followUpQueued=" + boolText(followUpQueued)
-			+ ";modelNeedsFollowUp=" + boolText(modelNeedsFollowUp)
-			+ ";postToolUseResponseVisible=" + boolText(postToolUseResponseVisible)
-			+ ";stdoutVisible=" + boolText(stdoutVisible)
-			+ ";stderrVisible=" + boolText(stderrVisible)
-			+ ";resultTextVisible=" + boolText(resultTextVisible)
-			+ ";outputText=" + outputText
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";callId=" + noneIfEmpty(callId) + ";responseKind=" + responseKind
+			+ ";success=" + boolText(success) + ";followUpQueued=" + boolText(followUpQueued) + ";modelNeedsFollowUp=" + boolText(modelNeedsFollowUp)
+			+ ";postToolUseResponseVisible=" + boolText(postToolUseResponseVisible) + ";stdoutVisible=" + boolText(stdoutVisible) + ";stderrVisible="
+			+ boolText(stderrVisible) + ";resultTextVisible=" + boolText(resultTextVisible) + ";outputText=" + outputText + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -10,16 +10,8 @@ class ModelReplayedServerRequestSurfaceRequest {
 	public final elicitationUrlRequest:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		dispatchOutcome:ModelThreadSnapshotReplayDispatchOutcome,
-		requestKind:ModelReplayedServerRequestKind,
-		replayKind:ModelTurnReplayKind,
-		snapshotRequestAllowed:Bool,
-		liveRequest:Bool,
-		elicitationUrlRequest:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, dispatchOutcome:ModelThreadSnapshotReplayDispatchOutcome, requestKind:ModelReplayedServerRequestKind,
+			replayKind:ModelTurnReplayKind, snapshotRequestAllowed:Bool, liveRequest:Bool, elicitationUrlRequest:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.dispatchOutcome = dispatchOutcome;
 		this.requestKind = requestKind == null ? ModelReplayedServerRequestKind.UserInput : requestKind;

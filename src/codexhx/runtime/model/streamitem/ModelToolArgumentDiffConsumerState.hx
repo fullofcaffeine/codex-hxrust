@@ -3,6 +3,7 @@ package codexhx.runtime.model.streamitem;
 class ModelToolArgumentDiffConsumerState {
 	public final kind:ModelToolArgumentDiffConsumerKind;
 	public final callId:String;
+
 	var lineBuffer:String;
 	var mode:ModelPatchParserMode;
 	var hunks:Array<ModelPatchFileChange>;
@@ -32,11 +33,14 @@ class ModelToolArgumentDiffConsumerState {
 	}
 
 	public function consume(delta:ModelStreamToolInputDelta):ModelToolArgumentDiffConsumerEvent {
-		if (delta == null || delta.status != ModelStreamToolInputDeltaStatus.Accepted) return null;
+		if (delta == null || delta.status != ModelStreamToolInputDeltaStatus.Accepted)
+			return null;
 		pushDelta(delta.delta);
-		if (hasError()) return null;
+		if (hasError())
+			return null;
 		final changes = snapshotChanges(!firstProgressSent);
-		if (changes.length == 0) return null;
+		if (changes.length == 0)
+			return null;
 		final event = nextEvent(changes, false);
 		if (!firstProgressSent) {
 			firstProgressSent = true;
@@ -49,15 +53,18 @@ class ModelToolArgumentDiffConsumerState {
 
 	public function finish():ModelToolArgumentDiffConsumerEvent {
 		finishParser();
-		if (hasError()) return null;
+		if (hasError())
+			return null;
 		if (pending != null) {
 			final event = new ModelToolArgumentDiffConsumerEvent(kind, callId, pending.changes, true, pending.index);
 			pending = null;
 			return event;
 		}
-		if (!firstProgressSent) return null;
+		if (!firstProgressSent)
+			return null;
 		final changes = snapshotChanges(false);
-		if (changes.length == 0) return null;
+		if (changes.length == 0)
+			return null;
 		return nextEvent(changes, true);
 	}
 
@@ -81,7 +88,8 @@ class ModelToolArgumentDiffConsumerState {
 			if (ch == "\n") {
 				var line = lineBuffer;
 				lineBuffer = "";
-				if (endsWith(line, "\r")) line = line.substr(0, line.length - 1);
+				if (endsWith(line, "\r"))
+					line = line.substr(0, line.length - 1);
 				lineNumber = lineNumber + 1;
 				processLine(line);
 			} else {
@@ -92,14 +100,16 @@ class ModelToolArgumentDiffConsumerState {
 	}
 
 	function finishParser():Void {
-		if (hasError()) return;
+		if (hasError())
+			return;
 		if (lineBuffer.length > 0) {
 			final line = lineBuffer;
 			lineBuffer = "";
 			lineNumber = lineNumber + 1;
 			if (trim(line) == "*** End Patch") {
 				ensureUpdateHunkIsNotEmpty(trim(line));
-				if (!hasError()) mode = ModelPatchParserMode.EndedPatch;
+				if (!hasError())
+					mode = ModelPatchParserMode.EndedPatch;
 			} else {
 				processLine(line);
 			}
@@ -118,30 +128,48 @@ class ModelToolArgumentDiffConsumerState {
 			}
 			failPatch("The first line of the patch must be '*** Begin Patch'");
 		} else if (mode == ModelPatchParserMode.StartedPatch) {
-			if (startsWith(line, "*** Environment ID: ")) return;
-			if (handleHunkHeadersAndEndPatch(trimmed)) return;
-			failHunk("'" + trimmed + "' is not a valid hunk header. Valid hunk headers: '*** Add File: {path}', '*** Delete File: {path}', '*** Update File: {path}'", lineNumber);
+			if (startsWith(line, "*** Environment ID: "))
+				return;
+			if (handleHunkHeadersAndEndPatch(trimmed))
+				return;
+			failHunk("'"
+				+ trimmed
+				+ "' is not a valid hunk header. Valid hunk headers: '*** Add File: {path}', '*** Delete File: {path}', '*** Update File: {path}'",
+				lineNumber);
 		} else if (mode == ModelPatchParserMode.AddFile) {
-			if (handleHunkHeadersAndEndPatch(trimmed)) return;
+			if (handleHunkHeadersAndEndPatch(trimmed))
+				return;
 			if (startsWith(line, "+")) {
 				final add = lastChange();
-				if (add != null) add.appendContent(line.substr(1) + "\n");
+				if (add != null)
+					add.appendContent(line.substr(1) + "\n");
 				return;
 			}
-			failHunk("'" + trimmed + "' is not a valid hunk header. Valid hunk headers: '*** Add File: {path}', '*** Delete File: {path}', '*** Update File: {path}'", lineNumber);
+			failHunk("'"
+				+ trimmed
+				+ "' is not a valid hunk header. Valid hunk headers: '*** Add File: {path}', '*** Delete File: {path}', '*** Update File: {path}'",
+				lineNumber);
 		} else if (mode == ModelPatchParserMode.DeleteFile) {
-			if (handleHunkHeadersAndEndPatch(trimmed)) return;
-			failHunk("'" + trimmed + "' is not a valid hunk header. Valid hunk headers: '*** Add File: {path}', '*** Delete File: {path}', '*** Update File: {path}'", lineNumber);
+			if (handleHunkHeadersAndEndPatch(trimmed))
+				return;
+			failHunk("'"
+				+ trimmed
+				+ "' is not a valid hunk header. Valid hunk headers: '*** Add File: {path}', '*** Delete File: {path}', '*** Update File: {path}'",
+				lineNumber);
 		} else if (mode == ModelPatchParserMode.UpdateFile) {
 			processUpdateLine(line, trimEnd(line));
 		}
 	}
 
 	function processUpdateLine(line:String, updateLine:String):Void {
-		if (handleHunkHeadersAndEndPatch(updateLine)) return;
+		if (handleHunkHeadersAndEndPatch(updateLine))
+			return;
 		final update = lastChange();
 		if (update == null) {
-			failHunk("Unexpected line found in update hunk: '" + line + "'. Every line should start with ' ' (context line), '+' (added line), or '-' (removed line)", lineNumber);
+			failHunk("Unexpected line found in update hunk: '"
+				+ line
+				+ "'. Every line should start with ' ' (context line), '+' (added line), or '-' (removed line)",
+				lineNumber);
 			return;
 		}
 		if (update.chunks.length == 0 && update.movePath.length == 0 && startsWith(updateLine, "*** Move to: ")) {
@@ -149,7 +177,10 @@ class ModelToolArgumentDiffConsumerState {
 			return;
 		}
 		if ((updateLine == "@@" || startsWith(updateLine, "@@ ")) && lastChunkIsEmpty(update)) {
-			failHunk("Unexpected line found in update hunk: '" + line + "'. Every line should start with ' ' (context line), '+' (added line), or '-' (removed line)", lineNumber);
+			failHunk("Unexpected line found in update hunk: '"
+				+ line
+				+ "'. Every line should start with ' ' (context line), '+' (added line), or '-' (removed line)",
+				lineNumber);
 			return;
 		}
 		if (updateLine == "@@") {
@@ -166,7 +197,8 @@ class ModelToolArgumentDiffConsumerState {
 				return;
 			}
 			final eofChunk = lastChunk(update);
-			if (eofChunk != null) eofChunk.isEndOfFile = true;
+			if (eofChunk != null)
+				eofChunk.isEndOfFile = true;
 			return;
 		}
 		if (line == "") {
@@ -189,32 +221,39 @@ class ModelToolArgumentDiffConsumerState {
 			failHunk("Expected update hunk to start with a @@ context marker, got: '" + line + "'", lineNumber);
 			return;
 		}
-		failHunk("Unexpected line found in update hunk: '" + line + "'. Every line should start with ' ' (context line), '+' (added line), or '-' (removed line)", lineNumber);
+		failHunk("Unexpected line found in update hunk: '"
+			+ line
+			+ "'. Every line should start with ' ' (context line), '+' (added line), or '-' (removed line)",
+			lineNumber);
 	}
 
 	function handleHunkHeadersAndEndPatch(line:String):Bool {
 		if (line == "*** End Patch") {
 			ensureUpdateHunkIsNotEmpty(line);
-			if (!hasError()) mode = ModelPatchParserMode.EndedPatch;
+			if (!hasError())
+				mode = ModelPatchParserMode.EndedPatch;
 			return true;
 		}
 		if (startsWith(line, "*** Add File: ")) {
 			ensureUpdateHunkIsNotEmpty(line);
-			if (hasError()) return true;
+			if (hasError())
+				return true;
 			hunks.push(ModelPatchFileChange.add(line.substr("*** Add File: ".length)));
 			mode = ModelPatchParserMode.AddFile;
 			return true;
 		}
 		if (startsWith(line, "*** Delete File: ")) {
 			ensureUpdateHunkIsNotEmpty(line);
-			if (hasError()) return true;
+			if (hasError())
+				return true;
 			hunks.push(ModelPatchFileChange.deleteFile(line.substr("*** Delete File: ".length)));
 			mode = ModelPatchParserMode.DeleteFile;
 			return true;
 		}
 		if (startsWith(line, "*** Update File: ")) {
 			ensureUpdateHunkIsNotEmpty(line);
-			if (hasError()) return true;
+			if (hasError())
+				return true;
 			hunks.push(ModelPatchFileChange.update(line.substr("*** Update File: ".length)));
 			mode = ModelPatchParserMode.UpdateFile;
 			updateHunkLineNumber = lineNumber;
@@ -225,7 +264,8 @@ class ModelToolArgumentDiffConsumerState {
 
 	function ensureUpdateHunkIsNotEmpty(line:String):Void {
 		final update = lastChange();
-		if (mode != ModelPatchParserMode.UpdateFile || update == null || update.kind != ModelPatchFileChangeKind.Update) return;
+		if (mode != ModelPatchParserMode.UpdateFile || update == null || update.kind != ModelPatchFileChangeKind.Update)
+			return;
 		if (update.chunks.length == 0) {
 			failHunk("Update file hunk for path '" + update.path + "' is empty", updateHunkLineNumber);
 			return;
@@ -234,19 +274,24 @@ class ModelToolArgumentDiffConsumerState {
 			if (line == "*** End Patch") {
 				failHunk("Update hunk does not contain any lines", lineNumber);
 			} else {
-				failHunk("Unexpected line found in update hunk: '" + line + "'. Every line should start with ' ' (context line), '+' (added line), or '-' (removed line)", lineNumber);
+				failHunk("Unexpected line found in update hunk: '"
+					+ line
+					+ "'. Every line should start with ' ' (context line), '+' (added line), or '-' (removed line)",
+					lineNumber);
 			}
 		}
 	}
 
 	function snapshotChanges(firstProgress:Bool):Array<ModelPatchFileChange> {
 		final out:Array<ModelPatchFileChange> = [];
-		for (hunk in hunks) out.push(firstProgress && hunk.kind == ModelPatchFileChangeKind.Add ? hunk.withoutAddContent() : hunk.copy());
+		for (hunk in hunks)
+			out.push(firstProgress && hunk.kind == ModelPatchFileChangeKind.Add ? hunk.withoutAddContent() : hunk.copy());
 		return out;
 	}
 
 	function ensureChunk(change:ModelPatchFileChange):ModelPatchUpdateChunk {
-		if (change.chunks.length == 0) change.addChunk(new ModelPatchUpdateChunk(""));
+		if (change.chunks.length == 0)
+			change.addChunk(new ModelPatchUpdateChunk(""));
 		return lastChunk(change);
 	}
 
@@ -269,11 +314,13 @@ class ModelToolArgumentDiffConsumerState {
 	}
 
 	function failPatch(message:String):Void {
-		if (error == null) error = new ModelPatchParseError(ModelPatchParseErrorKind.InvalidPatch, message, lineNumber);
+		if (error == null)
+			error = new ModelPatchParseError(ModelPatchParseErrorKind.InvalidPatch, message, lineNumber);
 	}
 
 	function failHunk(message:String, line:Int):Void {
-		if (error == null) error = new ModelPatchParseError(ModelPatchParseErrorKind.InvalidHunk, message, line);
+		if (error == null)
+			error = new ModelPatchParseError(ModelPatchParseErrorKind.InvalidHunk, message, line);
 	}
 
 	static function startsWith(value:String, prefix:String):Bool {
@@ -292,7 +339,8 @@ class ModelToolArgumentDiffConsumerState {
 		var end = value.length;
 		while (end > 0) {
 			final ch = value.charAt(end - 1);
-			if (ch != " " && ch != "\t" && ch != "\r") break;
+			if (ch != " " && ch != "\t" && ch != "\r")
+				break;
 			end = end - 1;
 		}
 		return value.substr(0, end);

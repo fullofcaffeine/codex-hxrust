@@ -90,7 +90,6 @@ class TuiSmokeComposerPopupKeyAction {
 	public final liveProbeRejected:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function popupTransitionText():String {
 		return popupBefore + "->" + popupAfter;
 	}

@@ -70,14 +70,11 @@ class TuiSmokeClipboardPasteAction {
 	public function computedDecision():String {
 		return switch kind {
 			case TuiSmokeClipboardPasteActionKind.Probe:
-				if (nativeFileAvailable || nativeImageAvailable) "native";
-				else if (wslSession && wslFallbackSucceeded) "wsl_fallback";
-				else if (errorKind.length > 0) "error_" + errorKind;
-				else "no_image";
+				if (nativeFileAvailable || nativeImageAvailable) "native"; else if (wslSession && wslFallbackSucceeded) "wsl_fallback"; else
+					if (errorKind.length > 0) "error_"
+					+ errorKind; else "no_image";
 			case TuiSmokeClipboardPasteActionKind.ImageAccept:
-				if (imageBytes > maxImageBytes) "refuse_oversized";
-				else if (source.length == 0 || source == "none") "refuse_no_image";
-				else "accept_" + source;
+				if (imageBytes > maxImageBytes) "refuse_oversized"; else if (source.length == 0 || source == "none") "refuse_no_image"; else "accept_" + source;
 			case TuiSmokeClipboardPasteActionKind.Refusal:
 				"refuse_" + normalizedErrorKind();
 			case TuiSmokeClipboardPasteActionKind.WslPath:
@@ -108,14 +105,18 @@ class TuiSmokeClipboardPasteAction {
 
 	public function formatLabel():String {
 		final normalized = format.toLowerCase();
-		if (normalized == "png") return "PNG";
-		if (normalized == "jpeg" || normalized == "jpg") return "JPEG";
+		if (normalized == "png")
+			return "PNG";
+		if (normalized == "jpeg" || normalized == "jpg")
+			return "JPEG";
 		return "IMG";
 	}
 
 	public function computedWslPath():String {
-		if (windowsPath.length < 3) return "";
-		if (windowsPath.charAt(1) != ":" || windowsPath.charAt(2) != "\\") return "";
+		if (windowsPath.length < 3)
+			return "";
+		if (windowsPath.charAt(1) != ":" || windowsPath.charAt(2) != "\\")
+			return "";
 		final drive = windowsPath.charAt(0).toLowerCase();
 		final rest = StringTools.replace(windowsPath.substr(3), "\\", "/");
 		return "/mnt/" + drive + "/" + rest;

@@ -6,7 +6,8 @@ class ModelSideBacktrackUnavailableMessagePolicy {
 	static final UpstreamRenderedLine = "■ " + UpstreamUnavailableMessage;
 
 	public static function apply(request:ModelSideBacktrackUnavailableMessageRequest):ModelSideBacktrackUnavailableMessageOutcome {
-		if (request == null) return failure("", "missing side-backtrack unavailable message request");
+		if (request == null)
+			return failure("", "missing side-backtrack unavailable message request");
 
 		final backtrackPrimedAfter = request.rejectInvoked ? false : request.backtrackPrimedBefore;
 		final backtrackReset = request.backtrackPrimedBefore && !backtrackPrimedAfter;
@@ -16,15 +17,9 @@ class ModelSideBacktrackUnavailableMessagePolicy {
 		final snapshotNamePreserved = request.expectedSnapshotName == UpstreamSnapshotName;
 		final widthStableSnapshot = request.renderedWidth == 80 && renderedLine == UpstreamRenderedLine;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = backtrackReset
-			&& errorHistoryCellInserted
-			&& insertHistoryCellIntentRecorded
-			&& snapshotNamePreserved
-			&& widthStableSnapshot
+		final ok = backtrackReset && errorHistoryCellInserted && insertHistoryCellIntentRecorded && snapshotNamePreserved && widthStableSnapshot
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelSideBacktrackUnavailableMessageDecisionKind.SideBacktrackUnavailableMessageInserted
-			: ModelSideBacktrackUnavailableMessageDecisionKind.SideBacktrackUnavailableMessageUnavailable;
+		final decisionKind = ok ? ModelSideBacktrackUnavailableMessageDecisionKind.SideBacktrackUnavailableMessageInserted : ModelSideBacktrackUnavailableMessageDecisionKind.SideBacktrackUnavailableMessageUnavailable;
 
 		return new ModelSideBacktrackUnavailableMessageOutcome({
 			ok: ok,

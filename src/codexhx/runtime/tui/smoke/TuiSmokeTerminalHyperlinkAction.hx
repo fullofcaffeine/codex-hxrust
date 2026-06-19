@@ -212,13 +212,17 @@ class TuiSmokeTerminalHyperlinkAction {
 	}
 
 	static function isLeadingPunctuation(ch:String):Bool {
-		return ch == "(" || ch == ")" || ch == "[" || ch == "]" || ch == "{"
-			|| ch == "}" || ch == "<" || ch == ">" || ch == "," || ch == "."
-			|| ch == ";" || ch == "!" || ch == "'" || ch == "\"";
+		return ch == "(" || ch == ")" || ch == "[" || ch == "]" || ch == "{" || ch == "}" || ch == "<" || ch == ">" || ch == "," || ch == "." || ch == ";"
+			|| ch == "!" || ch == "'" || ch == "\"";
 	}
 
 	static function shouldTrimTrailing(candidate:String, ch:String):Bool {
-		return ch == "," || ch == "." || ch == ";" || ch == "!" || ch == "'" || ch == "\""
+		return ch == ","
+			|| ch == "."
+			|| ch == ";"
+			|| ch == "!"
+			|| ch == "'"
+			|| ch == "\""
 			|| ((ch == ")" || ch == "]" || ch == "}" || ch == ">") && hasUnmatchedClosingDelimiter(candidate, ch));
 	}
 

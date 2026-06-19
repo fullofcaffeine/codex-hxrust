@@ -6,12 +6,7 @@ class ModelPatchApplicationRequest {
 	public final beforeFiles:Array<ModelPatchVirtualFile>;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		verificationOutcome:ModelPatchVerificationOutcome,
-		beforeFiles:Array<ModelPatchVirtualFile>,
-		secretProbe:String
-	) {
+	public function new(requestId:String, verificationOutcome:ModelPatchVerificationOutcome, beforeFiles:Array<ModelPatchVirtualFile>, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.verificationOutcome = verificationOutcome;
 		this.beforeFiles = beforeFiles == null ? [] : beforeFiles;

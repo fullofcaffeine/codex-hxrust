@@ -33,9 +33,7 @@ class ModelKeymapInvalidGlobalCopyOutcome {
 		this.ok = fields.ok;
 		this.code = fields.code == null ? "" : fields.code;
 		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.decisionKind = fields.decisionKind == null
-			? ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathRejected
-			: fields.decisionKind;
+		this.decisionKind = fields.decisionKind == null ? ModelKeymapInvalidGlobalCopyDecisionKind.KeymapInvalidGlobalCopyPathRejected : fields.decisionKind;
 		this.invalidBindingPreserved = fields.invalidBindingPreserved;
 		this.errorPathPreserved = fields.errorPathPreserved;
 		this.parseFailurePreserved = fields.parseFailurePreserved;
@@ -47,18 +45,11 @@ class ModelKeymapInvalidGlobalCopyOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";invalidBindingPreserved=" + boolText(invalidBindingPreserved)
-			+ ";errorPathPreserved=" + boolText(errorPathPreserved)
-			+ ";parseFailurePreserved=" + boolText(parseFailurePreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";invalidBindingPreserved="
+			+ boolText(invalidBindingPreserved) + ";errorPathPreserved=" + boolText(errorPathPreserved) + ";parseFailurePreserved="
+			+ boolText(parseFailurePreserved) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

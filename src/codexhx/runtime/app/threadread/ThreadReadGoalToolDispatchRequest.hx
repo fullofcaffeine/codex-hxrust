@@ -6,12 +6,8 @@ class ThreadReadGoalToolDispatchRequest {
 	public final createRequest:ThreadReadCreateGoalToolRequest;
 	public final updateRequest:ThreadReadUpdateGoalToolRequest;
 
-	function new(
-		kind:ThreadReadGoalToolKind,
-		getRequest:ThreadReadGetGoalToolRequest,
-		createRequest:ThreadReadCreateGoalToolRequest,
-		updateRequest:ThreadReadUpdateGoalToolRequest
-	) {
+	function new(kind:ThreadReadGoalToolKind, getRequest:ThreadReadGetGoalToolRequest, createRequest:ThreadReadCreateGoalToolRequest,
+			updateRequest:ThreadReadUpdateGoalToolRequest) {
 		this.kind = kind;
 		this.getRequest = getRequest;
 		this.createRequest = createRequest;

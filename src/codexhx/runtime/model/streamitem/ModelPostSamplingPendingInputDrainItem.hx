@@ -8,14 +8,8 @@ class ModelPostSamplingPendingInputDrainItem {
 	public final responseKind:ModelPatchToolOutputItemKind;
 	public final text:String;
 
-	public function new(
-		sourceKind:ModelPostSamplingPendingInputSourceKind,
-		inputKind:ModelSamplingInputItemKind,
-		orderIndex:Int,
-		callId:String,
-		responseKind:ModelPatchToolOutputItemKind,
-		text:String
-	) {
+	public function new(sourceKind:ModelPostSamplingPendingInputSourceKind, inputKind:ModelSamplingInputItemKind, orderIndex:Int, callId:String,
+			responseKind:ModelPatchToolOutputItemKind, text:String) {
 		this.sourceKind = sourceKind == null ? ModelPostSamplingPendingInputSourceKind.ActiveTurn : sourceKind;
 		this.inputKind = inputKind == null ? ModelSamplingInputItemKind.PendingUserInput : inputKind;
 		this.orderIndex = orderIndex < 0 ? 0 : orderIndex;
@@ -25,12 +19,8 @@ class ModelPostSamplingPendingInputDrainItem {
 	}
 
 	public function summary():String {
-		return "sourceKind=" + sourceKind
-			+ ";inputKind=" + inputKind
-			+ ";orderIndex=" + Std.string(orderIndex)
-			+ ";callId=" + noneIfEmpty(callId)
-			+ ";responseKind=" + responseKind
-			+ ";text=" + text;
+		return "sourceKind=" + sourceKind + ";inputKind=" + inputKind + ";orderIndex=" + Std.string(orderIndex) + ";callId=" + noneIfEmpty(callId)
+			+ ";responseKind=" + responseKind + ";text=" + text;
 	}
 
 	static function noneIfEmpty(value:String):String {

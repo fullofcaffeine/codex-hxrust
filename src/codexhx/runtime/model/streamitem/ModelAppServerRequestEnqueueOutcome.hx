@@ -28,34 +28,13 @@ class ModelAppServerRequestEnqueueOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		responseDispatchRequestId:String,
-		requestKind:ModelReplayedServerRequestKind,
-		routeKind:ModelAppServerRequestEnqueueRouteKind,
-		threadId:String,
-		primaryThreadId:String,
-		requestRecordedPending:Bool,
-		primaryPendingEventQueued:Bool,
-		primaryThreadRequestQueued:Bool,
-		backgroundThreadRequestQueued:Bool,
-		threadlessRequestIgnored:Bool,
-		unsupportedAlreadyRejectedSkipped:Bool,
-		enqueueFailureRecorded:Bool,
-		pendingInteractiveReplayRecordingIntended:Bool,
-		chatWidgetDeliveryIntended:Bool,
-		sideParentStatusRefreshIntended:Bool,
-		refreshPendingApprovalsIntended:Bool,
-		requestOrderingPreserved:Bool,
-		pendingPrimaryEventCountAfter:Int,
-		threadQueueEventCountAfter:Int,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, responseDispatchRequestId:String, requestKind:ModelReplayedServerRequestKind,
+			routeKind:ModelAppServerRequestEnqueueRouteKind, threadId:String, primaryThreadId:String, requestRecordedPending:Bool,
+			primaryPendingEventQueued:Bool, primaryThreadRequestQueued:Bool, backgroundThreadRequestQueued:Bool, threadlessRequestIgnored:Bool,
+			unsupportedAlreadyRejectedSkipped:Bool, enqueueFailureRecorded:Bool, pendingInteractiveReplayRecordingIntended:Bool,
+			chatWidgetDeliveryIntended:Bool, sideParentStatusRefreshIntended:Bool, refreshPendingApprovalsIntended:Bool, requestOrderingPreserved:Bool,
+			pendingPrimaryEventCountAfter:Int, threadQueueEventCountAfter:Int, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -85,32 +64,19 @@ class ModelAppServerRequestEnqueueOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";responseDispatchRequest=" + noneIfEmpty(responseDispatchRequestId)
-			+ ";requestKind=" + requestKind
-			+ ";routeKind=" + routeKind
-			+ ";threadId=" + noneIfEmpty(threadId)
-			+ ";primaryThreadId=" + noneIfEmpty(primaryThreadId)
-			+ ";requestRecordedPending=" + boolText(requestRecordedPending)
-			+ ";primaryPendingEventQueued=" + boolText(primaryPendingEventQueued)
-			+ ";primaryThreadRequestQueued=" + boolText(primaryThreadRequestQueued)
-			+ ";backgroundThreadRequestQueued=" + boolText(backgroundThreadRequestQueued)
-			+ ";threadlessRequestIgnored=" + boolText(threadlessRequestIgnored)
-			+ ";unsupportedAlreadyRejectedSkipped=" + boolText(unsupportedAlreadyRejectedSkipped)
-			+ ";enqueueFailureRecorded=" + boolText(enqueueFailureRecorded)
-			+ ";pendingInteractiveReplayRecordingIntended=" + boolText(pendingInteractiveReplayRecordingIntended)
-			+ ";chatWidgetDeliveryIntended=" + boolText(chatWidgetDeliveryIntended)
-			+ ";sideParentStatusRefreshIntended=" + boolText(sideParentStatusRefreshIntended)
-			+ ";refreshPendingApprovalsIntended=" + boolText(refreshPendingApprovalsIntended)
-			+ ";requestOrderingPreserved=" + boolText(requestOrderingPreserved)
-			+ ";pendingPrimaryEventCountAfter=" + pendingPrimaryEventCountAfter
-			+ ";threadQueueEventCountAfter=" + threadQueueEventCountAfter
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";responseDispatchRequest=" + noneIfEmpty(responseDispatchRequestId)
+			+ ";requestKind=" + requestKind + ";routeKind=" + routeKind + ";threadId=" + noneIfEmpty(threadId) + ";primaryThreadId="
+			+ noneIfEmpty(primaryThreadId) + ";requestRecordedPending=" + boolText(requestRecordedPending) + ";primaryPendingEventQueued="
+			+ boolText(primaryPendingEventQueued) + ";primaryThreadRequestQueued=" + boolText(primaryThreadRequestQueued) + ";backgroundThreadRequestQueued="
+			+ boolText(backgroundThreadRequestQueued) + ";threadlessRequestIgnored=" + boolText(threadlessRequestIgnored)
+			+ ";unsupportedAlreadyRejectedSkipped=" + boolText(unsupportedAlreadyRejectedSkipped) + ";enqueueFailureRecorded="
+			+ boolText(enqueueFailureRecorded) + ";pendingInteractiveReplayRecordingIntended=" + boolText(pendingInteractiveReplayRecordingIntended)
+			+ ";chatWidgetDeliveryIntended=" + boolText(chatWidgetDeliveryIntended) + ";sideParentStatusRefreshIntended="
+			+ boolText(sideParentStatusRefreshIntended) + ";refreshPendingApprovalsIntended=" + boolText(refreshPendingApprovalsIntended)
+			+ ";requestOrderingPreserved=" + boolText(requestOrderingPreserved) + ";pendingPrimaryEventCountAfter=" + pendingPrimaryEventCountAfter
+			+ ";threadQueueEventCountAfter=" + threadQueueEventCountAfter + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

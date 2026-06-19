@@ -6,12 +6,7 @@ class ThreadReadGoalSteeringItem {
 	public final kind:ThreadReadGoalSteeringItemKind;
 	public final prompt:String;
 
-	public function new(
-		source:String,
-		fragmentKind:String,
-		kind:ThreadReadGoalSteeringItemKind,
-		prompt:String
-	) {
+	public function new(source:String, fragmentKind:String, kind:ThreadReadGoalSteeringItemKind, prompt:String) {
 		this.source = source;
 		this.fragmentKind = fragmentKind;
 		this.kind = kind;
@@ -19,11 +14,8 @@ class ThreadReadGoalSteeringItem {
 	}
 
 	public function summary():String {
-		return "source=" + source
-			+ ";fragmentKind=" + fragmentKind
-			+ ";kind=" + kind
-			+ ";promptChars=" + Std.string(prompt.length)
-			+ ";promptHead=" + promptHead();
+		return "source=" + source + ";fragmentKind=" + fragmentKind + ";kind=" + kind + ";promptChars=" + Std.string(prompt.length) + ";promptHead="
+			+ promptHead();
 	}
 
 	function promptHead():String {

@@ -13,19 +13,9 @@ class ModelActiveNonPrimaryShutdownRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		navigationCleanupOutcome:ModelThreadSideThreadNavigationCleanupOutcome,
-		eventKind:ModelActiveNonPrimaryShutdownEventKind,
-		activeThreadId:String,
-		primaryThreadId:String,
-		pendingShutdownExitThreadId:String,
-		closedThreadIsSideThread:Bool,
-		primarySelectSucceeded:Bool,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, navigationCleanupOutcome:ModelThreadSideThreadNavigationCleanupOutcome,
+			eventKind:ModelActiveNonPrimaryShutdownEventKind, activeThreadId:String, primaryThreadId:String, pendingShutdownExitThreadId:String,
+			closedThreadIsSideThread:Bool, primarySelectSucceeded:Bool, eventOrderIndex:Int, previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.navigationCleanupOutcome = navigationCleanupOutcome;
 		this.eventKind = eventKind == null ? ModelActiveNonPrimaryShutdownEventKind.Other : eventKind;

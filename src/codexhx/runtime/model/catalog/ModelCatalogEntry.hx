@@ -19,25 +19,10 @@ class ModelCatalogEntry {
 	public final experimentalSupportedTools:Array<String>;
 	public final useResponsesLite:Bool;
 
-	public function new(
-		modelId:String,
-		providerId:String,
-		displayName:String,
-		priority:Int,
-		visibility:ModelCatalogVisibility,
-		supportedInApi:Bool,
-		contextWindow:Int,
-		maxContextWindow:Int,
-		supportsSearchTool:Bool,
-		webSearchToolType:ModelCatalogWebSearchToolType,
-		toolMode:ModelCatalogToolMode,
-		inputModalities:Array<String>,
-		serviceTiers:Array<String>,
-		defaultServiceTier:String,
-		additionalSpeedTiers:Array<String>,
-		experimentalSupportedTools:Array<String>,
-		useResponsesLite:Bool
-	) {
+	public function new(modelId:String, providerId:String, displayName:String, priority:Int, visibility:ModelCatalogVisibility, supportedInApi:Bool,
+			contextWindow:Int, maxContextWindow:Int, supportsSearchTool:Bool, webSearchToolType:ModelCatalogWebSearchToolType, toolMode:ModelCatalogToolMode,
+			inputModalities:Array<String>, serviceTiers:Array<String>, defaultServiceTier:String, additionalSpeedTiers:Array<String>,
+			experimentalSupportedTools:Array<String>, useResponsesLite:Bool) {
 		this.modelId = modelId;
 		this.providerId = providerId;
 		this.displayName = displayName;
@@ -86,23 +71,40 @@ class ModelCatalogEntry {
 	}
 
 	public function summary(capabilities:ModelProviderCapabilities):String {
-		return "model=" + modelId
-			+ ";provider=" + providerId
-			+ ";priority=" + Std.string(priority)
-			+ ";visibility=" + visibility
-			+ ";showInPicker=" + boolText(showInPicker())
-			+ ";supportedInApi=" + boolText(supportedInApi)
-			+ ";contextWindow=" + Std.string(contextWindow)
-			+ ";maxContextWindow=" + Std.string(maxContextWindow)
-			+ ";webSearchToolType=" + webSearchToolType
-			+ ";toolMode=" + toolMode
-			+ ";useResponsesLite=" + boolText(useResponsesLite)
-			+ ";hostedWebSearch=" + boolText(supportsHostedWebSearch(capabilities))
-			+ ";hostedImageGeneration=" + boolText(supportsHostedImageGeneration(capabilities))
-			+ ";namespaceTools=" + boolText(supportsNamespaceTools(capabilities))
-			+ ";inputModalities=" + inputModalities.join(",")
-			+ ";serviceTiers=" + serviceTiers.join(",")
-			+ ";defaultServiceTier=" + (defaultServiceTier == null || defaultServiceTier.length == 0 ? "none" : defaultServiceTier);
+		return "model="
+			+ modelId
+			+ ";provider="
+			+ providerId
+			+ ";priority="
+			+ Std.string(priority)
+			+ ";visibility="
+			+ visibility
+			+ ";showInPicker="
+			+ boolText(showInPicker())
+			+ ";supportedInApi="
+			+ boolText(supportedInApi)
+			+ ";contextWindow="
+			+ Std.string(contextWindow)
+			+ ";maxContextWindow="
+			+ Std.string(maxContextWindow)
+			+ ";webSearchToolType="
+			+ webSearchToolType
+			+ ";toolMode="
+			+ toolMode
+			+ ";useResponsesLite="
+			+ boolText(useResponsesLite)
+			+ ";hostedWebSearch="
+			+ boolText(supportsHostedWebSearch(capabilities))
+			+ ";hostedImageGeneration="
+			+ boolText(supportsHostedImageGeneration(capabilities))
+			+ ";namespaceTools="
+			+ boolText(supportsNamespaceTools(capabilities))
+			+ ";inputModalities="
+			+ inputModalities.join(",")
+			+ ";serviceTiers="
+			+ serviceTiers.join(",")
+			+ ";defaultServiceTier="
+			+ (defaultServiceTier == null || defaultServiceTier.length == 0 ? "none" : defaultServiceTier);
 	}
 
 	static function boolText(value:Bool):String {

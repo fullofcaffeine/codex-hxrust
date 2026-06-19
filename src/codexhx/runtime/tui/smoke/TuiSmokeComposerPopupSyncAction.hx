@@ -78,7 +78,6 @@ class TuiSmokeComposerPopupSyncAction {
 	public final noLiveFileSearch:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function popupTransitionText():String {
 		return popupBefore + "->" + popupAfter;
 	}

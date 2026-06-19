@@ -6,7 +6,8 @@ class ModelKeymapEditorUnbindConflictPolicy {
 	static final KillWholeLineName = "kill_whole_line";
 
 	public static function apply(request:ModelKeymapEditorUnbindConflictRequest):ModelKeymapEditorUnbindConflictOutcome {
-		if (request == null) return failure("", "missing keymap editor unbind conflict request");
+		if (request == null)
+			return failure("", "missing keymap editor unbind conflict request");
 
 		final ctrlU = character("u", true, false, false);
 		final configuredKillWholeLinePreserved = matches(request.configuredKillWholeLine, ctrlU);
@@ -17,19 +18,11 @@ class ModelKeymapEditorUnbindConflictPolicy {
 			&& request.expectedInnerActionName == KillWholeLineName;
 		final conflictRejectionPreserved = request.conflictRejected;
 		final originalActionUnboundPreserved = request.killLineStartUnbound;
-		final runtimeKillWholeLinePreserved = request.runtimeAcceptedAfterUnbind
-			&& matches(request.runtimeKillWholeLine, ctrlU);
+		final runtimeKillWholeLinePreserved = request.runtimeAcceptedAfterUnbind && matches(request.runtimeKillWholeLine, ctrlU);
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = configuredKillWholeLinePreserved
-			&& defaultKillLineStartPreserved
-			&& conflictActionNamesPreserved
-			&& conflictRejectionPreserved
-			&& originalActionUnboundPreserved
-			&& runtimeKillWholeLinePreserved
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapEditorUnbindConflictDecisionKind.KeymapEditorUnbindConflictPreserved
-			: ModelKeymapEditorUnbindConflictDecisionKind.KeymapEditorUnbindConflictRejected;
+		final ok = configuredKillWholeLinePreserved && defaultKillLineStartPreserved && conflictActionNamesPreserved && conflictRejectionPreserved
+			&& originalActionUnboundPreserved && runtimeKillWholeLinePreserved && eventOrderingPreserved;
+		final decisionKind = ok ? ModelKeymapEditorUnbindConflictDecisionKind.KeymapEditorUnbindConflictPreserved : ModelKeymapEditorUnbindConflictDecisionKind.KeymapEditorUnbindConflictRejected;
 
 		return new ModelKeymapEditorUnbindConflictOutcome({
 			ok: ok,

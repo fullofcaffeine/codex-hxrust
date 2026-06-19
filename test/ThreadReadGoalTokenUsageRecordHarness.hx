@@ -44,31 +44,18 @@ class ThreadReadGoalTokenUsageRecordHarness {
 		final out:Array<ThreadReadGoalTokenUsageRecordRequest> = [];
 		for (value in values) {
 			final request = objectField(objectValue(value), "request");
-			out.push(new ThreadReadGoalTokenUsageRecordRequest(
-				stringField(request, "turnStoreLevelId", ""),
-				stringField(request, "currentTurnId", ""),
-				boolField(request, "runtimeAvailable", false),
-				boolField(request, "runtimeEnabled", false),
-				boolField(request, "turnKnown", false),
-				boolField(request, "accountTokens", false),
-				usageField(request, "previousCurrentUsage"),
-				usageField(request, "lastAccountedUsage"),
-				usageField(request, "totalUsage"),
-				intField(request, "otherUnflushedTokenDelta", 0)
-			));
+			out.push(new ThreadReadGoalTokenUsageRecordRequest(stringField(request, "turnStoreLevelId", ""), stringField(request, "currentTurnId", ""),
+				boolField(request, "runtimeAvailable", false), boolField(request, "runtimeEnabled", false), boolField(request, "turnKnown", false),
+				boolField(request, "accountTokens", false), usageField(request, "previousCurrentUsage"), usageField(request, "lastAccountedUsage"),
+				usageField(request, "totalUsage"), intField(request, "otherUnflushedTokenDelta", 0)));
 		}
 		return out;
 	}
 
 	static function usageField(object:Value, name:String):ThreadReadTokenUsageBreakdown {
 		final value = objectField(object, name);
-		return new ThreadReadTokenUsageBreakdown(
-			intField(value, "totalTokens", 0),
-			intField(value, "inputTokens", 0),
-			intField(value, "cachedInputTokens", 0),
-			intField(value, "outputTokens", 0),
-			intField(value, "reasoningOutputTokens", 0)
-		);
+		return new ThreadReadTokenUsageBreakdown(intField(value, "totalTokens", 0), intField(value, "inputTokens", 0),
+			intField(value, "cachedInputTokens", 0), intField(value, "outputTokens", 0), intField(value, "reasoningOutputTokens", 0));
 	}
 
 	static function assertReport(root:Value, report:ThreadReadGoalTokenUsageRecordReport):Void {
@@ -130,7 +117,8 @@ class ThreadReadGoalTokenUsageRecordHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -147,7 +135,8 @@ class ThreadReadGoalTokenUsageRecordHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -156,10 +145,12 @@ class ThreadReadGoalTokenUsageRecordHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

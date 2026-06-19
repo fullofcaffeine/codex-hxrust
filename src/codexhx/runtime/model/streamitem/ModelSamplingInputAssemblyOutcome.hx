@@ -23,29 +23,11 @@ class ModelSamplingInputAssemblyOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		continuationKind:ModelSamplingContinuationKind,
-		nextSamplingRequestIndex:Int,
-		previousPromptItemCount:Int,
-		assembledItemCount:Int,
-		nextPromptItemCount:Int,
-		responseInputItemCount:Int,
-		pendingInputItemCount:Int,
-		pendingInputDrained:Bool,
-		historyClonedForPrompt:Bool,
-		forPromptNormalized:Bool,
-		modelSupportsImages:Bool,
-		firstItemKind:ModelSamplingInputItemKind,
-		lastItemKind:ModelSamplingInputItemKind,
-		orderedItemSummary:String,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, continuationKind:ModelSamplingContinuationKind, nextSamplingRequestIndex:Int,
+			previousPromptItemCount:Int, assembledItemCount:Int, nextPromptItemCount:Int, responseInputItemCount:Int, pendingInputItemCount:Int,
+			pendingInputDrained:Bool, historyClonedForPrompt:Bool, forPromptNormalized:Bool, modelSupportsImages:Bool,
+			firstItemKind:ModelSamplingInputItemKind, lastItemKind:ModelSamplingInputItemKind, orderedItemSummary:String, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -70,27 +52,14 @@ class ModelSamplingInputAssemblyOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";continuationKind=" + continuationKind
-			+ ";nextSamplingRequestIndex=" + Std.string(nextSamplingRequestIndex)
-			+ ";previousPromptItemCount=" + Std.string(previousPromptItemCount)
-			+ ";assembledItemCount=" + Std.string(assembledItemCount)
-			+ ";nextPromptItemCount=" + Std.string(nextPromptItemCount)
-			+ ";responseInputItemCount=" + Std.string(responseInputItemCount)
-			+ ";pendingInputItemCount=" + Std.string(pendingInputItemCount)
-			+ ";pendingInputDrained=" + boolText(pendingInputDrained)
-			+ ";historyClonedForPrompt=" + boolText(historyClonedForPrompt)
-			+ ";forPromptNormalized=" + boolText(forPromptNormalized)
-			+ ";modelSupportsImages=" + boolText(modelSupportsImages)
-			+ ";firstItemKind=" + firstItemKind
-			+ ";lastItemKind=" + lastItemKind
-			+ ";orderedItems=" + orderedItemSummary
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";continuationKind=" + continuationKind + ";nextSamplingRequestIndex="
+			+ Std.string(nextSamplingRequestIndex) + ";previousPromptItemCount=" + Std.string(previousPromptItemCount) + ";assembledItemCount="
+			+ Std.string(assembledItemCount) + ";nextPromptItemCount=" + Std.string(nextPromptItemCount) + ";responseInputItemCount="
+			+ Std.string(responseInputItemCount) + ";pendingInputItemCount=" + Std.string(pendingInputItemCount) + ";pendingInputDrained="
+			+ boolText(pendingInputDrained) + ";historyClonedForPrompt=" + boolText(historyClonedForPrompt) + ";forPromptNormalized="
+			+ boolText(forPromptNormalized) + ";modelSupportsImages=" + boolText(modelSupportsImages) + ";firstItemKind=" + firstItemKind + ";lastItemKind="
+			+ lastItemKind + ";orderedItems=" + orderedItemSummary + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

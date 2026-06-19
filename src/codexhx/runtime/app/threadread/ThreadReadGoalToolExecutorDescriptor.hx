@@ -12,18 +12,8 @@ class ThreadReadGoalToolExecutorDescriptor {
 	public final metricsAttached:Bool;
 	public final orderIndex:Int;
 
-	public function new(
-		kind:ThreadReadGoalToolExecutorKind,
-		toolNamespace:String,
-		toolName:String,
-		threadId:String,
-		stateDbAttached:Bool,
-		accountingStateAttached:Bool,
-		analyticsAttached:Bool,
-		eventEmitterAttached:Bool,
-		metricsAttached:Bool,
-		orderIndex:Int
-	) {
+	public function new(kind:ThreadReadGoalToolExecutorKind, toolNamespace:String, toolName:String, threadId:String, stateDbAttached:Bool,
+			accountingStateAttached:Bool, analyticsAttached:Bool, eventEmitterAttached:Bool, metricsAttached:Bool, orderIndex:Int) {
 		this.kind = kind;
 		this.toolNamespace = toolNamespace;
 		this.toolName = toolName;
@@ -37,15 +27,24 @@ class ThreadReadGoalToolExecutorDescriptor {
 	}
 
 	public function summary():String {
-		return "index=" + Std.string(orderIndex)
-			+ ";kind=" + kind
-			+ ";tool=" + (toolNamespace.length == 0 ? toolName : toolNamespace + "." + toolName)
-			+ ";thread=" + threadId
-			+ ";stateDb=" + boolText(stateDbAttached)
-			+ ";accounting=" + boolText(accountingStateAttached)
-			+ ";analytics=" + boolText(analyticsAttached)
-			+ ";events=" + boolText(eventEmitterAttached)
-			+ ";metrics=" + boolText(metricsAttached);
+		return "index="
+			+ Std.string(orderIndex)
+			+ ";kind="
+			+ kind
+			+ ";tool="
+			+ (toolNamespace.length == 0 ? toolName : toolNamespace + "." + toolName)
+			+ ";thread="
+			+ threadId
+			+ ";stateDb="
+			+ boolText(stateDbAttached)
+			+ ";accounting="
+			+ boolText(accountingStateAttached)
+			+ ";analytics="
+			+ boolText(analyticsAttached)
+			+ ";events="
+			+ boolText(eventEmitterAttached)
+			+ ";metrics="
+			+ boolText(metricsAttached);
 	}
 
 	static function boolText(value:Bool):String {

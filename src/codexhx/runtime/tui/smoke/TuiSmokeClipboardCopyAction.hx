@@ -68,9 +68,13 @@ class TuiSmokeClipboardCopyAction {
 	}
 
 	public function computedOsc52Sequence():String {
-		if (text.length > maxRawBytes) return "";
+		if (text.length > maxRawBytes)
+			return "";
 		final encoded = base64Ascii(text);
-		return tmuxSession ? esc() + "Ptmux;" + esc() + esc() + "]52;c;" + encoded + bel() + esc() + "\\" : esc() + "]52;c;" + encoded + bel();
+		return tmuxSession ? esc() + "Ptmux;" + esc() + esc() + "]52;c;" + encoded + bel() + esc() + "\\" : esc()
+			+ "]52;c;"
+			+ encoded
+			+ bel();
 	}
 
 	public function osc52Matches():Bool {
@@ -82,8 +86,10 @@ class TuiSmokeClipboardCopyAction {
 	}
 
 	public function computedTmuxReady():Bool {
-		if (StringTools.trim(tmuxSetClipboard) == "off") return false;
-		if (tmuxInfo.indexOf("Ms: [missing]") >= 0) return false;
+		if (StringTools.trim(tmuxSetClipboard) == "off")
+			return false;
+		if (tmuxInfo.indexOf("Ms: [missing]") >= 0)
+			return false;
 		return tmuxSetClipboard.length > 0 && tmuxInfo.length > 0;
 	}
 
@@ -93,8 +99,10 @@ class TuiSmokeClipboardCopyAction {
 
 	function terminalBackend():String {
 		if (tmuxSession) {
-			if (tmuxOk) return "tmux";
-			if (osc52Ok) return "osc52_after_tmux_failure";
+			if (tmuxOk)
+				return "tmux";
+			if (osc52Ok)
+				return "osc52_after_tmux_failure";
 			return "failed_terminal";
 		}
 		return osc52Ok ? "osc52" : "failed_osc52";

@@ -8,14 +8,8 @@ class TuiSmokeLoopRequest {
 	public final expectedTrace:String;
 	public final expectedSnapshot:String;
 
-	public function new(
-		name:String,
-		frame:Null<TuiSmokeFrameRequest>,
-		events:Array<TuiSmokeEvent>,
-		expectedExit:TuiSmokeExitKind,
-		expectedTrace:String,
-		expectedSnapshot:String
-	) {
+	public function new(name:String, frame:Null<TuiSmokeFrameRequest>, events:Array<TuiSmokeEvent>, expectedExit:TuiSmokeExitKind, expectedTrace:String,
+			expectedSnapshot:String) {
 		this.name = name == null ? "" : name;
 		this.frame = frame;
 		this.events = events == null ? [] : events;

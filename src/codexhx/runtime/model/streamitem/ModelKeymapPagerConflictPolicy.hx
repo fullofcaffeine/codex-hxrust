@@ -6,7 +6,8 @@ class ModelKeymapPagerConflictPolicy {
 	static final ScrollDownName = "scroll_down";
 
 	public static function apply(request:ModelKeymapPagerConflictRequest):ModelKeymapPagerConflictOutcome {
-		if (request == null) return failure("", "missing keymap pager conflict request");
+		if (request == null)
+			return failure("", "missing keymap pager conflict request");
 
 		final expectedBinding = character("u", true);
 		final scrollUpBindingPreserved = matches(request.configuredScrollUp, expectedBinding);
@@ -17,14 +18,9 @@ class ModelKeymapPagerConflictPolicy {
 			&& request.expectedInnerActionName == ScrollDownName;
 		final conflictRejectionPreserved = request.conflictRejected;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = scrollUpBindingPreserved
-			&& scrollDownBindingPreserved
-			&& conflictActionNamesPreserved
-			&& conflictRejectionPreserved
+		final ok = scrollUpBindingPreserved && scrollDownBindingPreserved && conflictActionNamesPreserved && conflictRejectionPreserved
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapPagerConflictDecisionKind.KeymapPagerConflictRejected
-			: ModelKeymapPagerConflictDecisionKind.KeymapPagerConflictMissed;
+		final decisionKind = ok ? ModelKeymapPagerConflictDecisionKind.KeymapPagerConflictRejected : ModelKeymapPagerConflictDecisionKind.KeymapPagerConflictMissed;
 
 		return new ModelKeymapPagerConflictOutcome({
 			ok: ok,

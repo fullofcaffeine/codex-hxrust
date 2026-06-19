@@ -9,15 +9,8 @@ class ModelPatchProjectionRequest {
 	public final includeLegacyEvents:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		verificationOutcome:ModelPatchVerificationOutcome,
-		applicationOutcome:ModelPatchApplicationOutcome,
-		approvalOutcome:ModelPatchApprovalDecisionOutcome,
-		trackerOutcome:ModelPatchTurnDiffTrackerOutcome,
-		includeLegacyEvents:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, verificationOutcome:ModelPatchVerificationOutcome, applicationOutcome:ModelPatchApplicationOutcome,
+			approvalOutcome:ModelPatchApprovalDecisionOutcome, trackerOutcome:ModelPatchTurnDiffTrackerOutcome, includeLegacyEvents:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.verificationOutcome = verificationOutcome;
 		this.applicationOutcome = applicationOutcome;

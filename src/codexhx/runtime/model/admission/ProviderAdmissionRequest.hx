@@ -11,17 +11,9 @@ class ProviderAdmissionRequest {
 	public final hasCredentialMaterial:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		provider:ProviderAdmissionProvider,
-		model:ProviderAdmissionModel,
-		credentialKind:ProviderAdmissionCredentialKind,
-		accountKind:ProviderAdmissionAccountKind,
-		networkKind:ProviderAdmissionNetworkKind,
-		liveNetworkAllowed:Bool,
-		hasCredentialMaterial:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, provider:ProviderAdmissionProvider, model:ProviderAdmissionModel, credentialKind:ProviderAdmissionCredentialKind,
+			accountKind:ProviderAdmissionAccountKind, networkKind:ProviderAdmissionNetworkKind, liveNetworkAllowed:Bool, hasCredentialMaterial:Bool,
+			secretProbe:String) {
 		this.requestId = requestId;
 		this.provider = provider;
 		this.model = model;

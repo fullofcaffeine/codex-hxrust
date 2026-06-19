@@ -37,9 +37,7 @@ class ModelKeymapVimNormalDefaultsOutcome {
 		this.ok = fields.ok;
 		this.code = fields.code == null ? "" : fields.code;
 		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.decisionKind = fields.decisionKind == null
-			? ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsRejected
-			: fields.decisionKind;
+		this.decisionKind = fields.decisionKind == null ? ModelKeymapVimNormalDefaultsDecisionKind.KeymapVimNormalDefaultsRejected : fields.decisionKind;
 		this.enterInsertDefaultsPreserved = fields.enterInsertDefaultsPreserved;
 		this.moveLeftDefaultsPreserved = fields.moveLeftDefaultsPreserved;
 		this.moveRightDefaultsPreserved = fields.moveRightDefaultsPreserved;
@@ -53,20 +51,12 @@ class ModelKeymapVimNormalDefaultsOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";enterInsertDefaultsPreserved=" + boolText(enterInsertDefaultsPreserved)
-			+ ";moveLeftDefaultsPreserved=" + boolText(moveLeftDefaultsPreserved)
-			+ ";moveRightDefaultsPreserved=" + boolText(moveRightDefaultsPreserved)
-			+ ";moveUpDefaultsPreserved=" + boolText(moveUpDefaultsPreserved)
-			+ ";moveDownDefaultsPreserved=" + boolText(moveDownDefaultsPreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";enterInsertDefaultsPreserved="
+			+ boolText(enterInsertDefaultsPreserved) + ";moveLeftDefaultsPreserved=" + boolText(moveLeftDefaultsPreserved) + ";moveRightDefaultsPreserved="
+			+ boolText(moveRightDefaultsPreserved) + ";moveUpDefaultsPreserved=" + boolText(moveUpDefaultsPreserved) + ";moveDownDefaultsPreserved="
+			+ boolText(moveDownDefaultsPreserved) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -29,9 +29,12 @@ class ThreadReadUpdateGoalToolResponse {
 	}
 
 	public function summary():String {
-		return "goalPresent=" + boolText(goal != null)
-			+ ";remainingTokens=" + (hasRemainingTokens ? Std.string(remainingTokens) : "null")
-			+ ";completionBudgetReport=" + boolText(hasCompletionBudgetReport);
+		return "goalPresent="
+			+ boolText(goal != null)
+			+ ";remainingTokens="
+			+ (hasRemainingTokens ? Std.string(remainingTokens) : "null")
+			+ ";completionBudgetReport="
+			+ boolText(hasCompletionBudgetReport);
 	}
 
 	static function boolText(value:Bool):String {

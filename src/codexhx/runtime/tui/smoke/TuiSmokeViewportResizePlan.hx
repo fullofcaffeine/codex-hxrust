@@ -44,7 +44,6 @@ class TuiSmokeViewportResizePlan {
 	public final clearAfterY:Int;
 	public final needsFullRepaint:Bool;
 
-
 	public function changed():Bool {
 		return previousX != nextX || previousY != nextY || previousWidth != nextWidth || previousHeight != nextHeight;
 	}

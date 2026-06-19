@@ -31,37 +31,15 @@ class ModelTurnTerminalProjectionOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		threadId:String,
-		turnId:String,
-		lifecycleRequestId:String,
-		eventKind:ModelTurnTerminalProjectionEventKind,
-		coreAgentStatusKind:ModelTurnTerminalProjectedStatusKind,
-		appTurnStatusKind:ModelTurnTerminalProjectedStatusKind,
-		appServerNotificationIntentKind:ModelTurnTerminalNotificationIntentKind,
-		tuiNotificationIntentKind:ModelTurnTerminalNotificationIntentKind,
-		pendingServerRequestsAborted:Bool,
-		pendingInterruptsResolved:Bool,
-		threadStatusCleared:Bool,
-		threadHistoryTurnClosed:Bool,
-		threadHistoryFailedStatusPreserved:Bool,
-		turnCompletedNotificationEmitted:Bool,
-		appServerTurnFailedRecorded:Bool,
-		lastAgentMessagePropagatedToCoreStatus:Bool,
-		collabAgentStateHasMessage:Bool,
-		tuiReceivesLastAgentMessageFromTurnNotification:Bool,
-		tuiNotificationResponseUsesCopySource:Bool,
-		tuiTaskCompletionHandled:Bool,
-		tuiInterruptedHandled:Bool,
-		tuiErrorHandled:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, threadId:String, turnId:String, lifecycleRequestId:String,
+			eventKind:ModelTurnTerminalProjectionEventKind, coreAgentStatusKind:ModelTurnTerminalProjectedStatusKind,
+			appTurnStatusKind:ModelTurnTerminalProjectedStatusKind, appServerNotificationIntentKind:ModelTurnTerminalNotificationIntentKind,
+			tuiNotificationIntentKind:ModelTurnTerminalNotificationIntentKind, pendingServerRequestsAborted:Bool, pendingInterruptsResolved:Bool,
+			threadStatusCleared:Bool, threadHistoryTurnClosed:Bool, threadHistoryFailedStatusPreserved:Bool, turnCompletedNotificationEmitted:Bool,
+			appServerTurnFailedRecorded:Bool, lastAgentMessagePropagatedToCoreStatus:Bool, collabAgentStateHasMessage:Bool,
+			tuiReceivesLastAgentMessageFromTurnNotification:Bool, tuiNotificationResponseUsesCopySource:Bool, tuiTaskCompletionHandled:Bool,
+			tuiInterruptedHandled:Bool, tuiErrorHandled:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool,
+			errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -94,35 +72,64 @@ class ModelTurnTerminalProjectionOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";thread=" + threadId
-			+ ";turn=" + turnId
-			+ ";lifecycleRequest=" + noneIfEmpty(lifecycleRequestId)
-			+ ";eventKind=" + eventKind
-			+ ";coreAgentStatusKind=" + coreAgentStatusKind
-			+ ";appTurnStatusKind=" + appTurnStatusKind
-			+ ";appServerNotificationIntentKind=" + appServerNotificationIntentKind
-			+ ";tuiNotificationIntentKind=" + tuiNotificationIntentKind
-			+ ";pendingServerRequestsAborted=" + boolText(pendingServerRequestsAborted)
-			+ ";pendingInterruptsResolved=" + boolText(pendingInterruptsResolved)
-			+ ";threadStatusCleared=" + boolText(threadStatusCleared)
-			+ ";threadHistoryTurnClosed=" + boolText(threadHistoryTurnClosed)
-			+ ";threadHistoryFailedStatusPreserved=" + boolText(threadHistoryFailedStatusPreserved)
-			+ ";turnCompletedNotificationEmitted=" + boolText(turnCompletedNotificationEmitted)
-			+ ";appServerTurnFailedRecorded=" + boolText(appServerTurnFailedRecorded)
-			+ ";lastAgentMessagePropagatedToCoreStatus=" + boolText(lastAgentMessagePropagatedToCoreStatus)
-			+ ";collabAgentStateHasMessage=" + boolText(collabAgentStateHasMessage)
-			+ ";tuiReceivesLastAgentMessageFromTurnNotification=" + boolText(tuiReceivesLastAgentMessageFromTurnNotification)
-			+ ";tuiNotificationResponseUsesCopySource=" + boolText(tuiNotificationResponseUsesCopySource)
-			+ ";tuiTaskCompletionHandled=" + boolText(tuiTaskCompletionHandled)
-			+ ";tuiInterruptedHandled=" + boolText(tuiInterruptedHandled)
-			+ ";tuiErrorHandled=" + boolText(tuiErrorHandled)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code="
+			+ code
+			+ ";ok="
+			+ boolText(ok)
+			+ ";request="
+			+ requestId
+			+ ";thread="
+			+ threadId
+			+ ";turn="
+			+ turnId
+			+ ";lifecycleRequest="
+			+ noneIfEmpty(lifecycleRequestId)
+			+ ";eventKind="
+			+ eventKind
+			+ ";coreAgentStatusKind="
+			+ coreAgentStatusKind
+			+ ";appTurnStatusKind="
+			+ appTurnStatusKind
+			+ ";appServerNotificationIntentKind="
+			+ appServerNotificationIntentKind
+			+ ";tuiNotificationIntentKind="
+			+ tuiNotificationIntentKind
+			+ ";pendingServerRequestsAborted="
+			+ boolText(pendingServerRequestsAborted)
+			+ ";pendingInterruptsResolved="
+			+ boolText(pendingInterruptsResolved)
+			+ ";threadStatusCleared="
+			+ boolText(threadStatusCleared)
+			+ ";threadHistoryTurnClosed="
+			+ boolText(threadHistoryTurnClosed)
+			+ ";threadHistoryFailedStatusPreserved="
+			+ boolText(threadHistoryFailedStatusPreserved)
+			+ ";turnCompletedNotificationEmitted="
+			+ boolText(turnCompletedNotificationEmitted)
+			+ ";appServerTurnFailedRecorded="
+			+ boolText(appServerTurnFailedRecorded)
+			+ ";lastAgentMessagePropagatedToCoreStatus="
+			+ boolText(lastAgentMessagePropagatedToCoreStatus)
+			+ ";collabAgentStateHasMessage="
+			+ boolText(collabAgentStateHasMessage)
+			+ ";tuiReceivesLastAgentMessageFromTurnNotification="
+			+ boolText(tuiReceivesLastAgentMessageFromTurnNotification)
+			+ ";tuiNotificationResponseUsesCopySource="
+			+ boolText(tuiNotificationResponseUsesCopySource)
+			+ ";tuiTaskCompletionHandled="
+			+ boolText(tuiTaskCompletionHandled)
+			+ ";tuiInterruptedHandled="
+			+ boolText(tuiInterruptedHandled)
+			+ ";tuiErrorHandled="
+			+ boolText(tuiErrorHandled)
+			+ ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture)
+			+ ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

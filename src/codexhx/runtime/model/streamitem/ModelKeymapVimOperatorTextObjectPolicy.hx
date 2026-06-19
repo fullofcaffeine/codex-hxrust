@@ -4,7 +4,8 @@ class ModelKeymapVimOperatorTextObjectPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeymapVimOperatorTextObjectRequest):ModelKeymapVimOperatorTextObjectOutcome {
-		if (request == null) return failure("", "missing keymap vim-operator text-object request");
+		if (request == null)
+			return failure("", "missing keymap vim-operator text-object request");
 
 		final legacyMotionPruningPreserved = matches(request.configuredMotionLeft, character("i"))
 			&& matches(request.configuredMotionRight, character("a"))
@@ -15,9 +16,7 @@ class ModelKeymapVimOperatorTextObjectPolicy {
 			&& matches(request.explicitConflictBinding, character("i"));
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = legacyMotionPruningPreserved && explicitTextObjectConflictPreserved && eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapVimOperatorTextObjectDecisionKind.KeymapVimOperatorTextObjectsPreserved
-			: ModelKeymapVimOperatorTextObjectDecisionKind.KeymapVimOperatorTextObjectsRejected;
+		final decisionKind = ok ? ModelKeymapVimOperatorTextObjectDecisionKind.KeymapVimOperatorTextObjectsPreserved : ModelKeymapVimOperatorTextObjectDecisionKind.KeymapVimOperatorTextObjectsRejected;
 
 		return new ModelKeymapVimOperatorTextObjectOutcome({
 			ok: ok,
@@ -35,9 +34,11 @@ class ModelKeymapVimOperatorTextObjectPolicy {
 	}
 
 	static function sameBindings(actual:Array<ModelKeymapBinding>, expected:Array<ModelKeymapBinding>):Bool {
-		if (actual.length != expected.length) return false;
+		if (actual.length != expected.length)
+			return false;
 		for (i in 0...actual.length) {
-			if (!matches(actual[i], expected[i])) return false;
+			if (!matches(actual[i], expected[i]))
+				return false;
 		}
 		return true;
 	}

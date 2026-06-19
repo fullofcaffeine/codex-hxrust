@@ -6,7 +6,8 @@ class ModelKeymapMainSurfaceConflictPolicy {
 	static final ToggleFastModeName = "toggle_fast_mode";
 
 	public static function apply(request:ModelKeymapMainSurfaceConflictRequest):ModelKeymapMainSurfaceConflictOutcome {
-		if (request == null) return failure("", "missing keymap main-surface conflict request");
+		if (request == null)
+			return failure("", "missing keymap main-surface conflict request");
 
 		final ctrlL = character("l", true, false, false);
 		final configuredToggleFastModeBindingPreserved = matches(request.configuredToggleFastModeBinding, ctrlL);
@@ -22,9 +23,7 @@ class ModelKeymapMainSurfaceConflictPolicy {
 			&& conflictActionNamesPreserved
 			&& conflictRejectionPreserved
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapMainSurfaceConflictDecisionKind.KeymapMainSurfaceConflictRejected
-			: ModelKeymapMainSurfaceConflictDecisionKind.KeymapMainSurfaceConflictMissed;
+		final decisionKind = ok ? ModelKeymapMainSurfaceConflictDecisionKind.KeymapMainSurfaceConflictRejected : ModelKeymapMainSurfaceConflictDecisionKind.KeymapMainSurfaceConflictMissed;
 
 		return new ModelKeymapMainSurfaceConflictOutcome({
 			ok: ok,

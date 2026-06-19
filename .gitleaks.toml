@@ -1,0 +1,12 @@
+title = "codex-hxrust gitleaks config"
+
+[allowlist]
+description = "Allow deterministic generated output, dependency folders, and local build products"
+paths = [
+  '''^generated/''',
+  '''^\.git/''',
+  '''^node_modules/''',
+  '''^target/''',
+  '''^test/\.generated/''',
+  '''^vendor/'''
+]

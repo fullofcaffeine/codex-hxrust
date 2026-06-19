@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelThreadSnapshotTurnHistoryReplayPolicy {
 	public static function replay(request:ModelThreadSnapshotTurnHistoryReplayRequest):ModelThreadSnapshotTurnHistoryReplayOutcome {
-		if (request == null) return failure("", ModelTurnReplayKind.ThreadSnapshot, "missing thread snapshot turn history replay request");
+		if (request == null)
+			return failure("", ModelTurnReplayKind.ThreadSnapshot, "missing thread snapshot turn history replay request");
 
 		final userMessages:Array<String> = [];
 		final agentMessages:Array<String> = [];
@@ -17,7 +18,8 @@ class ModelThreadSnapshotTurnHistoryReplayPolicy {
 			final turn = request.turns[turnIndex];
 			final turnOrdinal = ordinalSuffix(turn.turnId);
 			if (turnOrdinal >= 0) {
-				if (turnOrdinal < previousTurnOrdinal) turnOrderPreserved = false;
+				if (turnOrdinal < previousTurnOrdinal)
+					turnOrderPreserved = false;
 				previousTurnOrdinal = turnOrdinal;
 			}
 
@@ -27,7 +29,8 @@ class ModelThreadSnapshotTurnHistoryReplayPolicy {
 				final item = turn.items[itemIndex];
 				switch item.itemKind {
 					case ModelThreadSnapshotTurnHistoryItemKind.UserMessage:
-						if (seenAgentInTurn) itemOrderPreserved = false;
+						if (seenAgentInTurn)
+							itemOrderPreserved = false;
 						userMessages.push(item.text);
 						replayedItemCount = replayedItemCount + 1;
 					case ModelThreadSnapshotTurnHistoryItemKind.AgentMessage:
@@ -40,7 +43,8 @@ class ModelThreadSnapshotTurnHistoryReplayPolicy {
 				itemIndex = itemIndex + 1;
 			}
 
-			if (isTerminal(turn.statusKind)) terminalCount = terminalCount + 1;
+			if (isTerminal(turn.statusKind))
+				terminalCount = terminalCount + 1;
 			turnIndex = turnIndex + 1;
 		}
 
@@ -89,32 +93,33 @@ class ModelThreadSnapshotTurnHistoryReplayPolicy {
 	}
 
 	static function stringArraysEqual(actual:Array<String>, expected:Array<String>):Bool {
-		if (actual.length != expected.length) return false;
+		if (actual.length != expected.length)
+			return false;
 		var i = 0;
 		while (i < actual.length) {
-			if (actual[i] != expected[i]) return false;
+			if (actual[i] != expected[i])
+				return false;
 			i = i + 1;
 		}
 		return true;
 	}
 
 	static function ordinalSuffix(value:String):Int {
-		if (value == null || value.length == 0) return -1;
+		if (value == null || value.length == 0)
+			return -1;
 		var i = value.length - 1;
 		while (i >= 0) {
 			final code = value.charCodeAt(i);
-			if (code < 48 || code > 57) break;
+			if (code < 48 || code > 57)
+				break;
 			i = i - 1;
 		}
-		if (i == value.length - 1) return -1;
+		if (i == value.length - 1)
+			return -1;
 		return Std.parseInt(value.substr(i + 1));
 	}
 
-	static function failure(
-		requestId:String,
-		replayKind:ModelTurnReplayKind,
-		errorMessage:String
-	):ModelThreadSnapshotTurnHistoryReplayOutcome {
+	static function failure(requestId:String, replayKind:ModelTurnReplayKind, errorMessage:String):ModelThreadSnapshotTurnHistoryReplayOutcome {
 		return new ModelThreadSnapshotTurnHistoryReplayOutcome({
 			ok: false,
 			code: "thread_snapshot_turn_history_replay_failed",

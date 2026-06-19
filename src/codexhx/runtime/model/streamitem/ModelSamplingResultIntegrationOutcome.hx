@@ -26,32 +26,12 @@ class ModelSamplingResultIntegrationOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		decisionKind:ModelSamplingResultIntegrationDecisionKind,
-		statusKind:ModelSamplingResultIntegrationStatusKind,
-		modelNeedsFollowUp:Bool,
-		hasPendingInput:Bool,
-		needsFollowUp:Bool,
-		pendingInputDrainEnabled:Bool,
-		canDrainPendingInputAfterAutoCompact:Bool,
-		tokenLimitReached:Bool,
-		lastAgentMessageUpdated:Bool,
-		lastAgentMessage:String,
-		previousLastAgentMessage:String,
-		samplingOutcomeReturned:Bool,
-		stopHooksEligible:Bool,
-		continueLoop:Bool,
-		breakTurnLoop:Bool,
-		bypassedForCancellation:Bool,
-		bypassedForError:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, decisionKind:ModelSamplingResultIntegrationDecisionKind,
+			statusKind:ModelSamplingResultIntegrationStatusKind, modelNeedsFollowUp:Bool, hasPendingInput:Bool, needsFollowUp:Bool,
+			pendingInputDrainEnabled:Bool, canDrainPendingInputAfterAutoCompact:Bool, tokenLimitReached:Bool, lastAgentMessageUpdated:Bool,
+			lastAgentMessage:String, previousLastAgentMessage:String, samplingOutcomeReturned:Bool, stopHooksEligible:Bool, continueLoop:Bool,
+			breakTurnLoop:Bool, bypassedForCancellation:Bool, bypassedForError:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -79,30 +59,16 @@ class ModelSamplingResultIntegrationOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";statusKind=" + statusKind
-			+ ";modelNeedsFollowUp=" + boolText(modelNeedsFollowUp)
-			+ ";hasPendingInput=" + boolText(hasPendingInput)
-			+ ";needsFollowUp=" + boolText(needsFollowUp)
-			+ ";pendingInputDrainEnabled=" + boolText(pendingInputDrainEnabled)
-			+ ";canDrainPendingInputAfterAutoCompact=" + boolText(canDrainPendingInputAfterAutoCompact)
-			+ ";tokenLimitReached=" + boolText(tokenLimitReached)
-			+ ";lastAgentMessageUpdated=" + boolText(lastAgentMessageUpdated)
-			+ ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage)
-			+ ";previousLastAgentMessage=" + noneIfEmpty(previousLastAgentMessage)
-			+ ";samplingOutcomeReturned=" + boolText(samplingOutcomeReturned)
-			+ ";stopHooksEligible=" + boolText(stopHooksEligible)
-			+ ";continueLoop=" + boolText(continueLoop)
-			+ ";breakTurnLoop=" + boolText(breakTurnLoop)
-			+ ";bypassedForCancellation=" + boolText(bypassedForCancellation)
-			+ ";bypassedForError=" + boolText(bypassedForError)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";statusKind=" + statusKind
+			+ ";modelNeedsFollowUp=" + boolText(modelNeedsFollowUp) + ";hasPendingInput=" + boolText(hasPendingInput) + ";needsFollowUp="
+			+ boolText(needsFollowUp) + ";pendingInputDrainEnabled=" + boolText(pendingInputDrainEnabled) + ";canDrainPendingInputAfterAutoCompact="
+			+ boolText(canDrainPendingInputAfterAutoCompact) + ";tokenLimitReached=" + boolText(tokenLimitReached) + ";lastAgentMessageUpdated="
+			+ boolText(lastAgentMessageUpdated) + ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage) + ";previousLastAgentMessage="
+			+ noneIfEmpty(previousLastAgentMessage) + ";samplingOutcomeReturned=" + boolText(samplingOutcomeReturned) + ";stopHooksEligible="
+			+ boolText(stopHooksEligible) + ";continueLoop=" + boolText(continueLoop) + ";breakTurnLoop=" + boolText(breakTurnLoop)
+			+ ";bypassedForCancellation=" + boolText(bypassedForCancellation) + ";bypassedForError=" + boolText(bypassedForError) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

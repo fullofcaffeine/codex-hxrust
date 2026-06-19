@@ -33,16 +33,9 @@ class ResumePickerNoCredentialGateReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads
-			+ ";transcriptLoads=" + transcriptLoads
-			+ ";keys=" + keyEvents
-			+ ";frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";overlay=" + (overlayOpened ? "true" : "false")
-			+ ";densityPersisted=" + (densityPersisted ? "true" : "false")
-			+ ";configPath=" + configPath
-			+ ";final=" + finalSummary
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";events=[" + eventSummaries.join("##") + "]";
+		return "pageLoads=" + pageLoads + ";transcriptLoads=" + transcriptLoads + ";keys=" + keyEvents + ";frames=" + frameRequests + ";renders="
+			+ renderCount + ";overlay=" + (overlayOpened ? "true" : "false") + ";densityPersisted=" + (densityPersisted ? "true" : "false") + ";configPath="
+			+ configPath + ";final=" + finalSummary + ";finalSnapshot=" + finalSnapshot.split("\n")
+			.join("\\n") + ";events=[" + eventSummaries.join("##") + "]";
 	}
 }

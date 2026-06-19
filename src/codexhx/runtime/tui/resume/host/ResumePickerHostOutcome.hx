@@ -82,11 +82,7 @@ class ResumePickerHostOutcome {
 	}
 
 	public function summary():String {
-		return "ok=" + (ok ? "true" : "false")
-			+ ";kind=" + kind
-			+ ";code=" + code
-			+ ";detail=" + detail
-			+ ";pending=" + pendingCount
-			+ ";skipped=" + skippedCount;
+		return "ok=" + (ok ? "true" : "false") + ";kind=" + kind + ";code=" + code + ";detail=" + detail + ";pending=" + pendingCount + ";skipped="
+			+ skippedCount;
 	}
 }

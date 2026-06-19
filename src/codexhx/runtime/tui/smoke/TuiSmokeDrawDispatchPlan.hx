@@ -68,7 +68,6 @@ class TuiSmokeDrawDispatchPlan {
 	public final followUpFrame:Bool;
 	public final failureCode:String;
 
-
 	public function enabled():Bool {
 		return !allowLiveDispatch
 			&& event != TuiSmokeDrawDispatchEventKind.Unknown
@@ -76,7 +75,8 @@ class TuiSmokeDrawDispatchPlan {
 	}
 
 	public function renderedAreaText():String {
-		if (renderedWidth <= 0 || renderedHeight <= 0) return "none";
+		if (renderedWidth <= 0 || renderedHeight <= 0)
+			return "none";
 		return renderedWidth + "x" + renderedHeight;
 	}
 }

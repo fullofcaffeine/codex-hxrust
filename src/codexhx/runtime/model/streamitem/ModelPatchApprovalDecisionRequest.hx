@@ -15,21 +15,10 @@ class ModelPatchApprovalDecisionRequest {
 	public final reviewDecision:ModelPatchReviewDecision;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		verificationOutcome:ModelPatchVerificationOutcome,
-		applicationOutcome:ModelPatchApplicationOutcome,
-		environmentId:String,
-		approvalRequirement:ModelPatchApprovalRequirement,
-		permissionsPreapproved:Bool,
-		additionalPermissionRoot:String,
-		retryReason:String,
-		sandboxApprovalAllowed:Bool,
-		sandboxAttempt:ModelPatchSandboxAttemptKind,
-		sandboxDenied:Bool,
-		reviewDecision:ModelPatchReviewDecision,
-		secretProbe:String
-	) {
+	public function new(requestId:String, verificationOutcome:ModelPatchVerificationOutcome, applicationOutcome:ModelPatchApplicationOutcome,
+			environmentId:String, approvalRequirement:ModelPatchApprovalRequirement, permissionsPreapproved:Bool, additionalPermissionRoot:String,
+			retryReason:String, sandboxApprovalAllowed:Bool, sandboxAttempt:ModelPatchSandboxAttemptKind, sandboxDenied:Bool,
+			reviewDecision:ModelPatchReviewDecision, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.verificationOutcome = verificationOutcome;
 		this.applicationOutcome = applicationOutcome;

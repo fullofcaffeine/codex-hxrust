@@ -76,7 +76,6 @@ class TuiSmokeSlashPopupAction {
 	public final unsupportedRejected:Bool;
 	public final failureCode:String;
 
-
 	public function activeTransitionText():String {
 		return activeBefore + "->" + activeAfter;
 	}

@@ -12,7 +12,8 @@ class ThreadReadTurnItemsListReport {
 	public function unsupportedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.code == "method_not_found") count = count + 1;
+			if (outcome.code == "method_not_found")
+				count = count + 1;
 		}
 		return count;
 	}
@@ -26,10 +27,7 @@ class ThreadReadTurnItemsListReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";requests=" + Std.string(outcomes.length)
-			+ ";unsupported=" + Std.string(unsupportedCount())
-			+ ";failed=" + Std.string(failureCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";requests=" + Std.string(outcomes.length) + ";unsupported=" + Std.string(unsupportedCount()) + ";failed="
+			+ Std.string(failureCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

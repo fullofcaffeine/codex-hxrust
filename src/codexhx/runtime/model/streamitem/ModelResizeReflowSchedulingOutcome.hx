@@ -90,33 +90,16 @@ class ModelResizeReflowSchedulingOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";resizeReflowRequest=" + noneIfEmpty(resizeReflowRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";currentWidth=" + currentWidth
-			+ ";currentHeight=" + currentHeight
-			+ ";lastKnownWidth=" + lastKnownWidth
-			+ ";lastKnownHeight=" + lastKnownHeight
-			+ ";widthInitialized=" + boolText(widthInitialized)
-			+ ";widthChanged=" + boolText(widthChanged)
-			+ ";reflowNeededForWidth=" + boolText(reflowNeededForWidth)
-			+ ";heightChanged=" + boolText(heightChanged)
-			+ ";shouldRebuildTranscript=" + boolText(shouldRebuildTranscript)
-			+ ";pendingReflowSet=" + boolText(pendingReflowSet)
-			+ ";pendingTargetWidth=" + pendingTargetWidth
-			+ ";debounceMs=" + debounceMs
-			+ ";immediateFrameRequested=" + boolText(immediateFrameRequested)
-			+ ";delayedFrameRequested=" + boolText(delayedFrameRequested)
-			+ ";statusLineRefreshNeeded=" + boolText(statusLineRefreshNeeded)
-			+ ";streamResizeMarked=" + boolText(streamResizeMarked)
-			+ ";reflowStateCleared=" + boolText(reflowStateCleared)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";resizeReflowRequest=" + noneIfEmpty(resizeReflowRequestId)
+			+ ";decisionKind=" + decisionKind + ";currentWidth=" + currentWidth + ";currentHeight=" + currentHeight + ";lastKnownWidth=" + lastKnownWidth
+			+ ";lastKnownHeight=" + lastKnownHeight + ";widthInitialized=" + boolText(widthInitialized) + ";widthChanged=" + boolText(widthChanged)
+			+ ";reflowNeededForWidth=" + boolText(reflowNeededForWidth) + ";heightChanged=" + boolText(heightChanged) + ";shouldRebuildTranscript="
+			+ boolText(shouldRebuildTranscript) + ";pendingReflowSet=" + boolText(pendingReflowSet) + ";pendingTargetWidth=" + pendingTargetWidth
+			+ ";debounceMs=" + debounceMs + ";immediateFrameRequested=" + boolText(immediateFrameRequested) + ";delayedFrameRequested="
+			+ boolText(delayedFrameRequested) + ";statusLineRefreshNeeded=" + boolText(statusLineRefreshNeeded) + ";streamResizeMarked="
+			+ boolText(streamResizeMarked) + ";reflowStateCleared=" + boolText(reflowStateCleared) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

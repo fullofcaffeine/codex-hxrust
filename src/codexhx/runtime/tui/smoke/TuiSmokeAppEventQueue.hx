@@ -10,7 +10,8 @@ class TuiSmokeAppEventQueue {
 	}
 
 	public function send(event:TuiSmokeAppEvent):Bool {
-		if (event == null || event.kind == TuiSmokeAppEventKind.Unknown) return false;
+		if (event == null || event.kind == TuiSmokeAppEventKind.Unknown)
+			return false;
 		events.push(event);
 		loggedCount = loggedCount + 1;
 		return true;
@@ -21,7 +22,8 @@ class TuiSmokeAppEventQueue {
 	}
 
 	public function next():Null<TuiSmokeAppEvent> {
-		if (events.length == 0) return null;
+		if (events.length == 0)
+			return null;
 		final event = events[0];
 		events.splice(0, 1);
 		return event;

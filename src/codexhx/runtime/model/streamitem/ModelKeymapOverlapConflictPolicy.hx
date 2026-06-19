@@ -4,48 +4,27 @@ class ModelKeymapOverlapConflictPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeymapOverlapConflictRequest):ModelKeymapOverlapConflictOutcome {
-		if (request == null) return failure("", "missing keymap overlap conflict request");
+		if (request == null)
+			return failure("", "missing keymap overlap conflict request");
 
-		final explicitListLegacyConflictPreserved = conflict(
-			request.explicitListLegacyOuterAction,
-			ModelKeymapOverlapConflictActionKind.ListMoveUp,
-			request.explicitListLegacyInnerAction,
-			ModelKeymapOverlapConflictActionKind.ListPageUp,
-			request.explicitListLegacyBinding,
-			named("page-up")
-		);
+		final explicitListLegacyConflictPreserved = conflict(request.explicitListLegacyOuterAction, ModelKeymapOverlapConflictActionKind.ListMoveUp,
+			request.explicitListLegacyInnerAction, ModelKeymapOverlapConflictActionKind.ListPageUp, request.explicitListLegacyBinding, named("page-up"));
 		final appBindingPrunesListDefaultPreserved = matches(request.configuredAppCopy, named("page-down"))
 			&& sameBindings(request.prunedListPageDownAfterApp, [character("f", true)]);
 		final approvalBindingPrunesListDefaultPreserved = matches(request.configuredApprovalApprove, named("home"))
 			&& sameBindings(request.prunedListJumpTopAfterApproval, []);
-		final explicitListApprovalConflictPreserved = conflict(
-			request.explicitListApprovalOuterAction,
-			ModelKeymapOverlapConflictActionKind.ListJumpTop,
-			request.explicitListApprovalInnerAction,
-			ModelKeymapOverlapConflictActionKind.ApprovalApprove,
-			request.explicitListApprovalBinding,
-			named("home")
-		);
+		final explicitListApprovalConflictPreserved = conflict(request.explicitListApprovalOuterAction, ModelKeymapOverlapConflictActionKind.ListJumpTop,
+			request.explicitListApprovalInnerAction, ModelKeymapOverlapConflictActionKind.ApprovalApprove, request.explicitListApprovalBinding, named("home"));
 		final legacyVimChangePruningPreserved = matches(request.configuredLegacyVimMoveLeftForChange, character("c", false))
 			&& sameBindings(request.prunedVimStartChangeOperator, []);
-		final explicitVimChangeConflictPreserved = conflict(
-			request.explicitVimChangeOuterAction,
-			ModelKeymapOverlapConflictActionKind.VimNormalMoveLeft,
-			request.explicitVimChangeInnerAction,
-			ModelKeymapOverlapConflictActionKind.VimNormalStartChangeOperator,
-			request.explicitVimChangeBinding,
-			character("c", false)
-		);
+		final explicitVimChangeConflictPreserved = conflict(request.explicitVimChangeOuterAction, ModelKeymapOverlapConflictActionKind.VimNormalMoveLeft,
+			request.explicitVimChangeInnerAction, ModelKeymapOverlapConflictActionKind.VimNormalStartChangeOperator, request.explicitVimChangeBinding,
+			character("c", false));
 		final legacyVimSubstitutePruningPreserved = matches(request.configuredLegacyVimMoveLeftForSubstitute, character("s", false))
 			&& sameBindings(request.prunedVimSubstituteChar, []);
-		final explicitVimSubstituteConflictPreserved = conflict(
-			request.explicitVimSubstituteOuterAction,
-			ModelKeymapOverlapConflictActionKind.VimNormalMoveLeft,
-			request.explicitVimSubstituteInnerAction,
-			ModelKeymapOverlapConflictActionKind.VimNormalSubstituteChar,
-			request.explicitVimSubstituteBinding,
-			character("s", false)
-		);
+		final explicitVimSubstituteConflictPreserved = conflict(request.explicitVimSubstituteOuterAction,
+			ModelKeymapOverlapConflictActionKind.VimNormalMoveLeft, request.explicitVimSubstituteInnerAction,
+			ModelKeymapOverlapConflictActionKind.VimNormalSubstituteChar, request.explicitVimSubstituteBinding, character("s", false));
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = explicitListLegacyConflictPreserved
 			&& appBindingPrunesListDefaultPreserved
@@ -56,9 +35,7 @@ class ModelKeymapOverlapConflictPolicy {
 			&& legacyVimSubstitutePruningPreserved
 			&& explicitVimSubstituteConflictPreserved
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapOverlapConflictDecisionKind.KeymapOverlapConflictsPreserved
-			: ModelKeymapOverlapConflictDecisionKind.KeymapOverlapConflictsRejected;
+		final decisionKind = ok ? ModelKeymapOverlapConflictDecisionKind.KeymapOverlapConflictsPreserved : ModelKeymapOverlapConflictDecisionKind.KeymapOverlapConflictsRejected;
 
 		return new ModelKeymapOverlapConflictOutcome({
 			ok: ok,
@@ -81,21 +58,18 @@ class ModelKeymapOverlapConflictPolicy {
 		});
 	}
 
-	static function conflict(
-		actualOuter:ModelKeymapOverlapConflictActionKind,
-		expectedOuter:ModelKeymapOverlapConflictActionKind,
-		actualInner:ModelKeymapOverlapConflictActionKind,
-		expectedInner:ModelKeymapOverlapConflictActionKind,
-		actualBinding:Null<ModelKeymapBinding>,
-		expectedBinding:ModelKeymapBinding
-	):Bool {
+	static function conflict(actualOuter:ModelKeymapOverlapConflictActionKind, expectedOuter:ModelKeymapOverlapConflictActionKind,
+			actualInner:ModelKeymapOverlapConflictActionKind, expectedInner:ModelKeymapOverlapConflictActionKind, actualBinding:Null<ModelKeymapBinding>,
+			expectedBinding:ModelKeymapBinding):Bool {
 		return actualOuter == expectedOuter && actualInner == expectedInner && matches(actualBinding, expectedBinding);
 	}
 
 	static function sameBindings(actual:Array<ModelKeymapBinding>, expected:Array<ModelKeymapBinding>):Bool {
-		if (actual.length != expected.length) return false;
+		if (actual.length != expected.length)
+			return false;
 		for (i in 0...actual.length) {
-			if (!matches(actual[i], expected[i])) return false;
+			if (!matches(actual[i], expected[i]))
+				return false;
 		}
 		return true;
 	}

@@ -54,21 +54,13 @@ class ModelKeymapEditorUnbindConflictOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";configuredKillWholeLinePreserved=" + boolText(configuredKillWholeLinePreserved)
-			+ ";defaultKillLineStartPreserved=" + boolText(defaultKillLineStartPreserved)
-			+ ";conflictActionNamesPreserved=" + boolText(conflictActionNamesPreserved)
-			+ ";conflictRejectionPreserved=" + boolText(conflictRejectionPreserved)
-			+ ";originalActionUnboundPreserved=" + boolText(originalActionUnboundPreserved)
-			+ ";runtimeKillWholeLinePreserved=" + boolText(runtimeKillWholeLinePreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";configuredKillWholeLinePreserved="
+			+ boolText(configuredKillWholeLinePreserved) + ";defaultKillLineStartPreserved=" + boolText(defaultKillLineStartPreserved)
+			+ ";conflictActionNamesPreserved=" + boolText(conflictActionNamesPreserved) + ";conflictRejectionPreserved="
+			+ boolText(conflictRejectionPreserved) + ";originalActionUnboundPreserved=" + boolText(originalActionUnboundPreserved)
+			+ ";runtimeKillWholeLinePreserved=" + boolText(runtimeKillWholeLinePreserved) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

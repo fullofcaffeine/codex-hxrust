@@ -11,17 +11,8 @@ class ModelSamplingContinuationRequest {
 	public final previousSamplingRequestCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		responseInputOutcome:ModelPatchToolResponseInputOutcome,
-		hasPendingInput:Bool,
-		pendingInputCount:Int,
-		tokenLimitReached:Bool,
-		activeContextTokens:Int,
-		estimatedTokenCount:Int,
-		previousSamplingRequestCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, responseInputOutcome:ModelPatchToolResponseInputOutcome, hasPendingInput:Bool, pendingInputCount:Int,
+			tokenLimitReached:Bool, activeContextTokens:Int, estimatedTokenCount:Int, previousSamplingRequestCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.responseInputOutcome = responseInputOutcome;
 		this.hasPendingInput = hasPendingInput;

@@ -125,14 +125,8 @@ class ResumePickerReloadScrollPreservationRenderGate {
 			rowView("thread-visible-3b", "Reloaded scroll row three", "2026-06-19T17:13:00Z", 13, false),
 			rowView("thread-anchor", "Anchor scroll row", "2026-06-19T17:04:00Z", 5, true)
 		];
-		applyLoadedCommon(
-			state,
-			"scroll_preserved_by_window",
-			"selected=thread-anchor;index=4;scrollTop=2;previousScrollTop=2",
-			"scroll preserved",
-			true,
-			false
-		);
+		applyLoadedCommon(state, "scroll_preserved_by_window", "selected=thread-anchor;index=4;scrollTop=2;previousScrollTop=2", "scroll preserved", true,
+			false);
 	}
 
 	static function applyClampedScrollPage(state:ResumePickerState):Void {
@@ -150,14 +144,8 @@ class ResumePickerReloadScrollPreservationRenderGate {
 			rowView("thread-compact-1", "Compact scroll row one", "2026-06-19T17:21:00Z", 34, false),
 			rowView("thread-anchor", "Anchor scroll row", "2026-06-19T17:04:00Z", 5, true)
 		];
-		applyLoadedCommon(
-			state,
-			"scroll_clamped_after_shrink",
-			"selected=thread-anchor;index=2;scrollTop=0;previousScrollTop=2;maxScrollTop=0",
-			"scroll clamped",
-			false,
-			false
-		);
+		applyLoadedCommon(state, "scroll_clamped_after_shrink", "selected=thread-anchor;index=2;scrollTop=0;previousScrollTop=2;maxScrollTop=0",
+			"scroll clamped", false, false);
 	}
 
 	static function applyLoadedCommon(state:ResumePickerState, status:String, detail:String, footer:String, moreAbove:Bool, moreBelow:Bool):Void {
@@ -176,17 +164,9 @@ class ResumePickerReloadScrollPreservationRenderGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query
-			+ ";rows=" + state.loadedRows
-			+ ";selected=" + state.selectedIndex
-			+ ";thread=" + state.selectedThreadId
-			+ ";scrollTop=" + state.scrollTop
-			+ ";viewRows=" + state.viewRows
-			+ ";moreAbove=" + boolLabel(state.moreAbove)
-			+ ";moreBelow=" + boolLabel(state.moreBelow)
-			+ ";footer=" + state.footerProgressLabel
-			+ ";loader=" + state.loaderEventStatus
-			+ ";detail=" + state.loaderEventDetail;
+		return "query=" + state.query + ";rows=" + state.loadedRows + ";selected=" + state.selectedIndex + ";thread=" + state.selectedThreadId
+			+ ";scrollTop=" + state.scrollTop + ";viewRows=" + state.viewRows + ";moreAbove=" + boolLabel(state.moreAbove) + ";moreBelow="
+			+ boolLabel(state.moreBelow) + ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
 	}
 
 	static function loadPage(loader:DeterministicResumePickerBackgroundLoader, request:ResumePickerThreadListRequest):ResumePickerHostEvent {

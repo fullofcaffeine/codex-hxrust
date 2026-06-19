@@ -22,28 +22,11 @@ class ModelAppServerQueuedRequestDeliveryOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		enqueueRequestId:String,
-		requestKind:ModelReplayedServerRequestKind,
-		deliveryKind:ModelAppServerQueuedRequestDeliveryKind,
-		requestStillPending:Bool,
-		activeThreadEvent:Bool,
-		replayKindAttached:Bool,
-		chatWidgetRequestHandled:Bool,
-		pendingCheckApplied:Bool,
-		nonPendingSkipped:Bool,
-		pendingPrimaryStillDeferred:Bool,
-		replayStatePreserved:Bool,
-		deliveryOrderingPreserved:Bool,
-		liveOnlyEffectsSuppressed:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, enqueueRequestId:String, requestKind:ModelReplayedServerRequestKind,
+			deliveryKind:ModelAppServerQueuedRequestDeliveryKind, requestStillPending:Bool, activeThreadEvent:Bool, replayKindAttached:Bool,
+			chatWidgetRequestHandled:Bool, pendingCheckApplied:Bool, nonPendingSkipped:Bool, pendingPrimaryStillDeferred:Bool, replayStatePreserved:Bool,
+			deliveryOrderingPreserved:Bool, liveOnlyEffectsSuppressed:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -67,26 +50,14 @@ class ModelAppServerQueuedRequestDeliveryOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";enqueueRequest=" + noneIfEmpty(enqueueRequestId)
-			+ ";requestKind=" + requestKind
-			+ ";deliveryKind=" + deliveryKind
-			+ ";requestStillPending=" + boolText(requestStillPending)
-			+ ";activeThreadEvent=" + boolText(activeThreadEvent)
-			+ ";replayKindAttached=" + boolText(replayKindAttached)
-			+ ";chatWidgetRequestHandled=" + boolText(chatWidgetRequestHandled)
-			+ ";pendingCheckApplied=" + boolText(pendingCheckApplied)
-			+ ";nonPendingSkipped=" + boolText(nonPendingSkipped)
-			+ ";pendingPrimaryStillDeferred=" + boolText(pendingPrimaryStillDeferred)
-			+ ";replayStatePreserved=" + boolText(replayStatePreserved)
-			+ ";deliveryOrderingPreserved=" + boolText(deliveryOrderingPreserved)
-			+ ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";enqueueRequest=" + noneIfEmpty(enqueueRequestId) + ";requestKind="
+			+ requestKind + ";deliveryKind=" + deliveryKind + ";requestStillPending=" + boolText(requestStillPending) + ";activeThreadEvent="
+			+ boolText(activeThreadEvent) + ";replayKindAttached=" + boolText(replayKindAttached) + ";chatWidgetRequestHandled="
+			+ boolText(chatWidgetRequestHandled) + ";pendingCheckApplied=" + boolText(pendingCheckApplied) + ";nonPendingSkipped="
+			+ boolText(nonPendingSkipped) + ";pendingPrimaryStillDeferred=" + boolText(pendingPrimaryStillDeferred) + ";replayStatePreserved="
+			+ boolText(replayStatePreserved) + ";deliveryOrderingPreserved=" + boolText(deliveryOrderingPreserved) + ";liveOnlyEffectsSuppressed="
+			+ boolText(liveOnlyEffectsSuppressed) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

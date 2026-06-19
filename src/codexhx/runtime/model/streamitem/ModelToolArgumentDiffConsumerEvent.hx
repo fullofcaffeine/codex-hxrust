@@ -17,12 +17,10 @@ class ModelToolArgumentDiffConsumerEvent {
 
 	public function summary():String {
 		final parts:Array<String> = [];
-		for (change in changes) parts.push(change.summary());
-		return "consumer=" + kind
-			+ ";callId=" + callId
-			+ ";finished=" + boolText(finished)
-			+ ";index=" + Std.string(index)
-			+ ";changes=[" + parts.join("||") + "]";
+		for (change in changes)
+			parts.push(change.summary());
+		return "consumer=" + kind + ";callId=" + callId + ";finished=" + boolText(finished) + ";index=" + Std.string(index) + ";changes=["
+			+ parts.join("||") + "]";
 	}
 
 	static function boolText(value:Bool):String {

@@ -38,10 +38,12 @@ class ThreadReadTokenUsageReplayHarness {
 				assertEquals(expectedThreadId, outcome.notification.threadId);
 				assertEquals(expectedTurnId, outcome.notification.turnId);
 				assertEquals(expectedContextWindow, outcome.notification.tokenUsage.modelContextWindowText());
-				if (expectedJson.length > 0) assertContains(outcome.notification.toJson(), expectedJson);
+				if (expectedJson.length > 0)
+					assertContains(outcome.notification.toJson(), expectedJson);
 			}
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -50,28 +52,19 @@ class ThreadReadTokenUsageReplayHarness {
 		final out:Array<Null<ThreadReadTokenUsageReplayRequest>> = [];
 		for (value in values) {
 			final caseObject = objectValue(value);
-			out.push(ThreadReadTokenUsageReplayRequest.fromRaw(
-				stringField(caseObject, "threadId", ""),
-				ownerOutcome(objectField(caseObject, "owner")),
-				tokenUsage(caseObject)
-			));
+			out.push(ThreadReadTokenUsageReplayRequest.fromRaw(stringField(caseObject, "threadId", ""), ownerOutcome(objectField(caseObject, "owner")),
+				tokenUsage(caseObject)));
 		}
 		return out;
 	}
 
 	static function ownerOutcome(value:Value):ThreadReadTokenUsageOwnerOutcome {
 		if (boolField(value, "ok", false)) {
-			return ThreadReadTokenUsageOwnerOutcome.selected(
-				stringField(value, "turnId", ""),
-				intField(value, "turnIndex", -1),
-				cast stringField(value, "reason", "")
-			);
+			return ThreadReadTokenUsageOwnerOutcome.selected(stringField(value, "turnId", ""), intField(value, "turnIndex", -1),
+				cast stringField(value, "reason", ""));
 		}
-		return ThreadReadTokenUsageOwnerOutcome.failure(
-			stringField(value, "code", "owner_failed"),
-			cast stringField(value, "reason", ThreadReadTokenUsageOwnerReason.EmptyThread),
-			"owner resolution failed"
-		);
+		return ThreadReadTokenUsageOwnerOutcome.failure(stringField(value, "code", "owner_failed"),
+			cast stringField(value, "reason", ThreadReadTokenUsageOwnerReason.EmptyThread), "owner resolution failed");
 	}
 
 	static function tokenUsage(caseObject:Value):Null<ThreadReadTokenUsageInfo> {
@@ -97,13 +90,8 @@ class ThreadReadTokenUsageReplayHarness {
 	}
 
 	static function breakdown(value:Value):ThreadReadTokenUsageBreakdown {
-		return new ThreadReadTokenUsageBreakdown(
-			intField(value, "totalTokens", 0),
-			intField(value, "inputTokens", 0),
-			intField(value, "cachedInputTokens", 0),
-			intField(value, "outputTokens", 0),
-			intField(value, "reasoningOutputTokens", 0)
-		);
+		return new ThreadReadTokenUsageBreakdown(intField(value, "totalTokens", 0), intField(value, "inputTokens", 0),
+			intField(value, "cachedInputTokens", 0), intField(value, "outputTokens", 0), intField(value, "reasoningOutputTokens", 0));
 	}
 
 	static function assertReport(root:Value, report:ThreadReadTokenUsageReplayReport):Void {
@@ -166,7 +154,8 @@ class ThreadReadTokenUsageReplayHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -183,7 +172,8 @@ class ThreadReadTokenUsageReplayHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -192,10 +182,12 @@ class ThreadReadTokenUsageReplayHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

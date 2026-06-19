@@ -57,18 +57,11 @@ class ThreadReadToolFinishGoalProgressAdmissionHarness {
 		final out:Array<ThreadReadToolFinishGoalProgressAdmissionRequest> = [];
 		for (value in values) {
 			final request = objectField(objectValue(value), "request");
-			out.push(new ThreadReadToolFinishGoalProgressAdmissionRequest(
-				boolField(request, "runtimeAvailable", false),
-				boolField(request, "runtimeEnabled", false),
-				stringField(request, "turnId", ""),
-				stringField(request, "callId", ""),
-				stringField(request, "toolNamespace", ""),
-				stringField(request, "toolName", ""),
-				outcomeKind(stringField(request, "outcomeKind", "")),
-				boolField(request, "completedSuccess", false),
-				boolField(request, "failedHandlerExecuted", false),
-				accountingOutcome(valueField(request, "accounting"))
-			));
+			out.push(new ThreadReadToolFinishGoalProgressAdmissionRequest(boolField(request, "runtimeAvailable", false),
+				boolField(request, "runtimeEnabled", false), stringField(request, "turnId", ""), stringField(request, "callId", ""),
+				stringField(request, "toolNamespace", ""), stringField(request, "toolName", ""), outcomeKind(stringField(request, "outcomeKind", "")),
+				boolField(request, "completedSuccess", false), boolField(request, "failedHandlerExecuted", false),
+				accountingOutcome(valueField(request, "accounting"))));
 		}
 		return out;
 	}
@@ -82,20 +75,11 @@ class ThreadReadToolFinishGoalProgressAdmissionHarness {
 	}
 
 	static function accountingRequest(request:Value):ThreadReadActiveGoalProgressAccountingRequest {
-		return new ThreadReadActiveGoalProgressAccountingRequest(
-			stringField(request, "turnId", ""),
-			stringField(request, "eventId", ""),
-			boolField(request, "progressSnapshotAvailable", false),
-			stringField(request, "snapshotExpectedGoalId", ""),
-			intField(request, "snapshotTimeDeltaSeconds", 0),
-			intField(request, "snapshotTokenDelta", 0),
-			stringField(request, "previousStatus", ""),
-			dbOutcomeKind(stringField(request, "dbOutcomeKind", "")),
-			stringField(request, "dbErrorCode", ""),
-			goalValue(valueField(request, "updatedGoal")),
-			stringField(request, "updatedGoalId", ""),
-			disposition(stringField(request, "disposition", "keep_active"))
-		);
+		return new ThreadReadActiveGoalProgressAccountingRequest(stringField(request, "turnId", ""), stringField(request, "eventId", ""),
+			boolField(request, "progressSnapshotAvailable", false), stringField(request, "snapshotExpectedGoalId", ""),
+			intField(request, "snapshotTimeDeltaSeconds", 0), intField(request, "snapshotTokenDelta", 0), stringField(request, "previousStatus", ""),
+			dbOutcomeKind(stringField(request, "dbOutcomeKind", "")), stringField(request, "dbErrorCode", ""), goalValue(valueField(request, "updatedGoal")),
+			stringField(request, "updatedGoalId", ""), disposition(stringField(request, "disposition", "keep_active")));
 	}
 
 	static function outcomeKind(value:String):ThreadReadToolCallOutcomeKind {
@@ -130,7 +114,8 @@ class ThreadReadToolFinishGoalProgressAdmissionHarness {
 			case JNull: null;
 			case _:
 				final parsed = ThreadGoal.parseApp(value);
-				if (!parsed.ok) throw "invalid goal fixture: " + parsed.errorCode;
+				if (!parsed.ok)
+					throw "invalid goal fixture: " + parsed.errorCode;
 				parsed.value;
 		}
 	}
@@ -194,7 +179,8 @@ class ThreadReadToolFinishGoalProgressAdmissionHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -211,7 +197,8 @@ class ThreadReadToolFinishGoalProgressAdmissionHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -220,10 +207,12 @@ class ThreadReadToolFinishGoalProgressAdmissionHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

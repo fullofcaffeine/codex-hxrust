@@ -4,7 +4,8 @@ class ModelKeyParserPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeyParserRequest):ModelKeyParserOutcome {
-		if (request == null) return failure("", "missing key parser request");
+		if (request == null)
+			return failure("", "missing key parser request");
 
 		var acceptedFunctionKeyCount = 0;
 		var rejectedFunctionKeyCount = 0;
@@ -20,21 +21,27 @@ class ModelKeyParserPolicy {
 
 		for (keyCase in request.cases) {
 			final parsed = parse(keyCase.spec, request.maxFunctionKey);
-			if (parsed.accepted && parsed.kind == ModelParsedKeyKind.Function) acceptedFunctionKeyCount++;
-			if (!parsed.accepted && keyCase.expectedKind == ModelParsedKeyKind.Function) rejectedFunctionKeyCount++;
-			if (parsed.accepted && parsed.kind == ModelParsedKeyKind.Named) namedKeyCount++;
+			if (parsed.accepted && parsed.kind == ModelParsedKeyKind.Function)
+				acceptedFunctionKeyCount++;
+			if (!parsed.accepted && keyCase.expectedKind == ModelParsedKeyKind.Function)
+				rejectedFunctionKeyCount++;
+			if (parsed.accepted && parsed.kind == ModelParsedKeyKind.Named)
+				namedKeyCount++;
 			if (parsed.accepted && keyCase.spec == "space" && parsed.kind == ModelParsedKeyKind.Character && parsed.keyName == " ") {
 				spaceAliasPreserved = true;
 			}
 			if (parsed.accepted && keyCase.spec == "minus" && parsed.kind == ModelParsedKeyKind.Character && parsed.keyName == "-") {
 				minusAliasPreserved = true;
 			}
-			if (!parsed.accepted && keyCase.spec == "ctrl") modifierOnlyRejected = true;
+			if (!parsed.accepted && keyCase.spec == "ctrl")
+				modifierOnlyRejected = true;
 			if (!parsed.accepted && keyCase.spec == "ff" && keyCase.expectedKind == ModelParsedKeyKind.Function) {
 				nonnumericFunctionRejected = true;
 			}
-			if (isAltMinusCase(keyCase, parsed, "alt-minus")) altMinusAliasPreserved = true;
-			if (isAltMinusCase(keyCase, parsed, "alt--")) legacyAltLiteralMinusPreserved = true;
+			if (isAltMinusCase(keyCase, parsed, "alt-minus"))
+				altMinusAliasPreserved = true;
+			if (isAltMinusCase(keyCase, parsed, "alt--"))
+				legacyAltLiteralMinusPreserved = true;
 			if (parsed.accepted
 				&& keyCase.spec == "-"
 				&& parsed.kind == ModelParsedKeyKind.Character
@@ -42,25 +49,15 @@ class ModelKeyParserPolicy {
 				&& !parsed.hasAnyModifier()) {
 				literalMinusPreserved = true;
 			}
-			if (!caseMatches(keyCase, parsed)) allExpectedCasesMatched = false;
+			if (!caseMatches(keyCase, parsed))
+				allExpectedCasesMatched = false;
 		}
 
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = allExpectedCasesMatched
-			&& acceptedFunctionKeyCount == 2
-			&& rejectedFunctionKeyCount == 2
-			&& namedKeyCount >= 12
-			&& spaceAliasPreserved
-			&& minusAliasPreserved
-			&& modifierOnlyRejected
-			&& nonnumericFunctionRejected
-			&& altMinusAliasPreserved
-			&& legacyAltLiteralMinusPreserved
-			&& literalMinusPreserved
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeyParserDecisionKind.KeyParserCasesPreserved
-			: ModelKeyParserDecisionKind.KeyParserCasesRejected;
+		final ok = allExpectedCasesMatched && acceptedFunctionKeyCount == 2 && rejectedFunctionKeyCount == 2 && namedKeyCount >= 12 && spaceAliasPreserved
+			&& minusAliasPreserved && modifierOnlyRejected && nonnumericFunctionRejected && altMinusAliasPreserved && legacyAltLiteralMinusPreserved
+			&& literalMinusPreserved && eventOrderingPreserved;
+		final decisionKind = ok ? ModelKeyParserDecisionKind.KeyParserCasesPreserved : ModelKeyParserDecisionKind.KeyParserCasesRejected;
 
 		return new ModelKeyParserOutcome({
 			ok: ok,
@@ -98,7 +95,8 @@ class ModelKeyParserPolicy {
 
 	static function parse(spec:String, maxFunctionKey:Int):ParsedKey {
 		final normalized = spec == null ? "" : spec.toLowerCase();
-		if (normalized.length == 0) return invalid();
+		if (normalized.length == 0)
+			return invalid();
 		final keyParts = normalized.split("-");
 		var ctrlModifier = false;
 		var altModifier = false;
@@ -119,7 +117,8 @@ class ModelKeyParserPolicy {
 					keyName = part;
 			}
 		}
-		if (keyName == null) return invalid();
+		if (keyName == null)
+			return invalid();
 		while (index < keyParts.length) {
 			keyName += "-" + keyParts[index];
 			index++;
@@ -128,7 +127,8 @@ class ModelKeyParserPolicy {
 		if (keyName.length > 1 && keyName.charAt(0) == "f") {
 			final digits = keyName.substr(1);
 			final number = Std.parseInt(digits);
-			if (number == null || "f" + number != keyName) return invalidFunction();
+			if (number == null || "f" + number != keyName)
+				return invalidFunction();
 			if (number >= 1 && number <= maxFunctionKey) {
 				return new ParsedKey(true, ModelParsedKeyKind.Function, keyName, number, ctrlModifier, altModifier, shiftModifier);
 			}
@@ -204,15 +204,7 @@ class ParsedKey {
 	public final altModifier:Bool;
 	public final shiftModifier:Bool;
 
-	public function new(
-		accepted:Bool,
-		kind:ModelParsedKeyKind,
-		keyName:String,
-		functionNumber:Int,
-		ctrlModifier:Bool,
-		altModifier:Bool,
-		shiftModifier:Bool
-	) {
+	public function new(accepted:Bool, kind:ModelParsedKeyKind, keyName:String, functionNumber:Int, ctrlModifier:Bool, altModifier:Bool, shiftModifier:Bool) {
 		this.accepted = accepted;
 		this.kind = kind;
 		this.keyName = keyName == null ? "" : keyName;

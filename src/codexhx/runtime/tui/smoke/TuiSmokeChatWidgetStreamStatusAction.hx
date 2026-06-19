@@ -71,5 +71,4 @@ class TuiSmokeChatWidgetStreamStatusAction {
 	public final noRatatuiRender:Bool;
 	public final noModelCall:Bool;
 	public final unsupportedRejected:Bool;
-
 }

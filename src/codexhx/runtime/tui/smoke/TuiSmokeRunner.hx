@@ -2,11 +2,14 @@ package codexhx.runtime.tui.smoke;
 
 class TuiSmokeRunner {
 	public static function run(request:TuiSmokeFrameRequest):TuiSmokeOutcome {
-		if (request == null) return rejected("missing_request", "");
-		if (request.allowNetwork || request.allowModelCall) return rejected("live_effects_not_allowed", "");
+		if (request == null)
+			return rejected("missing_request", "");
+		if (request.allowNetwork || request.allowModelCall)
+			return rejected("live_effects_not_allowed", "");
 
 		final terminal = new TuiSmokeTerminalFacade(request.terminalMode, [request.key]);
-		if (!terminal.setup(request.allowLiveTerminal)) return rejected("terminal_setup_rejected", "");
+		if (!terminal.setup(request.allowLiveTerminal))
+			return rejected("terminal_setup_rejected", "");
 
 		final frame = terminal.render(request);
 		final key = terminal.pollKey();

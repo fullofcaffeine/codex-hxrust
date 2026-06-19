@@ -32,38 +32,13 @@ class ModelThreadSideThreadNavigationCleanupOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		composerHandoffRequestId:String,
-		decisionKind:ModelThreadSideThreadNavigationCleanupDecisionKind,
-		discardTargetSelected:Bool,
-		parentSwitchAttempted:Bool,
-		selectTargetSucceeded:Bool,
-		interruptAttempted:Bool,
-		startupInterruptAttempted:Bool,
-		turnInterruptAttempted:Bool,
-		unsubscribeAttempted:Bool,
-		serverRpcAttempted:Bool,
-		localStateRemoved:Bool,
-		localStateRetained:Bool,
-		threadEventChannelRemoved:Bool,
-		sideThreadStateRemoved:Bool,
-		agentNavigationEntryRemoved:Bool,
-		activeThreadCleared:Bool,
-		pendingApprovalsRefreshed:Bool,
-		activeAgentLabelSynced:Bool,
-		pendingInactiveRequestsSurfaced:Bool,
-		cleanupFailureKeptVisible:Bool,
-		closedSideThreadLocalOnly:Bool,
-		errorMessageDisplayed:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, composerHandoffRequestId:String,
+			decisionKind:ModelThreadSideThreadNavigationCleanupDecisionKind, discardTargetSelected:Bool, parentSwitchAttempted:Bool,
+			selectTargetSucceeded:Bool, interruptAttempted:Bool, startupInterruptAttempted:Bool, turnInterruptAttempted:Bool, unsubscribeAttempted:Bool,
+			serverRpcAttempted:Bool, localStateRemoved:Bool, localStateRetained:Bool, threadEventChannelRemoved:Bool, sideThreadStateRemoved:Bool,
+			agentNavigationEntryRemoved:Bool, activeThreadCleared:Bool, pendingApprovalsRefreshed:Bool, activeAgentLabelSynced:Bool,
+			pendingInactiveRequestsSurfaced:Bool, cleanupFailureKeptVisible:Bool, closedSideThreadLocalOnly:Bool, errorMessageDisplayed:Bool,
+			eventOrderingPreserved:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -97,36 +72,20 @@ class ModelThreadSideThreadNavigationCleanupOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";composerHandoffRequest=" + noneIfEmpty(composerHandoffRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";discardTargetSelected=" + boolText(discardTargetSelected)
-			+ ";parentSwitchAttempted=" + boolText(parentSwitchAttempted)
-			+ ";selectTargetSucceeded=" + boolText(selectTargetSucceeded)
-			+ ";interruptAttempted=" + boolText(interruptAttempted)
-			+ ";startupInterruptAttempted=" + boolText(startupInterruptAttempted)
-			+ ";turnInterruptAttempted=" + boolText(turnInterruptAttempted)
-			+ ";unsubscribeAttempted=" + boolText(unsubscribeAttempted)
-			+ ";serverRpcAttempted=" + boolText(serverRpcAttempted)
-			+ ";localStateRemoved=" + boolText(localStateRemoved)
-			+ ";localStateRetained=" + boolText(localStateRetained)
-			+ ";threadEventChannelRemoved=" + boolText(threadEventChannelRemoved)
-			+ ";sideThreadStateRemoved=" + boolText(sideThreadStateRemoved)
-			+ ";agentNavigationEntryRemoved=" + boolText(agentNavigationEntryRemoved)
-			+ ";activeThreadCleared=" + boolText(activeThreadCleared)
-			+ ";pendingApprovalsRefreshed=" + boolText(pendingApprovalsRefreshed)
-			+ ";activeAgentLabelSynced=" + boolText(activeAgentLabelSynced)
-			+ ";pendingInactiveRequestsSurfaced=" + boolText(pendingInactiveRequestsSurfaced)
-			+ ";cleanupFailureKeptVisible=" + boolText(cleanupFailureKeptVisible)
-			+ ";closedSideThreadLocalOnly=" + boolText(closedSideThreadLocalOnly)
-			+ ";errorMessageDisplayed=" + boolText(errorMessageDisplayed)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";composerHandoffRequest=" + noneIfEmpty(composerHandoffRequestId)
+			+ ";decisionKind=" + decisionKind + ";discardTargetSelected=" + boolText(discardTargetSelected) + ";parentSwitchAttempted="
+			+ boolText(parentSwitchAttempted) + ";selectTargetSucceeded=" + boolText(selectTargetSucceeded) + ";interruptAttempted="
+			+ boolText(interruptAttempted) + ";startupInterruptAttempted=" + boolText(startupInterruptAttempted) + ";turnInterruptAttempted="
+			+ boolText(turnInterruptAttempted) + ";unsubscribeAttempted=" + boolText(unsubscribeAttempted) + ";serverRpcAttempted="
+			+ boolText(serverRpcAttempted) + ";localStateRemoved=" + boolText(localStateRemoved) + ";localStateRetained=" + boolText(localStateRetained)
+			+ ";threadEventChannelRemoved=" + boolText(threadEventChannelRemoved) + ";sideThreadStateRemoved=" + boolText(sideThreadStateRemoved)
+			+ ";agentNavigationEntryRemoved=" + boolText(agentNavigationEntryRemoved) + ";activeThreadCleared=" + boolText(activeThreadCleared)
+			+ ";pendingApprovalsRefreshed=" + boolText(pendingApprovalsRefreshed) + ";activeAgentLabelSynced=" + boolText(activeAgentLabelSynced)
+			+ ";pendingInactiveRequestsSurfaced=" + boolText(pendingInactiveRequestsSurfaced) + ";cleanupFailureKeptVisible="
+			+ boolText(cleanupFailureKeptVisible) + ";closedSideThreadLocalOnly=" + boolText(closedSideThreadLocalOnly) + ";errorMessageDisplayed="
+			+ boolText(errorMessageDisplayed) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

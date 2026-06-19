@@ -12,18 +12,8 @@ class ModelThreadActiveTurnRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		rebaseOutcome:ModelThreadSessionRebaseOutcome,
-		eventKind:ModelThreadActiveTurnEventKind,
-		activeTurnIdBefore:String,
-		eventTurnId:String,
-		latestInProgressTurnId:String,
-		turnsRestoredInOrder:Bool,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, rebaseOutcome:ModelThreadSessionRebaseOutcome, eventKind:ModelThreadActiveTurnEventKind, activeTurnIdBefore:String,
+			eventTurnId:String, latestInProgressTurnId:String, turnsRestoredInOrder:Bool, eventOrderIndex:Int, previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.rebaseOutcome = rebaseOutcome;
 		this.eventKind = eventKind == null ? ModelThreadActiveTurnEventKind.TurnsRestored : eventKind;

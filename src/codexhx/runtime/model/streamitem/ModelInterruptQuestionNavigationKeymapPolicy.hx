@@ -8,7 +8,8 @@ class ModelInterruptQuestionNavigationKeymapPolicy {
 	static final F12Binding = "f12";
 
 	public static function apply(request:ModelInterruptQuestionNavigationKeymapRequest):ModelInterruptQuestionNavigationKeymapOutcome {
-		if (request == null) return failure("", "missing interrupt/question-navigation keymap request");
+		if (request == null)
+			return failure("", "missing interrupt/question-navigation keymap request");
 
 		final interruptActionNamePreserved = request.interruptActionName == InterruptActionName;
 		final questionNavigationActionNamePreserved = request.questionNavigationActionName == QuestionNavigationActionName;
@@ -18,11 +19,8 @@ class ModelInterruptQuestionNavigationKeymapPolicy {
 		final fixedBacktrackOverlapStillAllowed = request.fixedBacktrackActionName == FixedBacktrackActionName
 			&& request.fixedBacktrackBinding == EscBinding
 			&& request.allowedOverlapBinding == EscBinding;
-		final conflictRejected = interruptActionNamePreserved
-			&& questionNavigationActionNamePreserved
-			&& conflictingBindingDetected;
-		final noFalseBacktrackConflict = fixedBacktrackOverlapStillAllowed
-			&& request.interruptBinding != request.fixedBacktrackBinding;
+		final conflictRejected = interruptActionNamePreserved && questionNavigationActionNamePreserved && conflictingBindingDetected;
+		final noFalseBacktrackConflict = fixedBacktrackOverlapStillAllowed && request.interruptBinding != request.fixedBacktrackBinding;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = interruptActionNamePreserved
 			&& questionNavigationActionNamePreserved
@@ -33,9 +31,7 @@ class ModelInterruptQuestionNavigationKeymapPolicy {
 			&& conflictRejected
 			&& noFalseBacktrackConflict
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictRejected
-			: ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictMissed;
+		final decisionKind = ok ? ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictRejected : ModelInterruptQuestionNavigationKeymapDecisionKind.InterruptQuestionNavigationConflictMissed;
 
 		return new ModelInterruptQuestionNavigationKeymapOutcome({
 			ok: ok,

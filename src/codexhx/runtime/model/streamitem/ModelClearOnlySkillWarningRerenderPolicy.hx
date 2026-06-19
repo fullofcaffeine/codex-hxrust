@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelClearOnlySkillWarningRerenderPolicy {
 	public static function apply(request:ModelClearOnlySkillWarningRerenderRequest):ModelClearOnlySkillWarningRerenderOutcome {
-		if (request == null) return failure("", "missing clear-only skill warning rerender request");
+		if (request == null)
+			return failure("", "missing clear-only skill warning rerender request");
 
 		final warningKeyPresent = request.warningPath.length > 0 && request.warningMessage.length > 0;
 		final firstWarningRendered = warningKeyPresent && request.firstScanInputCount == 1;
@@ -11,18 +12,9 @@ class ModelClearOnlySkillWarningRerenderPolicy {
 		final postResetWarningRenderedAgain = resetClearedWarningMemory && warningKeyPresent && request.postResetScanInputCount == 1;
 		final sameWarningKeyReused = firstWarningRendered && repeatedWarningSuppressed && postResetWarningRenderedAgain;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final decisionKind = postResetWarningRenderedAgain
-			? ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningRerenderEnabled
-			: repeatedWarningSuppressed
-				? ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningStillSuppressed
-				: ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningUnavailable;
-		final ok = warningKeyPresent
-			&& firstWarningRendered
-			&& repeatedWarningSuppressed
-			&& resetClearedWarningMemory
-			&& postResetWarningRenderedAgain
-			&& sameWarningKeyReused
-			&& eventOrderingPreserved;
+		final decisionKind = postResetWarningRenderedAgain ? ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningRerenderEnabled : repeatedWarningSuppressed ? ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningStillSuppressed : ModelClearOnlySkillWarningRerenderDecisionKind.SkillWarningUnavailable;
+		final ok = warningKeyPresent && firstWarningRendered && repeatedWarningSuppressed && resetClearedWarningMemory && postResetWarningRenderedAgain
+			&& sameWarningKeyReused && eventOrderingPreserved;
 
 		return new ModelClearOnlySkillWarningRerenderOutcome({
 			ok: ok,

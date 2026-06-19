@@ -80,7 +80,6 @@ class TuiSmokeAppLinkAction {
 	public final completeAfter:Bool;
 	public final failureCode:String;
 
-
 	public function screenTransitionText():String {
 		return screenBefore + "->" + screenAfter;
 	}

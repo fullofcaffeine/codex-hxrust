@@ -18,7 +18,8 @@ class ModelPatchFileChangeProjection {
 	}
 
 	public static function fromChange(change:ModelPatchFileChange):ModelPatchFileChangeProjection {
-		if (change == null) return new ModelPatchFileChangeProjection("", ModelPatchFileChangeKind.Update, "", "", 0, 0);
+		if (change == null)
+			return new ModelPatchFileChangeProjection("", ModelPatchFileChangeKind.Update, "", "", 0, 0);
 		if (change.kind == ModelPatchFileChangeKind.Add) {
 			final lines = splitLines(change.content);
 			return new ModelPatchFileChangeProjection(change.path, change.kind, change.content, change.movePath, lines.length, 0);
@@ -32,25 +33,24 @@ class ModelPatchFileChangeProjection {
 	}
 
 	public function summary():String {
-		return "path=" + path
-			+ ";kind=" + kind
-			+ ";movePath=" + noneIfEmpty(movePath)
-			+ ";addedLines=" + Std.string(addedLines)
-			+ ";removedLines=" + Std.string(removedLines)
-			+ ";diff=" + diff;
+		return "path=" + path + ";kind=" + kind + ";movePath=" + noneIfEmpty(movePath) + ";addedLines=" + Std.string(addedLines) + ";removedLines="
+			+ Std.string(removedLines) + ";diff=" + diff;
 	}
 
 	static function splitLines(content:String):Array<String> {
-		if (content == null || content.length == 0) return [];
+		if (content == null || content.length == 0)
+			return [];
 		final raw = content.split("\n");
-		if (raw.length > 0 && raw[raw.length - 1] == "") raw.resize(raw.length - 1);
+		if (raw.length > 0 && raw[raw.length - 1] == "")
+			raw.resize(raw.length - 1);
 		return raw;
 	}
 
 	static function countPrefix(value:String, prefix:String):Int {
 		var count = 0;
 		for (line in splitLines(value)) {
-			if (line.indexOf(prefix) == 0 && line.indexOf(prefix + prefix) != 0) count = count + 1;
+			if (line.indexOf(prefix) == 0 && line.indexOf(prefix + prefix) != 0)
+				count = count + 1;
 		}
 		return count;
 	}

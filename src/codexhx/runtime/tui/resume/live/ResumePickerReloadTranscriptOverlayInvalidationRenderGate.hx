@@ -164,12 +164,7 @@ class ResumePickerReloadTranscriptOverlayInvalidationRenderGate {
 			visibleRow("thread-a", "Overlay anchor", "2026-06-19T19:00:00Z", 3, true),
 			visibleRow("thread-c", "Overlay sibling", "2026-06-19T19:10:00Z", 8, false)
 		];
-		applyLoadedCommon(
-			state,
-			"transcript_overlay_preserved_for_selected_thread",
-			"selected=thread-a;index=1;pending=thread-a;cells=3",
-			"overlay preserved"
-		);
+		applyLoadedCommon(state, "transcript_overlay_preserved_for_selected_thread", "selected=thread-a;index=1;pending=thread-a;cells=3", "overlay preserved");
 	}
 
 	static function applyInvalidatedOverlayReload(state:ResumePickerState):Void {
@@ -198,12 +193,8 @@ class ResumePickerReloadTranscriptOverlayInvalidationRenderGate {
 			visibleRow("thread-b", "Replacement overlay target", "2026-06-19T19:05:00Z", 5, true),
 			visibleRow("thread-d", "Fresh overlay row", "2026-06-19T19:20:00Z", 21, false)
 		];
-		applyLoadedCommon(
-			state,
-			"transcript_overlay_invalidated_after_selection_change",
-			"missing=thread-a;selected=thread-b;pendingCleared=true;overlayClosed=true;cells=0",
-			"overlay invalidated"
-		);
+		applyLoadedCommon(state, "transcript_overlay_invalidated_after_selection_change",
+			"missing=thread-a;selected=thread-b;pendingCleared=true;overlayClosed=true;cells=0", "overlay invalidated");
 	}
 
 	static function applyLoadedCommon(state:ResumePickerState, status:String, detail:String, footer:String):Void {
@@ -222,18 +213,10 @@ class ResumePickerReloadTranscriptOverlayInvalidationRenderGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query
-			+ ";rows=" + state.loadedRows
-			+ ";selected=" + state.selectedIndex
-			+ ";thread=" + state.selectedThreadId
-			+ ";pending=" + emptyLabel(state.pendingThreadId)
-			+ ";transcript=" + emptyLabel(state.transcriptState)
-			+ ";overlayOpen=" + boolLabel(state.overlayOpen)
-			+ ";overlayCloseCount=" + state.overlayCloseCount
-			+ ";cells=" + state.transcriptCellCount
-			+ ";footer=" + state.footerProgressLabel
-			+ ";loader=" + state.loaderEventStatus
-			+ ";detail=" + state.loaderEventDetail;
+		return "query=" + state.query + ";rows=" + state.loadedRows + ";selected=" + state.selectedIndex + ";thread=" + state.selectedThreadId + ";pending="
+			+ emptyLabel(state.pendingThreadId) + ";transcript=" + emptyLabel(state.transcriptState) + ";overlayOpen=" + boolLabel(state.overlayOpen)
+			+ ";overlayCloseCount=" + state.overlayCloseCount + ";cells=" + state.transcriptCellCount + ";footer=" + state.footerProgressLabel + ";loader="
+			+ state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
 	}
 
 	static function loadPage(loader:DeterministicResumePickerBackgroundLoader, request:ResumePickerThreadListRequest):ResumePickerHostEvent {
@@ -344,7 +327,11 @@ class ResumePickerReloadTranscriptOverlayInvalidationRenderGate {
 	}
 
 	static function detailCells():Array<String> {
-		return ["user: inspect overlay", "assistant: overlay survives same thread", "plan: invalidate stale overlay"];
+		return [
+			"user: inspect overlay",
+			"assistant: overlay survives same thread",
+			"plan: invalidate stale overlay"
+		];
 	}
 
 	static function emptyLabel(value:String):String {

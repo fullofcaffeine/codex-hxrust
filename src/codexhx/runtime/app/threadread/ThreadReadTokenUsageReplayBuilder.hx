@@ -23,8 +23,7 @@ class ThreadReadTokenUsageReplayBuilder {
 		if (!request.tokenUsage.isValid()) {
 			return ThreadReadTokenUsageReplayOutcome.failure("invalid_token_usage", "token usage counters and model context window must be non-negative");
 		}
-		return ThreadReadTokenUsageReplayOutcome.emitted(
-			new ThreadReadTokenUsageReplayNotification(request.threadIdString(), request.ownerOutcome.turnId, request.tokenUsage)
-		);
+		return ThreadReadTokenUsageReplayOutcome.emitted(new ThreadReadTokenUsageReplayNotification(request.threadIdString(), request.ownerOutcome.turnId,
+			request.tokenUsage));
 	}
 }

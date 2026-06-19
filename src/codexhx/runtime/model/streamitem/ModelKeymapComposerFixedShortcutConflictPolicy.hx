@@ -6,7 +6,8 @@ class ModelKeymapComposerFixedShortcutConflictPolicy {
 	static final FixedPasteImageName = "fixed.paste_image";
 
 	public static function apply(request:ModelKeymapComposerFixedShortcutConflictRequest):ModelKeymapComposerFixedShortcutConflictOutcome {
-		if (request == null) return failure("", "missing keymap composer/fixed-shortcut conflict request");
+		if (request == null)
+			return failure("", "missing keymap composer/fixed-shortcut conflict request");
 
 		final ctrlV = character("v", true, false, false);
 		final configuredComposerSubmitBindingPreserved = matches(request.configuredComposerSubmitBinding, ctrlV);
@@ -22,9 +23,7 @@ class ModelKeymapComposerFixedShortcutConflictPolicy {
 			&& conflictActionNamesPreserved
 			&& conflictRejectionPreserved
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapComposerFixedShortcutConflictDecisionKind.KeymapComposerFixedShortcutConflictRejected
-			: ModelKeymapComposerFixedShortcutConflictDecisionKind.KeymapComposerFixedShortcutConflictMissed;
+		final decisionKind = ok ? ModelKeymapComposerFixedShortcutConflictDecisionKind.KeymapComposerFixedShortcutConflictRejected : ModelKeymapComposerFixedShortcutConflictDecisionKind.KeymapComposerFixedShortcutConflictMissed;
 
 		return new ModelKeymapComposerFixedShortcutConflictOutcome({
 			ok: ok,

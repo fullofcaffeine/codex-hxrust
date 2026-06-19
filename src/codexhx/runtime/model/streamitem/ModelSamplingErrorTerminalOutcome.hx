@@ -25,31 +25,11 @@ class ModelSamplingErrorTerminalOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		errorKind:ModelSamplingErrorTerminalKind,
-		decisionKind:ModelSamplingErrorTerminalDecisionKind,
-		terminalStopHookRequestId:String,
-		stopHooksBypassed:Bool,
-		turnAborted:Bool,
-		invalidImageSanitizationAttempted:Bool,
-		historyImagesReplaced:Bool,
-		retrySamplingLoop:Bool,
-		codexErrorTracked:Bool,
-		lifecycleErrorEmitted:Bool,
-		errorEventEmitted:Bool,
-		codexErrorInfo:String,
-		lastAgentMessagePreserved:Bool,
-		lastAgentMessage:String,
-		continueLoop:Bool,
-		breakTurnLoop:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, errorKind:ModelSamplingErrorTerminalKind, decisionKind:ModelSamplingErrorTerminalDecisionKind,
+			terminalStopHookRequestId:String, stopHooksBypassed:Bool, turnAborted:Bool, invalidImageSanitizationAttempted:Bool, historyImagesReplaced:Bool,
+			retrySamplingLoop:Bool, codexErrorTracked:Bool, lifecycleErrorEmitted:Bool, errorEventEmitted:Bool, codexErrorInfo:String,
+			lastAgentMessagePreserved:Bool, lastAgentMessage:String, continueLoop:Bool, breakTurnLoop:Bool, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -76,29 +56,15 @@ class ModelSamplingErrorTerminalOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";errorKind=" + errorKind
-			+ ";decisionKind=" + decisionKind
-			+ ";terminalStopHookRequest=" + noneIfEmpty(terminalStopHookRequestId)
-			+ ";stopHooksBypassed=" + boolText(stopHooksBypassed)
-			+ ";turnAborted=" + boolText(turnAborted)
-			+ ";invalidImageSanitizationAttempted=" + boolText(invalidImageSanitizationAttempted)
-			+ ";historyImagesReplaced=" + boolText(historyImagesReplaced)
-			+ ";retrySamplingLoop=" + boolText(retrySamplingLoop)
-			+ ";codexErrorTracked=" + boolText(codexErrorTracked)
-			+ ";lifecycleErrorEmitted=" + boolText(lifecycleErrorEmitted)
-			+ ";errorEventEmitted=" + boolText(errorEventEmitted)
-			+ ";codexErrorInfo=" + noneIfEmpty(codexErrorInfo)
-			+ ";lastAgentMessagePreserved=" + boolText(lastAgentMessagePreserved)
-			+ ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage)
-			+ ";continueLoop=" + boolText(continueLoop)
-			+ ";breakTurnLoop=" + boolText(breakTurnLoop)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";errorKind=" + errorKind + ";decisionKind=" + decisionKind
+			+ ";terminalStopHookRequest=" + noneIfEmpty(terminalStopHookRequestId) + ";stopHooksBypassed=" + boolText(stopHooksBypassed) + ";turnAborted="
+			+ boolText(turnAborted) + ";invalidImageSanitizationAttempted=" + boolText(invalidImageSanitizationAttempted) + ";historyImagesReplaced="
+			+ boolText(historyImagesReplaced) + ";retrySamplingLoop=" + boolText(retrySamplingLoop) + ";codexErrorTracked=" + boolText(codexErrorTracked)
+			+ ";lifecycleErrorEmitted=" + boolText(lifecycleErrorEmitted) + ";errorEventEmitted=" + boolText(errorEventEmitted) + ";codexErrorInfo="
+			+ noneIfEmpty(codexErrorInfo) + ";lastAgentMessagePreserved=" + boolText(lastAgentMessagePreserved) + ";lastAgentMessage="
+			+ noneIfEmpty(lastAgentMessage) + ";continueLoop=" + boolText(continueLoop) + ";breakTurnLoop=" + boolText(breakTurnLoop)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -26,18 +26,19 @@ class TuiSmokeReplayBufferPlan {
 	public final flushAfterReplay:Bool;
 	public final reflowAfterFlush:Bool;
 
-
 	public function enabled():Bool {
 		return kind != TuiSmokeReplayBufferKind.None && kind != TuiSmokeReplayBufferKind.Unknown;
 	}
 
 	public function sizeText():String {
-		if (terminalWidth <= 0 || terminalHeight <= 0) return "unknown";
+		if (terminalWidth <= 0 || terminalHeight <= 0)
+			return "unknown";
 		return Std.string(terminalWidth) + "x" + Std.string(terminalHeight);
 	}
 
 	public function previousSizeText():String {
-		if (previousWidth <= 0 || previousHeight <= 0) return "unknown";
+		if (previousWidth <= 0 || previousHeight <= 0)
+			return "unknown";
 		return Std.string(previousWidth) + "x" + Std.string(previousHeight);
 	}
 

@@ -6,7 +6,8 @@ class ModelKeymapFixedShortcutPolicy {
 	static final IncreaseReasoningName = "chat.increase_reasoning_effort";
 
 	public static function apply(request:ModelKeymapFixedShortcutRequest):ModelKeymapFixedShortcutOutcome {
-		if (request == null) return failure("", "missing keymap fixed shortcut request");
+		if (request == null)
+			return failure("", "missing keymap fixed shortcut request");
 
 		final altDot = character(".", false, true, false);
 		final configuredCopyBindingPreserved = matches(request.configuredCopyBinding, altDot);
@@ -17,8 +18,7 @@ class ModelKeymapFixedShortcutPolicy {
 			&& request.expectedInnerActionName == IncreaseReasoningName;
 		final conflictRejectionPreserved = request.conflictRejected;
 		final originalActionUnboundPreserved = request.increaseReasoningUnbound;
-		final runtimeCopyRemapPreserved = request.runtimeAcceptedAfterUnbind
-			&& matches(request.runtimeCopyBinding, altDot);
+		final runtimeCopyRemapPreserved = request.runtimeAcceptedAfterUnbind && matches(request.runtimeCopyBinding, altDot);
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 		final ok = configuredCopyBindingPreserved
 			&& defaultIncreaseReasoningBindingPreserved
@@ -27,9 +27,7 @@ class ModelKeymapFixedShortcutPolicy {
 			&& originalActionUnboundPreserved
 			&& runtimeCopyRemapPreserved
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapFixedShortcutDecisionKind.KeymapFixedShortcutConflictPreserved
-			: ModelKeymapFixedShortcutDecisionKind.KeymapFixedShortcutConflictRejected;
+		final decisionKind = ok ? ModelKeymapFixedShortcutDecisionKind.KeymapFixedShortcutConflictPreserved : ModelKeymapFixedShortcutDecisionKind.KeymapFixedShortcutConflictRejected;
 
 		return new ModelKeymapFixedShortcutOutcome({
 			ok: ok,

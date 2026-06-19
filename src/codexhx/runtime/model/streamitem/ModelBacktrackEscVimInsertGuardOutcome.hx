@@ -60,23 +60,14 @@ class ModelBacktrackEscVimInsertGuardOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";initialBacktrackEscAllowed=" + boolText(initialBacktrackEscAllowed)
-			+ ";vimNormalBacktrackEscAllowed=" + boolText(vimNormalBacktrackEscAllowed)
-			+ ";vimInsertEscTakesPrecedence=" + boolText(vimInsertEscTakesPrecedence)
-			+ ";backtrackEscSuppressedDuringVimInsert=" + boolText(backtrackEscSuppressedDuringVimInsert)
-			+ ";vimEscHandled=" + boolText(vimEscHandled)
-			+ ";backtrackNotPrimedByVimEsc=" + boolText(backtrackNotPrimedByVimEsc)
-			+ ";vimInsertClearedAfterEsc=" + boolText(vimInsertClearedAfterEsc)
-			+ ";backtrackEscAllowedAfterVimEsc=" + boolText(backtrackEscAllowedAfterVimEsc)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";initialBacktrackEscAllowed="
+			+ boolText(initialBacktrackEscAllowed) + ";vimNormalBacktrackEscAllowed=" + boolText(vimNormalBacktrackEscAllowed)
+			+ ";vimInsertEscTakesPrecedence=" + boolText(vimInsertEscTakesPrecedence) + ";backtrackEscSuppressedDuringVimInsert="
+			+ boolText(backtrackEscSuppressedDuringVimInsert) + ";vimEscHandled=" + boolText(vimEscHandled) + ";backtrackNotPrimedByVimEsc="
+			+ boolText(backtrackNotPrimedByVimEsc) + ";vimInsertClearedAfterEsc=" + boolText(vimInsertClearedAfterEsc) + ";backtrackEscAllowedAfterVimEsc="
+			+ boolText(backtrackEscAllowedAfterVimEsc) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -25,26 +25,15 @@ class ThreadReadIdleGoalProgressAccountingPolicy {
 		}
 
 		if (request.updatedGoal == null) {
-			return ThreadReadIdleGoalProgressAccountingOutcome.stateError(
-				request.dbOutcomeKind,
-				"updated_goal_missing"
-			);
+			return ThreadReadIdleGoalProgressAccountingOutcome.stateError(request.dbOutcomeKind, "updated_goal_missing");
 		}
 
 		final status = request.updatedGoal.status;
 		final activeGoalCleared = shouldClearActiveGoal(status, request.disposition);
 		final budgetLimitReportCleared = status != ThreadGoalStatus.BudgetLimited;
 		final terminalMetricRecorded = request.previousStatus != status && ThreadGoalStatus.isTerminal(status);
-		return ThreadReadIdleGoalProgressAccountingOutcome.updated(
-			codeForUpdated(status, request.disposition),
-			goalIdFor(request),
-			status,
-			request.snapshotTimeDeltaSeconds,
-			activeGoalCleared,
-			budgetLimitReportCleared,
-			terminalMetricRecorded,
-			request.disposition
-		);
+		return ThreadReadIdleGoalProgressAccountingOutcome.updated(codeForUpdated(status, request.disposition), goalIdFor(request), status,
+			request.snapshotTimeDeltaSeconds, activeGoalCleared, budgetLimitReportCleared, terminalMetricRecorded, request.disposition);
 	}
 
 	static function codeForUpdated(status:String, disposition:ThreadReadGoalAccountingDisposition):String {
@@ -58,12 +47,14 @@ class ThreadReadIdleGoalProgressAccountingPolicy {
 	}
 
 	static function goalIdFor(request:ThreadReadIdleGoalProgressAccountingRequest):String {
-		if (request.updatedGoalId.length > 0) return request.updatedGoalId;
+		if (request.updatedGoalId.length > 0)
+			return request.updatedGoalId;
 		return request.snapshotExpectedGoalId;
 	}
 
 	static function shouldClearActiveGoal(status:String, disposition:ThreadReadGoalAccountingDisposition):Bool {
-		if (status == ThreadGoalStatus.Active) return false;
+		if (status == ThreadGoalStatus.Active)
+			return false;
 		if (status == ThreadGoalStatus.BudgetLimited) {
 			return disposition == ThreadReadGoalAccountingDisposition.ClearActive;
 		}

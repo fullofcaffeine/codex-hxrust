@@ -62,5 +62,4 @@ class TuiSmokeTerminalModeAction {
 	public final terminalStderrFinish:Bool;
 	public final supported:Bool;
 	public final failureCode:String;
-
 }

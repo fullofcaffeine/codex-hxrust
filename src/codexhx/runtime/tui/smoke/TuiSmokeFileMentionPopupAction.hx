@@ -88,7 +88,6 @@ class TuiSmokeFileMentionPopupAction {
 	public final liveSearchRejected:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function popupTransitionText():String {
 		return popupBefore + "->" + popupAfter;
 	}

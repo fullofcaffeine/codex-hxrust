@@ -25,13 +25,8 @@ class ResumePickerReloadFailurePreservationRenderGateReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads
-			+ ";reloadFailures=" + reloadFailures
-			+ ";recoveryReloads=" + recoveryReloads
-			+ ";frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";states=[" + stateSummaries.join("##") + "]"
+		return "pageLoads=" + pageLoads + ";reloadFailures=" + reloadFailures + ";recoveryReloads=" + recoveryReloads + ";frames=" + frameRequests
+			+ ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";states=[" + stateSummaries.join("##") + "]"
 			+ ";events=[" + eventSummaries.join("##") + "]";
 	}
 }

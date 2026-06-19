@@ -69,26 +69,17 @@ class ModelKeymapAliasOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";emptyArrayUnbindPreserved=" + boolText(emptyArrayUnbindPreserved)
-			+ ";rawOutputDefaultAltRPreserved=" + boolText(rawOutputDefaultAltRPreserved)
-			+ ";rawOutputRemapF12Preserved=" + boolText(rawOutputRemapF12Preserved)
-			+ ";editorNewlineAliasesPreserved=" + boolText(editorNewlineAliasesPreserved)
-			+ ";deleteForwardWordAltDPreserved=" + boolText(deleteForwardWordAltDPreserved)
-			+ ";modifiedDeletionAliasesPreserved=" + boolText(modifiedDeletionAliasesPreserved)
-			+ ";composerToggleShiftQuestionPreserved=" + boolText(composerToggleShiftQuestionPreserved)
-			+ ";approvalOpenFullscreenCtrlShiftAPreserved=" + boolText(approvalOpenFullscreenCtrlShiftAPreserved)
-			+ ";primaryBindingFirstPreserved=" + boolText(primaryBindingFirstPreserved)
-			+ ";primaryBindingEmptyNonePreserved=" + boolText(primaryBindingEmptyNonePreserved)
-			+ ";defaultsConflictValidationPreserved=" + boolText(defaultsConflictValidationPreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";emptyArrayUnbindPreserved="
+			+ boolText(emptyArrayUnbindPreserved) + ";rawOutputDefaultAltRPreserved=" + boolText(rawOutputDefaultAltRPreserved)
+			+ ";rawOutputRemapF12Preserved=" + boolText(rawOutputRemapF12Preserved) + ";editorNewlineAliasesPreserved="
+			+ boolText(editorNewlineAliasesPreserved) + ";deleteForwardWordAltDPreserved=" + boolText(deleteForwardWordAltDPreserved)
+			+ ";modifiedDeletionAliasesPreserved=" + boolText(modifiedDeletionAliasesPreserved) + ";composerToggleShiftQuestionPreserved="
+			+ boolText(composerToggleShiftQuestionPreserved) + ";approvalOpenFullscreenCtrlShiftAPreserved="
+			+ boolText(approvalOpenFullscreenCtrlShiftAPreserved) + ";primaryBindingFirstPreserved=" + boolText(primaryBindingFirstPreserved)
+			+ ";primaryBindingEmptyNonePreserved=" + boolText(primaryBindingEmptyNonePreserved) + ";defaultsConflictValidationPreserved="
+			+ boolText(defaultsConflictValidationPreserved) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

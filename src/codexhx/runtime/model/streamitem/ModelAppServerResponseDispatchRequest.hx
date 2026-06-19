@@ -12,18 +12,9 @@ class ModelAppServerResponseDispatchRequest {
 	public final responseOrderIndex:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		resolutionOutcome:ModelAppServerRequestResolutionOutcome,
-		dispatchKind:ModelAppServerResponseDispatchKind,
-		appServerSessionAvailable:Bool,
-		serializedPayloadAvailable:Bool,
-		transportSendSucceeds:Bool,
-		unsupportedRejectReason:String,
-		previousDispatchCount:Int,
-		responseOrderIndex:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, resolutionOutcome:ModelAppServerRequestResolutionOutcome, dispatchKind:ModelAppServerResponseDispatchKind,
+			appServerSessionAvailable:Bool, serializedPayloadAvailable:Bool, transportSendSucceeds:Bool, unsupportedRejectReason:String,
+			previousDispatchCount:Int, responseOrderIndex:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.resolutionOutcome = resolutionOutcome;
 		this.dispatchKind = dispatchKind == null ? ModelAppServerResponseDispatchKind.ResolveResponse : dispatchKind;

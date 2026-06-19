@@ -44,13 +44,8 @@ class ThreadReadGetGoalToolHarness {
 		final out:Array<ThreadReadGetGoalToolRequest> = [];
 		for (value in values) {
 			final request = objectField(objectValue(value), "request");
-			out.push(new ThreadReadGetGoalToolRequest(
-				stringField(request, "threadId", ""),
-				stringField(request, "argumentsJson", ""),
-				dbOutcomeKind(stringField(request, "dbOutcomeKind", "")),
-				stringField(request, "dbErrorMessage", ""),
-				goalValue(valueField(request, "goal"))
-			));
+			out.push(new ThreadReadGetGoalToolRequest(stringField(request, "threadId", ""), stringField(request, "argumentsJson", ""),
+				dbOutcomeKind(stringField(request, "dbOutcomeKind", "")), stringField(request, "dbErrorMessage", ""), goalValue(valueField(request, "goal"))));
 		}
 		return out;
 	}
@@ -69,7 +64,8 @@ class ThreadReadGetGoalToolHarness {
 			case JNull: null;
 			case _:
 				final parsed = ThreadGoal.parseApp(value);
-				if (!parsed.ok) throw "invalid goal fixture: " + parsed.errorCode;
+				if (!parsed.ok)
+					throw "invalid goal fixture: " + parsed.errorCode;
 				parsed.value;
 		}
 	}
@@ -77,9 +73,11 @@ class ThreadReadGetGoalToolHarness {
 	static function assertGoal(expect:Value, actual:ThreadGoal):Void {
 		switch expect {
 			case JNull:
-				if (actual != null) throw "expected null goal";
+				if (actual != null)
+					throw "expected null goal";
 			case _:
-				if (actual == null) throw "expected goal";
+				if (actual == null)
+					throw "expected goal";
 				final expectedGoal = goalValue(expect);
 				assertEquals(expectedGoal.appJson(), actual.appJson());
 		}
@@ -143,7 +141,8 @@ class ThreadReadGetGoalToolHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -160,7 +159,8 @@ class ThreadReadGetGoalToolHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -169,10 +169,12 @@ class ThreadReadGetGoalToolHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

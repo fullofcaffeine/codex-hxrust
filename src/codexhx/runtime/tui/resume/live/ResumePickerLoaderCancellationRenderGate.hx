@@ -132,13 +132,9 @@ class ResumePickerLoaderCancellationRenderGate {
 	}
 
 	static function stableSummary(state:ResumePickerState):String {
-		return "loaded=" + state.loadedRows
-			+ ";filtered=" + state.filteredRows
-			+ ";selected=" + state.selectedIndex
-			+ ";selectedThread=" + state.selectedThreadId
-			+ ";preview=" + state.previewState
-			+ ";transcript=" + state.transcriptState
-			+ ";overlay=" + (state.overlayOpen ? "true" : "false");
+		return "loaded=" + state.loadedRows + ";filtered=" + state.filteredRows + ";selected=" + state.selectedIndex + ";selectedThread="
+			+ state.selectedThreadId + ";preview=" + state.previewState + ";transcript=" + state.transcriptState + ";overlay="
+			+ (state.overlayOpen ? "true" : "false");
 	}
 
 	static function pageRequest(requestId:String, cursor:String):ResumePickerThreadListRequest {

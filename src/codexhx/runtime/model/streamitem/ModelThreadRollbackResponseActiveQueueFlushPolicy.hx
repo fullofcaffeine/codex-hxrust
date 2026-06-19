@@ -2,16 +2,18 @@ package codexhx.runtime.model.streamitem;
 
 class ModelThreadRollbackResponseActiveQueueFlushPolicy {
 	public static function apply(request:ModelThreadRollbackResponseActiveQueueFlushRequest):ModelThreadRollbackResponseActiveQueueFlushOutcome {
-		if (request == null) return failure("", "missing rollback response active queue flush request");
+		if (request == null)
+			return failure("", "missing rollback response active queue flush request");
 
 		final activeThreadMatched = request.activeThreadId.length > 0 && request.activeThreadId == request.rollbackThreadId;
 		final threadStoreRollbackApplied = request.threadChannelKnown && request.rollbackThreadId.length > 0 && request.numTurns > 0;
 		final shouldDrainReceiver = activeThreadMatched && request.receiverAttachedBefore;
 		final drainedActiveEventCount = shouldDrainReceiver ? request.queuedActiveEventCountBefore : 0;
-		final queuedActiveEventCountAfter = shouldDrainReceiver && !request.receiverDisconnectedDuringDrain ? 0 : request.queuedActiveEventCountBefore;
-		final receiverAttachedAfter = shouldDrainReceiver && !request.receiverDisconnectedDuringDrain
-			? true
-			: request.receiverAttachedBefore && !request.receiverDisconnectedDuringDrain;
+		final queuedActiveEventCountAfter = shouldDrainReceiver
+			&& !request.receiverDisconnectedDuringDrain ? 0 : request.queuedActiveEventCountBefore;
+		final receiverAttachedAfter = shouldDrainReceiver
+			&& !request.receiverDisconnectedDuringDrain ? true : request.receiverAttachedBefore
+				&& !request.receiverDisconnectedDuringDrain;
 		final receiverClearedAfterDisconnect = shouldDrainReceiver && request.receiverDisconnectedDuringDrain;
 		final staleNotificationDiscarded = shouldDrainReceiver
 			&& request.queuedStaleNotificationCountBefore > 0
@@ -20,22 +22,14 @@ class ModelThreadRollbackResponseActiveQueueFlushPolicy {
 		final applyThreadRollbackEventQueued = request.numTurns > 0 && !request.pendingBacktrackRollback;
 		final pendingBacktrackFinished = request.numTurns > 0 && request.pendingBacktrackRollback;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = activeThreadMatched
-			&& threadStoreRollbackApplied
-			&& request.receiverAttachedBefore
-			&& receiverAttachedAfter
-			&& !receiverClearedAfterDisconnect
-			&& staleNotificationDiscarded
-			&& queuedActiveEventCountAfter == 0
-			&& eventOrderingPreserved;
+		final ok = activeThreadMatched && threadStoreRollbackApplied && request.receiverAttachedBefore && receiverAttachedAfter
+			&& !receiverClearedAfterDisconnect && staleNotificationDiscarded && queuedActiveEventCountAfter == 0 && eventOrderingPreserved;
 
 		return new ModelThreadRollbackResponseActiveQueueFlushOutcome({
 			ok: ok,
 			code: ok ? "thread_rollback_response_active_queue_flushed" : "thread_rollback_response_active_queue_unchanged",
 			requestId: request.requestId,
-			decisionKind: ok
-				? ModelThreadRollbackResponseActiveQueueFlushDecisionKind.ActiveQueueFlushed
-				: ModelThreadRollbackResponseActiveQueueFlushDecisionKind.ActiveQueueUnchanged,
+			decisionKind: ok ? ModelThreadRollbackResponseActiveQueueFlushDecisionKind.ActiveQueueFlushed : ModelThreadRollbackResponseActiveQueueFlushDecisionKind.ActiveQueueUnchanged,
 			numTurns: request.numTurns,
 			activeThreadMatched: activeThreadMatched,
 			threadStoreRollbackApplied: threadStoreRollbackApplied,

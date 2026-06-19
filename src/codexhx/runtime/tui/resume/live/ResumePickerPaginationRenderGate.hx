@@ -113,7 +113,10 @@ class ResumePickerPaginationRenderGate {
 		final source = new InMemoryResumePickerThreadSource();
 		source.addPage(new ResumePickerThreadListResponse({
 			requestId: "page-1",
-			rows: [row("thread-a", "Resume kernel", "2026-06-19T12:00:00Z", 3), row("thread-b", "Host facade", "2026-06-19T12:05:00Z", 5)],
+			rows: [
+				row("thread-a", "Resume kernel", "2026-06-19T12:00:00Z", 3),
+				row("thread-b", "Host facade", "2026-06-19T12:05:00Z", 5)
+			],
 			nextCursor: "cursor-2",
 			scannedRows: 2,
 			acceptedRows: 2,
@@ -122,7 +125,10 @@ class ResumePickerPaginationRenderGate {
 		}));
 		source.addPage(new ResumePickerThreadListResponse({
 			requestId: "page-2",
-			rows: [row("thread-c", "Preview renderer", "2026-06-19T12:10:00Z", 8), row("thread-d", "Pagination renderer", "2026-06-19T12:15:00Z", 13)],
+			rows: [
+				row("thread-c", "Preview renderer", "2026-06-19T12:10:00Z", 8),
+				row("thread-d", "Pagination renderer", "2026-06-19T12:15:00Z", 13)
+			],
 			nextCursor: "",
 			scannedRows: 2,
 			acceptedRows: 2,

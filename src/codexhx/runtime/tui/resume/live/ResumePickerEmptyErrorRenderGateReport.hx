@@ -21,11 +21,7 @@ class ResumePickerEmptyErrorRenderGateReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads
-			+ ";failures=" + failures
-			+ ";frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";events=[" + eventSummaries.join("##") + "]";
+		return "pageLoads=" + pageLoads + ";failures=" + failures + ";frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot="
+			+ finalSnapshot.split("\n").join("\\n") + ";events=[" + eventSummaries.join("##") + "]";
 	}
 }

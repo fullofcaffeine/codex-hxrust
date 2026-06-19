@@ -32,38 +32,13 @@ class ModelTerminalResizeReflowOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		clearUiHeaderRequestId:String,
-		decisionKind:ModelTerminalResizeReflowDecisionKind,
-		requestKind:ModelTerminalResizeReflowRequestKind,
-		maxRowsKind:ModelTerminalResizeReflowMaxRowsKind,
-		maxRows:Int,
-		terminalWidth:Int,
-		historyWrapWidth:Int,
-		petReservedColumns:Int,
-		transcriptCellCount:Int,
-		renderedLines:Array<String>,
-		retainedReplayRows:Array<String>,
-		renderedLineCount:Int,
-		trimmedLineCount:Int,
-		rowCapApplied:Bool,
-		recentSuffixOnly:Bool,
-		allCellsRendered:Bool,
-		petReservedWidthApplied:Bool,
-		petWrappedEarlier:Bool,
-		initialReplayBufferStarted:Bool,
-		initialReplayRowsTrimmed:Bool,
-		threadSwitchTailMode:Bool,
-		threadSwitchBufferDisabled:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, clearUiHeaderRequestId:String, decisionKind:ModelTerminalResizeReflowDecisionKind,
+			requestKind:ModelTerminalResizeReflowRequestKind, maxRowsKind:ModelTerminalResizeReflowMaxRowsKind, maxRows:Int, terminalWidth:Int,
+			historyWrapWidth:Int, petReservedColumns:Int, transcriptCellCount:Int, renderedLines:Array<String>, retainedReplayRows:Array<String>,
+			renderedLineCount:Int, trimmedLineCount:Int, rowCapApplied:Bool, recentSuffixOnly:Bool, allCellsRendered:Bool, petReservedWidthApplied:Bool,
+			petWrappedEarlier:Bool, initialReplayBufferStarted:Bool, initialReplayRowsTrimmed:Bool, threadSwitchTailMode:Bool,
+			threadSwitchBufferDisabled:Bool, eventOrderingPreserved:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -97,40 +72,22 @@ class ModelTerminalResizeReflowOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";clearUiHeaderRequest=" + noneIfEmpty(clearUiHeaderRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";requestKind=" + requestKind
-			+ ";maxRowsKind=" + maxRowsKind
-			+ ";maxRows=" + maxRows
-			+ ";terminalWidth=" + terminalWidth
-			+ ";historyWrapWidth=" + historyWrapWidth
-			+ ";petReservedColumns=" + petReservedColumns
-			+ ";transcriptCellCount=" + transcriptCellCount
-			+ ";renderedLineCount=" + renderedLineCount
-			+ ";trimmedLineCount=" + trimmedLineCount
-			+ ";renderedLines=" + lineSummary(renderedLines)
-			+ ";retainedReplayRows=" + lineSummary(retainedReplayRows)
-			+ ";rowCapApplied=" + boolText(rowCapApplied)
-			+ ";recentSuffixOnly=" + boolText(recentSuffixOnly)
-			+ ";allCellsRendered=" + boolText(allCellsRendered)
-			+ ";petReservedWidthApplied=" + boolText(petReservedWidthApplied)
-			+ ";petWrappedEarlier=" + boolText(petWrappedEarlier)
-			+ ";initialReplayBufferStarted=" + boolText(initialReplayBufferStarted)
-			+ ";initialReplayRowsTrimmed=" + boolText(initialReplayRowsTrimmed)
-			+ ";threadSwitchTailMode=" + boolText(threadSwitchTailMode)
-			+ ";threadSwitchBufferDisabled=" + boolText(threadSwitchBufferDisabled)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";clearUiHeaderRequest=" + noneIfEmpty(clearUiHeaderRequestId)
+			+ ";decisionKind=" + decisionKind + ";requestKind=" + requestKind + ";maxRowsKind=" + maxRowsKind + ";maxRows=" + maxRows + ";terminalWidth="
+			+ terminalWidth + ";historyWrapWidth=" + historyWrapWidth + ";petReservedColumns=" + petReservedColumns + ";transcriptCellCount="
+			+ transcriptCellCount + ";renderedLineCount=" + renderedLineCount + ";trimmedLineCount=" + trimmedLineCount + ";renderedLines="
+			+ lineSummary(renderedLines) + ";retainedReplayRows=" + lineSummary(retainedReplayRows) + ";rowCapApplied=" + boolText(rowCapApplied)
+			+ ";recentSuffixOnly=" + boolText(recentSuffixOnly) + ";allCellsRendered=" + boolText(allCellsRendered) + ";petReservedWidthApplied="
+			+ boolText(petReservedWidthApplied) + ";petWrappedEarlier=" + boolText(petWrappedEarlier) + ";initialReplayBufferStarted="
+			+ boolText(initialReplayBufferStarted) + ";initialReplayRowsTrimmed=" + boolText(initialReplayRowsTrimmed) + ";threadSwitchTailMode="
+			+ boolText(threadSwitchTailMode) + ";threadSwitchBufferDisabled=" + boolText(threadSwitchBufferDisabled) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function lineSummary(lines:Array<String>):String {
-		if (lines == null || lines.length == 0) return "none";
+		if (lines == null || lines.length == 0)
+			return "none";
 		return lines.join("|");
 	}
 

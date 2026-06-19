@@ -25,31 +25,11 @@ class ModelSamplingDispatchOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		transportKind:ModelSamplingDispatchTransportKind,
-		windowId:String,
-		turnMetadataHeaderPresent:Bool,
-		nextSamplingRequestIndex:Int,
-		promptItemCount:Int,
-		assembledItemCount:Int,
-		dispatchAttemptIndex:Int,
-		maxRetries:Int,
-		retryStateInitialized:Bool,
-		modelClientSessionTurnScoped:Bool,
-		modelClientSessionReused:Bool,
-		stickyRoutingTokenPreserved:Bool,
-		cancellationChildTokenCreated:Bool,
-		promptOrderingPreserved:Bool,
-		liveProviderRequestAttempted:Bool,
-		providerStreamOpened:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, transportKind:ModelSamplingDispatchTransportKind, windowId:String,
+			turnMetadataHeaderPresent:Bool, nextSamplingRequestIndex:Int, promptItemCount:Int, assembledItemCount:Int, dispatchAttemptIndex:Int,
+			maxRetries:Int, retryStateInitialized:Bool, modelClientSessionTurnScoped:Bool, modelClientSessionReused:Bool, stickyRoutingTokenPreserved:Bool,
+			cancellationChildTokenCreated:Bool, promptOrderingPreserved:Bool, liveProviderRequestAttempted:Bool, providerStreamOpened:Bool,
+			liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -76,29 +56,16 @@ class ModelSamplingDispatchOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";transportKind=" + transportKind
-			+ ";windowId=" + windowId
-			+ ";turnMetadataHeaderPresent=" + boolText(turnMetadataHeaderPresent)
-			+ ";nextSamplingRequestIndex=" + Std.string(nextSamplingRequestIndex)
-			+ ";promptItemCount=" + Std.string(promptItemCount)
-			+ ";assembledItemCount=" + Std.string(assembledItemCount)
-			+ ";dispatchAttemptIndex=" + Std.string(dispatchAttemptIndex)
-			+ ";maxRetries=" + Std.string(maxRetries)
-			+ ";retryStateInitialized=" + boolText(retryStateInitialized)
-			+ ";modelClientSessionTurnScoped=" + boolText(modelClientSessionTurnScoped)
-			+ ";modelClientSessionReused=" + boolText(modelClientSessionReused)
-			+ ";stickyRoutingTokenPreserved=" + boolText(stickyRoutingTokenPreserved)
-			+ ";cancellationChildTokenCreated=" + boolText(cancellationChildTokenCreated)
-			+ ";promptOrderingPreserved=" + boolText(promptOrderingPreserved)
-			+ ";liveProviderRequestAttempted=" + boolText(liveProviderRequestAttempted)
-			+ ";providerStreamOpened=" + boolText(providerStreamOpened)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";transportKind=" + transportKind + ";windowId=" + windowId
+			+ ";turnMetadataHeaderPresent=" + boolText(turnMetadataHeaderPresent) + ";nextSamplingRequestIndex=" + Std.string(nextSamplingRequestIndex)
+			+ ";promptItemCount=" + Std.string(promptItemCount) + ";assembledItemCount=" + Std.string(assembledItemCount) + ";dispatchAttemptIndex="
+			+ Std.string(dispatchAttemptIndex) + ";maxRetries=" + Std.string(maxRetries) + ";retryStateInitialized=" + boolText(retryStateInitialized)
+			+ ";modelClientSessionTurnScoped=" + boolText(modelClientSessionTurnScoped) + ";modelClientSessionReused=" + boolText(modelClientSessionReused)
+			+ ";stickyRoutingTokenPreserved=" + boolText(stickyRoutingTokenPreserved) + ";cancellationChildTokenCreated="
+			+ boolText(cancellationChildTokenCreated) + ";promptOrderingPreserved=" + boolText(promptOrderingPreserved) + ";liveProviderRequestAttempted="
+			+ boolText(liveProviderRequestAttempted) + ";providerStreamOpened=" + boolText(providerStreamOpened) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -26,7 +26,8 @@ class ThreadReadActiveTurnMergeHarness {
 			assertEquals(stringField(expect, "threadStatus", ""), outcome.threadStatus);
 			assertEquals(Std.string(intField(expect, "turnCount", 0)), Std.string(outcome.turns.length));
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -41,11 +42,8 @@ class ThreadReadActiveTurnMergeHarness {
 				case JNull: null;
 				case _: throw "expected activeTurn object or null";
 			}
-			out.push(new ThreadReadActiveTurnMergeRequest(
-				cast stringField(object, "loadedStatus", ""),
-				boolField(object, "hasLiveRunningThread", false),
-				activeTurn
-			));
+			out.push(new ThreadReadActiveTurnMergeRequest(cast stringField(object, "loadedStatus", ""), boolField(object, "hasLiveRunningThread", false),
+				activeTurn));
 		}
 		return out;
 	}
@@ -63,16 +61,9 @@ class ThreadReadActiveTurnMergeHarness {
 		final items:Array<ThreadReadTurnItemSummary> = [];
 		for (itemValue in arrayField(object, "items")) {
 			final item = objectValue(itemValue);
-			items.push(new ThreadReadTurnItemSummary(
-				cast stringField(item, "kind", ""),
-				stringField(item, "text", "")
-			));
+			items.push(new ThreadReadTurnItemSummary(cast stringField(item, "kind", ""), stringField(item, "text", "")));
 		}
-		return new ThreadReadTurnSummary(
-			stringField(object, "id", ""),
-			cast stringField(object, "status", ""),
-			items
-		);
+		return new ThreadReadTurnSummary(stringField(object, "id", ""), cast stringField(object, "status", ""), items);
 	}
 
 	static function assertReport(root:Value, report:ThreadReadActiveTurnMergeReport):Void {
@@ -135,7 +126,8 @@ class ThreadReadActiveTurnMergeHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -152,7 +144,8 @@ class ThreadReadActiveTurnMergeHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -161,10 +154,12 @@ class ThreadReadActiveTurnMergeHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

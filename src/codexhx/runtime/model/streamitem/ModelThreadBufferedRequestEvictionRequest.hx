@@ -16,22 +16,10 @@ class ModelThreadBufferedRequestEvictionRequest {
 	public final snapshotFilterChecked:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		deliveryOutcome:ModelAppServerQueuedRequestDeliveryOutcome,
-		requestKind:ModelReplayedServerRequestKind,
-		incomingEventKind:ModelThreadBufferedEventKind,
-		evictedEventKind:ModelThreadBufferedEventKind,
-		bufferCapacity:Int,
-		bufferEventCountBefore:Int,
-		incomingOrderIndex:Int,
-		evictedOrderIndex:Int,
-		targetRequestEvicted:Bool,
-		targetRequestWasPendingInteractive:Bool,
-		pendingReplayRecordedBefore:Bool,
-		snapshotFilterChecked:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, deliveryOutcome:ModelAppServerQueuedRequestDeliveryOutcome, requestKind:ModelReplayedServerRequestKind,
+			incomingEventKind:ModelThreadBufferedEventKind, evictedEventKind:ModelThreadBufferedEventKind, bufferCapacity:Int, bufferEventCountBefore:Int,
+			incomingOrderIndex:Int, evictedOrderIndex:Int, targetRequestEvicted:Bool, targetRequestWasPendingInteractive:Bool,
+			pendingReplayRecordedBefore:Bool, snapshotFilterChecked:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.deliveryOutcome = deliveryOutcome;
 		this.requestKind = requestKind == null ? ModelReplayedServerRequestKind.UserInput : requestKind;

@@ -60,23 +60,14 @@ class ModelKeymapBindingInputOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";stringOrArrayInputValidated=" + boolText(stringOrArrayInputValidated)
-			+ ";invalidModifierPathPreserved=" + boolText(invalidModifierPathPreserved)
-			+ ";validMultiBindingCount=" + validMultiBindingCount
-			+ ";dedupeOrderPreserved=" + boolText(dedupeOrderPreserved)
-			+ ";contextFallbackPreserved=" + boolText(contextFallbackPreserved)
-			+ ";invalidGlobalPathsPreserved=" + boolText(invalidGlobalPathsPreserved)
-			+ ";defaultCopyBindingPreserved=" + boolText(defaultCopyBindingPreserved)
-			+ ";defaultMainSurfaceActionsPreserved=" + boolText(defaultMainSurfaceActionsPreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";stringOrArrayInputValidated="
+			+ boolText(stringOrArrayInputValidated) + ";invalidModifierPathPreserved=" + boolText(invalidModifierPathPreserved) + ";validMultiBindingCount="
+			+ validMultiBindingCount + ";dedupeOrderPreserved=" + boolText(dedupeOrderPreserved) + ";contextFallbackPreserved="
+			+ boolText(contextFallbackPreserved) + ";invalidGlobalPathsPreserved=" + boolText(invalidGlobalPathsPreserved) + ";defaultCopyBindingPreserved="
+			+ boolText(defaultCopyBindingPreserved) + ";defaultMainSurfaceActionsPreserved=" + boolText(defaultMainSurfaceActionsPreserved)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

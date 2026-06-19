@@ -155,13 +155,8 @@ class ResumePickerReloadSelectionPreservationRenderGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query
-			+ ";rows=" + state.loadedRows
-			+ ";selected=" + state.selectedIndex
-			+ ";thread=" + state.selectedThreadId
-			+ ";footer=" + state.footerProgressLabel
-			+ ";loader=" + state.loaderEventStatus
-			+ ";detail=" + state.loaderEventDetail;
+		return "query=" + state.query + ";rows=" + state.loadedRows + ";selected=" + state.selectedIndex + ";thread=" + state.selectedThreadId + ";footer="
+			+ state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
 	}
 
 	static function loadPage(loader:DeterministicResumePickerBackgroundLoader, request:ResumePickerThreadListRequest):ResumePickerHostEvent {

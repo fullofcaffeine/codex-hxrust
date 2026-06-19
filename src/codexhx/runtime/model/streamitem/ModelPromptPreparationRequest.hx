@@ -11,17 +11,8 @@ class ModelPromptPreparationRequest {
 	public final nextSamplingRequestIndex:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		hookRecordingOutcome:ModelPendingInputHookRecordingOutcome,
-		historyItemCount:Int,
-		imageItemCountBefore:Int,
-		modelSupportsImages:Bool,
-		windowId:String,
-		metadataHeaderEnabled:Bool,
-		nextSamplingRequestIndex:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, hookRecordingOutcome:ModelPendingInputHookRecordingOutcome, historyItemCount:Int, imageItemCountBefore:Int,
+			modelSupportsImages:Bool, windowId:String, metadataHeaderEnabled:Bool, nextSamplingRequestIndex:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.hookRecordingOutcome = hookRecordingOutcome;
 		this.historyItemCount = historyItemCount < 0 ? 0 : historyItemCount;

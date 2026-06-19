@@ -72,10 +72,8 @@ class InMemoryResumePickerThreadSource implements ResumePickerAppServerThreadSou
 	}
 
 	static function threadListRequestFacts(request:ResumePickerThreadListRequest):String {
-		return request.summary()
-			+ ";cwd=" + request.cwdFilter
-			+ ";showAll=" + boolLabel(request.showAll)
-			+ ";includeNonInteractive=" + boolLabel(request.includeNonInteractive);
+		return request.summary() + ";cwd=" + request.cwdFilter + ";showAll=" + boolLabel(request.showAll) + ";includeNonInteractive="
+			+ boolLabel(request.includeNonInteractive);
 	}
 
 	static function boolLabel(value:Bool):String {

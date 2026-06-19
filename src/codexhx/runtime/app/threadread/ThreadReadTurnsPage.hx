@@ -16,9 +16,7 @@ class ThreadReadTurnsPage {
 		for (turn in data) {
 			parts.push(turn.summary());
 		}
-		return "page:data=" + Std.string(data.length)
-			+ ";next=" + (nextCursor.length == 0 ? "null" : nextCursor)
-			+ ";back=" + (backwardsCursor.length == 0 ? "null" : backwardsCursor)
-			+ ";turns=[" + parts.join("||") + "]";
+		return "page:data=" + Std.string(data.length) + ";next=" + (nextCursor.length == 0 ? "null" : nextCursor) + ";back="
+			+ (backwardsCursor.length == 0 ? "null" : backwardsCursor) + ";turns=[" + parts.join("||") + "]";
 	}
 }

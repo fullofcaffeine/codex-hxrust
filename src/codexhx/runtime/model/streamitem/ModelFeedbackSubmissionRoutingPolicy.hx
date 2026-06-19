@@ -2,17 +2,22 @@ package codexhx.runtime.model.streamitem;
 
 class ModelFeedbackSubmissionRoutingPolicy {
 	public static function route(request:ModelFeedbackSubmissionRoutingRequest):ModelFeedbackSubmissionRoutingOutcome {
-		if (request == null) return failure("", "missing feedback submission routing request");
-		if (request.resultOk && request.resultThreadId.length == 0) return failure(request.requestId, "successful feedback submission must include result thread id");
-		if (!request.resultOk && request.resultErrorMessage.length == 0) return failure(request.requestId, "failed feedback submission must include error message");
+		if (request == null)
+			return failure("", "missing feedback submission routing request");
+		if (request.resultOk && request.resultThreadId.length == 0)
+			return failure(request.requestId, "successful feedback submission must include result thread id");
+		if (!request.resultOk && request.resultErrorMessage.length == 0)
+			return failure(request.requestId, "failed feedback submission must include error message");
 
 		final replay = request.requestKind == ModelFeedbackSubmissionRequestKind.SnapshotReplay || request.snapshotReplay;
 		final originBuffered = request.originThreadProvided && !replay;
 		final activeSend = originBuffered && request.originThreadActive;
 		final currentHistoryRendered = !request.originThreadProvided && !replay;
 		final snapshotReplayRendered = replay;
-		final historyCellKind = currentHistoryRendered || snapshotReplayRendered ? historyCellKind(request.resultOk) : ModelFeedbackSubmissionHistoryCellKind.None;
-		final historyCellText = currentHistoryRendered || snapshotReplayRendered ? historyCellText(request.resultOk, request.resultThreadId, request.resultErrorMessage) : "";
+		final historyCellKind = currentHistoryRendered
+			|| snapshotReplayRendered ? historyCellKind(request.resultOk) : ModelFeedbackSubmissionHistoryCellKind.None;
+		final historyCellText = currentHistoryRendered
+			|| snapshotReplayRendered ? historyCellText(request.resultOk, request.resultThreadId, request.resultErrorMessage) : "";
 		final ordered = request.eventOrderIndex == request.previousEventCount + 1;
 
 		return new ModelFeedbackSubmissionRoutingOutcome({
@@ -44,14 +49,13 @@ class ModelFeedbackSubmissionRoutingPolicy {
 		});
 	}
 
-	static function decisionKind(
-		replay:Bool,
-		originThreadProvided:Bool,
-		originThreadActive:Bool
-	):ModelFeedbackSubmissionDecisionKind {
-		if (replay) return ModelFeedbackSubmissionDecisionKind.SnapshotReplayRendered;
-		if (!originThreadProvided) return ModelFeedbackSubmissionDecisionKind.CurrentHistoryRendered;
-		if (originThreadActive) return ModelFeedbackSubmissionDecisionKind.ActiveOriginThreadDelivered;
+	static function decisionKind(replay:Bool, originThreadProvided:Bool, originThreadActive:Bool):ModelFeedbackSubmissionDecisionKind {
+		if (replay)
+			return ModelFeedbackSubmissionDecisionKind.SnapshotReplayRendered;
+		if (!originThreadProvided)
+			return ModelFeedbackSubmissionDecisionKind.CurrentHistoryRendered;
+		if (originThreadActive)
+			return ModelFeedbackSubmissionDecisionKind.ActiveOriginThreadDelivered;
 		return ModelFeedbackSubmissionDecisionKind.OriginThreadBuffered;
 	}
 
@@ -60,7 +64,8 @@ class ModelFeedbackSubmissionRoutingPolicy {
 	}
 
 	static function historyCellText(resultOk:Bool, threadId:String, errorMessage:String):String {
-		if (resultOk) return "Feedback uploaded. Please open an issue using the following URL: " + threadId;
+		if (resultOk)
+			return "Feedback uploaded. Please open an issue using the following URL: " + threadId;
 		return "Failed to upload feedback: " + errorMessage;
 	}
 

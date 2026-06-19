@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelFreshSessionPreviousConversationShutdownPolicy {
 	public static function apply(request:ModelFreshSessionPreviousConversationShutdownRequest):ModelFreshSessionPreviousConversationShutdownOutcome {
-		if (request == null) return failure("", "missing fresh-session previous-conversation shutdown request");
+		if (request == null)
+			return failure("", "missing fresh-session previous-conversation shutdown request");
 
 		final previousConversationPresent = request.chatWidgetThreadKnown && request.previousThreadId.length > 0;
 		final shutdownCurrentThreadAttempted = request.newSessionRequested && previousConversationPresent;
@@ -13,23 +14,14 @@ class ModelFreshSessionPreviousConversationShutdownPolicy {
 		final listenerTaskRemoved = listenerAbortAttempted;
 		final opShutdownSubmitted = false;
 		final opQueueLengthAfter = request.opQueueLengthBefore;
-		final duplicateShutdownSuppressed = shutdownCurrentThreadAttempted && !opShutdownSubmitted && opQueueLengthAfter == request.opQueueLengthBefore;
+		final duplicateShutdownSuppressed = shutdownCurrentThreadAttempted
+			&& !opShutdownSubmitted
+			&& opQueueLengthAfter == request.opQueueLengthBefore;
 		final newSessionMayStartAfterShutdown = request.newSessionRequested && (!threadUnsubscribeAttempted || threadUnsubscribeSucceeded);
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final decisionKind = decision(
-			previousConversationPresent,
-			shutdownCurrentThreadAttempted,
-			threadUnsubscribeAttempted,
-			threadUnsubscribeSucceeded
-		);
-		final ok = previousConversationPresent
-			&& shutdownCurrentThreadAttempted
-			&& threadUnsubscribeAttempted
-			&& threadUnsubscribeSucceeded
-			&& listenerTaskRemoved
-			&& duplicateShutdownSuppressed
-			&& newSessionMayStartAfterShutdown
-			&& eventOrderingPreserved;
+		final decisionKind = decision(previousConversationPresent, shutdownCurrentThreadAttempted, threadUnsubscribeAttempted, threadUnsubscribeSucceeded);
+		final ok = previousConversationPresent && shutdownCurrentThreadAttempted && threadUnsubscribeAttempted && threadUnsubscribeSucceeded
+			&& listenerTaskRemoved && duplicateShutdownSuppressed && newSessionMayStartAfterShutdown && eventOrderingPreserved;
 
 		return new ModelFreshSessionPreviousConversationShutdownOutcome({
 			ok: ok,
@@ -56,12 +48,8 @@ class ModelFreshSessionPreviousConversationShutdownPolicy {
 		});
 	}
 
-	static function decision(
-		previousConversationPresent:Bool,
-		shutdownCurrentThreadAttempted:Bool,
-		threadUnsubscribeAttempted:Bool,
-		threadUnsubscribeSucceeded:Bool
-	):ModelFreshSessionPreviousConversationShutdownDecisionKind {
+	static function decision(previousConversationPresent:Bool, shutdownCurrentThreadAttempted:Bool, threadUnsubscribeAttempted:Bool,
+			threadUnsubscribeSucceeded:Bool):ModelFreshSessionPreviousConversationShutdownDecisionKind {
 		if (!previousConversationPresent || !shutdownCurrentThreadAttempted) {
 			return ModelFreshSessionPreviousConversationShutdownDecisionKind.NoPreviousConversationNoop;
 		}

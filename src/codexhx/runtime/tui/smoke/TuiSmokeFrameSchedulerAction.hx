@@ -43,7 +43,6 @@ class TuiSmokeFrameSchedulerAction {
 	public final closed:Bool;
 	public final failureCode:String;
 
-
 	public function previousDeadlineText():String {
 		return deadlineText(previousDeadlineMs);
 	}

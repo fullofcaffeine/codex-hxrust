@@ -33,10 +33,12 @@ class ResumePickerScanCapRenderHarness {
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) < 0) throw "expected `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) < 0)
+			throw "expected `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String, label:String):Void {
-		if (expected != actual) throw label + " expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw label + " expected " + expected + " but got " + actual;
 	}
 }

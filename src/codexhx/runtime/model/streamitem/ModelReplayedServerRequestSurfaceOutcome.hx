@@ -25,31 +25,11 @@ class ModelReplayedServerRequestSurfaceOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		dispatchRequestId:String,
-		requestKind:ModelReplayedServerRequestKind,
-		surfaceKind:ModelReplayedServerRequestSurfaceKind,
-		replayKind:ModelTurnReplayKind,
-		replayKindAttached:Bool,
-		snapshotRequestAllowed:Bool,
-		chatWidgetRequestHandled:Bool,
-		execApprovalRendered:Bool,
-		fileChangeApprovalRendered:Bool,
-		elicitationRendered:Bool,
-		elicitationUrlDeclined:Bool,
-		permissionsRendered:Bool,
-		userInputRendered:Bool,
-		unsupportedStubErrorEmitted:Bool,
-		unsupportedReplayStubSuppressed:Bool,
-		liveOnlyEffectsSuppressed:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, dispatchRequestId:String, requestKind:ModelReplayedServerRequestKind,
+			surfaceKind:ModelReplayedServerRequestSurfaceKind, replayKind:ModelTurnReplayKind, replayKindAttached:Bool, snapshotRequestAllowed:Bool,
+			chatWidgetRequestHandled:Bool, execApprovalRendered:Bool, fileChangeApprovalRendered:Bool, elicitationRendered:Bool, elicitationUrlDeclined:Bool,
+			permissionsRendered:Bool, userInputRendered:Bool, unsupportedStubErrorEmitted:Bool, unsupportedReplayStubSuppressed:Bool,
+			liveOnlyEffectsSuppressed:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -76,29 +56,16 @@ class ModelReplayedServerRequestSurfaceOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";dispatchRequest=" + noneIfEmpty(dispatchRequestId)
-			+ ";requestKind=" + requestKind
-			+ ";surfaceKind=" + surfaceKind
-			+ ";replayKind=" + replayKind
-			+ ";replayKindAttached=" + boolText(replayKindAttached)
-			+ ";snapshotRequestAllowed=" + boolText(snapshotRequestAllowed)
-			+ ";chatWidgetRequestHandled=" + boolText(chatWidgetRequestHandled)
-			+ ";execApprovalRendered=" + boolText(execApprovalRendered)
-			+ ";fileChangeApprovalRendered=" + boolText(fileChangeApprovalRendered)
-			+ ";elicitationRendered=" + boolText(elicitationRendered)
-			+ ";elicitationUrlDeclined=" + boolText(elicitationUrlDeclined)
-			+ ";permissionsRendered=" + boolText(permissionsRendered)
-			+ ";userInputRendered=" + boolText(userInputRendered)
-			+ ";unsupportedStubErrorEmitted=" + boolText(unsupportedStubErrorEmitted)
-			+ ";unsupportedReplayStubSuppressed=" + boolText(unsupportedReplayStubSuppressed)
-			+ ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";dispatchRequest=" + noneIfEmpty(dispatchRequestId) + ";requestKind="
+			+ requestKind + ";surfaceKind=" + surfaceKind + ";replayKind=" + replayKind + ";replayKindAttached=" + boolText(replayKindAttached)
+			+ ";snapshotRequestAllowed=" + boolText(snapshotRequestAllowed) + ";chatWidgetRequestHandled=" + boolText(chatWidgetRequestHandled)
+			+ ";execApprovalRendered=" + boolText(execApprovalRendered) + ";fileChangeApprovalRendered=" + boolText(fileChangeApprovalRendered)
+			+ ";elicitationRendered=" + boolText(elicitationRendered) + ";elicitationUrlDeclined=" + boolText(elicitationUrlDeclined)
+			+ ";permissionsRendered=" + boolText(permissionsRendered) + ";userInputRendered=" + boolText(userInputRendered) + ";unsupportedStubErrorEmitted="
+			+ boolText(unsupportedStubErrorEmitted) + ";unsupportedReplayStubSuppressed=" + boolText(unsupportedReplayStubSuppressed)
+			+ ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

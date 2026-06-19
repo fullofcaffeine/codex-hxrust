@@ -57,22 +57,13 @@ class ModelKeymapApprovalConflictOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";approveBindingPreserved=" + boolText(approveBindingPreserved)
-			+ ";declineBindingPreserved=" + boolText(declineBindingPreserved)
-			+ ";denyBindingPreserved=" + boolText(denyBindingPreserved)
-			+ ";listAcceptBindingPreserved=" + boolText(listAcceptBindingPreserved)
-			+ ";listCancelBindingPreserved=" + boolText(listCancelBindingPreserved)
-			+ ";conflictActionNamesPreserved=" + boolText(conflictActionNamesPreserved)
-			+ ";conflictRejectionPreserved=" + boolText(conflictRejectionPreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";approveBindingPreserved="
+			+ boolText(approveBindingPreserved) + ";declineBindingPreserved=" + boolText(declineBindingPreserved) + ";denyBindingPreserved="
+			+ boolText(denyBindingPreserved) + ";listAcceptBindingPreserved=" + boolText(listAcceptBindingPreserved) + ";listCancelBindingPreserved="
+			+ boolText(listCancelBindingPreserved) + ";conflictActionNamesPreserved=" + boolText(conflictActionNamesPreserved)
+			+ ";conflictRejectionPreserved=" + boolText(conflictRejectionPreserved) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

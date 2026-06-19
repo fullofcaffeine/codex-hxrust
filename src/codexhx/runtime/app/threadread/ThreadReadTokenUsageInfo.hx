@@ -26,15 +26,16 @@ class ThreadReadTokenUsageInfo {
 	}
 
 	public function summary():String {
-		return total.summary("total")
-			+ ";" + last.summary("last")
-			+ ";modelContextWindow=" + modelContextWindowText();
+		return total.summary("total") + ";" + last.summary("last") + ";modelContextWindow=" + modelContextWindowText();
 	}
 
 	public function toJson():String {
-		return "{\"total\":" + total.toJson()
-			+ ",\"last\":" + last.toJson()
-			+ ",\"modelContextWindow\":" + modelContextWindowText()
+		return "{\"total\":"
+			+ total.toJson()
+			+ ",\"last\":"
+			+ last.toJson()
+			+ ",\"modelContextWindow\":"
+			+ modelContextWindowText()
 			+ "}";
 	}
 }

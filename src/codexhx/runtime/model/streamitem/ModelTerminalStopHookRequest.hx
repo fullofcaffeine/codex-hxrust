@@ -17,23 +17,10 @@ class ModelTerminalStopHookRequest {
 	public final stopHookAlreadyActive:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		integrationOutcome:ModelSamplingResultIntegrationOutcome,
-		promptPreparationOutcome:ModelPromptPreparationOutcome,
-		targetKind:ModelTerminalStopHookTargetKind,
-		previewRunCount:Int,
-		completedRunCount:Int,
-		completedRunStatusKind:ModelTerminalStopHookRunStatusKind,
-		shouldBlock:Bool,
-		continuationFragmentCount:Int,
-		continuationPromptRenderable:Bool,
-		shouldStop:Bool,
-		legacyAfterAgentEnabled:Bool,
-		legacyAfterAgentAbort:Bool,
-		stopHookAlreadyActive:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, integrationOutcome:ModelSamplingResultIntegrationOutcome, promptPreparationOutcome:ModelPromptPreparationOutcome,
+			targetKind:ModelTerminalStopHookTargetKind, previewRunCount:Int, completedRunCount:Int, completedRunStatusKind:ModelTerminalStopHookRunStatusKind,
+			shouldBlock:Bool, continuationFragmentCount:Int, continuationPromptRenderable:Bool, shouldStop:Bool, legacyAfterAgentEnabled:Bool,
+			legacyAfterAgentAbort:Bool, stopHookAlreadyActive:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.integrationOutcome = integrationOutcome;
 		this.promptPreparationOutcome = promptPreparationOutcome;

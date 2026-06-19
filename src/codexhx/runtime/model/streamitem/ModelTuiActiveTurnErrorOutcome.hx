@@ -84,29 +84,15 @@ class ModelTuiActiveTurnErrorOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";requestKind=" + requestKind
-			+ ";decisionKind=" + decisionKind
-			+ ";method=" + noneIfEmpty(method)
-			+ ";turnKind=" + turnKind
-			+ ";actualTurnId=" + noneIfEmpty(actualTurnId)
-			+ ";structuredTurnErrorExtracted=" + boolText(structuredTurnErrorExtracted)
-			+ ";steerRaceDetected=" + boolText(steerRaceDetected)
-			+ ";interruptRaceDetected=" + boolText(interruptRaceDetected)
-			+ ";archivedGuidanceDetected=" + boolText(archivedGuidanceDetected)
-			+ ";shouldClearCachedActiveTurn=" + boolText(shouldClearCachedActiveTurn)
-			+ ";shouldStartNewTurn=" + boolText(shouldStartNewTurn)
-			+ ";shouldRetryWithActualTurn=" + boolText(shouldRetryWithActualTurn)
-			+ ";shouldQueueRejectedSteer=" + boolText(shouldQueueRejectedSteer)
-			+ ";shouldDisplayErrorMessage=" + boolText(shouldDisplayErrorMessage)
-			+ ";rolloutPathLeaked=" + boolText(rolloutPathLeaked)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";requestKind=" + requestKind + ";decisionKind=" + decisionKind
+			+ ";method=" + noneIfEmpty(method) + ";turnKind=" + turnKind + ";actualTurnId=" + noneIfEmpty(actualTurnId) + ";structuredTurnErrorExtracted="
+			+ boolText(structuredTurnErrorExtracted) + ";steerRaceDetected=" + boolText(steerRaceDetected) + ";interruptRaceDetected="
+			+ boolText(interruptRaceDetected) + ";archivedGuidanceDetected=" + boolText(archivedGuidanceDetected) + ";shouldClearCachedActiveTurn="
+			+ boolText(shouldClearCachedActiveTurn) + ";shouldStartNewTurn=" + boolText(shouldStartNewTurn) + ";shouldRetryWithActualTurn="
+			+ boolText(shouldRetryWithActualTurn) + ";shouldQueueRejectedSteer=" + boolText(shouldQueueRejectedSteer) + ";shouldDisplayErrorMessage="
+			+ boolText(shouldDisplayErrorMessage) + ";rolloutPathLeaked=" + boolText(rolloutPathLeaked) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

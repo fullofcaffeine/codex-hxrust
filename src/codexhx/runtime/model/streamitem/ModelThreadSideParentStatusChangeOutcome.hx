@@ -23,29 +23,12 @@ class ModelThreadSideParentStatusChangeOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		pendingRequestId:String,
-		eventKind:ModelThreadSideParentStatusChangeEventKind,
-		turnStatus:ModelThreadSideParentTurnStatusKind,
-		decisionKind:ModelThreadSideParentStatusChangeDecisionKind,
-		sideParentStatusBefore:ModelThreadSideParentStatusKind,
-		pendingStatusAfter:ModelThreadSideParentStatusKind,
-		sideParentStatusAfter:ModelThreadSideParentStatusKind,
-		pendingStatusTookPrecedence:Bool,
-		notificationStatusChangeApplied:Bool,
-		actionableStatusCleared:Bool,
-		terminalStatusSet:Bool,
-		terminalStatusPreserved:Bool,
-		ignoredInProgressTurn:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, pendingRequestId:String, eventKind:ModelThreadSideParentStatusChangeEventKind,
+			turnStatus:ModelThreadSideParentTurnStatusKind, decisionKind:ModelThreadSideParentStatusChangeDecisionKind,
+			sideParentStatusBefore:ModelThreadSideParentStatusKind, pendingStatusAfter:ModelThreadSideParentStatusKind,
+			sideParentStatusAfter:ModelThreadSideParentStatusKind, pendingStatusTookPrecedence:Bool, notificationStatusChangeApplied:Bool,
+			actionableStatusCleared:Bool, terminalStatusSet:Bool, terminalStatusPreserved:Bool, ignoredInProgressTurn:Bool, eventOrderingPreserved:Bool,
+			liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -70,27 +53,15 @@ class ModelThreadSideParentStatusChangeOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";pendingRequest=" + noneIfEmpty(pendingRequestId)
-			+ ";eventKind=" + eventKind
-			+ ";turnStatus=" + turnStatus
-			+ ";decisionKind=" + decisionKind
-			+ ";sideParentStatusBefore=" + sideParentStatusBefore
-			+ ";pendingStatusAfter=" + pendingStatusAfter
-			+ ";sideParentStatusAfter=" + sideParentStatusAfter
-			+ ";pendingStatusTookPrecedence=" + boolText(pendingStatusTookPrecedence)
-			+ ";notificationStatusChangeApplied=" + boolText(notificationStatusChangeApplied)
-			+ ";actionableStatusCleared=" + boolText(actionableStatusCleared)
-			+ ";terminalStatusSet=" + boolText(terminalStatusSet)
-			+ ";terminalStatusPreserved=" + boolText(terminalStatusPreserved)
-			+ ";ignoredInProgressTurn=" + boolText(ignoredInProgressTurn)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";pendingRequest=" + noneIfEmpty(pendingRequestId) + ";eventKind="
+			+ eventKind + ";turnStatus=" + turnStatus + ";decisionKind=" + decisionKind + ";sideParentStatusBefore=" + sideParentStatusBefore
+			+ ";pendingStatusAfter=" + pendingStatusAfter + ";sideParentStatusAfter=" + sideParentStatusAfter + ";pendingStatusTookPrecedence="
+			+ boolText(pendingStatusTookPrecedence) + ";notificationStatusChangeApplied=" + boolText(notificationStatusChangeApplied)
+			+ ";actionableStatusCleared=" + boolText(actionableStatusCleared) + ";terminalStatusSet=" + boolText(terminalStatusSet)
+			+ ";terminalStatusPreserved=" + boolText(terminalStatusPreserved) + ";ignoredInProgressTurn=" + boolText(ignoredInProgressTurn)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

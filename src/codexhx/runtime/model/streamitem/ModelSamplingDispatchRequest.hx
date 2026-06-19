@@ -14,20 +14,9 @@ class ModelSamplingDispatchRequest {
 	public final liveProviderEnabled:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		assemblyOutcome:ModelSamplingInputAssemblyOutcome,
-		transportKind:ModelSamplingDispatchTransportKind,
-		windowId:String,
-		turnMetadataHeaderPresent:Bool,
-		maxRetries:Int,
-		previousDispatchCount:Int,
-		modelClientSessionReused:Bool,
-		stickyRoutingTokenPreserved:Bool,
-		cancellationChildTokenCreated:Bool,
-		liveProviderEnabled:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, assemblyOutcome:ModelSamplingInputAssemblyOutcome, transportKind:ModelSamplingDispatchTransportKind,
+			windowId:String, turnMetadataHeaderPresent:Bool, maxRetries:Int, previousDispatchCount:Int, modelClientSessionReused:Bool,
+			stickyRoutingTokenPreserved:Bool, cancellationChildTokenCreated:Bool, liveProviderEnabled:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.assemblyOutcome = assemblyOutcome;
 		this.transportKind = transportKind;

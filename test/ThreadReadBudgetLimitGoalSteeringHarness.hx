@@ -42,17 +42,10 @@ class ThreadReadBudgetLimitGoalSteeringHarness {
 			final caseObject = objectValue(value);
 			final progress = objectField(caseObject, "progress");
 			final host = objectField(caseObject, "host");
-			out.push(new ThreadReadBudgetLimitGoalSteeringRequest(
-				boolField(progress, "ok", false),
-				boolField(progress, "available", false),
-				stringField(progress, "errorCode", ""),
-				goalValue(valueField(progress, "goal")),
-				stringField(progress, "goalId", ""),
-				boolField(progress, "budgetLimitAlreadyReported", false),
-				boolField(host, "threadManagerAvailable", false),
-				boolField(host, "liveThreadAvailable", false),
-				boolField(host, "activeTurnRunning", false)
-			));
+			out.push(new ThreadReadBudgetLimitGoalSteeringRequest(boolField(progress, "ok", false), boolField(progress, "available", false),
+				stringField(progress, "errorCode", ""), goalValue(valueField(progress, "goal")), stringField(progress, "goalId", ""),
+				boolField(progress, "budgetLimitAlreadyReported", false), boolField(host, "threadManagerAvailable", false),
+				boolField(host, "liveThreadAvailable", false), boolField(host, "activeTurnRunning", false)));
 		}
 		return out;
 	}
@@ -62,7 +55,8 @@ class ThreadReadBudgetLimitGoalSteeringHarness {
 			case JNull: null;
 			case _:
 				final parsed = ThreadGoal.parseApp(value);
-				if (!parsed.ok) throw "invalid goal fixture: " + parsed.errorCode;
+				if (!parsed.ok)
+					throw "invalid goal fixture: " + parsed.errorCode;
 				parsed.value;
 		}
 	}
@@ -126,7 +120,8 @@ class ThreadReadBudgetLimitGoalSteeringHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -143,7 +138,8 @@ class ThreadReadBudgetLimitGoalSteeringHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -152,10 +148,12 @@ class ThreadReadBudgetLimitGoalSteeringHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

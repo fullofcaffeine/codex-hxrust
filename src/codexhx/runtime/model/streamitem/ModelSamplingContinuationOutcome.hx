@@ -24,30 +24,11 @@ class ModelSamplingContinuationOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		continuationKind:ModelSamplingContinuationKind,
-		modelNeedsFollowUp:Bool,
-		hasPendingInput:Bool,
-		needsFollowUp:Bool,
-		nextSamplingRequestRequired:Bool,
-		responseInputCarried:Bool,
-		pendingInputDrainedBeforeNextRequest:Bool,
-		autoCompactRequired:Bool,
-		canDrainPendingInputBeforeNextRequest:Bool,
-		admittedResponseInputCount:Int,
-		pendingInputCount:Int,
-		nextSamplingInputCount:Int,
-		nextSamplingRequestIndex:Int,
-		activeContextTokens:Int,
-		estimatedTokenCount:Int,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, continuationKind:ModelSamplingContinuationKind, modelNeedsFollowUp:Bool, hasPendingInput:Bool,
+			needsFollowUp:Bool, nextSamplingRequestRequired:Bool, responseInputCarried:Bool, pendingInputDrainedBeforeNextRequest:Bool,
+			autoCompactRequired:Bool, canDrainPendingInputBeforeNextRequest:Bool, admittedResponseInputCount:Int, pendingInputCount:Int,
+			nextSamplingInputCount:Int, nextSamplingRequestIndex:Int, activeContextTokens:Int, estimatedTokenCount:Int, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -73,28 +54,16 @@ class ModelSamplingContinuationOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";continuationKind=" + continuationKind
-			+ ";modelNeedsFollowUp=" + boolText(modelNeedsFollowUp)
-			+ ";hasPendingInput=" + boolText(hasPendingInput)
-			+ ";needsFollowUp=" + boolText(needsFollowUp)
-			+ ";nextSamplingRequestRequired=" + boolText(nextSamplingRequestRequired)
-			+ ";responseInputCarried=" + boolText(responseInputCarried)
-			+ ";pendingInputDrainedBeforeNextRequest=" + boolText(pendingInputDrainedBeforeNextRequest)
-			+ ";autoCompactRequired=" + boolText(autoCompactRequired)
-			+ ";canDrainPendingInputBeforeNextRequest=" + boolText(canDrainPendingInputBeforeNextRequest)
-			+ ";admittedResponseInputCount=" + Std.string(admittedResponseInputCount)
-			+ ";pendingInputCount=" + Std.string(pendingInputCount)
-			+ ";nextSamplingInputCount=" + Std.string(nextSamplingInputCount)
-			+ ";nextSamplingRequestIndex=" + Std.string(nextSamplingRequestIndex)
-			+ ";activeContextTokens=" + Std.string(activeContextTokens)
-			+ ";estimatedTokenCount=" + Std.string(estimatedTokenCount)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";continuationKind=" + continuationKind + ";modelNeedsFollowUp="
+			+ boolText(modelNeedsFollowUp) + ";hasPendingInput=" + boolText(hasPendingInput) + ";needsFollowUp=" + boolText(needsFollowUp)
+			+ ";nextSamplingRequestRequired=" + boolText(nextSamplingRequestRequired) + ";responseInputCarried=" + boolText(responseInputCarried)
+			+ ";pendingInputDrainedBeforeNextRequest=" + boolText(pendingInputDrainedBeforeNextRequest) + ";autoCompactRequired="
+			+ boolText(autoCompactRequired) + ";canDrainPendingInputBeforeNextRequest=" + boolText(canDrainPendingInputBeforeNextRequest)
+			+ ";admittedResponseInputCount=" + Std.string(admittedResponseInputCount) + ";pendingInputCount=" + Std.string(pendingInputCount)
+			+ ";nextSamplingInputCount=" + Std.string(nextSamplingInputCount) + ";nextSamplingRequestIndex=" + Std.string(nextSamplingRequestIndex)
+			+ ";activeContextTokens=" + Std.string(activeContextTokens) + ";estimatedTokenCount=" + Std.string(estimatedTokenCount)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

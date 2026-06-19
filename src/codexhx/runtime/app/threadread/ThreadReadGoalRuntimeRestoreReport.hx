@@ -12,7 +12,8 @@ class ThreadReadGoalRuntimeRestoreReport {
 	public function restoredCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.restoredActiveGoal) count = count + 1;
+			if (outcome.restoredActiveGoal)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadGoalRuntimeRestoreReport {
 	public function clearedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.clearedActiveGoal) count = count + 1;
+			if (outcome.clearedActiveGoal)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadGoalRuntimeRestoreReport {
 	public function metricCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.resumedMetricRecorded) count = count + 1;
+			if (outcome.resumedMetricRecorded)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -36,7 +39,8 @@ class ThreadReadGoalRuntimeRestoreReport {
 	public function noopCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.code == "runtime_missing_skip" || outcome.code == "runtime_disabled_noop") count = count + 1;
+			if (outcome.code == "runtime_missing_skip" || outcome.code == "runtime_disabled_noop")
+				count = count + 1;
 		}
 		return count;
 	}
@@ -44,7 +48,8 @@ class ThreadReadGoalRuntimeRestoreReport {
 	public function failureCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.ok) count = count + 1;
+			if (!outcome.ok)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -54,13 +59,8 @@ class ThreadReadGoalRuntimeRestoreReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";restored=" + Std.string(restoredCount())
-			+ ";cleared=" + Std.string(clearedCount())
-			+ ";metrics=" + Std.string(metricCount())
-			+ ";noop=" + Std.string(noopCount())
-			+ ";failed=" + Std.string(failureCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";restored=" + Std.string(restoredCount()) + ";cleared="
+			+ Std.string(clearedCount()) + ";metrics=" + Std.string(metricCount()) + ";noop=" + Std.string(noopCount()) + ";failed="
+			+ Std.string(failureCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

@@ -32,38 +32,13 @@ class ModelTerminalStopHookOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		integrationRequestId:String,
-		promptPreparationRequestId:String,
-		decisionKind:ModelTerminalStopHookDecisionKind,
-		targetKind:ModelTerminalStopHookTargetKind,
-		stopHooksEligible:Bool,
-		stopHookDispatched:Bool,
-		stopHookAlreadyActive:Bool,
-		previewRunCount:Int,
-		completedRunCount:Int,
-		completedRunStatusKind:ModelTerminalStopHookRunStatusKind,
-		hookStartedEventsProjected:Int,
-		hookCompletedEventsProjected:Int,
-		shouldBlock:Bool,
-		continuationFragmentCount:Int,
-		continuationPromptRecorded:Bool,
-		warningEmitted:Bool,
-		shouldStop:Bool,
-		legacyAfterAgentRan:Bool,
-		legacyAfterAgentAbort:Bool,
-		lastAgentMessage:String,
-		continueLoop:Bool,
-		breakTurnLoop:Bool,
-		errorEmitted:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, integrationRequestId:String, promptPreparationRequestId:String,
+			decisionKind:ModelTerminalStopHookDecisionKind, targetKind:ModelTerminalStopHookTargetKind, stopHooksEligible:Bool, stopHookDispatched:Bool,
+			stopHookAlreadyActive:Bool, previewRunCount:Int, completedRunCount:Int, completedRunStatusKind:ModelTerminalStopHookRunStatusKind,
+			hookStartedEventsProjected:Int, hookCompletedEventsProjected:Int, shouldBlock:Bool, continuationFragmentCount:Int,
+			continuationPromptRecorded:Bool, warningEmitted:Bool, shouldStop:Bool, legacyAfterAgentRan:Bool, legacyAfterAgentAbort:Bool,
+			lastAgentMessage:String, continueLoop:Bool, breakTurnLoop:Bool, errorEmitted:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -97,36 +72,18 @@ class ModelTerminalStopHookOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";integrationRequest=" + integrationRequestId
-			+ ";promptPreparationRequest=" + noneIfEmpty(promptPreparationRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";targetKind=" + targetKind
-			+ ";stopHooksEligible=" + boolText(stopHooksEligible)
-			+ ";stopHookDispatched=" + boolText(stopHookDispatched)
-			+ ";stopHookAlreadyActive=" + boolText(stopHookAlreadyActive)
-			+ ";previewRunCount=" + Std.string(previewRunCount)
-			+ ";completedRunCount=" + Std.string(completedRunCount)
-			+ ";completedRunStatusKind=" + completedRunStatusKind
-			+ ";hookStartedEventsProjected=" + Std.string(hookStartedEventsProjected)
-			+ ";hookCompletedEventsProjected=" + Std.string(hookCompletedEventsProjected)
-			+ ";shouldBlock=" + boolText(shouldBlock)
-			+ ";continuationFragmentCount=" + Std.string(continuationFragmentCount)
-			+ ";continuationPromptRecorded=" + boolText(continuationPromptRecorded)
-			+ ";warningEmitted=" + boolText(warningEmitted)
-			+ ";shouldStop=" + boolText(shouldStop)
-			+ ";legacyAfterAgentRan=" + boolText(legacyAfterAgentRan)
-			+ ";legacyAfterAgentAbort=" + boolText(legacyAfterAgentAbort)
-			+ ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage)
-			+ ";continueLoop=" + boolText(continueLoop)
-			+ ";breakTurnLoop=" + boolText(breakTurnLoop)
-			+ ";errorEmitted=" + boolText(errorEmitted)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";integrationRequest=" + integrationRequestId
+			+ ";promptPreparationRequest=" + noneIfEmpty(promptPreparationRequestId) + ";decisionKind=" + decisionKind + ";targetKind=" + targetKind
+			+ ";stopHooksEligible=" + boolText(stopHooksEligible) + ";stopHookDispatched=" + boolText(stopHookDispatched) + ";stopHookAlreadyActive="
+			+ boolText(stopHookAlreadyActive) + ";previewRunCount=" + Std.string(previewRunCount) + ";completedRunCount=" + Std.string(completedRunCount)
+			+ ";completedRunStatusKind=" + completedRunStatusKind + ";hookStartedEventsProjected=" + Std.string(hookStartedEventsProjected)
+			+ ";hookCompletedEventsProjected=" + Std.string(hookCompletedEventsProjected) + ";shouldBlock=" + boolText(shouldBlock)
+			+ ";continuationFragmentCount=" + Std.string(continuationFragmentCount) + ";continuationPromptRecorded=" + boolText(continuationPromptRecorded)
+			+ ";warningEmitted=" + boolText(warningEmitted) + ";shouldStop=" + boolText(shouldStop) + ";legacyAfterAgentRan=" + boolText(legacyAfterAgentRan)
+			+ ";legacyAfterAgentAbort=" + boolText(legacyAfterAgentAbort) + ";lastAgentMessage=" + noneIfEmpty(lastAgentMessage) + ";continueLoop="
+			+ boolText(continueLoop) + ";breakTurnLoop=" + boolText(breakTurnLoop) + ";errorEmitted=" + boolText(errorEmitted) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -12,16 +12,8 @@ class ThreadReadCreateGoalToolRequest {
 	public final previewErrorMessage:String;
 	public final insertedGoal:ThreadGoal;
 
-	public function new(
-		threadId:String,
-		turnId:String,
-		argumentsJson:String,
-		insertOutcomeKind:ThreadReadCreateGoalToolInsertOutcomeKind,
-		insertErrorMessage:String,
-		previewOutcomeKind:ThreadReadCreateGoalToolPreviewOutcomeKind,
-		previewErrorMessage:String,
-		insertedGoal:ThreadGoal
-	) {
+	public function new(threadId:String, turnId:String, argumentsJson:String, insertOutcomeKind:ThreadReadCreateGoalToolInsertOutcomeKind,
+			insertErrorMessage:String, previewOutcomeKind:ThreadReadCreateGoalToolPreviewOutcomeKind, previewErrorMessage:String, insertedGoal:ThreadGoal) {
 		this.threadId = threadId;
 		this.turnId = turnId;
 		this.argumentsJson = argumentsJson;

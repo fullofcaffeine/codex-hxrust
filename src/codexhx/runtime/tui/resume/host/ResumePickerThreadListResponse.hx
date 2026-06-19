@@ -21,12 +21,7 @@ class ResumePickerThreadListResponse {
 	public final reachedScanCap:Bool;
 
 	public function summary():String {
-		return "id=" + requestId
-			+ ";rows=" + rows.length
-			+ ";next=" + nextCursor
-			+ ";scanned=" + scannedRows
-			+ ";accepted=" + acceptedRows
-			+ ";invalid=" + invalidRows
-			+ ";scanCap=" + (reachedScanCap ? "true" : "false");
+		return "id=" + requestId + ";rows=" + rows.length + ";next=" + nextCursor + ";scanned=" + scannedRows + ";accepted=" + acceptedRows + ";invalid="
+			+ invalidRows + ";scanCap=" + (reachedScanCap ? "true" : "false");
 	}
 }

@@ -31,9 +31,7 @@ class ModelKeymapVimOperatorTextObjectOutcome {
 		this.ok = fields.ok;
 		this.code = fields.code == null ? "" : fields.code;
 		this.requestId = fields.requestId == null ? "" : fields.requestId;
-		this.decisionKind = fields.decisionKind == null
-			? ModelKeymapVimOperatorTextObjectDecisionKind.KeymapVimOperatorTextObjectsRejected
-			: fields.decisionKind;
+		this.decisionKind = fields.decisionKind == null ? ModelKeymapVimOperatorTextObjectDecisionKind.KeymapVimOperatorTextObjectsRejected : fields.decisionKind;
 		this.legacyMotionPruningPreserved = fields.legacyMotionPruningPreserved;
 		this.explicitTextObjectConflictPreserved = fields.explicitTextObjectConflictPreserved;
 		this.eventOrderingPreserved = fields.eventOrderingPreserved;
@@ -44,17 +42,11 @@ class ModelKeymapVimOperatorTextObjectOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";legacyMotionPruningPreserved=" + boolText(legacyMotionPruningPreserved)
-			+ ";explicitTextObjectConflictPreserved=" + boolText(explicitTextObjectConflictPreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";legacyMotionPruningPreserved="
+			+ boolText(legacyMotionPruningPreserved) + ";explicitTextObjectConflictPreserved=" + boolText(explicitTextObjectConflictPreserved)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

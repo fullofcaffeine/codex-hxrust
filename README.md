@@ -2,6 +2,8 @@
 
 `codex-hxrust` is an experiment to port all of OpenAI Codex to pure Haxe that emits Rust through [`haxe.rust`](../haxe.rust), including the app-server, runtime, tools, state, and TUI surfaces.
 
+The repository has public-readiness scaffolding in place: repo-managed hooks, Haxe formatting, staged and full-history gitleaks checks, GitHub CI, Dependabot, and generated-Rust smoke gates. It is still a port-in-progress, not a production Codex replacement.
+
 The strategy is upstream-first:
 
 1. Model the mainstream Codex protocol/runtime shape from `../codex`.
@@ -23,6 +25,7 @@ This repo uses lix-style scoped Haxe libraries for local development:
 
 ```bash
 npm install
+npm run hooks:install
 npm run hx:portable
 npm run hx:metal
 npm run test:generated-cargo
@@ -32,6 +35,27 @@ bash harness/check-tui-smoke.sh
 `haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. This is a live path dependency: edits in `../haxe.rust/src`, `../haxe.rust/std`, or its vendored Reflaxe tree are reflected immediately by this repo's `haxe`/haxe.rust builds, even before the haxe.rust change is committed.
 
 `reference/haxe-rust.pin.json` is reproducibility metadata, not what local scoped builds use to choose compiler files. Update the pin only after a haxe.rust change has been committed, pushed, and validated as the known-good compiler revision for codex-hxrust. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `scripts/check-generated-cargo.sh` green.
+
+## Public Readiness And Hooks
+
+Install repo-managed hooks after cloning:
+
+```bash
+npm run hooks:install
+```
+
+The pre-commit hook scans staged changes with gitleaks and formats staged Haxe files with `haxelib formatter`, skipping generated/vendor output. Full public-readiness checks are:
+
+```bash
+npm run format:haxe:check
+npm run format:haxe:changed -- origin/main
+npm run security:gitleaks
+npm run public:precommit
+```
+
+`scripts/security/run-gitleaks.sh` does not silently accept a full-history result that reports zero commits scanned when git history exists. If a local gitleaks version behaves that way, the wrapper falls back to scanning the `git log -p --all` patch stream and then scans the current tree with `gitleaks dir`.
+
+The package is marked `private` to prevent accidental npm publication. GitHub repository visibility is managed separately from npm publishing.
 
 ## Repository Status
 
@@ -126,6 +150,7 @@ generated/                        haxe.rust output, ignored except README/.gitig
 From the repo root:
 
 ```bash
+npm run public:precommit
 harness/check-doctor-json.sh
 harness/check-protocol-ids.sh
 harness/check-json-boundary.sh

@@ -62,7 +62,6 @@ class TuiSmokeComposerPopupRenderAction {
 	public final noRatatuiRender:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function windowText():String {
 		return windowStart + ".." + windowEnd;
 	}

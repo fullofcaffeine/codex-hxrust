@@ -4,10 +4,10 @@ class ModelKeymapAliasPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeymapAliasRequest):ModelKeymapAliasOutcome {
-		if (request == null) return failure("", "missing keymap alias request");
+		if (request == null)
+			return failure("", "missing keymap alias request");
 
-		final emptyArrayUnbindPreserved = request.composerToggleShortcutsConfiguredEmpty
-			&& request.composerToggleShortcutCount == 0;
+		final emptyArrayUnbindPreserved = request.composerToggleShortcutsConfiguredEmpty && request.composerToggleShortcutCount == 0;
 		final rawOutputDefaultAltRPreserved = matches(request.defaultRawOutputToggle, character("r", false, true, false));
 		final rawOutputRemapF12Preserved = matches(request.remappedRawOutputToggle, functionKey(12, false, false, false));
 		final editorNewlineAliasesPreserved = containsAll(request.editorInsertNewlineBindings, [
@@ -17,29 +17,13 @@ class ModelKeymapAliasPolicy {
 			named("enter", false, false, true),
 			named("enter", false, true, false)
 		]) && request.editorInsertNewlineBindings.length == 5;
-		final deleteForwardWordAltDPreserved = contains(
-			request.editorDeleteForwardWordBindings,
-			character("d", false, true, false)
-		);
-		final modifiedDeletionAliasesPreserved = containsAll(request.editorDeleteBackwardBindings, [
-			named("backspace", false, false, true)
-		]) && containsAll(request.editorDeleteForwardBindings, [
-			named("delete", false, false, true)
-		]) && containsAll(request.editorDeleteBackwardWordBindings, [
-			named("backspace", true, false, false),
-			named("backspace", true, false, true)
-		]) && containsAll(request.editorDeleteForwardWordBindings, [
-			named("delete", true, false, false),
-			named("delete", true, false, true)
-		]);
-		final composerToggleShiftQuestionPreserved = contains(
-			request.composerToggleShortcutBindings,
-			character("?", false, false, true)
-		);
-		final approvalOpenFullscreenCtrlShiftAPreserved = contains(
-			request.approvalOpenFullscreenBindings,
-			character("a", true, false, true)
-		);
+		final deleteForwardWordAltDPreserved = contains(request.editorDeleteForwardWordBindings, character("d", false, true, false));
+		final modifiedDeletionAliasesPreserved = containsAll(request.editorDeleteBackwardBindings, [named("backspace", false, false, true)])
+			&& containsAll(request.editorDeleteForwardBindings, [named("delete", false, false, true)])
+			&& containsAll(request.editorDeleteBackwardWordBindings, [named("backspace", true, false, false), named("backspace", true, false, true)])
+			&& containsAll(request.editorDeleteForwardWordBindings, [named("delete", true, false, false), named("delete", true, false, true)]);
+		final composerToggleShiftQuestionPreserved = contains(request.composerToggleShortcutBindings, character("?", false, false, true));
+		final approvalOpenFullscreenCtrlShiftAPreserved = contains(request.approvalOpenFullscreenBindings, character("a", true, false, true));
 		final primaryBindingFirstPreserved = request.primaryBindingCandidates.length > 0
 			&& matches(request.primaryBindingCandidates[0], request.primaryBindingExpected);
 		final primaryBindingEmptyNonePreserved = request.primaryEmptyCandidateCount == 0;
@@ -57,9 +41,7 @@ class ModelKeymapAliasPolicy {
 			&& primaryBindingEmptyNonePreserved
 			&& defaultsConflictValidationPreserved
 			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapAliasDecisionKind.KeymapAliasesPreserved
-			: ModelKeymapAliasDecisionKind.KeymapAliasesRejected;
+		final decisionKind = ok ? ModelKeymapAliasDecisionKind.KeymapAliasesPreserved : ModelKeymapAliasDecisionKind.KeymapAliasesRejected;
 
 		return new ModelKeymapAliasOutcome({
 			ok: ok,
@@ -87,15 +69,18 @@ class ModelKeymapAliasPolicy {
 
 	static function containsAll(actual:Array<ModelKeymapBinding>, expected:Array<ModelKeymapBinding>):Bool {
 		for (binding in expected) {
-			if (!contains(actual, binding)) return false;
+			if (!contains(actual, binding))
+				return false;
 		}
 		return true;
 	}
 
 	static function contains(actual:Array<ModelKeymapBinding>, expected:ModelKeymapBinding):Bool {
-		if (actual == null) return false;
+		if (actual == null)
+			return false;
 		for (binding in actual) {
-			if (matches(binding, expected)) return true;
+			if (matches(binding, expected))
+				return true;
 		}
 		return false;
 	}
@@ -126,12 +111,7 @@ class ModelKeymapAliasPolicy {
 		});
 	}
 
-	static function functionKey(
-		functionNumber:Int,
-		ctrlModifier:Bool,
-		altModifier:Bool,
-		shiftModifier:Bool
-	):ModelKeymapBinding {
+	static function functionKey(functionNumber:Int, ctrlModifier:Bool, altModifier:Bool, shiftModifier:Bool):ModelKeymapBinding {
 		return new ModelKeymapBinding({
 			kind: ModelParsedKeyKind.Function,
 			keyName: "f" + functionNumber,

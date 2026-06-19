@@ -22,8 +22,6 @@ class PersistedThreadReadOutcome {
 	}
 
 	public function summary():String {
-		return "read:" + code
-			+ ";ok=" + (ok ? "true" : "false")
-			+ (view == null ? "" : ";" + view.summary());
+		return "read:" + code + ";ok=" + (ok ? "true" : "false") + (view == null ? "" : ";" + view.summary());
 	}
 }

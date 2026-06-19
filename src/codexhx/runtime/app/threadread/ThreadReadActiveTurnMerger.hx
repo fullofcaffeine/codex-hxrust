@@ -1,10 +1,8 @@
 package codexhx.runtime.app.threadread;
 
 class ThreadReadActiveTurnMerger {
-	public static function mergeCases(
-		baseTurns:Array<ThreadReadTurnSummary>,
-		requests:Array<ThreadReadActiveTurnMergeRequest>
-	):ThreadReadActiveTurnMergeReport {
+	public static function mergeCases(baseTurns:Array<ThreadReadTurnSummary>,
+			requests:Array<ThreadReadActiveTurnMergeRequest>):ThreadReadActiveTurnMergeReport {
 		final outcomes:Array<ThreadReadActiveTurnMergeOutcome> = [];
 		for (request in requests) {
 			outcomes.push(reconstruct(baseTurns, request));
@@ -12,10 +10,7 @@ class ThreadReadActiveTurnMerger {
 		return new ThreadReadActiveTurnMergeReport(outcomes);
 	}
 
-	public static function reconstruct(
-		baseTurns:Array<ThreadReadTurnSummary>,
-		request:ThreadReadActiveTurnMergeRequest
-	):ThreadReadActiveTurnMergeOutcome {
+	public static function reconstruct(baseTurns:Array<ThreadReadTurnSummary>, request:ThreadReadActiveTurnMergeRequest):ThreadReadActiveTurnMergeOutcome {
 		if (!ThreadReadThreadStatus.isValid(request.loadedStatus)) {
 			return ThreadReadActiveTurnMergeOutcome.failure("invalid_thread_status", "loadedStatus must be notLoaded, idle, systemError, or active");
 		}
@@ -24,8 +19,10 @@ class ThreadReadActiveTurnMerger {
 			|| (request.activeTurn != null && request.activeTurn.status == ThreadReadTurnStatus.InProgress);
 		final resolvedStatus = resolveThreadStatus(request.loadedStatus, hasLiveInProgress);
 		final turns = cloneTurns(baseTurns);
-		if (resolvedStatus != ThreadReadThreadStatus.Active) interruptStaleInProgress(turns);
-		if (request.activeTurn != null) mergeActiveTurn(turns, request.activeTurn);
+		if (resolvedStatus != ThreadReadThreadStatus.Active)
+			interruptStaleInProgress(turns);
+		if (request.activeTurn != null)
+			mergeActiveTurn(turns, request.activeTurn);
 		return ThreadReadActiveTurnMergeOutcome.success(resolvedStatus, turns);
 	}
 
@@ -50,7 +47,8 @@ class ThreadReadActiveTurnMerger {
 	static function mergeActiveTurn(turns:Array<ThreadReadTurnSummary>, activeTurn:ThreadReadTurnSummary):Void {
 		var i = turns.length - 1;
 		while (i >= 0) {
-			if (turns[i].id == activeTurn.id) turns.splice(i, 1);
+			if (turns[i].id == activeTurn.id)
+				turns.splice(i, 1);
 			i = i - 1;
 		}
 		turns.push(activeTurn);

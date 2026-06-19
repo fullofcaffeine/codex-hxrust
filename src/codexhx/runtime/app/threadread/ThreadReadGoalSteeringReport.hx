@@ -12,7 +12,8 @@ class ThreadReadGoalSteeringReport {
 	public function emittedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.emitted) count = count + 1;
+			if (outcome.emitted)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadGoalSteeringReport {
 	public function skippedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.skipped) count = count + 1;
+			if (outcome.skipped)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadGoalSteeringReport {
 	public function failureCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.ok) count = count + 1;
+			if (!outcome.ok)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -38,11 +41,7 @@ class ThreadReadGoalSteeringReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";emitted=" + Std.string(emittedCount())
-			+ ";skipped=" + Std.string(skippedCount())
-			+ ";failed=" + Std.string(failureCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";emitted=" + Std.string(emittedCount()) + ";skipped="
+			+ Std.string(skippedCount()) + ";failed=" + Std.string(failureCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

@@ -44,18 +44,11 @@ class ThreadReadTurnStartGoalAccountingHarness {
 		final out:Array<ThreadReadTurnStartGoalAccountingRequest> = [];
 		for (value in values) {
 			final request = objectField(objectValue(value), "request");
-			out.push(new ThreadReadTurnStartGoalAccountingRequest(
-				boolField(request, "runtimeAvailable", false),
-				boolField(request, "runtimeEnabled", false),
-				stringField(request, "turnId", ""),
-				collaborationMode(stringField(request, "collaborationMode", "default")),
-				intField(request, "tokenUsageAtTurnStart", 0),
-				lookupOutcomeKind(stringField(request, "storedGoalLookupOutcomeKind", "")),
-				stringField(request, "storedGoalLookupErrorCode", ""),
-				goalValue(valueField(request, "storedGoal")),
-				stringField(request, "storedGoalId", ""),
-				stringField(request, "budgetLimitReportedGoalId", "")
-			));
+			out.push(new ThreadReadTurnStartGoalAccountingRequest(boolField(request, "runtimeAvailable", false), boolField(request, "runtimeEnabled", false),
+				stringField(request, "turnId", ""), collaborationMode(stringField(request, "collaborationMode", "default")),
+				intField(request, "tokenUsageAtTurnStart", 0), lookupOutcomeKind(stringField(request, "storedGoalLookupOutcomeKind", "")),
+				stringField(request, "storedGoalLookupErrorCode", ""), goalValue(valueField(request, "storedGoal")), stringField(request, "storedGoalId", ""),
+				stringField(request, "budgetLimitReportedGoalId", "")));
 		}
 		return out;
 	}
@@ -82,7 +75,8 @@ class ThreadReadTurnStartGoalAccountingHarness {
 			case JNull: null;
 			case _:
 				final parsed = ThreadGoal.parseApp(value);
-				if (!parsed.ok) throw "invalid goal fixture: " + parsed.errorCode;
+				if (!parsed.ok)
+					throw "invalid goal fixture: " + parsed.errorCode;
 				parsed.value;
 		}
 	}
@@ -146,7 +140,8 @@ class ThreadReadTurnStartGoalAccountingHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -163,7 +158,8 @@ class ThreadReadTurnStartGoalAccountingHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -172,10 +168,12 @@ class ThreadReadTurnStartGoalAccountingHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

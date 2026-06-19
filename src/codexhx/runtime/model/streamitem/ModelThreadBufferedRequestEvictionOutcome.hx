@@ -23,29 +23,11 @@ class ModelThreadBufferedRequestEvictionOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		deliveryRequestId:String,
-		requestKind:ModelReplayedServerRequestKind,
-		evictionKind:ModelThreadBufferedRequestEvictionKind,
-		incomingEventKind:ModelThreadBufferedEventKind,
-		evictedEventKind:ModelThreadBufferedEventKind,
-		overCapacity:Bool,
-		evictedRequestObserved:Bool,
-		pendingPromptRemoved:Bool,
-		pendingReplayRecordedAfter:Bool,
-		snapshotRequestReplayed:Bool,
-		replaySkippedAfterEviction:Bool,
-		bufferCountAfter:Int,
-		capacityPreserved:Bool,
-		orderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, deliveryRequestId:String, requestKind:ModelReplayedServerRequestKind,
+			evictionKind:ModelThreadBufferedRequestEvictionKind, incomingEventKind:ModelThreadBufferedEventKind,
+			evictedEventKind:ModelThreadBufferedEventKind, overCapacity:Bool, evictedRequestObserved:Bool, pendingPromptRemoved:Bool,
+			pendingReplayRecordedAfter:Bool, snapshotRequestReplayed:Bool, replaySkippedAfterEviction:Bool, bufferCountAfter:Int, capacityPreserved:Bool,
+			orderingPreserved:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -70,27 +52,14 @@ class ModelThreadBufferedRequestEvictionOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";deliveryRequest=" + noneIfEmpty(deliveryRequestId)
-			+ ";requestKind=" + requestKind
-			+ ";evictionKind=" + evictionKind
-			+ ";incomingEventKind=" + incomingEventKind
-			+ ";evictedEventKind=" + evictedEventKind
-			+ ";overCapacity=" + boolText(overCapacity)
-			+ ";evictedRequestObserved=" + boolText(evictedRequestObserved)
-			+ ";pendingPromptRemoved=" + boolText(pendingPromptRemoved)
-			+ ";pendingReplayRecordedAfter=" + boolText(pendingReplayRecordedAfter)
-			+ ";snapshotRequestReplayed=" + boolText(snapshotRequestReplayed)
-			+ ";replaySkippedAfterEviction=" + boolText(replaySkippedAfterEviction)
-			+ ";bufferCountAfter=" + bufferCountAfter
-			+ ";capacityPreserved=" + boolText(capacityPreserved)
-			+ ";orderingPreserved=" + boolText(orderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";deliveryRequest=" + noneIfEmpty(deliveryRequestId) + ";requestKind="
+			+ requestKind + ";evictionKind=" + evictionKind + ";incomingEventKind=" + incomingEventKind + ";evictedEventKind=" + evictedEventKind
+			+ ";overCapacity=" + boolText(overCapacity) + ";evictedRequestObserved=" + boolText(evictedRequestObserved) + ";pendingPromptRemoved="
+			+ boolText(pendingPromptRemoved) + ";pendingReplayRecordedAfter=" + boolText(pendingReplayRecordedAfter) + ";snapshotRequestReplayed="
+			+ boolText(snapshotRequestReplayed) + ";replaySkippedAfterEviction=" + boolText(replaySkippedAfterEviction) + ";bufferCountAfter="
+			+ bufferCountAfter + ";capacityPreserved=" + boolText(capacityPreserved) + ";orderingPreserved=" + boolText(orderingPreserved)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

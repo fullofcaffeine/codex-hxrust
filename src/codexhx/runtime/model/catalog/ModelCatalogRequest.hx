@@ -13,17 +13,8 @@ class ModelCatalogRequest {
 	public final requestedModelId:String;
 	public final catalog:Array<ModelCatalogEntry>;
 
-	public function new(
-		requestId:String,
-		admissionRequest:ProviderAdmissionRequest,
-		catalogSource:String,
-		refreshStrategy:ModelCatalogRefreshStrategy,
-		includeHidden:Bool,
-		allowLiveFetch:Bool,
-		usesCodexBackend:Bool,
-		requestedModelId:String,
-		catalog:Array<ModelCatalogEntry>
-	) {
+	public function new(requestId:String, admissionRequest:ProviderAdmissionRequest, catalogSource:String, refreshStrategy:ModelCatalogRefreshStrategy,
+			includeHidden:Bool, allowLiveFetch:Bool, usesCodexBackend:Bool, requestedModelId:String, catalog:Array<ModelCatalogEntry>) {
 		this.requestId = requestId;
 		this.admissionRequest = admissionRequest;
 		this.catalogSource = catalogSource;

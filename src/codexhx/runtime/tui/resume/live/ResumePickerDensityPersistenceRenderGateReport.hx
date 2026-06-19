@@ -25,11 +25,7 @@ class ResumePickerDensityPersistenceRenderGateReport {
 	public final failureMessage:String;
 
 	public function summary():String {
-		return "frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";configPath=" + successConfigPath
-			+ ";failureCode=" + failureCode
-			+ ";successSnapshot=" + successSnapshot.split("\n").join("\\n")
-			+ ";failureSnapshot=" + failureSnapshot.split("\n").join("\\n");
+		return "frames=" + frameRequests + ";renders=" + renderCount + ";configPath=" + successConfigPath + ";failureCode=" + failureCode
+			+ ";successSnapshot=" + successSnapshot.split("\n").join("\\n") + ";failureSnapshot=" + failureSnapshot.split("\n").join("\\n");
 	}
 }

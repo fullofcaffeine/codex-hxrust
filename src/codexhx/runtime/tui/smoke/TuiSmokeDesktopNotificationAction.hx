@@ -96,13 +96,8 @@ class TuiSmokeDesktopNotificationAction {
 
 	static function supportsOsc9(name:String):Bool {
 		final normalized = name.toLowerCase();
-		return normalized == "ghostty"
-			|| normalized == "iterm2"
-			|| normalized == "kitty"
-			|| normalized == "warp"
-			|| normalized == "warpterminal"
-			|| normalized == "warp_terminal"
-			|| normalized == "wezterm";
+		return normalized == "ghostty" || normalized == "iterm2" || normalized == "kitty" || normalized == "warp" || normalized == "warpterminal"
+			|| normalized == "warp_terminal" || normalized == "wezterm";
 	}
 
 	static function countEscapes(value:String):Int {

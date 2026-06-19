@@ -88,7 +88,6 @@ class TuiSmokeChatWidgetActiveStreamAction {
 	public final noModelCall:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function streamQueueText():String {
 		return queuedLinesBefore + "->" + queuedLinesAfter;
 	}

@@ -12,18 +12,9 @@ class ThreadReadToolFinishGoalProgressAdmissionRequest {
 	public final failedHandlerExecuted:Bool;
 	public final accountingOutcome:ThreadReadActiveGoalProgressAccountingOutcome;
 
-	public function new(
-		runtimeAvailable:Bool,
-		runtimeEnabled:Bool,
-		turnId:String,
-		callId:String,
-		toolNamespace:String,
-		toolName:String,
-		outcomeKind:ThreadReadToolCallOutcomeKind,
-		completedSuccess:Bool,
-		failedHandlerExecuted:Bool,
-		accountingOutcome:ThreadReadActiveGoalProgressAccountingOutcome
-	) {
+	public function new(runtimeAvailable:Bool, runtimeEnabled:Bool, turnId:String, callId:String, toolNamespace:String, toolName:String,
+			outcomeKind:ThreadReadToolCallOutcomeKind, completedSuccess:Bool, failedHandlerExecuted:Bool,
+			accountingOutcome:ThreadReadActiveGoalProgressAccountingOutcome) {
 		this.runtimeAvailable = runtimeAvailable;
 		this.runtimeEnabled = runtimeEnabled;
 		this.turnId = turnId;

@@ -10,8 +10,10 @@ class ThreadReadTurnGoalFinalizationPolicy {
 	}
 
 	public static function build(request:ThreadReadTurnGoalFinalizationRequest):ThreadReadTurnGoalFinalizationOutcome {
-		if (!request.runtimeAvailable) return ThreadReadTurnGoalFinalizationOutcome.runtimeMissing(request.kind);
-		if (!request.runtimeEnabled) return ThreadReadTurnGoalFinalizationOutcome.runtimeDisabled(request.kind);
+		if (!request.runtimeAvailable)
+			return ThreadReadTurnGoalFinalizationOutcome.runtimeMissing(request.kind);
+		if (!request.runtimeEnabled)
+			return ThreadReadTurnGoalFinalizationOutcome.runtimeDisabled(request.kind);
 
 		final eventId = request.turnId + eventSuffix(request.kind);
 		if (request.accountingOutcome == null || !request.accountingOutcome.ok) {

@@ -92,7 +92,6 @@ class TuiSmokeComposerTextareaRenderAction {
 	public final noRatatuiRender:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function lineWindowText():String {
 		return visibleStartLine + ".." + visibleEndLine;
 	}

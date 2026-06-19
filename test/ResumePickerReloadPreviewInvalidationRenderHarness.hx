@@ -23,13 +23,17 @@ class ResumePickerReloadPreviewInvalidationRenderHarness {
 		assertContains(snapshots[1], "footer preview preserved selected=1 selectedThread=thread-a");
 		assertContains(report.finalSnapshot, "rows loaded=2 filtered=2 scanned=2 accepted=2 invalid=0");
 		assertContains(report.finalSnapshot, "> Fallback preview target | thread-b | turns=5 | 2026-06-19T18:05:00Z | cwd=/workspace/codex-hxrust");
-		assertContains(report.finalSnapshot, "loader status=preview_invalidated_after_selection_change detail=missing=thread-a;selected=thread-b;expandedCleared=true;pendingCleared=true;previewLines=0");
+		assertContains(report.finalSnapshot,
+			"loader status=preview_invalidated_after_selection_change detail=missing=thread-a;selected=thread-b;expandedCleared=true;pendingCleared=true;previewLines=0");
 		assertContains(report.finalSnapshot, "footer preview invalidated selected=0 selectedThread=thread-b");
 		assertNotContains(report.finalSnapshot, "preview: user: inspect reload");
 		assertNotContains(report.finalSnapshot, "preview: assistant: preview survives same thread");
-		assertContains(report.summary(), "loaded-preview:query=preview;rows=3;selected=0;thread=thread-a;expanded=thread-a;preview=loaded;previewRendered=true;previewLines=2;pending=thread-a;transcript=preview_loaded");
-		assertContains(report.summary(), "preserved:query=preview;rows=3;selected=1;thread=thread-a;expanded=thread-a;preview=loaded;previewRendered=true;previewLines=2;pending=thread-a;transcript=preview_loaded");
-		assertContains(report.summary(), "invalidated:query=preview;rows=2;selected=0;thread=thread-b;expanded=<empty>;preview=<empty>;previewRendered=false;previewLines=0;pending=<empty>;transcript=<empty>");
+		assertContains(report.summary(),
+			"loaded-preview:query=preview;rows=3;selected=0;thread=thread-a;expanded=thread-a;preview=loaded;previewRendered=true;previewLines=2;pending=thread-a;transcript=preview_loaded");
+		assertContains(report.summary(),
+			"preserved:query=preview;rows=3;selected=1;thread=thread-a;expanded=thread-a;preview=loaded;previewRendered=true;previewLines=2;pending=thread-a;transcript=preview_loaded");
+		assertContains(report.summary(),
+			"invalidated:query=preview;rows=2;selected=0;thread=thread-b;expanded=<empty>;preview=<empty>;previewRendered=false;previewLines=0;pending=<empty>;transcript=<empty>");
 		assertContains(report.summary(), "kind=preview_loaded;request=preview-thread-a;thread=thread-a");
 		assertContains(report.summary(), "request=preserve-preview-page");
 		assertContains(report.summary(), "request=invalidate-preview-page");
@@ -38,14 +42,17 @@ class ResumePickerReloadPreviewInvalidationRenderHarness {
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) < 0) throw "expected `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) < 0)
+			throw "expected `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertNotContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) >= 0) throw "did not expect `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) >= 0)
+			throw "did not expect `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String, label:String):Void {
-		if (expected != actual) throw label + " expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw label + " expected " + expected + " but got " + actual;
 	}
 }

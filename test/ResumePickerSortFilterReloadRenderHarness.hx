@@ -27,8 +27,10 @@ class ResumePickerSortFilterReloadRenderHarness {
 		assertContains(report.finalSnapshot, "  Remote kernel result | thread-remote | turns=13 | 2026-06-19T15:15:00Z | cwd=/remote/workspace");
 		assertContains(report.finalSnapshot, "loader status=sort_filter_results_loaded detail=sort=created_at;filter=all;query=kernel;rows=3;invalid=1");
 		assertContains(report.finalSnapshot, "footer all results 3/4 selected=0 selectedThread=thread-archived");
-		assertContains(report.summary(), "id=initial-query-page;cursor=cursor-query;query=kernel;pageSize=3;sort=updated_at;filter=cwd;cwd=/workspace/codex-hxrust;showAll=false;includeNonInteractive=false");
-		assertContains(report.summary(), "id=sort-filter-page;cursor=;query=kernel;pageSize=3;sort=created_at;filter=all;cwd=/workspace/codex-hxrust;showAll=true;includeNonInteractive=false");
+		assertContains(report.summary(),
+			"id=initial-query-page;cursor=cursor-query;query=kernel;pageSize=3;sort=updated_at;filter=cwd;cwd=/workspace/codex-hxrust;showAll=false;includeNonInteractive=false");
+		assertContains(report.summary(),
+			"id=sort-filter-page;cursor=;query=kernel;pageSize=3;sort=created_at;filter=all;cwd=/workspace/codex-hxrust;showAll=true;includeNonInteractive=false");
 		assertContains(report.summary(), "request=sort-filter-page");
 		assertContains(report.summary(), "rows=3;next=;scanned=4;accepted=3;invalid=1");
 
@@ -36,10 +38,12 @@ class ResumePickerSortFilterReloadRenderHarness {
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (value.indexOf(needle) < 0) throw "expected `" + needle + "` in `" + value + "`";
+		if (value.indexOf(needle) < 0)
+			throw "expected `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String, label:String):Void {
-		if (expected != actual) throw label + " expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw label + " expected " + expected + " but got " + actual;
 	}
 }

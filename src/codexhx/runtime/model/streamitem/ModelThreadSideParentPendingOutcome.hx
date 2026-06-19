@@ -23,29 +23,12 @@ class ModelThreadSideParentPendingOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		activeTurnRequestId:String,
-		eventKind:ModelThreadSideParentPendingEventKind,
-		decisionKind:ModelThreadSideParentPendingDecisionKind,
-		requestKind:ModelReplayedServerRequestKind,
-		sideParentStatusAfter:ModelThreadSideParentStatusKind,
-		pendingUserInputCountAfter:Int,
-		pendingApprovalCountAfter:Int,
-		pendingThreadApprovalsAfter:Bool,
-		userInputPriorityApplied:Bool,
-		requestStatusFallbackApplied:Bool,
-		resolvedRequestRemoved:Bool,
-		evictedRequestRemoved:Bool,
-		threadClosedCleared:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, activeTurnRequestId:String, eventKind:ModelThreadSideParentPendingEventKind,
+			decisionKind:ModelThreadSideParentPendingDecisionKind, requestKind:ModelReplayedServerRequestKind,
+			sideParentStatusAfter:ModelThreadSideParentStatusKind, pendingUserInputCountAfter:Int, pendingApprovalCountAfter:Int,
+			pendingThreadApprovalsAfter:Bool, userInputPriorityApplied:Bool, requestStatusFallbackApplied:Bool, resolvedRequestRemoved:Bool,
+			evictedRequestRemoved:Bool, threadClosedCleared:Bool, eventOrderingPreserved:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -70,27 +53,15 @@ class ModelThreadSideParentPendingOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";activeTurnRequest=" + noneIfEmpty(activeTurnRequestId)
-			+ ";eventKind=" + eventKind
-			+ ";decisionKind=" + decisionKind
-			+ ";requestKind=" + requestKind
-			+ ";sideParentStatusAfter=" + sideParentStatusAfter
-			+ ";pendingUserInputCountAfter=" + pendingUserInputCountAfter
-			+ ";pendingApprovalCountAfter=" + pendingApprovalCountAfter
-			+ ";pendingThreadApprovalsAfter=" + boolText(pendingThreadApprovalsAfter)
-			+ ";userInputPriorityApplied=" + boolText(userInputPriorityApplied)
-			+ ";requestStatusFallbackApplied=" + boolText(requestStatusFallbackApplied)
-			+ ";resolvedRequestRemoved=" + boolText(resolvedRequestRemoved)
-			+ ";evictedRequestRemoved=" + boolText(evictedRequestRemoved)
-			+ ";threadClosedCleared=" + boolText(threadClosedCleared)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";activeTurnRequest=" + noneIfEmpty(activeTurnRequestId) + ";eventKind="
+			+ eventKind + ";decisionKind=" + decisionKind + ";requestKind=" + requestKind + ";sideParentStatusAfter=" + sideParentStatusAfter
+			+ ";pendingUserInputCountAfter=" + pendingUserInputCountAfter + ";pendingApprovalCountAfter=" + pendingApprovalCountAfter
+			+ ";pendingThreadApprovalsAfter=" + boolText(pendingThreadApprovalsAfter) + ";userInputPriorityApplied=" + boolText(userInputPriorityApplied)
+			+ ";requestStatusFallbackApplied=" + boolText(requestStatusFallbackApplied) + ";resolvedRequestRemoved=" + boolText(resolvedRequestRemoved)
+			+ ";evictedRequestRemoved=" + boolText(evictedRequestRemoved) + ";threadClosedCleared=" + boolText(threadClosedCleared)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -38,7 +38,8 @@ class TempHomeResumePickerConfigPersistence implements ResumePickerConfigPersist
 	}
 
 	static function ensureDirectory(path:String):Void {
-		if (path.length == 0 || FileSystem.exists(path)) return;
+		if (path.length == 0 || FileSystem.exists(path))
+			return;
 		final parts = path.split("/");
 		var current = "";
 		for (part in parts) {
@@ -47,7 +48,8 @@ class TempHomeResumePickerConfigPersistence implements ResumePickerConfigPersist
 				continue;
 			}
 			current = current == "/" ? current + part : current.length == 0 ? part : current + "/" + part;
-			if (!FileSystem.exists(current)) FileSystem.createDirectory(current);
+			if (!FileSystem.exists(current))
+				FileSystem.createDirectory(current);
 		}
 	}
 }

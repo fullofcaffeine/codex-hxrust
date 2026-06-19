@@ -50,7 +50,8 @@ class AsyncRuntimeContractHarness {
 		final first = task.poll(AsyncContext.fixture("before-complete"));
 		task.complete(stringField(testCase, "value", ""));
 		final second = task.poll(AsyncContext.fixture("after-complete"));
-		return "case=" + id + ";first=" + AsyncPollSummary.summary(first) + ";second=" + AsyncPollSummary.summary(second) + ";value=" + AsyncPollSummary.stringValue(second);
+		return "case=" + id + ";first=" + AsyncPollSummary.summary(first) + ";second=" + AsyncPollSummary.summary(second) + ";value="
+			+ AsyncPollSummary.stringValue(second);
 	}
 
 	static function runTaskTokenCancel(id:String, testCase:Value):String {
@@ -70,12 +71,9 @@ class AsyncRuntimeContractHarness {
 		final drain2 = stream.pollNext(AsyncContext.fixture("drain-second"));
 		stream.close();
 		final terminal = stream.pollNext(AsyncContext.fixture("terminal"));
-		return "case=" + id
-			+ ";push2=" + AsyncPollSummary.summary(push2)
-			+ ";drain1=" + AsyncPollSummary.summary(drain1) + ";item=" + pollItemSummary(drain1)
-			+ ";push3=" + AsyncPollSummary.summary(push3)
-			+ ";drain2=" + AsyncPollSummary.summary(drain2) + ";item=" + pollItemSummary(drain2)
-			+ ";terminal=" + AsyncPollSummary.summary(terminal);
+		return "case=" + id + ";push2=" + AsyncPollSummary.summary(push2) + ";drain1=" + AsyncPollSummary.summary(drain1) + ";item="
+			+ pollItemSummary(drain1) + ";push3=" + AsyncPollSummary.summary(push3) + ";drain2=" + AsyncPollSummary.summary(drain2) + ";item="
+			+ pollItemSummary(drain2) + ";terminal=" + AsyncPollSummary.summary(terminal);
 	}
 
 	static function runBestEffortDrop(id:String, testCase:Value):String {
@@ -83,7 +81,14 @@ class AsyncRuntimeContractHarness {
 		stream.push(stringField(testCase, "first", ""), AsyncDeliveryKind.Lossless);
 		final push2 = stream.push(stringField(testCase, "second", ""), AsyncDeliveryKind.BestEffort);
 		final drain = stream.pollNext(AsyncContext.fixture("drain"));
-		return "case=" + id + ";push2=" + AsyncPollSummary.summary(push2) + ";drain=" + AsyncPollSummary.summary(drain) + ";item=" + pollItemSummary(drain);
+		return "case="
+			+ id
+			+ ";push2="
+			+ AsyncPollSummary.summary(push2)
+			+ ";drain="
+			+ AsyncPollSummary.summary(drain)
+			+ ";item="
+			+ pollItemSummary(drain);
 	}
 
 	static function runStreamFailure(id:String, testCase:Value):String {
@@ -157,7 +162,8 @@ class AsyncRuntimeContractHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -174,16 +180,20 @@ class AsyncRuntimeContractHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
 	static function assertContains(value:String, needle:String):Void {
-		if (needle.length == 0) return;
-		if (value.indexOf(needle) < 0) throw "expected to find `" + needle + "` in `" + value + "`";
+		if (needle.length == 0)
+			return;
+		if (value.indexOf(needle) < 0)
+			throw "expected to find `" + needle + "` in `" + value + "`";
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected `" + expected + "` but got `" + actual + "`";
+		if (expected != actual)
+			throw "expected `" + expected + "` but got `" + actual + "`";
 	}
 }

@@ -17,18 +17,8 @@ class TurnModelPlanOutcome {
 	public final errorMessage:String;
 	public final sequence:String;
 
-	function new(
-		ok:Bool,
-		code:String,
-		request:TurnModelPlanRequest,
-		catalog:ModelCatalogOutcome,
-		selectedModelId:String,
-		effectiveToolMode:ModelCatalogToolMode,
-		capabilityEnabled:Bool,
-		plan:TurnModelCapabilityPlan,
-		errorMessage:String,
-		sequence:String
-	) {
+	function new(ok:Bool, code:String, request:TurnModelPlanRequest, catalog:ModelCatalogOutcome, selectedModelId:String,
+			effectiveToolMode:ModelCatalogToolMode, capabilityEnabled:Bool, plan:TurnModelCapabilityPlan, errorMessage:String, sequence:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = request.requestId;
@@ -43,66 +33,21 @@ class TurnModelPlanOutcome {
 		this.sequence = sequence;
 	}
 
-	public static function accepted(
-		request:TurnModelPlanRequest,
-		catalog:ModelCatalogOutcome,
-		selectedModelId:String,
-		effectiveToolMode:ModelCatalogToolMode,
-		capabilityEnabled:Bool,
-		plan:TurnModelCapabilityPlan,
-		sequence:String
-	):TurnModelPlanOutcome {
-		return new TurnModelPlanOutcome(
-			true,
-			"turn_model_plan_admitted",
-			request,
-			catalog,
-			selectedModelId,
-			effectiveToolMode,
-			capabilityEnabled,
-			plan,
-			"",
-			sequence
-		);
+	public static function accepted(request:TurnModelPlanRequest, catalog:ModelCatalogOutcome, selectedModelId:String, effectiveToolMode:ModelCatalogToolMode,
+			capabilityEnabled:Bool, plan:TurnModelCapabilityPlan, sequence:String):TurnModelPlanOutcome {
+		return new TurnModelPlanOutcome(true, "turn_model_plan_admitted", request, catalog, selectedModelId, effectiveToolMode, capabilityEnabled, plan, "",
+			sequence);
 	}
 
-	public static function denied(
-		request:TurnModelPlanRequest,
-		catalog:ModelCatalogOutcome,
-		code:String,
-		selectedModelId:String,
-		effectiveToolMode:ModelCatalogToolMode,
-		plan:TurnModelCapabilityPlan,
-		errorMessage:String,
-		sequence:String
-	):TurnModelPlanOutcome {
-		return new TurnModelPlanOutcome(
-			false,
-			code,
-			request,
-			catalog,
-			selectedModelId,
-			effectiveToolMode,
-			false,
-			plan,
-			errorMessage,
-			sequence
-		);
+	public static function denied(request:TurnModelPlanRequest, catalog:ModelCatalogOutcome, code:String, selectedModelId:String,
+			effectiveToolMode:ModelCatalogToolMode, plan:TurnModelCapabilityPlan, errorMessage:String, sequence:String):TurnModelPlanOutcome {
+		return new TurnModelPlanOutcome(false, code, request, catalog, selectedModelId, effectiveToolMode, false, plan, errorMessage, sequence);
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";catalogCode=" + catalogCode
-			+ ";provider=" + providerId
-			+ ";model=" + selectedModelId
-			+ ";toolMode=" + effectiveToolMode
-			+ ";requestedCapability=" + requestedCapability
-			+ ";capabilityEnabled=" + boolText(capabilityEnabled)
-			+ ";plan={" + (plan == null ? "none" : plan.summary()) + "}"
-			+ ";error=" + errorMessage
-			+ ";sequence=" + sequence;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";catalogCode=" + catalogCode + ";provider=" + providerId + ";model="
+			+ selectedModelId + ";toolMode=" + effectiveToolMode + ";requestedCapability=" + requestedCapability + ";capabilityEnabled="
+			+ boolText(capabilityEnabled) + ";plan={" + (plan == null ? "none" : plan.summary()) + "}" + ";error=" + errorMessage + ";sequence=" + sequence;
 	}
 
 	static function boolText(value:Bool):String {

@@ -76,10 +76,6 @@ class ResumePickerHostEvent {
 
 	public function summary():String {
 		final failure = failureCode.length == 0 ? "none" : failureCode + ":" + failureMessage;
-		return "kind=" + kind
-			+ ";request=" + requestId
-			+ ";thread=" + threadId
-			+ ";detail=" + detail
-			+ ";failure=" + failure;
+		return "kind=" + kind + ";request=" + requestId + ";thread=" + threadId + ";detail=" + detail + ";failure=" + failure;
 	}
 }

@@ -10,16 +10,9 @@ class ModelThreadSideParentStatusChangeRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		pendingOutcome:ModelThreadSideParentPendingOutcome,
-		eventKind:ModelThreadSideParentStatusChangeEventKind,
-		turnStatus:ModelThreadSideParentTurnStatusKind,
-		sideParentStatusBefore:ModelThreadSideParentStatusKind,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, pendingOutcome:ModelThreadSideParentPendingOutcome, eventKind:ModelThreadSideParentStatusChangeEventKind,
+			turnStatus:ModelThreadSideParentTurnStatusKind, sideParentStatusBefore:ModelThreadSideParentStatusKind, eventOrderIndex:Int,
+			previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.pendingOutcome = pendingOutcome;
 		this.eventKind = eventKind == null ? ModelThreadSideParentStatusChangeEventKind.OtherNotification : eventKind;

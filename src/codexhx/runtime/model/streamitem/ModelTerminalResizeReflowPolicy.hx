@@ -2,10 +2,13 @@ package codexhx.runtime.model.streamitem;
 
 class ModelTerminalResizeReflowPolicy {
 	public static function apply(request:ModelTerminalResizeReflowRequest):ModelTerminalResizeReflowOutcome {
-		if (request == null) return failure("", "", "missing terminal resize reflow request");
+		if (request == null)
+			return failure("", "", "missing terminal resize reflow request");
 		final clearUiHeaderRequestId = request.clearUiHeaderOutcome == null ? "" : request.clearUiHeaderOutcome.requestId;
-		if (request.clearUiHeaderOutcome == null) return failure(request.requestId, "", "missing clear UI header outcome");
-		if (!request.clearUiHeaderOutcome.ok) return failure(request.requestId, clearUiHeaderRequestId, "clear UI header outcome was not successful");
+		if (request.clearUiHeaderOutcome == null)
+			return failure(request.requestId, "", "missing clear UI header outcome");
+		if (!request.clearUiHeaderOutcome.ok)
+			return failure(request.requestId, clearUiHeaderRequestId, "clear UI header outcome was not successful");
 
 		final historyWrapWidth = wrapWidth(request.terminalWidth, request.petReservedColumns);
 		final renderedLines = renderTranscriptRows(request.transcriptRows, historyWrapWidth, request.maxRowsKind, request.maxRows);
@@ -23,75 +26,50 @@ class ModelTerminalResizeReflowPolicy {
 			&& request.terminalResizeReflowEnabled
 			&& rowCapApplied
 			&& !request.overlayActive;
-		final threadSwitchBufferDisabled = request.requestKind == ModelTerminalResizeReflowRequestKind.ThreadSwitchReplayBuffer && !threadSwitchTailMode;
+		final threadSwitchBufferDisabled = request.requestKind == ModelTerminalResizeReflowRequestKind.ThreadSwitchReplayBuffer
+			&& !threadSwitchTailMode;
 		final petReservedWidthApplied = request.petReservedColumns > 0 && historyWrapWidth < request.terminalWidth;
 		final petWrappedEarlier = petReservedWidthApplied && renderedLines.length > noPetLines.length;
 		final ordered = request.clearUiHeaderOutcome.eventOrderingPreserved && request.eventOrderIndex == request.previousEventCount + 1;
 
-		return new ModelTerminalResizeReflowOutcome(
-			true,
-			"terminal_resize_reflow_modeled",
-			request.requestId,
-			clearUiHeaderRequestId,
-			decisionKind(request, recentSuffixOnly, allCellsRendered, petWrappedEarlier, initialReplayBufferStarted, threadSwitchTailMode, threadSwitchBufferDisabled),
-			request.requestKind,
-			request.maxRowsKind,
-			request.maxRows,
-			request.terminalWidth,
-			historyWrapWidth,
-			request.petReservedColumns,
-			request.transcriptRows.length,
-			renderedLines,
-			retainedReplayRows,
-			renderedLines.length,
-			trimmedLineCount,
-			rowCapApplied,
-			recentSuffixOnly,
-			allCellsRendered,
-			petReservedWidthApplied,
-			petWrappedEarlier,
-			initialReplayBufferStarted,
-			initialReplayBufferStarted && request.replayRows.length > retainedReplayRows.length,
-			threadSwitchTailMode,
-			threadSwitchBufferDisabled,
-			ordered,
-			request.clearUiHeaderOutcome.liveNetworkAttempted,
-			request.clearUiHeaderOutcome.realFilesystemMutated,
-			request.clearUiHeaderOutcome.toolExecutedOutsideFixture,
-			""
-		);
+		return new ModelTerminalResizeReflowOutcome(true, "terminal_resize_reflow_modeled", request.requestId, clearUiHeaderRequestId,
+			decisionKind(request, recentSuffixOnly, allCellsRendered, petWrappedEarlier, initialReplayBufferStarted, threadSwitchTailMode,
+				threadSwitchBufferDisabled),
+			request.requestKind, request.maxRowsKind, request.maxRows, request.terminalWidth, historyWrapWidth, request.petReservedColumns,
+			request.transcriptRows.length, renderedLines, retainedReplayRows, renderedLines.length, trimmedLineCount, rowCapApplied, recentSuffixOnly,
+			allCellsRendered, petReservedWidthApplied, petWrappedEarlier,
+			initialReplayBufferStarted, initialReplayBufferStarted && request.replayRows.length > retainedReplayRows.length, threadSwitchTailMode,
+			threadSwitchBufferDisabled, ordered,
+			request.clearUiHeaderOutcome.liveNetworkAttempted, request.clearUiHeaderOutcome.realFilesystemMutated,
+			request.clearUiHeaderOutcome.toolExecutedOutsideFixture, "");
 	}
 
-	static function decisionKind(
-		request:ModelTerminalResizeReflowRequest,
-		recentSuffixOnly:Bool,
-		allCellsRendered:Bool,
-		petWrappedEarlier:Bool,
-		initialReplayBufferStarted:Bool,
-		threadSwitchTailMode:Bool,
-		threadSwitchBufferDisabled:Bool
-	):ModelTerminalResizeReflowDecisionKind {
-		if (initialReplayBufferStarted) return ModelTerminalResizeReflowDecisionKind.InitialReplayBufferTail;
-		if (threadSwitchTailMode) return ModelTerminalResizeReflowDecisionKind.ThreadSwitchTailMode;
-		if (threadSwitchBufferDisabled) return ModelTerminalResizeReflowDecisionKind.ThreadSwitchBufferDisabled;
-		if (petWrappedEarlier) return ModelTerminalResizeReflowDecisionKind.PetWrappedEarlier;
-		if (recentSuffixOnly) return ModelTerminalResizeReflowDecisionKind.CappedRecentSuffix;
-		if (allCellsRendered && request.maxRowsKind == ModelTerminalResizeReflowMaxRowsKind.Limit) return ModelTerminalResizeReflowDecisionKind.UnderLimitAllCells;
+	static function decisionKind(request:ModelTerminalResizeReflowRequest, recentSuffixOnly:Bool, allCellsRendered:Bool, petWrappedEarlier:Bool,
+			initialReplayBufferStarted:Bool, threadSwitchTailMode:Bool, threadSwitchBufferDisabled:Bool):ModelTerminalResizeReflowDecisionKind {
+		if (initialReplayBufferStarted)
+			return ModelTerminalResizeReflowDecisionKind.InitialReplayBufferTail;
+		if (threadSwitchTailMode)
+			return ModelTerminalResizeReflowDecisionKind.ThreadSwitchTailMode;
+		if (threadSwitchBufferDisabled)
+			return ModelTerminalResizeReflowDecisionKind.ThreadSwitchBufferDisabled;
+		if (petWrappedEarlier)
+			return ModelTerminalResizeReflowDecisionKind.PetWrappedEarlier;
+		if (recentSuffixOnly)
+			return ModelTerminalResizeReflowDecisionKind.CappedRecentSuffix;
+		if (allCellsRendered && request.maxRowsKind == ModelTerminalResizeReflowMaxRowsKind.Limit)
+			return ModelTerminalResizeReflowDecisionKind.UnderLimitAllCells;
 		return ModelTerminalResizeReflowDecisionKind.UncappedAllCells;
 	}
 
-	static function renderTranscriptRows(
-		transcriptRows:Array<String>,
-		width:Int,
-		maxRowsKind:ModelTerminalResizeReflowMaxRowsKind,
-		maxRows:Int
-	):Array<String> {
+	static function renderTranscriptRows(transcriptRows:Array<String>, width:Int, maxRowsKind:ModelTerminalResizeReflowMaxRowsKind, maxRows:Int):Array<String> {
 		final full:Array<String> = [];
 		if (transcriptRows != null) {
 			for (index in 0...transcriptRows.length) {
-				if (index > 0) full.push("");
+				if (index > 0)
+					full.push("");
 				final wrapped = wrapLine(transcriptRows[index], width);
-				for (line in wrapped) full.push(line);
+				for (line in wrapped)
+					full.push(line);
 			}
 		}
 		return retainedRows(full, maxRowsKind, maxRows);
@@ -99,10 +77,12 @@ class ModelTerminalResizeReflowPolicy {
 
 	static function retainedRows(rows:Array<String>, maxRowsKind:ModelTerminalResizeReflowMaxRowsKind, maxRows:Int):Array<String> {
 		final out:Array<String> = [];
-		if (rows == null) return out;
+		if (rows == null)
+			return out;
 		final cap = maxRows < 0 ? 0 : maxRows;
 		final start = maxRowsKind == ModelTerminalResizeReflowMaxRowsKind.Limit && rows.length > cap ? rows.length - cap : 0;
-		for (index in start...rows.length) out.push(rows[index] == null ? "" : rows[index]);
+		for (index in start...rows.length)
+			out.push(rows[index] == null ? "" : rows[index]);
 		return out;
 	}
 
@@ -122,7 +102,8 @@ class ModelTerminalResizeReflowPolicy {
 				current = word;
 			}
 		}
-		if (current.length > 0 || safeText.length == 0) lines.push(current);
+		if (current.length > 0 || safeText.length == 0)
+			lines.push(current);
 		return lines;
 	}
 
@@ -132,37 +113,9 @@ class ModelTerminalResizeReflowPolicy {
 	}
 
 	static function failure(requestId:String, clearUiHeaderRequestId:String, errorMessage:String):ModelTerminalResizeReflowOutcome {
-		return new ModelTerminalResizeReflowOutcome(
-			false,
-			"terminal_resize_reflow_failed",
-			requestId,
-			clearUiHeaderRequestId,
-			ModelTerminalResizeReflowDecisionKind.UncappedAllCells,
-			ModelTerminalResizeReflowRequestKind.RenderTranscript,
-			ModelTerminalResizeReflowMaxRowsKind.Disabled,
-			0,
-			1,
-			1,
-			0,
-			0,
-			[],
-			[],
-			0,
-			0,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			errorMessage
-		);
+		return new ModelTerminalResizeReflowOutcome(false, "terminal_resize_reflow_failed", requestId, clearUiHeaderRequestId,
+			ModelTerminalResizeReflowDecisionKind.UncappedAllCells, ModelTerminalResizeReflowRequestKind.RenderTranscript,
+			ModelTerminalResizeReflowMaxRowsKind.Disabled, 0, 1, 1, 0, 0, [], [], 0, 0, false, false, false, false, false, false, false, false, false, false,
+			false, false, false, errorMessage);
 	}
 }

@@ -26,10 +26,12 @@ class TuiSmokeHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertTrue(value:Bool, message:String):Void {
-		if (!value) throw message;
+		if (!value)
+			throw message;
 	}
 }

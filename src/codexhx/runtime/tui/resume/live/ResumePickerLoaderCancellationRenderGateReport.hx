@@ -27,14 +27,8 @@ class ResumePickerLoaderCancellationRenderGateReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads
-			+ ";staleIgnored=" + staleIgnored
-			+ ";cancelled=" + (cancellationObserved ? "true" : "false")
-			+ ";frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";baseline=" + baselineSummary
-			+ ";final=" + finalSummary
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";events=[" + eventSummaries.join("##") + "]";
+		return "pageLoads=" + pageLoads + ";staleIgnored=" + staleIgnored + ";cancelled=" + (cancellationObserved ? "true" : "false") + ";frames="
+			+ frameRequests + ";renders=" + renderCount + ";baseline=" + baselineSummary + ";final=" + finalSummary + ";finalSnapshot="
+			+ finalSnapshot.split("\n").join("\\n") + ";events=[" + eventSummaries.join("##") + "]";
 	}
 }

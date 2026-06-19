@@ -12,7 +12,8 @@ class ThreadReadTokenUsageReplayDeliveryReport {
 	public function deliveredCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.delivered) count = count + 1;
+			if (outcome.delivered)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadTokenUsageReplayDeliveryReport {
 	public function skippedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.skipped) count = count + 1;
+			if (outcome.skipped)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadTokenUsageReplayDeliveryReport {
 	public function failureCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.ok) count = count + 1;
+			if (!outcome.ok)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -38,11 +41,7 @@ class ThreadReadTokenUsageReplayDeliveryReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";delivered=" + Std.string(deliveredCount())
-			+ ";skipped=" + Std.string(skippedCount())
-			+ ";failed=" + Std.string(failureCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";delivered=" + Std.string(deliveredCount()) + ";skipped="
+			+ Std.string(skippedCount()) + ";failed=" + Std.string(failureCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

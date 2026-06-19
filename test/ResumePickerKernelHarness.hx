@@ -17,7 +17,8 @@ class ResumePickerKernelHarness {
 		for (request in arrayField(fixtureRoot(), "loopCases")) {
 			for (event in arrayField(request, "events")) {
 				final plan = optionalObjectField(event, "resumeFork");
-				if (plan == null) continue;
+				if (plan == null)
+					continue;
 				planCount = planCount + 1;
 				for (action in arrayField(plan, "actions")) {
 					commands.push(command(action));
@@ -163,7 +164,8 @@ class ResumePickerKernelHarness {
 
 	static function fixtureRoot():Value {
 		final parsed = CodexJson.parse(File.getContent("fixtures/hxrust/tui-smoke.v1.json"));
-		if (!parsed.ok) throw parsed.errorCode + " at " + parsed.errorPath + ": " + parsed.errorMessage;
+		if (!parsed.ok)
+			throw parsed.errorCode + " at " + parsed.errorPath + ": " + parsed.errorMessage;
 		return parsed.value;
 	}
 
@@ -176,7 +178,8 @@ class ResumePickerKernelHarness {
 
 	static function optionalObjectField(object:Value, name:String):Null<Value> {
 		final found = optionalField(object, name);
-		if (!found.exists) return null;
+		if (!found.exists)
+			return null;
 		return switch found.value {
 			case JNull: null;
 			case JObject(_, _): found.value;
@@ -186,7 +189,8 @@ class ResumePickerKernelHarness {
 
 	static function stringField(object:Value, name:String, fallback:String):String {
 		final found = optionalField(object, name);
-		if (!found.exists) return fallback;
+		if (!found.exists)
+			return fallback;
 		return switch found.value {
 			case JNull: fallback;
 			case JString(text): text;
@@ -196,7 +200,8 @@ class ResumePickerKernelHarness {
 
 	static function intField(object:Value, name:String, fallback:Int):Int {
 		final found = optionalField(object, name);
-		if (!found.exists) return fallback;
+		if (!found.exists)
+			return fallback;
 		return switch found.value {
 			case JNull: fallback;
 			case JNumber(number): Std.int(number);
@@ -206,7 +211,8 @@ class ResumePickerKernelHarness {
 
 	static function boolField(object:Value, name:String, fallback:Bool):Bool {
 		final found = optionalField(object, name);
-		if (!found.exists) return fallback;
+		if (!found.exists)
+			return fallback;
 		return switch found.value {
 			case JNull: fallback;
 			case JBool(flag): flag;
@@ -216,7 +222,8 @@ class ResumePickerKernelHarness {
 
 	static function valueField(object:Value, name:String):Value {
 		final found = optionalField(object, name);
-		if (found.exists) return found.value;
+		if (found.exists)
+			return found.value;
 		throw "missing field: " + name;
 	}
 
@@ -225,7 +232,8 @@ class ResumePickerKernelHarness {
 			case JObject(keys, values):
 				var index = 0;
 				while (index < keys.length && index < values.length) {
-					if (keys[index] == name) return new ResumePickerFieldLookup(true, values[index]);
+					if (keys[index] == name)
+						return new ResumePickerFieldLookup(true, values[index]);
 					index = index + 1;
 				}
 				return new ResumePickerFieldLookup(false, JNull);
@@ -235,11 +243,13 @@ class ResumePickerKernelHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String, label:String):Void {
-		if (expected != actual) throw label + " expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw label + " expected " + expected + " but got " + actual;
 	}
 
 	static function assertTrue(value:Bool, message:String):Void {
-		if (!value) throw message;
+		if (!value)
+			throw message;
 	}
 }
 

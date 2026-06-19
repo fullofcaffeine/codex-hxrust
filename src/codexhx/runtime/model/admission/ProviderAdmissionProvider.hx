@@ -14,20 +14,9 @@ class ProviderAdmissionProvider {
 	public final hasCommandAuth:Bool;
 	public final experimentalBearerTokenPresent:Bool;
 
-	public function new(
-		providerId:String,
-		name:String,
-		hasBaseUrl:Bool,
-		baseUrl:String,
-		envKeyConfigured:Bool,
-		envKeyPresent:Bool,
-		envKeyInstructionsPresent:Bool,
-		requiresOpenAiAuth:Bool,
-		supportsWebsockets:Bool,
-		hasAwsAuth:Bool,
-		hasCommandAuth:Bool,
-		experimentalBearerTokenPresent:Bool
-	) {
+	public function new(providerId:String, name:String, hasBaseUrl:Bool, baseUrl:String, envKeyConfigured:Bool, envKeyPresent:Bool,
+			envKeyInstructionsPresent:Bool, requiresOpenAiAuth:Bool, supportsWebsockets:Bool, hasAwsAuth:Bool, hasCommandAuth:Bool,
+			experimentalBearerTokenPresent:Bool) {
 		this.providerId = providerId;
 		this.name = name;
 		this.hasBaseUrl = hasBaseUrl;
@@ -55,34 +44,38 @@ class ProviderAdmissionProvider {
 	public function validateAuthShape():ProviderAdmissionShapeRead {
 		if (hasAwsAuth) {
 			final conflicts:Array<String> = [];
-			if (envKeyConfigured) conflicts.push("env_key");
-			if (experimentalBearerTokenPresent) conflicts.push("experimental_bearer_token");
-			if (hasCommandAuth) conflicts.push("auth");
-			if (requiresOpenAiAuth) conflicts.push("requires_openai_auth");
-			if (supportsWebsockets) conflicts.push("supports_websockets");
-			if (conflicts.length > 0) return ProviderAdmissionShapeRead.failure("provider aws cannot be combined with " + conflicts.join(", "));
+			if (envKeyConfigured)
+				conflicts.push("env_key");
+			if (experimentalBearerTokenPresent)
+				conflicts.push("experimental_bearer_token");
+			if (hasCommandAuth)
+				conflicts.push("auth");
+			if (requiresOpenAiAuth)
+				conflicts.push("requires_openai_auth");
+			if (supportsWebsockets)
+				conflicts.push("supports_websockets");
+			if (conflicts.length > 0)
+				return ProviderAdmissionShapeRead.failure("provider aws cannot be combined with " + conflicts.join(", "));
 		}
 		if (hasCommandAuth) {
 			final conflicts:Array<String> = [];
-			if (envKeyConfigured) conflicts.push("env_key");
-			if (experimentalBearerTokenPresent) conflicts.push("experimental_bearer_token");
-			if (requiresOpenAiAuth) conflicts.push("requires_openai_auth");
-			if (conflicts.length > 0) return ProviderAdmissionShapeRead.failure("provider auth cannot be combined with " + conflicts.join(", "));
+			if (envKeyConfigured)
+				conflicts.push("env_key");
+			if (experimentalBearerTokenPresent)
+				conflicts.push("experimental_bearer_token");
+			if (requiresOpenAiAuth)
+				conflicts.push("requires_openai_auth");
+			if (conflicts.length > 0)
+				return ProviderAdmissionShapeRead.failure("provider auth cannot be combined with " + conflicts.join(", "));
 		}
 		return ProviderAdmissionShapeRead.success();
 	}
 
 	public function summary():String {
-		return "provider=" + providerId
-			+ ";name=" + name
-			+ ";baseUrl=" + (hasBaseUrl ? baseUrl : "none")
-			+ ";envKeyName=" + envKeyNameBucket()
-			+ ";envKeyPresent=" + boolText(envKeyPresent)
-			+ ";requiresOpenAiAuth=" + boolText(requiresOpenAiAuth)
-			+ ";supportsWebsockets=" + boolText(supportsWebsockets)
-			+ ";aws=" + boolText(hasAwsAuth)
-			+ ";commandAuth=" + boolText(hasCommandAuth)
-			+ ";experimentalBearerToken=" + boolText(experimentalBearerTokenPresent);
+		return "provider=" + providerId + ";name=" + name + ";baseUrl=" + (hasBaseUrl ? baseUrl : "none") + ";envKeyName=" + envKeyNameBucket()
+			+ ";envKeyPresent=" + boolText(envKeyPresent) + ";requiresOpenAiAuth=" + boolText(requiresOpenAiAuth) + ";supportsWebsockets="
+			+ boolText(supportsWebsockets) + ";aws=" + boolText(hasAwsAuth) + ";commandAuth=" + boolText(hasCommandAuth) + ";experimentalBearerToken="
+			+ boolText(experimentalBearerTokenPresent);
 	}
 
 	static function boolText(value:Bool):String {

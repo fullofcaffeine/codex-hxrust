@@ -2,20 +2,25 @@ package codexhx.runtime.model.streamitem;
 
 class ModelThreadSnapshotSessionRefreshPolicy {
 	public static function apply(request:ModelThreadSnapshotSessionRefreshRequest):ModelThreadSnapshotSessionRefreshOutcome {
-		if (request == null) return failure("", "", "missing refreshed snapshot session request");
+		if (request == null)
+			return failure("", "", "missing refreshed snapshot session request");
 
 		final snapshotSessionCwdAfter = request.refreshedSessionCwd;
 		final storeSessionCwdAfter = request.refreshedSessionCwd;
 		final resumedTurnCount = request.resumedTurns.length;
 		final userMessageCount = countUserMessages(request.resumedTurns);
 		final activeTurnIdAfter = latestInProgressTurnId(request.resumedTurns);
-		final snapshotSessionReplaced = request.snapshotSessionCwdBefore != request.refreshedSessionCwd && snapshotSessionCwdAfter == request.refreshedSessionCwd;
-		final storeSessionReplaced = request.storeSessionCwdBefore != request.refreshedSessionCwd && storeSessionCwdAfter == request.refreshedSessionCwd;
+		final snapshotSessionReplaced = request.snapshotSessionCwdBefore != request.refreshedSessionCwd
+			&& snapshotSessionCwdAfter == request.refreshedSessionCwd;
+		final storeSessionReplaced = request.storeSessionCwdBefore != request.refreshedSessionCwd
+			&& storeSessionCwdAfter == request.refreshedSessionCwd;
 		final snapshotTurnsReplaced = request.snapshotTurnCountBefore != resumedTurnCount;
 		final storeTurnsReplaced = request.storeTurnCountBefore != resumedTurnCount;
-		final storeSnapshotMatchesRefreshedSnapshot = snapshotSessionCwdAfter == storeSessionCwdAfter && resumedTurnCount == request.resumedTurns.length;
+		final storeSnapshotMatchesRefreshedSnapshot = snapshotSessionCwdAfter == storeSessionCwdAfter
+			&& resumedTurnCount == request.resumedTurns.length;
 		final bufferRebasedAfterRefresh = request.survivingBufferEventCount <= request.bufferEventCountBefore;
-		final refreshedCwdPreserved = snapshotSessionCwdAfter == request.refreshedSessionCwd && storeSessionCwdAfter == request.refreshedSessionCwd;
+		final refreshedCwdPreserved = snapshotSessionCwdAfter == request.refreshedSessionCwd
+			&& storeSessionCwdAfter == request.refreshedSessionCwd;
 		final resumedTurnsPersisted = resumedTurnCount > 0 && snapshotTurnsReplaced && storeTurnsReplaced;
 		final activeTurnRestoredFromResumedTurns = activeTurnIdAfter.length > 0;
 		final ok = request.threadId.length > 0
@@ -60,21 +65,21 @@ class ModelThreadSnapshotSessionRefreshPolicy {
 
 	static function countUserMessages(turns:Array<ModelThreadSnapshotSessionRefreshTurn>):Int {
 		var count = 0;
-		for (turn in turns) if (turn.userText.length > 0) count = count + 1;
+		for (turn in turns)
+			if (turn.userText.length > 0)
+				count = count + 1;
 		return count;
 	}
 
 	static function latestInProgressTurnId(turns:Array<ModelThreadSnapshotSessionRefreshTurn>):String {
 		var active = "";
-		for (turn in turns) if (turn.statusKind == ModelThreadSnapshotTurnStatusKind.InProgress) active = turn.turnId;
+		for (turn in turns)
+			if (turn.statusKind == ModelThreadSnapshotTurnStatusKind.InProgress)
+				active = turn.turnId;
 		return active;
 	}
 
-	static function failure(
-		requestId:String,
-		threadId:String,
-		errorMessage:String
-	):ModelThreadSnapshotSessionRefreshOutcome {
+	static function failure(requestId:String, threadId:String, errorMessage:String):ModelThreadSnapshotSessionRefreshOutcome {
 		return new ModelThreadSnapshotSessionRefreshOutcome({
 			ok: false,
 			code: "thread_snapshot_session_refresh_failed",

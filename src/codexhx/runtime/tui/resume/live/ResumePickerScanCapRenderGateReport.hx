@@ -23,12 +23,7 @@ class ResumePickerScanCapRenderGateReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads
-			+ ";scanCapPageLoads=" + scanCapPageLoads
-			+ ";ordinaryPageLoads=" + ordinaryPageLoads
-			+ ";frames=" + frameRequests
-			+ ";renders=" + renderCount
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";events=[" + eventSummaries.join("##") + "]";
+		return "pageLoads=" + pageLoads + ";scanCapPageLoads=" + scanCapPageLoads + ";ordinaryPageLoads=" + ordinaryPageLoads + ";frames=" + frameRequests
+			+ ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";events=[" + eventSummaries.join("##") + "]";
 	}
 }

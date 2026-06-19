@@ -31,37 +31,12 @@ class ModelClearUiHeaderOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		activeShutdownRequestId:String,
-		decisionKind:ModelClearUiHeaderDecisionKind,
-		requestKind:ModelClearUiHeaderRequestKind,
-		titleLine:String,
-		modelLine:String,
-		directoryLine:String,
-		lineCount:Int,
-		width:Int,
-		version:String,
-		headerRendered:Bool,
-		clearPendingHistoryLines:Bool,
-		visibleScreenCleared:Bool,
-		scrollbackCleared:Bool,
-		viewportAnchoredToTop:Bool,
-		queuedHeaderInserted:Bool,
-		hasEmittedHistoryLinesAfter:Bool,
-		transcriptStateReset:Bool,
-		staleNoticeSuppressed:Bool,
-		staleTranscriptSuppressed:Bool,
-		ctrlLReusedClearHeader:Bool,
-		fastStatusShown:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, activeShutdownRequestId:String, decisionKind:ModelClearUiHeaderDecisionKind,
+			requestKind:ModelClearUiHeaderRequestKind, titleLine:String, modelLine:String, directoryLine:String, lineCount:Int, width:Int, version:String,
+			headerRendered:Bool, clearPendingHistoryLines:Bool, visibleScreenCleared:Bool, scrollbackCleared:Bool, viewportAnchoredToTop:Bool,
+			queuedHeaderInserted:Bool, hasEmittedHistoryLinesAfter:Bool, transcriptStateReset:Bool, staleNoticeSuppressed:Bool,
+			staleTranscriptSuppressed:Bool, ctrlLReusedClearHeader:Bool, fastStatusShown:Bool, eventOrderingPreserved:Bool, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -94,35 +69,17 @@ class ModelClearUiHeaderOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";activeShutdownRequest=" + noneIfEmpty(activeShutdownRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";requestKind=" + requestKind
-			+ ";titleLine=" + noneIfEmpty(titleLine)
-			+ ";modelLine=" + noneIfEmpty(modelLine)
-			+ ";directoryLine=" + noneIfEmpty(directoryLine)
-			+ ";lineCount=" + lineCount
-			+ ";width=" + width
-			+ ";version=" + noneIfEmpty(version)
-			+ ";headerRendered=" + boolText(headerRendered)
-			+ ";clearPendingHistoryLines=" + boolText(clearPendingHistoryLines)
-			+ ";visibleScreenCleared=" + boolText(visibleScreenCleared)
-			+ ";scrollbackCleared=" + boolText(scrollbackCleared)
-			+ ";viewportAnchoredToTop=" + boolText(viewportAnchoredToTop)
-			+ ";queuedHeaderInserted=" + boolText(queuedHeaderInserted)
-			+ ";hasEmittedHistoryLinesAfter=" + boolText(hasEmittedHistoryLinesAfter)
-			+ ";transcriptStateReset=" + boolText(transcriptStateReset)
-			+ ";staleNoticeSuppressed=" + boolText(staleNoticeSuppressed)
-			+ ";staleTranscriptSuppressed=" + boolText(staleTranscriptSuppressed)
-			+ ";ctrlLReusedClearHeader=" + boolText(ctrlLReusedClearHeader)
-			+ ";fastStatusShown=" + boolText(fastStatusShown)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";activeShutdownRequest=" + noneIfEmpty(activeShutdownRequestId)
+			+ ";decisionKind=" + decisionKind + ";requestKind=" + requestKind + ";titleLine=" + noneIfEmpty(titleLine) + ";modelLine="
+			+ noneIfEmpty(modelLine) + ";directoryLine=" + noneIfEmpty(directoryLine) + ";lineCount=" + lineCount + ";width=" + width + ";version="
+			+ noneIfEmpty(version) + ";headerRendered=" + boolText(headerRendered) + ";clearPendingHistoryLines=" + boolText(clearPendingHistoryLines)
+			+ ";visibleScreenCleared=" + boolText(visibleScreenCleared) + ";scrollbackCleared=" + boolText(scrollbackCleared) + ";viewportAnchoredToTop="
+			+ boolText(viewportAnchoredToTop) + ";queuedHeaderInserted=" + boolText(queuedHeaderInserted) + ";hasEmittedHistoryLinesAfter="
+			+ boolText(hasEmittedHistoryLinesAfter) + ";transcriptStateReset=" + boolText(transcriptStateReset) + ";staleNoticeSuppressed="
+			+ boolText(staleNoticeSuppressed) + ";staleTranscriptSuppressed=" + boolText(staleTranscriptSuppressed) + ";ctrlLReusedClearHeader="
+			+ boolText(ctrlLReusedClearHeader) + ";fastStatusShown=" + boolText(fastStatusShown) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

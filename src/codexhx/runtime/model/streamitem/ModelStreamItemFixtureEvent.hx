@@ -12,18 +12,8 @@ class ModelStreamItemFixtureEvent {
 	public final totalTokens:Int;
 	public final endTurn:Bool;
 
-	public function new(
-		kind:ModelStreamItemEventKind,
-		item:ModelStreamOutputItem,
-		itemId:String,
-		callId:String,
-		delta:String,
-		summaryIndex:Int,
-		contentIndex:Int,
-		responseId:String,
-		totalTokens:Int,
-		endTurn:Bool
-	) {
+	public function new(kind:ModelStreamItemEventKind, item:ModelStreamOutputItem, itemId:String, callId:String, delta:String, summaryIndex:Int,
+			contentIndex:Int, responseId:String, totalTokens:Int, endTurn:Bool) {
 		this.kind = kind;
 		this.item = item;
 		this.itemId = itemId;

@@ -8,14 +8,7 @@ class ModelStreamToolInputDelta {
 	public final status:ModelStreamToolInputDeltaStatus;
 	public final index:Int;
 
-	public function new(
-		callId:String,
-		itemId:String,
-		delta:String,
-		accumulatedInput:String,
-		status:ModelStreamToolInputDeltaStatus,
-		index:Int
-	) {
+	public function new(callId:String, itemId:String, delta:String, accumulatedInput:String, status:ModelStreamToolInputDeltaStatus, index:Int) {
 		this.callId = callId;
 		this.itemId = itemId;
 		this.delta = delta;
@@ -25,12 +18,8 @@ class ModelStreamToolInputDelta {
 	}
 
 	public function summary():String {
-		return "status=" + status
-			+ ";callId=" + noneIfEmpty(callId)
-			+ ";itemId=" + noneIfEmpty(itemId)
-			+ ";delta=" + delta
-			+ ";accumulatedInput=" + accumulatedInput
-			+ ";index=" + Std.string(index);
+		return "status=" + status + ";callId=" + noneIfEmpty(callId) + ";itemId=" + noneIfEmpty(itemId) + ";delta=" + delta + ";accumulatedInput="
+			+ accumulatedInput + ";index=" + Std.string(index);
 	}
 
 	static function noneIfEmpty(value:String):String {

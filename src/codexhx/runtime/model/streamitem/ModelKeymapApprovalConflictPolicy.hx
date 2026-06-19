@@ -11,7 +11,8 @@ class ModelKeymapApprovalConflictPolicy {
 	static final ApprovalCancelName = "approval.cancel";
 
 	public static function apply(request:ModelKeymapApprovalConflictRequest):ModelKeymapApprovalConflictOutcome {
-		if (request == null) return failure("", "missing keymap approval conflict request");
+		if (request == null)
+			return failure("", "missing keymap approval conflict request");
 
 		final approvalBinding = character("y");
 		final cancelBinding = character("c");
@@ -42,15 +43,10 @@ class ModelKeymapApprovalConflictPolicy {
 		final conflictActionNamesPreserved = approvalPairConflictPreserved || overlayAcceptConflictPreserved || overlayCancelConflictPreserved;
 		final conflictRejectionPreserved = request.conflictRejected;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final bindingEvidencePreserved = approvalPairConflictPreserved
-			? approveBindingPreserved
-			: overlayAcceptConflictPreserved || overlayCancelConflictPreserved;
-		final ok = bindingEvidencePreserved
-			&& conflictRejectionPreserved
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapApprovalConflictDecisionKind.KeymapApprovalConflictRejected
-			: ModelKeymapApprovalConflictDecisionKind.KeymapApprovalConflictMissed;
+		final bindingEvidencePreserved = approvalPairConflictPreserved ? approveBindingPreserved : overlayAcceptConflictPreserved
+			|| overlayCancelConflictPreserved;
+		final ok = bindingEvidencePreserved && conflictRejectionPreserved && eventOrderingPreserved;
+		final decisionKind = ok ? ModelKeymapApprovalConflictDecisionKind.KeymapApprovalConflictRejected : ModelKeymapApprovalConflictDecisionKind.KeymapApprovalConflictMissed;
 
 		return new ModelKeymapApprovalConflictOutcome({
 			ok: ok,

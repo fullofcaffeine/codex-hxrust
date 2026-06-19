@@ -12,18 +12,8 @@ class ModelPatchVerificationRequest {
 	public final files:Array<ModelPatchVirtualFile>;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		reducerOutcome:ModelStreamItemReducerOutcome,
-		callId:String,
-		turnId:String,
-		autoApproved:Bool,
-		desiredStatus:ModelPatchApplyStatus,
-		stdout:String,
-		stderr:String,
-		files:Array<ModelPatchVirtualFile>,
-		secretProbe:String
-	) {
+	public function new(requestId:String, reducerOutcome:ModelStreamItemReducerOutcome, callId:String, turnId:String, autoApproved:Bool,
+			desiredStatus:ModelPatchApplyStatus, stdout:String, stderr:String, files:Array<ModelPatchVirtualFile>, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.reducerOutcome = reducerOutcome;
 		this.callId = callId == null ? "" : callId;

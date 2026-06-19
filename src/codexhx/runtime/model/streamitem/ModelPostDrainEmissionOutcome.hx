@@ -22,28 +22,10 @@ class ModelPostDrainEmissionOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		emissionKind:ModelPostDrainEmissionKind,
-		cancellationKind:ModelPostDrainCancellationKind,
-		tokenCountPending:Bool,
-		tokenCountProjected:Bool,
-		tokenInfoAvailable:Bool,
-		cancellationCheckedAfterTokenCount:Bool,
-		turnDiffPending:Bool,
-		turnDiffTrackerRead:Bool,
-		unifiedDiffAvailable:Bool,
-		turnDiffProjected:Bool,
-		turnDiffSkippedByCancellation:Bool,
-		turnDiffSkippedNoDiff:Bool,
-		samplingOutcomeReturned:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, emissionKind:ModelPostDrainEmissionKind, cancellationKind:ModelPostDrainCancellationKind,
+			tokenCountPending:Bool, tokenCountProjected:Bool, tokenInfoAvailable:Bool, cancellationCheckedAfterTokenCount:Bool, turnDiffPending:Bool,
+			turnDiffTrackerRead:Bool, unifiedDiffAvailable:Bool, turnDiffProjected:Bool, turnDiffSkippedByCancellation:Bool, turnDiffSkippedNoDiff:Bool,
+			samplingOutcomeReturned:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -67,26 +49,14 @@ class ModelPostDrainEmissionOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";emissionKind=" + emissionKind
-			+ ";cancellationKind=" + cancellationKind
-			+ ";tokenCountPending=" + boolText(tokenCountPending)
-			+ ";tokenCountProjected=" + boolText(tokenCountProjected)
-			+ ";tokenInfoAvailable=" + boolText(tokenInfoAvailable)
-			+ ";cancellationCheckedAfterTokenCount=" + boolText(cancellationCheckedAfterTokenCount)
-			+ ";turnDiffPending=" + boolText(turnDiffPending)
-			+ ";turnDiffTrackerRead=" + boolText(turnDiffTrackerRead)
-			+ ";unifiedDiffAvailable=" + boolText(unifiedDiffAvailable)
-			+ ";turnDiffProjected=" + boolText(turnDiffProjected)
-			+ ";turnDiffSkippedByCancellation=" + boolText(turnDiffSkippedByCancellation)
-			+ ";turnDiffSkippedNoDiff=" + boolText(turnDiffSkippedNoDiff)
-			+ ";samplingOutcomeReturned=" + boolText(samplingOutcomeReturned)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";emissionKind=" + emissionKind + ";cancellationKind=" + cancellationKind
+			+ ";tokenCountPending=" + boolText(tokenCountPending) + ";tokenCountProjected=" + boolText(tokenCountProjected) + ";tokenInfoAvailable="
+			+ boolText(tokenInfoAvailable) + ";cancellationCheckedAfterTokenCount=" + boolText(cancellationCheckedAfterTokenCount) + ";turnDiffPending="
+			+ boolText(turnDiffPending) + ";turnDiffTrackerRead=" + boolText(turnDiffTrackerRead) + ";unifiedDiffAvailable=" + boolText(unifiedDiffAvailable)
+			+ ";turnDiffProjected=" + boolText(turnDiffProjected) + ";turnDiffSkippedByCancellation=" + boolText(turnDiffSkippedByCancellation)
+			+ ";turnDiffSkippedNoDiff=" + boolText(turnDiffSkippedNoDiff) + ";samplingOutcomeReturned=" + boolText(samplingOutcomeReturned)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

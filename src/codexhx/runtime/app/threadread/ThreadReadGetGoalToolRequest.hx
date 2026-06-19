@@ -9,13 +9,7 @@ class ThreadReadGetGoalToolRequest {
 	public final dbErrorMessage:String;
 	public final goal:ThreadGoal;
 
-	public function new(
-		threadId:String,
-		argumentsJson:String,
-		dbOutcomeKind:ThreadReadGetGoalToolDbOutcomeKind,
-		dbErrorMessage:String,
-		goal:ThreadGoal
-	) {
+	public function new(threadId:String, argumentsJson:String, dbOutcomeKind:ThreadReadGetGoalToolDbOutcomeKind, dbErrorMessage:String, goal:ThreadGoal) {
 		this.threadId = threadId;
 		this.argumentsJson = argumentsJson;
 		this.dbOutcomeKind = dbOutcomeKind;

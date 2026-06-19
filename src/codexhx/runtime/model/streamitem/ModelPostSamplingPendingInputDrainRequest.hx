@@ -8,14 +8,9 @@ class ModelPostSamplingPendingInputDrainRequest {
 	public final acceptsMailboxDelivery:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		integrationOutcome:ModelSamplingResultIntegrationOutcome,
-		activeTurnItems:Array<ModelPostSamplingPendingInputDrainItem>,
-		mailboxItems:Array<ModelPostSamplingPendingInputDrainItem>,
-		acceptsMailboxDelivery:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, integrationOutcome:ModelSamplingResultIntegrationOutcome,
+			activeTurnItems:Array<ModelPostSamplingPendingInputDrainItem>, mailboxItems:Array<ModelPostSamplingPendingInputDrainItem>,
+			acceptsMailboxDelivery:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.integrationOutcome = integrationOutcome;
 		this.activeTurnItems = activeTurnItems == null ? [] : activeTurnItems;

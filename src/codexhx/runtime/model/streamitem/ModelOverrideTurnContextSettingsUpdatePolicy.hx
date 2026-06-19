@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelOverrideTurnContextSettingsUpdatePolicy {
 	public static function apply(request:ModelOverrideTurnContextSettingsUpdateRequest):ModelOverrideTurnContextSettingsUpdateOutcome {
-		if (request == null) return failure("", "missing override-turn-context settings update request");
+		if (request == null)
+			return failure("", "missing override-turn-context settings update request");
 
 		final canHandle = request.appCommandOverrideTurnContext
 			&& request.primaryThreadRegistered
@@ -22,8 +23,10 @@ class ModelOverrideTurnContextSettingsUpdatePolicy {
 		final cachedPrimarySessionUnchangedBeforeNotification = threadSettingsUpdateSubmitted;
 		final notificationAppliedToCache = request.notificationReceived && threadSettingsUpdateSubmitted;
 		final defaultMode = request.requestedCollaborationMode == "default";
-		final primarySessionModelPreserved = notificationAppliedToCache && (!defaultMode || request.requestedModel == request.initialModel);
-		final primarySessionEffortPreserved = notificationAppliedToCache && (!defaultMode || request.requestedEffort == request.initialEffort);
+		final primarySessionModelPreserved = notificationAppliedToCache
+			&& (!defaultMode || request.requestedModel == request.initialModel);
+		final primarySessionEffortPreserved = notificationAppliedToCache
+			&& (!defaultMode || request.requestedEffort == request.initialEffort);
 		final collaborationModeCached = notificationAppliedToCache && request.requestedCollaborationMode.length > 0;
 		final collaborationSettingsRebasedToNotification = collaborationModeCached
 			&& request.requestedCollaborationModel == request.requestedModel
@@ -34,11 +37,7 @@ class ModelOverrideTurnContextSettingsUpdatePolicy {
 		final activePermissionProfileSubmitted = threadSettingsUpdateSubmitted && request.requestedActivePermissionProfile.length > 0;
 		final personalityCached = notificationAppliedToCache && request.requestedPersonality.length > 0;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final decisionKind = threadSettingsUpdateSubmitted
-			? ModelOverrideTurnContextSettingsUpdateDecisionKind.ThreadSettingsUpdateSubmitted
-			: handled
-				? ModelOverrideTurnContextSettingsUpdateDecisionKind.NoSettingsChangesNoop
-				: ModelOverrideTurnContextSettingsUpdateDecisionKind.OverrideTurnContextNotHandled;
+		final decisionKind = threadSettingsUpdateSubmitted ? ModelOverrideTurnContextSettingsUpdateDecisionKind.ThreadSettingsUpdateSubmitted : handled ? ModelOverrideTurnContextSettingsUpdateDecisionKind.NoSettingsChangesNoop : ModelOverrideTurnContextSettingsUpdateDecisionKind.OverrideTurnContextNotHandled;
 		final ok = handled
 			&& threadSettingsUpdateSubmitted
 			&& updateParamsCarriedRequestedSettings

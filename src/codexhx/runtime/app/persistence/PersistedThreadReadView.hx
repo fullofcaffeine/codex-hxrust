@@ -12,14 +12,7 @@ class PersistedThreadReadView {
 	public final status:String;
 	public final history:PersistedThreadHistorySummary;
 
-	public function new(
-		threadId:ThreadId,
-		sessionId:SessionId,
-		rolloutPath:PathLikeId,
-		archived:Bool,
-		status:String,
-		history:PersistedThreadHistorySummary
-	) {
+	public function new(threadId:ThreadId, sessionId:SessionId, rolloutPath:PathLikeId, archived:Bool, status:String, history:PersistedThreadHistorySummary) {
 		this.threadId = threadId;
 		this.sessionId = sessionId;
 		this.rolloutPath = rolloutPath;
@@ -29,11 +22,7 @@ class PersistedThreadReadView {
 	}
 
 	public function summary():String {
-		return "thread=" + threadId.toString()
-			+ ";session=" + sessionId.toString()
-			+ ";path=" + rolloutPath.toString()
-			+ ";status=" + status
-			+ ";archived=" + (archived ? "true" : "false")
-			+ ";" + history.summary();
+		return "thread=" + threadId.toString() + ";session=" + sessionId.toString() + ";path=" + rolloutPath.toString() + ";status=" + status + ";archived="
+			+ (archived ? "true" : "false") + ";" + history.summary();
 	}
 }

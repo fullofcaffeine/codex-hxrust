@@ -43,8 +43,10 @@ class ModelPatchFileChange {
 		final copiedChunks:Array<ModelPatchUpdateChunk> = [];
 		for (chunk in chunks) {
 			final copyChunk = new ModelPatchUpdateChunk(chunk.changeContext);
-			for (line in chunk.oldLines) copyChunk.oldLines.push(line);
-			for (line in chunk.newLines) copyChunk.newLines.push(line);
+			for (line in chunk.oldLines)
+				copyChunk.oldLines.push(line);
+			for (line in chunk.newLines)
+				copyChunk.newLines.push(line);
 			copyChunk.isEndOfFile = chunk.isEndOfFile;
 			copiedChunks.push(copyChunk);
 		}
@@ -52,24 +54,23 @@ class ModelPatchFileChange {
 	}
 
 	public function withoutAddContent():ModelPatchFileChange {
-		if (kind != ModelPatchFileChangeKind.Add) return copy();
+		if (kind != ModelPatchFileChangeKind.Add)
+			return copy();
 		return new ModelPatchFileChange(path, kind, "", movePath, []);
 	}
 
 	public function unifiedDiff():String {
 		var out = "";
-		for (chunk in chunks) out = out + chunk.unifiedDiff();
+		for (chunk in chunks)
+			out = out + chunk.unifiedDiff();
 		return out;
 	}
 
 	public function summary():String {
 		final chunkParts:Array<String> = [];
-		for (chunk in chunks) chunkParts.push(chunk.summary());
-		return "path=" + path
-			+ ";kind=" + kind
-			+ ";content=" + content
-			+ ";unifiedDiff=" + unifiedDiff()
-			+ ";movePath=" + noneIfEmpty(movePath)
+		for (chunk in chunks)
+			chunkParts.push(chunk.summary());
+		return "path=" + path + ";kind=" + kind + ";content=" + content + ";unifiedDiff=" + unifiedDiff() + ";movePath=" + noneIfEmpty(movePath)
 			+ ";chunks=[" + chunkParts.join("||") + "]";
 	}
 

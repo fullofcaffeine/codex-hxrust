@@ -27,33 +27,12 @@ class ModelThreadSideThreadStartupRoutingOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		startRequestId:String,
-		decisionKind:ModelThreadSideThreadStartupRoutingDecisionKind,
-		startupEventKind:ModelThreadSideThreadStartupEventKind,
-		expectedServersRefreshed:Bool,
-		appScopedIgnored:Bool,
-		misroutedVisibleThreadIgnored:Bool,
-		childThreadChannelEnsured:Bool,
-		notificationBuffered:Bool,
-		notificationSentToActiveReceiver:Bool,
-		sideThreadSessionHandled:Bool,
-		sideConversationDisplayMode:Bool,
-		contextLabelPreserved:Bool,
-		startupStatusRendered:Bool,
-		startupFailureWarningRendered:Bool,
-		loginErrorRendered:Bool,
-		activeTranscriptMutated:Bool,
-		appEventRendered:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, startRequestId:String, decisionKind:ModelThreadSideThreadStartupRoutingDecisionKind,
+			startupEventKind:ModelThreadSideThreadStartupEventKind, expectedServersRefreshed:Bool, appScopedIgnored:Bool, misroutedVisibleThreadIgnored:Bool,
+			childThreadChannelEnsured:Bool, notificationBuffered:Bool, notificationSentToActiveReceiver:Bool, sideThreadSessionHandled:Bool,
+			sideConversationDisplayMode:Bool, contextLabelPreserved:Bool, startupStatusRendered:Bool, startupFailureWarningRendered:Bool,
+			loginErrorRendered:Bool, activeTranscriptMutated:Bool, appEventRendered:Bool, eventOrderingPreserved:Bool, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -82,31 +61,17 @@ class ModelThreadSideThreadStartupRoutingOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";startRequest=" + noneIfEmpty(startRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";startupEventKind=" + startupEventKind
-			+ ";expectedServersRefreshed=" + boolText(expectedServersRefreshed)
-			+ ";appScopedIgnored=" + boolText(appScopedIgnored)
-			+ ";misroutedVisibleThreadIgnored=" + boolText(misroutedVisibleThreadIgnored)
-			+ ";childThreadChannelEnsured=" + boolText(childThreadChannelEnsured)
-			+ ";notificationBuffered=" + boolText(notificationBuffered)
-			+ ";notificationSentToActiveReceiver=" + boolText(notificationSentToActiveReceiver)
-			+ ";sideThreadSessionHandled=" + boolText(sideThreadSessionHandled)
-			+ ";sideConversationDisplayMode=" + boolText(sideConversationDisplayMode)
-			+ ";contextLabelPreserved=" + boolText(contextLabelPreserved)
-			+ ";startupStatusRendered=" + boolText(startupStatusRendered)
-			+ ";startupFailureWarningRendered=" + boolText(startupFailureWarningRendered)
-			+ ";loginErrorRendered=" + boolText(loginErrorRendered)
-			+ ";activeTranscriptMutated=" + boolText(activeTranscriptMutated)
-			+ ";appEventRendered=" + boolText(appEventRendered)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";startRequest=" + noneIfEmpty(startRequestId) + ";decisionKind="
+			+ decisionKind + ";startupEventKind=" + startupEventKind + ";expectedServersRefreshed=" + boolText(expectedServersRefreshed)
+			+ ";appScopedIgnored=" + boolText(appScopedIgnored) + ";misroutedVisibleThreadIgnored=" + boolText(misroutedVisibleThreadIgnored)
+			+ ";childThreadChannelEnsured=" + boolText(childThreadChannelEnsured) + ";notificationBuffered=" + boolText(notificationBuffered)
+			+ ";notificationSentToActiveReceiver=" + boolText(notificationSentToActiveReceiver) + ";sideThreadSessionHandled="
+			+ boolText(sideThreadSessionHandled) + ";sideConversationDisplayMode=" + boolText(sideConversationDisplayMode) + ";contextLabelPreserved="
+			+ boolText(contextLabelPreserved) + ";startupStatusRendered=" + boolText(startupStatusRendered) + ";startupFailureWarningRendered="
+			+ boolText(startupFailureWarningRendered) + ";loginErrorRendered=" + boolText(loginErrorRendered) + ";activeTranscriptMutated="
+			+ boolText(activeTranscriptMutated) + ";appEventRendered=" + boolText(appEventRendered) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated="
+			+ boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

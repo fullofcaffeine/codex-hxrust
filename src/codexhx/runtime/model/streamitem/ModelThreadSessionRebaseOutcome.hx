@@ -19,25 +19,10 @@ class ModelThreadSessionRebaseOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		evictionRequestId:String,
-		rebaseKind:ModelThreadSessionRebaseKind,
-		rebaseEventKind:ModelThreadSessionRebaseEventKind,
-		eventSurvivesRebase:Bool,
-		eventDroppedByRebase:Bool,
-		pendingReplayStatePreserved:Bool,
-		snapshotRequestReplayed:Bool,
-		resolvedRequestFilteredAfterRebase:Bool,
-		bufferEventCountAfter:Int,
-		orderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, evictionRequestId:String, rebaseKind:ModelThreadSessionRebaseKind,
+			rebaseEventKind:ModelThreadSessionRebaseEventKind, eventSurvivesRebase:Bool, eventDroppedByRebase:Bool, pendingReplayStatePreserved:Bool,
+			snapshotRequestReplayed:Bool, resolvedRequestFilteredAfterRebase:Bool, bufferEventCountAfter:Int, orderingPreserved:Bool,
+			liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -58,23 +43,13 @@ class ModelThreadSessionRebaseOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";evictionRequest=" + noneIfEmpty(evictionRequestId)
-			+ ";rebaseKind=" + rebaseKind
-			+ ";rebaseEventKind=" + rebaseEventKind
-			+ ";eventSurvivesRebase=" + boolText(eventSurvivesRebase)
-			+ ";eventDroppedByRebase=" + boolText(eventDroppedByRebase)
-			+ ";pendingReplayStatePreserved=" + boolText(pendingReplayStatePreserved)
-			+ ";snapshotRequestReplayed=" + boolText(snapshotRequestReplayed)
-			+ ";resolvedRequestFilteredAfterRebase=" + boolText(resolvedRequestFilteredAfterRebase)
-			+ ";bufferEventCountAfter=" + bufferEventCountAfter
-			+ ";orderingPreserved=" + boolText(orderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";evictionRequest=" + noneIfEmpty(evictionRequestId) + ";rebaseKind="
+			+ rebaseKind + ";rebaseEventKind=" + rebaseEventKind + ";eventSurvivesRebase=" + boolText(eventSurvivesRebase) + ";eventDroppedByRebase="
+			+ boolText(eventDroppedByRebase) + ";pendingReplayStatePreserved=" + boolText(pendingReplayStatePreserved) + ";snapshotRequestReplayed="
+			+ boolText(snapshotRequestReplayed) + ";resolvedRequestFilteredAfterRebase=" + boolText(resolvedRequestFilteredAfterRebase)
+			+ ";bufferEventCountAfter=" + bufferEventCountAfter + ";orderingPreserved=" + boolText(orderingPreserved) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

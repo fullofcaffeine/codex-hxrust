@@ -109,7 +109,6 @@ class TuiSmokeDrawCompositionPlan {
 	public final backendFlush:Bool;
 	public final failureCode:String;
 
-
 	public function enabled():Bool {
 		return !allowLiveDraw && mode != TuiSmokeDrawCompositionMode.Unknown;
 	}
@@ -147,7 +146,8 @@ class TuiSmokeDrawCompositionPlan {
 	}
 
 	static function sizeText(width:Int, height:Int):String {
-		if (width <= 0 || height <= 0) return "unknown";
+		if (width <= 0 || height <= 0)
+			return "unknown";
 		return width + "x" + height;
 	}
 

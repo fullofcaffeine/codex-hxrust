@@ -28,7 +28,6 @@ class TuiSmokeResizeRepaintPlan {
 	public final emptyTranscript:Bool;
 	public final insertRows:Bool;
 
-
 	public function rowCapText():String {
 		return rowCap < 0 ? "none" : Std.string(rowCap);
 	}

@@ -40,7 +40,6 @@ class TuiSmokeResizeDrawAction {
 	public final viewport:Null<TuiSmokeViewportResizePlan>;
 	public final suspendResume:Null<TuiSmokeSuspendResumePlan>;
 
-
 	public function sizeText():String {
 		return sizeLabel(terminalWidth, terminalHeight);
 	}
@@ -50,8 +49,10 @@ class TuiSmokeResizeDrawAction {
 	}
 
 	public function widthState():String {
-		if (terminalWidth <= 0) return "unknown";
-		if (lastWidth <= 0) return "initialized";
+		if (terminalWidth <= 0)
+			return "unknown";
+		if (lastWidth <= 0)
+			return "initialized";
 		return terminalWidth == lastWidth ? "unchanged" : "changed";
 	}
 
@@ -72,7 +73,8 @@ class TuiSmokeResizeDrawAction {
 	}
 
 	static function sizeLabel(width:Int, height:Int):String {
-		if (width <= 0 || height <= 0) return "unknown";
+		if (width <= 0 || height <= 0)
+			return "unknown";
 		return Std.string(width) + "x" + Std.string(height);
 	}
 }

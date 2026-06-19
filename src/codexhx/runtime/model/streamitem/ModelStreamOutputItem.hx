@@ -15,21 +15,8 @@ class ModelStreamOutputItem {
 	public final customInput:String;
 	public final status:String;
 
-	public function new(
-		kind:ModelStreamOutputItemKind,
-		itemId:String,
-		role:String,
-		text:String,
-		phase:String,
-		summary:Array<String>,
-		rawContent:Array<String>,
-		callId:String,
-		toolName:String,
-		namespace:String,
-		arguments:String,
-		customInput:String,
-		status:String
-	) {
+	public function new(kind:ModelStreamOutputItemKind, itemId:String, role:String, text:String, phase:String, summary:Array<String>,
+			rawContent:Array<String>, callId:String, toolName:String, namespace:String, arguments:String, customInput:String, status:String) {
 		this.kind = kind;
 		this.itemId = itemId;
 		this.role = role;

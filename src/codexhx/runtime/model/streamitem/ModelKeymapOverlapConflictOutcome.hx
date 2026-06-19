@@ -60,23 +60,15 @@ class ModelKeymapOverlapConflictOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";decisionKind=" + decisionKind
-			+ ";explicitListLegacyConflictPreserved=" + boolText(explicitListLegacyConflictPreserved)
-			+ ";appBindingPrunesListDefaultPreserved=" + boolText(appBindingPrunesListDefaultPreserved)
-			+ ";approvalBindingPrunesListDefaultPreserved=" + boolText(approvalBindingPrunesListDefaultPreserved)
-			+ ";explicitListApprovalConflictPreserved=" + boolText(explicitListApprovalConflictPreserved)
-			+ ";legacyVimChangePruningPreserved=" + boolText(legacyVimChangePruningPreserved)
-			+ ";explicitVimChangeConflictPreserved=" + boolText(explicitVimChangeConflictPreserved)
-			+ ";legacyVimSubstitutePruningPreserved=" + boolText(legacyVimSubstitutePruningPreserved)
-			+ ";explicitVimSubstituteConflictPreserved=" + boolText(explicitVimSubstituteConflictPreserved)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";decisionKind=" + decisionKind + ";explicitListLegacyConflictPreserved="
+			+ boolText(explicitListLegacyConflictPreserved) + ";appBindingPrunesListDefaultPreserved=" + boolText(appBindingPrunesListDefaultPreserved)
+			+ ";approvalBindingPrunesListDefaultPreserved=" + boolText(approvalBindingPrunesListDefaultPreserved) + ";explicitListApprovalConflictPreserved="
+			+ boolText(explicitListApprovalConflictPreserved) + ";legacyVimChangePruningPreserved=" + boolText(legacyVimChangePruningPreserved)
+			+ ";explicitVimChangeConflictPreserved=" + boolText(explicitVimChangeConflictPreserved) + ";legacyVimSubstitutePruningPreserved="
+			+ boolText(legacyVimSubstitutePruningPreserved) + ";explicitVimSubstituteConflictPreserved=" + boolText(explicitVimSubstituteConflictPreserved)
+			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
+			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error="
+			+ errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

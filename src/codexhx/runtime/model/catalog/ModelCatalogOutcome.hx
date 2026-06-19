@@ -27,29 +27,14 @@ class ModelCatalogOutcome {
 	public final errorMessage:String;
 	public final sequence:String;
 
-	function new(
-		ok:Bool,
-		code:String,
-		request:ModelCatalogRequest,
-		admission:ProviderAdmissionOutcome,
-		liveFetchAttempted:Bool,
-		selectedModelId:String,
-		selectedHidden:Bool,
-		defaultModelId:String,
-		catalogCount:Int,
-		providerModelCount:Int,
-		visibleCount:Int,
-		hiddenCount:Int,
-		apiFilteredCount:Int,
-		capabilitySummary:String,
-		modelSummaries:Array<String>,
-		errorMessage:String,
-		sequence:String
-	) {
+	function new(ok:Bool, code:String, request:ModelCatalogRequest, admission:ProviderAdmissionOutcome, liveFetchAttempted:Bool, selectedModelId:String,
+			selectedHidden:Bool, defaultModelId:String, catalogCount:Int, providerModelCount:Int, visibleCount:Int, hiddenCount:Int, apiFilteredCount:Int,
+			capabilitySummary:String, modelSummaries:Array<String>, errorMessage:String, sequence:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = request.requestId;
-		this.providerId = request.admissionRequest == null || request.admissionRequest.provider == null ? "" : request.admissionRequest.provider.providerId;
+		this.providerId = request.admissionRequest == null
+			|| request.admissionRequest.provider == null ? "" : request.admissionRequest.provider.providerId;
 		this.admissionCode = admission == null ? "none" : admission.code;
 		this.catalogSource = request.catalogSource;
 		this.refreshStrategy = request.refreshStrategy;
@@ -71,102 +56,30 @@ class ModelCatalogOutcome {
 		this.sequence = sequence;
 	}
 
-	public static function accepted(
-		request:ModelCatalogRequest,
-		admission:ProviderAdmissionOutcome,
-		liveFetchAttempted:Bool,
-		selected:ModelCatalogEntry,
-		defaultModelId:String,
-		catalogCount:Int,
-		providerModelCount:Int,
-		visibleCount:Int,
-		hiddenCount:Int,
-		apiFilteredCount:Int,
-		capabilitySummary:String,
-		modelSummaries:Array<String>,
-		sequence:String
-	):ModelCatalogOutcome {
-		return new ModelCatalogOutcome(
-			true,
-			"model_catalog_admitted",
-			request,
-			admission,
-			liveFetchAttempted,
-			selected == null ? "" : selected.modelId,
-			selected != null && selected.hidden(),
-			defaultModelId,
-			catalogCount,
-			providerModelCount,
-			visibleCount,
-			hiddenCount,
-			apiFilteredCount,
-			capabilitySummary,
-			modelSummaries,
-			"",
-			sequence
-		);
+	public static function accepted(request:ModelCatalogRequest, admission:ProviderAdmissionOutcome, liveFetchAttempted:Bool, selected:ModelCatalogEntry,
+			defaultModelId:String, catalogCount:Int, providerModelCount:Int, visibleCount:Int, hiddenCount:Int, apiFilteredCount:Int,
+			capabilitySummary:String, modelSummaries:Array<String>, sequence:String):ModelCatalogOutcome {
+		return new ModelCatalogOutcome(true, "model_catalog_admitted", request, admission, liveFetchAttempted,
+			selected == null ? "" : selected.modelId, selected != null
+			&& selected.hidden(), defaultModelId, catalogCount, providerModelCount, visibleCount, hiddenCount, apiFilteredCount,
+			capabilitySummary, modelSummaries, "", sequence);
 	}
 
-	public static function denied(
-		request:ModelCatalogRequest,
-		admission:ProviderAdmissionOutcome,
-		code:String,
-		liveFetchAttempted:Bool,
-		catalogCount:Int,
-		providerModelCount:Int,
-		visibleCount:Int,
-		hiddenCount:Int,
-		apiFilteredCount:Int,
-		capabilitySummary:String,
-		modelSummaries:Array<String>,
-		errorMessage:String,
-		sequence:String
-	):ModelCatalogOutcome {
-		return new ModelCatalogOutcome(
-			false,
-			code,
-			request,
-			admission,
-			liveFetchAttempted,
-			"",
-			false,
-			"",
-			catalogCount,
-			providerModelCount,
-			visibleCount,
-			hiddenCount,
-			apiFilteredCount,
-			capabilitySummary,
-			modelSummaries,
-			errorMessage,
-			sequence
-		);
+	public static function denied(request:ModelCatalogRequest, admission:ProviderAdmissionOutcome, code:String, liveFetchAttempted:Bool, catalogCount:Int,
+			providerModelCount:Int, visibleCount:Int, hiddenCount:Int, apiFilteredCount:Int, capabilitySummary:String, modelSummaries:Array<String>,
+			errorMessage:String, sequence:String):ModelCatalogOutcome {
+		return new ModelCatalogOutcome(false, code, request, admission, liveFetchAttempted, "", false, "", catalogCount, providerModelCount, visibleCount,
+			hiddenCount, apiFilteredCount, capabilitySummary, modelSummaries, errorMessage, sequence);
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";provider=" + providerId
-			+ ";admissionCode=" + admissionCode
-			+ ";catalogSource=" + catalogSource
-			+ ";refreshStrategy=" + refreshStrategy
-			+ ";includeHidden=" + boolText(includeHidden)
-			+ ";allowLiveFetch=" + boolText(allowLiveFetch)
-			+ ";usesCodexBackend=" + boolText(usesCodexBackend)
-			+ ";liveFetchAttempted=" + boolText(liveFetchAttempted)
-			+ ";selected=" + selectedModelId
-			+ ";selectedHidden=" + boolText(selectedHidden)
-			+ ";default=" + defaultModelId
-			+ ";catalogCount=" + Std.string(catalogCount)
-			+ ";providerModelCount=" + Std.string(providerModelCount)
-			+ ";visible=" + Std.string(visibleCount)
-			+ ";hidden=" + Std.string(hiddenCount)
-			+ ";apiFiltered=" + Std.string(apiFilteredCount)
-			+ ";capabilities={" + capabilitySummary + "}"
-			+ ";models=[" + modelSummaries.join("##") + "]"
-			+ ";error=" + errorMessage
-			+ ";sequence=" + sequence;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";provider=" + providerId + ";admissionCode=" + admissionCode
+			+ ";catalogSource=" + catalogSource + ";refreshStrategy=" + refreshStrategy + ";includeHidden=" + boolText(includeHidden) + ";allowLiveFetch="
+			+ boolText(allowLiveFetch) + ";usesCodexBackend=" + boolText(usesCodexBackend) + ";liveFetchAttempted=" + boolText(liveFetchAttempted)
+			+ ";selected=" + selectedModelId + ";selectedHidden=" + boolText(selectedHidden) + ";default=" + defaultModelId + ";catalogCount="
+			+ Std.string(catalogCount) + ";providerModelCount=" + Std.string(providerModelCount) + ";visible=" + Std.string(visibleCount) + ";hidden="
+			+ Std.string(hiddenCount) + ";apiFiltered=" + Std.string(apiFilteredCount) + ";capabilities={" + capabilitySummary + "}" + ";models=["
+			+ modelSummaries.join("##") + "]" + ";error=" + errorMessage + ";sequence=" + sequence;
 	}
 
 	static function boolText(value:Bool):String {

@@ -20,26 +20,9 @@ class ThreadReadTurnGoalFinalizationOutcome {
 	public final sequence:String;
 	public final message:String;
 
-	function new(
-		ok:Bool,
-		code:String,
-		kind:String,
-		runtimeAvailable:Bool,
-		runtimeEnabled:Bool,
-		accountingAttempted:Bool,
-		accountingMode:String,
-		budgetLimitedDisposition:String,
-		eventId:String,
-		accountingOk:Bool,
-		accountingCode:String,
-		progressReturned:Bool,
-		activeGoalCleared:Bool,
-		finishTurnCalled:Bool,
-		turnStatePreserved:Bool,
-		warningLogged:Bool,
-		sequence:String,
-		message:String
-	) {
+	function new(ok:Bool, code:String, kind:String, runtimeAvailable:Bool, runtimeEnabled:Bool, accountingAttempted:Bool, accountingMode:String,
+			budgetLimitedDisposition:String, eventId:String, accountingOk:Bool, accountingCode:String, progressReturned:Bool, activeGoalCleared:Bool,
+			finishTurnCalled:Bool, turnStatePreserved:Bool, warningLogged:Bool, sequence:String, message:String) {
 		this.ok = ok;
 		this.code = code;
 		this.kind = kind;
@@ -61,100 +44,41 @@ class ThreadReadTurnGoalFinalizationOutcome {
 	}
 
 	public static function runtimeMissing(kind:String):ThreadReadTurnGoalFinalizationOutcome {
-		return new ThreadReadTurnGoalFinalizationOutcome(
-			true,
-			"runtime_missing_skip",
-			kind,
-			false,
-			false,
-			false,
-			"none",
-			"none",
-			"",
-			true,
-			"",
-			false,
-			false,
-			false,
-			true,
-			false,
-			hookName(kind) + "->goal_runtime_handle/none->return",
-			"turn finalization skipped because the goal runtime was unavailable"
-		);
+		return new ThreadReadTurnGoalFinalizationOutcome(true, "runtime_missing_skip", kind, false, false, false, "none", "none", "", true, "", false, false,
+			false, true, false, hookName(kind) + "->goal_runtime_handle/none->return", "turn finalization skipped because the goal runtime was unavailable");
 	}
 
 	public static function runtimeDisabled(kind:String):ThreadReadTurnGoalFinalizationOutcome {
-		return new ThreadReadTurnGoalFinalizationOutcome(
-			true,
-			"runtime_disabled_skip",
-			kind,
-			true,
-			false,
-			false,
-			"none",
-			"none",
-			"",
-			true,
-			"",
-			false,
-			false,
-			false,
-			true,
-			false,
-			hookName(kind) + "->runtime_disabled->return",
-			"turn finalization skipped because the goal runtime was disabled"
-		);
+		return new ThreadReadTurnGoalFinalizationOutcome(true, "runtime_disabled_skip", kind, true, false, false, "none", "none", "", true, "", false, false,
+			false, true, false, hookName(kind) + "->runtime_disabled->return", "turn finalization skipped because the goal runtime was disabled");
 	}
 
 	public static function accountingError(kind:String, eventId:String, accountingCode:String):ThreadReadTurnGoalFinalizationOutcome {
-		return new ThreadReadTurnGoalFinalizationOutcome(
-			true,
-			"accounting_error_preserved_turn",
-			kind,
-			true,
-			true,
-			true,
-			"active_only",
-			ThreadReadGoalAccountingDisposition.ClearActive,
-			eventId,
-			false,
-			accountingCode,
-			false,
-			false,
-			false,
-			true,
-			true,
-			hookName(kind) + "->account_active_goal_progress:" + eventId + "/error:" + accountingCode + "->warn->return",
-			"active goal progress accounting failed and finish_turn was skipped"
-		);
+		return new ThreadReadTurnGoalFinalizationOutcome(true, "accounting_error_preserved_turn", kind, true, true, true, "active_only",
+			ThreadReadGoalAccountingDisposition.ClearActive, eventId, false, accountingCode, false, false, false, true, true,
+			hookName(kind)
+			+ "->account_active_goal_progress:"
+			+ eventId
+			+ "/error:"
+			+ accountingCode
+			+ "->warn->return",
+			"active goal progress accounting failed and finish_turn was skipped");
 	}
 
-	public static function finalized(
-		kind:String,
-		eventId:String,
-		accounting:ThreadReadActiveGoalProgressAccountingOutcome
-	):ThreadReadTurnGoalFinalizationOutcome {
+	public static function finalized(kind:String, eventId:String,
+			accounting:ThreadReadActiveGoalProgressAccountingOutcome):ThreadReadTurnGoalFinalizationOutcome {
 		final suffix = accounting.progressReturned ? "with_progress" : "without_progress";
-		return new ThreadReadTurnGoalFinalizationOutcome(
-			true,
-			kind + "_finalized_" + suffix,
-			kind,
-			true,
-			true,
-			true,
-			"active_only",
-			ThreadReadGoalAccountingDisposition.ClearActive,
-			eventId,
-			true,
-			accounting.code,
-			accounting.progressReturned,
-			accounting.activeGoalCleared,
-			true,
-			false,
-			false,
-			hookName(kind) + "->account_active_goal_progress:" + eventId + "/ok:" + accounting.code + "->finish_turn",
-			"active goal progress accounting completed and finish_turn removed the turn"
-		);
+		return new ThreadReadTurnGoalFinalizationOutcome(true, kind
+			+ "_finalized_"
+			+ suffix, kind, true, true, true, "active_only",
+			ThreadReadGoalAccountingDisposition.ClearActive, eventId, true, accounting.code, accounting.progressReturned, accounting.activeGoalCleared, true,
+			false, false, hookName(kind)
+			+ "->account_active_goal_progress:"
+			+ eventId
+			+ "/ok:"
+			+ accounting.code
+			+ "->finish_turn",
+			"active goal progress accounting completed and finish_turn removed the turn");
 	}
 
 	static function hookName(kind:String):String {
@@ -162,23 +86,11 @@ class ThreadReadTurnGoalFinalizationOutcome {
 	}
 
 	public function summary():String {
-		return "ok=" + (ok ? "true" : "false")
-			+ ";code=" + code
-			+ ";kind=" + kind
-			+ ";runtimeAvailable=" + (runtimeAvailable ? "true" : "false")
-			+ ";runtimeEnabled=" + (runtimeEnabled ? "true" : "false")
-			+ ";accountingAttempted=" + (accountingAttempted ? "true" : "false")
-			+ ";mode=" + accountingMode
-			+ ";disposition=" + budgetLimitedDisposition
-			+ ";eventId=" + eventId
-			+ ";accountingOk=" + (accountingOk ? "true" : "false")
-			+ ";accountingCode=" + accountingCode
-			+ ";progressReturned=" + (progressReturned ? "true" : "false")
-			+ ";activeCleared=" + (activeGoalCleared ? "true" : "false")
-			+ ";finishTurn=" + (finishTurnCalled ? "true" : "false")
-			+ ";turnPreserved=" + (turnStatePreserved ? "true" : "false")
-			+ ";warning=" + (warningLogged ? "true" : "false")
-			+ ";sequence=" + sequence
-			+ ";message=" + message;
+		return "ok=" + (ok ? "true" : "false") + ";code=" + code + ";kind=" + kind + ";runtimeAvailable=" + (runtimeAvailable ? "true" : "false")
+			+ ";runtimeEnabled=" + (runtimeEnabled ? "true" : "false") + ";accountingAttempted=" + (accountingAttempted ? "true" : "false") + ";mode="
+			+ accountingMode + ";disposition=" + budgetLimitedDisposition + ";eventId=" + eventId + ";accountingOk=" + (accountingOk ? "true" : "false")
+			+ ";accountingCode=" + accountingCode + ";progressReturned=" + (progressReturned ? "true" : "false") + ";activeCleared="
+			+ (activeGoalCleared ? "true" : "false") + ";finishTurn=" + (finishTurnCalled ? "true" : "false") + ";turnPreserved="
+			+ (turnStatePreserved ? "true" : "false") + ";warning=" + (warningLogged ? "true" : "false") + ";sequence=" + sequence + ";message=" + message;
 	}
 }

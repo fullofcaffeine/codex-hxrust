@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelClearOnlyUiResetPolicy {
 	public static function apply(request:ModelClearOnlyUiResetRequest):ModelClearOnlyUiResetOutcome {
-		if (request == null) return failure("", "missing clear-only UI reset request");
+		if (request == null)
+			return failure("", "missing clear-only UI reset request");
 
 		final resetAvailable = request.resetInvoked;
 		final overlayCleared = resetAvailable;
@@ -16,31 +17,13 @@ class ModelClearOnlyUiResetPolicy {
 		final backtrackPendingRollbackCleared = resetAvailable;
 		final backtrackRenderPendingCleared = resetAvailable;
 		final skillWarningsCleared = resetAvailable;
-		final chatSessionThreadPreserved = resetAvailable
-			&& request.threadId.length > 0
-			&& request.chatSessionThreadPresentBefore;
+		final chatSessionThreadPreserved = resetAvailable && request.threadId.length > 0 && request.chatSessionThreadPresentBefore;
 		final composerDraftPreserved = resetAvailable && request.composerDraftBefore.length > 0;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final decisionKind = resetAvailable
-			? ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetApplied
-			: request.threadId.length > 0
-				? ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetSkipped
-				: ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetUnavailable;
-		final ok = resetAvailable
-			&& overlayCleared
-			&& transcriptCleared
-			&& deferredHistoryCleared
-			&& historyEmittedFlagReset
-			&& transcriptReflowCleared
-			&& initialHistoryReplayBufferCleared
-			&& backtrackPrimedCleared
-			&& backtrackPreviewCleared
-			&& backtrackPendingRollbackCleared
-			&& backtrackRenderPendingCleared
-			&& skillWarningsCleared
-			&& chatSessionThreadPreserved
-			&& composerDraftPreserved
-			&& eventOrderingPreserved;
+		final decisionKind = resetAvailable ? ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetApplied : request.threadId.length > 0 ? ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetSkipped : ModelClearOnlyUiResetDecisionKind.ClearOnlyUiResetUnavailable;
+		final ok = resetAvailable && overlayCleared && transcriptCleared && deferredHistoryCleared && historyEmittedFlagReset && transcriptReflowCleared
+			&& initialHistoryReplayBufferCleared && backtrackPrimedCleared && backtrackPreviewCleared && backtrackPendingRollbackCleared
+			&& backtrackRenderPendingCleared && skillWarningsCleared && chatSessionThreadPreserved && composerDraftPreserved && eventOrderingPreserved;
 
 		return new ModelClearOnlyUiResetOutcome({
 			ok: ok,

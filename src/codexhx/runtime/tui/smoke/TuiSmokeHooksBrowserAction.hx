@@ -78,7 +78,6 @@ class TuiSmokeHooksBrowserAction {
 	public final unsupportedRejected:Bool;
 	public final failureCode:String;
 
-
 	public function pageTransitionText():String {
 		return pageBefore + "->" + pageAfter;
 	}

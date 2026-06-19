@@ -18,17 +18,13 @@ class TuiSmokeThreadNotification {
 	public final delta:String;
 	public final message:String;
 
-
 	public function displayText():String {
 		return switch kind {
 			case TuiSmokeThreadNotificationKind.ThreadStatus:
 				status.length > 0 ? status : notificationId;
 			case TuiSmokeThreadNotificationKind.AssistantDelta:
 				delta.length > 0 ? delta : notificationId;
-			case TuiSmokeThreadNotificationKind.Warning
-				| TuiSmokeThreadNotificationKind.ThreadArchived
-				| TuiSmokeThreadNotificationKind.ThreadUnarchived
-				| TuiSmokeThreadNotificationKind.ThreadClosed:
+			case TuiSmokeThreadNotificationKind.Warning | TuiSmokeThreadNotificationKind.ThreadArchived | TuiSmokeThreadNotificationKind.ThreadUnarchived | TuiSmokeThreadNotificationKind.ThreadClosed:
 				message.length > 0 ? message : notificationId;
 			case _:
 				notificationId;

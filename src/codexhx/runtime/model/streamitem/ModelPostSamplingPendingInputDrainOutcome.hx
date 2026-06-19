@@ -22,28 +22,11 @@ class ModelPostSamplingPendingInputDrainOutcome {
 	public final orderedItemsSummary:String;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		integrationRequestId:String,
-		drainKind:ModelPostSamplingPendingInputDrainKind,
-		canDrainPendingInput:Bool,
-		acceptsMailboxDelivery:Bool,
-		activeTurnItemCount:Int,
-		mailboxItemCount:Int,
-		drainedItemCount:Int,
-		userInputRecordedCount:Int,
-		responseItemRecordedCount:Int,
-		mailboxAppendedAfterActiveTurn:Bool,
-		hookRecordingAttempted:Bool,
-		promptAssemblyAfterHooks:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		orderedItemsSummary:String,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, integrationRequestId:String, drainKind:ModelPostSamplingPendingInputDrainKind,
+			canDrainPendingInput:Bool, acceptsMailboxDelivery:Bool, activeTurnItemCount:Int, mailboxItemCount:Int, drainedItemCount:Int,
+			userInputRecordedCount:Int, responseItemRecordedCount:Int, mailboxAppendedAfterActiveTurn:Bool, hookRecordingAttempted:Bool,
+			promptAssemblyAfterHooks:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, orderedItemsSummary:String,
+			errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -67,26 +50,14 @@ class ModelPostSamplingPendingInputDrainOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";integrationRequest=" + integrationRequestId
-			+ ";drainKind=" + drainKind
-			+ ";canDrainPendingInput=" + boolText(canDrainPendingInput)
-			+ ";acceptsMailboxDelivery=" + boolText(acceptsMailboxDelivery)
-			+ ";activeTurnItemCount=" + Std.string(activeTurnItemCount)
-			+ ";mailboxItemCount=" + Std.string(mailboxItemCount)
-			+ ";drainedItemCount=" + Std.string(drainedItemCount)
-			+ ";userInputRecordedCount=" + Std.string(userInputRecordedCount)
-			+ ";responseItemRecordedCount=" + Std.string(responseItemRecordedCount)
-			+ ";mailboxAppendedAfterActiveTurn=" + boolText(mailboxAppendedAfterActiveTurn)
-			+ ";hookRecordingAttempted=" + boolText(hookRecordingAttempted)
-			+ ";promptAssemblyAfterHooks=" + boolText(promptAssemblyAfterHooks)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";orderedItems=[" + orderedItemsSummary + "]"
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";integrationRequest=" + integrationRequestId + ";drainKind=" + drainKind
+			+ ";canDrainPendingInput=" + boolText(canDrainPendingInput) + ";acceptsMailboxDelivery=" + boolText(acceptsMailboxDelivery)
+			+ ";activeTurnItemCount=" + Std.string(activeTurnItemCount) + ";mailboxItemCount=" + Std.string(mailboxItemCount) + ";drainedItemCount="
+			+ Std.string(drainedItemCount) + ";userInputRecordedCount=" + Std.string(userInputRecordedCount) + ";responseItemRecordedCount="
+			+ Std.string(responseItemRecordedCount) + ";mailboxAppendedAfterActiveTurn=" + boolText(mailboxAppendedAfterActiveTurn)
+			+ ";hookRecordingAttempted=" + boolText(hookRecordingAttempted) + ";promptAssemblyAfterHooks=" + boolText(promptAssemblyAfterHooks)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";orderedItems=[" + orderedItemsSummary + "]" + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

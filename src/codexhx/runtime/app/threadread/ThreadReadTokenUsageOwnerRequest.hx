@@ -10,7 +10,6 @@ class ThreadReadTokenUsageOwnerRequest {
 	}
 
 	public function summary():String {
-		return "turns=" + Std.string(turns.length)
-			+ ";ownerHint=" + (ownerHint == null ? "none" : ownerHint.summary());
+		return "turns=" + Std.string(turns.length) + ";ownerHint=" + (ownerHint == null ? "none" : ownerHint.summary());
 	}
 }

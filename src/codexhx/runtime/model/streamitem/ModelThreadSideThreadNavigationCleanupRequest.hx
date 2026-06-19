@@ -23,29 +23,12 @@ class ModelThreadSideThreadNavigationCleanupRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		composerHandoffOutcome:ModelThreadSideThreadComposerHandoffOutcome,
-		currentDisplayedThreadIsSide:Bool,
-		targetIsCurrentSideThread:Bool,
-		targetIsParentThread:Bool,
-		selectedByParentSwitch:Bool,
-		selectTargetSucceeded:Bool,
-		discardClosedNotification:Bool,
-		activeThreadWasSideBeforeSwitch:Bool,
-		activeThreadIsDiscardTarget:Bool,
-		activeTurnPresent:Bool,
-		interruptSucceeded:Bool,
-		unsubscribeSucceeded:Bool,
-		threadEventChannelBefore:Bool,
-		sideThreadLocalStateBefore:Bool,
-		agentNavigationEntryBefore:Bool,
-		pendingInactiveRequests:Bool,
-		keepVisibleSelectSucceeded:Bool,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, composerHandoffOutcome:ModelThreadSideThreadComposerHandoffOutcome, currentDisplayedThreadIsSide:Bool,
+			targetIsCurrentSideThread:Bool, targetIsParentThread:Bool, selectedByParentSwitch:Bool, selectTargetSucceeded:Bool,
+			discardClosedNotification:Bool, activeThreadWasSideBeforeSwitch:Bool, activeThreadIsDiscardTarget:Bool, activeTurnPresent:Bool,
+			interruptSucceeded:Bool, unsubscribeSucceeded:Bool, threadEventChannelBefore:Bool, sideThreadLocalStateBefore:Bool,
+			agentNavigationEntryBefore:Bool, pendingInactiveRequests:Bool, keepVisibleSelectSucceeded:Bool, eventOrderIndex:Int, previousEventCount:Int,
+			secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.composerHandoffOutcome = composerHandoffOutcome;
 		this.currentDisplayedThreadIsSide = currentDisplayedThreadIsSide;

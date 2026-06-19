@@ -9,13 +9,8 @@ class ModelStreamRouteRequest {
 	public final events:Array<ModelStreamFixtureEvent>;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		envelopeRequest:ModelRequestEnvelopeRequest,
-		upstreamRequestId:String,
-		events:Array<ModelStreamFixtureEvent>,
-		secretProbe:String
-	) {
+	public function new(requestId:String, envelopeRequest:ModelRequestEnvelopeRequest, upstreamRequestId:String, events:Array<ModelStreamFixtureEvent>,
+			secretProbe:String) {
 		this.requestId = requestId;
 		this.envelopeRequest = envelopeRequest;
 		this.upstreamRequestId = upstreamRequestId;

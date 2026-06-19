@@ -19,25 +19,10 @@ class ModelAppServerRequestResolutionRequest {
 	public final duplicateResponse:Bool;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		surfaceOutcome:ModelReplayedServerRequestSurfaceOutcome,
-		requestKind:ModelReplayedServerRequestKind,
-		commandKind:ModelAppServerRequestResolutionCommandKind,
-		appServerRequestId:String,
-		requestKey:String,
-		commandKey:String,
-		serverName:String,
-		commandServerName:String,
-		mcpRequestId:String,
-		commandMcpRequestId:String,
-		pendingItemId:String,
-		pendingRequestCountBefore:Int,
-		userInputQueueLengthBefore:Int,
-		userInputQueuePosition:Int,
-		duplicateResponse:Bool,
-		secretProbe:String
-	) {
+	public function new(requestId:String, surfaceOutcome:ModelReplayedServerRequestSurfaceOutcome, requestKind:ModelReplayedServerRequestKind,
+			commandKind:ModelAppServerRequestResolutionCommandKind, appServerRequestId:String, requestKey:String, commandKey:String, serverName:String,
+			commandServerName:String, mcpRequestId:String, commandMcpRequestId:String, pendingItemId:String, pendingRequestCountBefore:Int,
+			userInputQueueLengthBefore:Int, userInputQueuePosition:Int, duplicateResponse:Bool, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.surfaceOutcome = surfaceOutcome;
 		this.requestKind = requestKind == null ? ModelReplayedServerRequestKind.UserInput : requestKind;

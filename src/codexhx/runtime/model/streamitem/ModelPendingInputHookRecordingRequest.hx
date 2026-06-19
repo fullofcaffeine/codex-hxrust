@@ -6,12 +6,8 @@ class ModelPendingInputHookRecordingRequest {
 	public final items:Array<ModelPendingInputHookRecordingItem>;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		drainOutcome:ModelPostSamplingPendingInputDrainOutcome,
-		items:Array<ModelPendingInputHookRecordingItem>,
-		secretProbe:String
-	) {
+	public function new(requestId:String, drainOutcome:ModelPostSamplingPendingInputDrainOutcome, items:Array<ModelPendingInputHookRecordingItem>,
+			secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.drainOutcome = drainOutcome;
 		this.items = items == null ? [] : items;

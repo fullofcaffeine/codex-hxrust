@@ -40,15 +40,9 @@ class ThreadReadGoalRuntimeRestoreHarness {
 			final caseObject = objectValue(value);
 			final runtime = objectField(caseObject, "runtime");
 			final state = objectField(caseObject, "state");
-			out.push(new ThreadReadGoalRuntimeRestoreRequest(
-				boolField(runtime, "present", false),
-				boolField(runtime, "enabled", false),
-				boolField(state, "readOk", false),
-				stringField(state, "readErrorCode", ""),
-				goalValue(valueField(state, "goal")),
-				stringField(state, "goalId", ""),
-				stringField(runtime, "previousActiveGoalId", "")
-			));
+			out.push(new ThreadReadGoalRuntimeRestoreRequest(boolField(runtime, "present", false), boolField(runtime, "enabled", false),
+				boolField(state, "readOk", false), stringField(state, "readErrorCode", ""), goalValue(valueField(state, "goal")),
+				stringField(state, "goalId", ""), stringField(runtime, "previousActiveGoalId", "")));
 		}
 		return out;
 	}
@@ -58,7 +52,8 @@ class ThreadReadGoalRuntimeRestoreHarness {
 			case JNull: null;
 			case _:
 				final parsed = ThreadGoal.parseApp(value);
-				if (!parsed.ok) throw "invalid goal fixture: " + parsed.errorCode;
+				if (!parsed.ok)
+					throw "invalid goal fixture: " + parsed.errorCode;
 				parsed.value;
 		}
 	}
@@ -126,7 +121,8 @@ class ThreadReadGoalRuntimeRestoreHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -143,7 +139,8 @@ class ThreadReadGoalRuntimeRestoreHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -152,10 +149,12 @@ class ThreadReadGoalRuntimeRestoreHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

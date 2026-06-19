@@ -32,7 +32,8 @@ class ThreadReadResumeGoalSnapshotHarness {
 			assertEquals(stringField(expect, "continuationIntent", ""), outcome.continuationIntent);
 			assertEquals(stringField(expect, "pendingRequestsReplayPoint", ""), outcome.pendingRequestsReplayPoint);
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -42,51 +43,29 @@ class ThreadReadResumeGoalSnapshotHarness {
 		for (value in values) {
 			final caseObject = objectValue(value);
 			final operation:ThreadReadTokenUsageReplayDeliveryOperation = cast stringField(caseObject, "operation", "");
-			out.push(new ThreadReadResumeGoalSnapshotRequest(
-				operation,
-				boolField(caseObject, "responseReady", false),
-				boolField(caseObject, "goalsFeatureEnabled", false),
-				boolField(caseObject, "stateDbAvailable", false),
+			out.push(new ThreadReadResumeGoalSnapshotRequest(operation, boolField(caseObject, "responseReady", false),
+				boolField(caseObject, "goalsFeatureEnabled", false), boolField(caseObject, "stateDbAvailable", false),
 				boolField(caseObject, "pendingRequestsReplayAfterSnapshot", false),
-				tokenUsageDelivery(operation, stringField(caseObject, "tokenUsageDelivery", "")),
-				goal(optionalStringField(caseObject, "goalStatus"))
-			));
+				tokenUsageDelivery(operation, stringField(caseObject, "tokenUsageDelivery", "")), goal(optionalStringField(caseObject, "goalStatus"))));
 		}
 		return out;
 	}
 
-	static function tokenUsageDelivery(
-		operation:ThreadReadTokenUsageReplayDeliveryOperation,
-		kind:String
-	):ThreadReadTokenUsageReplayDeliveryOutcome {
-		if (kind == "delivered") return ThreadReadTokenUsageReplayDeliveryOutcome.makeDelivered(operation, "conn-resume-goal");
+	static function tokenUsageDelivery(operation:ThreadReadTokenUsageReplayDeliveryOperation, kind:String):ThreadReadTokenUsageReplayDeliveryOutcome {
+		if (kind == "delivered")
+			return ThreadReadTokenUsageReplayDeliveryOutcome.makeDelivered(operation, "conn-resume-goal");
 		if (kind == "skipped_no_payload") {
-			return ThreadReadTokenUsageReplayDeliveryOutcome.makeSkipped(
-				operation,
-				"skipped_no_payload",
-				"no restored token usage notification payload was available"
-			);
+			return ThreadReadTokenUsageReplayDeliveryOutcome.makeSkipped(operation, "skipped_no_payload",
+				"no restored token usage notification payload was available");
 		}
-		return ThreadReadTokenUsageReplayDeliveryOutcome.failure(
-			operation,
-			"response_not_ready",
-			"restored token usage replay must be ordered after the JSON-RPC response"
-		);
+		return ThreadReadTokenUsageReplayDeliveryOutcome.failure(operation, "response_not_ready",
+			"restored token usage replay must be ordered after the JSON-RPC response");
 	}
 
 	static function goal(status:String):ThreadGoal {
-		if (status.length == 0) return null;
-		return new ThreadGoal(
-			threadId(),
-			"keep polishing",
-			status,
-			true,
-			100000,
-			1200,
-			300,
-			200000,
-			200100
-		);
+		if (status.length == 0)
+			return null;
+		return new ThreadGoal(threadId(), "keep polishing", status, true, 100000, 1200, 300, 200000, 200100);
 	}
 
 	static function threadId():String {
@@ -164,7 +143,8 @@ class ThreadReadResumeGoalSnapshotHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -181,7 +161,8 @@ class ThreadReadResumeGoalSnapshotHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -190,10 +171,12 @@ class ThreadReadResumeGoalSnapshotHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

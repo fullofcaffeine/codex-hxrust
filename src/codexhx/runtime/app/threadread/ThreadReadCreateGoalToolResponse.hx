@@ -23,9 +23,12 @@ class ThreadReadCreateGoalToolResponse {
 	}
 
 	public function summary():String {
-		return "goalPresent=" + boolText(goal != null)
-			+ ";remainingTokens=" + (hasRemainingTokens ? Std.string(remainingTokens) : "null")
-			+ ";completionBudgetReport=" + (hasCompletionBudgetReport ? completionBudgetReport : "null");
+		return "goalPresent="
+			+ boolText(goal != null)
+			+ ";remainingTokens="
+			+ (hasRemainingTokens ? Std.string(remainingTokens) : "null")
+			+ ";completionBudgetReport="
+			+ (hasCompletionBudgetReport ? completionBudgetReport : "null");
 	}
 
 	static function boolText(value:Bool):String {

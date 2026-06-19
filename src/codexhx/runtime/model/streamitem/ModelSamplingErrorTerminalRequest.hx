@@ -10,16 +10,8 @@ class ModelSamplingErrorTerminalRequest {
 	public final terminalStopHookOutcome:ModelTerminalStopHookOutcome;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		errorKind:ModelSamplingErrorTerminalKind,
-		previousLastAgentMessage:String,
-		historyImagesReplaceable:Bool,
-		errorMessage:String,
-		codexErrorInfo:String,
-		terminalStopHookOutcome:ModelTerminalStopHookOutcome,
-		secretProbe:String
-	) {
+	public function new(requestId:String, errorKind:ModelSamplingErrorTerminalKind, previousLastAgentMessage:String, historyImagesReplaceable:Bool,
+			errorMessage:String, codexErrorInfo:String, terminalStopHookOutcome:ModelTerminalStopHookOutcome, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.errorKind = errorKind == null ? ModelSamplingErrorTerminalKind.GenericCodexError : errorKind;
 		this.previousLastAgentMessage = previousLastAgentMessage == null ? "" : previousLastAgentMessage;

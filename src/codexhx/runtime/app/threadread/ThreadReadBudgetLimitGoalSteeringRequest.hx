@@ -13,17 +13,8 @@ class ThreadReadBudgetLimitGoalSteeringRequest {
 	public final liveThreadAvailable:Bool;
 	public final activeTurnRunning:Bool;
 
-	public function new(
-		progressOk:Bool,
-		progressAvailable:Bool,
-		progressErrorCode:String,
-		goal:ThreadGoal,
-		goalId:String,
-		budgetLimitAlreadyReported:Bool,
-		threadManagerAvailable:Bool,
-		liveThreadAvailable:Bool,
-		activeTurnRunning:Bool
-	) {
+	public function new(progressOk:Bool, progressAvailable:Bool, progressErrorCode:String, goal:ThreadGoal, goalId:String, budgetLimitAlreadyReported:Bool,
+			threadManagerAvailable:Bool, liveThreadAvailable:Bool, activeTurnRunning:Bool) {
 		this.progressOk = progressOk;
 		this.progressAvailable = progressAvailable;
 		this.progressErrorCode = progressErrorCode;

@@ -49,7 +49,8 @@ class TuiSmokeTerminalStartupProbeAction {
 	}
 
 	public function cursorMatches():Bool {
-		if (cursorX < 0 && cursorY < 0) return parsedCursor() == "";
+		if (cursorX < 0 && cursorY < 0)
+			return parsedCursor() == "";
 		return parsedCursor() == cursorX + "," + cursorY;
 	}
 
@@ -90,7 +91,8 @@ class TuiSmokeTerminalStartupProbeAction {
 		var index = value.indexOf(prefix);
 		while (index >= 0) {
 			final end = value.indexOf("R", index + prefix.length);
-			if (end < 0) return null;
+			if (end < 0)
+				return null;
 			final body = value.substr(index + prefix.length, end - index - prefix.length);
 			final parts = body.split(";");
 			if (parts.length == 2) {
@@ -108,7 +110,8 @@ class TuiSmokeTerminalStartupProbeAction {
 	static function parseOscColor(value:String, colorSlot:Int):String {
 		final prefix = esc() + "]" + colorSlot + ";";
 		final start = value.indexOf(prefix);
-		if (start < 0) return "";
+		if (start < 0)
+			return "";
 		final payloadStart = start + prefix.length;
 		var index = payloadStart;
 		while (index < value.length) {
@@ -126,32 +129,40 @@ class TuiSmokeTerminalStartupProbeAction {
 	static function parseOscRgb(value:String):String {
 		final trimmed = StringTools.trim(value);
 		final colon = trimmed.indexOf(":");
-		if (colon < 0) return "";
+		if (colon < 0)
+			return "";
 		final prefix = trimmed.substr(0, colon).toLowerCase();
-		if (prefix != "rgb" && prefix != "rgba") return "";
+		if (prefix != "rgb" && prefix != "rgba")
+			return "";
 		final parts = trimmed.substr(colon + 1).split("/");
-		if ((prefix == "rgb" && parts.length != 3) || (prefix == "rgba" && parts.length != 4)) return "";
+		if ((prefix == "rgb" && parts.length != 3) || (prefix == "rgba" && parts.length != 4))
+			return "";
 		final r = parseComponent(parts[0]);
 		final g = parseComponent(parts[1]);
 		final b = parseComponent(parts[2]);
-		if (r < 0 || g < 0 || b < 0) return "";
-		if (prefix == "rgba" && parseComponent(parts[3]) < 0) return "";
+		if (r < 0 || g < 0 || b < 0)
+			return "";
+		if (prefix == "rgba" && parseComponent(parts[3]) < 0)
+			return "";
 		return r + "," + g + "," + b;
 	}
 
 	static function parseComponent(value:String):Int {
-		if (value.length != 2 && value.length != 4) return -1;
+		if (value.length != 2 && value.length != 4)
+			return -1;
 		var out = 0;
 		for (i in 0...value.length) {
 			final digit = hexDigit(value.charAt(i));
-			if (digit < 0) return -1;
+			if (digit < 0)
+				return -1;
 			out = out * 16 + digit;
 		}
 		return value.length == 2 ? out : Std.int(out / 257);
 	}
 
 	static function parseDecimal(value:String):Int {
-		if (value.length == 0) return -1;
+		if (value.length == 0)
+			return -1;
 		var out = 0;
 		for (i in 0...value.length) {
 			final digit = switch value.charAt(i) {
@@ -167,7 +178,8 @@ class TuiSmokeTerminalStartupProbeAction {
 				case "9": 9;
 				case _: -1;
 			}
-			if (digit < 0) return -1;
+			if (digit < 0)
+				return -1;
 			out = out * 10 + digit;
 		}
 		return out;

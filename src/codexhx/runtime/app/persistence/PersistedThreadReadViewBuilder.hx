@@ -7,10 +7,7 @@ import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
 
 class PersistedThreadReadViewBuilder {
-	public static function fromAdapterReport(
-		adapterReport:StateSqliteAdapterReport,
-		requests:Array<PersistedThreadReadRequest>
-	):PersistedThreadReadReport {
+	public static function fromAdapterReport(adapterReport:StateSqliteAdapterReport, requests:Array<PersistedThreadReadRequest>):PersistedThreadReadReport {
 		final outcomes:Array<PersistedThreadReadOutcome> = [];
 		for (request in requests) {
 			outcomes.push(readOne(adapterReport, request));
@@ -63,13 +60,7 @@ class PersistedThreadReadViewBuilder {
 			return PersistedThreadReadOutcome.failure("invalid_history_summary", "persisted history counts are inconsistent");
 		}
 
-		return PersistedThreadReadOutcome.success(new PersistedThreadReadView(
-			threadId,
-			sessionId,
-			rolloutPath,
-			row.archived,
-			"notLoaded",
-			new PersistedThreadHistorySummary(includeTurns, row.historyItemCount, row.persistedItemCount)
-		));
+		return PersistedThreadReadOutcome.success(new PersistedThreadReadView(threadId, sessionId, rolloutPath, row.archived, "notLoaded",
+			new PersistedThreadHistorySummary(includeTurns, row.historyItemCount, row.persistedItemCount)));
 	}
 }

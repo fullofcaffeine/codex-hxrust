@@ -34,7 +34,8 @@ class PersistedThreadReadViewHarness {
 			assertEquals(boolText(boolField(expect, "ok", false)), boolText(outcome.ok));
 			assertEquals(stringField(expect, "code", ""), outcome.code);
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -57,38 +58,23 @@ class PersistedThreadReadViewHarness {
 
 	static function reconcileRequest(command:Value):StateSqliteReconcileRequest {
 		final metadata = objectField(command, "metadata");
-		return new StateSqliteReconcileRequest(
-			new ThreadPersistenceMetadata(
-				ThreadId.fromString(stringField(metadata, "threadId", "")),
-				SessionId.fromString(stringField(metadata, "sessionId", "")),
-				PathLikeId.fromString(stringField(metadata, "rolloutPath", "")),
-				intField(metadata, "historyItemCount", 0),
-				intField(metadata, "persistedItemCount", 0),
-				stringArrayField(metadata, "rolloutItemKinds"),
-				boolField(metadata, "includeHistory", false),
-				boolField(metadata, "archived", false),
-				boolField(metadata, "goalStateRequested", false)
-			),
-			boolField(command, "mutationEnabled", false)
-		);
+		return new StateSqliteReconcileRequest(new ThreadPersistenceMetadata(ThreadId.fromString(stringField(metadata, "threadId", "")),
+			SessionId.fromString(stringField(metadata, "sessionId", "")), PathLikeId.fromString(stringField(metadata, "rolloutPath", "")),
+			intField(metadata, "historyItemCount", 0), intField(metadata, "persistedItemCount", 0), stringArrayField(metadata, "rolloutItemKinds"),
+			boolField(metadata, "includeHistory", false), boolField(metadata, "archived", false), boolField(metadata, "goalStateRequested", false)),
+			boolField(command, "mutationEnabled", false));
 	}
 
 	static function queryRequest(command:Value):StateSqliteQueryRequest {
-		return new StateSqliteQueryRequest(
-			ThreadId.fromString(stringField(command, "threadId", "")),
-			nullableBoolField(command, "archivedOnly")
-		);
+		return new StateSqliteQueryRequest(ThreadId.fromString(stringField(command, "threadId", "")), nullableBoolField(command, "archivedOnly"));
 	}
 
 	static function readRequestsFromFixture(values:Array<Value>):Array<PersistedThreadReadRequest> {
 		final out:Array<PersistedThreadReadRequest> = [];
 		for (value in values) {
 			final request = objectValue(value);
-			out.push(new PersistedThreadReadRequest(
-				ThreadId.fromString(stringField(request, "threadId", "")),
-				boolField(request, "includeTurns", false),
-				boolField(request, "includeArchived", false)
-			));
+			out.push(new PersistedThreadReadRequest(ThreadId.fromString(stringField(request, "threadId", "")), boolField(request, "includeTurns", false),
+				boolField(request, "includeArchived", false)));
 		}
 		return out;
 	}
@@ -127,8 +113,10 @@ class PersistedThreadReadViewHarness {
 		final out:Array<String> = [];
 		for (value in arrayField(object, name)) {
 			switch value {
-				case JString(text): out.push(text);
-				case _: throw "expected string array field";
+				case JString(text):
+					out.push(text);
+				case _:
+					throw "expected string array field";
 			}
 		}
 		return out;
@@ -179,7 +167,8 @@ class PersistedThreadReadViewHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -196,7 +185,8 @@ class PersistedThreadReadViewHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -205,10 +195,12 @@ class PersistedThreadReadViewHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

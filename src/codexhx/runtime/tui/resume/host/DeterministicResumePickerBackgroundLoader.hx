@@ -31,7 +31,8 @@ class DeterministicResumePickerBackgroundLoader implements ResumePickerBackgroun
 						case Cancelled(reason, _, _):
 							stream.push(ResumePickerHostEvent.failed(request.page.requestId, "", "cancelled", Std.string(reason)), AsyncDeliveryKind.Lossless);
 						case _:
-							stream.push(ResumePickerHostEvent.failed(request.page.requestId, "", "pending", "page task did not complete deterministically"), AsyncDeliveryKind.Lossless);
+							stream.push(ResumePickerHostEvent.failed(request.page.requestId, "", "pending", "page task did not complete deterministically"),
+								AsyncDeliveryKind.Lossless);
 					}
 				}
 			case ResumePickerBackgroundRequestKind.Preview:
@@ -52,13 +53,17 @@ class DeterministicResumePickerBackgroundLoader implements ResumePickerBackgroun
 		final readTask = source.requestTranscript(request.read);
 		return switch readTask.poll(AsyncContext.fixture(preview ? "preview" : "transcript")) {
 			case Ready(response, _, _):
-				stream.push(preview ? ResumePickerHostEvent.previewLoaded(response) : ResumePickerHostEvent.transcriptLoaded(response), AsyncDeliveryKind.Lossless);
+				stream.push(preview ? ResumePickerHostEvent.previewLoaded(response) : ResumePickerHostEvent.transcriptLoaded(response),
+					AsyncDeliveryKind.Lossless);
 			case Failed(error, _, _):
 				stream.push(ResumePickerHostEvent.failed(request.read.requestId, request.read.threadId, error.code, error.message), AsyncDeliveryKind.Lossless);
 			case Cancelled(reason, _, _):
-				stream.push(ResumePickerHostEvent.failed(request.read.requestId, request.read.threadId, "cancelled", Std.string(reason)), AsyncDeliveryKind.Lossless);
+				stream.push(ResumePickerHostEvent.failed(request.read.requestId, request.read.threadId, "cancelled", Std.string(reason)),
+					AsyncDeliveryKind.Lossless);
 			case _:
-				stream.push(ResumePickerHostEvent.failed(request.read.requestId, request.read.threadId, "pending", "thread/read task did not complete deterministically"), AsyncDeliveryKind.Lossless);
+				stream.push(ResumePickerHostEvent.failed(request.read.requestId, request.read.threadId, "pending",
+					"thread/read task did not complete deterministically"),
+					AsyncDeliveryKind.Lossless);
 		}
 	}
 

@@ -74,7 +74,6 @@ class TuiSmokeComposerFooterRenderAction {
 	public final noRatatuiRender:Bool;
 	public final unsupportedRejected:Bool;
 
-
 	public function modeTransitionText():String {
 		return modeBefore + "->" + modeAfter;
 	}

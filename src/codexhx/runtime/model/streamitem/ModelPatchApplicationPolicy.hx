@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelPatchApplicationPolicy {
 	public static function apply(request:ModelPatchApplicationRequest):ModelPatchApplicationOutcome {
-		if (request == null) return failure("", ModelPatchApplyStatus.Failed, "", "", [], "missing patch application request");
+		if (request == null)
+			return failure("", ModelPatchApplyStatus.Failed, "", "", [], "missing patch application request");
 		if (request.verificationOutcome == null || !request.verificationOutcome.ok || request.verificationOutcome.endEvent == null) {
 			return failure(request.requestId, ModelPatchApplyStatus.Failed, "", "", request.beforeFiles, "patch application requires a verified patch outcome");
 		}
@@ -16,7 +17,8 @@ class ModelPatchApplicationPolicy {
 		final after = copyFiles(before);
 		for (change in endEvent.changes) {
 			final error = applyChange(after, change);
-			if (error.length > 0) return failure(request.requestId, ModelPatchApplyStatus.Failed, endEvent.stdout, error, before, error);
+			if (error.length > 0)
+				return failure(request.requestId, ModelPatchApplyStatus.Failed, endEvent.stdout, error, before, error);
 		}
 		return success(request.requestId, ModelPatchApplyStatus.Completed, endEvent.stdout, endEvent.stderr, before, after);
 	}
@@ -27,13 +29,15 @@ class ModelPatchApplicationPolicy {
 			return "";
 		}
 		if (change.kind == ModelPatchFileChangeKind.Delete) {
-			if (!removeFile(files, change.path)) return "delete source missing from virtual workspace: " + change.path;
+			if (!removeFile(files, change.path))
+				return "delete source missing from virtual workspace: " + change.path;
 			return "";
 		}
 		if (change.kind == ModelPatchFileChangeKind.Update) {
 			final current = fileContent(files, change.path);
 			final updated = applyUpdateChunks(current, change);
-			if (updated == null) return "update chunk did not match virtual workspace: " + change.path;
+			if (updated == null)
+				return "update chunk did not match virtual workspace: " + change.path;
 			if (change.movePath.length > 0) {
 				removeFile(files, change.path);
 				putFile(files, change.movePath, updated);
@@ -54,34 +58,42 @@ class ModelPatchApplicationPolicy {
 				current = current + newBlock;
 			} else {
 				final index = current.indexOf(oldBlock);
-				if (index < 0) return null;
+				if (index < 0)
+					return null;
 				current = current.substr(0, index) + newBlock + current.substr(index + oldBlock.length);
 			}
-			if (chunk.isEndOfFile) current = trimTrailingBlankLines(current);
+			if (chunk.isEndOfFile)
+				current = trimTrailingBlankLines(current);
 		}
 		return current;
 	}
 
 	static function linesBlock(lines:Array<String>):String {
-		if (lines == null || lines.length == 0) return "";
+		if (lines == null || lines.length == 0)
+			return "";
 		return lines.join("\n") + "\n";
 	}
 
 	static function trimTrailingBlankLines(value:String):String {
 		var out = value;
-		while (out.length >= 2 && out.substr(out.length - 2) == "\n\n") out = out.substr(0, out.length - 1);
+		while (out.length >= 2 && out.substr(out.length - 2) == "\n\n")
+			out = out.substr(0, out.length - 1);
 		return out;
 	}
 
 	static function copyFiles(files:Array<ModelPatchVirtualFile>):Array<ModelPatchVirtualFile> {
 		final out:Array<ModelPatchVirtualFile> = [];
-		if (files == null) return out;
-		for (file in files) out.push(new ModelPatchVirtualFile(file.path, file.content));
+		if (files == null)
+			return out;
+		for (file in files)
+			out.push(new ModelPatchVirtualFile(file.path, file.content));
 		return out;
 	}
 
 	static function fileContent(files:Array<ModelPatchVirtualFile>, path:String):String {
-		for (file in files) if (file.path == path) return file.content;
+		for (file in files)
+			if (file.path == path)
+				return file.content;
 		return "";
 	}
 
@@ -109,51 +121,15 @@ class ModelPatchApplicationPolicy {
 		return false;
 	}
 
-	static function success(
-		requestId:String,
-		status:ModelPatchApplyStatus,
-		stdout:String,
-		stderr:String,
-		beforeFiles:Array<ModelPatchVirtualFile>,
-		afterFiles:Array<ModelPatchVirtualFile>
-	):ModelPatchApplicationOutcome {
-		return new ModelPatchApplicationOutcome(
-			true,
-			"patch_application_result_modeled",
-			requestId,
-			status,
-			stdout,
-			stderr,
-			beforeFiles,
-			afterFiles,
-			false,
-			false,
-			false,
-			""
-		);
+	static function success(requestId:String, status:ModelPatchApplyStatus, stdout:String, stderr:String, beforeFiles:Array<ModelPatchVirtualFile>,
+			afterFiles:Array<ModelPatchVirtualFile>):ModelPatchApplicationOutcome {
+		return new ModelPatchApplicationOutcome(true, "patch_application_result_modeled", requestId, status, stdout, stderr, beforeFiles, afterFiles, false,
+			false, false, "");
 	}
 
-	static function failure(
-		requestId:String,
-		status:ModelPatchApplyStatus,
-		stdout:String,
-		stderr:String,
-		beforeFiles:Array<ModelPatchVirtualFile>,
-		errorMessage:String
-	):ModelPatchApplicationOutcome {
-		return new ModelPatchApplicationOutcome(
-			false,
-			"patch_application_failed",
-			requestId,
-			status,
-			stdout,
-			stderr,
-			copyFiles(beforeFiles),
-			copyFiles(beforeFiles),
-			false,
-			false,
-			false,
-			errorMessage
-		);
+	static function failure(requestId:String, status:ModelPatchApplyStatus, stdout:String, stderr:String, beforeFiles:Array<ModelPatchVirtualFile>,
+			errorMessage:String):ModelPatchApplicationOutcome {
+		return new ModelPatchApplicationOutcome(false, "patch_application_failed", requestId, status, stdout, stderr, copyFiles(beforeFiles),
+			copyFiles(beforeFiles), false, false, false, errorMessage);
 	}
 }

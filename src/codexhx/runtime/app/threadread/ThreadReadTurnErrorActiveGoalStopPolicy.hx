@@ -30,61 +30,32 @@ class ThreadReadTurnErrorActiveGoalStopPolicy {
 		final progressEventId = request.turnId + ":" + eventNameFor(reason) + "-progress";
 		if (request.accountingOutcome == null || !request.accountingOutcome.ok) {
 			final code = request.accountingOutcome == null ? "accounting_outcome_missing" : request.accountingOutcome.code;
-			return ThreadReadTurnErrorActiveGoalStopOutcome.accountingFailure(
-				request.errorKind,
-				reason,
-				targetStatus,
-				progressEventId,
-				code
-			);
+			return ThreadReadTurnErrorActiveGoalStopOutcome.accountingFailure(request.errorKind, reason, targetStatus, progressEventId, code);
 		}
 
 		if (request.storedGoalLookupOutcomeKind == ThreadReadStoredGoalLookupOutcomeKind.Error) {
-			return ThreadReadTurnErrorActiveGoalStopOutcome.lookupFailure(
-				request.errorKind,
-				reason,
-				targetStatus,
-				progressEventId,
-				request.accountingOutcome,
-				request.storedGoalLookupErrorCode
-			);
+			return ThreadReadTurnErrorActiveGoalStopOutcome.lookupFailure(request.errorKind, reason, targetStatus, progressEventId, request.accountingOutcome,
+				request.storedGoalLookupErrorCode);
 		}
 
 		if (request.storedGoalLookupOutcomeKind == ThreadReadStoredGoalLookupOutcomeKind.Missing || request.storedGoal == null) {
-			return ThreadReadTurnErrorActiveGoalStopOutcome.missingStoredGoal(
-				request.errorKind,
-				reason,
-				targetStatus,
-				progressEventId,
-				request.accountingOutcome
-			);
+			return ThreadReadTurnErrorActiveGoalStopOutcome.missingStoredGoal(request.errorKind, reason, targetStatus, progressEventId,
+				request.accountingOutcome);
 		}
 
 		final previousStatus = request.storedGoal.status;
 		if (!canStop(previousStatus, targetStatus)) {
-			return ThreadReadTurnErrorActiveGoalStopOutcome.notStoppable(
-				request.errorKind,
-				reason,
-				targetStatus,
-				progressEventId,
-				request.accountingOutcome,
-				previousStatus
-			);
+			return ThreadReadTurnErrorActiveGoalStopOutcome.notStoppable(request.errorKind, reason, targetStatus, progressEventId, request.accountingOutcome,
+				previousStatus);
 		}
 
-		return ThreadReadTurnErrorActiveGoalStopOutcome.stopped(
-			request.errorKind,
-			reason,
-			targetStatus,
-			progressEventId,
-			request.turnId + ":" + eventNameFor(reason),
-			request.accountingOutcome,
-			previousStatus
-		);
+		return ThreadReadTurnErrorActiveGoalStopOutcome.stopped(request.errorKind, reason, targetStatus, progressEventId,
+			request.turnId + ":" + eventNameFor(reason), request.accountingOutcome, previousStatus);
 	}
 
 	static function stopReasonFor(errorKind:ThreadReadTurnErrorKind):ThreadReadActiveGoalStopReason {
-		if (errorKind == ThreadReadTurnErrorKind.UsageLimitExceeded) return ThreadReadActiveGoalStopReason.UsageLimit;
+		if (errorKind == ThreadReadTurnErrorKind.UsageLimitExceeded)
+			return ThreadReadActiveGoalStopReason.UsageLimit;
 		return ThreadReadActiveGoalStopReason.TurnError;
 	}
 

@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelThreadSnapshotCollabMetadataReplayPolicy {
 	public static function replay(request:ModelThreadSnapshotCollabMetadataReplayRequest):ModelThreadSnapshotCollabMetadataReplayOutcome {
-		if (request == null) return failure("", ModelTurnReplayKind.ThreadSnapshot, "missing collab metadata replay request");
+		if (request == null)
+			return failure("", ModelTurnReplayKind.ThreadSnapshot, "missing collab metadata replay request");
 
 		final reseeded = request.replacementCreatedBeforeReplay ? request.navigationEntries.copy() : [];
 		var namedWaitItemCount = 0;
@@ -16,18 +17,23 @@ class ModelThreadSnapshotCollabMetadataReplayPolicy {
 			final metadata = metadataForThread(reseeded, waitItem.receiverThreadId);
 			if (metadata == null) {
 				fallbackThreadIdRendered = true;
-				if (renderedWaitSummary.length == 0) renderedWaitSummary = "receiver=" + waitItem.receiverThreadId;
+				if (renderedWaitSummary.length == 0)
+					renderedWaitSummary = "receiver=" + waitItem.receiverThreadId;
 			} else {
 				namedWaitItemCount = namedWaitItemCount + 1;
 				final rendered = renderAgentLabel(metadata);
-				if (renderedWaitSummary.length == 0) renderedWaitSummary = rendered;
-				if (rendered == request.expectedAgentNickname + " [" + request.expectedAgentRole + "]") renderedWaitContainsMetadata = true;
+				if (renderedWaitSummary.length == 0)
+					renderedWaitSummary = rendered;
+				if (rendered == request.expectedAgentNickname + " [" + request.expectedAgentRole + "]")
+					renderedWaitContainsMetadata = true;
 			}
 		}
 
 		final agentNicknamePreserved = containsNickname(reseeded, request.expectedAgentNickname);
 		final agentRolePreserved = containsRole(reseeded, request.expectedAgentRole);
-		final metadataReseededBeforeReplay = request.replacementCreatedBeforeReplay && reseeded.length == request.navigationEntries.length && reseeded.length > 0;
+		final metadataReseededBeforeReplay = request.replacementCreatedBeforeReplay
+			&& reseeded.length == request.navigationEntries.length
+			&& reseeded.length > 0;
 		final ok = request.replayKind == ModelTurnReplayKind.ThreadSnapshot
 			&& metadataReseededBeforeReplay
 			&& agentNicknamePreserved
@@ -63,32 +69,37 @@ class ModelThreadSnapshotCollabMetadataReplayPolicy {
 	}
 
 	static function metadataForThread(entries:Array<ModelCollabAgentMetadataEntry>, threadId:String):ModelCollabAgentMetadataEntry {
-		for (entry in entries) if (entry.threadId == threadId) return entry;
+		for (entry in entries)
+			if (entry.threadId == threadId)
+				return entry;
 		return null;
 	}
 
 	static function containsNickname(entries:Array<ModelCollabAgentMetadataEntry>, nickname:String):Bool {
-		for (entry in entries) if (entry.agentNickname == nickname) return true;
+		for (entry in entries)
+			if (entry.agentNickname == nickname)
+				return true;
 		return false;
 	}
 
 	static function containsRole(entries:Array<ModelCollabAgentMetadataEntry>, role:String):Bool {
-		for (entry in entries) if (entry.agentRole == role) return true;
+		for (entry in entries)
+			if (entry.agentRole == role)
+				return true;
 		return false;
 	}
 
 	static function renderAgentLabel(metadata:ModelCollabAgentMetadataEntry):String {
-		if (metadata.agentNickname.length > 0 && metadata.agentRole.length > 0) return metadata.agentNickname + " [" + metadata.agentRole + "]";
-		if (metadata.agentNickname.length > 0) return metadata.agentNickname;
-		if (metadata.agentRole.length > 0) return "[" + metadata.agentRole + "]";
+		if (metadata.agentNickname.length > 0 && metadata.agentRole.length > 0)
+			return metadata.agentNickname + " [" + metadata.agentRole + "]";
+		if (metadata.agentNickname.length > 0)
+			return metadata.agentNickname;
+		if (metadata.agentRole.length > 0)
+			return "[" + metadata.agentRole + "]";
 		return metadata.threadId;
 	}
 
-	static function failure(
-		requestId:String,
-		replayKind:ModelTurnReplayKind,
-		errorMessage:String
-	):ModelThreadSnapshotCollabMetadataReplayOutcome {
+	static function failure(requestId:String, replayKind:ModelTurnReplayKind, errorMessage:String):ModelThreadSnapshotCollabMetadataReplayOutcome {
 		return new ModelThreadSnapshotCollabMetadataReplayOutcome({
 			ok: false,
 			code: "thread_snapshot_collab_metadata_replay_failed",

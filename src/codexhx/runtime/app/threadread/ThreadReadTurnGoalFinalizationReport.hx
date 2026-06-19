@@ -12,7 +12,8 @@ class ThreadReadTurnGoalFinalizationReport {
 	public function finalizedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.finishTurnCalled) count = count + 1;
+			if (outcome.finishTurnCalled)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadTurnGoalFinalizationReport {
 	public function skippedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.accountingAttempted) count = count + 1;
+			if (!outcome.accountingAttempted)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadTurnGoalFinalizationReport {
 	public function accountingErrorCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.accountingAttempted && !outcome.accountingOk) count = count + 1;
+			if (outcome.accountingAttempted && !outcome.accountingOk)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -36,7 +39,8 @@ class ThreadReadTurnGoalFinalizationReport {
 	public function warningCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.warningLogged) count = count + 1;
+			if (outcome.warningLogged)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -44,7 +48,8 @@ class ThreadReadTurnGoalFinalizationReport {
 	public function activeGoalClearedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.activeGoalCleared) count = count + 1;
+			if (outcome.activeGoalCleared)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -54,13 +59,8 @@ class ThreadReadTurnGoalFinalizationReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";finalized=" + Std.string(finalizedCount())
-			+ ";skipped=" + Std.string(skippedCount())
-			+ ";accountingErrors=" + Std.string(accountingErrorCount())
-			+ ";warnings=" + Std.string(warningCount())
-			+ ";activeCleared=" + Std.string(activeGoalClearedCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";finalized=" + Std.string(finalizedCount()) + ";skipped="
+			+ Std.string(skippedCount()) + ";accountingErrors=" + Std.string(accountingErrorCount()) + ";warnings=" + Std.string(warningCount())
+			+ ";activeCleared=" + Std.string(activeGoalClearedCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

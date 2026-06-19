@@ -161,12 +161,7 @@ class ResumePickerReloadPreviewInvalidationRenderGate {
 			visibleRow("thread-a", "Preview anchor", "2026-06-19T18:00:00Z", 3, true, previewLines),
 			visibleRow("thread-c", "Preview sibling", "2026-06-19T18:10:00Z", 8, false, [])
 		];
-		applyLoadedCommon(
-			state,
-			"preview_preserved_for_selected_thread",
-			"selected=thread-a;index=1;expanded=thread-a;previewLines=2",
-			"preview preserved"
-		);
+		applyLoadedCommon(state, "preview_preserved_for_selected_thread", "selected=thread-a;index=1;expanded=thread-a;previewLines=2", "preview preserved");
 	}
 
 	static function applyInvalidatedPreviewReload(state:ResumePickerState):Void {
@@ -191,12 +186,8 @@ class ResumePickerReloadPreviewInvalidationRenderGate {
 			visibleRow("thread-b", "Fallback preview target", "2026-06-19T18:05:00Z", 5, true, []),
 			visibleRow("thread-d", "Replacement preview row", "2026-06-19T18:20:00Z", 21, false, [])
 		];
-		applyLoadedCommon(
-			state,
-			"preview_invalidated_after_selection_change",
-			"missing=thread-a;selected=thread-b;expandedCleared=true;pendingCleared=true;previewLines=0",
-			"preview invalidated"
-		);
+		applyLoadedCommon(state, "preview_invalidated_after_selection_change",
+			"missing=thread-a;selected=thread-b;expandedCleared=true;pendingCleared=true;previewLines=0", "preview invalidated");
 	}
 
 	static function applyLoadedCommon(state:ResumePickerState, status:String, detail:String, footer:String):Void {
@@ -217,19 +208,11 @@ class ResumePickerReloadPreviewInvalidationRenderGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query
-			+ ";rows=" + state.loadedRows
-			+ ";selected=" + state.selectedIndex
-			+ ";thread=" + state.selectedThreadId
-			+ ";expanded=" + emptyLabel(state.expandedThreadId)
-			+ ";preview=" + emptyLabel(state.previewState)
-			+ ";previewRendered=" + boolLabel(state.previewRendered)
-			+ ";previewLines=" + state.previewLineCount
-			+ ";pending=" + emptyLabel(state.pendingThreadId)
-			+ ";transcript=" + emptyLabel(state.transcriptState)
-			+ ";footer=" + state.footerProgressLabel
-			+ ";loader=" + state.loaderEventStatus
-			+ ";detail=" + state.loaderEventDetail;
+		return "query=" + state.query + ";rows=" + state.loadedRows + ";selected=" + state.selectedIndex + ";thread=" + state.selectedThreadId
+			+ ";expanded=" + emptyLabel(state.expandedThreadId) + ";preview=" + emptyLabel(state.previewState) + ";previewRendered="
+			+ boolLabel(state.previewRendered) + ";previewLines=" + state.previewLineCount + ";pending=" + emptyLabel(state.pendingThreadId) + ";transcript="
+			+ emptyLabel(state.transcriptState) + ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail="
+			+ state.loaderEventDetail;
 	}
 
 	static function loadPage(loader:DeterministicResumePickerBackgroundLoader, request:ResumePickerThreadListRequest):ResumePickerHostEvent {
@@ -327,7 +310,8 @@ class ResumePickerReloadPreviewInvalidationRenderGate {
 		});
 	}
 
-	static function visibleRow(threadId:String, title:String, updatedAt:String, turnCount:Int, selected:Bool, previewLines:Array<String>):ResumePickerVisibleRow {
+	static function visibleRow(threadId:String, title:String, updatedAt:String, turnCount:Int, selected:Bool,
+			previewLines:Array<String>):ResumePickerVisibleRow {
 		return new ResumePickerVisibleRow({
 			threadId: threadId,
 			title: title,

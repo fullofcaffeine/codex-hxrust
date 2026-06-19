@@ -24,36 +24,16 @@ class ThreadReadGoalTokenUsageRecordPolicy {
 		final ignoredReasoning = reasoningDelta(request.lastAccountedUsage, request.totalUsage) > 0;
 		final ignoredTotal = totalDelta(request.lastAccountedUsage, request.totalUsage) != delta;
 		if (!request.accountTokens) {
-			return ThreadReadGoalTokenUsageRecordOutcome.notAccounted(
-				"token_accounting_disabled_skip",
-				request.turnStoreLevelId,
-				request.currentTurnId,
-				false,
-				delta,
-				ignoredReasoning,
-				ignoredTotal
-			);
+			return ThreadReadGoalTokenUsageRecordOutcome.notAccounted("token_accounting_disabled_skip", request.turnStoreLevelId, request.currentTurnId,
+				false, delta, ignoredReasoning, ignoredTotal);
 		}
 		if (delta <= 0) {
-			return ThreadReadGoalTokenUsageRecordOutcome.notAccounted(
-				"non_positive_delta_skip",
-				request.turnStoreLevelId,
-				request.currentTurnId,
-				true,
-				delta,
-				ignoredReasoning,
-				ignoredTotal
-			);
+			return ThreadReadGoalTokenUsageRecordOutcome.notAccounted("non_positive_delta_skip", request.turnStoreLevelId, request.currentTurnId, true, delta,
+				ignoredReasoning, ignoredTotal);
 		}
 		final otherDelta = request.otherUnflushedTokenDelta > 0 ? request.otherUnflushedTokenDelta : 0;
-		return ThreadReadGoalTokenUsageRecordOutcome.recordedDelta(
-			request.turnStoreLevelId,
-			request.currentTurnId,
-			delta,
-			delta + otherDelta,
-			ignoredReasoning,
-			ignoredTotal
-		);
+		return ThreadReadGoalTokenUsageRecordOutcome.recordedDelta(request.turnStoreLevelId, request.currentTurnId, delta, delta + otherDelta,
+			ignoredReasoning, ignoredTotal);
 	}
 
 	static function goalTokenDeltaSinceLastAccounting(last:ThreadReadTokenUsageBreakdown, current:ThreadReadTokenUsageBreakdown):Int {

@@ -17,7 +17,8 @@ class ModelPatchAppliedDelta {
 
 	public function summary():String {
 		final parts:Array<String> = [];
-		for (change in changes) parts.push(change.summary());
+		for (change in changes)
+			parts.push(change.summary());
 		return "known=" + boolText(known) + ";exact=" + boolText(exact) + ";changes=[" + parts.join("||") + "]";
 	}
 

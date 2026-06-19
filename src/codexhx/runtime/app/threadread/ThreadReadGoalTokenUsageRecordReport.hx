@@ -12,7 +12,8 @@ class ThreadReadGoalTokenUsageRecordReport {
 	public function recordedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.recorded) count = count + 1;
+			if (outcome.recorded)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadGoalTokenUsageRecordReport {
 	public function skippedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.recorded) count = count + 1;
+			if (!outcome.recorded)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadGoalTokenUsageRecordReport {
 	public function currentUsageUpdatedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.currentUsageUpdated) count = count + 1;
+			if (outcome.currentUsageUpdated)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -36,7 +39,8 @@ class ThreadReadGoalTokenUsageRecordReport {
 	public function ignoredReasoningCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.ignoredReasoningOutputTokens) count = count + 1;
+			if (outcome.ignoredReasoningOutputTokens)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -44,7 +48,8 @@ class ThreadReadGoalTokenUsageRecordReport {
 	public function ignoredTotalCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.ignoredTotalTokens) count = count + 1;
+			if (outcome.ignoredTotalTokens)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -54,13 +59,8 @@ class ThreadReadGoalTokenUsageRecordReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";recorded=" + Std.string(recordedCount())
-			+ ";skipped=" + Std.string(skippedCount())
-			+ ";currentUsageUpdated=" + Std.string(currentUsageUpdatedCount())
-			+ ";ignoredReasoning=" + Std.string(ignoredReasoningCount())
-			+ ";ignoredTotal=" + Std.string(ignoredTotalCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";recorded=" + Std.string(recordedCount()) + ";skipped="
+			+ Std.string(skippedCount()) + ";currentUsageUpdated=" + Std.string(currentUsageUpdatedCount()) + ";ignoredReasoning="
+			+ Std.string(ignoredReasoningCount()) + ";ignoredTotal=" + Std.string(ignoredTotalCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

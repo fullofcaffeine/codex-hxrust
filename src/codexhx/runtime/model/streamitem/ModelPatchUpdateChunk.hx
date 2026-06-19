@@ -32,17 +32,24 @@ class ModelPatchUpdateChunk {
 
 	public function unifiedDiff():String {
 		var out = changeContext.length > 0 ? "@@ " + changeContext + "\n" : "@@\n";
-		for (line in oldLines) out = out + "-" + line + "\n";
-		for (line in newLines) out = out + "+" + line + "\n";
-		if (isEndOfFile) out = out + "*** End of File\n";
+		for (line in oldLines)
+			out = out + "-" + line + "\n";
+		for (line in newLines)
+			out = out + "+" + line + "\n";
+		if (isEndOfFile)
+			out = out + "*** End of File\n";
 		return out;
 	}
 
 	public function summary():String {
-		return "context=" + noneIfEmpty(changeContext)
-			+ ";old=" + oldLines.join("\\n")
-			+ ";new=" + newLines.join("\\n")
-			+ ";eof=" + boolText(isEndOfFile);
+		return "context="
+			+ noneIfEmpty(changeContext)
+			+ ";old="
+			+ oldLines.join("\\n")
+			+ ";new="
+			+ newLines.join("\\n")
+			+ ";eof="
+			+ boolText(isEndOfFile);
 	}
 
 	static function boolText(value:Bool):String {

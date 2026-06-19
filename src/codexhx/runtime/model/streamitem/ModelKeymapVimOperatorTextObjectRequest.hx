@@ -33,12 +33,8 @@ class ModelKeymapVimOperatorTextObjectRequest {
 		this.configuredMotionRight = fields.configuredMotionRight;
 		this.prunedSelectInnerTextObject = fields.prunedSelectInnerTextObject == null ? [] : fields.prunedSelectInnerTextObject;
 		this.prunedSelectAroundTextObject = fields.prunedSelectAroundTextObject == null ? [] : fields.prunedSelectAroundTextObject;
-		this.explicitConflictOuterAction = fields.explicitConflictOuterAction == null
-			? ModelKeymapVimOperatorTextObjectActionKind.Unknown
-			: fields.explicitConflictOuterAction;
-		this.explicitConflictInnerAction = fields.explicitConflictInnerAction == null
-			? ModelKeymapVimOperatorTextObjectActionKind.Unknown
-			: fields.explicitConflictInnerAction;
+		this.explicitConflictOuterAction = fields.explicitConflictOuterAction == null ? ModelKeymapVimOperatorTextObjectActionKind.Unknown : fields.explicitConflictOuterAction;
+		this.explicitConflictInnerAction = fields.explicitConflictInnerAction == null ? ModelKeymapVimOperatorTextObjectActionKind.Unknown : fields.explicitConflictInnerAction;
 		this.explicitConflictBinding = fields.explicitConflictBinding;
 		this.previousEventCount = fields.previousEventCount;
 		this.eventOrderIndex = fields.eventOrderIndex;

@@ -22,23 +22,9 @@ class ModelStreamRouteOutcome {
 	public final errorMessage:String;
 	public final sequence:String;
 
-	function new(
-		ok:Bool,
-		code:String,
-		request:ModelStreamRouteRequest,
-		envelope:ModelRequestEnvelopeOutcome,
-		lastModelRequestId:String,
-		lastModelResponseId:String,
-		completed:Bool,
-		failed:Bool,
-		cancelled:Bool,
-		endTurn:Bool,
-		itemsAdded:Int,
-		totalTokens:Int,
-		liveNetworkAttempted:Bool,
-		errorMessage:String,
-		sequence:String
-	) {
+	function new(ok:Bool, code:String, request:ModelStreamRouteRequest, envelope:ModelRequestEnvelopeOutcome, lastModelRequestId:String,
+			lastModelResponseId:String, completed:Bool, failed:Bool, cancelled:Bool, endTurn:Bool, itemsAdded:Int, totalTokens:Int, liveNetworkAttempted:Bool,
+			errorMessage:String, sequence:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = request.requestId;
@@ -59,86 +45,25 @@ class ModelStreamRouteOutcome {
 		this.sequence = sequence;
 	}
 
-	public static function mapped(
-		request:ModelStreamRouteRequest,
-		envelope:ModelRequestEnvelopeOutcome,
-		lastModelRequestId:String,
-		lastModelResponseId:String,
-		completed:Bool,
-		failed:Bool,
-		cancelled:Bool,
-		endTurn:Bool,
-		itemsAdded:Int,
-		totalTokens:Int,
-		liveNetworkAttempted:Bool,
-		errorMessage:String,
-		sequence:String
-	):ModelStreamRouteOutcome {
+	public static function mapped(request:ModelStreamRouteRequest, envelope:ModelRequestEnvelopeOutcome, lastModelRequestId:String,
+			lastModelResponseId:String, completed:Bool, failed:Bool, cancelled:Bool, endTurn:Bool, itemsAdded:Int, totalTokens:Int, liveNetworkAttempted:Bool,
+			errorMessage:String, sequence:String):ModelStreamRouteOutcome {
 		final code = completed ? "model_stream_completed" : (cancelled ? "model_stream_cancelled" : "model_stream_failed");
-		return new ModelStreamRouteOutcome(
-			completed,
-			code,
-			request,
-			envelope,
-			lastModelRequestId,
-			lastModelResponseId,
-			completed,
-			failed,
-			cancelled,
-			endTurn,
-			itemsAdded,
-			totalTokens,
-			liveNetworkAttempted,
-			errorMessage,
-			sequence
-		);
+		return new ModelStreamRouteOutcome(completed, code, request, envelope, lastModelRequestId, lastModelResponseId, completed, failed, cancelled, endTurn,
+			itemsAdded, totalTokens, liveNetworkAttempted, errorMessage, sequence);
 	}
 
-	public static function denied(
-		request:ModelStreamRouteRequest,
-		envelope:ModelRequestEnvelopeOutcome,
-		code:String,
-		errorMessage:String,
-		sequence:String
-	):ModelStreamRouteOutcome {
-		return new ModelStreamRouteOutcome(
-			false,
-			code,
-			request,
-			envelope,
-			"",
-			"",
-			false,
-			true,
-			false,
-			false,
-			0,
-			0,
-			false,
-			errorMessage,
-			sequence
-		);
+	public static function denied(request:ModelStreamRouteRequest, envelope:ModelRequestEnvelopeOutcome, code:String, errorMessage:String,
+			sequence:String):ModelStreamRouteOutcome {
+		return new ModelStreamRouteOutcome(false, code, request, envelope, "", "", false, true, false, false, 0, 0, false, errorMessage, sequence);
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";envelopeCode=" + envelopeCode
-			+ ";provider=" + providerId
-			+ ";model=" + selectedModelId
-			+ ";upstreamRequestId=" + noneIfEmpty(upstreamRequestId)
-			+ ";lastModelRequestId=" + noneIfEmpty(lastModelRequestId)
-			+ ";lastModelResponseId=" + noneIfEmpty(lastModelResponseId)
-			+ ";completed=" + boolText(completed)
-			+ ";failed=" + boolText(failed)
-			+ ";cancelled=" + boolText(cancelled)
-			+ ";endTurn=" + boolText(endTurn)
-			+ ";itemsAdded=" + Std.string(itemsAdded)
-			+ ";totalTokens=" + Std.string(totalTokens)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";error=" + errorMessage
-			+ ";sequence=" + sequence;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";envelopeCode=" + envelopeCode + ";provider=" + providerId + ";model="
+			+ selectedModelId + ";upstreamRequestId=" + noneIfEmpty(upstreamRequestId) + ";lastModelRequestId=" + noneIfEmpty(lastModelRequestId)
+			+ ";lastModelResponseId=" + noneIfEmpty(lastModelResponseId) + ";completed=" + boolText(completed) + ";failed=" + boolText(failed)
+			+ ";cancelled=" + boolText(cancelled) + ";endTurn=" + boolText(endTurn) + ";itemsAdded=" + Std.string(itemsAdded) + ";totalTokens="
+			+ Std.string(totalTokens) + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";error=" + errorMessage + ";sequence=" + sequence;
 	}
 
 	static function boolText(value:Bool):String {

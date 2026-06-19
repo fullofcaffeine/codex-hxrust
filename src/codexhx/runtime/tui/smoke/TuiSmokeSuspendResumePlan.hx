@@ -38,7 +38,6 @@ class TuiSmokeSuspendResumePlan {
 	public final altScroll:Bool;
 	public final clearAfterRestore:Bool;
 
-
 	public function enabled():Bool {
 		return action != TuiSmokeResumeActionKind.None && action != TuiSmokeResumeActionKind.Unknown;
 	}

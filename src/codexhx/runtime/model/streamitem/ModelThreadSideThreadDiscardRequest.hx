@@ -23,29 +23,11 @@ class ModelThreadSideThreadDiscardRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		uiSyncOutcome:ModelThreadSideThreadUiSyncOutcome,
-		maybeReturnRequested:Bool,
-		overlayActive:Bool,
-		modalOrPopupActive:Bool,
-		composerEmpty:Bool,
-		activeSideParentKnown:Bool,
-		selectionSucceeded:Bool,
-		activeSideParentAfterSelectionKnown:Bool,
-		currentThreadDisplayed:Bool,
-		currentThreadIsSideThread:Bool,
-		targetIsCurrentThread:Bool,
-		sideThreadHasActiveTurn:Bool,
-		interruptSucceeded:Bool,
-		unsubscribeSucceeded:Bool,
-		discardedThreadWasActive:Bool,
-		closedSideThread:Bool,
-		keepVisibleAfterCleanupFailure:Bool,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, uiSyncOutcome:ModelThreadSideThreadUiSyncOutcome, maybeReturnRequested:Bool, overlayActive:Bool,
+			modalOrPopupActive:Bool, composerEmpty:Bool, activeSideParentKnown:Bool, selectionSucceeded:Bool, activeSideParentAfterSelectionKnown:Bool,
+			currentThreadDisplayed:Bool, currentThreadIsSideThread:Bool, targetIsCurrentThread:Bool, sideThreadHasActiveTurn:Bool, interruptSucceeded:Bool,
+			unsubscribeSucceeded:Bool, discardedThreadWasActive:Bool, closedSideThread:Bool, keepVisibleAfterCleanupFailure:Bool, eventOrderIndex:Int,
+			previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.uiSyncOutcome = uiSyncOutcome;
 		this.maybeReturnRequested = maybeReturnRequested;

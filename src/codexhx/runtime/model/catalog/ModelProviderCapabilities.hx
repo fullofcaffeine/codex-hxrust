@@ -18,14 +18,18 @@ class ModelProviderCapabilities {
 	}
 
 	public static function forProvider(provider:ProviderAdmissionProvider):ModelProviderCapabilities {
-		if (provider != null && provider.hasAwsAuth) return new ModelProviderCapabilities(true, false, false);
+		if (provider != null && provider.hasAwsAuth)
+			return new ModelProviderCapabilities(true, false, false);
 		return defaultConfigured();
 	}
 
 	public function summary():String {
-		return "namespaceTools=" + boolText(namespaceTools)
-			+ ";imageGeneration=" + boolText(imageGeneration)
-			+ ";webSearch=" + boolText(webSearch);
+		return "namespaceTools="
+			+ boolText(namespaceTools)
+			+ ";imageGeneration="
+			+ boolText(imageGeneration)
+			+ ";webSearch="
+			+ boolText(webSearch);
 	}
 
 	static function boolText(value:Bool):String {

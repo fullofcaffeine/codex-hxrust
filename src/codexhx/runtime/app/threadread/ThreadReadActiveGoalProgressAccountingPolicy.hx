@@ -25,27 +25,16 @@ class ThreadReadActiveGoalProgressAccountingPolicy {
 		}
 
 		if (request.updatedGoal == null) {
-			return ThreadReadActiveGoalProgressAccountingOutcome.stateError(
-				request.dbOutcomeKind,
-				"updated_goal_missing"
-			);
+			return ThreadReadActiveGoalProgressAccountingOutcome.stateError(request.dbOutcomeKind, "updated_goal_missing");
 		}
 
 		final status = request.updatedGoal.status;
 		final activeGoalCleared = shouldClearActiveGoal(status, request.disposition);
 		final budgetLimitReportCleared = status != ThreadGoalStatus.BudgetLimited;
 		final terminalMetricRecorded = request.previousStatus != status && ThreadGoalStatus.isTerminal(status);
-		return ThreadReadActiveGoalProgressAccountingOutcome.updated(
-			codeForUpdated(status, request.disposition),
-			goalIdFor(request),
-			status,
-			request.snapshotTimeDeltaSeconds,
-			request.snapshotTokenDelta,
-			activeGoalCleared,
-			budgetLimitReportCleared,
-			terminalMetricRecorded,
-			request.disposition
-		);
+		return ThreadReadActiveGoalProgressAccountingOutcome.updated(codeForUpdated(status, request.disposition), goalIdFor(request), status,
+			request.snapshotTimeDeltaSeconds, request.snapshotTokenDelta, activeGoalCleared, budgetLimitReportCleared, terminalMetricRecorded,
+			request.disposition);
 	}
 
 	static function codeForUpdated(status:String, disposition:ThreadReadGoalAccountingDisposition):String {
@@ -59,12 +48,14 @@ class ThreadReadActiveGoalProgressAccountingPolicy {
 	}
 
 	static function goalIdFor(request:ThreadReadActiveGoalProgressAccountingRequest):String {
-		if (request.updatedGoalId.length > 0) return request.updatedGoalId;
+		if (request.updatedGoalId.length > 0)
+			return request.updatedGoalId;
 		return request.snapshotExpectedGoalId;
 	}
 
 	static function shouldClearActiveGoal(status:String, disposition:ThreadReadGoalAccountingDisposition):Bool {
-		if (status == ThreadGoalStatus.Active) return false;
+		if (status == ThreadGoalStatus.Active)
+			return false;
 		if (status == ThreadGoalStatus.BudgetLimited) {
 			return disposition == ThreadReadGoalAccountingDisposition.ClearActive;
 		}

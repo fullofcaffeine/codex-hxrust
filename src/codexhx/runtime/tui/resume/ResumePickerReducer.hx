@@ -10,7 +10,8 @@ class ResumePickerReducer {
 	}
 
 	public static function apply(state:ResumePickerState, command:ResumePickerCommand):ResumePickerState {
-		if (command == null) return state;
+		if (command == null)
+			return state;
 		final next = state.copy();
 		next.commandCount = next.commandCount + 1;
 
@@ -55,24 +56,28 @@ class ResumePickerReducer {
 				next.nextCursorPresent = command.nextCursorPresent;
 				next.reachedScanCap = command.reachedScanCap;
 				next.searchActive = command.searchActive;
-				if (command.lookupRequested) next.addEffect(ResumePickerEffectKind.RequestPage, command.nextCursor, command.query);
+				if (command.lookupRequested)
+					next.addEffect(ResumePickerEffectKind.RequestPage, command.nextCursor, command.query);
 			case ResumePickerCommandKind.SortToggle:
 				next.sortKey = command.sortKeyAfter;
 				next.loadedRows = command.loadedRows;
 				next.filteredRows = command.filteredRows;
-				if (command.lookupRequested) next.addEffect(ResumePickerEffectKind.ResetPage, "sort", Std.string(command.sortKeyAfter));
+				if (command.lookupRequested)
+					next.addEffect(ResumePickerEffectKind.ResetPage, "sort", Std.string(command.sortKeyAfter));
 				addFrameIfRequested(next, command);
 			case ResumePickerCommandKind.FilterToggle:
 				next.filterMode = command.filterModeAfter;
 				next.cwdFilter = command.cwdFilter;
 				next.showAll = command.showAll;
-				if (command.lookupRequested) next.addEffect(ResumePickerEffectKind.ResetPage, "filter", Std.string(command.filterModeAfter));
+				if (command.lookupRequested)
+					next.addEffect(ResumePickerEffectKind.ResetPage, "filter", Std.string(command.filterModeAfter));
 				addFrameIfRequested(next, command);
 			case ResumePickerCommandKind.PreviewToggle:
 				next.selectedIndex = command.selectedIndex;
 				next.expandedThreadId = command.expandedThreadId;
 				next.previewState = command.previewCacheAfter;
-				if (command.cacheInserted) next.addEffect(ResumePickerEffectKind.RequestPreview, command.threadId, "toggle");
+				if (command.cacheInserted)
+					next.addEffect(ResumePickerEffectKind.RequestPreview, command.threadId, "toggle");
 				addFrameIfRequested(next, command);
 			case ResumePickerCommandKind.PreviewRequest:
 				if (command.includeTurns && command.threadReadRequested && command.appServerStarted) {
@@ -92,7 +97,8 @@ class ResumePickerReducer {
 				next.pendingThreadId = command.pendingThreadId;
 				next.transcriptState = command.transcriptCacheAfter;
 				next.transcriptLoadingFrameShown = command.loadingFrameShown;
-				if (command.transcriptCacheAfter == "loading") next.addEffect(ResumePickerEffectKind.RequestTranscript, command.threadId, "open");
+				if (command.transcriptCacheAfter == "loading")
+					next.addEffect(ResumePickerEffectKind.RequestTranscript, command.threadId, "open");
 				addFrameIfRequested(next, command);
 			case ResumePickerCommandKind.TranscriptRequest:
 				if (command.includeTurns && command.threadReadRequested && command.appServerStarted) {
@@ -118,22 +124,26 @@ class ResumePickerReducer {
 				next.transcriptState = command.transcriptState;
 				next.overlayOpen = command.overlayOpened;
 				next.transcriptCellCount = command.transcriptCellCount;
-				if (command.overlayOpened) next.addEffect(ResumePickerEffectKind.OpenTranscriptOverlay, command.threadId, Std.string(command.transcriptCellCount));
+				if (command.overlayOpened)
+					next.addEffect(ResumePickerEffectKind.OpenTranscriptOverlay, command.threadId, Std.string(command.transcriptCellCount));
 				addFrameIfRequested(next, command);
 			case ResumePickerCommandKind.KeyboardMove:
 				next.selectedIndex = command.selectedAfter;
 				next.scrollTop = command.scrollTopAfter;
 				next.viewRows = command.viewRows;
 				next.loadedRows = command.loadedRows;
-				if (command.loadMoreRequested) next.addEffect(ResumePickerEffectKind.LoadMore, command.nextCursor, command.keyName);
+				if (command.loadMoreRequested)
+					next.addEffect(ResumePickerEffectKind.LoadMore, command.nextCursor, command.keyName);
 				addFrameIfRequested(next, command);
 			case ResumePickerCommandKind.QueryClear:
 				next.query = command.queryAfter;
 				next.selectedIndex = command.selectedAfter;
-				if (command.startFresh) next.addEffect(ResumePickerEffectKind.StartFresh, "query", command.keyName);
+				if (command.startFresh)
+					next.addEffect(ResumePickerEffectKind.StartFresh, "query", command.keyName);
 				addFrameIfRequested(next, command);
 			case ResumePickerCommandKind.LoadMoreTrigger:
-				if (command.loadMoreRequested) next.addEffect(ResumePickerEffectKind.LoadMore, command.nextCursor, command.keyName);
+				if (command.loadMoreRequested)
+					next.addEffect(ResumePickerEffectKind.LoadMore, command.nextCursor, command.keyName);
 				next.searchActive = command.searchActive;
 				next.selectedIndex = command.selectedAfter;
 				addFrameIfRequested(next, command);
@@ -153,7 +163,8 @@ class ResumePickerReducer {
 			case ResumePickerCommandKind.DensityToggle:
 				next.density = command.densityAfter;
 				next.inlineErrorShown = command.inlineErrorShown;
-				if (command.persistenceAttempted) next.addEffect(ResumePickerEffectKind.PersistDensity, Std.string(command.densityAfter), command.persistenceSucceeded ? "ok" : "failed");
+				if (command.persistenceAttempted)
+					next.addEffect(ResumePickerEffectKind.PersistDensity, Std.string(command.densityAfter), command.persistenceSucceeded ? "ok" : "failed");
 				addFrameIfRequested(next, command);
 			case ResumePickerCommandKind.ToolbarFocus:
 				next.toolbarFocus = command.toolbarFocusAfter;
@@ -164,7 +175,8 @@ class ResumePickerReducer {
 				next.filterMode = command.filterModeAfter;
 				next.cwdFilter = command.cwdFilter;
 				next.showAll = command.showAll;
-				if (command.lookupRequested) next.addEffect(ResumePickerEffectKind.ResetPage, Std.string(command.toolbarFocusBefore), command.keyName);
+				if (command.lookupRequested)
+					next.addEffect(ResumePickerEffectKind.ResetPage, Std.string(command.toolbarFocusBefore), command.keyName);
 				addFrameIfRequested(next, command);
 			case ResumePickerCommandKind.ToolbarRender:
 				next.toolbarFocus = command.toolbarFocusAfter;
@@ -213,7 +225,8 @@ class ResumePickerReducer {
 				next.failureCount = next.failureCount + 1;
 				next.lastFailureCode = command.failureCode;
 				next.lastError = command.errorMessage;
-				if (command.unsupportedRejected) next.addEffect(ResumePickerEffectKind.SurfaceError, command.failureCode, command.errorMessage);
+				if (command.unsupportedRejected)
+					next.addEffect(ResumePickerEffectKind.SurfaceError, command.failureCode, command.errorMessage);
 			case ResumePickerCommandKind.Other:
 				// Non-picker resume/fork lifecycle actions are intentionally outside this pure picker kernel.
 			case ResumePickerCommandKind.Unknown:

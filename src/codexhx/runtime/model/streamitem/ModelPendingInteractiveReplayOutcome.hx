@@ -27,33 +27,13 @@ class ModelPendingInteractiveReplayOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		reconstructionRequestId:String,
-		eventKind:ModelPendingInteractiveReplayEventKind,
-		promptKind:ModelPendingInteractivePromptKind,
-		restoredActiveTurnDetected:Bool,
-		activeTurnIdAfter:String,
-		activeTurnCleared:Bool,
-		nonmatchingCompletionPreservedActive:Bool,
-		promptRecorded:Bool,
-		promptRemovedByTurnCompletion:Bool,
-		promptRemovedByOutboundOp:Bool,
-		promptRemovedByResolution:Bool,
-		promptRemovedByEviction:Bool,
-		pendingReplayCleared:Bool,
-		snapshotRequestReplayed:Bool,
-		snapshotRequestFiltered:Bool,
-		replayedTurnCompletedHandled:Bool,
-		replayUsesThreadSnapshotKind:Bool,
-		sideStatusKind:ModelPendingInteractiveSideStatusKind,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, reconstructionRequestId:String, eventKind:ModelPendingInteractiveReplayEventKind,
+			promptKind:ModelPendingInteractivePromptKind, restoredActiveTurnDetected:Bool, activeTurnIdAfter:String, activeTurnCleared:Bool,
+			nonmatchingCompletionPreservedActive:Bool, promptRecorded:Bool, promptRemovedByTurnCompletion:Bool, promptRemovedByOutboundOp:Bool,
+			promptRemovedByResolution:Bool, promptRemovedByEviction:Bool, pendingReplayCleared:Bool, snapshotRequestReplayed:Bool,
+			snapshotRequestFiltered:Bool, replayedTurnCompletedHandled:Bool, replayUsesThreadSnapshotKind:Bool,
+			sideStatusKind:ModelPendingInteractiveSideStatusKind, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool,
+			errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -82,31 +62,17 @@ class ModelPendingInteractiveReplayOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";reconstructionRequest=" + noneIfEmpty(reconstructionRequestId)
-			+ ";eventKind=" + eventKind
-			+ ";promptKind=" + promptKind
-			+ ";restoredActiveTurnDetected=" + boolText(restoredActiveTurnDetected)
-			+ ";activeTurnIdAfter=" + noneIfEmpty(activeTurnIdAfter)
-			+ ";activeTurnCleared=" + boolText(activeTurnCleared)
-			+ ";nonmatchingCompletionPreservedActive=" + boolText(nonmatchingCompletionPreservedActive)
-			+ ";promptRecorded=" + boolText(promptRecorded)
-			+ ";promptRemovedByTurnCompletion=" + boolText(promptRemovedByTurnCompletion)
-			+ ";promptRemovedByOutboundOp=" + boolText(promptRemovedByOutboundOp)
-			+ ";promptRemovedByResolution=" + boolText(promptRemovedByResolution)
-			+ ";promptRemovedByEviction=" + boolText(promptRemovedByEviction)
-			+ ";pendingReplayCleared=" + boolText(pendingReplayCleared)
-			+ ";snapshotRequestReplayed=" + boolText(snapshotRequestReplayed)
-			+ ";snapshotRequestFiltered=" + boolText(snapshotRequestFiltered)
-			+ ";replayedTurnCompletedHandled=" + boolText(replayedTurnCompletedHandled)
-			+ ";replayUsesThreadSnapshotKind=" + boolText(replayUsesThreadSnapshotKind)
-			+ ";sideStatusKind=" + sideStatusKind
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";reconstructionRequest=" + noneIfEmpty(reconstructionRequestId)
+			+ ";eventKind=" + eventKind + ";promptKind=" + promptKind + ";restoredActiveTurnDetected=" + boolText(restoredActiveTurnDetected)
+			+ ";activeTurnIdAfter=" + noneIfEmpty(activeTurnIdAfter) + ";activeTurnCleared=" + boolText(activeTurnCleared)
+			+ ";nonmatchingCompletionPreservedActive=" + boolText(nonmatchingCompletionPreservedActive) + ";promptRecorded=" + boolText(promptRecorded)
+			+ ";promptRemovedByTurnCompletion=" + boolText(promptRemovedByTurnCompletion) + ";promptRemovedByOutboundOp="
+			+ boolText(promptRemovedByOutboundOp) + ";promptRemovedByResolution=" + boolText(promptRemovedByResolution) + ";promptRemovedByEviction="
+			+ boolText(promptRemovedByEviction) + ";pendingReplayCleared=" + boolText(pendingReplayCleared) + ";snapshotRequestReplayed="
+			+ boolText(snapshotRequestReplayed) + ";snapshotRequestFiltered=" + boolText(snapshotRequestFiltered) + ";replayedTurnCompletedHandled="
+			+ boolText(replayedTurnCompletedHandled) + ";replayUsesThreadSnapshotKind=" + boolText(replayUsesThreadSnapshotKind) + ";sideStatusKind="
+			+ sideStatusKind + ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

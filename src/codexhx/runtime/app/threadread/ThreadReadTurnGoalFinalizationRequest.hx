@@ -7,13 +7,8 @@ class ThreadReadTurnGoalFinalizationRequest {
 	public final turnId:String;
 	public final accountingOutcome:ThreadReadActiveGoalProgressAccountingOutcome;
 
-	public function new(
-		kind:ThreadReadTurnGoalFinalizationKind,
-		runtimeAvailable:Bool,
-		runtimeEnabled:Bool,
-		turnId:String,
-		accountingOutcome:ThreadReadActiveGoalProgressAccountingOutcome
-	) {
+	public function new(kind:ThreadReadTurnGoalFinalizationKind, runtimeAvailable:Bool, runtimeEnabled:Bool, turnId:String,
+			accountingOutcome:ThreadReadActiveGoalProgressAccountingOutcome) {
 		this.kind = kind;
 		this.runtimeAvailable = runtimeAvailable;
 		this.runtimeEnabled = runtimeEnabled;

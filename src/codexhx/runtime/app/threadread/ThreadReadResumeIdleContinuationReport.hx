@@ -12,7 +12,8 @@ class ThreadReadResumeIdleContinuationReport {
 	public function idleHookCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.idleHookEmitted) count = count + 1;
+			if (outcome.idleHookEmitted)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadResumeIdleContinuationReport {
 	public function continuationRequestCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.goalContinuationRequested) count = count + 1;
+			if (outcome.goalContinuationRequested)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadResumeIdleContinuationReport {
 	public function turnStartedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.turnStarted) count = count + 1;
+			if (outcome.turnStarted)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -36,7 +39,8 @@ class ThreadReadResumeIdleContinuationReport {
 	public function activeGoalClearedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.activeGoalCleared) count = count + 1;
+			if (outcome.activeGoalCleared)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -44,7 +48,8 @@ class ThreadReadResumeIdleContinuationReport {
 	public function skippedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.skipped) count = count + 1;
+			if (outcome.skipped)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -52,7 +57,8 @@ class ThreadReadResumeIdleContinuationReport {
 	public function failureCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.ok) count = count + 1;
+			if (!outcome.ok)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -62,14 +68,9 @@ class ThreadReadResumeIdleContinuationReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";idleHooks=" + Std.string(idleHookCount())
-			+ ";continuationRequests=" + Std.string(continuationRequestCount())
-			+ ";turnsStarted=" + Std.string(turnStartedCount())
-			+ ";activeGoalsCleared=" + Std.string(activeGoalClearedCount())
-			+ ";skipped=" + Std.string(skippedCount())
-			+ ";failed=" + Std.string(failureCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";idleHooks=" + Std.string(idleHookCount()) + ";continuationRequests="
+			+ Std.string(continuationRequestCount()) + ";turnsStarted=" + Std.string(turnStartedCount()) + ";activeGoalsCleared="
+			+ Std.string(activeGoalClearedCount()) + ";skipped=" + Std.string(skippedCount()) + ";failed=" + Std.string(failureCount()) + ";outcomes=["
+			+ parts.join("##") + "]";
 	}
 }

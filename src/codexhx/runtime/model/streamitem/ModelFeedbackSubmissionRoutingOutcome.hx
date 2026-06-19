@@ -84,29 +84,15 @@ class ModelFeedbackSubmissionRoutingOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";requestKind=" + requestKind
-			+ ";decisionKind=" + decisionKind
-			+ ";category=" + category
-			+ ";includeLogs=" + boolText(includeLogs)
-			+ ";feedbackSucceeded=" + boolText(feedbackSucceeded)
-			+ ";resultThreadId=" + noneIfEmpty(resultThreadId)
-			+ ";originThreadProvided=" + boolText(originThreadProvided)
-			+ ";originThreadActive=" + boolText(originThreadActive)
-			+ ";originThreadBuffered=" + boolText(originThreadBuffered)
-			+ ";activeThreadSendAttempted=" + boolText(activeThreadSendAttempted)
-			+ ";currentHistoryRendered=" + boolText(currentHistoryRendered)
-			+ ";snapshotReplayRendered=" + boolText(snapshotReplayRendered)
-			+ ";historyCellKind=" + historyCellKind
-			+ ";appEventEmittedImmediately=" + boolText(appEventEmittedImmediately)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveFeedbackUploadAttempted=" + boolText(liveFeedbackUploadAttempted)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";requestKind=" + requestKind + ";decisionKind=" + decisionKind
+			+ ";category=" + category + ";includeLogs=" + boolText(includeLogs) + ";feedbackSucceeded=" + boolText(feedbackSucceeded) + ";resultThreadId="
+			+ noneIfEmpty(resultThreadId) + ";originThreadProvided=" + boolText(originThreadProvided) + ";originThreadActive=" + boolText(originThreadActive)
+			+ ";originThreadBuffered=" + boolText(originThreadBuffered) + ";activeThreadSendAttempted=" + boolText(activeThreadSendAttempted)
+			+ ";currentHistoryRendered=" + boolText(currentHistoryRendered) + ";snapshotReplayRendered=" + boolText(snapshotReplayRendered)
+			+ ";historyCellKind=" + historyCellKind + ";appEventEmittedImmediately=" + boolText(appEventEmittedImmediately) + ";eventOrderingPreserved="
+			+ boolText(eventOrderingPreserved) + ";liveFeedbackUploadAttempted=" + boolText(liveFeedbackUploadAttempted) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

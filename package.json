@@ -3,7 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "description": "Codex-to-Haxe/haxe.rust pressure-test experiment.",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fullofcaffeine/codex-hxrust.git"
+  },
   "devDependencies": {
     "lix": "^15.12.4"
   },
@@ -13,6 +17,13 @@
     "hx:metal": "haxe hxml/metal.hxml",
     "hx:portable:codegen": "haxe hxml/portable.codegen.hxml",
     "hx:metal:codegen": "haxe hxml/metal.codegen.hxml",
+    "format:haxe": "bash scripts/lint/hx_format_guard.sh --write",
+    "format:haxe:check": "bash scripts/lint/hx_format_guard.sh",
+    "format:haxe:changed": "bash scripts/lint/hx_format_guard.sh --changed",
+    "security:gitleaks": "bash scripts/security/run-gitleaks.sh",
+    "security:gitleaks:staged": "bash scripts/security/run-gitleaks.sh --staged",
+    "hooks:install": "bash scripts/hooks/install.sh",
+    "public:precommit": "npm run format:haxe:check && npm run security:gitleaks",
     "test:generated-cargo": "bash scripts/check-generated-cargo.sh",
     "test:tui-smoke": "bash harness/check-tui-smoke.sh"
   }

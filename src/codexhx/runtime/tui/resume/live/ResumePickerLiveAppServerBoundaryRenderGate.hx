@@ -34,7 +34,8 @@ class ResumePickerLiveAppServerBoundaryRenderGate {
 		final activeRequest = pageRequest("live-active-page", "", "kernel", ResumePickerSortKey.CreatedAt, ResumePickerFilterMode.All, true, true);
 		pollSummaries.push("active:" + AsyncPollSummary.summary(loader.enqueue(ResumePickerBackgroundRequest.pageLoad(activeRequest))));
 
-		final blockedRequest = pageRequest("live-blocked-reload-page", "cursor-live-2", "kernel", ResumePickerSortKey.CreatedAt, ResumePickerFilterMode.All, true, true);
+		final blockedRequest = pageRequest("live-blocked-reload-page", "cursor-live-2", "kernel", ResumePickerSortKey.CreatedAt, ResumePickerFilterMode.All,
+			true, true);
 		final blockedPoll = loader.enqueue(ResumePickerBackgroundRequest.pageLoad(blockedRequest));
 		final blockedSummary = AsyncPollSummary.summary(blockedPoll);
 		pollSummaries.push("blocked-reload:" + blockedSummary);
@@ -116,13 +117,8 @@ class ResumePickerLiveAppServerBoundaryRenderGate {
 	static function applyBackpressureState(state:ResumePickerState, request:ResumePickerThreadListRequest, pending:Int, skipped:Int):Void {
 		state.loadingPending = true;
 		state.loaderEventStatus = "live_boundary_backpressure";
-		state.loaderEventDetail = "request=" + request.requestId
-			+ ";cursor=" + emptyLabel(request.cursor)
-			+ ";query=" + emptyLabel(request.query)
-			+ ";sort=" + request.sortKey
-			+ ";filter=" + request.filterMode
-			+ ";pending=" + pending
-			+ ";skipped=" + skipped;
+		state.loaderEventDetail = "request=" + request.requestId + ";cursor=" + emptyLabel(request.cursor) + ";query=" + emptyLabel(request.query)
+			+ ";sort=" + request.sortKey + ";filter=" + request.filterMode + ";pending=" + pending + ";skipped=" + skipped;
 		state.footerProgressLabel = "live reload queued";
 	}
 
@@ -157,9 +153,7 @@ class ResumePickerLiveAppServerBoundaryRenderGate {
 		state.lastFailureCode = "app_server_thread_list_failed";
 		state.lastError = event.failureCode + ":" + event.failureMessage;
 		state.loaderEventStatus = "live_boundary_error_mapped";
-		state.loaderEventDetail = "request=" + event.requestId
-			+ ";sourceCode=" + event.failureCode
-			+ ";preservedThread=" + state.selectedThreadId
+		state.loaderEventDetail = "request=" + event.requestId + ";sourceCode=" + event.failureCode + ";preservedThread=" + state.selectedThreadId
 			+ ";rows=" + state.loadedRows;
 		state.footerProgressLabel = "live boundary error";
 	}
@@ -188,25 +182,14 @@ class ResumePickerLiveAppServerBoundaryRenderGate {
 		state.footerProgressLabel = "live boundary recovered";
 	}
 
-	static function renderFrame(
-		scheduler:DeterministicResumePickerFrameScheduler,
-		renderer:DeterministicResumePickerTerminalRenderer,
-		state:ResumePickerState,
-		reason:String
-	):Void {
+	static function renderFrame(scheduler:DeterministicResumePickerFrameScheduler, renderer:DeterministicResumePickerTerminalRenderer,
+			state:ResumePickerState, reason:String):Void {
 		scheduler.requestFrame(reason);
 		renderer.render(state);
 	}
 
-	static function pageRequest(
-		requestId:String,
-		cursor:String,
-		query:String,
-		sortKey:ResumePickerSortKey,
-		filterMode:ResumePickerFilterMode,
-		showAll:Bool,
-		includeNonInteractive:Bool
-	):ResumePickerThreadListRequest {
+	static function pageRequest(requestId:String, cursor:String, query:String, sortKey:ResumePickerSortKey, filterMode:ResumePickerFilterMode, showAll:Bool,
+			includeNonInteractive:Bool):ResumePickerThreadListRequest {
 		return new ResumePickerThreadListRequest({
 			requestId: requestId,
 			cursor: cursor,
@@ -298,23 +281,17 @@ class ResumePickerLiveAppServerBoundaryRenderGate {
 
 	static function contains(values:Array<String>, needle:String):Bool {
 		for (value in values) {
-			if (value.indexOf(needle) >= 0) return true;
+			if (value.indexOf(needle) >= 0)
+				return true;
 		}
 		return false;
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query
-			+ ";sort=" + state.sortKey
-			+ ";filter=" + state.filterMode
-			+ ";rows=" + state.loadedRows
-			+ ";selected=" + state.selectedIndex
-			+ ";thread=" + state.selectedThreadId
-			+ ";errorShown=" + boolLabel(state.inlineErrorShown)
-			+ ";failure=" + emptyLabel(state.lastFailureCode)
-			+ ";footer=" + state.footerProgressLabel
-			+ ";loader=" + state.loaderEventStatus
-			+ ";detail=" + state.loaderEventDetail;
+		return "query=" + state.query + ";sort=" + state.sortKey + ";filter=" + state.filterMode + ";rows=" + state.loadedRows + ";selected="
+			+ state.selectedIndex + ";thread=" + state.selectedThreadId + ";errorShown=" + boolLabel(state.inlineErrorShown) + ";failure="
+			+ emptyLabel(state.lastFailureCode) + ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail="
+			+ state.loaderEventDetail;
 	}
 
 	static function expectEvent(poll:AsyncPoll<AsyncStreamItem<ResumePickerHostEvent>>):ResumePickerHostEvent {

@@ -24,30 +24,11 @@ class ModelThreadSideThreadComposerHandoffOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		startRequestId:String,
-		startupRoutingRequestId:String,
-		decisionKind:ModelThreadSideThreadComposerHandoffDecisionKind,
-		userMessagePreserved:Bool,
-		restoreAttempted:Bool,
-		composerMutated:Bool,
-		composerTextAfter:String,
-		submittedAsPlainUserTurn:Bool,
-		duplicateSubmissionPrevented:Bool,
-		sideUiSynced:Bool,
-		contextLabelCleared:Bool,
-		errorMessageDisplayed:Bool,
-		runControlContinue:Bool,
-		startupRoutingComposed:Bool,
-		eventOrderingPreserved:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, startRequestId:String, startupRoutingRequestId:String,
+			decisionKind:ModelThreadSideThreadComposerHandoffDecisionKind, userMessagePreserved:Bool, restoreAttempted:Bool, composerMutated:Bool,
+			composerTextAfter:String, submittedAsPlainUserTurn:Bool, duplicateSubmissionPrevented:Bool, sideUiSynced:Bool, contextLabelCleared:Bool,
+			errorMessageDisplayed:Bool, runControlContinue:Bool, startupRoutingComposed:Bool, eventOrderingPreserved:Bool, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -73,28 +54,15 @@ class ModelThreadSideThreadComposerHandoffOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";startRequest=" + noneIfEmpty(startRequestId)
-			+ ";startupRoutingRequest=" + noneIfEmpty(startupRoutingRequestId)
-			+ ";decisionKind=" + decisionKind
-			+ ";userMessagePreserved=" + boolText(userMessagePreserved)
-			+ ";restoreAttempted=" + boolText(restoreAttempted)
-			+ ";composerMutated=" + boolText(composerMutated)
-			+ ";composerTextAfter=" + noneIfEmpty(composerTextAfter)
-			+ ";submittedAsPlainUserTurn=" + boolText(submittedAsPlainUserTurn)
-			+ ";duplicateSubmissionPrevented=" + boolText(duplicateSubmissionPrevented)
-			+ ";sideUiSynced=" + boolText(sideUiSynced)
-			+ ";contextLabelCleared=" + boolText(contextLabelCleared)
-			+ ";errorMessageDisplayed=" + boolText(errorMessageDisplayed)
-			+ ";runControlContinue=" + boolText(runControlContinue)
-			+ ";startupRoutingComposed=" + boolText(startupRoutingComposed)
-			+ ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";startRequest=" + noneIfEmpty(startRequestId) + ";startupRoutingRequest="
+			+ noneIfEmpty(startupRoutingRequestId) + ";decisionKind=" + decisionKind + ";userMessagePreserved=" + boolText(userMessagePreserved)
+			+ ";restoreAttempted=" + boolText(restoreAttempted) + ";composerMutated=" + boolText(composerMutated) + ";composerTextAfter="
+			+ noneIfEmpty(composerTextAfter) + ";submittedAsPlainUserTurn=" + boolText(submittedAsPlainUserTurn) + ";duplicateSubmissionPrevented="
+			+ boolText(duplicateSubmissionPrevented) + ";sideUiSynced=" + boolText(sideUiSynced) + ";contextLabelCleared=" + boolText(contextLabelCleared)
+			+ ";errorMessageDisplayed=" + boolText(errorMessageDisplayed) + ";runControlContinue=" + boolText(runControlContinue)
+			+ ";startupRoutingComposed=" + boolText(startupRoutingComposed) + ";eventOrderingPreserved=" + boolText(eventOrderingPreserved)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

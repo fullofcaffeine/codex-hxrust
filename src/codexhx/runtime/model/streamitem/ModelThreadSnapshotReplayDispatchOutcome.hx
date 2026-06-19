@@ -27,33 +27,12 @@ class ModelThreadSnapshotReplayDispatchOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		pendingReplayRequestId:String,
-		replayKind:ModelTurnReplayKind,
-		eventKind:ModelThreadSnapshotReplayEventKind,
-		dispatchKind:ModelThreadSnapshotReplayDispatchKind,
-		beginReplayBufferEmitted:Bool,
-		endReplayBufferEmitted:Bool,
-		initialSubmitSuppressed:Bool,
-		queueAutosendSuppressed:Bool,
-		inputStateRestored:Bool,
-		turnsReplayed:Bool,
-		pendingPrimaryEventsDrained:Bool,
-		noticeSuppressed:Bool,
-		notificationDeliveredWithReplayKind:Bool,
-		requestDeliveredWithReplayKind:Bool,
-		historyEntryDelivered:Bool,
-		feedbackDelivered:Bool,
-		replayKindAttached:Bool,
-		liveOnlyEffectsSuppressed:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, pendingReplayRequestId:String, replayKind:ModelTurnReplayKind,
+			eventKind:ModelThreadSnapshotReplayEventKind, dispatchKind:ModelThreadSnapshotReplayDispatchKind, beginReplayBufferEmitted:Bool,
+			endReplayBufferEmitted:Bool, initialSubmitSuppressed:Bool, queueAutosendSuppressed:Bool, inputStateRestored:Bool, turnsReplayed:Bool,
+			pendingPrimaryEventsDrained:Bool, noticeSuppressed:Bool, notificationDeliveredWithReplayKind:Bool, requestDeliveredWithReplayKind:Bool,
+			historyEntryDelivered:Bool, feedbackDelivered:Bool, replayKindAttached:Bool, liveOnlyEffectsSuppressed:Bool, liveNetworkAttempted:Bool,
+			realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code == null ? "" : code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -82,31 +61,17 @@ class ModelThreadSnapshotReplayDispatchOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";pendingReplayRequest=" + noneIfEmpty(pendingReplayRequestId)
-			+ ";replayKind=" + replayKind
-			+ ";eventKind=" + eventKind
-			+ ";dispatchKind=" + dispatchKind
-			+ ";beginReplayBufferEmitted=" + boolText(beginReplayBufferEmitted)
-			+ ";endReplayBufferEmitted=" + boolText(endReplayBufferEmitted)
-			+ ";initialSubmitSuppressed=" + boolText(initialSubmitSuppressed)
-			+ ";queueAutosendSuppressed=" + boolText(queueAutosendSuppressed)
-			+ ";inputStateRestored=" + boolText(inputStateRestored)
-			+ ";turnsReplayed=" + boolText(turnsReplayed)
-			+ ";pendingPrimaryEventsDrained=" + boolText(pendingPrimaryEventsDrained)
-			+ ";noticeSuppressed=" + boolText(noticeSuppressed)
-			+ ";notificationDeliveredWithReplayKind=" + boolText(notificationDeliveredWithReplayKind)
-			+ ";requestDeliveredWithReplayKind=" + boolText(requestDeliveredWithReplayKind)
-			+ ";historyEntryDelivered=" + boolText(historyEntryDelivered)
-			+ ";feedbackDelivered=" + boolText(feedbackDelivered)
-			+ ";replayKindAttached=" + boolText(replayKindAttached)
-			+ ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";pendingReplayRequest=" + noneIfEmpty(pendingReplayRequestId)
+			+ ";replayKind=" + replayKind + ";eventKind=" + eventKind + ";dispatchKind=" + dispatchKind + ";beginReplayBufferEmitted="
+			+ boolText(beginReplayBufferEmitted) + ";endReplayBufferEmitted=" + boolText(endReplayBufferEmitted) + ";initialSubmitSuppressed="
+			+ boolText(initialSubmitSuppressed) + ";queueAutosendSuppressed=" + boolText(queueAutosendSuppressed) + ";inputStateRestored="
+			+ boolText(inputStateRestored) + ";turnsReplayed=" + boolText(turnsReplayed) + ";pendingPrimaryEventsDrained="
+			+ boolText(pendingPrimaryEventsDrained) + ";noticeSuppressed=" + boolText(noticeSuppressed) + ";notificationDeliveredWithReplayKind="
+			+ boolText(notificationDeliveredWithReplayKind) + ";requestDeliveredWithReplayKind=" + boolText(requestDeliveredWithReplayKind)
+			+ ";historyEntryDelivered=" + boolText(historyEntryDelivered) + ";feedbackDelivered=" + boolText(feedbackDelivered) + ";replayKindAttached="
+			+ boolText(replayKindAttached) + ";liveOnlyEffectsSuppressed=" + boolText(liveOnlyEffectsSuppressed) + ";liveNetworkAttempted="
+			+ boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated) + ";toolExecutedOutsideFixture="
+			+ boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

@@ -2,25 +2,18 @@ package codexhx.runtime.model.streamitem;
 
 class ModelThreadSideParentStatusChangePolicy {
 	public static function apply(request:ModelThreadSideParentStatusChangeRequest):ModelThreadSideParentStatusChangeOutcome {
-		if (request == null) return failure("", "", "missing thread side-parent status-change request");
+		if (request == null)
+			return failure("", "", "missing thread side-parent status-change request");
 		final pendingRequestId = request.pendingOutcome == null ? "" : request.pendingOutcome.requestId;
-		if (request.pendingOutcome == null) return failure(request.requestId, "", "missing thread side-parent pending outcome");
-		if (!request.pendingOutcome.ok) return failure(request.requestId, pendingRequestId, "thread side-parent pending outcome was not successful");
+		if (request.pendingOutcome == null)
+			return failure(request.requestId, "", "missing thread side-parent pending outcome");
+		if (!request.pendingOutcome.ok)
+			return failure(request.requestId, pendingRequestId, "thread side-parent pending outcome was not successful");
 
 		final pendingStatus = request.pendingOutcome.sideParentStatusAfter;
 		if (pendingStatus != ModelThreadSideParentStatusKind.None) {
-			return success(
-				request,
-				pendingRequestId,
-				ModelThreadSideParentStatusChangeDecisionKind.PendingStatusPrecedence,
-				pendingStatus,
-				true,
-				false,
-				false,
-				false,
-				false,
-				false
-			);
+			return success(request, pendingRequestId, ModelThreadSideParentStatusChangeDecisionKind.PendingStatusPrecedence, pendingStatus, true, false,
+				false, false, false, false);
 		}
 
 		var after = request.sideParentStatusBefore;
@@ -76,55 +69,20 @@ class ModelThreadSideParentStatusChangePolicy {
 			case OtherNotification:
 		}
 
-		return success(
-			request,
-			pendingRequestId,
-			decisionKind,
-			after,
-			false,
-			notificationStatusChangeApplied,
-			actionableStatusCleared,
-			terminalStatusSet,
-			terminalStatusPreserved,
-			ignoredInProgressTurn
-		);
+		return success(request, pendingRequestId, decisionKind, after, false, notificationStatusChangeApplied, actionableStatusCleared, terminalStatusSet,
+			terminalStatusPreserved, ignoredInProgressTurn);
 	}
 
-	static function success(
-		request:ModelThreadSideParentStatusChangeRequest,
-		pendingRequestId:String,
-		decisionKind:ModelThreadSideParentStatusChangeDecisionKind,
-		sideParentStatusAfter:ModelThreadSideParentStatusKind,
-		pendingStatusTookPrecedence:Bool,
-		notificationStatusChangeApplied:Bool,
-		actionableStatusCleared:Bool,
-		terminalStatusSet:Bool,
-		terminalStatusPreserved:Bool,
-		ignoredInProgressTurn:Bool
-	):ModelThreadSideParentStatusChangeOutcome {
-		return new ModelThreadSideParentStatusChangeOutcome(
-			true,
-			"thread_side_parent_status_change_modeled",
-			request.requestId,
-			pendingRequestId,
-			request.eventKind,
-			request.turnStatus,
-			decisionKind,
-			request.sideParentStatusBefore,
-			request.pendingOutcome.sideParentStatusAfter,
-			sideParentStatusAfter,
-			pendingStatusTookPrecedence,
-			notificationStatusChangeApplied,
-			actionableStatusCleared,
-			terminalStatusSet,
+	static function success(request:ModelThreadSideParentStatusChangeRequest, pendingRequestId:String,
+			decisionKind:ModelThreadSideParentStatusChangeDecisionKind, sideParentStatusAfter:ModelThreadSideParentStatusKind,
+			pendingStatusTookPrecedence:Bool, notificationStatusChangeApplied:Bool, actionableStatusCleared:Bool, terminalStatusSet:Bool,
+			terminalStatusPreserved:Bool, ignoredInProgressTurn:Bool):ModelThreadSideParentStatusChangeOutcome {
+		return new ModelThreadSideParentStatusChangeOutcome(true, "thread_side_parent_status_change_modeled", request.requestId, pendingRequestId,
+			request.eventKind, request.turnStatus, decisionKind, request.sideParentStatusBefore, request.pendingOutcome.sideParentStatusAfter,
+			sideParentStatusAfter, pendingStatusTookPrecedence, notificationStatusChangeApplied, actionableStatusCleared, terminalStatusSet,
 			terminalStatusPreserved,
-			ignoredInProgressTurn,
-			request.pendingOutcome.eventOrderingPreserved && request.eventOrderIndex == request.previousEventCount + 1,
-			request.pendingOutcome.liveNetworkAttempted,
-			request.pendingOutcome.realFilesystemMutated,
-			request.pendingOutcome.toolExecutedOutsideFixture,
-			""
-		);
+			ignoredInProgressTurn, request.pendingOutcome.eventOrderingPreserved && request.eventOrderIndex == request.previousEventCount + 1,
+			request.pendingOutcome.liveNetworkAttempted, request.pendingOutcome.realFilesystemMutated, request.pendingOutcome.toolExecutedOutsideFixture, "");
 	}
 
 	static function isActionable(status:ModelThreadSideParentStatusKind):Bool {
@@ -139,28 +97,9 @@ class ModelThreadSideParentStatusChangePolicy {
 	}
 
 	static function failure(requestId:String, pendingRequestId:String, errorMessage:String):ModelThreadSideParentStatusChangeOutcome {
-		return new ModelThreadSideParentStatusChangeOutcome(
-			false,
-			"thread_side_parent_status_change_failed",
-			requestId,
-			pendingRequestId,
-			ModelThreadSideParentStatusChangeEventKind.OtherNotification,
-			ModelThreadSideParentTurnStatusKind.None,
-			ModelThreadSideParentStatusChangeDecisionKind.PreservedNoChange,
-			ModelThreadSideParentStatusKind.None,
-			ModelThreadSideParentStatusKind.None,
-			ModelThreadSideParentStatusKind.None,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			errorMessage
-		);
+		return new ModelThreadSideParentStatusChangeOutcome(false, "thread_side_parent_status_change_failed", requestId, pendingRequestId,
+			ModelThreadSideParentStatusChangeEventKind.OtherNotification, ModelThreadSideParentTurnStatusKind.None,
+			ModelThreadSideParentStatusChangeDecisionKind.PreservedNoChange, ModelThreadSideParentStatusKind.None, ModelThreadSideParentStatusKind.None,
+			ModelThreadSideParentStatusKind.None, false, false, false, false, false, false, false, false, false, false, errorMessage);
 	}
 }

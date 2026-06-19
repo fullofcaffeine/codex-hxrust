@@ -62,7 +62,6 @@ class TuiSmokeAltScreenAction {
 	public final clearAfterY:Int;
 	public final failureCode:String;
 
-
 	public function activeTransitionText():String {
 		return activeBefore + "->" + activeAfter;
 	}

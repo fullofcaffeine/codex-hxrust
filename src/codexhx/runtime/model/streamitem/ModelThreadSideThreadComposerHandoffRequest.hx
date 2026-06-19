@@ -12,18 +12,9 @@ class ModelThreadSideThreadComposerHandoffRequest {
 	public final previousEventCount:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		startOutcome:ModelThreadSideThreadStartOutcome,
-		startupRoutingOutcome:ModelThreadSideThreadStartupRoutingOutcome,
-		userMessageProvided:Bool,
-		inlineUserMessageText:String,
-		composerInitiallyEmpty:Bool,
-		sideContextLabelBefore:String,
-		eventOrderIndex:Int,
-		previousEventCount:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, startOutcome:ModelThreadSideThreadStartOutcome, startupRoutingOutcome:ModelThreadSideThreadStartupRoutingOutcome,
+			userMessageProvided:Bool, inlineUserMessageText:String, composerInitiallyEmpty:Bool, sideContextLabelBefore:String, eventOrderIndex:Int,
+			previousEventCount:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.startOutcome = startOutcome;
 		this.startupRoutingOutcome = startupRoutingOutcome;

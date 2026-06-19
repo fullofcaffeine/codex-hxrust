@@ -4,19 +4,17 @@ class ModelKeymapShadowPolicy {
 	static final NoFunctionNumber = -1;
 
 	public static function apply(request:ModelKeymapShadowRequest):ModelKeymapShadowOutcome {
-		if (request == null) return failure("", "missing keymap shadow request");
+		if (request == null)
+			return failure("", "missing keymap shadow request");
 
-		final canonicalBindingPreserved = matches(
-			request.canonicalBinding,
-			new ModelKeymapBinding({
-				kind: ModelParsedKeyKind.Character,
-				keyName: "a",
-				functionNumber: NoFunctionNumber,
-				ctrlModifier: true,
-				altModifier: true,
-				shiftModifier: true
-			})
-		);
+		final canonicalBindingPreserved = matches(request.canonicalBinding, new ModelKeymapBinding({
+			kind: ModelParsedKeyKind.Character,
+			keyName: "a",
+			functionNumber: NoFunctionNumber,
+			ctrlModifier: true,
+			altModifier: true,
+			shiftModifier: true
+		}));
 		var shadowConflictCount = 0;
 		var composerShadowRejected = false;
 		var editorShadowRejected = false;
@@ -25,11 +23,11 @@ class ModelKeymapShadowPolicy {
 		var actionNamesPreserved = request.shadowCases.length > 0;
 
 		for (shadowCase in request.shadowCases) {
-			final validCase = shadowCase.outerActionName.length > 0
-				&& shadowCase.innerActionName.length > 0
-				&& shadowCase.binding != null;
-			if (!validCase) actionNamesPreserved = false;
-			if (validCase) shadowConflictCount++;
+			final validCase = shadowCase.outerActionName.length > 0 && shadowCase.innerActionName.length > 0 && shadowCase.binding != null;
+			if (!validCase)
+				actionNamesPreserved = false;
+			if (validCase)
+				shadowConflictCount++;
 			switch shadowCase.scope {
 				case ModelKeymapShadowScopeKind.Composer:
 					composerShadowRejected = composerShadowRejected || validCase;
@@ -45,17 +43,9 @@ class ModelKeymapShadowPolicy {
 		}
 
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final ok = canonicalBindingPreserved
-			&& shadowConflictCount == 4
-			&& composerShadowRejected
-			&& editorShadowRejected
-			&& approvalShadowRejected
-			&& listShadowRejected
-			&& actionNamesPreserved
-			&& eventOrderingPreserved;
-		final decisionKind = ok
-			? ModelKeymapShadowDecisionKind.KeymapShadowConflictsRejected
-			: ModelKeymapShadowDecisionKind.KeymapShadowConflictsMissed;
+		final ok = canonicalBindingPreserved && shadowConflictCount == 4 && composerShadowRejected && editorShadowRejected && approvalShadowRejected
+			&& listShadowRejected && actionNamesPreserved && eventOrderingPreserved;
+		final decisionKind = ok ? ModelKeymapShadowDecisionKind.KeymapShadowConflictsRejected : ModelKeymapShadowDecisionKind.KeymapShadowConflictsMissed;
 
 		return new ModelKeymapShadowOutcome({
 			ok: ok,

@@ -25,31 +25,11 @@ class ModelSamplingStreamAttemptOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		resultKind:ModelSamplingStreamAttemptResultKind,
-		errorKind:ModelSamplingStreamErrorKind,
-		retryable:Bool,
-		retryScheduled:Bool,
-		retryCountBefore:Int,
-		retryCountAfter:Int,
-		maxRetries:Int,
-		unauthorizedRetryStatePrepared:Bool,
-		contextWindowMarkedFull:Bool,
-		usageLimitRateLimitsUpdated:Bool,
-		terminal:Bool,
-		streamOpened:Bool,
-		dispatchAttemptIndex:Int,
-		promptItemCount:Int,
-		liveProviderRequestAttempted:Bool,
-		providerStreamOpened:Bool,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, resultKind:ModelSamplingStreamAttemptResultKind, errorKind:ModelSamplingStreamErrorKind,
+			retryable:Bool, retryScheduled:Bool, retryCountBefore:Int, retryCountAfter:Int, maxRetries:Int, unauthorizedRetryStatePrepared:Bool,
+			contextWindowMarkedFull:Bool, usageLimitRateLimitsUpdated:Bool, terminal:Bool, streamOpened:Bool, dispatchAttemptIndex:Int, promptItemCount:Int,
+			liveProviderRequestAttempted:Bool, providerStreamOpened:Bool, liveNetworkAttempted:Bool, realFilesystemMutated:Bool,
+			toolExecutedOutsideFixture:Bool, errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -76,29 +56,15 @@ class ModelSamplingStreamAttemptOutcome {
 	}
 
 	public function summary():String {
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";resultKind=" + resultKind
-			+ ";errorKind=" + errorKind
-			+ ";retryable=" + boolText(retryable)
-			+ ";retryScheduled=" + boolText(retryScheduled)
-			+ ";retryCountBefore=" + Std.string(retryCountBefore)
-			+ ";retryCountAfter=" + Std.string(retryCountAfter)
-			+ ";maxRetries=" + Std.string(maxRetries)
-			+ ";unauthorizedRetryStatePrepared=" + boolText(unauthorizedRetryStatePrepared)
-			+ ";contextWindowMarkedFull=" + boolText(contextWindowMarkedFull)
-			+ ";usageLimitRateLimitsUpdated=" + boolText(usageLimitRateLimitsUpdated)
-			+ ";terminal=" + boolText(terminal)
-			+ ";streamOpened=" + boolText(streamOpened)
-			+ ";dispatchAttemptIndex=" + Std.string(dispatchAttemptIndex)
-			+ ";promptItemCount=" + Std.string(promptItemCount)
-			+ ";liveProviderRequestAttempted=" + boolText(liveProviderRequestAttempted)
-			+ ";providerStreamOpened=" + boolText(providerStreamOpened)
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";resultKind=" + resultKind + ";errorKind=" + errorKind + ";retryable="
+			+ boolText(retryable) + ";retryScheduled=" + boolText(retryScheduled) + ";retryCountBefore=" + Std.string(retryCountBefore) + ";retryCountAfter="
+			+ Std.string(retryCountAfter) + ";maxRetries=" + Std.string(maxRetries) + ";unauthorizedRetryStatePrepared="
+			+ boolText(unauthorizedRetryStatePrepared) + ";contextWindowMarkedFull=" + boolText(contextWindowMarkedFull) + ";usageLimitRateLimitsUpdated="
+			+ boolText(usageLimitRateLimitsUpdated) + ";terminal=" + boolText(terminal) + ";streamOpened=" + boolText(streamOpened)
+			+ ";dispatchAttemptIndex=" + Std.string(dispatchAttemptIndex) + ";promptItemCount=" + Std.string(promptItemCount)
+			+ ";liveProviderRequestAttempted=" + boolText(liveProviderRequestAttempted) + ";providerStreamOpened=" + boolText(providerStreamOpened)
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

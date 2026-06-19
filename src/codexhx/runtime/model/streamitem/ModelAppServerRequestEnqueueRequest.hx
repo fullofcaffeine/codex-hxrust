@@ -18,24 +18,10 @@ class ModelAppServerRequestEnqueueRequest {
 	public final requestOrderIndex:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		responseDispatchOutcome:ModelAppServerResponseDispatchOutcome,
-		requestKind:ModelReplayedServerRequestKind,
-		threadId:String,
-		primaryThreadId:String,
-		primaryThreadKnown:Bool,
-		activeThreadId:String,
-		threadIdAvailable:Bool,
-		pendingRequestRecorded:Bool,
-		queueActive:Bool,
-		enqueueSucceeds:Bool,
-		pendingPrimaryEventCountBefore:Int,
-		threadQueueEventCountBefore:Int,
-		previousRequestCount:Int,
-		requestOrderIndex:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, responseDispatchOutcome:ModelAppServerResponseDispatchOutcome, requestKind:ModelReplayedServerRequestKind,
+			threadId:String, primaryThreadId:String, primaryThreadKnown:Bool, activeThreadId:String, threadIdAvailable:Bool, pendingRequestRecorded:Bool,
+			queueActive:Bool, enqueueSucceeds:Bool, pendingPrimaryEventCountBefore:Int, threadQueueEventCountBefore:Int, previousRequestCount:Int,
+			requestOrderIndex:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.responseDispatchOutcome = responseDispatchOutcome;
 		this.requestKind = requestKind == null ? ModelReplayedServerRequestKind.UserInput : requestKind;

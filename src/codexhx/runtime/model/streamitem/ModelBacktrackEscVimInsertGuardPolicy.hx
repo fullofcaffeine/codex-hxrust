@@ -2,12 +2,10 @@ package codexhx.runtime.model.streamitem;
 
 class ModelBacktrackEscVimInsertGuardPolicy {
 	public static function apply(request:ModelBacktrackEscVimInsertGuardRequest):ModelBacktrackEscVimInsertGuardOutcome {
-		if (request == null) return failure("", "missing backtrack Esc Vim-insert guard request");
+		if (request == null)
+			return failure("", "missing backtrack Esc Vim-insert guard request");
 
-		final baseBacktrackEligible = request.keyIsEsc
-			&& !request.sideConversationActive
-			&& request.normalBacktrackMode
-			&& request.composerEmptyInitially;
+		final baseBacktrackEligible = request.keyIsEsc && !request.sideConversationActive && request.normalBacktrackMode && request.composerEmptyInitially;
 		final initialBacktrackEscAllowed = baseBacktrackEligible;
 		final vimNormalBacktrackEscAllowed = initialBacktrackEscAllowed && request.vimModeEnabled;
 		final vimInsertEscTakesPrecedence = baseBacktrackEligible && request.vimModeEnabled && request.vimInsertModeActiveBeforeEsc;
@@ -17,11 +15,7 @@ class ModelBacktrackEscVimInsertGuardPolicy {
 		final vimInsertClearedAfterEsc = vimEscHandled && !request.vimInsertModeActiveAfterEsc;
 		final backtrackEscAllowedAfterVimEsc = baseBacktrackEligible && vimInsertClearedAfterEsc;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
-		final decisionKind = backtrackEscAllowedAfterVimEsc
-			? ModelBacktrackEscVimInsertGuardDecisionKind.BacktrackEscGuardPreserved
-			: vimInsertEscTakesPrecedence
-				? ModelBacktrackEscVimInsertGuardDecisionKind.VimInsertEscStolen
-				: ModelBacktrackEscVimInsertGuardDecisionKind.BacktrackEscGuardUnavailable;
+		final decisionKind = backtrackEscAllowedAfterVimEsc ? ModelBacktrackEscVimInsertGuardDecisionKind.BacktrackEscGuardPreserved : vimInsertEscTakesPrecedence ? ModelBacktrackEscVimInsertGuardDecisionKind.VimInsertEscStolen : ModelBacktrackEscVimInsertGuardDecisionKind.BacktrackEscGuardUnavailable;
 		final ok = initialBacktrackEscAllowed
 			&& vimNormalBacktrackEscAllowed
 			&& vimInsertEscTakesPrecedence

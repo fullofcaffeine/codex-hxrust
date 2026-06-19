@@ -12,18 +12,9 @@ class ModelAppServerQueuedRequestDeliveryRequest {
 	public final deliveryOrderIndex:Int;
 	public final secretProbe:String;
 
-	public function new(
-		requestId:String,
-		enqueueOutcome:ModelAppServerRequestEnqueueOutcome,
-		requestKind:ModelReplayedServerRequestKind,
-		requestStillPending:Bool,
-		activeThreadEvent:Bool,
-		replayDelivery:Bool,
-		pendingPrimaryDrained:Bool,
-		previousDeliveryCount:Int,
-		deliveryOrderIndex:Int,
-		secretProbe:String
-	) {
+	public function new(requestId:String, enqueueOutcome:ModelAppServerRequestEnqueueOutcome, requestKind:ModelReplayedServerRequestKind,
+			requestStillPending:Bool, activeThreadEvent:Bool, replayDelivery:Bool, pendingPrimaryDrained:Bool, previousDeliveryCount:Int,
+			deliveryOrderIndex:Int, secretProbe:String) {
 		this.requestId = requestId == null ? "" : requestId;
 		this.enqueueOutcome = enqueueOutcome;
 		this.requestKind = requestKind == null ? ModelReplayedServerRequestKind.UserInput : requestKind;

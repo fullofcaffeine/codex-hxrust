@@ -6,7 +6,7 @@ import haxe.macro.Expr;
 #end
 
 class FieldRecordConstructor {
-#if macro
+	#if macro
 	public static function build():Array<Field> {
 		final fields = Context.getBuildFields();
 		for (field in fields) {
@@ -122,9 +122,7 @@ class FieldRecordConstructor {
 	static function unknownValue(path:TypePath, pos:Position):Expr {
 		return {
 			expr: EField({
-				expr: path.pack.length == 0
-					? EConst(CIdent(path.name))
-					: EField(drill(path.pack, pos), path.name),
+				expr: path.pack.length == 0 ? EConst(CIdent(path.name)) : EField(drill(path.pack, pos), path.name),
 				pos: pos
 			}, "Unknown"),
 			pos: pos
@@ -167,5 +165,5 @@ class FieldRecordConstructor {
 		}
 		return false;
 	}
-#end
+	#end
 }

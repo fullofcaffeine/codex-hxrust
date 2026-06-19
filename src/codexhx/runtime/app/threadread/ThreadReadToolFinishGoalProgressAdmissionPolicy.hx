@@ -12,7 +12,8 @@ class ThreadReadToolFinishGoalProgressAdmissionPolicy {
 	}
 
 	public static function build(request:ThreadReadToolFinishGoalProgressAdmissionRequest):ThreadReadToolFinishGoalProgressAdmissionOutcome {
-		if (!request.runtimeAvailable) return ThreadReadToolFinishGoalProgressAdmissionOutcome.runtimeMissing(request);
+		if (!request.runtimeAvailable)
+			return ThreadReadToolFinishGoalProgressAdmissionOutcome.runtimeMissing(request);
 
 		final toolAttemptCounts = countsForGoalProgress(request);
 		final updateGoalSelfTool = isBareUpdateGoal(request);
@@ -25,23 +26,23 @@ class ThreadReadToolFinishGoalProgressAdmissionPolicy {
 		if (updateGoalSelfTool) {
 			return ThreadReadToolFinishGoalProgressAdmissionOutcome.updateGoalSelfToolSkip(request, toolAttemptCounts);
 		}
-		if (request.accountingOutcome == null) return ThreadReadToolFinishGoalProgressAdmissionOutcome.accountingMissing(request);
+		if (request.accountingOutcome == null)
+			return ThreadReadToolFinishGoalProgressAdmissionOutcome.accountingMissing(request);
 		if (!request.accountingOutcome.ok) {
 			return ThreadReadToolFinishGoalProgressAdmissionOutcome.accountingFailed(request, request.accountingOutcome.code);
 		}
 		if (!request.accountingOutcome.progressReturned) {
 			return ThreadReadToolFinishGoalProgressAdmissionOutcome.noProgress(request, request.accountingOutcome.code);
 		}
-		return ThreadReadToolFinishGoalProgressAdmissionOutcome.progressReturnedOutcome(
-			request,
-			request.accountingOutcome.code,
-			request.accountingOutcome.status == ThreadGoalStatus.BudgetLimited
-		);
+		return ThreadReadToolFinishGoalProgressAdmissionOutcome.progressReturnedOutcome(request, request.accountingOutcome.code,
+			request.accountingOutcome.status == ThreadGoalStatus.BudgetLimited);
 	}
 
 	static function countsForGoalProgress(request:ThreadReadToolFinishGoalProgressAdmissionRequest):Bool {
-		if (request.outcomeKind == ThreadReadToolCallOutcomeKind.Completed) return true;
-		if (request.outcomeKind == ThreadReadToolCallOutcomeKind.Failed) return request.failedHandlerExecuted;
+		if (request.outcomeKind == ThreadReadToolCallOutcomeKind.Completed)
+			return true;
+		if (request.outcomeKind == ThreadReadToolCallOutcomeKind.Failed)
+			return request.failedHandlerExecuted;
 		return false;
 	}
 

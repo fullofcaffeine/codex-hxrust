@@ -9,46 +9,26 @@ class ThreadReadCreateGoalToolPolicy {
 
 	public static function buildCases(requests:Array<ThreadReadCreateGoalToolRequest>):ThreadReadCreateGoalToolReport {
 		final outcomes:Array<ThreadReadCreateGoalToolOutcome> = [];
-		for (request in requests) outcomes.push(build(request));
+		for (request in requests)
+			outcomes.push(build(request));
 		return new ThreadReadCreateGoalToolReport(outcomes);
 	}
 
 	public static function build(request:ThreadReadCreateGoalToolRequest):ThreadReadCreateGoalToolOutcome {
 		final args = parseArguments(request.argumentsJson);
 		if (!args.ok) {
-			return ThreadReadCreateGoalToolOutcome.rejected(
-				request,
-				"invalid_tool_arguments",
-				args.errorMessage,
-				"",
-				false,
-				0,
-				"handle_create->parse_arguments:error->RespondToModel"
-			);
+			return ThreadReadCreateGoalToolOutcome.rejected(request, "invalid_tool_arguments", args.errorMessage, "", false, 0,
+				"handle_create->parse_arguments:error->RespondToModel");
 		}
 		final objective = StringTools.trim(args.objective);
 		final objectiveError = validateObjective(objective);
 		if (objectiveError.length > 0) {
-			return ThreadReadCreateGoalToolOutcome.rejected(
-				request,
-				"invalid_goal_objective",
-				objectiveError,
-				objective,
-				args.hasTokenBudget,
-				args.tokenBudget,
-				"handle_create->trim_objective->validate_thread_goal_objective:error->RespondToModel"
-			);
+			return ThreadReadCreateGoalToolOutcome.rejected(request, "invalid_goal_objective", objectiveError, objective, args.hasTokenBudget,
+				args.tokenBudget, "handle_create->trim_objective->validate_thread_goal_objective:error->RespondToModel");
 		}
 		if (args.hasTokenBudget && args.tokenBudget <= 0) {
-			return ThreadReadCreateGoalToolOutcome.rejected(
-				request,
-				"invalid_goal_budget",
-				"goal budgets must be positive when provided",
-				objective,
-				args.hasTokenBudget,
-				args.tokenBudget,
-				"handle_create->validate_goal_budget:error->RespondToModel"
-			);
+			return ThreadReadCreateGoalToolOutcome.rejected(request, "invalid_goal_budget", "goal budgets must be positive when provided", objective,
+				args.hasTokenBudget, args.tokenBudget, "handle_create->validate_goal_budget:error->RespondToModel");
 		}
 		if (request.insertOutcomeKind == ThreadReadCreateGoalToolInsertOutcomeKind.Error) {
 			return ThreadReadCreateGoalToolOutcome.insertError(request, objective, args.hasTokenBudget, args.tokenBudget);
@@ -67,13 +47,16 @@ class ThreadReadCreateGoalToolPolicy {
 		} catch (e:Dynamic) {
 			return ThreadReadCreateGoalToolArgsRead.failure("goal tool arguments are not valid JSON");
 		}
-		if (!parsed.ok) return ThreadReadCreateGoalToolArgsRead.failure("goal tool arguments are not valid JSON");
+		if (!parsed.ok)
+			return ThreadReadCreateGoalToolArgsRead.failure("goal tool arguments are not valid JSON");
 		return switch parsed.value {
 			case JObject(keys, values):
 				final objective = stringField(keys, values, "objective");
-				if (!objective.ok) return ThreadReadCreateGoalToolArgsRead.failure("missing objective");
+				if (!objective.ok)
+					return ThreadReadCreateGoalToolArgsRead.failure("missing objective");
 				final budget = optionalIntField(keys, values, "token_budget");
-				if (!budget.ok) return ThreadReadCreateGoalToolArgsRead.failure("invalid token_budget");
+				if (!budget.ok)
+					return ThreadReadCreateGoalToolArgsRead.failure("invalid token_budget");
 				ThreadReadCreateGoalToolArgsRead.success(objective.value, budget.present, budget.value);
 			case _:
 				ThreadReadCreateGoalToolArgsRead.failure("goal tool arguments must be a JSON object");
@@ -81,14 +64,17 @@ class ThreadReadCreateGoalToolPolicy {
 	}
 
 	static function validateObjective(value:String):String {
-		if (value.length == 0) return "goal objective must not be empty";
-		if (value.length > maxObjectiveChars) return "goal objective must be at most 4000 characters";
+		if (value.length == 0)
+			return "goal objective must not be empty";
+		if (value.length > maxObjectiveChars)
+			return "goal objective must be at most 4000 characters";
 		return "";
 	}
 
 	static function stringField(keys:Array<String>, values:Array<Value>, name:String):ThreadReadCreateGoalToolStringRead {
 		final index = fieldIndex(keys, name);
-		if (index < 0) return ThreadReadCreateGoalToolStringRead.failure();
+		if (index < 0)
+			return ThreadReadCreateGoalToolStringRead.failure();
 		return switch values[index] {
 			case JString(value): ThreadReadCreateGoalToolStringRead.success(value);
 			case _: ThreadReadCreateGoalToolStringRead.failure();
@@ -97,7 +83,8 @@ class ThreadReadCreateGoalToolPolicy {
 
 	static function optionalIntField(keys:Array<String>, values:Array<Value>, name:String):ThreadReadCreateGoalToolOptionalIntRead {
 		final index = fieldIndex(keys, name);
-		if (index < 0) return ThreadReadCreateGoalToolOptionalIntRead.absent();
+		if (index < 0)
+			return ThreadReadCreateGoalToolOptionalIntRead.absent();
 		return switch values[index] {
 			case JNull: ThreadReadCreateGoalToolOptionalIntRead.absent();
 			case JNumber(value): ThreadReadCreateGoalToolOptionalIntRead.some(Std.int(value));
@@ -108,7 +95,8 @@ class ThreadReadCreateGoalToolPolicy {
 	static function fieldIndex(keys:Array<String>, name:String):Int {
 		var i = 0;
 		while (i < keys.length) {
-			if (keys[i] == name) return i;
+			if (keys[i] == name)
+				return i;
 			i = i + 1;
 		}
 		return -1;

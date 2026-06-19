@@ -10,16 +10,8 @@ class ModelInFlightToolDrainItem {
 	public final fromResponseInput:Bool;
 	public final externalContext:Bool;
 
-	public function new(
-		callId:String,
-		responseKind:ModelPatchToolOutputItemKind,
-		orderIndex:Int,
-		outputText:String,
-		success:Bool,
-		failureKind:ModelInFlightToolDrainFailureKind,
-		fromResponseInput:Bool,
-		externalContext:Bool
-	) {
+	public function new(callId:String, responseKind:ModelPatchToolOutputItemKind, orderIndex:Int, outputText:String, success:Bool,
+			failureKind:ModelInFlightToolDrainFailureKind, fromResponseInput:Bool, externalContext:Bool) {
 		this.callId = callId == null ? "" : callId;
 		this.responseKind = responseKind;
 		this.orderIndex = orderIndex;
@@ -31,13 +23,8 @@ class ModelInFlightToolDrainItem {
 	}
 
 	public function summary():String {
-		return "orderIndex=" + Std.string(orderIndex)
-			+ ";callId=" + noneIfEmpty(callId)
-			+ ";responseKind=" + responseKind
-			+ ";success=" + boolText(success)
-			+ ";failureKind=" + failureKind
-			+ ";fromResponseInput=" + boolText(fromResponseInput)
-			+ ";externalContext=" + boolText(externalContext)
+		return "orderIndex=" + Std.string(orderIndex) + ";callId=" + noneIfEmpty(callId) + ";responseKind=" + responseKind + ";success=" + boolText(success)
+			+ ";failureKind=" + failureKind + ";fromResponseInput=" + boolText(fromResponseInput) + ";externalContext=" + boolText(externalContext)
 			+ ";text=" + outputText;
 	}
 

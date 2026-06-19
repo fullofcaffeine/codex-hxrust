@@ -17,10 +17,7 @@ class ResumePickerThreadReadResponse {
 	public final truncated:Bool;
 
 	public function summary():String {
-		return "id=" + requestId
-			+ ";thread=" + threadId
-			+ ";preview=" + previewLines.length
-			+ ";cells=" + transcriptCells.length
-			+ ";truncated=" + (truncated ? "true" : "false");
+		return "id=" + requestId + ";thread=" + threadId + ";preview=" + previewLines.length + ";cells=" + transcriptCells.length + ";truncated="
+			+ (truncated ? "true" : "false");
 	}
 }

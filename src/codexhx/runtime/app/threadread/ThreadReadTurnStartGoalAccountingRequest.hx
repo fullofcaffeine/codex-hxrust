@@ -14,18 +14,9 @@ class ThreadReadTurnStartGoalAccountingRequest {
 	public final storedGoalId:String;
 	public final budgetLimitReportedGoalId:String;
 
-	public function new(
-		runtimeAvailable:Bool,
-		runtimeEnabled:Bool,
-		turnId:String,
-		collaborationMode:ThreadReadTurnStartCollaborationMode,
-		tokenUsageAtTurnStart:Int,
-		storedGoalLookupOutcomeKind:ThreadReadStoredGoalLookupOutcomeKind,
-		storedGoalLookupErrorCode:String,
-		storedGoal:ThreadGoal,
-		storedGoalId:String,
-		budgetLimitReportedGoalId:String
-	) {
+	public function new(runtimeAvailable:Bool, runtimeEnabled:Bool, turnId:String, collaborationMode:ThreadReadTurnStartCollaborationMode,
+			tokenUsageAtTurnStart:Int, storedGoalLookupOutcomeKind:ThreadReadStoredGoalLookupOutcomeKind, storedGoalLookupErrorCode:String,
+			storedGoal:ThreadGoal, storedGoalId:String, budgetLimitReportedGoalId:String) {
 		this.runtimeAvailable = runtimeAvailable;
 		this.runtimeEnabled = runtimeEnabled;
 		this.turnId = turnId;

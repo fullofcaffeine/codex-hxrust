@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelBacktrackSelectionPolicy {
 	public static function apply(request:ModelBacktrackSelectionRequest):ModelBacktrackSelectionOutcome {
-		if (request == null) return failure("", "missing backtrack selection request");
+		if (request == null)
+			return failure("", "missing backtrack selection request");
 
 		final totalUserCount = totalUsers(request.transcriptCells);
 		final latestSessionStart = latestSessionStart(request.transcriptCells);
@@ -10,7 +11,11 @@ class ModelBacktrackSelectionPolicy {
 		final duplicateHistoryIgnored = totalUserCount > sessionUserCount && latestSessionStart > 0;
 		final eventOrderingPreserved = request.eventOrderIndex == request.previousEventCount + 1;
 
-		if (!request.primed || !request.hasBaseThread || request.pendingRollback || request.nthUserMessage < 0 || request.nthUserMessage >= sessionUserCount) {
+		if (!request.primed
+			|| !request.hasBaseThread
+			|| request.pendingRollback
+			|| request.nthUserMessage < 0
+			|| request.nthUserMessage >= sessionUserCount) {
 			return new ModelBacktrackSelectionOutcome({
 				ok: false,
 				code: "backtrack_selection_unavailable",
@@ -39,12 +44,11 @@ class ModelBacktrackSelectionPolicy {
 		}
 
 		final selected = nthUserSinceLatestSession(request.transcriptCells, latestSessionStart, request.nthUserMessage);
-		if (selected == null) return failure(request.requestId, "selected user message not found");
+		if (selected == null)
+			return failure(request.requestId, "selected user message not found");
 
 		final rollbackTurnCount = sessionUserCount - request.nthUserMessage;
-		final hasComposerContent = selected.message.length > 0
-			|| selected.textElementCount > 0
-			|| selected.localImageCount > 0
+		final hasComposerContent = selected.message.length > 0 || selected.textElementCount > 0 || selected.localImageCount > 0
 			|| selected.remoteImageCount > 0;
 
 		return new ModelBacktrackSelectionOutcome({
@@ -78,7 +82,8 @@ class ModelBacktrackSelectionPolicy {
 		var start = 0;
 		var i = 0;
 		while (i < cells.length) {
-			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.SessionHeader) start = i + 1;
+			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.SessionHeader)
+				start = i + 1;
 			i = i + 1;
 		}
 		return start;
@@ -86,7 +91,9 @@ class ModelBacktrackSelectionPolicy {
 
 	static function totalUsers(cells:Array<ModelBacktrackTranscriptCell>):Int {
 		var count = 0;
-		for (cell in cells) if (cell.cellKind == ModelBacktrackTranscriptCellKind.User) count = count + 1;
+		for (cell in cells)
+			if (cell.cellKind == ModelBacktrackTranscriptCellKind.User)
+				count = count + 1;
 		return count;
 	}
 
@@ -94,23 +101,21 @@ class ModelBacktrackSelectionPolicy {
 		var count = 0;
 		var i = start;
 		while (i < cells.length) {
-			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.User) count = count + 1;
+			if (cells[i].cellKind == ModelBacktrackTranscriptCellKind.User)
+				count = count + 1;
 			i = i + 1;
 		}
 		return count;
 	}
 
-	static function nthUserSinceLatestSession(
-		cells:Array<ModelBacktrackTranscriptCell>,
-		start:Int,
-		nth:Int
-	):ModelBacktrackTranscriptCell {
+	static function nthUserSinceLatestSession(cells:Array<ModelBacktrackTranscriptCell>, start:Int, nth:Int):ModelBacktrackTranscriptCell {
 		var count = 0;
 		var i = start;
 		while (i < cells.length) {
 			final cell = cells[i];
 			if (cell.cellKind == ModelBacktrackTranscriptCellKind.User) {
-				if (count == nth) return cell;
+				if (count == nth)
+					return cell;
 				count = count + 1;
 			}
 			i = i + 1;

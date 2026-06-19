@@ -12,7 +12,8 @@ class ThreadReadBudgetLimitGoalSteeringReport {
 	public function injectedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.injected) count = count + 1;
+			if (outcome.injected)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -20,7 +21,8 @@ class ThreadReadBudgetLimitGoalSteeringReport {
 	public function skippedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.skipped) count = count + 1;
+			if (outcome.skipped)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -28,7 +30,8 @@ class ThreadReadBudgetLimitGoalSteeringReport {
 	public function failureCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (!outcome.ok) count = count + 1;
+			if (!outcome.ok)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -36,7 +39,8 @@ class ThreadReadBudgetLimitGoalSteeringReport {
 	public function reportMarkedCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.reportMarked) count = count + 1;
+			if (outcome.reportMarked)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -44,7 +48,8 @@ class ThreadReadBudgetLimitGoalSteeringReport {
 	public function duplicateCount():Int {
 		var count = 0;
 		for (outcome in outcomes) {
-			if (outcome.duplicateReportSkipped) count = count + 1;
+			if (outcome.duplicateReportSkipped)
+				count = count + 1;
 		}
 		return count;
 	}
@@ -54,13 +59,8 @@ class ThreadReadBudgetLimitGoalSteeringReport {
 		for (outcome in outcomes) {
 			parts.push(outcome.summary());
 		}
-		return "schema=" + schema
-			+ ";cases=" + Std.string(outcomes.length)
-			+ ";injected=" + Std.string(injectedCount())
-			+ ";skipped=" + Std.string(skippedCount())
-			+ ";failed=" + Std.string(failureCount())
-			+ ";reportMarked=" + Std.string(reportMarkedCount())
-			+ ";duplicates=" + Std.string(duplicateCount())
-			+ ";outcomes=[" + parts.join("##") + "]";
+		return "schema=" + schema + ";cases=" + Std.string(outcomes.length) + ";injected=" + Std.string(injectedCount()) + ";skipped="
+			+ Std.string(skippedCount()) + ";failed=" + Std.string(failureCount()) + ";reportMarked=" + Std.string(reportMarkedCount()) + ";duplicates="
+			+ Std.string(duplicateCount()) + ";outcomes=[" + parts.join("##") + "]";
 	}
 }

@@ -12,9 +12,7 @@ class ProviderAdmissionModel {
 	}
 
 	public function valid():Bool {
-		return StringTools.trim(modelId).length > 0
-			&& StringTools.trim(providerId).length > 0
-			&& contextWindow >= 0;
+		return StringTools.trim(modelId).length > 0 && StringTools.trim(providerId).length > 0 && contextWindow >= 0;
 	}
 
 	public function summary():String {

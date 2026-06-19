@@ -2,7 +2,8 @@ package codexhx.runtime.model.streamitem;
 
 class ModelInFlightToolDrainPolicy {
 	public static function drain(request:ModelInFlightToolDrainRequest):ModelInFlightToolDrainOutcome {
-		if (request == null) return failure("", "missing in-flight tool drain request");
+		if (request == null)
+			return failure("", "missing in-flight tool drain request");
 		if (request.handoffOutcome == null || !request.handoffOutcome.ok) {
 			return failure(request.requestId, "in-flight drain requires a modeled stream handoff");
 		}
@@ -15,7 +16,8 @@ class ModelInFlightToolDrainPolicy {
 		final parts:Array<String> = [];
 		var lastOrder = 0;
 		for (item in request.items) {
-			if (item.orderIndex <= lastOrder) responseOrderPreserved = false;
+			if (item.orderIndex <= lastOrder)
+				responseOrderPreserved = false;
 			lastOrder = item.orderIndex;
 			if (item.failureKind == ModelInFlightToolDrainFailureKind.FatalToolFuture) {
 				fatalFailures = fatalFailures + 1;
@@ -25,7 +27,8 @@ class ModelInFlightToolDrainPolicy {
 					convertedFailures = convertedFailures + 1;
 				}
 			}
-			if (item.externalContext) memoryModePolluted = true;
+			if (item.externalContext)
+				memoryModePolluted = true;
 			parts.push(item.summary());
 		}
 
@@ -47,68 +50,33 @@ class ModelInFlightToolDrainPolicy {
 		final tokenAfterDrain = completed && request.tokenCountPending;
 		final turnDiffAfterDrain = completed && request.turnDiffPending;
 
-		return new ModelInFlightToolDrainOutcome(
-			true,
-			"in_flight_tool_drain_modeled",
-			request.requestId,
-			drainKind,
-			request.items.length,
-			drained,
-			convertedFailures,
-			fatalFailures,
-			responseOrderPreserved,
-			recorded,
-			memoryModePolluted,
-			hasItems,
-			tokenAfterDrain,
-			turnDiffAfterDrain,
-			tokenAfterDrain,
-			turnDiffAfterDrain,
-			request.handoffOutcome.liveNetworkAttempted,
-			request.handoffOutcome.realFilesystemMutated,
-			request.handoffOutcome.toolExecutedOutsideFixture,
-			parts.join("||"),
-			fatalFailures > 0 ? "fatal in-flight tool future failure" : ""
-		);
+		return new ModelInFlightToolDrainOutcome(true, "in_flight_tool_drain_modeled", request.requestId, drainKind, request.items.length, drained,
+			convertedFailures, fatalFailures, responseOrderPreserved, recorded, memoryModePolluted, hasItems, tokenAfterDrain, turnDiffAfterDrain,
+			tokenAfterDrain, turnDiffAfterDrain, request.handoffOutcome.liveNetworkAttempted, request.handoffOutcome.realFilesystemMutated,
+			request.handoffOutcome.toolExecutedOutsideFixture, parts.join("||"), fatalFailures > 0 ? "fatal in-flight tool future failure" : "");
 	}
 
 	static function matchesResponseInput(request:ModelInFlightToolDrainRequest):Bool {
 		for (item in request.items) {
 			if (item.fromResponseInput) {
 				final input = request.responseInputOutcome;
-				if (input == null || !input.ok) return false;
-				if (item.callId != input.callId) return false;
-				if (item.responseKind != input.responseKind) return false;
-				if (item.orderIndex != input.responseOrderIndex) return false;
-				if (item.success != input.success) return false;
+				if (input == null || !input.ok)
+					return false;
+				if (item.callId != input.callId)
+					return false;
+				if (item.responseKind != input.responseKind)
+					return false;
+				if (item.orderIndex != input.responseOrderIndex)
+					return false;
+				if (item.success != input.success)
+					return false;
 			}
 		}
 		return true;
 	}
 
 	static function failure(requestId:String, errorMessage:String):ModelInFlightToolDrainOutcome {
-		return new ModelInFlightToolDrainOutcome(
-			false,
-			"in_flight_tool_drain_failed",
-			requestId,
-			ModelInFlightToolDrainOutcomeKind.FatalFailure,
-			0,
-			0,
-			0,
-			0,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			false,
-			"",
-			errorMessage
-		);
+		return new ModelInFlightToolDrainOutcome(false, "in_flight_tool_drain_failed", requestId, ModelInFlightToolDrainOutcomeKind.FatalFailure, 0, 0, 0, 0,
+			false, false, false, false, false, false, false, false, false, false, false, "", errorMessage);
 	}
 }

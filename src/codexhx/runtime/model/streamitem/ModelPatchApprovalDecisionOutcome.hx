@@ -18,24 +18,10 @@ class ModelPatchApprovalDecisionOutcome {
 	public final toolExecutedOutsideFixture:Bool;
 	public final errorMessage:String;
 
-	public function new(
-		ok:Bool,
-		code:String,
-		requestId:String,
-		approvalRequired:Bool,
-		approvalRequestEmitted:Bool,
-		canRun:Bool,
-		sandboxPreference:String,
-		escalatesOnFailure:Bool,
-		sandboxRetryRequested:Bool,
-		permissionRequestPayload:String,
-		reviewDecision:ModelPatchReviewDecision,
-		approvalKeys:Array<ModelPatchApprovalKey>,
-		liveNetworkAttempted:Bool,
-		realFilesystemMutated:Bool,
-		toolExecutedOutsideFixture:Bool,
-		errorMessage:String
-	) {
+	public function new(ok:Bool, code:String, requestId:String, approvalRequired:Bool, approvalRequestEmitted:Bool, canRun:Bool, sandboxPreference:String,
+			escalatesOnFailure:Bool, sandboxRetryRequested:Bool, permissionRequestPayload:String, reviewDecision:ModelPatchReviewDecision,
+			approvalKeys:Array<ModelPatchApprovalKey>, liveNetworkAttempted:Bool, realFilesystemMutated:Bool, toolExecutedOutsideFixture:Bool,
+			errorMessage:String) {
 		this.ok = ok;
 		this.code = code;
 		this.requestId = requestId == null ? "" : requestId;
@@ -56,23 +42,14 @@ class ModelPatchApprovalDecisionOutcome {
 
 	public function summary():String {
 		final parts:Array<String> = [];
-		for (key in approvalKeys) parts.push(key.summary());
-		return "code=" + code
-			+ ";ok=" + boolText(ok)
-			+ ";request=" + requestId
-			+ ";approvalRequired=" + boolText(approvalRequired)
-			+ ";approvalRequestEmitted=" + boolText(approvalRequestEmitted)
-			+ ";canRun=" + boolText(canRun)
-			+ ";sandboxPreference=" + sandboxPreference
-			+ ";escalatesOnFailure=" + boolText(escalatesOnFailure)
-			+ ";sandboxRetryRequested=" + boolText(sandboxRetryRequested)
-			+ ";permissionRequestPayload=" + permissionRequestPayload
-			+ ";reviewDecision=" + reviewDecision
-			+ ";approvalKeys=[" + parts.join("||") + "]"
-			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted)
-			+ ";realFilesystemMutated=" + boolText(realFilesystemMutated)
-			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture)
-			+ ";error=" + errorMessage;
+		for (key in approvalKeys)
+			parts.push(key.summary());
+		return "code=" + code + ";ok=" + boolText(ok) + ";request=" + requestId + ";approvalRequired=" + boolText(approvalRequired)
+			+ ";approvalRequestEmitted=" + boolText(approvalRequestEmitted) + ";canRun=" + boolText(canRun) + ";sandboxPreference=" + sandboxPreference
+			+ ";escalatesOnFailure=" + boolText(escalatesOnFailure) + ";sandboxRetryRequested=" + boolText(sandboxRetryRequested)
+			+ ";permissionRequestPayload=" + permissionRequestPayload + ";reviewDecision=" + reviewDecision + ";approvalKeys=[" + parts.join("||") + "]"
+			+ ";liveNetworkAttempted=" + boolText(liveNetworkAttempted) + ";realFilesystemMutated=" + boolText(realFilesystemMutated)
+			+ ";toolExecutedOutsideFixture=" + boolText(toolExecutedOutsideFixture) + ";error=" + errorMessage;
 	}
 
 	static function boolText(value:Bool):String {

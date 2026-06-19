@@ -36,7 +36,8 @@ class ThreadReadTurnsPageHarness {
 			assertEquals(stringField(expect, "nextCursor", ""), nextCursor);
 			assertEquals(stringField(expect, "backwardsCursor", ""), backwardsCursor);
 			final needle = stringField(expect, "summaryContains", "");
-			if (needle.length > 0) assertContains(outcome.summary(), needle);
+			if (needle.length > 0)
+				assertContains(outcome.summary(), needle);
 			i = i + 1;
 		}
 	}
@@ -48,16 +49,9 @@ class ThreadReadTurnsPageHarness {
 			final items:Array<ThreadReadTurnItemSummary> = [];
 			for (itemValue in arrayField(object, "items")) {
 				final item = objectValue(itemValue);
-				items.push(new ThreadReadTurnItemSummary(
-					cast stringField(item, "kind", ""),
-					stringField(item, "text", "")
-				));
+				items.push(new ThreadReadTurnItemSummary(cast stringField(item, "kind", ""), stringField(item, "text", "")));
 			}
-			out.push(new ThreadReadTurnSummary(
-				stringField(object, "id", ""),
-				cast stringField(object, "status", ""),
-				items
-			));
+			out.push(new ThreadReadTurnSummary(stringField(object, "id", ""), cast stringField(object, "status", ""), items));
 		}
 		return out;
 	}
@@ -67,13 +61,8 @@ class ThreadReadTurnsPageHarness {
 		final threadId = stringField(root, "threadId", "");
 		for (value in values) {
 			final object = objectValue(value);
-			out.push(new ThreadReadTurnsPageRequest(
-				ThreadId.fromString(threadId),
-				stringField(object, "cursor", ""),
-				intField(object, "limit", -1),
-				cast stringField(object, "sortDirection", "desc"),
-				cast stringField(object, "itemsView", "summary")
-			));
+			out.push(new ThreadReadTurnsPageRequest(ThreadId.fromString(threadId), stringField(object, "cursor", ""), intField(object, "limit", -1),
+				cast stringField(object, "sortDirection", "desc"), cast stringField(object, "itemsView", "summary")));
 		}
 		return out;
 	}
@@ -138,7 +127,8 @@ class ThreadReadTurnsPageHarness {
 			case JObject(keys, values):
 				var i = 0;
 				while (i < keys.length && i < values.length) {
-					if (keys[i] == name) return values[i];
+					if (keys[i] == name)
+						return values[i];
 					i = i + 1;
 				}
 				JNull;
@@ -155,7 +145,8 @@ class ThreadReadTurnsPageHarness {
 	}
 
 	static function expectParse(outcome:JsonParseOutcome):Value {
-		if (!outcome.ok) throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
+		if (!outcome.ok)
+			throw outcome.errorCode + " at " + outcome.errorPath + ": " + outcome.errorMessage;
 		return outcome.value;
 	}
 
@@ -164,10 +155,12 @@ class ThreadReadTurnsPageHarness {
 	}
 
 	static function assertEquals(expected:String, actual:String):Void {
-		if (expected != actual) throw "expected " + expected + " but got " + actual;
+		if (expected != actual)
+			throw "expected " + expected + " but got " + actual;
 	}
 
 	static function assertContains(haystack:String, needle:String):Void {
-		if (needle.length > 0 && haystack.indexOf(needle) < 0) throw "expected to find " + needle + " in " + haystack;
+		if (needle.length > 0 && haystack.indexOf(needle) < 0)
+			throw "expected to find " + needle + " in " + haystack;
 	}
 }

@@ -14,11 +14,8 @@ class ThreadReadTurnsCursor {
 	}
 
 	public static function encode(turnId:String, includeAnchor:Bool):String {
-		return "{"
-			+ CodexJson.quote("turnId") + ":" + CodexJson.quote(turnId)
-			+ ","
-			+ CodexJson.quote("includeAnchor") + ":" + (includeAnchor ? "true" : "false")
-			+ "}";
+		return "{" + CodexJson.quote("turnId") + ":" + CodexJson.quote(turnId) + "," + CodexJson.quote("includeAnchor") + ":"
+			+ (includeAnchor ? "true" : "false") + "}";
 	}
 
 	public static function parse(text:String):ThreadReadTurnsCursorParseOutcome {
@@ -27,15 +24,19 @@ class ThreadReadTurnsCursor {
 		} catch (_:Dynamic) {
 			return ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: " + text);
 		}
-		if (!parsed.ok) return ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: " + text);
+		if (!parsed.ok)
+			return ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: " + text);
 		return switch parsed.value {
 			case JObject(keys, values):
 				final turnIdValue = stringField(keys, values, "turnId");
-				if (turnIdValue == null) return ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: missing turnId");
+				if (turnIdValue == null)
+					return ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: missing turnId");
 				final turnId = TurnId.fromString(turnIdValue);
-				if (turnId == null) return ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: invalid turnId");
+				if (turnId == null)
+					return ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: invalid turnId");
 				final includeAnchor = boolField(keys, values, "includeAnchor");
-				if (includeAnchor == null) return ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: missing includeAnchor");
+				if (includeAnchor == null)
+					return ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: missing includeAnchor");
 				ThreadReadTurnsCursorParseOutcome.success(new ThreadReadTurnsCursor(turnId, includeAnchor));
 			case _:
 				ThreadReadTurnsCursorParseOutcome.failure("invalid_cursor", "invalid cursor: " + text);

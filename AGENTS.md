@@ -60,6 +60,16 @@ If a Cafex/Cafetera item floats to the top of the ready queue before its upstrea
 
 Cafex work is a separate later revision/adaptation layer after the 1:1 upstream Codex port is complete enough to stand on its own. Do not treat Cafex parity as part of the first-port acceptance path. Keep Cafex adapter changes under `codexhx.adapters.cafex` and related fixtures/docs, and do not let Cafex behavior leak into upstream-shaped core modules or into `../haxe.rust`.
 
+## Public Readiness, Hooks, And Secret Scanning
+
+Before saying this repository is ready to be public, verify the public-readiness rails are installed and passing. This repo should maintain parity with the safety posture used in `../opencodehx`: staged pre-commit gitleaks scanning, Haxe formatting, full-history secret scanning, GitHub Actions security scanning, CI format/build gates, and Dependabot.
+
+Use `npm run hooks:install` to set `core.hooksPath` to `scripts/hooks`. The pre-commit hook must run `scripts/security/run-gitleaks.sh --staged` before formatting staged `.hx` files with `haxelib formatter`.
+
+Use `npm run public:precommit` before public-release checks. The full gitleaks wrapper must not silently accept a result that scans zero commits when git history exists; if the local gitleaks CLI reports zero scanned commits for a non-empty history, the wrapper should fall back to scanning `git log -p --all` through `gitleaks detect --pipe` and then scan the current tree with `gitleaks dir`.
+
+Do not flip package metadata from private/unlicensed to public/released casually. Public readiness also requires an intentional license, repository URL, README status, and audit of local paths, private references, fixtures, pins, and generated artifacts.
+
 ## Testing Strategy
 
 Use `docs/testing-strategy.md` as the testing policy. Haxe-authored tests that run through the Haxe interpreter and haxe.rust-generated Rust are the primary codexhx proof. Upstream Codex schemas, fixtures, and tests are contract inputs and oracle evidence; adapt them into Haxe-owned fixtures or differential public-behavior harnesses rather than treating upstream Rust-internal test success as sufficient. Generated Rust must remain build output and must not be manually edited to pass tests.

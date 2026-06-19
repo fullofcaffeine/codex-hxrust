@@ -17,23 +17,9 @@ class ModelRequestPromptEnvelope {
 	public final betaFeaturesHeaderPresent:Bool;
 	public final enableRequestCompression:Bool;
 
-	public function new(
-		inputItemCount:Int,
-		toolSpecCount:Int,
-		parallelToolCalls:Bool,
-		supportsReasoningSummaries:Bool,
-		reasoningEffort:String,
-		reasoningSummary:String,
-		supportsVerbosity:Bool,
-		requestedVerbosity:String,
-		outputSchemaPresent:Bool,
-		outputSchemaStrict:Bool,
-		requestedServiceTier:String,
-		windowId:String,
-		turnMetadataHeaderPresent:Bool,
-		betaFeaturesHeaderPresent:Bool,
-		enableRequestCompression:Bool
-	) {
+	public function new(inputItemCount:Int, toolSpecCount:Int, parallelToolCalls:Bool, supportsReasoningSummaries:Bool, reasoningEffort:String,
+			reasoningSummary:String, supportsVerbosity:Bool, requestedVerbosity:String, outputSchemaPresent:Bool, outputSchemaStrict:Bool,
+			requestedServiceTier:String, windowId:String, turnMetadataHeaderPresent:Bool, betaFeaturesHeaderPresent:Bool, enableRequestCompression:Bool) {
 		this.inputItemCount = inputItemCount;
 		this.toolSpecCount = toolSpecCount;
 		this.parallelToolCalls = parallelToolCalls;
