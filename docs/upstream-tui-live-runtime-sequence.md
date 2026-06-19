@@ -2640,6 +2640,19 @@ Model selected raw Codex input submission and turn lifecycle bookkeeping without
 
 Status: HXCX-TUI-69 extends `fixtures/hxrust/tui-smoke.v1.json` with typed turn lifecycle, composer submission, pre-session queueing, empty refusal, blocked-image restore, shell escape, user-input assembly, mention routing, submit-turn, pending-steer, history-render, queue-drain, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic input submission state evidence only, not live shell execution, model submission, or full composer rendering.
 
+### HXCX-TUI-70: ChatWidget Turn Runtime Boundary
+
+Model selected raw Codex task runtime bookkeeping without live model, shell, terminal, or notification effects:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/turn_runtime.rs` task-running derivation: bottom-pane running state is derived from agent-turn and MCP-startup state, then plan-mode nudges and status surfaces are refreshed;
+- preserve task start reset behavior: pending-start is cleared, turn lifecycle starts, transcript/adaptive chunking/plan streams/runtime metrics/session telemetry/reasoning/quit hints are reset, active hook cells are cleared, interrupt hint and terminal-title status switch to working, status header ownership is respected, ambient pet state changes, and redraw is requested;
+- preserve runtime metrics handling: collected deltas merge into turn totals, websocket timing deltas add visible history, and final-message separators can include elapsed time plus accumulated runtime metrics;
+- preserve task completion behavior: last-agent markdown is only recorded when no item-level copy source exists, notification text falls back through the item copy source, active answer/plan streams and unified exec wait streaks are finalized, final separator insertion is gated by work/runtime state, status-line branch/git summary refreshes are requested, running command state is cleared, pending previews refresh, queued follow-ups and active goals suppress completion notifications, plan implementation prompts are gated, and pending rate-limit prompts can be shown;
+- preserve `../codex/codex-rs/tui/src/chatwidget/notifications.rs` and `warnings.rs`: notification allow-lists and priority replacement avoid lower-priority overwrites, pending notifications post display text once, fallback model metadata warnings dedupe by model slug, and warning/error/rate-limit paths finalize the turn before queuing follow-up input;
+- keep the evidence deterministic and independent of live process spawning, filesystem mutation, ratatui rendering, app-server mutation, credentialed model/provider calls, network transport, OS desktop notifications, and Cafex behavior.
+
+Status: HXCX-TUI-70 extends `fixtures/hxrust/tui-smoke.v1.json` with typed task-running, task-start, runtime-metrics, task-completion, cleanup, follow-up, plan-prompt, rate-limit-prompt, notification, warning, finalize/error, plan-update, interrupted-message, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic turn runtime state evidence only, not live model/provider submission, desktop notification delivery, or full runtime ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

@@ -61,7 +61,10 @@
       "../codex/codex-rs/tui/src/chatwidget/input_queue.rs",
       "../codex/codex-rs/tui/src/chatwidget/input_flow.rs",
       "../codex/codex-rs/tui/src/chatwidget/turn_lifecycle.rs",
-      "../codex/codex-rs/tui/src/chatwidget/mcp_startup.rs"
+      "../codex/codex-rs/tui/src/chatwidget/turn_runtime.rs",
+      "../codex/codex-rs/tui/src/chatwidget/warnings.rs",
+      "../codex/codex-rs/tui/src/chatwidget/mcp_startup.rs",
+      "../codex/codex-rs/tui/src/chatwidget/tests/status_and_layout.rs"
     ],
     "notes": "Minimal generated-binary smoke proof only. It uses a headless terminal facade and fixture frame; it does not claim ratatui/crossterm ownership, live app-server transport, or a full interactive TUI."
   },
@@ -14452,6 +14455,303 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_input_submission.plan=headless\ntui.chat_widget_input_submission.turn_start=agent=false->true:sleep=false->true:prevent_idle=true\ntui.chat_widget_input_submission.turn_finish=agent=true->false:sleep=true->false\ntui.chat_widget_input_submission.turn_restore=agent=false->true:sleep=false->true:source=thread_replay\ntui.chat_widget_input_submission.turn_reset=agent=true->false:budget=2->0\ntui.chat_widget_input_submission.prevent_idle=false:agent=true:sleep=true\ntui.chat_widget_input_submission.budget_limited=turn-budget:blocked=true:budget=0->1\ntui.chat_widget_input_submission.budget_limited=turn-budget:blocked=false:budget=1->0\ntui.chat_widget_input_submission.composer=submitted:text=hello:local=1:remote=1:mentions=2:configured=true:plan_stream=false:queued=false:submitted=true:reasoning=true:status=true\ntui.chat_widget_input_submission.composer=submitted:text=follow-up:local=0:remote=0:mentions=0:configured=true:plan_stream=false:queued=true:submitted=false:reasoning=false:status=false\ntui.chat_widget_input_submission.pre_session_queue=draft before config:configured=false:queued=0->1:preview=true\ntui.chat_widget_input_submission.empty=rejected=true:accepted=false:queued=false:submitted=false\ntui.chat_widget_input_submission.blocked_image=model_supports=false:local=1:remote=1:restored=true:warning=true:redraw=true\ntui.chat_widget_input_submission.shell=:allow=true:help=true:run=false:history=false:accepted=false\ntui.chat_widget_input_submission.shell=cargo test:allow=true:help=false:run=true:history=true:accepted=true\ntui.chat_widget_input_submission.shell=!echo plain:allow=false:help=false:run=false:history=false:accepted=true\ntui.chat_widget_input_submission.items=remote,local,text,skill,plugin,app:text=Fix [Image #1] @lint:remote=1:local=1:elements=2:count=6\ntui.chat_widget_input_submission.mentions=skill:lint|plugin:repo|app:github:bindings=4:skills=1:plugins=1:apps=1:dedupe=1\ntui.chat_widget_input_submission.submit_turn=gpt-5.2-codex:mode=default:items=6:accepted=true:op=true:history_append=true:mentions_encoded=true:ide=true:separator=true\ntui.chat_widget_input_submission.pending_steer=follow-up while running:render_history=false:pending=0->1:preview=true\ntui.chat_widget_input_submission.history=UserMessageText:render=true:history=0->1:display=true:cancel_edit=true:pending_start=true\ntui.chat_widget_input_submission.history=Override:render=false:history=1->2:display=false:cancel_edit=false:pending_start=false\ntui.chat_widget_input_submission.queue_drain=Plain:queued=2->1:submitted=true:preview=true:task=true\ntui.chat_widget_input_submission.queue_drain=RunShell:queued=1->0:submitted=false:preview=true:task=false\ntui.chat_widget_input_submission.failure=thread_model_unavailable:error=Thread model is unavailable:model_available=false:no_process=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget input submission\ninput> \ntrace:\ntui.chat_widget_input_submission.plan=headless\ntui.chat_widget_input_submission.turn_start=agent=false->true:sleep=false->true:prevent_idle=true\ntui.chat_widget_input_submission.turn_finish=agent=true->false:sleep=true->false\ntui.chat_widget_input_submission.turn_restore=agent=false->true:sleep=false->true:source=thread_replay\ntui.chat_widget_input_submission.turn_reset=agent=true->false:budget=2->0\ntui.chat_widget_input_submission.prevent_idle=false:agent=true:sleep=true\ntui.chat_widget_input_submission.budget_limited=turn-budget:blocked=true:budget=0->1\ntui.chat_widget_input_submission.budget_limited=turn-budget:blocked=false:budget=1->0\ntui.chat_widget_input_submission.composer=submitted:text=hello:local=1:remote=1:mentions=2:configured=true:plan_stream=false:queued=false:submitted=true:reasoning=true:status=true\ntui.chat_widget_input_submission.composer=submitted:text=follow-up:local=0:remote=0:mentions=0:configured=true:plan_stream=false:queued=true:submitted=false:reasoning=false:status=false\ntui.chat_widget_input_submission.pre_session_queue=draft before config:configured=false:queued=0->1:preview=true\ntui.chat_widget_input_submission.empty=rejected=true:accepted=false:queued=false:submitted=false\ntui.chat_widget_input_submission.blocked_image=model_supports=false:local=1:remote=1:restored=true:warning=true:redraw=true\ntui.chat_widget_input_submission.shell=:allow=true:help=true:run=false:history=false:accepted=false\ntui.chat_widget_input_submission.shell=cargo test:allow=true:help=false:run=true:history=true:accepted=true\ntui.chat_widget_input_submission.shell=!echo plain:allow=false:help=false:run=false:history=false:accepted=true\ntui.chat_widget_input_submission.items=remote,local,text,skill,plugin,app:text=Fix [Image #1] @lint:remote=1:local=1:elements=2:count=6\ntui.chat_widget_input_submission.mentions=skill:lint|plugin:repo|app:github:bindings=4:skills=1:plugins=1:apps=1:dedupe=1\ntui.chat_widget_input_submission.submit_turn=gpt-5.2-codex:mode=default:items=6:accepted=true:op=true:history_append=true:mentions_encoded=true:ide=true:separator=true\ntui.chat_widget_input_submission.pending_steer=follow-up while running:render_history=false:pending=0->1:preview=true\ntui.chat_widget_input_submission.history=UserMessageText:render=true:history=0->1:display=true:cancel_edit=true:pending_start=true\ntui.chat_widget_input_submission.history=Override:render=false:history=1->2:display=false:cancel_edit=false:pending_start=false\ntui.chat_widget_input_submission.queue_drain=Plain:queued=2->1:submitted=true:preview=true:task=true\ntui.chat_widget_input_submission.queue_drain=RunShell:queued=1->0:submitted=false:preview=true:task=false\ntui.chat_widget_input_submission.failure=thread_model_unavailable:error=Thread model is unavailable:model_available=false:no_process=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-turn-runtime-headless",
+      "frame": {
+        "name": "chatwidget-turn-runtime-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget turn runtime"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_turn_runtime",
+          "chatWidgetTurnRuntime": {
+            "allowLiveProcess": false,
+            "allowFilesystemMutation": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "task_running_state",
+                "agentTurnRunning": true,
+                "mcpStartupRunning": false,
+                "taskRunningBefore": false,
+                "taskRunningAfter": true
+              },
+              {
+                "kind": "task_running_state",
+                "agentTurnRunning": false,
+                "mcpStartupRunning": true,
+                "taskRunningBefore": false,
+                "taskRunningAfter": true
+              },
+              {
+                "kind": "task_started",
+                "pendingStartBefore": true,
+                "pendingStartAfter": false,
+                "transcriptReset": true,
+                "adaptiveChunkingReset": true,
+                "planStreamCleared": true,
+                "runtimeMetricsReset": true,
+                "telemetryReset": true,
+                "quitHintCleared": true,
+                "activeHookCellBefore": true,
+                "activeHookCellAfter": false,
+                "statusHeaderSet": true,
+                "interruptHintVisible": true,
+                "terminalTitleWorking": true,
+                "reasoningCleared": true,
+                "petKind": "Running",
+                "requestRedraw": true
+              },
+              {
+                "kind": "runtime_metrics",
+                "runtimeDelta": "responses_ws:120ms",
+                "metricsMerged": true,
+                "websocketTimingLogged": true,
+                "historyInserted": true
+              },
+              {
+                "kind": "task_completed",
+                "lastAgentMessage": "Done",
+                "copySource": "turn_complete",
+                "notificationResponse": "Done",
+                "answerStreamFlushed": true,
+                "planFinalized": true,
+                "planConsolidated": true,
+                "waitStreakFlushed": true,
+                "runtimeMetricsAttached": true,
+                "finalSeparatorInserted": true,
+                "elapsedSeconds": 12,
+                "fromReplay": false
+              },
+              {
+                "kind": "task_completed",
+                "lastAgentMessage": "Replay done",
+                "copySource": "existing_item",
+                "notificationResponse": "item markdown",
+                "answerStreamFlushed": true,
+                "planFinalized": false,
+                "planConsolidated": false,
+                "waitStreakFlushed": true,
+                "runtimeMetricsAttached": false,
+                "finalSeparatorInserted": false,
+                "elapsedSeconds": 0,
+                "fromReplay": true
+              },
+              {
+                "kind": "completion_cleanup",
+                "pendingStartBefore": true,
+                "pendingStartAfter": false,
+                "agentTurnRunning": false,
+                "taskRunningAfter": false,
+                "runningCommandsBefore": 2,
+                "runningCommandsAfter": 0,
+                "suppressedExecBefore": 1,
+                "suppressedExecAfter": 0,
+                "statusLineRefreshRequested": true,
+                "gitSummaryRefreshRequested": true,
+                "petKind": "Review",
+                "requestRedraw": true
+              },
+              {
+                "kind": "follow_up_boundary",
+                "queuedFollowUps": true,
+                "followUpStarted": true,
+                "activeGoal": "none",
+                "notificationQueued": false,
+                "pendingSteersBefore": 1,
+                "pendingSteersAfter": 0,
+                "pendingPreviewRefreshed": true
+              },
+              {
+                "kind": "follow_up_boundary",
+                "queuedFollowUps": false,
+                "followUpStarted": false,
+                "activeGoal": "continuing",
+                "notificationQueued": false,
+                "pendingSteersBefore": 0,
+                "pendingSteersAfter": 0,
+                "pendingPreviewRefreshed": true
+              },
+              {
+                "kind": "follow_up_boundary",
+                "queuedFollowUps": false,
+                "followUpStarted": false,
+                "activeGoal": "none",
+                "notificationQueued": true,
+                "pendingSteersBefore": 0,
+                "pendingSteersAfter": 0,
+                "pendingPreviewRefreshed": true
+              },
+              {
+                "kind": "plan_implementation_prompt",
+                "planPromptEligible": true,
+                "mode": "Plan",
+                "planSeen": true,
+                "modalActive": false,
+                "rateLimitPending": false,
+                "promptOpened": true,
+                "notificationQueued": true,
+                "contextLabel": "72% used"
+              },
+              {
+                "kind": "plan_implementation_prompt",
+                "planPromptEligible": false,
+                "mode": "Plan",
+                "planSeen": true,
+                "modalActive": false,
+                "rateLimitPending": true,
+                "promptOpened": false,
+                "notificationQueued": false,
+                "contextLabel": ""
+              },
+              {
+                "kind": "rate_limit_prompt",
+                "status": "pending",
+                "rateLimitPromptShown": true,
+                "taskRunningAfter": false,
+                "promptOpened": true
+              },
+              {
+                "kind": "notification",
+                "notificationKind": "agent-turn-complete",
+                "allowed": true,
+                "priority": 0,
+                "existingPriority": -1,
+                "stored": true,
+                "posted": true,
+                "display": "Done",
+                "requestRedraw": true
+              },
+              {
+                "kind": "notification",
+                "notificationKind": "plan-mode-prompt",
+                "allowed": true,
+                "priority": 1,
+                "existingPriority": 0,
+                "stored": true,
+                "posted": false,
+                "display": "Plan mode prompt: Implement plan",
+                "requestRedraw": true
+              },
+              {
+                "kind": "notification",
+                "notificationKind": "agent-turn-complete",
+                "allowed": true,
+                "priority": 0,
+                "existingPriority": 1,
+                "stored": false,
+                "posted": false,
+                "display": "ignored lower priority",
+                "requestRedraw": false
+              },
+              {
+                "kind": "warning",
+                "source": "fallback_model_metadata",
+                "warningDisplayed": true,
+                "warningDeduped": false,
+                "historyInserted": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "warning",
+                "source": "fallback_model_metadata",
+                "warningDisplayed": false,
+                "warningDeduped": true,
+                "historyInserted": false,
+                "requestRedraw": false
+              },
+              {
+                "kind": "finalize_turn",
+                "activeCellFinalized": true,
+                "activeHookCleared": true,
+                "agentTurnRunning": false,
+                "taskRunningAfter": false,
+                "runningCommandsBefore": 2,
+                "runningCommandsAfter": 0,
+                "streamsCleared": true,
+                "cancelEditCleared": true,
+                "statusLineRefreshRequested": true,
+                "rateLimitPromptShown": true
+              },
+              {
+                "kind": "non_retry_error",
+                "errorKind": "server_overloaded",
+                "message": "Codex is currently experiencing high load.",
+                "errorInserted": true,
+                "cyberPolicy": false,
+                "ownerNudgeOpened": false,
+                "queueDrainAttempted": true,
+                "petKind": "Failed"
+              },
+              {
+                "kind": "non_retry_error",
+                "errorKind": "workspace_member_credits",
+                "message": "Usage limit reached.",
+                "errorInserted": true,
+                "cyberPolicy": false,
+                "ownerNudgeOpened": true,
+                "queueDrainAttempted": true,
+                "petKind": "Failed"
+              },
+              {
+                "kind": "plan_update",
+                "planItemsCompleted": 2,
+                "planItemsTotal": 3,
+                "planProgressRecorded": true,
+                "historyInserted": true
+              },
+              {
+                "kind": "interrupted_message",
+                "source": "budget_limited",
+                "message": "Goal budget reached - the turn was stopped."
+              },
+              {
+                "kind": "interrupted_message",
+                "source": "user_abort",
+                "message": "Conversation interrupted - tell the model what to do differently."
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_turn_runtime_effects_rejected",
+                "noLiveProcess": true,
+                "noFilesystemMutation": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_turn_runtime.plan=headless\ntui.chat_widget_turn_runtime.task_running=agent=true:mcp=false:bottom=false->true:nudge=true:surfaces=true\ntui.chat_widget_turn_runtime.task_running=agent=false:mcp=true:bottom=false->true:nudge=true:surfaces=true\ntui.chat_widget_turn_runtime.task_started=pending=true->false:transcript=true:chunking=true:plan_stream=true:metrics=true:telemetry=true:quit=true:hook=true->false:status=true:interrupt=true:title=true:reasoning=true:pet=Running:redraw=true\ntui.chat_widget_turn_runtime.metrics=responses_ws:120ms:merged=true:websocket=true:history=true\ntui.chat_widget_turn_runtime.task_completed=last=Done:copy=turn_complete:notify=Done:answer_flush=true:plan_final=true:plan_consolidated=true:wait_flush=true:runtime=true:separator=true:elapsed=12:replay=false\ntui.chat_widget_turn_runtime.task_completed=last=Replay done:copy=existing_item:notify=item markdown:answer_flush=true:plan_final=false:plan_consolidated=false:wait_flush=true:runtime=false:separator=false:elapsed=0:replay=true\ntui.chat_widget_turn_runtime.cleanup=pending=true->false:turn=false:task=false:commands=2->0:suppressed=1->0:status_refresh=true:git_refresh=true:pet=Review:redraw=true\ntui.chat_widget_turn_runtime.follow_up=queued=true:started=true:goal=none:notify=false:pending=1->0:preview=true\ntui.chat_widget_turn_runtime.follow_up=queued=false:started=false:goal=continuing:notify=false:pending=0->0:preview=true\ntui.chat_widget_turn_runtime.follow_up=queued=false:started=false:goal=none:notify=true:pending=0->0:preview=true\ntui.chat_widget_turn_runtime.plan_prompt=eligible=true:mode=Plan:plan_seen=true:modal=false:rate_limit=false:opened=true:notify=true:context=72% used\ntui.chat_widget_turn_runtime.plan_prompt=eligible=false:mode=Plan:plan_seen=true:modal=false:rate_limit=true:opened=false:notify=false:context=\ntui.chat_widget_turn_runtime.rate_limit=pending:shown=true:task=false:opened=true\ntui.chat_widget_turn_runtime.notification=agent-turn-complete:allowed=true:priority=0:existing=-1:stored=true:posted=true:display=Done:redraw=true\ntui.chat_widget_turn_runtime.notification=plan-mode-prompt:allowed=true:priority=1:existing=0:stored=true:posted=false:display=Plan mode prompt: Implement plan:redraw=true\ntui.chat_widget_turn_runtime.notification=agent-turn-complete:allowed=true:priority=0:existing=1:stored=false:posted=false:display=ignored lower priority:redraw=false\ntui.chat_widget_turn_runtime.warning=fallback_model_metadata:displayed=true:deduped=false:history=true:redraw=true\ntui.chat_widget_turn_runtime.warning=fallback_model_metadata:displayed=false:deduped=true:history=false:redraw=false\ntui.chat_widget_turn_runtime.finalize=active_cell=true:hook=true:turn=false:task=false:commands=2->0:streams=true:cancel=true:status_refresh=true:rate_prompt=true\ntui.chat_widget_turn_runtime.error=server_overloaded:message=Codex is currently experiencing high load.:error_cell=true:cyber=false:owner_nudge=false:queue_drain=true:pet=Failed\ntui.chat_widget_turn_runtime.error=workspace_member_credits:message=Usage limit reached.:error_cell=true:cyber=false:owner_nudge=true:queue_drain=true:pet=Failed\ntui.chat_widget_turn_runtime.plan_update=2/3:progress=true:history=true:surfaces=true\ntui.chat_widget_turn_runtime.interrupted=budget_limited:message=Goal budget reached - the turn was stopped.\ntui.chat_widget_turn_runtime.interrupted=user_abort:message=Conversation interrupted - tell the model what to do differently.\ntui.chat_widget_turn_runtime.failure=live_turn_runtime_effects_rejected:no_process=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget turn runtime\ninput> \ntrace:\ntui.chat_widget_turn_runtime.plan=headless\ntui.chat_widget_turn_runtime.task_running=agent=true:mcp=false:bottom=false->true:nudge=true:surfaces=true\ntui.chat_widget_turn_runtime.task_running=agent=false:mcp=true:bottom=false->true:nudge=true:surfaces=true\ntui.chat_widget_turn_runtime.task_started=pending=true->false:transcript=true:chunking=true:plan_stream=true:metrics=true:telemetry=true:quit=true:hook=true->false:status=true:interrupt=true:title=true:reasoning=true:pet=Running:redraw=true\ntui.chat_widget_turn_runtime.metrics=responses_ws:120ms:merged=true:websocket=true:history=true\ntui.chat_widget_turn_runtime.task_completed=last=Done:copy=turn_complete:notify=Done:answer_flush=true:plan_final=true:plan_consolidated=true:wait_flush=true:runtime=true:separator=true:elapsed=12:replay=false\ntui.chat_widget_turn_runtime.task_completed=last=Replay done:copy=existing_item:notify=item markdown:answer_flush=true:plan_final=false:plan_consolidated=false:wait_flush=true:runtime=false:separator=false:elapsed=0:replay=true\ntui.chat_widget_turn_runtime.cleanup=pending=true->false:turn=false:task=false:commands=2->0:suppressed=1->0:status_refresh=true:git_refresh=true:pet=Review:redraw=true\ntui.chat_widget_turn_runtime.follow_up=queued=true:started=true:goal=none:notify=false:pending=1->0:preview=true\ntui.chat_widget_turn_runtime.follow_up=queued=false:started=false:goal=continuing:notify=false:pending=0->0:preview=true\ntui.chat_widget_turn_runtime.follow_up=queued=false:started=false:goal=none:notify=true:pending=0->0:preview=true\ntui.chat_widget_turn_runtime.plan_prompt=eligible=true:mode=Plan:plan_seen=true:modal=false:rate_limit=false:opened=true:notify=true:context=72% used\ntui.chat_widget_turn_runtime.plan_prompt=eligible=false:mode=Plan:plan_seen=true:modal=false:rate_limit=true:opened=false:notify=false:context=\ntui.chat_widget_turn_runtime.rate_limit=pending:shown=true:task=false:opened=true\ntui.chat_widget_turn_runtime.notification=agent-turn-complete:allowed=true:priority=0:existing=-1:stored=true:posted=true:display=Done:redraw=true\ntui.chat_widget_turn_runtime.notification=plan-mode-prompt:allowed=true:priority=1:existing=0:stored=true:posted=false:display=Plan mode prompt: Implement plan:redraw=true\ntui.chat_widget_turn_runtime.notification=agent-turn-complete:allowed=true:priority=0:existing=1:stored=false:posted=false:display=ignored lower priority:redraw=false\ntui.chat_widget_turn_runtime.warning=fallback_model_metadata:displayed=true:deduped=false:history=true:redraw=true\ntui.chat_widget_turn_runtime.warning=fallback_model_metadata:displayed=false:deduped=true:history=false:redraw=false\ntui.chat_widget_turn_runtime.finalize=active_cell=true:hook=true:turn=false:task=false:commands=2->0:streams=true:cancel=true:status_refresh=true:rate_prompt=true\ntui.chat_widget_turn_runtime.error=server_overloaded:message=Codex is currently experiencing high load.:error_cell=true:cyber=false:owner_nudge=false:queue_drain=true:pet=Failed\ntui.chat_widget_turn_runtime.error=workspace_member_credits:message=Usage limit reached.:error_cell=true:cyber=false:owner_nudge=true:queue_drain=true:pet=Failed\ntui.chat_widget_turn_runtime.plan_update=2/3:progress=true:history=true:surfaces=true\ntui.chat_widget_turn_runtime.interrupted=budget_limited:message=Goal budget reached - the turn was stopped.\ntui.chat_widget_turn_runtime.interrupted=user_abort:message=Conversation interrupted - tell the model what to do differently.\ntui.chat_widget_turn_runtime.failure=live_turn_runtime_effects_rejected:no_process=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

@@ -286,6 +286,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetTurnRuntime:
+					if (!traceTurnRuntime(event.chatWidgetTurnRuntime, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3829,6 +3834,190 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_input_submission.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceTurnRuntime(plan:TuiSmokeTurnRuntimePlan, trace:Array<String>):Bool {
+		if (
+			plan == null
+			|| plan.allowLiveProcess
+			|| plan.allowFilesystemMutation
+			|| plan.allowRatatuiRender
+			|| plan.allowModelCall
+			|| !plan.enabled()
+		) {
+			trace.push("tui.chat_widget_turn_runtime.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_turn_runtime.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeTurnRuntimeActionKind.TaskRunningState:
+					trace.push(
+						"tui.chat_widget_turn_runtime.task_running="
+						+ "agent=" + action.agentTurnRunning
+						+ ":mcp=" + action.mcpStartupRunning
+						+ ":bottom=" + action.taskRunningBefore + "->" + action.taskRunningAfter
+						+ ":nudge=true:surfaces=true"
+					);
+				case TuiSmokeTurnRuntimeActionKind.TaskStarted:
+					trace.push(
+						"tui.chat_widget_turn_runtime.task_started="
+						+ "pending=" + action.pendingStartBefore + "->" + action.pendingStartAfter
+						+ ":transcript=" + action.transcriptReset
+						+ ":chunking=" + action.adaptiveChunkingReset
+						+ ":plan_stream=" + action.planStreamCleared
+						+ ":metrics=" + action.runtimeMetricsReset
+						+ ":telemetry=" + action.telemetryReset
+						+ ":quit=" + action.quitHintCleared
+						+ ":hook=" + action.activeHookCellBefore + "->" + action.activeHookCellAfter
+						+ ":status=" + action.statusHeaderSet
+						+ ":interrupt=" + action.interruptHintVisible
+						+ ":title=" + action.terminalTitleWorking
+						+ ":reasoning=" + action.reasoningCleared
+						+ ":pet=" + action.petKind
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeTurnRuntimeActionKind.RuntimeMetrics:
+					trace.push(
+						"tui.chat_widget_turn_runtime.metrics="
+						+ action.runtimeDelta
+						+ ":merged=" + action.metricsMerged
+						+ ":websocket=" + action.websocketTimingLogged
+						+ ":history=" + action.historyInserted
+					);
+				case TuiSmokeTurnRuntimeActionKind.TaskCompleted:
+					trace.push(
+						"tui.chat_widget_turn_runtime.task_completed="
+						+ "last=" + action.lastAgentMessage
+						+ ":copy=" + action.copySource
+						+ ":notify=" + action.notificationResponse
+						+ ":answer_flush=" + action.answerStreamFlushed
+						+ ":plan_final=" + action.planFinalized
+						+ ":plan_consolidated=" + action.planConsolidated
+						+ ":wait_flush=" + action.waitStreakFlushed
+						+ ":runtime=" + action.runtimeMetricsAttached
+						+ ":separator=" + action.finalSeparatorInserted
+						+ ":elapsed=" + action.elapsedSeconds
+						+ ":replay=" + action.fromReplay
+					);
+				case TuiSmokeTurnRuntimeActionKind.CompletionCleanup:
+					trace.push(
+						"tui.chat_widget_turn_runtime.cleanup="
+						+ "pending=" + action.pendingStartBefore + "->" + action.pendingStartAfter
+						+ ":turn=" + action.agentTurnRunning
+						+ ":task=" + action.taskRunningAfter
+						+ ":commands=" + action.runningCommandsBefore + "->" + action.runningCommandsAfter
+						+ ":suppressed=" + action.suppressedExecBefore + "->" + action.suppressedExecAfter
+						+ ":status_refresh=" + action.statusLineRefreshRequested
+						+ ":git_refresh=" + action.gitSummaryRefreshRequested
+						+ ":pet=" + action.petKind
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeTurnRuntimeActionKind.FollowUpBoundary:
+					trace.push(
+						"tui.chat_widget_turn_runtime.follow_up="
+						+ "queued=" + action.queuedFollowUps
+						+ ":started=" + action.followUpStarted
+						+ ":goal=" + action.activeGoal
+						+ ":notify=" + action.notificationQueued
+						+ ":pending=" + action.pendingSteersBefore + "->" + action.pendingSteersAfter
+						+ ":preview=" + action.pendingPreviewRefreshed
+					);
+				case TuiSmokeTurnRuntimeActionKind.PlanImplementationPrompt:
+					trace.push(
+						"tui.chat_widget_turn_runtime.plan_prompt="
+						+ "eligible=" + action.planPromptEligible
+						+ ":mode=" + action.mode
+						+ ":plan_seen=" + action.planSeen
+						+ ":modal=" + action.modalActive
+						+ ":rate_limit=" + action.rateLimitPending
+						+ ":opened=" + action.promptOpened
+						+ ":notify=" + action.notificationQueued
+						+ ":context=" + action.contextLabel
+					);
+				case TuiSmokeTurnRuntimeActionKind.RateLimitPrompt:
+					trace.push(
+						"tui.chat_widget_turn_runtime.rate_limit="
+						+ action.status
+						+ ":shown=" + action.rateLimitPromptShown
+						+ ":task=" + action.taskRunningAfter
+						+ ":opened=" + action.promptOpened
+					);
+				case TuiSmokeTurnRuntimeActionKind.Notification:
+					trace.push(
+						"tui.chat_widget_turn_runtime.notification="
+						+ action.notificationKind
+						+ ":allowed=" + action.allowed
+						+ ":priority=" + action.priority
+						+ ":existing=" + action.existingPriority
+						+ ":stored=" + action.stored
+						+ ":posted=" + action.posted
+						+ ":display=" + action.display
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeTurnRuntimeActionKind.Warning:
+					trace.push(
+						"tui.chat_widget_turn_runtime.warning="
+						+ action.source
+						+ ":displayed=" + action.warningDisplayed
+						+ ":deduped=" + action.warningDeduped
+						+ ":history=" + action.historyInserted
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeTurnRuntimeActionKind.FinalizeTurn:
+					trace.push(
+						"tui.chat_widget_turn_runtime.finalize="
+						+ "active_cell=" + action.activeCellFinalized
+						+ ":hook=" + action.activeHookCleared
+						+ ":turn=" + action.agentTurnRunning
+						+ ":task=" + action.taskRunningAfter
+						+ ":commands=" + action.runningCommandsBefore + "->" + action.runningCommandsAfter
+						+ ":streams=" + action.streamsCleared
+						+ ":cancel=" + action.cancelEditCleared
+						+ ":status_refresh=" + action.statusLineRefreshRequested
+						+ ":rate_prompt=" + action.rateLimitPromptShown
+					);
+				case TuiSmokeTurnRuntimeActionKind.NonRetryError:
+					trace.push(
+						"tui.chat_widget_turn_runtime.error="
+						+ action.errorKind
+						+ ":message=" + action.message
+						+ ":error_cell=" + action.errorInserted
+						+ ":cyber=" + action.cyberPolicy
+						+ ":owner_nudge=" + action.ownerNudgeOpened
+						+ ":queue_drain=" + action.queueDrainAttempted
+						+ ":pet=" + action.petKind
+					);
+				case TuiSmokeTurnRuntimeActionKind.PlanUpdate:
+					trace.push(
+						"tui.chat_widget_turn_runtime.plan_update="
+						+ action.planItemsCompleted + "/" + action.planItemsTotal
+						+ ":progress=" + action.planProgressRecorded
+						+ ":history=" + action.historyInserted
+						+ ":surfaces=true"
+					);
+				case TuiSmokeTurnRuntimeActionKind.InterruptedMessage:
+					trace.push(
+						"tui.chat_widget_turn_runtime.interrupted="
+						+ action.source
+						+ ":message=" + action.message
+					);
+				case TuiSmokeTurnRuntimeActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_turn_runtime.failure="
+						+ action.failureCode
+						+ ":no_process=" + action.noLiveProcess
+						+ ":no_fs=" + action.noFilesystemMutation
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_turn_runtime.unknown");
 					return false;
 			}
 		}
