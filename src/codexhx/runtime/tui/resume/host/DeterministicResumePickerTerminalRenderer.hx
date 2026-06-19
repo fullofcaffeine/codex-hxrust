@@ -51,6 +51,9 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 			lines.push("overlay loading thread=" + emptyLabel(state.pendingThreadId) + " message=" + state.loadingOverlayMessage);
 		} else if (state.overlayOpen) {
 			lines.push("overlay transcript thread=" + emptyLabel(state.pendingThreadId) + " cells=" + state.transcriptCellCount);
+			for (cell in state.transcriptCells) {
+				lines.push("  transcript: " + cell);
+			}
 		} else {
 			lines.push("overlay closed");
 		}

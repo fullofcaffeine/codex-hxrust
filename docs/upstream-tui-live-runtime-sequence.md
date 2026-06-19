@@ -3139,6 +3139,17 @@ Extend the normalized resume picker renderer from pagination evidence into empty
 
 Status: HXCX-TUI-109 teaches `DeterministicResumePickerTerminalRenderer` to render typed empty-state and inline error lines, and adds `ResumePickerEmptyErrorRenderGate`, `ResumePickerEmptyErrorRenderGateReport`, `test/ResumePickerEmptyErrorRenderHarness.hx`, `hxml/resume-picker-empty-error-render.hxml`, and `harness/check-resume-picker-empty-error-render.sh`. The gate validates initial loading, no-sessions, search no-results, missing page fixture failure, visible error label, footer state, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui ownership.
 
+### HXCX-TUI-110: Resume Picker Transcript Overlay Detail Render Snapshot Gate
+
+Extend the normalized resume picker renderer from overlay-open count evidence into visible transcript detail evidence:
+
+- drive fixture-backed full `thread/read includeTurns=true` requests through the runtime-neutral host facade;
+- render pending transcript loading, loaded transcript detail cells, and empty-transcript fallback cells through the deterministic terminal renderer;
+- assert selected rows, overlay thread ids, transcript labels, footer state, frame/render counts, and host transcript event evidence in a generated-Rust harness;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime ownership, pager overlay ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-110 adds typed `ResumePickerState.transcriptCells`, teaches `DeterministicResumePickerTerminalRenderer` to render normalized transcript cell lines when an overlay is open, and adds `ResumePickerTranscriptOverlayRenderGate`, `ResumePickerTranscriptOverlayRenderGateReport`, `test/ResumePickerTranscriptOverlayRenderHarness.hx`, `hxml/resume-picker-transcript-overlay-render.hxml`, and `harness/check-resume-picker-transcript-overlay-render.sh`. The gate validates pending loading overlay, loaded detail cells, empty-fallback cell rendering, footer state, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal, ratatui, or pager overlay ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

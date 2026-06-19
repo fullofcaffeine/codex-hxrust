@@ -51,6 +51,7 @@ typedef ResumePickerStateFields = {
 	final transcriptPlanCellCount:Int;
 	final transcriptReasoningCellCount:Int;
 	final transcriptFallbackCellCount:Int;
+	final transcriptCells:Array<String>;
 	final overlayOpen:Bool;
 	final overlayCloseCount:Int;
 	final lastKeyConsumed:Bool;
@@ -133,6 +134,7 @@ class ResumePickerState {
 	public var transcriptPlanCellCount:Int;
 	public var transcriptReasoningCellCount:Int;
 	public var transcriptFallbackCellCount:Int;
+	public var transcriptCells:Array<String>;
 	public var overlayOpen:Bool;
 	public var overlayCloseCount:Int;
 	public var lastKeyConsumed:Bool;
@@ -209,6 +211,7 @@ class ResumePickerState {
 			transcriptPlanCellCount: 0,
 			transcriptReasoningCellCount: 0,
 			transcriptFallbackCellCount: 0,
+			transcriptCells: [],
 			overlayOpen: false,
 			overlayCloseCount: 0,
 			lastKeyConsumed: false,
@@ -287,6 +290,7 @@ class ResumePickerState {
 			transcriptPlanCellCount: transcriptPlanCellCount,
 			transcriptReasoningCellCount: transcriptReasoningCellCount,
 			transcriptFallbackCellCount: transcriptFallbackCellCount,
+			transcriptCells: transcriptCells.copy(),
 			overlayOpen: overlayOpen,
 			overlayCloseCount: overlayCloseCount,
 			lastKeyConsumed: lastKeyConsumed,
