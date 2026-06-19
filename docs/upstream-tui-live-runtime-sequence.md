@@ -2914,6 +2914,19 @@ Extend HXCX-TUI-90 with selected raw Codex `codex archive` / `codex unarchive` c
 
 Status: HXCX-TUI-91 extends `fixtures/hxrust/tui-smoke.v1.json` with typed UUID resolution, paged exact-name lookup, active-vs-archived scope selection, not-found failure, archive/unarchive success-message formatting, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic command resolver evidence only, not a live CLI command, app-server session mutation, or persistent archive repair flow.
 
+### HXCX-TUI-92: Session Archive App-Server RPC Boundary
+
+Extend HXCX-TUI-91 from command target resolution into the app-server RPC boundary used by raw Codex TUI archive/unarchive commands, without live app-server mutation, rollout reads, filesystem mutation, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/app_server_session.rs` `thread_archive`: allocate the next request id, send `ClientRequest::ThreadArchive` with `ThreadArchiveParams { thread_id }`, accept an empty `ThreadArchiveResponse`, and wrap transport failures as `failed to archive session`;
+- preserve `../codex/codex-rs/tui/src/app_server_session.rs` `thread_unarchive`: allocate the next request id, send `ClientRequest::ThreadUnarchive` with `ThreadUnarchiveParams { thread_id }`, return the `Thread` from `ThreadUnarchiveResponse`, and wrap transport failures as `failed to unarchive session`;
+- preserve `../codex/codex-rs/app-server-protocol/src/protocol/common.rs` method names and serialization: `thread/archive` and `thread/unarchive` both serialize the `threadId` request identity and remain typed client requests;
+- preserve `../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs` response shapes: archive returns an empty object while unarchive returns `{ thread }`;
+- preserve the HXCX-TUI-91 command-result name preference: the unarchive command may prefer the thread name returned by `thread/unarchive` over the earlier resolver name;
+- keep invalid thread-id handling and transport-failure wrapping deterministic, with no live app-server session, network transport, filesystem mutation, or Cafex behavior.
+
+Status: HXCX-TUI-92 extends `fixtures/hxrust/tui-smoke.v1.json` with typed archive/unarchive RPC request method/params, empty archive response, unarchive thread response, returned-name preference, invalid thread-id rejection, wrapped transport error evidence, and no-live/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic app-server RPC boundary evidence only, not live JSON-RPC transport, session archive mutation, notification fanout, or persistent rollout movement.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

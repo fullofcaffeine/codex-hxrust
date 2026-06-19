@@ -2034,6 +2034,28 @@ class TuiSmokeEventLoop {
 						+ ":thread=" + action.threadId
 						+ ":name=" + action.threadName
 					);
+				case TuiSmokeSessionArchiveCommandActionKind.RpcRequest:
+					trace.push(
+						"tui.session_archive_command.rpc_request="
+						+ "id=" + action.requestId
+						+ ":method=" + action.method
+						+ ":action=" + action.action
+						+ ":thread=" + action.threadId
+						+ ":valid=" + action.validThreadId
+						+ ":archive=" + action.archiveRequested
+						+ ":unarchive=" + action.unarchiveRequested
+					);
+				case TuiSmokeSessionArchiveCommandActionKind.RpcResponse:
+					trace.push(
+						"tui.session_archive_command.rpc_response="
+						+ "id=" + action.requestId
+						+ ":method=" + action.method
+						+ ":empty=" + action.responseEmpty
+						+ ":thread=" + action.responseThreadId
+						+ ":name=" + action.responseThreadName
+						+ ":has_thread=" + action.responseHasThread
+						+ ":success=" + action.mutationSucceeded
+					);
 				case TuiSmokeSessionArchiveCommandActionKind.CommandResult:
 					trace.push(
 						"tui.session_archive_command.result="
@@ -2054,6 +2076,7 @@ class TuiSmokeEventLoop {
 						+ ":no_model=" + action.noModelCall
 						+ ":no_app_server=" + action.noAppServerMutation
 						+ ":no_fs=" + action.noFilesystemMutation
+						+ ":wrapped=" + action.errorWrapped
 						+ ":unsupported=" + action.unsupportedRejected
 					);
 				case _:
