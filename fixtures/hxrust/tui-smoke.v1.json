@@ -17762,6 +17762,116 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.summary=command=/status:rows=12:inserted=true:usage_link=true:remote=true\ntui.chat_widget_status_card.model=gpt-5.2-codex:details=reasoning effort medium, reasoning summaries auto:provider=openai:runtime=responses:account=dev@example.com (Plus)\ntui.chat_widget_status_card.permissions=workspace-write on /workspace plus network disabled:dir=/workspace/tests:agents=<none>\ntui.chat_widget_status_card.thread=Status card parity:session=11111111-2222-3333-4444-555555555555:forked_from=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:collab=Code\ntui.chat_widget_status_card.tokens=total=2200:input=1400:output=600:visible=true:context=2000/200000:context_left=99:context_visible=true\ntui.chat_widget_status_card.rate_limit=available:label=5h limit:summary=55% left:reset=in 15m:details=:warning=:rows=3:refreshing=false\ntui.chat_widget_status_card.rate_limit=available:label=Credits:summary=38 credits:reset=:details=:warning=:rows=3:refreshing=false\ntui.chat_widget_status_card.rate_limit=stale:label=5h limit:summary=28% left:reset=in 10m:details=:warning=limits may be stale - start new turn to refresh.:rows=2:refreshing=false\ntui.chat_widget_status_card.rate_limit=missing:label=Limits:summary=refresh requested; run /status again shortly.:reset=:details=:warning=:rows=1:refreshing=true\ntui.chat_widget_status_card.rate_limit=unavailable:label=Limits:summary=not available for this account:reset=:details=:warning=:rows=1:refreshing=false\ntui.chat_widget_status_card.refresh=available:rows=3:completed=true:refreshing=false\ntui.chat_widget_status_card.failure=live_status_card_render_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget status card output\ninput> \ntrace:\ntui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.summary=command=/status:rows=12:inserted=true:usage_link=true:remote=true\ntui.chat_widget_status_card.model=gpt-5.2-codex:details=reasoning effort medium, reasoning summaries auto:provider=openai:runtime=responses:account=dev@example.com (Plus)\ntui.chat_widget_status_card.permissions=workspace-write on /workspace plus network disabled:dir=/workspace/tests:agents=<none>\ntui.chat_widget_status_card.thread=Status card parity:session=11111111-2222-3333-4444-555555555555:forked_from=aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:collab=Code\ntui.chat_widget_status_card.tokens=total=2200:input=1400:output=600:visible=true:context=2000/200000:context_left=99:context_visible=true\ntui.chat_widget_status_card.rate_limit=available:label=5h limit:summary=55% left:reset=in 15m:details=:warning=:rows=3:refreshing=false\ntui.chat_widget_status_card.rate_limit=available:label=Credits:summary=38 credits:reset=:details=:warning=:rows=3:refreshing=false\ntui.chat_widget_status_card.rate_limit=stale:label=5h limit:summary=28% left:reset=in 10m:details=:warning=limits may be stale - start new turn to refresh.:rows=2:refreshing=false\ntui.chat_widget_status_card.rate_limit=missing:label=Limits:summary=refresh requested; run /status again shortly.:reset=:details=:warning=:rows=1:refreshing=true\ntui.chat_widget_status_card.rate_limit=unavailable:label=Limits:summary=not available for this account:reset=:details=:warning=:rows=1:refreshing=false\ntui.chat_widget_status_card.refresh=available:rows=3:completed=true:refreshing=false\ntui.chat_widget_status_card.failure=live_status_card_render_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-status-card-render-width-headless",
+      "frame": {
+        "name": "chatwidget-status-card-render-width-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget status card render width"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_status_card",
+          "chatWidgetStatusCard": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "render_width",
+                "width": 70,
+                "innerWidth": 66,
+                "valueWidth": 43,
+                "rowCount": 14,
+                "wrappedLineCount": 1,
+                "continuationLineCount": 0,
+                "truncatedLineCount": 1
+              },
+              {
+                "kind": "render_width",
+                "width": 46,
+                "innerWidth": 42,
+                "valueWidth": 20,
+                "rowCount": 18,
+                "wrappedLineCount": 4,
+                "continuationLineCount": 3,
+                "truncatedLineCount": 0
+              },
+              {
+                "kind": "remote_wrap",
+                "remoteAddress": "unix:///tmp/codex-home/app-server-control/app-server-control.sock",
+                "width": 46,
+                "valueWidth": 20,
+                "remoteConnectionVisible": true,
+                "wrappedLineCount": 4
+              },
+              {
+                "kind": "continuation",
+                "rowName": "Monthly credit limit",
+                "rateLimitSummary": "63% left",
+                "rateLimitReset": "in 4w",
+                "rateLimitDetails": "12,345 of 20,000 credits used",
+                "continuationLineCount": 2,
+                "truncatedLineCount": 0
+              },
+              {
+                "kind": "subscriber_visibility",
+                "account": "subscriber@example.com (Plus)",
+                "tokenUsageVisible": false,
+                "contextWindowVisible": true,
+                "hiddenRowCount": 1
+              },
+              {
+                "kind": "usage_link",
+                "provider": "openai",
+                "showChatGptUsageLink": true,
+                "rowVisible": true
+              },
+              {
+                "kind": "usage_link",
+                "provider": "bedrock",
+                "showChatGptUsageLink": false,
+                "rowVisible": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_status_card_render_width_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.render_width=width=70:inner=66:value=43:rows=14:wrapped=1:continued=0:truncated=1\ntui.chat_widget_status_card.render_width=width=46:inner=42:value=20:rows=18:wrapped=4:continued=3:truncated=0\ntui.chat_widget_status_card.remote_wrap=unix:///tmp/codex-home/app-server-control/app-server-control.sock:width=46:value=20:visible=true:wrapped=4\ntui.chat_widget_status_card.continuation=Monthly credit limit:summary=63% left:reset=in 4w:details=12,345 of 20,000 credits used:continued=2:truncated=0\ntui.chat_widget_status_card.subscriber=subscriber@example.com (Plus):token_visible=false:context_visible=true:hidden=1\ntui.chat_widget_status_card.usage_link=openai:visible=true:row_visible=true\ntui.chat_widget_status_card.usage_link=bedrock:visible=false:row_visible=false\ntui.chat_widget_status_card.failure=live_status_card_render_width_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget status card render width\ninput> \ntrace:\ntui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.render_width=width=70:inner=66:value=43:rows=14:wrapped=1:continued=0:truncated=1\ntui.chat_widget_status_card.render_width=width=46:inner=42:value=20:rows=18:wrapped=4:continued=3:truncated=0\ntui.chat_widget_status_card.remote_wrap=unix:///tmp/codex-home/app-server-control/app-server-control.sock:width=46:value=20:visible=true:wrapped=4\ntui.chat_widget_status_card.continuation=Monthly credit limit:summary=63% left:reset=in 4w:details=12,345 of 20,000 credits used:continued=2:truncated=0\ntui.chat_widget_status_card.subscriber=subscriber@example.com (Plus):token_visible=false:context_visible=true:hidden=1\ntui.chat_widget_status_card.usage_link=openai:visible=true:row_visible=true\ntui.chat_widget_status_card.usage_link=bedrock:visible=false:row_visible=false\ntui.chat_widget_status_card.failure=live_status_card_render_width_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

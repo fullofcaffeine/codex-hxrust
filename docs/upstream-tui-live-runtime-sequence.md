@@ -2854,6 +2854,18 @@ Model selected raw Codex `/status` card output behavior without live terminal mu
 
 Status: HXCX-TUI-86 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-card summary, model/provider/account, permissions, thread/session/collaboration, token/context, available/stale/missing/unavailable rate-limit, refresh-completion, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic `/status` card row evidence only, not full ratatui span rendering, terminal width wrapping, live rate-limit fetching, account auth, app-server transport, or model traffic.
 
+### HXCX-TUI-87: ChatWidget Status-Card Render-Width Boundary
+
+Model selected raw Codex `/status` card render-width behavior without live terminal mutation, ratatui rendering, app-server mutation, command execution, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/status/card.rs` width calculation contracts: card display uses `width - 4` as inner width, derives value-column width from collected labels, truncates only after content width is known, and narrow terminals increase wrapped/continuation rows rather than dropping content;
+- preserve remote connection wrapping: long app-server control addresses wrap under the `Remote` label using the value-column width and remain distinct from model/provider rows;
+- preserve rate-limit continuation behavior: reset timestamps and monthly credit details continue onto dim continuation rows when they do not fit inline, rather than truncating actionable reset/detail text;
+- preserve account/provider visibility gates: ChatGPT subscriber accounts hide token-usage rows while context-window rows can remain visible, OpenAI-auth-backed providers show the ChatGPT usage link, and Bedrock/native provider status cards do not show that usage-link row;
+- keep render evidence deterministic and row-oriented; this slice records width/wrap/truncation facts, not ratatui spans, border glyph snapshots, or terminal pixel output.
+
+Status: HXCX-TUI-87 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-card render-width, remote wrap, continuation, subscriber token hiding, usage-link provider gating, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic `/status` render-width evidence only, not full ratatui span rendering, terminal glyph snapshots, live rate-limit fetching, account auth, app-server transport, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

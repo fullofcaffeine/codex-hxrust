@@ -8,6 +8,11 @@ enum abstract TuiSmokeStatusCardActionKind(String) to String {
 	final TokenUsage = "token_usage";
 	final RateLimit = "rate_limit";
 	final Refresh = "refresh";
+	final RenderWidth = "render_width";
+	final RemoteWrap = "remote_wrap";
+	final Continuation = "continuation";
+	final SubscriberVisibility = "subscriber_visibility";
+	final UsageLink = "usage_link";
 	final Failure = "failure";
 	final Unknown = "unknown";
 
@@ -20,6 +25,11 @@ enum abstract TuiSmokeStatusCardActionKind(String) to String {
 			case "token_usage": TokenUsage;
 			case "rate_limit": RateLimit;
 			case "refresh": Refresh;
+			case "render_width": RenderWidth;
+			case "remote_wrap": RemoteWrap;
+			case "continuation": Continuation;
+			case "subscriber_visibility": SubscriberVisibility;
+			case "usage_link": UsageLink;
 			case "failure": Failure;
 			case _: Unknown;
 		}

@@ -5332,6 +5332,51 @@ class TuiSmokeEventLoop {
 						+ ":completed=" + action.refreshCompleted
 						+ ":refreshing=" + action.refreshingRateLimits
 					);
+				case TuiSmokeStatusCardActionKind.RenderWidth:
+					trace.push(
+						"tui.chat_widget_status_card.render_width="
+						+ "width=" + action.width
+						+ ":inner=" + action.innerWidth
+						+ ":value=" + action.valueWidth
+						+ ":rows=" + action.rowCount
+						+ ":wrapped=" + action.wrappedLineCount
+						+ ":continued=" + action.continuationLineCount
+						+ ":truncated=" + action.truncatedLineCount
+					);
+				case TuiSmokeStatusCardActionKind.RemoteWrap:
+					trace.push(
+						"tui.chat_widget_status_card.remote_wrap="
+						+ action.remoteAddress
+						+ ":width=" + action.width
+						+ ":value=" + action.valueWidth
+						+ ":visible=" + action.remoteConnectionVisible
+						+ ":wrapped=" + action.wrappedLineCount
+					);
+				case TuiSmokeStatusCardActionKind.Continuation:
+					trace.push(
+						"tui.chat_widget_status_card.continuation="
+						+ action.rowName
+						+ ":summary=" + action.rateLimitSummary
+						+ ":reset=" + action.rateLimitReset
+						+ ":details=" + action.rateLimitDetails
+						+ ":continued=" + action.continuationLineCount
+						+ ":truncated=" + action.truncatedLineCount
+					);
+				case TuiSmokeStatusCardActionKind.SubscriberVisibility:
+					trace.push(
+						"tui.chat_widget_status_card.subscriber="
+						+ action.account
+						+ ":token_visible=" + action.tokenUsageVisible
+						+ ":context_visible=" + action.contextWindowVisible
+						+ ":hidden=" + action.hiddenRowCount
+					);
+				case TuiSmokeStatusCardActionKind.UsageLink:
+					trace.push(
+						"tui.chat_widget_status_card.usage_link="
+						+ action.provider
+						+ ":visible=" + action.showChatGptUsageLink
+						+ ":row_visible=" + action.rowVisible
+					);
 				case TuiSmokeStatusCardActionKind.Failure:
 					trace.push(
 						"tui.chat_widget_status_card.failure="

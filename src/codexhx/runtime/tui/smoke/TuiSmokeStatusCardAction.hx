@@ -3,6 +3,7 @@ package codexhx.runtime.tui.smoke;
 typedef TuiSmokeStatusCardActionFields = {
 	final kind:TuiSmokeStatusCardActionKind;
 	final commandRow:String;
+	final rowName:String;
 	final model:String;
 	final modelDetails:String;
 	final provider:String;
@@ -22,6 +23,7 @@ typedef TuiSmokeStatusCardActionFields = {
 	final rateLimitDetails:String;
 	final rateLimitWarning:String;
 	final failureCode:String;
+	final remoteAddress:String;
 	final totalTokens:Int;
 	final inputTokens:Int;
 	final outputTokens:Int;
@@ -30,9 +32,17 @@ typedef TuiSmokeStatusCardActionFields = {
 	final contextPercentRemaining:Int;
 	final rowCount:Int;
 	final rateLimitRowCount:Int;
+	final width:Int;
+	final innerWidth:Int;
+	final valueWidth:Int;
+	final wrappedLineCount:Int;
+	final continuationLineCount:Int;
+	final truncatedLineCount:Int;
+	final hiddenRowCount:Int;
 	final refreshingRateLimits:Bool;
 	final showChatGptUsageLink:Bool;
 	final remoteConnectionVisible:Bool;
+	final rowVisible:Bool;
 	final tokenUsageVisible:Bool;
 	final contextWindowVisible:Bool;
 	final statusOutputInserted:Bool;
@@ -47,6 +57,7 @@ typedef TuiSmokeStatusCardActionFields = {
 class TuiSmokeStatusCardAction {
 	public final kind:TuiSmokeStatusCardActionKind;
 	public final commandRow:String;
+	public final rowName:String;
 	public final model:String;
 	public final modelDetails:String;
 	public final provider:String;
@@ -66,6 +77,7 @@ class TuiSmokeStatusCardAction {
 	public final rateLimitDetails:String;
 	public final rateLimitWarning:String;
 	public final failureCode:String;
+	public final remoteAddress:String;
 	public final totalTokens:Int;
 	public final inputTokens:Int;
 	public final outputTokens:Int;
@@ -74,9 +86,17 @@ class TuiSmokeStatusCardAction {
 	public final contextPercentRemaining:Int;
 	public final rowCount:Int;
 	public final rateLimitRowCount:Int;
+	public final width:Int;
+	public final innerWidth:Int;
+	public final valueWidth:Int;
+	public final wrappedLineCount:Int;
+	public final continuationLineCount:Int;
+	public final truncatedLineCount:Int;
+	public final hiddenRowCount:Int;
 	public final refreshingRateLimits:Bool;
 	public final showChatGptUsageLink:Bool;
 	public final remoteConnectionVisible:Bool;
+	public final rowVisible:Bool;
 	public final tokenUsageVisible:Bool;
 	public final contextWindowVisible:Bool;
 	public final statusOutputInserted:Bool;
