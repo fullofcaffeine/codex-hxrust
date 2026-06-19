@@ -53,9 +53,11 @@ npm run security:gitleaks
 npm run public:precommit
 ```
 
-`scripts/security/run-gitleaks.sh` does not silently accept a full-history result that reports zero commits scanned when git history exists. If a local gitleaks version behaves that way, the wrapper falls back to scanning the `git log -p --all` patch stream and then scans the current tree with `gitleaks dir`.
+`scripts/security/run-gitleaks.sh` does not silently accept a full-history result that reports zero commits scanned when git history exists. If a local gitleaks version behaves that way, the wrapper falls back to scanning the `git log -p --all` patch stream and then scans the current tree with `gitleaks detect --no-git`.
 
 The package is marked `private` to prevent accidental npm publication. GitHub repository visibility is managed separately from npm publishing.
+
+GitHub CI always runs the public formatter and gitleaks workflows. The generated haxe.rust Cargo smoke job needs access to the sibling `../haxe.rust` repository; on public GitHub Actions it runs when `HAXE_RUST_CHECKOUT_TOKEN` is configured, and otherwise emits a skip notice. Local publishing readiness still requires `npm run test:generated-cargo`.
 
 ## Repository Status
 

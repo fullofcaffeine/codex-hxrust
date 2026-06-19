@@ -43,7 +43,6 @@ jobs:
         working-directory: codex-hxrust
         run: |
           set -euo pipefail
-          npx lix download
           npx lix download haxe "${{ env.HAXE_VERSION }}"
           npx lix use haxe "${{ env.HAXE_VERSION }}"
           echo "$(pwd)/node_modules/.bin" >> "$GITHUB_PATH"
@@ -53,46 +52,49 @@ jobs:
       - name: Install Haxe formatter
         run: haxelib install formatter --quiet
 
-      - name: Check changed Haxe formatting
+      - name: Check Haxe formatting
         working-directory: codex-hxrust
-        run: |
-          set -euo pipefail
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            git fetch origin "${{ github.base_ref }}" --depth=1
-            npm run format:haxe:changed -- "origin/${{ github.base_ref }}"
-          elif [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
-            npm run format:haxe:changed -- "${{ github.event.before }}"
-          else
-            npm run format:haxe:changed -- "HEAD~1"
-          fi
+        run: npm run format:haxe:check
 
   haxe-rust-smoke:
     name: haxe.rust generated Rust smoke
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      HAXE_RUST_CHECKOUT_TOKEN: ${{ secrets.HAXE_RUST_CHECKOUT_TOKEN }}
     steps:
       - name: Checkout codex-hxrust
         uses: actions/checkout@v6
         with:
           path: codex-hxrust
 
+      - name: Skip note when haxe.rust token is unavailable
+        if: env.HAXE_RUST_CHECKOUT_TOKEN == ''
+        run: |
+          echo "::notice::Skipping generated Rust smoke because HAXE_RUST_CHECKOUT_TOKEN is not configured for the private haxe.rust sibling."
+          echo "::notice::Local public-readiness still requires npm run test:generated-cargo before publishing."
+
       - name: Checkout haxe.rust sibling
+        if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
         uses: actions/checkout@v6
         with:
           repository: ${{ env.HAXE_RUST_REPOSITORY }}
           path: haxe.rust
-          token: ${{ secrets.HAXE_RUST_CHECKOUT_TOKEN || github.token }}
+          token: ${{ env.HAXE_RUST_CHECKOUT_TOKEN }}
 
       - name: Setup Node.js
+        if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install npm dependencies
+        if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
         working-directory: codex-hxrust
         run: npm ci --ignore-scripts --no-audit --no-fund
 
       - name: Install Haxe via lix
+        if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
         working-directory: codex-hxrust
         run: |
           set -euo pipefail
@@ -104,5 +106,6 @@ jobs:
           haxe -version
 
       - name: Check haxe.rust generated Cargo gates
+        if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
         working-directory: codex-hxrust
         run: npm run test:generated-cargo
