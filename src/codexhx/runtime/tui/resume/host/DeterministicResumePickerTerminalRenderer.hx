@@ -36,7 +36,16 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 		if (state.toolbarRenderMode.length > 0 || state.toolbarFocus != "filter") {
 			lines.push("toolbar-detail focus=" + state.toolbarFocus + " mode=" + emptyLabel(state.toolbarRenderMode));
 		}
-		lines.push("rows loaded=" + state.loadedRows + " filtered=" + state.filteredRows + " scanned=" + state.scannedRows + " accepted=" + state.acceptedRows);
+		lines.push("rows loaded="
+			+ state.loadedRows
+			+ " filtered="
+			+ state.filteredRows
+			+ " scanned="
+			+ state.scannedRows
+			+ " accepted="
+			+ state.acceptedRows
+			+ " invalid="
+			+ state.invalidRows);
 		if (state.scrollTop > 0 || state.moreAbove || state.pendingPageDownCompleted) {
 			lines.push("navigation selected="
 				+ state.selectedIndex
@@ -107,7 +116,9 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 			+ " | turns="
 			+ row.turnCount
 			+ " | "
-			+ row.updatedAt;
+			+ row.updatedAt
+			+ " | cwd="
+			+ emptyLabel(row.cwd);
 	}
 
 	static function emptyLabel(value:String):String {

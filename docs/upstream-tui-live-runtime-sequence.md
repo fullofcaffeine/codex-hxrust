@@ -3205,6 +3205,17 @@ Extend the normalized resume picker renderer from loader cancellation evidence i
 
 Status: HXCX-TUI-115 adds `ResumePickerHostBackpressureRenderGate`, `ResumePickerHostBackpressureRenderGateReport`, `test/ResumePickerHostBackpressureRenderHarness.hx`, `hxml/resume-picker-host-backpressure-render.hxml`, and `harness/check-resume-picker-host-backpressure-render.sh`. The gate validates best-effort frame drop, lossless page backpressure, skipped/pending counts, post-drain recovery, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
 
+### HXCX-TUI-116: Resume Picker Invalid Row Projection Render Snapshot Gate
+
+Extend the normalized resume picker renderer from bounded loader backpressure evidence into app-server row projection evidence:
+
+- render scanned, accepted, and invalid/skipped row counts after fixture-backed `thread/list` projection;
+- render accepted rows only, including display title/preview fallbacks, timestamp evidence, and cwd metadata preservation;
+- keep skipped invalid rows visible as count/status evidence without rendering invalid row data as selectable rows;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, Tokio task ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-116 teaches `DeterministicResumePickerTerminalRenderer` to include `invalid` row counts and `cwd` row metadata, and adds `ResumePickerInvalidRowProjectionRenderGate`, `ResumePickerInvalidRowProjectionRenderGateReport`, `test/ResumePickerInvalidRowProjectionRenderHarness.hx`, `hxml/resume-picker-invalid-row-projection-render.hxml`, and `harness/check-resume-picker-invalid-row-projection-render.sh`. The gate validates three accepted rows out of five scanned rows, two invalid/skipped rows, fallback display rows, timestamp/cwd metadata, loader status evidence, frame/render counts, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live app-server fanout, terminal ownership, Tokio task ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

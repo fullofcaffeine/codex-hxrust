@@ -69,6 +69,7 @@ Profile policy for the scaffold:
 | `resume-picker-density-persistence-render.hxml` | Compile the HXCX-TUI-113 resume picker normalized density persistence render snapshot gate through portable haxe.rust. |
 | `resume-picker-loader-cancellation-render.hxml` | Compile the HXCX-TUI-114 resume picker normalized loader cancellation/stale-event render snapshot gate through portable haxe.rust. |
 | `resume-picker-host-backpressure-render.hxml` | Compile the HXCX-TUI-115 resume picker normalized host backpressure render snapshot gate through portable haxe.rust. |
+| `resume-picker-invalid-row-projection-render.hxml` | Compile the HXCX-TUI-116 resume picker normalized invalid-row projection render snapshot gate through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |
