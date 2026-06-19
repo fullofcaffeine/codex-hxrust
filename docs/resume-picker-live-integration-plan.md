@@ -80,6 +80,8 @@ These are still fixture evidence and must not be described as live parity yet:
    - Keep the Haxe-facing async contract runtime-neutral: tasks, streams, poll/next outcomes, cancellation, and backpressure. Do not expose Tokio handles or Tokio types in codexhx APIs.
    - Start with deterministic in-memory implementations, then add metal/native Rust implementations behind haxe.rust.
 
+Status: `codexhx.runtime.tui.resume.host` owns the first runtime-neutral host facade. It defines typed app-server thread-list/thread-read requests and responses, background loader requests/events, frame scheduler, terminal renderer, and config persistence contracts. `harness/check-resume-picker-host-facade.sh` validates deterministic in-memory implementations, lossless versus best-effort backpressure, cancellation, frame scheduling, rendering, and density persistence through the Haxe interpreter and portable haxe.rust-generated Rust. Tokio, crossterm, ratatui frame lifetimes, config file mutation, and live app-server transport remain behind future metal/native boundaries.
+
 3. Add the no-credential app-server loop.
    - Build an in-process or local fixture-backed app-server implementation that serves `thread/list` and `thread/read` through the same typed request/response path as production.
    - Prove page load, cursor pagination, preview load, and full transcript load through generated Rust without provider credentials or model traffic.
@@ -128,6 +130,7 @@ Near-term gates:
 
 - `harness/check-tui-smoke.sh`
 - `harness/check-resume-picker-kernel.sh` for Haxe interpreter tests plus haxe.rust-generated Cargo `check`, `test`, and binary execution for the pure picker kernel.
+- `harness/check-resume-picker-host-facade.sh` for runtime-neutral host contracts, deterministic in-memory implementations, backpressure/cancellation, and portable haxe.rust-generated Rust validation.
 - A new no-credential generated Rust gate for the app-server facade once the host boundary exists.
 - A new VT100/test-backend render gate before any live crossterm automation.
 

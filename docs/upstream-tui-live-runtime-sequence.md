@@ -3069,6 +3069,19 @@ Start converting the deterministic resume picker smoke evidence into an upstream
 
 Status: HXCX-TUI-103 adds `src/codexhx/runtime/tui/resume/`, `test/ResumePickerKernelHarness.hx`, `hxml/resume-picker-kernel.hxml`, and `harness/check-resume-picker-kernel.sh`. The new gate validates picker open, page request/ingest, stale page refusal, search continuation, sort/filter toggles, preview request/completion/render gating, transcript request/loading/completion/overlay opening, keyboard movement, query clearing, load-more intent, metadata failure, density persistence intent, toolbar focus/activation/render state, footer progress, hints, list render state, empty-state labels, loading overlay text, selection, failure surfacing, and no-live/no-render evidence through portable haxe.rust. This is pure state/effect-intent evidence only, not live app-server fanout, crossterm input, ratatui rendering, config mutation, state DB/rollout querying, or pager overlay ownership.
 
+### HXCX-TUI-104: Resume Picker Runtime-Neutral Host Facade
+
+Define the first host seam that can satisfy resume picker effect intents without exposing Rust runtime details to app-facing Haxe APIs:
+
+- preserve `../codex/codex-rs/tui/src/app_server_session.rs` thread-list and thread-read boundaries as typed Haxe request/response contracts, not raw JSON strings or live transport handles;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` loader behavior as background request/event contracts for page, preview, transcript, and frame intents;
+- preserve `../codex/codex-rs/tui/src/tui/frame_requester.rs` scheduling as a frame scheduler handle that reports deterministic request evidence before real Tokio scheduling exists;
+- preserve terminal rendering and config persistence as host interfaces, leaving crossterm, ratatui frame lifetimes, temp-home config writes, and real user config mutation to later native/metal slices;
+- reuse the runtime-neutral async contract for tasks, streams, poll/next outcomes, cancellation, lossless events, best-effort drops, and backpressure;
+- keep the slice mainstream/raw Codex only, with no Cafex behavior and no Tokio, crossterm, ratatui, or Codex-specific haxe.rust compiler assumptions in app-facing Haxe.
+
+Status: HXCX-TUI-104 adds `src/codexhx/runtime/tui/resume/host/`, `test/ResumePickerHostFacadeHarness.hx`, `hxml/resume-picker-host-facade.hxml`, and `harness/check-resume-picker-host-facade.sh`. The gate validates deterministic app-server thread source, background loader page/preview/transcript/frame events, lossless versus best-effort backpressure, cancellation, frame scheduling, terminal renderer snapshots, configured and unconfigured density persistence, and portable haxe.rust-generated Rust output. This is host-contract evidence only, not live JSON-RPC transport, crossterm input, ratatui rendering, config file mutation, state DB/rollout querying, or pager overlay ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
