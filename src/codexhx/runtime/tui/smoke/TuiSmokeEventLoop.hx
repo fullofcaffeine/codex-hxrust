@@ -311,6 +311,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetPermissionSelection:
+					if (!tracePermissionSelection(event.chatWidgetPermissionSelection, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4195,6 +4200,95 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_session_flow.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function tracePermissionSelection(plan:TuiSmokePermissionSelectionPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowFilesystemMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_permission_selection.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_permission_selection.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokePermissionSelectionActionKind.ModeList:
+					trace.push(
+						"tui.chat_widget_permission_selection.mode_list="
+						+ "items=" + action.itemCount
+						+ ":disabled=" + action.disabledCount
+						+ ":read_only=" + action.includeReadOnly
+						+ ":guardian=" + action.guardianEnabled
+						+ ":auto_review=" + action.autoReviewIncluded
+						+ ":degraded=" + action.windowsDegradedSandbox
+						+ ":elevate_hint=" + action.elevateSandboxHint
+					);
+				case TuiSmokePermissionSelectionActionKind.ProfileList:
+					trace.push(
+						"tui.chat_widget_permission_selection.profile_list="
+						+ "items=" + action.itemCount
+						+ ":builtin=" + action.builtinCount
+						+ ":custom=" + action.customProfileCount
+						+ ":current=" + action.profileId
+						+ ":auto_review=" + action.autoReviewIncluded
+					);
+				case TuiSmokePermissionSelectionActionKind.SelectProfile:
+					trace.push(
+						"tui.chat_widget_permission_selection.select_profile="
+						+ action.profileId
+						+ ":label=" + action.displayLabel
+						+ ":approval=" + action.approvalPolicy
+						+ ":reviewer=" + action.reviewer
+						+ ":current=" + action.isCurrent
+						+ ":override=" + action.overrideTurnContext
+						+ ":approval_event=" + action.updateApprovalPolicy
+						+ ":reviewer_event=" + action.updateReviewer
+						+ ":profile_event=" + action.selectProfileEvent
+						+ ":history=" + action.historyCellEmitted
+					);
+				case TuiSmokePermissionSelectionActionKind.FullAccessConfirm:
+					trace.push(
+						"tui.chat_widget_permission_selection.full_access="
+						+ action.presetId
+						+ ":warning_hidden=" + action.warningHidden
+						+ ":requires=" + action.requiresConfirmation
+						+ ":opened=" + action.confirmationOpened
+						+ ":return=" + action.returnToPermissions
+						+ ":remember=" + action.rememberDismissal
+						+ ":history=" + action.historyCellEmitted
+					);
+				case TuiSmokePermissionSelectionActionKind.AutoReviewDenials:
+					trace.push(
+						"tui.chat_widget_permission_selection.denials="
+						+ "entries=" + action.denialCount
+						+ ":popup=" + action.popupOpened
+						+ ":empty_info=" + action.emptyInfoInserted
+						+ ":missing_thread=" + action.missingThreadError
+						+ ":selected=" + action.selectedId
+						+ ":submit=" + action.submitThreadOp
+						+ ":info=" + action.infoInserted
+					);
+				case TuiSmokePermissionSelectionActionKind.DisabledPreset:
+					trace.push(
+						"tui.chat_widget_permission_selection.disabled="
+						+ action.presetId
+						+ ":approval=" + action.approvalDisabled
+						+ ":guardian=" + action.guardianDisabled
+						+ ":skipped=" + action.skippedByNavigation
+					);
+				case TuiSmokePermissionSelectionActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_permission_selection.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_fs=" + action.noFilesystemMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_permission_selection.unknown");
 					return false;
 			}
 		}

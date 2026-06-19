@@ -113,6 +113,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetReplayProtocol: optionalReplayProtocolPlan(value, "chatWidgetReplayProtocol"),
 				chatWidgetRateLimit: optionalRateLimitPlan(value, "chatWidgetRateLimit"),
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
+				chatWidgetPermissionSelection: optionalPermissionSelectionPlan(value, "chatWidgetPermissionSelection"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -125,6 +126,69 @@ class TuiSmokeFixtureLoader {
 				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe"),
 				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy"),
 				clipboardPaste: optionalClipboardPastePlan(value, "clipboardPaste")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalPermissionSelectionPlan(object:Value, name:String):Null<TuiSmokePermissionSelectionPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokePermissionSelectionPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					actions: permissionSelectionActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function permissionSelectionActions(values:Array<Value>):Array<TuiSmokePermissionSelectionAction> {
+		final out:Array<TuiSmokePermissionSelectionAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokePermissionSelectionAction({
+				kind: TuiSmokePermissionSelectionActionKind.fromString(stringField(value, "kind", "")),
+				presetId: optionalStringField(value, "presetId", ""),
+				profileId: optionalStringField(value, "profileId", ""),
+				displayLabel: optionalStringField(value, "displayLabel", ""),
+				approvalPolicy: optionalStringField(value, "approvalPolicy", ""),
+				reviewer: optionalStringField(value, "reviewer", ""),
+				selectedId: optionalStringField(value, "selectedId", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				itemCount: optionalIntField(value, "itemCount", 0),
+				builtinCount: optionalIntField(value, "builtinCount", 0),
+				customProfileCount: optionalIntField(value, "customProfileCount", 0),
+				disabledCount: optionalIntField(value, "disabledCount", 0),
+				denialCount: optionalIntField(value, "denialCount", 0),
+				includeReadOnly: optionalBoolField(value, "includeReadOnly", false),
+				guardianEnabled: optionalBoolField(value, "guardianEnabled", false),
+				autoReviewIncluded: optionalBoolField(value, "autoReviewIncluded", false),
+				windowsDegradedSandbox: optionalBoolField(value, "windowsDegradedSandbox", false),
+				elevateSandboxHint: optionalBoolField(value, "elevateSandboxHint", false),
+				isCurrent: optionalBoolField(value, "isCurrent", false),
+				overrideTurnContext: optionalBoolField(value, "overrideTurnContext", false),
+				updateApprovalPolicy: optionalBoolField(value, "updateApprovalPolicy", false),
+				updateReviewer: optionalBoolField(value, "updateReviewer", false),
+				selectProfileEvent: optionalBoolField(value, "selectProfileEvent", false),
+				historyCellEmitted: optionalBoolField(value, "historyCellEmitted", false),
+				warningHidden: optionalBoolField(value, "warningHidden", false),
+				requiresConfirmation: optionalBoolField(value, "requiresConfirmation", false),
+				confirmationOpened: optionalBoolField(value, "confirmationOpened", false),
+				returnToPermissions: optionalBoolField(value, "returnToPermissions", false),
+				rememberDismissal: optionalBoolField(value, "rememberDismissal", false),
+				popupOpened: optionalBoolField(value, "popupOpened", false),
+				emptyInfoInserted: optionalBoolField(value, "emptyInfoInserted", false),
+				missingThreadError: optionalBoolField(value, "missingThreadError", false),
+				submitThreadOp: optionalBoolField(value, "submitThreadOp", false),
+				infoInserted: optionalBoolField(value, "infoInserted", false),
+				approvalDisabled: optionalBoolField(value, "approvalDisabled", false),
+				guardianDisabled: optionalBoolField(value, "guardianDisabled", false),
+				skippedByNavigation: optionalBoolField(value, "skippedByNavigation", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

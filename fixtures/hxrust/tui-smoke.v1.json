@@ -15763,6 +15763,171 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_windows_sandbox.plan=headless\ntui.chat_widget_windows_sandbox.mode_allowed=Unelevated:allowed=true\ntui.chat_widget_windows_sandbox.mode_allowed=Unelevated:allowed=false\ntui.chat_widget_windows_sandbox.setup_required=elevated=true:source=true:complete=false:required=true\ntui.chat_widget_windows_sandbox.setup_required=elevated=true:source=true:complete=true:required=false\ntui.chat_widget_windows_sandbox.enable_prompt=legacy_nux_disabled:preset=auto:legacy_nux=false:allow_unelevated=true:admin=false:fallback=false:quit=false:cancel_reopens=false:telemetry=false:elevated_event=false:legacy_event=true\ntui.chat_widget_windows_sandbox.enable_prompt=elevated_optional:preset=auto:legacy_nux=true:allow_unelevated=true:admin=true:fallback=true:quit=true:cancel_reopens=true:telemetry=true:elevated_event=true:legacy_event=true\ntui.chat_widget_windows_sandbox.enable_prompt=elevated_required:preset=auto:legacy_nux=true:allow_unelevated=false:admin=true:fallback=false:quit=true:cancel_reopens=true:telemetry=true:elevated_event=true:legacy_event=false\ntui.chat_widget_windows_sandbox.fallback_prompt=fallback_optional:preset=auto:allow_unelevated=true:retry=true:legacy=true:quit=true:cancel_reopens=true:fallback_event=true:elevated_event=true:legacy_event=true\ntui.chat_widget_windows_sandbox.fallback_prompt=fallback_required:preset=auto:allow_unelevated=false:retry=true:legacy=false:quit=true:cancel_reopens=true:fallback_event=true:elevated_event=true:legacy_event=false\ntui.chat_widget_windows_sandbox.startup_prompt=show_now=true:required=true:popup=true:enable_event=true:quit=true\ntui.chat_widget_windows_sandbox.startup_prompt=show_now=false:required=true:popup=false:enable_event=false:quit=false\ntui.chat_widget_windows_sandbox.initial_prompt=fix required sandbox startup:required=true:held=true:submitted=false:mode=Elevated\ntui.chat_widget_windows_sandbox.initial_prompt=fix required sandbox startup:required=false:held=false:submitted=true:mode=Unelevated\ntui.chat_widget_windows_sandbox.world_writable=shown=false:remembered=false:failed_scan=false:paths=:extra=0:items=0\ntui.chat_widget_windows_sandbox.world_writable=shown=true:remembered=true:failed_scan=true:paths=C:/repo,C:/repo/tmp:extra=2:items=2\ntui.chat_widget_windows_sandbox.failure=live_windows_sandbox_effects_rejected:no_os=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget windows sandbox\ninput> \ntrace:\ntui.chat_widget_windows_sandbox.plan=headless\ntui.chat_widget_windows_sandbox.mode_allowed=Unelevated:allowed=true\ntui.chat_widget_windows_sandbox.mode_allowed=Unelevated:allowed=false\ntui.chat_widget_windows_sandbox.setup_required=elevated=true:source=true:complete=false:required=true\ntui.chat_widget_windows_sandbox.setup_required=elevated=true:source=true:complete=true:required=false\ntui.chat_widget_windows_sandbox.enable_prompt=legacy_nux_disabled:preset=auto:legacy_nux=false:allow_unelevated=true:admin=false:fallback=false:quit=false:cancel_reopens=false:telemetry=false:elevated_event=false:legacy_event=true\ntui.chat_widget_windows_sandbox.enable_prompt=elevated_optional:preset=auto:legacy_nux=true:allow_unelevated=true:admin=true:fallback=true:quit=true:cancel_reopens=true:telemetry=true:elevated_event=true:legacy_event=true\ntui.chat_widget_windows_sandbox.enable_prompt=elevated_required:preset=auto:legacy_nux=true:allow_unelevated=false:admin=true:fallback=false:quit=true:cancel_reopens=true:telemetry=true:elevated_event=true:legacy_event=false\ntui.chat_widget_windows_sandbox.fallback_prompt=fallback_optional:preset=auto:allow_unelevated=true:retry=true:legacy=true:quit=true:cancel_reopens=true:fallback_event=true:elevated_event=true:legacy_event=true\ntui.chat_widget_windows_sandbox.fallback_prompt=fallback_required:preset=auto:allow_unelevated=false:retry=true:legacy=false:quit=true:cancel_reopens=true:fallback_event=true:elevated_event=true:legacy_event=false\ntui.chat_widget_windows_sandbox.startup_prompt=show_now=true:required=true:popup=true:enable_event=true:quit=true\ntui.chat_widget_windows_sandbox.startup_prompt=show_now=false:required=true:popup=false:enable_event=false:quit=false\ntui.chat_widget_windows_sandbox.initial_prompt=fix required sandbox startup:required=true:held=true:submitted=false:mode=Elevated\ntui.chat_widget_windows_sandbox.initial_prompt=fix required sandbox startup:required=false:held=false:submitted=true:mode=Unelevated\ntui.chat_widget_windows_sandbox.world_writable=shown=false:remembered=false:failed_scan=false:paths=:extra=0:items=0\ntui.chat_widget_windows_sandbox.world_writable=shown=true:remembered=true:failed_scan=true:paths=C:/repo,C:/repo/tmp:extra=2:items=2\ntui.chat_widget_windows_sandbox.failure=live_windows_sandbox_effects_rejected:no_os=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-permission-selection-headless",
+      "frame": {
+        "name": "chatwidget-permission-selection-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget permission selection"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_permission_selection",
+          "chatWidgetPermissionSelection": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "mode_list",
+                "itemCount": 4,
+                "disabledCount": 1,
+                "includeReadOnly": false,
+                "guardianEnabled": true,
+                "autoReviewIncluded": true,
+                "windowsDegradedSandbox": true,
+                "elevateSandboxHint": true
+              },
+              {
+                "kind": "profile_list",
+                "itemCount": 6,
+                "builtinCount": 4,
+                "customProfileCount": 2,
+                "profileId": ":workspace",
+                "autoReviewIncluded": true
+              },
+              {
+                "kind": "select_profile",
+                "profileId": ":workspace",
+                "displayLabel": "Ask for approval",
+                "approvalPolicy": "on-request",
+                "reviewer": "user",
+                "isCurrent": true,
+                "overrideTurnContext": true,
+                "updateApprovalPolicy": true,
+                "updateReviewer": true,
+                "selectProfileEvent": true,
+                "historyCellEmitted": true
+              },
+              {
+                "kind": "select_profile",
+                "profileId": ":workspace",
+                "displayLabel": "Approve for me",
+                "approvalPolicy": "on-request",
+                "reviewer": "auto-review",
+                "isCurrent": false,
+                "overrideTurnContext": true,
+                "updateApprovalPolicy": true,
+                "updateReviewer": true,
+                "selectProfileEvent": true,
+                "historyCellEmitted": true
+              },
+              {
+                "kind": "select_profile",
+                "profileId": "readonly-plus",
+                "displayLabel": "readonly-plus",
+                "approvalPolicy": "",
+                "reviewer": "",
+                "isCurrent": false,
+                "overrideTurnContext": false,
+                "updateApprovalPolicy": false,
+                "updateReviewer": false,
+                "selectProfileEvent": true,
+                "historyCellEmitted": false
+              },
+              {
+                "kind": "full_access_confirm",
+                "presetId": "full-access",
+                "warningHidden": false,
+                "requiresConfirmation": true,
+                "confirmationOpened": true,
+                "returnToPermissions": true,
+                "rememberDismissal": true,
+                "historyCellEmitted": false
+              },
+              {
+                "kind": "full_access_confirm",
+                "presetId": "full-access",
+                "warningHidden": true,
+                "requiresConfirmation": false,
+                "confirmationOpened": false,
+                "returnToPermissions": false,
+                "rememberDismissal": false,
+                "historyCellEmitted": true
+              },
+              {
+                "kind": "auto_review_denials",
+                "denialCount": 0,
+                "popupOpened": false,
+                "emptyInfoInserted": true,
+                "missingThreadError": false,
+                "selectedId": "",
+                "submitThreadOp": false,
+                "infoInserted": false
+              },
+              {
+                "kind": "auto_review_denials",
+                "denialCount": 2,
+                "popupOpened": true,
+                "emptyInfoInserted": false,
+                "missingThreadError": false,
+                "selectedId": "denial-2",
+                "submitThreadOp": true,
+                "infoInserted": true
+              },
+              {
+                "kind": "disabled_preset",
+                "presetId": "full-access",
+                "approvalDisabled": true,
+                "guardianDisabled": false,
+                "skippedByNavigation": true
+              },
+              {
+                "kind": "disabled_preset",
+                "presetId": "auto-review",
+                "approvalDisabled": false,
+                "guardianDisabled": true,
+                "skippedByNavigation": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_permission_selection_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_permission_selection.plan=headless\ntui.chat_widget_permission_selection.mode_list=items=4:disabled=1:read_only=false:guardian=true:auto_review=true:degraded=true:elevate_hint=true\ntui.chat_widget_permission_selection.profile_list=items=6:builtin=4:custom=2:current=:workspace:auto_review=true\ntui.chat_widget_permission_selection.select_profile=:workspace:label=Ask for approval:approval=on-request:reviewer=user:current=true:override=true:approval_event=true:reviewer_event=true:profile_event=true:history=true\ntui.chat_widget_permission_selection.select_profile=:workspace:label=Approve for me:approval=on-request:reviewer=auto-review:current=false:override=true:approval_event=true:reviewer_event=true:profile_event=true:history=true\ntui.chat_widget_permission_selection.select_profile=readonly-plus:label=readonly-plus:approval=:reviewer=:current=false:override=false:approval_event=false:reviewer_event=false:profile_event=true:history=false\ntui.chat_widget_permission_selection.full_access=full-access:warning_hidden=false:requires=true:opened=true:return=true:remember=true:history=false\ntui.chat_widget_permission_selection.full_access=full-access:warning_hidden=true:requires=false:opened=false:return=false:remember=false:history=true\ntui.chat_widget_permission_selection.denials=entries=0:popup=false:empty_info=true:missing_thread=false:selected=:submit=false:info=false\ntui.chat_widget_permission_selection.denials=entries=2:popup=true:empty_info=false:missing_thread=false:selected=denial-2:submit=true:info=true\ntui.chat_widget_permission_selection.disabled=full-access:approval=true:guardian=false:skipped=true\ntui.chat_widget_permission_selection.disabled=auto-review:approval=false:guardian=true:skipped=true\ntui.chat_widget_permission_selection.failure=live_permission_selection_effects_rejected:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget permission selection\ninput> \ntrace:\ntui.chat_widget_permission_selection.plan=headless\ntui.chat_widget_permission_selection.mode_list=items=4:disabled=1:read_only=false:guardian=true:auto_review=true:degraded=true:elevate_hint=true\ntui.chat_widget_permission_selection.profile_list=items=6:builtin=4:custom=2:current=:workspace:auto_review=true\ntui.chat_widget_permission_selection.select_profile=:workspace:label=Ask for approval:approval=on-request:reviewer=user:current=true:override=true:approval_event=true:reviewer_event=true:profile_event=true:history=true\ntui.chat_widget_permission_selection.select_profile=:workspace:label=Approve for me:approval=on-request:reviewer=auto-review:current=false:override=true:approval_event=true:reviewer_event=true:profile_event=true:history=true\ntui.chat_widget_permission_selection.select_profile=readonly-plus:label=readonly-plus:approval=:reviewer=:current=false:override=false:approval_event=false:reviewer_event=false:profile_event=true:history=false\ntui.chat_widget_permission_selection.full_access=full-access:warning_hidden=false:requires=true:opened=true:return=true:remember=true:history=false\ntui.chat_widget_permission_selection.full_access=full-access:warning_hidden=true:requires=false:opened=false:return=false:remember=false:history=true\ntui.chat_widget_permission_selection.denials=entries=0:popup=false:empty_info=true:missing_thread=false:selected=:submit=false:info=false\ntui.chat_widget_permission_selection.denials=entries=2:popup=true:empty_info=false:missing_thread=false:selected=denial-2:submit=true:info=true\ntui.chat_widget_permission_selection.disabled=full-access:approval=true:guardian=false:skipped=true\ntui.chat_widget_permission_selection.disabled=auto-review:approval=false:guardian=true:skipped=true\ntui.chat_widget_permission_selection.failure=live_permission_selection_effects_rejected:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

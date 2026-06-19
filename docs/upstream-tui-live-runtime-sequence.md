@@ -2706,6 +2706,19 @@ Model selected raw Codex Windows sandbox prompt behavior without mutating OS san
 
 Status: HXCX-TUI-74 extends `fixtures/hxrust/tui-smoke.v1.json` with typed mode-allowance, setup-required, enable-prompt, fallback-prompt, startup-gate, initial-message gate, world-writable warning, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic Windows sandbox prompt evidence only, not real OS sandbox setup or popup rendering ownership.
 
+### HXCX-TUI-75: ChatWidget Permission Selection Boundary
+
+Model selected raw Codex permission-selection behavior without opening live ratatui popups, mutating config files, or dispatching model traffic:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/permission_popups.rs` normal approvals popup shape: built-in approval presets, optional Guardian auto-review row, disabled preset reasons, Windows read-only/degraded-sandbox label decisions, and the elevated sandbox hint;
+- preserve `../codex/codex-rs/tui/src/chatwidget/permissions_menu.rs` explicit permission-profile mode: built-in workspace/full-access/read-only profiles, custom profile rows, current profile marking, and `PermissionProfileSelection` event identity;
+- preserve permission selection side effects as typed intent: override turn context, update approval policy, update approvals reviewer, select named profile, and history-cell emission after actual selection rather than merely opening a popup;
+- preserve full-access confirmation gating: warning-hidden bypass, confirmation popup opening, return-to-permissions routing, remember-dismissal intent, and delayed history emission until confirmed;
+- preserve auto-review denial popup behavior: empty-denial info message, missing-thread refusal, searchable denial list, selected denial approval submission, and confirmation info insertion;
+- keep the evidence deterministic and independent of live terminal rendering, config file mutation, command execution, filesystem mutation, model/provider calls, and Cafex behavior.
+
+Status: HXCX-TUI-75 extends `fixtures/hxrust/tui-smoke.v1.json` with typed permission list, profile list, profile selection, full-access confirmation, auto-review denial, disabled preset, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic permission-selection state evidence only, not live popup rendering, config persistence, terminal ownership, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
