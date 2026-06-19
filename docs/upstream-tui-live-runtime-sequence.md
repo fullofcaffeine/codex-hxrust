@@ -2719,6 +2719,19 @@ Model selected raw Codex permission-selection behavior without opening live rata
 
 Status: HXCX-TUI-75 extends `fixtures/hxrust/tui-smoke.v1.json` with typed permission list, profile list, profile selection, full-access confirmation, auto-review denial, disabled preset, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic permission-selection state evidence only, not live popup rendering, config persistence, terminal ownership, or model traffic.
 
+### HXCX-TUI-76: ChatWidget Model And Settings Popup Boundary
+
+Model selected raw Codex model/settings popup behavior without live ratatui rendering, model/provider calls, or config-file mutation:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/model_popups.rs` model picker behavior: session-configured gate, catalog-ready gate, quick auto preset partitioning, custom OpenAI base-url warning, current/default row marking, and the "All models" child-popup action;
+- preserve all-models and reasoning popup behavior: single-effort auto-application, multi-effort row construction, high/extra-high warning text for current Codex models, current/default reasoning selection, and plan-mode redirection to the reasoning-scope prompt;
+- preserve plan-mode reasoning scope side effects: plan-only versus all-modes selection, model/reasoning updates, plan-reasoning persistence, global model persistence, and the prompt notification;
+- preserve `../codex/codex-rs/tui/src/chatwidget/service_tiers.rs` service-tier toggles: fast-mode keybinding gate, effective/configured tier distinction, override-turn-context event, persisted service-tier selection, and dependent surface refresh;
+- preserve `../codex/codex-rs/tui/src/chatwidget/settings_popups.rs` settings-adjacent popups: personality support/error gates, personality persistence, realtime audio device rows and restart prompt, and experimental-feature popup filtering/saving intent;
+- keep the evidence deterministic and independent of live terminal rendering, config writes, audio-device enumeration, network/model calls, and Cafex behavior.
+
+Status: HXCX-TUI-76 extends `fixtures/hxrust/tui-smoke.v1.json` with typed model picker, all-models, reasoning, plan-scope, service-tier, personality, realtime-audio, experimental-feature, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic model/settings popup state evidence only, not live popup rendering, config persistence, audio-device ownership, provider transport, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

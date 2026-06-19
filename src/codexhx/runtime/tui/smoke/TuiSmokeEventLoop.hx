@@ -316,6 +316,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetModelSettings:
+					if (!traceModelSettings(event.chatWidgetModelSettings, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4200,6 +4205,123 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_session_flow.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceModelSettings(plan:TuiSmokeModelSettingsPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowConfigMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_model_settings.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_model_settings.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeModelSettingsActionKind.ModelPopup:
+					trace.push(
+						"tui.chat_widget_model_settings.model_popup="
+						+ "session=" + action.sessionConfigured
+						+ ":catalog=" + action.catalogReady
+						+ ":auto=" + action.autoPresetCount
+						+ ":other=" + action.otherPresetCount
+						+ ":items=" + action.itemCount
+						+ ":current=" + action.currentSelected
+						+ ":all_row=" + action.allModelsRow
+						+ ":warning=" + action.customBaseUrlWarning
+						+ ":open_all=" + action.openAllModelsEvent
+					);
+				case TuiSmokeModelSettingsActionKind.AllModelsPopup:
+					trace.push(
+						"tui.chat_widget_model_settings.all_models="
+						+ "items=" + action.itemCount
+						+ ":model=" + action.model
+						+ ":current=" + action.currentSelected
+						+ ":default=" + action.defaultSelected
+						+ ":reasoning_event=" + action.openReasoningEvent
+						+ ":single_auto=" + action.singleEffortAutoApplied
+					);
+				case TuiSmokeModelSettingsActionKind.ReasoningPopup:
+					trace.push(
+						"tui.chat_widget_model_settings.reasoning="
+						+ action.model
+						+ ":choices=" + action.reasoningChoiceCount
+						+ ":selected=" + action.effort
+						+ ":warning=" + action.warningShown
+						+ ":plan=" + action.planMode
+						+ ":update_model=" + action.updateModel
+						+ ":update_reasoning=" + action.updateReasoning
+						+ ":persist=" + action.persistModel
+					);
+				case TuiSmokeModelSettingsActionKind.PlanScopePrompt:
+					trace.push(
+						"tui.chat_widget_model_settings.plan_scope="
+						+ action.model
+						+ ":effort=" + action.effort
+						+ ":plan_only=" + action.planOnlySelected
+						+ ":all_modes=" + action.allModesSelected
+						+ ":update_model=" + action.updateModel
+						+ ":update_reasoning=" + action.updateReasoning
+						+ ":update_plan=" + action.updatePlanReasoning
+						+ ":persist_model=" + action.persistModel
+						+ ":persist_plan=" + action.persistPlanReasoning
+						+ ":notify=" + action.notifyPlanPrompt
+					);
+				case TuiSmokeModelSettingsActionKind.ServiceTier:
+					trace.push(
+						"tui.chat_widget_model_settings.service_tier="
+						+ action.serviceTier
+						+ ":configured=" + action.configuredTier
+						+ ":effective=" + action.effectiveTier
+						+ ":fast_feature=" + action.fastFeatureEnabled
+						+ ":toggle_allowed=" + action.fastToggleAllowed
+						+ ":override=" + action.overrideTurnContext
+						+ ":persist=" + action.persistServiceTier
+						+ ":refresh=" + action.refreshSurfaces
+					);
+				case TuiSmokeModelSettingsActionKind.Personality:
+					trace.push(
+						"tui.chat_widget_model_settings.personality="
+						+ action.personality
+						+ ":session=" + action.sessionConfigured
+						+ ":supports=" + action.supportsPersonality
+						+ ":popup=" + action.popupOpened
+						+ ":error=" + action.errorInserted
+						+ ":override=" + action.overrideTurnContext
+						+ ":persist=" + action.persistPersonality
+					);
+				case TuiSmokeModelSettingsActionKind.RealtimeAudio:
+					trace.push(
+						"tui.chat_widget_model_settings.audio="
+						+ action.audioKind
+						+ ":devices=" + action.deviceCount
+						+ ":selected=" + action.selectedDevice
+						+ ":default_row=" + action.defaultDeviceRow
+						+ ":unavailable=" + action.unavailableDeviceRow
+						+ ":persist=" + action.persistAudioDevice
+						+ ":restart_prompt=" + action.restartPrompt
+						+ ":restart=" + action.restartEvent
+					);
+				case TuiSmokeModelSettingsActionKind.ExperimentalFeatures:
+					trace.push(
+						"tui.chat_widget_model_settings.experimental="
+						+ "features=" + action.featureCount
+						+ ":stable_omitted=" + action.stableFeatureOmitted
+						+ ":save_on_exit=" + action.configSaveOnExit
+						+ ":popup=" + action.popupOpened
+					);
+				case TuiSmokeModelSettingsActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_model_settings.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_config=" + action.noConfigMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_model_settings.unknown");
 					return false;
 			}
 		}

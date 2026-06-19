@@ -114,6 +114,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetRateLimit: optionalRateLimitPlan(value, "chatWidgetRateLimit"),
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
 				chatWidgetPermissionSelection: optionalPermissionSelectionPlan(value, "chatWidgetPermissionSelection"),
+				chatWidgetModelSettings: optionalModelSettingsPlan(value, "chatWidgetModelSettings"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -126,6 +127,83 @@ class TuiSmokeFixtureLoader {
 				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe"),
 				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy"),
 				clipboardPaste: optionalClipboardPastePlan(value, "clipboardPaste")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalModelSettingsPlan(object:Value, name:String):Null<TuiSmokeModelSettingsPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeModelSettingsPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowConfigMutation: optionalBoolField(value, "allowConfigMutation", false),
+					actions: modelSettingsActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function modelSettingsActions(values:Array<Value>):Array<TuiSmokeModelSettingsAction> {
+		final out:Array<TuiSmokeModelSettingsAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeModelSettingsAction({
+				kind: TuiSmokeModelSettingsActionKind.fromString(stringField(value, "kind", "")),
+				model: optionalStringField(value, "model", ""),
+				effort: optionalStringField(value, "effort", ""),
+				serviceTier: optionalStringField(value, "serviceTier", ""),
+				personality: optionalStringField(value, "personality", ""),
+				audioKind: optionalStringField(value, "audioKind", ""),
+				selectedDevice: optionalStringField(value, "selectedDevice", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				itemCount: optionalIntField(value, "itemCount", 0),
+				autoPresetCount: optionalIntField(value, "autoPresetCount", 0),
+				otherPresetCount: optionalIntField(value, "otherPresetCount", 0),
+				reasoningChoiceCount: optionalIntField(value, "reasoningChoiceCount", 0),
+				featureCount: optionalIntField(value, "featureCount", 0),
+				deviceCount: optionalIntField(value, "deviceCount", 0),
+				configuredTier: optionalStringField(value, "configuredTier", ""),
+				effectiveTier: optionalStringField(value, "effectiveTier", ""),
+				sessionConfigured: optionalBoolField(value, "sessionConfigured", false),
+				catalogReady: optionalBoolField(value, "catalogReady", false),
+				customBaseUrlWarning: optionalBoolField(value, "customBaseUrlWarning", false),
+				currentSelected: optionalBoolField(value, "currentSelected", false),
+				defaultSelected: optionalBoolField(value, "defaultSelected", false),
+				allModelsRow: optionalBoolField(value, "allModelsRow", false),
+				openAllModelsEvent: optionalBoolField(value, "openAllModelsEvent", false),
+				openReasoningEvent: optionalBoolField(value, "openReasoningEvent", false),
+				singleEffortAutoApplied: optionalBoolField(value, "singleEffortAutoApplied", false),
+				warningShown: optionalBoolField(value, "warningShown", false),
+				planMode: optionalBoolField(value, "planMode", false),
+				planOnlySelected: optionalBoolField(value, "planOnlySelected", false),
+				allModesSelected: optionalBoolField(value, "allModesSelected", false),
+				updateModel: optionalBoolField(value, "updateModel", false),
+				updateReasoning: optionalBoolField(value, "updateReasoning", false),
+				updatePlanReasoning: optionalBoolField(value, "updatePlanReasoning", false),
+				persistModel: optionalBoolField(value, "persistModel", false),
+				persistPlanReasoning: optionalBoolField(value, "persistPlanReasoning", false),
+				notifyPlanPrompt: optionalBoolField(value, "notifyPlanPrompt", false),
+				fastFeatureEnabled: optionalBoolField(value, "fastFeatureEnabled", false),
+				fastToggleAllowed: optionalBoolField(value, "fastToggleAllowed", false),
+				overrideTurnContext: optionalBoolField(value, "overrideTurnContext", false),
+				persistServiceTier: optionalBoolField(value, "persistServiceTier", false),
+				refreshSurfaces: optionalBoolField(value, "refreshSurfaces", false),
+				supportsPersonality: optionalBoolField(value, "supportsPersonality", false),
+				persistPersonality: optionalBoolField(value, "persistPersonality", false),
+				popupOpened: optionalBoolField(value, "popupOpened", false),
+				errorInserted: optionalBoolField(value, "errorInserted", false),
+				defaultDeviceRow: optionalBoolField(value, "defaultDeviceRow", false),
+				unavailableDeviceRow: optionalBoolField(value, "unavailableDeviceRow", false),
+				persistAudioDevice: optionalBoolField(value, "persistAudioDevice", false),
+				restartPrompt: optionalBoolField(value, "restartPrompt", false),
+				restartEvent: optionalBoolField(value, "restartEvent", false),
+				stableFeatureOmitted: optionalBoolField(value, "stableFeatureOmitted", false),
+				configSaveOnExit: optionalBoolField(value, "configSaveOnExit", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noConfigMutation: optionalBoolField(value, "noConfigMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

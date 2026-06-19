@@ -15928,6 +15928,187 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_permission_selection.plan=headless\ntui.chat_widget_permission_selection.mode_list=items=4:disabled=1:read_only=false:guardian=true:auto_review=true:degraded=true:elevate_hint=true\ntui.chat_widget_permission_selection.profile_list=items=6:builtin=4:custom=2:current=:workspace:auto_review=true\ntui.chat_widget_permission_selection.select_profile=:workspace:label=Ask for approval:approval=on-request:reviewer=user:current=true:override=true:approval_event=true:reviewer_event=true:profile_event=true:history=true\ntui.chat_widget_permission_selection.select_profile=:workspace:label=Approve for me:approval=on-request:reviewer=auto-review:current=false:override=true:approval_event=true:reviewer_event=true:profile_event=true:history=true\ntui.chat_widget_permission_selection.select_profile=readonly-plus:label=readonly-plus:approval=:reviewer=:current=false:override=false:approval_event=false:reviewer_event=false:profile_event=true:history=false\ntui.chat_widget_permission_selection.full_access=full-access:warning_hidden=false:requires=true:opened=true:return=true:remember=true:history=false\ntui.chat_widget_permission_selection.full_access=full-access:warning_hidden=true:requires=false:opened=false:return=false:remember=false:history=true\ntui.chat_widget_permission_selection.denials=entries=0:popup=false:empty_info=true:missing_thread=false:selected=:submit=false:info=false\ntui.chat_widget_permission_selection.denials=entries=2:popup=true:empty_info=false:missing_thread=false:selected=denial-2:submit=true:info=true\ntui.chat_widget_permission_selection.disabled=full-access:approval=true:guardian=false:skipped=true\ntui.chat_widget_permission_selection.disabled=auto-review:approval=false:guardian=true:skipped=true\ntui.chat_widget_permission_selection.failure=live_permission_selection_effects_rejected:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget permission selection\ninput> \ntrace:\ntui.chat_widget_permission_selection.plan=headless\ntui.chat_widget_permission_selection.mode_list=items=4:disabled=1:read_only=false:guardian=true:auto_review=true:degraded=true:elevate_hint=true\ntui.chat_widget_permission_selection.profile_list=items=6:builtin=4:custom=2:current=:workspace:auto_review=true\ntui.chat_widget_permission_selection.select_profile=:workspace:label=Ask for approval:approval=on-request:reviewer=user:current=true:override=true:approval_event=true:reviewer_event=true:profile_event=true:history=true\ntui.chat_widget_permission_selection.select_profile=:workspace:label=Approve for me:approval=on-request:reviewer=auto-review:current=false:override=true:approval_event=true:reviewer_event=true:profile_event=true:history=true\ntui.chat_widget_permission_selection.select_profile=readonly-plus:label=readonly-plus:approval=:reviewer=:current=false:override=false:approval_event=false:reviewer_event=false:profile_event=true:history=false\ntui.chat_widget_permission_selection.full_access=full-access:warning_hidden=false:requires=true:opened=true:return=true:remember=true:history=false\ntui.chat_widget_permission_selection.full_access=full-access:warning_hidden=true:requires=false:opened=false:return=false:remember=false:history=true\ntui.chat_widget_permission_selection.denials=entries=0:popup=false:empty_info=true:missing_thread=false:selected=:submit=false:info=false\ntui.chat_widget_permission_selection.denials=entries=2:popup=true:empty_info=false:missing_thread=false:selected=denial-2:submit=true:info=true\ntui.chat_widget_permission_selection.disabled=full-access:approval=true:guardian=false:skipped=true\ntui.chat_widget_permission_selection.disabled=auto-review:approval=false:guardian=true:skipped=true\ntui.chat_widget_permission_selection.failure=live_permission_selection_effects_rejected:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-model-settings-headless",
+      "frame": {
+        "name": "chatwidget-model-settings-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget model settings"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_model_settings",
+          "chatWidgetModelSettings": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowConfigMutation": false,
+            "actions": [
+              {
+                "kind": "model_popup",
+                "sessionConfigured": true,
+                "catalogReady": true,
+                "autoPresetCount": 3,
+                "otherPresetCount": 2,
+                "itemCount": 4,
+                "currentSelected": true,
+                "allModelsRow": true,
+                "customBaseUrlWarning": true,
+                "openAllModelsEvent": true
+              },
+              {
+                "kind": "all_models_popup",
+                "model": "gpt-5.2-codex",
+                "itemCount": 2,
+                "currentSelected": true,
+                "defaultSelected": false,
+                "openReasoningEvent": true,
+                "singleEffortAutoApplied": false
+              },
+              {
+                "kind": "all_models_popup",
+                "model": "gpt-4.1-mini",
+                "itemCount": 1,
+                "currentSelected": false,
+                "defaultSelected": true,
+                "openReasoningEvent": false,
+                "singleEffortAutoApplied": true
+              },
+              {
+                "kind": "reasoning_popup",
+                "model": "gpt-5.2-codex",
+                "effort": "high",
+                "reasoningChoiceCount": 4,
+                "warningShown": true,
+                "planMode": false,
+                "updateModel": true,
+                "updateReasoning": true,
+                "persistModel": true
+              },
+              {
+                "kind": "reasoning_popup",
+                "model": "gpt-5.2-codex",
+                "effort": "medium",
+                "reasoningChoiceCount": 4,
+                "warningShown": false,
+                "planMode": true,
+                "updateModel": false,
+                "updateReasoning": false,
+                "persistModel": false
+              },
+              {
+                "kind": "plan_scope_prompt",
+                "model": "gpt-5.2-codex",
+                "effort": "medium",
+                "planOnlySelected": true,
+                "allModesSelected": false,
+                "updateModel": true,
+                "updateReasoning": false,
+                "updatePlanReasoning": true,
+                "persistModel": false,
+                "persistPlanReasoning": true,
+                "notifyPlanPrompt": true
+              },
+              {
+                "kind": "plan_scope_prompt",
+                "model": "gpt-5.2-codex",
+                "effort": "medium",
+                "planOnlySelected": false,
+                "allModesSelected": true,
+                "updateModel": true,
+                "updateReasoning": true,
+                "updatePlanReasoning": true,
+                "persistModel": true,
+                "persistPlanReasoning": true,
+                "notifyPlanPrompt": true
+              },
+              {
+                "kind": "service_tier",
+                "serviceTier": "fast",
+                "configuredTier": "default",
+                "effectiveTier": "fast",
+                "fastFeatureEnabled": true,
+                "fastToggleAllowed": true,
+                "overrideTurnContext": true,
+                "persistServiceTier": true,
+                "refreshSurfaces": true
+              },
+              {
+                "kind": "personality",
+                "personality": "Friendly",
+                "sessionConfigured": true,
+                "supportsPersonality": true,
+                "popupOpened": true,
+                "errorInserted": false,
+                "overrideTurnContext": true,
+                "persistPersonality": true
+              },
+              {
+                "kind": "personality",
+                "personality": "Friendly",
+                "sessionConfigured": true,
+                "supportsPersonality": false,
+                "popupOpened": false,
+                "errorInserted": true,
+                "overrideTurnContext": false,
+                "persistPersonality": false
+              },
+              {
+                "kind": "realtime_audio",
+                "audioKind": "microphone",
+                "deviceCount": 3,
+                "selectedDevice": "Studio Mic",
+                "defaultDeviceRow": true,
+                "unavailableDeviceRow": true,
+                "persistAudioDevice": true,
+                "restartPrompt": true,
+                "restartEvent": true
+              },
+              {
+                "kind": "experimental_features",
+                "featureCount": 2,
+                "stableFeatureOmitted": true,
+                "configSaveOnExit": true,
+                "popupOpened": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_model_settings_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noConfigMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_model_settings.plan=headless\ntui.chat_widget_model_settings.model_popup=session=true:catalog=true:auto=3:other=2:items=4:current=true:all_row=true:warning=true:open_all=true\ntui.chat_widget_model_settings.all_models=items=2:model=gpt-5.2-codex:current=true:default=false:reasoning_event=true:single_auto=false\ntui.chat_widget_model_settings.all_models=items=1:model=gpt-4.1-mini:current=false:default=true:reasoning_event=false:single_auto=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=high:warning=true:plan=false:update_model=true:update_reasoning=true:persist=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=medium:warning=false:plan=true:update_model=false:update_reasoning=false:persist=false\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=true:all_modes=false:update_model=true:update_reasoning=false:update_plan=true:persist_model=false:persist_plan=true:notify=true\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=false:all_modes=true:update_model=true:update_reasoning=true:update_plan=true:persist_model=true:persist_plan=true:notify=true\ntui.chat_widget_model_settings.service_tier=fast:configured=default:effective=fast:fast_feature=true:toggle_allowed=true:override=true:persist=true:refresh=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=true:popup=true:error=false:override=true:persist=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=false:popup=false:error=true:override=false:persist=false\ntui.chat_widget_model_settings.audio=microphone:devices=3:selected=Studio Mic:default_row=true:unavailable=true:persist=true:restart_prompt=true:restart=true\ntui.chat_widget_model_settings.experimental=features=2:stable_omitted=true:save_on_exit=true:popup=true\ntui.chat_widget_model_settings.failure=live_model_settings_effects_rejected:no_render=true:no_model=true:no_config=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget model settings\ninput> \ntrace:\ntui.chat_widget_model_settings.plan=headless\ntui.chat_widget_model_settings.model_popup=session=true:catalog=true:auto=3:other=2:items=4:current=true:all_row=true:warning=true:open_all=true\ntui.chat_widget_model_settings.all_models=items=2:model=gpt-5.2-codex:current=true:default=false:reasoning_event=true:single_auto=false\ntui.chat_widget_model_settings.all_models=items=1:model=gpt-4.1-mini:current=false:default=true:reasoning_event=false:single_auto=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=high:warning=true:plan=false:update_model=true:update_reasoning=true:persist=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=medium:warning=false:plan=true:update_model=false:update_reasoning=false:persist=false\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=true:all_modes=false:update_model=true:update_reasoning=false:update_plan=true:persist_model=false:persist_plan=true:notify=true\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=false:all_modes=true:update_model=true:update_reasoning=true:update_plan=true:persist_model=true:persist_plan=true:notify=true\ntui.chat_widget_model_settings.service_tier=fast:configured=default:effective=fast:fast_feature=true:toggle_allowed=true:override=true:persist=true:refresh=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=true:popup=true:error=false:override=true:persist=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=false:popup=false:error=true:override=false:persist=false\ntui.chat_widget_model_settings.audio=microphone:devices=3:selected=Studio Mic:default_row=true:unavailable=true:persist=true:restart_prompt=true:restart=true\ntui.chat_widget_model_settings.experimental=features=2:stable_omitted=true:save_on_exit=true:popup=true\ntui.chat_widget_model_settings.failure=live_model_settings_effects_rejected:no_render=true:no_model=true:no_config=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
