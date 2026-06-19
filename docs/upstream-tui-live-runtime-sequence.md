@@ -2770,6 +2770,18 @@ Model selected raw Codex transcript/history-cell behavior without live ratatui r
 
 Status: HXCX-TUI-79 extends `fixtures/hxrust/tui-smoke.v1.json` with typed history-cell, user, assistant, reasoning, notice, tool, command, transcript-mode, copy-history, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic transcript/history state evidence only, not the full ratatui renderer, live transcript overlay, command runner, tool runtime, or app-server transport.
 
+### HXCX-TUI-80: ChatWidget Transcript Overlay And Live-Tail Cache Boundary
+
+Model selected raw Codex transcript overlay behavior without live alternate-screen ownership, ratatui rendering, app-server mutation, command execution, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/app/input.rs` and `app_backtrack.rs` overlay ownership: `Ctrl+T` opens the transcript overlay from committed `transcript_cells`, enters alternate-screen intent, schedules a frame, and routes draw/resize through the overlay while `ChatWidget` remains the active-cell source of truth;
+- preserve `../codex/codex-rs/tui/src/chatwidget.rs` `ActiveCellTranscriptKey`: the cached live tail invalidates on width, active-cell revision, stream-continuation state, or animation tick; missing keys drop the tail; and empty active-cell transcript lines produce no renderable tail;
+- preserve `../codex/codex-rs/tui/src/pager_overlay.rs` live-tail and committed-cell behavior: identical keys are no-ops, recomputation preserves bottom-follow, non-continuation tails receive spacing after committed cells, semantic hyperlink metadata is preserved, inserted/replaced/consolidated committed cells keep an open overlay in sync, and highlight state is cleared when trimmed out;
+- preserve transcript pager behavior: page height is based on rendered content, paging is continuous and round-trips, highlighted user cells scroll into view, close/close-transcript marks the overlay done, and raw/rich transcript mode toggles schedule reflow/redraw without changing source cells;
+- keep the evidence deterministic and independent of live terminal rendering, app-server updates, command/tool execution, filesystem mutation, model/provider calls, and Cafex behavior.
+
+Status: HXCX-TUI-80 extends `fixtures/hxrust/tui-smoke.v1.json` with typed transcript-overlay open, live-tail key/sync/drop, insert, replace, consolidate, highlight, paging, raw/rich mode, close, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic transcript overlay/cache evidence only, not the full ratatui renderer, real alternate-screen lifecycle, live app overlay event loop, command runner, tool runtime, or app-server transport.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

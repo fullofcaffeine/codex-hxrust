@@ -336,6 +336,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetTranscriptOverlay:
+					if (!traceTranscriptOverlay(event.chatWidgetTranscriptOverlay, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4538,6 +4543,128 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_transcript_history.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceTranscriptOverlay(plan:TuiSmokeTranscriptOverlayPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_transcript_overlay.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_transcript_overlay.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeTranscriptOverlayActionKind.Open:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.open="
+						+ "title=" + action.title
+						+ ":cells=" + action.committedCellCount
+						+ ":alt=" + action.altScreenEntered
+						+ ":opened=" + action.opened
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeTranscriptOverlayActionKind.LiveTailKey:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.key="
+						+ "present=" + action.keyPresent
+						+ ":revision=" + action.revision
+						+ ":continuation=" + action.streamContinuation
+						+ ":animation=" + action.animationTick
+						+ ":bumped=" + action.activeRevisionBumped
+					);
+				case TuiSmokeTranscriptOverlayActionKind.LiveTailSync:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.live_tail="
+						+ "width=" + action.width
+						+ ":lines=" + action.liveTailLines
+						+ ":recomputed=" + action.recomputed
+						+ ":cache_hit=" + action.cacheHit
+						+ ":follow_bottom=" + action.followBottom
+						+ ":continuation=" + action.streamContinuation
+						+ ":top_inset=" + action.topInset
+						+ ":links=" + action.hyperlinkAnnotated
+						+ ":animation_frame=" + action.animationScheduled
+					);
+				case TuiSmokeTranscriptOverlayActionKind.LiveTailDrop:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.drop_tail="
+						+ "key=" + action.keyPresent
+						+ ":dropped=" + action.dropped
+						+ ":renderables=" + action.renderableCount
+					);
+				case TuiSmokeTranscriptOverlayActionKind.InsertCell:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.insert="
+						+ action.source
+						+ ":cells=" + action.committedCellCount
+						+ ":renderables=" + action.renderableCount
+						+ ":tail_lines=" + action.liveTailLines
+						+ ":follow_bottom=" + action.followBottom
+						+ ":inserted=" + action.inserted
+					);
+				case TuiSmokeTranscriptOverlayActionKind.ReplaceCells:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.replace="
+						+ "cells=" + action.committedCellCount
+						+ ":replaced=" + action.replacedCount
+						+ ":highlight_cleared=" + action.highlightCleared
+						+ ":follow_bottom=" + action.followBottom
+					);
+				case TuiSmokeTranscriptOverlayActionKind.Consolidate:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.consolidate="
+						+ "range=" + action.consolidatedStart + ".." + action.consolidatedEnd
+						+ ":cells=" + action.committedCellCount
+						+ ":renderables=" + action.renderableCount
+						+ ":follow_bottom=" + action.followBottom
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeTranscriptOverlayActionKind.Highlight:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.highlight="
+						+ "cell=" + action.selectedCell
+						+ ":applied=" + action.highlightApplied
+						+ ":cleared=" + action.highlightCleared
+						+ ":scroll=" + action.scrollOffset
+					);
+				case TuiSmokeTranscriptOverlayActionKind.Paging:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.paging="
+						+ "height=" + action.height
+						+ ":page=" + action.pageHeight
+						+ ":offset=" + action.scrollOffset
+						+ ":continuous=" + action.continuousPaging
+						+ ":roundtrip=" + action.roundTripped
+					);
+				case TuiSmokeTranscriptOverlayActionKind.RawMode:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.raw_mode="
+						+ action.renderMode
+						+ ":raw=" + action.rawMode
+						+ ":rich=" + action.richMode
+						+ ":frame=" + action.frameScheduled
+						+ ":links=" + action.hyperlinkAnnotated
+					);
+				case TuiSmokeTranscriptOverlayActionKind.Close:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.close="
+						+ "closed=" + action.closed
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeTranscriptOverlayActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_transcript_overlay.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_transcript_overlay.unknown");
 					return false;
 			}
 		}

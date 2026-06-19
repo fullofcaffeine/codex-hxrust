@@ -16678,6 +16678,187 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_transcript_history.plan=headless\ntui.chat_widget_transcript_history.cell=HistoryCell:mode=Rich:width=72:display=2:raw=2:transcript=2:height=2:visible=true:hyperlinks=true\ntui.chat_widget_transcript_history.user=live:turns=1:display=4:raw=2:trim=true:images=true:elements=true:inserted=true\ntui.chat_widget_transcript_history.assistant=stream_delta:stream=true:consolidated=true:separator=true:copy=true:entries=1:active=true\ntui.chat_widget_transcript_history.reasoning=summary_block:transcript_only=false:display=1:transcript=1:status=High level reasoning:revision=1\ntui.chat_widget_transcript_history.reasoning=raw_reasoning:transcript_only=true:display=0:transcript=1:status=Thinking:revision=2\ntui.chat_widget_transcript_history.notice=info:message=Model interrupted to submit steer instructions:hint=true:deduped=false:error=false:inserted=true\ntui.chat_widget_transcript_history.notice=warning:message=MCP startup incomplete:hint=false:deduped=true:error=false:inserted=true\ntui.chat_widget_transcript_history.notice=error:message=Oversized input:hint=false:deduped=false:error=true:inserted=true\ntui.chat_widget_transcript_history.tool=find_docs:status=Completed:display=3:raw=2:image_extra=true:inserted=true\ntui.chat_widget_transcript_history.command=cargo test:status=Succeeded:exit=0:grouped=true:orphan=false:display=3:transcript=4\ntui.chat_widget_transcript_history.command=python script.py:status=Failed:exit=1:grouped=false:orphan=true:display=2:transcript=3\ntui.chat_widget_transcript_history.mode=Raw:rich=false:raw=true:active_revision=true:hyperlinks=false:transcript=12\ntui.chat_widget_transcript_history.mode=Rich:rich=true:raw=false:active_revision=true:hyperlinks=true:transcript=12\ntui.chat_widget_transcript_history.copy=turns=2:entries=2:recorded=true:revision=2:source=assistant_final\ntui.chat_widget_transcript_history.failure=live_transcript_history_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget transcript history\ninput> \ntrace:\ntui.chat_widget_transcript_history.plan=headless\ntui.chat_widget_transcript_history.cell=HistoryCell:mode=Rich:width=72:display=2:raw=2:transcript=2:height=2:visible=true:hyperlinks=true\ntui.chat_widget_transcript_history.user=live:turns=1:display=4:raw=2:trim=true:images=true:elements=true:inserted=true\ntui.chat_widget_transcript_history.assistant=stream_delta:stream=true:consolidated=true:separator=true:copy=true:entries=1:active=true\ntui.chat_widget_transcript_history.reasoning=summary_block:transcript_only=false:display=1:transcript=1:status=High level reasoning:revision=1\ntui.chat_widget_transcript_history.reasoning=raw_reasoning:transcript_only=true:display=0:transcript=1:status=Thinking:revision=2\ntui.chat_widget_transcript_history.notice=info:message=Model interrupted to submit steer instructions:hint=true:deduped=false:error=false:inserted=true\ntui.chat_widget_transcript_history.notice=warning:message=MCP startup incomplete:hint=false:deduped=true:error=false:inserted=true\ntui.chat_widget_transcript_history.notice=error:message=Oversized input:hint=false:deduped=false:error=true:inserted=true\ntui.chat_widget_transcript_history.tool=find_docs:status=Completed:display=3:raw=2:image_extra=true:inserted=true\ntui.chat_widget_transcript_history.command=cargo test:status=Succeeded:exit=0:grouped=true:orphan=false:display=3:transcript=4\ntui.chat_widget_transcript_history.command=python script.py:status=Failed:exit=1:grouped=false:orphan=true:display=2:transcript=3\ntui.chat_widget_transcript_history.mode=Raw:rich=false:raw=true:active_revision=true:hyperlinks=false:transcript=12\ntui.chat_widget_transcript_history.mode=Rich:rich=true:raw=false:active_revision=true:hyperlinks=true:transcript=12\ntui.chat_widget_transcript_history.copy=turns=2:entries=2:recorded=true:revision=2:source=assistant_final\ntui.chat_widget_transcript_history.failure=live_transcript_history_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-transcript-overlay-headless",
+      "frame": {
+        "name": "chatwidget-transcript-overlay-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget transcript overlay"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_transcript_overlay",
+          "chatWidgetTranscriptOverlay": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "open",
+                "title": "T R A N S C R I P T",
+                "committedCellCount": 4,
+                "altScreenEntered": true,
+                "opened": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "live_tail_key",
+                "keyPresent": true,
+                "revision": 3,
+                "streamContinuation": false,
+                "animationTick": -1,
+                "activeRevisionBumped": true
+              },
+              {
+                "kind": "live_tail_sync",
+                "width": 72,
+                "liveTailLines": 2,
+                "recomputed": true,
+                "cacheHit": false,
+                "followBottom": true,
+                "streamContinuation": false,
+                "topInset": true,
+                "hyperlinkAnnotated": true,
+                "animationScheduled": false
+              },
+              {
+                "kind": "live_tail_sync",
+                "width": 72,
+                "liveTailLines": 2,
+                "recomputed": false,
+                "cacheHit": true,
+                "followBottom": true,
+                "streamContinuation": false,
+                "topInset": true,
+                "hyperlinkAnnotated": true,
+                "animationScheduled": false
+              },
+              {
+                "kind": "live_tail_key",
+                "keyPresent": true,
+                "revision": 3,
+                "streamContinuation": true,
+                "animationTick": 4,
+                "activeRevisionBumped": false
+              },
+              {
+                "kind": "live_tail_sync",
+                "width": 72,
+                "liveTailLines": 1,
+                "recomputed": true,
+                "cacheHit": false,
+                "followBottom": true,
+                "streamContinuation": true,
+                "topInset": false,
+                "hyperlinkAnnotated": false,
+                "animationScheduled": true
+              },
+              {
+                "kind": "insert_cell",
+                "source": "InsertHistoryCell",
+                "committedCellCount": 5,
+                "renderableCount": 6,
+                "liveTailLines": 1,
+                "followBottom": true,
+                "inserted": true
+              },
+              {
+                "kind": "consolidate",
+                "consolidatedStart": 1,
+                "consolidatedEnd": 4,
+                "committedCellCount": 3,
+                "renderableCount": 4,
+                "followBottom": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "replace_cells",
+                "committedCellCount": 2,
+                "replacedCount": 3,
+                "highlightCleared": true,
+                "followBottom": true
+              },
+              {
+                "kind": "highlight",
+                "selectedCell": 1,
+                "highlightApplied": true,
+                "highlightCleared": false,
+                "scrollOffset": 1
+              },
+              {
+                "kind": "paging",
+                "height": 15,
+                "pageHeight": 10,
+                "scrollOffset": 10,
+                "continuousPaging": true,
+                "roundTripped": true
+              },
+              {
+                "kind": "raw_mode",
+                "renderMode": "Raw",
+                "rawMode": true,
+                "richMode": false,
+                "frameScheduled": true,
+                "hyperlinkAnnotated": false
+              },
+              {
+                "kind": "raw_mode",
+                "renderMode": "Rich",
+                "rawMode": false,
+                "richMode": true,
+                "frameScheduled": true,
+                "hyperlinkAnnotated": true
+              },
+              {
+                "kind": "live_tail_drop",
+                "keyPresent": false,
+                "dropped": true,
+                "renderableCount": 2
+              },
+              {
+                "kind": "close",
+                "closed": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_transcript_overlay_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_transcript_overlay.plan=headless\ntui.chat_widget_transcript_overlay.open=title=T R A N S C R I P T:cells=4:alt=true:opened=true:frame=true\ntui.chat_widget_transcript_overlay.key=present=true:revision=3:continuation=false:animation=-1:bumped=true\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=2:recomputed=true:cache_hit=false:follow_bottom=true:continuation=false:top_inset=true:links=true:animation_frame=false\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=2:recomputed=false:cache_hit=true:follow_bottom=true:continuation=false:top_inset=true:links=true:animation_frame=false\ntui.chat_widget_transcript_overlay.key=present=true:revision=3:continuation=true:animation=4:bumped=false\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=1:recomputed=true:cache_hit=false:follow_bottom=true:continuation=true:top_inset=false:links=false:animation_frame=true\ntui.chat_widget_transcript_overlay.insert=InsertHistoryCell:cells=5:renderables=6:tail_lines=1:follow_bottom=true:inserted=true\ntui.chat_widget_transcript_overlay.consolidate=range=1..4:cells=3:renderables=4:follow_bottom=true:frame=true\ntui.chat_widget_transcript_overlay.replace=cells=2:replaced=3:highlight_cleared=true:follow_bottom=true\ntui.chat_widget_transcript_overlay.highlight=cell=1:applied=true:cleared=false:scroll=1\ntui.chat_widget_transcript_overlay.paging=height=15:page=10:offset=10:continuous=true:roundtrip=true\ntui.chat_widget_transcript_overlay.raw_mode=Raw:raw=true:rich=false:frame=true:links=false\ntui.chat_widget_transcript_overlay.raw_mode=Rich:raw=false:rich=true:frame=true:links=true\ntui.chat_widget_transcript_overlay.drop_tail=key=false:dropped=true:renderables=2\ntui.chat_widget_transcript_overlay.close=closed=true:frame=true\ntui.chat_widget_transcript_overlay.failure=live_transcript_overlay_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget transcript overlay\ninput> \ntrace:\ntui.chat_widget_transcript_overlay.plan=headless\ntui.chat_widget_transcript_overlay.open=title=T R A N S C R I P T:cells=4:alt=true:opened=true:frame=true\ntui.chat_widget_transcript_overlay.key=present=true:revision=3:continuation=false:animation=-1:bumped=true\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=2:recomputed=true:cache_hit=false:follow_bottom=true:continuation=false:top_inset=true:links=true:animation_frame=false\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=2:recomputed=false:cache_hit=true:follow_bottom=true:continuation=false:top_inset=true:links=true:animation_frame=false\ntui.chat_widget_transcript_overlay.key=present=true:revision=3:continuation=true:animation=4:bumped=false\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=1:recomputed=true:cache_hit=false:follow_bottom=true:continuation=true:top_inset=false:links=false:animation_frame=true\ntui.chat_widget_transcript_overlay.insert=InsertHistoryCell:cells=5:renderables=6:tail_lines=1:follow_bottom=true:inserted=true\ntui.chat_widget_transcript_overlay.consolidate=range=1..4:cells=3:renderables=4:follow_bottom=true:frame=true\ntui.chat_widget_transcript_overlay.replace=cells=2:replaced=3:highlight_cleared=true:follow_bottom=true\ntui.chat_widget_transcript_overlay.highlight=cell=1:applied=true:cleared=false:scroll=1\ntui.chat_widget_transcript_overlay.paging=height=15:page=10:offset=10:continuous=true:roundtrip=true\ntui.chat_widget_transcript_overlay.raw_mode=Raw:raw=true:rich=false:frame=true:links=false\ntui.chat_widget_transcript_overlay.raw_mode=Rich:raw=false:rich=true:frame=true:links=true\ntui.chat_widget_transcript_overlay.drop_tail=key=false:dropped=true:renderables=2\ntui.chat_widget_transcript_overlay.close=closed=true:frame=true\ntui.chat_widget_transcript_overlay.failure=live_transcript_overlay_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

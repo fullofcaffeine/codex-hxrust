@@ -118,6 +118,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
+				chatWidgetTranscriptOverlay: optionalTranscriptOverlayPlan(value, "chatWidgetTranscriptOverlay"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -326,6 +327,72 @@ class TuiSmokeFixtureLoader {
 				commandGrouped: optionalBoolField(value, "commandGrouped", false),
 				orphanHistoryInserted: optionalBoolField(value, "orphanHistoryInserted", false),
 				toolExtraImageCell: optionalBoolField(value, "toolExtraImageCell", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTranscriptOverlayPlan(object:Value, name:String):Null<TuiSmokeTranscriptOverlayPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTranscriptOverlayPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: transcriptOverlayActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function transcriptOverlayActions(values:Array<Value>):Array<TuiSmokeTranscriptOverlayAction> {
+		final out:Array<TuiSmokeTranscriptOverlayAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTranscriptOverlayAction({
+				kind: TuiSmokeTranscriptOverlayActionKind.fromString(stringField(value, "kind", "")),
+				source: optionalStringField(value, "source", ""),
+				title: optionalStringField(value, "title", ""),
+				renderMode: optionalStringField(value, "renderMode", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				width: optionalIntField(value, "width", 0),
+				height: optionalIntField(value, "height", 0),
+				committedCellCount: optionalIntField(value, "committedCellCount", 0),
+				liveTailLines: optionalIntField(value, "liveTailLines", 0),
+				renderableCount: optionalIntField(value, "renderableCount", 0),
+				revision: optionalIntField(value, "revision", 0),
+				animationTick: optionalIntField(value, "animationTick", -1),
+				pageHeight: optionalIntField(value, "pageHeight", 0),
+				scrollOffset: optionalIntField(value, "scrollOffset", 0),
+				selectedCell: optionalIntField(value, "selectedCell", -1),
+				replacedCount: optionalIntField(value, "replacedCount", 0),
+				consolidatedStart: optionalIntField(value, "consolidatedStart", 0),
+				consolidatedEnd: optionalIntField(value, "consolidatedEnd", 0),
+				inserted: optionalBoolField(value, "inserted", false),
+				opened: optionalBoolField(value, "opened", false),
+				closed: optionalBoolField(value, "closed", false),
+				altScreenEntered: optionalBoolField(value, "altScreenEntered", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				keyPresent: optionalBoolField(value, "keyPresent", false),
+				recomputed: optionalBoolField(value, "recomputed", false),
+				cacheHit: optionalBoolField(value, "cacheHit", false),
+				dropped: optionalBoolField(value, "dropped", false),
+				followBottom: optionalBoolField(value, "followBottom", false),
+				streamContinuation: optionalBoolField(value, "streamContinuation", false),
+				topInset: optionalBoolField(value, "topInset", false),
+				hyperlinkAnnotated: optionalBoolField(value, "hyperlinkAnnotated", false),
+				rawMode: optionalBoolField(value, "rawMode", false),
+				richMode: optionalBoolField(value, "richMode", false),
+				activeRevisionBumped: optionalBoolField(value, "activeRevisionBumped", false),
+				animationScheduled: optionalBoolField(value, "animationScheduled", false),
+				scrolledToBottom: optionalBoolField(value, "scrolledToBottom", false),
+				highlightApplied: optionalBoolField(value, "highlightApplied", false),
+				highlightCleared: optionalBoolField(value, "highlightCleared", false),
+				continuousPaging: optionalBoolField(value, "continuousPaging", false),
+				roundTripped: optionalBoolField(value, "roundTripped", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
