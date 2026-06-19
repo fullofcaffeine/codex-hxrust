@@ -34,6 +34,7 @@
       "../codex/codex-rs/tui/src/chatwidget/status_surfaces.rs",
       "../codex/codex-rs/tui/src/chatwidget/status_controls.rs",
       "../codex/codex-rs/tui/src/chatwidget/status_state.rs",
+      "../codex/codex-rs/tui/src/chatwidget/tests/status_command_tests.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
       "../codex/codex-rs/tui/src/chatwidget/command_lifecycle.rs",
       "../codex/codex-rs/tui/src/chatwidget/tool_lifecycle.rs",
@@ -17872,6 +17873,129 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.render_width=width=70:inner=66:value=43:rows=14:wrapped=1:continued=0:truncated=1\ntui.chat_widget_status_card.render_width=width=46:inner=42:value=20:rows=18:wrapped=4:continued=3:truncated=0\ntui.chat_widget_status_card.remote_wrap=unix:///tmp/codex-home/app-server-control/app-server-control.sock:width=46:value=20:visible=true:wrapped=4\ntui.chat_widget_status_card.continuation=Monthly credit limit:summary=63% left:reset=in 4w:details=12,345 of 20,000 credits used:continued=2:truncated=0\ntui.chat_widget_status_card.subscriber=subscriber@example.com (Plus):token_visible=false:context_visible=true:hidden=1\ntui.chat_widget_status_card.usage_link=openai:visible=true:row_visible=true\ntui.chat_widget_status_card.usage_link=bedrock:visible=false:row_visible=false\ntui.chat_widget_status_card.failure=live_status_card_render_width_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget status card render width\ninput> \ntrace:\ntui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.render_width=width=70:inner=66:value=43:rows=14:wrapped=1:continued=0:truncated=1\ntui.chat_widget_status_card.render_width=width=46:inner=42:value=20:rows=18:wrapped=4:continued=3:truncated=0\ntui.chat_widget_status_card.remote_wrap=unix:///tmp/codex-home/app-server-control/app-server-control.sock:width=46:value=20:visible=true:wrapped=4\ntui.chat_widget_status_card.continuation=Monthly credit limit:summary=63% left:reset=in 4w:details=12,345 of 20,000 credits used:continued=2:truncated=0\ntui.chat_widget_status_card.subscriber=subscriber@example.com (Plus):token_visible=false:context_visible=true:hidden=1\ntui.chat_widget_status_card.usage_link=openai:visible=true:row_visible=true\ntui.chat_widget_status_card.usage_link=bedrock:visible=false:row_visible=false\ntui.chat_widget_status_card.failure=live_status_card_render_width_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-status-card-rate-limit-refresh-headless",
+      "frame": {
+        "name": "chatwidget-status-card-rate-limit-refresh-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget status card rate limit refresh"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_status_card",
+          "chatWidgetStatusCard": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "refresh_request",
+                "requestId": 0,
+                "nextRequestId": 1,
+                "pendingRefreshCount": 1,
+                "statusOutputInserted": true,
+                "refreshingRateLimits": true,
+                "appEventEmitted": true
+              },
+              {
+                "kind": "refresh_request",
+                "requestId": 1,
+                "nextRequestId": 2,
+                "pendingRefreshCount": 2,
+                "statusOutputInserted": true,
+                "refreshingRateLimits": true,
+                "appEventEmitted": true
+              },
+              {
+                "kind": "stale_completion",
+                "requestId": 42,
+                "pendingRefreshCount": 2,
+                "remainingRefreshCount": 2,
+                "staleCompletionIgnored": true,
+                "statusHistoryUpdated": false,
+                "redrawRequested": false
+              },
+              {
+                "kind": "refresh_delivery",
+                "requestId": 0,
+                "snapshotPercentRemaining": 55,
+                "pendingRefreshCount": 2,
+                "remainingRefreshCount": 1,
+                "statusHistoryUpdated": true,
+                "refreshCompleted": true,
+                "refreshingRateLimits": false,
+                "redrawRequested": true
+              },
+              {
+                "kind": "cached_snapshot",
+                "snapshotPercentRemaining": 8,
+                "cachedForFutureStatus": true,
+                "rateLimitRowCount": 3
+              },
+              {
+                "kind": "refresh_delivery",
+                "requestId": 1,
+                "snapshotPercentRemaining": 8,
+                "pendingRefreshCount": 1,
+                "remainingRefreshCount": 0,
+                "statusHistoryUpdated": true,
+                "refreshCompleted": true,
+                "refreshingRateLimits": false,
+                "redrawRequested": true
+              },
+              {
+                "kind": "startup_prefetch",
+                "snapshotPercentRemaining": 72,
+                "cachedForFutureStatus": true,
+                "frameScheduled": true,
+                "statusHistoryUpdated": false
+              },
+              {
+                "kind": "no_refresh_gate",
+                "provider": "bedrock",
+                "statusOutputInserted": true,
+                "appEventEmitted": false,
+                "pendingRefreshCount": 0
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_status_card_rate_limit_refresh_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.refresh_request=request=0:next=1:pending=1:inserted=true:refreshing=true:event=true\ntui.chat_widget_status_card.refresh_request=request=1:next=2:pending=2:inserted=true:refreshing=true:event=true\ntui.chat_widget_status_card.stale_completion=request=42:pending=2->2:ignored=true:updated=false:redraw=false\ntui.chat_widget_status_card.refresh_delivery=request=0:snapshot_left=55:pending=2->1:updated=true:completed=true:refreshing=false:redraw=true\ntui.chat_widget_status_card.cached_snapshot=left=8:future_status=true:rows=3\ntui.chat_widget_status_card.refresh_delivery=request=1:snapshot_left=8:pending=1->0:updated=true:completed=true:refreshing=false:redraw=true\ntui.chat_widget_status_card.startup_prefetch=snapshot_left=72:cached=true:frame=true:status_handle=false\ntui.chat_widget_status_card.no_refresh_gate=bedrock:inserted=true:event=false:pending=0\ntui.chat_widget_status_card.failure=live_status_card_rate_limit_refresh_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget status card rate limit refresh\ninput> \ntrace:\ntui.chat_widget_status_card.plan=headless\ntui.chat_widget_status_card.refresh_request=request=0:next=1:pending=1:inserted=true:refreshing=true:event=true\ntui.chat_widget_status_card.refresh_request=request=1:next=2:pending=2:inserted=true:refreshing=true:event=true\ntui.chat_widget_status_card.stale_completion=request=42:pending=2->2:ignored=true:updated=false:redraw=false\ntui.chat_widget_status_card.refresh_delivery=request=0:snapshot_left=55:pending=2->1:updated=true:completed=true:refreshing=false:redraw=true\ntui.chat_widget_status_card.cached_snapshot=left=8:future_status=true:rows=3\ntui.chat_widget_status_card.refresh_delivery=request=1:snapshot_left=8:pending=1->0:updated=true:completed=true:refreshing=false:redraw=true\ntui.chat_widget_status_card.startup_prefetch=snapshot_left=72:cached=true:frame=true:status_handle=false\ntui.chat_widget_status_card.no_refresh_gate=bedrock:inserted=true:event=false:pending=0\ntui.chat_widget_status_card.failure=live_status_card_rate_limit_refresh_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

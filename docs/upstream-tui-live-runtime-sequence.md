@@ -2866,6 +2866,18 @@ Model selected raw Codex `/status` card render-width behavior without live termi
 
 Status: HXCX-TUI-87 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-card render-width, remote wrap, continuation, subscriber token hiding, usage-link provider gating, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic `/status` render-width evidence only, not full ratatui span rendering, terminal glyph snapshots, live rate-limit fetching, account auth, app-server transport, or model traffic.
 
+### HXCX-TUI-88: ChatWidget Status-Card Rate-Limit Refresh Delivery Boundary
+
+Model selected raw Codex `/status` rate-limit refresh delivery behavior without live account transport, app-server mutation, ratatui rendering, command execution, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/slash_dispatch.rs` request-id behavior: ChatGPT-backed `/status` output inserts the card immediately, emits `RefreshRateLimits { origin: StatusCommand { request_id } }`, starts at request id `0`, increments the next id, and avoids transient refresh text in terminal history;
+- preserve `../codex/codex-rs/tui/src/chatwidget/status_controls.rs` pending handle behavior: each refreshing card stores a `(request_id, StatusHistoryHandle)` pair, overlapping `/status` refreshes keep distinct handles, and matching completions update only the matching card;
+- preserve `../codex/codex-rs/tui/src/status/card.rs` handle completion behavior: `StatusHistoryHandle::finish_rate_limit_refresh` recomposes current snapshots, replaces card-local rate-limit state, and clears `refreshing_rate_limits`;
+- preserve app event dispatch routing from `../codex/codex-rs/tui/src/app/event_dispatch.rs`: successful status-command refreshes update cached snapshots then finish the matching status card, errors still finish the matching card, startup prefetch updates the cache and schedules a frame without a status-history handle, and stale/mismatched completions do not redraw or mutate unrelated cards;
+- preserve provider gating from the upstream status-command tests: non-ChatGPT/native provider sessions still insert `/status` output but do not emit a rate-limit refresh app event.
+
+Status: HXCX-TUI-88 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-card refresh request, overlapping refresh delivery, stale completion, cached snapshot, startup prefetch, non-refresh provider gate, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic `/status` refresh-delivery evidence only, not live account fetching, app-server transport, account auth, ratatui rendering, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

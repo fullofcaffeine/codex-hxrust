@@ -13,6 +13,12 @@ enum abstract TuiSmokeStatusCardActionKind(String) to String {
 	final Continuation = "continuation";
 	final SubscriberVisibility = "subscriber_visibility";
 	final UsageLink = "usage_link";
+	final RefreshRequest = "refresh_request";
+	final RefreshDelivery = "refresh_delivery";
+	final CachedSnapshot = "cached_snapshot";
+	final StaleCompletion = "stale_completion";
+	final StartupPrefetch = "startup_prefetch";
+	final NoRefreshGate = "no_refresh_gate";
 	final Failure = "failure";
 	final Unknown = "unknown";
 
@@ -30,6 +36,12 @@ enum abstract TuiSmokeStatusCardActionKind(String) to String {
 			case "continuation": Continuation;
 			case "subscriber_visibility": SubscriberVisibility;
 			case "usage_link": UsageLink;
+			case "refresh_request": RefreshRequest;
+			case "refresh_delivery": RefreshDelivery;
+			case "cached_snapshot": CachedSnapshot;
+			case "stale_completion": StaleCompletion;
+			case "startup_prefetch": StartupPrefetch;
+			case "no_refresh_gate": NoRefreshGate;
 			case "failure": Failure;
 			case _: Unknown;
 		}

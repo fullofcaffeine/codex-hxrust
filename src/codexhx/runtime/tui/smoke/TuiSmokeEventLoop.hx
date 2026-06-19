@@ -5377,6 +5377,59 @@ class TuiSmokeEventLoop {
 						+ ":visible=" + action.showChatGptUsageLink
 						+ ":row_visible=" + action.rowVisible
 					);
+				case TuiSmokeStatusCardActionKind.RefreshRequest:
+					trace.push(
+						"tui.chat_widget_status_card.refresh_request="
+						+ "request=" + action.requestId
+						+ ":next=" + action.nextRequestId
+						+ ":pending=" + action.pendingRefreshCount
+						+ ":inserted=" + action.statusOutputInserted
+						+ ":refreshing=" + action.refreshingRateLimits
+						+ ":event=" + action.appEventEmitted
+					);
+				case TuiSmokeStatusCardActionKind.RefreshDelivery:
+					trace.push(
+						"tui.chat_widget_status_card.refresh_delivery="
+						+ "request=" + action.requestId
+						+ ":snapshot_left=" + action.snapshotPercentRemaining
+						+ ":pending=" + action.pendingRefreshCount + "->" + action.remainingRefreshCount
+						+ ":updated=" + action.statusHistoryUpdated
+						+ ":completed=" + action.refreshCompleted
+						+ ":refreshing=" + action.refreshingRateLimits
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeStatusCardActionKind.CachedSnapshot:
+					trace.push(
+						"tui.chat_widget_status_card.cached_snapshot="
+						+ "left=" + action.snapshotPercentRemaining
+						+ ":future_status=" + action.cachedForFutureStatus
+						+ ":rows=" + action.rateLimitRowCount
+					);
+				case TuiSmokeStatusCardActionKind.StaleCompletion:
+					trace.push(
+						"tui.chat_widget_status_card.stale_completion="
+						+ "request=" + action.requestId
+						+ ":pending=" + action.pendingRefreshCount + "->" + action.remainingRefreshCount
+						+ ":ignored=" + action.staleCompletionIgnored
+						+ ":updated=" + action.statusHistoryUpdated
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeStatusCardActionKind.StartupPrefetch:
+					trace.push(
+						"tui.chat_widget_status_card.startup_prefetch="
+						+ "snapshot_left=" + action.snapshotPercentRemaining
+						+ ":cached=" + action.cachedForFutureStatus
+						+ ":frame=" + action.frameScheduled
+						+ ":status_handle=" + action.statusHistoryUpdated
+					);
+				case TuiSmokeStatusCardActionKind.NoRefreshGate:
+					trace.push(
+						"tui.chat_widget_status_card.no_refresh_gate="
+						+ action.provider
+						+ ":inserted=" + action.statusOutputInserted
+						+ ":event=" + action.appEventEmitted
+						+ ":pending=" + action.pendingRefreshCount
+					);
 				case TuiSmokeStatusCardActionKind.Failure:
 					trace.push(
 						"tui.chat_widget_status_card.failure="
