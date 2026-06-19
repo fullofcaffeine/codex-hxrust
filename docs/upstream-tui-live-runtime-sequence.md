@@ -2484,6 +2484,18 @@ Model selected raw Codex clipboard-paste image behavior without touching real cl
 
 Status: HXCX-TUI-57 extends `fixtures/hxrust/tui-smoke.v1.json` with typed clipboard paste probes, image acceptance, WSL path conversion, refusal cases, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic image-intake evidence only, not live clipboard or filesystem ownership.
 
+### HXCX-TUI-58: Composer Paste-Burst Handoff Boundary
+
+Model selected raw Codex composer paste-burst behavior without owning live terminal input or filesystem/image probing:
+
+- preserve `PasteBurst` timing and classification anchors from `../codex/codex-rs/tui/src/bottom_pane/paste_burst.rs`: ASCII first-char hold, fast-char buffering, Enter capture during an active burst, active idle flush, non-char flush/clear behavior, and the recommended follow-up tick delay;
+- preserve `ChatComposer::handle_paste` handoff from `../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs`: explicit paste normalizes text, small paste inserts directly, large paste stores pending payloads behind `[Pasted Content N chars]` placeholders, duplicate-size placeholders use `#2`, `#3`, and explicit paste clears transient burst state;
+- preserve image-path handoff evidence from `handle_paste_image_path` and attachment state: image-like paths may become local `[Image #N]` attachments when dimensions are available, while headless smoke fixtures do not perform real image probing;
+- preserve `ChatWidget::handle_paste_burst_tick` scheduling from `../codex/codex-rs/tui/src/chatwidget/interaction.rs`: a flushed burst requests immediate redraw, while still-active bursts schedule a delayed follow-up and skip redundant rendering;
+- keep the evidence deterministic and independent of live terminal key streams, live clipboard reads, process spawning, image decoding, filesystem mutation/probing, ratatui rendering, app-server mutation, model/tool execution, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-58 extends `fixtures/hxrust/tui-smoke.v1.json` with typed paste-burst timing, small/large paste handoff, duplicate placeholder numbering, image placeholder handoff, follow-up scheduling, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic composer handoff evidence only, not live terminal/clipboard ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

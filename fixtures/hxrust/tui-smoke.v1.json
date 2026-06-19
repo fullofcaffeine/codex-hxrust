@@ -12268,6 +12268,162 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.clipboard_paste.plan=headless\ntui.clipboard_paste.probe=native:wsl=false:native_clipboard=true:native_file=true:native_image=false:wsl_attempt=false\ntui.clipboard_paste.image=accept_native_file:placeholder=[Image #1]:path=/tmp/codex-clipboard-native.png:format=PNG:dimensions=640x480:bytes=4096:local=0->1\ntui.clipboard_paste.probe=wsl_fallback:wsl=true:native_clipboard=false:native_file=false:native_image=false:wsl_attempt=true\ntui.clipboard_paste.wsl_path=C:\\Users\\Alice\\AppData\\Local\\Temp\\codex-clipboard.png->/mnt/c/Users/Alice/AppData/Local/Temp/codex-clipboard.png\ntui.clipboard_paste.refusal=refuse_no_image:source=native_image:bytes=0:max=10000000\ntui.clipboard_paste.refusal=refuse_unsupported:source=native_file:bytes=1024:max=10000000\ntui.clipboard_paste.refusal=refuse_oversized:source=native_file:bytes=12000001:max=10000000\ntui.clipboard_paste.failure=live_clipboard_paste_rejected:clipboard=false:process=false:filesystem=false\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> clipboard paste image no live backend\ninput> \ntrace:\ntui.clipboard_paste.plan=headless\ntui.clipboard_paste.probe=native:wsl=false:native_clipboard=true:native_file=true:native_image=false:wsl_attempt=false\ntui.clipboard_paste.image=accept_native_file:placeholder=[Image #1]:path=/tmp/codex-clipboard-native.png:format=PNG:dimensions=640x480:bytes=4096:local=0->1\ntui.clipboard_paste.probe=wsl_fallback:wsl=true:native_clipboard=false:native_file=false:native_image=false:wsl_attempt=true\ntui.clipboard_paste.wsl_path=C:\\Users\\Alice\\AppData\\Local\\Temp\\codex-clipboard.png->/mnt/c/Users/Alice/AppData/Local/Temp/codex-clipboard.png\ntui.clipboard_paste.refusal=refuse_no_image:source=native_image:bytes=0:max=10000000\ntui.clipboard_paste.refusal=refuse_unsupported:source=native_file:bytes=1024:max=10000000\ntui.clipboard_paste.refusal=refuse_oversized:source=native_file:bytes=12000001:max=10000000\ntui.clipboard_paste.failure=live_clipboard_paste_rejected:clipboard=false:process=false:filesystem=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "composer-paste-burst-handoff-headless",
+      "frame": {
+        "name": "composer-paste-burst-handoff-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer paste burst scheduler handoff"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_attachment",
+          "composerAttachment": {
+            "allowLiveFilesystem": false,
+            "allowLiveClipboard": false,
+            "allowProcessSpawn": false,
+            "actions": [
+              {
+                "kind": "paste_burst_char",
+                "inputText": "?",
+                "burstBefore": "inactive",
+                "burstAfter": "pending_first_char",
+                "buffered": false,
+                "newlineCaptured": false,
+                "pendingBefore": 0,
+                "pendingAfter": 0,
+                "charIntervalMs": 8,
+                "shortcutOverlaySuppressed": true
+              },
+              {
+                "kind": "paste_burst_char",
+                "inputText": "u",
+                "burstBefore": "pending_first_char",
+                "burstAfter": "buffering",
+                "buffered": true,
+                "newlineCaptured": false,
+                "pendingBefore": 0,
+                "pendingAfter": 0,
+                "charIntervalMs": 8
+              },
+              {
+                "kind": "paste_burst_char",
+                "inputText": "enter",
+                "burstBefore": "buffering",
+                "burstAfter": "buffering",
+                "buffered": true,
+                "newlineCaptured": true,
+                "pendingBefore": 0,
+                "pendingAfter": 0,
+                "charIntervalMs": 8
+              },
+              {
+                "kind": "paste_burst_flush",
+                "pasteKind": "paste_burst",
+                "burstBefore": "buffering",
+                "burstAfter": "flushed",
+                "flushed": true,
+                "charCount": 32,
+                "pendingBefore": 0,
+                "pendingAfter": 0,
+                "needsRedraw": true,
+                "activeIdleTimeoutMs": 8
+              },
+              {
+                "kind": "handle_paste",
+                "pasteKind": "small_text",
+                "charCount": 32,
+                "threshold": 1000,
+                "normalizedText": "cmd?/next",
+                "textInserted": true,
+                "placeholderInserted": false,
+                "pendingBefore": 0,
+                "pendingAfter": 0,
+                "needsRedraw": true,
+                "explicitPasteClearsBurst": true
+              },
+              {
+                "kind": "attach_local_image",
+                "placeholder": "[Image #1]",
+                "path": "/tmp/codex-clipboard-native.png",
+                "localImageBefore": 0,
+                "localImageAfter": 1,
+                "remoteImageAfter": 0,
+                "imageAttached": true
+              },
+              {
+                "kind": "large_paste_placeholder",
+                "placeholder": "[Pasted Content 1004 chars]",
+                "charCount": 1004,
+                "pendingBefore": 0,
+                "pendingAfter": 1,
+                "textElementBefore": 0,
+                "textElementAfter": 1
+              },
+              {
+                "kind": "large_paste_placeholder",
+                "placeholder": "[Pasted Content 1004 chars] #2",
+                "charCount": 1004,
+                "pendingBefore": 1,
+                "pendingAfter": 2,
+                "textElementBefore": 1,
+                "textElementAfter": 2
+              },
+              {
+                "kind": "expand_pending_pastes",
+                "pendingBefore": 2,
+                "pendingAfter": 0,
+                "textElementBefore": 2,
+                "textElementAfter": 0,
+                "pendingExpanded": true,
+                "pendingCleared": true
+              },
+              {
+                "kind": "frame_schedule",
+                "burstAfter": "buffering",
+                "frameScheduled": true,
+                "needsRedraw": true,
+                "followupDelayMs": 9
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_paste_burst_rejected",
+                "noLiveClipboard": true,
+                "noProcessSpawn": true,
+                "noLiveFilesystem": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_attachment.plan=headless\ntui.composer_attachment.burst_char=?:state=inactive->pending_first_char:buffered=false:newline=false:pending=0->0:interval_ms=8:shortcut_suppressed=true\ntui.composer_attachment.burst_char=u:state=pending_first_char->buffering:buffered=true:newline=false:pending=0->0:interval_ms=8\ntui.composer_attachment.burst_char=enter:state=buffering->buffering:buffered=true:newline=true:pending=0->0:interval_ms=8\ntui.composer_attachment.burst_flush=paste_burst:state=buffering->flushed:flushed=true:chars=32:pending=0->0:redraw=true:idle_ms=8\ntui.composer_attachment.paste=small_text:chars=32:threshold=1000:normalized=cmd?/next:text_inserted=true:placeholder=false:pending=0->0:redraw=true:clears_burst=true\ntui.composer_attachment.local_image=[Image #1]:path=/tmp/codex-clipboard-native.png:local=0->1:remote=0:attached=true\ntui.composer_attachment.large_paste=[Pasted Content 1004 chars]:chars=1004:pending=0->1:elements=0->1\ntui.composer_attachment.large_paste=[Pasted Content 1004 chars] #2:chars=1004:pending=1->2:elements=1->2\ntui.composer_attachment.expand_pending=pending=2->0:elements=2->0:expanded=true:cleared=true\ntui.composer_attachment.frame=scheduled=true:redraw=true:burst=buffering:delay_ms=9\ntui.composer_attachment.failure=live_paste_burst_rejected:no_live_clipboard=true:no_process=true:no_live_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer paste burst scheduler handoff\ninput> \ntrace:\ntui.composer_attachment.plan=headless\ntui.composer_attachment.burst_char=?:state=inactive->pending_first_char:buffered=false:newline=false:pending=0->0:interval_ms=8:shortcut_suppressed=true\ntui.composer_attachment.burst_char=u:state=pending_first_char->buffering:buffered=true:newline=false:pending=0->0:interval_ms=8\ntui.composer_attachment.burst_char=enter:state=buffering->buffering:buffered=true:newline=true:pending=0->0:interval_ms=8\ntui.composer_attachment.burst_flush=paste_burst:state=buffering->flushed:flushed=true:chars=32:pending=0->0:redraw=true:idle_ms=8\ntui.composer_attachment.paste=small_text:chars=32:threshold=1000:normalized=cmd?/next:text_inserted=true:placeholder=false:pending=0->0:redraw=true:clears_burst=true\ntui.composer_attachment.local_image=[Image #1]:path=/tmp/codex-clipboard-native.png:local=0->1:remote=0:attached=true\ntui.composer_attachment.large_paste=[Pasted Content 1004 chars]:chars=1004:pending=0->1:elements=0->1\ntui.composer_attachment.large_paste=[Pasted Content 1004 chars] #2:chars=1004:pending=1->2:elements=1->2\ntui.composer_attachment.expand_pending=pending=2->0:elements=2->0:expanded=true:cleared=true\ntui.composer_attachment.frame=scheduled=true:redraw=true:burst=buffering:delay_ms=9\ntui.composer_attachment.failure=live_paste_burst_rejected:no_live_clipboard=true:no_process=true:no_live_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

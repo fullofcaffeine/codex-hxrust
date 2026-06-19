@@ -1424,6 +1424,8 @@ class TuiSmokeFixtureLoader {
 			case value:
 				new TuiSmokeComposerAttachmentPlan({
 					allowLiveFilesystem: optionalBoolField(value, "allowLiveFilesystem", false),
+					allowLiveClipboard: optionalBoolField(value, "allowLiveClipboard", false),
+					allowProcessSpawn: optionalBoolField(value, "allowProcessSpawn", false),
 					actions: composerAttachmentActions(optionalArrayField(value, "actions"))
 				});
 		}
@@ -1459,6 +1461,9 @@ class TuiSmokeFixtureLoader {
 				selectedRemoteAfter: optionalIntField(value, "selectedRemoteAfter", -1),
 				cursorBefore: optionalIntField(value, "cursorBefore", 0),
 				cursorAfter: optionalIntField(value, "cursorAfter", 0),
+				charIntervalMs: optionalIntField(value, "charIntervalMs", 0),
+				activeIdleTimeoutMs: optionalIntField(value, "activeIdleTimeoutMs", 0),
+				followupDelayMs: optionalIntField(value, "followupDelayMs", 0),
 				needsRedraw: optionalBoolField(value, "needsRedraw", false),
 				frameScheduled: optionalBoolField(value, "frameScheduled", false),
 				pasteBurstDisabled: optionalBoolField(value, "pasteBurstDisabled", false),
@@ -1483,6 +1488,10 @@ class TuiSmokeFixtureLoader {
 				submissionPrepared: optionalBoolField(value, "submissionPrepared", false),
 				localImagesPruned: optionalBoolField(value, "localImagesPruned", false),
 				remoteImagesTaken: optionalBoolField(value, "remoteImagesTaken", false),
+				explicitPasteClearsBurst: optionalBoolField(value, "explicitPasteClearsBurst", false),
+				shortcutOverlaySuppressed: optionalBoolField(value, "shortcutOverlaySuppressed", false),
+				noLiveClipboard: optionalBoolField(value, "noLiveClipboard", false),
+				noProcessSpawn: optionalBoolField(value, "noProcessSpawn", false),
 				noLiveFilesystem: optionalBoolField(value, "noLiveFilesystem", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));

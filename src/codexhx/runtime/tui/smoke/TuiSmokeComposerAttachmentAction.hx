@@ -27,6 +27,9 @@ typedef TuiSmokeComposerAttachmentActionFields = {
 	final selectedRemoteAfter:Int;
 	final cursorBefore:Int;
 	final cursorAfter:Int;
+	final charIntervalMs:Int;
+	final activeIdleTimeoutMs:Int;
+	final followupDelayMs:Int;
 	final needsRedraw:Bool;
 	final frameScheduled:Bool;
 	final pasteBurstDisabled:Bool;
@@ -51,6 +54,10 @@ typedef TuiSmokeComposerAttachmentActionFields = {
 	final submissionPrepared:Bool;
 	final localImagesPruned:Bool;
 	final remoteImagesTaken:Bool;
+	final explicitPasteClearsBurst:Bool;
+	final shortcutOverlaySuppressed:Bool;
+	final noLiveClipboard:Bool;
+	final noProcessSpawn:Bool;
 	final noLiveFilesystem:Bool;
 	final unsupportedRejected:Bool;
 }
@@ -83,6 +90,12 @@ class TuiSmokeComposerAttachmentAction {
 	public final selectedRemoteAfter:Int;
 	public final cursorBefore:Int;
 	public final cursorAfter:Int;
+	@:recordMin(0)
+	public final charIntervalMs:Int;
+	@:recordMin(0)
+	public final activeIdleTimeoutMs:Int;
+	@:recordMin(0)
+	public final followupDelayMs:Int;
 	public final needsRedraw:Bool;
 	public final frameScheduled:Bool;
 	public final pasteBurstDisabled:Bool;
@@ -107,6 +120,10 @@ class TuiSmokeComposerAttachmentAction {
 	public final submissionPrepared:Bool;
 	public final localImagesPruned:Bool;
 	public final remoteImagesTaken:Bool;
+	public final explicitPasteClearsBurst:Bool;
+	public final shortcutOverlaySuppressed:Bool;
+	public final noLiveClipboard:Bool;
+	public final noProcessSpawn:Bool;
 	public final noLiveFilesystem:Bool;
 	public final unsupportedRejected:Bool;
 

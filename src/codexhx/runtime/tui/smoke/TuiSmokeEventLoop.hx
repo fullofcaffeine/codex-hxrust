@@ -3679,7 +3679,7 @@ class TuiSmokeEventLoop {
 	}
 
 	static function traceComposerAttachment(plan:TuiSmokeComposerAttachmentPlan, trace:Array<String>):Bool {
-		if (plan == null || plan.allowLiveFilesystem || !plan.enabled()) {
+		if (plan == null || plan.allowLiveFilesystem || plan.allowLiveClipboard || plan.allowProcessSpawn || !plan.enabled()) {
 			trace.push("tui.composer_attachment.rejected=live_or_missing");
 			return false;
 		}
@@ -3697,6 +3697,7 @@ class TuiSmokeEventLoop {
 						+ ":placeholder=" + action.placeholderInserted
 						+ ":pending=" + action.pendingTransitionText()
 						+ ":redraw=" + action.needsRedraw
+						+ (action.explicitPasteClearsBurst ? ":clears_burst=true" : "")
 					);
 				case TuiSmokeComposerAttachmentActionKind.PasteBurstChar:
 					trace.push(
@@ -3706,6 +3707,8 @@ class TuiSmokeEventLoop {
 						+ ":buffered=" + action.buffered
 						+ ":newline=" + action.newlineCaptured
 						+ ":pending=" + action.pendingTransitionText()
+						+ (action.charIntervalMs > 0 ? ":interval_ms=" + action.charIntervalMs : "")
+						+ (action.shortcutOverlaySuppressed ? ":shortcut_suppressed=true" : "")
 					);
 				case TuiSmokeComposerAttachmentActionKind.PasteBurstFlush:
 					trace.push(
@@ -3716,6 +3719,7 @@ class TuiSmokeEventLoop {
 						+ ":chars=" + action.charCount
 						+ ":pending=" + action.pendingTransitionText()
 						+ ":redraw=" + action.needsRedraw
+						+ (action.activeIdleTimeoutMs > 0 ? ":idle_ms=" + action.activeIdleTimeoutMs : "")
 					);
 				case TuiSmokeComposerAttachmentActionKind.LargePastePlaceholder:
 					trace.push(
@@ -3827,11 +3831,15 @@ class TuiSmokeEventLoop {
 						+ "scheduled=" + action.frameScheduled
 						+ ":redraw=" + action.needsRedraw
 						+ ":burst=" + action.burstAfter
+						+ (action.followupDelayMs > 0 ? ":delay_ms=" + action.followupDelayMs : "")
 					);
 				case TuiSmokeComposerAttachmentActionKind.Failure:
 					trace.push(
 						"tui.composer_attachment.failure="
 						+ action.failureCode
+						+ ":no_live_clipboard=" + action.noLiveClipboard
+						+ ":no_process=" + action.noProcessSpawn
+						+ ":no_live_fs=" + action.noLiveFilesystem
 						+ ":unsupported=" + action.unsupportedRejected
 					);
 				case _:
