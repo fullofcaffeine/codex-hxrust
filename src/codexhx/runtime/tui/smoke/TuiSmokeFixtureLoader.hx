@@ -108,7 +108,43 @@ class TuiSmokeFixtureLoader {
 				resumeFork: optionalResumeForkPlan(value, "resumeFork"),
 				terminalTitle: optionalTerminalTitlePlan(value, "terminalTitle"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
-				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink")
+				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
+				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTerminalPalettePlan(object:Value, name:String):Null<TuiSmokeTerminalPalettePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTerminalPalettePlan({
+					allowLiveQuery: optionalBoolField(value, "allowLiveQuery", false),
+					actions: terminalPaletteActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function terminalPaletteActions(values:Array<Value>):Array<TuiSmokeTerminalPaletteAction> {
+		final out:Array<TuiSmokeTerminalPaletteAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTerminalPaletteAction({
+				kind: TuiSmokeTerminalPaletteActionKind.fromString(stringField(value, "kind", "")),
+				slot: optionalIntField(value, "slot", 0),
+				payload: optionalStringField(value, "payload", ""),
+				buffer: optionalStringField(value, "buffer", ""),
+				color: optionalStringField(value, "color", ""),
+				foreground: optionalStringField(value, "foreground", ""),
+				background: optionalStringField(value, "background", ""),
+				valid: optionalBoolField(value, "valid", false),
+				startupAttempted: optionalBoolField(value, "startupAttempted", false),
+				startupValue: optionalStringField(value, "startupValue", ""),
+				requeryRequested: optionalBoolField(value, "requeryRequested", false),
+				requeryValue: optionalStringField(value, "requeryValue", ""),
+				skippedBecauseUnavailable: optionalBoolField(value, "skippedBecauseUnavailable", false),
+				liveQueryAllowed: optionalBoolField(value, "liveQueryAllowed", false),
+				failureCode: optionalStringField(value, "failureCode", "")
 			}));
 		}
 		return out;

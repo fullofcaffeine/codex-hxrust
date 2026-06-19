@@ -36,6 +36,7 @@
       "../codex/codex-rs/tui/src/tui/terminal_probe.rs",
       "../codex/codex-rs/tui/src/tui/terminal_stderr.rs",
       "../codex/codex-rs/tui/src/terminal_hyperlinks.rs",
+      "../codex/codex-rs/tui/src/terminal_palette.rs",
       "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
       "../codex/codex-rs/tui/tests/suite/status_indicator.rs",
       "../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs",
@@ -11855,6 +11856,106 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.terminal_hyperlink.plan=headless\ntui.terminal_hyperlink.destination=safe=https://example.com/safe:valid=true\ntui.terminal_hyperlink.destination=safe=mailto:a@example.com:valid=false\ntui.terminal_hyperlink.discover=columns=5..26:destination=https://example.com/a\ntui.terminal_hyperlink.decorate=valid=true:pairs=1:visible=visible:live=false\ntui.terminal_hyperlink.strip=pairs=1:visible=visible\ntui.terminal_hyperlink.decorate=valid=false:pairs=0:visible=a:live=false\ntui.terminal_hyperlink.prefix_remap=prefix=2:columns=5..26->7..28\ntui.terminal_hyperlink.failure=non_web_destination_rejected:live=false\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> terminal hyperlink no live osc write\ninput> \ntrace:\ntui.terminal_hyperlink.plan=headless\ntui.terminal_hyperlink.destination=safe=https://example.com/safe:valid=true\ntui.terminal_hyperlink.destination=safe=mailto:a@example.com:valid=false\ntui.terminal_hyperlink.discover=columns=5..26:destination=https://example.com/a\ntui.terminal_hyperlink.decorate=valid=true:pairs=1:visible=visible:live=false\ntui.terminal_hyperlink.strip=pairs=1:visible=visible\ntui.terminal_hyperlink.decorate=valid=false:pairs=0:visible=a:live=false\ntui.terminal_hyperlink.prefix_remap=prefix=2:columns=5..26->7..28\ntui.terminal_hyperlink.failure=non_web_destination_rejected:live=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "terminal-palette-osc-color-probe",
+      "frame": {
+        "name": "terminal-palette-osc-color-probe",
+        "title": "Codex TUI Smoke Terminal",
+        "status": "running",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "terminal palette no live osc query"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "terminal_palette_probe",
+          "terminalPalette": {
+            "allowLiveQuery": false,
+            "actions": [
+              {
+                "kind": "parse_osc_color",
+                "slot": 10,
+                "buffer": "\u001b]10;rgb:ffff/8000/0000\u0007",
+                "color": "255,127,0"
+              },
+              {
+                "kind": "parse_osc_color",
+                "slot": 11,
+                "buffer": "\u001b]11;rgba:00/80/ff/ff\u001b\\",
+                "color": "0,128,255"
+              },
+              {
+                "kind": "parse_rgb",
+                "payload": "rgb:00/80/ff",
+                "color": "0,128,255"
+              },
+              {
+                "kind": "parse_rgb",
+                "payload": "rgba:ffff/8000/0000/ffff",
+                "color": "255,127,0"
+              },
+              {
+                "kind": "parse_default_colors",
+                "buffer": "typed\u001b]10;rgb:eeee/eeee/eeee\u001b\\noise\u001b]11;rgb:1111/1111/1111\u0007",
+                "foreground": "238,238,238",
+                "background": "17,17,17",
+                "valid": true
+              },
+              {
+                "kind": "parse_default_colors",
+                "buffer": "\u001b]10;rgb:eeee/eeee/eeee\u001b\\\u001b]11;rgb:nope\u0007",
+                "foreground": "238,238,238",
+                "background": "",
+                "valid": false
+              },
+              {
+                "kind": "cache",
+                "startupAttempted": true,
+                "startupValue": "238,238,238/17,17,17",
+                "requeryRequested": false,
+                "skippedBecauseUnavailable": false
+              },
+              {
+                "kind": "cache",
+                "startupAttempted": true,
+                "startupValue": "",
+                "requeryRequested": true,
+                "requeryValue": "",
+                "skippedBecauseUnavailable": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_palette_query_rejected",
+                "liveQueryAllowed": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.terminal_palette.plan=headless\ntui.terminal_palette.osc_color=slot=10:color=255,127,0\ntui.terminal_palette.osc_color=slot=11:color=0,128,255\ntui.terminal_palette.rgb=payload=rgb:00/80/ff:color=0,128,255\ntui.terminal_palette.rgb=payload=rgba:ffff/8000/0000/ffff:color=255,127,0\ntui.terminal_palette.default_colors=fg=238,238,238:bg=17,17,17:valid=true\ntui.terminal_palette.default_colors=fg=238,238,238:bg=:valid=false\ntui.terminal_palette.cache=startup_attempted=true:startup=238,238,238/17,17,17:requery=false:result=238,238,238/17,17,17:skip_unavailable=false\ntui.terminal_palette.cache=startup_attempted=true:startup=:requery=true:result=attempted-unavailable:skip_unavailable=true\ntui.terminal_palette.failure=live_palette_query_rejected:live=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> terminal palette no live osc query\ninput> \ntrace:\ntui.terminal_palette.plan=headless\ntui.terminal_palette.osc_color=slot=10:color=255,127,0\ntui.terminal_palette.osc_color=slot=11:color=0,128,255\ntui.terminal_palette.rgb=payload=rgb:00/80/ff:color=0,128,255\ntui.terminal_palette.rgb=payload=rgba:ffff/8000/0000/ffff:color=255,127,0\ntui.terminal_palette.default_colors=fg=238,238,238:bg=17,17,17:valid=true\ntui.terminal_palette.default_colors=fg=238,238,238:bg=:valid=false\ntui.terminal_palette.cache=startup_attempted=true:startup=238,238,238/17,17,17:requery=false:result=238,238,238/17,17,17:skip_unavailable=false\ntui.terminal_palette.cache=startup_attempted=true:startup=:requery=true:result=attempted-unavailable:skip_unavailable=true\ntui.terminal_palette.failure=live_palette_query_rejected:live=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

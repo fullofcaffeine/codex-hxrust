@@ -2436,6 +2436,18 @@ Model selected raw Codex terminal-hyperlink behavior without writing live OSC 8 
 
 Status: HXCX-TUI-53 extends `fixtures/hxrust/tui-smoke.v1.json` with typed terminal-hyperlink sanitize/discover/decorate/strip/remap evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic hyperlink-boundary evidence only, not live terminal hyperlink rendering.
 
+### HXCX-TUI-54: Terminal Palette OSC 10/11 Probe
+
+Model selected raw Codex terminal-palette probe behavior without sending live terminal queries:
+
+- preserve OSC 10/11 parser behavior from `../codex/codex-rs/tui/src/tui/terminal_probe.rs`: foreground and background responses can be parsed from one buffer in either order, with BEL and ST terminators both accepted;
+- preserve RGB/RGBA component parsing from `terminal_probe.rs`: two-digit components map directly, four-digit components divide by 257, and malformed, partial, or unterminated payloads are refused;
+- preserve paired default-color semantics from `parse_default_colors`: foreground and background are only useful as a pair, so a missing or malformed side yields no default palette result;
+- preserve startup/cache handoff from `../codex/codex-rs/tui/src/tui.rs` and `../codex/codex-rs/tui/src/terminal_palette.rs`: startup probe results populate the palette cache, unavailable results are recorded as attempted, and focus-triggered requery does not retry a cache that already attempted and failed;
+- keep the evidence deterministic and independent of live OSC 10/11 writes, direct tty reads, crossterm color queries, ratatui rendering, alternate-screen takeover, live input loops, app-server mutation, model/tool execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-54 extends `fixtures/hxrust/tui-smoke.v1.json` with typed terminal-palette OSC parser/cache evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic palette-probe evidence only, not live terminal color querying.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

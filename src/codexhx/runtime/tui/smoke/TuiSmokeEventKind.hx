@@ -50,6 +50,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final TerminalTitle = "terminal_title";
 	final DesktopNotification = "desktop_notification";
 	final TerminalHyperlink = "terminal_hyperlink";
+	final TerminalPaletteProbe = "terminal_palette_probe";
 	final Unknown = "unknown";
 
 	public static function fromString(value:String):TuiSmokeEventKind {
@@ -103,6 +104,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "terminal_title": TerminalTitle;
 			case "desktop_notification": DesktopNotification;
 			case "terminal_hyperlink": TerminalHyperlink;
+			case "terminal_palette_probe": TerminalPaletteProbe;
 			case _: Unknown;
 		}
 	}

@@ -291,6 +291,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.TerminalPaletteProbe:
+					if (!traceTerminalPalette(event.terminalPalette, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1818,6 +1823,80 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.clear_archive.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceTerminalPalette(plan:TuiSmokeTerminalPalettePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveQuery || !plan.enabled()) {
+			trace.push("tui.terminal_palette.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.terminal_palette.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeTerminalPaletteActionKind.ParseOscColor:
+					if (!action.colorMatches()) {
+						trace.push(
+							"tui.terminal_palette.osc_color_mismatch="
+							+ action.color
+							+ ":computed=" + action.computedColor()
+						);
+						return false;
+					}
+					trace.push(
+						"tui.terminal_palette.osc_color="
+						+ "slot=" + action.slot
+						+ ":color=" + action.computedColor()
+					);
+				case TuiSmokeTerminalPaletteActionKind.ParseRgb:
+					if (!action.rgbMatches()) {
+						trace.push(
+							"tui.terminal_palette.rgb_mismatch="
+							+ action.color
+							+ ":computed=" + action.computedRgb()
+						);
+						return false;
+					}
+					trace.push(
+						"tui.terminal_palette.rgb="
+						+ "payload=" + action.payload
+						+ ":color=" + action.computedRgb()
+					);
+				case TuiSmokeTerminalPaletteActionKind.ParseDefaultColors:
+					if (!action.defaultColorsMatch()) {
+						trace.push(
+							"tui.terminal_palette.default_mismatch="
+							+ action.foreground + "/" + action.background
+							+ ":computed=" + action.computedForeground() + "/" + action.computedBackground()
+						);
+						return false;
+					}
+					trace.push(
+						"tui.terminal_palette.default_colors="
+						+ "fg=" + action.computedForeground()
+						+ ":bg=" + action.computedBackground()
+						+ ":valid=" + action.valid
+					);
+				case TuiSmokeTerminalPaletteActionKind.Cache:
+					trace.push(
+						"tui.terminal_palette.cache="
+						+ "startup_attempted=" + action.startupAttempted
+						+ ":startup=" + action.startupValue
+						+ ":requery=" + action.requeryRequested
+						+ ":result=" + action.cacheResult()
+						+ ":skip_unavailable=" + action.skippedBecauseUnavailable
+					);
+				case TuiSmokeTerminalPaletteActionKind.Failure:
+					trace.push(
+						"tui.terminal_palette.failure="
+						+ action.failureCode
+						+ ":live=" + action.liveQueryAllowed
+					);
+				case _:
+					trace.push("tui.terminal_palette.unknown");
 					return false;
 			}
 		}
