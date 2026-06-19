@@ -16303,6 +16303,200 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_goal_menu.plan=headless\ntui.chat_widget_goal_menu.summary=Active:objective=ship codexhx:budget=50000:tokens=12500:time=90:hint=edit,pause,clear:inserted=true\ntui.chat_widget_goal_menu.summary=Paused:objective=ship codexhx:budget=50000:tokens=12500:time=90:hint=edit,resume,clear:inserted=true\ntui.chat_widget_goal_menu.summary=BudgetLimited:objective=ship codexhx:budget=50000:tokens=63876:time=120:hint=edit,clear:inserted=true\ntui.chat_widget_goal_menu.indicator=Active:kind=Active:usage=12.5K / 50K:budget=true:active_elapsed=60\ntui.chat_widget_goal_menu.indicator=Paused:kind=Paused:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=Blocked:kind=Blocked:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=UsageLimited:kind=UsageLimited:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=BudgetLimited:kind=BudgetLimited:usage=63.9K / 50K tokens:budget=true:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=Complete:kind=Complete:usage=10h 12m:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.edit=Paused:edited=Paused:opened=true:set_objective=true\ntui.chat_widget_goal_menu.edit=Complete:edited=Active:opened=true:set_objective=true\ntui.chat_widget_goal_menu.resume=Paused:opened=true:default=true:set_status=true:leave_paused=false\ntui.chat_widget_goal_menu.resume=Paused:opened=true:default=false:set_status=false:leave_paused=true\ntui.chat_widget_goal_menu.validation=Live:chars=12001/12000:allowed=false:error=true:composer_cleared=true:pending_drained=true\ntui.chat_widget_goal_menu.validation=Queued:chars=12001/12000:allowed=false:error=true:composer_cleared=false:pending_drained=false\ntui.chat_widget_goal_menu.interrupt_pause=Active:active_paused=true:set_status=true\ntui.chat_widget_goal_menu.clear=Active:current=true:indicator=true\ntui.chat_widget_goal_menu.failure=live_goal_menu_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget goal menu\ninput> \ntrace:\ntui.chat_widget_goal_menu.plan=headless\ntui.chat_widget_goal_menu.summary=Active:objective=ship codexhx:budget=50000:tokens=12500:time=90:hint=edit,pause,clear:inserted=true\ntui.chat_widget_goal_menu.summary=Paused:objective=ship codexhx:budget=50000:tokens=12500:time=90:hint=edit,resume,clear:inserted=true\ntui.chat_widget_goal_menu.summary=BudgetLimited:objective=ship codexhx:budget=50000:tokens=63876:time=120:hint=edit,clear:inserted=true\ntui.chat_widget_goal_menu.indicator=Active:kind=Active:usage=12.5K / 50K:budget=true:active_elapsed=60\ntui.chat_widget_goal_menu.indicator=Paused:kind=Paused:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=Blocked:kind=Blocked:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=UsageLimited:kind=UsageLimited:usage=:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=BudgetLimited:kind=BudgetLimited:usage=63.9K / 50K tokens:budget=true:active_elapsed=0\ntui.chat_widget_goal_menu.indicator=Complete:kind=Complete:usage=10h 12m:budget=false:active_elapsed=0\ntui.chat_widget_goal_menu.edit=Paused:edited=Paused:opened=true:set_objective=true\ntui.chat_widget_goal_menu.edit=Complete:edited=Active:opened=true:set_objective=true\ntui.chat_widget_goal_menu.resume=Paused:opened=true:default=true:set_status=true:leave_paused=false\ntui.chat_widget_goal_menu.resume=Paused:opened=true:default=false:set_status=false:leave_paused=true\ntui.chat_widget_goal_menu.validation=Live:chars=12001/12000:allowed=false:error=true:composer_cleared=true:pending_drained=true\ntui.chat_widget_goal_menu.validation=Queued:chars=12001/12000:allowed=false:error=true:composer_cleared=false:pending_drained=false\ntui.chat_widget_goal_menu.interrupt_pause=Active:active_paused=true:set_status=true\ntui.chat_widget_goal_menu.clear=Active:current=true:indicator=true\ntui.chat_widget_goal_menu.failure=live_goal_menu_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-review-mode-headless",
+      "frame": {
+        "name": "chatwidget-review-mode-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget review mode"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_review_mode",
+          "chatWidgetReviewMode": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "popup",
+                "itemCount": 4,
+                "popupOpened": true,
+                "branchPickerEvent": true,
+                "uncommittedReviewEvent": true,
+                "commitPickerEvent": true,
+                "customPromptEvent": true,
+                "dismissParentOnChildAccept": true
+              },
+              {
+                "kind": "picker",
+                "pickerKind": "branch",
+                "itemCount": 3,
+                "branchCount": 3,
+                "target": "BaseBranch",
+                "searchable": true,
+                "branchPickerEvent": true
+              },
+              {
+                "kind": "picker",
+                "pickerKind": "commit",
+                "itemCount": 2,
+                "commitCount": 2,
+                "target": "Commit",
+                "searchable": true,
+                "commitPickerEvent": true
+              },
+              {
+                "kind": "custom_prompt",
+                "prompt": "please audit dependencies",
+                "emptyIgnored": true,
+                "customPromptEvent": true
+              },
+              {
+                "kind": "enter_exit",
+                "hint": "feature branch",
+                "reviewModeEntered": true,
+                "reviewModeExited": true,
+                "bannerInserted": true,
+                "reviewPromptSuppressed": true,
+                "assistantRendered": true
+              },
+              {
+                "kind": "steer_queue",
+                "pendingSteerCount": 2,
+                "queuedMessageCount": 1,
+                "rejectedSteerCount": 2,
+                "submittedCount": 2,
+                "pendingSteerSubmitted": true,
+                "nonSteerableRejected": true,
+                "rejectedSteersPrepended": true,
+                "mergedAfterReviewExit": true,
+                "existingQueuePreserved": true
+              },
+              {
+                "kind": "warning",
+                "failureCode": "esc_review_steers",
+                "pendingSteerCount": 1,
+                "escWarningInserted": true,
+                "interruptSuppressed": true
+              },
+              {
+                "kind": "token_restore",
+                "preReviewPercent": 30,
+                "reviewPercent": 97,
+                "restoredPercent": 30,
+                "tokenSnapshotSaved": true,
+                "tokenRestored": true
+              },
+              {
+                "kind": "guardian",
+                "guardianStatus": "InProgress",
+                "actionSummary": "curl",
+                "statusHeader": "Reviewing approval request",
+                "statusDetails": "curl",
+                "parallelCount": 1,
+                "remainingCount": 1,
+                "statusSet": true
+              },
+              {
+                "kind": "guardian",
+                "guardianStatus": "Denied",
+                "risk": "High",
+                "actionSummary": "rm_rf",
+                "statusDetails": "rm_rf",
+                "parallelCount": 1,
+                "remainingCount": 0,
+                "historyInserted": true,
+                "warningInserted": true,
+                "denialStored": true
+              },
+              {
+                "kind": "guardian",
+                "guardianStatus": "Approved",
+                "risk": "Low",
+                "actionSummary": "git_status",
+                "statusDetails": "git_status",
+                "parallelCount": 1,
+                "remainingCount": 0,
+                "historyInserted": true,
+                "approvalSubmitted": true
+              },
+              {
+                "kind": "guardian",
+                "guardianStatus": "TimedOut",
+                "risk": "Medium",
+                "actionSummary": "python_script",
+                "statusDetails": "python_script",
+                "parallelCount": 1,
+                "remainingCount": 0,
+                "historyInserted": true,
+                "warningInserted": true
+              },
+              {
+                "kind": "guardian",
+                "guardianStatus": "InProgress",
+                "actionSummary": "curl,python",
+                "statusHeader": "Reviewing 2 approval requests",
+                "statusDetails": "curl,python",
+                "parallelCount": 2,
+                "remainingCount": 2,
+                "statusSet": true,
+                "remainingStatusVisible": true
+              },
+              {
+                "kind": "guardian",
+                "guardianStatus": "Denied",
+                "risk": "High",
+                "actionSummary": "curl",
+                "statusHeader": "Reviewing approval request",
+                "statusDetails": "python",
+                "parallelCount": 2,
+                "remainingCount": 1,
+                "statusSet": true,
+                "historyInserted": true,
+                "warningInserted": true,
+                "denialStored": true,
+                "remainingStatusVisible": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_review_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_review_mode.plan=headless\ntui.chat_widget_review_mode.popup=items=4:opened=true:branch=true:uncommitted=true:commit=true:custom=true:child_accept=true\ntui.chat_widget_review_mode.picker=branch:items=3:branches=3:commits=0:search=true:target=BaseBranch:review=true\ntui.chat_widget_review_mode.picker=commit:items=2:branches=0:commits=2:search=true:target=Commit:review=true\ntui.chat_widget_review_mode.custom=prompt=please audit dependencies:empty_ignored=true:review=true\ntui.chat_widget_review_mode.enter_exit=hint=feature branch:entered=true:exited=true:banner=true:prompt_suppressed=true:assistant_rendered=true\ntui.chat_widget_review_mode.steer_queue=pending=2:queued=1:rejected=2:submitted=2:pending_submitted=true:non_steerable=true:prepended=true:merged=true:preserved=true\ntui.chat_widget_review_mode.warning=esc_review_steers:inserted=true:interrupt=false:pending=1\ntui.chat_widget_review_mode.tokens=pre=30:review=97:restored=30:saved=true:restored_flag=true\ntui.chat_widget_review_mode.guardian=InProgress:risk=:summary=curl:header=Reviewing approval request:details=curl:parallel=1:remaining=1:status=true:history=false:warning=false:denial_stored=false:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=Denied:risk=High:summary=rm_rf:header=:details=rm_rf:parallel=1:remaining=0:status=false:history=true:warning=true:denial_stored=true:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=Approved:risk=Low:summary=git_status:header=:details=git_status:parallel=1:remaining=0:status=false:history=true:warning=false:denial_stored=false:approval_submit=true:remaining_visible=false\ntui.chat_widget_review_mode.guardian=TimedOut:risk=Medium:summary=python_script:header=:details=python_script:parallel=1:remaining=0:status=false:history=true:warning=true:denial_stored=false:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=InProgress:risk=:summary=curl,python:header=Reviewing 2 approval requests:details=curl,python:parallel=2:remaining=2:status=true:history=false:warning=false:denial_stored=false:approval_submit=false:remaining_visible=true\ntui.chat_widget_review_mode.guardian=Denied:risk=High:summary=curl:header=Reviewing approval request:details=python:parallel=2:remaining=1:status=true:history=true:warning=true:denial_stored=true:approval_submit=false:remaining_visible=true\ntui.chat_widget_review_mode.failure=live_review_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget review mode\ninput> \ntrace:\ntui.chat_widget_review_mode.plan=headless\ntui.chat_widget_review_mode.popup=items=4:opened=true:branch=true:uncommitted=true:commit=true:custom=true:child_accept=true\ntui.chat_widget_review_mode.picker=branch:items=3:branches=3:commits=0:search=true:target=BaseBranch:review=true\ntui.chat_widget_review_mode.picker=commit:items=2:branches=0:commits=2:search=true:target=Commit:review=true\ntui.chat_widget_review_mode.custom=prompt=please audit dependencies:empty_ignored=true:review=true\ntui.chat_widget_review_mode.enter_exit=hint=feature branch:entered=true:exited=true:banner=true:prompt_suppressed=true:assistant_rendered=true\ntui.chat_widget_review_mode.steer_queue=pending=2:queued=1:rejected=2:submitted=2:pending_submitted=true:non_steerable=true:prepended=true:merged=true:preserved=true\ntui.chat_widget_review_mode.warning=esc_review_steers:inserted=true:interrupt=false:pending=1\ntui.chat_widget_review_mode.tokens=pre=30:review=97:restored=30:saved=true:restored_flag=true\ntui.chat_widget_review_mode.guardian=InProgress:risk=:summary=curl:header=Reviewing approval request:details=curl:parallel=1:remaining=1:status=true:history=false:warning=false:denial_stored=false:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=Denied:risk=High:summary=rm_rf:header=:details=rm_rf:parallel=1:remaining=0:status=false:history=true:warning=true:denial_stored=true:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=Approved:risk=Low:summary=git_status:header=:details=git_status:parallel=1:remaining=0:status=false:history=true:warning=false:denial_stored=false:approval_submit=true:remaining_visible=false\ntui.chat_widget_review_mode.guardian=TimedOut:risk=Medium:summary=python_script:header=:details=python_script:parallel=1:remaining=0:status=false:history=true:warning=true:denial_stored=false:approval_submit=false:remaining_visible=false\ntui.chat_widget_review_mode.guardian=InProgress:risk=:summary=curl,python:header=Reviewing 2 approval requests:details=curl,python:parallel=2:remaining=2:status=true:history=false:warning=false:denial_stored=false:approval_submit=false:remaining_visible=true\ntui.chat_widget_review_mode.guardian=Denied:risk=High:summary=curl:header=Reviewing approval request:details=python:parallel=2:remaining=1:status=true:history=true:warning=true:denial_stored=true:approval_submit=false:remaining_visible=true\ntui.chat_widget_review_mode.failure=live_review_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

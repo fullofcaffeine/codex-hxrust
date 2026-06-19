@@ -116,6 +116,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetPermissionSelection: optionalPermissionSelectionPlan(value, "chatWidgetPermissionSelection"),
 				chatWidgetModelSettings: optionalModelSettingsPlan(value, "chatWidgetModelSettings"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
+				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -180,6 +181,83 @@ class TuiSmokeFixtureLoader {
 				activeGoalPaused: optionalBoolField(value, "activeGoalPaused", false),
 				currentGoalCleared: optionalBoolField(value, "currentGoalCleared", false),
 				collaborationIndicatorUpdated: optionalBoolField(value, "collaborationIndicatorUpdated", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalReviewModePlan(object:Value, name:String):Null<TuiSmokeReviewModePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeReviewModePlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: reviewModeActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function reviewModeActions(values:Array<Value>):Array<TuiSmokeReviewModeAction> {
+		final out:Array<TuiSmokeReviewModeAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeReviewModeAction({
+				kind: TuiSmokeReviewModeActionKind.fromString(stringField(value, "kind", "")),
+				target: optionalStringField(value, "target", ""),
+				hint: optionalStringField(value, "hint", ""),
+				pickerKind: optionalStringField(value, "pickerKind", ""),
+				prompt: optionalStringField(value, "prompt", ""),
+				guardianStatus: optionalStringField(value, "guardianStatus", ""),
+				risk: optionalStringField(value, "risk", ""),
+				actionSummary: optionalStringField(value, "actionSummary", ""),
+				statusHeader: optionalStringField(value, "statusHeader", ""),
+				statusDetails: optionalStringField(value, "statusDetails", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				itemCount: optionalIntField(value, "itemCount", 0),
+				branchCount: optionalIntField(value, "branchCount", 0),
+				commitCount: optionalIntField(value, "commitCount", 0),
+				pendingSteerCount: optionalIntField(value, "pendingSteerCount", 0),
+				queuedMessageCount: optionalIntField(value, "queuedMessageCount", 0),
+				rejectedSteerCount: optionalIntField(value, "rejectedSteerCount", 0),
+				submittedCount: optionalIntField(value, "submittedCount", 0),
+				preReviewPercent: optionalIntField(value, "preReviewPercent", 0),
+				reviewPercent: optionalIntField(value, "reviewPercent", 0),
+				restoredPercent: optionalIntField(value, "restoredPercent", 0),
+				parallelCount: optionalIntField(value, "parallelCount", 0),
+				remainingCount: optionalIntField(value, "remainingCount", 0),
+				popupOpened: optionalBoolField(value, "popupOpened", false),
+				branchPickerEvent: optionalBoolField(value, "branchPickerEvent", false),
+				commitPickerEvent: optionalBoolField(value, "commitPickerEvent", false),
+				uncommittedReviewEvent: optionalBoolField(value, "uncommittedReviewEvent", false),
+				customPromptEvent: optionalBoolField(value, "customPromptEvent", false),
+				dismissParentOnChildAccept: optionalBoolField(value, "dismissParentOnChildAccept", false),
+				searchable: optionalBoolField(value, "searchable", false),
+				emptyIgnored: optionalBoolField(value, "emptyIgnored", false),
+				reviewModeEntered: optionalBoolField(value, "reviewModeEntered", false),
+				reviewModeExited: optionalBoolField(value, "reviewModeExited", false),
+				bannerInserted: optionalBoolField(value, "bannerInserted", false),
+				reviewPromptSuppressed: optionalBoolField(value, "reviewPromptSuppressed", false),
+				assistantRendered: optionalBoolField(value, "assistantRendered", false),
+				pendingSteerSubmitted: optionalBoolField(value, "pendingSteerSubmitted", false),
+				nonSteerableRejected: optionalBoolField(value, "nonSteerableRejected", false),
+				rejectedSteersPrepended: optionalBoolField(value, "rejectedSteersPrepended", false),
+				mergedAfterReviewExit: optionalBoolField(value, "mergedAfterReviewExit", false),
+				existingQueuePreserved: optionalBoolField(value, "existingQueuePreserved", false),
+				escWarningInserted: optionalBoolField(value, "escWarningInserted", false),
+				interruptSuppressed: optionalBoolField(value, "interruptSuppressed", false),
+				tokenSnapshotSaved: optionalBoolField(value, "tokenSnapshotSaved", false),
+				tokenRestored: optionalBoolField(value, "tokenRestored", false),
+				statusSet: optionalBoolField(value, "statusSet", false),
+				historyInserted: optionalBoolField(value, "historyInserted", false),
+				warningInserted: optionalBoolField(value, "warningInserted", false),
+				denialStored: optionalBoolField(value, "denialStored", false),
+				approvalSubmitted: optionalBoolField(value, "approvalSubmitted", false),
+				remainingStatusVisible: optionalBoolField(value, "remainingStatusVisible", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),

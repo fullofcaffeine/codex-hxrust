@@ -326,6 +326,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetReviewMode:
+					if (!traceReviewMode(event.chatWidgetReviewMode, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4296,6 +4301,117 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_goal_menu.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceReviewMode(plan:TuiSmokeReviewModePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_review_mode.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_review_mode.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeReviewModeActionKind.Popup:
+					trace.push(
+						"tui.chat_widget_review_mode.popup="
+						+ "items=" + action.itemCount
+						+ ":opened=" + action.popupOpened
+						+ ":branch=" + action.branchPickerEvent
+						+ ":uncommitted=" + action.uncommittedReviewEvent
+						+ ":commit=" + action.commitPickerEvent
+						+ ":custom=" + action.customPromptEvent
+						+ ":child_accept=" + action.dismissParentOnChildAccept
+					);
+				case TuiSmokeReviewModeActionKind.Picker:
+					trace.push(
+						"tui.chat_widget_review_mode.picker="
+						+ action.pickerKind
+						+ ":items=" + action.itemCount
+						+ ":branches=" + action.branchCount
+						+ ":commits=" + action.commitCount
+						+ ":search=" + action.searchable
+						+ ":target=" + action.target
+						+ ":review=" + (action.branchPickerEvent || action.commitPickerEvent)
+					);
+				case TuiSmokeReviewModeActionKind.CustomPrompt:
+					trace.push(
+						"tui.chat_widget_review_mode.custom="
+						+ "prompt=" + action.prompt
+						+ ":empty_ignored=" + action.emptyIgnored
+						+ ":review=" + action.customPromptEvent
+					);
+				case TuiSmokeReviewModeActionKind.EnterExit:
+					trace.push(
+						"tui.chat_widget_review_mode.enter_exit="
+						+ "hint=" + action.hint
+						+ ":entered=" + action.reviewModeEntered
+						+ ":exited=" + action.reviewModeExited
+						+ ":banner=" + action.bannerInserted
+						+ ":prompt_suppressed=" + action.reviewPromptSuppressed
+						+ ":assistant_rendered=" + action.assistantRendered
+					);
+				case TuiSmokeReviewModeActionKind.SteerQueue:
+					trace.push(
+						"tui.chat_widget_review_mode.steer_queue="
+						+ "pending=" + action.pendingSteerCount
+						+ ":queued=" + action.queuedMessageCount
+						+ ":rejected=" + action.rejectedSteerCount
+						+ ":submitted=" + action.submittedCount
+						+ ":pending_submitted=" + action.pendingSteerSubmitted
+						+ ":non_steerable=" + action.nonSteerableRejected
+						+ ":prepended=" + action.rejectedSteersPrepended
+						+ ":merged=" + action.mergedAfterReviewExit
+						+ ":preserved=" + action.existingQueuePreserved
+					);
+				case TuiSmokeReviewModeActionKind.Warning:
+					trace.push(
+						"tui.chat_widget_review_mode.warning="
+						+ action.failureCode
+						+ ":inserted=" + action.escWarningInserted
+						+ ":interrupt=" + !action.interruptSuppressed
+						+ ":pending=" + action.pendingSteerCount
+					);
+				case TuiSmokeReviewModeActionKind.TokenRestore:
+					trace.push(
+						"tui.chat_widget_review_mode.tokens="
+						+ "pre=" + action.preReviewPercent
+						+ ":review=" + action.reviewPercent
+						+ ":restored=" + action.restoredPercent
+						+ ":saved=" + action.tokenSnapshotSaved
+						+ ":restored_flag=" + action.tokenRestored
+					);
+				case TuiSmokeReviewModeActionKind.Guardian:
+					trace.push(
+						"tui.chat_widget_review_mode.guardian="
+						+ action.guardianStatus
+						+ ":risk=" + action.risk
+						+ ":summary=" + action.actionSummary
+						+ ":header=" + action.statusHeader
+						+ ":details=" + action.statusDetails
+						+ ":parallel=" + action.parallelCount
+						+ ":remaining=" + action.remainingCount
+						+ ":status=" + action.statusSet
+						+ ":history=" + action.historyInserted
+						+ ":warning=" + action.warningInserted
+						+ ":denial_stored=" + action.denialStored
+						+ ":approval_submit=" + action.approvalSubmitted
+						+ ":remaining_visible=" + action.remainingStatusVisible
+					);
+				case TuiSmokeReviewModeActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_review_mode.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_review_mode.unknown");
 					return false;
 			}
 		}

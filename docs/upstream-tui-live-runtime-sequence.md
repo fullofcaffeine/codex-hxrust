@@ -2746,6 +2746,18 @@ Model selected raw Codex `/goal` menu and status behavior without live app-serve
 
 Status: HXCX-TUI-77 extends `fixtures/hxrust/tui-smoke.v1.json` with typed goal summary, status indicator, edit prompt, resume prompt, validation, interrupt pause, clear, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic goal menu/status state evidence only, not live app-server mutation, renderer ownership, or model traffic.
 
+### HXCX-TUI-78: ChatWidget Review Mode And Guardian Boundary
+
+Model selected raw Codex review-mode and guardian-review behavior without live app-server mutation, ratatui rendering, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/review_popups.rs` review popup routing: base-branch picker, uncommitted-changes review, commit picker, and custom-instructions prompt stay distinct, searchable child pickers defer parent dismissal until child acceptance, and empty custom prompts are ignored;
+- preserve `../codex/codex-rs/tui/src/chatwidget/review.rs` review-mode lifecycle: entering review mode inserts the review banner, suppresses the live review prompt item, keeps assistant messages renderable, snapshots pre-review token state, and restores the prior context indicator on exit;
+- preserve `../codex/codex-rs/tui/src/chatwidget/tests/review_mode.rs` queued-review behavior: pending steers are submitted while review is running, non-steerable messages are rejected into front-of-queue steers, existing queued user messages are preserved, rejected steers merge after review exit, and Esc shows a warning instead of interrupting while review steers are pending;
+- preserve `../codex/codex-rs/tui/src/chatwidget/tests/guardian.rs` and `status_state.rs` guardian surfaces: in-progress approval reviews set a status header/details line, parallel reviews aggregate status, approved/denied/timed-out terminal outcomes insert history or warning surfaces, denials are stored for later approval, and remaining reviews stay visible after one terminal outcome;
+- keep the evidence deterministic and independent of live app-server updates, terminal rendering, model/provider calls, command execution, filesystem mutation, and Cafex behavior.
+
+Status: HXCX-TUI-78 extends `fixtures/hxrust/tui-smoke.v1.json` with typed review popup, picker, custom prompt, review enter/exit, steer queue, Esc warning, token restoration, guardian status/outcome, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic review-mode and guardian state evidence only, not live popup rendering, app-server mutation, command execution, renderer ownership, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
