@@ -301,6 +301,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ClipboardCopy:
+					if (!traceClipboardCopy(event.clipboardCopy, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case _:
 					exit = TuiSmokeExitKind.Rejected;
 					trace.push("event.unknown");
@@ -1973,6 +1978,69 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.terminal_startup_probe.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceClipboardCopy(plan:TuiSmokeClipboardCopyPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveClipboard || plan.allowLiveTerminalWrite || plan.allowProcessSpawn || !plan.enabled()) {
+			trace.push("tui.clipboard_copy.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.clipboard_copy.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeClipboardCopyActionKind.Route:
+					if (!action.routeMatches()) {
+						trace.push("tui.clipboard_copy.route_mismatch=" + action.routedBackend() + ":expected=" + action.expectedBackend);
+						return false;
+					}
+					trace.push(
+						"tui.clipboard_copy.route="
+						+ action.routedBackend()
+						+ ":ssh=" + action.sshSession
+						+ ":wsl=" + action.wslSession
+						+ ":tmux=" + action.tmuxSession
+						+ ":lease=" + action.nativeLease
+					);
+				case TuiSmokeClipboardCopyActionKind.Osc52Sequence:
+					if (!action.rawByteCountMatches() || !action.osc52Matches()) {
+						trace.push(
+							"tui.clipboard_copy.osc52_mismatch="
+							+ "bytes=" + action.text.length
+							+ ":sequence=" + action.computedOsc52Sequence()
+						);
+						return false;
+					}
+					trace.push(
+						"tui.clipboard_copy.osc52="
+						+ "bytes=" + action.text.length
+						+ ":tmux=" + action.tmuxSession
+						+ ":wrapped=" + (action.tmuxSession && action.computedOsc52Sequence().length > 0)
+					);
+				case TuiSmokeClipboardCopyActionKind.TmuxReady:
+					if (!action.tmuxReadyMatches()) {
+						trace.push("tui.clipboard_copy.tmux_ready_mismatch=" + action.computedTmuxReady() + ":expected=" + action.expectedReady);
+						return false;
+					}
+					trace.push(
+						"tui.clipboard_copy.tmux_ready="
+						+ action.computedTmuxReady()
+						+ ":set_clipboard=" + StringTools.trim(action.tmuxSetClipboard)
+						+ ":missing_ms=" + (action.tmuxInfo.indexOf("Ms: [missing]") >= 0)
+					);
+				case TuiSmokeClipboardCopyActionKind.Failure:
+					trace.push(
+						"tui.clipboard_copy.failure="
+						+ action.failureCode
+						+ ":clipboard=" + action.liveClipboardAllowed
+						+ ":terminal=" + action.liveTerminalWriteAllowed
+						+ ":process=" + action.processSpawnAllowed
+					);
+				case _:
+					trace.push("tui.clipboard_copy.unknown");
 					return false;
 			}
 		}

@@ -37,6 +37,7 @@
       "../codex/codex-rs/tui/src/tui/terminal_stderr.rs",
       "../codex/codex-rs/tui/src/terminal_hyperlinks.rs",
       "../codex/codex-rs/tui/src/terminal_palette.rs",
+      "../codex/codex-rs/tui/src/clipboard_copy.rs",
       "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
       "../codex/codex-rs/tui/tests/suite/status_indicator.rs",
       "../codex/codex-rs/tui/src/bottom_pane/chat_composer.rs",
@@ -12035,6 +12036,117 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.terminal_startup_probe.plan=headless\ntui.terminal_startup_probe.batch=cursor=9,19:fg=238,238,238:bg=17,17,17:keyboard=true:complete=true\ntui.terminal_startup_probe.keyboard=supported=false:fallback=true\ntui.terminal_startup_probe.handle=duplicated_stdio:stdio=true:tty_fallback=false:flags_restored=true\ntui.terminal_startup_probe.timeout=ms=100:cursor=:colors_complete=false:keyboard=false\ntui.terminal_startup_probe.failure=live_startup_probe_rejected:live=false\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> startup terminal probe no live tty\ninput> \ntrace:\ntui.terminal_startup_probe.plan=headless\ntui.terminal_startup_probe.batch=cursor=9,19:fg=238,238,238:bg=17,17,17:keyboard=true:complete=true\ntui.terminal_startup_probe.keyboard=supported=false:fallback=true\ntui.terminal_startup_probe.handle=duplicated_stdio:stdio=true:tty_fallback=false:flags_restored=true\ntui.terminal_startup_probe.timeout=ms=100:cursor=:colors_complete=false:keyboard=false\ntui.terminal_startup_probe.failure=live_startup_probe_rejected:live=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "clipboard-copy-routing-headless",
+      "frame": {
+        "name": "clipboard-copy-routing-headless",
+        "title": "Codex TUI Smoke Terminal",
+        "status": "running",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "clipboard copy no live backend"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "clipboard_copy",
+          "clipboardCopy": {
+            "allowLiveClipboard": false,
+            "allowLiveTerminalWrite": false,
+            "allowProcessSpawn": false,
+            "actions": [
+              {
+                "kind": "route",
+                "text": "copy me",
+                "sshSession": true,
+                "tmuxSession": false,
+                "osc52Ok": true,
+                "expectedBackend": "osc52"
+              },
+              {
+                "kind": "route",
+                "text": "copy me",
+                "nativeOk": true,
+                "nativeLease": true,
+                "expectedBackend": "native_lease"
+              },
+              {
+                "kind": "route",
+                "text": "copy me",
+                "wslSession": true,
+                "nativeOk": false,
+                "wslOk": true,
+                "expectedBackend": "wsl_powershell"
+              },
+              {
+                "kind": "route",
+                "text": "copy me",
+                "tmuxSession": true,
+                "tmuxOk": false,
+                "osc52Ok": true,
+                "expectedBackend": "osc52_after_tmux_failure"
+              },
+              {
+                "kind": "osc52_sequence",
+                "text": "copy me",
+                "rawBytes": 7,
+                "maxRawBytes": 100000,
+                "expectedSequence": "\u001b]52;c;Y29weSBtZQ==\u0007"
+              },
+              {
+                "kind": "osc52_sequence",
+                "text": "copy",
+                "tmuxSession": true,
+                "rawBytes": 4,
+                "maxRawBytes": 100000,
+                "expectedSequence": "\u001bPtmux;\u001b\u001b]52;c;Y29weQ==\u0007\u001b\\"
+              },
+              {
+                "kind": "tmux_ready",
+                "tmuxSetClipboard": "external",
+                "tmuxInfo": "Ms: \\E]52;%p1%s;%p2%s\\007",
+                "expectedReady": true
+              },
+              {
+                "kind": "tmux_ready",
+                "tmuxSetClipboard": "on",
+                "tmuxInfo": "Ms: [missing]",
+                "expectedReady": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_clipboard_copy_rejected",
+                "liveClipboardAllowed": false,
+                "liveTerminalWriteAllowed": false,
+                "processSpawnAllowed": false
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.clipboard_copy.plan=headless\ntui.clipboard_copy.route=osc52:ssh=true:wsl=false:tmux=false:lease=false\ntui.clipboard_copy.route=native_lease:ssh=false:wsl=false:tmux=false:lease=true\ntui.clipboard_copy.route=wsl_powershell:ssh=false:wsl=true:tmux=false:lease=false\ntui.clipboard_copy.route=osc52_after_tmux_failure:ssh=false:wsl=false:tmux=true:lease=false\ntui.clipboard_copy.osc52=bytes=7:tmux=false:wrapped=false\ntui.clipboard_copy.osc52=bytes=4:tmux=true:wrapped=true\ntui.clipboard_copy.tmux_ready=true:set_clipboard=external:missing_ms=false\ntui.clipboard_copy.tmux_ready=false:set_clipboard=on:missing_ms=true\ntui.clipboard_copy.failure=live_clipboard_copy_rejected:clipboard=false:terminal=false:process=false\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Terminal\nstatus: running | model: gpt-5.2-codex\nsystem> clipboard copy no live backend\ninput> \ntrace:\ntui.clipboard_copy.plan=headless\ntui.clipboard_copy.route=osc52:ssh=true:wsl=false:tmux=false:lease=false\ntui.clipboard_copy.route=native_lease:ssh=false:wsl=false:tmux=false:lease=true\ntui.clipboard_copy.route=wsl_powershell:ssh=false:wsl=true:tmux=false:lease=false\ntui.clipboard_copy.route=osc52_after_tmux_failure:ssh=false:wsl=false:tmux=true:lease=false\ntui.clipboard_copy.osc52=bytes=7:tmux=false:wrapped=false\ntui.clipboard_copy.osc52=bytes=4:tmux=true:wrapped=true\ntui.clipboard_copy.tmux_ready=true:set_clipboard=external:missing_ms=false\ntui.clipboard_copy.tmux_ready=false:set_clipboard=on:missing_ms=true\ntui.clipboard_copy.failure=live_clipboard_copy_rejected:clipboard=false:terminal=false:process=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

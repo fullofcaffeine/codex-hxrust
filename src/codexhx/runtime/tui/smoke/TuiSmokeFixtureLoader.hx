@@ -110,7 +110,51 @@ class TuiSmokeFixtureLoader {
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
-				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe")
+				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe"),
+				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalClipboardCopyPlan(object:Value, name:String):Null<TuiSmokeClipboardCopyPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeClipboardCopyPlan({
+					allowLiveClipboard: optionalBoolField(value, "allowLiveClipboard", false),
+					allowLiveTerminalWrite: optionalBoolField(value, "allowLiveTerminalWrite", false),
+					allowProcessSpawn: optionalBoolField(value, "allowProcessSpawn", false),
+					actions: clipboardCopyActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function clipboardCopyActions(values:Array<Value>):Array<TuiSmokeClipboardCopyAction> {
+		final out:Array<TuiSmokeClipboardCopyAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeClipboardCopyAction({
+				kind: TuiSmokeClipboardCopyActionKind.fromString(stringField(value, "kind", "")),
+				text: optionalStringField(value, "text", ""),
+				sshSession: optionalBoolField(value, "sshSession", false),
+				wslSession: optionalBoolField(value, "wslSession", false),
+				tmuxSession: optionalBoolField(value, "tmuxSession", false),
+				nativeOk: optionalBoolField(value, "nativeOk", false),
+				nativeLease: optionalBoolField(value, "nativeLease", false),
+				wslOk: optionalBoolField(value, "wslOk", false),
+				tmuxOk: optionalBoolField(value, "tmuxOk", false),
+				osc52Ok: optionalBoolField(value, "osc52Ok", false),
+				expectedBackend: optionalStringField(value, "expectedBackend", ""),
+				expectedSequence: optionalStringField(value, "expectedSequence", ""),
+				tmuxSetClipboard: optionalStringField(value, "tmuxSetClipboard", ""),
+				tmuxInfo: optionalStringField(value, "tmuxInfo", ""),
+				expectedReady: optionalBoolField(value, "expectedReady", false),
+				rawBytes: optionalIntField(value, "rawBytes", 0),
+				maxRawBytes: optionalIntField(value, "maxRawBytes", 100000),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				liveClipboardAllowed: optionalBoolField(value, "liveClipboardAllowed", false),
+				liveTerminalWriteAllowed: optionalBoolField(value, "liveTerminalWriteAllowed", false),
+				processSpawnAllowed: optionalBoolField(value, "processSpawnAllowed", false)
 			}));
 		}
 		return out;

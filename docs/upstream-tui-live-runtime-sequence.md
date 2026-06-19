@@ -2460,6 +2460,18 @@ Model selected raw Codex startup terminal-probe behavior without owning live ter
 
 Status: HXCX-TUI-55 extends `fixtures/hxrust/tui-smoke.v1.json` with typed terminal startup-probe parse/timeout/handle-source evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic startup-probe evidence only, not live terminal probing.
 
+### HXCX-TUI-56: Clipboard Copy Routing Boundary
+
+Model selected raw Codex clipboard-copy behavior without touching real clipboards or terminal output:
+
+- preserve backend selection from `../codex/codex-rs/tui/src/clipboard_copy.rs`: SSH sessions use terminal-mediated copy, local sessions try native clipboard first, WSL sessions fall back to PowerShell after native failure, and terminal copy prefers tmux before OSC 52;
+- preserve `ClipboardLease` ownership evidence from `clipboard_copy.rs`: Linux/native clipboard success may require a lease to keep clipboard contents alive, while OSC 52, tmux, and WSL paths do not;
+- preserve tmux readiness checks from `tmux_clipboard_copy_ready`: `set-clipboard=off` and missing `Ms` capability refuse tmux native forwarding before falling back;
+- preserve OSC 52 sequence constraints from `osc52_sequence`: payloads are base64 encoded, bounded by `OSC52_MAX_RAW_BYTES`, and tmux sessions wrap the OSC 52 sequence in DCS passthrough;
+- keep the evidence deterministic and independent of live clipboard writes, `/dev/tty` or stdout writes, tmux/PowerShell process spawning, native GUI clipboard handles, ratatui rendering, app-server mutation, model/tool execution, filesystem mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-56 extends `fixtures/hxrust/tui-smoke.v1.json` with typed clipboard route, tmux readiness, OSC 52 shaping, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic clipboard-boundary evidence only, not live clipboard ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
