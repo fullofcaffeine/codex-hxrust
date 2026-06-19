@@ -44,6 +44,9 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 				}
 			}
 		}
+		if (state.moreBelow || state.loadingOlderShown) {
+			lines.push("page next=" + emptyLabel(state.nextCursor) + " moreBelow=" + boolLabel(state.moreBelow) + " loadingOlder=" + boolLabel(state.loadingOlderShown));
+		}
 		if (state.loadingOverlayMessage.length > 0) {
 			lines.push("overlay loading thread=" + emptyLabel(state.pendingThreadId) + " message=" + state.loadingOverlayMessage);
 		} else if (state.overlayOpen) {
@@ -70,5 +73,9 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 
 	static function emptyLabel(value:String):String {
 		return value.length == 0 ? "<empty>" : value;
+	}
+
+	static function boolLabel(value:Bool):String {
+		return value ? "true" : "false";
 	}
 }

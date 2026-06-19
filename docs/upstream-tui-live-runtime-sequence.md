@@ -3117,6 +3117,17 @@ Extend the normalized resume picker renderer from selected-row and transcript-ov
 
 Status: HXCX-TUI-107 extends `ResumePickerVisibleRow` with typed preview lines, teaches `DeterministicResumePickerTerminalRenderer` to render indented preview lines, and adds `ResumePickerPreviewRenderGate`, `ResumePickerPreviewRenderGateReport`, `test/ResumePickerPreviewRenderHarness.hx`, `hxml/resume-picker-preview-render.hxml`, and `harness/check-resume-picker-preview-render.sh`. The gate validates fixture-backed page load plus preview `thread/read`, preview-loading snapshot, loaded preview-line snapshot, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui ownership.
 
+### HXCX-TUI-108: Resume Picker Pagination Load-More Render Snapshot Gate
+
+Extend the normalized resume picker renderer from preview evidence into pagination/load-more evidence:
+
+- drive first and second `thread/list` page loads through the runtime-neutral host facade and deterministic background loader;
+- render loaded rows with next-cursor, `moreBelow`, and loading-older state before ingesting the second page;
+- assert selected row, second-page rows, footer progress, frame/render counts, and host page-load event evidence in a generated-Rust harness;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-108 teaches `DeterministicResumePickerTerminalRenderer` to include normalized pagination state when there is a next page or loading-older marker, and adds `ResumePickerPaginationRenderGate`, `ResumePickerPaginationRenderGateReport`, `test/ResumePickerPaginationRenderHarness.hx`, `hxml/resume-picker-pagination-render.hxml`, and `harness/check-resume-picker-pagination-render.sh`. The gate validates fixture-backed first-page load, next-cursor/more-below render evidence, loading-older render evidence, second-page ingest, final loaded rows, footer progress, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

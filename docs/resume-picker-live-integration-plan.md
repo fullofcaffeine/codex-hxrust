@@ -16,6 +16,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-no-credential-gate.sh` now validates the first combined no-credential generated-Rust gate: fixture-backed thread list/read through the host facade, deterministic key events, frame requests, terminal/test rendering, transcript overlay open, and temp Codex-home density persistence.
 - `harness/check-resume-picker-render-snapshot.sh` validates stable normalized test-backend screen snapshots for the no-credential picker path, including visible rows, selected row marker, loading overlay, transcript overlay, footer, and temp-home config evidence.
 - `harness/check-resume-picker-preview-render.sh` validates fixture-backed `thread/read` preview rendering through the same normalized test-backend surface, including selected row, loading preview evidence, preview lines, and footer state.
+- `harness/check-resume-picker-pagination-render.sh` validates fixture-backed second-page ingestion, next-cursor render evidence, loading-older state, visible loaded rows, and footer progress through the same normalized test-backend surface.
 
 ## Upstream Anchors
 
@@ -108,6 +109,8 @@ Status: `harness/check-resume-picker-render-snapshot.sh` adds the first normaliz
    - Toolbar/density: persistence intent -> temp-home `config.toml` mutation through `ConfigEditsBuilder` equivalent.
    - Footer/progress: label fixture -> rendered footer snapshot at multiple widths.
 
+Status: pagination/load-more now has generated-Rust normalized render evidence in `harness/check-resume-picker-pagination-render.sh`. The gate loads the first page through the host facade, renders the next cursor and `moreBelow` state, renders the loading-older frame, ingests a second fixture-backed page, and asserts final loaded-row/footer state. This is still deterministic test-backend evidence, not live app-server fanout, live crossterm input, ratatui frame ownership, state DB/rollout querying, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -142,6 +145,7 @@ Near-term gates:
 - `harness/check-resume-picker-no-credential-gate.sh` for the first combined no-credential generated-Rust app-server facade, deterministic key, frame/render, transcript overlay, and temp-home density persistence gate.
 - `harness/check-resume-picker-render-snapshot.sh` for normalized VT100/test-backend-style screen snapshots before any live crossterm automation.
 - `harness/check-resume-picker-preview-render.sh` for normalized preview-line render snapshots driven by fixture-backed `thread/read previewOnly=true`.
+- `harness/check-resume-picker-pagination-render.sh` for normalized pagination/load-more snapshots driven by fixture-backed first and second page loads.
 
 Exit criteria for "first live resume picker slice":
 
