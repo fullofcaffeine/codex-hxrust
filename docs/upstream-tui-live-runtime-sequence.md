@@ -2509,6 +2509,19 @@ Model selected raw Codex `ChatWidget` submission assembly behavior without live 
 
 Status: HXCX-TUI-59 extends `fixtures/hxrust/tui-smoke.v1.json` with typed `UserInput` item ordering, shell diversion, queue-before-session, blocked-image/model-unavailable restoration, empty suppression, and no-live dispatch evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic submission assembly evidence only, not live model/app dispatch.
 
+### HXCX-TUI-60: ChatWidget Input Queue State Boundary
+
+Model selected raw Codex `ChatWidget` input queue behavior without live app/model dispatch:
+
+- preserve `InputQueueState` anchors from `../codex/codex-rs/tui/src/chatwidget/input_queue.rs`: queued user messages, queued-message history records, rejected steer queue/history records, pending steers, `user_turn_pending_start`, `submit_pending_steers_after_interrupt`, and `suppress_queue_autosend` stay as explicit state facts;
+- preserve pending-input preview category separation from `input_queue.rs`: queued messages, pending steers, and rejected steers render into distinct preview buckets, with missing history records falling back to user-message text while pending steers use their committed history record and compare key;
+- preserve follow-up detection: queued user messages and rejected steers both count as queued follow-up work;
+- preserve clear/reset semantics: `clear()` drains queued messages/history, rejected steers/history, pending steers, `user_turn_pending_start`, and `submit_pending_steers_after_interrupt`, while autosend suppression is not cleared by that method;
+- preserve queue-drain gates from `../codex/codex-rs/tui/src/chatwidget/input_flow.rs`: autosend suppression, pending/running turns, and bottom-pane task state can block draining; when modal/popup state clears and the queue is idle, at most one queued input is drained and the pending preview is refreshed;
+- keep the evidence deterministic and independent of live app command dispatch, model/provider calls, shell execution, filesystem mutation, terminal rendering, app-server mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-60 extends `fixtures/hxrust/tui-smoke.v1.json` with typed queued/pending/rejected preview separation, missing-history fallback, follow-up detection, clear/reset flags, autosend suppression preservation, modal-cleared drain intent, pending/running drain gates, and no-live dispatch evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic input queue state evidence only, not live model/app dispatch.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

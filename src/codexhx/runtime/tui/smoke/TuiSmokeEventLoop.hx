@@ -3040,6 +3040,43 @@ class TuiSmokeEventLoop {
 						+ ":followup=" + action.followupSubmitted
 						+ ":modal=" + action.hadModalOrPopup + "->" + action.modalCleared
 					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.InputQueueState:
+					trace.push(
+						"tui.chat_widget_composer_render.input_queue="
+						+ "queued=" + action.queuedAfter
+						+ ":queued_history=" + action.queuedHistoryRecords
+						+ ":pending=" + action.pendingSteers
+						+ ":pending_history=" + action.pendingSteerHistoryRecords
+						+ ":compare_keys=" + action.pendingSteerCompareKeys
+						+ ":rejected=" + action.rejectedSteers
+						+ ":rejected_history=" + action.rejectedHistoryRecords
+						+ ":followups=" + action.queuedFollowUps
+						+ ":fallback=" + action.missingHistoryFallback
+						+ ":texts=" + action.previewQueuedText + "|" + action.previewPendingText + "|" + action.previewRejectedText
+					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.InputQueueClear:
+					trace.push(
+						"tui.chat_widget_composer_render.input_queue_clear="
+						+ "queued=" + action.queueTransitionText()
+						+ ":pending=" + action.pendingSteers + "->0"
+						+ ":rejected=" + action.rejectedSteers + "->0"
+						+ ":user_turn=" + action.userTurnPendingBefore + "->" + action.userTurnPendingAfter
+						+ ":submit_after_interrupt=" + action.submitPendingSteersAfterInterruptBefore + "->" + action.submitPendingSteersAfterInterruptAfter
+						+ ":autosend=" + action.suppressAutosendBefore + "->" + action.suppressAutosendAfter
+					);
+				case TuiSmokeChatWidgetComposerRenderActionKind.QueueDrainGate:
+					trace.push(
+						"tui.chat_widget_composer_render.queue_drain_gate="
+						+ "autosend=" + !action.autosendSuppressed
+						+ ":pending=" + action.userTurnPending
+						+ ":task=" + action.taskRunning
+						+ ":queued=" + action.queueTransitionText()
+						+ ":action=" + action.queuedAction
+						+ ":followup=" + action.followupSubmitted
+						+ ":modal=" + action.hadModalOrPopup + "->" + action.modalCleared
+						+ ":preview=" + action.previewUpdated
+						+ ":live_dispatch=" + !action.noLiveDispatch
+					);
 				case TuiSmokeChatWidgetComposerRenderActionKind.Frame:
 					trace.push(
 						"tui.chat_widget_composer_render.frame="
