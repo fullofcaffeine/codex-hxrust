@@ -5,6 +5,7 @@ ROOT_DIR="$(git rev-parse --show-toplevel)"
 MODE="check"
 CHANGED_BASE=""
 HAXELIB_BIN="${HAXELIB_BIN:-haxelib}"
+FORMATTER_CMD=()
 
 if [ "${1:-}" = "--write" ]; then
   MODE="write"
@@ -24,7 +25,19 @@ if ! command -v "$HAXELIB_BIN" >/dev/null 2>&1; then
   exit 1
 fi
 
-if ! "$HAXELIB_BIN" run formatter --help >/dev/null 2>&1; then
+if [ "${HAXE_FORMATTER_USE_NODE:-}" = "1" ]; then
+  formatter_lib_path="$("$HAXELIB_BIN" libpath formatter 2>/dev/null || true)"
+  if [ -z "$formatter_lib_path" ] || [ ! -f "$formatter_lib_path/run.js" ]; then
+    echo "[guard:hx-format] ERROR: formatter run.js was not found via haxelib libpath." >&2
+    echo "[guard:hx-format] Install it with: haxelib install formatter" >&2
+    exit 1
+  fi
+  FORMATTER_CMD=(node "$formatter_lib_path/run.js")
+else
+  FORMATTER_CMD=("$HAXELIB_BIN" run formatter)
+fi
+
+if ! "${FORMATTER_CMD[@]}" --help >/dev/null 2>&1; then
   echo "[guard:hx-format] ERROR: formatter haxelib is not installed." >&2
   echo "[guard:hx-format] Install it with: haxelib install formatter" >&2
   exit 1
@@ -71,10 +84,10 @@ fi
 
 if [ "$MODE" = "write" ]; then
   echo "[guard:hx-format] Formatting Haxe sources..."
-  "$HAXELIB_BIN" run formatter "${sources[@]}"
+  "${FORMATTER_CMD[@]}" "${sources[@]}"
 else
   echo "[guard:hx-format] Checking Haxe formatting..."
-  "$HAXELIB_BIN" run formatter "${sources[@]}" --check
+  "${FORMATTER_CMD[@]}" "${sources[@]}" --check
 fi
 
 echo "[guard:hx-format] OK"

@@ -59,6 +59,7 @@ jobs:
         working-directory: codex-hxrust
         env:
           HAXELIB_BIN: /usr/bin/haxelib
+          HAXE_FORMATTER_USE_NODE: "1"
         run: npm run format:haxe:check
 
   haxe-rust-smoke:
