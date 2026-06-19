@@ -361,6 +361,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetSlashCommand:
+					if (!traceSlashCommand(event.chatWidgetSlashCommand, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -5159,6 +5164,91 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_raw_output_render.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceSlashCommand(plan:TuiSmokeSlashCommandPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_slash_command.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_slash_command.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeSlashCommandActionKind.Dispatch:
+					trace.push(
+						"tui.chat_widget_slash_command.dispatch="
+						+ action.command
+						+ ":source=" + action.source
+						+ ":history=" + action.historyStaged + "->" + action.historyRecorded
+						+ ":task=" + action.taskRunning
+						+ ":side=" + action.sideConversation
+						+ ":allowed=" + action.commandAllowed
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeSlashCommandActionKind.RawMode:
+					trace.push(
+						"tui.chat_widget_slash_command.raw="
+						+ action.command
+						+ ":args=" + action.args
+						+ ":raw=" + action.rawOutputBefore + "->" + action.rawOutputAfter
+						+ ":config=" + action.configUpdated
+						+ ":notice=" + action.noticeInserted
+						+ ":surfaces=" + action.statusSurfacesRefreshed
+						+ ":event=" + action.appEventSent
+					);
+				case TuiSmokeSlashCommandActionKind.StatusOutput:
+					trace.push(
+						"tui.chat_widget_slash_command.status="
+						+ action.command
+						+ ":card=" + action.statusCard
+						+ ":inserted=" + action.statusOutputInserted
+						+ ":prefetch=" + action.rateLimitPrefetch
+						+ ":request=" + action.requestId
+						+ ":refreshing=" + action.statusRefreshing
+						+ ":event=" + action.appEventSent
+					);
+				case TuiSmokeSlashCommandActionKind.InlineArgs:
+					trace.push(
+						"tui.chat_widget_slash_command.inline_args="
+						+ action.command
+						+ ":args=" + action.args
+						+ ":supports=" + action.supportsInlineArgs
+						+ ":trimmed=" + action.argsTrimmed
+						+ ":fallback=" + action.fallbackToBare
+					);
+				case TuiSmokeSlashCommandActionKind.Availability:
+					trace.push(
+						"tui.chat_widget_slash_command.availability="
+						+ action.command
+						+ ":task=" + action.taskRunning
+						+ ":side=" + action.sideConversation
+						+ ":side_allowed=" + action.sideAllowed
+						+ ":allowed=" + action.commandAllowed
+						+ ":drained=" + action.submissionDrained
+						+ ":redraw=" + action.redrawRequested
+					);
+				case TuiSmokeSlashCommandActionKind.AppEvent:
+					trace.push(
+						"tui.chat_widget_slash_command.app_event="
+						+ action.appEvent
+						+ ":command=" + action.command
+						+ ":sent=" + action.appEventSent
+					);
+				case TuiSmokeSlashCommandActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_slash_command.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_slash_command.unknown");
 					return false;
 			}
 		}

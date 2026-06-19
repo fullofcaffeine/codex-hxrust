@@ -17461,6 +17461,158 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_status_surface_render.plan=headless\ntui.chat_widget_status_surface_render.select=surface=status_line:items=model-name,git-branch,pull-request,raw-output:count=4:visible=4:status_line=true:title=false\ntui.chat_widget_status_surface_render.indicator=all:model=gpt-5.2-codex:branch=main:git=PR #42 +3 -1:raw=raw output:model_visible=true:branch_visible=true:git_visible=true:raw_visible=true:activity_visible=false:segments=4:branch_request=true:git_request=true:hyperlink=true\ntui.chat_widget_status_surface_render.warning=invalid-status-item:message=bogus-item:visible=true:deduped=false:count=1:dedupe_count=0\ntui.chat_widget_status_surface_render.warning=invalid-status-item:message=bogus-item:visible=false:deduped=true:count=1:dedupe_count=1\ntui.chat_widget_status_surface_render.preview=title:items=status,model-name:started=true:committed=false:reverted=false\ntui.chat_widget_status_surface_render.refresh=run=working:header=Working:details=waiting for tools:text=gpt-5.2-codex main PR #42 raw output:revision=3->4:redraw=true:frame=true\ntui.chat_widget_status_surface_render.failure=live_status_surface_render_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget status surface render\ninput> \ntrace:\ntui.chat_widget_status_surface_render.plan=headless\ntui.chat_widget_status_surface_render.select=surface=status_line:items=model-name,git-branch,pull-request,raw-output:count=4:visible=4:status_line=true:title=false\ntui.chat_widget_status_surface_render.indicator=all:model=gpt-5.2-codex:branch=main:git=PR #42 +3 -1:raw=raw output:model_visible=true:branch_visible=true:git_visible=true:raw_visible=true:activity_visible=false:segments=4:branch_request=true:git_request=true:hyperlink=true\ntui.chat_widget_status_surface_render.warning=invalid-status-item:message=bogus-item:visible=true:deduped=false:count=1:dedupe_count=0\ntui.chat_widget_status_surface_render.warning=invalid-status-item:message=bogus-item:visible=false:deduped=true:count=1:dedupe_count=1\ntui.chat_widget_status_surface_render.preview=title:items=status,model-name:started=true:committed=false:reverted=false\ntui.chat_widget_status_surface_render.refresh=run=working:header=Working:details=waiting for tools:text=gpt-5.2-codex main PR #42 raw output:revision=3->4:redraw=true:frame=true\ntui.chat_widget_status_surface_render.failure=live_status_surface_render_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-slash-command-raw-status-headless",
+      "frame": {
+        "name": "chatwidget-slash-command-raw-status-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget slash command raw status"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_slash_command",
+          "chatWidgetSlashCommand": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "dispatch",
+                "source": "live",
+                "command": "raw",
+                "historyStaged": true,
+                "historyRecorded": true,
+                "taskRunning": false,
+                "sideConversation": false,
+                "commandAllowed": true,
+                "redrawRequested": true
+              },
+              {
+                "kind": "raw_mode",
+                "command": "raw",
+                "args": "",
+                "rawOutputBefore": false,
+                "rawOutputAfter": true,
+                "configUpdated": true,
+                "noticeInserted": true,
+                "statusSurfacesRefreshed": true,
+                "appEventSent": true
+              },
+              {
+                "kind": "inline_args",
+                "command": "raw",
+                "args": "off",
+                "supportsInlineArgs": true,
+                "argsTrimmed": true,
+                "fallbackToBare": false
+              },
+              {
+                "kind": "raw_mode",
+                "command": "raw",
+                "args": "off",
+                "rawOutputBefore": true,
+                "rawOutputAfter": false,
+                "configUpdated": true,
+                "noticeInserted": true,
+                "statusSurfacesRefreshed": true,
+                "appEventSent": true
+              },
+              {
+                "kind": "app_event",
+                "command": "raw",
+                "appEvent": "RawOutputModeChanged(false)",
+                "appEventSent": true
+              },
+              {
+                "kind": "dispatch",
+                "source": "queued",
+                "command": "status",
+                "historyStaged": true,
+                "historyRecorded": true,
+                "taskRunning": true,
+                "sideConversation": true,
+                "commandAllowed": true,
+                "redrawRequested": true
+              },
+              {
+                "kind": "status_output",
+                "command": "status",
+                "statusCard": "session:model:permissions:tokens",
+                "statusOutputInserted": true,
+                "rateLimitPrefetch": false,
+                "requestId": 0,
+                "statusRefreshing": false,
+                "appEventSent": false
+              },
+              {
+                "kind": "status_output",
+                "command": "status",
+                "statusCard": "session:model:permissions:limits",
+                "statusOutputInserted": true,
+                "rateLimitPrefetch": true,
+                "requestId": 7,
+                "statusRefreshing": true,
+                "appEventSent": true
+              },
+              {
+                "kind": "availability",
+                "command": "clear",
+                "taskRunning": true,
+                "sideConversation": false,
+                "sideAllowed": false,
+                "commandAllowed": false,
+                "submissionDrained": true,
+                "redrawRequested": true
+              },
+              {
+                "kind": "availability",
+                "command": "goal",
+                "taskRunning": false,
+                "sideConversation": true,
+                "sideAllowed": false,
+                "commandAllowed": false,
+                "submissionDrained": true,
+                "redrawRequested": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_slash_command_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_slash_command.plan=headless\ntui.chat_widget_slash_command.dispatch=raw:source=live:history=true->true:task=false:side=false:allowed=true:redraw=true\ntui.chat_widget_slash_command.raw=raw:args=:raw=false->true:config=true:notice=true:surfaces=true:event=true\ntui.chat_widget_slash_command.inline_args=raw:args=off:supports=true:trimmed=true:fallback=false\ntui.chat_widget_slash_command.raw=raw:args=off:raw=true->false:config=true:notice=true:surfaces=true:event=true\ntui.chat_widget_slash_command.app_event=RawOutputModeChanged(false):command=raw:sent=true\ntui.chat_widget_slash_command.dispatch=status:source=queued:history=true->true:task=true:side=true:allowed=true:redraw=true\ntui.chat_widget_slash_command.status=status:card=session:model:permissions:tokens:inserted=true:prefetch=false:request=0:refreshing=false:event=false\ntui.chat_widget_slash_command.status=status:card=session:model:permissions:limits:inserted=true:prefetch=true:request=7:refreshing=true:event=true\ntui.chat_widget_slash_command.availability=clear:task=true:side=false:side_allowed=false:allowed=false:drained=true:redraw=true\ntui.chat_widget_slash_command.availability=goal:task=false:side=true:side_allowed=false:allowed=false:drained=true:redraw=false\ntui.chat_widget_slash_command.failure=live_slash_command_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget slash command raw status\ninput> \ntrace:\ntui.chat_widget_slash_command.plan=headless\ntui.chat_widget_slash_command.dispatch=raw:source=live:history=true->true:task=false:side=false:allowed=true:redraw=true\ntui.chat_widget_slash_command.raw=raw:args=:raw=false->true:config=true:notice=true:surfaces=true:event=true\ntui.chat_widget_slash_command.inline_args=raw:args=off:supports=true:trimmed=true:fallback=false\ntui.chat_widget_slash_command.raw=raw:args=off:raw=true->false:config=true:notice=true:surfaces=true:event=true\ntui.chat_widget_slash_command.app_event=RawOutputModeChanged(false):command=raw:sent=true\ntui.chat_widget_slash_command.dispatch=status:source=queued:history=true->true:task=true:side=true:allowed=true:redraw=true\ntui.chat_widget_slash_command.status=status:card=session:model:permissions:tokens:inserted=true:prefetch=false:request=0:refreshing=false:event=false\ntui.chat_widget_slash_command.status=status:card=session:model:permissions:limits:inserted=true:prefetch=true:request=7:refreshing=true:event=true\ntui.chat_widget_slash_command.availability=clear:task=true:side=false:side_allowed=false:allowed=false:drained=true:redraw=true\ntui.chat_widget_slash_command.availability=goal:task=false:side=true:side_allowed=false:allowed=false:drained=true:redraw=false\ntui.chat_widget_slash_command.failure=live_slash_command_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

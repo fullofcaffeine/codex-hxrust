@@ -123,6 +123,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetBacktrackOverlay: optionalBacktrackOverlayPlan(value, "chatWidgetBacktrackOverlay"),
 				chatWidgetKeymapRawOutput: optionalKeymapRawOutputPlan(value, "chatWidgetKeymapRawOutput"),
 				chatWidgetRawOutputRender: optionalRawOutputRenderPlan(value, "chatWidgetRawOutputRender"),
+				chatWidgetSlashCommand: optionalSlashCommandPlan(value, "chatWidgetSlashCommand"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -1622,6 +1623,61 @@ class TuiSmokeFixtureLoader {
 				hyperlinkAnnotated: optionalBoolField(value, "hyperlinkAnnotated", false),
 				redrawRequested: optionalBoolField(value, "redrawRequested", false),
 				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalSlashCommandPlan(object:Value, name:String):Null<TuiSmokeSlashCommandPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSlashCommandPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: slashCommandActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function slashCommandActions(values:Array<Value>):Array<TuiSmokeSlashCommandAction> {
+		final out:Array<TuiSmokeSlashCommandAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSlashCommandAction({
+				kind: TuiSmokeSlashCommandActionKind.fromString(stringField(value, "kind", "")),
+				source: optionalStringField(value, "source", ""),
+				command: optionalStringField(value, "command", ""),
+				args: optionalStringField(value, "args", ""),
+				appEvent: optionalStringField(value, "appEvent", ""),
+				notice: optionalStringField(value, "notice", ""),
+				statusCard: optionalStringField(value, "statusCard", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				requestId: optionalIntField(value, "requestId", 0),
+				historyStaged: optionalBoolField(value, "historyStaged", false),
+				historyRecorded: optionalBoolField(value, "historyRecorded", false),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				sideConversation: optionalBoolField(value, "sideConversation", false),
+				sideAllowed: optionalBoolField(value, "sideAllowed", false),
+				commandAllowed: optionalBoolField(value, "commandAllowed", false),
+				supportsInlineArgs: optionalBoolField(value, "supportsInlineArgs", false),
+				argsTrimmed: optionalBoolField(value, "argsTrimmed", false),
+				fallbackToBare: optionalBoolField(value, "fallbackToBare", false),
+				rawOutputBefore: optionalBoolField(value, "rawOutputBefore", false),
+				rawOutputAfter: optionalBoolField(value, "rawOutputAfter", false),
+				configUpdated: optionalBoolField(value, "configUpdated", false),
+				noticeInserted: optionalBoolField(value, "noticeInserted", false),
+				statusSurfacesRefreshed: optionalBoolField(value, "statusSurfacesRefreshed", false),
+				appEventSent: optionalBoolField(value, "appEventSent", false),
+				statusOutputInserted: optionalBoolField(value, "statusOutputInserted", false),
+				rateLimitPrefetch: optionalBoolField(value, "rateLimitPrefetch", false),
+				statusRefreshing: optionalBoolField(value, "statusRefreshing", false),
+				submissionDrained: optionalBoolField(value, "submissionDrained", false),
+				redrawRequested: optionalBoolField(value, "redrawRequested", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),

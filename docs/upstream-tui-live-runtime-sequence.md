@@ -2830,6 +2830,18 @@ Model selected raw Codex status-surface rendering behavior without live terminal
 
 Status: HXCX-TUI-84 extends `fixtures/hxrust/tui-smoke.v1.json` with typed status-surface render selection, model/branch/git/raw indicators, warning dedupe/visibility, title preview, status refresh/redraw scheduling, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic status-surface render intent only, not the full ratatui renderer, real terminal title mutation, live git watcher, config-file persistence, app-server transport, or model traffic.
 
+### HXCX-TUI-85: ChatWidget Slash-Command Raw/Status Boundary
+
+Model selected raw Codex ChatWidget slash-command dispatch behavior without live terminal mutation, ratatui rendering, app-server mutation, command execution, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/slash_dispatch.rs` command-dispatch ownership: `handle_slash_command_dispatch` records staged slash history after dispatch, queued and live sources share the app-level handler boundary, and command availability is checked before side effects;
+- preserve `/raw` behavior from `slash_dispatch.rs` and `chatwidget.rs`: `Raw` supports inline args, toggles or sets raw-output mode, updates config, refreshes status surfaces, inserts the user-facing notice, and emits `AppEvent::RawOutputModeChanged`;
+- preserve `/status` behavior from `slash_dispatch.rs` and `../codex/codex-rs/tui/src/status/card.rs`: the status command inserts a composite `/status` history output, may prefetch rate limits with a request id, and emits a rate-limit refresh app event only when the refresh path is active;
+- preserve availability guards from `../codex/codex-rs/tui/src/slash_command.rs`: `/raw` and `/status` are available during tasks and in side conversations, while commands such as `/clear` fail while a task is running and commands such as `/goal` are rejected in side conversations;
+- keep argument parsing deterministic: inline `/raw off` is modeled as a trimmed inline-arg command, while empty args can still fall back to bare command dispatch in later fixtures.
+
+Status: HXCX-TUI-85 extends `fixtures/hxrust/tui-smoke.v1.json` with typed slash-command dispatch, `/raw` bare and inline-arg mode effects, `/status` card and rate-limit refresh intent, app-event emission, task/side availability guards, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic ChatWidget slash-command effect evidence only, not the full popup lifecycle, live command execution, full `/status` ratatui card rendering, config-file persistence, app-server transport, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
