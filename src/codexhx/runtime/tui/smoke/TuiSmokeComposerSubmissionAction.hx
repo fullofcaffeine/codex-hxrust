@@ -20,8 +20,17 @@ typedef TuiSmokeComposerSubmissionActionFields = {
 	final localImageAfter:Int;
 	final remoteImageBefore:Int;
 	final remoteImageAfter:Int;
+	final textItemCount:Int;
+	final remoteImageItemCount:Int;
+	final localImageItemCount:Int;
+	final skillItemCount:Int;
+	final mentionItemCount:Int;
+	final itemCount:Int;
+	final mentionBindingCount:Int;
 	final queueBefore:Int;
 	final queueAfter:Int;
+	final itemOrder:String;
+	final modelName:String;
 	final shouldQueue:Bool;
 	final recordHistory:Bool;
 	final pasteBurstFlushed:Bool;
@@ -45,7 +54,19 @@ typedef TuiSmokeComposerSubmissionActionFields = {
 	final historyRecorded:Bool;
 	final vimNormalEntered:Bool;
 	final modelSupportsImages:Bool;
+	final sessionConfigured:Bool;
+	final modelAvailable:Bool;
 	final blockedRestored:Bool;
+	final userTurnSubmitted:Bool;
+	final shellEscapeAllowed:Bool;
+	final shellCommandSubmitted:Bool;
+	final renderInHistory:Bool;
+	final pendingSteerQueued:Bool;
+	final displayRecorded:Bool;
+	final cancelEditRecorded:Bool;
+	final ideContextApplied:Bool;
+	final collaborationModeAttached:Bool;
+	final emptySuppressedBeforeDispatch:Bool;
 	final appEventSent:Bool;
 	final noLiveDispatch:Bool;
 	final unsupportedRejected:Bool;
@@ -72,8 +93,24 @@ class TuiSmokeComposerSubmissionAction {
 	public final localImageAfter:Int;
 	public final remoteImageBefore:Int;
 	public final remoteImageAfter:Int;
+	@:recordMin(0)
+	public final textItemCount:Int;
+	@:recordMin(0)
+	public final remoteImageItemCount:Int;
+	@:recordMin(0)
+	public final localImageItemCount:Int;
+	@:recordMin(0)
+	public final skillItemCount:Int;
+	@:recordMin(0)
+	public final mentionItemCount:Int;
+	@:recordMin(0)
+	public final itemCount:Int;
+	@:recordMin(0)
+	public final mentionBindingCount:Int;
 	public final queueBefore:Int;
 	public final queueAfter:Int;
+	public final itemOrder:String;
+	public final modelName:String;
 	public final shouldQueue:Bool;
 	public final recordHistory:Bool;
 	public final pasteBurstFlushed:Bool;
@@ -97,7 +134,19 @@ class TuiSmokeComposerSubmissionAction {
 	public final historyRecorded:Bool;
 	public final vimNormalEntered:Bool;
 	public final modelSupportsImages:Bool;
+	public final sessionConfigured:Bool;
+	public final modelAvailable:Bool;
 	public final blockedRestored:Bool;
+	public final userTurnSubmitted:Bool;
+	public final shellEscapeAllowed:Bool;
+	public final shellCommandSubmitted:Bool;
+	public final renderInHistory:Bool;
+	public final pendingSteerQueued:Bool;
+	public final displayRecorded:Bool;
+	public final cancelEditRecorded:Bool;
+	public final ideContextApplied:Bool;
+	public final collaborationModeAttached:Bool;
+	public final emptySuppressedBeforeDispatch:Bool;
 	public final appEventSent:Bool;
 	public final noLiveDispatch:Bool;
 	public final unsupportedRejected:Bool;

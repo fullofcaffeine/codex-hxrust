@@ -2496,6 +2496,19 @@ Model selected raw Codex composer paste-burst behavior without owning live termi
 
 Status: HXCX-TUI-58 extends `fixtures/hxrust/tui-smoke.v1.json` with typed paste-burst timing, small/large paste handoff, duplicate placeholder numbering, image placeholder handoff, follow-up scheduling, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic composer handoff evidence only, not live terminal/clipboard ownership.
 
+### HXCX-TUI-59: ChatWidget Input Submission Item Assembly Boundary
+
+Model selected raw Codex `ChatWidget` submission assembly behavior without live app/model dispatch:
+
+- preserve `user_message_from_submission` anchors from `../codex/codex-rs/tui/src/chatwidget/input_submission.rs`: submitted drafts drain local images, remote image URLs, text elements, and mention bindings from the bottom pane into a `UserMessage`;
+- preserve `submit_user_message_with_history_and_shell_escape_policy` item ordering: remote image `UserInput::Image` items are emitted before local image `UserInput::LocalImage`, then text, then skill/app/plugin mention-derived items;
+- preserve shell escape behavior: `!cmd` diverts to a user shell command when shell escape is allowed, while empty shell commands show help instead of model submission;
+- preserve fail-closed restoration behavior: empty submissions suppress before dispatch, image submissions restore the draft when the current model lacks image support, and unavailable/empty effective model names restore the composed message with mention bindings intact;
+- preserve post-submit side effects as deterministic facts: user-turn construction, model name, optional collaboration mode/IDE context, history recording, pending steer/display/cancel-edit decisions, and queueing before session configuration;
+- keep the evidence deterministic and independent of live app command dispatch, model/provider calls, shell execution, filesystem mutation, terminal rendering, app-server mutation, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-59 extends `fixtures/hxrust/tui-smoke.v1.json` with typed `UserInput` item ordering, shell diversion, queue-before-session, blocked-image/model-unavailable restoration, empty suppression, and no-live dispatch evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic submission assembly evidence only, not live model/app dispatch.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

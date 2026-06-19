@@ -3636,6 +3636,32 @@ class TuiSmokeEventLoop {
 						+ ":local_drained=" + action.localImagesDrained
 						+ ":remote_drained=" + action.remoteImagesDrained
 					);
+				case TuiSmokeComposerSubmissionActionKind.AssembleUserInput:
+					trace.push(
+						"tui.composer_submission.items="
+						+ "order=" + action.itemOrder
+						+ ":count=" + action.itemCount
+						+ ":remote=" + action.remoteImageItemCount
+						+ ":local=" + action.localImageItemCount
+						+ ":text=" + action.textItemCount
+						+ ":skills=" + action.skillItemCount
+						+ ":mentions=" + action.mentionItemCount
+						+ ":bindings=" + action.mentionBindingCount
+					);
+				case TuiSmokeComposerSubmissionActionKind.SubmitUserTurn:
+					trace.push(
+						"tui.composer_submission.user_turn="
+						+ "submitted=" + action.userTurnSubmitted
+						+ ":model=" + action.modelName
+						+ ":session=" + action.sessionConfigured
+						+ ":history=" + action.renderInHistory
+						+ ":pending_steer=" + action.pendingSteerQueued
+						+ ":display=" + action.displayRecorded
+						+ ":cancel_edit=" + action.cancelEditRecorded
+						+ ":ide=" + action.ideContextApplied
+						+ ":collab=" + action.collaborationModeAttached
+						+ ":live=" + !action.noLiveDispatch
+					);
 				case TuiSmokeComposerSubmissionActionKind.QueueDrain:
 					trace.push(
 						"tui.composer_submission.queue_drain="
@@ -3650,6 +3676,16 @@ class TuiSmokeEventLoop {
 						+ "model_supports_images=" + action.modelSupportsImages
 						+ ":local=" + action.localImageAfter
 						+ ":remote=" + action.remoteImageAfter
+						+ ":restored=" + action.blockedRestored
+					);
+				case TuiSmokeComposerSubmissionActionKind.RestoreUnavailableModel:
+					trace.push(
+						"tui.composer_submission.restore_unavailable_model="
+						+ "model_available=" + action.modelAvailable
+						+ ":text=" + action.preparedText
+						+ ":local=" + action.localImageAfter
+						+ ":remote=" + action.remoteImageAfter
+						+ ":bindings=" + action.mentionBindingCount
 						+ ":restored=" + action.blockedRestored
 					);
 				case TuiSmokeComposerSubmissionActionKind.HistoryRecord:
@@ -3668,6 +3704,9 @@ class TuiSmokeEventLoop {
 						+ ":too_large=" + action.tooLargeRejected
 						+ ":empty=" + action.emptySuppressed
 						+ ":pending_restored=" + action.pendingRestored
+						+ (action.emptySuppressedBeforeDispatch ? ":pre_dispatch_empty=true" : "")
+						+ (action.shellCommandSubmitted ? ":shell=true" : "")
+						+ (action.noLiveDispatch ? ":no_live=true" : "")
 						+ ":unsupported=" + action.unsupportedRejected
 					);
 				case _:
