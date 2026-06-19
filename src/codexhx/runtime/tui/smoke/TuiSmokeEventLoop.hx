@@ -2869,6 +2869,47 @@ class TuiSmokeEventLoop {
 						+ ":error=" + action.errorMessage
 						+ ":frame=" + action.frameScheduled
 					);
+				case TuiSmokeResumeForkActionKind.PickerDensityToggle:
+					trace.push(
+						"tui.resume_fork.picker_density_toggle="
+						+ action.densityBefore + "->" + action.densityAfter
+						+ ":key=" + action.keyName
+						+ ":query_preserved=" + action.queryPreserved
+						+ ":persist_configured=" + action.persistenceConfigured
+						+ ":persist_attempted=" + action.persistenceAttempted
+						+ ":persist_success=" + action.persistenceSucceeded
+						+ ":inline_error=" + action.inlineErrorShown
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerToolbarFocus:
+					trace.push(
+						"tui.resume_fork.picker_toolbar_focus="
+						+ "key=" + action.keyName
+						+ ":" + action.toolbarFocusBefore + "->" + action.toolbarFocusAfter
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerToolbarActivate:
+					trace.push(
+						"tui.resume_fork.picker_toolbar_activate="
+						+ "focus=" + action.toolbarFocusBefore
+						+ ":key=" + action.keyName
+						+ ":sort=" + action.sortKeyBefore + "->" + action.sortKeyAfter
+						+ ":filter=" + action.filterModeBefore + "->" + action.filterModeAfter
+						+ ":cwd=" + action.cwdFilter
+						+ ":show_all=" + action.showAll
+						+ ":query_preserved=" + action.queryPreserved
+						+ ":reset=" + action.lookupRequested
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerToolbarRender:
+					trace.push(
+						"tui.resume_fork.picker_toolbar_render="
+						+ "mode=" + action.toolbarRenderMode
+						+ ":focus=" + action.toolbarFocusAfter
+						+ ":sort=" + action.sortKey
+						+ ":filter=" + action.filterModeAfter
+						+ ":cwd_present=" + (action.cwdFilter != "")
+					);
 				case TuiSmokeResumeForkActionKind.PickerSelection:
 					trace.push(
 						"tui.resume_fork.picker_selection="

@@ -22,6 +22,10 @@ enum abstract TuiSmokeResumeForkActionKind(String) to String {
 	final PickerTranscriptLoadingKey = "picker_transcript_loading_key";
 	final PickerOverlayClose = "picker_overlay_close";
 	final PickerMetadataFailure = "picker_metadata_failure";
+	final PickerDensityToggle = "picker_density_toggle";
+	final PickerToolbarFocus = "picker_toolbar_focus";
+	final PickerToolbarActivate = "picker_toolbar_activate";
+	final PickerToolbarRender = "picker_toolbar_render";
 	final PickerSelection = "picker_selection";
 	final Lookup = "lookup";
 	final StartupGate = "startup_gate";
@@ -56,6 +60,10 @@ enum abstract TuiSmokeResumeForkActionKind(String) to String {
 			case "picker_transcript_loading_key": PickerTranscriptLoadingKey;
 			case "picker_overlay_close": PickerOverlayClose;
 			case "picker_metadata_failure": PickerMetadataFailure;
+			case "picker_density_toggle": PickerDensityToggle;
+			case "picker_toolbar_focus": PickerToolbarFocus;
+			case "picker_toolbar_activate": PickerToolbarActivate;
+			case "picker_toolbar_render": PickerToolbarRender;
 			case "picker_selection": PickerSelection;
 			case "lookup": Lookup;
 			case "startup_gate": StartupGate;

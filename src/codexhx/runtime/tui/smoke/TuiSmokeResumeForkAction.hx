@@ -32,6 +32,11 @@ typedef TuiSmokeResumeForkActionFields = {
 	final filterModeBefore:String;
 	final filterModeAfter:String;
 	final cwdFilter:String;
+	final densityBefore:String;
+	final densityAfter:String;
+	final toolbarFocusBefore:String;
+	final toolbarFocusAfter:String;
+	final toolbarRenderMode:String;
 	final failureCode:String;
 	final errorMessage:String;
 	final pageSize:Int;
@@ -74,6 +79,11 @@ typedef TuiSmokeResumeForkActionFields = {
 	final startFresh:Bool;
 	final keyConsumed:Bool;
 	final overlayClosed:Bool;
+	final persistenceConfigured:Bool;
+	final persistenceAttempted:Bool;
+	final persistenceSucceeded:Bool;
+	final inlineErrorShown:Bool;
+	final queryPreserved:Bool;
 	final showAll:Bool;
 	final includeNonInteractive:Bool;
 	final selected:Bool;
@@ -148,6 +158,11 @@ class TuiSmokeResumeForkAction {
 	public final filterModeBefore:String;
 	public final filterModeAfter:String;
 	public final cwdFilter:String;
+	public final densityBefore:String;
+	public final densityAfter:String;
+	public final toolbarFocusBefore:String;
+	public final toolbarFocusAfter:String;
+	public final toolbarRenderMode:String;
 	public final failureCode:String;
 	public final errorMessage:String;
 	public final pageSize:Int;
@@ -190,6 +205,11 @@ class TuiSmokeResumeForkAction {
 	public final startFresh:Bool;
 	public final keyConsumed:Bool;
 	public final overlayClosed:Bool;
+	public final persistenceConfigured:Bool;
+	public final persistenceAttempted:Bool;
+	public final persistenceSucceeded:Bool;
+	public final inlineErrorShown:Bool;
+	public final queryPreserved:Bool;
 	public final showAll:Bool;
 	public final includeNonInteractive:Bool;
 	public final selected:Bool;

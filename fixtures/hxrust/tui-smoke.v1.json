@@ -12263,6 +12263,171 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume picker keyboard loading state\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_page_ingest=token=4:stale=false:scanned=20:accepted=20:invalid=0:loaded=20:filtered=20:next=cursor-20:has_next=true:scan_cap=false:page_down=false\ntui.resume_fork.picker_keyboard_move=key=page_down:selected=0->5:scroll=0->1:view_rows=5:loaded=20:load_more=false:frame=true\ntui.resume_fork.picker_keyboard_move=key=page_down:selected=5->10:scroll=1->6:view_rows=5:loaded=20:load_more=false:frame=true\ntui.resume_fork.picker_keyboard_move=key=page_up:selected=10->5:scroll=6->5:view_rows=5:loaded=20:load_more=false:frame=true\ntui.resume_fork.picker_keyboard_move=key=end:selected=5->19:scroll=5->15:view_rows=5:loaded=20:load_more=true:frame=true\ntui.resume_fork.picker_load_more_trigger=key=end:cursor=cursor-20:requested=true:pending_target=19:search_active=false:frame=true\ntui.resume_fork.picker_keyboard_move=key=home:selected=19->0:scroll=15->0:view_rows=5:loaded=20:load_more=false:frame=true\ntui.resume_fork.picker_query_clear=key=esc:query=beta->:selected=0->1:start_fresh=false:frame=true\ntui.resume_fork.picker_query_clear=key=esc:query=->:selected=1->1:start_fresh=true:frame=false\ntui.resume_fork.picker_transcript_loading_key=key=down:pending=thread-loading:consumed=true:exit=false\ntui.resume_fork.picker_transcript_loading_key=key=ctrl_c:pending=thread-loading:consumed=false:exit=true\ntui.resume_fork.picker_overlay_close=key=esc:overlay=true->true:frame=true\ntui.resume_fork.picker_metadata_failure=key=enter:path=/tmp/missing.jsonl:thread=:error=Failed to read session metadata from /tmp/missing.jsonl:frame=true\ntui.resume_fork.failure=live_resume_picker_keyboard_loading_rejected:error=resume picker keyboard/loading state requires live ratatui for interactive input:source=resume_picker:target=keyboard:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "resume-picker-density-toolbar-persistence-boundary",
+      "frame": {
+        "name": "resume-picker-density-toolbar-persistence-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "resume picker density toolbar persistence"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resume_fork",
+          "resumeFork": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "picker_open",
+                "action": "resume",
+                "source": "startup",
+                "context": "picker",
+                "showAll": false,
+                "includeNonInteractive": false,
+                "remoteWorkspace": false,
+                "altScreenEntered": true
+              },
+              {
+                "kind": "picker_density_toggle",
+                "keyName": "ctrl_o",
+                "densityBefore": "comfortable",
+                "densityAfter": "dense",
+                "queryPreserved": true,
+                "persistenceConfigured": true,
+                "persistenceAttempted": true,
+                "persistenceSucceeded": true,
+                "inlineErrorShown": false,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_density_toggle",
+                "keyName": "raw_ctrl_o",
+                "densityBefore": "comfortable",
+                "densityAfter": "dense",
+                "queryPreserved": true,
+                "persistenceConfigured": true,
+                "persistenceAttempted": true,
+                "persistenceSucceeded": false,
+                "inlineErrorShown": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_toolbar_focus",
+                "keyName": "tab",
+                "toolbarFocusBefore": "filter",
+                "toolbarFocusAfter": "sort",
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_toolbar_focus",
+                "keyName": "backtab",
+                "toolbarFocusBefore": "sort",
+                "toolbarFocusAfter": "filter",
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_toolbar_focus",
+                "keyName": "tab",
+                "toolbarFocusBefore": "filter",
+                "toolbarFocusAfter": "sort",
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_toolbar_activate",
+                "keyName": "ctrl_l",
+                "toolbarFocusBefore": "sort",
+                "sortKeyBefore": "updated_at",
+                "sortKeyAfter": "created_at",
+                "filterModeBefore": "cwd",
+                "filterModeAfter": "cwd",
+                "cwdFilter": "/workspace/codex",
+                "showAll": false,
+                "queryPreserved": true,
+                "lookupRequested": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_toolbar_focus",
+                "keyName": "backtab",
+                "toolbarFocusBefore": "sort",
+                "toolbarFocusAfter": "filter",
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_toolbar_activate",
+                "keyName": "right",
+                "toolbarFocusBefore": "filter",
+                "sortKeyBefore": "created_at",
+                "sortKeyAfter": "created_at",
+                "filterModeBefore": "cwd",
+                "filterModeAfter": "all",
+                "cwdFilter": "/workspace/codex",
+                "showAll": true,
+                "queryPreserved": true,
+                "lookupRequested": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_toolbar_render",
+                "toolbarRenderMode": "wide",
+                "toolbarFocusAfter": "filter",
+                "sortKey": "created_at",
+                "filterModeAfter": "all",
+                "cwdFilter": "/workspace/codex"
+              },
+              {
+                "kind": "picker_toolbar_render",
+                "toolbarRenderMode": "compact",
+                "toolbarFocusAfter": "sort",
+                "sortKey": "updated_at",
+                "filterModeAfter": "all",
+                "cwdFilter": ""
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_resume_picker_density_toolbar_rejected",
+                "errorMessage": "resume picker density toolbar persistence requires live ratatui and config writes",
+                "source": "resume_picker",
+                "idOrName": "density-toolbar",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_density_toggle=comfortable->dense:key=ctrl_o:query_preserved=true:persist_configured=true:persist_attempted=true:persist_success=true:inline_error=false:frame=true\ntui.resume_fork.picker_density_toggle=comfortable->dense:key=raw_ctrl_o:query_preserved=true:persist_configured=true:persist_attempted=true:persist_success=false:inline_error=true:frame=true\ntui.resume_fork.picker_toolbar_focus=key=tab:filter->sort:frame=true\ntui.resume_fork.picker_toolbar_focus=key=backtab:sort->filter:frame=true\ntui.resume_fork.picker_toolbar_focus=key=tab:filter->sort:frame=true\ntui.resume_fork.picker_toolbar_activate=focus=sort:key=ctrl_l:sort=updated_at->created_at:filter=cwd->cwd:cwd=/workspace/codex:show_all=false:query_preserved=true:reset=true:frame=true\ntui.resume_fork.picker_toolbar_focus=key=backtab:sort->filter:frame=true\ntui.resume_fork.picker_toolbar_activate=focus=filter:key=right:sort=created_at->created_at:filter=cwd->all:cwd=/workspace/codex:show_all=true:query_preserved=true:reset=true:frame=true\ntui.resume_fork.picker_toolbar_render=mode=wide:focus=filter:sort=created_at:filter=all:cwd_present=true\ntui.resume_fork.picker_toolbar_render=mode=compact:focus=sort:sort=updated_at:filter=all:cwd_present=false\ntui.resume_fork.failure=live_resume_picker_density_toolbar_rejected:error=resume picker density toolbar persistence requires live ratatui and config writes:source=resume_picker:target=density-toolbar:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume picker density toolbar persistence\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_density_toggle=comfortable->dense:key=ctrl_o:query_preserved=true:persist_configured=true:persist_attempted=true:persist_success=true:inline_error=false:frame=true\ntui.resume_fork.picker_density_toggle=comfortable->dense:key=raw_ctrl_o:query_preserved=true:persist_configured=true:persist_attempted=true:persist_success=false:inline_error=true:frame=true\ntui.resume_fork.picker_toolbar_focus=key=tab:filter->sort:frame=true\ntui.resume_fork.picker_toolbar_focus=key=backtab:sort->filter:frame=true\ntui.resume_fork.picker_toolbar_focus=key=tab:filter->sort:frame=true\ntui.resume_fork.picker_toolbar_activate=focus=sort:key=ctrl_l:sort=updated_at->created_at:filter=cwd->cwd:cwd=/workspace/codex:show_all=false:query_preserved=true:reset=true:frame=true\ntui.resume_fork.picker_toolbar_focus=key=backtab:sort->filter:frame=true\ntui.resume_fork.picker_toolbar_activate=focus=filter:key=right:sort=created_at->created_at:filter=cwd->all:cwd=/workspace/codex:show_all=true:query_preserved=true:reset=true:frame=true\ntui.resume_fork.picker_toolbar_render=mode=wide:focus=filter:sort=created_at:filter=all:cwd_present=true\ntui.resume_fork.picker_toolbar_render=mode=compact:focus=sort:sort=updated_at:filter=all:cwd_present=false\ntui.resume_fork.failure=live_resume_picker_density_toolbar_rejected:error=resume picker density toolbar persistence requires live ratatui and config writes:source=resume_picker:target=density-toolbar:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "resume-fork-missing-target-refusal",
       "frame": {
         "name": "resume-fork-missing-target-refusal",

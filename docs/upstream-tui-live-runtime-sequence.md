@@ -3018,6 +3018,19 @@ Extend HXCX-TUI-98 from transcript overlay state into selected raw Codex resume 
 
 Status: HXCX-TUI-99 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker page/jump movement, scroll visibility, load-more trigger, query clear with selection preservation, empty-query start-fresh intent, transcript-loading key consumption, Ctrl-C exit, overlay close, metadata failure, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic keyboard/loading-state evidence only, not live crossterm input, pager key handling, live app-server fanout, state DB/rollout querying, ratatui rendering, or persistent session mutation.
 
+### HXCX-TUI-100: Resume Picker Density Toolbar Persistence Boundary
+
+Extend HXCX-TUI-99 from keyboard/loading behavior into selected raw Codex resume picker density, toolbar, and view-preference behavior, without live terminal ownership, app-server transport, state DB/rollout querying, model traffic, ratatui rendering, or real config mutation:
+
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `toggle_density`: Ctrl-O and raw Ctrl-O toggle between comfortable and dense modes without typing into search, call `ensure_selected_visible`, attempt view persistence when configured, keep the toggled density on persistence failure, surface the upstream inline error, and schedule a frame;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `persist_density`: persistence uses `ConfigEditsBuilder::set_session_picker_view` under the configured Codex home and maps write failures into the picker inline error path;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `focus_next_toolbar_control` and `focus_previous_toolbar_control`: Tab and BackTab cycle between Filter and Sort focus and request a frame;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `change_focused_toolbar_value`: left/right keymap activation delegates to Sort or Filter, where Sort toggles between `UpdatedAt` and `CreatedAt`, Filter toggles Cwd/All only when a cwd filter exists, and both value changes restart initial page loading while preserving provider/filter context;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` toolbar rendering: wide toolbar renders discrete active/inactive Cwd/All and Updated/Created options, compact toolbar renders the current value, focused active values are highlighted, and missing cwd collapses Filter to All;
+- keep no-live/no-render/no-filesystem behavior deterministic, with no real config writes, terminal backend mutation, app-server requests beyond typed reset intent, or Cafex behavior.
+
+Status: HXCX-TUI-100 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker density toggle success/failure, query preservation, config persistence intent, inline error surfacing, toolbar focus cycling, Sort/Filter activation, toolbar render mode, provider/cwd filter preservation, and no-live/no-render/no-filesystem evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic density/toolbar/persistence evidence only, not live crossterm input, real config writes, live app-server fanout, state DB/rollout querying, ratatui rendering, or persistent session mutation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
