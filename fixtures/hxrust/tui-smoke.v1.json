@@ -11869,6 +11869,200 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume picker app-server transcript preview\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_page_ingest=token=2:stale=false:scanned=2:accepted=2:invalid=0:loaded=2:filtered=2:next=:has_next=false:scan_cap=false:page_down=false\ntui.resume_fork.picker_preview_toggle=selected=1:thread=thread-preview-selected:expanded=thread-preview-selected:cache=missing->loading:inserted=true:toggled=true:frame=true\ntui.resume_fork.picker_preview_request=thread=thread-preview-selected:include_turns=true:thread_read=true:app_server=true:no_model=true:no_fs=true\ntui.resume_fork.picker_preview_render=thread=thread-preview-selected:expanded=thread-preview-selected:state=loading:selected=true:rendered=true:lines=1:no_render=true\ntui.resume_fork.picker_preview_complete=thread=thread-preview-selected:state=loaded:cache=loading->loaded:lines=3:user=1:assistant=2:selected=true:frame=true\ntui.resume_fork.picker_preview_render=thread=thread-preview-selected:expanded=thread-preview-selected:state=loaded:selected=true:rendered=true:lines=3:no_render=true\ntui.resume_fork.picker_preview_toggle=selected=1:thread=thread-preview-selected:expanded=:cache=loaded->loaded:inserted=false:toggled=true:frame=true\ntui.resume_fork.picker_preview_complete=thread=thread-preview-unselected:state=failed:cache=loading->failed:lines=0:user=0:assistant=0:selected=false:frame=true\ntui.resume_fork.picker_preview_render=thread=thread-preview-unselected:expanded=:state=failed:selected=false:rendered=false:lines=0:no_render=true\ntui.resume_fork.failure=live_resume_picker_transcript_preview_rejected:error=resume picker transcript preview requires live app-server and ratatui:source=resume_picker:target=thread-preview-selected:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "resume-picker-full-transcript-overlay-boundary",
+      "frame": {
+        "name": "resume-picker-full-transcript-overlay-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "resume picker full transcript overlay"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resume_fork",
+          "resumeFork": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "picker_open",
+                "action": "resume",
+                "source": "startup",
+                "context": "picker",
+                "showAll": false,
+                "includeNonInteractive": false,
+                "remoteWorkspace": false,
+                "altScreenEntered": true
+              },
+              {
+                "kind": "picker_page_ingest",
+                "requestToken": 3,
+                "scannedRows": 3,
+                "acceptedRows": 3,
+                "invalidRows": 0,
+                "loadedRows": 3,
+                "filteredRows": 3,
+                "nextCursor": "",
+                "nextCursorPresent": false,
+                "reachedScanCap": false,
+                "pendingPageDownCompleted": false
+              },
+              {
+                "kind": "picker_transcript_open",
+                "selectedIndex": 0,
+                "threadId": "thread-transcript-fresh",
+                "transcriptCacheBefore": "missing",
+                "transcriptCacheAfter": "loading",
+                "pendingThreadId": "thread-transcript-fresh",
+                "loadingFrameShown": false,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_transcript_request",
+                "threadId": "thread-transcript-fresh",
+                "includeTurns": true,
+                "threadReadRequested": true,
+                "appServerStarted": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true
+              },
+              {
+                "kind": "picker_transcript_complete",
+                "threadId": "thread-transcript-fresh",
+                "transcriptState": "loaded",
+                "transcriptCacheBefore": "loading",
+                "transcriptCacheAfter": "loaded",
+                "transcriptCellCount": 5,
+                "userLineCount": 1,
+                "assistantLineCount": 1,
+                "planCellCount": 1,
+                "reasoningCellCount": 1,
+                "fallbackCellCount": 1,
+                "pendingThreadId": "thread-transcript-fresh",
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_transcript_loading_frame",
+                "pendingThreadId": "thread-transcript-fresh",
+                "loadingFrameShown": true,
+                "overlayOpened": false,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_transcript_overlay_open",
+                "threadId": "thread-transcript-fresh",
+                "transcriptState": "loaded",
+                "loadingFrameShown": true,
+                "overlayOpened": true,
+                "pendingThreadId": "",
+                "transcriptCellCount": 5,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_transcript_open",
+                "selectedIndex": 1,
+                "threadId": "thread-transcript-cached",
+                "transcriptCacheBefore": "loaded",
+                "transcriptCacheAfter": "loaded",
+                "pendingThreadId": "thread-transcript-cached",
+                "loadingFrameShown": false,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_transcript_loading_frame",
+                "pendingThreadId": "thread-transcript-cached",
+                "loadingFrameShown": true,
+                "overlayOpened": false,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_transcript_overlay_open",
+                "threadId": "thread-transcript-cached",
+                "transcriptState": "loaded",
+                "loadingFrameShown": true,
+                "overlayOpened": true,
+                "pendingThreadId": "",
+                "transcriptCellCount": 1,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_transcript_open",
+                "selectedIndex": 2,
+                "threadId": "thread-transcript-failed",
+                "transcriptCacheBefore": "failed",
+                "transcriptCacheAfter": "loading",
+                "pendingThreadId": "thread-transcript-failed",
+                "loadingFrameShown": false,
+                "frameScheduled": true
+              },
+              {
+                "kind": "picker_transcript_request",
+                "threadId": "thread-transcript-failed",
+                "includeTurns": true,
+                "threadReadRequested": true,
+                "appServerStarted": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true
+              },
+              {
+                "kind": "picker_transcript_complete",
+                "threadId": "thread-transcript-failed",
+                "transcriptState": "failed",
+                "transcriptCacheBefore": "loading",
+                "transcriptCacheAfter": "failed",
+                "transcriptCellCount": 0,
+                "userLineCount": 0,
+                "assistantLineCount": 0,
+                "planCellCount": 0,
+                "reasoningCellCount": 0,
+                "fallbackCellCount": 0,
+                "pendingThreadId": "",
+                "frameScheduled": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_resume_picker_full_transcript_rejected",
+                "errorMessage": "resume picker full transcript overlay requires live app-server and ratatui",
+                "source": "resume_picker",
+                "idOrName": "thread-transcript-failed",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_page_ingest=token=3:stale=false:scanned=3:accepted=3:invalid=0:loaded=3:filtered=3:next=:has_next=false:scan_cap=false:page_down=false\ntui.resume_fork.picker_transcript_open=selected=0:thread=thread-transcript-fresh:cache=missing->loading:pending=thread-transcript-fresh:loading_frame=false:frame=true\ntui.resume_fork.picker_transcript_request=thread=thread-transcript-fresh:include_turns=true:thread_read=true:app_server=true:no_model=true:no_fs=true\ntui.resume_fork.picker_transcript_complete=thread=thread-transcript-fresh:state=loaded:cache=loading->loaded:cells=5:user=1:assistant=1:plan=1:reasoning=1:fallback=1:pending=thread-transcript-fresh:frame=true\ntui.resume_fork.picker_transcript_loading_frame=pending=thread-transcript-fresh:shown=true:overlay=false:frame=true\ntui.resume_fork.picker_transcript_overlay_open=thread=thread-transcript-fresh:state=loaded:loading_frame=true:overlay=true:pending=:cells=5:frame=true\ntui.resume_fork.picker_transcript_open=selected=1:thread=thread-transcript-cached:cache=loaded->loaded:pending=thread-transcript-cached:loading_frame=false:frame=true\ntui.resume_fork.picker_transcript_loading_frame=pending=thread-transcript-cached:shown=true:overlay=false:frame=true\ntui.resume_fork.picker_transcript_overlay_open=thread=thread-transcript-cached:state=loaded:loading_frame=true:overlay=true:pending=:cells=1:frame=true\ntui.resume_fork.picker_transcript_open=selected=2:thread=thread-transcript-failed:cache=failed->loading:pending=thread-transcript-failed:loading_frame=false:frame=true\ntui.resume_fork.picker_transcript_request=thread=thread-transcript-failed:include_turns=true:thread_read=true:app_server=true:no_model=true:no_fs=true\ntui.resume_fork.picker_transcript_complete=thread=thread-transcript-failed:state=failed:cache=loading->failed:cells=0:user=0:assistant=0:plan=0:reasoning=0:fallback=0:pending=:frame=true\ntui.resume_fork.failure=live_resume_picker_full_transcript_rejected:error=resume picker full transcript overlay requires live app-server and ratatui:source=resume_picker:target=thread-transcript-failed:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume picker full transcript overlay\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.picker_open=action=resume:source=startup:context=picker:show_all=false:include_non_interactive=false:remote=false:alt=true\ntui.resume_fork.picker_page_ingest=token=3:stale=false:scanned=3:accepted=3:invalid=0:loaded=3:filtered=3:next=:has_next=false:scan_cap=false:page_down=false\ntui.resume_fork.picker_transcript_open=selected=0:thread=thread-transcript-fresh:cache=missing->loading:pending=thread-transcript-fresh:loading_frame=false:frame=true\ntui.resume_fork.picker_transcript_request=thread=thread-transcript-fresh:include_turns=true:thread_read=true:app_server=true:no_model=true:no_fs=true\ntui.resume_fork.picker_transcript_complete=thread=thread-transcript-fresh:state=loaded:cache=loading->loaded:cells=5:user=1:assistant=1:plan=1:reasoning=1:fallback=1:pending=thread-transcript-fresh:frame=true\ntui.resume_fork.picker_transcript_loading_frame=pending=thread-transcript-fresh:shown=true:overlay=false:frame=true\ntui.resume_fork.picker_transcript_overlay_open=thread=thread-transcript-fresh:state=loaded:loading_frame=true:overlay=true:pending=:cells=5:frame=true\ntui.resume_fork.picker_transcript_open=selected=1:thread=thread-transcript-cached:cache=loaded->loaded:pending=thread-transcript-cached:loading_frame=false:frame=true\ntui.resume_fork.picker_transcript_loading_frame=pending=thread-transcript-cached:shown=true:overlay=false:frame=true\ntui.resume_fork.picker_transcript_overlay_open=thread=thread-transcript-cached:state=loaded:loading_frame=true:overlay=true:pending=:cells=1:frame=true\ntui.resume_fork.picker_transcript_open=selected=2:thread=thread-transcript-failed:cache=failed->loading:pending=thread-transcript-failed:loading_frame=false:frame=true\ntui.resume_fork.picker_transcript_request=thread=thread-transcript-failed:include_turns=true:thread_read=true:app_server=true:no_model=true:no_fs=true\ntui.resume_fork.picker_transcript_complete=thread=thread-transcript-failed:state=failed:cache=loading->failed:cells=0:user=0:assistant=0:plan=0:reasoning=0:fallback=0:pending=:frame=true\ntui.resume_fork.failure=live_resume_picker_full_transcript_rejected:error=resume picker full transcript overlay requires live app-server and ratatui:source=resume_picker:target=thread-transcript-failed:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "resume-fork-missing-target-refusal",
       "frame": {
         "name": "resume-fork-missing-target-refusal",

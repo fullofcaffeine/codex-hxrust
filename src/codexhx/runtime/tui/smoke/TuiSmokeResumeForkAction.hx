@@ -16,6 +16,10 @@ typedef TuiSmokeResumeForkActionFields = {
 	final previewState:String;
 	final previewCacheBefore:String;
 	final previewCacheAfter:String;
+	final transcriptState:String;
+	final transcriptCacheBefore:String;
+	final transcriptCacheAfter:String;
+	final pendingThreadId:String;
 	final query:String;
 	final cursor:String;
 	final nextCursor:String;
@@ -40,6 +44,10 @@ typedef TuiSmokeResumeForkActionFields = {
 	final previewLineCount:Int;
 	final userLineCount:Int;
 	final assistantLineCount:Int;
+	final transcriptCellCount:Int;
+	final planCellCount:Int;
+	final reasoningCellCount:Int;
+	final fallbackCellCount:Int;
 	final altScreenEntered:Bool;
 	final altScreenExited:Bool;
 	final pickerStarted:Bool;
@@ -52,6 +60,8 @@ typedef TuiSmokeResumeForkActionFields = {
 	final cacheInserted:Bool;
 	final includeTurns:Bool;
 	final previewRendered:Bool;
+	final loadingFrameShown:Bool;
+	final overlayOpened:Bool;
 	final showAll:Bool;
 	final includeNonInteractive:Bool;
 	final selected:Bool;
@@ -110,6 +120,10 @@ class TuiSmokeResumeForkAction {
 	public final previewState:String;
 	public final previewCacheBefore:String;
 	public final previewCacheAfter:String;
+	public final transcriptState:String;
+	public final transcriptCacheBefore:String;
+	public final transcriptCacheAfter:String;
+	public final pendingThreadId:String;
 	public final query:String;
 	public final cursor:String;
 	public final nextCursor:String;
@@ -134,6 +148,10 @@ class TuiSmokeResumeForkAction {
 	public final previewLineCount:Int;
 	public final userLineCount:Int;
 	public final assistantLineCount:Int;
+	public final transcriptCellCount:Int;
+	public final planCellCount:Int;
+	public final reasoningCellCount:Int;
+	public final fallbackCellCount:Int;
 	public final altScreenEntered:Bool;
 	public final altScreenExited:Bool;
 	public final pickerStarted:Bool;
@@ -146,6 +164,8 @@ class TuiSmokeResumeForkAction {
 	public final cacheInserted:Bool;
 	public final includeTurns:Bool;
 	public final previewRendered:Bool;
+	public final loadingFrameShown:Bool;
+	public final overlayOpened:Bool;
 	public final showAll:Bool;
 	public final includeNonInteractive:Bool;
 	public final selected:Bool;

@@ -2761,6 +2761,60 @@ class TuiSmokeEventLoop {
 						+ ":lines=" + action.previewLineCount
 						+ ":no_render=" + action.noRatatuiRender
 					);
+				case TuiSmokeResumeForkActionKind.PickerTranscriptOpen:
+					trace.push(
+						"tui.resume_fork.picker_transcript_open="
+						+ "selected=" + action.selectedIndex
+						+ ":thread=" + action.threadId
+						+ ":cache=" + action.transcriptCacheBefore + "->" + action.transcriptCacheAfter
+						+ ":pending=" + action.pendingThreadId
+						+ ":loading_frame=" + action.loadingFrameShown
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerTranscriptRequest:
+					trace.push(
+						"tui.resume_fork.picker_transcript_request="
+						+ "thread=" + action.threadId
+						+ ":include_turns=" + action.includeTurns
+						+ ":thread_read=" + action.threadReadRequested
+						+ ":app_server=" + action.appServerStarted
+						+ ":no_model=" + action.noModelCall
+						+ ":no_fs=" + action.noFilesystemMutation
+					);
+				case TuiSmokeResumeForkActionKind.PickerTranscriptLoadingFrame:
+					trace.push(
+						"tui.resume_fork.picker_transcript_loading_frame="
+						+ "pending=" + action.pendingThreadId
+						+ ":shown=" + action.loadingFrameShown
+						+ ":overlay=" + action.overlayOpened
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerTranscriptComplete:
+					trace.push(
+						"tui.resume_fork.picker_transcript_complete="
+						+ "thread=" + action.threadId
+						+ ":state=" + action.transcriptState
+						+ ":cache=" + action.transcriptCacheBefore + "->" + action.transcriptCacheAfter
+						+ ":cells=" + action.transcriptCellCount
+						+ ":user=" + action.userLineCount
+						+ ":assistant=" + action.assistantLineCount
+						+ ":plan=" + action.planCellCount
+						+ ":reasoning=" + action.reasoningCellCount
+						+ ":fallback=" + action.fallbackCellCount
+						+ ":pending=" + action.pendingThreadId
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerTranscriptOverlayOpen:
+					trace.push(
+						"tui.resume_fork.picker_transcript_overlay_open="
+						+ "thread=" + action.threadId
+						+ ":state=" + action.transcriptState
+						+ ":loading_frame=" + action.loadingFrameShown
+						+ ":overlay=" + action.overlayOpened
+						+ ":pending=" + action.pendingThreadId
+						+ ":cells=" + action.transcriptCellCount
+						+ ":frame=" + action.frameScheduled
+					);
 				case TuiSmokeResumeForkActionKind.PickerSelection:
 					trace.push(
 						"tui.resume_fork.picker_selection="

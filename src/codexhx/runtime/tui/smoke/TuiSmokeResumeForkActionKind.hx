@@ -11,6 +11,11 @@ enum abstract TuiSmokeResumeForkActionKind(String) to String {
 	final PickerPreviewRequest = "picker_preview_request";
 	final PickerPreviewComplete = "picker_preview_complete";
 	final PickerPreviewRender = "picker_preview_render";
+	final PickerTranscriptOpen = "picker_transcript_open";
+	final PickerTranscriptRequest = "picker_transcript_request";
+	final PickerTranscriptLoadingFrame = "picker_transcript_loading_frame";
+	final PickerTranscriptComplete = "picker_transcript_complete";
+	final PickerTranscriptOverlayOpen = "picker_transcript_overlay_open";
 	final PickerSelection = "picker_selection";
 	final Lookup = "lookup";
 	final StartupGate = "startup_gate";
@@ -34,6 +39,11 @@ enum abstract TuiSmokeResumeForkActionKind(String) to String {
 			case "picker_preview_request": PickerPreviewRequest;
 			case "picker_preview_complete": PickerPreviewComplete;
 			case "picker_preview_render": PickerPreviewRender;
+			case "picker_transcript_open": PickerTranscriptOpen;
+			case "picker_transcript_request": PickerTranscriptRequest;
+			case "picker_transcript_loading_frame": PickerTranscriptLoadingFrame;
+			case "picker_transcript_complete": PickerTranscriptComplete;
+			case "picker_transcript_overlay_open": PickerTranscriptOverlayOpen;
 			case "picker_selection": PickerSelection;
 			case "lookup": Lookup;
 			case "startup_gate": StartupGate;

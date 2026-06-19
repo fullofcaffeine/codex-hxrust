@@ -2991,6 +2991,19 @@ Extend HXCX-TUI-96 from page loading into selected raw Codex resume picker trans
 
 Status: HXCX-TUI-97 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker preview toggle, cache miss/loading insertion, `thread/read includeTurns=true` request intent, loaded/failed preview completion, selected-row render gating, unselected cache non-rendering, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic transcript preview evidence only, not full transcript overlay loading, live app-server fanout, state DB/rollout querying, ratatui rendering, or persistent session mutation.
 
+### HXCX-TUI-98: Resume Picker Full Transcript Overlay Boundary
+
+Extend HXCX-TUI-97 from inline preview into selected raw Codex resume picker full transcript overlay behavior, without live app-server transport, state DB/rollout querying, filesystem mutation, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `PickerLoadRequest::Transcript`: the picker loader routes full transcript requests by selected `ThreadId` separately from page and inline preview requests;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `open_selected_transcript`: Ctrl+T/Ctrl+Enter opens only the selected row with a valid thread id, inserts `SessionTranscriptState::Loading` on missing or failed cache entries, begins a pending transcript open, schedules a frame, and sends a transcript loader request only when a fresh load is required;
+- preserve `../codex/codex-rs/tui/src/thread_transcript.rs` `load_session_transcript`: full transcript loading calls `thread_read(thread_id, include_turns=true)` and projects user, assistant markdown, plan, reasoning, and fallback transcript cells, including the empty-transcript fallback cell when no content survives projection;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `note_transcript_loading_frame_drawn` and `open_pending_transcript_if_ready`: even cached or immediately loaded transcript cells wait for one loading frame before opening `Overlay::new_transcript`, then clear pending state and schedule another frame;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `BackgroundEvent::Transcript`: successful completion stores loaded cells and opens only if the pending thread matches and the loading frame has been drawn; failed completion stores `Failed`, clears matching pending state, surfaces the upstream inline error, and schedules a frame;
+- keep no-live/no-render behavior deterministic, with no live JSON-RPC transport, pager interaction, state DB reads, filesystem mutation, or Cafex behavior.
+
+Status: HXCX-TUI-98 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker full transcript open, app-server `thread/read includeTurns=true` request intent, transcript-cell projection counts, pending-open lifecycle, loading-frame gate, cached transcript open behavior, successful overlay opening, failed completion/error evidence, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic full transcript overlay evidence only, not live app-server fanout, pager key handling, state DB/rollout querying, ratatui rendering, or persistent session mutation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
