@@ -120,6 +120,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
 				chatWidgetTranscriptOverlay: optionalTranscriptOverlayPlan(value, "chatWidgetTranscriptOverlay"),
 				chatWidgetBacktrackOverlay: optionalBacktrackOverlayPlan(value, "chatWidgetBacktrackOverlay"),
+				chatWidgetKeymapRawOutput: optionalKeymapRawOutputPlan(value, "chatWidgetKeymapRawOutput"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -473,6 +474,65 @@ class TuiSmokeFixtureLoader {
 				infoInserted: optionalBoolField(value, "infoInserted", false),
 				sideConversationRejected: optionalBoolField(value, "sideConversationRejected", false),
 				vimInsertAllowed: optionalBoolField(value, "vimInsertAllowed", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalKeymapRawOutputPlan(object:Value, name:String):Null<TuiSmokeKeymapRawOutputPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeKeymapRawOutputPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: keymapRawOutputActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function keymapRawOutputActions(values:Array<Value>):Array<TuiSmokeKeymapRawOutputAction> {
+		final out:Array<TuiSmokeKeymapRawOutputAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeKeymapRawOutputAction({
+				kind: TuiSmokeKeymapRawOutputActionKind.fromString(stringField(value, "kind", "")),
+				source: optionalStringField(value, "source", ""),
+				surface: optionalStringField(value, "surface", ""),
+				actionName: optionalStringField(value, "actionName", ""),
+				binding: optionalStringField(value, "binding", ""),
+				previousBinding: optionalStringField(value, "previousBinding", ""),
+				conflictAction: optionalStringField(value, "conflictAction", ""),
+				conflictWith: optionalStringField(value, "conflictWith", ""),
+				errorPath: optionalStringField(value, "errorPath", ""),
+				fallback: optionalStringField(value, "fallback", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				beforeCount: optionalIntField(value, "beforeCount", 0),
+				afterCount: optionalIntField(value, "afterCount", 0),
+				aliasCount: optionalIntField(value, "aliasCount", 0),
+				modifiedDeleteCount: optionalIntField(value, "modifiedDeleteCount", 0),
+				rawOutputBefore: optionalBoolField(value, "rawOutputBefore", false),
+				rawOutputAfter: optionalBoolField(value, "rawOutputAfter", false),
+				matched: optionalBoolField(value, "matched", false),
+				remapped: optionalBoolField(value, "remapped", false),
+				defaultPruned: optionalBoolField(value, "defaultPruned", false),
+				unbound: optionalBoolField(value, "unbound", false),
+				fallbackSuppressed: optionalBoolField(value, "fallbackSuppressed", false),
+				preserved: optionalBoolField(value, "preserved", false),
+				assigned: optionalBoolField(value, "assigned", false),
+				conflict: optionalBoolField(value, "conflict", false),
+				rejected: optionalBoolField(value, "rejected", false),
+				legacyPruned: optionalBoolField(value, "legacyPruned", false),
+				stringOrArrayAccepted: optionalBoolField(value, "stringOrArrayAccepted", false),
+				deduped: optionalBoolField(value, "deduped", false),
+				rawOutputToggled: optionalBoolField(value, "rawOutputToggled", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),

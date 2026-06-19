@@ -346,6 +346,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetKeymapRawOutput:
+					if (!traceKeymapRawOutput(event.chatWidgetKeymapRawOutput, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4825,6 +4830,125 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_backtrack_overlay.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceKeymapRawOutput(plan:TuiSmokeKeymapRawOutputPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_keymap_raw_output.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_keymap_raw_output.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeKeymapRawOutputActionKind.RawOutputDefault:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.raw_default="
+						+ "action=" + action.actionName
+						+ ":binding=" + action.binding
+						+ ":matched=" + action.matched
+						+ ":surface=" + action.surface
+					);
+				case TuiSmokeKeymapRawOutputActionKind.RawOutputRemap:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.raw_remap="
+						+ "action=" + action.actionName
+						+ ":binding=" + action.binding
+						+ ":previous=" + action.previousBinding
+						+ ":remapped=" + action.remapped
+						+ ":default_pruned=" + action.defaultPruned
+					);
+				case TuiSmokeKeymapRawOutputActionKind.ToggleRawOutput:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.toggle="
+						+ "binding=" + action.binding
+						+ ":raw=" + action.rawOutputBefore + "->" + action.rawOutputAfter
+						+ ":toggled=" + action.rawOutputToggled
+						+ ":frame=" + action.frameScheduled
+						+ ":live_terminal=" + !action.noLiveTerminal
+					);
+				case TuiSmokeKeymapRawOutputActionKind.ExplicitUnbind:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.unbind="
+						+ "action=" + action.actionName
+						+ ":bindings=" + action.afterCount
+						+ ":unbound=" + action.unbound
+						+ ":fallback_suppressed=" + action.fallbackSuppressed
+					);
+				case TuiSmokeKeymapRawOutputActionKind.EditorAliases:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.editor_aliases="
+						+ "newline=" + action.aliasCount
+						+ ":delete_word=" + action.binding
+						+ ":modified_delete=" + action.modifiedDeleteCount
+						+ ":preserved=" + action.preserved
+					);
+				case TuiSmokeKeymapRawOutputActionKind.MainSurfaceAssignment:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.main_assign="
+						+ "action=" + action.actionName
+						+ ":binding=" + action.binding
+						+ ":surface=" + action.surface
+						+ ":assigned=" + action.assigned
+						+ ":conflict=" + action.conflict
+					);
+				case TuiSmokeKeymapRawOutputActionKind.MainSurfaceConflict:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.main_conflict="
+						+ "action=" + action.actionName
+						+ ":binding=" + action.binding
+						+ ":conflict=" + action.conflictWith
+						+ ":rejected=" + action.rejected
+					);
+				case TuiSmokeKeymapRawOutputActionKind.FixedShortcutConflict:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.fixed_conflict="
+						+ "action=" + action.actionName
+						+ ":binding=" + action.binding
+						+ ":conflict=" + action.conflictWith
+						+ ":rejected=" + action.rejected
+					);
+				case TuiSmokeKeymapRawOutputActionKind.FixedShortcutUnbindRemap:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.fixed_unbind_remap="
+						+ "action=" + action.actionName
+						+ ":binding=" + action.binding
+						+ ":conflict=" + action.conflictWith
+						+ ":unbound=" + action.unbound
+						+ ":assigned=" + action.assigned
+					);
+				case TuiSmokeKeymapRawOutputActionKind.DefaultPruning:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.default_pruning="
+						+ "surface=" + action.surface
+						+ ":defaults=" + action.beforeCount + "->" + action.afterCount
+						+ ":legacy_pruned=" + action.legacyPruned
+						+ ":conflict=" + action.conflict
+					);
+				case TuiSmokeKeymapRawOutputActionKind.BindingInput:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.binding_input="
+						+ "path=" + action.errorPath
+						+ ":string_or_array=" + action.stringOrArrayAccepted
+						+ ":deduped=" + action.beforeCount + "->" + action.afterCount
+						+ ":fallback=" + action.fallback
+						+ ":invalid_path=" + action.conflictAction
+					);
+				case TuiSmokeKeymapRawOutputActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_keymap_raw_output.failure="
+						+ action.failureCode
+						+ ":no_terminal=" + action.noLiveTerminal
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_keymap_raw_output.unknown");
 					return false;
 			}
 		}

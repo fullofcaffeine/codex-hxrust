@@ -1,0 +1,80 @@
+package codexhx.runtime.tui.smoke;
+
+typedef TuiSmokeKeymapRawOutputActionFields = {
+	final kind:TuiSmokeKeymapRawOutputActionKind;
+	final source:String;
+	final surface:String;
+	final actionName:String;
+	final binding:String;
+	final previousBinding:String;
+	final conflictAction:String;
+	final conflictWith:String;
+	final errorPath:String;
+	final fallback:String;
+	final failureCode:String;
+	final beforeCount:Int;
+	final afterCount:Int;
+	final aliasCount:Int;
+	final modifiedDeleteCount:Int;
+	final rawOutputBefore:Bool;
+	final rawOutputAfter:Bool;
+	final matched:Bool;
+	final remapped:Bool;
+	final defaultPruned:Bool;
+	final unbound:Bool;
+	final fallbackSuppressed:Bool;
+	final preserved:Bool;
+	final assigned:Bool;
+	final conflict:Bool;
+	final rejected:Bool;
+	final legacyPruned:Bool;
+	final stringOrArrayAccepted:Bool;
+	final deduped:Bool;
+	final rawOutputToggled:Bool;
+	final frameScheduled:Bool;
+	final noLiveTerminal:Bool;
+	final noRatatuiRender:Bool;
+	final noModelCall:Bool;
+	final noAppServerMutation:Bool;
+	final unsupportedRejected:Bool;
+}
+
+@:build(codexhx.macros.FieldRecordConstructor.build())
+class TuiSmokeKeymapRawOutputAction {
+	public final kind:TuiSmokeKeymapRawOutputActionKind;
+	public final source:String;
+	public final surface:String;
+	public final actionName:String;
+	public final binding:String;
+	public final previousBinding:String;
+	public final conflictAction:String;
+	public final conflictWith:String;
+	public final errorPath:String;
+	public final fallback:String;
+	public final failureCode:String;
+	public final beforeCount:Int;
+	public final afterCount:Int;
+	public final aliasCount:Int;
+	public final modifiedDeleteCount:Int;
+	public final rawOutputBefore:Bool;
+	public final rawOutputAfter:Bool;
+	public final matched:Bool;
+	public final remapped:Bool;
+	public final defaultPruned:Bool;
+	public final unbound:Bool;
+	public final fallbackSuppressed:Bool;
+	public final preserved:Bool;
+	public final assigned:Bool;
+	public final conflict:Bool;
+	public final rejected:Bool;
+	public final legacyPruned:Bool;
+	public final stringOrArrayAccepted:Bool;
+	public final deduped:Bool;
+	public final rawOutputToggled:Bool;
+	public final frameScheduled:Bool;
+	public final noLiveTerminal:Bool;
+	public final noRatatuiRender:Bool;
+	public final noModelCall:Bool;
+	public final noAppServerMutation:Bool;
+	public final unsupportedRejected:Bool;
+}

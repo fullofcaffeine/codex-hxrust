@@ -2794,6 +2794,18 @@ Model selected raw Codex backtrack behavior without live alternate-screen owners
 
 Status: HXCX-TUI-81 extends `fixtures/hxrust/tui-smoke.v1.json` with typed backtrack prime/open/select/step/confirm/rollback, trim/sync, unavailable guard, reset, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic backtrack overlay state evidence only, not the full ratatui renderer, real alternate-screen lifecycle, live app overlay event loop, command runner, tool runtime, or app-server transport.
 
+### HXCX-TUI-82: ChatWidget Raw-Output And Runtime Keymap Boundary
+
+Model selected raw Codex keymap/runtime behavior without live keyboard input, live terminal mutation, ratatui rendering, app-server mutation, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/keymap.rs` raw-output contracts: `global.toggle_raw_output` defaults to Alt-r, can be remapped to F12, and toggles ChatWidget raw-output state while scheduling redraw without requiring live terminal writes in this deterministic gate;
+- preserve explicit unbind and alias behavior: empty arrays remove bindings rather than falling back to defaults, editor newline aliases stay grouped, Alt-d remains delete-forward-word, and modified Backspace/Delete aliases remain part of the editor surface;
+- preserve main-surface assignment/conflict behavior: reassignable app actions such as `toggle_fast_mode` can take free bindings, but fail closed when colliding with existing main-surface bindings such as `clear_terminal`;
+- preserve fixed-shortcut guard behavior: composer submit cannot claim fixed paste-image Ctrl-v, while fixed shortcut collisions can be made legal only after the original fixed action is explicitly unbound;
+- preserve default pruning and binding-input behavior: legacy bindings prune selected defaults, string-or-array binding input deduplicates in first-seen order, fallback routes global queue behavior into composer scope, and invalid keymap paths remain explicit.
+
+Status: HXCX-TUI-82 extends `fixtures/hxrust/tui-smoke.v1.json` with typed raw-output default/remap/toggle, explicit unbind, editor aliases, main-surface assignment/conflict, fixed-shortcut conflict/unbind-remap, default pruning, binding input, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic runtime keymap evidence only, not the full keyboard event loop, real terminal raw-output rendering, config-file loading, ratatui renderer, app-server transport, or model traffic.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

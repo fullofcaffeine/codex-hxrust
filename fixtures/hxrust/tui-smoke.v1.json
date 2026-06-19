@@ -17052,6 +17052,147 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_backtrack_overlay.plan=headless\ntui.chat_widget_backtrack_overlay.prime=thread=thread-main:users=3:composer_empty=true:target=true:primed=true:base=true:hint=true\ntui.chat_widget_backtrack_overlay.open_preview=users=3:alt=true:opened=true:preview=true:hint_cleared=true:frame=true\ntui.chat_widget_backtrack_overlay.selection=latest:nth=2:cell=5:thread_match=true:highlight=true:prefill=third prompt:text=1:local=1:remote=1\ntui.chat_widget_backtrack_overlay.step=older:from=2:to=1:cell=3:clamped=false:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.step=older:from=0:to=0:cell=1:clamped=true:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.step=newer:from=1:to=2:cell=5:clamped=false:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.confirm=nth=1:closed=true:confirmed=true:thread_match=true:frame=true\ntui.chat_widget_backtrack_overlay.rollback_request=nth=1:users=3:num_turns=2:pending=true:submitted=true:prefill=true:remote=true\ntui.chat_widget_backtrack_overlay.rollback_success=nth=1:from=6:to=3:copy_users=1:overlay_replaced=true:deferred_cleared=true:render_pending=true\ntui.chat_widget_backtrack_overlay.non_pending=num_turns=1:from=6:to=4:copy_users=2:overlay_replaced=true:render_pending=true\ntui.chat_widget_backtrack_overlay.rollback_failure=pending_cleared=true\ntui.chat_widget_backtrack_overlay.unavailable=main:users=0:target=false:reset=true:info=true:side_rejected=false:vim_insert_allowed=false:frame=true\ntui.chat_widget_backtrack_overlay.unavailable=side:users=1:target=false:reset=true:info=true:side_rejected=true:vim_insert_allowed=false:frame=true\ntui.chat_widget_backtrack_overlay.unavailable=vim_insert:users=2:target=true:reset=false:info=false:side_rejected=false:vim_insert_allowed=true:frame=false\ntui.chat_widget_backtrack_overlay.reset=clear_ui:primed=false:preview=false:pending=false:render_pending=false\ntui.chat_widget_backtrack_overlay.failure=live_backtrack_overlay_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget backtrack overlay\ninput> \ntrace:\ntui.chat_widget_backtrack_overlay.plan=headless\ntui.chat_widget_backtrack_overlay.prime=thread=thread-main:users=3:composer_empty=true:target=true:primed=true:base=true:hint=true\ntui.chat_widget_backtrack_overlay.open_preview=users=3:alt=true:opened=true:preview=true:hint_cleared=true:frame=true\ntui.chat_widget_backtrack_overlay.selection=latest:nth=2:cell=5:thread_match=true:highlight=true:prefill=third prompt:text=1:local=1:remote=1\ntui.chat_widget_backtrack_overlay.step=older:from=2:to=1:cell=3:clamped=false:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.step=older:from=0:to=0:cell=1:clamped=true:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.step=newer:from=1:to=2:cell=5:clamped=false:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.confirm=nth=1:closed=true:confirmed=true:thread_match=true:frame=true\ntui.chat_widget_backtrack_overlay.rollback_request=nth=1:users=3:num_turns=2:pending=true:submitted=true:prefill=true:remote=true\ntui.chat_widget_backtrack_overlay.rollback_success=nth=1:from=6:to=3:copy_users=1:overlay_replaced=true:deferred_cleared=true:render_pending=true\ntui.chat_widget_backtrack_overlay.non_pending=num_turns=1:from=6:to=4:copy_users=2:overlay_replaced=true:render_pending=true\ntui.chat_widget_backtrack_overlay.rollback_failure=pending_cleared=true\ntui.chat_widget_backtrack_overlay.unavailable=main:users=0:target=false:reset=true:info=true:side_rejected=false:vim_insert_allowed=false:frame=true\ntui.chat_widget_backtrack_overlay.unavailable=side:users=1:target=false:reset=true:info=true:side_rejected=true:vim_insert_allowed=false:frame=true\ntui.chat_widget_backtrack_overlay.unavailable=vim_insert:users=2:target=true:reset=false:info=false:side_rejected=false:vim_insert_allowed=true:frame=false\ntui.chat_widget_backtrack_overlay.reset=clear_ui:primed=false:preview=false:pending=false:render_pending=false\ntui.chat_widget_backtrack_overlay.failure=live_backtrack_overlay_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-keymap-raw-output-headless",
+      "frame": {
+        "name": "chatwidget-keymap-raw-output-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget keymap raw output"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_keymap_raw_output",
+          "chatWidgetKeymapRawOutput": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "raw_output_default",
+                "surface": "app",
+                "actionName": "global.toggle_raw_output",
+                "binding": "alt-r",
+                "matched": true
+              },
+              {
+                "kind": "raw_output_remap",
+                "actionName": "global.toggle_raw_output",
+                "binding": "f12",
+                "previousBinding": "alt-r",
+                "remapped": true,
+                "defaultPruned": true
+              },
+              {
+                "kind": "toggle_raw_output",
+                "binding": "f12",
+                "rawOutputBefore": false,
+                "rawOutputAfter": true,
+                "rawOutputToggled": true,
+                "frameScheduled": true,
+                "noLiveTerminal": true
+              },
+              {
+                "kind": "explicit_unbind",
+                "actionName": "composer.toggle_shortcuts",
+                "afterCount": 0,
+                "unbound": true,
+                "fallbackSuppressed": true
+              },
+              {
+                "kind": "editor_aliases",
+                "binding": "alt-d",
+                "aliasCount": 5,
+                "modifiedDeleteCount": 4,
+                "preserved": true
+              },
+              {
+                "kind": "main_surface_assignment",
+                "surface": "app",
+                "actionName": "global.toggle_fast_mode",
+                "binding": "ctrl-shift-f",
+                "assigned": true,
+                "conflict": false
+              },
+              {
+                "kind": "main_surface_conflict",
+                "actionName": "global.toggle_fast_mode",
+                "binding": "ctrl-l",
+                "conflictWith": "clear_terminal",
+                "rejected": true
+              },
+              {
+                "kind": "fixed_shortcut_conflict",
+                "actionName": "composer.submit",
+                "binding": "ctrl-v",
+                "conflictWith": "fixed.paste_image",
+                "rejected": true
+              },
+              {
+                "kind": "fixed_shortcut_unbind_remap",
+                "actionName": "global.copy",
+                "binding": "alt-.",
+                "conflictWith": "chat.increase_reasoning_effort",
+                "unbound": true,
+                "assigned": true
+              },
+              {
+                "kind": "default_pruning",
+                "surface": "list",
+                "beforeCount": 6,
+                "afterCount": 4,
+                "legacyPruned": true,
+                "conflict": false
+              },
+              {
+                "kind": "binding_input",
+                "errorPath": "tui.keymap.composer.submit",
+                "stringOrArrayAccepted": true,
+                "beforeCount": 2,
+                "afterCount": 1,
+                "fallback": "global_to_composer",
+                "conflictAction": "tui.keymap.global.open_transcript"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_keymap_raw_output_effects_rejected",
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_keymap_raw_output.plan=headless\ntui.chat_widget_keymap_raw_output.raw_default=action=global.toggle_raw_output:binding=alt-r:matched=true:surface=app\ntui.chat_widget_keymap_raw_output.raw_remap=action=global.toggle_raw_output:binding=f12:previous=alt-r:remapped=true:default_pruned=true\ntui.chat_widget_keymap_raw_output.toggle=binding=f12:raw=false->true:toggled=true:frame=true:live_terminal=false\ntui.chat_widget_keymap_raw_output.unbind=action=composer.toggle_shortcuts:bindings=0:unbound=true:fallback_suppressed=true\ntui.chat_widget_keymap_raw_output.editor_aliases=newline=5:delete_word=alt-d:modified_delete=4:preserved=true\ntui.chat_widget_keymap_raw_output.main_assign=action=global.toggle_fast_mode:binding=ctrl-shift-f:surface=app:assigned=true:conflict=false\ntui.chat_widget_keymap_raw_output.main_conflict=action=global.toggle_fast_mode:binding=ctrl-l:conflict=clear_terminal:rejected=true\ntui.chat_widget_keymap_raw_output.fixed_conflict=action=composer.submit:binding=ctrl-v:conflict=fixed.paste_image:rejected=true\ntui.chat_widget_keymap_raw_output.fixed_unbind_remap=action=global.copy:binding=alt-.:conflict=chat.increase_reasoning_effort:unbound=true:assigned=true\ntui.chat_widget_keymap_raw_output.default_pruning=surface=list:defaults=6->4:legacy_pruned=true:conflict=false\ntui.chat_widget_keymap_raw_output.binding_input=path=tui.keymap.composer.submit:string_or_array=true:deduped=2->1:fallback=global_to_composer:invalid_path=tui.keymap.global.open_transcript\ntui.chat_widget_keymap_raw_output.failure=live_keymap_raw_output_effects_rejected:no_terminal=true:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget keymap raw output\ninput> \ntrace:\ntui.chat_widget_keymap_raw_output.plan=headless\ntui.chat_widget_keymap_raw_output.raw_default=action=global.toggle_raw_output:binding=alt-r:matched=true:surface=app\ntui.chat_widget_keymap_raw_output.raw_remap=action=global.toggle_raw_output:binding=f12:previous=alt-r:remapped=true:default_pruned=true\ntui.chat_widget_keymap_raw_output.toggle=binding=f12:raw=false->true:toggled=true:frame=true:live_terminal=false\ntui.chat_widget_keymap_raw_output.unbind=action=composer.toggle_shortcuts:bindings=0:unbound=true:fallback_suppressed=true\ntui.chat_widget_keymap_raw_output.editor_aliases=newline=5:delete_word=alt-d:modified_delete=4:preserved=true\ntui.chat_widget_keymap_raw_output.main_assign=action=global.toggle_fast_mode:binding=ctrl-shift-f:surface=app:assigned=true:conflict=false\ntui.chat_widget_keymap_raw_output.main_conflict=action=global.toggle_fast_mode:binding=ctrl-l:conflict=clear_terminal:rejected=true\ntui.chat_widget_keymap_raw_output.fixed_conflict=action=composer.submit:binding=ctrl-v:conflict=fixed.paste_image:rejected=true\ntui.chat_widget_keymap_raw_output.fixed_unbind_remap=action=global.copy:binding=alt-.:conflict=chat.increase_reasoning_effort:unbound=true:assigned=true\ntui.chat_widget_keymap_raw_output.default_pruning=surface=list:defaults=6->4:legacy_pruned=true:conflict=false\ntui.chat_widget_keymap_raw_output.binding_input=path=tui.keymap.composer.submit:string_or_array=true:deduped=2->1:fallback=global_to_composer:invalid_path=tui.keymap.global.open_transcript\ntui.chat_widget_keymap_raw_output.failure=live_keymap_raw_output_effects_rejected:no_terminal=true:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
