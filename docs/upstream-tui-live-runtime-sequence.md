@@ -2782,6 +2782,18 @@ Model selected raw Codex transcript overlay behavior without live alternate-scre
 
 Status: HXCX-TUI-80 extends `fixtures/hxrust/tui-smoke.v1.json` with typed transcript-overlay open, live-tail key/sync/drop, insert, replace, consolidate, highlight, paging, raw/rich mode, close, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic transcript overlay/cache evidence only, not the full ratatui renderer, real alternate-screen lifecycle, live app overlay event loop, command runner, tool runtime, or app-server transport.
 
+### HXCX-TUI-81: ChatWidget Backtrack Overlay Boundary
+
+Model selected raw Codex backtrack behavior without live alternate-screen ownership, ratatui rendering, app-server mutation, command execution, or model traffic:
+
+- preserve `../codex/codex-rs/tui/src/app_backtrack.rs` state-machine contracts: the first eligible `Esc` primes backtrack with the current thread id, a subsequent `Esc` opens transcript preview, empty composers are required, and unavailable targets reset state while inserting the upstream info surface;
+- preserve overlay preview navigation: transcript-overlay backtrack mode highlights the latest user message first, older/newer navigation clamps at the available user-message range, highlighted cell indexes are derived from post-session user cells, and selection preserves text elements plus local and remote images;
+- preserve rollback intent and completion: confirming the overlay captures the selected user turn, closes the overlay, submits `thread_rollback(num_turns)`, stores pending rollback state, restores composer prefill and remote-image context, and ignores mismatched-thread completions;
+- preserve transcript/copy-history cleanup: pending and non-pending rollback completions trim committed transcript cells, truncate copy history to the remaining user count, replace open overlay committed cells, clear deferred history rows, and mark render pending;
+- preserve input guards from `app/input.rs` and upstream tests: side-conversation backtrack is rejected with an info message, Vim insert-mode `Esc` remains an editor escape instead of a backtrack trigger, clear-UI resets backtrack state, and the deterministic fixture never performs live render/model/app-server work.
+
+Status: HXCX-TUI-81 extends `fixtures/hxrust/tui-smoke.v1.json` with typed backtrack prime/open/select/step/confirm/rollback, trim/sync, unavailable guard, reset, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic backtrack overlay state evidence only, not the full ratatui renderer, real alternate-screen lifecycle, live app overlay event loop, command runner, tool runtime, or app-server transport.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

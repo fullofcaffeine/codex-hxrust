@@ -119,6 +119,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
 				chatWidgetTranscriptOverlay: optionalTranscriptOverlayPlan(value, "chatWidgetTranscriptOverlay"),
+				chatWidgetBacktrackOverlay: optionalBacktrackOverlayPlan(value, "chatWidgetBacktrackOverlay"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -393,6 +394,85 @@ class TuiSmokeFixtureLoader {
 				highlightCleared: optionalBoolField(value, "highlightCleared", false),
 				continuousPaging: optionalBoolField(value, "continuousPaging", false),
 				roundTripped: optionalBoolField(value, "roundTripped", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalBacktrackOverlayPlan(object:Value, name:String):Null<TuiSmokeBacktrackOverlayPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeBacktrackOverlayPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: backtrackOverlayActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function backtrackOverlayActions(values:Array<Value>):Array<TuiSmokeBacktrackOverlayAction> {
+		final out:Array<TuiSmokeBacktrackOverlayAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeBacktrackOverlayAction({
+				kind: TuiSmokeBacktrackOverlayActionKind.fromString(stringField(value, "kind", "")),
+				source: optionalStringField(value, "source", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				baseThreadId: optionalStringField(value, "baseThreadId", ""),
+				message: optionalStringField(value, "message", ""),
+				prefill: optionalStringField(value, "prefill", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				direction: optionalStringField(value, "direction", ""),
+				userCount: optionalIntField(value, "userCount", 0),
+				nthUserMessage: optionalIntField(value, "nthUserMessage", -1),
+				cellIndex: optionalIntField(value, "cellIndex", -1),
+				previousNthUserMessage: optionalIntField(value, "previousNthUserMessage", -1),
+				nextNthUserMessage: optionalIntField(value, "nextNthUserMessage", -1),
+				numTurns: optionalIntField(value, "numTurns", 0),
+				originalCellCount: optionalIntField(value, "originalCellCount", 0),
+				trimmedCellCount: optionalIntField(value, "trimmedCellCount", 0),
+				copyHistoryUserCount: optionalIntField(value, "copyHistoryUserCount", 0),
+				remoteImageCount: optionalIntField(value, "remoteImageCount", 0),
+				localImageCount: optionalIntField(value, "localImageCount", 0),
+				textElementCount: optionalIntField(value, "textElementCount", 0),
+				composerEmpty: optionalBoolField(value, "composerEmpty", false),
+				primed: optionalBoolField(value, "primed", false),
+				baseThreadCaptured: optionalBoolField(value, "baseThreadCaptured", false),
+				hintShown: optionalBoolField(value, "hintShown", false),
+				targetAvailable: optionalBoolField(value, "targetAvailable", false),
+				overlayOpened: optionalBoolField(value, "overlayOpened", false),
+				overlayPreviewActive: optionalBoolField(value, "overlayPreviewActive", false),
+				altScreenEntered: optionalBoolField(value, "altScreenEntered", false),
+				frameScheduled: optionalBoolField(value, "frameScheduled", false),
+				hintCleared: optionalBoolField(value, "hintCleared", false),
+				highlightApplied: optionalBoolField(value, "highlightApplied", false),
+				highlightCleared: optionalBoolField(value, "highlightCleared", false),
+				steppedOlder: optionalBoolField(value, "steppedOlder", false),
+				steppedNewer: optionalBoolField(value, "steppedNewer", false),
+				clamped: optionalBoolField(value, "clamped", false),
+				confirmed: optionalBoolField(value, "confirmed", false),
+				closed: optionalBoolField(value, "closed", false),
+				selectionMatchedThread: optionalBoolField(value, "selectionMatchedThread", false),
+				pendingRollbackSet: optionalBoolField(value, "pendingRollbackSet", false),
+				pendingRollbackCleared: optionalBoolField(value, "pendingRollbackCleared", false),
+				pendingRollbackBlocked: optionalBoolField(value, "pendingRollbackBlocked", false),
+				rollbackSubmitted: optionalBoolField(value, "rollbackSubmitted", false),
+				composerPrefilled: optionalBoolField(value, "composerPrefilled", false),
+				remoteImagesRestored: optionalBoolField(value, "remoteImagesRestored", false),
+				copyHistoryTruncated: optionalBoolField(value, "copyHistoryTruncated", false),
+				overlayReplaced: optionalBoolField(value, "overlayReplaced", false),
+				deferredHistoryCleared: optionalBoolField(value, "deferredHistoryCleared", false),
+				renderPending: optionalBoolField(value, "renderPending", false),
+				ignoredThreadMismatch: optionalBoolField(value, "ignoredThreadMismatch", false),
+				stateReset: optionalBoolField(value, "stateReset", false),
+				infoInserted: optionalBoolField(value, "infoInserted", false),
+				sideConversationRejected: optionalBoolField(value, "sideConversationRejected", false),
+				vimInsertAllowed: optionalBoolField(value, "vimInsertAllowed", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),

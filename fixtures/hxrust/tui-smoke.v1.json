@@ -16859,6 +16859,199 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_transcript_overlay.plan=headless\ntui.chat_widget_transcript_overlay.open=title=T R A N S C R I P T:cells=4:alt=true:opened=true:frame=true\ntui.chat_widget_transcript_overlay.key=present=true:revision=3:continuation=false:animation=-1:bumped=true\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=2:recomputed=true:cache_hit=false:follow_bottom=true:continuation=false:top_inset=true:links=true:animation_frame=false\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=2:recomputed=false:cache_hit=true:follow_bottom=true:continuation=false:top_inset=true:links=true:animation_frame=false\ntui.chat_widget_transcript_overlay.key=present=true:revision=3:continuation=true:animation=4:bumped=false\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=1:recomputed=true:cache_hit=false:follow_bottom=true:continuation=true:top_inset=false:links=false:animation_frame=true\ntui.chat_widget_transcript_overlay.insert=InsertHistoryCell:cells=5:renderables=6:tail_lines=1:follow_bottom=true:inserted=true\ntui.chat_widget_transcript_overlay.consolidate=range=1..4:cells=3:renderables=4:follow_bottom=true:frame=true\ntui.chat_widget_transcript_overlay.replace=cells=2:replaced=3:highlight_cleared=true:follow_bottom=true\ntui.chat_widget_transcript_overlay.highlight=cell=1:applied=true:cleared=false:scroll=1\ntui.chat_widget_transcript_overlay.paging=height=15:page=10:offset=10:continuous=true:roundtrip=true\ntui.chat_widget_transcript_overlay.raw_mode=Raw:raw=true:rich=false:frame=true:links=false\ntui.chat_widget_transcript_overlay.raw_mode=Rich:raw=false:rich=true:frame=true:links=true\ntui.chat_widget_transcript_overlay.drop_tail=key=false:dropped=true:renderables=2\ntui.chat_widget_transcript_overlay.close=closed=true:frame=true\ntui.chat_widget_transcript_overlay.failure=live_transcript_overlay_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget transcript overlay\ninput> \ntrace:\ntui.chat_widget_transcript_overlay.plan=headless\ntui.chat_widget_transcript_overlay.open=title=T R A N S C R I P T:cells=4:alt=true:opened=true:frame=true\ntui.chat_widget_transcript_overlay.key=present=true:revision=3:continuation=false:animation=-1:bumped=true\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=2:recomputed=true:cache_hit=false:follow_bottom=true:continuation=false:top_inset=true:links=true:animation_frame=false\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=2:recomputed=false:cache_hit=true:follow_bottom=true:continuation=false:top_inset=true:links=true:animation_frame=false\ntui.chat_widget_transcript_overlay.key=present=true:revision=3:continuation=true:animation=4:bumped=false\ntui.chat_widget_transcript_overlay.live_tail=width=72:lines=1:recomputed=true:cache_hit=false:follow_bottom=true:continuation=true:top_inset=false:links=false:animation_frame=true\ntui.chat_widget_transcript_overlay.insert=InsertHistoryCell:cells=5:renderables=6:tail_lines=1:follow_bottom=true:inserted=true\ntui.chat_widget_transcript_overlay.consolidate=range=1..4:cells=3:renderables=4:follow_bottom=true:frame=true\ntui.chat_widget_transcript_overlay.replace=cells=2:replaced=3:highlight_cleared=true:follow_bottom=true\ntui.chat_widget_transcript_overlay.highlight=cell=1:applied=true:cleared=false:scroll=1\ntui.chat_widget_transcript_overlay.paging=height=15:page=10:offset=10:continuous=true:roundtrip=true\ntui.chat_widget_transcript_overlay.raw_mode=Raw:raw=true:rich=false:frame=true:links=false\ntui.chat_widget_transcript_overlay.raw_mode=Rich:raw=false:rich=true:frame=true:links=true\ntui.chat_widget_transcript_overlay.drop_tail=key=false:dropped=true:renderables=2\ntui.chat_widget_transcript_overlay.close=closed=true:frame=true\ntui.chat_widget_transcript_overlay.failure=live_transcript_overlay_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-backtrack-overlay-headless",
+      "frame": {
+        "name": "chatwidget-backtrack-overlay-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget backtrack overlay"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_backtrack_overlay",
+          "chatWidgetBacktrackOverlay": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "prime",
+                "threadId": "thread-main",
+                "userCount": 3,
+                "composerEmpty": true,
+                "targetAvailable": true,
+                "primed": true,
+                "baseThreadCaptured": true,
+                "hintShown": true
+              },
+              {
+                "kind": "open_preview",
+                "userCount": 3,
+                "altScreenEntered": true,
+                "overlayOpened": true,
+                "overlayPreviewActive": true,
+                "hintCleared": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "selection",
+                "source": "latest",
+                "nthUserMessage": 2,
+                "cellIndex": 5,
+                "selectionMatchedThread": true,
+                "highlightApplied": true,
+                "prefill": "third prompt",
+                "textElementCount": 1,
+                "localImageCount": 1,
+                "remoteImageCount": 1
+              },
+              {
+                "kind": "step",
+                "direction": "older",
+                "previousNthUserMessage": 2,
+                "nextNthUserMessage": 1,
+                "cellIndex": 3,
+                "clamped": false,
+                "highlightApplied": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "step",
+                "direction": "older",
+                "previousNthUserMessage": 0,
+                "nextNthUserMessage": 0,
+                "cellIndex": 1,
+                "clamped": true,
+                "highlightApplied": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "step",
+                "direction": "newer",
+                "previousNthUserMessage": 1,
+                "nextNthUserMessage": 2,
+                "cellIndex": 5,
+                "clamped": false,
+                "highlightApplied": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "confirm",
+                "nthUserMessage": 1,
+                "closed": true,
+                "confirmed": true,
+                "selectionMatchedThread": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "rollback_request",
+                "nthUserMessage": 1,
+                "userCount": 3,
+                "numTurns": 2,
+                "pendingRollbackSet": true,
+                "rollbackSubmitted": true,
+                "composerPrefilled": true,
+                "remoteImagesRestored": true
+              },
+              {
+                "kind": "rollback_success",
+                "nthUserMessage": 1,
+                "originalCellCount": 6,
+                "trimmedCellCount": 3,
+                "copyHistoryUserCount": 1,
+                "overlayReplaced": true,
+                "deferredHistoryCleared": true,
+                "renderPending": true
+              },
+              {
+                "kind": "non_pending_rollback",
+                "numTurns": 1,
+                "originalCellCount": 6,
+                "trimmedCellCount": 4,
+                "copyHistoryUserCount": 2,
+                "overlayReplaced": true,
+                "renderPending": true
+              },
+              {
+                "kind": "rollback_failure",
+                "pendingRollbackCleared": true
+              },
+              {
+                "kind": "unavailable",
+                "source": "main",
+                "userCount": 0,
+                "targetAvailable": false,
+                "stateReset": true,
+                "infoInserted": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "unavailable",
+                "source": "side",
+                "userCount": 1,
+                "targetAvailable": false,
+                "stateReset": true,
+                "infoInserted": true,
+                "sideConversationRejected": true,
+                "frameScheduled": true
+              },
+              {
+                "kind": "unavailable",
+                "source": "vim_insert",
+                "userCount": 2,
+                "targetAvailable": true,
+                "stateReset": false,
+                "infoInserted": false,
+                "vimInsertAllowed": true,
+                "frameScheduled": false
+              },
+              {
+                "kind": "reset",
+                "source": "clear_ui",
+                "primed": false,
+                "overlayPreviewActive": false,
+                "pendingRollbackSet": false,
+                "renderPending": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_backtrack_overlay_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_backtrack_overlay.plan=headless\ntui.chat_widget_backtrack_overlay.prime=thread=thread-main:users=3:composer_empty=true:target=true:primed=true:base=true:hint=true\ntui.chat_widget_backtrack_overlay.open_preview=users=3:alt=true:opened=true:preview=true:hint_cleared=true:frame=true\ntui.chat_widget_backtrack_overlay.selection=latest:nth=2:cell=5:thread_match=true:highlight=true:prefill=third prompt:text=1:local=1:remote=1\ntui.chat_widget_backtrack_overlay.step=older:from=2:to=1:cell=3:clamped=false:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.step=older:from=0:to=0:cell=1:clamped=true:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.step=newer:from=1:to=2:cell=5:clamped=false:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.confirm=nth=1:closed=true:confirmed=true:thread_match=true:frame=true\ntui.chat_widget_backtrack_overlay.rollback_request=nth=1:users=3:num_turns=2:pending=true:submitted=true:prefill=true:remote=true\ntui.chat_widget_backtrack_overlay.rollback_success=nth=1:from=6:to=3:copy_users=1:overlay_replaced=true:deferred_cleared=true:render_pending=true\ntui.chat_widget_backtrack_overlay.non_pending=num_turns=1:from=6:to=4:copy_users=2:overlay_replaced=true:render_pending=true\ntui.chat_widget_backtrack_overlay.rollback_failure=pending_cleared=true\ntui.chat_widget_backtrack_overlay.unavailable=main:users=0:target=false:reset=true:info=true:side_rejected=false:vim_insert_allowed=false:frame=true\ntui.chat_widget_backtrack_overlay.unavailable=side:users=1:target=false:reset=true:info=true:side_rejected=true:vim_insert_allowed=false:frame=true\ntui.chat_widget_backtrack_overlay.unavailable=vim_insert:users=2:target=true:reset=false:info=false:side_rejected=false:vim_insert_allowed=true:frame=false\ntui.chat_widget_backtrack_overlay.reset=clear_ui:primed=false:preview=false:pending=false:render_pending=false\ntui.chat_widget_backtrack_overlay.failure=live_backtrack_overlay_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget backtrack overlay\ninput> \ntrace:\ntui.chat_widget_backtrack_overlay.plan=headless\ntui.chat_widget_backtrack_overlay.prime=thread=thread-main:users=3:composer_empty=true:target=true:primed=true:base=true:hint=true\ntui.chat_widget_backtrack_overlay.open_preview=users=3:alt=true:opened=true:preview=true:hint_cleared=true:frame=true\ntui.chat_widget_backtrack_overlay.selection=latest:nth=2:cell=5:thread_match=true:highlight=true:prefill=third prompt:text=1:local=1:remote=1\ntui.chat_widget_backtrack_overlay.step=older:from=2:to=1:cell=3:clamped=false:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.step=older:from=0:to=0:cell=1:clamped=true:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.step=newer:from=1:to=2:cell=5:clamped=false:highlight=true:frame=true\ntui.chat_widget_backtrack_overlay.confirm=nth=1:closed=true:confirmed=true:thread_match=true:frame=true\ntui.chat_widget_backtrack_overlay.rollback_request=nth=1:users=3:num_turns=2:pending=true:submitted=true:prefill=true:remote=true\ntui.chat_widget_backtrack_overlay.rollback_success=nth=1:from=6:to=3:copy_users=1:overlay_replaced=true:deferred_cleared=true:render_pending=true\ntui.chat_widget_backtrack_overlay.non_pending=num_turns=1:from=6:to=4:copy_users=2:overlay_replaced=true:render_pending=true\ntui.chat_widget_backtrack_overlay.rollback_failure=pending_cleared=true\ntui.chat_widget_backtrack_overlay.unavailable=main:users=0:target=false:reset=true:info=true:side_rejected=false:vim_insert_allowed=false:frame=true\ntui.chat_widget_backtrack_overlay.unavailable=side:users=1:target=false:reset=true:info=true:side_rejected=true:vim_insert_allowed=false:frame=true\ntui.chat_widget_backtrack_overlay.unavailable=vim_insert:users=2:target=true:reset=false:info=false:side_rejected=false:vim_insert_allowed=true:frame=false\ntui.chat_widget_backtrack_overlay.reset=clear_ui:primed=false:preview=false:pending=false:render_pending=false\ntui.chat_widget_backtrack_overlay.failure=live_backtrack_overlay_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

@@ -341,6 +341,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetBacktrackOverlay:
+					if (!traceBacktrackOverlay(event.chatWidgetBacktrackOverlay, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4665,6 +4670,161 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_transcript_overlay.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceBacktrackOverlay(plan:TuiSmokeBacktrackOverlayPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.chat_widget_backtrack_overlay.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_backtrack_overlay.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeBacktrackOverlayActionKind.Prime:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.prime="
+						+ "thread=" + action.threadId
+						+ ":users=" + action.userCount
+						+ ":composer_empty=" + action.composerEmpty
+						+ ":target=" + action.targetAvailable
+						+ ":primed=" + action.primed
+						+ ":base=" + action.baseThreadCaptured
+						+ ":hint=" + action.hintShown
+					);
+				case TuiSmokeBacktrackOverlayActionKind.OpenPreview:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.open_preview="
+						+ "users=" + action.userCount
+						+ ":alt=" + action.altScreenEntered
+						+ ":opened=" + action.overlayOpened
+						+ ":preview=" + action.overlayPreviewActive
+						+ ":hint_cleared=" + action.hintCleared
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeBacktrackOverlayActionKind.OverlayPreview:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.overlay_preview="
+						+ "source=" + action.source
+						+ ":users=" + action.userCount
+						+ ":preview=" + action.overlayPreviewActive
+						+ ":target=" + action.targetAvailable
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeBacktrackOverlayActionKind.Selection:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.selection="
+						+ action.source
+						+ ":nth=" + action.nthUserMessage
+						+ ":cell=" + action.cellIndex
+						+ ":thread_match=" + action.selectionMatchedThread
+						+ ":highlight=" + action.highlightApplied
+						+ ":prefill=" + action.prefill
+						+ ":text=" + action.textElementCount
+						+ ":local=" + action.localImageCount
+						+ ":remote=" + action.remoteImageCount
+					);
+				case TuiSmokeBacktrackOverlayActionKind.Step:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.step="
+						+ action.direction
+						+ ":from=" + action.previousNthUserMessage
+						+ ":to=" + action.nextNthUserMessage
+						+ ":cell=" + action.cellIndex
+						+ ":clamped=" + action.clamped
+						+ ":highlight=" + action.highlightApplied
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeBacktrackOverlayActionKind.Confirm:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.confirm="
+						+ "nth=" + action.nthUserMessage
+						+ ":closed=" + action.closed
+						+ ":confirmed=" + action.confirmed
+						+ ":thread_match=" + action.selectionMatchedThread
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeBacktrackOverlayActionKind.RollbackRequest:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.rollback_request="
+						+ "nth=" + action.nthUserMessage
+						+ ":users=" + action.userCount
+						+ ":num_turns=" + action.numTurns
+						+ ":pending=" + action.pendingRollbackSet
+						+ ":submitted=" + action.rollbackSubmitted
+						+ ":prefill=" + action.composerPrefilled
+						+ ":remote=" + action.remoteImagesRestored
+					);
+				case TuiSmokeBacktrackOverlayActionKind.RollbackSuccess:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.rollback_success="
+						+ "nth=" + action.nthUserMessage
+						+ ":from=" + action.originalCellCount
+						+ ":to=" + action.trimmedCellCount
+						+ ":copy_users=" + action.copyHistoryUserCount
+						+ ":overlay_replaced=" + action.overlayReplaced
+						+ ":deferred_cleared=" + action.deferredHistoryCleared
+						+ ":render_pending=" + action.renderPending
+					);
+				case TuiSmokeBacktrackOverlayActionKind.RollbackFailure:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.rollback_failure="
+						+ "pending_cleared=" + action.pendingRollbackCleared
+					);
+				case TuiSmokeBacktrackOverlayActionKind.NonPendingRollback:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.non_pending="
+						+ "num_turns=" + action.numTurns
+						+ ":from=" + action.originalCellCount
+						+ ":to=" + action.trimmedCellCount
+						+ ":copy_users=" + action.copyHistoryUserCount
+						+ ":overlay_replaced=" + action.overlayReplaced
+						+ ":render_pending=" + action.renderPending
+					);
+				case TuiSmokeBacktrackOverlayActionKind.Trim:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.trim="
+						+ "nth=" + action.nthUserMessage
+						+ ":from=" + action.originalCellCount
+						+ ":to=" + action.trimmedCellCount
+						+ ":copy_truncated=" + action.copyHistoryTruncated
+						+ ":highlight_cleared=" + action.highlightCleared
+					);
+				case TuiSmokeBacktrackOverlayActionKind.Unavailable:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.unavailable="
+						+ action.source
+						+ ":users=" + action.userCount
+						+ ":target=" + action.targetAvailable
+						+ ":reset=" + action.stateReset
+						+ ":info=" + action.infoInserted
+						+ ":side_rejected=" + action.sideConversationRejected
+						+ ":vim_insert_allowed=" + action.vimInsertAllowed
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeBacktrackOverlayActionKind.Reset:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.reset="
+						+ action.source
+						+ ":primed=" + action.primed
+						+ ":preview=" + action.overlayPreviewActive
+						+ ":pending=" + action.pendingRollbackSet
+						+ ":render_pending=" + action.renderPending
+					);
+				case TuiSmokeBacktrackOverlayActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_backtrack_overlay.failure="
+						+ action.failureCode
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_backtrack_overlay.unknown");
 					return false;
 			}
 		}
