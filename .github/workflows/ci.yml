@@ -39,6 +39,11 @@ jobs:
         working-directory: codex-hxrust
         run: npm ci --ignore-scripts --no-audit --no-fund
 
+      - name: Install Neko runtime for haxelib
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y neko
+
       - name: Install Haxe via lix
         working-directory: codex-hxrust
         run: |
@@ -92,6 +97,12 @@ jobs:
         if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
         working-directory: codex-hxrust
         run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Install Neko runtime for haxelib
+        if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y neko
 
       - name: Install Haxe via lix
         if: env.HAXE_RUST_CHECKOUT_TOKEN != ''
