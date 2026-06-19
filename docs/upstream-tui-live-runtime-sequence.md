@@ -3128,6 +3128,17 @@ Extend the normalized resume picker renderer from preview evidence into paginati
 
 Status: HXCX-TUI-108 teaches `DeterministicResumePickerTerminalRenderer` to include normalized pagination state when there is a next page or loading-older marker, and adds `ResumePickerPaginationRenderGate`, `ResumePickerPaginationRenderGateReport`, `test/ResumePickerPaginationRenderHarness.hx`, `hxml/resume-picker-pagination-render.hxml`, and `harness/check-resume-picker-pagination-render.sh`. The gate validates fixture-backed first-page load, next-cursor/more-below render evidence, loading-older render evidence, second-page ingest, final loaded rows, footer progress, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui ownership.
 
+### HXCX-TUI-109: Resume Picker Empty And Error Render Snapshot Gate
+
+Extend the normalized resume picker renderer from pagination evidence into empty/loading/no-results and page-failure evidence:
+
+- render initial loading, no-sessions, search no-results, and failed page-load states through the deterministic terminal renderer;
+- drive the page failure through the runtime-neutral host facade so the visible inline error comes from the same typed failure path as future app-server work;
+- assert empty labels, search query display, error code/message, footer state, frame/render counts, and host event evidence in a generated-Rust harness;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-109 teaches `DeterministicResumePickerTerminalRenderer` to render typed empty-state and inline error lines, and adds `ResumePickerEmptyErrorRenderGate`, `ResumePickerEmptyErrorRenderGateReport`, `test/ResumePickerEmptyErrorRenderHarness.hx`, `hxml/resume-picker-empty-error-render.hxml`, and `harness/check-resume-picker-empty-error-render.sh`. The gate validates initial loading, no-sessions, search no-results, missing page fixture failure, visible error label, footer state, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

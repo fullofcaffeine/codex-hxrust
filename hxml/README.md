@@ -62,6 +62,7 @@ Profile policy for the scaffold:
 | `resume-picker-render-snapshot.hxml` | Compile the HXCX-TUI-106 resume picker normalized VT100/test-backend render snapshot gate through portable haxe.rust. |
 | `resume-picker-preview-render.hxml` | Compile the HXCX-TUI-107 resume picker normalized transcript-preview render snapshot gate through portable haxe.rust. |
 | `resume-picker-pagination-render.hxml` | Compile the HXCX-TUI-108 resume picker normalized pagination/load-more render snapshot gate through portable haxe.rust. |
+| `resume-picker-empty-error-render.hxml` | Compile the HXCX-TUI-109 resume picker normalized empty/error render snapshot gate through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |

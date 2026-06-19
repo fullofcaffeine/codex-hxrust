@@ -35,7 +35,7 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 		lines.push("toolbar sort=" + state.sortKey + " filter=" + state.filterMode + " query=" + emptyLabel(state.query));
 		lines.push("rows loaded=" + state.loadedRows + " filtered=" + state.filteredRows + " scanned=" + state.scannedRows + " accepted=" + state.acceptedRows);
 		if (state.visibleRows.length == 0) {
-			lines.push("  no rows loaded");
+			lines.push(state.emptyStateMessage.length == 0 ? "  no rows loaded" : "  empty: " + state.emptyStateMessage);
 		} else {
 			for (row in state.visibleRows) {
 				lines.push(renderRow(row));
@@ -53,6 +53,9 @@ class DeterministicResumePickerTerminalRenderer implements ResumePickerTerminalR
 			lines.push("overlay transcript thread=" + emptyLabel(state.pendingThreadId) + " cells=" + state.transcriptCellCount);
 		} else {
 			lines.push("overlay closed");
+		}
+		if (state.inlineErrorShown || state.lastError.length > 0 || state.lastFailureCode.length > 0) {
+			lines.push("error code=" + emptyLabel(state.lastFailureCode) + " message=" + emptyLabel(state.lastError));
 		}
 		lines.push("footer " + emptyLabel(state.footerProgressLabel) + " selected=" + state.selectedIndex + " selectedThread=" + emptyLabel(state.selectedThreadId));
 		return lines.join("\n");
