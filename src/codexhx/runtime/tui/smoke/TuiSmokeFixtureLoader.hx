@@ -110,6 +110,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetInputSubmission: optionalInputSubmissionPlan(value, "chatWidgetInputSubmission"),
 				chatWidgetTurnRuntime: optionalTurnRuntimePlan(value, "chatWidgetTurnRuntime"),
 				chatWidgetSessionFlow: optionalSessionFlowPlan(value, "chatWidgetSessionFlow"),
+				chatWidgetReplayProtocol: optionalReplayProtocolPlan(value, "chatWidgetReplayProtocol"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -122,6 +123,86 @@ class TuiSmokeFixtureLoader {
 				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe"),
 				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy"),
 				clipboardPaste: optionalClipboardPastePlan(value, "clipboardPaste")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalReplayProtocolPlan(object:Value, name:String):Null<TuiSmokeReplayProtocolPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeReplayProtocolPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: replayProtocolActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function replayProtocolActions(values:Array<Value>):Array<TuiSmokeReplayProtocolAction> {
+		final out:Array<TuiSmokeReplayProtocolAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeReplayProtocolAction({
+				kind: TuiSmokeReplayProtocolActionKind.fromString(stringField(value, "kind", "")),
+				replayKind: optionalStringField(value, "replayKind", ""),
+				turnStatus: optionalStringField(value, "turnStatus", ""),
+				itemType: optionalStringField(value, "itemType", ""),
+				notificationType: optionalStringField(value, "notificationType", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				turnId: optionalStringField(value, "turnId", ""),
+				itemCount: optionalIntField(value, "itemCount", 0),
+				reasoningDeltaCount: optionalIntField(value, "reasoningDeltaCount", 0),
+				durationMs: optionalIntField(value, "durationMs", 0),
+				fromReplay: optionalBoolField(value, "fromReplay", false),
+				resumeInitialReplay: optionalBoolField(value, "resumeInitialReplay", false),
+				threadSnapshotReplay: optionalBoolField(value, "threadSnapshotReplay", false),
+				taskStarted: optionalBoolField(value, "taskStarted", false),
+				completionSynthesized: optionalBoolField(value, "completionSynthesized", false),
+				taskCompleted: optionalBoolField(value, "taskCompleted", false),
+				interrupted: optionalBoolField(value, "interrupted", false),
+				failed: optionalBoolField(value, "failed", false),
+				finalizedTurn: optionalBoolField(value, "finalizedTurn", false),
+				budgetLimited: optionalBoolField(value, "budgetLimited", false),
+				lastTurnIdSet: optionalBoolField(value, "lastTurnIdSet", false),
+				lastRenderedUserCleared: optionalBoolField(value, "lastRenderedUserCleared", false),
+				lastNonRetryErrorCleared: optionalBoolField(value, "lastNonRetryErrorCleared", false),
+				lastNonRetryErrorSet: optionalBoolField(value, "lastNonRetryErrorSet", false),
+				retryHeaderRestored: optionalBoolField(value, "retryHeaderRestored", false),
+				retryable: optionalBoolField(value, "retryable", false),
+				streamErrorShown: optionalBoolField(value, "streamErrorShown", false),
+				nonRetryHandled: optionalBoolField(value, "nonRetryHandled", false),
+				liveEffectsSuppressed: optionalBoolField(value, "liveEffectsSuppressed", false),
+				misroutedRejected: optionalBoolField(value, "misroutedRejected", false),
+				userCommitted: optionalBoolField(value, "userCommitted", false),
+				composerHistorySeeded: optionalBoolField(value, "composerHistorySeeded", false),
+				agentCommitted: optionalBoolField(value, "agentCommitted", false),
+				planCompleted: optionalBoolField(value, "planCompleted", false),
+				reasoningFinalized: optionalBoolField(value, "reasoningFinalized", false),
+				rawReasoningShown: optionalBoolField(value, "rawReasoningShown", false),
+				commandStarted: optionalBoolField(value, "commandStarted", false),
+				commandCompleted: optionalBoolField(value, "commandCompleted", false),
+				fileChangeIgnored: optionalBoolField(value, "fileChangeIgnored", false),
+				fileChangeCompleted: optionalBoolField(value, "fileChangeCompleted", false),
+				mcpStarted: optionalBoolField(value, "mcpStarted", false),
+				mcpCompleted: optionalBoolField(value, "mcpCompleted", false),
+				webSearchCompleted: optionalBoolField(value, "webSearchCompleted", false),
+				imageViewOpened: optionalBoolField(value, "imageViewOpened", false),
+				imageGenerationCompleted: optionalBoolField(value, "imageGenerationCompleted", false),
+				reviewEntered: optionalBoolField(value, "reviewEntered", false),
+				reviewExited: optionalBoolField(value, "reviewExited", false),
+				contextCompacted: optionalBoolField(value, "contextCompacted", false),
+				collabToolRouted: optionalBoolField(value, "collabToolRouted", false),
+				subAgentActivityRouted: optionalBoolField(value, "subAgentActivityRouted", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

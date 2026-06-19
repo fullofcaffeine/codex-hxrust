@@ -296,6 +296,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetReplayProtocol:
+					if (!traceReplayProtocol(event.chatWidgetReplayProtocol, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4180,6 +4185,113 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_session_flow.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceReplayProtocol(plan:TuiSmokeReplayProtocolPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowLiveTerminal || plan.allowAppServerMutation || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_replay_protocol.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_replay_protocol.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeReplayProtocolActionKind.ReplayTurn:
+					trace.push(
+						"tui.chat_widget_replay_protocol.replay_turn="
+						+ action.replayKind
+						+ ":status=" + action.turnStatus
+						+ ":turn=" + action.turnId
+						+ ":items=" + action.itemCount
+						+ ":task_started=" + action.taskStarted
+						+ ":completion=" + action.completionSynthesized
+						+ ":task_complete=" + action.taskCompleted
+						+ ":interrupted=" + action.interrupted
+						+ ":failed=" + action.failed
+						+ ":last_error_cleared=" + action.lastNonRetryErrorCleared
+						+ ":from_replay=" + action.fromReplay
+					);
+				case TuiSmokeReplayProtocolActionKind.ReplayItem:
+					trace.push(
+						"tui.chat_widget_replay_protocol.replay_item="
+						+ action.itemType
+						+ ":kind=" + action.replayKind
+						+ ":turn=" + action.turnId
+						+ ":from_replay=" + action.fromReplay
+						+ ":user=" + action.userCommitted
+						+ ":history=" + action.composerHistorySeeded
+						+ ":agent=" + action.agentCommitted
+						+ ":plan=" + action.planCompleted
+						+ ":reasoning=" + action.reasoningDeltaCount
+						+ ":raw=" + action.rawReasoningShown
+						+ ":final=" + action.reasoningFinalized
+						+ ":cmd=" + action.commandStarted + "/" + action.commandCompleted
+						+ ":file=" + action.fileChangeIgnored + "/" + action.fileChangeCompleted
+						+ ":mcp=" + action.mcpStarted + "/" + action.mcpCompleted
+						+ ":web=" + action.webSearchCompleted
+						+ ":image=" + action.imageViewOpened + "/" + action.imageGenerationCompleted
+						+ ":review=" + action.reviewEntered + "/" + action.reviewExited
+						+ ":context=" + action.contextCompacted
+						+ ":collab=" + action.collabToolRouted
+						+ ":subagent=" + action.subAgentActivityRouted
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeReplayProtocolActionKind.ServerNotification:
+					trace.push(
+						"tui.chat_widget_replay_protocol.notification="
+						+ action.notificationType
+						+ ":kind=" + action.replayKind
+						+ ":from_replay=" + action.fromReplay
+						+ ":resume_initial=" + action.resumeInitialReplay
+						+ ":snapshot=" + action.threadSnapshotReplay
+						+ ":misrouted=" + action.misroutedRejected
+						+ ":last_turn=" + action.lastTurnIdSet
+						+ ":task_started=" + action.taskStarted
+						+ ":retry_header=" + action.retryHeaderRestored
+						+ ":live_suppressed=" + action.liveEffectsSuppressed
+					);
+				case TuiSmokeReplayProtocolActionKind.TurnCompleted:
+					trace.push(
+						"tui.chat_widget_replay_protocol.turn_completed="
+						+ action.turnStatus
+						+ ":kind=" + action.replayKind
+						+ ":turn=" + action.turnId
+						+ ":dedupe_clear=" + action.lastRenderedUserCleared
+						+ ":task_complete=" + action.taskCompleted
+						+ ":interrupted=" + action.interrupted
+						+ ":budget=" + action.budgetLimited
+						+ ":failed=" + action.failed
+						+ ":finalized=" + action.finalizedTurn
+						+ ":last_error_set=" + action.lastNonRetryErrorSet
+						+ ":last_error_cleared=" + action.lastNonRetryErrorCleared
+						+ ":duration=" + action.durationMs
+					);
+				case TuiSmokeReplayProtocolActionKind.ErrorNotification:
+					trace.push(
+						"tui.chat_widget_replay_protocol.error="
+						+ action.errorMessage
+						+ ":retryable=" + action.retryable
+						+ ":from_replay=" + action.fromReplay
+						+ ":stream=" + action.streamErrorShown
+						+ ":non_retry=" + action.nonRetryHandled
+						+ ":last_error_set=" + action.lastNonRetryErrorSet
+						+ ":retry_header=" + action.retryHeaderRestored
+					);
+				case TuiSmokeReplayProtocolActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_replay_protocol.failure="
+						+ action.failureCode
+						+ ":no_live=" + action.noLiveTerminal
+						+ ":no_app_server=" + action.noAppServerMutation
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_replay_protocol.unknown");
 					return false;
 			}
 		}

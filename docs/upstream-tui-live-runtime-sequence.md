@@ -2665,6 +2665,19 @@ Model selected raw Codex session configuration and thread-header behavior withou
 
 Status: HXCX-TUI-71 extends `fixtures/hxrust/tui-smoke.v1.json` with typed normal/quiet session configuration, header insert/removal, skills/connectors refresh, initial-message gates, fork notices, thread-name updates, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic session-flow state evidence only, not live app-server session ownership or full header rendering.
 
+### HXCX-TUI-72: ChatWidget Replay Protocol Routing Boundary
+
+Model selected raw Codex replay and server-notification routing without live app-server mutation, model calls, realtime transport, or terminal rendering:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/replay.rs` turn replay behavior: in-progress turns clear stale non-retry error state and start task-running UI state, completed/interrupted/failed turns synthesize a replayed `TurnCompletedNotification`, and replay item routing marks item handling as replay-derived;
+- preserve replay item routing from `replay.rs`: user messages seed replayed history/composer history, agent messages replay through completed assistant-message handling, reasoning replays summary deltas and optionally raw reasoning before finalization, command/file-change/MCP/web/image/review/context/collab/sub-agent items route through their ordinary ChatWidget handlers while remaining replay-scoped;
+- preserve `../codex/codex-rs/tui/src/chatwidget/protocol.rs` server-notification guards: misrouted child-thread MCP status updates are rejected before shared state mutation, retry headers are restored for non-resume/non-retry notifications, `TurnStarted` sets the last turn id while suppressing task start only for `ResumeInitialMessages`, and live-only shutdown/realtime side effects are suppressed during replay;
+- preserve `handle_turn_completed_notification` in `protocol.rs`: completed turns clear user-message dedupe and non-retry error state before task completion, interrupted turns map budget-limited ids to budget abort reasons, failed turns either consume matching stored non-retry errors or handle/finalize the turn, and replay completion is distinguishable from live completion;
+- preserve replay error behavior from `protocol.rs` and `../codex/codex-rs/tui/src/chatwidget/tests/history_replay.rs`: replayed retryable stream errors do not set live retry status or render a stream-error cell, live retryable errors do, and non-retry errors record the turn/error pair before terminal handling;
+- keep the evidence deterministic and independent of live terminal ownership, app-server mutation, ratatui rendering, credentialed model/provider calls, realtime/WebRTC transport, filesystem mutation, and Cafex behavior.
+
+Status: HXCX-TUI-72 extends `fixtures/hxrust/tui-smoke.v1.json` with typed replay-turn, replay-item, server-notification, turn-completion, retryable/nonretryable error, live-only suppression, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic replay/protocol routing evidence only, not a full live app-server replay transport, renderer, or realtime backend.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

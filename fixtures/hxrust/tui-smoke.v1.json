@@ -15074,6 +15074,254 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_session_flow.plan=headless\ntui.chat_widget_session_flow.configure=Normal:thread=thread-old->thread-main:name=Main thread:history=log-1/7:copy_reset=true:queue_clear=true:review_reset=true:turn_reset=true:goal_clear=true:cwd=/repo:roots=/repo,/repo/tools:approval=on-request:permission=workspace-write:fallback=false:model=gpt-5.2-codex:effort=high:collab=default:mask=true:effective=false\ntui.chat_widget_session_flow.configure=Quiet:thread=thread-main->thread-main:name=Main thread:history=log-1/8:copy_reset=true:queue_clear=true:review_reset=false:turn_reset=true:goal_clear=true:cwd=/repo:roots=/repo:approval=never:permission=read-only:fallback=true:model=gpt-5.2-codex-mini:effort=medium:collab=plan:mask=false:effective=true\ntui.chat_widget_session_flow.header=Normal:inserted=true:cleared=false:revision=false:service=priority:copy_source_reset=true:redraw=true:suppress=false\ntui.chat_widget_session_flow.header=Quiet:inserted=false:cleared=true:revision=true:service=auto:copy_source_reset=true:redraw=false:suppress=true\ntui.chat_widget_session_flow.skills_connectors=cleared=true:reload=true:skills=3:connectors=2:prefetch=true:service_cmd=true:personality_cmd=true:plugins_cmd=true:goal_cmd=true:plugin_mentions=true\ntui.chat_widget_session_flow.initial_message=hello from startup:submitted=true:suppressed=false:sandbox_blocked=false:queued=0->0\ntui.chat_widget_session_flow.initial_message=blocked startup:submitted=false:suppressed=true:sandbox_blocked=false:queued=0->0\ntui.chat_widget_session_flow.initial_message=windows elevated:submitted=false:suppressed=false:sandbox_blocked=true:queued=0->0\ntui.chat_widget_session_flow.fork_notice=thread-parent:title=Parent thread:inserted=true:display=Normal\ntui.chat_widget_session_flow.fork_notice=thread-parent-2:title=:inserted=true:display=Normal\ntui.chat_widget_session_flow.thread_name=thread-main:matched=true:name=Renamed thread:confirm=true:surfaces=true:redraw=true:drain=true\ntui.chat_widget_session_flow.thread_name=thread-other:matched=false:name=Ignored rename:confirm=false:surfaces=false:redraw=false:drain=false\ntui.chat_widget_session_flow.failure=live_session_flow_effects_rejected:error=session flow fixture must stay headless:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget session flow\ninput> \ntrace:\ntui.chat_widget_session_flow.plan=headless\ntui.chat_widget_session_flow.configure=Normal:thread=thread-old->thread-main:name=Main thread:history=log-1/7:copy_reset=true:queue_clear=true:review_reset=true:turn_reset=true:goal_clear=true:cwd=/repo:roots=/repo,/repo/tools:approval=on-request:permission=workspace-write:fallback=false:model=gpt-5.2-codex:effort=high:collab=default:mask=true:effective=false\ntui.chat_widget_session_flow.configure=Quiet:thread=thread-main->thread-main:name=Main thread:history=log-1/8:copy_reset=true:queue_clear=true:review_reset=false:turn_reset=true:goal_clear=true:cwd=/repo:roots=/repo:approval=never:permission=read-only:fallback=true:model=gpt-5.2-codex-mini:effort=medium:collab=plan:mask=false:effective=true\ntui.chat_widget_session_flow.header=Normal:inserted=true:cleared=false:revision=false:service=priority:copy_source_reset=true:redraw=true:suppress=false\ntui.chat_widget_session_flow.header=Quiet:inserted=false:cleared=true:revision=true:service=auto:copy_source_reset=true:redraw=false:suppress=true\ntui.chat_widget_session_flow.skills_connectors=cleared=true:reload=true:skills=3:connectors=2:prefetch=true:service_cmd=true:personality_cmd=true:plugins_cmd=true:goal_cmd=true:plugin_mentions=true\ntui.chat_widget_session_flow.initial_message=hello from startup:submitted=true:suppressed=false:sandbox_blocked=false:queued=0->0\ntui.chat_widget_session_flow.initial_message=blocked startup:submitted=false:suppressed=true:sandbox_blocked=false:queued=0->0\ntui.chat_widget_session_flow.initial_message=windows elevated:submitted=false:suppressed=false:sandbox_blocked=true:queued=0->0\ntui.chat_widget_session_flow.fork_notice=thread-parent:title=Parent thread:inserted=true:display=Normal\ntui.chat_widget_session_flow.fork_notice=thread-parent-2:title=:inserted=true:display=Normal\ntui.chat_widget_session_flow.thread_name=thread-main:matched=true:name=Renamed thread:confirm=true:surfaces=true:redraw=true:drain=true\ntui.chat_widget_session_flow.thread_name=thread-other:matched=false:name=Ignored rename:confirm=false:surfaces=false:redraw=false:drain=false\ntui.chat_widget_session_flow.failure=live_session_flow_effects_rejected:error=session flow fixture must stay headless:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-replay-protocol-headless",
+      "frame": {
+        "name": "chatwidget-replay-protocol-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget replay protocol"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_replay_protocol",
+          "chatWidgetReplayProtocol": {
+            "allowLiveTerminal": false,
+            "allowAppServerMutation": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "replay_turn",
+                "replayKind": "ResumeInitialMessages",
+                "turnStatus": "InProgress",
+                "turnId": "turn-running",
+                "itemCount": 2,
+                "taskStarted": true,
+                "completionSynthesized": false,
+                "taskCompleted": false,
+                "interrupted": false,
+                "failed": false,
+                "lastNonRetryErrorCleared": true,
+                "fromReplay": true
+              },
+              {
+                "kind": "replay_turn",
+                "replayKind": "ThreadSnapshot",
+                "turnStatus": "Completed",
+                "turnId": "turn-done",
+                "itemCount": 4,
+                "taskStarted": false,
+                "completionSynthesized": true,
+                "taskCompleted": true,
+                "interrupted": false,
+                "failed": false,
+                "lastNonRetryErrorCleared": true,
+                "fromReplay": true
+              },
+              {
+                "kind": "replay_item",
+                "replayKind": "ResumeInitialMessages",
+                "turnId": "turn-done",
+                "itemType": "UserMessage",
+                "fromReplay": true,
+                "userCommitted": true,
+                "composerHistorySeeded": true
+              },
+              {
+                "kind": "replay_item",
+                "replayKind": "ThreadSnapshot",
+                "turnId": "turn-done",
+                "itemType": "Reasoning",
+                "fromReplay": true,
+                "reasoningDeltaCount": 2,
+                "rawReasoningShown": false,
+                "reasoningFinalized": true
+              },
+              {
+                "kind": "replay_item",
+                "replayKind": "ThreadSnapshot",
+                "turnId": "turn-tools",
+                "itemType": "ToolBundle",
+                "fromReplay": true,
+                "commandStarted": true,
+                "commandCompleted": true,
+                "fileChangeIgnored": true,
+                "fileChangeCompleted": true,
+                "mcpStarted": true,
+                "mcpCompleted": true,
+                "webSearchCompleted": true,
+                "imageViewOpened": true,
+                "imageGenerationCompleted": true,
+                "reviewEntered": true,
+                "reviewExited": true,
+                "contextCompacted": true,
+                "collabToolRouted": true,
+                "subAgentActivityRouted": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "server_notification",
+                "notificationType": "McpServerStatusUpdated",
+                "replayKind": "Live",
+                "fromReplay": false,
+                "misroutedRejected": true,
+                "liveEffectsSuppressed": true
+              },
+              {
+                "kind": "server_notification",
+                "notificationType": "TurnStarted",
+                "replayKind": "ResumeInitialMessages",
+                "fromReplay": true,
+                "resumeInitialReplay": true,
+                "threadSnapshotReplay": false,
+                "lastTurnIdSet": true,
+                "taskStarted": false,
+                "retryHeaderRestored": false,
+                "liveEffectsSuppressed": false
+              },
+              {
+                "kind": "server_notification",
+                "notificationType": "TurnStarted",
+                "replayKind": "ThreadSnapshot",
+                "fromReplay": true,
+                "resumeInitialReplay": false,
+                "threadSnapshotReplay": true,
+                "lastTurnIdSet": true,
+                "taskStarted": true,
+                "retryHeaderRestored": true,
+                "liveEffectsSuppressed": false
+              },
+              {
+                "kind": "server_notification",
+                "notificationType": "ThreadClosed",
+                "replayKind": "ThreadSnapshot",
+                "fromReplay": true,
+                "threadSnapshotReplay": true,
+                "liveEffectsSuppressed": true
+              },
+              {
+                "kind": "server_notification",
+                "notificationType": "ThreadRealtimeStarted",
+                "replayKind": "ThreadSnapshot",
+                "fromReplay": true,
+                "threadSnapshotReplay": true,
+                "liveEffectsSuppressed": true
+              },
+              {
+                "kind": "turn_completed",
+                "turnStatus": "Completed",
+                "replayKind": "ThreadSnapshot",
+                "turnId": "turn-done",
+                "lastRenderedUserCleared": true,
+                "taskCompleted": true,
+                "interrupted": false,
+                "budgetLimited": false,
+                "failed": false,
+                "finalizedTurn": false,
+                "lastNonRetryErrorSet": false,
+                "lastNonRetryErrorCleared": true,
+                "durationMs": 234
+              },
+              {
+                "kind": "turn_completed",
+                "turnStatus": "Interrupted",
+                "replayKind": "Live",
+                "turnId": "turn-budget",
+                "lastRenderedUserCleared": true,
+                "taskCompleted": false,
+                "interrupted": true,
+                "budgetLimited": true,
+                "failed": false,
+                "finalizedTurn": true,
+                "lastNonRetryErrorSet": false,
+                "lastNonRetryErrorCleared": true,
+                "durationMs": 0
+              },
+              {
+                "kind": "turn_completed",
+                "turnStatus": "Failed",
+                "replayKind": "Live",
+                "turnId": "turn-failed",
+                "lastRenderedUserCleared": true,
+                "taskCompleted": false,
+                "interrupted": false,
+                "budgetLimited": false,
+                "failed": true,
+                "finalizedTurn": true,
+                "lastNonRetryErrorSet": false,
+                "lastNonRetryErrorCleared": true,
+                "durationMs": 0
+              },
+              {
+                "kind": "error_notification",
+                "errorMessage": "retryable network",
+                "retryable": true,
+                "fromReplay": false,
+                "streamErrorShown": true,
+                "nonRetryHandled": false,
+                "lastNonRetryErrorSet": false,
+                "retryHeaderRestored": false
+              },
+              {
+                "kind": "error_notification",
+                "errorMessage": "replayed retry",
+                "retryable": true,
+                "fromReplay": true,
+                "streamErrorShown": false,
+                "nonRetryHandled": false,
+                "lastNonRetryErrorSet": false,
+                "retryHeaderRestored": false
+              },
+              {
+                "kind": "error_notification",
+                "errorMessage": "fatal provider error",
+                "retryable": false,
+                "fromReplay": false,
+                "streamErrorShown": false,
+                "nonRetryHandled": true,
+                "lastNonRetryErrorSet": true,
+                "retryHeaderRestored": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_replay_protocol_effects_rejected",
+                "noLiveTerminal": true,
+                "noAppServerMutation": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_replay_protocol.plan=headless\ntui.chat_widget_replay_protocol.replay_turn=ResumeInitialMessages:status=InProgress:turn=turn-running:items=2:task_started=true:completion=false:task_complete=false:interrupted=false:failed=false:last_error_cleared=true:from_replay=true\ntui.chat_widget_replay_protocol.replay_turn=ThreadSnapshot:status=Completed:turn=turn-done:items=4:task_started=false:completion=true:task_complete=true:interrupted=false:failed=false:last_error_cleared=true:from_replay=true\ntui.chat_widget_replay_protocol.replay_item=UserMessage:kind=ResumeInitialMessages:turn=turn-done:from_replay=true:user=true:history=true:agent=false:plan=false:reasoning=0:raw=false:final=false:cmd=false/false:file=false/false:mcp=false/false:web=false:image=false/false:review=false/false:context=false:collab=false:subagent=false:redraw=false\ntui.chat_widget_replay_protocol.replay_item=Reasoning:kind=ThreadSnapshot:turn=turn-done:from_replay=true:user=false:history=false:agent=false:plan=false:reasoning=2:raw=false:final=true:cmd=false/false:file=false/false:mcp=false/false:web=false:image=false/false:review=false/false:context=false:collab=false:subagent=false:redraw=false\ntui.chat_widget_replay_protocol.replay_item=ToolBundle:kind=ThreadSnapshot:turn=turn-tools:from_replay=true:user=false:history=false:agent=false:plan=false:reasoning=0:raw=false:final=false:cmd=true/true:file=true/true:mcp=true/true:web=true:image=true/true:review=true/true:context=true:collab=true:subagent=true:redraw=true\ntui.chat_widget_replay_protocol.notification=McpServerStatusUpdated:kind=Live:from_replay=false:resume_initial=false:snapshot=false:misrouted=true:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.notification=TurnStarted:kind=ResumeInitialMessages:from_replay=true:resume_initial=true:snapshot=false:misrouted=false:last_turn=true:task_started=false:retry_header=false:live_suppressed=false\ntui.chat_widget_replay_protocol.notification=TurnStarted:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=true:task_started=true:retry_header=true:live_suppressed=false\ntui.chat_widget_replay_protocol.notification=ThreadClosed:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.notification=ThreadRealtimeStarted:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.turn_completed=Completed:kind=ThreadSnapshot:turn=turn-done:dedupe_clear=true:task_complete=true:interrupted=false:budget=false:failed=false:finalized=false:last_error_set=false:last_error_cleared=true:duration=234\ntui.chat_widget_replay_protocol.turn_completed=Interrupted:kind=Live:turn=turn-budget:dedupe_clear=true:task_complete=false:interrupted=true:budget=true:failed=false:finalized=true:last_error_set=false:last_error_cleared=true:duration=0\ntui.chat_widget_replay_protocol.turn_completed=Failed:kind=Live:turn=turn-failed:dedupe_clear=true:task_complete=false:interrupted=false:budget=false:failed=true:finalized=true:last_error_set=false:last_error_cleared=true:duration=0\ntui.chat_widget_replay_protocol.error=retryable network:retryable=true:from_replay=false:stream=true:non_retry=false:last_error_set=false:retry_header=false\ntui.chat_widget_replay_protocol.error=replayed retry:retryable=true:from_replay=true:stream=false:non_retry=false:last_error_set=false:retry_header=false\ntui.chat_widget_replay_protocol.error=fatal provider error:retryable=false:from_replay=false:stream=false:non_retry=true:last_error_set=true:retry_header=true\ntui.chat_widget_replay_protocol.failure=live_replay_protocol_effects_rejected:no_live=true:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget replay protocol\ninput> \ntrace:\ntui.chat_widget_replay_protocol.plan=headless\ntui.chat_widget_replay_protocol.replay_turn=ResumeInitialMessages:status=InProgress:turn=turn-running:items=2:task_started=true:completion=false:task_complete=false:interrupted=false:failed=false:last_error_cleared=true:from_replay=true\ntui.chat_widget_replay_protocol.replay_turn=ThreadSnapshot:status=Completed:turn=turn-done:items=4:task_started=false:completion=true:task_complete=true:interrupted=false:failed=false:last_error_cleared=true:from_replay=true\ntui.chat_widget_replay_protocol.replay_item=UserMessage:kind=ResumeInitialMessages:turn=turn-done:from_replay=true:user=true:history=true:agent=false:plan=false:reasoning=0:raw=false:final=false:cmd=false/false:file=false/false:mcp=false/false:web=false:image=false/false:review=false/false:context=false:collab=false:subagent=false:redraw=false\ntui.chat_widget_replay_protocol.replay_item=Reasoning:kind=ThreadSnapshot:turn=turn-done:from_replay=true:user=false:history=false:agent=false:plan=false:reasoning=2:raw=false:final=true:cmd=false/false:file=false/false:mcp=false/false:web=false:image=false/false:review=false/false:context=false:collab=false:subagent=false:redraw=false\ntui.chat_widget_replay_protocol.replay_item=ToolBundle:kind=ThreadSnapshot:turn=turn-tools:from_replay=true:user=false:history=false:agent=false:plan=false:reasoning=0:raw=false:final=false:cmd=true/true:file=true/true:mcp=true/true:web=true:image=true/true:review=true/true:context=true:collab=true:subagent=true:redraw=true\ntui.chat_widget_replay_protocol.notification=McpServerStatusUpdated:kind=Live:from_replay=false:resume_initial=false:snapshot=false:misrouted=true:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.notification=TurnStarted:kind=ResumeInitialMessages:from_replay=true:resume_initial=true:snapshot=false:misrouted=false:last_turn=true:task_started=false:retry_header=false:live_suppressed=false\ntui.chat_widget_replay_protocol.notification=TurnStarted:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=true:task_started=true:retry_header=true:live_suppressed=false\ntui.chat_widget_replay_protocol.notification=ThreadClosed:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.notification=ThreadRealtimeStarted:kind=ThreadSnapshot:from_replay=true:resume_initial=false:snapshot=true:misrouted=false:last_turn=false:task_started=false:retry_header=false:live_suppressed=true\ntui.chat_widget_replay_protocol.turn_completed=Completed:kind=ThreadSnapshot:turn=turn-done:dedupe_clear=true:task_complete=true:interrupted=false:budget=false:failed=false:finalized=false:last_error_set=false:last_error_cleared=true:duration=234\ntui.chat_widget_replay_protocol.turn_completed=Interrupted:kind=Live:turn=turn-budget:dedupe_clear=true:task_complete=false:interrupted=true:budget=true:failed=false:finalized=true:last_error_set=false:last_error_cleared=true:duration=0\ntui.chat_widget_replay_protocol.turn_completed=Failed:kind=Live:turn=turn-failed:dedupe_clear=true:task_complete=false:interrupted=false:budget=false:failed=true:finalized=true:last_error_set=false:last_error_cleared=true:duration=0\ntui.chat_widget_replay_protocol.error=retryable network:retryable=true:from_replay=false:stream=true:non_retry=false:last_error_set=false:retry_header=false\ntui.chat_widget_replay_protocol.error=replayed retry:retryable=true:from_replay=true:stream=false:non_retry=false:last_error_set=false:retry_header=false\ntui.chat_widget_replay_protocol.error=fatal provider error:retryable=false:from_replay=false:stream=false:non_retry=true:last_error_set=true:retry_header=true\ntui.chat_widget_replay_protocol.failure=live_replay_protocol_effects_rejected:no_live=true:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
