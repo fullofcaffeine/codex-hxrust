@@ -21,6 +21,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-transcript-overlay-render.sh` validates fixture-backed full transcript loading, loading overlay state, loaded transcript detail cells, and empty-transcript fallback cells through the normalized test-backend surface.
 - `harness/check-resume-picker-toolbar-footer-render.sh` validates normalized toolbar focus/value display plus wide, compact, key-only, and loading footer/progress variants through the normalized test-backend surface.
 - `harness/check-resume-picker-keyboard-navigation-render.sh` validates normalized keyboard navigation render states for selection movement, page/end-style scroll evidence, search query display, query clear restoration, and frame/render counts through the normalized test-backend surface.
+- `harness/check-resume-picker-density-persistence-render.sh` validates normalized density persistence render states for temp-home config write success and persistence failure/error/footer evidence through the normalized test-backend surface.
 
 ## Upstream Anchors
 
@@ -123,6 +124,8 @@ Status: toolbar/footer width variants now have generated-Rust normalized evidenc
 
 Status: keyboard navigation variants now have generated-Rust normalized evidence in `harness/check-resume-picker-keyboard-navigation-render.sh`. The gate renders initial selection, down movement, page/end-style selection and scroll evidence, active search query display, and query-clear/start-fresh restoration. This is still deterministic test-backend evidence, not live crossterm input, ratatui layout ownership, app-server fanout, state DB/rollout querying, or Cafex behavior.
 
+Status: density persistence success/failure variants now have generated-Rust normalized evidence in `harness/check-resume-picker-density-persistence-render.sh`. The gate renders a temp Codex-home `config.toml` write for dense mode and a deterministic persistence-unconfigured failure with visible inline error, config status, and footer labels. This is still deterministic test-backend evidence, not live user config mutation, live crossterm input, ratatui layout ownership, app-server fanout, state DB/rollout querying, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -162,6 +165,7 @@ Near-term gates:
 - `harness/check-resume-picker-transcript-overlay-render.sh` for normalized full-transcript loading, loaded detail, and empty-fallback transcript snapshots.
 - `harness/check-resume-picker-toolbar-footer-render.sh` for normalized toolbar focus/value and footer width/fallback snapshots.
 - `harness/check-resume-picker-keyboard-navigation-render.sh` for normalized selection movement, page/end-style navigation, search query, and query-clear/start-fresh snapshots.
+- `harness/check-resume-picker-density-persistence-render.sh` for normalized density config persistence success and failure/error/footer snapshots.
 
 Exit criteria for "first live resume picker slice":
 

@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/resume-picker-density-persistence-render
+-D rust_crate=codex_hxrust_resume_picker_density_persistence_render
+-D rust_cargo_subcommand=check
+-main ResumePickerDensityPersistenceRenderHarness

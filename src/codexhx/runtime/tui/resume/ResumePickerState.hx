@@ -58,6 +58,8 @@ typedef ResumePickerStateFields = {
 	final inlineErrorShown:Bool;
 	final lastError:String;
 	final lastFailureCode:String;
+	final configPersistenceStatus:String;
+	final configPersistencePath:String;
 	final selectedThreadId:String;
 	final selectedLabel:String;
 	final footerProgressLabel:String;
@@ -141,6 +143,8 @@ class ResumePickerState {
 	public var inlineErrorShown:Bool;
 	public var lastError:String;
 	public var lastFailureCode:String;
+	public var configPersistenceStatus:String;
+	public var configPersistencePath:String;
 	public var selectedThreadId:String;
 	public var selectedLabel:String;
 	public var footerProgressLabel:String;
@@ -218,6 +222,8 @@ class ResumePickerState {
 			inlineErrorShown: false,
 			lastError: "",
 			lastFailureCode: "",
+			configPersistenceStatus: "",
+			configPersistencePath: "",
 			selectedThreadId: "",
 			selectedLabel: "",
 			footerProgressLabel: "",
@@ -297,6 +303,8 @@ class ResumePickerState {
 			inlineErrorShown: inlineErrorShown,
 			lastError: lastError,
 			lastFailureCode: lastFailureCode,
+			configPersistenceStatus: configPersistenceStatus,
+			configPersistencePath: configPersistencePath,
 			selectedThreadId: selectedThreadId,
 			selectedLabel: selectedLabel,
 			footerProgressLabel: footerProgressLabel,

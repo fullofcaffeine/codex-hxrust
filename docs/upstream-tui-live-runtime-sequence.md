@@ -3172,6 +3172,17 @@ Extend the normalized resume picker renderer from toolbar/footer evidence into v
 
 Status: HXCX-TUI-112 teaches `DeterministicResumePickerTerminalRenderer` to emit an optional normalized navigation line, and adds `ResumePickerKeyboardNavigationRenderGate`, `ResumePickerKeyboardNavigationRenderGateReport`, `test/ResumePickerKeyboardNavigationRenderHarness.hx`, `hxml/resume-picker-keyboard-navigation-render.hxml`, and `harness/check-resume-picker-keyboard-navigation-render.sh`. The gate validates selection movement, page/end-style scroll evidence, search query display, query-clear/start-fresh restoration, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live terminal or ratatui input/layout ownership.
 
+### HXCX-TUI-113: Resume Picker Density Persistence Render Snapshot Gate
+
+Extend the normalized resume picker renderer from keyboard navigation evidence into density config persistence success and failure evidence:
+
+- render temp Codex-home `config.toml` density persistence success through the existing config persistence facade;
+- render persistence-unconfigured failure with inline error, config status, density, footer label, and frame/render count evidence;
+- surface normalized config persistence status/path lines without claiming live user config mutation;
+- keep the gate credential-free and test-backend only, with no live crossterm takeover, ratatui frame lifetime/layout ownership, state DB mutation, model traffic, Cafex behavior, or Codex-specific haxe.rust compiler behavior.
+
+Status: HXCX-TUI-113 adds normalized `ResumePickerState.configPersistenceStatus` and `configPersistencePath` render evidence, plus `ResumePickerDensityPersistenceRenderGate`, `ResumePickerDensityPersistenceRenderGateReport`, `test/ResumePickerDensityPersistenceRenderHarness.hx`, `hxml/resume-picker-density-persistence-render.hxml`, and `harness/check-resume-picker-density-persistence-render.sh`. The gate validates temp-home dense config write success, persistence-unconfigured failure, visible error/config/footer evidence, frame/render counts, and generated Cargo `check`, `test`, and binary execution. This is still normalized test-backend evidence only, not live user config mutation, terminal ownership, or ratatui input/layout ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
