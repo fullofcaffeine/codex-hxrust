@@ -13,6 +13,7 @@ typedef TuiSmokeResumeForkActionFields = {
 	final expandedThreadId:String;
 	final targetLabel:String;
 	final targetPath:String;
+	final keyName:String;
 	final previewState:String;
 	final previewCacheBefore:String;
 	final previewCacheAfter:String;
@@ -21,6 +22,8 @@ typedef TuiSmokeResumeForkActionFields = {
 	final transcriptCacheAfter:String;
 	final pendingThreadId:String;
 	final query:String;
+	final queryBefore:String;
+	final queryAfter:String;
 	final cursor:String;
 	final nextCursor:String;
 	final sortKey:String;
@@ -34,6 +37,11 @@ typedef TuiSmokeResumeForkActionFields = {
 	final pageSize:Int;
 	final loadedRows:Int;
 	final selectedIndex:Int;
+	final selectedBefore:Int;
+	final selectedAfter:Int;
+	final scrollTopBefore:Int;
+	final scrollTopAfter:Int;
+	final viewRows:Int;
 	final requestToken:Int;
 	final searchToken:Int;
 	final scannedRows:Int;
@@ -62,6 +70,10 @@ typedef TuiSmokeResumeForkActionFields = {
 	final previewRendered:Bool;
 	final loadingFrameShown:Bool;
 	final overlayOpened:Bool;
+	final loadMoreRequested:Bool;
+	final startFresh:Bool;
+	final keyConsumed:Bool;
+	final overlayClosed:Bool;
 	final showAll:Bool;
 	final includeNonInteractive:Bool;
 	final selected:Bool;
@@ -117,6 +129,7 @@ class TuiSmokeResumeForkAction {
 	public final expandedThreadId:String;
 	public final targetLabel:String;
 	public final targetPath:String;
+	public final keyName:String;
 	public final previewState:String;
 	public final previewCacheBefore:String;
 	public final previewCacheAfter:String;
@@ -125,6 +138,8 @@ class TuiSmokeResumeForkAction {
 	public final transcriptCacheAfter:String;
 	public final pendingThreadId:String;
 	public final query:String;
+	public final queryBefore:String;
+	public final queryAfter:String;
 	public final cursor:String;
 	public final nextCursor:String;
 	public final sortKey:String;
@@ -138,6 +153,11 @@ class TuiSmokeResumeForkAction {
 	public final pageSize:Int;
 	public final loadedRows:Int;
 	public final selectedIndex:Int;
+	public final selectedBefore:Int;
+	public final selectedAfter:Int;
+	public final scrollTopBefore:Int;
+	public final scrollTopAfter:Int;
+	public final viewRows:Int;
 	public final requestToken:Int;
 	public final searchToken:Int;
 	public final scannedRows:Int;
@@ -166,6 +186,10 @@ class TuiSmokeResumeForkAction {
 	public final previewRendered:Bool;
 	public final loadingFrameShown:Bool;
 	public final overlayOpened:Bool;
+	public final loadMoreRequested:Bool;
+	public final startFresh:Bool;
+	public final keyConsumed:Bool;
+	public final overlayClosed:Bool;
 	public final showAll:Bool;
 	public final includeNonInteractive:Bool;
 	public final selected:Bool;

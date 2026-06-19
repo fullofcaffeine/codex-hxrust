@@ -2815,6 +2815,60 @@ class TuiSmokeEventLoop {
 						+ ":cells=" + action.transcriptCellCount
 						+ ":frame=" + action.frameScheduled
 					);
+				case TuiSmokeResumeForkActionKind.PickerKeyboardMove:
+					trace.push(
+						"tui.resume_fork.picker_keyboard_move="
+						+ "key=" + action.keyName
+						+ ":selected=" + action.selectedBefore + "->" + action.selectedAfter
+						+ ":scroll=" + action.scrollTopBefore + "->" + action.scrollTopAfter
+						+ ":view_rows=" + action.viewRows
+						+ ":loaded=" + action.loadedRows
+						+ ":load_more=" + action.loadMoreRequested
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerQueryClear:
+					trace.push(
+						"tui.resume_fork.picker_query_clear="
+						+ "key=" + action.keyName
+						+ ":query=" + action.queryBefore + "->" + action.queryAfter
+						+ ":selected=" + action.selectedBefore + "->" + action.selectedAfter
+						+ ":start_fresh=" + action.startFresh
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerLoadMoreTrigger:
+					trace.push(
+						"tui.resume_fork.picker_load_more_trigger="
+						+ "key=" + action.keyName
+						+ ":cursor=" + action.nextCursor
+						+ ":requested=" + action.loadMoreRequested
+						+ ":pending_target=" + action.selectedAfter
+						+ ":search_active=" + action.searchActive
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerTranscriptLoadingKey:
+					trace.push(
+						"tui.resume_fork.picker_transcript_loading_key="
+						+ "key=" + action.keyName
+						+ ":pending=" + action.pendingThreadId
+						+ ":consumed=" + action.keyConsumed
+						+ ":exit=" + action.altScreenExited
+					);
+				case TuiSmokeResumeForkActionKind.PickerOverlayClose:
+					trace.push(
+						"tui.resume_fork.picker_overlay_close="
+						+ "key=" + action.keyName
+						+ ":overlay=" + action.overlayOpened + "->" + action.overlayClosed
+						+ ":frame=" + action.frameScheduled
+					);
+				case TuiSmokeResumeForkActionKind.PickerMetadataFailure:
+					trace.push(
+						"tui.resume_fork.picker_metadata_failure="
+						+ "key=" + action.keyName
+						+ ":path=" + action.targetPath
+						+ ":thread=" + action.threadId
+						+ ":error=" + action.errorMessage
+						+ ":frame=" + action.frameScheduled
+					);
 				case TuiSmokeResumeForkActionKind.PickerSelection:
 					trace.push(
 						"tui.resume_fork.picker_selection="

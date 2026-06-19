@@ -3004,6 +3004,20 @@ Extend HXCX-TUI-97 from inline preview into selected raw Codex resume picker ful
 
 Status: HXCX-TUI-98 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker full transcript open, app-server `thread/read includeTurns=true` request intent, transcript-cell projection counts, pending-open lifecycle, loading-frame gate, cached transcript open behavior, successful overlay opening, failed completion/error evidence, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic full transcript overlay evidence only, not live app-server fanout, pager key handling, state DB/rollout querying, ratatui rendering, or persistent session mutation.
 
+### HXCX-TUI-99: Resume Picker Keyboard And Loading-State Boundary
+
+Extend HXCX-TUI-98 from transcript overlay state into selected raw Codex resume picker keyboard and loading-state behavior, without live terminal ownership, app-server transport, state DB/rollout querying, filesystem mutation, model traffic, or ratatui rendering:
+
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `handle_key`: Ctrl-C exits before remapped cancel handling, Esc starts fresh only when the query is empty, plain text belongs to search before list navigation, and modified list keymap bindings drive movement;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` page and jump navigation: PageDown/PageUp move by the visible row count, Home/End clamp to first/last filtered rows, movement calls `ensure_selected_visible`, and End/near-bottom movement can trigger `load_more_if_needed(LoadTrigger::Scroll)` when a cursor exists;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `clear_query_preserving_selection`: clearing a query restores the selected row by stable seen-key when that row still exists in the unfiltered list;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` `handle_transcript_loading_key`: while a full transcript is pending, normal picker movement/input is consumed and only Ctrl-C returns an exit selection;
+- preserve `../codex/codex-rs/tui/src/resume_picker.rs` overlay routing and `handle_overlay_event`: when a transcript overlay is open it receives events first, and closing it clears overlay state and schedules a frame before picker input resumes;
+- preserve selected-row acceptance failure behavior: Enter on a row with no resolvable `ThreadId` attempts metadata resolution when a path exists, surfaces the upstream inline metadata error, and schedules a frame;
+- keep no-live/no-render behavior deterministic, with no live key loop, terminal backend mutation, app-server requests beyond typed intent, filesystem mutation, or Cafex behavior.
+
+Status: HXCX-TUI-99 extends `fixtures/hxrust/tui-smoke.v1.json` with typed resume picker page/jump movement, scroll visibility, load-more trigger, query clear with selection preservation, empty-query start-fresh intent, transcript-loading key consumption, Ctrl-C exit, overlay close, metadata failure, and no-live/no-render evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic keyboard/loading-state evidence only, not live crossterm input, pager key handling, live app-server fanout, state DB/rollout querying, ratatui rendering, or persistent session mutation.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
