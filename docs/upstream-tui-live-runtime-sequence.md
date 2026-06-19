@@ -3057,6 +3057,18 @@ Bridge the completed deterministic resume picker smoke boundaries into the first
 
 Status: HXCX-TUI-102 adds the detailed live integration plan in `docs/resume-picker-live-integration-plan.md` and leaves the Beads queue with upstream/raw implementation work before Cafex adapter work. This is planning and sequencing evidence only, not a live generated TUI binary yet.
 
+### HXCX-TUI-103: Resume Picker Pure State Kernel
+
+Start converting the deterministic resume picker smoke evidence into an upstream-shaped Haxe module before adding live host effects:
+
+- preserve the pure state/effect split from `../codex/codex-rs/tui/src/resume_picker.rs` `PickerState`, page request handling, transcript preview/open lifecycle, density/toolbar decisions, footer progress, empty-state labels, and loading overlay state;
+- map only the upstream-shaped smoke fixture boundary into `ResumePickerCommand`; after that boundary, use typed Haxe command/state/effect values rather than stringly dispatch;
+- keep host effects as intents: page load, preview load, transcript load, density persistence, frame scheduling, load-more, start-fresh, transcript overlay open, and inline error surfacing;
+- validate the kernel through both the Haxe interpreter and haxe.rust-generated Rust using the existing deterministic smoke fixture;
+- keep the slice mainstream/raw Codex only, with no Cafex behavior and no live app-server, terminal, ratatui, config, state DB, model, or filesystem takeover.
+
+Status: HXCX-TUI-103 adds `src/codexhx/runtime/tui/resume/`, `test/ResumePickerKernelHarness.hx`, `hxml/resume-picker-kernel.hxml`, and `harness/check-resume-picker-kernel.sh`. The new gate validates picker open, page request/ingest, stale page refusal, search continuation, sort/filter toggles, preview request/completion/render gating, transcript request/loading/completion/overlay opening, keyboard movement, query clearing, load-more intent, metadata failure, density persistence intent, toolbar focus/activation/render state, footer progress, hints, list render state, empty-state labels, loading overlay text, selection, failure surfacing, and no-live/no-render evidence through portable haxe.rust. This is pure state/effect-intent evidence only, not live app-server fanout, crossterm input, ratatui rendering, config mutation, state DB/rollout querying, or pager overlay ownership.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
@@ -3083,6 +3095,7 @@ These are generic compiler/runtime pressure points. They must not become Codex-s
 | Generated Rust quality | TUI/runtime debugging needs readable generated Rust and useful diagnostics. | Track concrete ugly or inefficient lowering as haxe.rust Beads with product-neutral fixtures. Existing `haxe.rust-oo3.73` is the benchmark-corpus anchor. |
 | Non-copy local reuse | Reducers often route the same text payload into transcript, notification, and state fields. | HXCX-4.10 filed `haxe.rust-fzl`; until fixed, use explicit Haxe semantic copies rather than raw Rust or Codex-specific compiler hooks. |
 | Static final access paths | Fixture and runtime harnesses often keep stable IDs as static constants. | HXCX-4.23 filed `haxe.rust-3f0g`; until fixed, use helper functions for constant values that generated Rust mispaths. |
+| Nullable JSON enum helper matches | Fixture adapters commonly read optional JSON fields before converting into typed DTOs. | HXCX-TUI-103 exposed a portable generated-Rust mismatch around matching `Null<haxe.json.Value>` helper returns. The local harness uses an explicit typed field lookup record. `codex-hxrust-5mz5` tracks reducing this to a product-neutral haxe.rust fixture if it recurs; do not add Codex-specific compiler logic. |
 
 ## Cafex Gate
 

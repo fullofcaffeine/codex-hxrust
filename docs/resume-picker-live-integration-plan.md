@@ -11,6 +11,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `HXCX-TUI-94` through `HXCX-TUI-101` cover raw Codex resume picker thread list filtering, row projection, pagination, preview loading, full transcript open, keyboard/loading routing, density/toolbar persistence intent, footer progress, and render-state labels.
 - `fixtures/hxrust/tui-smoke.v1.json` is still deterministic evidence: no live crossterm input, no live app-server fanout, no ratatui snapshot ownership, no state DB reads, no real config mutation, no model traffic, and no Cafex behavior.
 - `harness/check-tui-smoke.sh` remains the current regression gate for the fixture boundary.
+- `src/codexhx/runtime/tui/resume/` now owns the first pure Haxe resume picker kernel. `harness/check-resume-picker-kernel.sh` runs the same fixture evidence through the Haxe interpreter, portable haxe.rust generation, generated Cargo `check`, generated Cargo `test`, and the generated binary.
 
 ## Upstream Anchors
 
@@ -41,6 +42,10 @@ These pieces should move into typed Haxe first and remain runnable under both th
 - Typed row/protocol DTOs: thread ids, seen-row keys, provider filter, page cursor, sort key, filter mode, density, launch context, action, transcript preview lines, footer labels, and render-state variants.
 - Pure decisions: filter/sort/search, selection movement, scroll visibility, load-more intent, query clearing with stable-row restoration, toolbar value changes, density toggle outcome, footer/hint fitting, empty-state labels, transcript loading gate, and overlay close routing.
 - Fixture and differential public-behavior checks derived from upstream behavior, not upstream private test helper coupling.
+
+Status: the first implementation slice is `codexhx.runtime.tui.resume`. It introduces typed command, state, effect, density, filter, sort, toolbar, and action spaces and reduces the existing smoke fixture into pure picker state transitions. The current kernel covers picker open, page request/ingest, stale page refusal, search continuation, sort/filter toggles, preview request/completion/render gating, transcript request/loading/completion/overlay opening, keyboard movement, query clearing, load-more intent, metadata failures, density persistence intent, toolbar focus/activation/render state, footer progress, hints, empty-state labels, loading overlay text, selection, and failure surfacing.
+
+This is still pure state and effect-intent evidence. It does not own live `AppServerSession`, crossterm input, ratatui frames, config writes, state DB/rollout reads, transcript `HistoryCell` renderables, or pager overlay rendering.
 
 ### Metal/Native Boundaries
 
@@ -104,7 +109,7 @@ These are still fixture evidence and must not be described as live parity yet:
 
 ## haxe.rust Pressure Points
 
-No new compiler limitation is proven by this planning slice. Expected generic pressure points to watch while implementing the live picker are:
+Expected generic pressure points to watch while implementing the live picker are:
 
 - Borrow/ownership-shaped APIs for ratatui frame lifetimes, terminal backends, and drop/RAII restore guards.
 - Async task/channel lowering for the loader queue and frame scheduler without exposing Tokio in Haxe-facing APIs.
@@ -113,6 +118,7 @@ No new compiler limitation is proven by this planning slice. Expected generic pr
 - Low-clone collection lowering for rows, preview lines, transcript cells, and stable row keys.
 - Native `Result`/error-boundary output quality for app-server, terminal, config, and IO errors.
 - Warning-clean, readable Rust for state reducers and host facades with minimal hxrt/runtime involvement on hot paths.
+- Nullable JSON enum helper lowering: the pure picker kernel initially exposed a portable generated-Rust mismatch around matching `Null<haxe.json.Value>` helper returns, where the emitted Rust pattern shape confused `Option<Value>` and `Value`. The harness currently uses an explicit typed field-lookup record instead. `codex-hxrust-5mz5` tracks reducing this to a product-neutral haxe.rust fixture if it recurs or blocks production code.
 
 Any concrete compiler/runtime limitation found while implementing the picker belongs in `../haxe.rust` as a generic fixture or test. Do not add Codex-specific compiler behavior.
 
@@ -121,8 +127,7 @@ Any concrete compiler/runtime limitation found while implementing the picker bel
 Near-term gates:
 
 - `harness/check-tui-smoke.sh`
-- Haxe interpreter tests for the pure picker kernel.
-- haxe.rust-generated Cargo `check`, `test`, and binary execution for the pure picker kernel.
+- `harness/check-resume-picker-kernel.sh` for Haxe interpreter tests plus haxe.rust-generated Cargo `check`, `test`, and binary execution for the pure picker kernel.
 - A new no-credential generated Rust gate for the app-server facade once the host boundary exists.
 - A new VT100/test-backend render gate before any live crossterm automation.
 
