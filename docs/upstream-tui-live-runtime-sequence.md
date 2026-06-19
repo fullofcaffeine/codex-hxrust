@@ -2627,6 +2627,19 @@ Model selected raw Codex hook lifecycle and hooks browser bookkeeping without li
 
 Status: HXCX-TUI-68 extends `fixtures/hxrust/tui-smoke.v1.json` with typed hook start/completion, completed-output flush, idle finish, visibility/timer scheduling, hooks list fetch/load/browser, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic hook lifecycle state evidence only, not live hook execution or full hook-cell rendering.
 
+### HXCX-TUI-69: ChatWidget Input Submission Boundary
+
+Model selected raw Codex input submission and turn lifecycle bookkeeping without live model, shell, or UI effects:
+
+- preserve `../codex/codex-rs/tui/src/chatwidget/turn_lifecycle.rs`: start/finish/restore update agent-turn state, goal-status timing, and sleep-inhibitor state together; reset clears current turn and budget-limited ids; prevent-idle changes rebuild the inhibitor while preserving the active running state; budget-limited turn ids are consumed once;
+- preserve `../codex/codex-rs/tui/src/chatwidget/input_flow.rs` queue decisions: submitted composer input is ignored when empty, queued before session configuration or while a turn is pending/running, queued while plan streaming, and submitted immediately only when the session is configured and not blocked by an active user-shell-only turn;
+- preserve `../codex/codex-rs/tui/src/chatwidget/input_submission.rs` shell escape behavior: empty `!` commands insert shell-help history and continue queue drain, non-empty allowed shell commands submit a user-shell command plus history, and disallowed shell escapes become ordinary user-turn text;
+- preserve blocked image submission handling: image-bearing input is refused when the active model lacks image support, the composed text/elements/local images/remote URLs/mention bindings are restored to the composer, a warning history cell is added, and redraw is requested;
+- preserve user-turn assembly from `../codex/codex-rs/tui/src/chatwidget/user_messages.rs`: remote images, local images, text elements, skill mentions, plugin mentions, app mentions, dedupe, encoded history mentions, IDE context, service/collaboration metadata, pending steers, cancel-edit candidates, final-message separator clearing, and history display gating by active turn;
+- keep the evidence deterministic and independent of live process spawning, filesystem mutation, ratatui rendering, app-server mutation, credentialed model/provider calls, network transport, and Cafex behavior.
+
+Status: HXCX-TUI-69 extends `fixtures/hxrust/tui-smoke.v1.json` with typed turn lifecycle, composer submission, pre-session queueing, empty refusal, blocked-image restore, shell escape, user-input assembly, mention routing, submit-turn, pending-steer, history-render, queue-drain, and no-live evidence and validates the slice through `harness/check-tui-smoke.sh`. This is deterministic input submission state evidence only, not live shell execution, model submission, or full composer rendering.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

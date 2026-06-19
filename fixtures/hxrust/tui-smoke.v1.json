@@ -14189,6 +14189,269 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_hook_lifecycle.plan=headless\ntui.chat_widget_hook_lifecycle.started=hook-pre-1:hook=lint:event=PreToolUse:active=false->true:runs=0->1:existing=false:completed_flush=true:answer_flush=true:activity=true:revision=0->1:redraw=true\ntui.chat_widget_hook_lifecycle.started=hook-post-1:hook=format:event=PostToolUse:active=true->true:runs=1->2:existing=true:completed_flush=false:answer_flush=true:activity=true:revision=1->2:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-pre-1:hook=lint:status=success:matched=true:added=false:created=false:empty=false:output_flush=true:finish_idle=false:history=true:active=true->true:revision=2->3:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-session-1:hook=setup:status=blocked:matched=false:added=true:created=false:empty=false:output_flush=false:finish_idle=false:history=false:active=true->true:revision=3->4:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-quiet-1:hook=quiet:status=success:matched=false:added=false:created=true:empty=true:output_flush=false:finish_idle=true:history=false:active=false->false:revision=4->5:redraw=true\ntui.chat_widget_hook_lifecycle.flush_completed=taken=true:empty_after=true:cleared=true:history=true:separator=true:cells=1:revision=5->6\ntui.chat_widget_hook_lifecycle.finish_active=empty=false:should_flush=true:cleared=true:history=true:separator=true:revision=6->7\ntui.chat_widget_hook_lifecycle.visibility=advanced=true:finish_idle=true:active=true->false:revision=7->8\ntui.chat_widget_hook_lifecycle.timer=visible=true:frame=true:delay_ms=50:deadline=true\ntui.chat_widget_hook_lifecycle.fetch_hooks=cwd=/repo:requested=true:count=1\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/old:loaded=/repo:stale=true:error=false:browser=false:redraw=false:message=\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/repo:loaded=/repo:stale=false:error=true:browser=false:redraw=false:message=bad hooks config\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/repo:loaded=/repo:stale=false:error=false:browser=true:redraw=true:message=\ntui.chat_widget_hook_lifecycle.open_browser=2 hooks:browser=true:redraw=true\ntui.chat_widget_hook_lifecycle.failure=live_hook_lifecycle_rejected:no_hook=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget hook lifecycle\ninput> \ntrace:\ntui.chat_widget_hook_lifecycle.plan=headless\ntui.chat_widget_hook_lifecycle.started=hook-pre-1:hook=lint:event=PreToolUse:active=false->true:runs=0->1:existing=false:completed_flush=true:answer_flush=true:activity=true:revision=0->1:redraw=true\ntui.chat_widget_hook_lifecycle.started=hook-post-1:hook=format:event=PostToolUse:active=true->true:runs=1->2:existing=true:completed_flush=false:answer_flush=true:activity=true:revision=1->2:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-pre-1:hook=lint:status=success:matched=true:added=false:created=false:empty=false:output_flush=true:finish_idle=false:history=true:active=true->true:revision=2->3:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-session-1:hook=setup:status=blocked:matched=false:added=true:created=false:empty=false:output_flush=false:finish_idle=false:history=false:active=true->true:revision=3->4:redraw=true\ntui.chat_widget_hook_lifecycle.completed=hook-quiet-1:hook=quiet:status=success:matched=false:added=false:created=true:empty=true:output_flush=false:finish_idle=true:history=false:active=false->false:revision=4->5:redraw=true\ntui.chat_widget_hook_lifecycle.flush_completed=taken=true:empty_after=true:cleared=true:history=true:separator=true:cells=1:revision=5->6\ntui.chat_widget_hook_lifecycle.finish_active=empty=false:should_flush=true:cleared=true:history=true:separator=true:revision=6->7\ntui.chat_widget_hook_lifecycle.visibility=advanced=true:finish_idle=true:active=true->false:revision=7->8\ntui.chat_widget_hook_lifecycle.timer=visible=true:frame=true:delay_ms=50:deadline=true\ntui.chat_widget_hook_lifecycle.fetch_hooks=cwd=/repo:requested=true:count=1\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/old:loaded=/repo:stale=true:error=false:browser=false:redraw=false:message=\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/repo:loaded=/repo:stale=false:error=true:browser=false:redraw=false:message=bad hooks config\ntui.chat_widget_hook_lifecycle.hooks_loaded=cwd=/repo:loaded=/repo:stale=false:error=false:browser=true:redraw=true:message=\ntui.chat_widget_hook_lifecycle.open_browser=2 hooks:browser=true:redraw=true\ntui.chat_widget_hook_lifecycle.failure=live_hook_lifecycle_rejected:no_hook=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-input-submission-headless",
+      "frame": {
+        "name": "chatwidget-input-submission-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget input submission"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_input_submission",
+          "chatWidgetInputSubmission": {
+            "allowLiveProcess": false,
+            "allowFilesystemMutation": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "turn_start",
+                "agentTurnRunningBefore": false,
+                "agentTurnRunningAfter": true,
+                "sleepTurnRunningBefore": false,
+                "sleepTurnRunningAfter": true,
+                "preventIdleSleep": true
+              },
+              {
+                "kind": "turn_finish",
+                "agentTurnRunningBefore": true,
+                "agentTurnRunningAfter": false,
+                "sleepTurnRunningBefore": true,
+                "sleepTurnRunningAfter": false
+              },
+              {
+                "kind": "turn_restore",
+                "source": "thread_replay",
+                "agentTurnRunningBefore": false,
+                "agentTurnRunningAfter": true,
+                "sleepTurnRunningBefore": false,
+                "sleepTurnRunningAfter": true
+              },
+              {
+                "kind": "turn_reset",
+                "agentTurnRunningBefore": true,
+                "agentTurnRunningAfter": false,
+                "budgetCountBefore": 2,
+                "budgetCountAfter": 0
+              },
+              {
+                "kind": "prevent_idle_sleep",
+                "preventIdleSleep": false,
+                "agentTurnRunningAfter": true,
+                "sleepTurnRunningAfter": true
+              },
+              {
+                "kind": "budget_limited",
+                "text": "turn-budget",
+                "blocked": true,
+                "budgetCountBefore": 0,
+                "budgetCountAfter": 1
+              },
+              {
+                "kind": "budget_limited",
+                "text": "turn-budget",
+                "blocked": false,
+                "budgetCountBefore": 1,
+                "budgetCountAfter": 0
+              },
+              {
+                "kind": "composer_submission",
+                "source": "submitted",
+                "text": "hello",
+                "localImages": 1,
+                "remoteImages": 1,
+                "mentionBindings": 2,
+                "sessionConfigured": true,
+                "planStreaming": false,
+                "queued": false,
+                "submitted": true,
+                "reasoningCleared": true,
+                "statusSet": true
+              },
+              {
+                "kind": "composer_submission",
+                "source": "submitted",
+                "text": "follow-up",
+                "localImages": 0,
+                "remoteImages": 0,
+                "mentionBindings": 0,
+                "sessionConfigured": true,
+                "planStreaming": false,
+                "queued": true,
+                "submitted": false,
+                "reasoningCleared": false,
+                "statusSet": false
+              },
+              {
+                "kind": "pre_session_queue",
+                "text": "draft before config",
+                "sessionConfigured": false,
+                "queuedBefore": 0,
+                "queuedAfter": 1,
+                "pendingPreviewRefreshed": true
+              },
+              {
+                "kind": "empty_submission",
+                "emptyRejected": true,
+                "accepted": false,
+                "queued": false,
+                "submitted": false
+              },
+              {
+                "kind": "blocked_image_restore",
+                "modelSupportsImages": false,
+                "localImages": 1,
+                "remoteImages": 1,
+                "restoredComposer": true,
+                "warningInserted": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "shell_escape",
+                "shellCommand": "",
+                "shellEscapeAllowed": true,
+                "shellHelpInserted": true,
+                "shellRunCommand": false,
+                "shellHistoryInserted": false,
+                "accepted": false
+              },
+              {
+                "kind": "shell_escape",
+                "shellCommand": "cargo test",
+                "shellEscapeAllowed": true,
+                "shellHelpInserted": false,
+                "shellRunCommand": true,
+                "shellHistoryInserted": true,
+                "accepted": true
+              },
+              {
+                "kind": "shell_escape",
+                "shellCommand": "!echo plain",
+                "shellEscapeAllowed": false,
+                "shellHelpInserted": false,
+                "shellRunCommand": false,
+                "shellHistoryInserted": false,
+                "accepted": true
+              },
+              {
+                "kind": "user_input_assembly",
+                "itemsSummary": "remote,local,text,skill,plugin,app",
+                "text": "Fix [Image #1] @lint",
+                "remoteImages": 1,
+                "localImages": 1,
+                "textElements": 2,
+                "itemsCount": 6
+              },
+              {
+                "kind": "mention_routing",
+                "mentionsSummary": "skill:lint|plugin:repo|app:github",
+                "mentionBindings": 4,
+                "skillsCount": 1,
+                "pluginsCount": 1,
+                "appsCount": 1,
+                "duplicatesSkipped": 1
+              },
+              {
+                "kind": "submit_user_turn",
+                "model": "gpt-5.2-codex",
+                "collaborationMode": "default",
+                "itemsCount": 6,
+                "accepted": true,
+                "appCommandCreated": true,
+                "historyAppended": true,
+                "mentionsEncoded": true,
+                "ideContextApplied": true,
+                "finalSeparatorCleared": true
+              },
+              {
+                "kind": "pending_steer",
+                "previewText": "follow-up while running",
+                "renderInHistory": false,
+                "pendingSteersBefore": 0,
+                "pendingSteersAfter": 1,
+                "pendingPreviewRefreshed": true
+              },
+              {
+                "kind": "history_render",
+                "historyRecord": "UserMessageText",
+                "renderInHistory": true,
+                "historyBefore": 0,
+                "historyAfter": 1,
+                "displayInserted": true,
+                "cancelEditRecorded": true,
+                "userTurnPendingStart": true
+              },
+              {
+                "kind": "history_render",
+                "historyRecord": "Override",
+                "renderInHistory": false,
+                "historyBefore": 1,
+                "historyAfter": 2,
+                "displayInserted": false,
+                "cancelEditRecorded": false,
+                "userTurnPendingStart": false
+              },
+              {
+                "kind": "queue_drain",
+                "action": "Plain",
+                "queuedBefore": 2,
+                "queuedAfter": 1,
+                "submitted": true,
+                "pendingPreviewRefreshed": true,
+                "taskRunning": true
+              },
+              {
+                "kind": "queue_drain",
+                "action": "RunShell",
+                "queuedBefore": 1,
+                "queuedAfter": 0,
+                "submitted": false,
+                "pendingPreviewRefreshed": true,
+                "taskRunning": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "thread_model_unavailable",
+                "errorMessage": "Thread model is unavailable",
+                "modelAvailable": false,
+                "noLiveProcess": true,
+                "noFilesystemMutation": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_input_submission.plan=headless\ntui.chat_widget_input_submission.turn_start=agent=false->true:sleep=false->true:prevent_idle=true\ntui.chat_widget_input_submission.turn_finish=agent=true->false:sleep=true->false\ntui.chat_widget_input_submission.turn_restore=agent=false->true:sleep=false->true:source=thread_replay\ntui.chat_widget_input_submission.turn_reset=agent=true->false:budget=2->0\ntui.chat_widget_input_submission.prevent_idle=false:agent=true:sleep=true\ntui.chat_widget_input_submission.budget_limited=turn-budget:blocked=true:budget=0->1\ntui.chat_widget_input_submission.budget_limited=turn-budget:blocked=false:budget=1->0\ntui.chat_widget_input_submission.composer=submitted:text=hello:local=1:remote=1:mentions=2:configured=true:plan_stream=false:queued=false:submitted=true:reasoning=true:status=true\ntui.chat_widget_input_submission.composer=submitted:text=follow-up:local=0:remote=0:mentions=0:configured=true:plan_stream=false:queued=true:submitted=false:reasoning=false:status=false\ntui.chat_widget_input_submission.pre_session_queue=draft before config:configured=false:queued=0->1:preview=true\ntui.chat_widget_input_submission.empty=rejected=true:accepted=false:queued=false:submitted=false\ntui.chat_widget_input_submission.blocked_image=model_supports=false:local=1:remote=1:restored=true:warning=true:redraw=true\ntui.chat_widget_input_submission.shell=:allow=true:help=true:run=false:history=false:accepted=false\ntui.chat_widget_input_submission.shell=cargo test:allow=true:help=false:run=true:history=true:accepted=true\ntui.chat_widget_input_submission.shell=!echo plain:allow=false:help=false:run=false:history=false:accepted=true\ntui.chat_widget_input_submission.items=remote,local,text,skill,plugin,app:text=Fix [Image #1] @lint:remote=1:local=1:elements=2:count=6\ntui.chat_widget_input_submission.mentions=skill:lint|plugin:repo|app:github:bindings=4:skills=1:plugins=1:apps=1:dedupe=1\ntui.chat_widget_input_submission.submit_turn=gpt-5.2-codex:mode=default:items=6:accepted=true:op=true:history_append=true:mentions_encoded=true:ide=true:separator=true\ntui.chat_widget_input_submission.pending_steer=follow-up while running:render_history=false:pending=0->1:preview=true\ntui.chat_widget_input_submission.history=UserMessageText:render=true:history=0->1:display=true:cancel_edit=true:pending_start=true\ntui.chat_widget_input_submission.history=Override:render=false:history=1->2:display=false:cancel_edit=false:pending_start=false\ntui.chat_widget_input_submission.queue_drain=Plain:queued=2->1:submitted=true:preview=true:task=true\ntui.chat_widget_input_submission.queue_drain=RunShell:queued=1->0:submitted=false:preview=true:task=false\ntui.chat_widget_input_submission.failure=thread_model_unavailable:error=Thread model is unavailable:model_available=false:no_process=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget input submission\ninput> \ntrace:\ntui.chat_widget_input_submission.plan=headless\ntui.chat_widget_input_submission.turn_start=agent=false->true:sleep=false->true:prevent_idle=true\ntui.chat_widget_input_submission.turn_finish=agent=true->false:sleep=true->false\ntui.chat_widget_input_submission.turn_restore=agent=false->true:sleep=false->true:source=thread_replay\ntui.chat_widget_input_submission.turn_reset=agent=true->false:budget=2->0\ntui.chat_widget_input_submission.prevent_idle=false:agent=true:sleep=true\ntui.chat_widget_input_submission.budget_limited=turn-budget:blocked=true:budget=0->1\ntui.chat_widget_input_submission.budget_limited=turn-budget:blocked=false:budget=1->0\ntui.chat_widget_input_submission.composer=submitted:text=hello:local=1:remote=1:mentions=2:configured=true:plan_stream=false:queued=false:submitted=true:reasoning=true:status=true\ntui.chat_widget_input_submission.composer=submitted:text=follow-up:local=0:remote=0:mentions=0:configured=true:plan_stream=false:queued=true:submitted=false:reasoning=false:status=false\ntui.chat_widget_input_submission.pre_session_queue=draft before config:configured=false:queued=0->1:preview=true\ntui.chat_widget_input_submission.empty=rejected=true:accepted=false:queued=false:submitted=false\ntui.chat_widget_input_submission.blocked_image=model_supports=false:local=1:remote=1:restored=true:warning=true:redraw=true\ntui.chat_widget_input_submission.shell=:allow=true:help=true:run=false:history=false:accepted=false\ntui.chat_widget_input_submission.shell=cargo test:allow=true:help=false:run=true:history=true:accepted=true\ntui.chat_widget_input_submission.shell=!echo plain:allow=false:help=false:run=false:history=false:accepted=true\ntui.chat_widget_input_submission.items=remote,local,text,skill,plugin,app:text=Fix [Image #1] @lint:remote=1:local=1:elements=2:count=6\ntui.chat_widget_input_submission.mentions=skill:lint|plugin:repo|app:github:bindings=4:skills=1:plugins=1:apps=1:dedupe=1\ntui.chat_widget_input_submission.submit_turn=gpt-5.2-codex:mode=default:items=6:accepted=true:op=true:history_append=true:mentions_encoded=true:ide=true:separator=true\ntui.chat_widget_input_submission.pending_steer=follow-up while running:render_history=false:pending=0->1:preview=true\ntui.chat_widget_input_submission.history=UserMessageText:render=true:history=0->1:display=true:cancel_edit=true:pending_start=true\ntui.chat_widget_input_submission.history=Override:render=false:history=1->2:display=false:cancel_edit=false:pending_start=false\ntui.chat_widget_input_submission.queue_drain=Plain:queued=2->1:submitted=true:preview=true:task=true\ntui.chat_widget_input_submission.queue_drain=RunShell:queued=1->0:submitted=false:preview=true:task=false\ntui.chat_widget_input_submission.failure=thread_model_unavailable:error=Thread model is unavailable:model_available=false:no_process=true:no_fs=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

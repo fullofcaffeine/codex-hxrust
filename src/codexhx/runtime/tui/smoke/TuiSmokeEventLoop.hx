@@ -281,6 +281,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetInputSubmission:
+					if (!traceInputSubmission(event.chatWidgetInputSubmission, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetInterruptQuit:
 					if (!traceChatWidgetInterruptQuit(event.chatWidgetInterruptQuit, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3638,6 +3643,192 @@ class TuiSmokeEventLoop {
 					);
 				case _:
 					trace.push("tui.chat_widget_hook_lifecycle.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceInputSubmission(plan:TuiSmokeInputSubmissionPlan, trace:Array<String>):Bool {
+		if (
+			plan == null
+			|| plan.allowLiveProcess
+			|| plan.allowFilesystemMutation
+			|| plan.allowRatatuiRender
+			|| plan.allowModelCall
+			|| !plan.enabled()
+		) {
+			trace.push("tui.chat_widget_input_submission.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_input_submission.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeInputSubmissionActionKind.TurnStart:
+					trace.push(
+						"tui.chat_widget_input_submission.turn_start="
+						+ "agent=" + action.agentTurnRunningBefore + "->" + action.agentTurnRunningAfter
+						+ ":sleep=" + action.sleepTurnRunningBefore + "->" + action.sleepTurnRunningAfter
+						+ ":prevent_idle=" + action.preventIdleSleep
+					);
+				case TuiSmokeInputSubmissionActionKind.TurnFinish:
+					trace.push(
+						"tui.chat_widget_input_submission.turn_finish="
+						+ "agent=" + action.agentTurnRunningBefore + "->" + action.agentTurnRunningAfter
+						+ ":sleep=" + action.sleepTurnRunningBefore + "->" + action.sleepTurnRunningAfter
+					);
+				case TuiSmokeInputSubmissionActionKind.TurnRestore:
+					trace.push(
+						"tui.chat_widget_input_submission.turn_restore="
+						+ "agent=" + action.agentTurnRunningBefore + "->" + action.agentTurnRunningAfter
+						+ ":sleep=" + action.sleepTurnRunningBefore + "->" + action.sleepTurnRunningAfter
+						+ ":source=" + action.source
+					);
+				case TuiSmokeInputSubmissionActionKind.TurnReset:
+					trace.push(
+						"tui.chat_widget_input_submission.turn_reset="
+						+ "agent=" + action.agentTurnRunningBefore + "->" + action.agentTurnRunningAfter
+						+ ":budget=" + action.budgetCountBefore + "->" + action.budgetCountAfter
+					);
+				case TuiSmokeInputSubmissionActionKind.PreventIdleSleep:
+					trace.push(
+						"tui.chat_widget_input_submission.prevent_idle="
+						+ action.preventIdleSleep
+						+ ":agent=" + action.agentTurnRunningAfter
+						+ ":sleep=" + action.sleepTurnRunningAfter
+					);
+				case TuiSmokeInputSubmissionActionKind.BudgetLimited:
+					trace.push(
+						"tui.chat_widget_input_submission.budget_limited="
+						+ action.text
+						+ ":blocked=" + action.blocked
+						+ ":budget=" + action.budgetCountBefore + "->" + action.budgetCountAfter
+					);
+				case TuiSmokeInputSubmissionActionKind.ComposerSubmission:
+					trace.push(
+						"tui.chat_widget_input_submission.composer="
+						+ action.source
+						+ ":text=" + action.text
+						+ ":local=" + action.localImages
+						+ ":remote=" + action.remoteImages
+						+ ":mentions=" + action.mentionBindings
+						+ ":configured=" + action.sessionConfigured
+						+ ":plan_stream=" + action.planStreaming
+						+ ":queued=" + action.queued
+						+ ":submitted=" + action.submitted
+						+ ":reasoning=" + action.reasoningCleared
+						+ ":status=" + action.statusSet
+					);
+				case TuiSmokeInputSubmissionActionKind.PreSessionQueue:
+					trace.push(
+						"tui.chat_widget_input_submission.pre_session_queue="
+						+ action.text
+						+ ":configured=" + action.sessionConfigured
+						+ ":queued=" + action.queuedBefore + "->" + action.queuedAfter
+						+ ":preview=" + action.pendingPreviewRefreshed
+					);
+				case TuiSmokeInputSubmissionActionKind.EmptySubmission:
+					trace.push(
+						"tui.chat_widget_input_submission.empty="
+						+ "rejected=" + action.emptyRejected
+						+ ":accepted=" + action.accepted
+						+ ":queued=" + action.queued
+						+ ":submitted=" + action.submitted
+					);
+				case TuiSmokeInputSubmissionActionKind.BlockedImageRestore:
+					trace.push(
+						"tui.chat_widget_input_submission.blocked_image="
+						+ "model_supports=" + action.modelSupportsImages
+						+ ":local=" + action.localImages
+						+ ":remote=" + action.remoteImages
+						+ ":restored=" + action.restoredComposer
+						+ ":warning=" + action.warningInserted
+						+ ":redraw=" + action.requestRedraw
+					);
+				case TuiSmokeInputSubmissionActionKind.ShellEscape:
+					trace.push(
+						"tui.chat_widget_input_submission.shell="
+						+ action.shellCommand
+						+ ":allow=" + action.shellEscapeAllowed
+						+ ":help=" + action.shellHelpInserted
+						+ ":run=" + action.shellRunCommand
+						+ ":history=" + action.shellHistoryInserted
+						+ ":accepted=" + action.accepted
+					);
+				case TuiSmokeInputSubmissionActionKind.UserInputAssembly:
+					trace.push(
+						"tui.chat_widget_input_submission.items="
+						+ action.itemsSummary
+						+ ":text=" + action.text
+						+ ":remote=" + action.remoteImages
+						+ ":local=" + action.localImages
+						+ ":elements=" + action.textElements
+						+ ":count=" + action.itemsCount
+					);
+				case TuiSmokeInputSubmissionActionKind.MentionRouting:
+					trace.push(
+						"tui.chat_widget_input_submission.mentions="
+						+ action.mentionsSummary
+						+ ":bindings=" + action.mentionBindings
+						+ ":skills=" + action.skillsCount
+						+ ":plugins=" + action.pluginsCount
+						+ ":apps=" + action.appsCount
+						+ ":dedupe=" + action.duplicatesSkipped
+					);
+				case TuiSmokeInputSubmissionActionKind.SubmitUserTurn:
+					trace.push(
+						"tui.chat_widget_input_submission.submit_turn="
+						+ action.model
+						+ ":mode=" + action.collaborationMode
+						+ ":items=" + action.itemsCount
+						+ ":accepted=" + action.accepted
+						+ ":op=" + action.appCommandCreated
+						+ ":history_append=" + action.historyAppended
+						+ ":mentions_encoded=" + action.mentionsEncoded
+						+ ":ide=" + action.ideContextApplied
+						+ ":separator=" + action.finalSeparatorCleared
+					);
+				case TuiSmokeInputSubmissionActionKind.PendingSteer:
+					trace.push(
+						"tui.chat_widget_input_submission.pending_steer="
+						+ action.previewText
+						+ ":render_history=" + action.renderInHistory
+						+ ":pending=" + action.pendingSteersBefore + "->" + action.pendingSteersAfter
+						+ ":preview=" + action.pendingPreviewRefreshed
+					);
+				case TuiSmokeInputSubmissionActionKind.HistoryRender:
+					trace.push(
+						"tui.chat_widget_input_submission.history="
+						+ action.historyRecord
+						+ ":render=" + action.renderInHistory
+						+ ":history=" + action.historyBefore + "->" + action.historyAfter
+						+ ":display=" + action.displayInserted
+						+ ":cancel_edit=" + action.cancelEditRecorded
+						+ ":pending_start=" + action.userTurnPendingStart
+					);
+				case TuiSmokeInputSubmissionActionKind.QueueDrain:
+					trace.push(
+						"tui.chat_widget_input_submission.queue_drain="
+						+ action.action
+						+ ":queued=" + action.queuedBefore + "->" + action.queuedAfter
+						+ ":submitted=" + action.submitted
+						+ ":preview=" + action.pendingPreviewRefreshed
+						+ ":task=" + action.taskRunning
+					);
+				case TuiSmokeInputSubmissionActionKind.Failure:
+					trace.push(
+						"tui.chat_widget_input_submission.failure="
+						+ action.failureCode
+						+ ":error=" + action.errorMessage
+						+ ":model_available=" + action.modelAvailable
+						+ ":no_process=" + action.noLiveProcess
+						+ ":no_fs=" + action.noFilesystemMutation
+						+ ":no_render=" + action.noRatatuiRender
+						+ ":no_model=" + action.noModelCall
+						+ ":unsupported=" + action.unsupportedRejected
+					);
+				case _:
+					trace.push("tui.chat_widget_input_submission.unknown");
 					return false;
 			}
 		}

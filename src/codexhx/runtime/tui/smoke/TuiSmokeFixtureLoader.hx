@@ -107,6 +107,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetCommandLifecycle: optionalCommandLifecyclePlan(value, "chatWidgetCommandLifecycle"),
 				chatWidgetToolLifecycle: optionalToolLifecyclePlan(value, "chatWidgetToolLifecycle"),
 				chatWidgetHookLifecycle: optionalHookLifecyclePlan(value, "chatWidgetHookLifecycle"),
+				chatWidgetInputSubmission: optionalInputSubmissionPlan(value, "chatWidgetInputSubmission"),
 				chatWidgetInterruptQuit: optionalChatWidgetInterruptQuitPlan(value, "chatWidgetInterruptQuit"),
 				chatWidgetInterruptedRestore: optionalChatWidgetInterruptedRestorePlan(value, "chatWidgetInterruptedRestore"),
 				sideConversation: optionalSideConversationPlan(value, "sideConversation"),
@@ -1144,6 +1145,101 @@ class TuiSmokeFixtureLoader {
 				browserOpened: optionalBoolField(value, "browserOpened", false),
 				fetchRequested: optionalBoolField(value, "fetchRequested", false),
 				noLiveHookExecution: optionalBoolField(value, "noLiveHookExecution", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalInputSubmissionPlan(object:Value, name:String):Null<TuiSmokeInputSubmissionPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeInputSubmissionPlan({
+					allowLiveProcess: optionalBoolField(value, "allowLiveProcess", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: inputSubmissionActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function inputSubmissionActions(values:Array<Value>):Array<TuiSmokeInputSubmissionAction> {
+		final out:Array<TuiSmokeInputSubmissionAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeInputSubmissionAction({
+				kind: TuiSmokeInputSubmissionActionKind.fromString(stringField(value, "kind", "")),
+				text: optionalStringField(value, "text", ""),
+				action: optionalStringField(value, "action", ""),
+				source: optionalStringField(value, "source", ""),
+				historyRecord: optionalStringField(value, "historyRecord", ""),
+				shellCommand: optionalStringField(value, "shellCommand", ""),
+				model: optionalStringField(value, "model", ""),
+				collaborationMode: optionalStringField(value, "collaborationMode", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				previewText: optionalStringField(value, "previewText", ""),
+				itemsSummary: optionalStringField(value, "itemsSummary", ""),
+				mentionsSummary: optionalStringField(value, "mentionsSummary", ""),
+				localImages: optionalIntField(value, "localImages", 0),
+				remoteImages: optionalIntField(value, "remoteImages", 0),
+				textElements: optionalIntField(value, "textElements", 0),
+				mentionBindings: optionalIntField(value, "mentionBindings", 0),
+				queuedBefore: optionalIntField(value, "queuedBefore", 0),
+				queuedAfter: optionalIntField(value, "queuedAfter", 0),
+				pendingSteersBefore: optionalIntField(value, "pendingSteersBefore", 0),
+				pendingSteersAfter: optionalIntField(value, "pendingSteersAfter", 0),
+				rejectedBefore: optionalIntField(value, "rejectedBefore", 0),
+				rejectedAfter: optionalIntField(value, "rejectedAfter", 0),
+				historyBefore: optionalIntField(value, "historyBefore", 0),
+				historyAfter: optionalIntField(value, "historyAfter", 0),
+				itemsCount: optionalIntField(value, "itemsCount", 0),
+				skillsCount: optionalIntField(value, "skillsCount", 0),
+				pluginsCount: optionalIntField(value, "pluginsCount", 0),
+				appsCount: optionalIntField(value, "appsCount", 0),
+				duplicatesSkipped: optionalIntField(value, "duplicatesSkipped", 0),
+				budgetCountBefore: optionalIntField(value, "budgetCountBefore", 0),
+				budgetCountAfter: optionalIntField(value, "budgetCountAfter", 0),
+				sessionConfigured: optionalBoolField(value, "sessionConfigured", false),
+				planStreaming: optionalBoolField(value, "planStreaming", false),
+				taskRunning: optionalBoolField(value, "taskRunning", false),
+				agentTurnRunningBefore: optionalBoolField(value, "agentTurnRunningBefore", false),
+				agentTurnRunningAfter: optionalBoolField(value, "agentTurnRunningAfter", false),
+				sleepTurnRunningBefore: optionalBoolField(value, "sleepTurnRunningBefore", false),
+				sleepTurnRunningAfter: optionalBoolField(value, "sleepTurnRunningAfter", false),
+				preventIdleSleep: optionalBoolField(value, "preventIdleSleep", false),
+				queued: optionalBoolField(value, "queued", false),
+				submitted: optionalBoolField(value, "submitted", false),
+				accepted: optionalBoolField(value, "accepted", false),
+				appCommandCreated: optionalBoolField(value, "appCommandCreated", false),
+				pendingPreviewRefreshed: optionalBoolField(value, "pendingPreviewRefreshed", false),
+				reasoningCleared: optionalBoolField(value, "reasoningCleared", false),
+				statusSet: optionalBoolField(value, "statusSet", false),
+				emptyRejected: optionalBoolField(value, "emptyRejected", false),
+				modelSupportsImages: optionalBoolField(value, "modelSupportsImages", false),
+				restoredComposer: optionalBoolField(value, "restoredComposer", false),
+				warningInserted: optionalBoolField(value, "warningInserted", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				shellEscapeAllowed: optionalBoolField(value, "shellEscapeAllowed", false),
+				shellHelpInserted: optionalBoolField(value, "shellHelpInserted", false),
+				shellRunCommand: optionalBoolField(value, "shellRunCommand", false),
+				shellHistoryInserted: optionalBoolField(value, "shellHistoryInserted", false),
+				renderInHistory: optionalBoolField(value, "renderInHistory", false),
+				userTurnPendingStart: optionalBoolField(value, "userTurnPendingStart", false),
+				cancelEditRecorded: optionalBoolField(value, "cancelEditRecorded", false),
+				displayInserted: optionalBoolField(value, "displayInserted", false),
+				finalSeparatorCleared: optionalBoolField(value, "finalSeparatorCleared", false),
+				pendingSteerCreated: optionalBoolField(value, "pendingSteerCreated", false),
+				historyAppended: optionalBoolField(value, "historyAppended", false),
+				mentionsEncoded: optionalBoolField(value, "mentionsEncoded", false),
+				ideContextApplied: optionalBoolField(value, "ideContextApplied", false),
+				modelAvailable: optionalBoolField(value, "modelAvailable", false),
+				blocked: optionalBoolField(value, "blocked", false),
+				noLiveProcess: optionalBoolField(value, "noLiveProcess", false),
 				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
