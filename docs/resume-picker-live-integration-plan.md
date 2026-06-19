@@ -124,7 +124,7 @@ Expected generic pressure points to watch while implementing the live picker are
 - Low-clone collection lowering for rows, preview lines, transcript cells, and stable row keys.
 - Native `Result`/error-boundary output quality for app-server, terminal, config, and IO errors.
 - Warning-clean, readable Rust for state reducers and host facades with minimal hxrt/runtime involvement on hot paths.
-- Nullable JSON enum helper lowering: the pure picker kernel initially exposed a portable generated-Rust mismatch around matching `Null<haxe.json.Value>` helper returns, where the emitted Rust pattern shape confused `Option<Value>` and `Value`. The harness currently uses an explicit typed field-lookup record instead. `codex-hxrust-5mz5` tracks reducing this to a product-neutral haxe.rust fixture if it recurs or blocks production code.
+- Nullable JSON enum helper lowering: the pure picker kernel initially exposed a portable generated-Rust mismatch around matching `Null<haxe.json.Value>` helper returns, where the emitted Rust pattern shape confused `Option<Value>` and `Value`. This is fixed upstream in haxe.rust `8b7b97b24f19577dda522e7d0cae33853a4ff44c` / `haxe.rust-qsoq` with a product-neutral `json_nullable_value_switch` snapshot. codexhx can revisit local typed field-lookup workarounds when a future picker slice benefits from the clearer direct `Null<Value>` switch shape.
 
 Any concrete compiler/runtime limitation found while implementing the picker belongs in `../haxe.rust` as a generic fixture or test. Do not add Codex-specific compiler behavior.
 

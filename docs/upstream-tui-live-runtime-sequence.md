@@ -3121,7 +3121,7 @@ These are generic compiler/runtime pressure points. They must not become Codex-s
 | Generated Rust quality | TUI/runtime debugging needs readable generated Rust and useful diagnostics. | Track concrete ugly or inefficient lowering as haxe.rust Beads with product-neutral fixtures. Existing `haxe.rust-oo3.73` is the benchmark-corpus anchor. |
 | Non-copy local reuse | Reducers often route the same text payload into transcript, notification, and state fields. | HXCX-4.10 filed `haxe.rust-fzl`; until fixed, use explicit Haxe semantic copies rather than raw Rust or Codex-specific compiler hooks. |
 | Static final access paths | Fixture and runtime harnesses often keep stable IDs as static constants. | HXCX-4.23 filed `haxe.rust-3f0g`; until fixed, use helper functions for constant values that generated Rust mispaths. |
-| Nullable JSON enum helper matches | Fixture adapters commonly read optional JSON fields before converting into typed DTOs. | HXCX-TUI-103 exposed a portable generated-Rust mismatch around matching `Null<haxe.json.Value>` helper returns. The local harness uses an explicit typed field lookup record. `codex-hxrust-5mz5` tracks reducing this to a product-neutral haxe.rust fixture if it recurs; do not add Codex-specific compiler logic. |
+| Nullable JSON enum helper matches | Fixture adapters commonly read optional JSON fields before converting into typed DTOs. | HXCX-TUI-103 exposed a portable generated-Rust mismatch around matching `Null<haxe.json.Value>` helper returns. Fixed upstream in haxe.rust `8b7b97b24f19577dda522e7d0cae33853a4ff44c` / `haxe.rust-qsoq` with the product-neutral `json_nullable_value_switch` snapshot; keep future compiler pressure generic and Codex-free. |
 
 ## Cafex Gate
 
