@@ -18,14 +18,16 @@ The `../haxe.rust` checkout is part of the work surface for this project. Do **n
 
 Local codex-hxrust builds use the live sibling checkout through `haxe_libraries/reflaxe.rust.hxml`, which adds `../haxe.rust/src` and `../haxe.rust/std` to the Haxe classpath. That means edits in `../haxe.rust` are reflected immediately in this repo's Haxe/haxe.rust gates. The pin does not select files for local scoped builds; it records the committed known-good compiler revision for reproducibility.
 
-Work directly in `../haxe.rust` when fixing compiler/runtime limitations. The compiler must remain a general Haxe-to-Rust backend: never add Codex-specific code, fixtures, paths, naming, or assumptions to haxe.rust. Codex-specific pressure fixtures belong in this repo; haxe.rust fixes need generic minimal repros and generic tests.
+Work directly in `../haxe.rust` when fixing compiler/runtime limitations. Before making any change there, read `../haxe.rust/AGENTS.md` in full and follow that repository's current instructions, including its Beads workflow, test expectations, commit-message conventions, push/landing rules, and any local branch or release discipline. Do not assume codex-hxrust conventions apply inside haxe.rust unless that repo's instructions say so.
+
+The compiler must remain a general Haxe-to-Rust backend: never add Codex-specific code, fixtures, paths, naming, or assumptions to haxe.rust. Codex-specific pressure fixtures belong in this repo; haxe.rust fixes need generic minimal repros and generic tests.
 
 Before changing `../haxe.rust`, verify it is up to date with its remote `origin` by fetching and rebasing or otherwise reconciling remote changes without overwriting unrelated local work. After making a haxe.rust fix, commit and push it directly in that repository; do not leave compiler/runtime improvements stranded locally while codex-hxrust has already adapted to them.
 
 When the Codex port exposes a haxe.rust limitation:
 
 1. Reduce the limitation to the smallest Haxe/haxe.rust fixture or failing example.
-2. Fix or improve haxe.rust in `../haxe.rust`, respecting its Beads milestones, `AGENTS.md`, and contract-first test policy.
+2. Re-read or confirm `../haxe.rust/AGENTS.md` is current for this session, then fix or improve haxe.rust in `../haxe.rust`, respecting its Beads milestones, commit conventions, and contract-first test policy.
 3. Commit and push the haxe.rust change directly in that repository.
 4. Run the relevant haxe.rust validation plus this repo's generated Cargo/fixture gates.
 5. Update `reference/haxe-rust.pin.json` only after the committed haxe.rust revision should become codex-hxrust's known-good compiler pin and the gated checks pass.
