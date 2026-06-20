@@ -5,6 +5,7 @@ enum abstract ResumePickerHostEventKind(String) to String {
 	final PreviewLoaded = "preview_loaded";
 	final TranscriptLoaded = "transcript_loaded";
 	final FrameRequested = "frame_requested";
+	final ServerRequestDelivered = "server_request_delivered";
 	final DensityPersisted = "density_persisted";
 	final Rendered = "rendered";
 	final Failed = "failed";

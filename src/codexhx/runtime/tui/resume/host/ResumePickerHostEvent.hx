@@ -63,6 +63,17 @@ class ResumePickerHostEvent {
 		});
 	}
 
+	public static function serverRequestDelivered(requestId:String, detail:String):ResumePickerHostEvent {
+		return new ResumePickerHostEvent({
+			kind: ResumePickerHostEventKind.ServerRequestDelivered,
+			requestId: requestId,
+			threadId: "",
+			detail: detail,
+			failureCode: "",
+			failureMessage: ""
+		});
+	}
+
 	public static function failed(requestId:String, threadId:String, code:String, message:String):ResumePickerHostEvent {
 		return new ResumePickerHostEvent({
 			kind: ResumePickerHostEventKind.Failed,

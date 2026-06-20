@@ -54,6 +54,8 @@ class ResumePickerHostFacadeHarness {
 					transcriptEvents = transcriptEvents + 1;
 				case ResumePickerHostEventKind.FrameRequested:
 					frameEvents = frameEvents + 1;
+				case ResumePickerHostEventKind.ServerRequestDelivered:
+					summaries.push("unexpected-server-request-delivery");
 				case ResumePickerHostEventKind.Failed:
 					failureEvents = failureEvents + 1;
 				case _:

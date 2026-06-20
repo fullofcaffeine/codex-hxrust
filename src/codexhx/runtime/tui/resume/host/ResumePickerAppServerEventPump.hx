@@ -153,7 +153,7 @@ class ResumePickerAppServerEventPump {
 			case ProgressUpdated:
 				ResumePickerHostEvent.frameRequested(event.detail);
 			case ServerRequest:
-				ResumePickerHostEvent.failed(event.requestId, "", "app_server_request_delivered_to_tui", event.detail);
+				ResumePickerHostEvent.serverRequestDelivered(event.requestId, event.detail);
 			case Disconnected:
 				final outcome = fanout.disconnect(event.detail);
 				disconnectEvent(outcome, event.detail);
