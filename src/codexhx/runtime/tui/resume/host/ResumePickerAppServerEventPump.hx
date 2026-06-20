@@ -14,6 +14,8 @@ class ResumePickerAppServerEventPump {
 	final scheduler:ResumePickerFrameSchedulerHandle;
 	final stream:DeterministicAsyncStream<ResumePickerAppServerStreamEvent>;
 	final log:Array<String>;
+	var pressureSkippedEvents:Int;
+	final rejectedServerRequests:Array<String>;
 
 	public function new(activeGeneration:Int, fanout:ResumePickerAppServerStreamFanout, scheduler:ResumePickerFrameSchedulerHandle, capacity:Int) {
 		this.activeGeneration = activeGeneration;
@@ -21,6 +23,8 @@ class ResumePickerAppServerEventPump {
 		this.scheduler = scheduler;
 		this.stream = new DeterministicAsyncStream<ResumePickerAppServerStreamEvent>(capacity);
 		this.log = [];
+		this.pressureSkippedEvents = 0;
+		this.rejectedServerRequests = [];
 		log.push("session:attach:generation=" + activeGeneration);
 	}
 
@@ -34,6 +38,37 @@ class ResumePickerAppServerEventPump {
 		final delivery = event.lossless ? AsyncDeliveryKind.Lossless : AsyncDeliveryKind.BestEffort;
 		final poll = stream.push(event, delivery);
 		log.push("enqueue:" + event.summary() + ";poll=" + AsyncPollSummary.summary(poll));
+		return poll;
+	}
+
+	public function forward(event:ResumePickerAppServerStreamEvent):AsyncPoll<Bool> {
+		if (event.lossless && pressureSkippedEvents > 0) {
+			final lag = ResumePickerAppServerStreamEvent.lagged(event.generation, pressureSkippedEvents);
+			final lagPoll = stream.push(lag, AsyncDeliveryKind.Lossless);
+			log.push("forward:lag:" + lag.summary() + ";poll=" + AsyncPollSummary.summary(lagPoll));
+			switch lagPoll {
+				case Ready(_, _, _):
+					pressureSkippedEvents = 0;
+				case _:
+					return lagPoll;
+			}
+		}
+
+		final delivery = event.lossless ? AsyncDeliveryKind.Lossless : AsyncDeliveryKind.BestEffort;
+		final poll = stream.push(event, delivery);
+		log.push("forward:" + event.summary() + ";poll=" + AsyncPollSummary.summary(poll));
+		switch poll {
+			case Backpressured(_, _, _):
+				if (!event.lossless) {
+					pressureSkippedEvents = pressureSkippedEvents + 1;
+					if (event.kind == ResumePickerAppServerStreamEventKind.ServerRequest) {
+						final rejection = "request=" + event.requestId + ";detail=" + event.detail + ";reason=consumer_queue_full";
+						rejectedServerRequests.push(rejection);
+						log.push("forward:server-request-rejected:" + rejection);
+					}
+				}
+			case _:
+		}
 		return poll;
 	}
 
@@ -57,6 +92,14 @@ class ResumePickerAppServerEventPump {
 
 	public function summaries():Array<String> {
 		return log.copy();
+	}
+
+	public function rejectedRequestSummaries():Array<String> {
+		return rejectedServerRequests.copy();
+	}
+
+	public function skippedBestEffortEvents():Int {
+		return pressureSkippedEvents;
 	}
 
 	function dispatchItem(item:AsyncStreamItem<ResumePickerAppServerStreamEvent>, pendingCount:Int, skippedCount:Int):ResumePickerAppServerEventPumpDispatch {
@@ -107,6 +150,10 @@ class ResumePickerAppServerEventPump {
 			case FrameRequested:
 				scheduler.requestFrame(event.detail);
 				ResumePickerHostEvent.frameRequested(event.detail);
+			case ProgressUpdated:
+				ResumePickerHostEvent.frameRequested(event.detail);
+			case ServerRequest:
+				ResumePickerHostEvent.failed(event.requestId, "", "app_server_request_delivered_to_tui", event.detail);
 			case Disconnected:
 				final outcome = fanout.disconnect(event.detail);
 				disconnectEvent(outcome, event.detail);

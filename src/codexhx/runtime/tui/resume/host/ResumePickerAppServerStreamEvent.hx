@@ -69,6 +69,30 @@ class ResumePickerAppServerStreamEvent {
 		});
 	}
 
+	public static function progressUpdated(generation:Int, detail:String):ResumePickerAppServerStreamEvent {
+		return new ResumePickerAppServerStreamEvent({
+			generation: generation,
+			kind: ResumePickerAppServerStreamEventKind.ProgressUpdated,
+			requestId: "",
+			threadId: "",
+			payloadJson: "",
+			detail: detail,
+			lossless: false
+		});
+	}
+
+	public static function serverRequest(generation:Int, requestId:String, detail:String):ResumePickerAppServerStreamEvent {
+		return new ResumePickerAppServerStreamEvent({
+			generation: generation,
+			kind: ResumePickerAppServerStreamEventKind.ServerRequest,
+			requestId: requestId,
+			threadId: "",
+			payloadJson: "",
+			detail: detail,
+			lossless: false
+		});
+	}
+
 	public static function disconnected(generation:Int, message:String):ResumePickerAppServerStreamEvent {
 		return new ResumePickerAppServerStreamEvent({
 			generation: generation,

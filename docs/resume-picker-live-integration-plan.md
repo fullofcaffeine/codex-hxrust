@@ -40,6 +40,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-app-server-stream-fanout-render.sh` validates normalized app-server stream/fanout evidence, including typed pending request ownership, correlated `thread/list`/`thread/read` response routing, lossless backpressure, JSON-RPC error mapping, and credential/model/state-DB-free transcript recovery.
 - `harness/check-resume-picker-app-server-session-lifecycle-render.sh` validates normalized app-server session lifecycle evidence, including pending request cancellation, late response rejection, disconnect refusal, fresh-session recovery, and credential/model/state-DB-free execution.
 - `harness/check-resume-picker-app-server-event-pump-boundary-render.sh` validates normalized app-server event-pump boundary evidence, including queued stream-event dispatch, active session generation filtering, stale-event rejection, frame scheduling intent, disconnect propagation, and credential/model/state-DB-free fresh-session recovery.
+- `harness/check-resume-picker-app-server-stream-pressure-render.sh` validates normalized app-server stream pressure evidence, including upstream-shaped lossless versus best-effort forwarding, best-effort server-request rejection under queue pressure, lag-marker delivery before preserved lossless events, and credential/model/state-DB-free recovery.
 
 ## Upstream Anchors
 
@@ -182,6 +183,8 @@ Status: app-server session lifecycle evidence now has generated-Rust normalized 
 
 Status: app-server event-pump boundary evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-app-server-event-pump-boundary-render.sh`. The gate models queued app-server stream events as typed Haxe values, dispatches active-generation page/read/frame/disconnect events through the existing fanout and frame scheduler, rejects stale-generation events before they can mutate picker state, and recovers by attaching a fresh session generation. This is still credential-free deterministic event-pump evidence, not live socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
 
+Status: app-server stream pressure evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-app-server-stream-pressure-render.sh`. The gate forwards upstream-shaped app-server stream events through a bounded typed pump, proves best-effort frame/progress delivery can be skipped under pressure, rejects a dropped request-like event with explicit consumer-queue-full evidence, emits a lag marker before the next lossless read result, preserves lossless read/page events, and renders recovery. This is still credential-free deterministic stream-pressure evidence, not live socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -241,6 +244,7 @@ Near-term gates:
 - `harness/check-resume-picker-app-server-stream-fanout-render.sh` for normalized app-server stream/fanout pending ownership, correlated response routing, lossless backpressure, JSON-RPC error mapping, transport events, and transcript recovery snapshots.
 - `harness/check-resume-picker-app-server-session-lifecycle-render.sh` for normalized app-server session cancellation, late response rejection, disconnect refusal, fresh-session recovery, transport events, and transcript recovery snapshots.
 - `harness/check-resume-picker-app-server-event-pump-boundary-render.sh` for normalized app-server event-pump queued dispatch, session-generation filtering, stale-event rejection, frame scheduling intent, disconnect propagation, and recovery snapshots.
+- `harness/check-resume-picker-app-server-stream-pressure-render.sh` for normalized app-server stream pressure, best-effort drop/rejection evidence, lag-marker delivery, preserved lossless read/page events, and recovery snapshots.
 
 Exit criteria for "first live resume picker slice":
 
