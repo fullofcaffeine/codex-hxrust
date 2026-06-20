@@ -37,6 +37,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-reload-failure-preservation-render.sh` validates normalized reload failure preservation evidence, including previous row/selection/query preservation, visible loader/error/footer state, and later successful recovery.
 - `harness/check-resume-picker-live-app-server-boundary-render.sh` validates normalized live app-server boundary evidence, including typed `thread/list` request provenance, bounded loader backpressure, app-server failure mapping, and credential/model/state-DB-free recovery rendering.
 - `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh` validates normalized JSON-RPC `thread/list` transport evidence, including request method/params/request-id preservation, fixture response decoding, JSON-RPC error mapping, recovery rendering, and credential/model/state-DB-free execution.
+- `harness/check-resume-picker-app-server-stream-fanout-render.sh` validates normalized app-server stream/fanout evidence, including typed pending request ownership, correlated `thread/list`/`thread/read` response routing, lossless backpressure, JSON-RPC error mapping, and credential/model/state-DB-free transcript recovery.
 
 ## Upstream Anchors
 
@@ -173,6 +174,8 @@ Status: JSON-RPC `thread/list` transport evidence now has generated-Rust normali
 
 Status: JSON-RPC `thread/read` transport evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-json-rpc-thread-read-transport-render.sh`. The gate routes resume picker preview and transcript reads through the same fixture-backed JSON-RPC source, preserves upstream `thread/read` params with `threadId` and `includeTurns`, keeps picker-local preview hints off the wire, decodes preview lines and transcript cells, maps JSON-RPC errors into visible loader/error state, drains transport event summaries, and renders preview/error/transcript recovery. This is still credential-free deterministic transport evidence, not live socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
 
+Status: app-server stream/fanout evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-app-server-stream-fanout-render.sh`. The gate enqueues `thread/list` and multiple `thread/read` requests through a typed fanout facade, preserves upstream JSON-RPC method/params/request-id shape, holds pending requests until correlated responses arrive, routes out-of-order page/preview completions, surfaces deterministic lossless backpressure, maps a later JSON-RPC read error, drains transport events, and renders transcript recovery. This is still credential-free deterministic stream evidence, not live socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -229,6 +232,7 @@ Near-term gates:
 - `harness/check-resume-picker-live-app-server-boundary-render.sh` for normalized typed app-server `thread/list` request-boundary provenance, lossless backpressure, source-failure mapping, and recovery snapshots.
 - `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh` for normalized JSON-RPC `thread/list` transport provenance, fixture result decoding, JSON-RPC error mapping, transport events, and recovery snapshots.
 - `harness/check-resume-picker-json-rpc-thread-read-transport-render.sh` for normalized JSON-RPC `thread/read` transport provenance, fixture preview/transcript decoding, JSON-RPC error mapping, transport events, and preview/transcript render snapshots.
+- `harness/check-resume-picker-app-server-stream-fanout-render.sh` for normalized app-server stream/fanout pending ownership, correlated response routing, lossless backpressure, JSON-RPC error mapping, transport events, and transcript recovery snapshots.
 
 Exit criteria for "first live resume picker slice":
 

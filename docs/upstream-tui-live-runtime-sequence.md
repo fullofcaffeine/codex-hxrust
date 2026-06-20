@@ -3363,6 +3363,19 @@ Extend the fixture-backed JSON-RPC transport boundary from `thread/list` into se
 
 Status: HXCX-TUI-129 adds JSON-RPC `thread/read` support to `JsonRpcResumePickerThreadSource`, plus `ResumePickerJsonRpcThreadReadTransportRenderGate`, `ResumePickerJsonRpcThreadReadTransportRenderGateReport`, `test/ResumePickerJsonRpcThreadReadTransportRenderHarness.hx`, `hxml/resume-picker-json-rpc-thread-read-transport-render.hxml`, and `harness/check-resume-picker-json-rpc-thread-read-transport-render.sh`. The gate validates upstream-shaped method/params/request-id provenance, local preview truncation, deterministic transcript-cell decoding, app-server error mapping, transport event summaries, visible normalized preview/error/transcript rendering, no credential/model/state DB mutation, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is deterministic fixture transport evidence only, not live socket ownership, Tokio stream ownership, terminal ownership, ratatui input/layout ownership, SQLite/state DB mutation, or Cafex behavior.
 
+### HXCX-TUI-130: Resume Picker App-Server Stream/Fanout Render Gate
+
+Move the fixture-backed JSON-RPC source closer to the upstream app-server client stream shape:
+
+- enqueue `thread/list` and `thread/read` requests without immediate fixture completion;
+- preserve upstream-shaped method/params/request-id provenance while holding typed pending requests;
+- resolve page and preview responses through correlated request ids while other reads remain pending;
+- surface bounded lossless transport backpressure as a typed picker host failure;
+- drain transport stream events and recover with a later JSON-RPC read error plus successful transcript response;
+- keep the gate credential-free, model-free, state-DB-free, and Cafex-free.
+
+Status: HXCX-TUI-130 adds two-phase fanout hooks to `JsonRpcResumePickerThreadSource`, `ResumePickerAppServerStreamFanout`, `ResumePickerAppServerStreamFanoutRenderGate`, `ResumePickerAppServerStreamFanoutRenderGateReport`, `test/ResumePickerAppServerStreamFanoutRenderHarness.hx`, `hxml/resume-picker-app-server-stream-fanout-render.hxml`, and `harness/check-resume-picker-app-server-stream-fanout-render.sh`. The gate validates typed pending ownership, upstream JSON-RPC method/params/request-id preservation, correlated page/preview/transcript response routing, deterministic lossless backpressure routing, JSON-RPC read-error mapping, transport event summaries, visible normalized transcript recovery, no credential/model/state DB mutation, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is deterministic stream/fanout evidence only, not live socket ownership, Tokio stream ownership, terminal ownership, ratatui input/layout ownership, SQLite/state DB mutation, or Cafex behavior.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

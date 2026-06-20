@@ -13,6 +13,8 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 	final transport:FixtureLiveTransport;
 	final resultFixtures:StringMap<String>;
 	final errorFixtures:StringMap<String>;
+	final pendingPageRequests:StringMap<ResumePickerThreadListRequest>;
+	final pendingReadRequests:StringMap<ResumePickerThreadReadRequest>;
 	final requestLog:Array<String>;
 	final transportLog:Array<String>;
 	var pageRequests:Int;
@@ -22,6 +24,8 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 		this.transport = new FixtureLiveTransport(queueCapacity);
 		this.resultFixtures = new StringMap();
 		this.errorFixtures = new StringMap();
+		this.pendingPageRequests = new StringMap();
+		this.pendingReadRequests = new StringMap();
 		this.requestLog = [];
 		this.transportLog = [];
 		this.pageRequests = 0;
@@ -86,6 +90,43 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 		return task;
 	}
 
+	public function enqueuePageRequest(request:ResumePickerThreadListRequest):RuntimeClientOutcome {
+		pageRequests = pageRequests + 1;
+		requestLog.push(threadListRequestFacts(request));
+		final accepted = transport.sendRequest(request.requestId, "thread/list", encodeThreadListParams(request));
+		transportLog.push("fanout-send:" + outcomeSummary(accepted));
+		if (accepted.ok)
+			pendingPageRequests.set(request.requestId, request);
+		return accepted;
+	}
+
+	public function completePageRequest(requestId:String, resultJson:String):ResumePickerHostEvent {
+		final completed = transport.completeResponse(requestId, "thread/list", resultJson);
+		transportLog.push("fanout-complete:" + outcomeSummary(completed));
+		if (!completed.ok) {
+			if (completed.code == "completed")
+				pendingPageRequests.remove(requestId);
+			return ResumePickerHostEvent.failed(requestId, "", "json_rpc_response_rejected", completed.code + ":" + completed.message);
+		}
+		pendingPageRequests.remove(requestId);
+		final response = decodeThreadListResponse(requestId, resultJson);
+		if (!response.ok)
+			return ResumePickerHostEvent.failed(requestId, "", response.errorCode, response.errorMessage);
+		return ResumePickerHostEvent.pageLoaded(response.response);
+	}
+
+	public function failPageRequest(requestId:String, errorJson:String):ResumePickerHostEvent {
+		final failed = transport.failResponse(requestId, "thread/list", errorJson);
+		transportLog.push("fanout-error:" + outcomeSummary(failed));
+		if (!failed.ok) {
+			if (failed.code == "failed")
+				pendingPageRequests.remove(requestId);
+			return ResumePickerHostEvent.failed(requestId, "", "json_rpc_response_rejected", failed.code + ":" + failed.message);
+		}
+		pendingPageRequests.remove(requestId);
+		return ResumePickerHostEvent.failed(requestId, "", "json_rpc_thread_list_error", errorMessage(errorJson, "thread/list"));
+	}
+
 	public function requestTranscript(request:ResumePickerThreadReadRequest):AsyncTask<ResumePickerThreadReadResponse> {
 		readRequests = readRequests + 1;
 		requestLog.push(threadReadRequestFacts(request));
@@ -126,6 +167,49 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 			task.complete(response.response);
 		}
 		return task;
+	}
+
+	public function enqueueReadRequest(request:ResumePickerThreadReadRequest):RuntimeClientOutcome {
+		readRequests = readRequests + 1;
+		requestLog.push(threadReadRequestFacts(request));
+		final accepted = transport.sendRequest(request.requestId, "thread/read", encodeThreadReadParams(request));
+		transportLog.push("fanout-send:" + outcomeSummary(accepted));
+		if (accepted.ok)
+			pendingReadRequests.set(request.requestId, request);
+		return accepted;
+	}
+
+	public function completeReadRequest(requestId:String, resultJson:String):ResumePickerHostEvent {
+		final request = pendingReadRequests.get(requestId);
+		final threadId = request == null ? "" : request.threadId;
+		final completed = transport.completeResponse(requestId, "thread/read", resultJson);
+		transportLog.push("fanout-complete:" + outcomeSummary(completed));
+		if (!completed.ok) {
+			if (completed.code == "completed")
+				pendingReadRequests.remove(requestId);
+			return ResumePickerHostEvent.failed(requestId, threadId, "json_rpc_response_rejected", completed.code + ":" + completed.message);
+		}
+		pendingReadRequests.remove(requestId);
+		if (request == null)
+			return ResumePickerHostEvent.failed(requestId, "", "missing_pending_thread_read_request", "thread/read response has no typed pending request");
+		final response = decodeThreadReadResponse(request, resultJson);
+		if (!response.ok)
+			return ResumePickerHostEvent.failed(requestId, request.threadId, response.errorCode, response.errorMessage);
+		return request.previewOnly ? ResumePickerHostEvent.previewLoaded(response.response) : ResumePickerHostEvent.transcriptLoaded(response.response);
+	}
+
+	public function failReadRequest(requestId:String, errorJson:String):ResumePickerHostEvent {
+		final request = pendingReadRequests.get(requestId);
+		final threadId = request == null ? "" : request.threadId;
+		final failed = transport.failResponse(requestId, "thread/read", errorJson);
+		transportLog.push("fanout-error:" + outcomeSummary(failed));
+		if (!failed.ok) {
+			if (failed.code == "failed")
+				pendingReadRequests.remove(requestId);
+			return ResumePickerHostEvent.failed(requestId, threadId, "json_rpc_response_rejected", failed.code + ":" + failed.message);
+		}
+		pendingReadRequests.remove(requestId);
+		return ResumePickerHostEvent.failed(requestId, threadId, "json_rpc_thread_read_error", errorMessage(errorJson, "thread/read"));
 	}
 
 	public function pageRequestCount():Int {
