@@ -3350,6 +3350,19 @@ Extend the typed app-server boundary into a fixture-backed JSON-RPC `thread/list
 
 Status: HXCX-TUI-128 adds `JsonRpcResumePickerThreadSource`, `ResumePickerJsonRpcThreadListTransportRenderGate`, `ResumePickerJsonRpcThreadListTransportRenderGateReport`, `test/ResumePickerJsonRpcThreadListTransportRenderHarness.hx`, `hxml/resume-picker-json-rpc-thread-list-transport-render.hxml`, and `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh`. The gate validates JSON-RPC method/params/request-id provenance, deterministic result decoding, app-server error mapping, transport event summaries, visible normalized error/recovery rendering, no credential/model/state DB mutation, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is deterministic fixture transport evidence only, not live socket ownership, Tokio stream ownership, terminal ownership, ratatui input/layout ownership, SQLite/state DB mutation, or Cafex behavior.
 
+### HXCX-TUI-129: Resume Picker JSON-RPC Thread/Read Transport Render Gate
+
+Extend the fixture-backed JSON-RPC transport boundary from `thread/list` into selected `thread/read` preview and transcript behavior:
+
+- encode picker read requests into upstream-shaped `thread/read` method/params with `threadId` and `includeTurns` only;
+- keep picker-local preview hints such as `previewOnly` and `maxPreviewLines` out of the JSON-RPC wire params;
+- decode deterministic `ThreadReadResponse.thread.preview` into capped preview lines for inline picker rendering;
+- decode deterministic included turns/items into typed transcript-cell render evidence for the overlay path;
+- map JSON-RPC read errors into visible loader/error state while preserving existing preview/list state;
+- keep the gate credential-free, model-free, state-DB-free, and Cafex-free.
+
+Status: HXCX-TUI-129 adds JSON-RPC `thread/read` support to `JsonRpcResumePickerThreadSource`, plus `ResumePickerJsonRpcThreadReadTransportRenderGate`, `ResumePickerJsonRpcThreadReadTransportRenderGateReport`, `test/ResumePickerJsonRpcThreadReadTransportRenderHarness.hx`, `hxml/resume-picker-json-rpc-thread-read-transport-render.hxml`, and `harness/check-resume-picker-json-rpc-thread-read-transport-render.sh`. The gate validates upstream-shaped method/params/request-id provenance, local preview truncation, deterministic transcript-cell decoding, app-server error mapping, transport event summaries, visible normalized preview/error/transcript rendering, no credential/model/state DB mutation, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is deterministic fixture transport evidence only, not live socket ownership, Tokio stream ownership, terminal ownership, ratatui input/layout ownership, SQLite/state DB mutation, or Cafex behavior.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

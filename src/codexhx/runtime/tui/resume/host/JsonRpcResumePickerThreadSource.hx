@@ -36,6 +36,14 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 		errorFixtures.set(requestId, errorJson);
 	}
 
+	public function addThreadReadResult(requestId:String, resultJson:String):Void {
+		resultFixtures.set(requestId, resultJson);
+	}
+
+	public function addThreadReadError(requestId:String, errorJson:String):Void {
+		errorFixtures.set(requestId, errorJson);
+	}
+
 	public function requestPage(request:ResumePickerThreadListRequest):AsyncTask<ResumePickerThreadListResponse> {
 		pageRequests = pageRequests + 1;
 		requestLog.push(threadListRequestFacts(request));
@@ -52,7 +60,7 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 		if (errorJson != null) {
 			final failed = transport.failResponse(request.requestId, "thread/list", errorJson);
 			transportLog.push("error:" + outcomeSummary(failed));
-			task.fail("json_rpc_thread_list_error", errorMessage(errorJson), false);
+			task.fail("json_rpc_thread_list_error", errorMessage(errorJson, "thread/list"), false);
 			return task;
 		}
 
@@ -80,12 +88,43 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 
 	public function requestTranscript(request:ResumePickerThreadReadRequest):AsyncTask<ResumePickerThreadReadResponse> {
 		readRequests = readRequests + 1;
+		requestLog.push(threadReadRequestFacts(request));
 		final task = new DeterministicAsyncTask<ResumePickerThreadReadResponse>();
-		task.fail("unsupported_json_rpc_thread_read_fixture",
-			"JSON-RPC resume picker source currently supports thread/list only; request="
-			+ request.requestId
-			+ ";thread="
-			+ request.threadId, false);
+		final paramsJson = encodeThreadReadParams(request);
+		final accepted = transport.sendRequest(request.requestId, "thread/read", paramsJson);
+		transportLog.push("send:" + outcomeSummary(accepted));
+		if (!accepted.ok) {
+			task.fail("json_rpc_request_rejected", accepted.code + ":" + accepted.message, false);
+			return task;
+		}
+
+		final errorJson = errorFixtures.get(request.requestId);
+		if (errorJson != null) {
+			final failed = transport.failResponse(request.requestId, "thread/read", errorJson);
+			transportLog.push("error:" + outcomeSummary(failed));
+			task.fail("json_rpc_thread_read_error", errorMessage(errorJson, "thread/read"), false);
+			return task;
+		}
+
+		final resultJson = resultFixtures.get(request.requestId);
+		if (resultJson == null) {
+			task.fail("missing_json_rpc_thread_read_fixture", "no JSON-RPC thread/read fixture for " + request.requestId, false);
+			return task;
+		}
+
+		final completed = transport.completeResponse(request.requestId, "thread/read", resultJson);
+		transportLog.push("complete:" + outcomeSummary(completed));
+		if (!completed.ok) {
+			task.fail("json_rpc_response_rejected", completed.code + ":" + completed.message, false);
+			return task;
+		}
+
+		final response = decodeThreadReadResponse(request, resultJson);
+		if (!response.ok) {
+			task.fail(response.errorCode, response.errorMessage, false);
+		} else {
+			task.complete(response.response);
+		}
 		return task;
 	}
 
@@ -123,6 +162,10 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 		return "{" + "\"archived\":" + archived + ",\"cursor\":" + cursor + ",\"limit\":" + request.pageSize + ",\"searchTerm\":" + searchTerm
 			+ ",\"sortDirection\":\"desc\"" + ",\"sortKey\":" + CodexJson.quote(Std.string(request.sortKey)) + ",\"cwd\":" + cwd + ",\"sourceKinds\":"
 			+ sourceKinds + ",\"useStateDbOnly\":false" + "}";
+	}
+
+	static function encodeThreadReadParams(request:ResumePickerThreadReadRequest):String {
+		return "{" + "\"threadId\":" + CodexJson.quote(request.threadId) + ",\"includeTurns\":" + boolLabel(request.includeTurns) + "}";
 	}
 
 	static function decodeThreadListResponse(requestId:String, resultJson:String):JsonRpcThreadListDecodeOutcome {
@@ -180,8 +223,105 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 		}
 	}
 
+	static function decodeThreadReadResponse(request:ResumePickerThreadReadRequest, resultJson:String):JsonRpcThreadReadDecodeOutcome {
+		final parsed = CodexJson.parse(resultJson);
+		if (!parsed.ok)
+			return JsonRpcThreadReadDecodeOutcome.failure(parsed.errorCode, parsed.errorPath, parsed.errorMessage);
+		return switch parsed.value {
+			case JObject(keys, values):
+				final threadIndex = fieldIndex(keys, "thread");
+				if (threadIndex < 0)
+					return JsonRpcThreadReadDecodeOutcome.failure("missing_field", "$.thread", "required object field is missing");
+				switch values[threadIndex] {
+					case JObject(_, _):
+						decodeThreadReadThread(request, values[threadIndex], "$.thread");
+					case _:
+						JsonRpcThreadReadDecodeOutcome.failure("expected_object", "$.thread", "expected JSON object");
+				}
+			case _:
+				JsonRpcThreadReadDecodeOutcome.failure("expected_object", "$", "thread/read result must be a JSON object");
+		}
+	}
+
+	static function decodeThreadReadThread(request:ResumePickerThreadReadRequest, value:Value, path:String):JsonRpcThreadReadDecodeOutcome {
+		return switch value {
+			case JObject(keys, values):
+				final id = requiredString(keys, values, "id", path + ".id");
+				if (!id.ok)
+					return JsonRpcThreadReadDecodeOutcome.failure(id.errorCode, id.errorPath, id.errorMessage);
+				final preview = optionalString(keys, values, "preview", "");
+				final turns = optionalArray(keys, values, "turns");
+				final previewLines = capLines(splitPreview(preview), request.maxPreviewLines);
+				final transcriptCells = request.includeTurns && !request.previewOnly ? decodeTranscriptCells(turns) : [];
+				JsonRpcThreadReadDecodeOutcome.success(new ResumePickerThreadReadResponse({
+					requestId: request.requestId,
+					threadId: id.value,
+					previewLines: previewLines,
+					transcriptCells: transcriptCells,
+					truncated: request.maxPreviewLines > 0 && splitPreview(preview).length > request.maxPreviewLines}));
+			case _:
+				JsonRpcThreadReadDecodeOutcome.failure("expected_object", path, "thread/read thread must be a JSON object");
+		}
+	}
+
+	static function decodeTranscriptCells(turns:Array<Value>):Array<String> {
+		final cells:Array<String> = [];
+		for (turn in turns) {
+			switch turn {
+				case JObject(keys, values):
+					final items = optionalArray(keys, values, "items");
+					for (item in items)
+						cells.push(decodeThreadItemCell(item));
+				case _:
+			}
+		}
+		if (cells.length == 0)
+			cells.push("fallback: No transcript content");
+		return cells;
+	}
+
+	static function decodeThreadItemCell(value:Value):String {
+		return switch value {
+			case JObject(keys, values):
+				final role = transcriptRole(optionalString(keys, values, "role", optionalString(keys, values, "type", "item")));
+				final text = optionalString(keys, values, "text", optionalString(keys, values, "summary", decodeUserMessageContent(keys, values)));
+				text.length == 0 ? role : role + ": " + text;
+			case JString(text):
+				"item: " + text;
+			case _:
+				"item";
+		}
+	}
+
+	static function transcriptRole(value:String):String {
+		return switch value {
+			case "userMessage": "user";
+			case "agentMessage": "assistant";
+			case other: other;
+		}
+	}
+
+	static function decodeUserMessageContent(keys:Array<String>, values:Array<Value>):String {
+		final content = optionalArray(keys, values, "content");
+		final parts:Array<String> = [];
+		for (entry in content) {
+			switch entry {
+				case JObject(entryKeys, entryValues):
+					final text = optionalString(entryKeys, entryValues, "text", "");
+					if (text.length > 0)
+						parts.push(text);
+				case _:
+			}
+		}
+		return parts.join(" ");
+	}
+
 	static function threadListRequestFacts(request:ResumePickerThreadListRequest):String {
 		return request.summary() + ";jsonMethod=thread/list" + ";jsonParams=" + encodeThreadListParams(request);
+	}
+
+	static function threadReadRequestFacts(request:ResumePickerThreadReadRequest):String {
+		return request.summary() + ";jsonMethod=thread/read" + ";jsonParams=" + encodeThreadReadParams(request);
 	}
 
 	static function outcomeSummary(outcome:RuntimeClientOutcome):String {
@@ -189,17 +329,17 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 			+ outcome.pendingCount + ";message=" + outcome.message;
 	}
 
-	static function errorMessage(errorJson:String):String {
+	static function errorMessage(errorJson:String, method:String):String {
 		final parsed = CodexJson.parse(errorJson);
 		if (!parsed.ok)
 			return parsed.errorCode + ":" + parsed.errorMessage;
 		return switch parsed.value {
 			case JObject(keys, values):
 				final code = optionalNumber(keys, values, "code", 0);
-				final message = optionalString(keys, values, "message", "JSON-RPC thread/list error");
+				final message = optionalString(keys, values, "message", "JSON-RPC " + method + " error");
 				Std.string(code) + ":" + message;
 			case _:
-				"JSON-RPC thread/list error";
+				"JSON-RPC " + method + " error";
 		}
 	}
 
@@ -220,6 +360,16 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 		return switch values[i] {
 			case JArray(entries): JsonRpcArrayDecodeOutcome.success(entries);
 			case _: JsonRpcArrayDecodeOutcome.failure("expected_array", path, "expected JSON array");
+		}
+	}
+
+	static function optionalArray(keys:Array<String>, values:Array<Value>, name:String):Array<Value> {
+		final i = fieldIndex(keys, name);
+		if (i < 0)
+			return [];
+		return switch values[i] {
+			case JArray(entries): entries;
+			case _: [];
 		}
 	}
 
@@ -265,6 +415,22 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 
 	static function nullableString(value:String):String {
 		return value.length == 0 ? "null" : CodexJson.quote(value);
+	}
+
+	static function splitPreview(preview:String):Array<String> {
+		final lines:Array<String> = [];
+		for (line in preview.split("\n")) {
+			final trimmed = StringTools.trim(line);
+			if (trimmed.length > 0)
+				lines.push(trimmed);
+		}
+		return lines;
+	}
+
+	static function capLines(lines:Array<String>, maxLines:Int):Array<String> {
+		if (maxLines <= 0 || lines.length <= maxLines)
+			return lines.copy();
+		return lines.slice(0, maxLines);
 	}
 
 	static function fieldIndex(keys:Array<String>, name:String):Int {
@@ -327,6 +493,30 @@ class JsonRpcThreadRowDecodeOutcome {
 
 	public static function failure(code:String, path:String, message:String):JsonRpcThreadRowDecodeOutcome {
 		return new JsonRpcThreadRowDecodeOutcome(false, null, code, path, message);
+	}
+}
+
+class JsonRpcThreadReadDecodeOutcome {
+	public final ok:Bool;
+	public final response:ResumePickerThreadReadResponse;
+	public final errorCode:String;
+	public final errorPath:String;
+	public final errorMessage:String;
+
+	function new(ok:Bool, response:ResumePickerThreadReadResponse, errorCode:String, errorPath:String, errorMessage:String) {
+		this.ok = ok;
+		this.response = response;
+		this.errorCode = errorCode;
+		this.errorPath = errorPath;
+		this.errorMessage = errorMessage;
+	}
+
+	public static function success(response:ResumePickerThreadReadResponse):JsonRpcThreadReadDecodeOutcome {
+		return new JsonRpcThreadReadDecodeOutcome(true, response, "", "", "");
+	}
+
+	public static function failure(code:String, path:String, message:String):JsonRpcThreadReadDecodeOutcome {
+		return new JsonRpcThreadReadDecodeOutcome(false, null, code, path, message);
 	}
 }
 

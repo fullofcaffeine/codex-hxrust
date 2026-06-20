@@ -171,6 +171,8 @@ Status: live app-server boundary evidence now has generated-Rust normalized cove
 
 Status: JSON-RPC `thread/list` transport evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh`. The gate routes resume picker page requests through a fixture-backed JSON-RPC `thread/list` source, preserves public method/params/request-id shape, decodes deterministic result rows, maps JSON-RPC errors into visible loader/error state, drains transport event summaries, and renders later recovery. This is still credential-free deterministic transport evidence, not live socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
 
+Status: JSON-RPC `thread/read` transport evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-json-rpc-thread-read-transport-render.sh`. The gate routes resume picker preview and transcript reads through the same fixture-backed JSON-RPC source, preserves upstream `thread/read` params with `threadId` and `includeTurns`, keeps picker-local preview hints off the wire, decodes preview lines and transcript cells, maps JSON-RPC errors into visible loader/error state, drains transport event summaries, and renders preview/error/transcript recovery. This is still credential-free deterministic transport evidence, not live socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -226,6 +228,7 @@ Near-term gates:
 - `harness/check-resume-picker-reload-failure-preservation-render.sh` for normalized current reload failure preservation and later recovery snapshots.
 - `harness/check-resume-picker-live-app-server-boundary-render.sh` for normalized typed app-server `thread/list` request-boundary provenance, lossless backpressure, source-failure mapping, and recovery snapshots.
 - `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh` for normalized JSON-RPC `thread/list` transport provenance, fixture result decoding, JSON-RPC error mapping, transport events, and recovery snapshots.
+- `harness/check-resume-picker-json-rpc-thread-read-transport-render.sh` for normalized JSON-RPC `thread/read` transport provenance, fixture preview/transcript decoding, JSON-RPC error mapping, transport events, and preview/transcript render snapshots.
 
 Exit criteria for "first live resume picker slice":
 
