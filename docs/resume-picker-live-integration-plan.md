@@ -43,6 +43,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-app-server-stream-pressure-render.sh` validates normalized app-server stream pressure evidence, including upstream-shaped lossless versus best-effort forwarding, best-effort server-request rejection under queue pressure, lag-marker delivery before preserved lossless events, and credential/model/state-DB-free recovery.
 - `harness/check-resume-picker-app-server-server-request-delivery-render.sh` validates normalized app-server server-request delivery evidence, including accepted typed request-like stream events, a TUI-facing `server_request_delivered` host event, deterministic response/refusal intent recording, separation from pressure-drop rejection, and credential/model/state-DB-free recovery.
 - `harness/check-resume-picker-app-server-response-dispatch-intent-render.sh` validates normalized app-server response dispatch intent evidence, including typed resolve/reject command construction, request-id/order preservation, unsupported-refusal separation from pressure drops, live transport suppression, and credential/model/state-DB-free recovery.
+- `harness/check-resume-picker-app-server-response-dispatch-failure-noop-render.sh` validates normalized app-server response dispatch failure/noop evidence, including missing-session no-op, malformed/unknown intent serialization refusal, missing response payload refusal, send-failure recording, request-id preservation, pressure-drop separation, live transport suppression, and credential/model/state-DB-free recovery.
 
 ## Upstream Anchors
 
@@ -191,6 +192,8 @@ Status: app-server server-request delivery evidence now has generated-Rust norma
 
 Status: app-server response dispatch intent evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-app-server-response-dispatch-intent-render.sh`. The gate delivers two request-like events into the TUI-facing host boundary, builds typed reject/resolve dispatch commands with preserved request ids and ordering, keeps unsupported fixture refusal distinct from pressure-drop rejection, suppresses live transport while recording dispatch intent, then renders page recovery. This is still credential-free deterministic response-dispatch evidence, not live JSON-RPC response sending, approval/request-user-input UI ownership, socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
 
+Status: app-server response dispatch failure/noop evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-app-server-response-dispatch-failure-noop-render.sh`. The gate exercises the failure side of the typed request handle: missing app-server session becomes a no-op command, malformed or unknown intents are serialization refusals, resolved intents without payloads are refused before send intent, transport send failure is recorded as a typed command, request ids are preserved where a delivered request exists, pressure-drop rejection remains empty, live transport is suppressed, and page recovery renders. This is still credential-free deterministic response-dispatch failure evidence, not live JSON-RPC response sending, approval/request-user-input UI ownership, socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -253,6 +256,7 @@ Near-term gates:
 - `harness/check-resume-picker-app-server-stream-pressure-render.sh` for normalized app-server stream pressure, best-effort drop/rejection evidence, lag-marker delivery, preserved lossless read/page events, and recovery snapshots.
 - `harness/check-resume-picker-app-server-server-request-delivery-render.sh` for normalized app-server request-like event delivery, typed host event routing, deterministic response/refusal intent recording, pressure-drop separation, and recovery snapshots.
 - `harness/check-resume-picker-app-server-response-dispatch-intent-render.sh` for normalized app-server response dispatch intent, typed reject/resolve command construction, request-id/order preservation, live transport suppression, and recovery snapshots.
+- `harness/check-resume-picker-app-server-response-dispatch-failure-noop-render.sh` for normalized app-server response dispatch failure/noop handling, typed no-op/refusal/send-failed commands, request-id preservation, live transport suppression, and recovery snapshots.
 
 Exit criteria for "first live resume picker slice":
 
