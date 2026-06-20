@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/resume-picker-app-server-typed-response-dispatch-ordering-refresh-render
+-D rust_crate=codex_hxrust_resume_picker_app_server_typed_response_dispatch_ordering_refresh_render
+-D rust_cargo_subcommand=check
+-main ResumePickerAppServerTypedResponseDispatchOrderingRefreshRenderHarness
