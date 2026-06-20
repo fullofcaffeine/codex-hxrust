@@ -39,6 +39,7 @@ The smoke sequence already captures the pure behavior we should preserve before 
 - `harness/check-resume-picker-json-rpc-thread-list-transport-render.sh` validates normalized JSON-RPC `thread/list` transport evidence, including request method/params/request-id preservation, fixture response decoding, JSON-RPC error mapping, recovery rendering, and credential/model/state-DB-free execution.
 - `harness/check-resume-picker-app-server-stream-fanout-render.sh` validates normalized app-server stream/fanout evidence, including typed pending request ownership, correlated `thread/list`/`thread/read` response routing, lossless backpressure, JSON-RPC error mapping, and credential/model/state-DB-free transcript recovery.
 - `harness/check-resume-picker-app-server-session-lifecycle-render.sh` validates normalized app-server session lifecycle evidence, including pending request cancellation, late response rejection, disconnect refusal, fresh-session recovery, and credential/model/state-DB-free execution.
+- `harness/check-resume-picker-app-server-event-pump-boundary-render.sh` validates normalized app-server event-pump boundary evidence, including queued stream-event dispatch, active session generation filtering, stale-event rejection, frame scheduling intent, disconnect propagation, and credential/model/state-DB-free fresh-session recovery.
 
 ## Upstream Anchors
 
@@ -179,6 +180,8 @@ Status: app-server stream/fanout evidence now has generated-Rust normalized cove
 
 Status: app-server session lifecycle evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-app-server-session-lifecycle-render.sh`. The gate ties pending `thread/list` and `thread/read` requests to a typed session lifecycle, cancels pending read/page requests, rejects a late read response after cancellation, refuses a new page request after disconnect, drains cancellation/disconnect transport events, and recovers with a fresh session that loads page plus transcript state. This is still credential-free deterministic lifecycle evidence, not live socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
 
+Status: app-server event-pump boundary evidence now has generated-Rust normalized coverage in `harness/check-resume-picker-app-server-event-pump-boundary-render.sh`. The gate models queued app-server stream events as typed Haxe values, dispatches active-generation page/read/frame/disconnect events through the existing fanout and frame scheduler, rejects stale-generation events before they can mutate picker state, and recovers by attaching a fresh session generation. This is still credential-free deterministic event-pump evidence, not live socket ownership, Tokio stream ownership, crossterm input, ratatui frame ownership, SQLite/state DB mutation, provider/model traffic, or Cafex behavior.
+
 6. Add differential upstream checks.
    - Use upstream schemas, fixtures, and public behavior as oracle evidence.
    - Do not treat upstream Rust-internal test success as sufficient for codexhx. The proof is Haxe source running through haxe.rust-generated Rust.
@@ -237,6 +240,7 @@ Near-term gates:
 - `harness/check-resume-picker-json-rpc-thread-read-transport-render.sh` for normalized JSON-RPC `thread/read` transport provenance, fixture preview/transcript decoding, JSON-RPC error mapping, transport events, and preview/transcript render snapshots.
 - `harness/check-resume-picker-app-server-stream-fanout-render.sh` for normalized app-server stream/fanout pending ownership, correlated response routing, lossless backpressure, JSON-RPC error mapping, transport events, and transcript recovery snapshots.
 - `harness/check-resume-picker-app-server-session-lifecycle-render.sh` for normalized app-server session cancellation, late response rejection, disconnect refusal, fresh-session recovery, transport events, and transcript recovery snapshots.
+- `harness/check-resume-picker-app-server-event-pump-boundary-render.sh` for normalized app-server event-pump queued dispatch, session-generation filtering, stale-event rejection, frame scheduling intent, disconnect propagation, and recovery snapshots.
 
 Exit criteria for "first live resume picker slice":
 
