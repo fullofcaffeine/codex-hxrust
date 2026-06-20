@@ -97,6 +97,7 @@ Profile policy for the scaffold:
 | `resume-picker-app-server-typed-response-dispatch-ordering-refresh-render.hxml` | Compile the HXCX-TUI-141 resume picker normalized app-server typed response dispatch ordering/refresh render gate through portable haxe.rust. |
 | `resume-picker-app-server-typed-response-refresh-application-render.hxml` | Compile the HXCX-TUI-142 resume picker normalized app-server typed response refresh application render gate through portable haxe.rust. |
 | `resume-picker-app-server-typed-response-refresh-replay-delivery-render.hxml` | Compile the HXCX-TUI-143 resume picker normalized app-server typed response refresh replay-delivery render gate through portable haxe.rust. |
+| `resume-picker-app-server-typed-response-replay-surface-update-render.hxml` | Compile the HXCX-TUI-144 resume picker normalized app-server typed response replay surface-update render gate through portable haxe.rust. |
 | `tui-story-replay.hxml` | Compile the HXCX-4.8 upstream TUI story replay parser and summary harness through portable haxe.rust. |
 | `tui-render.hxml` | Compile the HXCX-4.9 VT100/history/render invariant harness through portable haxe.rust. |
 | `turn-runtime-reducer.hxml` | Compile the HXCX-4.10 upstream turn-runtime reducer harness through portable haxe.rust. |
