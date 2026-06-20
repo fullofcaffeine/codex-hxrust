@@ -47,6 +47,24 @@ class ResumePickerAppServerStreamFanout {
 		return event;
 	}
 
+	public function cancelPage(requestId:String, reason:String):ResumePickerHostEvent {
+		final event = source.cancelPageRequest(requestId, reason);
+		log.push("session:cancel-page:" + event.summary() + ";pending=" + pendingCount());
+		return event;
+	}
+
+	public function cancelRead(requestId:String, reason:String):ResumePickerHostEvent {
+		final event = source.cancelReadRequest(requestId, reason);
+		log.push("session:cancel-read:" + event.summary() + ";pending=" + pendingCount());
+		return event;
+	}
+
+	public function disconnect(message:String):RuntimeClientOutcome {
+		final outcome = source.disconnectSession(message);
+		log.push("session:disconnect:" + outcomeSummary(outcome));
+		return outcome;
+	}
+
 	public function pendingCount():Int {
 		return source.pendingTransportRequests();
 	}

@@ -3376,6 +3376,19 @@ Move the fixture-backed JSON-RPC source closer to the upstream app-server client
 
 Status: HXCX-TUI-130 adds two-phase fanout hooks to `JsonRpcResumePickerThreadSource`, `ResumePickerAppServerStreamFanout`, `ResumePickerAppServerStreamFanoutRenderGate`, `ResumePickerAppServerStreamFanoutRenderGateReport`, `test/ResumePickerAppServerStreamFanoutRenderHarness.hx`, `hxml/resume-picker-app-server-stream-fanout-render.hxml`, and `harness/check-resume-picker-app-server-stream-fanout-render.sh`. The gate validates typed pending ownership, upstream JSON-RPC method/params/request-id preservation, correlated page/preview/transcript response routing, deterministic lossless backpressure routing, JSON-RPC read-error mapping, transport event summaries, visible normalized transcript recovery, no credential/model/state DB mutation, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is deterministic stream/fanout evidence only, not live socket ownership, Tokio stream ownership, terminal ownership, ratatui input/layout ownership, SQLite/state DB mutation, or Cafex behavior.
 
+### HXCX-TUI-131: Resume Picker App-Server Session Lifecycle Render Gate
+
+Extend the stream/fanout proof into deterministic app-server session lifecycle behavior:
+
+- tie `thread/list` and `thread/read` pending requests to a typed session lifecycle;
+- cancel pending page/read requests before disconnect and reconcile pending counts;
+- reject a late response that arrives after cancellation removed the request;
+- refuse new requests on a disconnected session;
+- recover through a fresh session that loads page and transcript state;
+- keep the gate credential-free, model-free, state-DB-free, and Cafex-free.
+
+Status: HXCX-TUI-131 adds session cancel/disconnect hooks to `JsonRpcResumePickerThreadSource` and `ResumePickerAppServerStreamFanout`, plus `ResumePickerAppServerSessionLifecycleRenderGate`, `ResumePickerAppServerSessionLifecycleRenderGateReport`, `test/ResumePickerAppServerSessionLifecycleRenderHarness.hx`, `hxml/resume-picker-app-server-session-lifecycle-render.hxml`, and `harness/check-resume-picker-app-server-session-lifecycle-render.sh`. The gate validates upstream JSON-RPC method/params/request-id preservation, pending cancellation, deterministic late-response rejection, disconnect refusal, fresh-session page/transcript recovery, transport event summaries, visible normalized error/recovery rendering, no credential/model/state DB mutation, warning-clean generated Rust, and generated Cargo `check`, `test`, and binary execution. This is deterministic session-lifecycle evidence only, not live socket ownership, Tokio stream ownership, terminal ownership, ratatui input/layout ownership, SQLite/state DB mutation, or Cafex behavior.
+
 ### HXCX-4.141+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

@@ -127,6 +127,15 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 		return ResumePickerHostEvent.failed(requestId, "", "json_rpc_thread_list_error", errorMessage(errorJson, "thread/list"));
 	}
 
+	public function cancelPageRequest(requestId:String, reason:String):ResumePickerHostEvent {
+		final cancelled = transport.cancelRequest(requestId, "thread/list", reason);
+		transportLog.push("session-cancel:" + outcomeSummary(cancelled));
+		if (!cancelled.ok)
+			return ResumePickerHostEvent.failed(requestId, "", "app_server_session_cancel_rejected", cancelled.code + ":" + cancelled.message);
+		pendingPageRequests.remove(requestId);
+		return ResumePickerHostEvent.failed(requestId, "", "app_server_session_cancelled", reason);
+	}
+
 	public function requestTranscript(request:ResumePickerThreadReadRequest):AsyncTask<ResumePickerThreadReadResponse> {
 		readRequests = readRequests + 1;
 		requestLog.push(threadReadRequestFacts(request));
@@ -210,6 +219,23 @@ class JsonRpcResumePickerThreadSource implements ResumePickerAppServerThreadSour
 		}
 		pendingReadRequests.remove(requestId);
 		return ResumePickerHostEvent.failed(requestId, threadId, "json_rpc_thread_read_error", errorMessage(errorJson, "thread/read"));
+	}
+
+	public function cancelReadRequest(requestId:String, reason:String):ResumePickerHostEvent {
+		final request = pendingReadRequests.get(requestId);
+		final threadId = request == null ? "" : request.threadId;
+		final cancelled = transport.cancelRequest(requestId, "thread/read", reason);
+		transportLog.push("session-cancel:" + outcomeSummary(cancelled));
+		if (!cancelled.ok)
+			return ResumePickerHostEvent.failed(requestId, threadId, "app_server_session_cancel_rejected", cancelled.code + ":" + cancelled.message);
+		pendingReadRequests.remove(requestId);
+		return ResumePickerHostEvent.failed(requestId, threadId, "app_server_session_cancelled", reason);
+	}
+
+	public function disconnectSession(message:String):RuntimeClientOutcome {
+		final disconnected = transport.disconnect(message);
+		transportLog.push("session-disconnect:" + outcomeSummary(disconnected));
+		return disconnected;
 	}
 
 	public function pageRequestCount():Int {
