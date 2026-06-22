@@ -3,6 +3,10 @@ set -euo pipefail
 
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 
+if [ -x "$ROOT_DIR/scripts/hooks/export-beads-jsonl.sh" ]; then
+  bash "$ROOT_DIR/scripts/hooks/export-beads-jsonl.sh"
+fi
+
 echo "[pre-commit] Running gitleaks on staged changes..."
 bash "$ROOT_DIR/scripts/security/run-gitleaks.sh" --staged
 

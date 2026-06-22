@@ -46,7 +46,7 @@ Install repo-managed hooks after cloning:
 npm run hooks:install
 ```
 
-The pre-commit hook scans staged changes with gitleaks and formats staged Haxe files with `haxelib formatter`, skipping generated/vendor output. Full public-readiness checks are:
+The pre-commit hook exports Beads' local embedded backend to tracked JSONL, stages `.beads/issues.jsonl` and `.beads/interactions.jsonl`, scans staged changes with gitleaks, and formats staged Haxe files with `haxelib formatter`, skipping generated/vendor output. Full public-readiness checks are:
 
 ```bash
 npm run format:haxe:check
