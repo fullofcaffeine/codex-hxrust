@@ -1,0 +1,84 @@
+package codexhx.runtime.tui.resume.live;
+
+import codexhx.runtime.tui.resume.host.ResumePickerAppServerTypedResponseRecoveryKeyboardIntentKind;
+
+class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateThirdCycleKeyboardReadinessRenderGate {
+	public static function run():ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateThirdCycleKeyboardReadinessRenderGateReport {
+		final handoffReport = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSecondCycleScheduledExecutionHandoffRenderGate.run();
+		final policy = new DeterministicResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateThirdCycleKeyboardReadinessPolicy();
+		final readiness = policy.admit(handoffReport, [
+			ResumePickerAppServerTypedResponseRecoveryKeyboardIntentKind.MoveDown,
+			ResumePickerAppServerTypedResponseRecoveryKeyboardIntentKind.MoveUp
+		]);
+		return new ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateThirdCycleKeyboardReadinessRenderGateReport({
+			readinessKind: readiness.kind,
+			readinessSummary: readiness.summary(),
+			decisionCount: readiness.decisionCount,
+			admittedCount: readiness.admittedCount,
+			postRenderIdleListReady: readiness.postRenderIdleListReady,
+			keyboardInputReady: readiness.keyboardInputReady,
+			listNavigationReady: readiness.listNavigationReady,
+			recoveredSelectionStableUntilNavigation: readiness.recoveredSelectionStableUntilNavigation,
+			navigationApplied: readiness.navigationApplied,
+			returnedToRecoveredSelection: readiness.returnedToRecoveredSelection,
+			noLeftoverScheduledRenderRequest: readiness.noLeftoverScheduledRenderRequest,
+			sourceSchedulerRequestCount: readiness.sourceSchedulerRequestCount,
+			consumedScheduledRequestCount: readiness.consumedScheduledRequestCount,
+			renderCount: readiness.renderCount,
+			renderedSnapshotPreserved: readiness.renderedSnapshotPreserved,
+			finalThreadId: readiness.finalThreadId,
+			finalFooter: readiness.finalFooter,
+			finalSelectionPreserved: readiness.finalSelectionPreserved,
+			finalFooterPreserved: readiness.finalFooterPreserved,
+			inputAdmitted: readiness.inputAdmitted,
+			localOnlyRenderIntent: readiness.localOnlyRenderIntent,
+			completionReady: handoffReport.completionReady,
+			nextSliceReady: handoffReport.nextSliceReady,
+			replayCount: readiness.replayCount,
+			sourceReplayCount: handoffReport.sourceReplayCount,
+			sourceHandoffReplayCount: handoffReport.sourceHandoffReplayCount,
+			sourceHandoffReadinessDecisionCount: handoffReport.sourceHandoffReadinessDecisionCount,
+			sourceHandoffRenderStateCount: handoffReport.sourceHandoffRenderStateCount,
+			sourceHandoffFrameRequests: handoffReport.sourceHandoffFrameRequests,
+			sourceHandoffKeyboardRenderCount: handoffReport.sourceHandoffKeyboardRenderCount,
+			sourceSecondCycleHandoffReplayCount: handoffReport.sourceSecondCycleHandoffReplayCount,
+			sourceSecondCycleHandoffReadinessDecisionCount: handoffReport.sourceSecondCycleHandoffReadinessDecisionCount,
+			sourceSecondCycleHandoffRenderStateCount: handoffReport.sourceSecondCycleHandoffRenderStateCount,
+			sourceSecondCycleHandoffFrameRequests: handoffReport.sourceSecondCycleHandoffFrameRequests,
+			sourceSecondCycleHandoffKeyboardRenderCount: handoffReport.sourceSecondCycleHandoffKeyboardRenderCount,
+			sourceReadinessDecisionCount: handoffReport.sourceReadinessDecisionCount,
+			sourceRenderStateCount: handoffReport.sourceRenderStateCount,
+			sourceFrameRequests: handoffReport.sourceFrameRequests,
+			sourceKeyboardRenderCount: handoffReport.sourceKeyboardRenderCount,
+			snapshotOrderPreserved: readiness.snapshotOrderPreserved,
+			selectedMarkersPreserved: readiness.selectedMarkersPreserved,
+			footerSummariesPreserved: readiness.footerSummariesPreserved,
+			selectedMarkerMoved: readiness.selectedMarkerMoved,
+			recoveredSelectionRestored: readiness.recoveredSelectionRestored,
+			sourcePreExecutionSchedulerRequestCount: readiness.sourcePreExecutionSchedulerRequestCount,
+			sourcePreExecutionConsumedRequestCount: readiness.sourcePreExecutionConsumedRequestCount,
+			sourcePreExecutionRenderCount: readiness.sourcePreExecutionRenderCount,
+			sourceRenderedSnapshotPreserved: readiness.sourceRenderedSnapshotPreserved,
+			sourceInputAdmitted: handoffReport.sourceInputAdmitted,
+			sourceLocalOnlyRenderIntent: handoffReport.sourceLocalOnlyRenderIntent,
+			sourceHandoffInputAdmitted: handoffReport.sourceHandoffInputAdmitted,
+			sourceHandoffLocalOnlyRenderIntent: handoffReport.sourceHandoffLocalOnlyRenderIntent,
+			sourceSecondCycleHandoffInputAdmitted: handoffReport.sourceSecondCycleHandoffInputAdmitted,
+			sourceSecondCycleHandoffLocalOnlyRenderIntent: handoffReport.sourceSecondCycleHandoffLocalOnlyRenderIntent,
+			stalePromptActionInactive: readiness.stalePromptActionInactive,
+			staleSideParentActionInactive: readiness.staleSideParentActionInactive,
+			staleActiveThreadActionInactive: readiness.staleActiveThreadActionInactive,
+			ignoredNoSurfaceRecordsAbsent: readiness.ignoredNoSurfaceRecordsAbsent,
+			noPressureDropRejection: readiness.noPressureDropRejection,
+			liveTransportSuppressed: readiness.liveTransportSuppressed,
+			liveTerminalSuppressed: readiness.liveTerminalSuppressed,
+			stateDbUntouched: readiness.stateDbUntouched,
+			noModelCall: readiness.noModelCall,
+			noFilesystemMutation: readiness.noFilesystemMutation,
+			finalSnapshot: handoffReport.finalSnapshot,
+			decisionSummaries: readiness.decisionSummaries,
+			policyLogSummaries: policy.summaries(),
+			sourceHandoffSummary: readiness.sourceHandoffSummary
+		});
+	}
+}
