@@ -67,7 +67,9 @@ Cafex work is a separate later revision/adaptation layer after the 1:1 upstream 
 
 Before saying this repository is ready to be public, verify the public-readiness rails are installed and passing. This repo should maintain parity with the safety posture used in `../opencodehx`: staged pre-commit gitleaks scanning, Haxe formatting, full-history secret scanning, GitHub Actions security scanning, CI format/build gates, and Dependabot.
 
-Use `npm run hooks:install` to set `core.hooksPath` to `scripts/hooks`. The pre-commit hook must export Beads' local embedded backend to tracked JSONL and stage `.beads/issues.jsonl` plus `.beads/interactions.jsonl` before running `scripts/security/run-gitleaks.sh --staged` and formatting staged `.hx` files with `haxelib formatter`.
+Use `npm run hooks:install` to set `core.hooksPath` to `scripts/hooks`. The pre-commit hook must delegate to Beads' official `bd hooks run pre-commit` exporter and stage `.beads/issues.jsonl` plus `.beads/interactions.jsonl` before running `scripts/security/run-gitleaks.sh --staged` and formatting staged `.hx` files with `haxelib formatter`.
+
+Do not leave `core.hooksPath` pointed at `.beads/hooks` after running `bd hooks install --beads`; that generated directory is local hook machinery, not this repo's committed hook source. If Beads hook install is inspected or run, restore the project hook path with `npm run hooks:install` before committing.
 
 Use `npm run public:precommit` before public-release checks. The full gitleaks wrapper must not silently accept a result that scans zero commits when git history exists; if the local gitleaks CLI reports zero scanned commits for a non-empty history, the wrapper should fall back to scanning `git log -p --all` through `gitleaks detect --pipe` and then scan the current tree with `gitleaks dir`.
 

@@ -46,7 +46,9 @@ Install repo-managed hooks after cloning:
 npm run hooks:install
 ```
 
-The pre-commit hook exports Beads' local embedded backend to tracked JSONL, stages `.beads/issues.jsonl` and `.beads/interactions.jsonl`, scans staged changes with gitleaks, and formats staged Haxe files with `haxelib formatter`, skipping generated/vendor output. Full public-readiness checks are:
+The pre-commit hook delegates to Beads' official `bd hooks run pre-commit` exporter, stages `.beads/issues.jsonl` and `.beads/interactions.jsonl`, scans staged changes with gitleaks, and formats staged Haxe files with `haxelib formatter`, skipping generated/vendor output. Full public-readiness checks are:
+
+Use `npm run hooks:install` as the project hook installer. `bd hooks install --beads` is useful to inspect Beads' generated shims, but it changes `core.hooksPath` to `.beads/hooks`; this repo keeps the active hook source in committed `scripts/hooks` and delegates to `bd hooks run pre-commit` from there.
 
 ```bash
 npm run format:haxe:check

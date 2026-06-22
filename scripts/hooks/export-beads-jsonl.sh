@@ -15,6 +15,6 @@ if ! command -v bd >/dev/null 2>&1; then
 fi
 
 echo "[pre-commit] Exporting Beads embedded backend to tracked JSONL..."
-bd export -o .beads/issues.jsonl >/dev/null
+bd hooks run pre-commit
 
 git add -- .beads/issues.jsonl .beads/interactions.jsonl
