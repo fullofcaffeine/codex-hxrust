@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/resume-picker-app-server-typed-response-recovery-post-completion-post-render-replay-aware-rendered-state-third-cycle-keyboard-render-state-render
+-D rust_crate=codex_hxrust_resume_picker_app_server_typed_response_recovery_post_completion_post_render_replay_aware_rendered_state_third_cycle_keyboard_render_state_render
+-D rust_cargo_subcommand=check
+-main ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateThirdCycleKeyboardRenderStateRenderHarness
