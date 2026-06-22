@@ -210,9 +210,9 @@ Protocol work currently includes:
 
 ## Beads
 
-This repo uses Beads for issue tracking. The authoritative issue JSON lives in `.beads/issues.jsonl`; local database/runtime files are ignored by `.beads/.gitignore`.
+This repo uses Beads for issue tracking. Modern `bd` uses an embedded Dolt backend locally here, but the committed collaboration artifact is JSONL: `.beads/issues.jsonl` plus `.beads/interactions.jsonl`. Local backend/runtime files such as `.beads/embeddeddolt/` and `.beads/*.db` are ignored by `.beads/.gitignore`.
 
-Beads is configured in JSONL-only mode for this repo. `.beads/issues.jsonl` is the source of truth; review, commit, and push it like any other tracked project file. Do not require `bd sync` here. On a fresh clone or after local Beads runtime state is missing, run `bd bootstrap --yes` to hydrate from the tracked JSONL.
+The practical workflow is JSONL-in-git: review, commit, and push tracked Beads JSONL like any other project file. Do not require `bd sync` here. On a fresh clone or after local Beads runtime state is missing, run `bd bootstrap --yes` to hydrate the embedded backend from the tracked JSONL.
 
 Run:
 
