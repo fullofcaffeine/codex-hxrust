@@ -100,7 +100,7 @@ harness/check-replacement-go-no-go.sh
 1. Keep production routing disabled.
 2. Use helper-only mode if selected adapter-slice evidence regresses.
 3. Route live Cafetera/Cafex workflows back to upstream Codex or the Cafex fork.
-4. Revert any experimental integration commit and run `bd sync` plus `git push`.
+4. Revert any experimental integration commit, run `bd bootstrap --yes` if local Beads runtime state is missing, and `git push`.
 5. Delete generated output directories; do not migrate production state.
 
 ## Final Notes

@@ -9,8 +9,11 @@ bd ready              # Find available work
 bd show <id>          # View issue details
 bd update <id> --status in_progress  # Claim work
 bd close <id>         # Complete work
-bd sync               # Sync with git
+bd bootstrap --yes    # Hydrate local runtime state from tracked JSONL if needed
+git diff .beads/issues.jsonl  # Review tracked issue changes
 ```
+
+This repo uses Beads in JSONL-only mode. `.beads/issues.jsonl` is the source of truth and must be committed and pushed like normal project code. On a fresh clone or when local Beads runtime state is missing, run `bd bootstrap --yes` to hydrate from tracked JSONL. Do not run or require `bd sync` in this repo; this installed `bd` does not expose that command, and Git already carries the tracked JSONL ledger.
 
 ## haxe.rust Upstream Improvement Rule
 
@@ -22,7 +25,7 @@ haxe.rust CI health is a hard prerequisite for codex-hxrust feature work. Before
 
 Work directly in `../haxe.rust` when fixing compiler/runtime limitations. Before making any change there, read `../haxe.rust/AGENTS.md` in full and follow that repository's current instructions, including its test expectations, commit-message conventions, push/landing rules, and any local branch or release discipline. Do not assume codex-hxrust conventions apply inside haxe.rust unless that repo's instructions say so.
 
-`bd` issue tracking is repository-local. If haxe.rust has an active `.beads` setup and its `AGENTS.md` asks for Beads, run `bd` from `../haxe.rust` when claiming or closing haxe.rust work. Do not run this repo's `bd` and assume it scopes into haxe.rust. If haxe.rust Beads are unavailable, unclear, or not useful for the current compiler pressure note, track the follow-up from codex-hxrust Beads/docs instead and keep the haxe.rust source change itself governed by haxe.rust's local instructions.
+`bd` issue tracking is repository-local. This repository uses JSONL-only Beads (`.beads/config.yaml` sets `no-db: true`, `no-daemon: true`, `no-auto-flush: true`, and `auto-start-daemon: false`), so `.beads/issues.jsonl` is the authoritative issue ledger and Git is the sync mechanism. If haxe.rust has an active `.beads` setup and its `AGENTS.md` asks for Beads, run `bd` from `../haxe.rust` when claiming or closing haxe.rust work and follow that repo's local Beads mode. Do not run this repo's `bd` and assume it scopes into haxe.rust. If haxe.rust Beads are unavailable, unclear, or not useful for the current compiler pressure note, track the follow-up from codex-hxrust Beads/docs instead and keep the haxe.rust source change itself governed by haxe.rust's local instructions.
 
 The compiler must remain a general Haxe-to-Rust backend: never add Codex-specific code, fixtures, paths, naming, or assumptions to haxe.rust. Codex-specific pressure fixtures belong in this repo; haxe.rust fixes need generic minimal repros and generic tests.
 
@@ -128,7 +131,7 @@ When documenting plans, say "idiomatic portable output" or "idiomatic metal outp
 4. **PUSH TO REMOTE** - This is MANDATORY:
    ```bash
    git pull --rebase
-   bd sync
+   git diff -- .beads/issues.jsonl  # should be empty after commit
    git push
    git status  # MUST show "up to date with origin"
    ```

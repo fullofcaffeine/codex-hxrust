@@ -72,7 +72,7 @@ For a local experiment integration commit:
 ```bash
 git revert <codexhx-integration-commit>
 git pull --rebase
-bd sync
+bd bootstrap --yes
 git push
 ```
 

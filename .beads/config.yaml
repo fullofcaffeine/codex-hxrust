@@ -8,16 +8,17 @@
 # Example: issue-prefix: "myproject" creates issues like "myproject-1", "myproject-2", etc.
 # issue-prefix: ""
 
-# Use no-db mode: load from JSONL, no SQLite, write back after each command
-# When true, bd will use .beads/issues.jsonl as the source of truth
-# instead of SQLite database
-# no-db: false
+# Use no-db mode: load from JSONL and treat the tracked file as the repo source
+# of truth. Run `bd bootstrap --yes` on a fresh clone to hydrate local runtime
+# state from `.beads/issues.jsonl`.
+no-db: true
 
-# Disable daemon for RPC communication (forces direct database access)
-# no-daemon: false
+# Disable daemon usage for this repo to avoid background DB-to-JSONL clobbering.
+no-daemon: true
 
 # Disable auto-flush of database to JSONL after mutations
-# no-auto-flush: false
+# In no-db mode this is effectively a no-op, but keep explicit.
+no-auto-flush: true
 
 # Disable auto-import from JSONL when it's newer than database
 # no-auto-import: false
@@ -32,7 +33,8 @@
 # db: ""
 
 # Auto-start daemon if not running (can also use BEADS_AUTO_START_DAEMON)
-# auto-start-daemon: true
+# Prevent implicit daemon starts from commands or hooks.
+auto-start-daemon: false
 
 # Debounce interval for auto-flush (can also use BEADS_FLUSH_DEBOUNCE)
 # flush-debounce: "5s"

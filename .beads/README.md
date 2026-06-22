@@ -26,8 +26,13 @@ bd show <issue-id>
 bd update <issue-id> --status in_progress
 bd update <issue-id> --status done
 
-# Sync with git remote
-bd sync
+# Hydrate local runtime state from tracked JSONL if needed
+bd bootstrap --yes
+
+# Review and commit the tracked JSONL ledger
+git diff .beads/issues.jsonl
+git add .beads/issues.jsonl
+git commit -m "chore: update beads ledger"
 ```
 
 ### Working with Issues
@@ -36,7 +41,7 @@ Issues in Beads are:
 - **Git-native**: Stored in `.beads/issues.jsonl` and synced like code
 - **AI-friendly**: CLI-first design works perfectly with AI coding agents
 - **Branch-aware**: Issues can follow your branch workflow
-- **Always in sync**: Auto-syncs with your commits
+- **Tracked with Git**: Review, commit, and push JSONL changes with code
 
 ## Why Beads?
 
@@ -47,11 +52,12 @@ Issues in Beads are:
 
 🚀 **Developer Focused**
 - Issues live in your repo, right next to your code
-- Works offline, syncs when you push
+- Works offline, syncs when you commit and push the tracked JSONL
 - Fast, lightweight, and stays out of your way
 
 🔧 **Git Integration**
-- Automatic sync with git commits
+- JSONL-only mode in this repo: `.beads/issues.jsonl` is authoritative and Git is the sync mechanism
+- `bd bootstrap --yes` hydrates local runtime state from tracked JSONL on fresh clones
 - Branch-aware issue tracking
 - Intelligent JSONL merge resolution
 

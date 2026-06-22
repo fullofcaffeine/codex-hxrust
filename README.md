@@ -84,7 +84,6 @@ bd ready
 bd show <issue-id>
 bd update <issue-id> --status in_progress
 bd close <issue-id>
-bd sync
 ```
 
 Maintain the ready queue so raw Codex parity tasks outrank Cafex adapter tasks. If a later Cafex item appears ahead of the intended core work, reprioritize or dependency-gate the Beads items before continuing.
@@ -213,11 +212,14 @@ Protocol work currently includes:
 
 This repo uses Beads for issue tracking. The authoritative issue JSON lives in `.beads/issues.jsonl`; local database/runtime files are ignored by `.beads/.gitignore`.
 
+Beads is configured in JSONL-only mode for this repo. `.beads/issues.jsonl` is the source of truth; review, commit, and push it like any other tracked project file. Do not require `bd sync` here. On a fresh clone or after local Beads runtime state is missing, run `bd bootstrap --yes` to hydrate from the tracked JSONL.
+
 Run:
 
 ```bash
 bd onboard
+bd bootstrap --yes
 bd ready
 ```
 
-Before ending a session, follow `AGENTS.md`: file follow-ups, run gates, update Beads, `bd sync`, commit, push, and verify the branch is up to date with origin.
+Before ending a session, follow `AGENTS.md`: file follow-ups, run gates, update Beads JSONL, commit, push, and verify the branch is up to date with origin.
