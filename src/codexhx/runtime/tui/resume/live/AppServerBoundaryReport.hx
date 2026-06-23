@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef AppServerBoundaryReportFields = {
 	final requestIdsPreserved:Bool;
 	final requestFieldsPreserved:Bool;
@@ -41,15 +43,23 @@ class AppServerBoundaryReport {
 	public final stateSummaries:Array<String>;
 
 	public function summary():String {
-		return "requestIdsPreserved=" + boolLabel(requestIdsPreserved) + ";requestFieldsPreserved=" + boolLabel(requestFieldsPreserved)
-			+ ";backpressureSeen=" + boolLabel(backpressureSeen) + ";errorMapped=" + boolLabel(errorMapped) + ";noCredentialOrModelTraffic="
-			+ boolLabel(noCredentialOrModelTraffic) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";pageRequests=" + pageRequests + ";pending="
-			+ pendingEvents + ";skipped=" + skippedEvents + ";frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot="
-			+ finalSnapshot.split("\n").join("\\n") + ";requests=[" + requestSummaries.join("##") + "]" + ";polls=[" + pollSummaries.join("##") + "]"
-			+ ";events=[" + eventSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("requestIdsPreserved", requestIdsPreserved),
+			DiagnosticSummary.boolValue("requestFieldsPreserved", requestFieldsPreserved),
+			DiagnosticSummary.boolValue("backpressureSeen", backpressureSeen),
+			DiagnosticSummary.boolValue("errorMapped", errorMapped),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("pending", pendingEvents),
+			DiagnosticSummary.intValue("skipped", skippedEvents),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("polls", pollSummaries),
+			DiagnosticSummary.logList("events", eventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries)
+		]);
 	}
 }

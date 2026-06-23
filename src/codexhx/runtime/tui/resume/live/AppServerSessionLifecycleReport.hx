@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef AppServerSessionLifecycleReportFields = {
 	final requestShapePreserved:Bool;
 	final sessionLifecycleModeled:Bool;
@@ -47,17 +49,26 @@ class AppServerSessionLifecycleReport {
 	public final stateSummaries:Array<String>;
 
 	public function summary():String {
-		return "requestShapePreserved=" + boolLabel(requestShapePreserved) + ";sessionLifecycleModeled=" + boolLabel(sessionLifecycleModeled)
-			+ ";cancellationRouted=" + boolLabel(cancellationRouted) + ";lateResponseRejected=" + boolLabel(lateResponseRejected)
-			+ ";disconnectRefusalModeled=" + boolLabel(disconnectRefusalModeled) + ";recoveryDecoded=" + boolLabel(recoveryDecoded)
-			+ ";noCredentialOrModelTraffic=" + boolLabel(noCredentialOrModelTraffic) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";pageRequests="
-			+ pageRequests + ";readRequests=" + readRequests + ";frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot="
-			+ finalSnapshot.split("\n").join("\\n") + ";requests=[" + requestSummaries.join("##") + "]" + ";transport=[" + transportSummaries.join("##")
-			+ "]" + ";transportEvents=[" + transportEventSummaries.join("##") + "]" + ";fanout=[" + fanoutSummaries.join("##") + "]" + ";hostEvents=["
-			+ hostEventSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("requestShapePreserved", requestShapePreserved),
+			DiagnosticSummary.boolValue("sessionLifecycleModeled", sessionLifecycleModeled),
+			DiagnosticSummary.boolValue("cancellationRouted", cancellationRouted),
+			DiagnosticSummary.boolValue("lateResponseRejected", lateResponseRejected),
+			DiagnosticSummary.boolValue("disconnectRefusalModeled", disconnectRefusalModeled),
+			DiagnosticSummary.boolValue("recoveryDecoded", recoveryDecoded),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("transportEvents", transportEventSummaries),
+			DiagnosticSummary.logList("fanout", fanoutSummaries),
+			DiagnosticSummary.logList("hostEvents", hostEventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries)
+		]);
 	}
 }

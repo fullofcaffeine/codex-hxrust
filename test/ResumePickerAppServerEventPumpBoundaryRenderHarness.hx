@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.AppServerEventPumpBoundaryGate;
 
-class EventPumpBoundaryRenderHarness {
+class ResumePickerAppServerEventPumpBoundaryRenderHarness {
 	static function main():Void {
 		final report = AppServerEventPumpBoundaryGate.run();
 		final snapshots = report.renderSnapshots;

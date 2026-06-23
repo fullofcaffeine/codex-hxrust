@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef JsonRpcThreadReadTransportReportFields = {
 	final requestShapePreserved:Bool;
 	final previewDecoded:Bool;
@@ -39,15 +41,22 @@ class JsonRpcThreadReadTransportReport {
 	public final stateSummaries:Array<String>;
 
 	public function summary():String {
-		return "requestShapePreserved=" + boolLabel(requestShapePreserved) + ";previewDecoded=" + boolLabel(previewDecoded) + ";transcriptDecoded="
-			+ boolLabel(transcriptDecoded) + ";errorMapped=" + boolLabel(errorMapped) + ";noCredentialOrModelTraffic="
-			+ boolLabel(noCredentialOrModelTraffic) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";readRequests=" + readRequests + ";frames="
-			+ frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";requests=["
-			+ requestSummaries.join("##") + "]" + ";transport=[" + transportSummaries.join("##") + "]" + ";transportEvents=["
-			+ transportEventSummaries.join("##") + "]" + ";hostEvents=[" + hostEventSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("requestShapePreserved", requestShapePreserved),
+			DiagnosticSummary.boolValue("previewDecoded", previewDecoded),
+			DiagnosticSummary.boolValue("transcriptDecoded", transcriptDecoded),
+			DiagnosticSummary.boolValue("errorMapped", errorMapped),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("transportEvents", transportEventSummaries),
+			DiagnosticSummary.logList("hostEvents", hostEventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries)
+		]);
 	}
 }

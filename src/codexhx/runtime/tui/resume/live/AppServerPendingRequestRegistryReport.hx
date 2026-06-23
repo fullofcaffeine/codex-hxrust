@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef AppServerPendingRequestRegistryReportFields = {
 	final registrationRecorded:Bool;
 	final duplicateRejected:Bool;
@@ -69,22 +71,37 @@ class AppServerPendingRequestRegistryReport {
 	public final forwardPollSummaries:Array<String>;
 
 	public function summary():String {
-		return "registrationRecorded=" + boolLabel(registrationRecorded) + ";duplicateRejected=" + boolLabel(duplicateRejected) + ";resolveRemovedPending="
-			+ boolLabel(resolveRemovedPending) + ";rejectRemovedPending=" + boolLabel(rejectRemovedPending) + ";secondResponseRefused="
-			+ boolLabel(secondResponseRefused) + ";abandonedCleanupRecorded=" + boolLabel(abandonedCleanupRecorded) + ";registryEmptyAtEnd="
-			+ boolLabel(registryEmptyAtEnd) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed="
-			+ boolLabel(liveTransportSuppressed) + ";recoveryDecoded=" + boolLabel(recoveryDecoded) + ";noCredentialOrModelTraffic="
-			+ boolLabel(noCredentialOrModelTraffic) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";pageRequests=" + pageRequests + ";readRequests="
-			+ readRequests + ";frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";registryEvents=[" + registryEventSummaries.join("##") + "]" + ";registryLog=[" + registryLogSummaries.join("##") + "]" + ";pending=["
-			+ pendingSummaries.join("##") + "]" + ";commands=[" + commandSummaries.join("##") + "]" + ";envelopes=[" + envelopeSummaries.join("##") + "]"
-			+ ";requests=[" + requestSummaries.join("##") + "]" + ";transport=[" + transportSummaries.join("##") + "]" + ";dispatch=["
-			+ dispatchSummaries.join("##") + "]" + ";pump=[" + pumpSummaries.join("##") + "]" + ";rejectedRequests=[" + rejectedRequestSummaries.join("##")
-			+ "]" + ";hostEvents=[" + hostEventSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]" + ";forwardPolls=["
-			+ forwardPollSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("registrationRecorded", registrationRecorded),
+			DiagnosticSummary.boolValue("duplicateRejected", duplicateRejected),
+			DiagnosticSummary.boolValue("resolveRemovedPending", resolveRemovedPending),
+			DiagnosticSummary.boolValue("rejectRemovedPending", rejectRemovedPending),
+			DiagnosticSummary.boolValue("secondResponseRefused", secondResponseRefused),
+			DiagnosticSummary.boolValue("abandonedCleanupRecorded", abandonedCleanupRecorded),
+			DiagnosticSummary.boolValue("registryEmptyAtEnd", registryEmptyAtEnd),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("recoveryDecoded", recoveryDecoded),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("registryEvents", registryEventSummaries),
+			DiagnosticSummary.logList("registryLog", registryLogSummaries),
+			DiagnosticSummary.logList("pending", pendingSummaries),
+			DiagnosticSummary.logList("commands", commandSummaries),
+			DiagnosticSummary.logList("envelopes", envelopeSummaries),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("dispatch", dispatchSummaries),
+			DiagnosticSummary.logList("pump", pumpSummaries),
+			DiagnosticSummary.logList("rejectedRequests", rejectedRequestSummaries),
+			DiagnosticSummary.logList("hostEvents", hostEventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("forwardPolls", forwardPollSummaries)
+		]);
 	}
 }

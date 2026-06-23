@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef AppServerStreamPressureReportFields = {
 	final pressureContractModeled:Bool;
 	final bestEffortDropped:Bool;
@@ -55,18 +57,30 @@ class AppServerStreamPressureReport {
 	public final forwardPollSummaries:Array<String>;
 
 	public function summary():String {
-		return "pressureContractModeled=" + boolLabel(pressureContractModeled) + ";bestEffortDropped=" + boolLabel(bestEffortDropped)
-			+ ";serverRequestRejected=" + boolLabel(serverRequestRejected) + ";losslessBackpressured=" + boolLabel(losslessBackpressured)
-			+ ";losslessLagFlushed=" + boolLabel(losslessLagFlushed) + ";losslessEventPreserved=" + boolLabel(losslessEventPreserved) + ";recoveryDecoded="
-			+ boolLabel(recoveryDecoded) + ";noCredentialOrModelTraffic=" + boolLabel(noCredentialOrModelTraffic) + ";stateDbUntouched="
-			+ boolLabel(stateDbUntouched) + ";pageRequests=" + pageRequests + ";readRequests=" + readRequests + ";frames=" + frameRequests + ";renders="
-			+ renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";requests=[" + requestSummaries.join("##") + "]" + ";transport=["
-			+ transportSummaries.join("##") + "]" + ";dispatch=[" + dispatchSummaries.join("##") + "]" + ";pump=[" + pumpSummaries.join("##") + "]"
-			+ ";rejectedRequests=[" + rejectedRequestSummaries.join("##") + "]" + ";fanout=[" + fanoutSummaries.join("##") + "]" + ";hostEvents=["
-			+ hostEventSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]" + ";forwardPolls=[" + forwardPollSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("pressureContractModeled", pressureContractModeled),
+			DiagnosticSummary.boolValue("bestEffortDropped", bestEffortDropped),
+			DiagnosticSummary.boolValue("serverRequestRejected", serverRequestRejected),
+			DiagnosticSummary.boolValue("losslessBackpressured", losslessBackpressured),
+			DiagnosticSummary.boolValue("losslessLagFlushed", losslessLagFlushed),
+			DiagnosticSummary.boolValue("losslessEventPreserved", losslessEventPreserved),
+			DiagnosticSummary.boolValue("recoveryDecoded", recoveryDecoded),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("dispatch", dispatchSummaries),
+			DiagnosticSummary.logList("pump", pumpSummaries),
+			DiagnosticSummary.logList("rejectedRequests", rejectedRequestSummaries),
+			DiagnosticSummary.logList("fanout", fanoutSummaries),
+			DiagnosticSummary.logList("hostEvents", hostEventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("forwardPolls", forwardPollSummaries)
+		]);
 	}
 }

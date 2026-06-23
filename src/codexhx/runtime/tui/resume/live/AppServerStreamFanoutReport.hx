@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef AppServerStreamFanoutReportFields = {
 	final requestShapePreserved:Bool;
 	final pendingOwnershipModeled:Bool;
@@ -49,17 +51,27 @@ class AppServerStreamFanoutReport {
 	public final stateSummaries:Array<String>;
 
 	public function summary():String {
-		return "requestShapePreserved=" + boolLabel(requestShapePreserved) + ";pendingOwnershipModeled=" + boolLabel(pendingOwnershipModeled)
-			+ ";backpressureRouted=" + boolLabel(backpressureRouted) + ";jsonRpcErrorMapped=" + boolLabel(jsonRpcErrorMapped) + ";pageDecoded="
-			+ boolLabel(pageDecoded) + ";previewDecoded=" + boolLabel(previewDecoded) + ";transcriptDecoded=" + boolLabel(transcriptDecoded)
-			+ ";noCredentialOrModelTraffic=" + boolLabel(noCredentialOrModelTraffic) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";pageRequests="
-			+ pageRequests + ";readRequests=" + readRequests + ";frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot="
-			+ finalSnapshot.split("\n").join("\\n") + ";requests=[" + requestSummaries.join("##") + "]" + ";transport=[" + transportSummaries.join("##")
-			+ "]" + ";transportEvents=[" + transportEventSummaries.join("##") + "]" + ";fanout=[" + fanoutSummaries.join("##") + "]" + ";hostEvents=["
-			+ hostEventSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("requestShapePreserved", requestShapePreserved),
+			DiagnosticSummary.boolValue("pendingOwnershipModeled", pendingOwnershipModeled),
+			DiagnosticSummary.boolValue("backpressureRouted", backpressureRouted),
+			DiagnosticSummary.boolValue("jsonRpcErrorMapped", jsonRpcErrorMapped),
+			DiagnosticSummary.boolValue("pageDecoded", pageDecoded),
+			DiagnosticSummary.boolValue("previewDecoded", previewDecoded),
+			DiagnosticSummary.boolValue("transcriptDecoded", transcriptDecoded),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("transportEvents", transportEventSummaries),
+			DiagnosticSummary.logList("fanout", fanoutSummaries),
+			DiagnosticSummary.logList("hostEvents", hostEventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries)
+		]);
 	}
 }

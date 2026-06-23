@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.AppServerStreamFanoutGate;
 
-class StreamFanoutRenderHarness {
+class ResumePickerAppServerStreamFanoutRenderHarness {
 	static function main():Void {
 		final report = AppServerStreamFanoutGate.run();
 		final snapshots = report.renderSnapshots;
