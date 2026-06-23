@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.ResponseTransportEnvelopeGate;
 
-class ResponseTransportEnvelopeRenderHarness {
+class ResumePickerAppServerResponseTransportEnvelopeRenderHarness {
 	static function main():Void {
 		final report = ResponseTransportEnvelopeGate.run();
 		final snapshots = report.renderSnapshots;

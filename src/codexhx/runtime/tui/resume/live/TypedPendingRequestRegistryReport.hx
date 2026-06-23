@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef TypedPendingRequestRegistryReportFields = {
 	final typedClassesRegistered:Bool;
 	final keyDuplicateRejected:Bool;
@@ -67,21 +69,36 @@ class TypedPendingRequestRegistryReport {
 	public final forwardPollSummaries:Array<String>;
 
 	public function summary():String {
-		return "typedClassesRegistered=" + boolLabel(typedClassesRegistered) + ";keyDuplicateRejected=" + boolLabel(keyDuplicateRejected)
-			+ ";userInputFifoResolved=" + boolLabel(userInputFifoResolved) + ";mcpRequestMatched=" + boolLabel(mcpRequestMatched) + ";unsupportedRefused="
-			+ boolLabel(unsupportedRefused) + ";notificationRemoved=" + boolLabel(notificationRemoved) + ";staleReplaySkipped="
-			+ boolLabel(staleReplaySkipped) + ";registryEmptyAtEnd=" + boolLabel(registryEmptyAtEnd) + ";noPressureDropRejection="
-			+ boolLabel(noPressureDropRejection) + ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed) + ";recoveryDecoded="
-			+ boolLabel(recoveryDecoded) + ";noCredentialOrModelTraffic=" + boolLabel(noCredentialOrModelTraffic) + ";stateDbUntouched="
-			+ boolLabel(stateDbUntouched) + ";pageRequests=" + pageRequests + ";readRequests=" + readRequests + ";frames=" + frameRequests + ";renders="
-			+ renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";typedEvents=[" + typedEventSummaries.join("##") + "]"
-			+ ";registryLog=[" + registryLogSummaries.join("##") + "]" + ";pending=[" + pendingSummaries.join("##") + "]" + ";requests=["
-			+ requestSummaries.join("##") + "]" + ";transport=[" + transportSummaries.join("##") + "]" + ";dispatch=[" + dispatchSummaries.join("##") + "]"
-			+ ";pump=[" + pumpSummaries.join("##") + "]" + ";rejectedRequests=[" + rejectedRequestSummaries.join("##") + "]" + ";hostEvents=["
-			+ hostEventSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]" + ";forwardPolls=[" + forwardPollSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("typedClassesRegistered", typedClassesRegistered),
+			DiagnosticSummary.boolValue("keyDuplicateRejected", keyDuplicateRejected),
+			DiagnosticSummary.boolValue("userInputFifoResolved", userInputFifoResolved),
+			DiagnosticSummary.boolValue("mcpRequestMatched", mcpRequestMatched),
+			DiagnosticSummary.boolValue("unsupportedRefused", unsupportedRefused),
+			DiagnosticSummary.boolValue("notificationRemoved", notificationRemoved),
+			DiagnosticSummary.boolValue("staleReplaySkipped", staleReplaySkipped),
+			DiagnosticSummary.boolValue("registryEmptyAtEnd", registryEmptyAtEnd),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("recoveryDecoded", recoveryDecoded),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("typedEvents", typedEventSummaries),
+			DiagnosticSummary.logList("registryLog", registryLogSummaries),
+			DiagnosticSummary.logList("pending", pendingSummaries),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("dispatch", dispatchSummaries),
+			DiagnosticSummary.logList("pump", pumpSummaries),
+			DiagnosticSummary.logList("rejectedRequests", rejectedRequestSummaries),
+			DiagnosticSummary.logList("hostEvents", hostEventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("forwardPolls", forwardPollSummaries)
+		]);
 	}
 }

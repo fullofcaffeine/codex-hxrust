@@ -5,4 +5,4 @@
 -D rust_output=generated/resume-picker-app-server-response-transport-envelope-render
 -D rust_crate=codex_hxrust_resume_picker_app_server_response_transport_envelope_render
 -D rust_cargo_subcommand=check
--main ResponseTransportEnvelopeRenderHarness
+-main ResumePickerAppServerResponseTransportEnvelopeRenderHarness

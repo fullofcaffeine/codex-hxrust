@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef DispatchFailureNoopReportFields = {
 	final missingSessionNoopRecorded:Bool;
 	final malformedIntentSerializationRefused:Bool;
@@ -65,22 +67,35 @@ class DispatchFailureNoopReport {
 	public final forwardPollSummaries:Array<String>;
 
 	public function summary():String {
-		return "missingSessionNoopRecorded=" + boolLabel(missingSessionNoopRecorded) + ";malformedIntentSerializationRefused="
-			+ boolLabel(malformedIntentSerializationRefused) + ";unknownIntentSerializationRefused=" + boolLabel(unknownIntentSerializationRefused)
-			+ ";missingPayloadSerializationRefused=" + boolLabel(missingPayloadSerializationRefused) + ";sendFailureRecorded="
-			+ boolLabel(sendFailureRecorded) + ";requestIdsPreserved=" + boolLabel(requestIdsPreserved) + ";noPressureDropRejection="
-			+ boolLabel(noPressureDropRejection) + ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed) + ";recoveryDecoded="
-			+ boolLabel(recoveryDecoded) + ";noCredentialOrModelTraffic=" + boolLabel(noCredentialOrModelTraffic) + ";stateDbUntouched="
-			+ boolLabel(stateDbUntouched) + ";pageRequests=" + pageRequests + ";readRequests=" + readRequests + ";frames=" + frameRequests + ";renders="
-			+ renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";responseIntents=[" + responseIntentSummaries.join("##") + "]"
-			+ ";dispatchCommands=[" + dispatchCommandSummaries.join("##") + "]" + ";requestHandle=[" + requestHandleSummaries.join("##") + "]"
-			+ ";requests=[" + requestSummaries.join("##") + "]" + ";transport=[" + transportSummaries.join("##") + "]" + ";dispatch=["
-			+ dispatchSummaries.join("##") + "]" + ";pump=[" + pumpSummaries.join("##") + "]" + ";rejectedRequests=[" + rejectedRequestSummaries.join("##")
-			+ "]" + ";fanout=[" + fanoutSummaries.join("##") + "]" + ";hostEvents=[" + hostEventSummaries.join("##") + "]" + ";states=["
-			+ stateSummaries.join("##") + "]" + ";forwardPolls=[" + forwardPollSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("missingSessionNoopRecorded", missingSessionNoopRecorded),
+			DiagnosticSummary.boolValue("malformedIntentSerializationRefused", malformedIntentSerializationRefused),
+			DiagnosticSummary.boolValue("unknownIntentSerializationRefused", unknownIntentSerializationRefused),
+			DiagnosticSummary.boolValue("missingPayloadSerializationRefused", missingPayloadSerializationRefused),
+			DiagnosticSummary.boolValue("sendFailureRecorded", sendFailureRecorded),
+			DiagnosticSummary.boolValue("requestIdsPreserved", requestIdsPreserved),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("recoveryDecoded", recoveryDecoded),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("responseIntents", responseIntentSummaries),
+			DiagnosticSummary.logList("dispatchCommands", dispatchCommandSummaries),
+			DiagnosticSummary.logList("requestHandle", requestHandleSummaries),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("dispatch", dispatchSummaries),
+			DiagnosticSummary.logList("pump", pumpSummaries),
+			DiagnosticSummary.logList("rejectedRequests", rejectedRequestSummaries),
+			DiagnosticSummary.logList("fanout", fanoutSummaries),
+			DiagnosticSummary.logList("hostEvents", hostEventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("forwardPolls", forwardPollSummaries)
+		]);
 	}
 }

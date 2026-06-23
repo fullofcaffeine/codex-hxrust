@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef ResponseTransportEnvelopeReportFields = {
 	final resolveEnvelopeRecorded:Bool;
 	final rejectEnvelopeRecorded:Bool;
@@ -63,21 +65,34 @@ class ResponseTransportEnvelopeReport {
 	public final forwardPollSummaries:Array<String>;
 
 	public function summary():String {
-		return "resolveEnvelopeRecorded=" + boolLabel(resolveEnvelopeRecorded) + ";rejectEnvelopeRecorded=" + boolLabel(rejectEnvelopeRecorded)
-			+ ";localRefusalEnvelopeRecorded=" + boolLabel(localRefusalEnvelopeRecorded) + ";sendFailureEnvelopeRecorded="
-			+ boolLabel(sendFailureEnvelopeRecorded) + ";requestIdsCorrelated=" + boolLabel(requestIdsCorrelated) + ";errorPayloadsDistinct="
-			+ boolLabel(errorPayloadsDistinct) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed="
-			+ boolLabel(liveTransportSuppressed) + ";recoveryDecoded=" + boolLabel(recoveryDecoded) + ";noCredentialOrModelTraffic="
-			+ boolLabel(noCredentialOrModelTraffic) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";pageRequests=" + pageRequests + ";readRequests="
-			+ readRequests + ";frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";commands=[" + commandSummaries.join("##") + "]" + ";envelopes=[" + envelopeSummaries.join("##") + "]" + ";transportEnvelopes=["
-			+ transportEnvelopeSummaries.join("##") + "]" + ";requests=[" + requestSummaries.join("##") + "]" + ";transport=["
-			+ transportSummaries.join("##") + "]" + ";dispatch=[" + dispatchSummaries.join("##") + "]" + ";pump=[" + pumpSummaries.join("##") + "]"
-			+ ";rejectedRequests=[" + rejectedRequestSummaries.join("##") + "]" + ";hostEvents=[" + hostEventSummaries.join("##") + "]" + ";states=["
-			+ stateSummaries.join("##") + "]" + ";forwardPolls=[" + forwardPollSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("resolveEnvelopeRecorded", resolveEnvelopeRecorded),
+			DiagnosticSummary.boolValue("rejectEnvelopeRecorded", rejectEnvelopeRecorded),
+			DiagnosticSummary.boolValue("localRefusalEnvelopeRecorded", localRefusalEnvelopeRecorded),
+			DiagnosticSummary.boolValue("sendFailureEnvelopeRecorded", sendFailureEnvelopeRecorded),
+			DiagnosticSummary.boolValue("requestIdsCorrelated", requestIdsCorrelated),
+			DiagnosticSummary.boolValue("errorPayloadsDistinct", errorPayloadsDistinct),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("recoveryDecoded", recoveryDecoded),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("commands", commandSummaries),
+			DiagnosticSummary.logList("envelopes", envelopeSummaries),
+			DiagnosticSummary.logList("transportEnvelopes", transportEnvelopeSummaries),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("dispatch", dispatchSummaries),
+			DiagnosticSummary.logList("pump", pumpSummaries),
+			DiagnosticSummary.logList("rejectedRequests", rejectedRequestSummaries),
+			DiagnosticSummary.logList("hostEvents", hostEventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("forwardPolls", forwardPollSummaries)
+		]);
 	}
 }
