@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef NoResultsRecoveryReportFields = {
 	final pageLoads:Int;
 	final emptyReloads:Int;
@@ -25,8 +27,15 @@ class NoResultsRecoveryReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads + ";emptyReloads=" + emptyReloads + ";recoveryReloads=" + recoveryReloads + ";frames=" + frameRequests + ";renders="
-			+ renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";states=[" + stateSummaries.join("##") + "]" + ";events=["
-			+ eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("pageLoads", pageLoads),
+			DiagnosticSummary.intValue("emptyReloads", emptyReloads),
+			DiagnosticSummary.intValue("recoveryReloads", recoveryReloads),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }

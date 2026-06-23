@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef ResumePickerQueryReloadReportFields = {
 	final pageLoads:Int;
 	final queryReloads:Int;
@@ -23,7 +25,14 @@ class ResumePickerQueryReloadReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads + ";queryReloads=" + queryReloads + ";frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot="
-			+ finalSnapshot.split("\n").join("\\n") + ";requests=[" + requestSummaries.join("##") + "]" + ";events=[" + eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("pageLoads", pageLoads),
+			DiagnosticSummary.intValue("queryReloads", queryReloads),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }

@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef TranscriptOverlayReportFields = {
 	final transcriptLoads:Int;
 	final fallbackLoads:Int;
@@ -21,7 +23,13 @@ class TranscriptOverlayReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "transcriptLoads=" + transcriptLoads + ";fallbackLoads=" + fallbackLoads + ";frames=" + frameRequests + ";renders=" + renderCount
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";events=[" + eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("transcriptLoads", transcriptLoads),
+			DiagnosticSummary.intValue("fallbackLoads", fallbackLoads),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }

@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef ToolbarFooterReportFields = {
 	final frameRequests:Int;
 	final renderCount:Int;
@@ -15,6 +17,10 @@ class ToolbarFooterReport {
 	public final renderSnapshots:Array<String>;
 
 	public function summary():String {
-		return "frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n");
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot)
+		]);
 	}
 }

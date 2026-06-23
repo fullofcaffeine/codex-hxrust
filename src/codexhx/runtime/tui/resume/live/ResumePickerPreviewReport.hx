@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef ResumePickerPreviewReportFields = {
 	final pageLoads:Int;
 	final previewLoads:Int;
@@ -21,7 +23,13 @@ class ResumePickerPreviewReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads + ";previewLoads=" + previewLoads + ";frames=" + frameRequests + ";renders=" + renderCount + ";finalSnapshot="
-			+ finalSnapshot.split("\n").join("\\n") + ";events=[" + eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("pageLoads", pageLoads),
+			DiagnosticSummary.intValue("previewLoads", previewLoads),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }
