@@ -6,6 +6,16 @@ The goal is whole-Codex parity, not a headless-only subset: app-server protocol,
 
 Public-readiness scaffolding includes repo-managed hooks, Haxe formatting, staged and full-history gitleaks checks, GitHub CI, Dependabot, and generated-Rust smoke gates.
 
+## Port Progress
+
+Current Beads-based completion snapshot:
+
+```text
+[#######################################-] 99% (495/500 non-epic Beads closed)
+```
+
+This is an unweighted planning and throughput indicator, not a whole-Codex parity claim. The port has many small deterministic gates, including generated-Rust protocol/runtime/TUI slices, but a runnable interactive Codex TUI still needs live terminal ownership, app-server JSON-RPC integration, async task/channel boundaries, state DB persistence, tool execution, and broader upstream widget/runtime parity.
+
 The strategy is upstream-first:
 
 1. Model the mainstream Codex protocol/runtime shape from `../codex`.
