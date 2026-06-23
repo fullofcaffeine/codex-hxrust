@@ -1,7 +1,7 @@
 import codexhx.runtime.tui.resume.host.SurfaceRecoveryConfirmationKind;
 import codexhx.runtime.tui.resume.live.SurfaceRecoveryConfirmationGate;
 
-class SurfaceRecoveryConfirmationRenderHarness {
+class ResumePickerAppServerTypedResponseSurfaceRecoveryConfirmationRenderHarness {
 	static function main():Void {
 		final report = SurfaceRecoveryConfirmationGate.run();
 

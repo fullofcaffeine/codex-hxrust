@@ -5,4 +5,4 @@
 -D rust_output=generated/resume-picker-app-server-typed-response-surface-recovery-confirmation-render
 -D rust_crate=codex_hxrust_resume_picker_app_server_typed_response_surface_recovery_confirmation_render
 -D rust_cargo_subcommand=check
--main SurfaceRecoveryConfirmationRenderHarness
+-main ResumePickerAppServerTypedResponseSurfaceRecoveryConfirmationRenderHarness

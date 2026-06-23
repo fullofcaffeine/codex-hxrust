@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.SurfaceRecoveryConfirmationKind;
 
 typedef SurfaceRecoveryConfirmationReportFields = {
@@ -62,20 +63,33 @@ class SurfaceRecoveryConfirmationReport {
 	public final surfaceUpdateSummaries:Array<String>;
 
 	public function summary():String {
-		return "recoveryConfirmed=" + boolLabel(recoveryConfirmed) + ";confirmationKind=" + confirmationKind + ";surfaceUpdateCount=" + surfaceUpdateCount
-			+ ";recoveryFrameIndex=" + recoveryFrameIndex + ";thread=" + recoveredThreadId + ";footer=" + recoveredFooterLabel + ";loader="
-			+ recoveredLoaderStatus + ";pendingCleared=" + boolLabel(pendingInteractiveSurfaceCleared) + ";sideParentCleared="
-			+ boolLabel(sideParentSurfaceCleared) + ";activeThreadReplaced=" + boolLabel(activeThreadSurfaceReplaced) + ";staleSurfaceLoaderAbsent="
-			+ boolLabel(staleSurfaceLoaderAbsent) + ";ignoredNoSurfaceAbsent=" + boolLabel(ignoredNoSurfaceRecordsAbsent) + ";recoveryPageDecoded="
-			+ boolLabel(recoveryPageDecoded) + ";selectionPreserved=" + boolLabel(recoverySelectionPreserved) + ";noPressureDropRejection="
-			+ boolLabel(noPressureDropRejection) + ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed) + ";stateDbUntouched="
-			+ boolLabel(stateDbUntouched) + ";frames=" + frameRequests + ";renders=" + renderCount + ";pageRequests=" + pageRequests + ";readRequests="
-			+ readRequests + ";confirmation=[" + confirmationSummary + "]" + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";confirmationLog=["
-			+ confirmationLogSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]" + ";surfaceUpdates=["
-			+ surfaceUpdateSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("recoveryConfirmed", recoveryConfirmed),
+			DiagnosticSummary.enumValue("confirmationKind", Std.string(confirmationKind)),
+			DiagnosticSummary.intValue("surfaceUpdateCount", surfaceUpdateCount),
+			DiagnosticSummary.intValue("recoveryFrameIndex", recoveryFrameIndex),
+			DiagnosticSummary.text("thread", recoveredThreadId),
+			DiagnosticSummary.text("footer", recoveredFooterLabel),
+			DiagnosticSummary.text("loader", recoveredLoaderStatus),
+			DiagnosticSummary.boolValue("pendingCleared", pendingInteractiveSurfaceCleared),
+			DiagnosticSummary.boolValue("sideParentCleared", sideParentSurfaceCleared),
+			DiagnosticSummary.boolValue("activeThreadReplaced", activeThreadSurfaceReplaced),
+			DiagnosticSummary.boolValue("staleSurfaceLoaderAbsent", staleSurfaceLoaderAbsent),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("recoveryPageDecoded", recoveryPageDecoded),
+			DiagnosticSummary.boolValue("selectionPreserved", recoverySelectionPreserved),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.nested("confirmation", confirmationSummary),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("confirmationLog", confirmationLogSummaries),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("surfaceUpdates", surfaceUpdateSummaries)
+		]);
 	}
 }

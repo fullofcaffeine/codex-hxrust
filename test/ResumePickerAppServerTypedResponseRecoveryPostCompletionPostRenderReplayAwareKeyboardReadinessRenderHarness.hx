@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.ReplayAwareKeyboardReadinessGate;
 
-class RecoveryReplayAwareKeyboardReadinessRenderHarness {
+class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareKeyboardReadinessRenderHarness {
 	static function main():Void {
 		final report = ReplayAwareKeyboardReadinessGate.run();
 
