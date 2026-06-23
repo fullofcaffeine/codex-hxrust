@@ -5,4 +5,4 @@
 -D rust_output=generated/resume-picker-app-server-typed-response-recovery-render-snapshot-replay-render
 -D rust_crate=codex_hxrust_resume_picker_app_server_typed_response_recovery_render_snapshot_replay_render
 -D rust_cargo_subcommand=check
--main RecoveryRenderSnapshotReplayRenderHarness
+-main ResumePickerAppServerTypedResponseRecoveryRenderSnapshotReplayRenderHarness

@@ -5,4 +5,4 @@
 -D rust_output=generated/resume-picker-app-server-typed-response-recovery-keyboard-render-state-render
 -D rust_crate=codex_hxrust_resume_picker_app_server_typed_response_recovery_keyboard_render_state_render
 -D rust_cargo_subcommand=check
--main RecoveryKeyboardRenderStateRenderHarness
+-main ResumePickerAppServerTypedResponseRecoveryKeyboardRenderStateRenderHarness

@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.RecoveryKeyboardStateGate;
 
-class RecoveryKeyboardRenderStateRenderHarness {
+class ResumePickerAppServerTypedResponseRecoveryKeyboardRenderStateRenderHarness {
 	static function main():Void {
 		final report = RecoveryKeyboardStateGate.run();
 

@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.RecoveryRenderSnapshotReplayGate;
 
-class RecoveryRenderSnapshotReplayRenderHarness {
+class ResumePickerAppServerTypedResponseRecoveryRenderSnapshotReplayRenderHarness {
 	static function main():Void {
 		final report = RecoveryRenderSnapshotReplayGate.run();
 

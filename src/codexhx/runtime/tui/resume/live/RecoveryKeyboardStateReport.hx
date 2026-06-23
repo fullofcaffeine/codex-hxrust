@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef RecoveryKeyboardStateReportFields = {
 	final readinessDecisionCount:Int;
 	final renderStateCount:Int;
@@ -45,18 +47,25 @@ class RecoveryKeyboardStateReport {
 	public final readinessSummary:String;
 
 	public function summary():String {
-		return "readinessDecisionCount=" + readinessDecisionCount + ";renderStateCount=" + renderStateCount + ";frameRequests=" + frameRequests
-			+ ";renderCount=" + renderCount + ";selectedMarkerMoved=" + boolLabel(selectedMarkerMoved) + ";recoveredSelectionRestored="
-			+ boolLabel(recoveredSelectionRestored) + ";stalePromptActionInactive=" + boolLabel(stalePromptActionInactive)
-			+ ";staleSideParentActionInactive=" + boolLabel(staleSideParentActionInactive) + ";staleActiveThreadActionInactive="
-			+ boolLabel(staleActiveThreadActionInactive) + ";ignoredNoSurfaceAbsent=" + boolLabel(ignoredNoSurfaceRecordsAbsent)
-			+ ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed)
-			+ ";liveTerminalSuppressed=" + boolLabel(liveTerminalSuppressed) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";finalThread="
-			+ finalThreadId + ";renderStates=[" + renderStateSummaries.join("##") + "]" + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";readiness=[" + readinessSummary + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("readinessDecisionCount", readinessDecisionCount),
+			DiagnosticSummary.intValue("renderStateCount", renderStateCount),
+			DiagnosticSummary.intValue("frameRequests", frameRequests),
+			DiagnosticSummary.intValue("renderCount", renderCount),
+			DiagnosticSummary.boolValue("selectedMarkerMoved", selectedMarkerMoved),
+			DiagnosticSummary.boolValue("recoveredSelectionRestored", recoveredSelectionRestored),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.logList("renderStates", renderStateSummaries),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.nested("readiness", readinessSummary)
+		]);
 	}
 }
