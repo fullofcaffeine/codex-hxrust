@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef HostBackpressureReportFields = {
 	final bestEffortDropped:Bool;
 	final losslessBackpressured:Bool;
@@ -29,9 +31,17 @@ class HostBackpressureReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "bestEffortDropped=" + (bestEffortDropped ? "true" : "false") + ";losslessBackpressured=" + (losslessBackpressured ? "true" : "false")
-			+ ";recoverySucceeded=" + (recoverySucceeded ? "true" : "false") + ";skipped=" + skippedEvents + ";pending=" + pendingEvents + ";frames="
-			+ frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";polls=[" + pollSummaries.join("##")
-			+ "]" + ";events=[" + eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("bestEffortDropped", bestEffortDropped),
+			DiagnosticSummary.boolValue("losslessBackpressured", losslessBackpressured),
+			DiagnosticSummary.boolValue("recoverySucceeded", recoverySucceeded),
+			DiagnosticSummary.intValue("skipped", skippedEvents),
+			DiagnosticSummary.intValue("pending", pendingEvents),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("polls", pollSummaries),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }

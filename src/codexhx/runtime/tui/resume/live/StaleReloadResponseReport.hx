@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef StaleReloadResponseReportFields = {
 	final activePageLoads:Int;
 	final stalePageRefusals:Int;
@@ -25,8 +27,15 @@ class StaleReloadResponseReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "activePageLoads=" + activePageLoads + ";stalePageRefusals=" + stalePageRefusals + ";frames=" + frameRequests + ";renders=" + renderCount
-			+ ";activeSnapshot=" + activeSnapshot.split("\n").join("\\n") + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";states=["
-			+ stateSummaries.join("##") + "]" + ";events=[" + eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("activePageLoads", activePageLoads),
+			DiagnosticSummary.intValue("stalePageRefusals", stalePageRefusals),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("activeSnapshot", activeSnapshot),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }

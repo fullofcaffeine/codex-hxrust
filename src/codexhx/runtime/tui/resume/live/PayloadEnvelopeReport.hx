@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef PayloadEnvelopeReportFields = {
 	final execPayloadRecorded:Bool;
 	final filePayloadRecorded:Bool;
@@ -67,22 +69,36 @@ class PayloadEnvelopeReport {
 	public final forwardPollSummaries:Array<String>;
 
 	public function summary():String {
-		return "execPayloadRecorded=" + boolLabel(execPayloadRecorded) + ";filePayloadRecorded=" + boolLabel(filePayloadRecorded)
-			+ ";permissionsPayloadRecorded=" + boolLabel(permissionsPayloadRecorded) + ";userInputPayloadRecorded=" + boolLabel(userInputPayloadRecorded)
-			+ ";mcpPayloadRecorded=" + boolLabel(mcpPayloadRecorded) + ";unsupportedErrorRecorded=" + boolLabel(unsupportedErrorRecorded)
-			+ ";missingPendingNoopRecorded=" + boolLabel(missingPendingNoopRecorded) + ";requestIdsCorrelated=" + boolLabel(requestIdsCorrelated)
-			+ ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed)
-			+ ";recoveryDecoded=" + boolLabel(recoveryDecoded) + ";noCredentialOrModelTraffic=" + boolLabel(noCredentialOrModelTraffic)
-			+ ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";pageRequests=" + pageRequests + ";readRequests=" + readRequests + ";frames="
-			+ frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";typedEvents=["
-			+ typedEventSummaries.join("##") + "]" + ";envelopes=[" + envelopeSummaries.join("##") + "]" + ";envelopeLog=[" + envelopeLogSummaries.join("##")
-			+ "]" + ";requests=[" + requestSummaries.join("##") + "]" + ";transport=[" + transportSummaries.join("##") + "]" + ";dispatch=["
-			+ dispatchSummaries.join("##") + "]" + ";pump=[" + pumpSummaries.join("##") + "]" + ";rejectedRequests=[" + rejectedRequestSummaries.join("##")
-			+ "]" + ";hostEvents=[" + hostEventSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]" + ";forwardPolls=["
-			+ forwardPollSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("execPayloadRecorded", execPayloadRecorded),
+			DiagnosticSummary.boolValue("filePayloadRecorded", filePayloadRecorded),
+			DiagnosticSummary.boolValue("permissionsPayloadRecorded", permissionsPayloadRecorded),
+			DiagnosticSummary.boolValue("userInputPayloadRecorded", userInputPayloadRecorded),
+			DiagnosticSummary.boolValue("mcpPayloadRecorded", mcpPayloadRecorded),
+			DiagnosticSummary.boolValue("unsupportedErrorRecorded", unsupportedErrorRecorded),
+			DiagnosticSummary.boolValue("missingPendingNoopRecorded", missingPendingNoopRecorded),
+			DiagnosticSummary.boolValue("requestIdsCorrelated", requestIdsCorrelated),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("recoveryDecoded", recoveryDecoded),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("typedEvents", typedEventSummaries),
+			DiagnosticSummary.logList("envelopes", envelopeSummaries),
+			DiagnosticSummary.logList("envelopeLog", envelopeLogSummaries),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("dispatch", dispatchSummaries),
+			DiagnosticSummary.logList("pump", pumpSummaries),
+			DiagnosticSummary.logList("rejectedRequests", rejectedRequestSummaries),
+			DiagnosticSummary.logList("hostEvents", hostEventSummaries),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("forwardPolls", forwardPollSummaries)
+		]);
 	}
 }

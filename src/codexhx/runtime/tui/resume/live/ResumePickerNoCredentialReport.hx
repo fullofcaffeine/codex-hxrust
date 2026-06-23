@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef ResumePickerNoCredentialReportFields = {
 	final pageLoads:Int;
 	final transcriptLoads:Int;
@@ -33,9 +35,18 @@ class ResumePickerNoCredentialReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads + ";transcriptLoads=" + transcriptLoads + ";keys=" + keyEvents + ";frames=" + frameRequests + ";renders="
-			+ renderCount + ";overlay=" + (overlayOpened ? "true" : "false") + ";densityPersisted=" + (densityPersisted ? "true" : "false") + ";configPath="
-			+ configPath + ";final=" + finalSummary + ";finalSnapshot=" + finalSnapshot.split("\n")
-			.join("\\n") + ";events=[" + eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("pageLoads", pageLoads),
+			DiagnosticSummary.intValue("transcriptLoads", transcriptLoads),
+			DiagnosticSummary.intValue("keys", keyEvents),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.boolValue("overlay", overlayOpened),
+			DiagnosticSummary.boolValue("densityPersisted", densityPersisted),
+			DiagnosticSummary.text("configPath", configPath),
+			DiagnosticSummary.text("final", finalSummary),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }
