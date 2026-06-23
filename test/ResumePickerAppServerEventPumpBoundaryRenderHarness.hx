@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerEventPumpBoundaryRenderGate;
+import codexhx.runtime.tui.resume.live.AppServerEventPumpBoundaryGate;
 
-class ResumePickerAppServerEventPumpBoundaryRenderHarness {
+class EventPumpBoundaryRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerEventPumpBoundaryRenderGate.run();
+		final report = AppServerEventPumpBoundaryGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.eventPumpModeled, "event pump should model queued app-server stream events");

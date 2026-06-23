@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerReloadPreviewInvalidationRenderGate;
+import codexhx.runtime.tui.resume.live.PreviewInvalidationGate;
 
 class ResumePickerReloadPreviewInvalidationRenderHarness {
 	static function main():Void {
-		final report = ResumePickerReloadPreviewInvalidationRenderGate.run();
+		final report = PreviewInvalidationGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("3", Std.string(report.pageLoads), "page loads");

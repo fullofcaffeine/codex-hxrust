@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerInvalidRowProjectionRenderGate;
+import codexhx.runtime.tui.resume.live.InvalidRowProjectionGate;
 
 class ResumePickerInvalidRowProjectionRenderHarness {
 	static function main():Void {
-		final report = ResumePickerInvalidRowProjectionRenderGate.run();
+		final report = InvalidRowProjectionGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("1", Std.string(report.pageLoads), "page loads");

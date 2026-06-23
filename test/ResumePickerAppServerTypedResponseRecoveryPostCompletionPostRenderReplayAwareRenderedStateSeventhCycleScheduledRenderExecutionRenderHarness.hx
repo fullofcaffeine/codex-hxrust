@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSeventhCycleScheduledRenderExecutionRenderGate;
+import codexhx.runtime.tui.resume.live.SeventhScheduledRenderGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSeventhCycleScheduledRenderExecutionRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSeventhCycleScheduledRenderExecutionRenderGate.run();
+		final report = SeventhScheduledRenderGate.run();
 		final summary = report.summary();
 
 		assertEquals("local_render_executed", Std.string(report.executionKind), "execution kind");

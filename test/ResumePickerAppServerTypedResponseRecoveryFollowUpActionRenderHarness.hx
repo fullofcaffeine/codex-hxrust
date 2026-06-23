@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryFollowUpActionRenderGate;
+import codexhx.runtime.tui.resume.live.RecoveryFollowUpActionGate;
 
-class ResumePickerAppServerTypedResponseRecoveryFollowUpActionRenderHarness {
+class RecoveryFollowUpActionRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryFollowUpActionRenderGate.run();
+		final report = RecoveryFollowUpActionGate.run();
 
 		assertEquals("3", Std.string(report.actionCount), "follow-up actions");
 		assertEquals("1", Std.string(report.restoredStatusActionCount), "restored status action");

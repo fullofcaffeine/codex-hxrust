@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateReplayCompletionHandoffRenderGate;
+import codexhx.runtime.tui.resume.live.ReplayStateCompletionHandoffGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateReplayCompletionHandoffRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateReplayCompletionHandoffRenderGate.run();
+		final report = ReplayStateCompletionHandoffGate.run();
 
 		assertEquals("completed_recovered_selection", Std.string(report.handoffKind), "handoff kind");
 		assertEquals("2", Std.string(report.sourceReadinessDecisionCount), "source readiness decisions");

@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerTranscriptOverlayRenderGate;
+import codexhx.runtime.tui.resume.live.TranscriptOverlayGate;
 
 class ResumePickerTranscriptOverlayRenderHarness {
 	static function main():Void {
-		final report = ResumePickerTranscriptOverlayRenderGate.run();
+		final report = TranscriptOverlayGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("2", Std.string(report.transcriptLoads), "transcript loads");

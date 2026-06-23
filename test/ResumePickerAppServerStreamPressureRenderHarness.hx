@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerStreamPressureRenderGate;
+import codexhx.runtime.tui.resume.live.AppServerStreamPressureGate;
 
 class ResumePickerAppServerStreamPressureRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerStreamPressureRenderGate.run();
+		final report = AppServerStreamPressureGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.pressureContractModeled, "stream pressure contract should be modeled");

@@ -1,7 +1,6 @@
 package codexhx.runtime.tui;
 
 enum abstract TuiStoryKind(String) from String to String {
-	var Provenance = "provenance";
 	var SessionStart = "session_start";
 	var SessionEnd = "session_end";
 	var AppEvent = "app_event";

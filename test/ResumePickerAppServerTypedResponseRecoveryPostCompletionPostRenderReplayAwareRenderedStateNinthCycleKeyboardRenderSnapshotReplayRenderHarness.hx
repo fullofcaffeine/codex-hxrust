@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateNinthCycleKeyboardRenderSnapshotReplayRenderGate;
+import codexhx.runtime.tui.resume.live.recovery.ninth.SnapshotReplayGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateNinthCycleKeyboardRenderSnapshotReplayRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateNinthCycleKeyboardRenderSnapshotReplayRenderGate.run();
+		final report = SnapshotReplayGate.run();
 		final summary = report.summary();
 
 		assertEquals("2", Std.string(report.sourceReadinessDecisionCount), "source readiness decisions");

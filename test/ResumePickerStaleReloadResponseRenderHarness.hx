@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerStaleReloadResponseRenderGate;
+import codexhx.runtime.tui.resume.live.StaleReloadResponseGate;
 
 class ResumePickerStaleReloadResponseRenderHarness {
 	static function main():Void {
-		final report = ResumePickerStaleReloadResponseRenderGate.run();
+		final report = StaleReloadResponseGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("1", Std.string(report.activePageLoads), "active page loads");

@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerKeyboardNavigationRenderGate;
+import codexhx.runtime.tui.resume.live.KeyboardNavigationGate;
 
 class ResumePickerKeyboardNavigationRenderHarness {
 	static function main():Void {
-		final report = ResumePickerKeyboardNavigationRenderGate.run();
+		final report = KeyboardNavigationGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("5", Std.string(report.frameRequests), "frame requests");

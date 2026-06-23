@@ -1,7 +1,7 @@
 package codexhx.runtime.tui.resume.host;
 
 typedef ResumePickerBackgroundRequestFields = {
-	final kind:ResumePickerBackgroundRequestKind;
+	final kind:BackgroundRequestKind;
 	final page:Null<ResumePickerThreadListRequest>;
 	final read:Null<ResumePickerThreadReadRequest>;
 	final reason:String;
@@ -9,15 +9,15 @@ typedef ResumePickerBackgroundRequestFields = {
 
 @:build(codexhx.macros.FieldRecordConstructor.build())
 class ResumePickerBackgroundRequest {
-	@:recordDefault(ResumePickerBackgroundRequestKind.Unknown)
-	public final kind:ResumePickerBackgroundRequestKind;
+	@:recordDefault(BackgroundRequestKind.Unknown)
+	public final kind:BackgroundRequestKind;
 	public final page:Null<ResumePickerThreadListRequest>;
 	public final read:Null<ResumePickerThreadReadRequest>;
 	public final reason:String;
 
 	public static function pageLoad(request:ResumePickerThreadListRequest):ResumePickerBackgroundRequest {
 		return new ResumePickerBackgroundRequest({
-			kind: ResumePickerBackgroundRequestKind.Page,
+			kind: BackgroundRequestKind.Page,
 			page: request,
 			read: null,
 			reason: ""
@@ -26,7 +26,7 @@ class ResumePickerBackgroundRequest {
 
 	public static function previewLoad(request:ResumePickerThreadReadRequest):ResumePickerBackgroundRequest {
 		return new ResumePickerBackgroundRequest({
-			kind: ResumePickerBackgroundRequestKind.Preview,
+			kind: BackgroundRequestKind.Preview,
 			page: null,
 			read: request,
 			reason: ""
@@ -35,7 +35,7 @@ class ResumePickerBackgroundRequest {
 
 	public static function transcriptLoad(request:ResumePickerThreadReadRequest):ResumePickerBackgroundRequest {
 		return new ResumePickerBackgroundRequest({
-			kind: ResumePickerBackgroundRequestKind.Transcript,
+			kind: BackgroundRequestKind.Transcript,
 			page: null,
 			read: request,
 			reason: ""
@@ -44,7 +44,7 @@ class ResumePickerBackgroundRequest {
 
 	public static function frame(reason:String):ResumePickerBackgroundRequest {
 		return new ResumePickerBackgroundRequest({
-			kind: ResumePickerBackgroundRequestKind.Frame,
+			kind: BackgroundRequestKind.Frame,
 			page: null,
 			read: null,
 			reason: reason

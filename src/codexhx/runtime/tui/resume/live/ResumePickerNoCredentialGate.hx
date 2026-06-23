@@ -9,10 +9,10 @@ import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
 import codexhx.runtime.tui.resume.ResumePickerState;
 import codexhx.runtime.tui.resume.ResumePickerVisibleRow;
-import codexhx.runtime.tui.resume.host.DeterministicResumePickerBackgroundLoader;
-import codexhx.runtime.tui.resume.host.DeterministicResumePickerFrameScheduler;
-import codexhx.runtime.tui.resume.host.DeterministicResumePickerTerminalRenderer;
-import codexhx.runtime.tui.resume.host.InMemoryResumePickerThreadSource;
+import codexhx.runtime.tui.resume.host.DeterministicBackgroundLoader;
+import codexhx.runtime.tui.resume.host.DeterministicFrameScheduler;
+import codexhx.runtime.tui.resume.host.DeterministicTerminalRenderer;
+import codexhx.runtime.tui.resume.host.InMemoryThreadSource;
 import codexhx.runtime.tui.resume.host.ResumePickerBackgroundRequest;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEvent;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEventKind;
@@ -21,16 +21,16 @@ import codexhx.runtime.tui.resume.host.ResumePickerThreadListResponse;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadReadRequest;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadReadResponse;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadRow;
-import codexhx.runtime.tui.resume.host.TempHomeResumePickerConfigPersistence;
+import codexhx.runtime.tui.resume.host.TempHomeConfigPersistence;
 import sys.io.File;
 
 class ResumePickerNoCredentialGate {
-	public static function run(codexHome:String):ResumePickerNoCredentialGateReport {
+	public static function run(codexHome:String):ResumePickerNoCredentialReport {
 		final source = fixtureSource();
-		final loader = new DeterministicResumePickerBackgroundLoader(source, 8);
-		final scheduler = new DeterministicResumePickerFrameScheduler();
-		final renderer = new DeterministicResumePickerTerminalRenderer();
-		final persistence = new TempHomeResumePickerConfigPersistence(codexHome);
+		final loader = new DeterministicBackgroundLoader(source, 8);
+		final scheduler = new DeterministicFrameScheduler();
+		final renderer = new DeterministicTerminalRenderer();
+		final persistence = new TempHomeConfigPersistence(codexHome);
 		final state = ResumePickerState.initial();
 		final eventSummaries:Array<String> = [];
 		var pageLoads = 0;
@@ -68,15 +68,15 @@ class ResumePickerNoCredentialGate {
 		renderer.render(state);
 
 		final keys = [
-			new ResumePickerNoCredentialKeyEvent({kind: ResumePickerNoCredentialKeyKind.Down, keyName: "Down"}),
-			new ResumePickerNoCredentialKeyEvent({kind: ResumePickerNoCredentialKeyKind.OpenTranscript, keyName: "Enter"}),
-			new ResumePickerNoCredentialKeyEvent({kind: ResumePickerNoCredentialKeyKind.ToggleDensity, keyName: "d"})
+			new NoCredentialKeyEvent({kind: NoCredentialKeyKind.Down, keyName: "Down"}),
+			new NoCredentialKeyEvent({kind: NoCredentialKeyKind.OpenTranscript, keyName: "Enter"}),
+			new NoCredentialKeyEvent({kind: NoCredentialKeyKind.ToggleDensity, keyName: "d"})
 		];
 
 		for (key in keys) {
 			keyEvents = keyEvents + 1;
 			switch key.kind {
-				case ResumePickerNoCredentialKeyKind.Down:
+				case NoCredentialKeyKind.Down:
 					state.selectedIndex = 1;
 					state.selectedThreadId = "thread-b";
 					state.selectedLabel = "Host facade";
@@ -84,7 +84,7 @@ class ResumePickerNoCredentialGate {
 					state.footerProgressLabel = "100%";
 					scheduler.requestFrame("key:" + key.keyName);
 					renderer.render(state);
-				case ResumePickerNoCredentialKeyKind.OpenTranscript:
+				case NoCredentialKeyKind.OpenTranscript:
 					state.pendingThreadId = state.selectedThreadId;
 					state.transcriptState = "loading";
 					state.transcriptLoadingFrameShown = true;
@@ -104,7 +104,7 @@ class ResumePickerNoCredentialGate {
 					}
 					scheduler.requestFrame("transcript-loaded");
 					renderer.render(state);
-				case ResumePickerNoCredentialKeyKind.ToggleDensity:
+				case NoCredentialKeyKind.ToggleDensity:
 					state.density = ResumePickerDensity.Dense;
 					final poll = persistence.persistDensity(state.density).poll(AsyncContext.fixture("persist-density"));
 					switch poll {
@@ -115,12 +115,12 @@ class ResumePickerNoCredentialGate {
 					}
 					scheduler.requestFrame("key:" + key.keyName);
 					renderer.render(state);
-				case ResumePickerNoCredentialKeyKind.Unknown:
+				case NoCredentialKeyKind.Unknown:
 			}
 		}
 
 		final configText = File.getContent(persistence.configPath());
-		return new ResumePickerNoCredentialGateReport({
+		return new ResumePickerNoCredentialReport({
 			pageLoads: pageLoads,
 			transcriptLoads: transcriptLoads,
 			keyEvents: keyEvents,
@@ -184,8 +184,8 @@ class ResumePickerNoCredentialGate {
 		});
 	}
 
-	static function fixtureSource():InMemoryResumePickerThreadSource {
-		final source = new InMemoryResumePickerThreadSource();
+	static function fixtureSource():InMemoryThreadSource {
+		final source = new InMemoryThreadSource();
 		source.addPage(new ResumePickerThreadListResponse({
 			requestId: "page-1",
 			rows: [

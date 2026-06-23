@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionRenderRequestSchedulingRenderGate;
+import codexhx.runtime.tui.resume.live.CompletionRenderRequestGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionRenderRequestSchedulingRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionRenderRequestSchedulingRenderGate.run();
+		final report = CompletionRenderRequestGate.run();
 
 		assertEquals("local_render_scheduled", Std.string(report.scheduleKind), "schedule kind");
 		assertEquals("thread-surface-a", report.finalThreadId, "final thread");

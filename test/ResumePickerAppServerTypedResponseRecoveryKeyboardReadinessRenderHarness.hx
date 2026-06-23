@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryKeyboardReadinessRenderGate;
+import codexhx.runtime.tui.resume.live.RecoveryKeyboardReadinessGate;
 
 class ResumePickerAppServerTypedResponseRecoveryKeyboardReadinessRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryKeyboardReadinessRenderGate.run();
+		final report = RecoveryKeyboardReadinessGate.run();
 
 		assertEquals("2", Std.string(report.decisionCount), "keyboard decisions");
 		assertEquals("2", Std.string(report.admittedCount), "admitted decisions");

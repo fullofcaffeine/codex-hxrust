@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerToolbarFooterRenderGate;
+import codexhx.runtime.tui.resume.live.ToolbarFooterGate;
 
 class ResumePickerToolbarFooterRenderHarness {
 	static function main():Void {
-		final report = ResumePickerToolbarFooterRenderGate.run();
+		final report = ToolbarFooterGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("4", Std.string(report.frameRequests), "frame requests");

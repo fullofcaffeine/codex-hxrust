@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerResponseDispatchFailureNoopRenderGate;
+import codexhx.runtime.tui.resume.live.DispatchFailureNoopGate;
 
 class ResumePickerAppServerResponseDispatchFailureNoopRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerResponseDispatchFailureNoopRenderGate.run();
+		final report = DispatchFailureNoopGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.missingSessionNoopRecorded, "missing app-server session should become a no-op command");

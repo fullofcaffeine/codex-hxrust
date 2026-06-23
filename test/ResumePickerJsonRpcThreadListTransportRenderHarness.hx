@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerJsonRpcThreadListTransportRenderGate;
+import codexhx.runtime.tui.resume.live.JsonRpcThreadListTransportGate;
 
 class ResumePickerJsonRpcThreadListTransportRenderHarness {
 	static function main():Void {
-		final report = ResumePickerJsonRpcThreadListTransportRenderGate.run();
+		final report = JsonRpcThreadListTransportGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.requestShapePreserved, "JSON-RPC method/params/request-id shape should be preserved");

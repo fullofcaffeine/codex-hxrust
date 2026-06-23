@@ -11,7 +11,7 @@ codexhx is not a Rust fork of upstream Codex. Its source of truth is Haxe that e
 3. generated Rust builds and runs under locked Cargo gates;
 4. upstream Codex contract drift is detected intentionally.
 
-Running upstream Rust tests is useful, but many upstream tests bind to Rust crate internals, Tokio/runtime details, filesystem layout, feature flags, or implementation-specific helpers. Passing those tests directly is not the right first proof for a Haxe-authored implementation. Use upstream tests as an oracle source when they express public behavior; adapt or differential-test those behaviors through codexhx-owned fixtures.
+Running upstream Rust tests is useful, but many upstream tests bind to Rust crate internals, Tokio/runtime details, filesystem layout, feature flags, or implementation-specific helpers. Passing those tests directly is not the right first proof for a Haxe-authored implementation. Use upstream tests as an oracle source when they express public behavior; port those assertions into Haxe tests or differential-test those behaviors through codexhx-owned fixtures.
 
 ## Test Hierarchy
 
@@ -30,7 +30,7 @@ Running upstream Rust tests is useful, but many upstream tests bind to Rust crat
 
 4. **Golden parity fixtures**
    - Upstream-shaped JSON-RPC inputs, transcripts, schemas, and state artifacts should produce canonical codexhx outputs.
-   - These fixtures are owned here, with provenance recorded when copied or derived from upstream/Cafex sources.
+   - These fixtures are owned here, with source checkout, source path, commit/schema version, and copy/derivation reason recorded when copied or derived from upstream/Cafex sources.
 
 5. **Differential oracle tests**
    - For selected public workflows, run upstream Codex and codexhx against equivalent inputs and compare normalized outputs/events/state.
@@ -40,19 +40,37 @@ Running upstream Rust tests is useful, but many upstream tests bind to Rust crat
 6. **Adapted upstream tests**
    - Import or adapt upstream tests only when they describe public behavior rather than upstream Rust internals.
    - Keep the adapted test in Haxe or in a harness that drives the generated codexhx binary through public inputs.
+   - For the 1:1 upstream Codex port, every relevant upstream public-behavior test should eventually have one of three records: ported with equivalent assertions, covered by a named differential harness, or marked not-applicable because it only tests private Rust implementation detail.
 
 ## Current Practice
 
 Current app-server protocol work follows this pattern:
 
-- inspect upstream Codex schemas and Rust protocol definitions in `../codex`;
-- add Haxe validators and fixtures for the selected upstream message shape;
-- run the Haxe interpreter harness;
-- generate Rust through haxe.rust;
-- run generated `cargo check --locked`, `cargo test --locked`, and binary execution;
-- update schema fingerprint goldens only after reviewing the upstream schema addition.
+1. Inspect the upstream Codex implementation in `../codex` and identify the owning Rust modules for the selected behavior.
+2. Inspect the upstream tests for the same surface and extract the public behavior they assert.
+3. Add or update Haxe validators, typed fixtures, and Haxe test harnesses for that behavior.
+4. Run the Haxe interpreter harness.
+5. Generate Rust through haxe.rust.
+6. Run generated `cargo check --locked`, `cargo test --locked`, and binary execution.
+7. Record upstream anchors using concrete source paths, test names, commit/schema versions, and coverage decisions.
+8. Update schema fingerprint goldens only after reviewing the upstream schema addition.
 
 This proves selected protocol contract parity and haxe.rust compilation health. It does not yet prove full upstream runtime parity.
+
+The short version is: upstream code defines how the system is built, upstream tests define expected behavior, and codexhx Haxe/generated-Rust gates prove that the port implements that behavior.
+
+## Oracle Comparison Workflow
+
+Use upstream code and tests together:
+
+1. **Architecture and semantics:** read the upstream implementation module that owns the behavior.
+2. **Behavioral oracle:** read the upstream test file and identify the externally meaningful assertions.
+3. **Haxe implementation:** implement the equivalent behavior in the analogous codexhx module, using Haxe types/macros where they improve clarity without changing Codex behavior.
+4. **Conformance proof:** add a codexhx Haxe test or fixture with equivalent assertions.
+5. **Target proof:** run the same codexhx test through haxe.rust-generated Rust and Cargo.
+6. **Coverage record:** record `upstream test -> codexhx harness/fixture`, or mark the upstream test as private-internal/not-applicable with a reason.
+
+This keeps upstream tests as behavioral oracle material while making codexhx, not upstream Rust internals, the thing under test.
 
 ## Upstream Test Usage
 
@@ -62,6 +80,7 @@ Use upstream tests in this order:
 2. Prefer a Haxe fixture/unit test that asserts the same behavior.
 3. If the behavior requires an upstream runtime oracle, build a differential harness around public JSON-RPC, transcript, filesystem, process, or state artifacts.
 4. Avoid depending on upstream private Rust modules or test helper internals unless the task is explicitly about a native Rust wrapper or upstream compatibility investigation.
+5. Record the upstream test file, test name, upstream commit, and codexhx coverage decision so completion claims can be audited without embedding that detail in production source names.
 
 ## Completion Claims
 

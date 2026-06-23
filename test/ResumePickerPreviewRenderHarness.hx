@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerPreviewRenderGate;
+import codexhx.runtime.tui.resume.live.ResumePickerPreviewGate;
 
 class ResumePickerPreviewRenderHarness {
 	static function main():Void {
-		final report = ResumePickerPreviewRenderGate.run();
+		final report = ResumePickerPreviewGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("1", Std.string(report.pageLoads), "page loads");

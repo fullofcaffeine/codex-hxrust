@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerScanCapRenderGate;
+import codexhx.runtime.tui.resume.live.ResumePickerScanCapGate;
 
 class ResumePickerScanCapRenderHarness {
 	static function main():Void {
-		final report = ResumePickerScanCapRenderGate.run();
+		final report = ResumePickerScanCapGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("3", Std.string(report.pageLoads), "page loads");

@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerPendingRequestRegistryRenderGate;
+import codexhx.runtime.tui.resume.live.AppServerPendingRequestRegistryGate;
 
 class ResumePickerAppServerPendingRequestRegistryRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerPendingRequestRegistryRenderGate.run();
+		final report = AppServerPendingRequestRegistryGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.registrationRecorded, "delivered server request should register as pending");

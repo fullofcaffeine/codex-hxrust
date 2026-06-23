@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerStreamFanoutRenderGate;
+import codexhx.runtime.tui.resume.live.AppServerStreamFanoutGate;
 
-class ResumePickerAppServerStreamFanoutRenderHarness {
+class StreamFanoutRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerStreamFanoutRenderGate.run();
+		final report = AppServerStreamFanoutGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.requestShapePreserved, "app-server stream fanout should preserve JSON-RPC request shape");

@@ -5,4 +5,4 @@
 -D rust_output=generated/resume-picker-app-server-typed-response-recovery-post-completion-post-render-replay-aware-keyboard-readiness-render
 -D rust_crate=codex_hxrust_resume_picker_app_server_typed_response_recovery_post_completion_post_render_replay_aware_keyboard_readiness_render
 -D rust_cargo_subcommand=check
--main ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareKeyboardReadinessRenderHarness
+-main RecoveryReplayAwareKeyboardReadinessRenderHarness

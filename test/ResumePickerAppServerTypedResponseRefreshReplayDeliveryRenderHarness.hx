@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRefreshReplayDeliveryRenderGate;
+import codexhx.runtime.tui.resume.live.RefreshReplayDeliveryGate;
 
-class ResumePickerAppServerTypedResponseRefreshReplayDeliveryRenderHarness {
+class RefreshReplayDeliveryRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRefreshReplayDeliveryRenderGate.run();
+		final report = RefreshReplayDeliveryGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("15", Std.string(report.deliveryIntentCount), "delivery intents");

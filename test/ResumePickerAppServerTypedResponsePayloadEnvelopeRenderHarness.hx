@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponsePayloadEnvelopeRenderGate;
+import codexhx.runtime.tui.resume.live.PayloadEnvelopeGate;
 
 class ResumePickerAppServerTypedResponsePayloadEnvelopeRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponsePayloadEnvelopeRenderGate.run();
+		final report = PayloadEnvelopeGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.execPayloadRecorded, "exec approval response payload should be recorded");

@@ -64,7 +64,7 @@ The original G1 scaffold was nested while the experiment was being proven out; i
 
 ## Reference Policy
 
-`reference/` is for small, reviewable provenance artifacts:
+`reference/` is for small, reviewable source-reference artifacts:
 
 - pin JSON for external repos
 - selected fixture indexes

@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerSessionLifecycleRenderGate;
+import codexhx.runtime.tui.resume.live.AppServerSessionLifecycleGate;
 
 class ResumePickerAppServerSessionLifecycleRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerSessionLifecycleRenderGate.run();
+		final report = AppServerSessionLifecycleGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.requestShapePreserved, "session lifecycle gate should preserve upstream JSON-RPC request shape");

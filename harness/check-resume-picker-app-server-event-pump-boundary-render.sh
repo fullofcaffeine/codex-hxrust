@@ -5,7 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 rm -rf generated/resume-picker-app-server-event-pump-boundary-render
-haxe -cp src -cp test -main ResumePickerAppServerEventPumpBoundaryRenderHarness --interp
+haxe -cp src -cp test -main EventPumpBoundaryRenderHarness --interp
 haxe hxml/resume-picker-app-server-event-pump-boundary-render.hxml
 cargo check --manifest-path generated/resume-picker-app-server-event-pump-boundary-render/Cargo.toml --locked
 cargo test --manifest-path generated/resume-picker-app-server-event-pump-boundary-render/Cargo.toml --locked

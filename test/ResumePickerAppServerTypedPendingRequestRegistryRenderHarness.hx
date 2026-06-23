@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedPendingRequestRegistryRenderGate;
+import codexhx.runtime.tui.resume.live.TypedPendingRequestRegistryGate;
 
 class ResumePickerAppServerTypedPendingRequestRegistryRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedPendingRequestRegistryRenderGate.run();
+		final report = TypedPendingRequestRegistryGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.typedClassesRegistered, "typed request classes should register");

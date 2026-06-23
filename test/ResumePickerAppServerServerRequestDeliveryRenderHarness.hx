@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerServerRequestDeliveryRenderGate;
+import codexhx.runtime.tui.resume.live.AppServerServerRequestDeliveryGate;
 
 class ResumePickerAppServerServerRequestDeliveryRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerServerRequestDeliveryRenderGate.run();
+		final report = AppServerServerRequestDeliveryGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.serverRequestTyped, "server request event should remain typed");

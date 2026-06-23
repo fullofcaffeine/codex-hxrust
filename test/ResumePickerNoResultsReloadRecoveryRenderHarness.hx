@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerNoResultsReloadRecoveryRenderGate;
+import codexhx.runtime.tui.resume.live.NoResultsRecoveryGate;
 
 class ResumePickerNoResultsReloadRecoveryRenderHarness {
 	static function main():Void {
-		final report = ResumePickerNoResultsReloadRecoveryRenderGate.run();
+		final report = NoResultsRecoveryGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("3", Std.string(report.pageLoads), "page loads");

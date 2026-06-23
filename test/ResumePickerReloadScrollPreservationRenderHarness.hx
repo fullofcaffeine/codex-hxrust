@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerReloadScrollPreservationRenderGate;
+import codexhx.runtime.tui.resume.live.ScrollPreservationGate;
 
 class ResumePickerReloadScrollPreservationRenderHarness {
 	static function main():Void {
-		final report = ResumePickerReloadScrollPreservationRenderGate.run();
+		final report = ScrollPreservationGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("3", Std.string(report.pageLoads), "page loads");

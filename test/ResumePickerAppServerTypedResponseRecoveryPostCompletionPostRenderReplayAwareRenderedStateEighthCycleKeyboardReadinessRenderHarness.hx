@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateEighthCycleKeyboardReadinessRenderGate;
+import codexhx.runtime.tui.resume.live.EighthKeyboardReadinessGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateEighthCycleKeyboardReadinessRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateEighthCycleKeyboardReadinessRenderGate.run();
+		final report = EighthKeyboardReadinessGate.run();
 		final summary = report.readinessSummary + ";decisions=[" + report.decisionSummaries.join("##") + "];policyLog=["
 			+ report.policyLogSummaries.join("##") + "];sourceReplayCount=" + report.sourceReplayCount + ";sourceHandoffReplayCount="
 			+ report.sourceHandoffReplayCount + ";sourceHandoffReadinessDecisionCount=" + report.sourceHandoffReadinessDecisionCount

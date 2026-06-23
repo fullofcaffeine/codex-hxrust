@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerLoaderCancellationRenderGate;
+import codexhx.runtime.tui.resume.live.LoaderCancellationGate;
 
 class ResumePickerLoaderCancellationRenderHarness {
 	static function main():Void {
-		final report = ResumePickerLoaderCancellationRenderGate.run();
+		final report = LoaderCancellationGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("1", Std.string(report.pageLoads), "page loads");

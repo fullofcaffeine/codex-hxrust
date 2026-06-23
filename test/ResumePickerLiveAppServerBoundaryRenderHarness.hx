@@ -1,12 +1,12 @@
-import codexhx.runtime.tui.resume.live.ResumePickerLiveAppServerBoundaryRenderGate;
+import codexhx.runtime.tui.resume.live.AppServerBoundaryGate;
 
 class ResumePickerLiveAppServerBoundaryRenderHarness {
 	static function main():Void {
-		final report = ResumePickerLiveAppServerBoundaryRenderGate.run();
+		final report = AppServerBoundaryGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.requestIdsPreserved, "request ids should be preserved across source, loader, and host events");
-		assertTrue(report.provenancePreserved, "thread/list provenance should include cursor/query/sort/filter/cwd policy");
+		assertTrue(report.requestFieldsPreserved, "thread/list request fields should include cursor/query/sort/filter/cwd policy");
 		assertTrue(report.backpressureSeen, "bounded loader should report lossless backpressure for the reload request");
 		assertTrue(report.errorMapped, "source failure should be mapped to app-server thread/list failure state");
 		assertTrue(report.noCredentialOrModelTraffic, "gate must remain credential-free and model-free");

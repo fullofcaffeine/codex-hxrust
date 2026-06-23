@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSecondCycleInputAdmissionRenderGate;
+import codexhx.runtime.tui.resume.live.SecondInputAdmissionGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSecondCycleInputAdmissionRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSecondCycleInputAdmissionRenderGate.run();
+		final report = SecondInputAdmissionGate.run();
 
 		assertEquals("input_admitted", Std.string(report.admissionKind), "admission kind");
 		assertEquals("thread-surface-a", report.finalThreadId, "final thread");

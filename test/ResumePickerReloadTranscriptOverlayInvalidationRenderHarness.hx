@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerReloadTranscriptOverlayInvalidationRenderGate;
+import codexhx.runtime.tui.resume.live.TranscriptOverlayInvalidationGate;
 
 class ResumePickerReloadTranscriptOverlayInvalidationRenderHarness {
 	static function main():Void {
-		final report = ResumePickerReloadTranscriptOverlayInvalidationRenderGate.run();
+		final report = TranscriptOverlayInvalidationGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("3", Std.string(report.pageLoads), "page loads");

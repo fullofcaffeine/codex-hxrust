@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerEmptyErrorRenderGate;
+import codexhx.runtime.tui.resume.live.ResumePickerEmptyErrorGate;
 
 class ResumePickerEmptyErrorRenderHarness {
 	static function main():Void {
-		final report = ResumePickerEmptyErrorRenderGate.run();
+		final report = ResumePickerEmptyErrorGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("2", Std.string(report.pageLoads), "page loads");

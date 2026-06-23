@@ -1,11 +1,11 @@
-import codexhx.runtime.tui.resume.host.ResumePickerAppServerTypedResponseRecoveryIdleStateHandoffKind;
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryIdleStateHandoffRenderGate;
+import codexhx.runtime.tui.resume.host.RecoveryIdleStateHandoffKind;
+import codexhx.runtime.tui.resume.live.RecoveryIdleStateHandoffGate;
 
-class ResumePickerAppServerTypedResponseRecoveryIdleStateHandoffRenderHarness {
+class RecoveryIdleStateHandoffRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryIdleStateHandoffRenderGate.run();
+		final report = RecoveryIdleStateHandoffGate.run();
 
-		assertEquals(Std.string(ResumePickerAppServerTypedResponseRecoveryIdleStateHandoffKind.IdleListReady), Std.string(report.handoffKind), "handoff kind");
+		assertEquals(Std.string(RecoveryIdleStateHandoffKind.IdleListReady), Std.string(report.handoffKind), "handoff kind");
 		assertTrue(report.idleListReady, "handoff should produce idle/list-ready state");
 		assertEquals("thread-surface-a", report.recoveredThreadId, "recovered thread");
 		assertTrue(report.keyboardInputReady, "keyboard input should be ready");

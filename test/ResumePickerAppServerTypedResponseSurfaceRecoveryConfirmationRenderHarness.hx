@@ -1,14 +1,13 @@
-import codexhx.runtime.tui.resume.host.ResumePickerAppServerTypedResponseSurfaceRecoveryConfirmationKind;
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseSurfaceRecoveryConfirmationRenderGate;
+import codexhx.runtime.tui.resume.host.SurfaceRecoveryConfirmationKind;
+import codexhx.runtime.tui.resume.live.SurfaceRecoveryConfirmationGate;
 
-class ResumePickerAppServerTypedResponseSurfaceRecoveryConfirmationRenderHarness {
+class SurfaceRecoveryConfirmationRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseSurfaceRecoveryConfirmationRenderGate.run();
+		final report = SurfaceRecoveryConfirmationGate.run();
 
 		assertTrue(report.recoveryConfirmed, "recovery confirmation should succeed");
 		assertEquals("recovery_confirmed", Std.string(report.confirmationKind), "confirmation kind");
-		assertEquals(Std.string(ResumePickerAppServerTypedResponseSurfaceRecoveryConfirmationKind.RecoveryConfirmed), Std.string(report.confirmationKind),
-			"confirmation enum");
+		assertEquals(Std.string(SurfaceRecoveryConfirmationKind.RecoveryConfirmed), Std.string(report.confirmationKind), "confirmation enum");
 		assertEquals("15", Std.string(report.surfaceUpdateCount), "surface updates");
 		assertEquals("16", Std.string(report.recoveryFrameIndex), "recovery frame index");
 		assertEquals("17", Std.string(report.frameRequests), "frame requests");

@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerQueryReloadRenderGate;
+import codexhx.runtime.tui.resume.live.ResumePickerQueryReloadGate;
 
 class ResumePickerQueryReloadRenderHarness {
 	static function main():Void {
-		final report = ResumePickerQueryReloadRenderGate.run();
+		final report = ResumePickerQueryReloadGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("2", Std.string(report.pageLoads), "page loads");

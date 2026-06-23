@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSeventhCycleInputRenderIntentRenderGate;
+import codexhx.runtime.tui.resume.live.SeventhInputRenderIntentGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSeventhCycleInputRenderIntentRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSeventhCycleInputRenderIntentRenderGate.run();
+		final report = SeventhInputRenderIntentGate.run();
 		final summary = report.summary();
 
 		assertEquals("local_render_requested", Std.string(report.renderIntentKind), "render intent kind");

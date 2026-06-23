@@ -49,13 +49,17 @@ Treat haxe.rust fixes as first-class compiler contributions, not one-off local h
 
 `../codex` is the mainstream Codex reference checkout. Use it to inspect upstream directory structure, protocol schemas, runtime behavior, tests, and fixtures while keeping this port upstream-first.
 
+Treat `../codex` as the constant oracle for architecture and behavior, not just an occasional fixture source. Before adding or extending a parity slice, inspect the relevant upstream Rust modules/tests and record the anchors in the issue, docs, harness comments, or commit context when they materially shape behavior. For TUI resume/replay work, start from upstream modules such as `codex-rs/tui/src/resume_picker.rs`, `codex-rs/tui/src/app_server_session.rs`, `codex-rs/tui/src/app/thread_routing.rs`, `codex-rs/tui/src/chatwidget/replay.rs`, `codex-rs/tui/src/chatwidget/session_flow.rs`, and the matching app-server `thread_resume`/`thread_fork` processors before inventing local structure.
+
+Do not treat local validation terminology as architecture. Terms like "validation slice" may appear in Beads or testing notes as planning shorthand, but production Haxe packages/classes should be named after upstream Codex domains and Haxe/Rust responsibilities: resume picker, thread replay, app-server session, chat widget, state, tools, transport, etc.
+
 The Cafex/Cafetera Codex fork lives under `../fullofcaffeine` (for example `../fullofcaffeine/deps/codex` and Cafetera module paths). Treat those paths as later adapter-parity reference material and inspiration only.
 
-Do not edit, commit, or push changes in `../codex` or Cafex/Cafetera repositories from this project. If a fixture or schema is needed here, copy the narrow artifact into `fixtures/{upstream,cafex,hxrust}/` and record its provenance under `reference/`.
+Do not edit, commit, or push changes in `../codex` or Cafex/Cafetera repositories from this project. If a fixture or schema is needed here, copy the narrow artifact into `fixtures/{upstream,cafex,hxrust}/` and record its source checkout, source path, commit or schema version, and reason for copying under `reference/`.
 
 ## Work Selection Priority
 
-The project goal is a full Haxe-to-Rust Codex port, not a headless-only replacement. This includes upstream app-server protocol, runtime, tool/state systems, and the interactive TUI. Headless/core gates are early proof slices because they are deterministic and credential-free; do not describe them as the final scope.
+The project goal is a full Haxe-to-Rust Codex port, not a headless-only replacement. This includes upstream app-server protocol, runtime, tool/state systems, and the interactive TUI. Headless/core gates are early validation gates because they are deterministic and credential-free; do not describe them as the final scope.
 
 Keep Beads ordered so mainstream/raw Codex parity work is ready before Cafex adapter expansion. Use priorities and dependencies to make `bd ready` reflect the intended sequence: upstream/raw Codex protocol, runtime, app-server, tool, and state parity slices should outrank later Cafex/Cafetera adapter tasks.
 
@@ -77,7 +81,7 @@ Do not flip package metadata from private/unlicensed to public/released casually
 
 ## Testing Strategy
 
-Use `docs/testing-strategy.md` as the testing policy. Haxe-authored tests that run through the Haxe interpreter and haxe.rust-generated Rust are the primary codexhx proof. Upstream Codex schemas, fixtures, and tests are contract inputs and oracle evidence; adapt them into Haxe-owned fixtures or differential public-behavior harnesses rather than treating upstream Rust-internal test success as sufficient. Generated Rust must remain build output and must not be manually edited to pass tests.
+Use `docs/testing-strategy.md` as the testing policy. Haxe-authored tests that run through the Haxe interpreter and haxe.rust-generated Rust are the primary codexhx proof. Upstream Codex schemas, fixtures, and tests are contract inputs and oracle evidence; adapt public upstream behavior into Haxe-owned fixtures, ported Haxe tests, or differential public-behavior harnesses rather than treating upstream Rust-internal test success as sufficient. For a 1:1 upstream port, relevant upstream tests should eventually be ported with equivalent assertions or mapped to an accepted not-applicable/private-internal record. Generated Rust must remain build output and must not be manually edited to pass tests.
 
 ## Haxe and Generated Rust Quality
 
@@ -101,7 +105,15 @@ Avoid long positional constructors for DTOs, outcomes, requests, policies, and o
 
 Do not make comma/semicolon-delimited plaintext diagnostics look like the primary source model. Long hand-built `key=value;...` `summary()` strings are acceptable only as temporary harness/debug evidence at the boundary. Canonical codexhx code should expose typed fields, structured reports, typed snapshots, enum/abstract identifiers, and machine-readable diagnostics. When stable text summaries are useful for interpreter/generated-Rust parity checks, prefer a macro-derived or reusable structured diagnostic serializer over manual string-concatenation walls. This mirrors good Rust practice: use typed structs/enums plus `Debug`, `Serialize`, tracing fields, or snapshot helpers rather than hand-building giant plaintext records in core logic.
 
-Do not normalize full provenance-chain class or source file names as production Haxe style. Names such as `DeterministicResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateEighthCycleScheduledRenderExecutor` are acceptable only as temporary proof-slice scaffolding when traceability to a Bead/harness is more important than ergonomics. Production-facing modules should use meaningful packages plus concise type names, for example a recovery/eighth-cycle package with `ScheduledRenderExecutor`, or a cycle-generic executor parameterized by typed scenario/config values. Harness, hxml, generated crate, and docs names may remain explicit where that helps auditability.
+Do not use full scenario/test-history names for production Haxe source. That means source names must not encode the whole harness path, lifecycle phase chain, cycle number, and expected assertion history. Upstream Codex Rust uses concise domain modules such as `resume_picker.rs`, `app_server_session.rs`, `thread_routing.rs`, and `chatwidget/replay.rs`; codexhx should follow that style with Haxe-appropriate package structure. Keep Beads IDs, harness names, diagnostics, and docs responsible for audit detail. Production classes/files should express the domain abstraction, not the entire validation story.
+
+Keep the production directory tree recognizably aligned with upstream Codex. When porting TUI/runtime/app-server code, start from the upstream Rust module ownership and mirror it where practical, for example `tui/resume_picker`, `tui/app_server_session`, `tui/app/thread_routing`, `tui/chatwidget/replay`, and `app-server/request_processors/thread_processor`. Deviate organically when Haxe packages, macros, generated types, or stronger typed abstractions make the code clearer, but record the reason in docs or Beads when the deviation is architectural rather than local implementation detail.
+
+Generated Rust layout is part of the review surface. The Haxe package/class layout should be chosen so haxe.rust can emit Rust that is easy to compare to upstream Codex modules. Current haxe.rust output flattens package names into files such as `codexhx_runtime_tui_resume_live_*.rs`; treat that as a tracked generic haxe.rust output-shape pressure, not as a reason to normalize long Haxe names. Track the consumer pressure in this repo's Beads/docs, and when implementing the compiler fix in `../haxe.rust`, keep it generic: nested Rust module output, crate-root package mapping, and idiomatic `mod.rs`/directory emission must benefit any Haxe-to-Rust project, not just codexhx.
+
+Quality matters more than mechanical traceability. Do not choose source names, packages, DTO shapes, or abstractions merely because they make Beads-to-file search/replacement easy. Put traceability in Beads, docs, hxml, harness scripts, diagnostics, and commit messages. Put architecture in the code.
+
+Do not "fix" a giant source filename by leaving a giant typedef alias in that same filename. That preserves the bad source surface. Move implementation code to a concise upstream-domain package/name and update imports to use it directly. If a temporary compatibility alias is genuinely required, it must be short-lived, documented in Beads, excluded from new code imports, and removed before the related cleanup task closes.
 
 The generated Rust is a product surface. Haxe design choices should help haxe.rust emit readable, idiomatic, warning-clean, production-quality Rust with native representations and minimal hxrt/runtime involvement wherever the active semantic contract permits it. If high-quality Haxe still produces poor Rust, track and fix that as a generic haxe.rust compiler/runtime improvement rather than working around it with Codex-specific source contortions.
 

@@ -7,11 +7,11 @@ import codexhx.runtime.tui.resume.ResumePickerDensity;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
 import codexhx.runtime.tui.resume.ResumePickerState;
-import codexhx.runtime.tui.resume.host.DeterministicResumePickerBackgroundLoader;
-import codexhx.runtime.tui.resume.host.DeterministicResumePickerFrameScheduler;
-import codexhx.runtime.tui.resume.host.DeterministicResumePickerTerminalRenderer;
-import codexhx.runtime.tui.resume.host.InMemoryResumePickerConfigPersistence;
-import codexhx.runtime.tui.resume.host.InMemoryResumePickerThreadSource;
+import codexhx.runtime.tui.resume.host.DeterministicBackgroundLoader;
+import codexhx.runtime.tui.resume.host.DeterministicFrameScheduler;
+import codexhx.runtime.tui.resume.host.DeterministicTerminalRenderer;
+import codexhx.runtime.tui.resume.host.InMemoryConfigPersistence;
+import codexhx.runtime.tui.resume.host.InMemoryThreadSource;
 import codexhx.runtime.tui.resume.host.ResumePickerBackgroundRequest;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEvent;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEventKind;
@@ -25,10 +25,10 @@ import codexhx.runtime.tui.resume.host.ResumePickerThreadRow;
 class ResumePickerHostFacadeHarness {
 	static function main():Void {
 		final source = fixtureSource();
-		final loader = new DeterministicResumePickerBackgroundLoader(source, 8);
-		final scheduler = new DeterministicResumePickerFrameScheduler();
-		final renderer = new DeterministicResumePickerTerminalRenderer();
-		final persistence = new InMemoryResumePickerConfigPersistence(true);
+		final loader = new DeterministicBackgroundLoader(source, 8);
+		final scheduler = new DeterministicFrameScheduler();
+		final renderer = new DeterministicTerminalRenderer();
+		final persistence = new InMemoryConfigPersistence(true);
 
 		assertReadyBool(loader.enqueue(ResumePickerBackgroundRequest.pageLoad(pageRequest())));
 		assertReadyBool(loader.enqueue(ResumePickerBackgroundRequest.previewLoad(previewRequest())));
@@ -73,7 +73,7 @@ class ResumePickerHostFacadeHarness {
 		final persisted = expectPersisted(persistPoll);
 
 		final missingSource = fixtureSource();
-		final backpressureLoader = new DeterministicResumePickerBackgroundLoader(missingSource, 1);
+		final backpressureLoader = new DeterministicBackgroundLoader(missingSource, 1);
 		assertReadyBool(backpressureLoader.enqueue(ResumePickerBackgroundRequest.frame("first")));
 		final dropped = backpressureLoader.enqueue(ResumePickerBackgroundRequest.frame("second"));
 		assertContains(AsyncPollSummary.summary(dropped), "best_effort_dropped");
@@ -82,7 +82,7 @@ class ResumePickerHostFacadeHarness {
 		final cancelPoll = loader.cancel(AsyncCancelReason.Shutdown);
 		assertContains(AsyncPollSummary.summary(cancelPoll), "cancelReason=shutdown");
 
-		final unconfiguredPersistence = new InMemoryResumePickerConfigPersistence(false);
+		final unconfiguredPersistence = new InMemoryConfigPersistence(false);
 		final persistFailure = unconfiguredPersistence.persistDensity(ResumePickerDensity.Comfortable).poll(AsyncContext.fixture("persist-fail"));
 		assertContains(AsyncPollSummary.summary(persistFailure), "persistence_unconfigured");
 
@@ -115,8 +115,8 @@ class ResumePickerHostFacadeHarness {
 		Sys.println(report.summary());
 	}
 
-	static function fixtureSource():InMemoryResumePickerThreadSource {
-		final source = new InMemoryResumePickerThreadSource();
+	static function fixtureSource():InMemoryThreadSource {
+		final source = new InMemoryThreadSource();
 		source.addPage(new ResumePickerThreadListResponse({
 			requestId: "page-1",
 			rows: [

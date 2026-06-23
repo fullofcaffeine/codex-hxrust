@@ -161,7 +161,7 @@ Track these gaps before claiming parity:
 | --- | --- | --- |
 | No standalone upstream one-turn JSON fixture | Resolved for M3 seed | `mock-model-basic-one-turn.sse` covers created, text delta, assistant message done, and completed events using upstream SSE event names |
 | No upstream Haxe DTO golden files | Covered for first app-protocol subset | `reference/app-protocol-schema-fingerprints.v1.json` and `harness/check-schema-fingerprints.sh`; expand beyond the first M2 subset as DTO coverage grows |
-| Local fixture tree | Active | Keep copied fixture subsets under `fixtures/{upstream,cafex,hxrust}/` and record provenance under `reference/` |
+| Local fixture tree | Active | Keep copied fixture subsets under `fixtures/{upstream,cafex,hxrust}/` and record source path, commit, and copy reason under `reference/` |
 | Cafex fixtures are adapter-only | Intentional | Keep them inactive until M5 |
 | Full TUI fixtures | Selected story replay and render invariants active | HXCX-4.8 adapts `oss-story.jsonl`; HXCX-4.9 adapts VT100/history/render invariants before interactive terminal ownership |
 | Live model/provider traffic | Unsupported | Use mock SSE/JSONL only |

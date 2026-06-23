@@ -26,7 +26,7 @@ Read-only upstream reference: `../codex`.
 - `ModelStreamFixtureEventKind` is a typed event kind enum abstract for created, output item done, completed, provider error, stream closed, and consumer dropped events.
 - `ModelStreamRouteRequest` keeps the upstream request id and the request envelope request separate, so feedback IDs do not blur with local fixture IDs.
 - `ModelStreamRoutePolicy` maps terminal completion, provider error, stream-close failure, consumer-drop cancellation, and denied-envelope refusal without live transport.
-- `ModelStreamRouteOutcome` reports last model request id, last model response id, output items added, total token count, terminal booleans, live-network provenance, and a secret-free summary.
+- `ModelStreamRouteOutcome` reports last model request id, last model response id, output items added, total token count, terminal booleans, live-network route evidence, and a secret-free summary.
 
 The fixture `fixtures/hxrust/model-stream-route.v1.json` covers OpenAI completion with feedback IDs, provider error request-id override, Bedrock stream close before completion, Responses Lite consumer-drop cancellation, inherited no-live WebSocket refusal, no live traffic, and secret-free summaries.
 

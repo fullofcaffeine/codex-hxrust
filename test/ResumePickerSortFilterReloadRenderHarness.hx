@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerSortFilterReloadRenderGate;
+import codexhx.runtime.tui.resume.live.SortFilterReloadGate;
 
 class ResumePickerSortFilterReloadRenderHarness {
 	static function main():Void {
-		final report = ResumePickerSortFilterReloadRenderGate.run();
+		final report = SortFilterReloadGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("2", Std.string(report.pageLoads), "page loads");

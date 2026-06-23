@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseReplaySurfaceUpdateRenderGate;
+import codexhx.runtime.tui.resume.live.ReplaySurfaceUpdateGate;
 
-class ResumePickerAppServerTypedResponseReplaySurfaceUpdateRenderHarness {
+class ReplaySurfaceUpdateRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseReplaySurfaceUpdateRenderGate.run();
+		final report = ReplaySurfaceUpdateGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("15", Std.string(report.surfaceUpdateCount), "surface updates");

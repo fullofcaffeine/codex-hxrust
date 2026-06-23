@@ -1,12 +1,12 @@
-import codexhx.runtime.tui.resume.host.ResumePickerAppServerTypedResponseRecoveryReplayCompletionHandoffKind;
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateEighthCycleReplayCompletionHandoffRenderGate;
+import codexhx.runtime.tui.resume.host.RecoveryReplayCompletionHandoffKind;
+import codexhx.runtime.tui.resume.live.EighthCompletionHandoffGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateEighthCycleReplayCompletionHandoffRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateEighthCycleReplayCompletionHandoffRenderGate.run();
+		final report = EighthCompletionHandoffGate.run();
 		final summary = report.summary();
 
-		assertKindEquals(ResumePickerAppServerTypedResponseRecoveryReplayCompletionHandoffKind.CompletedRecoveredSelection, report.handoffKind, "handoff kind");
+		assertKindEquals(RecoveryReplayCompletionHandoffKind.CompletedRecoveredSelection, report.handoffKind, "handoff kind");
 		assertTrue(report.completionReady, "completion should be ready");
 		assertEquals("2", Std.string(report.sourceReadinessDecisionCount), "source readiness decisions");
 		assertEquals("2", Std.string(report.sourceRenderStateCount), "source render states");
@@ -117,8 +117,7 @@ class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAw
 			throw "did not expect `" + needle + "` in `" + value + "`";
 	}
 
-	static function assertKindEquals(expected:ResumePickerAppServerTypedResponseRecoveryReplayCompletionHandoffKind,
-			actual:ResumePickerAppServerTypedResponseRecoveryReplayCompletionHandoffKind, label:String):Void {
+	static function assertKindEquals(expected:RecoveryReplayCompletionHandoffKind, actual:RecoveryReplayCompletionHandoffKind, label:String):Void {
 		if (expected != actual)
 			throw label + " expected " + expected + " but got " + actual;
 	}

@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseDispatchOrderingRefreshRenderGate;
+import codexhx.runtime.tui.resume.live.DispatchOrderingRefreshGate;
 
 class ResumePickerAppServerTypedResponseDispatchOrderingRefreshRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseDispatchOrderingRefreshRenderGate.run();
+		final report = DispatchOrderingRefreshGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.responseOrderPreserved, "typed response dispatch should preserve envelope order");

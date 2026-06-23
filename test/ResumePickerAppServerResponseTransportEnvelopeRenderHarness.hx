@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerResponseTransportEnvelopeRenderGate;
+import codexhx.runtime.tui.resume.live.ResponseTransportEnvelopeGate;
 
-class ResumePickerAppServerResponseTransportEnvelopeRenderHarness {
+class ResponseTransportEnvelopeRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerResponseTransportEnvelopeRenderGate.run();
+		final report = ResponseTransportEnvelopeGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.resolveEnvelopeRecorded, "resolve command should produce result envelope");

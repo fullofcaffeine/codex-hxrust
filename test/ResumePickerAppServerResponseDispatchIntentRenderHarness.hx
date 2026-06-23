@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerResponseDispatchIntentRenderGate;
+import codexhx.runtime.tui.resume.live.AppServerResponseDispatchIntentGate;
 
 class ResumePickerAppServerResponseDispatchIntentRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerResponseDispatchIntentRenderGate.run();
+		final report = AppServerResponseDispatchIntentGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.deliveredRequestsMatched, "delivered request ids should match response dispatch commands");

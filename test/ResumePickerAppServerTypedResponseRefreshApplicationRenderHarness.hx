@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRefreshApplicationRenderGate;
+import codexhx.runtime.tui.resume.live.RefreshApplicationGate;
 
-class ResumePickerAppServerTypedResponseRefreshApplicationRenderHarness {
+class RefreshApplicationRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRefreshApplicationRenderGate.run();
+		final report = RefreshApplicationGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.supportedRefreshApplied, "supported response refreshes should apply");

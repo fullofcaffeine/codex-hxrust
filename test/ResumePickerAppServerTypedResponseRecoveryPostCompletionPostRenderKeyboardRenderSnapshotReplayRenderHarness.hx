@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderKeyboardRenderSnapshotReplayRenderGate;
+import codexhx.runtime.tui.resume.live.PostRenderSnapshotReplayGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderKeyboardRenderSnapshotReplayRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderKeyboardRenderSnapshotReplayRenderGate.run();
+		final report = PostRenderSnapshotReplayGate.run();
 
 		assertEquals("2", Std.string(report.sourceRenderStateCount), "source render states");
 		assertEquals("2", Std.string(report.replayCount), "replay count");

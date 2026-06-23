@@ -20,10 +20,11 @@
     "format:haxe": "bash scripts/lint/hx_format_guard.sh --write",
     "format:haxe:check": "bash scripts/lint/hx_format_guard.sh",
     "format:haxe:changed": "bash scripts/lint/hx_format_guard.sh --changed",
+    "lint:source-names": "bash scripts/lint/source_name_guard.sh",
     "security:gitleaks": "bash scripts/security/run-gitleaks.sh",
     "security:gitleaks:staged": "bash scripts/security/run-gitleaks.sh --staged",
     "hooks:install": "bash scripts/hooks/install.sh",
-    "public:precommit": "npm run format:haxe:check && npm run security:gitleaks",
+    "public:precommit": "npm run format:haxe:check && npm run lint:source-names && npm run security:gitleaks",
     "test:generated-cargo": "bash scripts/check-generated-cargo.sh",
     "test:tui-smoke": "bash harness/check-tui-smoke.sh"
   }

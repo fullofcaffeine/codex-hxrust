@@ -136,6 +136,8 @@ Do not update the pin merely to test local compiler edits. The direct scoped-lib
 
 Current known haxe.rust pressure points are tracked under the `HXCX-7.x` Beads epic.
 
+Generated Rust layout is also a pressure point. The desired end state is that haxe.rust output for codexhx is easy to review against upstream Codex's Rust module tree, not a flat collection of long package-derived filenames. The Haxe source now keeps production resume module names short; `codex-hxrust-3nto` tracks the remaining generic haxe.rust work for nested Rust module output and crate-root package mapping.
+
 ## Profile Approach
 
 Use `metal` now where codexhx needs Rust-native runtime/tool behavior, stricter host-boundary semantics, or production-shaped performance. Keep `portable` for DTOs, codecs, fixtures, schema/protocol validation, config, and pure state. At the compiler level, haxe.rust portable output should converge toward metal-level Rust performance wherever the Rust lowering can preserve Haxe semantics.
@@ -176,7 +178,7 @@ jq empty reference/*.json
 
 The gates are credential-free. They should not make model calls or mutate real Codex state.
 
-Testing policy is documented in `docs/testing-strategy.md`. In short: Haxe-authored tests compiled through haxe.rust are the primary codexhx proof; upstream Codex schemas/tests/fixtures are contract inputs and oracle evidence; differential tests should compare public behavior as runtime parity grows.
+Testing policy is documented in `docs/testing-strategy.md`. In short: Haxe-authored tests compiled through haxe.rust are the primary codexhx proof; upstream Codex schemas/tests/fixtures are contract inputs and oracle evidence; relevant upstream public-behavior tests should be ported, covered by differential harnesses, or explicitly marked not-applicable as runtime parity grows.
 
 Generated Rust is build output. Clean generated crates after validation unless a Bead explicitly asks for a generated snapshot:
 

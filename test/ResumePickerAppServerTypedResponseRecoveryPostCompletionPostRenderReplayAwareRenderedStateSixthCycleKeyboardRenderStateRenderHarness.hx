@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSixthCycleKeyboardRenderStateRenderGate;
+import codexhx.runtime.tui.resume.live.SixthKeyboardStateGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSixthCycleKeyboardRenderStateRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSixthCycleKeyboardRenderStateRenderGate.run();
+		final report = SixthKeyboardStateGate.run();
 
 		assertEquals("2", Std.string(report.readinessDecisionCount), "readiness decisions");
 		assertEquals("2", Std.string(report.readinessAdmittedCount), "readiness admitted count");

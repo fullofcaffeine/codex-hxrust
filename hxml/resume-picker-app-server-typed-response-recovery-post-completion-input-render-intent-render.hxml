@@ -5,4 +5,4 @@
 -D rust_output=generated/resume-picker-app-server-typed-response-recovery-post-completion-input-render-intent-render
 -D rust_crate=codex_hxrust_resume_picker_app_server_typed_response_recovery_post_completion_input_render_intent_render
 -D rust_cargo_subcommand=check
--main ResumePickerAppServerTypedResponseRecoveryPostCompletionInputRenderIntentRenderHarness
+-main CompletionInputRenderIntentRenderHarness

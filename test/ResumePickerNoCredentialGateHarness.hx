@@ -1,5 +1,5 @@
 import codexhx.runtime.tui.resume.live.ResumePickerNoCredentialGate;
-import codexhx.runtime.tui.resume.live.ResumePickerNoCredentialGateReport;
+import codexhx.runtime.tui.resume.live.ResumePickerNoCredentialReport;
 import sys.FileSystem;
 import sys.io.File;
 

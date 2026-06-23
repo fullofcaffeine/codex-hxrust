@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderRenderedStateHandoffRenderGate;
+import codexhx.runtime.tui.resume.live.PostRenderStateHandoffGate;
 
-class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderRenderedStateHandoffRenderHarness {
+class PostRenderRenderedStateHandoffRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderRenderedStateHandoffRenderGate.run();
+		final report = PostRenderStateHandoffGate.run();
 
 		assertEquals("rendered_idle_list_ready", Std.string(report.handoffKind), "handoff kind");
 		assertEquals("thread-surface-a", report.finalThreadId, "final thread");

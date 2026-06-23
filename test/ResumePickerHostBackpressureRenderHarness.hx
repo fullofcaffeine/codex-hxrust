@@ -1,8 +1,8 @@
-import codexhx.runtime.tui.resume.live.ResumePickerHostBackpressureRenderGate;
+import codexhx.runtime.tui.resume.live.HostBackpressureGate;
 
 class ResumePickerHostBackpressureRenderHarness {
 	static function main():Void {
-		final report = ResumePickerHostBackpressureRenderGate.run();
+		final report = HostBackpressureGate.run();
 		final snapshots = report.renderSnapshots;
 
 		assertTrue(report.bestEffortDropped, "best-effort frame should drop when bounded stream is full");

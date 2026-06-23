@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ResumePickerDensityPersistenceRenderGate;
+import codexhx.runtime.tui.resume.live.DensityPersistenceGate;
 import sys.FileSystem;
 
 class ResumePickerDensityPersistenceRenderHarness {
@@ -7,7 +7,7 @@ class ResumePickerDensityPersistenceRenderHarness {
 		final codexHome = tempRoot + "/codex-home";
 		resetTempHome(tempRoot);
 
-		final report = ResumePickerDensityPersistenceRenderGate.run(codexHome);
+		final report = DensityPersistenceGate.run(codexHome);
 		final snapshots = report.renderSnapshots;
 
 		assertEquals("2", Std.string(report.frameRequests), "frame requests");

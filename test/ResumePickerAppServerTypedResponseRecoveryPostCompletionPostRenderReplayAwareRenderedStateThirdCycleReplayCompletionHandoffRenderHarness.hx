@@ -1,11 +1,11 @@
-import codexhx.runtime.tui.resume.host.ResumePickerAppServerTypedResponseRecoveryReplayCompletionHandoffKind;
-import codexhx.runtime.tui.resume.live.ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateThirdCycleReplayCompletionHandoffRenderGate;
+import codexhx.runtime.tui.resume.host.RecoveryReplayCompletionHandoffKind;
+import codexhx.runtime.tui.resume.live.ThirdCompletionHandoffGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateThirdCycleReplayCompletionHandoffRenderHarness {
 	static function main():Void {
-		final report = ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateThirdCycleReplayCompletionHandoffRenderGate.run();
+		final report = ThirdCompletionHandoffGate.run();
 
-		assertEquals(ResumePickerAppServerTypedResponseRecoveryReplayCompletionHandoffKind.CompletedRecoveredSelection, report.handoffKind, "handoff kind");
+		assertEquals(RecoveryReplayCompletionHandoffKind.CompletedRecoveredSelection, report.handoffKind, "handoff kind");
 		assertTrue(report.completionReady, "completion should be ready");
 		assertEquals("2", Std.string(report.sourceReadinessDecisionCount), "source readiness decisions");
 		assertEquals("2", Std.string(report.sourceRenderStateCount), "source render states");
