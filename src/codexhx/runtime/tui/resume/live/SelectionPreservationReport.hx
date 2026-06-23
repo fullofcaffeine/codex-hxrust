@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef SelectionPreservationReportFields = {
 	final pageLoads:Int;
 	final preservedSelections:Int;
@@ -25,8 +27,15 @@ class SelectionPreservationReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads + ";preservedSelections=" + preservedSelections + ";fallbackSelections=" + fallbackSelections + ";frames="
-			+ frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";states=[" + stateSummaries.join("##")
-			+ "]" + ";events=[" + eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("pageLoads", pageLoads),
+			DiagnosticSummary.intValue("preservedSelections", preservedSelections),
+			DiagnosticSummary.intValue("fallbackSelections", fallbackSelections),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }

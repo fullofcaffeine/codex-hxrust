@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef DensityPersistenceReportFields = {
 	final frameRequests:Int;
 	final renderCount:Int;
@@ -25,7 +27,13 @@ class DensityPersistenceReport {
 	public final failureMessage:String;
 
 	public function summary():String {
-		return "frames=" + frameRequests + ";renders=" + renderCount + ";configPath=" + successConfigPath + ";failureCode=" + failureCode
-			+ ";successSnapshot=" + successSnapshot.split("\n").join("\\n") + ";failureSnapshot=" + failureSnapshot.split("\n").join("\\n");
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.text("configPath", successConfigPath),
+			DiagnosticSummary.text("failureCode", failureCode),
+			DiagnosticSummary.snapshot("successSnapshot", successSnapshot),
+			DiagnosticSummary.snapshot("failureSnapshot", failureSnapshot)
+		]);
 	}
 }

@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef LoaderCancellationReportFields = {
 	final pageLoads:Int;
 	final staleIgnored:Int;
@@ -27,8 +29,16 @@ class LoaderCancellationReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads + ";staleIgnored=" + staleIgnored + ";cancelled=" + (cancellationObserved ? "true" : "false") + ";frames="
-			+ frameRequests + ";renders=" + renderCount + ";baseline=" + baselineSummary + ";final=" + finalSummary + ";finalSnapshot="
-			+ finalSnapshot.split("\n").join("\\n") + ";events=[" + eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("pageLoads", pageLoads),
+			DiagnosticSummary.intValue("staleIgnored", staleIgnored),
+			DiagnosticSummary.boolValue("cancelled", cancellationObserved),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.text("baseline", baselineSummary),
+			DiagnosticSummary.text("final", finalSummary),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }

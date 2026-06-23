@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef FailurePreservationReportFields = {
 	final pageLoads:Int;
 	final reloadFailures:Int;
@@ -25,8 +27,15 @@ class FailurePreservationReport {
 	public final eventSummaries:Array<String>;
 
 	public function summary():String {
-		return "pageLoads=" + pageLoads + ";reloadFailures=" + reloadFailures + ";recoveryReloads=" + recoveryReloads + ";frames=" + frameRequests
-			+ ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";states=[" + stateSummaries.join("##") + "]"
-			+ ";events=[" + eventSummaries.join("##") + "]";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("pageLoads", pageLoads),
+			DiagnosticSummary.intValue("reloadFailures", reloadFailures),
+			DiagnosticSummary.intValue("recoveryReloads", recoveryReloads),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("events", eventSummaries)
+		]);
 	}
 }
