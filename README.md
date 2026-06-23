@@ -11,7 +11,7 @@ Public-readiness scaffolding includes repo-managed hooks, Haxe formatting, stage
 Current Beads-based completion snapshot:
 
 ```text
-[#######################################-] 99% (509/514 non-epic Beads closed)
+[#######################################-] 99% (510/515 non-epic Beads closed)
 ```
 
 This is an unweighted planning and throughput indicator, not a whole-Codex parity claim. The port has many small deterministic gates, including generated-Rust protocol/runtime/TUI slices, but a runnable interactive Codex TUI still needs live terminal ownership, app-server JSON-RPC integration, async task/channel boundaries, state DB persistence, tool execution, and broader upstream widget/runtime parity.
