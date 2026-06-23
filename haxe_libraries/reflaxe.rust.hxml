@@ -10,5 +10,6 @@
 -lib reflaxe
 
 -D reflaxe.rust=1.0.0
+-D rust_nested_modules
 --macro reflaxe.rust.CompilerBootstrap.Start()
 --macro reflaxe.rust.CompilerInit.Start()
