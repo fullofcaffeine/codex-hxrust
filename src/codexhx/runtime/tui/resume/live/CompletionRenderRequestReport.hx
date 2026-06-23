@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.CompletionRenderRequestScheduleKind;
 
 typedef CompletionRenderRequestReportFields = {
@@ -60,20 +61,32 @@ class CompletionRenderRequestReport {
 	public final schedulerLogSummaries:Array<String>;
 
 	public function summary():String {
-		return "scheduleKind=" + scheduleKind + ";scheduleRequested=" + boolLabel(scheduleRequested) + ";scheduled=" + boolLabel(scheduled)
-			+ ";scheduleSequence=" + scheduleSequence + ";schedulerRequestCount=" + schedulerRequestCount + ";schedulerSummary=" + schedulerSummary
-			+ ";localOnlyRenderIntent=" + boolLabel(localOnlyRenderIntent) + ";finalThread=" + finalThreadId + ";finalSelectionPreserved="
-			+ boolLabel(finalSelectionPreserved) + ";finalFooterPreserved=" + boolLabel(finalFooterPreserved) + ";inputAdmitted=" + boolLabel(inputAdmitted)
-			+ ";stalePromptActionInactive=" + boolLabel(stalePromptActionInactive) + ";staleSideParentActionInactive="
-			+ boolLabel(staleSideParentActionInactive) + ";staleActiveThreadActionInactive=" + boolLabel(staleActiveThreadActionInactive)
-			+ ";ignoredNoSurfaceAbsent=" + boolLabel(ignoredNoSurfaceRecordsAbsent) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection)
-			+ ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed) + ";liveTerminalSuppressed=" + boolLabel(liveTerminalSuppressed)
-			+ ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";noModelCall=" + boolLabel(noModelCall) + ";noFilesystemMutation="
-			+ boolLabel(noFilesystemMutation) + ";schedule=[" + scheduleSummary + "]" + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";schedulerLog=[" + schedulerLogSummaries.join("##") + "]" + ";renderIntent=[" + renderIntentSummary + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("scheduleKind", Std.string(scheduleKind)),
+			DiagnosticSummary.boolValue("scheduleRequested", scheduleRequested),
+			DiagnosticSummary.boolValue("scheduled", scheduled),
+			DiagnosticSummary.intValue("scheduleSequence", scheduleSequence),
+			DiagnosticSummary.intValue("schedulerRequestCount", schedulerRequestCount),
+			DiagnosticSummary.text("schedulerSummary", schedulerSummary),
+			DiagnosticSummary.boolValue("localOnlyRenderIntent", localOnlyRenderIntent),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.boolValue("finalSelectionPreserved", finalSelectionPreserved),
+			DiagnosticSummary.boolValue("finalFooterPreserved", finalFooterPreserved),
+			DiagnosticSummary.boolValue("inputAdmitted", inputAdmitted),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.boolValue("noModelCall", noModelCall),
+			DiagnosticSummary.boolValue("noFilesystemMutation", noFilesystemMutation),
+			DiagnosticSummary.nested("schedule", scheduleSummary),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("schedulerLog", schedulerLogSummaries),
+			DiagnosticSummary.nested("renderIntent", renderIntentSummary)
+		]);
 	}
 }
