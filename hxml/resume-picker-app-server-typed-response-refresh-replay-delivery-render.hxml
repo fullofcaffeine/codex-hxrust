@@ -5,4 +5,4 @@
 -D rust_output=generated/resume-picker-app-server-typed-response-refresh-replay-delivery-render
 -D rust_crate=codex_hxrust_resume_picker_app_server_typed_response_refresh_replay_delivery_render
 -D rust_cargo_subcommand=check
--main RefreshReplayDeliveryRenderHarness
+-main ResumePickerAppServerTypedResponseRefreshReplayDeliveryRenderHarness

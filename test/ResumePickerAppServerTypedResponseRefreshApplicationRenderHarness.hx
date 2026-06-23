@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.RefreshApplicationGate;
 
-class RefreshApplicationRenderHarness {
+class ResumePickerAppServerTypedResponseRefreshApplicationRenderHarness {
 	static function main():Void {
 		final report = RefreshApplicationGate.run();
 		final snapshots = report.renderSnapshots;

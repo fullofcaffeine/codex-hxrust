@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.RecoveryFollowUpActionGate;
 
-class RecoveryFollowUpActionRenderHarness {
+class ResumePickerAppServerTypedResponseRecoveryFollowUpActionRenderHarness {
 	static function main():Void {
 		final report = RecoveryFollowUpActionGate.run();
 

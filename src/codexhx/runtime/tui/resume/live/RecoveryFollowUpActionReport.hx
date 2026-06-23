@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef RecoveryFollowUpActionReportFields = {
 	final actionCount:Int;
 	final restoredStatusActionCount:Int;
@@ -43,17 +45,25 @@ class RecoveryFollowUpActionReport {
 	public final confirmationSummary:String;
 
 	public function summary():String {
-		return "actionCount=" + actionCount + ";restoredStatusActionCount=" + restoredStatusActionCount + ";frameActionCount=" + frameActionCount
-			+ ";selectionActionCount=" + selectionActionCount + ";followUpFrameRequests=" + followUpFrameRequests + ";stalePromptActionAbsent="
-			+ boolLabel(stalePromptActionAbsent) + ";staleSideParentActionAbsent=" + boolLabel(staleSideParentActionAbsent)
-			+ ";staleActiveThreadActionAbsent=" + boolLabel(staleActiveThreadActionAbsent) + ";ignoredNoSurfaceRecordsAbsent="
-			+ boolLabel(ignoredNoSurfaceRecordsAbsent) + ";recoveryConfirmed=" + boolLabel(recoveryConfirmed) + ";noPressureDropRejection="
-			+ boolLabel(noPressureDropRejection) + ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed) + ";stateDbUntouched="
-			+ boolLabel(stateDbUntouched) + ";thread=" + recoveredThreadId + ";confirmation=[" + confirmationSummary + "]" + ";finalSnapshot="
-			+ finalSnapshot.split("\n").join("\\n") + ";actions=[" + actionSummaries.join("##") + "]" + ";plannerLog=[" + plannerLogSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("actionCount", actionCount),
+			DiagnosticSummary.intValue("restoredStatusActionCount", restoredStatusActionCount),
+			DiagnosticSummary.intValue("frameActionCount", frameActionCount),
+			DiagnosticSummary.intValue("selectionActionCount", selectionActionCount),
+			DiagnosticSummary.intValue("followUpFrameRequests", followUpFrameRequests),
+			DiagnosticSummary.boolValue("stalePromptActionAbsent", stalePromptActionAbsent),
+			DiagnosticSummary.boolValue("staleSideParentActionAbsent", staleSideParentActionAbsent),
+			DiagnosticSummary.boolValue("staleActiveThreadActionAbsent", staleActiveThreadActionAbsent),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceRecordsAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("recoveryConfirmed", recoveryConfirmed),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.text("thread", recoveredThreadId),
+			DiagnosticSummary.nested("confirmation", confirmationSummary),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("actions", actionSummaries),
+			DiagnosticSummary.logList("plannerLog", plannerLogSummaries)
+		]);
 	}
 }

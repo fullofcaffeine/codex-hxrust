@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.RefreshReplayDeliveryGate;
 
-class RefreshReplayDeliveryRenderHarness {
+class ResumePickerAppServerTypedResponseRefreshReplayDeliveryRenderHarness {
 	static function main():Void {
 		final report = RefreshReplayDeliveryGate.run();
 		final snapshots = report.renderSnapshots;

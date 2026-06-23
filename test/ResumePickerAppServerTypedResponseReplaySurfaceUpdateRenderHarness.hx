@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.ReplaySurfaceUpdateGate;
 
-class ReplaySurfaceUpdateRenderHarness {
+class ResumePickerAppServerTypedResponseReplaySurfaceUpdateRenderHarness {
 	static function main():Void {
 		final report = ReplaySurfaceUpdateGate.run();
 		final snapshots = report.renderSnapshots;
