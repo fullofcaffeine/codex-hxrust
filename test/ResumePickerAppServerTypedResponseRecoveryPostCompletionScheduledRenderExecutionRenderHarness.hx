@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.CompletionScheduledRenderGate;
 
-class CompletionScheduledRenderExecutionRenderHarness {
+class ResumePickerAppServerTypedResponseRecoveryPostCompletionScheduledRenderExecutionRenderHarness {
 	static function main():Void {
 		final report = CompletionScheduledRenderGate.run();
 

@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.CompletionScheduledRenderExecutionKind;
 import codexhx.runtime.tui.resume.host.ResumePickerHostOutcomeKind;
 
@@ -92,28 +93,47 @@ class PostRenderScheduledRenderReport {
 	public final executionLogSummaries:Array<String>;
 
 	public function summary():String {
-		return "executionKind=" + executionKind + ";executionRequested=" + boolLabel(executionRequested) + ";rendered=" + boolLabel(rendered)
-			+ ";executionSequence=" + executionSequence + ";sourceSchedulerRequestCount=" + sourceSchedulerRequestCount + ";consumedScheduledRequestCount="
-			+ consumedScheduledRequestCount + ";renderCount=" + renderCount + ";renderOutcomeKind=" + renderOutcomeKind + ";renderedSnapshotMatchesSchedule="
-			+ boolLabel(renderedSnapshotMatchesSchedule) + ";localOnlyRenderIntent=" + boolLabel(localOnlyRenderIntent) + ";finalThread=" + finalThreadId
-			+ ";finalFooter=" + finalFooter + ";finalSelectionPreserved=" + boolLabel(finalSelectionPreserved) + ";finalFooterPreserved="
-			+ boolLabel(finalFooterPreserved) + ";inputAdmitted=" + boolLabel(inputAdmitted) + ";replayCount=" + replayCount + ";snapshotOrderPreserved="
-			+ boolLabel(snapshotOrderPreserved) + ";selectedMarkersPreserved=" + boolLabel(selectedMarkersPreserved) + ";footerSummariesPreserved="
-			+ boolLabel(footerSummariesPreserved) + ";selectedMarkerMoved=" + boolLabel(selectedMarkerMoved) + ";recoveredSelectionRestored="
-			+ boolLabel(recoveredSelectionRestored) + ";noLeftoverScheduledRenderRequest=" + boolLabel(noLeftoverScheduledRenderRequest)
-			+ ";sourcePreExecutionSchedulerRequestCount=" + sourcePreExecutionSchedulerRequestCount + ";sourcePreExecutionConsumedRequestCount="
-			+ sourcePreExecutionConsumedRequestCount + ";sourcePreExecutionRenderCount=" + sourcePreExecutionRenderCount
-			+ ";sourceRenderedSnapshotPreserved=" + boolLabel(sourceRenderedSnapshotPreserved) + ";stalePromptActionInactive="
-			+ boolLabel(stalePromptActionInactive) + ";staleSideParentActionInactive=" + boolLabel(staleSideParentActionInactive)
-			+ ";staleActiveThreadActionInactive=" + boolLabel(staleActiveThreadActionInactive) + ";ignoredNoSurfaceAbsent="
-			+ boolLabel(ignoredNoSurfaceRecordsAbsent) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed="
-			+ boolLabel(liveTransportSuppressed) + ";liveTerminalSuppressed=" + boolLabel(liveTerminalSuppressed) + ";stateDbUntouched="
-			+ boolLabel(stateDbUntouched) + ";noModelCall=" + boolLabel(noModelCall) + ";noFilesystemMutation=" + boolLabel(noFilesystemMutation)
-			+ ";renderedSnapshot=" + renderedSnapshot.split("\n").join("\\n") + ";execution=[" + executionSummary + "]" + ";executionLog=["
-			+ executionLogSummaries.join("##") + "]" + ";scheduling=[" + schedulingSummary + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("executionKind", Std.string(executionKind)),
+			DiagnosticSummary.boolValue("executionRequested", executionRequested),
+			DiagnosticSummary.boolValue("rendered", rendered),
+			DiagnosticSummary.intValue("executionSequence", executionSequence),
+			DiagnosticSummary.intValue("sourceSchedulerRequestCount", sourceSchedulerRequestCount),
+			DiagnosticSummary.intValue("consumedScheduledRequestCount", consumedScheduledRequestCount),
+			DiagnosticSummary.intValue("renderCount", renderCount),
+			DiagnosticSummary.enumValue("renderOutcomeKind", Std.string(renderOutcomeKind)),
+			DiagnosticSummary.boolValue("renderedSnapshotMatchesSchedule", renderedSnapshotMatchesSchedule),
+			DiagnosticSummary.boolValue("localOnlyRenderIntent", localOnlyRenderIntent),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.text("finalFooter", finalFooter),
+			DiagnosticSummary.boolValue("finalSelectionPreserved", finalSelectionPreserved),
+			DiagnosticSummary.boolValue("finalFooterPreserved", finalFooterPreserved),
+			DiagnosticSummary.boolValue("inputAdmitted", inputAdmitted),
+			DiagnosticSummary.intValue("replayCount", replayCount),
+			DiagnosticSummary.boolValue("snapshotOrderPreserved", snapshotOrderPreserved),
+			DiagnosticSummary.boolValue("selectedMarkersPreserved", selectedMarkersPreserved),
+			DiagnosticSummary.boolValue("footerSummariesPreserved", footerSummariesPreserved),
+			DiagnosticSummary.boolValue("selectedMarkerMoved", selectedMarkerMoved),
+			DiagnosticSummary.boolValue("recoveredSelectionRestored", recoveredSelectionRestored),
+			DiagnosticSummary.boolValue("noLeftoverScheduledRenderRequest", noLeftoverScheduledRenderRequest),
+			DiagnosticSummary.intValue("sourcePreExecutionSchedulerRequestCount", sourcePreExecutionSchedulerRequestCount),
+			DiagnosticSummary.intValue("sourcePreExecutionConsumedRequestCount", sourcePreExecutionConsumedRequestCount),
+			DiagnosticSummary.intValue("sourcePreExecutionRenderCount", sourcePreExecutionRenderCount),
+			DiagnosticSummary.boolValue("sourceRenderedSnapshotPreserved", sourceRenderedSnapshotPreserved),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.boolValue("noModelCall", noModelCall),
+			DiagnosticSummary.boolValue("noFilesystemMutation", noFilesystemMutation),
+			DiagnosticSummary.snapshot("renderedSnapshot", renderedSnapshot),
+			DiagnosticSummary.nested("execution", executionSummary),
+			DiagnosticSummary.logList("executionLog", executionLogSummaries),
+			DiagnosticSummary.nested("scheduling", schedulingSummary)
+		]);
 	}
 }

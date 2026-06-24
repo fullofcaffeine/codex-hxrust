@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-haxe -cp src -cp test -main CompletionScheduledRenderExecutionRenderHarness --interp
+haxe -cp src -cp test -main ResumePickerAppServerTypedResponseRecoveryPostCompletionScheduledRenderExecutionRenderHarness --interp
 haxe hxml/resume-picker-app-server-typed-response-recovery-post-completion-scheduled-render-execution-render.hxml
 cargo check --manifest-path generated/resume-picker-app-server-typed-response-recovery-post-completion-scheduled-render-execution-render/Cargo.toml
 cargo test --manifest-path generated/resume-picker-app-server-typed-response-recovery-post-completion-scheduled-render-execution-render/Cargo.toml
