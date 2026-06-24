@@ -4,6 +4,7 @@ import codexhx.protocol.json.CodexJson;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPoll;
 import codexhx.runtime.asyncruntime.AsyncStreamItem;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -267,10 +268,18 @@ class JsonRpcThreadReadTransportGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "thread=" + state.selectedThreadId + ";previewState=" + state.previewState + ";previewLines=" + state.previewLineCount + ";overlay="
-			+ boolLabel(state.overlayOpen) + ";cells=" + state.transcriptCellCount + ";errorShown=" + boolLabel(state.inlineErrorShown) + ";failure="
-			+ emptyLabel(state.lastFailureCode) + ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail="
-			+ state.loaderEventDetail;
+		return DiagnosticSummary.render([
+			DiagnosticSummary.text("thread", state.selectedThreadId),
+			DiagnosticSummary.text("previewState", state.previewState),
+			DiagnosticSummary.intValue("previewLines", state.previewLineCount),
+			DiagnosticSummary.boolValue("overlay", state.overlayOpen),
+			DiagnosticSummary.intValue("cells", state.transcriptCellCount),
+			DiagnosticSummary.boolValue("errorShown", state.inlineErrorShown),
+			DiagnosticSummary.text("failure", emptyLabel(state.lastFailureCode)),
+			DiagnosticSummary.text("footer", state.footerProgressLabel),
+			DiagnosticSummary.text("loader", state.loaderEventStatus),
+			DiagnosticSummary.text("detail", state.loaderEventDetail)
+		]);
 	}
 
 	static function contains(values:Array<String>, needle:String):Bool {
@@ -293,9 +302,5 @@ class JsonRpcThreadReadTransportGate {
 
 	static function emptyLabel(value:String):String {
 		return value.length == 0 ? "<empty>" : value;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 }

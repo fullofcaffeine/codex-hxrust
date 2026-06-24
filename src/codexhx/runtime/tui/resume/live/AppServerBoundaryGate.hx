@@ -4,6 +4,7 @@ import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPoll;
 import codexhx.runtime.asyncruntime.AsyncPollSummary;
 import codexhx.runtime.asyncruntime.AsyncStreamItem;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -287,10 +288,19 @@ class AppServerBoundaryGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query + ";sort=" + state.sortKey + ";filter=" + state.filterMode + ";rows=" + state.loadedRows + ";selected="
-			+ state.selectedIndex + ";thread=" + state.selectedThreadId + ";errorShown=" + boolLabel(state.inlineErrorShown) + ";failure="
-			+ emptyLabel(state.lastFailureCode) + ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail="
-			+ state.loaderEventDetail;
+		return DiagnosticSummary.render([
+			DiagnosticSummary.text("query", state.query),
+			DiagnosticSummary.enumValue("sort", Std.string(state.sortKey)),
+			DiagnosticSummary.enumValue("filter", Std.string(state.filterMode)),
+			DiagnosticSummary.intValue("rows", state.loadedRows),
+			DiagnosticSummary.intValue("selected", state.selectedIndex),
+			DiagnosticSummary.text("thread", state.selectedThreadId),
+			DiagnosticSummary.boolValue("errorShown", state.inlineErrorShown),
+			DiagnosticSummary.text("failure", emptyLabel(state.lastFailureCode)),
+			DiagnosticSummary.text("footer", state.footerProgressLabel),
+			DiagnosticSummary.text("loader", state.loaderEventStatus),
+			DiagnosticSummary.text("detail", state.loaderEventDetail)
+		]);
 	}
 
 	static function expectEvent(poll:AsyncPoll<AsyncStreamItem<ResumePickerHostEvent>>):ResumePickerHostEvent {
@@ -306,9 +316,5 @@ class AppServerBoundaryGate {
 
 	static function emptyLabel(value:String):String {
 		return value.length == 0 ? "<empty>" : value;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 }

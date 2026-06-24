@@ -3,6 +3,7 @@ package codexhx.runtime.tui.resume.live;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPoll;
 import codexhx.runtime.asyncruntime.AsyncStreamItem;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -189,8 +190,17 @@ class SortFilterReloadGate {
 	}
 
 	static function requestFacts(request:ResumePickerThreadListRequest):String {
-		return request.summary() + ";cwd=" + request.cwdFilter + ";showAll=" + boolLabel(request.showAll) + ";includeNonInteractive="
-			+ boolLabel(request.includeNonInteractive);
+		return DiagnosticSummary.render([
+			DiagnosticSummary.text("id", request.requestId),
+			DiagnosticSummary.text("cursor", request.cursor),
+			DiagnosticSummary.text("query", request.query),
+			DiagnosticSummary.intValue("pageSize", request.pageSize),
+			DiagnosticSummary.enumValue("sort", Std.string(request.sortKey)),
+			DiagnosticSummary.enumValue("filter", Std.string(request.filterMode)),
+			DiagnosticSummary.text("cwd", request.cwdFilter),
+			DiagnosticSummary.boolValue("showAll", request.showAll),
+			DiagnosticSummary.boolValue("includeNonInteractive", request.includeNonInteractive)
+		]);
 	}
 
 	static function fixtureSource():InMemoryThreadSource {
@@ -256,9 +266,5 @@ class SortFilterReloadGate {
 			case Closed(_, _): throw "expected host event, got closed";
 			case Backpressured(error, _, _): throw "expected host event, got backpressure: " + error.code;
 		}
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 }
