@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.RecoveryCompletionHandoffGate;
 
-class RecoveryReplayCompletionHandoffRenderHarness {
+class ResumePickerAppServerTypedResponseRecoveryReplayCompletionHandoffRenderHarness {
 	static function main():Void {
 		final report = RecoveryCompletionHandoffGate.run();
 

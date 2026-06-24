@@ -5,4 +5,4 @@
 -D rust_output=generated/resume-picker-app-server-typed-response-recovery-replay-completion-handoff-render
 -D rust_crate=codex_hxrust_resume_picker_app_server_typed_response_recovery_replay_completion_handoff_render
 -D rust_cargo_subcommand=check
--main RecoveryReplayCompletionHandoffRenderHarness
+-main ResumePickerAppServerTypedResponseRecoveryReplayCompletionHandoffRenderHarness

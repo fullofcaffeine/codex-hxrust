@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.RecoveryReplayCompletionHandoffKind;
 
 typedef RecoveryCompletionHandoffReportFields = {
@@ -54,19 +55,29 @@ class RecoveryCompletionHandoffReport {
 	public final handoffLogSummaries:Array<String>;
 
 	public function summary():String {
-		return "handoffKind=" + handoffKind + ";completionReady=" + boolLabel(completionReady) + ";replayCount=" + replayCount + ";finalThread="
-			+ finalThreadId + ";finalFooterStable=" + boolLabel(finalFooterStable) + ";finalSelectionRestored=" + boolLabel(finalSelectionRestored)
-			+ ";snapshotOrderPreserved=" + boolLabel(snapshotOrderPreserved) + ";selectedMarkersPreserved=" + boolLabel(selectedMarkersPreserved)
-			+ ";footerSummariesPreserved=" + boolLabel(footerSummariesPreserved) + ";stalePromptActionInactive=" + boolLabel(stalePromptActionInactive)
-			+ ";staleSideParentActionInactive=" + boolLabel(staleSideParentActionInactive) + ";staleActiveThreadActionInactive="
-			+ boolLabel(staleActiveThreadActionInactive) + ";ignoredNoSurfaceAbsent=" + boolLabel(ignoredNoSurfaceRecordsAbsent)
-			+ ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed)
-			+ ";liveTerminalSuppressed=" + boolLabel(liveTerminalSuppressed) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";nextSliceReady="
-			+ boolLabel(nextSliceReady) + ";handoff=[" + handoffSummary + "]" + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";handoffLog=["
-			+ handoffLogSummaries.join("##") + "]" + ";replay=[" + replaySummary + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("handoffKind", Std.string(handoffKind)),
+			DiagnosticSummary.boolValue("completionReady", completionReady),
+			DiagnosticSummary.intValue("replayCount", replayCount),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.boolValue("finalFooterStable", finalFooterStable),
+			DiagnosticSummary.boolValue("finalSelectionRestored", finalSelectionRestored),
+			DiagnosticSummary.boolValue("snapshotOrderPreserved", snapshotOrderPreserved),
+			DiagnosticSummary.boolValue("selectedMarkersPreserved", selectedMarkersPreserved),
+			DiagnosticSummary.boolValue("footerSummariesPreserved", footerSummariesPreserved),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.boolValue("nextSliceReady", nextSliceReady),
+			DiagnosticSummary.nested("handoff", handoffSummary),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("handoffLog", handoffLogSummaries),
+			DiagnosticSummary.nested("replay", replaySummary)
+		]);
 	}
 }
