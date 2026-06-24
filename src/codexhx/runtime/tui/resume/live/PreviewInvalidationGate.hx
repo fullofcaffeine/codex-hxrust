@@ -3,6 +3,7 @@ package codexhx.runtime.tui.resume.live;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPoll;
 import codexhx.runtime.asyncruntime.AsyncStreamItem;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -208,11 +209,21 @@ class PreviewInvalidationGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query + ";rows=" + state.loadedRows + ";selected=" + state.selectedIndex + ";thread=" + state.selectedThreadId
-			+ ";expanded=" + emptyLabel(state.expandedThreadId) + ";preview=" + emptyLabel(state.previewState) + ";previewRendered="
-			+ boolLabel(state.previewRendered) + ";previewLines=" + state.previewLineCount + ";pending=" + emptyLabel(state.pendingThreadId) + ";transcript="
-			+ emptyLabel(state.transcriptState) + ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail="
-			+ state.loaderEventDetail;
+		return DiagnosticSummary.render([
+			DiagnosticSummary.text("query", state.query),
+			DiagnosticSummary.intValue("rows", state.loadedRows),
+			DiagnosticSummary.intValue("selected", state.selectedIndex),
+			DiagnosticSummary.text("thread", state.selectedThreadId),
+			DiagnosticSummary.text("expanded", emptyLabel(state.expandedThreadId)),
+			DiagnosticSummary.text("preview", emptyLabel(state.previewState)),
+			DiagnosticSummary.boolValue("previewRendered", state.previewRendered),
+			DiagnosticSummary.intValue("previewLines", state.previewLineCount),
+			DiagnosticSummary.text("pending", emptyLabel(state.pendingThreadId)),
+			DiagnosticSummary.text("transcript", emptyLabel(state.transcriptState)),
+			DiagnosticSummary.text("footer", state.footerProgressLabel),
+			DiagnosticSummary.text("loader", state.loaderEventStatus),
+			DiagnosticSummary.text("detail", state.loaderEventDetail)
+		]);
 	}
 
 	static function loadPage(loader:DeterministicBackgroundLoader, request:ResumePickerThreadListRequest):ResumePickerHostEvent {
@@ -325,10 +336,6 @@ class PreviewInvalidationGate {
 
 	static function emptyLabel(value:String):String {
 		return value.length == 0 ? "<empty>" : value;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 
 	static function expectEvent(poll:AsyncPoll<AsyncStreamItem<ResumePickerHostEvent>>):ResumePickerHostEvent {

@@ -3,6 +3,7 @@ package codexhx.runtime.tui.resume.live;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPoll;
 import codexhx.runtime.asyncruntime.AsyncStreamItem;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -164,9 +165,19 @@ class ScrollPreservationGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query + ";rows=" + state.loadedRows + ";selected=" + state.selectedIndex + ";thread=" + state.selectedThreadId
-			+ ";scrollTop=" + state.scrollTop + ";viewRows=" + state.viewRows + ";moreAbove=" + boolLabel(state.moreAbove) + ";moreBelow="
-			+ boolLabel(state.moreBelow) + ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
+		return DiagnosticSummary.render([
+			DiagnosticSummary.text("query", state.query),
+			DiagnosticSummary.intValue("rows", state.loadedRows),
+			DiagnosticSummary.intValue("selected", state.selectedIndex),
+			DiagnosticSummary.text("thread", state.selectedThreadId),
+			DiagnosticSummary.intValue("scrollTop", state.scrollTop),
+			DiagnosticSummary.intValue("viewRows", state.viewRows),
+			DiagnosticSummary.boolValue("moreAbove", state.moreAbove),
+			DiagnosticSummary.boolValue("moreBelow", state.moreBelow),
+			DiagnosticSummary.text("footer", state.footerProgressLabel),
+			DiagnosticSummary.text("loader", state.loaderEventStatus),
+			DiagnosticSummary.text("detail", state.loaderEventDetail)
+		]);
 	}
 
 	static function loadPage(loader:DeterministicBackgroundLoader, request:ResumePickerThreadListRequest):ResumePickerHostEvent {
@@ -259,10 +270,6 @@ class ScrollPreservationGate {
 			selected: selected,
 			previewLines: []
 		});
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 
 	static function expectEvent(poll:AsyncPoll<AsyncStreamItem<ResumePickerHostEvent>>):ResumePickerHostEvent {

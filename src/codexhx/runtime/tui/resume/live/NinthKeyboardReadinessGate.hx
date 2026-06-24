@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.RecoveryReplayAwareKeyboardReadiness;
 import codexhx.runtime.tui.resume.host.RecoveryKeyboardIntentKind;
 
@@ -90,93 +91,49 @@ class NinthKeyboardReadinessGate {
 	}
 
 	static function compactReadinessSummary(readiness:RecoveryReplayAwareKeyboardReadiness):String {
-		return "kind="
-			+ readiness.kind
-			+ ";sourceHandoffKind="
-			+ readiness.sourceHandoffKind
-			+ ";decisionCount="
-			+ readiness.decisionCount
-			+ ";admittedCount="
-			+ readiness.admittedCount
-			+ ";postRenderIdleListReady="
-			+ boolLabel(readiness.postRenderIdleListReady)
-			+ ";keyboardInputReady="
-			+ boolLabel(readiness.keyboardInputReady)
-			+ ";listNavigationReady="
-			+ boolLabel(readiness.listNavigationReady)
-			+ ";recoveredSelectionStableUntilNavigation="
-			+ boolLabel(readiness.recoveredSelectionStableUntilNavigation)
-			+ ";navigationApplied="
-			+ boolLabel(readiness.navigationApplied)
-			+ ";returnedToRecoveredSelection="
-			+ boolLabel(readiness.returnedToRecoveredSelection)
-			+ ";noLeftoverScheduledRenderRequest="
-			+ boolLabel(readiness.noLeftoverScheduledRenderRequest)
-			+ ";sourceSchedulerRequestCount="
-			+ readiness.sourceSchedulerRequestCount
-			+ ";consumedScheduledRequestCount="
-			+ readiness.consumedScheduledRequestCount
-			+ ";renderCount="
-			+ readiness.renderCount
-			+ ";renderedSnapshotPreserved="
-			+ boolLabel(readiness.renderedSnapshotPreserved)
-			+ ";finalThread="
-			+ readiness.finalThreadId
-			+ ";finalFooter="
-			+ readiness.finalFooter
-			+ ";finalSelectionPreserved="
-			+ boolLabel(readiness.finalSelectionPreserved)
-			+ ";finalFooterPreserved="
-			+ boolLabel(readiness.finalFooterPreserved)
-			+ ";inputAdmitted="
-			+ boolLabel(readiness.inputAdmitted)
-			+ ";localOnlyRenderIntent="
-			+ boolLabel(readiness.localOnlyRenderIntent)
-			+ ";replayCount="
-			+ readiness.replayCount
-			+ ";snapshotOrderPreserved="
-			+ boolLabel(readiness.snapshotOrderPreserved)
-			+ ";selectedMarkersPreserved="
-			+ boolLabel(readiness.selectedMarkersPreserved)
-			+ ";footerSummariesPreserved="
-			+ boolLabel(readiness.footerSummariesPreserved)
-			+ ";selectedMarkerMoved="
-			+ boolLabel(readiness.selectedMarkerMoved)
-			+ ";recoveredSelectionRestored="
-			+ boolLabel(readiness.recoveredSelectionRestored)
-			+ ";sourcePreExecutionSchedulerRequestCount="
-			+ readiness.sourcePreExecutionSchedulerRequestCount
-			+ ";sourcePreExecutionConsumedRequestCount="
-			+ readiness.sourcePreExecutionConsumedRequestCount
-			+ ";sourcePreExecutionRenderCount="
-			+ readiness.sourcePreExecutionRenderCount
-			+ ";sourceRenderedSnapshotPreserved="
-			+ boolLabel(readiness.sourceRenderedSnapshotPreserved)
-			+ ";stalePromptActionInactive="
-			+ boolLabel(readiness.stalePromptActionInactive)
-			+ ";staleSideParentActionInactive="
-			+ boolLabel(readiness.staleSideParentActionInactive)
-			+ ";staleActiveThreadActionInactive="
-			+ boolLabel(readiness.staleActiveThreadActionInactive)
-			+ ";ignoredNoSurfaceAbsent="
-			+ boolLabel(readiness.ignoredNoSurfaceRecordsAbsent)
-			+ ";noPressureDropRejection="
-			+ boolLabel(readiness.noPressureDropRejection)
-			+ ";liveTransportSuppressed="
-			+ boolLabel(readiness.liveTransportSuppressed)
-			+ ";liveTerminalSuppressed="
-			+ boolLabel(readiness.liveTerminalSuppressed)
-			+ ";stateDbUntouched="
-			+ boolLabel(readiness.stateDbUntouched)
-			+ ";noModelCall="
-			+ boolLabel(readiness.noModelCall)
-			+ ";noFilesystemMutation="
-			+ boolLabel(readiness.noFilesystemMutation)
-			+ ";reason="
-			+ readiness.reason;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("kind", Std.string(readiness.kind)),
+			DiagnosticSummary.enumValue("sourceHandoffKind", Std.string(readiness.sourceHandoffKind)),
+			DiagnosticSummary.intValue("decisionCount", readiness.decisionCount),
+			DiagnosticSummary.intValue("admittedCount", readiness.admittedCount),
+			DiagnosticSummary.boolValue("postRenderIdleListReady", readiness.postRenderIdleListReady),
+			DiagnosticSummary.boolValue("keyboardInputReady", readiness.keyboardInputReady),
+			DiagnosticSummary.boolValue("listNavigationReady", readiness.listNavigationReady),
+			DiagnosticSummary.boolValue("recoveredSelectionStableUntilNavigation", readiness.recoveredSelectionStableUntilNavigation),
+			DiagnosticSummary.boolValue("navigationApplied", readiness.navigationApplied),
+			DiagnosticSummary.boolValue("returnedToRecoveredSelection", readiness.returnedToRecoveredSelection),
+			DiagnosticSummary.boolValue("noLeftoverScheduledRenderRequest", readiness.noLeftoverScheduledRenderRequest),
+			DiagnosticSummary.intValue("sourceSchedulerRequestCount", readiness.sourceSchedulerRequestCount),
+			DiagnosticSummary.intValue("consumedScheduledRequestCount", readiness.consumedScheduledRequestCount),
+			DiagnosticSummary.intValue("renderCount", readiness.renderCount),
+			DiagnosticSummary.boolValue("renderedSnapshotPreserved", readiness.renderedSnapshotPreserved),
+			DiagnosticSummary.text("finalThread", readiness.finalThreadId),
+			DiagnosticSummary.text("finalFooter", readiness.finalFooter),
+			DiagnosticSummary.boolValue("finalSelectionPreserved", readiness.finalSelectionPreserved),
+			DiagnosticSummary.boolValue("finalFooterPreserved", readiness.finalFooterPreserved),
+			DiagnosticSummary.boolValue("inputAdmitted", readiness.inputAdmitted),
+			DiagnosticSummary.boolValue("localOnlyRenderIntent", readiness.localOnlyRenderIntent),
+			DiagnosticSummary.intValue("replayCount", readiness.replayCount),
+			DiagnosticSummary.boolValue("snapshotOrderPreserved", readiness.snapshotOrderPreserved),
+			DiagnosticSummary.boolValue("selectedMarkersPreserved", readiness.selectedMarkersPreserved),
+			DiagnosticSummary.boolValue("footerSummariesPreserved", readiness.footerSummariesPreserved),
+			DiagnosticSummary.boolValue("selectedMarkerMoved", readiness.selectedMarkerMoved),
+			DiagnosticSummary.boolValue("recoveredSelectionRestored", readiness.recoveredSelectionRestored),
+			DiagnosticSummary.intValue("sourcePreExecutionSchedulerRequestCount", readiness.sourcePreExecutionSchedulerRequestCount),
+			DiagnosticSummary.intValue("sourcePreExecutionConsumedRequestCount", readiness.sourcePreExecutionConsumedRequestCount),
+			DiagnosticSummary.intValue("sourcePreExecutionRenderCount", readiness.sourcePreExecutionRenderCount),
+			DiagnosticSummary.boolValue("sourceRenderedSnapshotPreserved", readiness.sourceRenderedSnapshotPreserved),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", readiness.stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", readiness.staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", readiness.staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", readiness.ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", readiness.noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", readiness.liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", readiness.liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", readiness.stateDbUntouched),
+			DiagnosticSummary.boolValue("noModelCall", readiness.noModelCall),
+			DiagnosticSummary.boolValue("noFilesystemMutation", readiness.noFilesystemMutation),
+			DiagnosticSummary.text("reason", readiness.reason)
+		]);
 	}
 }

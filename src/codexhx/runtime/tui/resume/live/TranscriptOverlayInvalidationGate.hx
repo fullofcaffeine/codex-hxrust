@@ -3,6 +3,7 @@ package codexhx.runtime.tui.resume.live;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPoll;
 import codexhx.runtime.asyncruntime.AsyncStreamItem;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -213,10 +214,20 @@ class TranscriptOverlayInvalidationGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "query=" + state.query + ";rows=" + state.loadedRows + ";selected=" + state.selectedIndex + ";thread=" + state.selectedThreadId + ";pending="
-			+ emptyLabel(state.pendingThreadId) + ";transcript=" + emptyLabel(state.transcriptState) + ";overlayOpen=" + boolLabel(state.overlayOpen)
-			+ ";overlayCloseCount=" + state.overlayCloseCount + ";cells=" + state.transcriptCellCount + ";footer=" + state.footerProgressLabel + ";loader="
-			+ state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
+		return DiagnosticSummary.render([
+			DiagnosticSummary.text("query", state.query),
+			DiagnosticSummary.intValue("rows", state.loadedRows),
+			DiagnosticSummary.intValue("selected", state.selectedIndex),
+			DiagnosticSummary.text("thread", state.selectedThreadId),
+			DiagnosticSummary.text("pending", emptyLabel(state.pendingThreadId)),
+			DiagnosticSummary.text("transcript", emptyLabel(state.transcriptState)),
+			DiagnosticSummary.boolValue("overlayOpen", state.overlayOpen),
+			DiagnosticSummary.intValue("overlayCloseCount", state.overlayCloseCount),
+			DiagnosticSummary.intValue("cells", state.transcriptCellCount),
+			DiagnosticSummary.text("footer", state.footerProgressLabel),
+			DiagnosticSummary.text("loader", state.loaderEventStatus),
+			DiagnosticSummary.text("detail", state.loaderEventDetail)
+		]);
 	}
 
 	static function loadPage(loader:DeterministicBackgroundLoader, request:ResumePickerThreadListRequest):ResumePickerHostEvent {
@@ -336,10 +347,6 @@ class TranscriptOverlayInvalidationGate {
 
 	static function emptyLabel(value:String):String {
 		return value.length == 0 ? "<empty>" : value;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 
 	static function expectEvent(poll:AsyncPoll<AsyncStreamItem<ResumePickerHostEvent>>):ResumePickerHostEvent {
