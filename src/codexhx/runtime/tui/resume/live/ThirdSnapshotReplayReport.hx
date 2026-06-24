@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef ThirdSnapshotReplayReportFields = {
 	final sourceReadinessDecisionCount:Int;
 	final sourceRenderStateCount:Int;
@@ -127,40 +129,66 @@ class ThirdSnapshotReplayReport {
 	public final sourceSummary:String;
 
 	public function summary():String {
-		return "sourceReadinessDecisionCount=" + sourceReadinessDecisionCount + ";sourceRenderStateCount=" + sourceRenderStateCount
-			+ ";sourceFrameRequests=" + sourceFrameRequests + ";sourceKeyboardRenderCount=" + sourceKeyboardRenderCount + ";replayCount=" + replayCount
-			+ ";sourceReplayCount=" + sourceReplayCount + ";sourceHandoffReplayCount=" + sourceHandoffReplayCount + ";sourceHandoffReadinessDecisionCount="
-			+ sourceHandoffReadinessDecisionCount + ";sourceHandoffRenderStateCount=" + sourceHandoffRenderStateCount + ";sourceHandoffFrameRequests="
-			+ sourceHandoffFrameRequests + ";sourceHandoffKeyboardRenderCount=" + sourceHandoffKeyboardRenderCount + ";sourceSecondCycleHandoffReplayCount="
-			+ sourceSecondCycleHandoffReplayCount + ";sourceSecondCycleHandoffReadinessDecisionCount=" + sourceSecondCycleHandoffReadinessDecisionCount
-			+ ";sourceSecondCycleHandoffRenderStateCount=" + sourceSecondCycleHandoffRenderStateCount + ";sourceSecondCycleHandoffFrameRequests="
-			+ sourceSecondCycleHandoffFrameRequests + ";sourceSecondCycleHandoffKeyboardRenderCount=" + sourceSecondCycleHandoffKeyboardRenderCount
-			+ ";sourceThirdCycleHandoffReplayCount=" + sourceThirdCycleHandoffReplayCount + ";sourceThirdCycleHandoffReadinessDecisionCount="
-			+ sourceThirdCycleHandoffReadinessDecisionCount + ";sourceThirdCycleHandoffRenderStateCount=" + sourceThirdCycleHandoffRenderStateCount
-			+ ";sourceThirdCycleHandoffFrameRequests=" + sourceThirdCycleHandoffFrameRequests + ";sourceThirdCycleHandoffKeyboardRenderCount="
-			+ sourceThirdCycleHandoffKeyboardRenderCount + ";snapshotOrderPreserved=" + boolLabel(snapshotOrderPreserved) + ";selectedMarkersPreserved="
-			+ boolLabel(selectedMarkersPreserved) + ";footerSummariesPreserved=" + boolLabel(footerSummariesPreserved) + ";selectedMarkerMoved="
-			+ boolLabel(selectedMarkerMoved) + ";recoveredSelectionRestored=" + boolLabel(recoveredSelectionRestored) + ";noLeftoverScheduledRenderRequest="
-			+ boolLabel(noLeftoverScheduledRenderRequest) + ";sourceSchedulerRequestCount=" + sourceSchedulerRequestCount + ";consumedScheduledRequestCount="
-			+ consumedScheduledRequestCount + ";sourcePostRenderRenderCount=" + sourcePostRenderRenderCount + ";renderedSnapshotPreserved="
-			+ boolLabel(renderedSnapshotPreserved) + ";sourceRenderedSnapshotPreserved=" + boolLabel(sourceRenderedSnapshotPreserved)
-			+ ";finalSelectionPreserved=" + boolLabel(finalSelectionPreserved) + ";finalFooterPreserved=" + boolLabel(finalFooterPreserved)
-			+ ";inputAdmitted=" + boolLabel(inputAdmitted) + ";localOnlyRenderIntent=" + boolLabel(localOnlyRenderIntent) + ";completionReady="
-			+ boolLabel(completionReady) + ";nextSliceReady=" + boolLabel(nextSliceReady) + ";sourceInputAdmitted=" + boolLabel(sourceInputAdmitted)
-			+ ";sourceLocalOnlyRenderIntent=" + boolLabel(sourceLocalOnlyRenderIntent) + ";sourceHandoffInputAdmitted="
-			+ boolLabel(sourceHandoffInputAdmitted) + ";sourceHandoffLocalOnlyRenderIntent=" + boolLabel(sourceHandoffLocalOnlyRenderIntent)
-			+ ";sourceSecondCycleHandoffInputAdmitted=" + boolLabel(sourceSecondCycleHandoffInputAdmitted)
-			+ ";sourceSecondCycleHandoffLocalOnlyRenderIntent=" + boolLabel(sourceSecondCycleHandoffLocalOnlyRenderIntent) + ";stalePromptActionInactive="
-			+ boolLabel(stalePromptActionInactive) + ";staleSideParentActionInactive=" + boolLabel(staleSideParentActionInactive)
-			+ ";staleActiveThreadActionInactive=" + boolLabel(staleActiveThreadActionInactive) + ";ignoredNoSurfaceAbsent="
-			+ boolLabel(ignoredNoSurfaceRecordsAbsent) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed="
-			+ boolLabel(liveTransportSuppressed) + ";liveTerminalSuppressed=" + boolLabel(liveTerminalSuppressed) + ";stateDbUntouched="
-			+ boolLabel(stateDbUntouched) + ";noModelCall=" + boolLabel(noModelCall) + ";noFilesystemMutation=" + boolLabel(noFilesystemMutation)
-			+ ";finalThread=" + finalThreadId + ";finalFooter=" + finalFooter + ";replays=[" + replaySummaries.join("##") + "]" + ";finalSnapshot="
-			+ finalSnapshot.split("\n").join("\\n") + ";source=[" + sourceSummary + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("sourceReadinessDecisionCount", sourceReadinessDecisionCount),
+			DiagnosticSummary.intValue("sourceRenderStateCount", sourceRenderStateCount),
+			DiagnosticSummary.intValue("sourceFrameRequests", sourceFrameRequests),
+			DiagnosticSummary.intValue("sourceKeyboardRenderCount", sourceKeyboardRenderCount),
+			DiagnosticSummary.intValue("replayCount", replayCount),
+			DiagnosticSummary.intValue("sourceReplayCount", sourceReplayCount),
+			DiagnosticSummary.intValue("sourceHandoffReplayCount", sourceHandoffReplayCount),
+			DiagnosticSummary.intValue("sourceHandoffReadinessDecisionCount", sourceHandoffReadinessDecisionCount),
+			DiagnosticSummary.intValue("sourceHandoffRenderStateCount", sourceHandoffRenderStateCount),
+			DiagnosticSummary.intValue("sourceHandoffFrameRequests", sourceHandoffFrameRequests),
+			DiagnosticSummary.intValue("sourceHandoffKeyboardRenderCount", sourceHandoffKeyboardRenderCount),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffReplayCount", sourceSecondCycleHandoffReplayCount),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffReadinessDecisionCount", sourceSecondCycleHandoffReadinessDecisionCount),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffRenderStateCount", sourceSecondCycleHandoffRenderStateCount),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffFrameRequests", sourceSecondCycleHandoffFrameRequests),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffKeyboardRenderCount", sourceSecondCycleHandoffKeyboardRenderCount),
+			DiagnosticSummary.intValue("sourceThirdCycleHandoffReplayCount", sourceThirdCycleHandoffReplayCount),
+			DiagnosticSummary.intValue("sourceThirdCycleHandoffReadinessDecisionCount", sourceThirdCycleHandoffReadinessDecisionCount),
+			DiagnosticSummary.intValue("sourceThirdCycleHandoffRenderStateCount", sourceThirdCycleHandoffRenderStateCount),
+			DiagnosticSummary.intValue("sourceThirdCycleHandoffFrameRequests", sourceThirdCycleHandoffFrameRequests),
+			DiagnosticSummary.intValue("sourceThirdCycleHandoffKeyboardRenderCount", sourceThirdCycleHandoffKeyboardRenderCount),
+			DiagnosticSummary.boolValue("snapshotOrderPreserved", snapshotOrderPreserved),
+			DiagnosticSummary.boolValue("selectedMarkersPreserved", selectedMarkersPreserved),
+			DiagnosticSummary.boolValue("footerSummariesPreserved", footerSummariesPreserved),
+			DiagnosticSummary.boolValue("selectedMarkerMoved", selectedMarkerMoved),
+			DiagnosticSummary.boolValue("recoveredSelectionRestored", recoveredSelectionRestored),
+			DiagnosticSummary.boolValue("noLeftoverScheduledRenderRequest", noLeftoverScheduledRenderRequest),
+			DiagnosticSummary.intValue("sourceSchedulerRequestCount", sourceSchedulerRequestCount),
+			DiagnosticSummary.intValue("consumedScheduledRequestCount", consumedScheduledRequestCount),
+			DiagnosticSummary.intValue("sourcePostRenderRenderCount", sourcePostRenderRenderCount),
+			DiagnosticSummary.boolValue("renderedSnapshotPreserved", renderedSnapshotPreserved),
+			DiagnosticSummary.boolValue("sourceRenderedSnapshotPreserved", sourceRenderedSnapshotPreserved),
+			DiagnosticSummary.boolValue("finalSelectionPreserved", finalSelectionPreserved),
+			DiagnosticSummary.boolValue("finalFooterPreserved", finalFooterPreserved),
+			DiagnosticSummary.boolValue("inputAdmitted", inputAdmitted),
+			DiagnosticSummary.boolValue("localOnlyRenderIntent", localOnlyRenderIntent),
+			DiagnosticSummary.boolValue("completionReady", completionReady),
+			DiagnosticSummary.boolValue("nextSliceReady", nextSliceReady),
+			DiagnosticSummary.boolValue("sourceInputAdmitted", sourceInputAdmitted),
+			DiagnosticSummary.boolValue("sourceLocalOnlyRenderIntent", sourceLocalOnlyRenderIntent),
+			DiagnosticSummary.boolValue("sourceHandoffInputAdmitted", sourceHandoffInputAdmitted),
+			DiagnosticSummary.boolValue("sourceHandoffLocalOnlyRenderIntent", sourceHandoffLocalOnlyRenderIntent),
+			DiagnosticSummary.boolValue("sourceSecondCycleHandoffInputAdmitted", sourceSecondCycleHandoffInputAdmitted),
+			DiagnosticSummary.boolValue("sourceSecondCycleHandoffLocalOnlyRenderIntent", sourceSecondCycleHandoffLocalOnlyRenderIntent),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.boolValue("noModelCall", noModelCall),
+			DiagnosticSummary.boolValue("noFilesystemMutation", noFilesystemMutation),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.text("finalFooter", finalFooter),
+			DiagnosticSummary.logList("replays", replaySummaries),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.nested("source", sourceSummary)
+		]);
 	}
 }
