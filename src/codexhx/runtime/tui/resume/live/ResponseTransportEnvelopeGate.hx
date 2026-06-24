@@ -4,6 +4,7 @@ import codexhx.protocol.json.CodexJson;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPollSummary;
 import codexhx.runtime.app.RuntimeClientOutcome;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -24,6 +25,7 @@ import codexhx.runtime.tui.resume.host.StreamEvent;
 import codexhx.runtime.tui.resume.host.StreamFanout;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEventKind;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadListRequest;
+import codexhx.validation.tui.resume.live.ResumePickerGateDiagnostics;
 
 class ResponseTransportEnvelopeGate {
 	static final RESOLVE_REQUEST_ID = "server-request-envelope-resolve-1";
@@ -197,9 +199,16 @@ class ResponseTransportEnvelopeGate {
 		state.lastFailureCode = envelope.errorJson.length == 0 ? "" : envelope.kind;
 		state.lastError = envelope.errorJson;
 		state.loaderEventStatus = status;
-		state.loaderEventDetail = "request=" + envelope.requestId + ";kind=" + envelope.kind + ";method=" + envelope.method + ";correlation="
-			+ envelope.correlationKey + ";localOnly=" + boolLabel(envelope.localOnly) + ";sendIntent=" + boolLabel(envelope.sendIntentRecorded)
-			+ ";liveTransport=" + boolLabel(envelope.liveTransportAttempted) + ";suppressed=" + boolLabel(envelope.liveTransportSuppressed);
+		state.loaderEventDetail = DiagnosticSummary.render([
+			DiagnosticSummary.text("request", envelope.requestId),
+			DiagnosticSummary.enumValue("kind", Std.string(envelope.kind)),
+			DiagnosticSummary.text("method", envelope.method),
+			DiagnosticSummary.text("correlation", envelope.correlationKey),
+			DiagnosticSummary.boolValue("localOnly", envelope.localOnly),
+			DiagnosticSummary.boolValue("sendIntent", envelope.sendIntentRecorded),
+			DiagnosticSummary.boolValue("liveTransport", envelope.liveTransportAttempted),
+			DiagnosticSummary.boolValue("suppressed", envelope.liveTransportSuppressed)
+		]);
 		state.footerProgressLabel = status;
 	}
 
@@ -286,13 +295,11 @@ class ResponseTransportEnvelopeGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "thread=" + state.selectedThreadId + ";errorShown=" + boolLabel(state.inlineErrorShown) + ";failure=" + emptyLabel(state.lastFailureCode)
-			+ ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
+		return ResumePickerGateDiagnostics.inlineErrorState(state);
 	}
 
 	static function outcomeSummary(outcome:RuntimeClientOutcome):String {
-		return "ok=" + boolLabel(outcome.ok) + ";code=" + outcome.code + ";request=" + outcome.requestId + ";method=" + outcome.method + ";pending="
-			+ outcome.pendingCount + ";message=" + outcome.message;
+		return ResumePickerGateDiagnostics.runtimeClientOutcome(outcome);
 	}
 
 	static function title(prefix:String, suffix:String):String {
@@ -308,13 +315,5 @@ class ResponseTransportEnvelopeGate {
 
 	static function containsOne(values:Array<String>, needle:String):Bool {
 		return contains(values, needle);
-	}
-
-	static function emptyLabel(value:String):String {
-		return value.length == 0 ? "<empty>" : value;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 }

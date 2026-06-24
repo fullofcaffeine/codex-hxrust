@@ -3,6 +3,7 @@ package codexhx.runtime.tui.resume.live;
 import codexhx.protocol.json.CodexJson;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.app.RuntimeClientOutcome;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -20,6 +21,7 @@ import codexhx.runtime.tui.resume.host.ResumePickerHostEvent;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEventKind;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadListRequest;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadReadRequest;
+import codexhx.validation.tui.resume.live.ResumePickerGateDiagnostics;
 
 class AppServerEventPumpBoundaryGate {
 	public static function run():AppServerEventPumpBoundaryReport {
@@ -317,14 +319,20 @@ class AppServerEventPumpBoundaryGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "thread=" + state.selectedThreadId + ";previewState=" + state.previewState + ";previewLines=" + state.previewLineCount + ";errorShown="
-			+ boolLabel(state.inlineErrorShown) + ";failure=" + emptyLabel(state.lastFailureCode) + ";footer=" + state.footerProgressLabel + ";loader="
-			+ state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
+		return DiagnosticSummary.render([
+			DiagnosticSummary.text("thread", state.selectedThreadId),
+			DiagnosticSummary.text("previewState", state.previewState),
+			DiagnosticSummary.intValue("previewLines", state.previewLineCount),
+			DiagnosticSummary.boolValue("errorShown", state.inlineErrorShown),
+			DiagnosticSummary.text("failure", emptyLabel(state.lastFailureCode)),
+			DiagnosticSummary.text("footer", state.footerProgressLabel),
+			DiagnosticSummary.text("loader", state.loaderEventStatus),
+			DiagnosticSummary.text("detail", state.loaderEventDetail)
+		]);
 	}
 
 	static function outcomeSummary(outcome:RuntimeClientOutcome):String {
-		return "ok=" + boolLabel(outcome.ok) + ";code=" + outcome.code + ";request=" + outcome.requestId + ";method=" + outcome.method + ";pending="
-			+ outcome.pendingCount + ";message=" + outcome.message;
+		return ResumePickerGateDiagnostics.runtimeClientOutcome(outcome);
 	}
 
 	static function title(prefix:String, suffix:String):String {
@@ -340,9 +348,5 @@ class AppServerEventPumpBoundaryGate {
 
 	static function emptyLabel(value:String):String {
 		return value.length == 0 ? "<empty>" : value;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 }

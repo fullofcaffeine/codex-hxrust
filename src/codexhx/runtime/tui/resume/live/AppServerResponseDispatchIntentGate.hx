@@ -4,6 +4,7 @@ import codexhx.protocol.json.CodexJson;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPollSummary;
 import codexhx.runtime.app.RuntimeClientOutcome;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -23,6 +24,7 @@ import codexhx.runtime.tui.resume.host.StreamFanout;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEvent;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEventKind;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadListRequest;
+import codexhx.validation.tui.resume.live.ResumePickerGateDiagnostics;
 
 class AppServerResponseDispatchIntentGate {
 	static final REFUSED_REQUEST_ID = "server-request-dispatch-refused-1";
@@ -182,8 +184,14 @@ class AppServerResponseDispatchIntentGate {
 		state.lastFailureCode = "";
 		state.lastError = "";
 		state.loaderEventStatus = status;
-		state.loaderEventDetail = "request=" + event.requestId + ";hostKind=" + event.kind + ";command=" + command.kind + ";order=" + command.orderIndex
-			+ ";liveTransport=" + boolLabel(command.liveTransportAttempted) + ";suppressed=" + boolLabel(command.liveTransportSuppressed);
+		state.loaderEventDetail = DiagnosticSummary.render([
+			DiagnosticSummary.text("request", event.requestId),
+			DiagnosticSummary.enumValue("hostKind", Std.string(event.kind)),
+			DiagnosticSummary.enumValue("command", Std.string(command.kind)),
+			DiagnosticSummary.intValue("order", command.orderIndex),
+			DiagnosticSummary.boolValue("liveTransport", command.liveTransportAttempted),
+			DiagnosticSummary.boolValue("suppressed", command.liveTransportSuppressed)
+		]);
 		state.footerProgressLabel = status;
 	}
 
@@ -270,13 +278,11 @@ class AppServerResponseDispatchIntentGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "thread=" + state.selectedThreadId + ";errorShown=" + boolLabel(state.inlineErrorShown) + ";failure=" + emptyLabel(state.lastFailureCode)
-			+ ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
+		return ResumePickerGateDiagnostics.inlineErrorState(state);
 	}
 
 	static function outcomeSummary(outcome:RuntimeClientOutcome):String {
-		return "ok=" + boolLabel(outcome.ok) + ";code=" + outcome.code + ";request=" + outcome.requestId + ";method=" + outcome.method + ";pending="
-			+ outcome.pendingCount + ";message=" + outcome.message;
+		return ResumePickerGateDiagnostics.runtimeClientOutcome(outcome);
 	}
 
 	static function title(prefix:String, suffix:String):String {
@@ -288,13 +294,5 @@ class AppServerResponseDispatchIntentGate {
 			if (value.indexOf(needle) >= 0)
 				return true;
 		return false;
-	}
-
-	static function emptyLabel(value:String):String {
-		return value.length == 0 ? "<empty>" : value;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 }

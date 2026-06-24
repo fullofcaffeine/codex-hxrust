@@ -4,6 +4,7 @@ import codexhx.protocol.json.CodexJson;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPollSummary;
 import codexhx.runtime.app.RuntimeClientOutcome;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -24,6 +25,7 @@ import codexhx.runtime.tui.resume.host.StreamFanout;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEvent;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEventKind;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadListRequest;
+import codexhx.validation.tui.resume.live.ResumePickerGateDiagnostics;
 
 class DispatchFailureNoopGate {
 	static final MISSING_SESSION_REQUEST_ID = "server-request-dispatch-missing-session-1";
@@ -225,9 +227,17 @@ class DispatchFailureNoopGate {
 		state.lastFailureCode = command.errorCode;
 		state.lastError = command.errorMessage;
 		state.loaderEventStatus = status;
-		state.loaderEventDetail = "request=" + event.requestId + ";hostKind=" + event.kind + ";command=" + command.kind + ";intent=" + command.intentKind
-			+ ";order=" + command.orderIndex + ";error=" + errorSummary(command) + ";sendIntent=" + boolLabel(command.transportSendIntentRecorded)
-			+ ";liveTransport=" + boolLabel(command.liveTransportAttempted) + ";suppressed=" + boolLabel(command.liveTransportSuppressed);
+		state.loaderEventDetail = DiagnosticSummary.render([
+			DiagnosticSummary.text("request", event.requestId),
+			DiagnosticSummary.enumValue("hostKind", Std.string(event.kind)),
+			DiagnosticSummary.enumValue("command", Std.string(command.kind)),
+			DiagnosticSummary.enumValue("intent", Std.string(command.intentKind)),
+			DiagnosticSummary.intValue("order", command.orderIndex),
+			DiagnosticSummary.text("error", errorSummary(command)),
+			DiagnosticSummary.boolValue("sendIntent", command.transportSendIntentRecorded),
+			DiagnosticSummary.boolValue("liveTransport", command.liveTransportAttempted),
+			DiagnosticSummary.boolValue("suppressed", command.liveTransportSuppressed)
+		]);
 		state.footerProgressLabel = status;
 	}
 
@@ -236,9 +246,17 @@ class DispatchFailureNoopGate {
 		state.lastFailureCode = command.errorCode;
 		state.lastError = command.errorMessage;
 		state.loaderEventStatus = status;
-		state.loaderEventDetail = "request=<none>;hostKind=<none>;command=" + command.kind + ";intent=" + command.intentKind + ";order="
-			+ command.orderIndex + ";error=" + errorSummary(command) + ";sendIntent=" + boolLabel(command.transportSendIntentRecorded) + ";liveTransport="
-			+ boolLabel(command.liveTransportAttempted) + ";suppressed=" + boolLabel(command.liveTransportSuppressed);
+		state.loaderEventDetail = DiagnosticSummary.render([
+			DiagnosticSummary.text("request", "<none>"),
+			DiagnosticSummary.text("hostKind", "<none>"),
+			DiagnosticSummary.enumValue("command", Std.string(command.kind)),
+			DiagnosticSummary.enumValue("intent", Std.string(command.intentKind)),
+			DiagnosticSummary.intValue("order", command.orderIndex),
+			DiagnosticSummary.text("error", errorSummary(command)),
+			DiagnosticSummary.boolValue("sendIntent", command.transportSendIntentRecorded),
+			DiagnosticSummary.boolValue("liveTransport", command.liveTransportAttempted),
+			DiagnosticSummary.boolValue("suppressed", command.liveTransportSuppressed)
+		]);
 		state.footerProgressLabel = status;
 	}
 
@@ -325,13 +343,11 @@ class DispatchFailureNoopGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "thread=" + state.selectedThreadId + ";errorShown=" + boolLabel(state.inlineErrorShown) + ";failure=" + emptyLabel(state.lastFailureCode)
-			+ ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
+		return ResumePickerGateDiagnostics.inlineErrorState(state);
 	}
 
 	static function outcomeSummary(outcome:RuntimeClientOutcome):String {
-		return "ok=" + boolLabel(outcome.ok) + ";code=" + outcome.code + ";request=" + outcome.requestId + ";method=" + outcome.method + ";pending="
-			+ outcome.pendingCount + ";message=" + outcome.message;
+		return ResumePickerGateDiagnostics.runtimeClientOutcome(outcome);
 	}
 
 	static function errorSummary(command:RequestDispatchCommand):String {
@@ -347,13 +363,5 @@ class DispatchFailureNoopGate {
 			if (value.indexOf(needle) >= 0)
 				return true;
 		return false;
-	}
-
-	static function emptyLabel(value:String):String {
-		return value.length == 0 ? "<empty>" : value;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 }

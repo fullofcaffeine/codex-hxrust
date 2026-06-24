@@ -4,6 +4,7 @@ import codexhx.protocol.json.CodexJson;
 import codexhx.runtime.asyncruntime.AsyncContext;
 import codexhx.runtime.asyncruntime.AsyncPollSummary;
 import codexhx.runtime.app.RuntimeClientOutcome;
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.ResumePickerActionKind;
 import codexhx.runtime.tui.resume.ResumePickerFilterMode;
 import codexhx.runtime.tui.resume.ResumePickerSortKey;
@@ -25,6 +26,7 @@ import codexhx.runtime.tui.resume.host.PayloadKind;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEvent;
 import codexhx.runtime.tui.resume.host.ResumePickerHostEventKind;
 import codexhx.runtime.tui.resume.host.ResumePickerThreadListRequest;
+import codexhx.validation.tui.resume.live.ResumePickerGateDiagnostics;
 
 class PayloadEnvelopeGate {
 	public static function run():PayloadEnvelopeReport {
@@ -230,9 +232,17 @@ class PayloadEnvelopeGate {
 		state.lastFailureCode = state.inlineErrorShown ? envelope.payloadKind : "";
 		state.lastError = envelope.errorJson;
 		state.loaderEventStatus = status;
-		state.loaderEventDetail = "kind=" + envelope.kind + ";class=" + envelope.requestClass + ";payloadKind=" + envelope.payloadKind + ";request="
-			+ envelope.requestId + ";method=" + envelope.method + ";correlation=" + envelope.correlationKey + ";localOnly=" + boolLabel(envelope.localOnly)
-			+ ";sendIntent=" + boolLabel(envelope.sendIntentRecorded) + ";suppressed=" + boolLabel(envelope.liveTransportSuppressed);
+		state.loaderEventDetail = DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("kind", Std.string(envelope.kind)),
+			DiagnosticSummary.enumValue("class", Std.string(envelope.requestClass)),
+			DiagnosticSummary.text("payloadKind", envelope.payloadKind),
+			DiagnosticSummary.text("request", envelope.requestId),
+			DiagnosticSummary.text("method", envelope.method),
+			DiagnosticSummary.text("correlation", envelope.correlationKey),
+			DiagnosticSummary.boolValue("localOnly", envelope.localOnly),
+			DiagnosticSummary.boolValue("sendIntent", envelope.sendIntentRecorded),
+			DiagnosticSummary.boolValue("suppressed", envelope.liveTransportSuppressed)
+		]);
 		state.footerProgressLabel = status;
 	}
 
@@ -319,13 +329,11 @@ class PayloadEnvelopeGate {
 	}
 
 	static function stateSummary(state:ResumePickerState):String {
-		return "thread=" + state.selectedThreadId + ";errorShown=" + boolLabel(state.inlineErrorShown) + ";failure=" + emptyLabel(state.lastFailureCode)
-			+ ";footer=" + state.footerProgressLabel + ";loader=" + state.loaderEventStatus + ";detail=" + state.loaderEventDetail;
+		return ResumePickerGateDiagnostics.inlineErrorState(state);
 	}
 
 	static function outcomeSummary(outcome:RuntimeClientOutcome):String {
-		return "ok=" + boolLabel(outcome.ok) + ";code=" + outcome.code + ";request=" + outcome.requestId + ";method=" + outcome.method + ";pending="
-			+ outcome.pendingCount + ";message=" + outcome.message;
+		return ResumePickerGateDiagnostics.runtimeClientOutcome(outcome);
 	}
 
 	static function title(prefix:String, suffix:String):String {
@@ -337,13 +345,5 @@ class PayloadEnvelopeGate {
 			if (value.indexOf(needle) >= 0)
 				return true;
 		return false;
-	}
-
-	static function emptyLabel(value:String):String {
-		return value.length == 0 ? "<empty>" : value;
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
 	}
 }
