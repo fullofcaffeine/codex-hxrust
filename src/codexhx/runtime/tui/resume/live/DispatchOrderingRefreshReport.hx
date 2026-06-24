@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef DispatchOrderingRefreshReportFields = {
 	final responseOrderPreserved:Bool;
 	final supportedRefreshScheduled:Bool;
@@ -61,21 +63,33 @@ class DispatchOrderingRefreshReport {
 	public final forwardPollSummaries:Array<String>;
 
 	public function summary():String {
-		return "responseOrderPreserved=" + boolLabel(responseOrderPreserved) + ";supportedRefreshScheduled=" + boolLabel(supportedRefreshScheduled)
-			+ ";unsupportedRejectNoRefresh=" + boolLabel(unsupportedRejectNoRefresh) + ";missingNoopNoRefresh=" + boolLabel(missingNoopNoRefresh)
-			+ ";lateDuplicateRefused=" + boolLabel(lateDuplicateRefused) + ";requestIdsCorrelated=" + boolLabel(requestIdsCorrelated)
-			+ ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed)
-			+ ";recoveryDecoded=" + boolLabel(recoveryDecoded) + ";noCredentialOrModelTraffic=" + boolLabel(noCredentialOrModelTraffic)
-			+ ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";pageRequests=" + pageRequests + ";readRequests=" + readRequests + ";frames="
-			+ frameRequests + ";renders=" + renderCount + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";typedEvents=["
-			+ typedEventSummaries.join("##") + "]" + ";envelopes=[" + envelopeSummaries.join("##") + "]" + ";dispatchOutcomes=["
-			+ dispatchOutcomeSummaries.join("##") + "]" + ";dispatcherLog=[" + dispatcherLogSummaries.join("##") + "]" + ";requests=["
-			+ requestSummaries.join("##") + "]" + ";transport=[" + transportSummaries.join("##") + "]" + ";pump=[" + pumpSummaries.join("##") + "]"
-			+ ";rejectedRequests=[" + rejectedRequestSummaries.join("##") + "]" + ";states=[" + stateSummaries.join("##") + "]" + ";forwardPolls=["
-			+ forwardPollSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.boolValue("responseOrderPreserved", responseOrderPreserved),
+			DiagnosticSummary.boolValue("supportedRefreshScheduled", supportedRefreshScheduled),
+			DiagnosticSummary.boolValue("unsupportedRejectNoRefresh", unsupportedRejectNoRefresh),
+			DiagnosticSummary.boolValue("missingNoopNoRefresh", missingNoopNoRefresh),
+			DiagnosticSummary.boolValue("lateDuplicateRefused", lateDuplicateRefused),
+			DiagnosticSummary.boolValue("requestIdsCorrelated", requestIdsCorrelated),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("recoveryDecoded", recoveryDecoded),
+			DiagnosticSummary.boolValue("noCredentialOrModelTraffic", noCredentialOrModelTraffic),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.intValue("pageRequests", pageRequests),
+			DiagnosticSummary.intValue("readRequests", readRequests),
+			DiagnosticSummary.intValue("frames", frameRequests),
+			DiagnosticSummary.intValue("renders", renderCount),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("typedEvents", typedEventSummaries),
+			DiagnosticSummary.logList("envelopes", envelopeSummaries),
+			DiagnosticSummary.logList("dispatchOutcomes", dispatchOutcomeSummaries),
+			DiagnosticSummary.logList("dispatcherLog", dispatcherLogSummaries),
+			DiagnosticSummary.logList("requests", requestSummaries),
+			DiagnosticSummary.logList("transport", transportSummaries),
+			DiagnosticSummary.logList("pump", pumpSummaries),
+			DiagnosticSummary.logList("rejectedRequests", rejectedRequestSummaries),
+			DiagnosticSummary.logList("states", stateSummaries),
+			DiagnosticSummary.logList("forwardPolls", forwardPollSummaries)
+		]);
 	}
 }

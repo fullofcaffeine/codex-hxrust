@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.RecoveryIdleStateHandoffKind;
 
 typedef RecoveryIdleStateHandoffReportFields = {
@@ -48,18 +49,26 @@ class RecoveryIdleStateHandoffReport {
 	public final handoffLogSummaries:Array<String>;
 
 	public function summary():String {
-		return "handoffKind=" + handoffKind + ";idleListReady=" + boolLabel(idleListReady) + ";thread=" + recoveredThreadId + ";keyboardInputReady="
-			+ boolLabel(keyboardInputReady) + ";listNavigationReady=" + boolLabel(listNavigationReady) + ";promptActionCleared="
-			+ boolLabel(promptActionCleared) + ";sideParentActionCleared=" + boolLabel(sideParentActionCleared) + ";activeThreadActionCleared="
-			+ boolLabel(activeThreadActionCleared) + ";restoredStatusAccepted=" + boolLabel(restoredStatusAccepted) + ";frameRequestAccepted="
-			+ boolLabel(frameRequestAccepted) + ";selectionAccepted=" + boolLabel(selectionAccepted) + ";ignoredNoSurfaceAbsent="
-			+ boolLabel(ignoredNoSurfaceRecordsAbsent) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed="
-			+ boolLabel(liveTransportSuppressed) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";handoff=[" + handoffSummary + "]"
-			+ ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";actions=[" + actionSummaries.join("##") + "]" + ";handoffLog=["
-			+ handoffLogSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("handoffKind", Std.string(handoffKind)),
+			DiagnosticSummary.boolValue("idleListReady", idleListReady),
+			DiagnosticSummary.text("thread", recoveredThreadId),
+			DiagnosticSummary.boolValue("keyboardInputReady", keyboardInputReady),
+			DiagnosticSummary.boolValue("listNavigationReady", listNavigationReady),
+			DiagnosticSummary.boolValue("promptActionCleared", promptActionCleared),
+			DiagnosticSummary.boolValue("sideParentActionCleared", sideParentActionCleared),
+			DiagnosticSummary.boolValue("activeThreadActionCleared", activeThreadActionCleared),
+			DiagnosticSummary.boolValue("restoredStatusAccepted", restoredStatusAccepted),
+			DiagnosticSummary.boolValue("frameRequestAccepted", frameRequestAccepted),
+			DiagnosticSummary.boolValue("selectionAccepted", selectionAccepted),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.nested("handoff", handoffSummary),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("actions", actionSummaries),
+			DiagnosticSummary.logList("handoffLog", handoffLogSummaries)
+		]);
 	}
 }
