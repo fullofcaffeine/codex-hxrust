@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.CompletionRenderedStateHandoffKind;
 
 typedef CompletionStateHandoffReportFields = {
@@ -66,22 +67,35 @@ class CompletionStateHandoffReport {
 	public final handoffLogSummaries:Array<String>;
 
 	public function summary():String {
-		return "handoffKind=" + handoffKind + ";postRenderIdleListReady=" + boolLabel(postRenderIdleListReady) + ";keyboardInputReady="
-			+ boolLabel(keyboardInputReady) + ";listNavigationReady=" + boolLabel(listNavigationReady) + ";noLeftoverScheduledRenderRequest="
-			+ boolLabel(noLeftoverScheduledRenderRequest) + ";sourceSchedulerRequestCount=" + sourceSchedulerRequestCount + ";consumedScheduledRequestCount="
-			+ consumedScheduledRequestCount + ";renderCount=" + renderCount + ";renderedSnapshotPreserved=" + boolLabel(renderedSnapshotPreserved)
-			+ ";finalThread=" + finalThreadId + ";finalSelectionPreserved=" + boolLabel(finalSelectionPreserved) + ";finalFooterPreserved="
-			+ boolLabel(finalFooterPreserved) + ";inputAdmitted=" + boolLabel(inputAdmitted) + ";localOnlyRenderIntent=" + boolLabel(localOnlyRenderIntent)
-			+ ";stalePromptActionInactive=" + boolLabel(stalePromptActionInactive) + ";staleSideParentActionInactive="
-			+ boolLabel(staleSideParentActionInactive) + ";staleActiveThreadActionInactive=" + boolLabel(staleActiveThreadActionInactive)
-			+ ";ignoredNoSurfaceAbsent=" + boolLabel(ignoredNoSurfaceRecordsAbsent) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection)
-			+ ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed) + ";liveTerminalSuppressed=" + boolLabel(liveTerminalSuppressed)
-			+ ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";noModelCall=" + boolLabel(noModelCall) + ";noFilesystemMutation="
-			+ boolLabel(noFilesystemMutation) + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n") + ";handoff=[" + handoffSummary + "]"
-			+ ";handoffLog=[" + handoffLogSummaries.join("##") + "]" + ";execution=[" + executionSummary + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("handoffKind", Std.string(handoffKind)),
+			DiagnosticSummary.boolValue("postRenderIdleListReady", postRenderIdleListReady),
+			DiagnosticSummary.boolValue("keyboardInputReady", keyboardInputReady),
+			DiagnosticSummary.boolValue("listNavigationReady", listNavigationReady),
+			DiagnosticSummary.boolValue("noLeftoverScheduledRenderRequest", noLeftoverScheduledRenderRequest),
+			DiagnosticSummary.intValue("sourceSchedulerRequestCount", sourceSchedulerRequestCount),
+			DiagnosticSummary.intValue("consumedScheduledRequestCount", consumedScheduledRequestCount),
+			DiagnosticSummary.intValue("renderCount", renderCount),
+			DiagnosticSummary.boolValue("renderedSnapshotPreserved", renderedSnapshotPreserved),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.boolValue("finalSelectionPreserved", finalSelectionPreserved),
+			DiagnosticSummary.boolValue("finalFooterPreserved", finalFooterPreserved),
+			DiagnosticSummary.boolValue("inputAdmitted", inputAdmitted),
+			DiagnosticSummary.boolValue("localOnlyRenderIntent", localOnlyRenderIntent),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.boolValue("noModelCall", noModelCall),
+			DiagnosticSummary.boolValue("noFilesystemMutation", noFilesystemMutation),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.nested("handoff", handoffSummary),
+			DiagnosticSummary.logList("handoffLog", handoffLogSummaries),
+			DiagnosticSummary.nested("execution", executionSummary)
+		]);
 	}
 }

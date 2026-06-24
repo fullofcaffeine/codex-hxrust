@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.PostRenderStateHandoffGate;
 
-class PostRenderRenderedStateHandoffRenderHarness {
+class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderRenderedStateHandoffRenderHarness {
 	static function main():Void {
 		final report = PostRenderStateHandoffGate.run();
 
