@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.CompletionInputRenderIntentKind;
 
 typedef PostRenderInputRenderIntentReportFields = {
@@ -76,24 +77,40 @@ class PostRenderInputRenderIntentReport {
 	public final renderIntentLogSummaries:Array<String>;
 
 	public function summary():String {
-		return "renderIntentKind=" + renderIntentKind + ";renderRequested=" + boolLabel(renderRequested) + ";localOnlyRenderIntent="
-			+ boolLabel(localOnlyRenderIntent) + ";finalThread=" + finalThreadId + ";finalFooter=" + finalFooter + ";finalSelectionPreserved="
-			+ boolLabel(finalSelectionPreserved) + ";finalFooterPreserved=" + boolLabel(finalFooterPreserved) + ";inputAdmitted=" + boolLabel(inputAdmitted)
-			+ ";replayCount=" + replayCount + ";snapshotOrderPreserved=" + boolLabel(snapshotOrderPreserved) + ";selectedMarkersPreserved="
-			+ boolLabel(selectedMarkersPreserved) + ";footerSummariesPreserved=" + boolLabel(footerSummariesPreserved) + ";selectedMarkerMoved="
-			+ boolLabel(selectedMarkerMoved) + ";recoveredSelectionRestored=" + boolLabel(recoveredSelectionRestored) + ";noLeftoverScheduledRenderRequest="
-			+ boolLabel(noLeftoverScheduledRenderRequest) + ";sourceSchedulerRequestCount=" + sourceSchedulerRequestCount + ";consumedScheduledRequestCount="
-			+ consumedScheduledRequestCount + ";sourceRenderCount=" + sourceRenderCount + ";renderedSnapshotPreserved="
-			+ boolLabel(renderedSnapshotPreserved) + ";stalePromptActionInactive=" + boolLabel(stalePromptActionInactive) + ";staleSideParentActionInactive="
-			+ boolLabel(staleSideParentActionInactive) + ";staleActiveThreadActionInactive=" + boolLabel(staleActiveThreadActionInactive)
-			+ ";ignoredNoSurfaceAbsent=" + boolLabel(ignoredNoSurfaceRecordsAbsent) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection)
-			+ ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed) + ";liveTerminalSuppressed=" + boolLabel(liveTerminalSuppressed)
-			+ ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";noModelCall=" + boolLabel(noModelCall) + ";noFilesystemMutation="
-			+ boolLabel(noFilesystemMutation) + ";renderIntent=[" + renderIntentSummary + "]" + ";finalSnapshot=" + finalSnapshot.split("\n").join("\\n")
-			+ ";renderIntentLog=[" + renderIntentLogSummaries.join("##") + "]" + ";admission=[" + admissionSummary + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("renderIntentKind", Std.string(renderIntentKind)),
+			DiagnosticSummary.boolValue("renderRequested", renderRequested),
+			DiagnosticSummary.boolValue("localOnlyRenderIntent", localOnlyRenderIntent),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.text("finalFooter", finalFooter),
+			DiagnosticSummary.boolValue("finalSelectionPreserved", finalSelectionPreserved),
+			DiagnosticSummary.boolValue("finalFooterPreserved", finalFooterPreserved),
+			DiagnosticSummary.boolValue("inputAdmitted", inputAdmitted),
+			DiagnosticSummary.intValue("replayCount", replayCount),
+			DiagnosticSummary.boolValue("snapshotOrderPreserved", snapshotOrderPreserved),
+			DiagnosticSummary.boolValue("selectedMarkersPreserved", selectedMarkersPreserved),
+			DiagnosticSummary.boolValue("footerSummariesPreserved", footerSummariesPreserved),
+			DiagnosticSummary.boolValue("selectedMarkerMoved", selectedMarkerMoved),
+			DiagnosticSummary.boolValue("recoveredSelectionRestored", recoveredSelectionRestored),
+			DiagnosticSummary.boolValue("noLeftoverScheduledRenderRequest", noLeftoverScheduledRenderRequest),
+			DiagnosticSummary.intValue("sourceSchedulerRequestCount", sourceSchedulerRequestCount),
+			DiagnosticSummary.intValue("consumedScheduledRequestCount", consumedScheduledRequestCount),
+			DiagnosticSummary.intValue("sourceRenderCount", sourceRenderCount),
+			DiagnosticSummary.boolValue("renderedSnapshotPreserved", renderedSnapshotPreserved),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.boolValue("noModelCall", noModelCall),
+			DiagnosticSummary.boolValue("noFilesystemMutation", noFilesystemMutation),
+			DiagnosticSummary.nested("renderIntent", renderIntentSummary),
+			DiagnosticSummary.snapshot("finalSnapshot", finalSnapshot),
+			DiagnosticSummary.logList("renderIntentLog", renderIntentLogSummaries),
+			DiagnosticSummary.nested("admission", admissionSummary)
+		]);
 	}
 }
