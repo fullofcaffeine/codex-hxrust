@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ResumePickerEmptyErrorGate;
+import codexhx.validation.tui.resume.live.ResumePickerEmptyErrorGate;
 
 class ResumePickerEmptyErrorRenderHarness {
 	static function main():Void {

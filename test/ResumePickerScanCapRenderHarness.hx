@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ResumePickerScanCapGate;
+import codexhx.validation.tui.resume.live.ResumePickerScanCapGate;
 
 class ResumePickerScanCapRenderHarness {
 	static function main():Void {

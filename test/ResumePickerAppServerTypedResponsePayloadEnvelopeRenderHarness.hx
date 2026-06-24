@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.PayloadEnvelopeGate;
+import codexhx.validation.tui.resume.live.PayloadEnvelopeGate;
 
 class ResumePickerAppServerTypedResponsePayloadEnvelopeRenderHarness {
 	static function main():Void {

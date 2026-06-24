@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.InvalidRowProjectionGate;
+import codexhx.validation.tui.resume.live.InvalidRowProjectionGate;
 
 class ResumePickerInvalidRowProjectionRenderHarness {
 	static function main():Void {

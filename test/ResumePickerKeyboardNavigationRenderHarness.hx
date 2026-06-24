@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.KeyboardNavigationGate;
+import codexhx.validation.tui.resume.live.KeyboardNavigationGate;
 
 class ResumePickerKeyboardNavigationRenderHarness {
 	static function main():Void {

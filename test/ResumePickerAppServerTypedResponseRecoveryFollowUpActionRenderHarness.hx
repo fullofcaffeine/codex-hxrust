@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.RecoveryFollowUpActionGate;
+import codexhx.validation.tui.resume.live.RecoveryFollowUpActionGate;
 
 class ResumePickerAppServerTypedResponseRecoveryFollowUpActionRenderHarness {
 	static function main():Void {

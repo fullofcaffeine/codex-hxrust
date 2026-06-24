@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.SecondScheduledRenderGate;
+import codexhx.validation.tui.resume.live.SecondScheduledRenderGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSecondCycleScheduledRenderExecutionRenderHarness {
 	static function main():Void {

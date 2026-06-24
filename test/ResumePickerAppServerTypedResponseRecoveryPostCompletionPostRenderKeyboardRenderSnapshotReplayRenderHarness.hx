@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.PostRenderSnapshotReplayGate;
+import codexhx.validation.tui.resume.live.PostRenderSnapshotReplayGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderKeyboardRenderSnapshotReplayRenderHarness {
 	static function main():Void {

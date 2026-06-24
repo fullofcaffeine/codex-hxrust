@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.AppServerSessionLifecycleGate;
+import codexhx.validation.tui.resume.live.AppServerSessionLifecycleGate;
 
 class ResumePickerAppServerSessionLifecycleRenderHarness {
 	static function main():Void {

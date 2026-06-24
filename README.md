@@ -136,7 +136,9 @@ Do not update the pin merely to test local compiler edits. The direct scoped-lib
 
 Current known haxe.rust pressure points are tracked under the `HXCX-7.x` Beads epic.
 
-Generated Rust layout is also a pressure point. codexhx enables haxe.rust nested module output with `-D rust_nested_modules`, so generated resume/TUI gates now land under reviewable paths such as `codexhx/runtime/tui/resume/live/app_server_boundary_gate.rs` instead of one flat package-derived filename. Keep Haxe production module names short and upstream-domain-shaped; remaining output work should focus on narrower generic haxe.rust refinements such as crate-root package mapping and alias reduction.
+Validation gates and deterministic parity reports live under `codexhx.validation.*`; production runtime code stays under `codexhx.runtime.*`. The current resume/TUI validation gates are in `codexhx.validation.tui.resume.live`, while reusable host/runtime abstractions remain in `codexhx.runtime.tui.resume` and `codexhx.runtime.tui.resume.host`.
+
+Generated Rust layout is also a pressure point. codexhx enables haxe.rust nested module output with `-D rust_nested_modules`, so generated validation gates now land under reviewable paths such as `codexhx/validation/tui/resume/live/app_server_boundary_gate.rs` instead of one flat package-derived filename. Keep Haxe production module names short and upstream-domain-shaped; remaining output work should focus on narrower generic haxe.rust refinements such as crate-root package mapping and alias reduction.
 
 ## Profile Approach
 

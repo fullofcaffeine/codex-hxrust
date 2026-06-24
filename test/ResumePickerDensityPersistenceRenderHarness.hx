@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.DensityPersistenceGate;
+import codexhx.validation.tui.resume.live.DensityPersistenceGate;
 import sys.FileSystem;
 
 class ResumePickerDensityPersistenceRenderHarness {

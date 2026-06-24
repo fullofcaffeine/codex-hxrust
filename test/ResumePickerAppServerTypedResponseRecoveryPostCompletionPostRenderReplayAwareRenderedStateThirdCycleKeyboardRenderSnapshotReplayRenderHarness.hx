@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ThirdSnapshotReplayGate;
+import codexhx.validation.tui.resume.live.ThirdSnapshotReplayGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateThirdCycleKeyboardRenderSnapshotReplayRenderHarness {
 	static function main():Void {

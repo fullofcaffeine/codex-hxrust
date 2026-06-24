@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.AppServerStreamPressureGate;
+import codexhx.validation.tui.resume.live.AppServerStreamPressureGate;
 
 class ResumePickerAppServerStreamPressureRenderHarness {
 	static function main():Void {

@@ -1,5 +1,5 @@
-import codexhx.runtime.tui.resume.live.ResumePickerNoCredentialGate;
-import codexhx.runtime.tui.resume.live.ResumePickerNoCredentialReport;
+import codexhx.validation.tui.resume.live.ResumePickerNoCredentialGate;
+import codexhx.validation.tui.resume.live.ResumePickerNoCredentialReport;
 import sys.FileSystem;
 
 class ResumePickerRenderSnapshotHarness {
@@ -31,6 +31,7 @@ class ResumePickerRenderSnapshotHarness {
 			"rows loaded=2 filtered=2 scanned=2 accepted=2 invalid=0",
 			"  Resume kernel | thread-a | turns=3 | 2026-06-19T12:00:00Z | cwd=/workspace/codex-hxrust",
 			"> Host facade | thread-b | turns=5 | 2026-06-19T12:05:00Z | cwd=/workspace/codex-hxrust",
+			"page next=cursor-2 moreBelow=false loadingOlder=false scanCap=false nextPresent=true",
 			"overlay transcript thread=thread-b cells=3",
 			"footer 100% selected=1 selectedThread=thread-b"
 		].join("\n");

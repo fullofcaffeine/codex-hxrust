@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.AppServerServerRequestDeliveryGate;
+import codexhx.validation.tui.resume.live.AppServerServerRequestDeliveryGate;
 
 class ResumePickerAppServerServerRequestDeliveryRenderHarness {
 	static function main():Void {

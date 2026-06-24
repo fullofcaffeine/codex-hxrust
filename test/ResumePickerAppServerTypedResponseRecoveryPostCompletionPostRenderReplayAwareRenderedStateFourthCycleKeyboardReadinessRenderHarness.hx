@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.FourthKeyboardReadinessGate;
+import codexhx.validation.tui.resume.live.FourthKeyboardReadinessGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateFourthCycleKeyboardReadinessRenderHarness {
 	static function main():Void {

@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.DispatchFailureNoopGate;
+import codexhx.validation.tui.resume.live.DispatchFailureNoopGate;
 
 class ResumePickerAppServerResponseDispatchFailureNoopRenderHarness {
 	static function main():Void {

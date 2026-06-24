@@ -145,7 +145,7 @@ Status: `codexhx.runtime.tui.resume.host` owns the first runtime-neutral host fa
    - Prove page load, cursor pagination, preview load, and full transcript load through generated Rust without provider credentials or model traffic.
    - Keep upstream `AppServerSession` semantics visible: request ids, include-turns flags, cursor propagation, and error mapping.
 
-Status: `codexhx.runtime.tui.resume.live.ResumePickerNoCredentialGate` composes the host facade into the first credential-free generated-Rust app loop slice. The gate loads fixture-backed threads, applies deterministic key events, requests and renders frames through the test terminal renderer, opens the selected transcript overlay, and writes `session_picker_view = "dense"` into a temp Codex home. This is still a deterministic facade gate: it does not claim live JSON-RPC transport, crossterm input, ratatui frame ownership, state DB/rollout querying, provider traffic, or real user config mutation.
+Status: `codexhx.validation.tui.resume.live.ResumePickerNoCredentialGate` composes the host facade into the first credential-free generated-Rust app loop slice. The gate loads fixture-backed threads, applies deterministic key events, requests and renders frames through the test terminal renderer, opens the selected transcript overlay, and writes `session_picker_view = "dense"` into a temp Codex home. This is still a deterministic facade gate: it does not claim live JSON-RPC transport, crossterm input, ratatui frame ownership, state DB/rollout querying, provider traffic, or real user config mutation.
 
 4. Add the terminal/render smoke runner.
    - First use a VT100/test backend to render the Haxe picker through generated Rust and compare stable snapshots or normalized screen text.

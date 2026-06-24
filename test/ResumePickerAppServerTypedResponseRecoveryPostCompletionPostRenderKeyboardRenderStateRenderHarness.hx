@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.PostRenderKeyboardStateGate;
+import codexhx.validation.tui.resume.live.PostRenderKeyboardStateGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderKeyboardRenderStateRenderHarness {
 	static function main():Void {

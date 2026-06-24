@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.RefreshApplicationGate;
+import codexhx.validation.tui.resume.live.RefreshApplicationGate;
 
 class ResumePickerAppServerTypedResponseRefreshApplicationRenderHarness {
 	static function main():Void {

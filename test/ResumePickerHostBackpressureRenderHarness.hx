@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.HostBackpressureGate;
+import codexhx.validation.tui.resume.live.HostBackpressureGate;
 
 class ResumePickerHostBackpressureRenderHarness {
 	static function main():Void {

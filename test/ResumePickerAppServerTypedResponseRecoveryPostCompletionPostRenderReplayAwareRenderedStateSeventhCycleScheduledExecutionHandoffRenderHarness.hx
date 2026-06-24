@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.SeventhExecutionHandoffGate;
+import codexhx.validation.tui.resume.live.SeventhExecutionHandoffGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSeventhCycleScheduledExecutionHandoffRenderHarness {
 	static function main():Void {

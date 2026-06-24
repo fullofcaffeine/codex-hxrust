@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.FailurePreservationGate;
+import codexhx.validation.tui.resume.live.FailurePreservationGate;
 
 class ResumePickerReloadFailurePreservationRenderHarness {
 	static function main():Void {

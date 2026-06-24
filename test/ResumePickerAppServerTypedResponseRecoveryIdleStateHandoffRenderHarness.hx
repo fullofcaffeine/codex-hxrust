@@ -1,5 +1,5 @@
 import codexhx.runtime.tui.resume.host.RecoveryIdleStateHandoffKind;
-import codexhx.runtime.tui.resume.live.RecoveryIdleStateHandoffGate;
+import codexhx.validation.tui.resume.live.RecoveryIdleStateHandoffGate;
 
 class ResumePickerAppServerTypedResponseRecoveryIdleStateHandoffRenderHarness {
 	static function main():Void {

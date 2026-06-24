@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.EighthScheduledRenderGate;
+import codexhx.validation.tui.resume.live.EighthScheduledRenderGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateEighthCycleScheduledRenderExecutionRenderHarness {
 	static function main():Void {

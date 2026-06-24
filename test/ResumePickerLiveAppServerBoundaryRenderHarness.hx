@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.AppServerBoundaryGate;
+import codexhx.validation.tui.resume.live.AppServerBoundaryGate;
 
 class ResumePickerLiveAppServerBoundaryRenderHarness {
 	static function main():Void {

@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.PreviewInvalidationGate;
+import codexhx.validation.tui.resume.live.PreviewInvalidationGate;
 
 class ResumePickerReloadPreviewInvalidationRenderHarness {
 	static function main():Void {

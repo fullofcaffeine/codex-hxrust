@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.FifthRenderRequestGate;
+import codexhx.validation.tui.resume.live.FifthRenderRequestGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateFifthCycleRenderRequestSchedulingRenderHarness {
 	static function main():Void {

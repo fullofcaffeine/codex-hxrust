@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.DispatchOrderingRefreshGate;
+import codexhx.validation.tui.resume.live.DispatchOrderingRefreshGate;
 
 class ResumePickerAppServerTypedResponseDispatchOrderingRefreshRenderHarness {
 	static function main():Void {

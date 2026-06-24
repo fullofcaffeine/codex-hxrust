@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.AppServerResponseDispatchIntentGate;
+import codexhx.validation.tui.resume.live.AppServerResponseDispatchIntentGate;
 
 class ResumePickerAppServerResponseDispatchIntentRenderHarness {
 	static function main():Void {

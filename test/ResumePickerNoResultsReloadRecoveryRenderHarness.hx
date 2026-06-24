@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.NoResultsRecoveryGate;
+import codexhx.validation.tui.resume.live.NoResultsRecoveryGate;
 
 class ResumePickerNoResultsReloadRecoveryRenderHarness {
 	static function main():Void {

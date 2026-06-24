@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.SixthInputRenderIntentGate;
+import codexhx.validation.tui.resume.live.SixthInputRenderIntentGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSixthCycleInputRenderIntentRenderHarness {
 	static function main():Void {

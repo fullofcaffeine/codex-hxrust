@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ResumePickerPaginationGate;
+import codexhx.validation.tui.resume.live.ResumePickerPaginationGate;
 
 class ResumePickerPaginationRenderHarness {
 	static function main():Void {

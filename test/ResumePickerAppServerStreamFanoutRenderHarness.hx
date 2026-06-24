@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.AppServerStreamFanoutGate;
+import codexhx.validation.tui.resume.live.AppServerStreamFanoutGate;
 
 class ResumePickerAppServerStreamFanoutRenderHarness {
 	static function main():Void {

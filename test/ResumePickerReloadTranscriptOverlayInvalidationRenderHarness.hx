@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.TranscriptOverlayInvalidationGate;
+import codexhx.validation.tui.resume.live.TranscriptOverlayInvalidationGate;
 
 class ResumePickerReloadTranscriptOverlayInvalidationRenderHarness {
 	static function main():Void {

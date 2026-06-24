@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.LoaderCancellationGate;
+import codexhx.validation.tui.resume.live.LoaderCancellationGate;
 
 class ResumePickerLoaderCancellationRenderHarness {
 	static function main():Void {

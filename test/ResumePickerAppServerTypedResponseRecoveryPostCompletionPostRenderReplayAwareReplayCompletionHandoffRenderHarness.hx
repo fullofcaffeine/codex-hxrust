@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ReplayAwareCompletionHandoffGate;
+import codexhx.validation.tui.resume.live.ReplayAwareCompletionHandoffGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareReplayCompletionHandoffRenderHarness {
 	static function main():Void {

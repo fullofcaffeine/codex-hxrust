@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.PostRenderStateHandoffGate;
+import codexhx.validation.tui.resume.live.PostRenderStateHandoffGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderRenderedStateHandoffRenderHarness {
 	static function main():Void {

@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ResumePickerQueryReloadGate;
+import codexhx.validation.tui.resume.live.ResumePickerQueryReloadGate;
 
 class ResumePickerQueryReloadRenderHarness {
 	static function main():Void {

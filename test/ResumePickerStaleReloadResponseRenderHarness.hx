@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.StaleReloadResponseGate;
+import codexhx.validation.tui.resume.live.StaleReloadResponseGate;
 
 class ResumePickerStaleReloadResponseRenderHarness {
 	static function main():Void {

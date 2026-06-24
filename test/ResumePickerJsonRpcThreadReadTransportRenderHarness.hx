@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.JsonRpcThreadReadTransportGate;
+import codexhx.validation.tui.resume.live.JsonRpcThreadReadTransportGate;
 
 class ResumePickerJsonRpcThreadReadTransportRenderHarness {
 	static function main():Void {

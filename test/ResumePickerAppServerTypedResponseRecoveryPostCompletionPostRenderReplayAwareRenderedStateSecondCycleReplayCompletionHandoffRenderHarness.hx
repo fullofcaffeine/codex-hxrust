@@ -1,5 +1,5 @@
 import codexhx.runtime.tui.resume.host.RecoveryReplayCompletionHandoffKind;
-import codexhx.runtime.tui.resume.live.SecondCompletionHandoffGate;
+import codexhx.validation.tui.resume.live.SecondCompletionHandoffGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSecondCycleReplayCompletionHandoffRenderHarness {
 	static function main():Void {

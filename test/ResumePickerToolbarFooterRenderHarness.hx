@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ToolbarFooterGate;
+import codexhx.validation.tui.resume.live.ToolbarFooterGate;
 
 class ResumePickerToolbarFooterRenderHarness {
 	static function main():Void {

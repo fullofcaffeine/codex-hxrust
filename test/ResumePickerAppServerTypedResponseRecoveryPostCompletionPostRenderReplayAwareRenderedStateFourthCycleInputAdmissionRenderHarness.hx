@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.FourthInputAdmissionGate;
+import codexhx.validation.tui.resume.live.FourthInputAdmissionGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateFourthCycleInputAdmissionRenderHarness {
 	static function main():Void {

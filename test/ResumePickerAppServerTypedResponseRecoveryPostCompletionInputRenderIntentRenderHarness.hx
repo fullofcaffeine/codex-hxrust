@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.CompletionInputRenderIntentGate;
+import codexhx.validation.tui.resume.live.CompletionInputRenderIntentGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionInputRenderIntentRenderHarness {
 	static function main():Void {

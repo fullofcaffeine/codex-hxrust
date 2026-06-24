@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ReplayStateKeyboardReadinessGate;
+import codexhx.validation.tui.resume.live.ReplayStateKeyboardReadinessGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateKeyboardReadinessRenderHarness {
 	static function main():Void {

@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.TranscriptOverlayGate;
+import codexhx.validation.tui.resume.live.TranscriptOverlayGate;
 
 class ResumePickerTranscriptOverlayRenderHarness {
 	static function main():Void {

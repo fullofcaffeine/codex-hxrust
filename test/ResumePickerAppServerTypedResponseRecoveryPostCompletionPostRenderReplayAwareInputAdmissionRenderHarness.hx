@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ReplayAwareInputAdmissionGate;
+import codexhx.validation.tui.resume.live.ReplayAwareInputAdmissionGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareInputAdmissionRenderHarness {
 	static function main():Void {

@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.EighthKeyboardStateGate;
+import codexhx.validation.tui.resume.live.EighthKeyboardStateGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateEighthCycleKeyboardRenderStateRenderHarness {
 	static function main():Void {

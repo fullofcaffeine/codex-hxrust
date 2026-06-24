@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.SecondSnapshotReplayGate;
+import codexhx.validation.tui.resume.live.SecondSnapshotReplayGate;
 
 class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderReplayAwareRenderedStateSecondCycleKeyboardRenderSnapshotReplayRenderHarness {
 	static function main():Void {

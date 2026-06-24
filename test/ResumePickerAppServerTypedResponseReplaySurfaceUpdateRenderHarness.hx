@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ReplaySurfaceUpdateGate;
+import codexhx.validation.tui.resume.live.ReplaySurfaceUpdateGate;
 
 class ResumePickerAppServerTypedResponseReplaySurfaceUpdateRenderHarness {
 	static function main():Void {

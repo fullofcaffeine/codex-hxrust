@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.TypedPendingRequestRegistryGate;
+import codexhx.validation.tui.resume.live.TypedPendingRequestRegistryGate;
 
 class ResumePickerAppServerTypedPendingRequestRegistryRenderHarness {
 	static function main():Void {

@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.SelectionPreservationGate;
+import codexhx.validation.tui.resume.live.SelectionPreservationGate;
 
 class ResumePickerReloadSelectionPreservationRenderHarness {
 	static function main():Void {

@@ -1,4 +1,4 @@
-import codexhx.runtime.tui.resume.live.ScrollPreservationGate;
+import codexhx.validation.tui.resume.live.ScrollPreservationGate;
 
 class ResumePickerReloadScrollPreservationRenderHarness {
 	static function main():Void {
