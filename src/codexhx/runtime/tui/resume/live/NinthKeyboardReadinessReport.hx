@@ -242,7 +242,7 @@ class NinthKeyboardReadinessReport {
 			DiagnosticSummary.nested("readiness", readinessSummary),
 			DiagnosticSummary.logList("decisions", decisionSummaries),
 			DiagnosticSummary.logList("policyLog", policyLogSummaries),
-			DiagnosticSummary.nested("sourceHandoff", sourceHandoffSummary)
+			DiagnosticSummary.boundedNested("sourceHandoff", sourceHandoffSummary, 4096)
 		]);
 	}
 }

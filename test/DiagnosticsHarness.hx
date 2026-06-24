@@ -15,6 +15,13 @@ class DiagnosticsHarness {
 		final redactor = new DiagnosticRedactor(["openaiApiKey", "token"]);
 		final lines:Array<String> = [];
 
+		final bounded = codexhx.runtime.diagnostics.DiagnosticSummary.render([
+			codexhx.runtime.diagnostics.DiagnosticSummary.text("short", "abc"),
+			codexhx.runtime.diagnostics.DiagnosticSummary.boundedNested("nested", "abcdefghi", 3),
+			codexhx.runtime.diagnostics.DiagnosticSummary.boundedLogList("logs", ["one", "twooo", "three"], 2, 4)
+		]);
+		assertEquals("short=abc;nested=[abc...<truncated chars=9>];logs=[one##twoo...<truncated chars=5>##...<omitted items=1 total=3>]", bounded);
+
 		final log = new DiagnosticLogEvent("warn", "provider_config_loaded", "fixtures/hxrust/config-profile-basic.v1.json", [
 			new DiagnosticField("model", "gpt-5.2-codex"),
 			new DiagnosticField("openaiApiKey", "sk-test-secret"),
