@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.CompletionScheduledRenderExecutionKind;
 import codexhx.runtime.tui.resume.host.ResumePickerHostOutcomeKind;
 
@@ -138,41 +139,70 @@ class SecondScheduledRenderReport {
 	public final executionLogSummaries:Array<String>;
 
 	public function summary():String {
-		return "executionKind=" + executionKind + ";executionRequested=" + boolLabel(executionRequested) + ";rendered=" + boolLabel(rendered)
-			+ ";executionSequence=" + executionSequence + ";sourceSchedulerRequestCount=" + sourceSchedulerRequestCount + ";consumedScheduledRequestCount="
-			+ consumedScheduledRequestCount + ";renderCount=" + renderCount + ";renderOutcomeKind=" + renderOutcomeKind + ";renderedSnapshotMatchesSchedule="
-			+ boolLabel(renderedSnapshotMatchesSchedule) + ";localOnlyRenderIntent=" + boolLabel(localOnlyRenderIntent) + ";sourceReadinessDecisionCount="
-			+ sourceReadinessDecisionCount + ";sourceRenderStateCount=" + sourceRenderStateCount + ";sourceFrameRequests=" + sourceFrameRequests
-			+ ";sourceKeyboardRenderCount=" + sourceKeyboardRenderCount + ";replayCount=" + replayCount + ";sourceReplayCount=" + sourceReplayCount
-			+ ";sourceHandoffReplayCount=" + sourceHandoffReplayCount + ";sourceHandoffReadinessDecisionCount=" + sourceHandoffReadinessDecisionCount
-			+ ";sourceHandoffRenderStateCount=" + sourceHandoffRenderStateCount + ";sourceHandoffFrameRequests=" + sourceHandoffFrameRequests
-			+ ";sourceHandoffKeyboardRenderCount=" + sourceHandoffKeyboardRenderCount + ";sourceSecondCycleHandoffReplayCount="
-			+ sourceSecondCycleHandoffReplayCount + ";sourceSecondCycleHandoffReadinessDecisionCount=" + sourceSecondCycleHandoffReadinessDecisionCount
-			+ ";sourceSecondCycleHandoffRenderStateCount=" + sourceSecondCycleHandoffRenderStateCount + ";sourceSecondCycleHandoffFrameRequests="
-			+ sourceSecondCycleHandoffFrameRequests + ";sourceSecondCycleHandoffKeyboardRenderCount=" + sourceSecondCycleHandoffKeyboardRenderCount
-			+ ";finalThread=" + finalThreadId + ";finalFooter=" + finalFooter + ";finalSelectionPreserved=" + boolLabel(finalSelectionPreserved)
-			+ ";finalFooterPreserved=" + boolLabel(finalFooterPreserved) + ";inputAdmitted=" + boolLabel(inputAdmitted) + ";completionReady="
-			+ boolLabel(completionReady) + ";nextSliceReady=" + boolLabel(nextSliceReady) + ";snapshotOrderPreserved=" + boolLabel(snapshotOrderPreserved)
-			+ ";selectedMarkersPreserved=" + boolLabel(selectedMarkersPreserved) + ";footerSummariesPreserved=" + boolLabel(footerSummariesPreserved)
-			+ ";selectedMarkerMoved=" + boolLabel(selectedMarkerMoved) + ";recoveredSelectionRestored=" + boolLabel(recoveredSelectionRestored)
-			+ ";noLeftoverScheduledRenderRequest=" + boolLabel(noLeftoverScheduledRenderRequest) + ";sourcePreExecutionSchedulerRequestCount="
-			+ sourcePreExecutionSchedulerRequestCount + ";sourcePreExecutionConsumedRequestCount=" + sourcePreExecutionConsumedRequestCount
-			+ ";sourcePreExecutionRenderCount=" + sourcePreExecutionRenderCount + ";sourceRenderedSnapshotPreserved="
-			+ boolLabel(sourceRenderedSnapshotPreserved) + ";sourceInputAdmitted=" + boolLabel(sourceInputAdmitted) + ";sourceLocalOnlyRenderIntent="
-			+ boolLabel(sourceLocalOnlyRenderIntent) + ";sourceHandoffInputAdmitted=" + boolLabel(sourceHandoffInputAdmitted)
-			+ ";sourceHandoffLocalOnlyRenderIntent=" + boolLabel(sourceHandoffLocalOnlyRenderIntent) + ";sourceSecondCycleHandoffInputAdmitted="
-			+ boolLabel(sourceSecondCycleHandoffInputAdmitted) + ";sourceSecondCycleHandoffLocalOnlyRenderIntent="
-			+ boolLabel(sourceSecondCycleHandoffLocalOnlyRenderIntent) + ";stalePromptActionInactive=" + boolLabel(stalePromptActionInactive)
-			+ ";staleSideParentActionInactive=" + boolLabel(staleSideParentActionInactive) + ";staleActiveThreadActionInactive="
-			+ boolLabel(staleActiveThreadActionInactive) + ";ignoredNoSurfaceAbsent=" + boolLabel(ignoredNoSurfaceRecordsAbsent)
-			+ ";noPressureDropRejection=" + boolLabel(noPressureDropRejection) + ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed)
-			+ ";liveTerminalSuppressed=" + boolLabel(liveTerminalSuppressed) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";noModelCall="
-			+ boolLabel(noModelCall) + ";noFilesystemMutation=" + boolLabel(noFilesystemMutation) + ";renderedSnapshot="
-			+ renderedSnapshot.split("\n").join("\\n") + ";execution=[" + executionSummary + "]" + ";executionLog=[" + executionLogSummaries.join("##") + "]"
-			+ ";scheduling=[" + schedulingSummary + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("executionKind", Std.string(executionKind)),
+			DiagnosticSummary.boolValue("executionRequested", executionRequested),
+			DiagnosticSummary.boolValue("rendered", rendered),
+			DiagnosticSummary.intValue("executionSequence", executionSequence),
+			DiagnosticSummary.intValue("sourceSchedulerRequestCount", sourceSchedulerRequestCount),
+			DiagnosticSummary.intValue("consumedScheduledRequestCount", consumedScheduledRequestCount),
+			DiagnosticSummary.intValue("renderCount", renderCount),
+			DiagnosticSummary.enumValue("renderOutcomeKind", Std.string(renderOutcomeKind)),
+			DiagnosticSummary.boolValue("renderedSnapshotMatchesSchedule", renderedSnapshotMatchesSchedule),
+			DiagnosticSummary.boolValue("localOnlyRenderIntent", localOnlyRenderIntent),
+			DiagnosticSummary.intValue("sourceReadinessDecisionCount", sourceReadinessDecisionCount),
+			DiagnosticSummary.intValue("sourceRenderStateCount", sourceRenderStateCount),
+			DiagnosticSummary.intValue("sourceFrameRequests", sourceFrameRequests),
+			DiagnosticSummary.intValue("sourceKeyboardRenderCount", sourceKeyboardRenderCount),
+			DiagnosticSummary.intValue("replayCount", replayCount),
+			DiagnosticSummary.intValue("sourceReplayCount", sourceReplayCount),
+			DiagnosticSummary.intValue("sourceHandoffReplayCount", sourceHandoffReplayCount),
+			DiagnosticSummary.intValue("sourceHandoffReadinessDecisionCount", sourceHandoffReadinessDecisionCount),
+			DiagnosticSummary.intValue("sourceHandoffRenderStateCount", sourceHandoffRenderStateCount),
+			DiagnosticSummary.intValue("sourceHandoffFrameRequests", sourceHandoffFrameRequests),
+			DiagnosticSummary.intValue("sourceHandoffKeyboardRenderCount", sourceHandoffKeyboardRenderCount),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffReplayCount", sourceSecondCycleHandoffReplayCount),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffReadinessDecisionCount", sourceSecondCycleHandoffReadinessDecisionCount),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffRenderStateCount", sourceSecondCycleHandoffRenderStateCount),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffFrameRequests", sourceSecondCycleHandoffFrameRequests),
+			DiagnosticSummary.intValue("sourceSecondCycleHandoffKeyboardRenderCount", sourceSecondCycleHandoffKeyboardRenderCount),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.text("finalFooter", finalFooter),
+			DiagnosticSummary.boolValue("finalSelectionPreserved", finalSelectionPreserved),
+			DiagnosticSummary.boolValue("finalFooterPreserved", finalFooterPreserved),
+			DiagnosticSummary.boolValue("inputAdmitted", inputAdmitted),
+			DiagnosticSummary.boolValue("completionReady", completionReady),
+			DiagnosticSummary.boolValue("nextSliceReady", nextSliceReady),
+			DiagnosticSummary.boolValue("snapshotOrderPreserved", snapshotOrderPreserved),
+			DiagnosticSummary.boolValue("selectedMarkersPreserved", selectedMarkersPreserved),
+			DiagnosticSummary.boolValue("footerSummariesPreserved", footerSummariesPreserved),
+			DiagnosticSummary.boolValue("selectedMarkerMoved", selectedMarkerMoved),
+			DiagnosticSummary.boolValue("recoveredSelectionRestored", recoveredSelectionRestored),
+			DiagnosticSummary.boolValue("noLeftoverScheduledRenderRequest", noLeftoverScheduledRenderRequest),
+			DiagnosticSummary.intValue("sourcePreExecutionSchedulerRequestCount", sourcePreExecutionSchedulerRequestCount),
+			DiagnosticSummary.intValue("sourcePreExecutionConsumedRequestCount", sourcePreExecutionConsumedRequestCount),
+			DiagnosticSummary.intValue("sourcePreExecutionRenderCount", sourcePreExecutionRenderCount),
+			DiagnosticSummary.boolValue("sourceRenderedSnapshotPreserved", sourceRenderedSnapshotPreserved),
+			DiagnosticSummary.boolValue("sourceInputAdmitted", sourceInputAdmitted),
+			DiagnosticSummary.boolValue("sourceLocalOnlyRenderIntent", sourceLocalOnlyRenderIntent),
+			DiagnosticSummary.boolValue("sourceHandoffInputAdmitted", sourceHandoffInputAdmitted),
+			DiagnosticSummary.boolValue("sourceHandoffLocalOnlyRenderIntent", sourceHandoffLocalOnlyRenderIntent),
+			DiagnosticSummary.boolValue("sourceSecondCycleHandoffInputAdmitted", sourceSecondCycleHandoffInputAdmitted),
+			DiagnosticSummary.boolValue("sourceSecondCycleHandoffLocalOnlyRenderIntent", sourceSecondCycleHandoffLocalOnlyRenderIntent),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.boolValue("noModelCall", noModelCall),
+			DiagnosticSummary.boolValue("noFilesystemMutation", noFilesystemMutation),
+			DiagnosticSummary.snapshot("renderedSnapshot", renderedSnapshot),
+			DiagnosticSummary.nested("execution", executionSummary),
+			DiagnosticSummary.logList("executionLog", executionLogSummaries),
+			DiagnosticSummary.nested("scheduling", schedulingSummary)
+		]);
 	}
 }
