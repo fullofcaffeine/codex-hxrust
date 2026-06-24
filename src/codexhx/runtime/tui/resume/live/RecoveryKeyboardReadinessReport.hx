@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
+
 typedef RecoveryKeyboardReadinessReportFields = {
 	final decisionCount:Int;
 	final admittedCount:Int;
@@ -43,18 +45,25 @@ class RecoveryKeyboardReadinessReport {
 	public final handoffSummary:String;
 
 	public function summary():String {
-		return "decisionCount=" + decisionCount + ";admittedCount=" + admittedCount + ";recoveredSelectionStableUntilNavigation="
-			+ boolLabel(recoveredSelectionStableUntilNavigation) + ";navigationApplied=" + boolLabel(navigationApplied) + ";returnedToRecoveredSelection="
-			+ boolLabel(returnedToRecoveredSelection) + ";keyboardInputReady=" + boolLabel(keyboardInputReady) + ";listNavigationReady="
-			+ boolLabel(listNavigationReady) + ";stalePromptActionInactive=" + boolLabel(stalePromptActionInactive) + ";staleSideParentActionInactive="
-			+ boolLabel(staleSideParentActionInactive) + ";staleActiveThreadActionInactive=" + boolLabel(staleActiveThreadActionInactive)
-			+ ";ignoredNoSurfaceAbsent=" + boolLabel(ignoredNoSurfaceRecordsAbsent) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection)
-			+ ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed) + ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";finalThread="
-			+ finalThreadId + ";handoff=[" + handoffSummary + "]" + ";decisions=[" + decisionSummaries.join("##") + "]" + ";policyLog=["
-			+ policyLogSummaries.join("##") + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.intValue("decisionCount", decisionCount),
+			DiagnosticSummary.intValue("admittedCount", admittedCount),
+			DiagnosticSummary.boolValue("recoveredSelectionStableUntilNavigation", recoveredSelectionStableUntilNavigation),
+			DiagnosticSummary.boolValue("navigationApplied", navigationApplied),
+			DiagnosticSummary.boolValue("returnedToRecoveredSelection", returnedToRecoveredSelection),
+			DiagnosticSummary.boolValue("keyboardInputReady", keyboardInputReady),
+			DiagnosticSummary.boolValue("listNavigationReady", listNavigationReady),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.nested("handoff", handoffSummary),
+			DiagnosticSummary.logList("decisions", decisionSummaries),
+			DiagnosticSummary.logList("policyLog", policyLogSummaries)
+		]);
 	}
 }

@@ -1,5 +1,6 @@
 package codexhx.runtime.tui.resume.live;
 
+import codexhx.runtime.diagnostics.DiagnosticSummary;
 import codexhx.runtime.tui.resume.host.PostRenderKeyboardReadinessKind;
 
 typedef PostRenderKeyboardReadinessReportFields = {
@@ -74,24 +75,39 @@ class PostRenderKeyboardReadinessReport {
 	public final sourceHandoffSummary:String;
 
 	public function summary():String {
-		return "readinessKind=" + readinessKind + ";decisionCount=" + decisionCount + ";admittedCount=" + admittedCount + ";postRenderIdleListReady="
-			+ boolLabel(postRenderIdleListReady) + ";keyboardInputReady=" + boolLabel(keyboardInputReady) + ";listNavigationReady="
-			+ boolLabel(listNavigationReady) + ";recoveredSelectionStableUntilNavigation=" + boolLabel(recoveredSelectionStableUntilNavigation)
-			+ ";navigationApplied=" + boolLabel(navigationApplied) + ";returnedToRecoveredSelection=" + boolLabel(returnedToRecoveredSelection)
-			+ ";noLeftoverScheduledRenderRequest=" + boolLabel(noLeftoverScheduledRenderRequest) + ";sourceSchedulerRequestCount="
-			+ sourceSchedulerRequestCount + ";consumedScheduledRequestCount=" + consumedScheduledRequestCount + ";renderCount=" + renderCount
-			+ ";renderedSnapshotPreserved=" + boolLabel(renderedSnapshotPreserved) + ";finalThread=" + finalThreadId + ";finalFooter=" + finalFooter
-			+ ";finalSelectionPreserved=" + boolLabel(finalSelectionPreserved) + ";finalFooterPreserved=" + boolLabel(finalFooterPreserved)
-			+ ";stalePromptActionInactive=" + boolLabel(stalePromptActionInactive) + ";staleSideParentActionInactive="
-			+ boolLabel(staleSideParentActionInactive) + ";staleActiveThreadActionInactive=" + boolLabel(staleActiveThreadActionInactive)
-			+ ";ignoredNoSurfaceAbsent=" + boolLabel(ignoredNoSurfaceRecordsAbsent) + ";noPressureDropRejection=" + boolLabel(noPressureDropRejection)
-			+ ";liveTransportSuppressed=" + boolLabel(liveTransportSuppressed) + ";liveTerminalSuppressed=" + boolLabel(liveTerminalSuppressed)
-			+ ";stateDbUntouched=" + boolLabel(stateDbUntouched) + ";noModelCall=" + boolLabel(noModelCall) + ";noFilesystemMutation="
-			+ boolLabel(noFilesystemMutation) + ";readiness=[" + readinessSummary + "]" + ";decisions=[" + decisionSummaries.join("##") + "]"
-			+ ";policyLog=[" + policyLogSummaries.join("##") + "]" + ";sourceHandoff=[" + sourceHandoffSummary + "]";
-	}
-
-	static function boolLabel(value:Bool):String {
-		return value ? "true" : "false";
+		return DiagnosticSummary.render([
+			DiagnosticSummary.enumValue("readinessKind", Std.string(readinessKind)),
+			DiagnosticSummary.intValue("decisionCount", decisionCount),
+			DiagnosticSummary.intValue("admittedCount", admittedCount),
+			DiagnosticSummary.boolValue("postRenderIdleListReady", postRenderIdleListReady),
+			DiagnosticSummary.boolValue("keyboardInputReady", keyboardInputReady),
+			DiagnosticSummary.boolValue("listNavigationReady", listNavigationReady),
+			DiagnosticSummary.boolValue("recoveredSelectionStableUntilNavigation", recoveredSelectionStableUntilNavigation),
+			DiagnosticSummary.boolValue("navigationApplied", navigationApplied),
+			DiagnosticSummary.boolValue("returnedToRecoveredSelection", returnedToRecoveredSelection),
+			DiagnosticSummary.boolValue("noLeftoverScheduledRenderRequest", noLeftoverScheduledRenderRequest),
+			DiagnosticSummary.intValue("sourceSchedulerRequestCount", sourceSchedulerRequestCount),
+			DiagnosticSummary.intValue("consumedScheduledRequestCount", consumedScheduledRequestCount),
+			DiagnosticSummary.intValue("renderCount", renderCount),
+			DiagnosticSummary.boolValue("renderedSnapshotPreserved", renderedSnapshotPreserved),
+			DiagnosticSummary.text("finalThread", finalThreadId),
+			DiagnosticSummary.text("finalFooter", finalFooter),
+			DiagnosticSummary.boolValue("finalSelectionPreserved", finalSelectionPreserved),
+			DiagnosticSummary.boolValue("finalFooterPreserved", finalFooterPreserved),
+			DiagnosticSummary.boolValue("stalePromptActionInactive", stalePromptActionInactive),
+			DiagnosticSummary.boolValue("staleSideParentActionInactive", staleSideParentActionInactive),
+			DiagnosticSummary.boolValue("staleActiveThreadActionInactive", staleActiveThreadActionInactive),
+			DiagnosticSummary.boolValue("ignoredNoSurfaceAbsent", ignoredNoSurfaceRecordsAbsent),
+			DiagnosticSummary.boolValue("noPressureDropRejection", noPressureDropRejection),
+			DiagnosticSummary.boolValue("liveTransportSuppressed", liveTransportSuppressed),
+			DiagnosticSummary.boolValue("liveTerminalSuppressed", liveTerminalSuppressed),
+			DiagnosticSummary.boolValue("stateDbUntouched", stateDbUntouched),
+			DiagnosticSummary.boolValue("noModelCall", noModelCall),
+			DiagnosticSummary.boolValue("noFilesystemMutation", noFilesystemMutation),
+			DiagnosticSummary.nested("readiness", readinessSummary),
+			DiagnosticSummary.logList("decisions", decisionSummaries),
+			DiagnosticSummary.logList("policyLog", policyLogSummaries),
+			DiagnosticSummary.nested("sourceHandoff", sourceHandoffSummary)
+		]);
 	}
 }

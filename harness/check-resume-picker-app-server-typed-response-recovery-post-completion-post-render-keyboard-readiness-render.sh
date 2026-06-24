@@ -7,7 +7,7 @@ cd "$ROOT"
 OUT="generated/resume-picker-app-server-typed-response-recovery-post-completion-post-render-keyboard-readiness-render"
 rm -rf "$OUT"
 
-haxe -cp src -cp test -main PostRenderKeyboardReadinessRenderHarness --interp
+haxe -cp src -cp test -main ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderKeyboardReadinessRenderHarness --interp
 haxe hxml/resume-picker-app-server-typed-response-recovery-post-completion-post-render-keyboard-readiness-render.hxml
 cargo check --manifest-path "$OUT/Cargo.toml"
 cargo test --manifest-path "$OUT/Cargo.toml"

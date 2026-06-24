@@ -1,6 +1,6 @@
 import codexhx.runtime.tui.resume.live.PostRenderKeyboardReadinessGate;
 
-class PostRenderKeyboardReadinessRenderHarness {
+class ResumePickerAppServerTypedResponseRecoveryPostCompletionPostRenderKeyboardReadinessRenderHarness {
 	static function main():Void {
 		final report = PostRenderKeyboardReadinessGate.run();
 
