@@ -133,6 +133,7 @@ class TuiSmokeFixtureLoader {
 				desktopThread: optionalDesktopThreadPlan(value, "desktopThread"),
 				terminalVisualization: optionalTerminalVisualizationPlan(value, "terminalVisualization"),
 				agentStatus: optionalAgentStatusPlan(value, "agentStatus"),
+				agentNavigation: optionalAgentNavigationPlan(value, "agentNavigation"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
@@ -1319,6 +1320,48 @@ class TuiSmokeFixtureLoader {
 				maxPreviewLines: optionalIntField(value, "maxPreviewLines", 3),
 				maxPreviewItems: optionalIntField(value, "maxPreviewItems", 6),
 				maxGraphemes: optionalIntField(value, "maxGraphemes", 240),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalAgentNavigationPlan(object:Value, name:String):Null<TuiSmokeAgentNavigationPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAgentNavigationPlan({
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					actions: agentNavigationActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function agentNavigationActions(values:Array<Value>):Array<TuiSmokeAgentNavigationAction> {
+		final out:Array<TuiSmokeAgentNavigationAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeAgentNavigationAction({
+				kind: TuiSmokeAgentNavigationActionKind.fromString(stringField(value, "kind", "")),
+				threadId: optionalStringField(value, "threadId", ""),
+				agentNickname: optionalStringField(value, "agentNickname", ""),
+				agentRole: optionalStringField(value, "agentRole", ""),
+				agentPath: optionalStringField(value, "agentPath", ""),
+				isRunning: optionalBoolField(value, "isRunning", false),
+				isClosed: optionalBoolField(value, "isClosed", false),
+				currentThreadId: optionalStringField(value, "currentThreadId", ""),
+				primaryThreadId: optionalStringField(value, "primaryThreadId", ""),
+				direction: TuiSmokeAgentNavigationDirectionKind.fromString(optionalStringField(value, "direction", "")),
+				expectedThreadId: optionalStringField(value, "expectedThreadId", ""),
+				expectedLabel: optionalStringField(value, "expectedLabel", ""),
+				expectedSubtitle: optionalStringField(value, "expectedSubtitle", ""),
+				expectedOrder: optionalStringArrayField(value, "expectedOrder"),
+				expectedHasNonPrimary: optionalBoolField(value, "expectedHasNonPrimary", false),
 				failureCode: optionalStringField(value, "failureCode", ""),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
@@ -4815,6 +4858,19 @@ class TuiSmokeFixtureLoader {
 			case JArray(values): values;
 			case _: throw "expected array field: " + name;
 		}
+	}
+
+	static function optionalStringArrayField(object:Value, name:String):Array<String> {
+		final out:Array<String> = [];
+		for (value in optionalArrayField(object, name)) {
+			switch value {
+				case JString(text):
+					out.push(text);
+				case _:
+					throw "expected string array field: " + name;
+			}
+		}
+		return out;
 	}
 
 	static function stringField(object:Value, name:String, fallback:String):String {

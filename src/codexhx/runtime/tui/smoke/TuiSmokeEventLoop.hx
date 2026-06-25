@@ -435,6 +435,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.AgentNavigation:
+					if (!traceAgentNavigation(event.agentNavigation, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.DesktopNotification:
 					if (!traceDesktopNotification(event.desktopNotification, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -1745,6 +1750,83 @@ class TuiSmokeEventLoop {
 						+ action.noAppServerMutation + ":no_fs=" + action.noFilesystemMutation + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.agent_status.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceAgentNavigation(plan:TuiSmokeAgentNavigationPlan, trace:Array<String>):Bool {
+		if (plan == null || !plan.enabled()) {
+			trace.push("tui.agent_navigation.rejected=live_or_missing");
+			return false;
+		}
+		final state = new TuiSmokeAgentNavigationState();
+		trace.push("tui.agent_navigation.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeAgentNavigationActionKind.Upsert:
+					state.upsert(action.threadId, action.agentNickname, action.agentRole, action.isClosed);
+					trace.push("tui.agent_navigation.upsert=" + action.threadId + ":closed=" + action.isClosed + ":order=" + state.orderedThreadIds()
+						.join("|"));
+				case TuiSmokeAgentNavigationActionKind.RecordActivity:
+					state.recordActivity(action.threadId, action.agentPath, action.isRunning);
+					trace.push("tui.agent_navigation.activity=" + action.threadId + ":path=" + action.agentPath + ":running=" + action.isRunning);
+				case TuiSmokeAgentNavigationActionKind.SetRunning:
+					state.setRunning(action.threadId, action.isRunning);
+					trace.push("tui.agent_navigation.running=" + action.threadId + ":running=" + action.isRunning);
+				case TuiSmokeAgentNavigationActionKind.SetAgentPath:
+					state.setAgentPath(action.threadId, action.agentPath);
+					trace.push("tui.agent_navigation.path=" + action.threadId + ":path=" + action.agentPath);
+				case TuiSmokeAgentNavigationActionKind.MarkClosed:
+					state.markClosed(action.threadId);
+					trace.push("tui.agent_navigation.closed=" + action.threadId + ":order=" + state.orderedThreadIds().join("|"));
+				case TuiSmokeAgentNavigationActionKind.Remove:
+					state.remove(action.threadId);
+					trace.push("tui.agent_navigation.remove=" + action.threadId + ":order=" + state.orderedThreadIds().join("|"));
+				case TuiSmokeAgentNavigationActionKind.Clear:
+					state.clear();
+					trace.push("tui.agent_navigation.clear=order=" + state.orderedThreadIds().join("|"));
+				case TuiSmokeAgentNavigationActionKind.Ordered:
+					final actual = state.orderedThreadIds();
+					if (!stringArraysEqual(actual, action.expectedOrder)) {
+						trace.push("tui.agent_navigation.order_mismatch=expected:" + action.expectedOrder.join("|") + ":actual:" + actual.join("|"));
+						return false;
+					}
+					trace.push("tui.agent_navigation.order=" + actual.join("|"));
+				case TuiSmokeAgentNavigationActionKind.Adjacent:
+					final actual = state.adjacentThreadId(action.currentThreadId, action.direction);
+					if (actual != action.expectedThreadId) {
+						trace.push("tui.agent_navigation.adjacent_mismatch=expected:" + action.expectedThreadId + ":actual:" + actual);
+						return false;
+					}
+					trace.push("tui.agent_navigation.adjacent=" + action.currentThreadId + ":" + action.direction + "=>" + actual);
+				case TuiSmokeAgentNavigationActionKind.ActiveLabel:
+					final actual = state.activeAgentLabel(action.currentThreadId, action.primaryThreadId);
+					if (actual != action.expectedLabel) {
+						trace.push("tui.agent_navigation.label_mismatch=expected:" + action.expectedLabel + ":actual:" + actual);
+						return false;
+					}
+					trace.push("tui.agent_navigation.label=" + action.currentThreadId + ":primary=" + action.primaryThreadId + ":label=" + actual);
+				case TuiSmokeAgentNavigationActionKind.HasNonPrimary:
+					final actual = state.hasNonPrimaryThread(action.primaryThreadId);
+					if (actual != action.expectedHasNonPrimary) {
+						trace.push("tui.agent_navigation.non_primary_mismatch=expected:" + action.expectedHasNonPrimary + ":actual:" + actual);
+						return false;
+					}
+					trace.push("tui.agent_navigation.non_primary=" + actual + ":primary=" + action.primaryThreadId);
+				case TuiSmokeAgentNavigationActionKind.Subtitle:
+					final actual = TuiSmokeAgentNavigationState.pickerSubtitle();
+					if (actual != action.expectedSubtitle) {
+						trace.push("tui.agent_navigation.subtitle_mismatch=expected:" + action.expectedSubtitle + ":actual:" + actual);
+						return false;
+					}
+					trace.push("tui.agent_navigation.subtitle=" + actual);
+				case TuiSmokeAgentNavigationActionKind.Failure:
+					trace.push("tui.agent_navigation.failure=" + action.failureCode + ":no_model=" + action.noModelCall + ":no_app_server="
+						+ action.noAppServerMutation + ":no_fs=" + action.noFilesystemMutation + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.agent_navigation.unknown");
 					return false;
 			}
 		}
@@ -4482,6 +4564,16 @@ class TuiSmokeEventLoop {
 		trace.push("tui.terminal_modes." + label + "=" + "raw=" + action.rawModeRestore + ":keyboard=" + action.keyboardRestore
 			+ ":disable_bracketed_paste=" + action.bracketedPaste + ":disable_focus=" + action.focusChange + ":cursor_default=" + action.cursorDefault
 			+ ":cursor_show=" + action.cursorShow + ":stderr_finish=" + action.terminalStderrFinish);
+	}
+
+	static function stringArraysEqual(left:Array<String>, right:Array<String>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (i in 0...left.length) {
+			if (left[i] != right[i])
+				return false;
+		}
+		return true;
 	}
 
 	static function rejected(code:String):TuiSmokeLoopOutcome {

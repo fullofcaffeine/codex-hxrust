@@ -10,6 +10,8 @@
       "../codex/codex-rs/tui/src/app/history_ui.rs",
       "../codex/codex-rs/tui/src/app/agent_status_feed.rs",
       "../codex/codex-rs/tui/src/app/agent_status_feed_tests.rs",
+      "../codex/codex-rs/tui/src/app/agent_navigation.rs",
+      "../codex/codex-rs/tui/src/multi_agents.rs",
       "../codex/codex-rs/tui/src/app/thread_events.rs",
       "../codex/codex-rs/tui/src/app/thread_routing.rs",
       "../codex/codex-rs/tui/src/app_server_session.rs",
@@ -20407,6 +20409,158 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.agent_status.plan=headless\ntui.agent_status.empty=rendered=true:message=No sub-agents running.\ntui.agent_status.item=command_execution:id=command-1:accepted=true:duplicate=false:display=$ cargo test -p codex-tui:raw_reasoning_hidden=false:aggregated_output_hidden=true:collapsed=true\ntui.agent_status.item=agent_message:id=message-1:accepted=true:duplicate=false:display=Finished checking the focused TUI tests.:raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=true\ntui.agent_status.thread=/root/reviewer:items=2:lines=2:max_lines=3:max_items=6\ntui.agent_status.item=reasoning:id=reasoning-with-summary:accepted=true:duplicate=false:display=safe summary:raw_reasoning_hidden=true:aggregated_output_hidden=false:collapsed=true\ntui.agent_status.item=reasoning:id=reasoning-without-summary:accepted=false:duplicate=false:display=:raw_reasoning_hidden=true:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.item=command_execution:id=command-1:accepted=false:duplicate=true:display=$ cargo test -p codex-tui:raw_reasoning_hidden=false:aggregated_output_hidden=true:collapsed=true\ntui.agent_status.item=file_change:id=files-1:accepted=true:duplicate=false:display=Updated 2 file(s):raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.item=dynamic_tool_call:id=tool-1:accepted=true:duplicate=false:display=Tool shell/exec:raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.failure=live_agent_status_feed_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> agent status feed preview boundary\ninput> \ntrace:\ntui.agent_status.plan=headless\ntui.agent_status.empty=rendered=true:message=No sub-agents running.\ntui.agent_status.item=command_execution:id=command-1:accepted=true:duplicate=false:display=$ cargo test -p codex-tui:raw_reasoning_hidden=false:aggregated_output_hidden=true:collapsed=true\ntui.agent_status.item=agent_message:id=message-1:accepted=true:duplicate=false:display=Finished checking the focused TUI tests.:raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=true\ntui.agent_status.thread=/root/reviewer:items=2:lines=2:max_lines=3:max_items=6\ntui.agent_status.item=reasoning:id=reasoning-with-summary:accepted=true:duplicate=false:display=safe summary:raw_reasoning_hidden=true:aggregated_output_hidden=false:collapsed=true\ntui.agent_status.item=reasoning:id=reasoning-without-summary:accepted=false:duplicate=false:display=:raw_reasoning_hidden=true:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.item=command_execution:id=command-1:accepted=false:duplicate=true:display=$ cargo test -p codex-tui:raw_reasoning_hidden=false:aggregated_output_hidden=true:collapsed=true\ntui.agent_status.item=file_change:id=files-1:accepted=true:duplicate=false:display=Updated 2 file(s):raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.item=dynamic_tool_call:id=tool-1:accepted=true:duplicate=false:display=Tool shell/exec:raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.failure=live_agent_status_feed_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "agent-navigation-state-boundary",
+      "frame": {
+        "name": "agent-navigation-state-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 80,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "agent navigation state boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "agent_navigation",
+          "agentNavigation": {
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "upsert",
+                "threadId": "main-thread",
+                "isClosed": false
+              },
+              {
+                "kind": "upsert",
+                "threadId": "agent-one",
+                "agentNickname": "Robie",
+                "agentRole": "explorer",
+                "isClosed": false
+              },
+              {
+                "kind": "upsert",
+                "threadId": "agent-two",
+                "agentNickname": "Bob",
+                "agentRole": "worker",
+                "isClosed": false
+              },
+              {
+                "kind": "upsert",
+                "threadId": "agent-one",
+                "agentNickname": "Robie",
+                "agentRole": "worker",
+                "isClosed": true
+              },
+              {
+                "kind": "ordered",
+                "expectedOrder": [
+                  "main-thread",
+                  "agent-one",
+                  "agent-two"
+                ]
+              },
+              {
+                "kind": "adjacent",
+                "currentThreadId": "agent-two",
+                "direction": "next",
+                "expectedThreadId": "main-thread"
+              },
+              {
+                "kind": "adjacent",
+                "currentThreadId": "agent-two",
+                "direction": "previous",
+                "expectedThreadId": "agent-one"
+              },
+              {
+                "kind": "active_label",
+                "currentThreadId": "agent-one",
+                "primaryThreadId": "main-thread",
+                "expectedLabel": "Robie [worker]"
+              },
+              {
+                "kind": "active_label",
+                "currentThreadId": "main-thread",
+                "primaryThreadId": "main-thread",
+                "expectedLabel": "Main [default]"
+              },
+              {
+                "kind": "record_activity",
+                "threadId": "agent-path",
+                "agentPath": "/root/child",
+                "isRunning": true
+              },
+              {
+                "kind": "active_label",
+                "currentThreadId": "agent-path",
+                "primaryThreadId": "main-thread",
+                "expectedLabel": "`/root/child`"
+              },
+              {
+                "kind": "has_non_primary",
+                "primaryThreadId": "main-thread",
+                "expectedHasNonPrimary": true
+              },
+              {
+                "kind": "subtitle",
+                "expectedSubtitle": "Select an agent to watch. Alt+Left previous, Alt+Right next."
+              },
+              {
+                "kind": "remove",
+                "threadId": "agent-two"
+              },
+              {
+                "kind": "ordered",
+                "expectedOrder": [
+                  "main-thread",
+                  "agent-one",
+                  "agent-path"
+                ]
+              },
+              {
+                "kind": "clear"
+              },
+              {
+                "kind": "ordered",
+                "expectedOrder": []
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_agent_navigation_rejected",
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "noFilesystemMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.agent_navigation.plan=headless\ntui.agent_navigation.upsert=main-thread:closed=false:order=main-thread\ntui.agent_navigation.upsert=agent-one:closed=false:order=main-thread|agent-one\ntui.agent_navigation.upsert=agent-two:closed=false:order=main-thread|agent-one|agent-two\ntui.agent_navigation.upsert=agent-one:closed=true:order=main-thread|agent-one|agent-two\ntui.agent_navigation.order=main-thread|agent-one|agent-two\ntui.agent_navigation.adjacent=agent-two:next=>main-thread\ntui.agent_navigation.adjacent=agent-two:previous=>agent-one\ntui.agent_navigation.label=agent-one:primary=main-thread:label=Robie [worker]\ntui.agent_navigation.label=main-thread:primary=main-thread:label=Main [default]\ntui.agent_navigation.activity=agent-path:path=/root/child:running=true\ntui.agent_navigation.label=agent-path:primary=main-thread:label=`/root/child`\ntui.agent_navigation.non_primary=true:primary=main-thread\ntui.agent_navigation.subtitle=Select an agent to watch. Alt+Left previous, Alt+Right next.\ntui.agent_navigation.remove=agent-two:order=main-thread|agent-one|agent-path\ntui.agent_navigation.order=main-thread|agent-one|agent-path\ntui.agent_navigation.clear=order=\ntui.agent_navigation.order=\ntui.agent_navigation.failure=live_agent_navigation_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> agent navigation state boundary\ninput> \ntrace:\ntui.agent_navigation.plan=headless\ntui.agent_navigation.upsert=main-thread:closed=false:order=main-thread\ntui.agent_navigation.upsert=agent-one:closed=false:order=main-thread|agent-one\ntui.agent_navigation.upsert=agent-two:closed=false:order=main-thread|agent-one|agent-two\ntui.agent_navigation.upsert=agent-one:closed=true:order=main-thread|agent-one|agent-two\ntui.agent_navigation.order=main-thread|agent-one|agent-two\ntui.agent_navigation.adjacent=agent-two:next=>main-thread\ntui.agent_navigation.adjacent=agent-two:previous=>agent-one\ntui.agent_navigation.label=agent-one:primary=main-thread:label=Robie [worker]\ntui.agent_navigation.label=main-thread:primary=main-thread:label=Main [default]\ntui.agent_navigation.activity=agent-path:path=/root/child:running=true\ntui.agent_navigation.label=agent-path:primary=main-thread:label=`/root/child`\ntui.agent_navigation.non_primary=true:primary=main-thread\ntui.agent_navigation.subtitle=Select an agent to watch. Alt+Left previous, Alt+Right next.\ntui.agent_navigation.remove=agent-two:order=main-thread|agent-one|agent-path\ntui.agent_navigation.order=main-thread|agent-one|agent-path\ntui.agent_navigation.clear=order=\ntui.agent_navigation.order=\ntui.agent_navigation.failure=live_agent_navigation_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

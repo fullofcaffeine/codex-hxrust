@@ -3879,6 +3879,10 @@ Status: HXCX-TUI-252 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-253 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/app/agent_status_feed.rs` and `../codex/codex-rs/tui/src/app/agent_status_feed_tests.rs`. The fixture preserves the empty `/agent` status cell, bounded command/message activity preview, duplicate item suppression, reasoning-summary-only display that hides raw reasoning, whitespace collapse, and selected typed `activity_summary` variants. This is deterministic `/agent` preview evidence only, not live sub-agent runtime ownership, app-server mutation, model traffic, filesystem mutation, terminal mutation, or Cafex behavior.
 
+### HXCX-TUI-254 Headless Raw Codex Agent Navigation State
+
+Status: HXCX-TUI-254 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/app/agent_navigation.rs` and the picker naming helpers in `../codex/codex-rs/tui/src/multi_agents.rs`. The fixture preserves stable first-seen `/agent` picker order, next/previous wraparound navigation, active-agent labels for primary, nickname/role, and path-backed threads, non-primary detection, picker subtitle copy, remove/clear behavior, and closed-thread order preservation. This is deterministic pure navigation-state evidence only, not live app-server discovery, thread attach, terminal mutation, model traffic, filesystem mutation, or Cafex behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
