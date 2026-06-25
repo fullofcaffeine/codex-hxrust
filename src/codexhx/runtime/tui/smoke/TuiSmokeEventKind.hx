@@ -73,6 +73,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final SessionArchiveCommand = "session_archive_command";
 	final ResumeFork = "resume_fork";
 	final TerminalTitle = "terminal_title";
+	final BrowserOpen = "browser_open";
 	final DesktopThread = "desktop_thread";
 	final DesktopNotification = "desktop_notification";
 	final TerminalHyperlink = "terminal_hyperlink";
@@ -156,6 +157,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "session_archive_command": SessionArchiveCommand;
 			case "resume_fork": ResumeFork;
 			case "terminal_title": TerminalTitle;
+			case "browser_open": BrowserOpen;
 			case "desktop_thread": DesktopThread;
 			case "desktop_notification": DesktopNotification;
 			case "terminal_hyperlink": TerminalHyperlink;

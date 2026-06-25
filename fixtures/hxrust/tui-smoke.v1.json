@@ -20098,6 +20098,80 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.desktop_thread.plan=headless\ntui.desktop_thread.opened=thread=019e7341-b56d-7a32-b9a0-9239e2377bd4:url=codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd4:opened=true:info=true:message=Opened this session in Codex Desktop.:live=false\ntui.desktop_thread.open_failed=thread=019e7341-b56d-7a32-b9a0-9239e2377bd5:url=codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd5:error=launch failed:inserted=true:message=Failed to open this session in Codex Desktop: launch failed. Install or launch Codex Desktop and try again.:live=false\ntui.desktop_thread.failure=desktop thread opening requires OS desktop integration:no_live=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> desktop thread history ui boundary\ninput> \ntrace:\ntui.desktop_thread.plan=headless\ntui.desktop_thread.opened=thread=019e7341-b56d-7a32-b9a0-9239e2377bd4:url=codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd4:opened=true:info=true:message=Opened this session in Codex Desktop.:live=false\ntui.desktop_thread.open_failed=thread=019e7341-b56d-7a32-b9a0-9239e2377bd5:url=codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd5:error=launch failed:inserted=true:message=Failed to open this session in Codex Desktop: launch failed. Install or launch Codex Desktop and try again.:live=false\ntui.desktop_thread.failure=desktop thread opening requires OS desktop integration:no_live=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "browser-open-history-ui-boundary",
+      "frame": {
+        "name": "browser-open-history-ui-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 80,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "browser open history ui boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "browser_open",
+          "browserOpen": {
+            "allowLiveBrowserLaunch": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "opened",
+                "url": "https://chatgpt.com/codex/session",
+                "message": "Opened https://chatgpt.com/codex/session in your browser.",
+                "opened": true,
+                "infoInserted": true,
+                "noLiveBrowserLaunch": true,
+                "noModelCall": true,
+                "noAppServerMutation": true
+              },
+              {
+                "kind": "open_failed",
+                "url": "https://chatgpt.com/codex/failure",
+                "message": "Failed to open browser for https://chatgpt.com/codex/failure: launch failed",
+                "errorMessage": "launch failed",
+                "errorInserted": true,
+                "noLiveBrowserLaunch": true,
+                "noModelCall": true,
+                "noAppServerMutation": true
+              },
+              {
+                "kind": "failure",
+                "errorMessage": "browser opening requires OS integration",
+                "noLiveBrowserLaunch": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.browser_open.plan=headless\ntui.browser_open.opened=url=https://chatgpt.com/codex/session:opened=true:info=true:message=Opened https://chatgpt.com/codex/session in your browser.:live=false\ntui.browser_open.open_failed=url=https://chatgpt.com/codex/failure:error=launch failed:inserted=true:message=Failed to open browser for https://chatgpt.com/codex/failure: launch failed:live=false\ntui.browser_open.failure=browser opening requires OS integration:no_live=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> browser open history ui boundary\ninput> \ntrace:\ntui.browser_open.plan=headless\ntui.browser_open.opened=url=https://chatgpt.com/codex/session:opened=true:info=true:message=Opened https://chatgpt.com/codex/session in your browser.:live=false\ntui.browser_open.open_failed=url=https://chatgpt.com/codex/failure:error=launch failed:inserted=true:message=Failed to open browser for https://chatgpt.com/codex/failure: launch failed:live=false\ntui.browser_open.failure=browser opening requires OS integration:no_live=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

@@ -415,6 +415,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.BrowserOpen:
+					if (!traceBrowserOpen(event.browserOpen, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.DesktopThread:
 					if (!traceDesktopThread(event.desktopThread, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -1640,6 +1645,31 @@ class TuiSmokeEventLoop {
 						+ action.noModelCall + ":no_app_server=" + action.noAppServerMutation + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.desktop_thread.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceBrowserOpen(plan:TuiSmokeBrowserOpenPlan, trace:Array<String>):Bool {
+		if (plan == null || !plan.enabled()) {
+			trace.push("tui.browser_open.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.browser_open.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeBrowserOpenActionKind.Opened:
+					trace.push("tui.browser_open.opened=url=" + action.url + ":opened=" + action.opened + ":info=" + action.infoInserted + ":message="
+						+ action.message + ":live=" + !action.noLiveBrowserLaunch);
+				case TuiSmokeBrowserOpenActionKind.OpenFailed:
+					trace.push("tui.browser_open.open_failed=url=" + action.url + ":error=" + action.errorMessage + ":inserted=" + action.errorInserted
+						+ ":message=" + action.message + ":live=" + !action.noLiveBrowserLaunch);
+				case TuiSmokeBrowserOpenActionKind.Failure:
+					trace.push("tui.browser_open.failure=" + action.errorMessage + ":no_live=" + action.noLiveBrowserLaunch + ":no_model="
+						+ action.noModelCall + ":no_app_server=" + action.noAppServerMutation + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.browser_open.unknown");
 					return false;
 			}
 		}

@@ -3867,6 +3867,10 @@ Status: HXCX-TUI-249 adds `codexhx.validation.tui.resume.live.recovery.ninth.Sna
 
 Status: HXCX-TUI-250 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/app/history_ui.rs` desktop-thread handoff behavior. The fixture preserves the success history message `Opened this session in Codex Desktop.`, the failure message shape from `desktop_thread_open_error_message`, and the `codex://threads/<thread-id>` URL intent while rejecting live desktop/browser launch, app-server mutation, model traffic, filesystem mutation, terminal mutation, and Cafex behavior. This is deterministic history-message and launch-intent evidence only, not live OS desktop integration or browser/app process ownership.
 
+### HXCX-TUI-251 Headless Raw Codex Browser URL History UI
+
+Status: HXCX-TUI-251 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/app/history_ui.rs` generic browser URL handoff behavior. The fixture preserves `open_url_in_browser` success history text, failure history text, and URL intent while rejecting live browser launch, app-server mutation, model traffic, filesystem mutation, terminal mutation, and Cafex behavior. This is deterministic history-message and browser-launch intent evidence only, not live OS browser process ownership.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
