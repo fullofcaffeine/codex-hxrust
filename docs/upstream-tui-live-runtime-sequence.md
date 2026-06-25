@@ -3871,6 +3871,10 @@ Status: HXCX-TUI-250 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-251 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/app/history_ui.rs` generic browser URL handoff behavior. The fixture preserves `open_url_in_browser` success history text, failure history text, and URL intent while rejecting live browser launch, app-server mutation, model traffic, filesystem mutation, terminal mutation, and Cafex behavior. This is deterministic history-message and browser-launch intent evidence only, not live OS browser process ownership.
 
+### HXCX-TUI-252 Headless Raw Codex Terminal Visualization Instructions
+
+Status: HXCX-TUI-252 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/terminal_visualization_instructions.rs`. The fixture preserves feature-disabled passthrough, feature-enabled append to explicit control instructions, feature-enabled fallback to developer instructions, and feature-enabled generation from empty input using the upstream terminal ASCII-visual instruction text. This is deterministic instruction-merge evidence only, not live model submission, app-server mutation, filesystem mutation, terminal mutation, or Cafex behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

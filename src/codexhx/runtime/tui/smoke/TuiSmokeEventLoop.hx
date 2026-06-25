@@ -425,6 +425,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.TerminalVisualization:
+					if (!traceTerminalVisualization(event.terminalVisualization, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.DesktopNotification:
 					if (!traceDesktopNotification(event.desktopNotification, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -1670,6 +1675,34 @@ class TuiSmokeEventLoop {
 						+ action.noModelCall + ":no_app_server=" + action.noAppServerMutation + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.browser_open.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceTerminalVisualization(plan:TuiSmokeTerminalVisualizationPlan, trace:Array<String>):Bool {
+		if (plan == null || !plan.enabled()) {
+			trace.push("tui.terminal_visualization.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.terminal_visualization.plan=headless");
+		for (action in plan.actions) {
+			if (!action.instructionsMatch()) {
+				trace.push("tui.terminal_visualization.mismatch=expected:" + action.expectedInstructions.length + ":computed:"
+					+ action.computedInstructions().length);
+				return false;
+			}
+			switch action.kind {
+				case TuiSmokeTerminalVisualizationActionKind.Merge:
+					trace.push("tui.terminal_visualization.merge=feature=" + action.featureEnabled + ":control=" + action.usedControl
+						+ ":developer_fallback=" + action.usedDeveloperFallback + ":appended=" + action.appendedTerminalInstructions + ":empty="
+						+ action.generatedFromEmpty + ":chars=" + action.computedInstructions().length);
+				case TuiSmokeTerminalVisualizationActionKind.Failure:
+					trace.push("tui.terminal_visualization.failure=" + action.failureCode + ":no_model=" + action.noModelCall + ":no_app_server="
+						+ action.noAppServerMutation + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.terminal_visualization.unknown");
 					return false;
 			}
 		}

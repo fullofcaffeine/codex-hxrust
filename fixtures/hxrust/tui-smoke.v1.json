@@ -55,6 +55,7 @@
       "../codex/codex-rs/tui/src/tui/terminal_stderr.rs",
       "../codex/codex-rs/tui/src/terminal_hyperlinks.rs",
       "../codex/codex-rs/tui/src/terminal_palette.rs",
+      "../codex/codex-rs/tui/src/terminal_visualization_instructions.rs",
       "../codex/codex-rs/tui/src/clipboard_copy.rs",
       "../codex/codex-rs/tui/src/clipboard_paste.rs",
       "../codex/codex-rs/tui/tests/suite/vt100_history.rs",
@@ -20172,6 +20173,98 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.browser_open.plan=headless\ntui.browser_open.opened=url=https://chatgpt.com/codex/session:opened=true:info=true:message=Opened https://chatgpt.com/codex/session in your browser.:live=false\ntui.browser_open.open_failed=url=https://chatgpt.com/codex/failure:error=launch failed:inserted=true:message=Failed to open browser for https://chatgpt.com/codex/failure: launch failed:live=false\ntui.browser_open.failure=browser opening requires OS integration:no_live=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> browser open history ui boundary\ninput> \ntrace:\ntui.browser_open.plan=headless\ntui.browser_open.opened=url=https://chatgpt.com/codex/session:opened=true:info=true:message=Opened https://chatgpt.com/codex/session in your browser.:live=false\ntui.browser_open.open_failed=url=https://chatgpt.com/codex/failure:error=launch failed:inserted=true:message=Failed to open browser for https://chatgpt.com/codex/failure: launch failed:live=false\ntui.browser_open.failure=browser opening requires OS integration:no_live=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "terminal-visualization-instructions-merge-boundary",
+      "frame": {
+        "name": "terminal-visualization-instructions-merge-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 80,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "terminal visualization instructions boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "terminal_visualization",
+          "terminalVisualization": {
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "merge",
+                "featureEnabled": false,
+                "controlInstructions": "Existing control",
+                "developerInstructions": "Developer fallback",
+                "usedControl": true,
+                "usedDeveloperFallback": false,
+                "appendedTerminalInstructions": false,
+                "generatedFromEmpty": false
+              },
+              {
+                "kind": "merge",
+                "featureEnabled": true,
+                "controlInstructions": "Prefer concise final answers.",
+                "developerInstructions": "Developer fallback",
+                "usedControl": true,
+                "usedDeveloperFallback": false,
+                "appendedTerminalInstructions": true,
+                "generatedFromEmpty": false
+              },
+              {
+                "kind": "merge",
+                "featureEnabled": true,
+                "controlInstructions": "",
+                "developerInstructions": "Use project-specific terminology.",
+                "usedControl": false,
+                "usedDeveloperFallback": true,
+                "appendedTerminalInstructions": true,
+                "generatedFromEmpty": false
+              },
+              {
+                "kind": "merge",
+                "featureEnabled": true,
+                "controlInstructions": "",
+                "developerInstructions": "",
+                "usedControl": false,
+                "usedDeveloperFallback": false,
+                "appendedTerminalInstructions": true,
+                "generatedFromEmpty": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_visualization_instructions_rejected",
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.terminal_visualization.plan=headless\ntui.terminal_visualization.merge=feature=false:control=true:developer_fallback=false:appended=false:empty=false:chars=16\ntui.terminal_visualization.merge=feature=true:control=true:developer_fallback=false:appended=true:empty=false:chars=493\ntui.terminal_visualization.merge=feature=true:control=false:developer_fallback=true:appended=true:empty=false:chars=497\ntui.terminal_visualization.merge=feature=true:control=false:developer_fallback=false:appended=true:empty=true:chars=462\ntui.terminal_visualization.failure=live_visualization_instructions_rejected:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> terminal visualization instructions boundary\ninput> \ntrace:\ntui.terminal_visualization.plan=headless\ntui.terminal_visualization.merge=feature=false:control=true:developer_fallback=false:appended=false:empty=false:chars=16\ntui.terminal_visualization.merge=feature=true:control=true:developer_fallback=false:appended=true:empty=false:chars=493\ntui.terminal_visualization.merge=feature=true:control=false:developer_fallback=true:appended=true:empty=false:chars=497\ntui.terminal_visualization.merge=feature=true:control=false:developer_fallback=false:appended=true:empty=true:chars=462\ntui.terminal_visualization.failure=live_visualization_instructions_rejected:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

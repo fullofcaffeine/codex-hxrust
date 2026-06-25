@@ -131,6 +131,7 @@ class TuiSmokeFixtureLoader {
 				terminalTitle: optionalTerminalTitlePlan(value, "terminalTitle"),
 				browserOpen: optionalBrowserOpenPlan(value, "browserOpen"),
 				desktopThread: optionalDesktopThreadPlan(value, "desktopThread"),
+				terminalVisualization: optionalTerminalVisualizationPlan(value, "terminalVisualization"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
@@ -1234,6 +1235,40 @@ class TuiSmokeFixtureLoader {
 				infoInserted: optionalBoolField(value, "infoInserted", false),
 				errorInserted: optionalBoolField(value, "errorInserted", false),
 				noLiveBrowserLaunch: optionalBoolField(value, "noLiveBrowserLaunch", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTerminalVisualizationPlan(object:Value, name:String):Null<TuiSmokeTerminalVisualizationPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTerminalVisualizationPlan({
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: terminalVisualizationActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function terminalVisualizationActions(values:Array<Value>):Array<TuiSmokeTerminalVisualizationAction> {
+		final out:Array<TuiSmokeTerminalVisualizationAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTerminalVisualizationAction({
+				kind: TuiSmokeTerminalVisualizationActionKind.fromString(stringField(value, "kind", "")),
+				featureEnabled: optionalBoolField(value, "featureEnabled", false),
+				controlInstructions: optionalStringField(value, "controlInstructions", ""),
+				developerInstructions: optionalStringField(value, "developerInstructions", ""),
+				expectedInstructions: optionalStringField(value, "expectedInstructions", ""),
+				usedControl: optionalBoolField(value, "usedControl", false),
+				usedDeveloperFallback: optionalBoolField(value, "usedDeveloperFallback", false),
+				appendedTerminalInstructions: optionalBoolField(value, "appendedTerminalInstructions", false),
+				generatedFromEmpty: optionalBoolField(value, "generatedFromEmpty", false),
+				failureCode: optionalStringField(value, "failureCode", ""),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
