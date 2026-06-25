@@ -415,6 +415,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.DesktopThread:
+					if (!traceDesktopThread(event.desktopThread, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.DesktopNotification:
 					if (!traceDesktopNotification(event.desktopNotification, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -1610,6 +1615,31 @@ class TuiSmokeEventLoop {
 						+ action.disabledAfterFailure);
 				case _:
 					trace.push("tui.desktop_notification.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceDesktopThread(plan:TuiSmokeDesktopThreadPlan, trace:Array<String>):Bool {
+		if (plan == null || !plan.enabled()) {
+			trace.push("tui.desktop_thread.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.desktop_thread.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeDesktopThreadActionKind.Opened:
+					trace.push("tui.desktop_thread.opened=thread=" + action.threadId + ":url=" + action.url + ":opened=" + action.opened + ":info="
+						+ action.infoInserted + ":message=" + action.message + ":live=" + !action.noLiveDesktopLaunch);
+				case TuiSmokeDesktopThreadActionKind.OpenFailed:
+					trace.push("tui.desktop_thread.open_failed=thread=" + action.threadId + ":url=" + action.url + ":error=" + action.errorMessage
+						+ ":inserted=" + action.errorInserted + ":message=" + action.message + ":live=" + !action.noLiveDesktopLaunch);
+				case TuiSmokeDesktopThreadActionKind.Failure:
+					trace.push("tui.desktop_thread.failure=" + action.errorMessage + ":no_live=" + action.noLiveDesktopLaunch + ":no_model="
+						+ action.noModelCall + ":no_app_server=" + action.noAppServerMutation + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.desktop_thread.unknown");
 					return false;
 			}
 		}

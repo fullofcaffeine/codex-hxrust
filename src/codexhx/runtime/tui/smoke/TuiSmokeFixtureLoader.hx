@@ -129,6 +129,7 @@ class TuiSmokeFixtureLoader {
 				sessionArchiveCommand: optionalSessionArchiveCommandPlan(value, "sessionArchiveCommand"),
 				resumeFork: optionalResumeForkPlan(value, "resumeFork"),
 				terminalTitle: optionalTerminalTitlePlan(value, "terminalTitle"),
+				desktopThread: optionalDesktopThreadPlan(value, "desktopThread"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
@@ -1171,6 +1172,40 @@ class TuiSmokeFixtureLoader {
 					actions: desktopNotificationActions(optionalArrayField(value, "actions"))
 				});
 		}
+	}
+
+	static function optionalDesktopThreadPlan(object:Value, name:String):Null<TuiSmokeDesktopThreadPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeDesktopThreadPlan({
+					allowLiveDesktopLaunch: optionalBoolField(value, "allowLiveDesktopLaunch", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: desktopThreadActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function desktopThreadActions(values:Array<Value>):Array<TuiSmokeDesktopThreadAction> {
+		final out:Array<TuiSmokeDesktopThreadAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeDesktopThreadAction({
+				kind: TuiSmokeDesktopThreadActionKind.fromString(stringField(value, "kind", "")),
+				threadId: optionalStringField(value, "threadId", ""),
+				url: optionalStringField(value, "url", ""),
+				message: optionalStringField(value, "message", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				opened: optionalBoolField(value, "opened", false),
+				infoInserted: optionalBoolField(value, "infoInserted", false),
+				errorInserted: optionalBoolField(value, "errorInserted", false),
+				noLiveDesktopLaunch: optionalBoolField(value, "noLiveDesktopLaunch", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
 	}
 
 	static function desktopNotificationActions(values:Array<Value>):Array<TuiSmokeDesktopNotificationAction> {

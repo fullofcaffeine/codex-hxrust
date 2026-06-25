@@ -7,6 +7,7 @@
       "../codex/codex-rs/tui/src/app/app_server_events.rs",
       "../codex/codex-rs/tui/src/app/app_server_event_targets.rs",
       "../codex/codex-rs/tui/src/app/app_server_requests.rs",
+      "../codex/codex-rs/tui/src/app/history_ui.rs",
       "../codex/codex-rs/tui/src/app/thread_events.rs",
       "../codex/codex-rs/tui/src/app/thread_routing.rs",
       "../codex/codex-rs/tui/src/app_server_session.rs",
@@ -20021,6 +20022,82 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.session_archive_command.plan=headless\ntui.session_archive_command.thread_list_response=id=41:method=thread/list:rows=3:next=:backwards=cursor-prev-rows\ntui.session_archive_command.thread_list_row=id=41:idx=0:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:name=Design Session:display=Design Session:source=cli:cwd=/workspace/codex:path=/home/me/.codex/sessions/rollout-design.jsonl:branch=main:created=1770000000:updated=1770003600:archived_match=true:accepted=true\ntui.session_archive_command.thread_list_row=id=41:idx=1:thread=019e7341-b56d-7a32-b9a0-9239e2377bd3:name=:display=(no message yet):source=vscode:cwd=/workspace/other:path=:branch=:created=1770001000:updated=1770001200:archived_match=true:accepted=true\ntui.session_archive_command.thread_list_row_rejected=id=41:idx=2:thread=not-a-thread-id:reason=invalid thread id:valid_thread=false:accepted=false\ntui.session_archive_command.thread_list_response=id=42:method=thread/list:rows=1:next=:backwards=cursor-prev-archived\ntui.session_archive_command.thread_list_row=id=42:idx=0:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session:display=Restored Session:source=cli:cwd=/workspace/codex:path=/home/me/.codex/archived_sessions/rollout-restored.jsonl:branch=restore:created=1769990000:updated=1769997200:archived_match=true:accepted=true\ntui.session_archive_command.failure=thread_list_row_rejected:error=malformed app-server thread/list row skipped:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=false:unsupported=false\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> session archive thread list row projection boundary\ninput> \ntrace:\ntui.session_archive_command.plan=headless\ntui.session_archive_command.thread_list_response=id=41:method=thread/list:rows=3:next=:backwards=cursor-prev-rows\ntui.session_archive_command.thread_list_row=id=41:idx=0:thread=019e7341-b56d-7a32-b9a0-9239e2377bd1:name=Design Session:display=Design Session:source=cli:cwd=/workspace/codex:path=/home/me/.codex/sessions/rollout-design.jsonl:branch=main:created=1770000000:updated=1770003600:archived_match=true:accepted=true\ntui.session_archive_command.thread_list_row=id=41:idx=1:thread=019e7341-b56d-7a32-b9a0-9239e2377bd3:name=:display=(no message yet):source=vscode:cwd=/workspace/other:path=:branch=:created=1770001000:updated=1770001200:archived_match=true:accepted=true\ntui.session_archive_command.thread_list_row_rejected=id=41:idx=2:thread=not-a-thread-id:reason=invalid thread id:valid_thread=false:accepted=false\ntui.session_archive_command.thread_list_response=id=42:method=thread/list:rows=1:next=:backwards=cursor-prev-archived\ntui.session_archive_command.thread_list_row=id=42:idx=0:thread=019e7341-b56d-7a32-b9a0-9239e2377bd2:name=Restored Session:display=Restored Session:source=cli:cwd=/workspace/codex:path=/home/me/.codex/archived_sessions/rollout-restored.jsonl:branch=restore:created=1769990000:updated=1769997200:archived_match=true:accepted=true\ntui.session_archive_command.failure=thread_list_row_rejected:error=malformed app-server thread/list row skipped:no_live=false:no_model=false:no_app_server=false:no_fs=true:wrapped=false:unsupported=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "desktop-thread-history-ui-boundary",
+      "frame": {
+        "name": "desktop-thread-history-ui-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 80,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "desktop thread history ui boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "desktop_thread",
+          "desktopThread": {
+            "allowLiveDesktopLaunch": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "opened",
+                "threadId": "019e7341-b56d-7a32-b9a0-9239e2377bd4",
+                "url": "codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd4",
+                "message": "Opened this session in Codex Desktop.",
+                "opened": true,
+                "infoInserted": true,
+                "noLiveDesktopLaunch": true,
+                "noModelCall": true,
+                "noAppServerMutation": true
+              },
+              {
+                "kind": "open_failed",
+                "threadId": "019e7341-b56d-7a32-b9a0-9239e2377bd5",
+                "url": "codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd5",
+                "message": "Failed to open this session in Codex Desktop: launch failed. Install or launch Codex Desktop and try again.",
+                "errorMessage": "launch failed",
+                "errorInserted": true,
+                "noLiveDesktopLaunch": true,
+                "noModelCall": true,
+                "noAppServerMutation": true
+              },
+              {
+                "kind": "failure",
+                "errorMessage": "desktop thread opening requires OS desktop integration",
+                "noLiveDesktopLaunch": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.desktop_thread.plan=headless\ntui.desktop_thread.opened=thread=019e7341-b56d-7a32-b9a0-9239e2377bd4:url=codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd4:opened=true:info=true:message=Opened this session in Codex Desktop.:live=false\ntui.desktop_thread.open_failed=thread=019e7341-b56d-7a32-b9a0-9239e2377bd5:url=codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd5:error=launch failed:inserted=true:message=Failed to open this session in Codex Desktop: launch failed. Install or launch Codex Desktop and try again.:live=false\ntui.desktop_thread.failure=desktop thread opening requires OS desktop integration:no_live=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> desktop thread history ui boundary\ninput> \ntrace:\ntui.desktop_thread.plan=headless\ntui.desktop_thread.opened=thread=019e7341-b56d-7a32-b9a0-9239e2377bd4:url=codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd4:opened=true:info=true:message=Opened this session in Codex Desktop.:live=false\ntui.desktop_thread.open_failed=thread=019e7341-b56d-7a32-b9a0-9239e2377bd5:url=codex://threads/019e7341-b56d-7a32-b9a0-9239e2377bd5:error=launch failed:inserted=true:message=Failed to open this session in Codex Desktop: launch failed. Install or launch Codex Desktop and try again.:live=false\ntui.desktop_thread.failure=desktop thread opening requires OS desktop integration:no_live=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }
