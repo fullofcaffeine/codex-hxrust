@@ -11,6 +11,7 @@
       "../codex/codex-rs/tui/src/app/agent_status_feed.rs",
       "../codex/codex-rs/tui/src/app/agent_status_feed_tests.rs",
       "../codex/codex-rs/tui/src/app/agent_navigation.rs",
+      "../codex/codex-rs/tui/src/app/loaded_threads.rs",
       "../codex/codex-rs/tui/src/multi_agents.rs",
       "../codex/codex-rs/tui/src/app/thread_events.rs",
       "../codex/codex-rs/tui/src/app/thread_routing.rs",
@@ -20561,6 +20562,116 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.agent_navigation.plan=headless\ntui.agent_navigation.upsert=main-thread:closed=false:order=main-thread\ntui.agent_navigation.upsert=agent-one:closed=false:order=main-thread|agent-one\ntui.agent_navigation.upsert=agent-two:closed=false:order=main-thread|agent-one|agent-two\ntui.agent_navigation.upsert=agent-one:closed=true:order=main-thread|agent-one|agent-two\ntui.agent_navigation.order=main-thread|agent-one|agent-two\ntui.agent_navigation.adjacent=agent-two:next=>main-thread\ntui.agent_navigation.adjacent=agent-two:previous=>agent-one\ntui.agent_navigation.label=agent-one:primary=main-thread:label=Robie [worker]\ntui.agent_navigation.label=main-thread:primary=main-thread:label=Main [default]\ntui.agent_navigation.activity=agent-path:path=/root/child:running=true\ntui.agent_navigation.label=agent-path:primary=main-thread:label=`/root/child`\ntui.agent_navigation.non_primary=true:primary=main-thread\ntui.agent_navigation.subtitle=Select an agent to watch. Alt+Left previous, Alt+Right next.\ntui.agent_navigation.remove=agent-two:order=main-thread|agent-one|agent-path\ntui.agent_navigation.order=main-thread|agent-one|agent-path\ntui.agent_navigation.clear=order=\ntui.agent_navigation.order=\ntui.agent_navigation.failure=live_agent_navigation_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> agent navigation state boundary\ninput> \ntrace:\ntui.agent_navigation.plan=headless\ntui.agent_navigation.upsert=main-thread:closed=false:order=main-thread\ntui.agent_navigation.upsert=agent-one:closed=false:order=main-thread|agent-one\ntui.agent_navigation.upsert=agent-two:closed=false:order=main-thread|agent-one|agent-two\ntui.agent_navigation.upsert=agent-one:closed=true:order=main-thread|agent-one|agent-two\ntui.agent_navigation.order=main-thread|agent-one|agent-two\ntui.agent_navigation.adjacent=agent-two:next=>main-thread\ntui.agent_navigation.adjacent=agent-two:previous=>agent-one\ntui.agent_navigation.label=agent-one:primary=main-thread:label=Robie [worker]\ntui.agent_navigation.label=main-thread:primary=main-thread:label=Main [default]\ntui.agent_navigation.activity=agent-path:path=/root/child:running=true\ntui.agent_navigation.label=agent-path:primary=main-thread:label=`/root/child`\ntui.agent_navigation.non_primary=true:primary=main-thread\ntui.agent_navigation.subtitle=Select an agent to watch. Alt+Left previous, Alt+Right next.\ntui.agent_navigation.remove=agent-two:order=main-thread|agent-one|agent-path\ntui.agent_navigation.order=main-thread|agent-one|agent-path\ntui.agent_navigation.clear=order=\ntui.agent_navigation.order=\ntui.agent_navigation.failure=live_agent_navigation_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "loaded-subagent-thread-discovery-boundary",
+      "frame": {
+        "name": "loaded-subagent-thread-discovery-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 80,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "loaded subagent thread discovery boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "loaded_threads",
+          "loadedThreads": {
+            "primaryThreadId": "00000000-0000-0000-0000-000000000001",
+            "allowModelCall": false,
+            "allowAppServerRequest": false,
+            "allowFilesystemMutation": false,
+            "threads": [
+              {
+                "threadId": "00000000-0000-0000-0000-000000000001",
+                "source": "cli"
+              },
+              {
+                "threadId": "00000000-0000-0000-0000-000000000002",
+                "source": "thread_spawn",
+                "parentThreadId": "00000000-0000-0000-0000-000000000001",
+                "agentNickname": "Scout",
+                "agentRole": "explorer",
+                "agentPath": "/tmp/scout"
+              },
+              {
+                "threadId": "00000000-0000-0000-0000-000000000003",
+                "source": "thread_spawn",
+                "parentThreadId": "00000000-0000-0000-0000-000000000002",
+                "agentNickname": "Atlas",
+                "agentRole": "worker",
+                "agentPath": "/tmp/scout/atlas"
+              },
+              {
+                "threadId": "00000000-0000-0000-0000-000000000005",
+                "source": "thread_spawn",
+                "parentThreadId": "00000000-0000-0000-0000-000000000004",
+                "agentNickname": "Other",
+                "agentRole": "researcher"
+              },
+              {
+                "threadId": "00000000-0000-0000-0000-000000000006",
+                "source": "other",
+                "agentNickname": "Manual",
+                "agentRole": "viewer"
+              },
+              {
+                "threadId": "not-a-thread-id",
+                "validThreadId": false,
+                "source": "thread_spawn",
+                "parentThreadId": "00000000-0000-0000-0000-000000000001",
+                "agentNickname": "Broken",
+                "agentRole": "invalid"
+              }
+            ],
+            "expected": [
+              {
+                "threadId": "00000000-0000-0000-0000-000000000002",
+                "agentNickname": "Scout",
+                "agentRole": "explorer",
+                "agentPath": "/tmp/scout"
+              },
+              {
+                "threadId": "00000000-0000-0000-0000-000000000003",
+                "agentNickname": "Atlas",
+                "agentRole": "worker",
+                "agentPath": "/tmp/scout/atlas"
+              }
+            ],
+            "expectedInvalidSkipped": 1,
+            "expectedUnrelatedSkipped": 1,
+            "expectedNonSpawnSkipped": 1,
+            "failureCode": "live_loaded_threads_request_rejected",
+            "noModelCall": true,
+            "noAppServerRequest": true,
+            "noFilesystemMutation": true,
+            "unsupportedRejected": true
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.loaded_threads.plan=headless\ntui.loaded_threads.primary=00000000-0000-0000-0000-000000000001:discovered=00000000-0000-0000-0000-000000000002:Scout:explorer:/tmp/scout|00000000-0000-0000-0000-000000000003:Atlas:worker:/tmp/scout/atlas\ntui.loaded_threads.skipped=invalid:1:unrelated:1:non_spawn:1\ntui.loaded_threads.failure=live_loaded_threads_request_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> loaded subagent thread discovery boundary\ninput> \ntrace:\ntui.loaded_threads.plan=headless\ntui.loaded_threads.primary=00000000-0000-0000-0000-000000000001:discovered=00000000-0000-0000-0000-000000000002:Scout:explorer:/tmp/scout|00000000-0000-0000-0000-000000000003:Atlas:worker:/tmp/scout/atlas\ntui.loaded_threads.skipped=invalid:1:unrelated:1:non_spawn:1\ntui.loaded_threads.failure=live_loaded_threads_request_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

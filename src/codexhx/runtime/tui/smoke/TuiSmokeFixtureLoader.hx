@@ -134,6 +134,7 @@ class TuiSmokeFixtureLoader {
 				terminalVisualization: optionalTerminalVisualizationPlan(value, "terminalVisualization"),
 				agentStatus: optionalAgentStatusPlan(value, "agentStatus"),
 				agentNavigation: optionalAgentNavigationPlan(value, "agentNavigation"),
+				loadedThreads: optionalLoadedThreadsPlan(value, "loadedThreads"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
@@ -1367,6 +1368,58 @@ class TuiSmokeFixtureLoader {
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
 				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalLoadedThreadsPlan(object:Value, name:String):Null<TuiSmokeLoadedThreadsPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeLoadedThreadsPlan({
+					primaryThreadId: optionalStringField(value, "primaryThreadId", ""),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerRequest: optionalBoolField(value, "allowAppServerRequest", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					threads: loadedThreads(optionalArrayField(value, "threads")),
+					expected: loadedSubagentThreads(optionalArrayField(value, "expected")),
+					expectedInvalidSkipped: optionalIntField(value, "expectedInvalidSkipped", 0),
+					expectedUnrelatedSkipped: optionalIntField(value, "expectedUnrelatedSkipped", 0),
+					expectedNonSpawnSkipped: optionalIntField(value, "expectedNonSpawnSkipped", 0),
+					failureCode: optionalStringField(value, "failureCode", ""),
+					noModelCall: optionalBoolField(value, "noModelCall", false),
+					noAppServerRequest: optionalBoolField(value, "noAppServerRequest", false),
+					noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+					unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+				});
+		}
+	}
+
+	static function loadedThreads(values:Array<Value>):Array<TuiSmokeLoadedThread> {
+		final out:Array<TuiSmokeLoadedThread> = [];
+		for (value in values) {
+			out.push(new TuiSmokeLoadedThread({
+				threadId: optionalStringField(value, "threadId", ""),
+				validThreadId: optionalBoolField(value, "validThreadId", true),
+				source: TuiSmokeLoadedThreadSourceKind.fromString(optionalStringField(value, "source", "")),
+				parentThreadId: optionalStringField(value, "parentThreadId", ""),
+				agentNickname: optionalStringField(value, "agentNickname", ""),
+				agentRole: optionalStringField(value, "agentRole", ""),
+				agentPath: optionalStringField(value, "agentPath", "")
+			}));
+		}
+		return out;
+	}
+
+	static function loadedSubagentThreads(values:Array<Value>):Array<TuiSmokeLoadedSubagentThread> {
+		final out:Array<TuiSmokeLoadedSubagentThread> = [];
+		for (value in values) {
+			out.push(new TuiSmokeLoadedSubagentThread({
+				threadId: optionalStringField(value, "threadId", ""),
+				agentNickname: optionalStringField(value, "agentNickname", ""),
+				agentRole: optionalStringField(value, "agentRole", ""),
+				agentPath: optionalStringField(value, "agentPath", "")
 			}));
 		}
 		return out;

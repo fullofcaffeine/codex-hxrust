@@ -78,6 +78,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final TerminalVisualization = "terminal_visualization";
 	final AgentStatus = "agent_status";
 	final AgentNavigation = "agent_navigation";
+	final LoadedThreads = "loaded_threads";
 	final DesktopNotification = "desktop_notification";
 	final TerminalHyperlink = "terminal_hyperlink";
 	final TerminalPaletteProbe = "terminal_palette_probe";
@@ -165,6 +166,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "terminal_visualization": TerminalVisualization;
 			case "agent_status": AgentStatus;
 			case "agent_navigation": AgentNavigation;
+			case "loaded_threads": LoadedThreads;
 			case "desktop_notification": DesktopNotification;
 			case "terminal_hyperlink": TerminalHyperlink;
 			case "terminal_palette_probe": TerminalPaletteProbe;

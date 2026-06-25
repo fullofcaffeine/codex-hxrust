@@ -440,6 +440,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.LoadedThreads:
+					if (!traceLoadedThreads(event.loadedThreads, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.DesktopNotification:
 					if (!traceDesktopNotification(event.desktopNotification, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -1830,6 +1835,43 @@ class TuiSmokeEventLoop {
 					return false;
 			}
 		}
+		return true;
+	}
+
+	static function traceLoadedThreads(plan:TuiSmokeLoadedThreadsPlan, trace:Array<String>):Bool {
+		if (plan == null || !plan.enabled()) {
+			trace.push("tui.loaded_threads.rejected=live_or_missing");
+			return false;
+		}
+		final discovered = plan.discovered();
+		if (!plan.expectedMatches(discovered)) {
+			trace.push("tui.loaded_threads.mismatch=expected:" + plan.summary(plan.expected) + ":actual:" + plan.summary(discovered));
+			return false;
+		}
+		final invalidSkipped = plan.invalidSkipped();
+		final unrelatedSkipped = plan.unrelatedSkipped(discovered);
+		final nonSpawnSkipped = plan.nonSpawnSkipped();
+		if (invalidSkipped != plan.expectedInvalidSkipped
+			|| unrelatedSkipped != plan.expectedUnrelatedSkipped
+			|| nonSpawnSkipped != plan.expectedNonSpawnSkipped) {
+			trace.push("tui.loaded_threads.skip_mismatch=invalid:"
+				+ invalidSkipped
+				+ ":unrelated:"
+				+ unrelatedSkipped
+				+ ":non_spawn:"
+				+ nonSpawnSkipped);
+			return false;
+		}
+		trace.push("tui.loaded_threads.plan=headless");
+		trace.push("tui.loaded_threads.primary=" + plan.primaryThreadId + ":discovered=" + plan.summary(discovered));
+		trace.push("tui.loaded_threads.skipped=invalid:"
+			+ invalidSkipped
+			+ ":unrelated:"
+			+ unrelatedSkipped
+			+ ":non_spawn:"
+			+ nonSpawnSkipped);
+		trace.push("tui.loaded_threads.failure=" + plan.failureCode + ":no_model=" + plan.noModelCall + ":no_app_server=" + plan.noAppServerRequest
+			+ ":no_fs=" + plan.noFilesystemMutation + ":unsupported=" + plan.unsupportedRejected);
 		return true;
 	}
 
