@@ -430,6 +430,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.AgentStatus:
+					if (!traceAgentStatus(event.agentStatus, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.DesktopNotification:
 					if (!traceDesktopNotification(event.desktopNotification, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -1703,6 +1708,43 @@ class TuiSmokeEventLoop {
 						+ action.noAppServerMutation + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.terminal_visualization.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceAgentStatus(plan:TuiSmokeAgentStatusPlan, trace:Array<String>):Bool {
+		if (plan == null || !plan.enabled()) {
+			trace.push("tui.agent_status.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.agent_status.plan=headless");
+		for (action in plan.actions) {
+			if (!action.displayMatches()) {
+				trace.push("tui.agent_status.mismatch=id="
+					+ action.itemId
+					+ ":expected="
+					+ action.displayText
+					+ ":computed="
+					+ action.computedDisplayText());
+				return false;
+			}
+			switch action.kind {
+				case TuiSmokeAgentStatusActionKind.Empty:
+					trace.push("tui.agent_status.empty=rendered=" + action.emptyState + ":message=No sub-agents running.");
+				case TuiSmokeAgentStatusActionKind.Item:
+					trace.push("tui.agent_status.item=" + action.itemKind + ":id=" + action.itemId + ":accepted=" + action.accepted + ":duplicate="
+						+ action.duplicate + ":display=" + action.computedDisplayText() + ":raw_reasoning_hidden=" + action.rawReasoningHidden
+						+ ":aggregated_output_hidden=" + action.aggregatedOutputHidden + ":collapsed=" + action.whitespaceCollapsed);
+				case TuiSmokeAgentStatusActionKind.Thread:
+					trace.push("tui.agent_status.thread=" + action.agentPath + ":items=" + action.previewItemCount + ":lines=" + action.previewLineCount
+						+ ":max_lines=" + action.maxPreviewLines + ":max_items=" + action.maxPreviewItems);
+				case TuiSmokeAgentStatusActionKind.Failure:
+					trace.push("tui.agent_status.failure=" + action.failureCode + ":no_model=" + action.noModelCall + ":no_app_server="
+						+ action.noAppServerMutation + ":no_fs=" + action.noFilesystemMutation + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.agent_status.unknown");
 					return false;
 			}
 		}

@@ -132,6 +132,7 @@ class TuiSmokeFixtureLoader {
 				browserOpen: optionalBrowserOpenPlan(value, "browserOpen"),
 				desktopThread: optionalDesktopThreadPlan(value, "desktopThread"),
 				terminalVisualization: optionalTerminalVisualizationPlan(value, "terminalVisualization"),
+				agentStatus: optionalAgentStatusPlan(value, "agentStatus"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
@@ -1271,6 +1272,57 @@ class TuiSmokeFixtureLoader {
 				failureCode: optionalStringField(value, "failureCode", ""),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalAgentStatusPlan(object:Value, name:String):Null<TuiSmokeAgentStatusPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAgentStatusPlan({
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					actions: agentStatusActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function agentStatusActions(values:Array<Value>):Array<TuiSmokeAgentStatusAction> {
+		final out:Array<TuiSmokeAgentStatusAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeAgentStatusAction({
+				kind: TuiSmokeAgentStatusActionKind.fromString(stringField(value, "kind", "")),
+				itemKind: TuiSmokeAgentStatusItemKind.fromString(optionalStringField(value, "itemKind", "")),
+				agentPath: optionalStringField(value, "agentPath", ""),
+				itemId: optionalStringField(value, "itemId", ""),
+				rawText: optionalStringField(value, "rawText", ""),
+				summary: optionalStringField(value, "summary", ""),
+				displayText: optionalStringField(value, "displayText", ""),
+				server: optionalStringField(value, "server", ""),
+				namespace: optionalStringField(value, "namespace", ""),
+				tool: optionalStringField(value, "tool", ""),
+				collabTool: optionalStringField(value, "collabTool", ""),
+				subAgentActivity: optionalStringField(value, "subAgentActivity", ""),
+				fileChangeCount: optionalIntField(value, "fileChangeCount", 0),
+				accepted: optionalBoolField(value, "accepted", false),
+				duplicate: optionalBoolField(value, "duplicate", false),
+				rawReasoningHidden: optionalBoolField(value, "rawReasoningHidden", false),
+				aggregatedOutputHidden: optionalBoolField(value, "aggregatedOutputHidden", false),
+				whitespaceCollapsed: optionalBoolField(value, "whitespaceCollapsed", false),
+				emptyState: optionalBoolField(value, "emptyState", false),
+				previewLineCount: optionalIntField(value, "previewLineCount", 0),
+				previewItemCount: optionalIntField(value, "previewItemCount", 0),
+				maxPreviewLines: optionalIntField(value, "maxPreviewLines", 3),
+				maxPreviewItems: optionalIntField(value, "maxPreviewItems", 6),
+				maxGraphemes: optionalIntField(value, "maxGraphemes", 240),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}

@@ -8,6 +8,8 @@
       "../codex/codex-rs/tui/src/app/app_server_event_targets.rs",
       "../codex/codex-rs/tui/src/app/app_server_requests.rs",
       "../codex/codex-rs/tui/src/app/history_ui.rs",
+      "../codex/codex-rs/tui/src/app/agent_status_feed.rs",
+      "../codex/codex-rs/tui/src/app/agent_status_feed_tests.rs",
       "../codex/codex-rs/tui/src/app/thread_events.rs",
       "../codex/codex-rs/tui/src/app/thread_routing.rs",
       "../codex/codex-rs/tui/src/app_server_session.rs",
@@ -20265,6 +20267,146 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.terminal_visualization.plan=headless\ntui.terminal_visualization.merge=feature=false:control=true:developer_fallback=false:appended=false:empty=false:chars=16\ntui.terminal_visualization.merge=feature=true:control=true:developer_fallback=false:appended=true:empty=false:chars=493\ntui.terminal_visualization.merge=feature=true:control=false:developer_fallback=true:appended=true:empty=false:chars=497\ntui.terminal_visualization.merge=feature=true:control=false:developer_fallback=false:appended=true:empty=true:chars=462\ntui.terminal_visualization.failure=live_visualization_instructions_rejected:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> terminal visualization instructions boundary\ninput> \ntrace:\ntui.terminal_visualization.plan=headless\ntui.terminal_visualization.merge=feature=false:control=true:developer_fallback=false:appended=false:empty=false:chars=16\ntui.terminal_visualization.merge=feature=true:control=true:developer_fallback=false:appended=true:empty=false:chars=493\ntui.terminal_visualization.merge=feature=true:control=false:developer_fallback=true:appended=true:empty=false:chars=497\ntui.terminal_visualization.merge=feature=true:control=false:developer_fallback=false:appended=true:empty=true:chars=462\ntui.terminal_visualization.failure=live_visualization_instructions_rejected:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "agent-status-feed-preview-boundary",
+      "frame": {
+        "name": "agent-status-feed-preview-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 80,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "agent status feed preview boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "agent_status",
+          "agentStatus": {
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "empty",
+                "emptyState": true
+              },
+              {
+                "kind": "item",
+                "itemKind": "command_execution",
+                "itemId": "command-1",
+                "rawText": "cargo   test\n-p codex-tui",
+                "displayText": "$ cargo test -p codex-tui",
+                "accepted": true,
+                "duplicate": false,
+                "aggregatedOutputHidden": true,
+                "whitespaceCollapsed": true
+              },
+              {
+                "kind": "item",
+                "itemKind": "agent_message",
+                "itemId": "message-1",
+                "rawText": "Finished checking\n the focused   TUI tests.",
+                "displayText": "Finished checking the focused TUI tests.",
+                "accepted": true,
+                "duplicate": false,
+                "whitespaceCollapsed": true
+              },
+              {
+                "kind": "thread",
+                "agentPath": "/root/reviewer",
+                "previewLineCount": 2,
+                "previewItemCount": 2,
+                "maxPreviewLines": 3,
+                "maxPreviewItems": 6
+              },
+              {
+                "kind": "item",
+                "itemKind": "reasoning",
+                "itemId": "reasoning-with-summary",
+                "rawText": "hidden raw reasoning",
+                "summary": "safe summary",
+                "displayText": "safe summary",
+                "accepted": true,
+                "duplicate": false,
+                "rawReasoningHidden": true,
+                "whitespaceCollapsed": true
+              },
+              {
+                "kind": "item",
+                "itemKind": "reasoning",
+                "itemId": "reasoning-without-summary",
+                "rawText": "raw-only reasoning",
+                "summary": "",
+                "displayText": "",
+                "accepted": false,
+                "duplicate": false,
+                "rawReasoningHidden": true
+              },
+              {
+                "kind": "item",
+                "itemKind": "command_execution",
+                "itemId": "command-1",
+                "rawText": "cargo   test\n-p codex-tui",
+                "displayText": "$ cargo test -p codex-tui",
+                "accepted": false,
+                "duplicate": true,
+                "aggregatedOutputHidden": true,
+                "whitespaceCollapsed": true
+              },
+              {
+                "kind": "item",
+                "itemKind": "file_change",
+                "itemId": "files-1",
+                "fileChangeCount": 2,
+                "displayText": "Updated 2 file(s)",
+                "accepted": true,
+                "duplicate": false
+              },
+              {
+                "kind": "item",
+                "itemKind": "dynamic_tool_call",
+                "itemId": "tool-1",
+                "namespace": "shell",
+                "tool": "exec",
+                "displayText": "Tool shell/exec",
+                "accepted": true,
+                "duplicate": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_agent_status_feed_rejected",
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "noFilesystemMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.agent_status.plan=headless\ntui.agent_status.empty=rendered=true:message=No sub-agents running.\ntui.agent_status.item=command_execution:id=command-1:accepted=true:duplicate=false:display=$ cargo test -p codex-tui:raw_reasoning_hidden=false:aggregated_output_hidden=true:collapsed=true\ntui.agent_status.item=agent_message:id=message-1:accepted=true:duplicate=false:display=Finished checking the focused TUI tests.:raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=true\ntui.agent_status.thread=/root/reviewer:items=2:lines=2:max_lines=3:max_items=6\ntui.agent_status.item=reasoning:id=reasoning-with-summary:accepted=true:duplicate=false:display=safe summary:raw_reasoning_hidden=true:aggregated_output_hidden=false:collapsed=true\ntui.agent_status.item=reasoning:id=reasoning-without-summary:accepted=false:duplicate=false:display=:raw_reasoning_hidden=true:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.item=command_execution:id=command-1:accepted=false:duplicate=true:display=$ cargo test -p codex-tui:raw_reasoning_hidden=false:aggregated_output_hidden=true:collapsed=true\ntui.agent_status.item=file_change:id=files-1:accepted=true:duplicate=false:display=Updated 2 file(s):raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.item=dynamic_tool_call:id=tool-1:accepted=true:duplicate=false:display=Tool shell/exec:raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.failure=live_agent_status_feed_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> agent status feed preview boundary\ninput> \ntrace:\ntui.agent_status.plan=headless\ntui.agent_status.empty=rendered=true:message=No sub-agents running.\ntui.agent_status.item=command_execution:id=command-1:accepted=true:duplicate=false:display=$ cargo test -p codex-tui:raw_reasoning_hidden=false:aggregated_output_hidden=true:collapsed=true\ntui.agent_status.item=agent_message:id=message-1:accepted=true:duplicate=false:display=Finished checking the focused TUI tests.:raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=true\ntui.agent_status.thread=/root/reviewer:items=2:lines=2:max_lines=3:max_items=6\ntui.agent_status.item=reasoning:id=reasoning-with-summary:accepted=true:duplicate=false:display=safe summary:raw_reasoning_hidden=true:aggregated_output_hidden=false:collapsed=true\ntui.agent_status.item=reasoning:id=reasoning-without-summary:accepted=false:duplicate=false:display=:raw_reasoning_hidden=true:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.item=command_execution:id=command-1:accepted=false:duplicate=true:display=$ cargo test -p codex-tui:raw_reasoning_hidden=false:aggregated_output_hidden=true:collapsed=true\ntui.agent_status.item=file_change:id=files-1:accepted=true:duplicate=false:display=Updated 2 file(s):raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.item=dynamic_tool_call:id=tool-1:accepted=true:duplicate=false:display=Tool shell/exec:raw_reasoning_hidden=false:aggregated_output_hidden=false:collapsed=false\ntui.agent_status.failure=live_agent_status_feed_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

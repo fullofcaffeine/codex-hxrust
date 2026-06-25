@@ -3875,6 +3875,10 @@ Status: HXCX-TUI-251 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-252 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/terminal_visualization_instructions.rs`. The fixture preserves feature-disabled passthrough, feature-enabled append to explicit control instructions, feature-enabled fallback to developer instructions, and feature-enabled generation from empty input using the upstream terminal ASCII-visual instruction text. This is deterministic instruction-merge evidence only, not live model submission, app-server mutation, filesystem mutation, terminal mutation, or Cafex behavior.
 
+### HXCX-TUI-253 Headless Raw Codex Agent Status Feed Preview
+
+Status: HXCX-TUI-253 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/app/agent_status_feed.rs` and `../codex/codex-rs/tui/src/app/agent_status_feed_tests.rs`. The fixture preserves the empty `/agent` status cell, bounded command/message activity preview, duplicate item suppression, reasoning-summary-only display that hides raw reasoning, whitespace collapse, and selected typed `activity_summary` variants. This is deterministic `/agent` preview evidence only, not live sub-agent runtime ownership, app-server mutation, model traffic, filesystem mutation, terminal mutation, or Cafex behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
