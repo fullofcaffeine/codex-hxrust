@@ -45,6 +45,7 @@
       "../codex/codex-rs/tui/src/chatwidget/status_controls.rs",
       "../codex/codex-rs/tui/src/chatwidget/status_state.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/status_command_tests.rs",
+      "../codex/codex-rs/tui/src/goal_display.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -17301,6 +17302,160 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_model_settings.plan=headless\ntui.chat_widget_model_settings.model_popup=session=true:catalog=true:auto=3:other=2:items=4:current=true:all_row=true:warning=true:open_all=true\ntui.chat_widget_model_settings.all_models=items=2:model=gpt-5.2-codex:current=true:default=false:reasoning_event=true:single_auto=false\ntui.chat_widget_model_settings.all_models=items=1:model=gpt-4.1-mini:current=false:default=true:reasoning_event=false:single_auto=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=high:warning=true:plan=false:update_model=true:update_reasoning=true:persist=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=medium:warning=false:plan=true:update_model=false:update_reasoning=false:persist=false\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=true:all_modes=false:update_model=true:update_reasoning=false:update_plan=true:persist_model=false:persist_plan=true:notify=true\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=false:all_modes=true:update_model=true:update_reasoning=true:update_plan=true:persist_model=true:persist_plan=true:notify=true\ntui.chat_widget_model_settings.service_tier=fast:configured=default:effective=fast:fast_feature=true:toggle_allowed=true:override=true:persist=true:refresh=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=true:popup=true:error=false:override=true:persist=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=false:popup=false:error=true:override=false:persist=false\ntui.chat_widget_model_settings.audio=microphone:devices=3:selected=Studio Mic:default_row=true:unavailable=true:persist=true:restart_prompt=true:restart=true\ntui.chat_widget_model_settings.experimental=features=2:stable_omitted=true:save_on_exit=true:popup=true\ntui.chat_widget_model_settings.failure=live_model_settings_effects_rejected:no_render=true:no_model=true:no_config=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget model settings\ninput> \ntrace:\ntui.chat_widget_model_settings.plan=headless\ntui.chat_widget_model_settings.model_popup=session=true:catalog=true:auto=3:other=2:items=4:current=true:all_row=true:warning=true:open_all=true\ntui.chat_widget_model_settings.all_models=items=2:model=gpt-5.2-codex:current=true:default=false:reasoning_event=true:single_auto=false\ntui.chat_widget_model_settings.all_models=items=1:model=gpt-4.1-mini:current=false:default=true:reasoning_event=false:single_auto=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=high:warning=true:plan=false:update_model=true:update_reasoning=true:persist=true\ntui.chat_widget_model_settings.reasoning=gpt-5.2-codex:choices=4:selected=medium:warning=false:plan=true:update_model=false:update_reasoning=false:persist=false\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=true:all_modes=false:update_model=true:update_reasoning=false:update_plan=true:persist_model=false:persist_plan=true:notify=true\ntui.chat_widget_model_settings.plan_scope=gpt-5.2-codex:effort=medium:plan_only=false:all_modes=true:update_model=true:update_reasoning=true:update_plan=true:persist_model=true:persist_plan=true:notify=true\ntui.chat_widget_model_settings.service_tier=fast:configured=default:effective=fast:fast_feature=true:toggle_allowed=true:override=true:persist=true:refresh=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=true:popup=true:error=false:override=true:persist=true\ntui.chat_widget_model_settings.personality=Friendly:session=true:supports=false:popup=false:error=true:override=false:persist=false\ntui.chat_widget_model_settings.audio=microphone:devices=3:selected=Studio Mic:default_row=true:unavailable=true:persist=true:restart_prompt=true:restart=true\ntui.chat_widget_model_settings.experimental=features=2:stable_omitted=true:save_on_exit=true:popup=true\ntui.chat_widget_model_settings.failure=live_model_settings_effects_rejected:no_render=true:no_model=true:no_config=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "goal-display-headless",
+      "frame": {
+        "name": "goal-display-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "goal display helper boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "goal_display",
+          "goalDisplay": {
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "actions": [
+              {
+                "kind": "elapsed",
+                "seconds": -5,
+                "expectedElapsed": "0s"
+              },
+              {
+                "kind": "elapsed",
+                "seconds": 59,
+                "expectedElapsed": "59s"
+              },
+              {
+                "kind": "elapsed",
+                "seconds": 60,
+                "expectedElapsed": "1m"
+              },
+              {
+                "kind": "elapsed",
+                "seconds": 5400,
+                "expectedElapsed": "1h 30m"
+              },
+              {
+                "kind": "elapsed",
+                "seconds": 7200,
+                "expectedElapsed": "2h"
+              },
+              {
+                "kind": "elapsed",
+                "seconds": 86399,
+                "expectedElapsed": "23h 59m"
+              },
+              {
+                "kind": "elapsed",
+                "seconds": 86400,
+                "expectedElapsed": "1d 0h 0m"
+              },
+              {
+                "kind": "elapsed",
+                "seconds": 258120,
+                "expectedElapsed": "2d 23h 42m"
+              },
+              {
+                "kind": "status_label",
+                "status": "Active",
+                "expectedLabel": "active"
+              },
+              {
+                "kind": "status_label",
+                "status": "Paused",
+                "expectedLabel": "paused"
+              },
+              {
+                "kind": "status_label",
+                "status": "Blocked",
+                "expectedLabel": "blocked"
+              },
+              {
+                "kind": "status_label",
+                "status": "UsageLimited",
+                "expectedLabel": "usage limited"
+              },
+              {
+                "kind": "status_label",
+                "status": "BudgetLimited",
+                "expectedLabel": "limited by budget"
+              },
+              {
+                "kind": "status_label",
+                "status": "Complete",
+                "expectedLabel": "complete"
+              },
+              {
+                "kind": "usage_summary",
+                "status": "BudgetLimited",
+                "objective": "Complete the task described in ../gameboy-long-running-prompt5.txt",
+                "timeUsedSeconds": 120,
+                "hasTokenBudget": true,
+                "tokenBudget": 50000,
+                "tokensUsed": 63876,
+                "expectedSummary": "Objective: Complete the task described in ../gameboy-long-running-prompt5.txt Time: 2m. Tokens: 63.9K/50K."
+              },
+              {
+                "kind": "usage_summary",
+                "status": "Active",
+                "objective": "ship codexhx",
+                "timeUsedSeconds": 0,
+                "hasTokenBudget": false,
+                "tokensUsed": 0,
+                "tokenBudget": 0,
+                "expectedSummary": "Objective: ship codexhx"
+              },
+              {
+                "kind": "usage_summary",
+                "status": "Complete",
+                "objective": "archive parity notes",
+                "timeUsedSeconds": 36720,
+                "hasTokenBudget": false,
+                "tokensUsed": 0,
+                "tokenBudget": 0,
+                "expectedSummary": "Objective: archive parity notes Time: 10h 12m."
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_goal_display_effects_rejected",
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.goal_display.plan=headless\ntui.goal_display.elapsed=seconds=-5:label=0s\ntui.goal_display.elapsed=seconds=59:label=59s\ntui.goal_display.elapsed=seconds=60:label=1m\ntui.goal_display.elapsed=seconds=5400:label=1h 30m\ntui.goal_display.elapsed=seconds=7200:label=2h\ntui.goal_display.elapsed=seconds=86399:label=23h 59m\ntui.goal_display.elapsed=seconds=86400:label=1d 0h 0m\ntui.goal_display.elapsed=seconds=258120:label=2d 23h 42m\ntui.goal_display.status=Active:label=active\ntui.goal_display.status=Paused:label=paused\ntui.goal_display.status=Blocked:label=blocked\ntui.goal_display.status=UsageLimited:label=usage limited\ntui.goal_display.status=BudgetLimited:label=limited by budget\ntui.goal_display.status=Complete:label=complete\ntui.goal_display.summary=BudgetLimited:time=120:budget=true:tokens=63876/50000:text=Objective: Complete the task described in ../gameboy-long-running-prompt5.txt Time: 2m. Tokens: 63.9K/50K.\ntui.goal_display.summary=Active:time=0:budget=false:tokens=0/0:text=Objective: ship codexhx\ntui.goal_display.summary=Complete:time=36720:budget=false:tokens=0/0:text=Objective: archive parity notes Time: 10h 12m.\ntui.goal_display.failure=live_goal_display_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> goal display helper boundary\ninput> \ntrace:\ntui.goal_display.plan=headless\ntui.goal_display.elapsed=seconds=-5:label=0s\ntui.goal_display.elapsed=seconds=59:label=59s\ntui.goal_display.elapsed=seconds=60:label=1m\ntui.goal_display.elapsed=seconds=5400:label=1h 30m\ntui.goal_display.elapsed=seconds=7200:label=2h\ntui.goal_display.elapsed=seconds=86399:label=23h 59m\ntui.goal_display.elapsed=seconds=86400:label=1d 0h 0m\ntui.goal_display.elapsed=seconds=258120:label=2d 23h 42m\ntui.goal_display.status=Active:label=active\ntui.goal_display.status=Paused:label=paused\ntui.goal_display.status=Blocked:label=blocked\ntui.goal_display.status=UsageLimited:label=usage limited\ntui.goal_display.status=BudgetLimited:label=limited by budget\ntui.goal_display.status=Complete:label=complete\ntui.goal_display.summary=BudgetLimited:time=120:budget=true:tokens=63876/50000:text=Objective: Complete the task described in ../gameboy-long-running-prompt5.txt Time: 2m. Tokens: 63.9K/50K.\ntui.goal_display.summary=Active:time=0:budget=false:tokens=0/0:text=Objective: ship codexhx\ntui.goal_display.summary=Complete:time=36720:budget=false:tokens=0/0:text=Objective: archive parity notes Time: 10h 12m.\ntui.goal_display.failure=live_goal_display_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

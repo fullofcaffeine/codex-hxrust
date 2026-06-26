@@ -335,6 +335,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.GoalDisplay:
+					if (!traceGoalDisplay(event.goalDisplay, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3024,6 +3029,112 @@ class TuiSmokeEventLoop {
 			}
 		}
 		return true;
+	}
+
+	static function traceGoalDisplay(plan:TuiSmokeGoalDisplayPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowModelCall || plan.allowAppServerMutation || !plan.enabled()) {
+			trace.push("tui.goal_display.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.goal_display.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeGoalDisplayActionKind.Elapsed:
+					final elapsed = formatGoalElapsedSeconds(action.seconds);
+					if (elapsed != action.expectedElapsed) {
+						trace.push("tui.goal_display.elapsed_mismatch=seconds=" + action.seconds + ":expected=" + action.expectedElapsed + ":actual=" +
+							elapsed);
+						return false;
+					}
+					trace.push("tui.goal_display.elapsed=seconds=" + action.seconds + ":label=" + elapsed);
+				case TuiSmokeGoalDisplayActionKind.StatusLabel:
+					final label = goalStatusLabel(action.status);
+					if (label != action.expectedLabel) {
+						trace.push("tui.goal_display.status_mismatch=status=" + action.status + ":expected=" + action.expectedLabel + ":actual=" + label);
+						return false;
+					}
+					trace.push("tui.goal_display.status=" + action.status + ":label=" + label);
+				case TuiSmokeGoalDisplayActionKind.UsageSummary:
+					final summary = goalUsageSummary(action.objective, action.timeUsedSeconds, action.hasTokenBudget, action.tokensUsed, action.tokenBudget);
+					if (summary != action.expectedSummary) {
+						trace.push("tui.goal_display.summary_mismatch=status="
+							+ action.status
+							+ ":expected="
+							+ action.expectedSummary
+							+ ":actual="
+							+ summary);
+						return false;
+					}
+					trace.push("tui.goal_display.summary=" + action.status + ":time=" + action.timeUsedSeconds + ":budget=" + action.hasTokenBudget
+						+ ":tokens=" + action.tokensUsed + "/" + action.tokenBudget + ":text=" + summary);
+				case TuiSmokeGoalDisplayActionKind.Failure:
+					trace.push("tui.goal_display.failure=" + action.failureCode + ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall
+						+ ":no_app_server=" + action.noAppServerMutation + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.goal_display.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function formatGoalElapsedSeconds(seconds:Int):String {
+		final clamped = seconds < 0 ? 0 : seconds;
+		if (clamped < 60)
+			return Std.string(clamped) + "s";
+		final minutes = Std.int(clamped / 60);
+		if (minutes < 60)
+			return Std.string(minutes) + "m";
+		final hours = Std.int(minutes / 60);
+		final remainingMinutes = minutes % 60;
+		if (hours >= 24) {
+			final days = Std.int(hours / 24);
+			final remainingHours = hours % 24;
+			return Std.string(days) + "d " + Std.string(remainingHours) + "h " + Std.string(remainingMinutes) + "m";
+		}
+		if (remainingMinutes == 0)
+			return Std.string(hours) + "h";
+		return Std.string(hours) + "h " + Std.string(remainingMinutes) + "m";
+	}
+
+	static function goalStatusLabel(status:String):String {
+		return switch status {
+			case "Active": "active";
+			case "Paused": "paused";
+			case "Blocked": "blocked";
+			case "UsageLimited": "usage limited";
+			case "BudgetLimited": "limited by budget";
+			case "Complete": "complete";
+			case _: "";
+		}
+	}
+
+	static function goalUsageSummary(objective:String, timeUsedSeconds:Int, hasTokenBudget:Bool, tokensUsed:Int, tokenBudget:Int):String {
+		final parts:Array<String> = ["Objective: " + objective];
+		if (timeUsedSeconds > 0)
+			parts.push("Time: " + formatGoalElapsedSeconds(timeUsedSeconds) + ".");
+		if (hasTokenBudget)
+			parts.push("Tokens: " + formatTokensCompact(tokensUsed) + "/" + formatTokensCompact(tokenBudget) + ".");
+		return parts.join(" ");
+	}
+
+	static function formatTokensCompact(value:Int):String {
+		final sign = value < 0 ? "-" : "";
+		final abs = value < 0 ? -value : value;
+		if (abs < 1000)
+			return sign + Std.string(abs);
+		if (abs < 1000000)
+			return sign + formatCompactUnit(abs, 1000, "K");
+		return sign + formatCompactUnit(abs, 1000000, "M");
+	}
+
+	static function formatCompactUnit(value:Int, unit:Int, suffix:String):String {
+		final scaled = Std.int((value * 10 + Std.int(unit / 2)) / unit);
+		final whole = Std.int(scaled / 10);
+		final decimal = scaled % 10;
+		if (decimal == 0)
+			return Std.string(whole) + suffix;
+		return Std.string(whole) + "." + Std.string(decimal) + suffix;
 	}
 
 	static function traceGoalMenu(plan:TuiSmokeGoalMenuPlan, trace:Array<String>):Bool {

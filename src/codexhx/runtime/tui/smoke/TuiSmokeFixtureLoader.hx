@@ -113,6 +113,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
 				chatWidgetPermissionSelection: optionalPermissionSelectionPlan(value, "chatWidgetPermissionSelection"),
 				chatWidgetModelSettings: optionalModelSettingsPlan(value, "chatWidgetModelSettings"),
+				goalDisplay: optionalGoalDisplayPlan(value, "goalDisplay"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -141,6 +142,44 @@ class TuiSmokeFixtureLoader {
 				terminalStartupProbe: optionalTerminalStartupProbePlan(value, "terminalStartupProbe"),
 				clipboardCopy: optionalClipboardCopyPlan(value, "clipboardCopy"),
 				clipboardPaste: optionalClipboardPastePlan(value, "clipboardPaste")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalGoalDisplayPlan(object:Value, name:String):Null<TuiSmokeGoalDisplayPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeGoalDisplayPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					actions: goalDisplayActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function goalDisplayActions(values:Array<Value>):Array<TuiSmokeGoalDisplayAction> {
+		final out:Array<TuiSmokeGoalDisplayAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeGoalDisplayAction({
+				kind: TuiSmokeGoalDisplayActionKind.fromString(stringField(value, "kind", "")),
+				status: optionalStringField(value, "status", ""),
+				objective: optionalStringField(value, "objective", ""),
+				expectedLabel: optionalStringField(value, "expectedLabel", ""),
+				expectedElapsed: optionalStringField(value, "expectedElapsed", ""),
+				expectedSummary: optionalStringField(value, "expectedSummary", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				seconds: optionalIntField(value, "seconds", 0),
+				tokenBudget: optionalIntField(value, "tokenBudget", 0),
+				tokensUsed: optionalIntField(value, "tokensUsed", 0),
+				timeUsedSeconds: optionalIntField(value, "timeUsedSeconds", 0),
+				hasTokenBudget: optionalBoolField(value, "hasTokenBudget", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
