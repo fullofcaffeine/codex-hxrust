@@ -64,6 +64,7 @@ typedef TuiSmokeEventFields = {
 	final textFormatting:Null<TuiSmokeTextFormattingPlan>;
 	final liveWrap:Null<TuiSmokeLiveWrapPlan>;
 	final wrapping:Null<TuiSmokeWrappingPlan>;
+	final scrollState:Null<TuiSmokeScrollStatePlan>;
 	final chatWidgetGoalMenu:Null<TuiSmokeGoalMenuPlan>;
 	final chatWidgetReviewMode:Null<TuiSmokeReviewModePlan>;
 	final chatWidgetTranscriptHistory:Null<TuiSmokeTranscriptHistoryPlan>;
@@ -162,6 +163,7 @@ class TuiSmokeEvent {
 	public final textFormatting:Null<TuiSmokeTextFormattingPlan>;
 	public final liveWrap:Null<TuiSmokeLiveWrapPlan>;
 	public final wrapping:Null<TuiSmokeWrappingPlan>;
+	public final scrollState:Null<TuiSmokeScrollStatePlan>;
 	public final chatWidgetGoalMenu:Null<TuiSmokeGoalMenuPlan>;
 	public final chatWidgetReviewMode:Null<TuiSmokeReviewModePlan>;
 	public final chatWidgetTranscriptHistory:Null<TuiSmokeTranscriptHistoryPlan>;

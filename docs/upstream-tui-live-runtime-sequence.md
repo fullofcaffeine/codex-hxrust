@@ -3919,6 +3919,10 @@ Status: HXCX-TUI-262 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-263 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/wrapping.rs`. The fixture preserves URL-like text detection for absolute/custom-scheme, wrapped, localhost, and invalid-path/port cases; span-concatenated line URL detection; mixed URL/non-URL token classification with decorative pipe and ordered-list markers ignored; adaptive wrapping that preserves long URL-like tokens, falls back to plain long-token chunking, and honors subsequent indentation; and representative trimmed range boundaries. This is deterministic wrapping evidence only, not live terminal mutation, filesystem mutation, network traffic, or model traffic.
 
+### HXCX-TUI-264 Headless Raw Codex Scroll State
+
+Status: HXCX-TUI-264 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/scroll_state.rs`. The fixture preserves optional selection reset, empty-list clearing, clamp-selection defaulting and out-of-range behavior, wrap-around up/down movement, page-up/page-down clamping, jump top/bottom, and `ensure_visible` scroll-window repair including zero visible-row and no-selection cases. This is deterministic list state evidence only, not live terminal mutation, ratatui rendering, filesystem mutation, network traffic, or model traffic.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

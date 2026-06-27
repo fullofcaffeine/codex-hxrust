@@ -53,6 +53,7 @@
       "../codex/codex-rs/tui/src/text_formatting.rs",
       "../codex/codex-rs/tui/src/live_wrap.rs",
       "../codex/codex-rs/tui/src/wrapping.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/scroll_state.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -18911,6 +18912,231 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.wrapping.plan=headless\ntui.wrapping.contains_url=absolute:value=true:text=https://example.com/a/b\ntui.wrapping.contains_url=custom-scheme:value=true:text=myapp://open/some/path\ntui.wrapping.contains_url=wrapped-parens:value=true:text=(https://example.com/wrapped-in-parens)\ntui.wrapping.contains_url=localhost:value=true:text=localhost:3000/api\ntui.wrapping.contains_url=relative-path:value=false:text=src/main.rs\ntui.wrapping.contains_url=dotted-word:value=false:text=hello.world\ntui.wrapping.contains_url=bad-port:value=false:text=localhost:99999/path\ntui.wrapping.line_contains_url=split-spans:value=true:spans=see |https://example.com/a/very/long/path| for details\ntui.wrapping.mixed=prose-and-url:value=true:spans=see https://example.com/path for details\ntui.wrapping.mixed=pipe-url-only:value=false:spans=  | |https://example.com/path\ntui.wrapping.mixed=ordered-url-only:value=false:spans=1. https://example.com/path\ntui.wrapping.adaptive=long-url-preserved:width=20:lines=example.test/a-very-long-path-with-many-segments-and-query?x=1&y=2\ntui.wrapping.adaptive=non-url-fallback:width=20:lines=a_very_long_token_wi|thout_spaces_to_forc|e_wrapping\ntui.wrapping.adaptive=mixed-prose-url:width=36:lines=see https://example.com/path and|keep strikethrough intact while|wrapping prose\ntui.wrapping.adaptive=leading-spaces-subsequent-indent:width=10:lines=      abcd|      efgh\ntui.wrapping.adaptive=long-token-subsequent-indent:width=10:lines=abcdefghij|    klmnop|    qrst|    https://x.co\ntui.wrapping.range_trim=word-boundaries:width=5:ranges=0..5|6..11\ntui.wrapping.range_trim=long-token-chunks:width=3:ranges=0..3|3..6\ntui.wrapping.failure=live_wrapping_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> url aware wrapping boundary\ninput> \ntrace:\ntui.wrapping.plan=headless\ntui.wrapping.contains_url=absolute:value=true:text=https://example.com/a/b\ntui.wrapping.contains_url=custom-scheme:value=true:text=myapp://open/some/path\ntui.wrapping.contains_url=wrapped-parens:value=true:text=(https://example.com/wrapped-in-parens)\ntui.wrapping.contains_url=localhost:value=true:text=localhost:3000/api\ntui.wrapping.contains_url=relative-path:value=false:text=src/main.rs\ntui.wrapping.contains_url=dotted-word:value=false:text=hello.world\ntui.wrapping.contains_url=bad-port:value=false:text=localhost:99999/path\ntui.wrapping.line_contains_url=split-spans:value=true:spans=see |https://example.com/a/very/long/path| for details\ntui.wrapping.mixed=prose-and-url:value=true:spans=see https://example.com/path for details\ntui.wrapping.mixed=pipe-url-only:value=false:spans=  | |https://example.com/path\ntui.wrapping.mixed=ordered-url-only:value=false:spans=1. https://example.com/path\ntui.wrapping.adaptive=long-url-preserved:width=20:lines=example.test/a-very-long-path-with-many-segments-and-query?x=1&y=2\ntui.wrapping.adaptive=non-url-fallback:width=20:lines=a_very_long_token_wi|thout_spaces_to_forc|e_wrapping\ntui.wrapping.adaptive=mixed-prose-url:width=36:lines=see https://example.com/path and|keep strikethrough intact while|wrapping prose\ntui.wrapping.adaptive=leading-spaces-subsequent-indent:width=10:lines=      abcd|      efgh\ntui.wrapping.adaptive=long-token-subsequent-indent:width=10:lines=abcdefghij|    klmnop|    qrst|    https://x.co\ntui.wrapping.range_trim=word-boundaries:width=5:ranges=0..5|6..11\ntui.wrapping.range_trim=long-token-chunks:width=3:ranges=0..3|3..6\ntui.wrapping.failure=live_wrapping_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "scroll-state-headless",
+      "frame": {
+        "name": "scroll-state-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "scroll state selection boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "scroll_state",
+          "scrollState": {
+            "allowTerminalMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "reset",
+                "name": "new",
+                "expectedSelected": -1,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "clamp_selection",
+                "name": "default-first",
+                "len": 10,
+                "expectedSelected": 0,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "ensure_visible",
+                "name": "initial-visible",
+                "len": 10,
+                "visibleRows": 5,
+                "expectedSelected": 0,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "move_up_wrap",
+                "name": "wrap-to-bottom",
+                "len": 10,
+                "expectedSelected": 9,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "ensure_visible",
+                "name": "wrapped-bottom-visible",
+                "len": 10,
+                "visibleRows": 5,
+                "expectedSelected": 9,
+                "expectedScrollTop": 5
+              },
+              {
+                "kind": "move_down_wrap",
+                "name": "wrap-to-top",
+                "len": 10,
+                "expectedSelected": 0,
+                "expectedScrollTop": 5
+              },
+              {
+                "kind": "ensure_visible",
+                "name": "wrapped-top-visible",
+                "len": 10,
+                "visibleRows": 5,
+                "expectedSelected": 0,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "set_state",
+                "name": "out-of-range",
+                "selected": 99,
+                "scrollTop": 3,
+                "expectedSelected": 99,
+                "expectedScrollTop": 3
+              },
+              {
+                "kind": "clamp_selection",
+                "name": "clamp-out-of-range",
+                "len": 10,
+                "expectedSelected": 9,
+                "expectedScrollTop": 3
+              },
+              {
+                "kind": "set_state",
+                "name": "none-with-scroll",
+                "selected": -1,
+                "scrollTop": 7,
+                "expectedSelected": -1,
+                "expectedScrollTop": 7
+              },
+              {
+                "kind": "ensure_visible",
+                "name": "none-resets-scroll",
+                "len": 10,
+                "visibleRows": 5,
+                "expectedSelected": -1,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "set_state",
+                "name": "paging-start",
+                "selected": 0,
+                "scrollTop": 0,
+                "expectedSelected": 0,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "page_down_clamped",
+                "name": "first-page",
+                "len": 10,
+                "visibleRows": 4,
+                "expectedSelected": 4,
+                "expectedScrollTop": 1
+              },
+              {
+                "kind": "page_down_clamped",
+                "name": "second-page",
+                "len": 10,
+                "visibleRows": 4,
+                "expectedSelected": 8,
+                "expectedScrollTop": 5
+              },
+              {
+                "kind": "page_down_clamped",
+                "name": "last-page",
+                "len": 10,
+                "visibleRows": 4,
+                "expectedSelected": 9,
+                "expectedScrollTop": 6
+              },
+              {
+                "kind": "page_up_clamped",
+                "name": "page-up",
+                "len": 10,
+                "visibleRows": 4,
+                "expectedSelected": 5,
+                "expectedScrollTop": 5
+              },
+              {
+                "kind": "jump_top",
+                "name": "top",
+                "len": 10,
+                "visibleRows": 4,
+                "expectedSelected": 0,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "jump_bottom",
+                "name": "bottom",
+                "len": 10,
+                "visibleRows": 4,
+                "expectedSelected": 9,
+                "expectedScrollTop": 6
+              },
+              {
+                "kind": "set_state",
+                "name": "zero-visible-window",
+                "selected": 2,
+                "scrollTop": 4,
+                "expectedSelected": 2,
+                "expectedScrollTop": 4
+              },
+              {
+                "kind": "ensure_visible",
+                "name": "zero-visible-reset",
+                "len": 10,
+                "visibleRows": 0,
+                "expectedSelected": 2,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "set_state",
+                "name": "clear-empty-source",
+                "selected": 3,
+                "scrollTop": 2,
+                "expectedSelected": 3,
+                "expectedScrollTop": 2
+              },
+              {
+                "kind": "move_down_wrap",
+                "name": "empty-clear",
+                "len": 0,
+                "expectedSelected": -1,
+                "expectedScrollTop": 0
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_scroll_state_effects_rejected",
+                "noTerminalMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.scroll_state.plan=headless\ntui.scroll_state.reset=new:state=selected=none:scroll=0\ntui.scroll_state.clamp=default-first:len=10:state=selected=0:scroll=0\ntui.scroll_state.ensure_visible=initial-visible:len=10:visible=5:state=selected=0:scroll=0\ntui.scroll_state.move_up=wrap-to-bottom:len=10:state=selected=9:scroll=0\ntui.scroll_state.ensure_visible=wrapped-bottom-visible:len=10:visible=5:state=selected=9:scroll=5\ntui.scroll_state.move_down=wrap-to-top:len=10:state=selected=0:scroll=5\ntui.scroll_state.ensure_visible=wrapped-top-visible:len=10:visible=5:state=selected=0:scroll=0\ntui.scroll_state.set=out-of-range:state=selected=99:scroll=3\ntui.scroll_state.clamp=clamp-out-of-range:len=10:state=selected=9:scroll=3\ntui.scroll_state.set=none-with-scroll:state=selected=none:scroll=7\ntui.scroll_state.ensure_visible=none-resets-scroll:len=10:visible=5:state=selected=none:scroll=0\ntui.scroll_state.set=paging-start:state=selected=0:scroll=0\ntui.scroll_state.page_down=first-page:len=10:visible=4:state=selected=4:scroll=1\ntui.scroll_state.page_down=second-page:len=10:visible=4:state=selected=8:scroll=5\ntui.scroll_state.page_down=last-page:len=10:visible=4:state=selected=9:scroll=6\ntui.scroll_state.page_up=page-up:len=10:visible=4:state=selected=5:scroll=5\ntui.scroll_state.jump_top=top:len=10:visible=4:state=selected=0:scroll=0\ntui.scroll_state.jump_bottom=bottom:len=10:visible=4:state=selected=9:scroll=6\ntui.scroll_state.set=zero-visible-window:state=selected=2:scroll=4\ntui.scroll_state.ensure_visible=zero-visible-reset:len=10:visible=0:state=selected=2:scroll=0\ntui.scroll_state.set=clear-empty-source:state=selected=3:scroll=2\ntui.scroll_state.move_down=empty-clear:len=0:state=selected=none:scroll=0\ntui.scroll_state.failure=live_scroll_state_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> scroll state selection boundary\ninput> \ntrace:\ntui.scroll_state.plan=headless\ntui.scroll_state.reset=new:state=selected=none:scroll=0\ntui.scroll_state.clamp=default-first:len=10:state=selected=0:scroll=0\ntui.scroll_state.ensure_visible=initial-visible:len=10:visible=5:state=selected=0:scroll=0\ntui.scroll_state.move_up=wrap-to-bottom:len=10:state=selected=9:scroll=0\ntui.scroll_state.ensure_visible=wrapped-bottom-visible:len=10:visible=5:state=selected=9:scroll=5\ntui.scroll_state.move_down=wrap-to-top:len=10:state=selected=0:scroll=5\ntui.scroll_state.ensure_visible=wrapped-top-visible:len=10:visible=5:state=selected=0:scroll=0\ntui.scroll_state.set=out-of-range:state=selected=99:scroll=3\ntui.scroll_state.clamp=clamp-out-of-range:len=10:state=selected=9:scroll=3\ntui.scroll_state.set=none-with-scroll:state=selected=none:scroll=7\ntui.scroll_state.ensure_visible=none-resets-scroll:len=10:visible=5:state=selected=none:scroll=0\ntui.scroll_state.set=paging-start:state=selected=0:scroll=0\ntui.scroll_state.page_down=first-page:len=10:visible=4:state=selected=4:scroll=1\ntui.scroll_state.page_down=second-page:len=10:visible=4:state=selected=8:scroll=5\ntui.scroll_state.page_down=last-page:len=10:visible=4:state=selected=9:scroll=6\ntui.scroll_state.page_up=page-up:len=10:visible=4:state=selected=5:scroll=5\ntui.scroll_state.jump_top=top:len=10:visible=4:state=selected=0:scroll=0\ntui.scroll_state.jump_bottom=bottom:len=10:visible=4:state=selected=9:scroll=6\ntui.scroll_state.set=zero-visible-window:state=selected=2:scroll=4\ntui.scroll_state.ensure_visible=zero-visible-reset:len=10:visible=0:state=selected=2:scroll=0\ntui.scroll_state.set=clear-empty-source:state=selected=3:scroll=2\ntui.scroll_state.move_down=empty-clear:len=0:state=selected=none:scroll=0\ntui.scroll_state.failure=live_scroll_state_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

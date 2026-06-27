@@ -121,6 +121,7 @@ class TuiSmokeFixtureLoader {
 				textFormatting: optionalTextFormattingPlan(value, "textFormatting"),
 				liveWrap: optionalLiveWrapPlan(value, "liveWrap"),
 				wrapping: optionalWrappingPlan(value, "wrapping"),
+				scrollState: optionalScrollStatePlan(value, "scrollState"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -554,6 +555,43 @@ class TuiSmokeFixtureLoader {
 			out.push(new TuiSmokeWrappingRange({
 				start: optionalIntField(value, "start", 0),
 				end: optionalIntField(value, "end", 0)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalScrollStatePlan(object:Value, name:String):Null<TuiSmokeScrollStatePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeScrollStatePlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: scrollStateActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function scrollStateActions(values:Array<Value>):Array<TuiSmokeScrollStateAction> {
+		final out:Array<TuiSmokeScrollStateAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeScrollStateAction({
+				kind: TuiSmokeScrollStateActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				len: optionalIntField(value, "len", 0),
+				visibleRows: optionalIntField(value, "visibleRows", 0),
+				selected: optionalIntField(value, "selected", -1),
+				scrollTop: optionalIntField(value, "scrollTop", 0),
+				expectedSelected: optionalIntField(value, "expectedSelected", -1),
+				expectedScrollTop: optionalIntField(value, "expectedScrollTop", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

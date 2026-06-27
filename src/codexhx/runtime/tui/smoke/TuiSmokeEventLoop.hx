@@ -30,6 +30,11 @@ private typedef TuiSmokeLiveWrapPrefix = {
 	final width:Int;
 }
 
+private typedef TuiSmokeScrollState = {
+	var selectedIdx:Int;
+	var scrollTop:Int;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -402,6 +407,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.Wrapping:
 					if (!traceWrapping(event.wrapping, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.ScrollState:
+					if (!traceScrollState(event.scrollState, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -4520,6 +4530,209 @@ class TuiSmokeEventLoop {
 		for (range in ranges)
 			out.push(range.start + ".." + range.end);
 		return out.join("|");
+	}
+
+	static function traceScrollState(plan:TuiSmokeScrollStatePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowFilesystemMutation || plan.allowNetwork || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.scroll_state.rejected=live_or_missing");
+			return false;
+		}
+		final state:TuiSmokeScrollState = scrollStateNew();
+		trace.push("tui.scroll_state.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeScrollStateActionKind.Reset:
+					scrollStateReset(state);
+					if (!scrollStateMatches(action, state, trace, "reset"))
+						return false;
+					trace.push("tui.scroll_state.reset=" + action.name + ":state=" + scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.SetState:
+					state.selectedIdx = action.selected;
+					state.scrollTop = intMax(0, action.scrollTop);
+					if (!scrollStateMatches(action, state, trace, "set_state"))
+						return false;
+					trace.push("tui.scroll_state.set=" + action.name + ":state=" + scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.ClampSelection:
+					scrollStateClampSelection(state, action.len);
+					if (!scrollStateMatches(action, state, trace, "clamp"))
+						return false;
+					trace.push("tui.scroll_state.clamp=" + action.name + ":len=" + action.len + ":state=" + scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.MoveUpWrap:
+					scrollStateMoveUpWrap(state, action.len);
+					if (!scrollStateMatches(action, state, trace, "move_up"))
+						return false;
+					trace.push("tui.scroll_state.move_up=" + action.name + ":len=" + action.len + ":state=" + scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.MoveDownWrap:
+					scrollStateMoveDownWrap(state, action.len);
+					if (!scrollStateMatches(action, state, trace, "move_down"))
+						return false;
+					trace.push("tui.scroll_state.move_down=" + action.name + ":len=" + action.len + ":state=" + scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.PageUpClamped:
+					scrollStatePageUpClamped(state, action.len, action.visibleRows);
+					if (!scrollStateMatches(action, state, trace, "page_up"))
+						return false;
+					trace.push("tui.scroll_state.page_up=" + action.name + ":len=" + action.len + ":visible=" + action.visibleRows + ":state="
+						+ scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.PageDownClamped:
+					scrollStatePageDownClamped(state, action.len, action.visibleRows);
+					if (!scrollStateMatches(action, state, trace, "page_down"))
+						return false;
+					trace.push("tui.scroll_state.page_down=" + action.name + ":len=" + action.len + ":visible=" + action.visibleRows + ":state="
+						+ scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.JumpTop:
+					scrollStateJumpTop(state, action.len, action.visibleRows);
+					if (!scrollStateMatches(action, state, trace, "jump_top"))
+						return false;
+					trace.push("tui.scroll_state.jump_top=" + action.name + ":len=" + action.len + ":visible=" + action.visibleRows + ":state="
+						+ scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.JumpBottom:
+					scrollStateJumpBottom(state, action.len, action.visibleRows);
+					if (!scrollStateMatches(action, state, trace, "jump_bottom"))
+						return false;
+					trace.push("tui.scroll_state.jump_bottom=" + action.name + ":len=" + action.len + ":visible=" + action.visibleRows + ":state="
+						+ scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.EnsureVisible:
+					scrollStateEnsureVisible(state, action.len, action.visibleRows);
+					if (!scrollStateMatches(action, state, trace, "ensure_visible"))
+						return false;
+					trace.push("tui.scroll_state.ensure_visible=" + action.name + ":len=" + action.len + ":visible=" + action.visibleRows + ":state="
+						+ scrollStateTrace(state));
+				case TuiSmokeScrollStateActionKind.Failure:
+					trace.push("tui.scroll_state.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_fs="
+						+ action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.scroll_state.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function scrollStateNew():TuiSmokeScrollState {
+		return {
+			selectedIdx: -1,
+			scrollTop: 0
+		};
+	}
+
+	static function scrollStateReset(state:TuiSmokeScrollState):Void {
+		state.selectedIdx = -1;
+		state.scrollTop = 0;
+	}
+
+	static function scrollStateClampSelection(state:TuiSmokeScrollState, len:Int):Void {
+		if (scrollStateClearIfEmpty(state, len))
+			return;
+		final maxIdx = len - 1;
+		state.selectedIdx = state.selectedIdx < 0 ? 0 : intMin(state.selectedIdx, maxIdx);
+	}
+
+	static function scrollStateMoveUpWrap(state:TuiSmokeScrollState, len:Int):Void {
+		if (scrollStateClearIfEmpty(state, len))
+			return;
+		if (state.selectedIdx > 0) {
+			state.selectedIdx = state.selectedIdx - 1;
+		} else if (state.selectedIdx == 0) {
+			state.selectedIdx = len - 1;
+		} else {
+			state.selectedIdx = 0;
+		}
+	}
+
+	static function scrollStateMoveDownWrap(state:TuiSmokeScrollState, len:Int):Void {
+		if (scrollStateClearIfEmpty(state, len))
+			return;
+		if (state.selectedIdx >= 0 && state.selectedIdx + 1 < len) {
+			state.selectedIdx = state.selectedIdx + 1;
+		} else {
+			state.selectedIdx = 0;
+		}
+	}
+
+	static function scrollStatePageUpClamped(state:TuiSmokeScrollState, len:Int, visibleRows:Int):Void {
+		if (scrollStateClearIfEmpty(state, len))
+			return;
+		final step = intMax(1, visibleRows);
+		final current = scrollStateCurrentClamped(state, len);
+		state.selectedIdx = intMax(0, current - step);
+		scrollStateEnsureVisible(state, len, visibleRows);
+	}
+
+	static function scrollStatePageDownClamped(state:TuiSmokeScrollState, len:Int, visibleRows:Int):Void {
+		if (scrollStateClearIfEmpty(state, len))
+			return;
+		final step = intMax(1, visibleRows);
+		final current = scrollStateCurrentClamped(state, len);
+		state.selectedIdx = intMin(current + step, len - 1);
+		scrollStateEnsureVisible(state, len, visibleRows);
+	}
+
+	static function scrollStateJumpTop(state:TuiSmokeScrollState, len:Int, visibleRows:Int):Void {
+		if (scrollStateClearIfEmpty(state, len))
+			return;
+		state.selectedIdx = 0;
+		scrollStateEnsureVisible(state, len, visibleRows);
+	}
+
+	static function scrollStateJumpBottom(state:TuiSmokeScrollState, len:Int, visibleRows:Int):Void {
+		if (scrollStateClearIfEmpty(state, len))
+			return;
+		state.selectedIdx = len - 1;
+		scrollStateEnsureVisible(state, len, visibleRows);
+	}
+
+	static function scrollStateEnsureVisible(state:TuiSmokeScrollState, len:Int, visibleRows:Int):Void {
+		if (len == 0 || visibleRows == 0) {
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIdx < 0) {
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIdx < state.scrollTop) {
+			state.scrollTop = state.selectedIdx;
+		} else {
+			final bottom = state.scrollTop + visibleRows - 1;
+			if (state.selectedIdx > bottom)
+				state.scrollTop = state.selectedIdx + 1 - visibleRows;
+		}
+	}
+
+	static function scrollStateClearIfEmpty(state:TuiSmokeScrollState, len:Int):Bool {
+		if (len != 0)
+			return false;
+		scrollStateReset(state);
+		return true;
+	}
+
+	static function scrollStateCurrentClamped(state:TuiSmokeScrollState, len:Int):Int {
+		if (state.selectedIdx < 0)
+			return 0;
+		return intMin(state.selectedIdx, len - 1);
+	}
+
+	static function scrollStateMatches(action:TuiSmokeScrollStateAction, state:TuiSmokeScrollState, trace:Array<String>, label:String):Bool {
+		if (state.selectedIdx == action.expectedSelected && state.scrollTop == action.expectedScrollTop)
+			return true;
+		trace.push("tui.scroll_state."
+			+ label
+			+ "_mismatch="
+			+ action.name
+			+ ":expected="
+			+ scrollStateTraceValues(action.expectedSelected, action.expectedScrollTop)
+			+ ":actual="
+			+ scrollStateTrace(state));
+		return false;
+	}
+
+	static function scrollStateTrace(state:TuiSmokeScrollState):String {
+		return scrollStateTraceValues(state.selectedIdx, state.scrollTop);
+	}
+
+	static function scrollStateTraceValues(selectedIdx:Int, scrollTop:Int):String {
+		return "selected=" + (selectedIdx < 0 ? "none" : Std.string(selectedIdx)) + ":scroll=" + scrollTop;
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {
