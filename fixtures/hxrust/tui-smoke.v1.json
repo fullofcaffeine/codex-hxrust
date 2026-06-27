@@ -8229,6 +8229,188 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer external edit attachments\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.external_edit=retain-local-image:text=[Image #1]->Edited [Image #1] text:placeholder=[Image #1]->[Image #1]:local=1->1:remote=0:pending=1->0:elements=1->1:payloads=[Image #1]:retained=true:dropped=false:renumbered=false:duplicate_limited=false:rebuilt=true:cursor=0->21:cursor_end=true\ntui.composer_editing.external_edit=drop-missing-local:text=[Image #1]->No images here:placeholder=[Image #1]->:local=1->0:remote=0:pending=0->0:elements=1->0:payloads=:retained=false:dropped=true:renumbered=false:duplicate_limited=false:rebuilt=true:cursor=0->14:cursor_end=true\ntui.composer_editing.external_edit=renumber-kept-second:text=[Image #1][Image #2]->Keep [Image #1]:placeholder=[Image #2]->[Image #1]:local=2->1:remote=0:pending=0->0:elements=2->1:payloads=[Image #1]:retained=true:dropped=true:renumbered=true:duplicate_limited=false:rebuilt=true:cursor=0->15:cursor_end=true\ntui.composer_editing.external_edit=remote-offset-renumber:text=[Image #3]->Keep [Image #2]:placeholder=[Image #3]->[Image #2]:local=1->1:remote=1:pending=0->0:elements=1->1:payloads=[Image #2]:retained=true:dropped=false:renumbered=true:duplicate_limited=false:rebuilt=true:cursor=0->15:cursor_end=true\ntui.composer_editing.external_edit=duplicate-occurrence-limit:text=[Image #1]->[Image #1] extra [Image #1]:placeholder=[Image #1]->[Image #1]:local=1->1:remote=0:pending=0->0:elements=1->1:payloads=[Image #1]:retained=true:dropped=false:renumbered=false:duplicate_limited=true:rebuilt=true:cursor=0->25:cursor_end=true\ntui.composer_editing.failure=live_composer_external_edit_attachment_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-image-submission-headless",
+      "frame": {
+        "name": "composer-image-submission-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer image submission"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "image_submit",
+                "keyName": "local-image-text-submit",
+                "submissionText": "[Image #1] hi",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 1,
+                "localImageAfter": 1,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "selectedRemoteBefore": -1,
+                "selectedRemoteAfter": -1,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "submissionSubmitted": true,
+                "historyApplied": true,
+                "placeholdersRenumbered": false,
+                "remoteSelectionCleared": false,
+                "cursorBefore": 13,
+                "cursorAfter": 0
+              },
+              {
+                "kind": "image_submit",
+                "keyName": "local-image-only-submit",
+                "submissionText": "[Image #1]",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "",
+                "localImageBefore": 1,
+                "localImageAfter": 0,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "selectedRemoteBefore": -1,
+                "selectedRemoteAfter": -1,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "submissionSubmitted": true,
+                "historyApplied": true,
+                "placeholdersRenumbered": false,
+                "remoteSelectionCleared": false,
+                "cursorBefore": 10,
+                "cursorAfter": 0
+              },
+              {
+                "kind": "image_submit",
+                "keyName": "remote-only-empty-text",
+                "submissionText": "",
+                "placeholderBefore": "",
+                "placeholderAfter": "",
+                "localImageBefore": 0,
+                "localImageAfter": 0,
+                "remoteImageBefore": 2,
+                "remoteImageAfter": 2,
+                "selectedRemoteBefore": -1,
+                "selectedRemoteAfter": -1,
+                "elementBefore": 0,
+                "elementAfter": 0,
+                "elementPayloads": "",
+                "submissionSubmitted": true,
+                "historyApplied": true,
+                "placeholdersRenumbered": false,
+                "remoteSelectionCleared": false,
+                "cursorBefore": 0,
+                "cursorAfter": 0
+              },
+              {
+                "kind": "image_submit",
+                "keyName": "remote-offset-local-submit",
+                "submissionText": "[Image #2] hello",
+                "placeholderBefore": "[Image #2]",
+                "placeholderAfter": "[Image #2]",
+                "localImageBefore": 1,
+                "localImageAfter": 1,
+                "remoteImageBefore": 1,
+                "remoteImageAfter": 1,
+                "selectedRemoteBefore": -1,
+                "selectedRemoteAfter": -1,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #2]",
+                "submissionSubmitted": true,
+                "historyApplied": true,
+                "placeholdersRenumbered": false,
+                "remoteSelectionCleared": false,
+                "cursorBefore": 16,
+                "cursorAfter": 0
+              },
+              {
+                "kind": "image_submit",
+                "keyName": "history-restore-remote-local",
+                "submissionText": "[Image #2]",
+                "placeholderBefore": "[Image #2]",
+                "placeholderAfter": "[Image #2]",
+                "localImageBefore": 0,
+                "localImageAfter": 1,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 1,
+                "selectedRemoteBefore": -1,
+                "selectedRemoteAfter": -1,
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #2]",
+                "submissionSubmitted": false,
+                "historyApplied": true,
+                "placeholdersRenumbered": false,
+                "remoteSelectionCleared": false,
+                "cursorBefore": 0,
+                "cursorAfter": 10
+              },
+              {
+                "kind": "image_submit",
+                "keyName": "delete-remote-relabels-local",
+                "submissionText": "[Image #1]",
+                "placeholderBefore": "[Image #3]",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 1,
+                "localImageAfter": 1,
+                "remoteImageBefore": 2,
+                "remoteImageAfter": 0,
+                "selectedRemoteBefore": 1,
+                "selectedRemoteAfter": -1,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "submissionSubmitted": false,
+                "historyApplied": false,
+                "placeholdersRenumbered": true,
+                "remoteSelectionCleared": true,
+                "cursorBefore": 0,
+                "cursorAfter": 10
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_composer_image_submission_effects_rejected",
+                "noLiveInput": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.image_submit=local-image-text-submit:text=[Image #1] hi:placeholder=[Image #1]->[Image #1]:local=1->1:remote=0->0:selected=-1->-1:elements=1->1:payloads=[Image #1]:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=13->0\ntui.composer_editing.image_submit=local-image-only-submit:text=[Image #1]:placeholder=[Image #1]->:local=1->0:remote=0->0:selected=-1->-1:elements=1->1:payloads=[Image #1]:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=10->0\ntui.composer_editing.image_submit=remote-only-empty-text:text=:placeholder=->:local=0->0:remote=2->2:selected=-1->-1:elements=0->0:payloads=:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=0->0\ntui.composer_editing.image_submit=remote-offset-local-submit:text=[Image #2] hello:placeholder=[Image #2]->[Image #2]:local=1->1:remote=1->1:selected=-1->-1:elements=1->1:payloads=[Image #2]:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=16->0\ntui.composer_editing.image_submit=history-restore-remote-local:text=[Image #2]:placeholder=[Image #2]->[Image #2]:local=0->1:remote=0->1:selected=-1->-1:elements=0->1:payloads=[Image #2]:submitted=false:history=true:renumbered=false:remote_clear=false:cursor=0->10\ntui.composer_editing.image_submit=delete-remote-relabels-local:text=[Image #1]:placeholder=[Image #3]->[Image #1]:local=1->1:remote=2->0:selected=1->-1:elements=1->1:payloads=[Image #1]:submitted=false:history=false:renumbered=true:remote_clear=true:cursor=0->10\ntui.composer_editing.failure=live_composer_image_submission_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer image submission\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.image_submit=local-image-text-submit:text=[Image #1] hi:placeholder=[Image #1]->[Image #1]:local=1->1:remote=0->0:selected=-1->-1:elements=1->1:payloads=[Image #1]:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=13->0\ntui.composer_editing.image_submit=local-image-only-submit:text=[Image #1]:placeholder=[Image #1]->:local=1->0:remote=0->0:selected=-1->-1:elements=1->1:payloads=[Image #1]:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=10->0\ntui.composer_editing.image_submit=remote-only-empty-text:text=:placeholder=->:local=0->0:remote=2->2:selected=-1->-1:elements=0->0:payloads=:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=0->0\ntui.composer_editing.image_submit=remote-offset-local-submit:text=[Image #2] hello:placeholder=[Image #2]->[Image #2]:local=1->1:remote=1->1:selected=-1->-1:elements=1->1:payloads=[Image #2]:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=16->0\ntui.composer_editing.image_submit=history-restore-remote-local:text=[Image #2]:placeholder=[Image #2]->[Image #2]:local=0->1:remote=0->1:selected=-1->-1:elements=0->1:payloads=[Image #2]:submitted=false:history=true:renumbered=false:remote_clear=false:cursor=0->10\ntui.composer_editing.image_submit=delete-remote-relabels-local:text=[Image #1]:placeholder=[Image #3]->[Image #1]:local=1->1:remote=2->0:selected=1->-1:elements=1->1:payloads=[Image #1]:submitted=false:history=false:renumbered=true:remote_clear=true:cursor=0->10\ntui.composer_editing.failure=live_composer_image_submission_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-popup-sync-suppression-clears",
       "frame": {
         "name": "composer-popup-sync-suppression-clears",
