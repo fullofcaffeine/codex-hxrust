@@ -11477,6 +11477,21 @@ class TuiSmokeEventLoop {
 					trace.push("tui.composer_submission.mention_restore=text=" + action.preparedText + ":bindings=" + action.mentionBindingTransitionText()
 						+ ":elements=" + action.elementTransitionText() + ":summary=" + action.mentionBindingSummary + ":restored="
 						+ action.mentionBindingsRestored + ":pending_restored=" + action.pendingRestored);
+				case TuiSmokeComposerSubmissionActionKind.RestoreBoundMention:
+					trace.push("tui.composer_submission.bound_restore=text=" + action.preparedText + ":bindings=" + action.mentionBindingTransitionText()
+						+ ":elements=" + action.elementTransitionText() + ":summary=" + action.mentionBindingSummary + ":sigil=" + action.sigilMatched
+						+ ":boundary=" + action.boundaryMatched + ":email_skip=" + action.emailSubstringSkipped + ":punctuation="
+						+ action.punctuationBoundaryAccepted + ":restored=" + action.mentionBindingsRestored);
+				case TuiSmokeComposerSubmissionActionKind.BoundMentionRender:
+					trace.push("tui.composer_submission.bound_render=text=" + action.preparedText + ":summary=" + action.mentionBindingSummary
+						+ ":plugin_accent=" + action.pluginAccentApplied + ":history=" + action.historyRecorded);
+				case TuiSmokeComposerSubmissionActionKind.BoundMentionNavigation:
+					trace.push("tui.composer_submission.bound_navigation=" + action.commandName + ":cursor=" + action.cursorTransitionText()
+						+ ":popup_suppressed=" + action.popupSuppressed + ":arrow=" + action.arrowNavigationPassed);
+				case TuiSmokeComposerSubmissionActionKind.BoundMentionPopupSuppression:
+					trace.push("tui.composer_submission.bound_popup=text=" + action.preparedText + ":result=" + action.result + ":submitted="
+						+ action.mentionBindingsSubmitted + ":popup_suppressed=" + action.popupSuppressed + ":bindings=" +
+						action.mentionBindingTransitionText());
 				case TuiSmokeComposerSubmissionActionKind.BuildUserMessage:
 					trace.push("tui.composer_submission.user_message=" + action.result + ":text=" + action.preparedText + ":local="
 						+ action.localImageTransitionText() + ":remote=" + action.remoteImageTransitionText() + ":local_drained=" + action.localImagesDrained

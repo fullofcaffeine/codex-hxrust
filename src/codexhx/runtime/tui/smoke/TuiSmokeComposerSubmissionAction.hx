@@ -14,6 +14,8 @@ typedef TuiSmokeComposerSubmissionActionFields = {
 	final maxChars:Int;
 	final pendingBefore:Int;
 	final pendingAfter:Int;
+	final cursorBefore:Int;
+	final cursorAfter:Int;
 	final textElementBefore:Int;
 	final textElementAfter:Int;
 	final localImageBefore:Int;
@@ -78,6 +80,14 @@ typedef TuiSmokeComposerSubmissionActionFields = {
 	final recentMentionBindingsDrained:Bool;
 	final invalidBindingsDropped:Bool;
 	final pathlessBindingsIgnored:Bool;
+	final mentionBindingsSubmitted:Bool;
+	final pluginAccentApplied:Bool;
+	final popupSuppressed:Bool;
+	final arrowNavigationPassed:Bool;
+	final sigilMatched:Bool;
+	final boundaryMatched:Bool;
+	final emailSubstringSkipped:Bool;
+	final punctuationBoundaryAccepted:Bool;
 	final noLiveDispatch:Bool;
 	final unsupportedRejected:Bool;
 }
@@ -97,6 +107,8 @@ class TuiSmokeComposerSubmissionAction {
 	public final maxChars:Int;
 	public final pendingBefore:Int;
 	public final pendingAfter:Int;
+	public final cursorBefore:Int;
+	public final cursorAfter:Int;
 	public final textElementBefore:Int;
 	public final textElementAfter:Int;
 	public final localImageBefore:Int;
@@ -172,11 +184,23 @@ class TuiSmokeComposerSubmissionAction {
 	public final recentMentionBindingsDrained:Bool;
 	public final invalidBindingsDropped:Bool;
 	public final pathlessBindingsIgnored:Bool;
+	public final mentionBindingsSubmitted:Bool;
+	public final pluginAccentApplied:Bool;
+	public final popupSuppressed:Bool;
+	public final arrowNavigationPassed:Bool;
+	public final sigilMatched:Bool;
+	public final boundaryMatched:Bool;
+	public final emailSubstringSkipped:Bool;
+	public final punctuationBoundaryAccepted:Bool;
 	public final noLiveDispatch:Bool;
 	public final unsupportedRejected:Bool;
 
 	public function pendingTransitionText():String {
 		return pendingBefore + "->" + pendingAfter;
+	}
+
+	public function cursorTransitionText():String {
+		return cursorBefore + "->" + cursorAfter;
 	}
 
 	public function elementTransitionText():String {

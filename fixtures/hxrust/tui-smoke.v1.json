@@ -7494,6 +7494,167 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer mention binding submission capture\ninput> \ntrace:\ntui.composer_submission.plan=headless\ntui.composer_submission.mention_snapshot=text=$figma @repo @plan:bindings=3->2:elements=3->2:summary=$figma:/tmp/user/figma/SKILL.md|@repo:plugin://repo:invalid_dropped=true:pathless_ignored=true\ntui.composer_submission.mention_prepare=submitted:text=$figma please:bindings=1->0:recent=0->1:elements=1->0:history=true:draft_cleared=true\ntui.composer_submission.mention_recent=after-submit:recent=1->0:bindings=0->0:summary=$figma:/tmp/user/figma/SKILL.md:drained=true\ntui.composer_submission.mention_restore=text=ask @repo then $lint:bindings=0->2:elements=0->2:summary=@repo:plugin://repo|$lint:.codex/skills/lint/SKILL.md:restored=true:pending_restored=false\ntui.composer_submission.mention_restore=text=/bogus @repo:bindings=0->1:elements=0->1:summary=@repo:plugin://repo:restored=true:pending_restored=true\ntui.composer_submission.failure=live_composer_mention_binding_submission_effects_rejected:slash_failed=false:too_large=false:empty=false:pending_restored=false:no_live=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-submission-restored-bound-mentions",
+      "frame": {
+        "name": "composer-submission-restored-bound-mentions",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer restored bound mentions"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_submission",
+          "composerSubmission": {
+            "allowLiveDispatch": false,
+            "actions": [
+              {
+                "kind": "restore_bound_mention",
+                "preparedText": "@figma please",
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "textElementBefore": 0,
+                "textElementAfter": 1,
+                "mentionBindingSummary": "@figma:/tmp/user/figma/SKILL.md",
+                "sigilMatched": true,
+                "boundaryMatched": true,
+                "mentionBindingsRestored": true
+              },
+              {
+                "kind": "restore_bound_mention",
+                "preparedText": "@figma then $figma",
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "textElementBefore": 0,
+                "textElementAfter": 1,
+                "mentionBindingSummary": "$figma:app://figma",
+                "sigilMatched": true,
+                "boundaryMatched": true,
+                "mentionBindingsRestored": true
+              },
+              {
+                "kind": "restore_bound_mention",
+                "preparedText": "@figma then $figma",
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 2,
+                "textElementBefore": 0,
+                "textElementAfter": 2,
+                "mentionBindingSummary": "@figma:plugin://figma@test|$figma:app://figma",
+                "sigilMatched": true,
+                "boundaryMatched": true,
+                "mentionBindingsRestored": true
+              },
+              {
+                "kind": "restore_bound_mention",
+                "preparedText": "foo@sample.com then @sample",
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "textElementBefore": 0,
+                "textElementAfter": 1,
+                "mentionBindingSummary": "@sample:plugin://sample@test",
+                "sigilMatched": true,
+                "boundaryMatched": true,
+                "emailSubstringSkipped": true,
+                "mentionBindingsRestored": true
+              },
+              {
+                "kind": "restore_bound_mention",
+                "preparedText": "Please ask (@sample)",
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "textElementBefore": 0,
+                "textElementAfter": 1,
+                "mentionBindingSummary": "@sample:plugin://sample@test",
+                "sigilMatched": true,
+                "boundaryMatched": true,
+                "punctuationBoundaryAccepted": true,
+                "mentionBindingsRestored": true
+              },
+              {
+                "kind": "bound_mention_render",
+                "preparedText": "@sample plugin",
+                "mentionBindingSummary": "@sample:plugin://sample@test",
+                "pluginAccentApplied": true,
+                "historyRecorded": true
+              },
+              {
+                "kind": "bound_mention_navigation",
+                "commandName": "right-into-bound-mention",
+                "cursorBefore": 2,
+                "cursorAfter": 3,
+                "popupSuppressed": true,
+                "arrowNavigationPassed": true
+              },
+              {
+                "kind": "bound_mention_navigation",
+                "commandName": "right-across-bound-mention",
+                "cursorBefore": 3,
+                "cursorAfter": 9,
+                "popupSuppressed": true,
+                "arrowNavigationPassed": true
+              },
+              {
+                "kind": "bound_mention_navigation",
+                "commandName": "left-across-bound-mention",
+                "cursorBefore": 9,
+                "cursorAfter": 3,
+                "popupSuppressed": true,
+                "arrowNavigationPassed": true
+              },
+              {
+                "kind": "bound_mention_popup_suppression",
+                "result": "submitted",
+                "preparedText": "@sample",
+                "mentionBindingBefore": 1,
+                "mentionBindingAfter": 1,
+                "mentionBindingsSubmitted": true,
+                "popupSuppressed": true
+              },
+              {
+                "kind": "bound_mention_popup_suppression",
+                "result": "submitted",
+                "preparedText": "Please ask @sample.",
+                "mentionBindingBefore": 1,
+                "mentionBindingAfter": 1,
+                "mentionBindingsSubmitted": true,
+                "popupSuppressed": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_composer_restored_bound_mention_effects_rejected",
+                "noLiveDispatch": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_submission.plan=headless\ntui.composer_submission.bound_restore=text=@figma please:bindings=0->1:elements=0->1:summary=@figma:/tmp/user/figma/SKILL.md:sigil=true:boundary=true:email_skip=false:punctuation=false:restored=true\ntui.composer_submission.bound_restore=text=@figma then $figma:bindings=0->1:elements=0->1:summary=$figma:app://figma:sigil=true:boundary=true:email_skip=false:punctuation=false:restored=true\ntui.composer_submission.bound_restore=text=@figma then $figma:bindings=0->2:elements=0->2:summary=@figma:plugin://figma@test|$figma:app://figma:sigil=true:boundary=true:email_skip=false:punctuation=false:restored=true\ntui.composer_submission.bound_restore=text=foo@sample.com then @sample:bindings=0->1:elements=0->1:summary=@sample:plugin://sample@test:sigil=true:boundary=true:email_skip=true:punctuation=false:restored=true\ntui.composer_submission.bound_restore=text=Please ask (@sample):bindings=0->1:elements=0->1:summary=@sample:plugin://sample@test:sigil=true:boundary=true:email_skip=false:punctuation=true:restored=true\ntui.composer_submission.bound_render=text=@sample plugin:summary=@sample:plugin://sample@test:plugin_accent=true:history=true\ntui.composer_submission.bound_navigation=right-into-bound-mention:cursor=2->3:popup_suppressed=true:arrow=true\ntui.composer_submission.bound_navigation=right-across-bound-mention:cursor=3->9:popup_suppressed=true:arrow=true\ntui.composer_submission.bound_navigation=left-across-bound-mention:cursor=9->3:popup_suppressed=true:arrow=true\ntui.composer_submission.bound_popup=text=@sample:result=submitted:submitted=true:popup_suppressed=true:bindings=1->1\ntui.composer_submission.bound_popup=text=Please ask @sample.:result=submitted:submitted=true:popup_suppressed=true:bindings=1->1\ntui.composer_submission.failure=live_composer_restored_bound_mention_effects_rejected:slash_failed=false:too_large=false:empty=false:pending_restored=false:no_live=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer restored bound mentions\ninput> \ntrace:\ntui.composer_submission.plan=headless\ntui.composer_submission.bound_restore=text=@figma please:bindings=0->1:elements=0->1:summary=@figma:/tmp/user/figma/SKILL.md:sigil=true:boundary=true:email_skip=false:punctuation=false:restored=true\ntui.composer_submission.bound_restore=text=@figma then $figma:bindings=0->1:elements=0->1:summary=$figma:app://figma:sigil=true:boundary=true:email_skip=false:punctuation=false:restored=true\ntui.composer_submission.bound_restore=text=@figma then $figma:bindings=0->2:elements=0->2:summary=@figma:plugin://figma@test|$figma:app://figma:sigil=true:boundary=true:email_skip=false:punctuation=false:restored=true\ntui.composer_submission.bound_restore=text=foo@sample.com then @sample:bindings=0->1:elements=0->1:summary=@sample:plugin://sample@test:sigil=true:boundary=true:email_skip=true:punctuation=false:restored=true\ntui.composer_submission.bound_restore=text=Please ask (@sample):bindings=0->1:elements=0->1:summary=@sample:plugin://sample@test:sigil=true:boundary=true:email_skip=false:punctuation=true:restored=true\ntui.composer_submission.bound_render=text=@sample plugin:summary=@sample:plugin://sample@test:plugin_accent=true:history=true\ntui.composer_submission.bound_navigation=right-into-bound-mention:cursor=2->3:popup_suppressed=true:arrow=true\ntui.composer_submission.bound_navigation=right-across-bound-mention:cursor=3->9:popup_suppressed=true:arrow=true\ntui.composer_submission.bound_navigation=left-across-bound-mention:cursor=9->3:popup_suppressed=true:arrow=true\ntui.composer_submission.bound_popup=text=@sample:result=submitted:submitted=true:popup_suppressed=true:bindings=1->1\ntui.composer_submission.bound_popup=text=Please ask @sample.:result=submitted:submitted=true:popup_suppressed=true:bindings=1->1\ntui.composer_submission.failure=live_composer_restored_bound_mention_effects_rejected:slash_failed=false:too_large=false:empty=false:pending_restored=false:no_live=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-editing-remote-vim-bash-routing",
       "frame": {
         "name": "composer-editing-remote-vim-bash-routing",

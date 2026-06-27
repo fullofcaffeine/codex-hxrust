@@ -5197,6 +5197,8 @@ class TuiSmokeFixtureLoader {
 				maxChars: optionalIntField(value, "maxChars", 0),
 				pendingBefore: optionalIntField(value, "pendingBefore", 0),
 				pendingAfter: optionalIntField(value, "pendingAfter", 0),
+				cursorBefore: optionalIntField(value, "cursorBefore", 0),
+				cursorAfter: optionalIntField(value, "cursorAfter", 0),
 				textElementBefore: optionalIntField(value, "textElementBefore", 0),
 				textElementAfter: optionalIntField(value, "textElementAfter", 0),
 				localImageBefore: optionalIntField(value, "localImageBefore", 0),
@@ -5261,6 +5263,14 @@ class TuiSmokeFixtureLoader {
 				recentMentionBindingsDrained: optionalBoolField(value, "recentMentionBindingsDrained", false),
 				invalidBindingsDropped: optionalBoolField(value, "invalidBindingsDropped", false),
 				pathlessBindingsIgnored: optionalBoolField(value, "pathlessBindingsIgnored", false),
+				mentionBindingsSubmitted: optionalBoolField(value, "mentionBindingsSubmitted", false),
+				pluginAccentApplied: optionalBoolField(value, "pluginAccentApplied", false),
+				popupSuppressed: optionalBoolField(value, "popupSuppressed", false),
+				arrowNavigationPassed: optionalBoolField(value, "arrowNavigationPassed", false),
+				sigilMatched: optionalBoolField(value, "sigilMatched", false),
+				boundaryMatched: optionalBoolField(value, "boundaryMatched", false),
+				emailSubstringSkipped: optionalBoolField(value, "emailSubstringSkipped", false),
+				punctuationBoundaryAccepted: optionalBoolField(value, "punctuationBoundaryAccepted", false),
 				noLiveDispatch: optionalBoolField(value, "noLiveDispatch", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
