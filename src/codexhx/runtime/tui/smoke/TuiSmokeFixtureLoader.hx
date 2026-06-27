@@ -138,6 +138,7 @@ class TuiSmokeFixtureLoader {
 				commandPopup: optionalCommandPopupPlan(value, "commandPopup"),
 				multiSelectPicker: optionalMultiSelectPlan(value, "multiSelectPicker"),
 				appLinkView: optionalAppLinkViewPlan(value, "appLinkView"),
+				customPromptView: optionalCustomPromptPlan(value, "customPromptView"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -1480,6 +1481,73 @@ class TuiSmokeFixtureLoader {
 				noNetwork: optionalBoolField(value, "noNetwork", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalCustomPromptPlan(object:Value, name:String):Null<TuiSmokeCustomPromptPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeCustomPromptPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowPromptCallback: optionalBoolField(value, "allowPromptCallback", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowClipboardMutation: optionalBoolField(value, "allowClipboardMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: customPromptActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function customPromptActions(values:Array<Value>):Array<TuiSmokeCustomPromptAction> {
+		final out:Array<TuiSmokeCustomPromptAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeCustomPromptAction({
+				kind: TuiSmokeCustomPromptActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				title: optionalStringField(value, "title", ""),
+				placeholder: optionalStringField(value, "placeholder", ""),
+				contextLabel: optionalStringField(value, "contextLabel", ""),
+				initialText: optionalStringField(value, "initialText", ""),
+				width: optionalIntField(value, "width", 72),
+				areaHeight: optionalIntField(value, "areaHeight", 12),
+				pasteText: optionalStringField(value, "pasteText", ""),
+				steps: customPromptSteps(optionalArrayField(value, "steps")),
+				expectedText: optionalStringField(value, "expectedText", ""),
+				expectedCursor: optionalIntField(value, "expectedCursor", 0),
+				expectedSubmitted: optionalStringField(value, "expectedSubmitted", ""),
+				expectedCompletion: optionalStringField(value, "expectedCompletion", ""),
+				expectedPasteAccepted: optionalBoolField(value, "expectedPasteAccepted", false),
+				expectedInputHeight: optionalIntField(value, "expectedInputHeight", 0),
+				expectedDesiredHeight: optionalIntField(value, "expectedDesiredHeight", 0),
+				expectedCursorAvailable: optionalBoolField(value, "expectedCursorAvailable", false),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noPromptCallback: optionalBoolField(value, "noPromptCallback", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noClipboardMutation: optionalBoolField(value, "noClipboardMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function customPromptSteps(values:Array<Value>):Array<TuiSmokeCustomPromptStep> {
+		final out:Array<TuiSmokeCustomPromptStep> = [];
+		for (value in values) {
+			out.push(new TuiSmokeCustomPromptStep({
+				kind: TuiSmokeCustomPromptStepKind.fromString(stringField(value, "kind", "")),
+				text: optionalStringField(value, "text", ""),
+				modifiers: optionalStringField(value, "modifiers", "none"),
+				elapsedMs: optionalIntField(value, "elapsedMs", 0)
 			}));
 		}
 		return out;

@@ -72,6 +72,8 @@
       "../codex/codex-rs/tui/src/slash_command.rs",
       "../codex/codex-rs/tui/src/bottom_pane/multi_select_picker.rs",
       "../codex/codex-rs/tui/src/bottom_pane/app_link_view.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/custom_prompt_view.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/custom_prompt_view_tests.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -23023,6 +23025,266 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.app_link_view.plan=headless\ntui.app_link_view.params=codex-apps-auth-admitted:admitted=true:summary=app=connector_calendar:title=Google Calendar:url=https://chatgpt.com/apps/google-calendar/connector_calendar:suggestion=auth:target=codex_apps/request-1\ntui.app_link_view.params=codex-apps-auth-rejects-untrusted-host:admitted=false:summary=rejected_url\ntui.app_link_view.params=generic-url-admitted:admitted=true:summary=app=payment-123:title=Action required:desc=Server: payments:url=https://payments.example/checkout/123:suggestion=external_action:target=payments/request-2\ntui.app_link_view.params=generic-url-rejects-credentials:admitted=false:summary=rejected_url\ntui.app_link_view.labels=installed-enabled-actions:screen=link:selected=0:labels=Manage on ChatGPT|Disable app|Back:rows=> 1. Manage on ChatGPT|- 2. Disable app|- 3. Back:enabled=true:complete=false:events=<none>:dismissed=false:title_action=false:height=13\ntui.app_link_view.move=move-next-clamps-to-back:screen=link:selected=2:labels=Manage on ChatGPT|Disable app|Back:rows=- 1. Manage on ChatGPT|- 2. Disable app|> 3. Back:enabled=true:complete=false:events=<none>:dismissed=false:title_action=false:height=13\ntui.app_link_view.activate=toggle-installed-app:screen=link:selected=1:labels=Manage on ChatGPT|Enable app|Back:rows=- 1. Manage on ChatGPT|> 2. Enable app|- 3. Back:enabled=false:complete=false:events=set_app_enabled=connector_1:false:dismissed=false:title_action=false:height=13\ntui.app_link_view.activate=install-tool-opens-browser-confirmation:screen=confirmation:selected=0:labels=I already Installed it|Back:rows=> 1. I already Installed it|- 2. Back:enabled=false:complete=false:events=open_url=https://example.test/google-calendar:dismissed=false:title_action=true:height=14\ntui.app_link_view.activate=install-tool-completes-with-refresh-and-accept:screen=confirmation:selected=0:labels=I already Installed it|Back:rows=> 1. I already Installed it|- 2. Back:enabled=false:complete=true:events=refresh_connectors=true,resolve_accept=codex_apps/request-1:dismissed=false:title_action=true:height=14\ntui.app_link_view.activate=enable-tool-toggles-and-accepts:screen=link:selected=1:labels=Manage on ChatGPT|Disable app|Back:rows=- 1. Manage on ChatGPT|> 2. Disable app|- 3. Back:enabled=true:complete=true:events=set_app_enabled=connector_google_calendar:true,resolve_accept=codex_apps/request-1:dismissed=false:title_action=true:height=16\ntui.app_link_view.dismiss=dismiss-matching-request:screen=link:selected=0:labels=Manage on ChatGPT|Enable app|Back:rows=> 1. Manage on ChatGPT|- 2. Enable app|- 3. Back:enabled=false:complete=true:events=<none>:dismissed=true:title_action=true:height=16\ntui.app_link_view.dismiss=dismiss-ignores-other-request:screen=link:selected=0:labels=Manage on ChatGPT|Enable app|Back:rows=> 1. Manage on ChatGPT|- 2. Enable app|- 3. Back:enabled=false:complete=false:events=<none>:dismissed=false:title_action=true:height=16\ntui.app_link_view.height=auth-link-height-wraps-url:screen=link:selected=0:labels=Open sign-in URL|Back:rows=> 1. Open sign-in URL|- 2. Back:enabled=true:complete=false:events=<none>:dismissed=false:title_action=true:height=17\ntui.app_link_view.failure=live_app_link_view_effects_rejected:no_terminal=true:no_buffer=true:no_browser=true:no_app_server=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> app link view\ninput> \ntrace:\ntui.app_link_view.plan=headless\ntui.app_link_view.params=codex-apps-auth-admitted:admitted=true:summary=app=connector_calendar:title=Google Calendar:url=https://chatgpt.com/apps/google-calendar/connector_calendar:suggestion=auth:target=codex_apps/request-1\ntui.app_link_view.params=codex-apps-auth-rejects-untrusted-host:admitted=false:summary=rejected_url\ntui.app_link_view.params=generic-url-admitted:admitted=true:summary=app=payment-123:title=Action required:desc=Server: payments:url=https://payments.example/checkout/123:suggestion=external_action:target=payments/request-2\ntui.app_link_view.params=generic-url-rejects-credentials:admitted=false:summary=rejected_url\ntui.app_link_view.labels=installed-enabled-actions:screen=link:selected=0:labels=Manage on ChatGPT|Disable app|Back:rows=> 1. Manage on ChatGPT|- 2. Disable app|- 3. Back:enabled=true:complete=false:events=<none>:dismissed=false:title_action=false:height=13\ntui.app_link_view.move=move-next-clamps-to-back:screen=link:selected=2:labels=Manage on ChatGPT|Disable app|Back:rows=- 1. Manage on ChatGPT|- 2. Disable app|> 3. Back:enabled=true:complete=false:events=<none>:dismissed=false:title_action=false:height=13\ntui.app_link_view.activate=toggle-installed-app:screen=link:selected=1:labels=Manage on ChatGPT|Enable app|Back:rows=- 1. Manage on ChatGPT|> 2. Enable app|- 3. Back:enabled=false:complete=false:events=set_app_enabled=connector_1:false:dismissed=false:title_action=false:height=13\ntui.app_link_view.activate=install-tool-opens-browser-confirmation:screen=confirmation:selected=0:labels=I already Installed it|Back:rows=> 1. I already Installed it|- 2. Back:enabled=false:complete=false:events=open_url=https://example.test/google-calendar:dismissed=false:title_action=true:height=14\ntui.app_link_view.activate=install-tool-completes-with-refresh-and-accept:screen=confirmation:selected=0:labels=I already Installed it|Back:rows=> 1. I already Installed it|- 2. Back:enabled=false:complete=true:events=refresh_connectors=true,resolve_accept=codex_apps/request-1:dismissed=false:title_action=true:height=14\ntui.app_link_view.activate=enable-tool-toggles-and-accepts:screen=link:selected=1:labels=Manage on ChatGPT|Disable app|Back:rows=- 1. Manage on ChatGPT|> 2. Disable app|- 3. Back:enabled=true:complete=true:events=set_app_enabled=connector_google_calendar:true,resolve_accept=codex_apps/request-1:dismissed=false:title_action=true:height=16\ntui.app_link_view.dismiss=dismiss-matching-request:screen=link:selected=0:labels=Manage on ChatGPT|Enable app|Back:rows=> 1. Manage on ChatGPT|- 2. Enable app|- 3. Back:enabled=false:complete=true:events=<none>:dismissed=true:title_action=true:height=16\ntui.app_link_view.dismiss=dismiss-ignores-other-request:screen=link:selected=0:labels=Manage on ChatGPT|Enable app|Back:rows=> 1. Manage on ChatGPT|- 2. Enable app|- 3. Back:enabled=false:complete=false:events=<none>:dismissed=false:title_action=true:height=16\ntui.app_link_view.height=auth-link-height-wraps-url:screen=link:selected=0:labels=Open sign-in URL|Back:rows=> 1. Open sign-in URL|- 2. Back:enabled=true:complete=false:events=<none>:dismissed=false:title_action=true:height=17\ntui.app_link_view.failure=live_app_link_view_effects_rejected:no_terminal=true:no_buffer=true:no_browser=true:no_app_server=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "custom-prompt-view-headless",
+      "frame": {
+        "name": "custom-prompt-view-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "custom prompt view"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "custom_prompt_view",
+          "customPromptView": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowPromptCallback": false,
+            "allowFilesystemMutation": false,
+            "allowClipboardMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "init",
+                "name": "initial-text-context-and-placeholder",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "contextLabel": "Review mode: staged diff",
+                "initialText": "Focus tests",
+                "expectedText": "Focus tests",
+                "expectedCursor": 11,
+                "expectedInputHeight": 2,
+                "expectedDesiredHeight": 7,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "context=Review mode: staged diff", "input=Focus tests", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "sequence",
+                "name": "enter-submits-trimmed-nonempty-text",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "initialText": "  Ship it  ",
+                "steps": [{"kind": "enter", "elapsedMs": 80}],
+                "expectedText": "  Ship it  ",
+                "expectedCursor": 11,
+                "expectedSubmitted": "Ship it",
+                "expectedCompletion": "accepted",
+                "expectedInputHeight": 2,
+                "expectedDesiredHeight": 6,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "input=  Ship it  ", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "sequence",
+                "name": "enter-ignores-whitespace-only-text",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "initialText": "   ",
+                "steps": [{"kind": "enter", "elapsedMs": 80}],
+                "expectedText": "   ",
+                "expectedCursor": 3,
+                "expectedInputHeight": 2,
+                "expectedDesiredHeight": 6,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "input=   ", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "sequence",
+                "name": "modified-enter-inserts-newline",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "initialText": "first",
+                "steps": [{"kind": "enter", "modifiers": "shift", "elapsedMs": 80}],
+                "expectedText": "first\n",
+                "expectedCursor": 6,
+                "expectedInputHeight": 3,
+                "expectedDesiredHeight": 7,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "input=first\\n", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "sequence",
+                "name": "esc-cancels-view",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "initialText": "draft",
+                "steps": [{"kind": "esc", "elapsedMs": 0}],
+                "expectedText": "draft",
+                "expectedCursor": 5,
+                "expectedCompletion": "cancelled",
+                "expectedInputHeight": 2,
+                "expectedDesiredHeight": 6,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "input=draft", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "paste",
+                "name": "explicit-paste-inserts-and-clears-burst",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "initialText": "alpha ",
+                "pasteText": "beta",
+                "expectedText": "alpha beta",
+                "expectedCursor": 10,
+                "expectedPasteAccepted": true,
+                "expectedInputHeight": 2,
+                "expectedDesiredHeight": 6,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "input=alpha beta", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "paste",
+                "name": "empty-paste-rejected",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "pasteText": "",
+                "expectedText": "",
+                "expectedCursor": 0,
+                "expectedInputHeight": 2,
+                "expectedDesiredHeight": 6,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "input=Type instructions", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "sequence",
+                "name": "paste-burst-enter-preserves-short-first-line",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "steps": [
+                  {"kind": "char", "text": "x", "elapsedMs": 0},
+                  {"kind": "enter", "elapsedMs": 1},
+                  {"kind": "char", "text": "r", "elapsedMs": 2},
+                  {"kind": "char", "text": "e", "elapsedMs": 3},
+                  {"kind": "char", "text": "s", "elapsedMs": 4},
+                  {"kind": "char", "text": "t", "elapsedMs": 5},
+                  {"kind": "enter", "elapsedMs": 200}
+                ],
+                "expectedText": "x\nrest",
+                "expectedCursor": 6,
+                "expectedSubmitted": "x\nrest",
+                "expectedCompletion": "accepted",
+                "expectedInputHeight": 3,
+                "expectedDesiredHeight": 7,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "input=x\\nrest", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "sequence",
+                "name": "paste-burst-tab-then-enter-does-not-submit",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "steps": [
+                  {"kind": "char", "text": "x", "elapsedMs": 0},
+                  {"kind": "tab", "elapsedMs": 1},
+                  {"kind": "enter", "elapsedMs": 2},
+                  {"kind": "char", "text": "r", "elapsedMs": 3},
+                  {"kind": "char", "text": "e", "elapsedMs": 4},
+                  {"kind": "char", "text": "s", "elapsedMs": 5},
+                  {"kind": "char", "text": "t", "elapsedMs": 6},
+                  {"kind": "enter", "elapsedMs": 200}
+                ],
+                "expectedText": "x\nrest",
+                "expectedCursor": 6,
+                "expectedSubmitted": "x\nrest",
+                "expectedCompletion": "accepted",
+                "expectedInputHeight": 3,
+                "expectedDesiredHeight": 7,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "input=x\\nrest", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "sequence",
+                "name": "delayed-enter-after-typing-submits",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "steps": [
+                  {"kind": "char", "text": "f", "elapsedMs": 0},
+                  {"kind": "char", "text": "o", "elapsedMs": 20},
+                  {"kind": "char", "text": "o", "elapsedMs": 40},
+                  {"kind": "enter", "elapsedMs": 80}
+                ],
+                "expectedText": "foo",
+                "expectedCursor": 3,
+                "expectedSubmitted": "foo",
+                "expectedCompletion": "accepted",
+                "expectedInputHeight": 2,
+                "expectedDesiredHeight": 6,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "input=foo", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "height",
+                "name": "context-height-wraps-multiline-input",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "contextLabel": "Review mode: staged diff",
+                "initialText": "abcdefghij\nklmnopqrst\nuvwxyz",
+                "width": 12,
+                "expectedText": "abcdefghij\nklmnopqrst\nuvwxyz",
+                "expectedCursor": 28,
+                "expectedInputHeight": 4,
+                "expectedDesiredHeight": 9,
+                "expectedCursorAvailable": true,
+                "expectedRows": ["title=Edit goal", "context=Review mode: staged diff", "input=abcdefghij\\nklmnopqrst\\nuvwxyz", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "cursor",
+                "name": "cursor-unavailable-for-too-small-area",
+                "title": "Edit goal",
+                "placeholder": "Type instructions",
+                "initialText": "x",
+                "width": 2,
+                "areaHeight": 1,
+                "expectedText": "x",
+                "expectedCursor": 1,
+                "expectedInputHeight": 2,
+                "expectedDesiredHeight": 6,
+                "expectedCursorAvailable": false,
+                "expectedRows": ["title=Edit goal", "input=x", "hint=enter-submit|esc-cancel"]
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_custom_prompt_view_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noPromptCallback": true,
+                "noFilesystemMutation": true,
+                "noClipboardMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.custom_prompt_view.plan=headless\ntui.custom_prompt_view.init=initial-text-context-and-placeholder:title=Edit goal:context=Review mode: staged diff:placeholder=Type instructions:text=Focus tests:cursor=11:submitted=<empty>:completion=<empty>:paste=false:input_height=2:desired_height=7:cursor_available=true:rows=title=Edit goal|context=Review mode: staged diff|input=Focus tests|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=enter-submits-trimmed-nonempty-text:title=Edit goal:context=<empty>:placeholder=Type instructions:text=  Ship it  :cursor=11:submitted=Ship it:completion=accepted:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=  Ship it  |hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=enter-ignores-whitespace-only-text:title=Edit goal:context=<empty>:placeholder=Type instructions:text=   :cursor=3:submitted=<empty>:completion=<empty>:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=   |hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=modified-enter-inserts-newline:title=Edit goal:context=<empty>:placeholder=Type instructions:text=first\\n:cursor=6:submitted=<empty>:completion=<empty>:paste=false:input_height=3:desired_height=7:cursor_available=true:rows=title=Edit goal|input=first\\n|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=esc-cancels-view:title=Edit goal:context=<empty>:placeholder=Type instructions:text=draft:cursor=5:submitted=<empty>:completion=cancelled:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=draft|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.paste=explicit-paste-inserts-and-clears-burst:title=Edit goal:context=<empty>:placeholder=Type instructions:text=alpha beta:cursor=10:submitted=<empty>:completion=<empty>:paste=true:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=alpha beta|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.paste=empty-paste-rejected:title=Edit goal:context=<empty>:placeholder=Type instructions:text=<empty>:cursor=0:submitted=<empty>:completion=<empty>:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=Type instructions|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=paste-burst-enter-preserves-short-first-line:title=Edit goal:context=<empty>:placeholder=Type instructions:text=x\\nrest:cursor=6:submitted=x\\nrest:completion=accepted:paste=false:input_height=3:desired_height=7:cursor_available=true:rows=title=Edit goal|input=x\\nrest|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=paste-burst-tab-then-enter-does-not-submit:title=Edit goal:context=<empty>:placeholder=Type instructions:text=x\\nrest:cursor=6:submitted=x\\nrest:completion=accepted:paste=false:input_height=3:desired_height=7:cursor_available=true:rows=title=Edit goal|input=x\\nrest|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=delayed-enter-after-typing-submits:title=Edit goal:context=<empty>:placeholder=Type instructions:text=foo:cursor=3:submitted=foo:completion=accepted:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=foo|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.height=context-height-wraps-multiline-input:title=Edit goal:context=Review mode: staged diff:placeholder=Type instructions:text=abcdefghij\\nklmnopqrst\\nuvwxyz:cursor=28:submitted=<empty>:completion=<empty>:paste=false:input_height=4:desired_height=9:cursor_available=true:rows=title=Edit goal|context=Review mode: staged diff|input=abcdefghij\\nklmnopqrst\\nuvwxyz|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.cursor=cursor-unavailable-for-too-small-area:title=Edit goal:context=<empty>:placeholder=Type instructions:text=x:cursor=1:submitted=<empty>:completion=<empty>:paste=false:input_height=2:desired_height=6:cursor_available=false:rows=title=Edit goal|input=x|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.failure=live_custom_prompt_view_effects_rejected:no_terminal=true:no_buffer=true:no_callback=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> custom prompt view\ninput> \ntrace:\ntui.custom_prompt_view.plan=headless\ntui.custom_prompt_view.init=initial-text-context-and-placeholder:title=Edit goal:context=Review mode: staged diff:placeholder=Type instructions:text=Focus tests:cursor=11:submitted=<empty>:completion=<empty>:paste=false:input_height=2:desired_height=7:cursor_available=true:rows=title=Edit goal|context=Review mode: staged diff|input=Focus tests|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=enter-submits-trimmed-nonempty-text:title=Edit goal:context=<empty>:placeholder=Type instructions:text=  Ship it  :cursor=11:submitted=Ship it:completion=accepted:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=  Ship it  |hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=enter-ignores-whitespace-only-text:title=Edit goal:context=<empty>:placeholder=Type instructions:text=   :cursor=3:submitted=<empty>:completion=<empty>:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=   |hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=modified-enter-inserts-newline:title=Edit goal:context=<empty>:placeholder=Type instructions:text=first\\n:cursor=6:submitted=<empty>:completion=<empty>:paste=false:input_height=3:desired_height=7:cursor_available=true:rows=title=Edit goal|input=first\\n|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=esc-cancels-view:title=Edit goal:context=<empty>:placeholder=Type instructions:text=draft:cursor=5:submitted=<empty>:completion=cancelled:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=draft|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.paste=explicit-paste-inserts-and-clears-burst:title=Edit goal:context=<empty>:placeholder=Type instructions:text=alpha beta:cursor=10:submitted=<empty>:completion=<empty>:paste=true:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=alpha beta|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.paste=empty-paste-rejected:title=Edit goal:context=<empty>:placeholder=Type instructions:text=<empty>:cursor=0:submitted=<empty>:completion=<empty>:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=Type instructions|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=paste-burst-enter-preserves-short-first-line:title=Edit goal:context=<empty>:placeholder=Type instructions:text=x\\nrest:cursor=6:submitted=x\\nrest:completion=accepted:paste=false:input_height=3:desired_height=7:cursor_available=true:rows=title=Edit goal|input=x\\nrest|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=paste-burst-tab-then-enter-does-not-submit:title=Edit goal:context=<empty>:placeholder=Type instructions:text=x\\nrest:cursor=6:submitted=x\\nrest:completion=accepted:paste=false:input_height=3:desired_height=7:cursor_available=true:rows=title=Edit goal|input=x\\nrest|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.sequence=delayed-enter-after-typing-submits:title=Edit goal:context=<empty>:placeholder=Type instructions:text=foo:cursor=3:submitted=foo:completion=accepted:paste=false:input_height=2:desired_height=6:cursor_available=true:rows=title=Edit goal|input=foo|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.height=context-height-wraps-multiline-input:title=Edit goal:context=Review mode: staged diff:placeholder=Type instructions:text=abcdefghij\\nklmnopqrst\\nuvwxyz:cursor=28:submitted=<empty>:completion=<empty>:paste=false:input_height=4:desired_height=9:cursor_available=true:rows=title=Edit goal|context=Review mode: staged diff|input=abcdefghij\\nklmnopqrst\\nuvwxyz|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.cursor=cursor-unavailable-for-too-small-area:title=Edit goal:context=<empty>:placeholder=Type instructions:text=x:cursor=1:submitted=<empty>:completion=<empty>:paste=false:input_height=2:desired_height=6:cursor_available=false:rows=title=Edit goal|input=x|hint=enter-submit|esc-cancel\ntui.custom_prompt_view.failure=live_custom_prompt_view_effects_rejected:no_terminal=true:no_buffer=true:no_callback=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

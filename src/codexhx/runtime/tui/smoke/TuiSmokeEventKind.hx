@@ -82,6 +82,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final CommandPopup = "command_popup";
 	final MultiSelectPicker = "multi_select_picker";
 	final AppLinkView = "app_link_view";
+	final CustomPromptView = "custom_prompt_view";
 	final ChatWidgetGoalMenu = "chat_widget_goal_menu";
 	final ChatWidgetReviewMode = "chat_widget_review_mode";
 	final ChatWidgetTranscriptHistory = "chat_widget_transcript_history";
@@ -195,6 +196,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "command_popup": CommandPopup;
 			case "multi_select_picker": MultiSelectPicker;
 			case "app_link_view": AppLinkView;
+			case "custom_prompt_view": CustomPromptView;
 			case "chat_widget_goal_menu": ChatWidgetGoalMenu;
 			case "chat_widget_review_mode": ChatWidgetReviewMode;
 			case "chat_widget_transcript_history": ChatWidgetTranscriptHistory;

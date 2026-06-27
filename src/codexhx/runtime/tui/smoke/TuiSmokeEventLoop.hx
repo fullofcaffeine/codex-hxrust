@@ -183,6 +183,31 @@ private typedef TuiSmokeParsedAppLinkUrl = {
 	final host:String;
 }
 
+private typedef TuiSmokeCustomPromptState = {
+	final title:String;
+	final placeholder:String;
+	final contextLabel:String;
+	var text:String;
+	var cursor:Int;
+	var completion:String;
+	var submitted:String;
+	var pasteAccepted:Bool;
+	var pasteWindowUntil:Int;
+}
+
+private typedef TuiSmokeCustomPromptResult = {
+	final text:String;
+	final cursor:Int;
+	final submitted:String;
+	final completion:String;
+	final pasteAccepted:Bool;
+	final inputHeight:Int;
+	final desiredHeight:Int;
+	final cursorAvailable:Bool;
+	final rows:Array<String>;
+	final trace:String;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -640,6 +665,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.AppLinkView:
 					if (!traceAppLinkView(event.appLinkView, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.CustomPromptView:
+					if (!traceCustomPromptView(event.customPromptView, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -7709,6 +7739,206 @@ class TuiSmokeEventLoop {
 		if (appLinkViewIsExternalActionSuggestion(state))
 			return "Finish in Browser";
 		return "Finish App Setup";
+	}
+
+	static function traceCustomPromptView(plan:TuiSmokeCustomPromptPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowPromptCallback || plan.allowFilesystemMutation
+			|| plan.allowClipboardMutation || plan.allowNetwork || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.custom_prompt_view.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.custom_prompt_view.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeCustomPromptActionKind.Init, TuiSmokeCustomPromptActionKind.Sequence, TuiSmokeCustomPromptActionKind.Paste,
+					TuiSmokeCustomPromptActionKind.Height, TuiSmokeCustomPromptActionKind.Cursor:
+					final result = customPromptActionTrace(action);
+					if (result.text != action.expectedText
+						|| result.cursor != action.expectedCursor
+						|| result.submitted != action.expectedSubmitted
+						|| result.completion != action.expectedCompletion
+						|| result.pasteAccepted != action.expectedPasteAccepted
+						|| result.inputHeight != action.expectedInputHeight
+						|| result.desiredHeight != action.expectedDesiredHeight
+						|| result.cursorAvailable != action.expectedCursorAvailable
+						|| !stringArraysEqual(result.rows, action.expectedRows)) {
+						trace.push("tui.custom_prompt_view." + action.kind + "_mismatch=" + action.name + ":" + result.trace);
+						return false;
+					}
+					trace.push("tui.custom_prompt_view." + action.kind + "=" + action.name + ":" + result.trace);
+				case TuiSmokeCustomPromptActionKind.Failure:
+					trace.push("tui.custom_prompt_view.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_callback=" + action.noPromptCallback + ":no_fs=" + action.noFilesystemMutation + ":no_clipboard="
+						+ action.noClipboardMutation + ":no_network=" + action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.custom_prompt_view.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function customPromptActionTrace(action:TuiSmokeCustomPromptAction):TuiSmokeCustomPromptResult {
+		final state = customPromptState(action);
+		if (action.kind == TuiSmokeCustomPromptActionKind.Paste) {
+			customPromptPaste(state, action.pasteText);
+		}
+		for (step in action.steps) {
+			customPromptApplyStep(state, step);
+		}
+		final inputHeight = customPromptInputHeight(state.text, action.width);
+		final desiredHeight = customPromptDesiredHeight(state.text, action.width, state.contextLabel);
+		final cursorAvailable = customPromptCursorAvailable(state.text, action.width, action.areaHeight);
+		final rows = customPromptRows(state);
+		return {text: state.text,
+			cursor: state.cursor,
+			submitted: state.submitted,
+			completion: state.completion,
+			pasteAccepted: state.pasteAccepted,
+			inputHeight: inputHeight,
+			desiredHeight: desiredHeight,
+			cursorAvailable: cursorAvailable,
+			rows: rows,
+			trace: "title="
+			+ traceText(state.title)
+			+ ":context="
+			+ traceText(state.contextLabel)
+			+ ":placeholder="
+			+ traceText(state.placeholder)
+			+ ":text="
+			+ traceText(state.text)
+			+ ":cursor="
+			+ state.cursor
+			+ ":submitted="
+			+ traceText(state.submitted)
+			+ ":completion="
+			+ traceText(state.completion)
+			+ ":paste="
+			+ state.pasteAccepted
+			+ ":input_height="
+			+ inputHeight
+			+ ":desired_height="
+			+ desiredHeight
+			+ ":cursor_available="
+			+ cursorAvailable
+			+ ":rows="
+			+ customPromptRowTrace(rows)};
+	}
+
+	static function customPromptState(action:TuiSmokeCustomPromptAction):TuiSmokeCustomPromptState {
+		return {
+			title: action.title,
+			placeholder: action.placeholder,
+			contextLabel: action.contextLabel,
+			text: action.initialText,
+			cursor: action.initialText.length,
+			completion: "",
+			submitted: "",
+			pasteAccepted: false,
+			pasteWindowUntil: -1
+		};
+	}
+
+	static function customPromptApplyStep(state:TuiSmokeCustomPromptState, step:TuiSmokeCustomPromptStep):Void {
+		switch step.kind {
+			case TuiSmokeCustomPromptStepKind.Char:
+				if (!customPromptHasCtrlOrAlt(step.modifiers)) {
+					customPromptInsert(state, step.text);
+					state.pasteWindowUntil = step.elapsedMs + 25;
+				} else {
+					state.pasteWindowUntil = -1;
+				}
+			case TuiSmokeCustomPromptStepKind.Tab:
+				if (!customPromptHasCtrlOrAlt(step.modifiers)) {
+					if (step.elapsedMs <= state.pasteWindowUntil)
+						state.pasteWindowUntil = step.elapsedMs + 25;
+					else
+						state.pasteWindowUntil = -1;
+				} else {
+					state.pasteWindowUntil = -1;
+				}
+			case TuiSmokeCustomPromptStepKind.Enter:
+				if (step.modifiers == "none" || step.modifiers == "") {
+					if (step.elapsedMs <= state.pasteWindowUntil) {
+						customPromptInsert(state, "\n");
+						state.pasteWindowUntil = step.elapsedMs + 25;
+					} else {
+						final submitted = StringTools.trim(state.text);
+						if (submitted != "") {
+							state.submitted = submitted;
+							state.completion = "accepted";
+						}
+					}
+				} else {
+					customPromptInsert(state, "\n");
+					state.pasteWindowUntil = -1;
+				}
+			case TuiSmokeCustomPromptStepKind.Esc:
+				state.completion = "cancelled";
+				state.pasteWindowUntil = -1;
+			case TuiSmokeCustomPromptStepKind.Paste:
+				customPromptPaste(state, step.text);
+			case _:
+				state.pasteWindowUntil = -1;
+		}
+	}
+
+	static function customPromptPaste(state:TuiSmokeCustomPromptState, pasted:String):Void {
+		if (pasted == "") {
+			state.pasteAccepted = false;
+			return;
+		}
+		customPromptInsert(state, pasted);
+		state.pasteAccepted = true;
+		state.pasteWindowUntil = -1;
+	}
+
+	static function customPromptInsert(state:TuiSmokeCustomPromptState, value:String):Void {
+		final cursor = intClamp(state.cursor, 0, state.text.length);
+		state.text = state.text.substr(0, cursor) + value + state.text.substr(cursor);
+		state.cursor = cursor + value.length;
+	}
+
+	static function customPromptHasCtrlOrAlt(modifiers:String):Bool {
+		return modifiers.indexOf("ctrl") >= 0 || modifiers.indexOf("alt") >= 0;
+	}
+
+	static function customPromptDesiredHeight(text:String, width:Int, contextLabel:String):Int {
+		return 1 + (contextLabel == "" ? 0 : 1) + customPromptInputHeight(text, width) + 3;
+	}
+
+	static function customPromptInputHeight(text:String, width:Int):Int {
+		final usableWidth = intMax(1, width - 2);
+		final textHeight = intClamp(customPromptTextHeight(text, usableWidth), 1, 8);
+		return intMin(textHeight + 1, 9);
+	}
+
+	static function customPromptTextHeight(text:String, width:Int):Int {
+		final value = text == "" ? "" : text;
+		final lines = value.split("\n");
+		var rows = 0;
+		for (line in lines) {
+			rows += intMax(1, Std.int((line.length + width - 1) / width));
+		}
+		return intMax(1, rows);
+	}
+
+	static function customPromptCursorAvailable(text:String, width:Int, areaHeight:Int):Bool {
+		return areaHeight >= 2 && width > 2 && customPromptInputHeight(text, width) > 1;
+	}
+
+	static function customPromptRows(state:TuiSmokeCustomPromptState):Array<String> {
+		final out = ["title=" + traceText(state.title)];
+		if (state.contextLabel != "")
+			out.push("context=" + traceText(state.contextLabel));
+		out.push("input=" + traceText(state.text == "" ? state.placeholder : state.text));
+		out.push("hint=enter-submit|esc-cancel");
+		return out;
+	}
+
+	static function customPromptRowTrace(rows:Array<String>):String {
+		return rows.length == 0 ? "<none>" : rows.join("|");
 	}
 
 	static function traceSelectionPopupCommon(plan:TuiSmokeSelectionPopupCommonPlan, trace:Array<String>):Bool {
