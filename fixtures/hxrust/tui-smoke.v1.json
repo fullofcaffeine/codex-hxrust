@@ -65,6 +65,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/unified_exec_footer.rs",
       "../codex/codex-rs/tui/src/bottom_pane/file_search_popup.rs",
       "../codex/codex-rs/tui/src/bottom_pane/skill_popup.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/selection_popup_common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -21270,6 +21271,232 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.skill_popup.plan=headless\ntui.skill_popup.set_mentions=initial-mentions:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=GitHub:insert=$github:path=plugin://github:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-build-display:query=build:order=Build Helper With Absurdly Long Display Name:rows=Build Helper With Absurdl...>[Skill]:height=3:selected=Build Helper With Absurdly Long Display Name:insert=$build-helper:path=skill://build-helper:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-pr-display-before-search-term:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=PR Babysitter:insert=$pr-babysitter:path=skill://pr-babysitter:selected_idx=0:scroll_top=0\ntui.skill_popup.move_down=move-down-to-search-term:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=GitHub:insert=$github:path=plugin://github:selected_idx=1:scroll_top=0\ntui.skill_popup.move_down=move-down-wrap:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=PR Babysitter:insert=$pr-babysitter:path=skill://pr-babysitter:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-no-match:query=zzz:order=<none>:rows=<none>:height=3:selected=<empty>:insert=<empty>:path=<empty>:selected_idx=-1:scroll_top=0\ntui.skill_popup.set_query=query-empty-restores-rank-order:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=GitHub:insert=$github:path=plugin://github:selected_idx=0:scroll_top=0\ntui.skill_popup.move_up=move-up-wrap:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=Docs Only:insert=$docs:path=<empty>:selected_idx=4:scroll_top=0\ntui.skill_popup.set_mentions=set-mentions-clamps-selection:query=<empty>:order=GitHub,Plugin Creator:rows=GitHub>[Plugin] Pull request workflows|Plugin Creator>[Skill] Build local plugins:height=4:selected=Plugin Creator:insert=$plugin-creator:path=skill://plugin-creator:selected_idx=1:scroll_top=0\ntui.skill_popup.failure=live_skill_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> skill popup\ninput> \ntrace:\ntui.skill_popup.plan=headless\ntui.skill_popup.set_mentions=initial-mentions:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=GitHub:insert=$github:path=plugin://github:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-build-display:query=build:order=Build Helper With Absurdly Long Display Name:rows=Build Helper With Absurdl...>[Skill]:height=3:selected=Build Helper With Absurdly Long Display Name:insert=$build-helper:path=skill://build-helper:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-pr-display-before-search-term:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=PR Babysitter:insert=$pr-babysitter:path=skill://pr-babysitter:selected_idx=0:scroll_top=0\ntui.skill_popup.move_down=move-down-to-search-term:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=GitHub:insert=$github:path=plugin://github:selected_idx=1:scroll_top=0\ntui.skill_popup.move_down=move-down-wrap:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=PR Babysitter:insert=$pr-babysitter:path=skill://pr-babysitter:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-no-match:query=zzz:order=<none>:rows=<none>:height=3:selected=<empty>:insert=<empty>:path=<empty>:selected_idx=-1:scroll_top=0\ntui.skill_popup.set_query=query-empty-restores-rank-order:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=GitHub:insert=$github:path=plugin://github:selected_idx=0:scroll_top=0\ntui.skill_popup.move_up=move-up-wrap:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=Docs Only:insert=$docs:path=<empty>:selected_idx=4:scroll_top=0\ntui.skill_popup.set_mentions=set-mentions-clamps-selection:query=<empty>:order=GitHub,Plugin Creator:rows=GitHub>[Plugin] Pull request workflows|Plugin Creator>[Skill] Build local plugins:height=4:selected=Plugin Creator:insert=$plugin-creator:path=skill://plugin-creator:selected_idx=1:scroll_top=0\ntui.skill_popup.failure=live_skill_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "selection-popup-common-headless",
+      "frame": {
+        "name": "selection-popup-common-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "selection popup common"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "selection_popup_common",
+          "selectionPopupCommon": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "menu_surface",
+                "name": "inset-padding",
+                "x": 10,
+                "y": 4,
+                "width": 40,
+                "height": 8,
+                "expectedInset": "12,5,36,6",
+                "expectedPaddingHeight": 2
+              },
+              {
+                "kind": "single_line",
+                "name": "auto-visible-window",
+                "columnMode": "auto_visible",
+                "width": 50,
+                "height": 3,
+                "maxResults": 3,
+                "scrollTop": 0,
+                "selectedIndex": 1,
+                "rows": [
+                  {
+                    "name": "Short",
+                    "description": "Alpha"
+                  },
+                  {
+                    "name": "Longer Label",
+                    "description": "Beta description",
+                    "categoryTag": "[Core]"
+                  },
+                  {
+                    "name": "Disabled Option",
+                    "description": "Gamma",
+                    "disabledReason": "policy",
+                    "isDisabled": true
+                  },
+                  {
+                    "name": "Extremely Wide Hidden Row Name",
+                    "description": "Hidden",
+                    "categoryTag": "[Hidden]"
+                  }
+                ],
+                "expectedDescCol": 28,
+                "expectedStartIndex": 0,
+                "expectedRenderedLines": 3,
+                "expectedRows": [
+                  "-Short                       Alpha",
+                  "*Longer Label                Beta description  [Co…",
+                  "-Disabled Option (disabled)  Gamma (disabled: poli…"
+                ]
+              },
+              {
+                "kind": "single_line",
+                "name": "auto-all-rows-stable-column",
+                "columnMode": "auto_all_rows",
+                "width": 50,
+                "height": 3,
+                "maxResults": 3,
+                "scrollTop": 0,
+                "selectedIndex": 1,
+                "rows": [
+                  {
+                    "name": "Short",
+                    "description": "Alpha"
+                  },
+                  {
+                    "name": "Longer Label",
+                    "description": "Beta description",
+                    "categoryTag": "[Core]"
+                  },
+                  {
+                    "name": "Disabled Option",
+                    "description": "Gamma",
+                    "disabledReason": "policy",
+                    "isDisabled": true
+                  },
+                  {
+                    "name": "Extremely Wide Hidden Row Name",
+                    "description": "Hidden",
+                    "categoryTag": "[Hidden]"
+                  }
+                ],
+                "expectedDescCol": 32,
+                "expectedStartIndex": 0,
+                "expectedRenderedLines": 3,
+                "expectedRows": [
+                  "-Short                           Alpha",
+                  "*Longer Label                    Beta description …",
+                  "-Disabled Option (disabled)      Gamma (disabled: …"
+                ]
+              },
+              {
+                "kind": "single_line",
+                "name": "fixed-column-mode",
+                "columnMode": "fixed",
+                "width": 50,
+                "height": 3,
+                "maxResults": 3,
+                "scrollTop": 0,
+                "selectedIndex": 1,
+                "rows": [
+                  {
+                    "name": "Short",
+                    "description": "Alpha"
+                  },
+                  {
+                    "name": "Longer Label",
+                    "description": "Beta description",
+                    "categoryTag": "[Core]"
+                  },
+                  {
+                    "name": "Disabled Option",
+                    "description": "Gamma",
+                    "disabledReason": "policy",
+                    "isDisabled": true
+                  }
+                ],
+                "expectedDescCol": 15,
+                "expectedStartIndex": 0,
+                "expectedRenderedLines": 3,
+                "expectedRows": [
+                  "-Short          Alpha",
+                  "*Longer Label   Beta description  [Core]",
+                  "-Disabled Opti… (disabled)Gamma (disabled: policy)"
+                ]
+              },
+              {
+                "kind": "measure_wrapped",
+                "name": "wrapped-measure-selected-visible",
+                "columnMode": "auto_visible",
+                "width": 30,
+                "height": 3,
+                "maxResults": 2,
+                "scrollTop": 0,
+                "selectedIndex": 1,
+                "rows": [
+                  {
+                    "name": "First wrapped label",
+                    "description": "right column text",
+                    "wrapIndent": 2
+                  },
+                  {
+                    "name": "Second plain",
+                    "description": "short"
+                  }
+                ],
+                "expectedDescCol": 20,
+                "expectedStartIndex": 0,
+                "expectedMeasuredHeight": 3,
+                "expectedVisibleSelected": true
+              },
+              {
+                "kind": "wrap_indent",
+                "name": "explicit-indent-clamped",
+                "columnMode": "auto_visible",
+                "width": 6,
+                "height": 1,
+                "maxResults": 1,
+                "rowIndex": 0,
+                "rows": [
+                  {
+                    "name": "abc",
+                    "description": "desc",
+                    "wrapIndent": 10
+                  }
+                ],
+                "expectedDescCol": 4,
+                "expectedWrapIndent": 5
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_selection_popup_common_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.selection_popup_common.plan=headless\ntui.selection_popup_common.menu_surface=inset-padding:inset=12,5,36,6:padding_height=2\ntui.selection_popup_common.single_line=auto-visible-window:mode=auto_visible:width=50:height=3:max=3:start=0:desc_col=28:rendered=3:rows=-Short                       Alpha|*Longer Label                Beta description  [Co…|-Disabled Option (disabled)  Gamma (disabled: poli…\ntui.selection_popup_common.single_line=auto-all-rows-stable-column:mode=auto_all_rows:width=50:height=3:max=3:start=0:desc_col=32:rendered=3:rows=-Short                           Alpha|*Longer Label                    Beta description …|-Disabled Option (disabled)      Gamma (disabled: …\ntui.selection_popup_common.single_line=fixed-column-mode:mode=fixed:width=50:height=3:max=3:start=0:desc_col=15:rendered=3:rows=-Short          Alpha|*Longer Label   Beta description  [Core]|-Disabled Opti… (disabled)Gamma (disabled: policy)\ntui.selection_popup_common.measure_wrapped=wrapped-measure-selected-visible:mode=auto_visible:width=30:content_width=29:max=2:start=0:desc_col=20:measured=3:visible_selected=true\ntui.selection_popup_common.wrap_indent=explicit-indent-clamped:row=0:desc_col=4:width=6:indent=5\ntui.selection_popup_common.failure=live_selection_popup_common_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> selection popup common\ninput> \ntrace:\ntui.selection_popup_common.plan=headless\ntui.selection_popup_common.menu_surface=inset-padding:inset=12,5,36,6:padding_height=2\ntui.selection_popup_common.single_line=auto-visible-window:mode=auto_visible:width=50:height=3:max=3:start=0:desc_col=28:rendered=3:rows=-Short                       Alpha|*Longer Label                Beta description  [Co…|-Disabled Option (disabled)  Gamma (disabled: poli…\ntui.selection_popup_common.single_line=auto-all-rows-stable-column:mode=auto_all_rows:width=50:height=3:max=3:start=0:desc_col=32:rendered=3:rows=-Short                           Alpha|*Longer Label                    Beta description …|-Disabled Option (disabled)      Gamma (disabled: …\ntui.selection_popup_common.single_line=fixed-column-mode:mode=fixed:width=50:height=3:max=3:start=0:desc_col=15:rendered=3:rows=-Short          Alpha|*Longer Label   Beta description  [Core]|-Disabled Opti… (disabled)Gamma (disabled: policy)\ntui.selection_popup_common.measure_wrapped=wrapped-measure-selected-visible:mode=auto_visible:width=30:content_width=29:max=2:start=0:desc_col=20:measured=3:visible_selected=true\ntui.selection_popup_common.wrap_indent=explicit-indent-clamped:row=0:desc_col=4:width=6:indent=5\ntui.selection_popup_common.failure=live_selection_popup_common_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

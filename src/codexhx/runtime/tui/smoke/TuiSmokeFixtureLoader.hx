@@ -133,6 +133,7 @@ class TuiSmokeFixtureLoader {
 				unifiedExecFooter: optionalUnifiedExecFooterPlan(value, "unifiedExecFooter"),
 				fileSearchPopup: optionalFileSearchPopupPlan(value, "fileSearchPopup"),
 				skillPopup: optionalSkillPopupPlan(value, "skillPopup"),
+				selectionPopupCommon: optionalSelectionPopupCommonPlan(value, "selectionPopupCommon"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -1100,6 +1101,92 @@ class TuiSmokeFixtureLoader {
 				categoryTag: optionalStringField(value, "categoryTag", ""),
 				sortRank: optionalIntField(value, "sortRank", 1)
 			}));
+		}
+		return out;
+	}
+
+	static function optionalSelectionPopupCommonPlan(object:Value, name:String):Null<TuiSmokeSelectionPopupCommonPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSelectionPopupCommonPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: selectionPopupCommonActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function selectionPopupCommonActions(values:Array<Value>):Array<TuiSmokeSelectionPopupCommonAction> {
+		final out:Array<TuiSmokeSelectionPopupCommonAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSelectionPopupCommonAction({
+				kind: TuiSmokeSelectionPopupCommonActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				rows: selectionPopupRows(optionalArrayField(value, "rows")),
+				columnMode: TuiSmokeSelectionPopupColumnMode.fromString(optionalStringField(value, "columnMode", "auto_visible")),
+				x: optionalIntField(value, "x", 0),
+				y: optionalIntField(value, "y", 0),
+				width: optionalIntField(value, "width", 0),
+				height: optionalIntField(value, "height", 0),
+				maxResults: optionalIntField(value, "maxResults", 0),
+				scrollTop: optionalIntField(value, "scrollTop", 0),
+				selectedIndex: optionalIntField(value, "selectedIndex", -1),
+				nameColumnWidth: optionalIntField(value, "nameColumnWidth", 0),
+				hasNameColumnWidth: optionalBoolField(value, "hasNameColumnWidth", false),
+				emptyMessage: optionalStringField(value, "emptyMessage", "no rows"),
+				rowIndex: optionalIntField(value, "rowIndex", 0),
+				expectedInset: optionalStringField(value, "expectedInset", ""),
+				expectedPaddingHeight: optionalIntField(value, "expectedPaddingHeight", 0),
+				expectedDescCol: optionalIntField(value, "expectedDescCol", 0),
+				expectedStartIndex: optionalIntField(value, "expectedStartIndex", 0),
+				expectedRenderedLines: optionalIntField(value, "expectedRenderedLines", 0),
+				expectedMeasuredHeight: optionalIntField(value, "expectedMeasuredHeight", 0),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				expectedVisibleSelected: optionalBoolField(value, "expectedVisibleSelected", false),
+				expectedWrapIndent: optionalIntField(value, "expectedWrapIndent", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function selectionPopupRows(values:Array<Value>):Array<TuiSmokeSelectionPopupRow> {
+		final out:Array<TuiSmokeSelectionPopupRow> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSelectionPopupRow({
+				name: optionalStringField(value, "name", ""),
+				prefix: optionalStringField(value, "prefix", ""),
+				shortcut: optionalStringField(value, "shortcut", ""),
+				matchIndices: optionalIntArrayField(value, "matchIndices"),
+				description: optionalStringField(value, "description", ""),
+				categoryTag: optionalStringField(value, "categoryTag", ""),
+				disabledReason: optionalStringField(value, "disabledReason", ""),
+				isDisabled: optionalBoolField(value, "isDisabled", false),
+				wrapIndent: optionalIntField(value, "wrapIndent", -1)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalIntArrayField(object:Value, name:String):Array<Int> {
+		final values = optionalArrayField(object, name);
+		final out:Array<Int> = [];
+		for (value in values) {
+			switch value {
+				case JNumber(number):
+					out.push(Std.int(number));
+				case _:
+			}
 		}
 		return out;
 	}

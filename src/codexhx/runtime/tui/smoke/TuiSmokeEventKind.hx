@@ -77,6 +77,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final UnifiedExecFooter = "unified_exec_footer";
 	final FileSearchPopup = "file_search_popup";
 	final SkillPopup = "skill_popup";
+	final SelectionPopupCommon = "selection_popup_common";
 	final ChatWidgetGoalMenu = "chat_widget_goal_menu";
 	final ChatWidgetReviewMode = "chat_widget_review_mode";
 	final ChatWidgetTranscriptHistory = "chat_widget_transcript_history";
@@ -185,6 +186,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "unified_exec_footer": UnifiedExecFooter;
 			case "file_search_popup": FileSearchPopup;
 			case "skill_popup": SkillPopup;
+			case "selection_popup_common": SelectionPopupCommon;
 			case "chat_widget_goal_menu": ChatWidgetGoalMenu;
 			case "chat_widget_review_mode": ChatWidgetReviewMode;
 			case "chat_widget_transcript_history": ChatWidgetTranscriptHistory;

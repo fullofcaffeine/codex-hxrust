@@ -3967,6 +3967,10 @@ Status: HXCX-TUI-274 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-275 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/skill_popup.rs`. The fixture preserves empty-query sorting by `sort_rank` then display name, display-name and alternate-search-term filtering, display matches ordered before search-term-only matches, required-height clamping to `MAX_POPUP_ROWS + 2`, selected mention display/insert/path lookup, move-up/down wrapping, selection clamping after `set_mentions`, display-name truncation at 28 characters, description/category fallback row metadata, no-match selected-none behavior, and no-live rejection evidence. This is deterministic skill popup state evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
 
+### HXCX-TUI-276 Headless Raw Codex Selection Popup Common
+
+Status: HXCX-TUI-276 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/selection_popup_common.rs`. The fixture preserves menu-surface inset and vertical padding facts, `ColumnWidthMode::AutoVisible`, `AutoAllRows`, and `Fixed` description-column behavior, off-screen row influence on stable all-row columns, disabled row metadata, category tag carry-through, single-line overflow ellipsis, wrapped-height measurement, selected-row visibility under wrapped rows, explicit wrap-indent clamping for narrow widths, and no-live rejection evidence. This is deterministic shared popup layout evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

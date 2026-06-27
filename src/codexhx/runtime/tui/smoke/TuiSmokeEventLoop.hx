@@ -70,6 +70,13 @@ private typedef TuiSmokeSkillPopupMatch = {
 	final score:Int;
 }
 
+private typedef TuiSmokeSelectionPopupCommonRect = {
+	final x:Int;
+	final y:Int;
+	final width:Int;
+	final height:Int;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -502,6 +509,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.SkillPopup:
 					if (!traceSkillPopup(event.skillPopup, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.SelectionPopupCommon:
+					if (!traceSelectionPopupCommon(event.selectionPopupCommon, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -6421,6 +6433,338 @@ class TuiSmokeEventLoop {
 		if (left > right)
 			return 1;
 		return 0;
+	}
+
+	static function traceSelectionPopupCommon(plan:TuiSmokeSelectionPopupCommonPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.selection_popup_common.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.selection_popup_common.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeSelectionPopupCommonActionKind.MenuSurface:
+					final inset = selectionPopupCommonInset(action);
+					final actualInset = selectionPopupCommonRectTrace(inset);
+					final paddingHeight = 2;
+					if (actualInset != action.expectedInset || paddingHeight != action.expectedPaddingHeight) {
+						trace.push("tui.selection_popup_common.menu_surface_mismatch=" + action.name + ":inset=" + actualInset + ":padding_height="
+							+ paddingHeight);
+						return false;
+					}
+					trace.push("tui.selection_popup_common.menu_surface=" + action.name + ":inset=" + actualInset + ":padding_height=" + paddingHeight);
+				case TuiSmokeSelectionPopupCommonActionKind.SingleLine:
+					final single = selectionPopupCommonSingleLineTrace(action);
+					if (single.actualDescCol != action.expectedDescCol
+						|| single.actualStartIndex != action.expectedStartIndex
+						|| single.actualRenderedLines != action.expectedRenderedLines
+						|| !stringArraysEqual(single.actualRows, action.expectedRows)) {
+						trace.push("tui.selection_popup_common.single_line_mismatch=" + action.name + ":" + single.trace);
+						return false;
+					}
+					trace.push("tui.selection_popup_common.single_line=" + action.name + ":" + single.trace);
+				case TuiSmokeSelectionPopupCommonActionKind.MeasureWrapped:
+					final measured = selectionPopupCommonMeasuredTrace(action);
+					if (measured.actualDescCol != action.expectedDescCol
+						|| measured.actualStartIndex != action.expectedStartIndex
+						|| measured.actualMeasuredHeight != action.expectedMeasuredHeight
+						|| measured.actualVisibleSelected != action.expectedVisibleSelected) {
+						trace.push("tui.selection_popup_common.measure_wrapped_mismatch=" + action.name + ":" + measured.trace);
+						return false;
+					}
+					trace.push("tui.selection_popup_common.measure_wrapped=" + action.name + ":" + measured.trace);
+				case TuiSmokeSelectionPopupCommonActionKind.WrapIndent:
+					final descCol = selectionPopupCommonDescCol(action.rows, action.scrollTop, action.selectedIndex, action.maxResults, action.width,
+						action.height, action.columnMode, action.hasNameColumnWidth, action.nameColumnWidth, true);
+					final row = action.rowIndex >= 0 && action.rowIndex < action.rows.length ? action.rows[action.rowIndex] : null;
+					final indent = row == null ? 0 : selectionPopupCommonWrapIndent(row, descCol, action.width);
+					if (indent != action.expectedWrapIndent || descCol != action.expectedDescCol) {
+						trace.push("tui.selection_popup_common.wrap_indent_mismatch=" + action.name + ":row=" + action.rowIndex + ":desc_col=" + descCol
+							+ ":width=" + action.width + ":indent=" + indent);
+						return false;
+					}
+					trace.push("tui.selection_popup_common.wrap_indent=" + action.name + ":row=" + action.rowIndex + ":desc_col=" + descCol + ":width="
+						+ action.width + ":indent=" + indent);
+				case TuiSmokeSelectionPopupCommonActionKind.Failure:
+					trace.push("tui.selection_popup_common.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.selection_popup_common.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function selectionPopupCommonInset(action:TuiSmokeSelectionPopupCommonAction):TuiSmokeSelectionPopupCommonRect {
+		return {
+			x: action.x + 2,
+			y: action.y + 1,
+			width: intMax(0, action.width - 4),
+			height: intMax(0, action.height - 2)
+		};
+	}
+
+	static function selectionPopupCommonRectTrace(rect:TuiSmokeSelectionPopupCommonRect):String {
+		return rect.x + "," + rect.y + "," + rect.width + "," + rect.height;
+	}
+
+	static function selectionPopupCommonSingleLineTrace(action:TuiSmokeSelectionPopupCommonAction):{
+		final actualDescCol:Int;
+		final actualStartIndex:Int;
+		final actualRenderedLines:Int;
+		final actualRows:Array<String>;
+		final trace:String;
+	} {
+		final visibleItems = selectionPopupCommonVisibleItems(action.rows.length, action.maxResults, action.height);
+		final startIndex = selectionPopupCommonWindowStart(action.rows.length, action.scrollTop, action.selectedIndex, visibleItems);
+		final descCol = selectionPopupCommonComputeDescCol(action.rows, startIndex, visibleItems, action.width, action.columnMode, action.hasNameColumnWidth,
+			action.nameColumnWidth);
+		final rows = selectionPopupCommonSingleLineRows(action.rows, startIndex, visibleItems, action.selectedIndex, descCol, action.width);
+		final rendered = rows.length;
+		return {actualDescCol: descCol,
+			actualStartIndex: startIndex,
+			actualRenderedLines: rendered,
+			actualRows: rows,
+			trace: "mode="
+			+ action.columnMode
+			+ ":width="
+			+ action.width
+			+ ":height="
+			+ action.height
+			+ ":max="
+			+ action.maxResults
+			+ ":start="
+			+ startIndex
+			+ ":desc_col="
+			+ descCol
+			+ ":rendered="
+			+ rendered
+			+ ":rows="
+			+ selectionPopupCommonRowsTrace(rows)};
+	}
+
+	static function selectionPopupCommonMeasuredTrace(action:TuiSmokeSelectionPopupCommonAction):{
+		final actualDescCol:Int;
+		final actualStartIndex:Int;
+		final actualMeasuredHeight:Int;
+		final actualVisibleSelected:Bool;
+		final trace:String;
+	} {
+		final contentWidth = intMax(1, action.width - 1);
+		final visibleItems = intMin(action.maxResults, action.rows.length);
+		final startIndex = selectionPopupCommonWindowStart(action.rows.length, action.scrollTop, action.selectedIndex, visibleItems);
+		final descCol = selectionPopupCommonComputeDescCol(action.rows, startIndex, visibleItems, contentWidth, action.columnMode, action.hasNameColumnWidth,
+			action.nameColumnWidth);
+		var total = 0;
+		final end = intMin(action.rows.length, startIndex + visibleItems);
+		for (idx in startIndex...end)
+			total += selectionPopupCommonWrappedLineCount(action.rows[idx], descCol, contentWidth);
+		final measured = intMax(1, total);
+		final visibleSelected = selectionPopupCommonVisibleSelected(action.rows, startIndex, visibleItems, action.selectedIndex, descCol, contentWidth,
+			action.height);
+		return {actualDescCol: descCol,
+			actualStartIndex: startIndex,
+			actualMeasuredHeight: measured,
+			actualVisibleSelected: visibleSelected,
+			trace: "mode="
+			+ action.columnMode
+			+ ":width="
+			+ action.width
+			+ ":content_width="
+			+ contentWidth
+			+ ":max="
+			+ action.maxResults
+			+ ":start="
+			+ startIndex
+			+ ":desc_col="
+			+ descCol
+			+ ":measured="
+			+ measured
+			+ ":visible_selected="
+			+ visibleSelected};
+	}
+
+	static function selectionPopupCommonVisibleItems(rowCount:Int, maxResults:Int, height:Int):Int {
+		if (rowCount == 0)
+			return 0;
+		return intMin(intMin(maxResults, rowCount), intMax(1, height));
+	}
+
+	static function selectionPopupCommonWindowStart(rowCount:Int, scrollTop:Int, selectedIndex:Int, visibleItems:Int):Int {
+		if (rowCount == 0 || visibleItems == 0)
+			return 0;
+		var start = intMin(scrollTop, rowCount - 1);
+		if (selectedIndex >= 0) {
+			if (selectedIndex < start) {
+				start = selectedIndex;
+			} else {
+				final bottom = start + visibleItems - 1;
+				if (selectedIndex > bottom)
+					start = selectedIndex + 1 - visibleItems;
+			}
+		}
+		return intMax(0, start);
+	}
+
+	static function selectionPopupCommonDescCol(rows:Array<TuiSmokeSelectionPopupRow>, scrollTop:Int, selectedIndex:Int, maxResults:Int, width:Int,
+			height:Int, mode:TuiSmokeSelectionPopupColumnMode, hasNameColumnWidth:Bool, nameColumnWidth:Int, singleLine:Bool):Int {
+		final visibleItems = singleLine ? selectionPopupCommonVisibleItems(rows.length, maxResults, height) : intMin(maxResults, rows.length);
+		final startIndex = selectionPopupCommonWindowStart(rows.length, scrollTop, selectedIndex, visibleItems);
+		return selectionPopupCommonComputeDescCol(rows, startIndex, visibleItems, width, mode, hasNameColumnWidth, nameColumnWidth);
+	}
+
+	static function selectionPopupCommonComputeDescCol(rows:Array<TuiSmokeSelectionPopupRow>, startIndex:Int, visibleItems:Int, contentWidth:Int,
+			mode:TuiSmokeSelectionPopupColumnMode, hasNameColumnWidth:Bool, nameColumnWidth:Int):Int {
+		if (contentWidth <= 1)
+			return 0;
+		final maxDescCol = contentWidth - 1;
+		final maxAutoDescCol = intMin(maxDescCol, intMax(1, Std.int((contentWidth * 7) / 10)));
+		if (mode == TuiSmokeSelectionPopupColumnMode.Fixed)
+			return intClamp(Std.int((contentWidth * 3) / 10), 1, maxDescCol);
+		var maxNameWidth = 0;
+		if (mode == TuiSmokeSelectionPopupColumnMode.AutoAllRows) {
+			for (row in rows)
+				maxNameWidth = intMax(maxNameWidth, selectionPopupCommonNameMeasureWidth(row));
+		} else {
+			final end = intMin(rows.length, startIndex + visibleItems);
+			for (idx in startIndex...end)
+				maxNameWidth = intMax(maxNameWidth, selectionPopupCommonNameMeasureWidth(rows[idx]));
+		}
+		final leftWidth = hasNameColumnWidth ? intMax(nameColumnWidth, maxNameWidth) : maxNameWidth;
+		return intMin(leftWidth + 2, maxAutoDescCol);
+	}
+
+	static function selectionPopupCommonNameMeasureWidth(row:TuiSmokeSelectionPopupRow):Int {
+		return row.prefix.length + row.name.length + (row.disabledReason == "" ? 0 : " (disabled)".length);
+	}
+
+	static function selectionPopupCommonSingleLineRows(rows:Array<TuiSmokeSelectionPopupRow>, startIndex:Int, visibleItems:Int, selectedIndex:Int,
+			descCol:Int, width:Int):Array<String> {
+		final out:Array<String> = [];
+		final end = intMin(rows.length, startIndex + visibleItems);
+		for (idx in startIndex...end) {
+			final marker = idx == selectedIndex && !rows[idx].isDisabled ? "*" : "-";
+			final line = selectionPopupCommonTruncate(selectionPopupCommonBuildFullLine(rows[idx], descCol), width);
+			out.push(marker + line);
+		}
+		return out;
+	}
+
+	static function selectionPopupCommonBuildFullLine(row:TuiSmokeSelectionPopupRow, descCol:Int):String {
+		final combinedDescription = selectionPopupCommonCombinedDescription(row);
+		final hasDescription = combinedDescription != "";
+		final nameLimit = hasDescription ? intMax(0, descCol - 2 - row.prefix.length) : 2147483647;
+		var renderedName = row.name;
+		if (row.name.length > nameLimit) {
+			renderedName = nameLimit <= 0 ? ellipsis() : row.name.substr(0, nameLimit) + ellipsis();
+		}
+		if (row.disabledReason != "")
+			renderedName += " (disabled)";
+		var line = row.prefix + renderedName;
+		final nameWidth = row.prefix.length + renderedName.length;
+		if (row.shortcut != "")
+			line += " (" + row.shortcut + ")";
+		if (hasDescription)
+			line += spaces(intMax(0, descCol - nameWidth)) + combinedDescription;
+		if (row.categoryTag != "")
+			line += "  " + row.categoryTag;
+		return line;
+	}
+
+	static function selectionPopupCommonCombinedDescription(row:TuiSmokeSelectionPopupRow):String {
+		if (row.description != "" && row.disabledReason != "")
+			return row.description + " (disabled: " + row.disabledReason + ")";
+		if (row.description != "")
+			return row.description;
+		if (row.disabledReason != "")
+			return "disabled: " + row.disabledReason;
+		return "";
+	}
+
+	static function selectionPopupCommonTruncate(value:String, width:Int):String {
+		if (width <= 0)
+			return "";
+		if (value.length <= width)
+			return value;
+		if (width == 1)
+			return ellipsis();
+		return value.substr(0, width - 1) + ellipsis();
+	}
+
+	static function selectionPopupCommonWrappedLineCount(row:TuiSmokeSelectionPopupRow, descCol:Int, width:Int):Int {
+		final effectiveWidth = intMax(1, width);
+		if (selectionPopupCommonShouldWrapNameInColumn(row)) {
+			final leftWidth = intMax(1, descCol - 2);
+			final rightWidth = intMax(1, effectiveWidth - descCol);
+			return intMax(selectionPopupCommonTextLineCount(row.name, leftWidth), selectionPopupCommonTextLineCount(row.description, rightWidth));
+		}
+		final continuationIndent = selectionPopupCommonWrapIndent(row, descCol, effectiveWidth);
+		final firstWidth = effectiveWidth;
+		final nextWidth = intMax(1, effectiveWidth - continuationIndent);
+		final line = selectionPopupCommonBuildFullLine(row, descCol);
+		if (line.length <= firstWidth)
+			return 1;
+		return 1 + selectionPopupCommonTextLineCount(line.substr(firstWidth), nextWidth);
+	}
+
+	static function selectionPopupCommonShouldWrapNameInColumn(row:TuiSmokeSelectionPopupRow):Bool {
+		return row.wrapIndent >= 0 && row.description != "" && row.disabledReason == "" && row.matchIndices.length == 0 && row.shortcut == ""
+			&& row.categoryTag == "" && row.prefix == "";
+	}
+
+	static function selectionPopupCommonTextLineCount(value:String, width:Int):Int {
+		final effectiveWidth = intMax(1, width);
+		if (value.length == 0)
+			return 1;
+		return Std.int((value.length + effectiveWidth - 1) / effectiveWidth);
+	}
+
+	static function selectionPopupCommonWrapIndent(row:TuiSmokeSelectionPopupRow, descCol:Int, width:Int):Int {
+		final maxIndent = intMax(0, width - 1);
+		final indent = row.wrapIndent >= 0 ? row.wrapIndent : (row.description != "" || row.disabledReason != "" ? descCol : 0);
+		return intMin(indent, maxIndent);
+	}
+
+	static function selectionPopupCommonVisibleSelected(rows:Array<TuiSmokeSelectionPopupRow>, startIndex:Int, visibleItems:Int, selectedIndex:Int,
+			descCol:Int, width:Int, viewportHeight:Int):Bool {
+		if (selectedIndex < 0 || viewportHeight <= 0)
+			return false;
+		var usedLines = 0;
+		final end = intMin(rows.length, startIndex + visibleItems);
+		for (idx in startIndex...end) {
+			final rowLines = intMax(1, selectionPopupCommonWrappedLineCount(rows[idx], descCol, width));
+			if (usedLines > 0 && usedLines + rowLines > viewportHeight)
+				return false;
+			if (idx == selectedIndex)
+				return true;
+			usedLines += rowLines;
+			if (usedLines >= viewportHeight)
+				return false;
+		}
+		return false;
+	}
+
+	static function selectionPopupCommonRowsTrace(rows:Array<String>):String {
+		if (rows.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (row in rows)
+			out.push(traceText(row));
+		return out.join("|");
+	}
+
+	static function intClamp(value:Int, minValue:Int, maxValue:Int):Int {
+		return intMin(intMax(value, minValue), maxValue);
+	}
+
+	static function spaces(count:Int):String {
+		var out = "";
+		for (_ in 0...count)
+			out += " ";
+		return out;
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {
