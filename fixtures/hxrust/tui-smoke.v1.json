@@ -48,6 +48,7 @@
       "../codex/codex-rs/tui/src/goal_display.rs",
       "../codex/codex-rs/tui/src/git_action_directives.rs",
       "../codex/codex-rs/tui/src/thread_transcript.rs",
+      "../codex/codex-rs/tui/src/line_truncation.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -17831,6 +17832,226 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.thread_transcript.plan=headless\ntui.thread_transcript.project=mixed-hidden:visibility=hidden:cells=User(Please inspect src/app.ts)|AgentMarkdown(Done\\n- [P2] Fix body \u2014 src/app.ts:4\\n  Check input)|Plan(1. Inspect\\n2. Patch)|Reasoning(Summary A\\n\\nSummary B)|Plain(hook prompt: Run tests\\nhook prompt: Review diff)|Plain($ npm test\\nstatus: Completed \u00b7 exit 0\\n  ok\\n  trail)|Plain(file changes: Completed \u00b7 2 changes)|Plain(mcp tool: github/list_prs \u00b7 Completed)|Plain(tool: shell \u00b7 Failed)|Plain(web search: upstream transcript)\ntui.thread_transcript.project=visible-reasoning:visibility=visible:cells=Reasoning(Raw one\\n\\nRaw two)|Plain(image: /repo/screenshots/result.png)|Plain(image generation: succeeded \u00b7 /repo/out/generated.png)|Plain(review started: PR #17)|Plain(review finished: PR #17)|Plain(context compacted)\ntui.thread_transcript.project=empty-fallback:visibility=hidden:cells=Plain(No transcript content available)\ntui.thread_transcript.failure=live_thread_transcript_effects_rejected:no_read=true:no_render=true:no_fs=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> thread transcript cell projection boundary\ninput> \ntrace:\ntui.thread_transcript.plan=headless\ntui.thread_transcript.project=mixed-hidden:visibility=hidden:cells=User(Please inspect src/app.ts)|AgentMarkdown(Done\\n- [P2] Fix body \u2014 src/app.ts:4\\n  Check input)|Plan(1. Inspect\\n2. Patch)|Reasoning(Summary A\\n\\nSummary B)|Plain(hook prompt: Run tests\\nhook prompt: Review diff)|Plain($ npm test\\nstatus: Completed \u00b7 exit 0\\n  ok\\n  trail)|Plain(file changes: Completed \u00b7 2 changes)|Plain(mcp tool: github/list_prs \u00b7 Completed)|Plain(tool: shell \u00b7 Failed)|Plain(web search: upstream transcript)\ntui.thread_transcript.project=visible-reasoning:visibility=visible:cells=Reasoning(Raw one\\n\\nRaw two)|Plain(image: /repo/screenshots/result.png)|Plain(image generation: succeeded \u00b7 /repo/out/generated.png)|Plain(review started: PR #17)|Plain(review finished: PR #17)|Plain(context compacted)\ntui.thread_transcript.project=empty-fallback:visibility=hidden:cells=Plain(No transcript content available)\ntui.thread_transcript.failure=live_thread_transcript_effects_rejected:no_read=true:no_render=true:no_fs=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "line-truncation-headless",
+      "frame": {
+        "name": "line-truncation-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "line truncation helper boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "line_truncation",
+          "lineTruncation": {
+            "allowRatatuiRender": false,
+            "allowTerminalMutation": false,
+            "allowFilesystemMutation": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "width",
+                "name": "width-wide-and-empty",
+                "spans": [
+                  {
+                    "text": "abc",
+                    "style": "plain"
+                  },
+                  {
+                    "text": "",
+                    "style": "ghost"
+                  },
+                  {
+                    "text": "\u754c",
+                    "style": "wide"
+                  }
+                ],
+                "expectedWidth": 5
+              },
+              {
+                "kind": "truncate",
+                "name": "zero-width",
+                "maxWidth": 0,
+                "spans": [
+                  {
+                    "text": "abc",
+                    "style": "plain"
+                  },
+                  {
+                    "text": "",
+                    "style": "ghost"
+                  }
+                ],
+                "expectedSpans": []
+              },
+              {
+                "kind": "truncate",
+                "name": "no-overflow",
+                "maxWidth": 8,
+                "spans": [
+                  {
+                    "text": "ab",
+                    "style": "plain"
+                  },
+                  {
+                    "text": "cd",
+                    "style": "accent"
+                  }
+                ],
+                "expectedSpans": [
+                  {
+                    "text": "ab",
+                    "style": "plain"
+                  },
+                  {
+                    "text": "cd",
+                    "style": "accent"
+                  }
+                ]
+              },
+              {
+                "kind": "truncate",
+                "name": "empty-and-partial",
+                "maxWidth": 4,
+                "spans": [
+                  {
+                    "text": "",
+                    "style": "ghost"
+                  },
+                  {
+                    "text": "abc",
+                    "style": "plain"
+                  },
+                  {
+                    "text": "def",
+                    "style": "accent"
+                  }
+                ],
+                "expectedSpans": [
+                  {
+                    "text": "",
+                    "style": "ghost"
+                  },
+                  {
+                    "text": "abc",
+                    "style": "plain"
+                  },
+                  {
+                    "text": "d",
+                    "style": "accent"
+                  }
+                ]
+              },
+              {
+                "kind": "truncate",
+                "name": "wide-boundary",
+                "maxWidth": 3,
+                "spans": [
+                  {
+                    "text": "a\u754cb",
+                    "style": "plain"
+                  }
+                ],
+                "expectedSpans": [
+                  {
+                    "text": "a\u754c",
+                    "style": "plain"
+                  }
+                ]
+              },
+              {
+                "kind": "ellipsis",
+                "name": "ellipsis-no-overflow",
+                "maxWidth": 5,
+                "spans": [
+                  {
+                    "text": "fit",
+                    "style": "plain"
+                  }
+                ],
+                "expectedSpans": [
+                  {
+                    "text": "fit",
+                    "style": "plain"
+                  }
+                ]
+              },
+              {
+                "kind": "ellipsis",
+                "name": "ellipsis-overflow",
+                "maxWidth": 5,
+                "spans": [
+                  {
+                    "text": "abcd",
+                    "style": "plain"
+                  },
+                  {
+                    "text": "ef",
+                    "style": "accent"
+                  }
+                ],
+                "expectedSpans": [
+                  {
+                    "text": "abcd",
+                    "style": "plain"
+                  },
+                  {
+                    "text": "\u2026",
+                    "style": "plain"
+                  }
+                ]
+              },
+              {
+                "kind": "ellipsis",
+                "name": "ellipsis-zero",
+                "maxWidth": 0,
+                "spans": [
+                  {
+                    "text": "abc",
+                    "style": "plain"
+                  }
+                ],
+                "expectedSpans": []
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_line_truncation_effects_rejected",
+                "noRatatuiRender": true,
+                "noTerminalMutation": true,
+                "noFilesystemMutation": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.line_truncation.plan=headless\ntui.line_truncation.width=width-wide-and-empty:width=5:spans=plain[abc]|ghost[<empty>]|wide[\u754c]\ntui.line_truncation.truncate=zero-width:max=0:spans=<none>\ntui.line_truncation.truncate=no-overflow:max=8:spans=plain[ab]|accent[cd]\ntui.line_truncation.truncate=empty-and-partial:max=4:spans=ghost[<empty>]|plain[abc]|accent[d]\ntui.line_truncation.truncate=wide-boundary:max=3:spans=plain[a\u754c]\ntui.line_truncation.ellipsis=ellipsis-no-overflow:max=5:spans=plain[fit]\ntui.line_truncation.ellipsis=ellipsis-overflow:max=5:spans=plain[abcd]|plain[\u2026]\ntui.line_truncation.ellipsis=ellipsis-zero:max=0:spans=<none>\ntui.line_truncation.failure=live_line_truncation_effects_rejected:no_render=true:no_terminal=true:no_fs=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> line truncation helper boundary\ninput> \ntrace:\ntui.line_truncation.plan=headless\ntui.line_truncation.width=width-wide-and-empty:width=5:spans=plain[abc]|ghost[<empty>]|wide[\u754c]\ntui.line_truncation.truncate=zero-width:max=0:spans=<none>\ntui.line_truncation.truncate=no-overflow:max=8:spans=plain[ab]|accent[cd]\ntui.line_truncation.truncate=empty-and-partial:max=4:spans=ghost[<empty>]|plain[abc]|accent[d]\ntui.line_truncation.truncate=wide-boundary:max=3:spans=plain[a\u754c]\ntui.line_truncation.ellipsis=ellipsis-no-overflow:max=5:spans=plain[fit]\ntui.line_truncation.ellipsis=ellipsis-overflow:max=5:spans=plain[abcd]|plain[\u2026]\ntui.line_truncation.ellipsis=ellipsis-zero:max=0:spans=<none>\ntui.line_truncation.failure=live_line_truncation_effects_rejected:no_render=true:no_terminal=true:no_fs=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

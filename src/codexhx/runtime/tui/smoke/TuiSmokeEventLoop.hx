@@ -366,6 +366,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.LineTruncation:
+					if (!traceLineTruncation(event.lineTruncation, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3269,6 +3274,147 @@ class TuiSmokeEventLoop {
 
 	static function threadTranscriptCellKey(cell:TuiSmokeThreadTranscriptCell):String {
 		return cell.kind + "\t" + cell.text;
+	}
+
+	static function traceLineTruncation(plan:TuiSmokeLineTruncationPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowRatatuiRender || plan.allowTerminalMutation || plan.allowFilesystemMutation || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.line_truncation.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.line_truncation.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeLineTruncationActionKind.Width:
+					final width = lineTruncationWidth(action.spans);
+					if (width != action.expectedWidth) {
+						trace.push("tui.line_truncation.width_mismatch=" + action.name + ":expected=" + action.expectedWidth + ":actual=" + width);
+						return false;
+					}
+					trace.push("tui.line_truncation.width=" + action.name + ":width=" + width + ":spans=" + lineTruncationSpanTrace(action.spans));
+				case TuiSmokeLineTruncationActionKind.Truncate:
+					final spans = truncateLineToWidth(action.spans, action.maxWidth);
+					if (!lineTruncationSpansMatch(spans, action.expectedSpans)) {
+						trace.push("tui.line_truncation.truncate_mismatch=" + action.name + ":expected=" + lineTruncationSpanTrace(action.expectedSpans)
+							+ ":actual=" + lineTruncationSpanTrace(spans));
+						return false;
+					}
+					trace.push("tui.line_truncation.truncate=" + action.name + ":max=" + action.maxWidth + ":spans=" + lineTruncationSpanTrace(spans));
+				case TuiSmokeLineTruncationActionKind.Ellipsis:
+					final spans = truncateLineWithEllipsisIfOverflow(action.spans, action.maxWidth);
+					if (!lineTruncationSpansMatch(spans, action.expectedSpans)) {
+						trace.push("tui.line_truncation.ellipsis_mismatch=" + action.name + ":expected=" + lineTruncationSpanTrace(action.expectedSpans)
+							+ ":actual=" + lineTruncationSpanTrace(spans));
+						return false;
+					}
+					trace.push("tui.line_truncation.ellipsis=" + action.name + ":max=" + action.maxWidth + ":spans=" + lineTruncationSpanTrace(spans));
+				case TuiSmokeLineTruncationActionKind.Failure:
+					trace.push("tui.line_truncation.failure=" + action.failureCode + ":no_render=" + action.noRatatuiRender + ":no_terminal="
+						+ action.noTerminalMutation + ":no_fs=" + action.noFilesystemMutation + ":no_model=" + action.noModelCall + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.line_truncation.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function truncateLineWithEllipsisIfOverflow(spans:Array<TuiSmokeLineTruncationSpan>, maxWidth:Int):Array<TuiSmokeLineTruncationSpan> {
+		if (maxWidth <= 0)
+			return [];
+		if (lineTruncationWidth(spans) <= maxWidth)
+			return copyLineTruncationSpans(spans);
+		final truncated = truncateLineToWidth(spans, maxWidth - 1);
+		final ellipsisStyle = truncated.length == 0 ? "" : truncated[truncated.length - 1].style;
+		truncated.push(lineTruncationSpan(String.fromCharCode(0x2026), ellipsisStyle));
+		return truncated;
+	}
+
+	static function truncateLineToWidth(spans:Array<TuiSmokeLineTruncationSpan>, maxWidth:Int):Array<TuiSmokeLineTruncationSpan> {
+		if (maxWidth <= 0)
+			return [];
+		final out:Array<TuiSmokeLineTruncationSpan> = [];
+		var used = 0;
+		for (span in spans) {
+			if (used >= maxWidth)
+				break;
+			final spanWidth = lineTruncationSpanWidth(span);
+			if (used + spanWidth <= maxWidth) {
+				out.push(lineTruncationSpan(span.text, span.style));
+				used += spanWidth;
+				continue;
+			}
+			var text = "";
+			var index = 0;
+			while (index < span.text.length) {
+				final character = span.text.charAt(index);
+				final width = lineTruncationCharacterWidth(character);
+				if (used + width > maxWidth)
+					break;
+				text += character;
+				used += width;
+				index++;
+			}
+			if (text != "")
+				out.push(lineTruncationSpan(text, span.style));
+			break;
+		}
+		return out;
+	}
+
+	static function copyLineTruncationSpans(spans:Array<TuiSmokeLineTruncationSpan>):Array<TuiSmokeLineTruncationSpan> {
+		final out:Array<TuiSmokeLineTruncationSpan> = [];
+		for (span in spans)
+			out.push(lineTruncationSpan(span.text, span.style));
+		return out;
+	}
+
+	static function lineTruncationWidth(spans:Array<TuiSmokeLineTruncationSpan>):Int {
+		var width = 0;
+		for (span in spans)
+			width += lineTruncationSpanWidth(span);
+		return width;
+	}
+
+	static function lineTruncationSpanWidth(span:TuiSmokeLineTruncationSpan):Int {
+		var width = 0;
+		var index = 0;
+		while (index < span.text.length) {
+			width += lineTruncationCharacterWidth(span.text.charAt(index));
+			index++;
+		}
+		return width;
+	}
+
+	static function lineTruncationCharacterWidth(character:String):Int {
+		return character.length == 0 ? 0 : (character.charCodeAt(0) == 0x754c ? 2 : 1);
+	}
+
+	static function lineTruncationSpansMatch(left:Array<TuiSmokeLineTruncationSpan>, right:Array<TuiSmokeLineTruncationSpan>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (index in 0...left.length) {
+			if (lineTruncationSpanKey(left[index]) != lineTruncationSpanKey(right[index]))
+				return false;
+		}
+		return true;
+	}
+
+	static function lineTruncationSpanTrace(spans:Array<TuiSmokeLineTruncationSpan>):String {
+		if (spans.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (span in spans)
+			out.push((span.style == "" ? "<default>" : span.style) + "[" + traceText(span.text) + "]");
+		return out.join("|");
+	}
+
+	static function lineTruncationSpanKey(span:TuiSmokeLineTruncationSpan):String {
+		return span.style + "\t" + span.text;
+	}
+
+	static function lineTruncationSpan(text:String, style:String):TuiSmokeLineTruncationSpan {
+		return new TuiSmokeLineTruncationSpan({text: text, style: style});
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

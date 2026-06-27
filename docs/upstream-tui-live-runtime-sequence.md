@@ -3899,6 +3899,10 @@ Status: HXCX-TUI-257 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-258 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/thread_transcript.rs`. The fixture preserves persisted `ThreadItem` projection into normalized user, assistant markdown, plan, reasoning, and plain fallback transcript cells; assistant markdown sanitization through `git_action_directives`; directive-only assistant message elision; hidden versus visible raw reasoning selection; selected fallback rows for hook prompts, command execution, file changes, MCP/dynamic tools, web search, images, review mode, and context compaction; and the empty-transcript fallback cell. This is deterministic transcript conversion evidence only, not live `thread_read`, ratatui history-cell rendering, terminal mutation, filesystem mutation, model traffic, or Caf/Cafex/Cafetera behavior.
 
+### HXCX-TUI-259 Headless Raw Codex Line Truncation Helpers
+
+Status: HXCX-TUI-259 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/line_truncation.rs`. The fixture preserves `line_width`-style span width accumulation, zero-width truncation to an empty line, full-span pass-through, zero-width span preservation when width remains, style-preserving partial-span truncation, a fixture wide-character boundary, ellipsis-on-overflow behavior, and ellipsis style selection from the last truncated span. This is deterministic line-helper evidence only, not live ratatui rendering, terminal mutation, filesystem mutation, or model traffic.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

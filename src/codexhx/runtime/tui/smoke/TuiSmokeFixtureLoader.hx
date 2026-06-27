@@ -116,6 +116,7 @@ class TuiSmokeFixtureLoader {
 				goalDisplay: optionalGoalDisplayPlan(value, "goalDisplay"),
 				gitActionDirectives: optionalGitActionDirectivePlan(value, "gitActionDirectives"),
 				threadTranscript: optionalThreadTranscriptPlan(value, "threadTranscript"),
+				lineTruncation: optionalLineTruncationPlan(value, "lineTruncation"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -306,6 +307,52 @@ class TuiSmokeFixtureLoader {
 			out.push(new TuiSmokeThreadTranscriptCell({
 				kind: TuiSmokeThreadTranscriptCellKind.fromString(stringField(value, "kind", "")),
 				text: optionalStringField(value, "text", "")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalLineTruncationPlan(object:Value, name:String):Null<TuiSmokeLineTruncationPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeLineTruncationPlan({
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: lineTruncationActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function lineTruncationActions(values:Array<Value>):Array<TuiSmokeLineTruncationAction> {
+		final out:Array<TuiSmokeLineTruncationAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeLineTruncationAction({
+				kind: TuiSmokeLineTruncationActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				maxWidth: optionalIntField(value, "maxWidth", 0),
+				spans: lineTruncationSpans(optionalArrayField(value, "spans")),
+				expectedSpans: lineTruncationSpans(optionalArrayField(value, "expectedSpans")),
+				expectedWidth: optionalIntField(value, "expectedWidth", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function lineTruncationSpans(values:Array<Value>):Array<TuiSmokeLineTruncationSpan> {
+		final out:Array<TuiSmokeLineTruncationSpan> = [];
+		for (value in values) {
+			out.push(new TuiSmokeLineTruncationSpan({
+				text: optionalStringField(value, "text", ""),
+				style: optionalStringField(value, "style", "")
 			}));
 		}
 		return out;
