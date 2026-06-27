@@ -3995,6 +3995,10 @@ Status: HXCX-TUI-281 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-282 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/paste_burst.rs`. The fixture preserves the pure PasteBurst state-machine thresholds and decisions: ASCII first-character hold and typed flush, fast ASCII `BeginBufferFromPending`, buffered paste flush, modified-input flush of pending state, retro-grab admission/rejection, newline suppression window after flush, direct Enter suppression and window extension, active append/newline behavior, clear-window versus explicit-paste clearing, no-hold burst detection, and no-live rejection evidence. This is deterministic state-machine evidence only, not live terminal mutation, real textarea mutation, ratatui buffer ownership, clipboard or filesystem mutation, network traffic, model traffic, app-server delivery, or adapter-specific behavior.
 
+### HXCX-TUI-283 Headless Raw Codex TextArea
+
+Status: HXCX-TUI-283 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/textarea.rs`. The fixture preserves full-buffer replacement with element clearing, element range clamping/sorting/skipping, insert/replace cursor shifts, UTF-8 cursor-boundary clamping, kill-buffer preservation across `set_text_*`, Vim insert/normal paste-burst admission, deterministic wrapped-line/desired-height and cursor-position scroll facts, and no-live rejection evidence. This is deterministic textarea state/layout evidence only, not live terminal mutation, ratatui buffer ownership, real clipboard mutation, filesystem mutation, network traffic, model traffic, app-server delivery, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

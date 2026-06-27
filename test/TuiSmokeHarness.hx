@@ -15,10 +15,11 @@ class TuiSmokeHarness {
 			assertEquals(request.expectedSnapshot, outcome.snapshot);
 		}
 		final loopCases = TuiSmokeFixtureLoader.loadLoops(FixturePath);
-		assertEquals("220", Std.string(loopCases.length));
+		assertEquals("221", Std.string(loopCases.length));
 		for (request in loopCases) {
 			final outcome = TuiSmokeEventLoop.run(request);
-			assertTrue(outcome.ok, request.name + " should run app-loop cleanly");
+			if (!outcome.ok)
+				throw request.name + " should run app-loop cleanly\ntrace:\n" + outcome.trace + "\nsnapshot:\n" + outcome.snapshot;
 			assertTrue(outcome.terminalRestored, request.name + " should restore terminal facade");
 			assertEquals(request.expectedTrace, outcome.trace);
 			assertEquals(request.expectedSnapshot, outcome.snapshot);

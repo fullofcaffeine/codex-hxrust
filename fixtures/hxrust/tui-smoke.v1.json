@@ -23408,6 +23408,154 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> paste burst state machine\ninput> \ntrace:\ntui.paste_burst.plan=headless:char_interval=8ms:active_idle=8ms:enter_window=120ms:min_chars=3\ntui.paste_burst.ascii_hold_flush=ascii-first-char-held-then-typed:decision=retain_first_char:flush=typed(a):active=false:pending=<empty>\ntui.paste_burst.ascii_fast_buffer_flush=two-fast-ascii-buffer-from-pending:decisions=retain_first_char,begin_from_pending:flush=paste(ab):buffer=<empty>:active=false\ntui.paste_burst.flush_before_modified=modified-input-flushes-pending-char:decision=retain_first_char:flushed=a:active=false\ntui.paste_burst.retro_decision=retro-short-prefix-not-pastey:before=ab:retro=2:start=0:grabbed=<none>:buffer=<empty>:active=false\ntui.paste_burst.retro_decision=retro-whitespace-prefix-starts-buffer:before=a b:retro=2:start=1:grabbed= b:buffer= b:active=true\ntui.paste_burst.suppression_window=newline-window-outlives-flushed-buffer:decisions=retain_first_char,begin_from_pending:flush=paste(ab):in_window=true:after_window=false:active=false\ntui.paste_burst.direct_insert_window=direct-enter-suppression-and-extend-window:no_hold=none:direct_1ms=true:kept_alive_121ms=true:expired_122ms=false\ntui.paste_burst.active_append_clear=append-newline-try-append-and-clear:decisions=retain_first_char,begin_from_pending:newline=true:try_append=true:before_clear=active=true,buffer=ab\\nc,pending=<empty>,is_active=true:after_window_clear=active=false,buffer=ab\\nc,pending=<empty>,is_active=true:flushed_after_clear=ab\\nc:after_explicit_clear=active=false,buffer=<empty>,pending=<empty>,is_active=false\ntui.paste_burst.no_hold_path=no-hold-burst-retro-grabs-pastey-prefix:decisions=none,none,begin_buffer(retro=2):before=ab c:flush=paste( cz):active=false\ntui.paste_burst.failure=live_paste_burst_effects_rejected:no_terminal=true:no_textarea=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "textarea-headless",
+      "frame": {
+        "name": "textarea-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "textarea core state"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "textarea",
+          "textArea": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowClipboardMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "allowAppServerDelivery": false,
+            "actions": [
+              {
+                "kind": "replace_clear",
+                "name": "set-text-clears-elements-and-clamps-cursor",
+                "text": "old text",
+                "cursor": 99,
+                "newText": "abc",
+                "killBuffer": "restore",
+                "expectedTrace": "text=abc:cursor=3:elements=<none>:wrap_cache=cleared:preferred_col=cleared"
+              },
+              {
+                "kind": "replace_elements",
+                "name": "set-text-with-elements-clamps-sorts-skips",
+                "text": "zz",
+                "cursor": 2,
+                "newText": "abcde",
+                "elements": [
+                  {"start": 3, "end": 5, "name": "late"},
+                  {"start": 0, "end": 2, "name": "early"},
+                  {"start": 4, "end": 4, "name": "skip"},
+                  {"start": 4, "end": 20, "name": "clamped"}
+                ],
+                "expectedTrace": "text=abcde:cursor=2:elements=0-2:early|3-5:late|4-5:clamped:wrap_cache=cleared"
+              },
+              {
+                "kind": "insert_replace",
+                "name": "insert-and-replace-update-cursor",
+                "text": "abcd",
+                "cursor": 4,
+                "insertPos": 0,
+                "insertText": "X",
+                "rangeStart": 1,
+                "rangeEnd": 3,
+                "replaceText": "Q",
+                "expectedTrace": "after_insert=text=Xabcd:cursor=5:elements=<none>:after_replace=text=XQcd:cursor=4:elements=<none>"
+              },
+              {
+                "kind": "cursor_boundary",
+                "name": "set-text-clamps-to-utf8-boundary",
+                "text": "abcd",
+                "cursor": 1,
+                "newText": "你",
+                "insertText": "a",
+                "expectedTrace": "text=a你:cursor=1:elements=<none>:boundary_safe=true"
+              },
+              {
+                "kind": "kill_preserve",
+                "name": "kill-buffer-persists-across-set-text",
+                "text": "restore me",
+                "cursor": 0,
+                "newText": "/diff",
+                "expectedTrace": "text=restore me:cursor=10:elements=<none>:kill_buffer=restore me"
+              },
+              {
+                "kind": "paste_burst_mode",
+                "name": "insert-mode-allows-paste-burst",
+                "vimEnabled": true,
+                "vimMode": "insert",
+                "expectedTrace": "vim=true:mode=insert:allows_paste_burst=true"
+              },
+              {
+                "kind": "paste_burst_mode",
+                "name": "normal-mode-disables-paste-burst",
+                "vimEnabled": true,
+                "vimMode": "normal",
+                "expectedTrace": "vim=true:mode=normal:allows_paste_burst=false"
+              },
+              {
+                "kind": "wrap_cursor",
+                "name": "wrapped-height-and-cursor-scroll",
+                "text": "abcdefghij",
+                "cursor": 6,
+                "width": 4,
+                "areaHeight": 2,
+                "scroll": 0,
+                "expectedTrace": "height=3:lines=0-4|4-8|8-10:cursor=2,1:effective_scroll=0"
+              },
+              {
+                "kind": "wrap_cursor",
+                "name": "excessive-scroll-clamps-to-cursor",
+                "text": "abcdefghij",
+                "cursor": 1,
+                "width": 4,
+                "areaHeight": 2,
+                "scroll": 9,
+                "expectedTrace": "height=3:lines=0-4|4-8|8-10:cursor=1,0:effective_scroll=0"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_textarea_render_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noClipboardMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "noAppServerDelivery": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.textarea.plan=headless\ntui.textarea.replace_clear=set-text-clears-elements-and-clamps-cursor:text=abc:cursor=3:elements=<none>:wrap_cache=cleared:preferred_col=cleared\ntui.textarea.replace_elements=set-text-with-elements-clamps-sorts-skips:text=abcde:cursor=2:elements=0-2:early|3-5:late|4-5:clamped:wrap_cache=cleared\ntui.textarea.insert_replace=insert-and-replace-update-cursor:after_insert=text=Xabcd:cursor=5:elements=<none>:after_replace=text=XQcd:cursor=4:elements=<none>\ntui.textarea.cursor_boundary=set-text-clamps-to-utf8-boundary:text=a你:cursor=1:elements=<none>:boundary_safe=true\ntui.textarea.kill_preserve=kill-buffer-persists-across-set-text:text=restore me:cursor=10:elements=<none>:kill_buffer=restore me\ntui.textarea.paste_burst_mode=insert-mode-allows-paste-burst:vim=true:mode=insert:allows_paste_burst=true\ntui.textarea.paste_burst_mode=normal-mode-disables-paste-burst:vim=true:mode=normal:allows_paste_burst=false\ntui.textarea.wrap_cursor=wrapped-height-and-cursor-scroll:height=3:lines=0-4|4-8|8-10:cursor=2,1:effective_scroll=0\ntui.textarea.wrap_cursor=excessive-scroll-clamps-to-cursor:height=3:lines=0-4|4-8|8-10:cursor=1,0:effective_scroll=0\ntui.textarea.failure=live_textarea_render_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> textarea core state\ninput> \ntrace:\ntui.textarea.plan=headless\ntui.textarea.replace_clear=set-text-clears-elements-and-clamps-cursor:text=abc:cursor=3:elements=<none>:wrap_cache=cleared:preferred_col=cleared\ntui.textarea.replace_elements=set-text-with-elements-clamps-sorts-skips:text=abcde:cursor=2:elements=0-2:early|3-5:late|4-5:clamped:wrap_cache=cleared\ntui.textarea.insert_replace=insert-and-replace-update-cursor:after_insert=text=Xabcd:cursor=5:elements=<none>:after_replace=text=XQcd:cursor=4:elements=<none>\ntui.textarea.cursor_boundary=set-text-clamps-to-utf8-boundary:text=a你:cursor=1:elements=<none>:boundary_safe=true\ntui.textarea.kill_preserve=kill-buffer-persists-across-set-text:text=restore me:cursor=10:elements=<none>:kill_buffer=restore me\ntui.textarea.paste_burst_mode=insert-mode-allows-paste-burst:vim=true:mode=insert:allows_paste_burst=true\ntui.textarea.paste_burst_mode=normal-mode-disables-paste-burst:vim=true:mode=normal:allows_paste_burst=false\ntui.textarea.wrap_cursor=wrapped-height-and-cursor-scroll:height=3:lines=0-4|4-8|8-10:cursor=2,1:effective_scroll=0\ntui.textarea.wrap_cursor=excessive-scroll-clamps-to-cursor:height=3:lines=0-4|4-8|8-10:cursor=1,0:effective_scroll=0\ntui.textarea.failure=live_textarea_render_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-goal-menu-headless",
       "frame": {
         "name": "chatwidget-goal-menu-headless",

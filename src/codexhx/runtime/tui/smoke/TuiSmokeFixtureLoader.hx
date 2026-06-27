@@ -140,6 +140,7 @@ class TuiSmokeFixtureLoader {
 				appLinkView: optionalAppLinkViewPlan(value, "appLinkView"),
 				customPromptView: optionalCustomPromptPlan(value, "customPromptView"),
 				pasteBurst: optionalPasteBurstPlan(value, "pasteBurst"),
+				textArea: optionalTextAreaPlan(value, "textArea"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -1594,6 +1595,73 @@ class TuiSmokeFixtureLoader {
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTextAreaPlan(object:Value, name:String):Null<TuiSmokeTextAreaPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTextAreaPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowClipboardMutation: optionalBoolField(value, "allowClipboardMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerDelivery: optionalBoolField(value, "allowAppServerDelivery", false),
+					actions: textAreaActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function textAreaActions(values:Array<Value>):Array<TuiSmokeTextAreaAction> {
+		final out:Array<TuiSmokeTextAreaAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTextAreaAction({
+				kind: TuiSmokeTextAreaActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				text: optionalStringField(value, "text", ""),
+				cursor: optionalIntField(value, "cursor", 0),
+				newText: optionalStringField(value, "newText", ""),
+				insertText: optionalStringField(value, "insertText", ""),
+				replaceText: optionalStringField(value, "replaceText", ""),
+				insertPos: optionalIntField(value, "insertPos", 0),
+				rangeStart: optionalIntField(value, "rangeStart", 0),
+				rangeEnd: optionalIntField(value, "rangeEnd", 0),
+				width: optionalIntField(value, "width", 80),
+				areaX: optionalIntField(value, "areaX", 0),
+				areaY: optionalIntField(value, "areaY", 0),
+				areaHeight: optionalIntField(value, "areaHeight", 10),
+				scroll: optionalIntField(value, "scroll", 0),
+				vimEnabled: optionalBoolField(value, "vimEnabled", false),
+				vimMode: optionalStringField(value, "vimMode", "insert"),
+				killBuffer: optionalStringField(value, "killBuffer", ""),
+				elements: textAreaElements(optionalArrayField(value, "elements")),
+				expectedTrace: optionalStringField(value, "expectedTrace", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noClipboardMutation: optionalBoolField(value, "noClipboardMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function textAreaElements(values:Array<Value>):Array<TuiSmokeTextAreaElement> {
+		final out:Array<TuiSmokeTextAreaElement> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTextAreaElement({
+				start: optionalIntField(value, "start", 0),
+				end: optionalIntField(value, "end", 0),
+				name: optionalStringField(value, "name", "")
 			}));
 		}
 		return out;

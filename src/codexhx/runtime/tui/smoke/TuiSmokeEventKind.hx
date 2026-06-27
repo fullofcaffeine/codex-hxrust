@@ -84,6 +84,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final AppLinkView = "app_link_view";
 	final CustomPromptView = "custom_prompt_view";
 	final PasteBurst = "paste_burst";
+	final TextArea = "textarea";
 	final ChatWidgetGoalMenu = "chat_widget_goal_menu";
 	final ChatWidgetReviewMode = "chat_widget_review_mode";
 	final ChatWidgetTranscriptHistory = "chat_widget_transcript_history";
@@ -199,6 +200,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "app_link_view": AppLinkView;
 			case "custom_prompt_view": CustomPromptView;
 			case "paste_burst": PasteBurst;
+			case "textarea": TextArea;
 			case "chat_widget_goal_menu": ChatWidgetGoalMenu;
 			case "chat_widget_review_mode": ChatWidgetReviewMode;
 			case "chat_widget_transcript_history": ChatWidgetTranscriptHistory;
