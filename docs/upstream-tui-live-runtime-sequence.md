@@ -3999,6 +3999,10 @@ Status: HXCX-TUI-282 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-283 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/textarea.rs`. The fixture preserves full-buffer replacement with element clearing, element range clamping/sorting/skipping, insert/replace cursor shifts, UTF-8 cursor-boundary clamping, kill-buffer preservation across `set_text_*`, Vim insert/normal paste-burst admission, deterministic wrapped-line/desired-height and cursor-position scroll facts, and no-live rejection evidence. This is deterministic textarea state/layout evidence only, not live terminal mutation, ratatui buffer ownership, real clipboard mutation, filesystem mutation, network traffic, model traffic, app-server delivery, or adapter-specific behavior.
 
+### HXCX-TUI-284 Headless Raw Codex TextArea Editing
+
+Status: HXCX-TUI-284 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for upstream `../codex/codex-rs/tui/src/bottom_pane/textarea.rs` editing tests. The fixture preserves backward/forward delete edge behavior, atomic element deletion at the left edge, separator-aware backward and forward word deletion, kill-to-line-start/end behavior, linewise whole-line kill/yank and paste-below facts, characterwise yank restoration, multi-byte cursor left/right movement, logical vertical cursor movement, and Vim insert/normal movement/change-to-line-end facts. This is deterministic textarea editing state evidence only, not live keyboard input, terminal mutation, ratatui buffer ownership, real clipboard mutation, filesystem mutation, network traffic, model traffic, app-server delivery, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

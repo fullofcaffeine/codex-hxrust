@@ -1631,6 +1631,7 @@ class TuiSmokeFixtureLoader {
 				insertPos: optionalIntField(value, "insertPos", 0),
 				rangeStart: optionalIntField(value, "rangeStart", 0),
 				rangeEnd: optionalIntField(value, "rangeEnd", 0),
+				count: optionalIntField(value, "count", 1),
 				width: optionalIntField(value, "width", 80),
 				areaX: optionalIntField(value, "areaX", 0),
 				areaY: optionalIntField(value, "areaY", 0),

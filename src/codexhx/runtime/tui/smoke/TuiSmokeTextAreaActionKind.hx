@@ -8,6 +8,13 @@ enum abstract TuiSmokeTextAreaActionKind(String) to String {
 	final KillPreserve = "kill_preserve";
 	final PasteBurstMode = "paste_burst_mode";
 	final WrapCursor = "wrap_cursor";
+	final DeleteEdges = "delete_edges";
+	final ElementDelete = "element_delete";
+	final WordDelete = "word_delete";
+	final KillLine = "kill_line";
+	final YankRestore = "yank_restore";
+	final CursorMove = "cursor_move";
+	final VimEditing = "vim_editing";
 	final Failure = "failure";
 	final Unknown = "unknown";
 
@@ -20,6 +27,13 @@ enum abstract TuiSmokeTextAreaActionKind(String) to String {
 			case "kill_preserve": KillPreserve;
 			case "paste_burst_mode": PasteBurstMode;
 			case "wrap_cursor": WrapCursor;
+			case "delete_edges": DeleteEdges;
+			case "element_delete": ElementDelete;
+			case "word_delete": WordDelete;
+			case "kill_line": KillLine;
+			case "yank_restore": YankRestore;
+			case "cursor_move": CursorMove;
+			case "vim_editing": VimEditing;
 			case "failure": Failure;
 			case _: Unknown;
 		}

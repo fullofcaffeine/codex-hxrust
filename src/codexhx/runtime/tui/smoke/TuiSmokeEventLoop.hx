@@ -228,6 +228,7 @@ private typedef TuiSmokeTextAreaState = {
 	var cursor:Int;
 	var elements:Array<TuiSmokeTextAreaRange>;
 	var killBuffer:String;
+	var killBufferKind:String;
 	var vimEnabled:Bool;
 	var vimMode:String;
 }
@@ -8422,6 +8423,24 @@ class TuiSmokeEventLoop {
 				+ cursor.y
 				+ ":effective_scroll="
 				+ cursor.effectiveScroll;
+			case TuiSmokeTextAreaActionKind.DeleteEdges:
+				textAreaDeleteEdgesTrace(action);
+			case TuiSmokeTextAreaActionKind.ElementDelete:
+				final state = textAreaState(action.text, action.cursor, action.killBuffer, action.vimEnabled, action.vimMode);
+				textAreaSetTextWithElements(state, action.text, action.elements);
+				textAreaSetCursor(state, action.cursor);
+				textAreaDeleteForward(state, action.count);
+				textAreaSummary(state);
+			case TuiSmokeTextAreaActionKind.WordDelete:
+				textAreaWordDeleteTrace();
+			case TuiSmokeTextAreaActionKind.KillLine:
+				textAreaKillLineTrace();
+			case TuiSmokeTextAreaActionKind.YankRestore:
+				textAreaYankRestoreTrace();
+			case TuiSmokeTextAreaActionKind.CursorMove:
+				textAreaCursorMoveTrace(action);
+			case TuiSmokeTextAreaActionKind.VimEditing:
+				textAreaVimEditingTrace();
 			case _:
 				"unknown";
 		}
@@ -8433,6 +8452,7 @@ class TuiSmokeEventLoop {
 			cursor: 0,
 			elements: [],
 			killBuffer: killBuffer,
+			killBufferKind: "characterwise",
 			vimEnabled: vimEnabled,
 			vimMode: vimMode == "" ? "insert" : vimMode
 		};
@@ -8485,8 +8505,9 @@ class TuiSmokeEventLoop {
 	}
 
 	static function textAreaReplaceRange(state:TuiSmokeTextAreaState, start:Int, end:Int, replacement:String):Void {
-		final safeStart = textAreaClampByteToBoundary(state.text, intClamp(start, 0, textAreaByteLen(state.text)));
-		final safeEnd = textAreaClampByteToBoundary(state.text, intClamp(end, safeStart, textAreaByteLen(state.text)));
+		final expanded = textAreaExpandRangeToElements(state, start, end);
+		final safeStart = expanded.start;
+		final safeEnd = expanded.end;
 		final startChar = textAreaByteToCharIndex(state.text, safeStart);
 		final endChar = textAreaByteToCharIndex(state.text, safeEnd);
 		final removedLen = safeEnd - safeStart;
@@ -8500,6 +8521,481 @@ class TuiSmokeEventLoop {
 		}
 		state.cursor = intMin(state.cursor, textAreaByteLen(state.text));
 		state.cursor = textAreaClampByteToBoundary(state.text, state.cursor);
+	}
+
+	static function textAreaDeleteEdgesTrace(action:TuiSmokeTextAreaAction):String {
+		final state = textAreaState(action.text, action.cursor, action.killBuffer, action.vimEnabled, action.vimMode);
+		textAreaDeleteBackward(state, action.count);
+		final backward = textAreaSummary(state);
+		textAreaDeleteBackward(state, action.count);
+		final backwardStart = textAreaSummary(state);
+		textAreaSetCursor(state, 1);
+		textAreaDeleteForward(state, action.count);
+		final forward = textAreaSummary(state);
+		textAreaSetCursor(state, textAreaByteLen(state.text));
+		textAreaDeleteForward(state, action.count);
+		return "backward="
+			+ backward
+			+ ":backward_start="
+			+ backwardStart
+			+ ":forward="
+			+ forward
+			+ ":forward_end="
+			+ textAreaSummary(state);
+	}
+
+	static function textAreaDeleteBackward(state:TuiSmokeTextAreaState, count:Int):Void {
+		if (count <= 0 || state.cursor == 0)
+			return;
+		var target = state.cursor;
+		for (_ in 0...count) {
+			target = textAreaPrevAtomicBoundary(state, target);
+			if (target == 0)
+				break;
+		}
+		textAreaReplaceRange(state, target, state.cursor, "");
+	}
+
+	static function textAreaDeleteForward(state:TuiSmokeTextAreaState, count:Int):Void {
+		if (count <= 0 || state.cursor >= textAreaByteLen(state.text))
+			return;
+		var target = state.cursor;
+		for (_ in 0...count) {
+			target = textAreaNextAtomicBoundary(state, target);
+			if (target >= textAreaByteLen(state.text))
+				break;
+		}
+		textAreaReplaceRange(state, state.cursor, target, "");
+	}
+
+	static function textAreaWordDeleteTrace():String {
+		final back = textAreaState("path/to/file", "path/to/file".length, "", false, "insert");
+		textAreaDeleteBackwardWord(back);
+		final back1 = textAreaSummary(back);
+		textAreaDeleteBackwardWord(back);
+		final back2 = textAreaSummary(back);
+		final backSpace = textAreaState("foo/ ", "foo/ ".length, "", false, "insert");
+		textAreaDeleteBackwardWord(backSpace);
+		final forward = textAreaState("path/to/file", 0, "", false, "insert");
+		textAreaDeleteForwardWord(forward);
+		final forward1 = textAreaSummary(forward);
+		textAreaDeleteForwardWord(forward);
+		final forward2 = textAreaSummary(forward);
+		final forwardSpace = textAreaState(" /foo", 0, "", false, "insert");
+		textAreaDeleteForwardWord(forwardSpace);
+		return "back1=" + back1 + ":back2=" + back2 + ":back_space=" + textAreaSummary(backSpace) + ":forward1=" + forward1 + ":forward2=" + forward2
+			+ ":forward_space=" + textAreaSummary(forwardSpace);
+	}
+
+	static function textAreaDeleteBackwardWord(state:TuiSmokeTextAreaState):Void {
+		final start = textAreaBeginningOfPreviousWord(state);
+		textAreaKillRange(state, start, state.cursor, "characterwise");
+	}
+
+	static function textAreaDeleteForwardWord(state:TuiSmokeTextAreaState):Void {
+		final end = textAreaEndOfNextWord(state);
+		if (end > state.cursor)
+			textAreaKillRange(state, state.cursor, end, "characterwise");
+	}
+
+	static function textAreaKillLineTrace():String {
+		final endMid = textAreaState("abc\ndef", 1, "", false, "insert");
+		textAreaKillToEndOfLine(endMid);
+		final endEol = textAreaState("abc\ndef", 3, "", false, "insert");
+		textAreaKillToEndOfLine(endEol);
+		final startMid = textAreaState("abc\ndef", 5, "", false, "insert");
+		textAreaKillToBeginningOfLine(startMid);
+		final startBol = textAreaState("abc\ndef", 4, "", false, "insert");
+		textAreaKillToBeginningOfLine(startBol);
+		final whole = textAreaState("abc\ndef\nghi", 5, "", false, "insert");
+		textAreaKillCurrentLine(whole);
+		return "end_mid=" + textAreaSummary(endMid) + ":kill=" + traceText(endMid.killBuffer) + ":end_eol=" + textAreaSummary(endEol) + ":kill="
+			+ traceText(endEol.killBuffer) + ":start_mid=" + textAreaSummary(startMid) + ":kill=" + traceText(startMid.killBuffer) + ":start_bol="
+			+ textAreaSummary(startBol) + ":kill=" + traceText(startBol.killBuffer) + ":whole=" + textAreaSummary(whole) + ":kill="
+			+ traceText(whole.killBuffer) + ":kind=" + whole.killBufferKind;
+	}
+
+	static function textAreaYankRestoreTrace():String {
+		final end = textAreaState("hello", 0, "", false, "insert");
+		textAreaKillToEndOfLine(end);
+		final afterKill = textAreaSummary(end);
+		textAreaYank(end);
+		final afterYank = textAreaSummary(end);
+		final word = textAreaState("hello world", "hello world".length, "", false, "insert");
+		textAreaDeleteBackwardWord(word);
+		final wordKill = textAreaSummary(word) + ":kill=" + traceText(word.killBuffer);
+		textAreaYank(word);
+		final linewise = textAreaState("abc\n123\nxyz", 1, "", true, "normal");
+		textAreaYankCurrentLine(linewise);
+		textAreaPasteAfterCursor(linewise);
+		return "after_kill=" + afterKill + ":after_yank=" + afterYank + ":word_kill=" + wordKill + ":word_yank=" + textAreaSummary(word) + ":linewise="
+			+ textAreaSummary(linewise) + ":kill=" + traceText(linewise.killBuffer) + ":kind=" + linewise.killBufferKind;
+	}
+
+	static function textAreaCursorMoveTrace(action:TuiSmokeTextAreaAction):String {
+		final state = textAreaState(action.text, action.cursor, action.killBuffer, action.vimEnabled, action.vimMode);
+		textAreaMoveCursorLeft(state);
+		final left1 = state.cursor;
+		textAreaMoveCursorLeft(state);
+		final left2 = state.cursor;
+		textAreaMoveCursorLeft(state);
+		final left3 = state.cursor;
+		textAreaMoveCursorRight(state);
+		textAreaMoveCursorRight(state);
+		textAreaMoveCursorRight(state);
+		final rightEnd = state.cursor;
+		final vertical = textAreaState("abc\ndef\nghi", 5, "", false, "insert");
+		textAreaMoveCursorUp(vertical);
+		final up = vertical.cursor;
+		textAreaMoveCursorDown(vertical);
+		final down = vertical.cursor;
+		textAreaMoveCursorDown(vertical);
+		final down2 = vertical.cursor;
+		return "lefts=" + left1 + "," + left2 + "," + left3 + ":right_end=" + rightEnd + ":vertical=" + up + "," + down + "," + down2;
+	}
+
+	static function textAreaVimEditingTrace():String {
+		final insert = textAreaState("", 0, "", true, "normal");
+		textAreaEnterVimInsertMode(insert);
+		textAreaInsertAt(insert, insert.cursor, "h");
+		textAreaEnterVimNormalMode(insert);
+		final insertTrace = textAreaSummary(insert) + ":mode=" + insert.vimMode;
+		final arrows = textAreaState("ab\ncd", 1, "", true, "normal");
+		textAreaMoveCursorRight(arrows);
+		final right = arrows.cursor;
+		textAreaMoveCursorDown(arrows);
+		final down = arrows.cursor;
+		textAreaMoveCursorLeft(arrows);
+		final left = arrows.cursor;
+		textAreaMoveCursorUp(arrows);
+		final up = arrows.cursor;
+		final change = textAreaState("hello world\nnext line", 6, "", true, "normal");
+		textAreaKillToEndOfLine(change);
+		textAreaEnterVimInsertMode(change);
+		final atEol = textAreaState("hello\nworld", "hello".length, "", true, "normal");
+		textAreaVimKillToEndOfLine(atEol);
+		return "insert_escape=" + insertTrace + ":arrows=" + right + "," + down + "," + left + "," + up + ":change_eol=" + textAreaSummary(change)
+			+ ":kill=" + traceText(change.killBuffer) + ":mode=" + change.vimMode + ":vim_eol_noop=" + textAreaSummary(atEol) + ":kill="
+			+ traceText(atEol.killBuffer) + ":mode=" + atEol.vimMode;
+	}
+
+	static function textAreaKillRange(state:TuiSmokeTextAreaState, start:Int, end:Int, kind:String):Void {
+		final expanded = textAreaExpandRangeToElements(state, start, end);
+		if (expanded.start >= expanded.end)
+			return;
+		final startChar = textAreaByteToCharIndex(state.text, expanded.start);
+		final endChar = textAreaByteToCharIndex(state.text, expanded.end);
+		final removed = state.text.substr(startChar, endChar - startChar);
+		if (removed == "")
+			return;
+		state.killBuffer = removed;
+		state.killBufferKind = kind;
+		textAreaReplaceRange(state, expanded.start, expanded.end, "");
+	}
+
+	static function textAreaYankRange(state:TuiSmokeTextAreaState, start:Int, end:Int, kind:String):Void {
+		final expanded = textAreaExpandRangeToElements(state, start, end);
+		if (expanded.start >= expanded.end)
+			return;
+		final startChar = textAreaByteToCharIndex(state.text, expanded.start);
+		final endChar = textAreaByteToCharIndex(state.text, expanded.end);
+		final removed = state.text.substr(startChar, endChar - startChar);
+		if (removed == "")
+			return;
+		state.killBuffer = removed;
+		state.killBufferKind = kind;
+	}
+
+	static function textAreaKillToEndOfLine(state:TuiSmokeTextAreaState):Void {
+		final eol = textAreaEndOfCurrentLine(state);
+		if (state.cursor == eol) {
+			if (eol < textAreaByteLen(state.text))
+				textAreaKillRange(state, state.cursor, eol + 1, "characterwise");
+		} else {
+			textAreaKillRange(state, state.cursor, eol, "characterwise");
+		}
+	}
+
+	static function textAreaVimKillToEndOfLine(state:TuiSmokeTextAreaState):Void {
+		final eol = textAreaEndOfCurrentLine(state);
+		if (state.cursor < eol)
+			textAreaKillRange(state, state.cursor, eol, "characterwise");
+	}
+
+	static function textAreaKillToBeginningOfLine(state:TuiSmokeTextAreaState):Void {
+		final bol = textAreaBeginningOfCurrentLine(state);
+		if (state.cursor == bol) {
+			if (bol > 0)
+				textAreaKillRange(state, bol - 1, bol, "characterwise");
+		} else {
+			textAreaKillRange(state, bol, state.cursor, "characterwise");
+		}
+	}
+
+	static function textAreaKillCurrentLine(state:TuiSmokeTextAreaState):Void {
+		final range = textAreaCurrentLineRangeWithNewline(state);
+		textAreaKillRange(state, range.start, range.end, "linewise");
+	}
+
+	static function textAreaYankCurrentLine(state:TuiSmokeTextAreaState):Void {
+		final range = textAreaCurrentLineRangeWithNewline(state);
+		textAreaYankRange(state, range.start, range.end, "linewise");
+	}
+
+	static function textAreaYank(state:TuiSmokeTextAreaState):Void {
+		if (state.killBuffer == "")
+			return;
+		textAreaInsertAt(state, state.cursor, state.killBuffer);
+	}
+
+	static function textAreaPasteAfterCursor(state:TuiSmokeTextAreaState):Void {
+		if (state.killBuffer == "")
+			return;
+		if (state.killBufferKind == "linewise") {
+			textAreaPasteLineAfterCurrentLine(state);
+			return;
+		}
+		textAreaSetCursor(state, textAreaNextAtomicBoundary(state, state.cursor));
+		textAreaInsertAt(state, state.cursor, state.killBuffer);
+	}
+
+	static function textAreaPasteLineAfterCurrentLine(state:TuiSmokeTextAreaState):Void {
+		final eol = textAreaEndOfCurrentLine(state);
+		final textLen = textAreaByteLen(state.text);
+		final insertAt = eol < textLen ? eol + 1 : eol;
+		final cursor = eol < textLen ? insertAt : insertAt + 1;
+		final text = eol < textLen ? (StringTools.endsWith(state.killBuffer, "\n") ? state.killBuffer : state.killBuffer + "\n") : "\n"
+			+ textAreaTrimEndNewline(state.killBuffer);
+		textAreaInsertAt(state, insertAt, text);
+		textAreaSetCursor(state, intMin(cursor, textAreaByteLen(state.text)));
+	}
+
+	static function textAreaMoveCursorLeft(state:TuiSmokeTextAreaState):Void {
+		state.cursor = textAreaPrevAtomicBoundary(state, state.cursor);
+	}
+
+	static function textAreaMoveCursorRight(state:TuiSmokeTextAreaState):Void {
+		state.cursor = textAreaNextAtomicBoundary(state, state.cursor);
+	}
+
+	static function textAreaMoveCursorUp(state:TuiSmokeTextAreaState):Void {
+		final bol = textAreaBeginningOfCurrentLine(state);
+		final col = state.cursor - bol;
+		if (bol == 0) {
+			textAreaSetCursor(state, 0);
+			return;
+		}
+		final prevBol = textAreaBeginningOfLine(state, bol - 1);
+		final prevEol = textAreaEndOfLine(state, prevBol);
+		textAreaSetCursor(state, intMin(prevBol + col, prevEol));
+	}
+
+	static function textAreaMoveCursorDown(state:TuiSmokeTextAreaState):Void {
+		final eol = textAreaEndOfCurrentLine(state);
+		final col = state.cursor - textAreaBeginningOfCurrentLine(state);
+		if (eol >= textAreaByteLen(state.text)) {
+			textAreaSetCursor(state, textAreaByteLen(state.text));
+			return;
+		}
+		final nextBol = eol + 1;
+		final nextEol = textAreaEndOfLine(state, nextBol);
+		textAreaSetCursor(state, intMin(nextBol + col, nextEol));
+	}
+
+	static function textAreaEnterVimInsertMode(state:TuiSmokeTextAreaState):Void {
+		if (state.vimEnabled)
+			state.vimMode = "insert";
+	}
+
+	static function textAreaEnterVimNormalMode(state:TuiSmokeTextAreaState):Void {
+		if (!state.vimEnabled)
+			return;
+		final bol = textAreaBeginningOfCurrentLine(state);
+		if (state.cursor > bol)
+			state.cursor = intMax(bol, textAreaPrevAtomicBoundary(state, state.cursor));
+		state.vimMode = "normal";
+	}
+
+	static function textAreaBeginningOfPreviousWord(state:TuiSmokeTextAreaState):Int {
+		var pos = state.cursor;
+		while (pos > 0 && textAreaIsWhitespaceBefore(state.text, pos))
+			pos = textAreaPrevBoundary(state.text, pos);
+		if (pos == 0)
+			return 0;
+		final previous = textAreaCharBefore(state.text, pos);
+		final separator = textAreaIsWordSeparator(previous);
+		while (pos > 0) {
+			final ch = textAreaCharBefore(state.text, pos);
+			if (StringTools.isSpace(ch, 0))
+				break;
+			if (textAreaIsWordSeparator(ch) != separator)
+				break;
+			pos = textAreaPrevBoundary(state.text, pos);
+		}
+		return textAreaAdjustPosOutOfElements(state, pos, true);
+	}
+
+	static function textAreaEndOfNextWord(state:TuiSmokeTextAreaState):Int {
+		var pos = state.cursor;
+		final len = textAreaByteLen(state.text);
+		while (pos < len && textAreaIsWhitespaceAt(state.text, pos))
+			pos = textAreaNextBoundary(state.text, pos);
+		if (pos >= len)
+			return pos;
+		final first = textAreaCharAtByte(state.text, pos);
+		final separator = textAreaIsWordSeparator(first);
+		while (pos < len) {
+			final ch = textAreaCharAtByte(state.text, pos);
+			if (StringTools.isSpace(ch, 0))
+				break;
+			if (textAreaIsWordSeparator(ch) != separator)
+				break;
+			pos = textAreaNextBoundary(state.text, pos);
+		}
+		return textAreaAdjustPosOutOfElements(state, pos, false);
+	}
+
+	static function textAreaBeginningOfCurrentLine(state:TuiSmokeTextAreaState):Int {
+		return textAreaBeginningOfLine(state, state.cursor);
+	}
+
+	static function textAreaEndOfCurrentLine(state:TuiSmokeTextAreaState):Int {
+		return textAreaEndOfLine(state, state.cursor);
+	}
+
+	static function textAreaBeginningOfLine(state:TuiSmokeTextAreaState, pos:Int):Int {
+		var cursor = intClamp(pos, 0, textAreaByteLen(state.text));
+		while (cursor > 0) {
+			final prev = textAreaPrevBoundary(state.text, cursor);
+			if (textAreaCharAtByte(state.text, prev) == "\n")
+				return cursor;
+			cursor = prev;
+		}
+		return 0;
+	}
+
+	static function textAreaEndOfLine(state:TuiSmokeTextAreaState, pos:Int):Int {
+		var cursor = intClamp(pos, 0, textAreaByteLen(state.text));
+		final len = textAreaByteLen(state.text);
+		while (cursor < len) {
+			if (textAreaCharAtByte(state.text, cursor) == "\n")
+				return cursor;
+			cursor = textAreaNextBoundary(state.text, cursor);
+		}
+		return len;
+	}
+
+	static function textAreaCurrentLineRangeWithNewline(state:TuiSmokeTextAreaState):TuiSmokeTextAreaRange {
+		final bol = textAreaBeginningOfCurrentLine(state);
+		final eol = textAreaEndOfCurrentLine(state);
+		final end = eol < textAreaByteLen(state.text) ? eol + 1 : eol;
+		return {start: bol, end: end, name: ""};
+	}
+
+	static function textAreaExpandRangeToElements(state:TuiSmokeTextAreaState, start:Int, end:Int):TuiSmokeTextAreaRange {
+		var safeStart = textAreaClampByteToBoundary(state.text, intClamp(start, 0, textAreaByteLen(state.text)));
+		var safeEnd = textAreaClampByteToBoundary(state.text, intClamp(end, safeStart, textAreaByteLen(state.text)));
+		var changed = true;
+		while (changed) {
+			changed = false;
+			for (element in state.elements) {
+				if (element.start < safeEnd && element.end > safeStart) {
+					if (element.start < safeStart) {
+						safeStart = element.start;
+						changed = true;
+					}
+					if (element.end > safeEnd) {
+						safeEnd = element.end;
+						changed = true;
+					}
+				}
+			}
+		}
+		return {start: safeStart, end: safeEnd, name: ""};
+	}
+
+	static function textAreaPrevAtomicBoundary(state:TuiSmokeTextAreaState, pos:Int):Int {
+		final boundary = textAreaPrevBoundary(state.text, pos);
+		for (element in state.elements) {
+			if (boundary > element.start && boundary <= element.end)
+				return element.start;
+			if (pos == element.end)
+				return element.start;
+		}
+		return boundary;
+	}
+
+	static function textAreaNextAtomicBoundary(state:TuiSmokeTextAreaState, pos:Int):Int {
+		final boundary = textAreaNextBoundary(state.text, pos);
+		for (element in state.elements) {
+			if (boundary >= element.start && boundary < element.end)
+				return element.end;
+			if (pos == element.start)
+				return element.end;
+		}
+		return boundary;
+	}
+
+	static function textAreaPrevBoundary(text:String, pos:Int):Int {
+		var previous = 0;
+		var bytes = 0;
+		for (idx in 0...text.length) {
+			final next = bytes + textAreaCharByteLen(text, idx);
+			if (next >= pos)
+				return previous;
+			previous = next;
+			bytes = next;
+		}
+		return previous;
+	}
+
+	static function textAreaNextBoundary(text:String, pos:Int):Int {
+		var bytes = 0;
+		for (idx in 0...text.length) {
+			final next = bytes + textAreaCharByteLen(text, idx);
+			if (next > pos)
+				return next;
+			bytes = next;
+		}
+		return textAreaByteLen(text);
+	}
+
+	static function textAreaAdjustPosOutOfElements(state:TuiSmokeTextAreaState, pos:Int, preferStart:Bool):Int {
+		for (element in state.elements) {
+			if (pos > element.start && pos < element.end)
+				return preferStart ? element.start : element.end;
+		}
+		return pos;
+	}
+
+	static function textAreaCharAtByte(text:String, pos:Int):String {
+		final idx = textAreaByteToCharIndex(text, pos);
+		return idx >= text.length ? "" : text.charAt(idx);
+	}
+
+	static function textAreaCharBefore(text:String, pos:Int):String {
+		return textAreaCharAtByte(text, textAreaPrevBoundary(text, pos));
+	}
+
+	static function textAreaIsWhitespaceAt(text:String, pos:Int):Bool {
+		final ch = textAreaCharAtByte(text, pos);
+		return ch != "" && StringTools.isSpace(ch, 0);
+	}
+
+	static function textAreaIsWhitespaceBefore(text:String, pos:Int):Bool {
+		final ch = textAreaCharBefore(text, pos);
+		return ch != "" && StringTools.isSpace(ch, 0);
+	}
+
+	static function textAreaIsWordSeparator(ch:String):Bool {
+		return ch != "" && "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?".indexOf(ch) >= 0;
+	}
+
+	static function textAreaTrimEndNewline(text:String):String {
+		var out = text;
+		while (StringTools.endsWith(out, "\n"))
+			out = out.substr(0, out.length - 1);
+		return out;
 	}
 
 	static function textAreaShiftElements(state:TuiSmokeTextAreaState, at:Int, removed:Int, inserted:Int):Void {

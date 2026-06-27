@@ -23556,6 +23556,114 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> textarea core state\ninput> \ntrace:\ntui.textarea.plan=headless\ntui.textarea.replace_clear=set-text-clears-elements-and-clamps-cursor:text=abc:cursor=3:elements=<none>:wrap_cache=cleared:preferred_col=cleared\ntui.textarea.replace_elements=set-text-with-elements-clamps-sorts-skips:text=abcde:cursor=2:elements=0-2:early|3-5:late|4-5:clamped:wrap_cache=cleared\ntui.textarea.insert_replace=insert-and-replace-update-cursor:after_insert=text=Xabcd:cursor=5:elements=<none>:after_replace=text=XQcd:cursor=4:elements=<none>\ntui.textarea.cursor_boundary=set-text-clamps-to-utf8-boundary:text=a你:cursor=1:elements=<none>:boundary_safe=true\ntui.textarea.kill_preserve=kill-buffer-persists-across-set-text:text=restore me:cursor=10:elements=<none>:kill_buffer=restore me\ntui.textarea.paste_burst_mode=insert-mode-allows-paste-burst:vim=true:mode=insert:allows_paste_burst=true\ntui.textarea.paste_burst_mode=normal-mode-disables-paste-burst:vim=true:mode=normal:allows_paste_burst=false\ntui.textarea.wrap_cursor=wrapped-height-and-cursor-scroll:height=3:lines=0-4|4-8|8-10:cursor=2,1:effective_scroll=0\ntui.textarea.wrap_cursor=excessive-scroll-clamps-to-cursor:height=3:lines=0-4|4-8|8-10:cursor=1,0:effective_scroll=0\ntui.textarea.failure=live_textarea_render_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "textarea-editing-headless",
+      "frame": {
+        "name": "textarea-editing-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "textarea editing state"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "textarea",
+          "textArea": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowClipboardMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "allowAppServerDelivery": false,
+            "actions": [
+              {
+                "kind": "delete_edges",
+                "name": "delete-backward-forward-edges",
+                "text": "abc",
+                "cursor": 1,
+                "count": 1,
+                "expectedTrace": "backward=text=bc:cursor=0:elements=<none>:backward_start=text=bc:cursor=0:elements=<none>:forward=text=b:cursor=1:elements=<none>:forward_end=text=b:cursor=1:elements=<none>"
+              },
+              {
+                "kind": "element_delete",
+                "name": "delete-forward-removes-atomic-element",
+                "text": "a<element>b",
+                "cursor": 1,
+                "count": 1,
+                "elements": [
+                  {"start": 1, "end": 10, "name": "element"}
+                ],
+                "expectedTrace": "text=ab:cursor=1:elements=<none>"
+              },
+              {
+                "kind": "word_delete",
+                "name": "word-delete-separators-and-whitespace",
+                "expectedTrace": "back1=text=path/to/:cursor=8:elements=<none>:back2=text=path/to:cursor=7:elements=<none>:back_space=text=foo:cursor=3:elements=<none>:forward1=text=/to/file:cursor=0:elements=<none>:forward2=text=to/file:cursor=0:elements=<none>:forward_space=text=foo:cursor=0:elements=<none>"
+              },
+              {
+                "kind": "kill_line",
+                "name": "kill-line-start-end-and-linewise",
+                "expectedTrace": "end_mid=text=a\\ndef:cursor=1:elements=<none>:kill=bc:end_eol=text=abcdef:cursor=3:elements=<none>:kill=\\n:start_mid=text=abc\\nef:cursor=4:elements=<none>:kill=d:start_bol=text=abcdef:cursor=3:elements=<none>:kill=\\n:whole=text=abc\\nghi:cursor=4:elements=<none>:kill=def\\n:kind=linewise"
+              },
+              {
+                "kind": "yank_restore",
+                "name": "yank-restores-characterwise-and-linewise-kills",
+                "expectedTrace": "after_kill=text=<empty>:cursor=0:elements=<none>:after_yank=text=hello:cursor=5:elements=<none>:word_kill=text=hello :cursor=6:elements=<none>:kill=world:word_yank=text=hello world:cursor=11:elements=<none>:linewise=text=abc\\nabc\\n123\\nxyz:cursor=4:elements=<none>:kill=abc\\n:kind=linewise"
+              },
+              {
+                "kind": "cursor_move",
+                "name": "cursor-left-right-and-vertical-movement",
+                "text": "a你b",
+                "cursor": 5,
+                "expectedTrace": "lefts=4,1,0:right_end=5:vertical=1,5,9"
+              },
+              {
+                "kind": "vim_editing",
+                "name": "vim-insert-normal-movement-and-change",
+                "expectedTrace": "insert_escape=text=h:cursor=0:elements=<none>:mode=normal:arrows=2,5,4,1:change_eol=text=hello \\nnext line:cursor=6:elements=<none>:kill=world:mode=insert:vim_eol_noop=text=hello\\nworld:cursor=5:elements=<none>:kill=<empty>:mode=normal"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_textarea_editing_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noClipboardMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "noAppServerDelivery": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.textarea.plan=headless\ntui.textarea.delete_edges=delete-backward-forward-edges:backward=text=bc:cursor=0:elements=<none>:backward_start=text=bc:cursor=0:elements=<none>:forward=text=b:cursor=1:elements=<none>:forward_end=text=b:cursor=1:elements=<none>\ntui.textarea.element_delete=delete-forward-removes-atomic-element:text=ab:cursor=1:elements=<none>\ntui.textarea.word_delete=word-delete-separators-and-whitespace:back1=text=path/to/:cursor=8:elements=<none>:back2=text=path/to:cursor=7:elements=<none>:back_space=text=foo:cursor=3:elements=<none>:forward1=text=/to/file:cursor=0:elements=<none>:forward2=text=to/file:cursor=0:elements=<none>:forward_space=text=foo:cursor=0:elements=<none>\ntui.textarea.kill_line=kill-line-start-end-and-linewise:end_mid=text=a\\ndef:cursor=1:elements=<none>:kill=bc:end_eol=text=abcdef:cursor=3:elements=<none>:kill=\\n:start_mid=text=abc\\nef:cursor=4:elements=<none>:kill=d:start_bol=text=abcdef:cursor=3:elements=<none>:kill=\\n:whole=text=abc\\nghi:cursor=4:elements=<none>:kill=def\\n:kind=linewise\ntui.textarea.yank_restore=yank-restores-characterwise-and-linewise-kills:after_kill=text=<empty>:cursor=0:elements=<none>:after_yank=text=hello:cursor=5:elements=<none>:word_kill=text=hello :cursor=6:elements=<none>:kill=world:word_yank=text=hello world:cursor=11:elements=<none>:linewise=text=abc\\nabc\\n123\\nxyz:cursor=4:elements=<none>:kill=abc\\n:kind=linewise\ntui.textarea.cursor_move=cursor-left-right-and-vertical-movement:lefts=4,1,0:right_end=5:vertical=1,5,9\ntui.textarea.vim_editing=vim-insert-normal-movement-and-change:insert_escape=text=h:cursor=0:elements=<none>:mode=normal:arrows=2,5,4,1:change_eol=text=hello \\nnext line:cursor=6:elements=<none>:kill=world:mode=insert:vim_eol_noop=text=hello\\nworld:cursor=5:elements=<none>:kill=<empty>:mode=normal\ntui.textarea.failure=live_textarea_editing_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> textarea editing state\ninput> \ntrace:\ntui.textarea.plan=headless\ntui.textarea.delete_edges=delete-backward-forward-edges:backward=text=bc:cursor=0:elements=<none>:backward_start=text=bc:cursor=0:elements=<none>:forward=text=b:cursor=1:elements=<none>:forward_end=text=b:cursor=1:elements=<none>\ntui.textarea.element_delete=delete-forward-removes-atomic-element:text=ab:cursor=1:elements=<none>\ntui.textarea.word_delete=word-delete-separators-and-whitespace:back1=text=path/to/:cursor=8:elements=<none>:back2=text=path/to:cursor=7:elements=<none>:back_space=text=foo:cursor=3:elements=<none>:forward1=text=/to/file:cursor=0:elements=<none>:forward2=text=to/file:cursor=0:elements=<none>:forward_space=text=foo:cursor=0:elements=<none>\ntui.textarea.kill_line=kill-line-start-end-and-linewise:end_mid=text=a\\ndef:cursor=1:elements=<none>:kill=bc:end_eol=text=abcdef:cursor=3:elements=<none>:kill=\\n:start_mid=text=abc\\nef:cursor=4:elements=<none>:kill=d:start_bol=text=abcdef:cursor=3:elements=<none>:kill=\\n:whole=text=abc\\nghi:cursor=4:elements=<none>:kill=def\\n:kind=linewise\ntui.textarea.yank_restore=yank-restores-characterwise-and-linewise-kills:after_kill=text=<empty>:cursor=0:elements=<none>:after_yank=text=hello:cursor=5:elements=<none>:word_kill=text=hello :cursor=6:elements=<none>:kill=world:word_yank=text=hello world:cursor=11:elements=<none>:linewise=text=abc\\nabc\\n123\\nxyz:cursor=4:elements=<none>:kill=abc\\n:kind=linewise\ntui.textarea.cursor_move=cursor-left-right-and-vertical-movement:lefts=4,1,0:right_end=5:vertical=1,5,9\ntui.textarea.vim_editing=vim-insert-normal-movement-and-change:insert_escape=text=h:cursor=0:elements=<none>:mode=normal:arrows=2,5,4,1:change_eol=text=hello \\nnext line:cursor=6:elements=<none>:kill=world:mode=insert:vim_eol_noop=text=hello\\nworld:cursor=5:elements=<none>:kill=<empty>:mode=normal\ntui.textarea.failure=live_textarea_editing_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-goal-menu-headless",
       "frame": {
         "name": "chatwidget-goal-menu-headless",

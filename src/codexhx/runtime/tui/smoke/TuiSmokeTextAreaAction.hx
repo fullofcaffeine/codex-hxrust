@@ -11,6 +11,7 @@ typedef TuiSmokeTextAreaActionFields = {
 	final insertPos:Int;
 	final rangeStart:Int;
 	final rangeEnd:Int;
+	final count:Int;
 	final width:Int;
 	final areaX:Int;
 	final areaY:Int;
@@ -45,6 +46,7 @@ class TuiSmokeTextAreaAction {
 	public final insertPos:Int;
 	public final rangeStart:Int;
 	public final rangeEnd:Int;
+	public final count:Int;
 	public final width:Int;
 	public final areaX:Int;
 	public final areaY:Int;
