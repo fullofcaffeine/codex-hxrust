@@ -47,6 +47,7 @@
       "../codex/codex-rs/tui/src/chatwidget/tests/status_command_tests.rs",
       "../codex/codex-rs/tui/src/goal_display.rs",
       "../codex/codex-rs/tui/src/git_action_directives.rs",
+      "../codex/codex-rs/tui/src/thread_transcript.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -17573,6 +17574,263 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.git_action_directives.plan=headless\ntui.git_action_directives.parse=git-actions:visible=Done:actions=Stage(cwd=/repo)|Push(cwd=/repo,branch=feat/x)|CreateBranch(cwd=/first,branch=first)|Commit(cwd=/repo)|CreatePr(cwd=/repo,branch=feat/x,url=https://example.test/pr/7,draft=true)|CreateBranch(cwd=/second,branch=second):last_branch=/second\ntui.git_action_directives.parse=malformed:visible=Done\\nVisible ::git-commit:actions=<none>:last_branch=\ntui.git_action_directives.parse=code-comments:visible=Found two issues.\\n\\n  - [P2] Fix body= parsing \u2014 src/app.ts:10-12\\n    Keep role=\"tab\", ::git-stage{cwd=/tmp}, file=, and literal.\\n\\t- [P1] Clamp the range \u2014 codex/src/range.ts:8\\n\\t  The line range should match the App.:actions=<none>:last_branch=\ntui.git_action_directives.failure=live_git_action_directive_effects_rejected:no_git=true:no_fs=true:no_network=true:no_github=true:no_terminal=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> git action directive parser boundary\ninput> \ntrace:\ntui.git_action_directives.plan=headless\ntui.git_action_directives.parse=git-actions:visible=Done:actions=Stage(cwd=/repo)|Push(cwd=/repo,branch=feat/x)|CreateBranch(cwd=/first,branch=first)|Commit(cwd=/repo)|CreatePr(cwd=/repo,branch=feat/x,url=https://example.test/pr/7,draft=true)|CreateBranch(cwd=/second,branch=second):last_branch=/second\ntui.git_action_directives.parse=malformed:visible=Done\\nVisible ::git-commit:actions=<none>:last_branch=\ntui.git_action_directives.parse=code-comments:visible=Found two issues.\\n\\n  - [P2] Fix body= parsing \u2014 src/app.ts:10-12\\n    Keep role=\"tab\", ::git-stage{cwd=/tmp}, file=, and literal.\\n\\t- [P1] Clamp the range \u2014 codex/src/range.ts:8\\n\\t  The line range should match the App.:actions=<none>:last_branch=\ntui.git_action_directives.failure=live_git_action_directive_effects_rejected:no_git=true:no_fs=true:no_network=true:no_github=true:no_terminal=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "thread-transcript-headless",
+      "frame": {
+        "name": "thread-transcript-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "thread transcript cell projection boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "thread_transcript",
+          "threadTranscript": {
+            "allowAppServerRead": false,
+            "allowRatatuiRender": false,
+            "allowFilesystemMutation": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "project",
+                "name": "mixed-hidden",
+                "cwd": "/repo",
+                "rawReasoningVisibility": "hidden",
+                "items": [
+                  {
+                    "kind": "user_message",
+                    "text": "Please inspect src/app.ts"
+                  },
+                  {
+                    "kind": "agent_message",
+                    "text": "Done ::git-stage{cwd=\"/repo\"}\n:code-comment{title=\"Fix body\" body=\"Check input\" file=\"/repo/src/app.ts\" start=4 priority=2}"
+                  },
+                  {
+                    "kind": "agent_message",
+                    "text": "::git-commit{cwd=\"/repo\"}"
+                  },
+                  {
+                    "kind": "plan",
+                    "text": "1. Inspect\n2. Patch"
+                  },
+                  {
+                    "kind": "reasoning",
+                    "summary": [
+                      "Summary A",
+                      "Summary B"
+                    ],
+                    "content": [
+                      "Raw hidden"
+                    ]
+                  },
+                  {
+                    "kind": "hook_prompt",
+                    "fragments": [
+                      "  Run tests  ",
+                      "Review diff"
+                    ]
+                  },
+                  {
+                    "kind": "command_execution",
+                    "command": "npm test",
+                    "status": "Completed",
+                    "exitCode": "0",
+                    "aggregatedOutput": "ok\ntrail  "
+                  },
+                  {
+                    "kind": "file_change",
+                    "status": "Completed",
+                    "changesCount": 2
+                  },
+                  {
+                    "kind": "mcp_tool_call",
+                    "server": "github",
+                    "tool": "list_prs",
+                    "status": "Completed"
+                  },
+                  {
+                    "kind": "dynamic_tool_call",
+                    "tool": "shell",
+                    "status": "Failed"
+                  },
+                  {
+                    "kind": "web_search",
+                    "query": "upstream transcript"
+                  }
+                ],
+                "expectedCells": [
+                  {
+                    "kind": "User",
+                    "text": "Please inspect src/app.ts"
+                  },
+                  {
+                    "kind": "AgentMarkdown",
+                    "text": "Done\n- [P2] Fix body \u2014 src/app.ts:4\n  Check input"
+                  },
+                  {
+                    "kind": "Plan",
+                    "text": "1. Inspect\n2. Patch"
+                  },
+                  {
+                    "kind": "Reasoning",
+                    "text": "Summary A\n\nSummary B"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "hook prompt: Run tests\nhook prompt: Review diff"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "$ npm test\nstatus: Completed \u00b7 exit 0\n  ok\n  trail"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "file changes: Completed \u00b7 2 changes"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "mcp tool: github/list_prs \u00b7 Completed"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "tool: shell \u00b7 Failed"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "web search: upstream transcript"
+                  }
+                ]
+              },
+              {
+                "kind": "project",
+                "name": "visible-reasoning",
+                "cwd": "/repo",
+                "rawReasoningVisibility": "visible",
+                "items": [
+                  {
+                    "kind": "reasoning",
+                    "summary": [
+                      "Hidden summary"
+                    ],
+                    "content": [
+                      "Raw one",
+                      "Raw two"
+                    ]
+                  },
+                  {
+                    "kind": "image_view",
+                    "path": "/repo/screenshots/result.png"
+                  },
+                  {
+                    "kind": "image_generation",
+                    "status": "succeeded",
+                    "savedPath": "/repo/out/generated.png"
+                  },
+                  {
+                    "kind": "entered_review_mode",
+                    "review": "PR #17"
+                  },
+                  {
+                    "kind": "exited_review_mode",
+                    "review": "PR #17"
+                  },
+                  {
+                    "kind": "context_compaction"
+                  }
+                ],
+                "expectedCells": [
+                  {
+                    "kind": "Reasoning",
+                    "text": "Raw one\n\nRaw two"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "image: /repo/screenshots/result.png"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "image generation: succeeded \u00b7 /repo/out/generated.png"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "review started: PR #17"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "review finished: PR #17"
+                  },
+                  {
+                    "kind": "Plain",
+                    "text": "context compacted"
+                  }
+                ]
+              },
+              {
+                "kind": "project",
+                "name": "empty-fallback",
+                "cwd": "/repo",
+                "rawReasoningVisibility": "hidden",
+                "items": [
+                  {
+                    "kind": "agent_message",
+                    "text": "::git-stage{cwd=\"/repo\"}"
+                  },
+                  {
+                    "kind": "plan",
+                    "text": "   "
+                  },
+                  {
+                    "kind": "reasoning",
+                    "summary": [],
+                    "content": []
+                  }
+                ],
+                "expectedCells": [
+                  {
+                    "kind": "Plain",
+                    "text": "No transcript content available"
+                  }
+                ]
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_thread_transcript_effects_rejected",
+                "noAppServerRead": true,
+                "noRatatuiRender": true,
+                "noFilesystemMutation": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.thread_transcript.plan=headless\ntui.thread_transcript.project=mixed-hidden:visibility=hidden:cells=User(Please inspect src/app.ts)|AgentMarkdown(Done\\n- [P2] Fix body \u2014 src/app.ts:4\\n  Check input)|Plan(1. Inspect\\n2. Patch)|Reasoning(Summary A\\n\\nSummary B)|Plain(hook prompt: Run tests\\nhook prompt: Review diff)|Plain($ npm test\\nstatus: Completed \u00b7 exit 0\\n  ok\\n  trail)|Plain(file changes: Completed \u00b7 2 changes)|Plain(mcp tool: github/list_prs \u00b7 Completed)|Plain(tool: shell \u00b7 Failed)|Plain(web search: upstream transcript)\ntui.thread_transcript.project=visible-reasoning:visibility=visible:cells=Reasoning(Raw one\\n\\nRaw two)|Plain(image: /repo/screenshots/result.png)|Plain(image generation: succeeded \u00b7 /repo/out/generated.png)|Plain(review started: PR #17)|Plain(review finished: PR #17)|Plain(context compacted)\ntui.thread_transcript.project=empty-fallback:visibility=hidden:cells=Plain(No transcript content available)\ntui.thread_transcript.failure=live_thread_transcript_effects_rejected:no_read=true:no_render=true:no_fs=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> thread transcript cell projection boundary\ninput> \ntrace:\ntui.thread_transcript.plan=headless\ntui.thread_transcript.project=mixed-hidden:visibility=hidden:cells=User(Please inspect src/app.ts)|AgentMarkdown(Done\\n- [P2] Fix body \u2014 src/app.ts:4\\n  Check input)|Plan(1. Inspect\\n2. Patch)|Reasoning(Summary A\\n\\nSummary B)|Plain(hook prompt: Run tests\\nhook prompt: Review diff)|Plain($ npm test\\nstatus: Completed \u00b7 exit 0\\n  ok\\n  trail)|Plain(file changes: Completed \u00b7 2 changes)|Plain(mcp tool: github/list_prs \u00b7 Completed)|Plain(tool: shell \u00b7 Failed)|Plain(web search: upstream transcript)\ntui.thread_transcript.project=visible-reasoning:visibility=visible:cells=Reasoning(Raw one\\n\\nRaw two)|Plain(image: /repo/screenshots/result.png)|Plain(image generation: succeeded \u00b7 /repo/out/generated.png)|Plain(review started: PR #17)|Plain(review finished: PR #17)|Plain(context compacted)\ntui.thread_transcript.project=empty-fallback:visibility=hidden:cells=Plain(No transcript content available)\ntui.thread_transcript.failure=live_thread_transcript_effects_rejected:no_read=true:no_render=true:no_fs=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

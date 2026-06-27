@@ -115,6 +115,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetModelSettings: optionalModelSettingsPlan(value, "chatWidgetModelSettings"),
 				goalDisplay: optionalGoalDisplayPlan(value, "goalDisplay"),
 				gitActionDirectives: optionalGitActionDirectivePlan(value, "gitActionDirectives"),
+				threadTranscript: optionalThreadTranscriptPlan(value, "threadTranscript"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -233,6 +234,78 @@ class TuiSmokeFixtureLoader {
 				branch: optionalStringField(value, "branch", ""),
 				url: optionalStringField(value, "url", ""),
 				isDraft: optionalBoolField(value, "isDraft", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalThreadTranscriptPlan(object:Value, name:String):Null<TuiSmokeThreadTranscriptPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeThreadTranscriptPlan({
+					allowAppServerRead: optionalBoolField(value, "allowAppServerRead", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: threadTranscriptActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function threadTranscriptActions(values:Array<Value>):Array<TuiSmokeThreadTranscriptAction> {
+		final out:Array<TuiSmokeThreadTranscriptAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeThreadTranscriptAction({
+				kind: TuiSmokeThreadTranscriptActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				cwd: optionalStringField(value, "cwd", ""),
+				rawReasoningVisibility: optionalStringField(value, "rawReasoningVisibility", "hidden"),
+				items: threadTranscriptItems(optionalArrayField(value, "items")),
+				expectedCells: threadTranscriptCells(optionalArrayField(value, "expectedCells")),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noAppServerRead: optionalBoolField(value, "noAppServerRead", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function threadTranscriptItems(values:Array<Value>):Array<TuiSmokeThreadTranscriptItem> {
+		final out:Array<TuiSmokeThreadTranscriptItem> = [];
+		for (value in values) {
+			out.push(new TuiSmokeThreadTranscriptItem({
+				kind: TuiSmokeThreadTranscriptItemKind.fromString(stringField(value, "kind", "")),
+				text: optionalStringField(value, "text", ""),
+				summary: optionalStringArrayField(value, "summary"),
+				content: optionalStringArrayField(value, "content"),
+				fragments: optionalStringArrayField(value, "fragments"),
+				command: optionalStringField(value, "command", ""),
+				status: optionalStringField(value, "status", ""),
+				aggregatedOutput: optionalStringField(value, "aggregatedOutput", ""),
+				exitCode: optionalStringField(value, "exitCode", ""),
+				changesCount: optionalIntField(value, "changesCount", 0),
+				server: optionalStringField(value, "server", ""),
+				tool: optionalStringField(value, "tool", ""),
+				namespace: optionalStringField(value, "namespace", ""),
+				query: optionalStringField(value, "query", ""),
+				path: optionalStringField(value, "path", ""),
+				savedPath: optionalStringField(value, "savedPath", ""),
+				review: optionalStringField(value, "review", "")
+			}));
+		}
+		return out;
+	}
+
+	static function threadTranscriptCells(values:Array<Value>):Array<TuiSmokeThreadTranscriptCell> {
+		final out:Array<TuiSmokeThreadTranscriptCell> = [];
+		for (value in values) {
+			out.push(new TuiSmokeThreadTranscriptCell({
+				kind: TuiSmokeThreadTranscriptCellKind.fromString(stringField(value, "kind", "")),
+				text: optionalStringField(value, "text", "")
 			}));
 		}
 		return out;

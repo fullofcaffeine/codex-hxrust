@@ -3895,6 +3895,10 @@ Status: HXCX-TUI-256 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-257 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/git_action_directives.rs`. The fixture preserves visible-markdown stripping for `::git-*{...}` assistant directives, full directive identity and insertion-order dedupe for stage/commit/create-branch/push/create-pr rows, quoted attribute parsing, malformed required-attribute directive hiding, unclosed directive text preservation, `last_created_branch_cwd` selection, and code-comment fallback markdown with cwd-relative file locations. This is deterministic assistant-markdown parser evidence only, not live git mutation, filesystem mutation, GitHub/network calls, terminal mutation, model traffic, or Cafex behavior.
 
+### HXCX-TUI-258 Headless Raw Codex Thread Transcript Cells
+
+Status: HXCX-TUI-258 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/thread_transcript.rs`. The fixture preserves persisted `ThreadItem` projection into normalized user, assistant markdown, plan, reasoning, and plain fallback transcript cells; assistant markdown sanitization through `git_action_directives`; directive-only assistant message elision; hidden versus visible raw reasoning selection; selected fallback rows for hook prompts, command execution, file changes, MCP/dynamic tools, web search, images, review mode, and context compaction; and the empty-transcript fallback cell. This is deterministic transcript conversion evidence only, not live `thread_read`, ratatui history-cell rendering, terminal mutation, filesystem mutation, model traffic, or Caf/Cafex/Cafetera behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

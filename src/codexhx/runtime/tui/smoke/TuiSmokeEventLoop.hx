@@ -361,6 +361,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ThreadTranscript:
+					if (!traceThreadTranscript(event.threadTranscript, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3137,6 +3142,133 @@ class TuiSmokeEventLoop {
 			}
 		}
 		return true;
+	}
+
+	static function traceThreadTranscript(plan:TuiSmokeThreadTranscriptPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowAppServerRead || plan.allowRatatuiRender || plan.allowFilesystemMutation || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.thread_transcript.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.thread_transcript.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeThreadTranscriptActionKind.Project:
+					final cells = threadToTranscriptCells(action.items, action.cwd, action.rawReasoningVisibility);
+					if (!threadTranscriptCellsMatch(cells, action.expectedCells)) {
+						trace.push("tui.thread_transcript.cell_mismatch=" + action.name + ":expected=" + threadTranscriptCellTrace(action.expectedCells)
+							+ ":actual=" + threadTranscriptCellTrace(cells));
+						return false;
+					}
+					trace.push("tui.thread_transcript.project=" + action.name + ":visibility=" + action.rawReasoningVisibility + ":cells="
+						+ threadTranscriptCellTrace(cells));
+				case TuiSmokeThreadTranscriptActionKind.Failure:
+					trace.push("tui.thread_transcript.failure=" + action.failureCode + ":no_read=" + action.noAppServerRead + ":no_render="
+						+ action.noRatatuiRender + ":no_fs=" + action.noFilesystemMutation + ":no_model=" + action.noModelCall + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.thread_transcript.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function threadToTranscriptCells(items:Array<TuiSmokeThreadTranscriptItem>, cwd:String,
+			rawReasoningVisibility:String):Array<TuiSmokeThreadTranscriptCell> {
+		final cells:Array<TuiSmokeThreadTranscriptCell> = [];
+		for (item in items) {
+			switch item.kind {
+				case TuiSmokeThreadTranscriptItemKind.UserMessage:
+					cells.push(threadTranscriptCell(TuiSmokeThreadTranscriptCellKind.User, item.text));
+				case TuiSmokeThreadTranscriptItemKind.AgentMessage:
+					final parsed = parseAssistantMarkdownDirectives(item.text, cwd);
+					if (StringTools.trim(parsed.visibleMarkdown) != "")
+						cells.push(threadTranscriptCell(TuiSmokeThreadTranscriptCellKind.AgentMarkdown, parsed.visibleMarkdown));
+				case TuiSmokeThreadTranscriptItemKind.Plan:
+					if (StringTools.trim(item.text) != "")
+						cells.push(threadTranscriptCell(TuiSmokeThreadTranscriptCellKind.Plan, item.text));
+				case TuiSmokeThreadTranscriptItemKind.Reasoning:
+					final reasoningText = rawReasoningVisibility == "visible"
+						&& item.content.length > 0 ? item.content.join("\n\n") : item.summary.join("\n\n");
+					if (StringTools.trim(reasoningText) != "")
+						cells.push(threadTranscriptCell(TuiSmokeThreadTranscriptCellKind.Reasoning, reasoningText));
+				case _:
+					final fallback = fallbackTranscriptCell(item);
+					if (fallback != null)
+						cells.push(fallback);
+			}
+		}
+		if (cells.length == 0)
+			cells.push(threadTranscriptCell(TuiSmokeThreadTranscriptCellKind.Plain, "No transcript content available"));
+		return cells;
+	}
+
+	static function fallbackTranscriptCell(item:TuiSmokeThreadTranscriptItem):Null<TuiSmokeThreadTranscriptCell> {
+		final lines:Array<String> = [];
+		switch item.kind {
+			case TuiSmokeThreadTranscriptItemKind.HookPrompt:
+				for (fragment in item.fragments)
+					lines.push("hook prompt: " + StringTools.trim(fragment));
+			case TuiSmokeThreadTranscriptItemKind.CommandExecution:
+				lines.push("$ " + item.command);
+				lines.push("status: " + item.status + (item.exitCode == "" ? "" : middleDot("exit " + item.exitCode)));
+				if (StringTools.trim(item.aggregatedOutput) != "") {
+					for (line in item.aggregatedOutput.split("\n"))
+						lines.push("  " + StringTools.rtrim(line));
+				}
+			case TuiSmokeThreadTranscriptItemKind.FileChange:
+				lines.push("file changes: " + item.status + middleDot(Std.string(item.changesCount) + " changes"));
+			case TuiSmokeThreadTranscriptItemKind.McpToolCall:
+				lines.push("mcp tool: " + item.server + "/" + item.tool + middleDot(item.status));
+			case TuiSmokeThreadTranscriptItemKind.DynamicToolCall:
+				final name = item.namespace == "" ? item.tool : item.namespace + "/" + item.tool;
+				lines.push("tool: " + name + middleDot(item.status));
+			case TuiSmokeThreadTranscriptItemKind.WebSearch:
+				lines.push("web search: " + item.query);
+			case TuiSmokeThreadTranscriptItemKind.ImageView:
+				lines.push("image: " + item.path);
+			case TuiSmokeThreadTranscriptItemKind.ImageGeneration:
+				lines.push("image generation: " + item.status + (item.savedPath == "" ? "" : middleDot(item.savedPath)));
+			case TuiSmokeThreadTranscriptItemKind.EnteredReviewMode:
+				lines.push("review started: " + item.review);
+			case TuiSmokeThreadTranscriptItemKind.ExitedReviewMode:
+				lines.push("review finished: " + item.review);
+			case TuiSmokeThreadTranscriptItemKind.ContextCompaction:
+				lines.push("context compacted");
+			case _:
+		}
+		return lines.length == 0 ? null : threadTranscriptCell(TuiSmokeThreadTranscriptCellKind.Plain, lines.join("\n"));
+	}
+
+	static function middleDot(text:String):String {
+		return " " + String.fromCharCode(0xb7) + " " + text;
+	}
+
+	static function threadTranscriptCell(kind:TuiSmokeThreadTranscriptCellKind, text:String):TuiSmokeThreadTranscriptCell {
+		return new TuiSmokeThreadTranscriptCell({kind: kind, text: text});
+	}
+
+	static function threadTranscriptCellsMatch(left:Array<TuiSmokeThreadTranscriptCell>, right:Array<TuiSmokeThreadTranscriptCell>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (index in 0...left.length) {
+			if (threadTranscriptCellKey(left[index]) != threadTranscriptCellKey(right[index]))
+				return false;
+		}
+		return true;
+	}
+
+	static function threadTranscriptCellTrace(cells:Array<TuiSmokeThreadTranscriptCell>):String {
+		if (cells.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (cell in cells)
+			out.push(cell.kind + "(" + traceText(cell.text) + ")");
+		return out.join("|");
+	}
+
+	static function threadTranscriptCellKey(cell:TuiSmokeThreadTranscriptCell):String {
+		return cell.kind + "\t" + cell.text;
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

@@ -59,6 +59,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ChatWidgetModelSettings = "chat_widget_model_settings";
 	final GoalDisplay = "goal_display";
 	final GitActionDirectives = "git_action_directives";
+	final ThreadTranscript = "thread_transcript";
 	final ChatWidgetGoalMenu = "chat_widget_goal_menu";
 	final ChatWidgetReviewMode = "chat_widget_review_mode";
 	final ChatWidgetTranscriptHistory = "chat_widget_transcript_history";
@@ -149,6 +150,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "chat_widget_model_settings": ChatWidgetModelSettings;
 			case "goal_display": GoalDisplay;
 			case "git_action_directives": GitActionDirectives;
+			case "thread_transcript": ThreadTranscript;
 			case "chat_widget_goal_menu": ChatWidgetGoalMenu;
 			case "chat_widget_review_mode": ChatWidgetReviewMode;
 			case "chat_widget_transcript_history": ChatWidgetTranscriptHistory;
