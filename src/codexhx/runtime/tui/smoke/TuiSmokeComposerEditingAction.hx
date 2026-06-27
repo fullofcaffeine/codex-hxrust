@@ -10,9 +10,13 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final keyName:String;
 	final inputText:String;
 	final outputText:String;
+	final canonicalText:String;
+	final textareaText:String;
+	final submissionText:String;
 	final failureCode:String;
 	final cursorBefore:Int;
 	final cursorAfter:Int;
+	final historyCursor:Int;
 	final pendingPasteBefore:Int;
 	final pendingPasteAfter:Int;
 	final elementBefore:Int;
@@ -52,6 +56,10 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final popupSynced:Bool;
 	final vimReset:Bool;
 	final submissionReadyPreserved:Bool;
+	final elementsShifted:Bool;
+	final cursorClamped:Bool;
+	final pendingExpanded:Bool;
+	final textTrimmed:Bool;
 	final noLiveInput:Bool;
 	final unsupportedRejected:Bool;
 }
@@ -67,9 +75,13 @@ class TuiSmokeComposerEditingAction {
 	public final keyName:String;
 	public final inputText:String;
 	public final outputText:String;
+	public final canonicalText:String;
+	public final textareaText:String;
+	public final submissionText:String;
 	public final failureCode:String;
 	public final cursorBefore:Int;
 	public final cursorAfter:Int;
+	public final historyCursor:Int;
 	public final pendingPasteBefore:Int;
 	public final pendingPasteAfter:Int;
 	public final elementBefore:Int;
@@ -109,6 +121,10 @@ class TuiSmokeComposerEditingAction {
 	public final popupSynced:Bool;
 	public final vimReset:Bool;
 	public final submissionReadyPreserved:Bool;
+	public final elementsShifted:Bool;
+	public final cursorClamped:Bool;
+	public final pendingExpanded:Bool;
+	public final textTrimmed:Bool;
 	public final noLiveInput:Bool;
 	public final unsupportedRejected:Bool;
 

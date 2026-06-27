@@ -11351,6 +11351,13 @@ class TuiSmokeEventLoop {
 						+ action.textareaDelegated + ":paste_burst=" + action.pasteBurstDelegated + ":pending=" + action.pendingPasteTransitionText()
 						+ ":sync=" + action.popupSynced + ":vim_reset=" + action.vimReset + ":ready_preserved=" + action.submissionReadyPreserved
 						+ ":redraw=" + action.needsRedraw);
+				case TuiSmokeComposerEditingActionKind.CurrentImport:
+					trace.push("tui.composer_editing.current_import=" + action.keyName + ":canonical=" + action.canonicalText + ":textarea="
+						+ action.textareaText + ":submission=" + action.submissionText + ":cursor=" + action.cursorTransitionText() + ":history_cursor="
+						+ action.historyCursor + ":elements=" + action.elementTransitionText() + ":shifted=" + action.elementsShifted + ":bash_on="
+						+ action.bashModeEnabled + ":bash_off=" + action.bashModeDisabled + ":clamped=" + action.cursorClamped + ":pending="
+						+ action.pendingPasteTransitionText() + ":expanded=" + action.pendingExpanded + ":trimmed=" + action.textTrimmed
+						+ ":history_applied=" + action.historyApplied + ":ready_preserved=" + action.submissionReadyPreserved);
 				case TuiSmokeComposerEditingActionKind.PasteBurstFlush:
 					trace.push("tui.composer_editing.burst_flush=" + action.keyName + ":active=" + action.pasteBurstActiveBefore + "->"
 						+ action.pasteBurstActiveAfter + ":flushed=" + action.pasteBurstFlushed + ":newline=" + action.newlineCaptured + ":window_cleared="
