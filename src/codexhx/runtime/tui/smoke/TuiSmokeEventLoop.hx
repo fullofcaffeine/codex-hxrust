@@ -11461,6 +11461,22 @@ class TuiSmokeEventLoop {
 				case TuiSmokeComposerSubmissionActionKind.PrepareInlineArgs:
 					trace.push("tui.composer_submission.inline_args=" + action.commandName + ":args=" + action.argsText + ":pending="
 						+ action.pendingTransitionText() + ":elements=" + action.elementTransitionText() + ":trimmed=" + action.textTrimmed);
+				case TuiSmokeComposerSubmissionActionKind.SnapshotMentionBindings:
+					trace.push("tui.composer_submission.mention_snapshot=text=" + action.inputText + ":bindings=" + action.mentionBindingTransitionText()
+						+ ":elements=" + action.elementTransitionText() + ":summary=" + action.mentionBindingSummary + ":invalid_dropped="
+						+ action.invalidBindingsDropped + ":pathless_ignored=" + action.pathlessBindingsIgnored);
+				case TuiSmokeComposerSubmissionActionKind.PrepareMentionSubmission:
+					trace.push("tui.composer_submission.mention_prepare=" + action.result + ":text=" + action.preparedText + ":bindings="
+						+ action.mentionBindingTransitionText() + ":recent=" + action.recentMentionBindingTransitionText() + ":elements="
+						+ action.elementTransitionText() + ":history=" + action.recordHistory + ":draft_cleared=" + action.draftCleared);
+				case TuiSmokeComposerSubmissionActionKind.DrainRecentMentionBindings:
+					trace.push("tui.composer_submission.mention_recent=" + action.commandName + ":recent=" + action.recentMentionBindingTransitionText()
+						+ ":bindings=" + action.mentionBindingTransitionText() + ":summary=" + action.mentionBindingSummary + ":drained="
+						+ action.recentMentionBindingsDrained);
+				case TuiSmokeComposerSubmissionActionKind.RestoreMentionBindings:
+					trace.push("tui.composer_submission.mention_restore=text=" + action.preparedText + ":bindings=" + action.mentionBindingTransitionText()
+						+ ":elements=" + action.elementTransitionText() + ":summary=" + action.mentionBindingSummary + ":restored="
+						+ action.mentionBindingsRestored + ":pending_restored=" + action.pendingRestored);
 				case TuiSmokeComposerSubmissionActionKind.BuildUserMessage:
 					trace.push("tui.composer_submission.user_message=" + action.result + ":text=" + action.preparedText + ":local="
 						+ action.localImageTransitionText() + ":remote=" + action.remoteImageTransitionText() + ":local_drained=" + action.localImagesDrained

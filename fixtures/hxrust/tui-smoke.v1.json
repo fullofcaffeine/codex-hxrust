@@ -7389,6 +7389,111 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer slash args restore failures\ninput> \ntrace:\ntui.composer_submission.plan=headless\ntui.composer_submission.dispatch_bare=diff:result=command:history_staged=true:history_recorded=true:event=false\ntui.composer_submission.inline_args=plan:args=investigate [Pasted Content 1001 chars]:pending=1->0:elements=2->1:trimmed=true\ntui.composer_submission.dispatch_args=plan:args=investigate [Pasted Content 1001 chars]:result=command_with_args:elements=1:history_staged=true:live=false\ntui.composer_submission.failure=unknown_slash_command:slash_failed=true:too_large=false:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.failure=input_too_large:slash_failed=false:too_large=true:empty=false:pending_restored=true:unsupported=false\ntui.composer_submission.restore_blocked_images=model_supports_images=false:local=1:remote=1:restored=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-submission-mention-binding-capture",
+      "frame": {
+        "name": "composer-submission-mention-binding-capture",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer mention binding submission capture"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_submission",
+          "composerSubmission": {
+            "allowLiveDispatch": false,
+            "actions": [
+              {
+                "kind": "snapshot_mention_bindings",
+                "inputText": "$figma @repo @plan",
+                "mentionBindingBefore": 3,
+                "mentionBindingAfter": 2,
+                "textElementBefore": 3,
+                "textElementAfter": 2,
+                "mentionBindingSummary": "$figma:/tmp/user/figma/SKILL.md|@repo:plugin://repo",
+                "invalidBindingsDropped": true,
+                "pathlessBindingsIgnored": true
+              },
+              {
+                "kind": "prepare_mention_submission",
+                "result": "submitted",
+                "preparedText": "$figma please",
+                "mentionBindingBefore": 1,
+                "mentionBindingAfter": 0,
+                "recentMentionBindingBefore": 0,
+                "recentMentionBindingAfter": 1,
+                "textElementBefore": 1,
+                "textElementAfter": 0,
+                "recordHistory": true,
+                "draftCleared": true
+              },
+              {
+                "kind": "drain_recent_mention_bindings",
+                "commandName": "after-submit",
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 0,
+                "recentMentionBindingBefore": 1,
+                "recentMentionBindingAfter": 0,
+                "mentionBindingSummary": "$figma:/tmp/user/figma/SKILL.md",
+                "recentMentionBindingsDrained": true
+              },
+              {
+                "kind": "restore_mention_bindings",
+                "preparedText": "ask @repo then $lint",
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 2,
+                "textElementBefore": 0,
+                "textElementAfter": 2,
+                "mentionBindingSummary": "@repo:plugin://repo|$lint:.codex/skills/lint/SKILL.md",
+                "mentionBindingsRestored": true
+              },
+              {
+                "kind": "restore_mention_bindings",
+                "preparedText": "/bogus @repo",
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "textElementBefore": 0,
+                "textElementAfter": 1,
+                "mentionBindingSummary": "@repo:plugin://repo",
+                "mentionBindingsRestored": true,
+                "pendingRestored": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_composer_mention_binding_submission_effects_rejected",
+                "noLiveDispatch": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_submission.plan=headless\ntui.composer_submission.mention_snapshot=text=$figma @repo @plan:bindings=3->2:elements=3->2:summary=$figma:/tmp/user/figma/SKILL.md|@repo:plugin://repo:invalid_dropped=true:pathless_ignored=true\ntui.composer_submission.mention_prepare=submitted:text=$figma please:bindings=1->0:recent=0->1:elements=1->0:history=true:draft_cleared=true\ntui.composer_submission.mention_recent=after-submit:recent=1->0:bindings=0->0:summary=$figma:/tmp/user/figma/SKILL.md:drained=true\ntui.composer_submission.mention_restore=text=ask @repo then $lint:bindings=0->2:elements=0->2:summary=@repo:plugin://repo|$lint:.codex/skills/lint/SKILL.md:restored=true:pending_restored=false\ntui.composer_submission.mention_restore=text=/bogus @repo:bindings=0->1:elements=0->1:summary=@repo:plugin://repo:restored=true:pending_restored=true\ntui.composer_submission.failure=live_composer_mention_binding_submission_effects_rejected:slash_failed=false:too_large=false:empty=false:pending_restored=false:no_live=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer mention binding submission capture\ninput> \ntrace:\ntui.composer_submission.plan=headless\ntui.composer_submission.mention_snapshot=text=$figma @repo @plan:bindings=3->2:elements=3->2:summary=$figma:/tmp/user/figma/SKILL.md|@repo:plugin://repo:invalid_dropped=true:pathless_ignored=true\ntui.composer_submission.mention_prepare=submitted:text=$figma please:bindings=1->0:recent=0->1:elements=1->0:history=true:draft_cleared=true\ntui.composer_submission.mention_recent=after-submit:recent=1->0:bindings=0->0:summary=$figma:/tmp/user/figma/SKILL.md:drained=true\ntui.composer_submission.mention_restore=text=ask @repo then $lint:bindings=0->2:elements=0->2:summary=@repo:plugin://repo|$lint:.codex/skills/lint/SKILL.md:restored=true:pending_restored=false\ntui.composer_submission.mention_restore=text=/bogus @repo:bindings=0->1:elements=0->1:summary=@repo:plugin://repo:restored=true:pending_restored=true\ntui.composer_submission.failure=live_composer_mention_binding_submission_effects_rejected:slash_failed=false:too_large=false:empty=false:pending_restored=false:no_live=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-editing-remote-vim-bash-routing",
       "frame": {
         "name": "composer-editing-remote-vim-bash-routing",

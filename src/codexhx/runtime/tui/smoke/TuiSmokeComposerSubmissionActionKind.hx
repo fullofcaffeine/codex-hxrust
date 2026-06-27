@@ -7,6 +7,10 @@ enum abstract TuiSmokeComposerSubmissionActionKind(String) to String {
 	final DispatchBareSlash = "dispatch_bare_slash";
 	final DispatchSlashArgs = "dispatch_slash_args";
 	final PrepareInlineArgs = "prepare_inline_args";
+	final SnapshotMentionBindings = "snapshot_mention_bindings";
+	final PrepareMentionSubmission = "prepare_mention_submission";
+	final DrainRecentMentionBindings = "drain_recent_mention_bindings";
+	final RestoreMentionBindings = "restore_mention_bindings";
 	final BuildUserMessage = "build_user_message";
 	final AssembleUserInput = "assemble_user_input";
 	final SubmitUserTurn = "submit_user_turn";
@@ -25,6 +29,10 @@ enum abstract TuiSmokeComposerSubmissionActionKind(String) to String {
 			case "dispatch_bare_slash": DispatchBareSlash;
 			case "dispatch_slash_args": DispatchSlashArgs;
 			case "prepare_inline_args": PrepareInlineArgs;
+			case "snapshot_mention_bindings": SnapshotMentionBindings;
+			case "prepare_mention_submission": PrepareMentionSubmission;
+			case "drain_recent_mention_bindings": DrainRecentMentionBindings;
+			case "restore_mention_bindings": RestoreMentionBindings;
 			case "build_user_message": BuildUserMessage;
 			case "assemble_user_input": AssembleUserInput;
 			case "submit_user_turn": SubmitUserTurn;

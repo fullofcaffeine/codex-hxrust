@@ -27,9 +27,14 @@ typedef TuiSmokeComposerSubmissionActionFields = {
 	final mentionItemCount:Int;
 	final itemCount:Int;
 	final mentionBindingCount:Int;
+	final mentionBindingBefore:Int;
+	final mentionBindingAfter:Int;
+	final recentMentionBindingBefore:Int;
+	final recentMentionBindingAfter:Int;
 	final queueBefore:Int;
 	final queueAfter:Int;
 	final itemOrder:String;
+	final mentionBindingSummary:String;
 	final modelName:String;
 	final shouldQueue:Bool;
 	final recordHistory:Bool;
@@ -68,6 +73,11 @@ typedef TuiSmokeComposerSubmissionActionFields = {
 	final collaborationModeAttached:Bool;
 	final emptySuppressedBeforeDispatch:Bool;
 	final appEventSent:Bool;
+	final draftCleared:Bool;
+	final mentionBindingsRestored:Bool;
+	final recentMentionBindingsDrained:Bool;
+	final invalidBindingsDropped:Bool;
+	final pathlessBindingsIgnored:Bool;
 	final noLiveDispatch:Bool;
 	final unsupportedRejected:Bool;
 }
@@ -107,9 +117,18 @@ class TuiSmokeComposerSubmissionAction {
 	public final itemCount:Int;
 	@:recordMin(0)
 	public final mentionBindingCount:Int;
+	@:recordMin(0)
+	public final mentionBindingBefore:Int;
+	@:recordMin(0)
+	public final mentionBindingAfter:Int;
+	@:recordMin(0)
+	public final recentMentionBindingBefore:Int;
+	@:recordMin(0)
+	public final recentMentionBindingAfter:Int;
 	public final queueBefore:Int;
 	public final queueAfter:Int;
 	public final itemOrder:String;
+	public final mentionBindingSummary:String;
 	public final modelName:String;
 	public final shouldQueue:Bool;
 	public final recordHistory:Bool;
@@ -148,6 +167,11 @@ class TuiSmokeComposerSubmissionAction {
 	public final collaborationModeAttached:Bool;
 	public final emptySuppressedBeforeDispatch:Bool;
 	public final appEventSent:Bool;
+	public final draftCleared:Bool;
+	public final mentionBindingsRestored:Bool;
+	public final recentMentionBindingsDrained:Bool;
+	public final invalidBindingsDropped:Bool;
+	public final pathlessBindingsIgnored:Bool;
 	public final noLiveDispatch:Bool;
 	public final unsupportedRejected:Bool;
 
@@ -169,5 +193,13 @@ class TuiSmokeComposerSubmissionAction {
 
 	public function queueTransitionText():String {
 		return queueBefore + "->" + queueAfter;
+	}
+
+	public function mentionBindingTransitionText():String {
+		return mentionBindingBefore + "->" + mentionBindingAfter;
+	}
+
+	public function recentMentionBindingTransitionText():String {
+		return recentMentionBindingBefore + "->" + recentMentionBindingAfter;
 	}
 }
