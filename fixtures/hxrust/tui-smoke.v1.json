@@ -8059,6 +8059,176 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer current text import\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.current_import=current-plain:canonical=hello:textarea=hello:submission=:cursor=3->3:history_cursor=3:elements=0->0:shifted=false:bash_on=false:bash_off=false:clamped=false:pending=0->0:expanded=false:trimmed=false:history_applied=false:ready_preserved=true\ntui.composer_editing.current_import=current-bash-prefix:canonical=!git status:textarea=git status:submission=:cursor=0->1:history_cursor=0:elements=1->1:shifted=true:bash_on=true:bash_off=false:clamped=false:pending=0->0:expanded=false:trimmed=false:history_applied=false:ready_preserved=true\ntui.composer_editing.current_import=import-bash-prefix:canonical=!git status:textarea=git status:submission=:cursor=11->0:history_cursor=0:elements=1->1:shifted=true:bash_on=true:bash_off=false:clamped=false:pending=1->0:expanded=false:trimmed=false:history_applied=false:ready_preserved=true\ntui.composer_editing.current_import=import-leaves-bash:canonical=git status:textarea=git status:submission=:cursor=10->0:history_cursor=0:elements=1->1:shifted=false:bash_on=false:bash_off=true:clamped=false:pending=0->0:expanded=false:trimmed=false:history_applied=false:ready_preserved=true\ntui.composer_editing.current_import=restore-cursor-clamp:canonical=short:textarea=short:submission=:cursor=99->5:history_cursor=5:elements=0->0:shifted=false:bash_on=false:bash_off=false:clamped=true:pending=1->0:expanded=false:trimmed=false:history_applied=false:ready_preserved=true\ntui.composer_editing.current_import=history-recall-end:canonical=second:textarea=second:submission=:cursor=0->6:history_cursor=6:elements=0->0:shifted=false:bash_on=false:bash_off=false:clamped=false:pending=0->0:expanded=false:trimmed=false:history_applied=true:ready_preserved=true\ntui.composer_editing.current_import=submit-trim-expand:canonical=  [Pasted Content 5 chars]  :textarea=[Pasted Content 5 chars]:submission=hello:cursor=26->0:history_cursor=0:elements=1->0:shifted=false:bash_on=false:bash_off=false:clamped=false:pending=1->0:expanded=true:trimmed=true:history_applied=false:ready_preserved=false\ntui.composer_editing.failure=live_composer_current_text_import_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-external-edit-attachments-headless",
+      "frame": {
+        "name": "composer-external-edit-attachments-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer external edit attachments"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "external_edit",
+                "keyName": "retain-local-image",
+                "inputText": "[Image #1]",
+                "outputText": "Edited [Image #1] text",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 1,
+                "localImageAfter": 1,
+                "remoteImageAfter": 0,
+                "pendingPasteBefore": 1,
+                "pendingPasteAfter": 0,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "attachmentsRetained": true,
+                "attachmentsDropped": false,
+                "placeholdersRenumbered": false,
+                "duplicateLimited": false,
+                "elementsRebuilt": true,
+                "cursorBefore": 0,
+                "cursorAfter": 21,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "external_edit",
+                "keyName": "drop-missing-local",
+                "inputText": "[Image #1]",
+                "outputText": "No images here",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "",
+                "localImageBefore": 1,
+                "localImageAfter": 0,
+                "remoteImageAfter": 0,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "elementBefore": 1,
+                "elementAfter": 0,
+                "elementPayloads": "",
+                "attachmentsRetained": false,
+                "attachmentsDropped": true,
+                "placeholdersRenumbered": false,
+                "duplicateLimited": false,
+                "elementsRebuilt": true,
+                "cursorBefore": 0,
+                "cursorAfter": 14,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "external_edit",
+                "keyName": "renumber-kept-second",
+                "inputText": "[Image #1][Image #2]",
+                "outputText": "Keep [Image #1]",
+                "placeholderBefore": "[Image #2]",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 2,
+                "localImageAfter": 1,
+                "remoteImageAfter": 0,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "elementBefore": 2,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "attachmentsRetained": true,
+                "attachmentsDropped": true,
+                "placeholdersRenumbered": true,
+                "duplicateLimited": false,
+                "elementsRebuilt": true,
+                "cursorBefore": 0,
+                "cursorAfter": 15,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "external_edit",
+                "keyName": "remote-offset-renumber",
+                "inputText": "[Image #3]",
+                "outputText": "Keep [Image #2]",
+                "placeholderBefore": "[Image #3]",
+                "placeholderAfter": "[Image #2]",
+                "localImageBefore": 1,
+                "localImageAfter": 1,
+                "remoteImageAfter": 1,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #2]",
+                "attachmentsRetained": true,
+                "attachmentsDropped": false,
+                "placeholdersRenumbered": true,
+                "duplicateLimited": false,
+                "elementsRebuilt": true,
+                "cursorBefore": 0,
+                "cursorAfter": 15,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "external_edit",
+                "keyName": "duplicate-occurrence-limit",
+                "inputText": "[Image #1]",
+                "outputText": "[Image #1] extra [Image #1]",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 1,
+                "localImageAfter": 1,
+                "remoteImageAfter": 0,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "attachmentsRetained": true,
+                "attachmentsDropped": false,
+                "placeholdersRenumbered": false,
+                "duplicateLimited": true,
+                "elementsRebuilt": true,
+                "cursorBefore": 0,
+                "cursorAfter": 25,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_composer_external_edit_attachment_effects_rejected",
+                "noLiveInput": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.external_edit=retain-local-image:text=[Image #1]->Edited [Image #1] text:placeholder=[Image #1]->[Image #1]:local=1->1:remote=0:pending=1->0:elements=1->1:payloads=[Image #1]:retained=true:dropped=false:renumbered=false:duplicate_limited=false:rebuilt=true:cursor=0->21:cursor_end=true\ntui.composer_editing.external_edit=drop-missing-local:text=[Image #1]->No images here:placeholder=[Image #1]->:local=1->0:remote=0:pending=0->0:elements=1->0:payloads=:retained=false:dropped=true:renumbered=false:duplicate_limited=false:rebuilt=true:cursor=0->14:cursor_end=true\ntui.composer_editing.external_edit=renumber-kept-second:text=[Image #1][Image #2]->Keep [Image #1]:placeholder=[Image #2]->[Image #1]:local=2->1:remote=0:pending=0->0:elements=2->1:payloads=[Image #1]:retained=true:dropped=true:renumbered=true:duplicate_limited=false:rebuilt=true:cursor=0->15:cursor_end=true\ntui.composer_editing.external_edit=remote-offset-renumber:text=[Image #3]->Keep [Image #2]:placeholder=[Image #3]->[Image #2]:local=1->1:remote=1:pending=0->0:elements=1->1:payloads=[Image #2]:retained=true:dropped=false:renumbered=true:duplicate_limited=false:rebuilt=true:cursor=0->15:cursor_end=true\ntui.composer_editing.external_edit=duplicate-occurrence-limit:text=[Image #1]->[Image #1] extra [Image #1]:placeholder=[Image #1]->[Image #1]:local=1->1:remote=0:pending=0->0:elements=1->1:payloads=[Image #1]:retained=true:dropped=false:renumbered=false:duplicate_limited=true:rebuilt=true:cursor=0->25:cursor_end=true\ntui.composer_editing.failure=live_composer_external_edit_attachment_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer external edit attachments\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.external_edit=retain-local-image:text=[Image #1]->Edited [Image #1] text:placeholder=[Image #1]->[Image #1]:local=1->1:remote=0:pending=1->0:elements=1->1:payloads=[Image #1]:retained=true:dropped=false:renumbered=false:duplicate_limited=false:rebuilt=true:cursor=0->21:cursor_end=true\ntui.composer_editing.external_edit=drop-missing-local:text=[Image #1]->No images here:placeholder=[Image #1]->:local=1->0:remote=0:pending=0->0:elements=1->0:payloads=:retained=false:dropped=true:renumbered=false:duplicate_limited=false:rebuilt=true:cursor=0->14:cursor_end=true\ntui.composer_editing.external_edit=renumber-kept-second:text=[Image #1][Image #2]->Keep [Image #1]:placeholder=[Image #2]->[Image #1]:local=2->1:remote=0:pending=0->0:elements=2->1:payloads=[Image #1]:retained=true:dropped=true:renumbered=true:duplicate_limited=false:rebuilt=true:cursor=0->15:cursor_end=true\ntui.composer_editing.external_edit=remote-offset-renumber:text=[Image #3]->Keep [Image #2]:placeholder=[Image #3]->[Image #2]:local=1->1:remote=1:pending=0->0:elements=1->1:payloads=[Image #2]:retained=true:dropped=false:renumbered=true:duplicate_limited=false:rebuilt=true:cursor=0->15:cursor_end=true\ntui.composer_editing.external_edit=duplicate-occurrence-limit:text=[Image #1]->[Image #1] extra [Image #1]:placeholder=[Image #1]->[Image #1]:local=1->1:remote=0:pending=0->0:elements=1->1:payloads=[Image #1]:retained=true:dropped=false:renumbered=false:duplicate_limited=true:rebuilt=true:cursor=0->25:cursor_end=true\ntui.composer_editing.failure=live_composer_external_edit_attachment_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-popup-sync-suppression-clears",
       "frame": {
         "name": "composer-popup-sync-suppression-clears",

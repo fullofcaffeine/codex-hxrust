@@ -13,6 +13,9 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final canonicalText:String;
 	final textareaText:String;
 	final submissionText:String;
+	final placeholderBefore:String;
+	final placeholderAfter:String;
+	final elementPayloads:String;
 	final failureCode:String;
 	final cursorBefore:Int;
 	final cursorAfter:Int;
@@ -60,6 +63,12 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final cursorClamped:Bool;
 	final pendingExpanded:Bool;
 	final textTrimmed:Bool;
+	final attachmentsRetained:Bool;
+	final attachmentsDropped:Bool;
+	final placeholdersRenumbered:Bool;
+	final duplicateLimited:Bool;
+	final elementsRebuilt:Bool;
+	final cursorAtEnd:Bool;
 	final noLiveInput:Bool;
 	final unsupportedRejected:Bool;
 }
@@ -78,6 +87,9 @@ class TuiSmokeComposerEditingAction {
 	public final canonicalText:String;
 	public final textareaText:String;
 	public final submissionText:String;
+	public final placeholderBefore:String;
+	public final placeholderAfter:String;
+	public final elementPayloads:String;
 	public final failureCode:String;
 	public final cursorBefore:Int;
 	public final cursorAfter:Int;
@@ -125,6 +137,12 @@ class TuiSmokeComposerEditingAction {
 	public final cursorClamped:Bool;
 	public final pendingExpanded:Bool;
 	public final textTrimmed:Bool;
+	public final attachmentsRetained:Bool;
+	public final attachmentsDropped:Bool;
+	public final placeholdersRenumbered:Bool;
+	public final duplicateLimited:Bool;
+	public final elementsRebuilt:Bool;
+	public final cursorAtEnd:Bool;
 	public final noLiveInput:Bool;
 	public final unsupportedRejected:Bool;
 

@@ -13,6 +13,7 @@ enum abstract TuiSmokeComposerEditingActionKind(String) to String {
 	final BasicInput = "basic_input";
 	final TextareaRoute = "textarea_route";
 	final CurrentImport = "current_import";
+	final ExternalEdit = "external_edit";
 	final PasteBurstFlush = "paste_burst_flush";
 	final ReconcileElements = "reconcile_elements";
 	final ShortcutOverlay = "shortcut_overlay";
@@ -34,6 +35,7 @@ enum abstract TuiSmokeComposerEditingActionKind(String) to String {
 			case "basic_input": BasicInput;
 			case "textarea_route": TextareaRoute;
 			case "current_import": CurrentImport;
+			case "external_edit": ExternalEdit;
 			case "paste_burst_flush": PasteBurstFlush;
 			case "reconcile_elements": ReconcileElements;
 			case "shortcut_overlay": ShortcutOverlay;

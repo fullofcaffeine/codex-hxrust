@@ -11358,6 +11358,13 @@ class TuiSmokeEventLoop {
 						+ action.bashModeEnabled + ":bash_off=" + action.bashModeDisabled + ":clamped=" + action.cursorClamped + ":pending="
 						+ action.pendingPasteTransitionText() + ":expanded=" + action.pendingExpanded + ":trimmed=" + action.textTrimmed
 						+ ":history_applied=" + action.historyApplied + ":ready_preserved=" + action.submissionReadyPreserved);
+				case TuiSmokeComposerEditingActionKind.ExternalEdit:
+					trace.push("tui.composer_editing.external_edit=" + action.keyName + ":text=" + action.inputText + "->" + action.outputText
+						+ ":placeholder=" + action.placeholderBefore + "->" + action.placeholderAfter + ":local=" + action.localImageTransitionText()
+						+ ":remote=" + action.remoteImageAfter + ":pending=" + action.pendingPasteTransitionText() + ":elements="
+						+ action.elementTransitionText() + ":payloads=" + action.elementPayloads + ":retained=" + action.attachmentsRetained + ":dropped="
+						+ action.attachmentsDropped + ":renumbered=" + action.placeholdersRenumbered + ":duplicate_limited=" + action.duplicateLimited
+						+ ":rebuilt=" + action.elementsRebuilt + ":cursor=" + action.cursorTransitionText() + ":cursor_end=" + action.cursorAtEnd);
 				case TuiSmokeComposerEditingActionKind.PasteBurstFlush:
 					trace.push("tui.composer_editing.burst_flush=" + action.keyName + ":active=" + action.pasteBurstActiveBefore + "->"
 						+ action.pasteBurstActiveAfter + ":flushed=" + action.pasteBurstFlushed + ":newline=" + action.newlineCaptured + ":window_cleared="

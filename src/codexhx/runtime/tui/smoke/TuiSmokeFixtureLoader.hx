@@ -5099,6 +5099,9 @@ class TuiSmokeFixtureLoader {
 				canonicalText: optionalStringField(value, "canonicalText", ""),
 				textareaText: optionalStringField(value, "textareaText", ""),
 				submissionText: optionalStringField(value, "submissionText", ""),
+				placeholderBefore: optionalStringField(value, "placeholderBefore", ""),
+				placeholderAfter: optionalStringField(value, "placeholderAfter", ""),
+				elementPayloads: optionalStringField(value, "elementPayloads", ""),
 				failureCode: optionalStringField(value, "failureCode", ""),
 				cursorBefore: optionalIntField(value, "cursorBefore", 0),
 				cursorAfter: optionalIntField(value, "cursorAfter", 0),
@@ -5146,6 +5149,12 @@ class TuiSmokeFixtureLoader {
 				cursorClamped: optionalBoolField(value, "cursorClamped", false),
 				pendingExpanded: optionalBoolField(value, "pendingExpanded", false),
 				textTrimmed: optionalBoolField(value, "textTrimmed", false),
+				attachmentsRetained: optionalBoolField(value, "attachmentsRetained", false),
+				attachmentsDropped: optionalBoolField(value, "attachmentsDropped", false),
+				placeholdersRenumbered: optionalBoolField(value, "placeholdersRenumbered", false),
+				duplicateLimited: optionalBoolField(value, "duplicateLimited", false),
+				elementsRebuilt: optionalBoolField(value, "elementsRebuilt", false),
+				cursorAtEnd: optionalBoolField(value, "cursorAtEnd", false),
 				noLiveInput: optionalBoolField(value, "noLiveInput", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
