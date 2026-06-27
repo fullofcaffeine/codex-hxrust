@@ -371,6 +371,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.MarkdownTextMerge:
+					if (!traceMarkdownTextMerge(event.markdownTextMerge, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -3415,6 +3420,94 @@ class TuiSmokeEventLoop {
 
 	static function lineTruncationSpan(text:String, style:String):TuiSmokeLineTruncationSpan {
 		return new TuiSmokeLineTruncationSpan({text: text, style: style});
+	}
+
+	static function traceMarkdownTextMerge(plan:TuiSmokeMarkdownTextMergePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowFilesystemMutation || plan.allowNetwork || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.markdown_text_merge.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.markdown_text_merge.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeMarkdownTextMergeActionKind.Merge:
+					final events = mergeDecodedMarkdownText(action.events);
+					if (!markdownTextEventsMatch(events, action.expectedEvents)) {
+						trace.push("tui.markdown_text_merge.merge_mismatch=" + action.name + ":expected=" + markdownTextEventTrace(action.expectedEvents)
+							+ ":actual=" + markdownTextEventTrace(events));
+						return false;
+					}
+					trace.push("tui.markdown_text_merge.merge=" + action.name + ":events=" + markdownTextEventTrace(events));
+				case TuiSmokeMarkdownTextMergeActionKind.Failure:
+					trace.push("tui.markdown_text_merge.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_fs="
+						+ action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.markdown_text_merge.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function mergeDecodedMarkdownText(events:Array<TuiSmokeMarkdownTextEvent>):Array<TuiSmokeMarkdownTextEvent> {
+		final out:Array<TuiSmokeMarkdownTextEvent> = [];
+		var index = 0;
+		while (index < events.length) {
+			final event = events[index];
+			if (event.kind != TuiSmokeMarkdownTextEventKind.Text
+				|| index + 1 >= events.length
+				|| events[index + 1].kind != TuiSmokeMarkdownTextEventKind.Text) {
+				out.push(markdownTextEvent(event.kind, event.text, event.start, event.end));
+				index++;
+				continue;
+			}
+
+			final start = event.start;
+			var end = event.end;
+			var text = event.text;
+			index++;
+			while (index < events.length && events[index].kind == TuiSmokeMarkdownTextEventKind.Text) {
+				final next = events[index];
+				text += next.text;
+				end = next.end;
+				index++;
+			}
+			out.push(markdownTextEvent(TuiSmokeMarkdownTextEventKind.Text, text, start, end));
+		}
+		return out;
+	}
+
+	static function markdownTextEventsMatch(left:Array<TuiSmokeMarkdownTextEvent>, right:Array<TuiSmokeMarkdownTextEvent>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (index in 0...left.length) {
+			if (markdownTextEventKey(left[index]) != markdownTextEventKey(right[index]))
+				return false;
+		}
+		return true;
+	}
+
+	static function markdownTextEventTrace(events:Array<TuiSmokeMarkdownTextEvent>):String {
+		if (events.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (event in events)
+			out.push(event.kind + "[" + traceText(event.text) + "]@" + event.start + ".." + event.end);
+		return out.join("|");
+	}
+
+	static function markdownTextEventKey(event:TuiSmokeMarkdownTextEvent):String {
+		return event.kind + "\t" + event.text + "\t" + event.start + "\t" + event.end;
+	}
+
+	static function markdownTextEvent(kind:TuiSmokeMarkdownTextEventKind, text:String, start:Int, end:Int):TuiSmokeMarkdownTextEvent {
+		return new TuiSmokeMarkdownTextEvent({
+			kind: kind,
+			text: text,
+			start: start,
+			end: end
+		});
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

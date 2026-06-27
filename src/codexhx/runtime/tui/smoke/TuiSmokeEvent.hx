@@ -60,6 +60,7 @@ typedef TuiSmokeEventFields = {
 	final gitActionDirectives:Null<TuiSmokeGitActionDirectivePlan>;
 	final threadTranscript:Null<TuiSmokeThreadTranscriptPlan>;
 	final lineTruncation:Null<TuiSmokeLineTruncationPlan>;
+	final markdownTextMerge:Null<TuiSmokeMarkdownTextMergePlan>;
 	final chatWidgetGoalMenu:Null<TuiSmokeGoalMenuPlan>;
 	final chatWidgetReviewMode:Null<TuiSmokeReviewModePlan>;
 	final chatWidgetTranscriptHistory:Null<TuiSmokeTranscriptHistoryPlan>;
@@ -154,6 +155,7 @@ class TuiSmokeEvent {
 	public final gitActionDirectives:Null<TuiSmokeGitActionDirectivePlan>;
 	public final threadTranscript:Null<TuiSmokeThreadTranscriptPlan>;
 	public final lineTruncation:Null<TuiSmokeLineTruncationPlan>;
+	public final markdownTextMerge:Null<TuiSmokeMarkdownTextMergePlan>;
 	public final chatWidgetGoalMenu:Null<TuiSmokeGoalMenuPlan>;
 	public final chatWidgetReviewMode:Null<TuiSmokeReviewModePlan>;
 	public final chatWidgetTranscriptHistory:Null<TuiSmokeTranscriptHistoryPlan>;

@@ -3903,6 +3903,10 @@ Status: HXCX-TUI-258 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-259 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/line_truncation.rs`. The fixture preserves `line_width`-style span width accumulation, zero-width truncation to an empty line, full-span pass-through, zero-width span preservation when width remains, style-preserving partial-span truncation, a fixture wide-character boundary, ellipsis-on-overflow behavior, and ellipsis style selection from the last truncated span. This is deterministic line-helper evidence only, not live ratatui rendering, terminal mutation, filesystem mutation, or model traffic.
 
+### HXCX-TUI-260 Headless Raw Codex Markdown Text Merge
+
+Status: HXCX-TUI-260 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/markdown_text_merge.rs`. The fixture preserves `DecodedTextMerge`-style adjacent `Text` event coalescing, parser-decoded text concatenation without source reconstruction, first-start and last-end source range preservation, isolated text pass-through, non-text pass-through, and merge boundaries around non-text events. This is deterministic parsed-event adapter evidence only, not live terminal mutation, filesystem mutation, network traffic, or model traffic.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

@@ -49,6 +49,7 @@
       "../codex/codex-rs/tui/src/git_action_directives.rs",
       "../codex/codex-rs/tui/src/thread_transcript.rs",
       "../codex/codex-rs/tui/src/line_truncation.rs",
+      "../codex/codex-rs/tui/src/markdown_text_merge.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -18052,6 +18053,212 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.line_truncation.plan=headless\ntui.line_truncation.width=width-wide-and-empty:width=5:spans=plain[abc]|ghost[<empty>]|wide[\u754c]\ntui.line_truncation.truncate=zero-width:max=0:spans=<none>\ntui.line_truncation.truncate=no-overflow:max=8:spans=plain[ab]|accent[cd]\ntui.line_truncation.truncate=empty-and-partial:max=4:spans=ghost[<empty>]|plain[abc]|accent[d]\ntui.line_truncation.truncate=wide-boundary:max=3:spans=plain[a\u754c]\ntui.line_truncation.ellipsis=ellipsis-no-overflow:max=5:spans=plain[fit]\ntui.line_truncation.ellipsis=ellipsis-overflow:max=5:spans=plain[abcd]|plain[\u2026]\ntui.line_truncation.ellipsis=ellipsis-zero:max=0:spans=<none>\ntui.line_truncation.failure=live_line_truncation_effects_rejected:no_render=true:no_terminal=true:no_fs=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> line truncation helper boundary\ninput> \ntrace:\ntui.line_truncation.plan=headless\ntui.line_truncation.width=width-wide-and-empty:width=5:spans=plain[abc]|ghost[<empty>]|wide[\u754c]\ntui.line_truncation.truncate=zero-width:max=0:spans=<none>\ntui.line_truncation.truncate=no-overflow:max=8:spans=plain[ab]|accent[cd]\ntui.line_truncation.truncate=empty-and-partial:max=4:spans=ghost[<empty>]|plain[abc]|accent[d]\ntui.line_truncation.truncate=wide-boundary:max=3:spans=plain[a\u754c]\ntui.line_truncation.ellipsis=ellipsis-no-overflow:max=5:spans=plain[fit]\ntui.line_truncation.ellipsis=ellipsis-overflow:max=5:spans=plain[abcd]|plain[\u2026]\ntui.line_truncation.ellipsis=ellipsis-zero:max=0:spans=<none>\ntui.line_truncation.failure=live_line_truncation_effects_rejected:no_render=true:no_terminal=true:no_fs=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "markdown-text-merge-headless",
+      "frame": {
+        "name": "markdown-text-merge-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "markdown text merge boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "markdown_text_merge",
+          "markdownTextMerge": {
+            "allowTerminalMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "merge",
+                "name": "adjacent-and-boundary",
+                "events": [
+                  {
+                    "kind": "Text",
+                    "text": "foo",
+                    "start": 0,
+                    "end": 3
+                  },
+                  {
+                    "kind": "Text",
+                    "text": "-",
+                    "start": 3,
+                    "end": 4
+                  },
+                  {
+                    "kind": "Text",
+                    "text": "bar",
+                    "start": 4,
+                    "end": 7
+                  },
+                  {
+                    "kind": "Start",
+                    "text": "emphasis",
+                    "start": 7,
+                    "end": 8
+                  },
+                  {
+                    "kind": "Text",
+                    "text": "tail",
+                    "start": 8,
+                    "end": 12
+                  },
+                  {
+                    "kind": "End",
+                    "text": "emphasis",
+                    "start": 12,
+                    "end": 13
+                  },
+                  {
+                    "kind": "Text",
+                    "text": "solo",
+                    "start": 13,
+                    "end": 17
+                  }
+                ],
+                "expectedEvents": [
+                  {
+                    "kind": "Text",
+                    "text": "foo-bar",
+                    "start": 0,
+                    "end": 7
+                  },
+                  {
+                    "kind": "Start",
+                    "text": "emphasis",
+                    "start": 7,
+                    "end": 8
+                  },
+                  {
+                    "kind": "Text",
+                    "text": "tail",
+                    "start": 8,
+                    "end": 12
+                  },
+                  {
+                    "kind": "End",
+                    "text": "emphasis",
+                    "start": 12,
+                    "end": 13
+                  },
+                  {
+                    "kind": "Text",
+                    "text": "solo",
+                    "start": 13,
+                    "end": 17
+                  }
+                ]
+              },
+              {
+                "kind": "merge",
+                "name": "decoded-source-range",
+                "events": [
+                  {
+                    "kind": "Text",
+                    "text": "AT&T",
+                    "start": 20,
+                    "end": 28
+                  },
+                  {
+                    "kind": "Text",
+                    "text": "<tag>",
+                    "start": 28,
+                    "end": 40
+                  }
+                ],
+                "expectedEvents": [
+                  {
+                    "kind": "Text",
+                    "text": "AT&T<tag>",
+                    "start": 20,
+                    "end": 40
+                  }
+                ]
+              },
+              {
+                "kind": "merge",
+                "name": "non-text-passthrough",
+                "events": [
+                  {
+                    "kind": "SoftBreak",
+                    "text": "",
+                    "start": 40,
+                    "end": 41
+                  },
+                  {
+                    "kind": "Html",
+                    "text": "<br>",
+                    "start": 41,
+                    "end": 45
+                  },
+                  {
+                    "kind": "Code",
+                    "text": "x",
+                    "start": 45,
+                    "end": 48
+                  }
+                ],
+                "expectedEvents": [
+                  {
+                    "kind": "SoftBreak",
+                    "text": "",
+                    "start": 40,
+                    "end": 41
+                  },
+                  {
+                    "kind": "Html",
+                    "text": "<br>",
+                    "start": 41,
+                    "end": 45
+                  },
+                  {
+                    "kind": "Code",
+                    "text": "x",
+                    "start": 45,
+                    "end": 48
+                  }
+                ]
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_markdown_text_merge_effects_rejected",
+                "noTerminalMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.markdown_text_merge.plan=headless\ntui.markdown_text_merge.merge=adjacent-and-boundary:events=Text[foo-bar]@0..7|Start[emphasis]@7..8|Text[tail]@8..12|End[emphasis]@12..13|Text[solo]@13..17\ntui.markdown_text_merge.merge=decoded-source-range:events=Text[AT&T<tag>]@20..40\ntui.markdown_text_merge.merge=non-text-passthrough:events=SoftBreak[<empty>]@40..41|Html[<br>]@41..45|Code[x]@45..48\ntui.markdown_text_merge.failure=live_markdown_text_merge_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> markdown text merge boundary\ninput> \ntrace:\ntui.markdown_text_merge.plan=headless\ntui.markdown_text_merge.merge=adjacent-and-boundary:events=Text[foo-bar]@0..7|Start[emphasis]@7..8|Text[tail]@8..12|End[emphasis]@12..13|Text[solo]@13..17\ntui.markdown_text_merge.merge=decoded-source-range:events=Text[AT&T<tag>]@20..40\ntui.markdown_text_merge.merge=non-text-passthrough:events=SoftBreak[<empty>]@40..41|Html[<br>]@41..45|Code[x]@45..48\ntui.markdown_text_merge.failure=live_markdown_text_merge_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

@@ -117,6 +117,7 @@ class TuiSmokeFixtureLoader {
 				gitActionDirectives: optionalGitActionDirectivePlan(value, "gitActionDirectives"),
 				threadTranscript: optionalThreadTranscriptPlan(value, "threadTranscript"),
 				lineTruncation: optionalLineTruncationPlan(value, "lineTruncation"),
+				markdownTextMerge: optionalMarkdownTextMergePlan(value, "markdownTextMerge"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -353,6 +354,52 @@ class TuiSmokeFixtureLoader {
 			out.push(new TuiSmokeLineTruncationSpan({
 				text: optionalStringField(value, "text", ""),
 				style: optionalStringField(value, "style", "")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalMarkdownTextMergePlan(object:Value, name:String):Null<TuiSmokeMarkdownTextMergePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeMarkdownTextMergePlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: markdownTextMergeActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function markdownTextMergeActions(values:Array<Value>):Array<TuiSmokeMarkdownTextMergeAction> {
+		final out:Array<TuiSmokeMarkdownTextMergeAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeMarkdownTextMergeAction({
+				kind: TuiSmokeMarkdownTextMergeActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				events: markdownTextMergeEvents(optionalArrayField(value, "events")),
+				expectedEvents: markdownTextMergeEvents(optionalArrayField(value, "expectedEvents")),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function markdownTextMergeEvents(values:Array<Value>):Array<TuiSmokeMarkdownTextEvent> {
+		final out:Array<TuiSmokeMarkdownTextEvent> = [];
+		for (value in values) {
+			out.push(new TuiSmokeMarkdownTextEvent({
+				kind: TuiSmokeMarkdownTextEventKind.fromString(stringField(value, "kind", "")),
+				text: optionalStringField(value, "text", ""),
+				start: optionalIntField(value, "start", 0),
+				end: optionalIntField(value, "end", 0)
 			}));
 		}
 		return out;
