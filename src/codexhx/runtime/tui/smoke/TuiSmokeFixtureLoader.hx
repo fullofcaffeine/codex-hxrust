@@ -135,6 +135,7 @@ class TuiSmokeFixtureLoader {
 				skillPopup: optionalSkillPopupPlan(value, "skillPopup"),
 				selectionPopupCommon: optionalSelectionPopupCommonPlan(value, "selectionPopupCommon"),
 				listSelectionView: optionalListSelectionPlan(value, "listSelectionView"),
+				commandPopup: optionalCommandPopupPlan(value, "commandPopup"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -1256,6 +1257,89 @@ class TuiSmokeFixtureLoader {
 				isDisabled: optionalBoolField(value, "isDisabled", false),
 				disabledReason: optionalStringField(value, "disabledReason", ""),
 				dismissOnSelect: optionalBoolField(value, "dismissOnSelect", true)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalCommandPopupPlan(object:Value, name:String):Null<TuiSmokeCommandPopupPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeCommandPopupPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowClipboardMutation: optionalBoolField(value, "allowClipboardMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					catalog: commandPopupItems(optionalArrayField(value, "catalog")),
+					actions: commandPopupActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function commandPopupActions(values:Array<Value>):Array<TuiSmokeCommandPopupAction> {
+		final out:Array<TuiSmokeCommandPopupAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeCommandPopupAction({
+				kind: TuiSmokeCommandPopupActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				composerText: optionalStringField(value, "composerText", ""),
+				previousFilter: optionalStringField(value, "previousFilter", ""),
+				selectedIndex: optionalIntField(value, "selectedIndex", 0),
+				scrollTop: optionalIntField(value, "scrollTop", 0),
+				maxVisibleRows: optionalIntField(value, "maxVisibleRows", 8),
+				width: optionalIntField(value, "width", 72),
+				moveCount: optionalIntField(value, "moveCount", 1),
+				catalog: commandPopupItems(optionalArrayField(value, "catalog")),
+				collaborationModesEnabled: optionalBoolField(value, "collaborationModesEnabled", false),
+				connectorsEnabled: optionalBoolField(value, "connectorsEnabled", false),
+				pluginsCommandEnabled: optionalBoolField(value, "pluginsCommandEnabled", false),
+				serviceTierCommandsEnabled: optionalBoolField(value, "serviceTierCommandsEnabled", false),
+				goalCommandEnabled: optionalBoolField(value, "goalCommandEnabled", false),
+				personalityCommandEnabled: optionalBoolField(value, "personalityCommandEnabled", false),
+				realtimeConversationEnabled: optionalBoolField(value, "realtimeConversationEnabled", false),
+				audioDeviceSelectionEnabled: optionalBoolField(value, "audioDeviceSelectionEnabled", false),
+				windowsDegradedSandboxActive: optionalBoolField(value, "windowsDegradedSandboxActive", false),
+				sideConversationActive: optionalBoolField(value, "sideConversationActive", false),
+				expectedFilter: optionalStringField(value, "expectedFilter", ""),
+				expectedCommands: optionalStringArrayField(value, "expectedCommands"),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				expectedSelectedIndex: optionalIntField(value, "expectedSelectedIndex", -1),
+				expectedSelectedCommand: optionalStringField(value, "expectedSelectedCommand", ""),
+				expectedScrollTop: optionalIntField(value, "expectedScrollTop", 0),
+				expectedAccepted: optionalBoolField(value, "expectedAccepted", false),
+				expectedCancelled: optionalBoolField(value, "expectedCancelled", false),
+				expectedAcceptedKind: optionalStringField(value, "expectedAcceptedKind", ""),
+				expectedAcceptedId: optionalStringField(value, "expectedAcceptedId", ""),
+				expectedHeight: optionalIntField(value, "expectedHeight", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noClipboardMutation: optionalBoolField(value, "noClipboardMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function commandPopupItems(values:Array<Value>):Array<TuiSmokeCommandPopupItem> {
+		final out:Array<TuiSmokeCommandPopupItem> = [];
+		for (value in values) {
+			out.push(new TuiSmokeCommandPopupItem({
+				kind: TuiSmokeCommandPopupItemKind.fromString(optionalStringField(value, "kind", "builtin")),
+				command: optionalStringField(value, "command", ""),
+				description: optionalStringField(value, "description", ""),
+				id: optionalStringField(value, "id", ""),
+				isAlias: optionalBoolField(value, "isAlias", false),
+				isDebug: optionalBoolField(value, "isDebug", false),
+				isApps: optionalBoolField(value, "isApps", false),
+				requiresFlag: optionalStringField(value, "requiresFlag", ""),
+				availableInSideConversation: optionalBoolField(value, "availableInSideConversation", false)
 			}));
 		}
 		return out;

@@ -99,6 +99,21 @@ private typedef TuiSmokeListSelectionResult = {
 	final trace:String;
 }
 
+private typedef TuiSmokeCommandPopupResult = {
+	final filter:String;
+	final commands:Array<String>;
+	final rows:Array<String>;
+	final selectedIndex:Int;
+	final selectedCommand:String;
+	final scrollTop:Int;
+	final accepted:Bool;
+	final cancelled:Bool;
+	final acceptedKind:String;
+	final acceptedId:String;
+	final height:Int;
+	final trace:String;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -541,6 +556,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.ListSelectionView:
 					if (!traceListSelectionView(event.listSelectionView, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.CommandPopup:
+					if (!traceCommandPopup(event.commandPopup, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -6753,6 +6773,232 @@ class TuiSmokeEventLoop {
 
 	static function listSelectionItemEnabled(item:TuiSmokeListSelectionItem):Bool {
 		return item != null && !item.isDisabled && item.disabledReason == "";
+	}
+
+	static function traceCommandPopup(plan:TuiSmokeCommandPopupPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowClipboardMutation
+			|| plan.allowNetwork || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.command_popup.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.command_popup.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeCommandPopupActionKind.Filter, TuiSmokeCommandPopupActionKind.MoveDown, TuiSmokeCommandPopupActionKind.MoveUp,
+					TuiSmokeCommandPopupActionKind.Accept, TuiSmokeCommandPopupActionKind.Height:
+					final result = commandPopupActionTrace(action, plan.catalog);
+					if (result.filter != action.expectedFilter
+						|| !stringArraysEqual(result.commands, action.expectedCommands)
+						|| !stringArraysEqual(result.rows, action.expectedRows)
+						|| result.selectedIndex != action.expectedSelectedIndex
+						|| result.selectedCommand != action.expectedSelectedCommand
+						|| result.scrollTop != action.expectedScrollTop
+						|| result.accepted != action.expectedAccepted
+						|| result.cancelled != action.expectedCancelled
+						|| result.acceptedKind != action.expectedAcceptedKind
+						|| result.acceptedId != action.expectedAcceptedId
+						|| result.height != action.expectedHeight) {
+						trace.push("tui.command_popup." + action.kind + "_mismatch=" + action.name + ":" + result.trace);
+						return false;
+					}
+					trace.push("tui.command_popup." + action.kind + "=" + action.name + ":" + result.trace);
+				case TuiSmokeCommandPopupActionKind.Failure:
+					trace.push("tui.command_popup.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_clipboard=" + action.noClipboardMutation + ":no_network="
+						+ action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.command_popup.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function commandPopupActionTrace(action:TuiSmokeCommandPopupAction, planCatalog:Array<TuiSmokeCommandPopupItem>):TuiSmokeCommandPopupResult {
+		final filter = commandPopupFilterFromComposerText(action.composerText);
+		final catalog = action.catalog.length > 0 ? action.catalog : planCatalog;
+		final matches = commandPopupMatches(catalog, action, filter);
+		var selected = action.previousFilter != filter ? 0 : intClamp(action.selectedIndex, 0, intMax(0, matches.length - 1));
+		if (matches.length == 0)
+			selected = -1;
+		var scrollTop = action.previousFilter != filter ? 0 : commandPopupEnsureVisible(action.scrollTop, selected, matches.length, action.maxVisibleRows);
+		if (action.kind == TuiSmokeCommandPopupActionKind.MoveDown) {
+			for (_ in 0...intMax(1, action.moveCount))
+				selected = commandPopupMove(selected, matches.length, 1);
+			scrollTop = commandPopupEnsureVisible(scrollTop, selected, matches.length, action.maxVisibleRows);
+		} else if (action.kind == TuiSmokeCommandPopupActionKind.MoveUp) {
+			for (_ in 0...intMax(1, action.moveCount))
+				selected = commandPopupMove(selected, matches.length, -1);
+			scrollTop = commandPopupEnsureVisible(scrollTop, selected, matches.length, action.maxVisibleRows);
+		}
+		final selectedItem = selected >= 0 && selected < matches.length ? matches[selected].item : null;
+		var accepted = false;
+		var cancelled = false;
+		var acceptedKind = "";
+		var acceptedId = "";
+		if (action.kind == TuiSmokeCommandPopupActionKind.Accept) {
+			if (selectedItem == null) {
+				cancelled = true;
+			} else {
+				accepted = true;
+				acceptedKind = selectedItem.kind;
+				acceptedId = selectedItem.kind == TuiSmokeCommandPopupItemKind.ServiceTier ? selectedItem.id : selectedItem.command;
+			}
+		}
+		final commands = commandPopupCommandTrace(matches);
+		final rows = commandPopupRows(matches, selected);
+		final height = commandPopupHeight(rows, action.width, action.maxVisibleRows);
+		final selectedCommand = selectedItem == null ? "" : selectedItem.command;
+		return {filter: filter,
+			commands: commands,
+			rows: rows,
+			selectedIndex: selected,
+			selectedCommand: selectedCommand,
+			scrollTop: scrollTop,
+			accepted: accepted,
+			cancelled: cancelled,
+			acceptedKind: acceptedKind,
+			acceptedId: acceptedId,
+			height: height,
+			trace: "filter="
+			+ traceText(filter)
+			+ ":commands="
+			+ stringListTrace(commands, ",")
+			+ ":selected="
+			+ selected
+			+ ":selected_command="
+			+ traceText(selectedCommand)
+			+ ":scroll="
+			+ scrollTop
+			+ ":height="
+			+ height
+			+ ":rows="
+			+ stringListTrace(rows, "|")
+			+ ":accepted="
+			+ accepted
+			+ ":cancelled="
+			+ cancelled
+			+ ":accepted_kind="
+			+ traceText(acceptedKind)
+			+ ":accepted_id="
+			+ traceText(acceptedId)};
+	}
+
+	static function commandPopupFilterFromComposerText(text:String):String {
+		final newline = text.indexOf("\n");
+		final firstLine = newline >= 0 ? text.substr(0, newline) : text;
+		if (!StringTools.startsWith(firstLine, "/"))
+			return "";
+		final stripped = StringTools.ltrim(firstLine.substr(1));
+		final end = firstWhitespaceIndex(stripped);
+		return stripped.substr(0, end);
+	}
+
+	static function commandPopupMatches(catalog:Array<TuiSmokeCommandPopupItem>, action:TuiSmokeCommandPopupAction, filter:String):Array<{
+		final item:TuiSmokeCommandPopupItem;
+		final matchStart:Int;
+		final matchLength:Int;
+	}> {
+		final visible:Array<TuiSmokeCommandPopupItem> = [];
+		for (item in catalog) {
+			if (commandPopupItemVisible(item, action, filter))
+				visible.push(item);
+		}
+		if (filter == "") {
+			final out:Array<{final item:TuiSmokeCommandPopupItem; final matchStart:Int; final matchLength:Int;}> = [];
+			for (item in visible)
+				out.push({item: item, matchStart: -1, matchLength: 0});
+			return out;
+		}
+		final exact:Array<{final item:TuiSmokeCommandPopupItem; final matchStart:Int; final matchLength:Int;}> = [];
+		final prefix:Array<{final item:TuiSmokeCommandPopupItem; final matchStart:Int; final matchLength:Int;}> = [];
+		final normalized = filter.toLowerCase();
+		for (item in visible) {
+			final command = item.command.toLowerCase();
+			if (command == normalized) {
+				exact.push({item: item, matchStart: 1, matchLength: filter.length});
+			} else if (StringTools.startsWith(command, normalized)) {
+				prefix.push({item: item, matchStart: 1, matchLength: filter.length});
+			}
+		}
+		for (match in prefix)
+			exact.push(match);
+		return exact;
+	}
+
+	static function commandPopupItemVisible(item:TuiSmokeCommandPopupItem, action:TuiSmokeCommandPopupAction, filter:String):Bool {
+		if (item == null || item.command == "")
+			return false;
+		if (item.isDebug || item.isApps)
+			return false;
+		if (filter == "" && item.isAlias)
+			return false;
+		if (action.sideConversationActive && !item.availableInSideConversation)
+			return false;
+		return switch item.requiresFlag {
+			case "collaboration_modes": action.collaborationModesEnabled;
+			case "connectors": action.connectorsEnabled;
+			case "plugins": action.pluginsCommandEnabled;
+			case "service_tier": action.serviceTierCommandsEnabled;
+			case "goal": action.goalCommandEnabled;
+			case "personality": action.personalityCommandEnabled;
+			case "realtime": action.realtimeConversationEnabled;
+			case "audio_device_selection": action.audioDeviceSelectionEnabled;
+			case "windows_degraded_sandbox": action.windowsDegradedSandboxActive;
+			case _: true;
+		}
+	}
+
+	static function commandPopupMove(selected:Int, length:Int, direction:Int):Int {
+		if (length == 0)
+			return -1;
+		if (selected < 0)
+			return 0;
+		return (selected + direction + length) % length;
+	}
+
+	static function commandPopupEnsureVisible(scrollTop:Int, selected:Int, length:Int, maxRows:Int):Int {
+		if (length == 0 || selected < 0)
+			return 0;
+		final visibleRows = intMin(intMax(1, maxRows), length);
+		var start = intClamp(scrollTop, 0, intMax(0, length - visibleRows));
+		if (selected < start)
+			start = selected;
+		final bottom = start + visibleRows - 1;
+		if (selected > bottom)
+			start = selected + 1 - visibleRows;
+		return intClamp(start, 0, intMax(0, length - visibleRows));
+	}
+
+	static function commandPopupCommandTrace(matches:Array<{final item:TuiSmokeCommandPopupItem; final matchStart:Int; final matchLength:Int;}>):Array<String> {
+		final out:Array<String> = [];
+		for (match in matches)
+			out.push(match.item.command);
+		return out;
+	}
+
+	static function commandPopupRows(matches:Array<{final item:TuiSmokeCommandPopupItem; final matchStart:Int; final matchLength:Int;}>,
+			selected:Int):Array<String> {
+		final out:Array<String> = [];
+		for (idx in 0...matches.length) {
+			final match = matches[idx];
+			final marker = idx == selected ? ">" : "-";
+			final range = match.matchStart >= 0 ? match.matchStart + "-" + (match.matchStart + match.matchLength - 1) : "none";
+			out.push(marker + " /" + match.item.command + "{kind=" + match.item.kind + ",id=" + traceText(match.item.id) + ",desc="
+				+ traceText(match.item.description) + ",match=" + range + "}");
+		}
+		return out;
+	}
+
+	static function commandPopupHeight(rows:Array<String>, width:Int, maxRows:Int):Int {
+		if (rows.length == 0)
+			return 1;
+		final visible = intMin(intMax(1, maxRows), rows.length);
+		final effectiveWidth = intMax(1, width);
+		var total = 0;
+		for (idx in 0...visible)
+			total += intMax(1, Std.int((rows[idx].length + effectiveWidth - 1) / effectiveWidth));
+		return total;
 	}
 
 	static function traceSelectionPopupCommon(plan:TuiSmokeSelectionPopupCommonPlan, trace:Array<String>):Bool {

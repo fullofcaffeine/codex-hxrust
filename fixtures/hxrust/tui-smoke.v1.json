@@ -67,6 +67,9 @@
       "../codex/codex-rs/tui/src/bottom_pane/skill_popup.rs",
       "../codex/codex-rs/tui/src/bottom_pane/selection_popup_common.rs",
       "../codex/codex-rs/tui/src/bottom_pane/list_selection_view.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/command_popup.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/slash_commands.rs",
+      "../codex/codex-rs/tui/src/slash_command.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -22027,6 +22030,328 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.list_selection_view.plan=headless\ntui.list_selection_view.layout=wide-half:content=86:side=42,42:row_display=single_line:desired_height=16\ntui.list_selection_view.layout=fixed-side-wrapped:content=76:side=54,20:row_display=wrapped:desired_height=5\ntui.list_selection_view.layout=stacked-disabled-side:content=46:side=none:row_display=single_line:desired_height=14\ntui.list_selection_view.layout=half-too-narrow:content=46:side=none:row_display=single_line:desired_height=14\ntui.list_selection_view.filter=query-plugin:query=plugin:filtered=2,4:selected_visible=0:selected_actual=2:scroll=0:rows=> Gamma (default){desc=Gamma desc,actual=2,enabled=true}|- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.filter=preserve-selected-plugin:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.move_down=skip-disabled-down:query=<empty>:filtered=0,1,2,3,4:selected_visible=2:selected_actual=2:scroll=0:rows=- Alpha (current){desc=Alpha desc,actual=0,enabled=true}|- Beta Disabled{desc=Beta desc,actual=1,enabled=false}|> Gamma (default){desc=Gamma desc,actual=2,enabled=true}|- Delta Locked{desc=Delta desc,actual=3,enabled=false}|- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.move_down=query-plugin-next:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.accept=disabled-rejected:query=delta:filtered=3:selected_visible=0:selected_actual=3:scroll=0:rows=> Delta Locked{desc=Delta desc,actual=3,enabled=false}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.accept=enabled-accepts:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=true:cancelled=false:last=4\ntui.list_selection_view.accept=no-selection-cancels:query=zzz:filtered=<none>:selected_visible=-1:selected_actual=-1:scroll=0:rows=<none>:accepted=false:cancelled=true:last=-1\ntui.list_selection_view.failure=live_list_selection_view_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> list selection view\ninput> \ntrace:\ntui.list_selection_view.plan=headless\ntui.list_selection_view.layout=wide-half:content=86:side=42,42:row_display=single_line:desired_height=16\ntui.list_selection_view.layout=fixed-side-wrapped:content=76:side=54,20:row_display=wrapped:desired_height=5\ntui.list_selection_view.layout=stacked-disabled-side:content=46:side=none:row_display=single_line:desired_height=14\ntui.list_selection_view.layout=half-too-narrow:content=46:side=none:row_display=single_line:desired_height=14\ntui.list_selection_view.filter=query-plugin:query=plugin:filtered=2,4:selected_visible=0:selected_actual=2:scroll=0:rows=> Gamma (default){desc=Gamma desc,actual=2,enabled=true}|- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.filter=preserve-selected-plugin:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.move_down=skip-disabled-down:query=<empty>:filtered=0,1,2,3,4:selected_visible=2:selected_actual=2:scroll=0:rows=- Alpha (current){desc=Alpha desc,actual=0,enabled=true}|- Beta Disabled{desc=Beta desc,actual=1,enabled=false}|> Gamma (default){desc=Gamma desc,actual=2,enabled=true}|- Delta Locked{desc=Delta desc,actual=3,enabled=false}|- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.move_down=query-plugin-next:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.accept=disabled-rejected:query=delta:filtered=3:selected_visible=0:selected_actual=3:scroll=0:rows=> Delta Locked{desc=Delta desc,actual=3,enabled=false}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.accept=enabled-accepts:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=true:cancelled=false:last=4\ntui.list_selection_view.accept=no-selection-cancels:query=zzz:filtered=<none>:selected_visible=-1:selected_actual=-1:scroll=0:rows=<none>:accepted=false:cancelled=true:last=-1\ntui.list_selection_view.failure=live_list_selection_view_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "command-popup-headless",
+      "frame": {
+        "name": "command-popup-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "command popup"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "command_popup",
+          "commandPopup": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowClipboardMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "catalog": [
+              {
+                "command": "model",
+                "description": "choose what model and reasoning effort to use"
+              },
+              {
+                "kind": "service_tier",
+                "id": "priority",
+                "command": "fast",
+                "description": "Fastest inference with increased plan usage",
+                "requiresFlag": "service_tier"
+              },
+              {
+                "command": "memories",
+                "description": "configure memory use and generation"
+              },
+              {
+                "command": "mention",
+                "description": "mention a file"
+              },
+              {
+                "command": "mcp",
+                "description": "list configured MCP tools; use /mcp verbose for details"
+              },
+              {
+                "command": "init",
+                "description": "create an AGENTS.md file with instructions for Codex"
+              },
+              {
+                "command": "compact",
+                "description": "summarize conversation to prevent hitting the context limit"
+              },
+              {
+                "command": "status",
+                "description": "show current session configuration and token usage",
+                "availableInSideConversation": true
+              },
+              {
+                "command": "stop",
+                "description": "stop all background terminals"
+              },
+              {
+                "command": "quit",
+                "description": "exit Codex",
+                "isAlias": true
+              },
+              {
+                "command": "btw",
+                "description": "start a side conversation in an ephemeral fork",
+                "isAlias": true
+              },
+              {
+                "command": "plan",
+                "description": "switch to Plan mode",
+                "requiresFlag": "collaboration_modes"
+              },
+              {
+                "command": "personality",
+                "description": "choose a communication style for Codex",
+                "requiresFlag": "personality"
+              },
+              {
+                "command": "debug-config",
+                "description": "show config layers and requirement sources for debugging",
+                "isDebug": true
+              },
+              {
+                "command": "apps",
+                "description": "manage apps",
+                "isApps": true
+              }
+            ],
+            "actions": [
+              {
+                "kind": "filter",
+                "name": "empty-filter-hides-aliases-and-gated",
+                "composerText": "/",
+                "width": 72,
+                "expectedFilter": "",
+                "expectedCommands": ["model", "memories", "mention", "mcp", "init", "compact", "status", "stop"],
+                "expectedRows": [
+                  "> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=none}",
+                  "- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=none}",
+                  "- /mention{kind=builtin,id=<empty>,desc=mention a file,match=none}",
+                  "- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=none}",
+                  "- /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=none}",
+                  "- /compact{kind=builtin,id=<empty>,desc=summarize conversation to prevent hitting the context limit,match=none}",
+                  "- /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=none}",
+                  "- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=none}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedCommand": "model",
+                "expectedScrollTop": 0,
+                "expectedHeight": 15
+              },
+              {
+                "kind": "filter",
+                "name": "exact-init-first-token",
+                "composerText": "/init later args\nignored",
+                "expectedFilter": "init",
+                "expectedCommands": ["init"],
+                "expectedRows": [
+                  "> /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=1-4}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedCommand": "init",
+                "expectedScrollTop": 0,
+                "expectedHeight": 2
+              },
+              {
+                "kind": "filter",
+                "name": "model-prefix",
+                "composerText": "/mo",
+                "expectedFilter": "mo",
+                "expectedCommands": ["model"],
+                "expectedRows": [
+                  "> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-2}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedCommand": "model",
+                "expectedScrollTop": 0,
+                "expectedHeight": 2
+              },
+              {
+                "kind": "filter",
+                "name": "m-prefix-presentation-order",
+                "composerText": "/m",
+                "expectedFilter": "m",
+                "expectedCommands": ["model", "memories", "mention", "mcp"],
+                "expectedRows": [
+                  "> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}",
+                  "- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}",
+                  "- /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}",
+                  "- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedCommand": "model",
+                "expectedScrollTop": 0,
+                "expectedHeight": 7
+              },
+              {
+                "kind": "move_down",
+                "name": "m-prefix-move-to-mention",
+                "composerText": "/m",
+                "previousFilter": "m",
+                "selectedIndex": 0,
+                "moveCount": 2,
+                "expectedFilter": "m",
+                "expectedCommands": ["model", "memories", "mention", "mcp"],
+                "expectedRows": [
+                  "- /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}",
+                  "- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}",
+                  "> /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}",
+                  "- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}"
+                ],
+                "expectedSelectedIndex": 2,
+                "expectedSelectedCommand": "mention",
+                "expectedScrollTop": 0,
+                "expectedHeight": 7
+              },
+              {
+                "kind": "accept",
+                "name": "service-tier-accepts-catalog-id",
+                "composerText": "/fa",
+                "serviceTierCommandsEnabled": true,
+                "expectedFilter": "fa",
+                "expectedCommands": ["fast"],
+                "expectedRows": [
+                  "> /fast{kind=service_tier,id=priority,desc=Fastest inference with increased plan usage,match=1-2}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedCommand": "fast",
+                "expectedScrollTop": 0,
+                "expectedAccepted": true,
+                "expectedAcceptedKind": "service_tier",
+                "expectedAcceptedId": "priority",
+                "expectedHeight": 2
+              },
+              {
+                "kind": "filter",
+                "name": "filter-change-resets-scrolled-selection",
+                "composerText": "/st",
+                "previousFilter": "",
+                "selectedIndex": 7,
+                "scrollTop": 4,
+                "expectedFilter": "st",
+                "expectedCommands": ["status", "stop"],
+                "expectedRows": [
+                  "> /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=1-2}",
+                  "- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=1-2}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedCommand": "status",
+                "expectedScrollTop": 0,
+                "expectedHeight": 4
+              },
+              {
+                "kind": "filter",
+                "name": "alias-hidden-empty-shown-prefix",
+                "composerText": "/qu",
+                "expectedFilter": "qu",
+                "expectedCommands": ["quit"],
+                "expectedRows": [
+                  "> /quit{kind=builtin,id=<empty>,desc=exit Codex,match=1-2}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedCommand": "quit",
+                "expectedScrollTop": 0,
+                "expectedHeight": 1
+              },
+              {
+                "kind": "filter",
+                "name": "ac-prefix-excludes-compact",
+                "composerText": "/ac",
+                "expectedFilter": "ac",
+                "expectedCommands": [],
+                "expectedRows": [],
+                "expectedSelectedIndex": -1,
+                "expectedSelectedCommand": "",
+                "expectedScrollTop": 0,
+                "expectedHeight": 1
+              },
+              {
+                "kind": "filter",
+                "name": "plan-hidden-when-collaboration-disabled",
+                "composerText": "/plan",
+                "expectedFilter": "plan",
+                "expectedCommands": [],
+                "expectedRows": [],
+                "expectedSelectedIndex": -1,
+                "expectedSelectedCommand": "",
+                "expectedScrollTop": 0,
+                "expectedHeight": 1
+              },
+              {
+                "kind": "filter",
+                "name": "plan-visible-when-collaboration-enabled",
+                "composerText": "/plan",
+                "collaborationModesEnabled": true,
+                "expectedFilter": "plan",
+                "expectedCommands": ["plan"],
+                "expectedRows": [
+                  "> /plan{kind=builtin,id=<empty>,desc=switch to Plan mode,match=1-4}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedCommand": "plan",
+                "expectedScrollTop": 0,
+                "expectedHeight": 1
+              },
+              {
+                "kind": "accept",
+                "name": "no-match-cancels",
+                "composerText": "/zzz",
+                "expectedFilter": "zzz",
+                "expectedCommands": [],
+                "expectedRows": [],
+                "expectedSelectedIndex": -1,
+                "expectedSelectedCommand": "",
+                "expectedScrollTop": 0,
+                "expectedAccepted": false,
+                "expectedCancelled": true,
+                "expectedHeight": 1
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_command_popup_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noClipboardMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.command_popup.plan=headless\ntui.command_popup.filter=empty-filter-hides-aliases-and-gated:filter=<empty>:commands=model,memories,mention,mcp,init,compact,status,stop:selected=0:selected_command=model:scroll=0:height=15:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=none}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=none}|- /mention{kind=builtin,id=<empty>,desc=mention a file,match=none}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=none}|- /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=none}|- /compact{kind=builtin,id=<empty>,desc=summarize conversation to prevent hitting the context limit,match=none}|- /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=none}|- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=none}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=exact-init-first-token:filter=init:commands=init:selected=0:selected_command=init:scroll=0:height=2:rows=> /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=1-4}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=model-prefix:filter=mo:commands=model:selected=0:selected_command=model:scroll=0:height=2:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=m-prefix-presentation-order:filter=m:commands=model,memories,mention,mcp:selected=0:selected_command=model:scroll=0:height=7:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}|- /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.move_down=m-prefix-move-to-mention:filter=m:commands=model,memories,mention,mcp:selected=2:selected_command=mention:scroll=0:height=7:rows=- /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}|> /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.accept=service-tier-accepts-catalog-id:filter=fa:commands=fast:selected=0:selected_command=fast:scroll=0:height=2:rows=> /fast{kind=service_tier,id=priority,desc=Fastest inference with increased plan usage,match=1-2}:accepted=true:cancelled=false:accepted_kind=service_tier:accepted_id=priority\ntui.command_popup.filter=filter-change-resets-scrolled-selection:filter=st:commands=status,stop:selected=0:selected_command=status:scroll=0:height=4:rows=> /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=1-2}|- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=alias-hidden-empty-shown-prefix:filter=qu:commands=quit:selected=0:selected_command=quit:scroll=0:height=1:rows=> /quit{kind=builtin,id=<empty>,desc=exit Codex,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=ac-prefix-excludes-compact:filter=ac:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=plan-hidden-when-collaboration-disabled:filter=plan:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=plan-visible-when-collaboration-enabled:filter=plan:commands=plan:selected=0:selected_command=plan:scroll=0:height=1:rows=> /plan{kind=builtin,id=<empty>,desc=switch to Plan mode,match=1-4}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.accept=no-match-cancels:filter=zzz:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=true:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.failure=live_command_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> command popup\ninput> \ntrace:\ntui.command_popup.plan=headless\ntui.command_popup.filter=empty-filter-hides-aliases-and-gated:filter=<empty>:commands=model,memories,mention,mcp,init,compact,status,stop:selected=0:selected_command=model:scroll=0:height=15:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=none}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=none}|- /mention{kind=builtin,id=<empty>,desc=mention a file,match=none}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=none}|- /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=none}|- /compact{kind=builtin,id=<empty>,desc=summarize conversation to prevent hitting the context limit,match=none}|- /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=none}|- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=none}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=exact-init-first-token:filter=init:commands=init:selected=0:selected_command=init:scroll=0:height=2:rows=> /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=1-4}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=model-prefix:filter=mo:commands=model:selected=0:selected_command=model:scroll=0:height=2:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=m-prefix-presentation-order:filter=m:commands=model,memories,mention,mcp:selected=0:selected_command=model:scroll=0:height=7:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}|- /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.move_down=m-prefix-move-to-mention:filter=m:commands=model,memories,mention,mcp:selected=2:selected_command=mention:scroll=0:height=7:rows=- /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}|> /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.accept=service-tier-accepts-catalog-id:filter=fa:commands=fast:selected=0:selected_command=fast:scroll=0:height=2:rows=> /fast{kind=service_tier,id=priority,desc=Fastest inference with increased plan usage,match=1-2}:accepted=true:cancelled=false:accepted_kind=service_tier:accepted_id=priority\ntui.command_popup.filter=filter-change-resets-scrolled-selection:filter=st:commands=status,stop:selected=0:selected_command=status:scroll=0:height=4:rows=> /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=1-2}|- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=alias-hidden-empty-shown-prefix:filter=qu:commands=quit:selected=0:selected_command=quit:scroll=0:height=1:rows=> /quit{kind=builtin,id=<empty>,desc=exit Codex,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=ac-prefix-excludes-compact:filter=ac:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=plan-hidden-when-collaboration-disabled:filter=plan:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=plan-visible-when-collaboration-enabled:filter=plan:commands=plan:selected=0:selected_command=plan:scroll=0:height=1:rows=> /plan{kind=builtin,id=<empty>,desc=switch to Plan mode,match=1-4}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.accept=no-match-cancels:filter=zzz:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=true:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.failure=live_command_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",
