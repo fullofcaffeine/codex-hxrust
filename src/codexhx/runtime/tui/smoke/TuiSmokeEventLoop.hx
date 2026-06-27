@@ -11398,6 +11398,13 @@ class TuiSmokeEventLoop {
 						+ action.remoteImageBefore + "->" + action.remoteImageAfter + ":elements=" + action.elementTransitionText() + ":payloads="
 						+ action.elementPayloads + ":popup=" + action.popupTransitionText() + ":redraw=" + action.needsRedraw + ":cursor="
 						+ action.cursorTransitionText() + ":clamped=" + action.cursorClamped + ":retained=" + action.attachmentsRetained);
+				case TuiSmokeComposerEditingActionKind.MentionsV2ToolSelect:
+					trace.push("tui.composer_editing.mentions_v2_tool_select=" + action.keyName + ":insert=" + action.insertText + ":path="
+						+ action.bindingPath + ":token=" + action.tokenBefore + "->" + action.tokenAfter + ":text=" + action.inputText + "->"
+						+ action.outputText + ":bindings=" + action.mentionBindingTransitionText() + ":elements=" + action.elementTransitionText()
+						+ ":payloads=" + action.elementPayloads + ":pending=" + action.pendingPasteTransitionText() + ":popup="
+						+ action.popupTransitionText() + ":redraw=" + action.needsRedraw + ":cursor=" + action.cursorTransitionText() + ":clamped="
+						+ action.cursorClamped + ":retained=" + action.attachmentsRetained);
 				case TuiSmokeComposerEditingActionKind.PasteBurstFlush:
 					trace.push("tui.composer_editing.burst_flush=" + action.keyName + ":active=" + action.pasteBurstActiveBefore + "->"
 						+ action.pasteBurstActiveAfter + ":flushed=" + action.pasteBurstFlushed + ":newline=" + action.newlineCaptured + ":window_cleared="

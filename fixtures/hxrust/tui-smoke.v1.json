@@ -9102,6 +9102,180 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer mentions-v2 file image selection\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.mentions_v2_file_select=tab-image-file-candidate:selected=/tmp/chart.png:token=@chart-><image>:text=ask @chart now->ask [Image #1]  now:placeholder=->[Image #1]:local=0->1:remote=0->0:elements=0->1:payloads=[Image #1]:popup=mention_v2->none:redraw=true:cursor=8->15:clamped=false:retained=false\ntui.composer_editing.mentions_v2_file_select=unreadable-image-file-fallback:selected=/tmp/missing.png:token=@missing->/tmp/missing.png:text=ask @missing now->ask /tmp/missing.png  now:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:popup=mention_v2->none:redraw=true:cursor=10->21:clamped=false:retained=false\ntui.composer_editing.mentions_v2_file_select=normal-file-candidate:selected=src/main.rs:token=@src->src/main.rs:text=@src->src/main.rs :placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:popup=mention_v2->none:redraw=true:cursor=4->12:clamped=false:retained=false\ntui.composer_editing.mentions_v2_file_select=empty-token-file-candidate:selected=docs/readme.md:token=@->docs/readme.md:text=ask @ ->ask docs/readme.md  :placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:popup=mention_v2->none:redraw=true:cursor=5->19:clamped=false:retained=false\ntui.composer_editing.mentions_v2_file_select=multibyte-image-file-candidate:selected=/tmp/画像.png:token=@画像.png-><image>:text=日本語 @画像.png 次->日本語 [Image #1]  次:placeholder=->[Image #1]:local=0->1:remote=0->0:elements=0->1:payloads=[Image #1]:popup=mention_v2->none:redraw=true:cursor=14->21:clamped=true:retained=false\ntui.composer_editing.mentions_v2_file_select=remote-offset-image-file-candidate:selected=/tmp/local.png:token=@local-><image>:text=@local->[Image #3] :placeholder=->[Image #3]:local=0->1:remote=2->2:elements=0->1:payloads=[Image #3]:popup=mention_v2->none:redraw=true:cursor=6->11:clamped=false:retained=false\ntui.composer_editing.failure=live_composer_mentions_v2_file_image_selection_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-mentions-v2-tool-mention-insertion-headless",
+      "frame": {
+        "name": "composer-mentions-v2-tool-mention-insertion-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer mentions-v2 tool mention insertion"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "mentions_v2_tool_select",
+                "keyName": "plugin-binding",
+                "inputText": "ask @codex now",
+                "outputText": "ask @codex-cli  now",
+                "insertText": "@codex-cli",
+                "bindingPath": "plugin://codex-cli",
+                "tokenBefore": "@codex",
+                "tokenAfter": "@codex-cli",
+                "popupBefore": "mention_v2",
+                "popupAfter": "none",
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "elementPayloads": "@codex-cli",
+                "needsRedraw": true,
+                "cursorBefore": 8,
+                "cursorAfter": 15
+              },
+              {
+                "kind": "mentions_v2_tool_select",
+                "keyName": "skill-binding",
+                "inputText": "/review $lint",
+                "outputText": "/review $lint ",
+                "insertText": "$lint",
+                "bindingPath": ".codex/skills/lint/SKILL.md",
+                "tokenBefore": "$lint",
+                "tokenAfter": "$lint",
+                "popupBefore": "mention_v2",
+                "popupAfter": "none",
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "elementPayloads": "$lint",
+                "needsRedraw": true,
+                "cursorBefore": 13,
+                "cursorAfter": 14
+              },
+              {
+                "kind": "mentions_v2_tool_select",
+                "keyName": "tool-without-binding-path",
+                "inputText": "use @plan now",
+                "outputText": "use @plan  now",
+                "insertText": "@plan",
+                "bindingPath": "",
+                "tokenBefore": "@plan",
+                "tokenAfter": "@plan",
+                "popupBefore": "mention_v2",
+                "popupAfter": "none",
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 0,
+                "elementPayloads": "@plan",
+                "needsRedraw": true,
+                "cursorBefore": 6,
+                "cursorAfter": 10
+              },
+              {
+                "kind": "mentions_v2_tool_select",
+                "keyName": "multibyte-token-boundary",
+                "inputText": "日本語 @計画 次",
+                "outputText": "日本語 @plan  次",
+                "insertText": "@plan",
+                "bindingPath": "tools/plan.md",
+                "tokenBefore": "@計画",
+                "tokenAfter": "@plan",
+                "popupBefore": "mention_v2",
+                "popupAfter": "none",
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "elementPayloads": "@plan",
+                "needsRedraw": true,
+                "cursorBefore": 14,
+                "cursorAfter": 16,
+                "cursorClamped": true
+              },
+              {
+                "kind": "mentions_v2_tool_select",
+                "keyName": "large-paste-element-retained",
+                "inputText": "[Pasted Content 105 chars] @tool",
+                "outputText": "[Pasted Content 105 chars] @tool ",
+                "insertText": "@tool",
+                "bindingPath": "tools/tool.md",
+                "tokenBefore": "@tool",
+                "tokenAfter": "@tool",
+                "popupBefore": "mention_v2",
+                "popupAfter": "none",
+                "pendingPasteBefore": 1,
+                "pendingPasteAfter": 1,
+                "elementBefore": 1,
+                "elementAfter": 2,
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "elementPayloads": "[Pasted Content 105 chars],@tool",
+                "needsRedraw": true,
+                "cursorBefore": 32,
+                "cursorAfter": 33,
+                "attachmentsRetained": true
+              },
+              {
+                "kind": "mentions_v2_tool_select",
+                "keyName": "empty-token-plugin-binding",
+                "inputText": "ask @ ",
+                "outputText": "ask @workspace  ",
+                "insertText": "@workspace",
+                "bindingPath": "plugin://workspace",
+                "tokenBefore": "@",
+                "tokenAfter": "@workspace",
+                "popupBefore": "mention_v2",
+                "popupAfter": "none",
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "mentionBindingBefore": 0,
+                "mentionBindingAfter": 1,
+                "elementPayloads": "@workspace",
+                "needsRedraw": true,
+                "cursorBefore": 5,
+                "cursorAfter": 15
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_composer_mentions_v2_tool_selection_effects_rejected",
+                "noLiveInput": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.mentions_v2_tool_select=plugin-binding:insert=@codex-cli:path=plugin://codex-cli:token=@codex->@codex-cli:text=ask @codex now->ask @codex-cli  now:bindings=0->1:elements=0->1:payloads=@codex-cli:pending=0->0:popup=mention_v2->none:redraw=true:cursor=8->15:clamped=false:retained=false\ntui.composer_editing.mentions_v2_tool_select=skill-binding:insert=$lint:path=.codex/skills/lint/SKILL.md:token=$lint->$lint:text=/review $lint->/review $lint :bindings=0->1:elements=0->1:payloads=$lint:pending=0->0:popup=mention_v2->none:redraw=true:cursor=13->14:clamped=false:retained=false\ntui.composer_editing.mentions_v2_tool_select=tool-without-binding-path:insert=@plan:path=:token=@plan->@plan:text=use @plan now->use @plan  now:bindings=0->0:elements=0->1:payloads=@plan:pending=0->0:popup=mention_v2->none:redraw=true:cursor=6->10:clamped=false:retained=false\ntui.composer_editing.mentions_v2_tool_select=multibyte-token-boundary:insert=@plan:path=tools/plan.md:token=@計画->@plan:text=日本語 @計画 次->日本語 @plan  次:bindings=0->1:elements=0->1:payloads=@plan:pending=0->0:popup=mention_v2->none:redraw=true:cursor=14->16:clamped=true:retained=false\ntui.composer_editing.mentions_v2_tool_select=large-paste-element-retained:insert=@tool:path=tools/tool.md:token=@tool->@tool:text=[Pasted Content 105 chars] @tool->[Pasted Content 105 chars] @tool :bindings=0->1:elements=1->2:payloads=[Pasted Content 105 chars],@tool:pending=1->1:popup=mention_v2->none:redraw=true:cursor=32->33:clamped=false:retained=true\ntui.composer_editing.mentions_v2_tool_select=empty-token-plugin-binding:insert=@workspace:path=plugin://workspace:token=@->@workspace:text=ask @ ->ask @workspace  :bindings=0->1:elements=0->1:payloads=@workspace:pending=0->0:popup=mention_v2->none:redraw=true:cursor=5->15:clamped=false:retained=false\ntui.composer_editing.failure=live_composer_mentions_v2_tool_selection_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer mentions-v2 tool mention insertion\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.mentions_v2_tool_select=plugin-binding:insert=@codex-cli:path=plugin://codex-cli:token=@codex->@codex-cli:text=ask @codex now->ask @codex-cli  now:bindings=0->1:elements=0->1:payloads=@codex-cli:pending=0->0:popup=mention_v2->none:redraw=true:cursor=8->15:clamped=false:retained=false\ntui.composer_editing.mentions_v2_tool_select=skill-binding:insert=$lint:path=.codex/skills/lint/SKILL.md:token=$lint->$lint:text=/review $lint->/review $lint :bindings=0->1:elements=0->1:payloads=$lint:pending=0->0:popup=mention_v2->none:redraw=true:cursor=13->14:clamped=false:retained=false\ntui.composer_editing.mentions_v2_tool_select=tool-without-binding-path:insert=@plan:path=:token=@plan->@plan:text=use @plan now->use @plan  now:bindings=0->0:elements=0->1:payloads=@plan:pending=0->0:popup=mention_v2->none:redraw=true:cursor=6->10:clamped=false:retained=false\ntui.composer_editing.mentions_v2_tool_select=multibyte-token-boundary:insert=@plan:path=tools/plan.md:token=@計画->@plan:text=日本語 @計画 次->日本語 @plan  次:bindings=0->1:elements=0->1:payloads=@plan:pending=0->0:popup=mention_v2->none:redraw=true:cursor=14->16:clamped=true:retained=false\ntui.composer_editing.mentions_v2_tool_select=large-paste-element-retained:insert=@tool:path=tools/tool.md:token=@tool->@tool:text=[Pasted Content 105 chars] @tool->[Pasted Content 105 chars] @tool :bindings=0->1:elements=1->2:payloads=[Pasted Content 105 chars],@tool:pending=1->1:popup=mention_v2->none:redraw=true:cursor=32->33:clamped=false:retained=true\ntui.composer_editing.mentions_v2_tool_select=empty-token-plugin-binding:insert=@workspace:path=plugin://workspace:token=@->@workspace:text=ask @ ->ask @workspace  :bindings=0->1:elements=0->1:payloads=@workspace:pending=0->0:popup=mention_v2->none:redraw=true:cursor=5->15:clamped=false:retained=false\ntui.composer_editing.failure=live_composer_mentions_v2_tool_selection_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-popup-sync-suppression-clears",
       "frame": {
         "name": "composer-popup-sync-suppression-clears",

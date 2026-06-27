@@ -14,6 +14,8 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final textareaText:String;
 	final submissionText:String;
 	final selectedPath:String;
+	final insertText:String;
+	final bindingPath:String;
 	final tokenBefore:String;
 	final tokenAfter:String;
 	final placeholderBefore:String;
@@ -33,6 +35,8 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final remoteImageAfter:Int;
 	final selectedRemoteBefore:Int;
 	final selectedRemoteAfter:Int;
+	final mentionBindingBefore:Int;
+	final mentionBindingAfter:Int;
 	final needsRedraw:Bool;
 	final keyConsumed:Bool;
 	final releaseIgnored:Bool;
@@ -91,6 +95,8 @@ class TuiSmokeComposerEditingAction {
 	public final textareaText:String;
 	public final submissionText:String;
 	public final selectedPath:String;
+	public final insertText:String;
+	public final bindingPath:String;
 	public final tokenBefore:String;
 	public final tokenAfter:String;
 	public final placeholderBefore:String;
@@ -110,6 +116,8 @@ class TuiSmokeComposerEditingAction {
 	public final remoteImageAfter:Int;
 	public final selectedRemoteBefore:Int;
 	public final selectedRemoteAfter:Int;
+	public final mentionBindingBefore:Int;
+	public final mentionBindingAfter:Int;
 	public final needsRedraw:Bool;
 	public final keyConsumed:Bool;
 	public final releaseIgnored:Bool;
@@ -174,6 +182,10 @@ class TuiSmokeComposerEditingAction {
 
 	public function selectedRemoteTransitionText():String {
 		return selectedRemoteBefore + "->" + selectedRemoteAfter;
+	}
+
+	public function mentionBindingTransitionText():String {
+		return mentionBindingBefore + "->" + mentionBindingAfter;
 	}
 
 	public function popupTransitionText():String {
