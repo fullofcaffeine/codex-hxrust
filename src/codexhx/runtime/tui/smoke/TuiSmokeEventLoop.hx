@@ -8447,6 +8447,12 @@ class TuiSmokeEventLoop {
 				textAreaVimTextObjectGuardsTrace();
 			case TuiSmokeTextAreaActionKind.VimWordEnd:
 				textAreaVimWordEndTrace();
+			case TuiSmokeTextAreaActionKind.ElementMutation:
+				textAreaElementMutationTrace();
+			case TuiSmokeTextAreaActionKind.ElementRange:
+				textAreaElementRangeTrace();
+			case TuiSmokeTextAreaActionKind.ElementBoundary:
+				textAreaElementBoundaryTrace();
 			case _:
 				"unknown";
 		}
@@ -8497,11 +8503,12 @@ class TuiSmokeEventLoop {
 	}
 
 	static function textAreaSetCursor(state:TuiSmokeTextAreaState, cursor:Int):Void {
-		state.cursor = textAreaClampByteToBoundary(state.text, intClamp(cursor, 0, textAreaByteLen(state.text)));
+		final boundary = textAreaClampByteToBoundary(state.text, intClamp(cursor, 0, textAreaByteLen(state.text)));
+		state.cursor = textAreaClampPosToNearestAtomicBoundary(state, boundary);
 	}
 
 	static function textAreaInsertAt(state:TuiSmokeTextAreaState, pos:Int, insert:String):Void {
-		final safePos = textAreaClampByteToBoundary(state.text, intClamp(pos, 0, textAreaByteLen(state.text)));
+		final safePos = textAreaClampPosForInsertion(state, pos);
 		final charPos = textAreaByteToCharIndex(state.text, safePos);
 		state.text = state.text.substr(0, charPos) + insert + state.text.substr(charPos);
 		final insertedLen = textAreaByteLen(insert);
@@ -8772,6 +8779,165 @@ class TuiSmokeEventLoop {
 		return "e_cursor=" + eCursor + ":after_x=" + textAreaSummary(e) + ":kill=" + traceText(e.killBuffer) + ":de=" + textAreaSummary(deleteEnd)
 			+ ":kill=" + traceText(deleteEnd.killBuffer) + ":trailing=" + textAreaSummary(trailing) + ":atom=" + atomFirst + "," + atom.cursor
 			+ ":dollar_cursor=" + dollarCursor + ":after_x=" + textAreaSummary(dollar) + ":kill=" + traceText(dollar.killBuffer);
+	}
+
+	static function textAreaElementMutationTrace():String {
+		final state = textAreaState("pre post", "pre ".length, "", false, "insert");
+		textAreaInsertElement(state, "<tool>", "tool-call");
+		final inserted = textAreaSummary(state);
+		final payloads = textAreaElementPayloadsTrace(state);
+		final namedBefore = textAreaNamedElementRangeTrace(state, "tool-call");
+		final replacedPayload = textAreaReplaceElementPayload(state, "<tool>", "<done>");
+		final afterPayload = textAreaSummary(state);
+		final updatedNamed = textAreaUpdateNamedElementById(state, "tool-call", "[done]");
+		final afterUpdate = textAreaSummary(state);
+		final namedAfter = textAreaNamedElementRangeTrace(state, "tool-call");
+		final replacedById = textAreaReplaceElementById(state, "tool-call", "done");
+		final afterReplaceId = textAreaSummary(state);
+		return "inserted=" + inserted + ":payloads=" + payloads + ":named_before=" + namedBefore + ":replace_payload=" + replacedPayload + ":after_payload="
+			+ afterPayload + ":update_named=" + updatedNamed + ":after_update=" + afterUpdate + ":named_after=" + namedAfter + ":replace_by_id="
+			+ replacedById + ":after_replace_id=" + afterReplaceId;
+	}
+
+	static function textAreaElementRangeTrace():String {
+		final state = textAreaState("ab cd ef", 0, "", false, "insert");
+		final late = textAreaAddElementRange(state, 6, 8, "late");
+		final early = textAreaAddElementRange(state, 0, 2, "early");
+		final duplicate = textAreaAddElementRange(state, 0, 2, "duplicate");
+		final overlap = textAreaAddElementRange(state, 1, 4, "overlap");
+		final clamped = textAreaAddElementRange(state, 99, 99, "invalid");
+		final ordered = textAreaElementTrace(state.elements);
+		final removed = textAreaRemoveElementRange(state, 0, 2);
+		final removeMissing = textAreaRemoveElementRange(state, 0, 2);
+		return "added=" + late + "," + early + ":duplicate=" + duplicate + ":overlap=" + overlap + ":clamped=" + clamped + ":ordered=" + ordered
+			+ ":removed=" + removed + ":missing=" + removeMissing + ":after=" + textAreaSummary(state);
+	}
+
+	static function textAreaElementBoundaryTrace():String {
+		final state = textAreaState("a<el>b", 0, "", false, "insert");
+		textAreaAddElementRange(state, 1, 5, "atom");
+		textAreaSetCursor(state, 3);
+		final clampedCursor = state.cursor;
+		textAreaInsertAt(state, 4, "X");
+		final afterInsert = textAreaSummary(state);
+		final replace = textAreaState("ab<wide>cd", 0, "", false, "insert");
+		textAreaAddElementRange(replace, 2, 8, "wide");
+		textAreaReplaceRange(replace, 4, 9, "Z");
+		return "cursor=" + clampedCursor + ":after_insert=" + afterInsert + ":prev=" + textAreaPrevAtomicBoundary(state, 6) + ":next="
+			+ textAreaNextAtomicBoundary(state, 1) + ":replace_expand=" + textAreaSummary(replace);
+	}
+
+	static function textAreaInsertElement(state:TuiSmokeTextAreaState, payload:String, name:String):Void {
+		final start = textAreaClampPosForInsertion(state, state.cursor);
+		textAreaInsertAt(state, start, payload);
+		final end = start + textAreaByteLen(payload);
+		textAreaInsertSortedRange(state.elements, {start: start, end: end, name: name});
+		textAreaSetCursor(state, end);
+	}
+
+	static function textAreaElementPayloadsTrace(state:TuiSmokeTextAreaState):String {
+		if (state.elements.length == 0)
+			return "<none>";
+		final payloads:Array<String> = [];
+		for (element in state.elements)
+			payloads.push(traceText(textAreaSlice(state.text, element.start, element.end)));
+		return payloads.join("|");
+	}
+
+	static function textAreaNamedElementRangeTrace(state:TuiSmokeTextAreaState, name:String):String {
+		for (element in state.elements) {
+			if (element.name == name)
+				return element.start + "-" + element.end;
+		}
+		return "<none>";
+	}
+
+	static function textAreaReplaceElementPayload(state:TuiSmokeTextAreaState, oldPayload:String, newPayload:String):Bool {
+		for (element in state.elements) {
+			if (textAreaSlice(state.text, element.start, element.end) == oldPayload) {
+				final start = element.start;
+				final end = element.end;
+				final name = element.name;
+				textAreaReplaceRange(state, start, end, newPayload);
+				textAreaInsertSortedRange(state.elements, {start: start, end: start + textAreaByteLen(newPayload), name: name});
+				return true;
+			}
+		}
+		return false;
+	}
+
+	static function textAreaReplaceElementById(state:TuiSmokeTextAreaState, name:String, replacement:String):Bool {
+		final element = textAreaFindNamedElement(state, name);
+		if (element == null)
+			return false;
+		textAreaReplaceRange(state, element.start, element.end, replacement);
+		return true;
+	}
+
+	static function textAreaUpdateNamedElementById(state:TuiSmokeTextAreaState, name:String, replacement:String):Bool {
+		final element = textAreaFindNamedElement(state, name);
+		if (element == null)
+			return false;
+		final start = element.start;
+		textAreaReplaceRange(state, element.start, element.end, replacement);
+		textAreaInsertSortedRange(state.elements, {start: start, end: start + textAreaByteLen(replacement), name: name});
+		return true;
+	}
+
+	static function textAreaFindNamedElement(state:TuiSmokeTextAreaState, name:String):Null<TuiSmokeTextAreaRange> {
+		for (element in state.elements) {
+			if (element.name == name)
+				return element;
+		}
+		return null;
+	}
+
+	static function textAreaAddElementRange(state:TuiSmokeTextAreaState, start:Int, end:Int, name:String):Bool {
+		var safeStart = textAreaClampByteToBoundary(state.text, intClamp(start, 0, textAreaByteLen(state.text)));
+		var safeEnd = textAreaClampByteToBoundary(state.text, intClamp(end, safeStart, textAreaByteLen(state.text)));
+		if (safeStart >= safeEnd)
+			return false;
+		for (element in state.elements) {
+			if (element.start < safeEnd && element.end > safeStart)
+				return false;
+		}
+		textAreaInsertSortedRange(state.elements, {start: safeStart, end: safeEnd, name: name});
+		return true;
+	}
+
+	static function textAreaRemoveElementRange(state:TuiSmokeTextAreaState, start:Int, end:Int):Bool {
+		final safeStart = textAreaClampByteToBoundary(state.text, intClamp(start, 0, textAreaByteLen(state.text)));
+		final safeEnd = textAreaClampByteToBoundary(state.text, intClamp(end, safeStart, textAreaByteLen(state.text)));
+		for (idx in 0...state.elements.length) {
+			final element = state.elements[idx];
+			if (element.start == safeStart && element.end == safeEnd) {
+				state.elements.splice(idx, 1);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	static function textAreaClampPosForInsertion(state:TuiSmokeTextAreaState, pos:Int):Int {
+		final boundary = textAreaClampByteToBoundary(state.text, intClamp(pos, 0, textAreaByteLen(state.text)));
+		return textAreaClampPosToNearestAtomicBoundary(state, boundary);
+	}
+
+	static function textAreaClampPosToNearestAtomicBoundary(state:TuiSmokeTextAreaState, pos:Int):Int {
+		for (element in state.elements) {
+			if (pos > element.start && pos < element.end) {
+				final startDistance = pos - element.start;
+				final endDistance = element.end - pos;
+				return startDistance <= endDistance ? element.start : element.end;
+			}
+		}
+		return pos;
+	}
+
+	static function textAreaSlice(text:String, start:Int, end:Int):String {
+		final startChar = textAreaByteToCharIndex(text, start);
+		final endChar = textAreaByteToCharIndex(text, end);
+		return text.substr(startChar, endChar - startChar);
 	}
 
 	static function textAreaKillRange(state:TuiSmokeTextAreaState, start:Int, end:Int, kind:String):Void {

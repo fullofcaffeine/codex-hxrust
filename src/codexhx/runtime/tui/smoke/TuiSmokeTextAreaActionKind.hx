@@ -18,6 +18,9 @@ enum abstract TuiSmokeTextAreaActionKind(String) to String {
 	final VimTextObjects = "vim_text_objects";
 	final VimTextObjectGuards = "vim_text_object_guards";
 	final VimWordEnd = "vim_word_end";
+	final ElementMutation = "element_mutation";
+	final ElementRange = "element_range";
+	final ElementBoundary = "element_boundary";
 	final Failure = "failure";
 	final Unknown = "unknown";
 
@@ -40,6 +43,9 @@ enum abstract TuiSmokeTextAreaActionKind(String) to String {
 			case "vim_text_objects": VimTextObjects;
 			case "vim_text_object_guards": VimTextObjectGuards;
 			case "vim_word_end": VimWordEnd;
+			case "element_mutation": ElementMutation;
+			case "element_range": ElementRange;
+			case "element_boundary": ElementBoundary;
 			case "failure": Failure;
 			case _: Unknown;
 		}

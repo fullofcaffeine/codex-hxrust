@@ -23741,6 +23741,83 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> textarea vim text objects\ninput> \ntrace:\ntui.textarea.plan=headless\ntui.textarea.vim_text_objects=vim-word-and-big-word-operators:dw=text=world:cursor=0:elements=<none>:kill=hello :ciw=text=hello :cursor=6:elements=<none>:kill=world:mode=insert:yaw=text=hello world:cursor=1:elements=<none>:kill=hello :diW=text= qux:cursor=0:elements=<none>:kill=foo.bar/baz:daw_end=text=world:cursor=0:elements=<none>:kill=hello :ciW_final=text=foo :cursor=4:elements=<none>:kill=bar:mode=insert\ntui.textarea.vim_text_object_guards=vim-delimiter-quote-cancel-invalid-guards:cib=text=a(b()d)e:cursor=4:elements=<none>:kill=c:mode=insert:da_bracket=text=a  c:cursor=2:elements=<none>:kill=[b]:empty_paren=text=call():cursor=5:elements=<none>:kill=<empty>:mode=insert:empty_quote=text=say \"\" now:cursor=5:elements=<none>:kill=<empty>:mode=insert:quote_escape=text=say \"\" now:cursor=5:elements=<none>:kill=a \\\\\"b\\\\\" c:mode=insert:quote_line_local=text=one \"two\\nthree\" four:cursor=9:elements=<none>:kill=<empty>:cancelled=text=hello world:cursor=1:elements=<none>:pending=false:invalid=text=hello:cursor=0:elements=<none>:pending=false\ntui.textarea.vim_word_end=vim-word-end-dollar-and-atomic-element-motion:e_cursor=2:after_x=text=ab:cursor=2:elements=<none>:kill=c:de=text=alph gamma:cursor=4:elements=<none>:kill=a beta:trailing=text=alpha   :cursor=7:elements=<none>:atom=6,20:dollar_cursor=2:after_x=text=ab\\n123:cursor=2:elements=<none>:kill=c\ntui.textarea.failure=live_textarea_vim_text_object_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "textarea-elements-headless",
+      "frame": {
+        "name": "textarea-elements-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "textarea element mutation state"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "textarea",
+          "textArea": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowClipboardMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "allowAppServerDelivery": false,
+            "actions": [
+              {
+                "kind": "element_mutation",
+                "name": "named-element-insert-update-and-replace",
+                "expectedTrace": "inserted=text=pre <tool>post:cursor=10:elements=4-10:tool-call:payloads=<tool>:named_before=4-10:replace_payload=true:after_payload=text=pre <done>post:cursor=10:elements=4-10:tool-call:update_named=true:after_update=text=pre [done]post:cursor=10:elements=4-10:tool-call:named_after=4-10:replace_by_id=true:after_replace_id=text=pre donepost:cursor=8:elements=<none>"
+              },
+              {
+                "kind": "element_range",
+                "name": "add-remove-range-sorts-and-rejects-overlap",
+                "expectedTrace": "added=true,true:duplicate=false:overlap=false:clamped=false:ordered=0-2:early|6-8:late:removed=true:missing=false:after=text=ab cd ef:cursor=0:elements=6-8:late"
+              },
+              {
+                "kind": "element_boundary",
+                "name": "cursor-insert-and-replace-expand-atomic-elements",
+                "expectedTrace": "cursor=1:after_insert=text=a<el>Xb:cursor=1:elements=1-5:atom:prev=1:next=5:replace_expand=text=abZd:cursor=0:elements=<none>"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_textarea_element_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noClipboardMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "noAppServerDelivery": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.textarea.plan=headless\ntui.textarea.element_mutation=named-element-insert-update-and-replace:inserted=text=pre <tool>post:cursor=10:elements=4-10:tool-call:payloads=<tool>:named_before=4-10:replace_payload=true:after_payload=text=pre <done>post:cursor=10:elements=4-10:tool-call:update_named=true:after_update=text=pre [done]post:cursor=10:elements=4-10:tool-call:named_after=4-10:replace_by_id=true:after_replace_id=text=pre donepost:cursor=8:elements=<none>\ntui.textarea.element_range=add-remove-range-sorts-and-rejects-overlap:added=true,true:duplicate=false:overlap=false:clamped=false:ordered=0-2:early|6-8:late:removed=true:missing=false:after=text=ab cd ef:cursor=0:elements=6-8:late\ntui.textarea.element_boundary=cursor-insert-and-replace-expand-atomic-elements:cursor=1:after_insert=text=a<el>Xb:cursor=1:elements=1-5:atom:prev=1:next=5:replace_expand=text=abZd:cursor=0:elements=<none>\ntui.textarea.failure=live_textarea_element_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> textarea element mutation state\ninput> \ntrace:\ntui.textarea.plan=headless\ntui.textarea.element_mutation=named-element-insert-update-and-replace:inserted=text=pre <tool>post:cursor=10:elements=4-10:tool-call:payloads=<tool>:named_before=4-10:replace_payload=true:after_payload=text=pre <done>post:cursor=10:elements=4-10:tool-call:update_named=true:after_update=text=pre [done]post:cursor=10:elements=4-10:tool-call:named_after=4-10:replace_by_id=true:after_replace_id=text=pre donepost:cursor=8:elements=<none>\ntui.textarea.element_range=add-remove-range-sorts-and-rejects-overlap:added=true,true:duplicate=false:overlap=false:clamped=false:ordered=0-2:early|6-8:late:removed=true:missing=false:after=text=ab cd ef:cursor=0:elements=6-8:late\ntui.textarea.element_boundary=cursor-insert-and-replace-expand-atomic-elements:cursor=1:after_insert=text=a<el>Xb:cursor=1:elements=1-5:atom:prev=1:next=5:replace_expand=text=abZd:cursor=0:elements=<none>\ntui.textarea.failure=live_textarea_element_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-goal-menu-headless",
       "frame": {
         "name": "chatwidget-goal-menu-headless",
