@@ -1,5 +1,7 @@
 package codexhx.runtime.tui.smoke;
 
+import haxe.json.Value;
+
 private typedef TuiSmokeParsedGitActionMarkdown = {
 	final visibleMarkdown:String;
 	final directives:Array<TuiSmokeGitActionDirectiveExpectation>;
@@ -373,6 +375,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.MarkdownTextMerge:
 					if (!traceMarkdownTextMerge(event.markdownTextMerge, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.TextFormatting:
+					if (!traceTextFormatting(event.textFormatting, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -3510,6 +3517,324 @@ class TuiSmokeEventLoop {
 		});
 	}
 
+	static function traceTextFormatting(plan:TuiSmokeTextFormattingPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowFilesystemMutation || plan.allowNetwork || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.text_formatting.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.text_formatting.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeTextFormattingActionKind.Capitalize:
+					final actual = capitalizeFirst(action.input);
+					if (!textFormattingExpected(action, actual, trace, "capitalize"))
+						return false;
+					trace.push("tui.text_formatting.capitalize=" + action.name + ":result=" + traceText(actual));
+				case TuiSmokeTextFormattingActionKind.JsonCompact:
+					final result = formatJsonCompact(action.input);
+					final actual = result == null ? action.input : result;
+					if (result != null != action.expectedFormatted || !textFormattingExpected(action, actual, trace, "json_compact"))
+						return false;
+					trace.push("tui.text_formatting.json_compact=" + action.name + ":formatted=" + (result != null) + ":result=" + traceText(actual));
+				case TuiSmokeTextFormattingActionKind.TruncateText:
+					final actual = truncateTextByScalar(action.input, action.maxGraphemes);
+					if (!textFormattingExpected(action, actual, trace, "truncate_text"))
+						return false;
+					trace.push("tui.text_formatting.truncate_text=" + action.name + ":max=" + action.maxGraphemes + ":result=" + traceText(actual));
+				case TuiSmokeTextFormattingActionKind.ToolResult:
+					final actual = formatAndTruncateToolResult(action.input, action.maxLines, action.lineWidth);
+					if (!textFormattingExpected(action, actual, trace, "tool_result"))
+						return false;
+					trace.push("tui.text_formatting.tool_result=" + action.name + ":lines=" + action.maxLines + ":width=" + action.lineWidth + ":result="
+						+ traceText(actual));
+				case TuiSmokeTextFormattingActionKind.CenterPath:
+					final actual = centerTruncatePath(action.input, action.maxWidth);
+					if (!textFormattingExpected(action, actual, trace, "center_path"))
+						return false;
+					trace.push("tui.text_formatting.center_path=" + action.name + ":max=" + action.maxWidth + ":result=" + traceText(actual));
+				case TuiSmokeTextFormattingActionKind.ProperJoin:
+					final actual = properJoin(action.items);
+					if (!textFormattingExpected(action, actual, trace, "proper_join"))
+						return false;
+					trace.push("tui.text_formatting.proper_join=" + action.name + ":result=" + traceText(actual));
+				case TuiSmokeTextFormattingActionKind.Failure:
+					trace.push("tui.text_formatting.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_fs="
+						+ action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.text_formatting.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function textFormattingExpected(action:TuiSmokeTextFormattingAction, actual:String, trace:Array<String>, label:String):Bool {
+		if (actual == action.expected)
+			return true;
+		trace.push("tui.text_formatting."
+			+ label
+			+ "_mismatch="
+			+ action.name
+			+ ":expected="
+			+ traceText(action.expected)
+			+ ":actual="
+			+ traceText(actual));
+		return false;
+	}
+
+	static function capitalizeFirst(input:String):String {
+		return input.length == 0 ? "" : uppercaseAscii(input.charAt(0)) + input.substr(1);
+	}
+
+	static function formatAndTruncateToolResult(text:String, maxLines:Int, lineWidth:Int):String {
+		final maxGraphemes = intMax(0, maxLines * lineWidth - maxLines);
+		final formatted = formatJsonCompact(text);
+		return truncateTextByScalar(formatted == null ? text : formatted, maxGraphemes);
+	}
+
+	static function formatJsonCompact(text:String):Null<String> {
+		final parsed = try codexhx.protocol.json.CodexJson.parse(text) catch (_:Dynamic) null;
+		if (parsed == null)
+			return null;
+		if (!parsed.ok)
+			return null;
+		return jsonCompactValue(parsed.value);
+	}
+
+	static function jsonCompactValue(value:Value):String {
+		return switch value {
+			case JNull:
+				"null";
+			case JBool(value):
+				Std.string(value);
+			case JNumber(value):
+				jsonNumberString(value);
+			case JString(value):
+				jsonQuote(value);
+			case JArray(values):
+				final out:Array<String> = [];
+				for (item in values)
+					out.push(jsonCompactValue(item));
+				"[" + out.join(", ") + "]";
+			case JObject(keys, values):
+				final out:Array<String> = [];
+				for (index in 0...keys.length)
+					out.push(jsonQuote(keys[index]) + ": " + jsonCompactValue(values[index]));
+				"{" + out.join(", ") + "}";
+		}
+	}
+
+	static function jsonNumberString(value:Float):String {
+		final asInt = Std.int(value);
+		return value == asInt ? Std.string(asInt) : Std.string(value);
+	}
+
+	static function jsonQuote(value:String):String {
+		var out = "\"";
+		var index = 0;
+		while (index < value.length) {
+			final ch = value.charAt(index);
+			out += switch ch {
+				case "\"": "\\\"";
+				case "\\": "\\\\";
+				case "\n": "\\n";
+				case "\r": "\\r";
+				case "\t": "\\t";
+				case _: ch;
+			}
+			index++;
+		}
+		return out + "\"";
+	}
+
+	static function truncateTextByScalar(text:String, maxGraphemes:Int):String {
+		if (maxGraphemes < 0)
+			maxGraphemes = 0;
+		if (text.length <= maxGraphemes)
+			return text;
+		if (maxGraphemes >= 3)
+			return text.substr(0, maxGraphemes - 3) + "...";
+		return text.substr(0, maxGraphemes);
+	}
+
+	static function centerTruncatePath(path:String, maxWidth:Int):String {
+		if (maxWidth <= 0)
+			return "";
+		if (displayWidth(path) <= maxWidth)
+			return path;
+		final hasLeadingSep = StringTools.startsWith(path, "/");
+		final hasTrailingSep = StringTools.endsWith(path, "/");
+		final rawSegments = path.split("/");
+		if (hasLeadingSep && rawSegments.length > 0 && rawSegments[0] == "")
+			rawSegments.shift();
+		if (hasTrailingSep && rawSegments.length > 0 && rawSegments[rawSegments.length - 1] == "")
+			rawSegments.pop();
+		if (rawSegments.length == 0)
+			return hasLeadingSep ? "/" : ellipsis();
+
+		final segmentCount = rawSegments.length;
+		final desiredSuffix = segmentCount > 1 ? intMin(2, segmentCount - 1) : 0;
+		final combos:Array<{left:Int, right:Int}> = [];
+		for (left in 1...segmentCount + 1) {
+			final minRight = left == segmentCount ? 0 : 1;
+			for (right in minRight...segmentCount - left + 1)
+				combos.push({left: left, right: right});
+		}
+		combos.sort(function(a, b) {
+			final aPriority = a.right >= desiredSuffix ? 1 : 0;
+			final bPriority = b.right >= desiredSuffix ? 1 : 0;
+			if (aPriority != bPriority)
+				return bPriority - aPriority;
+			if (a.left != b.left)
+				return b.left - a.left;
+			if (a.right != b.right)
+				return b.right - a.right;
+			return (b.left + b.right) - (a.left + a.right);
+		});
+
+		for (combo in combos) {
+			final segments:Array<{
+				original:String,
+				text:String,
+				truncatable:Bool,
+				isSuffix:Bool
+			}> = [];
+			for (index in 0...combo.left)
+				segments.push({
+					original: rawSegments[index],
+					text: rawSegments[index],
+					truncatable: true,
+					isSuffix: false
+				});
+			final needEllipsis = combo.left + combo.right < segmentCount;
+			if (needEllipsis)
+				segments.push({
+					original: ellipsis(),
+					text: ellipsis(),
+					truncatable: false,
+					isSuffix: false
+				});
+			if (combo.right > 0) {
+				for (index in segmentCount - combo.right...segmentCount)
+					segments.push({
+						original: rawSegments[index],
+						text: rawSegments[index],
+						truncatable: true,
+						isSuffix: true
+					});
+			}
+			final candidate = fitPathSegments(segments, hasLeadingSep, maxWidth, needEllipsis || segmentCount <= 2, segmentCount);
+			if (candidate != null)
+				return candidate;
+		}
+		return frontTruncate(path, maxWidth);
+	}
+
+	static function fitPathSegments(segments:Array<{
+		original:String,
+		text:String,
+		truncatable:Bool,
+		isSuffix:Bool
+	}>, hasLeadingSep:Bool, maxWidth:Int, allowFrontTruncate:Bool,
+			segmentCount:Int):Null<String> {
+		while (true) {
+			final candidate = assemblePathSegments(hasLeadingSep, segments);
+			final width = displayWidth(candidate);
+			if (width <= maxWidth)
+				return candidate;
+			if (!allowFrontTruncate)
+				return null;
+			final indices:Array<Int> = [];
+			var index = segments.length - 1;
+			while (index >= 0) {
+				if (segments[index].truncatable && segments[index].isSuffix)
+					indices.push(index);
+				index--;
+			}
+			index = segments.length - 1;
+			while (index >= 0) {
+				if (segments[index].truncatable && !segments[index].isSuffix)
+					indices.push(index);
+				index--;
+			}
+			if (indices.length == 0)
+				return null;
+			var changed = false;
+			for (idx in indices) {
+				if (displayWidth(segments[idx].original) <= maxWidth && segmentCount > 2)
+					continue;
+				final otherWidth = width - displayWidth(segments[idx].text);
+				final allowedWidth = intMax(1, maxWidth - otherWidth);
+				final newText = frontTruncate(segments[idx].original, allowedWidth);
+				if (newText != segments[idx].text) {
+					segments[idx].text = newText;
+					changed = true;
+					break;
+				}
+			}
+			if (!changed)
+				return null;
+		}
+	}
+
+	static function assemblePathSegments(hasLeadingSep:Bool, segments:Array<{
+		original:String,
+		text:String,
+		truncatable:Bool,
+		isSuffix:Bool
+	}>):String {
+		var result = hasLeadingSep ? "/" : "";
+		for (segment in segments) {
+			if (result != "" && !StringTools.endsWith(result, "/"))
+				result += "/";
+			result += segment.text;
+		}
+		return result;
+	}
+
+	static function frontTruncate(original:String, allowedWidth:Int):String {
+		if (allowedWidth <= 0)
+			return "";
+		if (displayWidth(original) <= allowedWidth)
+			return original;
+		if (allowedWidth == 1)
+			return ellipsis();
+		final allowedTail = allowedWidth - 1;
+		return ellipsis() + original.substr(intMax(0, original.length - allowedTail));
+	}
+
+	static function displayWidth(value:String):Int {
+		return value.length;
+	}
+
+	static function uppercaseAscii(value:String):String {
+		if (value.length == 0)
+			return "";
+		final code = value.charCodeAt(0);
+		return code >= "a".code && code <= "z".code ? String.fromCharCode(code - 32) : value;
+	}
+
+	static function properJoin(items:Array<String>):String {
+		return switch items.length {
+			case 0:
+				"";
+			case 1:
+				items[0];
+			case 2:
+				items[0] + " and " + items[1];
+			case _:
+				final prefix:Array<String> = [];
+				for (index in 0...items.length - 1)
+					prefix.push(items[index]);
+				prefix.join(", ") + " and " + items[items.length - 1];
+		}
+	}
+
+	static function ellipsis():String {
+		return String.fromCharCode(0x2026);
+	}
+
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {
 		final directives:Array<TuiSmokeGitActionDirectiveExpectation> = [];
 		final seen:Map<String, Bool> = new Map();
@@ -3881,6 +4206,10 @@ class TuiSmokeEventLoop {
 
 	static function intMax(left:Int, right:Int):Int {
 		return left > right ? left : right;
+	}
+
+	static function intMin(left:Int, right:Int):Int {
+		return left < right ? left : right;
 	}
 
 	static function formatGoalElapsedSeconds(seconds:Int):String {

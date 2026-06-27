@@ -50,6 +50,7 @@
       "../codex/codex-rs/tui/src/thread_transcript.rs",
       "../codex/codex-rs/tui/src/line_truncation.rs",
       "../codex/codex-rs/tui/src/markdown_text_merge.rs",
+      "../codex/codex-rs/tui/src/text_formatting.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -18259,6 +18260,193 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.markdown_text_merge.plan=headless\ntui.markdown_text_merge.merge=adjacent-and-boundary:events=Text[foo-bar]@0..7|Start[emphasis]@7..8|Text[tail]@8..12|End[emphasis]@12..13|Text[solo]@13..17\ntui.markdown_text_merge.merge=decoded-source-range:events=Text[AT&T<tag>]@20..40\ntui.markdown_text_merge.merge=non-text-passthrough:events=SoftBreak[<empty>]@40..41|Html[<br>]@41..45|Code[x]@45..48\ntui.markdown_text_merge.failure=live_markdown_text_merge_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> markdown text merge boundary\ninput> \ntrace:\ntui.markdown_text_merge.plan=headless\ntui.markdown_text_merge.merge=adjacent-and-boundary:events=Text[foo-bar]@0..7|Start[emphasis]@7..8|Text[tail]@8..12|End[emphasis]@12..13|Text[solo]@13..17\ntui.markdown_text_merge.merge=decoded-source-range:events=Text[AT&T<tag>]@20..40\ntui.markdown_text_merge.merge=non-text-passthrough:events=SoftBreak[<empty>]@40..41|Html[<br>]@41..45|Code[x]@45..48\ntui.markdown_text_merge.failure=live_markdown_text_merge_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "text-formatting-headless",
+      "frame": {
+        "name": "text-formatting-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "text formatting helper boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "text_formatting",
+          "textFormatting": {
+            "allowTerminalMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "capitalize",
+                "name": "empty",
+                "input": "",
+                "expected": ""
+              },
+              {
+                "kind": "capitalize",
+                "name": "word",
+                "input": "hello",
+                "expected": "Hello"
+              },
+              {
+                "kind": "json_compact",
+                "name": "simple-object",
+                "input": "{ \"name\": \"John\", \"age\": 30 }",
+                "expectedFormatted": true,
+                "expected": "{\"name\": \"John\", \"age\": 30}"
+              },
+              {
+                "kind": "json_compact",
+                "name": "array",
+                "input": "[ 1, 2, { \"key\": \"value\" }, \"string\" ]",
+                "expectedFormatted": true,
+                "expected": "[1, 2, {\"key\": \"value\"}, \"string\"]"
+              },
+              {
+                "kind": "json_compact",
+                "name": "invalid",
+                "input": "{\"invalid\": json syntax}",
+                "expectedFormatted": false,
+                "expected": "{\"invalid\": json syntax}"
+              },
+              {
+                "kind": "truncate_text",
+                "name": "ellipsis",
+                "input": "Hello, world!",
+                "maxGraphemes": 8,
+                "expected": "Hello..."
+              },
+              {
+                "kind": "truncate_text",
+                "name": "zero",
+                "input": "Hello",
+                "maxGraphemes": 0,
+                "expected": ""
+              },
+              {
+                "kind": "truncate_text",
+                "name": "one",
+                "input": "Hello",
+                "maxGraphemes": 1,
+                "expected": "H"
+              },
+              {
+                "kind": "truncate_text",
+                "name": "three-boundary",
+                "input": "Hello",
+                "maxGraphemes": 3,
+                "expected": "..."
+              },
+              {
+                "kind": "truncate_text",
+                "name": "exact",
+                "input": "Hello",
+                "maxGraphemes": 5,
+                "expected": "Hello"
+              },
+              {
+                "kind": "tool_result",
+                "name": "json-sized",
+                "input": "{\"compact\":true}",
+                "maxLines": 2,
+                "lineWidth": 20,
+                "expected": "{\"compact\": true}"
+              },
+              {
+                "kind": "tool_result",
+                "name": "plain-sized",
+                "input": "abcdefghijklmnop",
+                "maxLines": 2,
+                "lineWidth": 6,
+                "expected": "abcdefg..."
+              },
+              {
+                "kind": "center_path",
+                "name": "short",
+                "input": "/Users/codex/Public",
+                "maxWidth": 40,
+                "expected": "/Users/codex/Public"
+              },
+              {
+                "kind": "center_path",
+                "name": "long",
+                "input": "~/hello/the/fox/is/very/fast",
+                "maxWidth": 24,
+                "expected": "~/hello/the/\u2026/very/fast"
+              },
+              {
+                "kind": "center_path",
+                "name": "long-segment",
+                "input": "~/supercalifragilisticexpialidocious",
+                "maxWidth": 18,
+                "expected": "~/\u2026cexpialidocious"
+              },
+              {
+                "kind": "proper_join",
+                "name": "empty",
+                "items": [],
+                "expected": ""
+              },
+              {
+                "kind": "proper_join",
+                "name": "two",
+                "items": [
+                  "apple",
+                  "banana"
+                ],
+                "expected": "apple and banana"
+              },
+              {
+                "kind": "proper_join",
+                "name": "four",
+                "items": [
+                  "apple",
+                  "banana",
+                  "cherry",
+                  "date"
+                ],
+                "expected": "apple, banana, cherry and date"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_text_formatting_effects_rejected",
+                "noTerminalMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.text_formatting.plan=headless\ntui.text_formatting.capitalize=empty:result=<empty>\ntui.text_formatting.capitalize=word:result=Hello\ntui.text_formatting.json_compact=simple-object:formatted=true:result={\"name\": \"John\", \"age\": 30}\ntui.text_formatting.json_compact=array:formatted=true:result=[1, 2, {\"key\": \"value\"}, \"string\"]\ntui.text_formatting.json_compact=invalid:formatted=false:result={\"invalid\": json syntax}\ntui.text_formatting.truncate_text=ellipsis:max=8:result=Hello...\ntui.text_formatting.truncate_text=zero:max=0:result=<empty>\ntui.text_formatting.truncate_text=one:max=1:result=H\ntui.text_formatting.truncate_text=three-boundary:max=3:result=...\ntui.text_formatting.truncate_text=exact:max=5:result=Hello\ntui.text_formatting.tool_result=json-sized:lines=2:width=20:result={\"compact\": true}\ntui.text_formatting.tool_result=plain-sized:lines=2:width=6:result=abcdefg...\ntui.text_formatting.center_path=short:max=40:result=/Users/codex/Public\ntui.text_formatting.center_path=long:max=24:result=~/hello/the/\u2026/very/fast\ntui.text_formatting.center_path=long-segment:max=18:result=~/\u2026cexpialidocious\ntui.text_formatting.proper_join=empty:result=<empty>\ntui.text_formatting.proper_join=two:result=apple and banana\ntui.text_formatting.proper_join=four:result=apple, banana, cherry and date\ntui.text_formatting.failure=live_text_formatting_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> text formatting helper boundary\ninput> \ntrace:\ntui.text_formatting.plan=headless\ntui.text_formatting.capitalize=empty:result=<empty>\ntui.text_formatting.capitalize=word:result=Hello\ntui.text_formatting.json_compact=simple-object:formatted=true:result={\"name\": \"John\", \"age\": 30}\ntui.text_formatting.json_compact=array:formatted=true:result=[1, 2, {\"key\": \"value\"}, \"string\"]\ntui.text_formatting.json_compact=invalid:formatted=false:result={\"invalid\": json syntax}\ntui.text_formatting.truncate_text=ellipsis:max=8:result=Hello...\ntui.text_formatting.truncate_text=zero:max=0:result=<empty>\ntui.text_formatting.truncate_text=one:max=1:result=H\ntui.text_formatting.truncate_text=three-boundary:max=3:result=...\ntui.text_formatting.truncate_text=exact:max=5:result=Hello\ntui.text_formatting.tool_result=json-sized:lines=2:width=20:result={\"compact\": true}\ntui.text_formatting.tool_result=plain-sized:lines=2:width=6:result=abcdefg...\ntui.text_formatting.center_path=short:max=40:result=/Users/codex/Public\ntui.text_formatting.center_path=long:max=24:result=~/hello/the/\u2026/very/fast\ntui.text_formatting.center_path=long-segment:max=18:result=~/\u2026cexpialidocious\ntui.text_formatting.proper_join=empty:result=<empty>\ntui.text_formatting.proper_join=two:result=apple and banana\ntui.text_formatting.proper_join=four:result=apple, banana, cherry and date\ntui.text_formatting.failure=live_text_formatting_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

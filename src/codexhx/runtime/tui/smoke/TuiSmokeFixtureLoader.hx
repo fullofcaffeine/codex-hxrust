@@ -118,6 +118,7 @@ class TuiSmokeFixtureLoader {
 				threadTranscript: optionalThreadTranscriptPlan(value, "threadTranscript"),
 				lineTruncation: optionalLineTruncationPlan(value, "lineTruncation"),
 				markdownTextMerge: optionalMarkdownTextMergePlan(value, "markdownTextMerge"),
+				textFormatting: optionalTextFormattingPlan(value, "textFormatting"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -400,6 +401,45 @@ class TuiSmokeFixtureLoader {
 				text: optionalStringField(value, "text", ""),
 				start: optionalIntField(value, "start", 0),
 				end: optionalIntField(value, "end", 0)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalTextFormattingPlan(object:Value, name:String):Null<TuiSmokeTextFormattingPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeTextFormattingPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: textFormattingActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function textFormattingActions(values:Array<Value>):Array<TuiSmokeTextFormattingAction> {
+		final out:Array<TuiSmokeTextFormattingAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeTextFormattingAction({
+				kind: TuiSmokeTextFormattingActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				input: optionalStringField(value, "input", ""),
+				items: optionalStringArrayField(value, "items"),
+				maxGraphemes: optionalIntField(value, "maxGraphemes", 0),
+				maxLines: optionalIntField(value, "maxLines", 0),
+				lineWidth: optionalIntField(value, "lineWidth", 0),
+				maxWidth: optionalIntField(value, "maxWidth", 0),
+				expected: optionalStringField(value, "expected", ""),
+				expectedFormatted: optionalBoolField(value, "expectedFormatted", false),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
