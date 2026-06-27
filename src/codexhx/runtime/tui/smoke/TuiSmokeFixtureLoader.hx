@@ -119,6 +119,7 @@ class TuiSmokeFixtureLoader {
 				lineTruncation: optionalLineTruncationPlan(value, "lineTruncation"),
 				markdownTextMerge: optionalMarkdownTextMergePlan(value, "markdownTextMerge"),
 				textFormatting: optionalTextFormattingPlan(value, "textFormatting"),
+				liveWrap: optionalLiveWrapPlan(value, "liveWrap"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -440,6 +441,59 @@ class TuiSmokeFixtureLoader {
 				noNetwork: optionalBoolField(value, "noNetwork", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalLiveWrapPlan(object:Value, name:String):Null<TuiSmokeLiveWrapPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeLiveWrapPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: liveWrapActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function liveWrapActions(values:Array<Value>):Array<TuiSmokeLiveWrapAction> {
+		final out:Array<TuiSmokeLiveWrapAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeLiveWrapAction({
+				kind: TuiSmokeLiveWrapActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				width: optionalIntField(value, "width", 0),
+				maxKeep: optionalIntField(value, "maxKeep", 0),
+				maxCols: optionalIntField(value, "maxCols", 0),
+				fragment: optionalStringField(value, "fragment", ""),
+				text: optionalStringField(value, "text", ""),
+				expectedRows: liveWrapRows(optionalArrayField(value, "expectedRows")),
+				expectedRemainingRows: liveWrapRows(optionalArrayField(value, "expectedRemainingRows")),
+				expectedPrefix: optionalStringField(value, "expectedPrefix", ""),
+				expectedSuffix: optionalStringField(value, "expectedSuffix", ""),
+				expectedWidth: optionalIntField(value, "expectedWidth", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function liveWrapRows(values:Array<Value>):Array<TuiSmokeLiveWrapRow> {
+		final out:Array<TuiSmokeLiveWrapRow> = [];
+		for (value in values) {
+			out.push(new TuiSmokeLiveWrapRow({
+				text: optionalStringField(value, "text", ""),
+				explicitBreak: optionalBoolField(value, "explicitBreak", false),
+				width: optionalIntField(value, "width", 0)
 			}));
 		}
 		return out;

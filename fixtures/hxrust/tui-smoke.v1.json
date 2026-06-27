@@ -51,6 +51,7 @@
       "../codex/codex-rs/tui/src/line_truncation.rs",
       "../codex/codex-rs/tui/src/markdown_text_merge.rs",
       "../codex/codex-rs/tui/src/text_formatting.rs",
+      "../codex/codex-rs/tui/src/live_wrap.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -18447,6 +18448,234 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.text_formatting.plan=headless\ntui.text_formatting.capitalize=empty:result=<empty>\ntui.text_formatting.capitalize=word:result=Hello\ntui.text_formatting.json_compact=simple-object:formatted=true:result={\"name\": \"John\", \"age\": 30}\ntui.text_formatting.json_compact=array:formatted=true:result=[1, 2, {\"key\": \"value\"}, \"string\"]\ntui.text_formatting.json_compact=invalid:formatted=false:result={\"invalid\": json syntax}\ntui.text_formatting.truncate_text=ellipsis:max=8:result=Hello...\ntui.text_formatting.truncate_text=zero:max=0:result=<empty>\ntui.text_formatting.truncate_text=one:max=1:result=H\ntui.text_formatting.truncate_text=three-boundary:max=3:result=...\ntui.text_formatting.truncate_text=exact:max=5:result=Hello\ntui.text_formatting.tool_result=json-sized:lines=2:width=20:result={\"compact\": true}\ntui.text_formatting.tool_result=plain-sized:lines=2:width=6:result=abcdefg...\ntui.text_formatting.center_path=short:max=40:result=/Users/codex/Public\ntui.text_formatting.center_path=long:max=24:result=~/hello/the/\u2026/very/fast\ntui.text_formatting.center_path=long-segment:max=18:result=~/\u2026cexpialidocious\ntui.text_formatting.proper_join=empty:result=<empty>\ntui.text_formatting.proper_join=two:result=apple and banana\ntui.text_formatting.proper_join=four:result=apple, banana, cherry and date\ntui.text_formatting.failure=live_text_formatting_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> text formatting helper boundary\ninput> \ntrace:\ntui.text_formatting.plan=headless\ntui.text_formatting.capitalize=empty:result=<empty>\ntui.text_formatting.capitalize=word:result=Hello\ntui.text_formatting.json_compact=simple-object:formatted=true:result={\"name\": \"John\", \"age\": 30}\ntui.text_formatting.json_compact=array:formatted=true:result=[1, 2, {\"key\": \"value\"}, \"string\"]\ntui.text_formatting.json_compact=invalid:formatted=false:result={\"invalid\": json syntax}\ntui.text_formatting.truncate_text=ellipsis:max=8:result=Hello...\ntui.text_formatting.truncate_text=zero:max=0:result=<empty>\ntui.text_formatting.truncate_text=one:max=1:result=H\ntui.text_formatting.truncate_text=three-boundary:max=3:result=...\ntui.text_formatting.truncate_text=exact:max=5:result=Hello\ntui.text_formatting.tool_result=json-sized:lines=2:width=20:result={\"compact\": true}\ntui.text_formatting.tool_result=plain-sized:lines=2:width=6:result=abcdefg...\ntui.text_formatting.center_path=short:max=40:result=/Users/codex/Public\ntui.text_formatting.center_path=long:max=24:result=~/hello/the/\u2026/very/fast\ntui.text_formatting.center_path=long-segment:max=18:result=~/\u2026cexpialidocious\ntui.text_formatting.proper_join=empty:result=<empty>\ntui.text_formatting.proper_join=two:result=apple and banana\ntui.text_formatting.proper_join=four:result=apple, banana, cherry and date\ntui.text_formatting.failure=live_text_formatting_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "live-wrap-headless",
+      "frame": {
+        "name": "live-wrap-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "live wrap row builder boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "live_wrap",
+          "liveWrap": {
+            "allowTerminalMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "reset",
+                "name": "ascii-builder",
+                "width": 10
+              },
+              {
+                "kind": "push",
+                "name": "long-ascii",
+                "fragment": "hello whirl this is a test"
+              },
+              {
+                "kind": "rows",
+                "name": "hard-wrap-rows",
+                "expectedRows": [
+                  {
+                    "text": "hello whir",
+                    "explicitBreak": false,
+                    "width": 10
+                  },
+                  {
+                    "text": "l this is ",
+                    "explicitBreak": false,
+                    "width": 10
+                  }
+                ]
+              },
+              {
+                "kind": "display",
+                "name": "partial-display",
+                "expectedRows": [
+                  {
+                    "text": "hello whir",
+                    "explicitBreak": false,
+                    "width": 10
+                  },
+                  {
+                    "text": "l this is ",
+                    "explicitBreak": false,
+                    "width": 10
+                  },
+                  {
+                    "text": "a test",
+                    "explicitBreak": false,
+                    "width": 6
+                  }
+                ]
+              },
+              {
+                "kind": "reset",
+                "name": "newline-builder",
+                "width": 10
+              },
+              {
+                "kind": "push",
+                "name": "newline",
+                "fragment": "hello\nworld"
+              },
+              {
+                "kind": "display",
+                "name": "newline-display",
+                "expectedRows": [
+                  {
+                    "text": "hello",
+                    "explicitBreak": true,
+                    "width": 5
+                  },
+                  {
+                    "text": "world",
+                    "explicitBreak": false,
+                    "width": 5
+                  }
+                ]
+              },
+              {
+                "kind": "end_line",
+                "name": "explicit-end",
+                "expectedRows": [
+                  {
+                    "text": "hello",
+                    "explicitBreak": true,
+                    "width": 5
+                  },
+                  {
+                    "text": "world",
+                    "explicitBreak": true,
+                    "width": 5
+                  }
+                ]
+              },
+              {
+                "kind": "reset",
+                "name": "rewrap-builder",
+                "width": 10
+              },
+              {
+                "kind": "push",
+                "name": "rewrap-source",
+                "fragment": "abcdefghijK"
+              },
+              {
+                "kind": "set_width",
+                "name": "narrower",
+                "width": 5,
+                "expectedRows": [
+                  {
+                    "text": "abcde",
+                    "explicitBreak": false,
+                    "width": 5
+                  },
+                  {
+                    "text": "fghij",
+                    "explicitBreak": false,
+                    "width": 5
+                  },
+                  {
+                    "text": "K",
+                    "explicitBreak": false,
+                    "width": 1
+                  }
+                ]
+              },
+              {
+                "kind": "drain",
+                "name": "commit-ready",
+                "maxKeep": 1,
+                "expectedRows": [
+                  {
+                    "text": "abcde",
+                    "explicitBreak": false,
+                    "width": 5
+                  },
+                  {
+                    "text": "fghij",
+                    "explicitBreak": false,
+                    "width": 5
+                  }
+                ],
+                "expectedRemainingRows": [
+                  {
+                    "text": "K",
+                    "explicitBreak": false,
+                    "width": 1
+                  }
+                ]
+              },
+              {
+                "kind": "prefix",
+                "name": "ascii-prefix",
+                "text": "ABCDEF",
+                "maxCols": 3,
+                "expectedPrefix": "ABC",
+                "expectedSuffix": "DEF",
+                "expectedWidth": 3
+              },
+              {
+                "kind": "prefix",
+                "name": "wide-overflow",
+                "text": "a\u754cb",
+                "maxCols": 2,
+                "expectedPrefix": "a",
+                "expectedSuffix": "\u754cb",
+                "expectedWidth": 1
+              },
+              {
+                "kind": "prefix",
+                "name": "wide-fit",
+                "text": "a\u754cb",
+                "maxCols": 3,
+                "expectedPrefix": "a\u754c",
+                "expectedSuffix": "b",
+                "expectedWidth": 3
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_wrap_effects_rejected",
+                "noTerminalMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.live_wrap.plan=headless\ntui.live_wrap.reset=ascii-builder:width=10\ntui.live_wrap.push=long-ascii:fragment=hello whirl this is a test:display=hello whir~:10|l this is ~:10|a test~:6\ntui.live_wrap.rows=hard-wrap-rows:rows=hello whir~:10|l this is ~:10\ntui.live_wrap.display=partial-display:rows=hello whir~:10|l this is ~:10|a test~:6\ntui.live_wrap.reset=newline-builder:width=10\ntui.live_wrap.push=newline:fragment=hello\\nworld:display=hello!:5|world~:5\ntui.live_wrap.display=newline-display:rows=hello!:5|world~:5\ntui.live_wrap.end_line=explicit-end:display=hello!:5|world!:5\ntui.live_wrap.reset=rewrap-builder:width=10\ntui.live_wrap.push=rewrap-source:fragment=abcdefghijK:display=abcdefghij~:10|K~:1\ntui.live_wrap.set_width=narrower:width=5:display=abcde~:5|fghij~:5|K~:1\ntui.live_wrap.drain=commit-ready:max_keep=1:drained=abcde~:5|fghij~:5:remaining=K~:1\ntui.live_wrap.prefix=ascii-prefix:max=3:prefix=ABC:suffix=DEF:width=3\ntui.live_wrap.prefix=wide-overflow:max=2:prefix=a:suffix=\u754cb:width=1\ntui.live_wrap.prefix=wide-fit:max=3:prefix=a\u754c:suffix=b:width=3\ntui.live_wrap.failure=live_wrap_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> live wrap row builder boundary\ninput> \ntrace:\ntui.live_wrap.plan=headless\ntui.live_wrap.reset=ascii-builder:width=10\ntui.live_wrap.push=long-ascii:fragment=hello whirl this is a test:display=hello whir~:10|l this is ~:10|a test~:6\ntui.live_wrap.rows=hard-wrap-rows:rows=hello whir~:10|l this is ~:10\ntui.live_wrap.display=partial-display:rows=hello whir~:10|l this is ~:10|a test~:6\ntui.live_wrap.reset=newline-builder:width=10\ntui.live_wrap.push=newline:fragment=hello\\nworld:display=hello!:5|world~:5\ntui.live_wrap.display=newline-display:rows=hello!:5|world~:5\ntui.live_wrap.end_line=explicit-end:display=hello!:5|world!:5\ntui.live_wrap.reset=rewrap-builder:width=10\ntui.live_wrap.push=rewrap-source:fragment=abcdefghijK:display=abcdefghij~:10|K~:1\ntui.live_wrap.set_width=narrower:width=5:display=abcde~:5|fghij~:5|K~:1\ntui.live_wrap.drain=commit-ready:max_keep=1:drained=abcde~:5|fghij~:5:remaining=K~:1\ntui.live_wrap.prefix=ascii-prefix:max=3:prefix=ABC:suffix=DEF:width=3\ntui.live_wrap.prefix=wide-overflow:max=2:prefix=a:suffix=\u754cb:width=1\ntui.live_wrap.prefix=wide-fit:max=3:prefix=a\u754c:suffix=b:width=3\ntui.live_wrap.failure=live_wrap_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

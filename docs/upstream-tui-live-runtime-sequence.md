@@ -3911,6 +3911,10 @@ Status: HXCX-TUI-260 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-261 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/text_formatting.rs`. The fixture preserves empty and nonempty `capitalize_first`, compact JSON formatting for objects and arrays, invalid JSON passthrough, `truncate_text` thresholds for zero/short/ellipsis/exact cases, `format_and_truncate_tool_result` display sizing for JSON and plain text, selected center path truncation behavior, and proper English joining. This is deterministic text-helper evidence only, not live terminal mutation, filesystem mutation, network traffic, or model traffic.
 
+### HXCX-TUI-262 Headless Raw Codex Live Wrap Row Builder
+
+Status: HXCX-TUI-262 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/live_wrap.rs`. The fixture preserves `RowBuilder`-style fixed-width prefix wrapping, buffered partial display rows, newline-generated explicit breaks, explicit `end_line`, width reset rewrapping, commit-ready draining, and `take_prefix_by_width` behavior for ASCII plus a fixture wide character. This is deterministic row-builder evidence only, not live terminal mutation, filesystem mutation, network traffic, or model traffic.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

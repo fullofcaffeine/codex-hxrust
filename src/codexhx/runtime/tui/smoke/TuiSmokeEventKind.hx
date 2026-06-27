@@ -63,6 +63,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final LineTruncation = "line_truncation";
 	final MarkdownTextMerge = "markdown_text_merge";
 	final TextFormatting = "text_formatting";
+	final LiveWrap = "live_wrap";
 	final ChatWidgetGoalMenu = "chat_widget_goal_menu";
 	final ChatWidgetReviewMode = "chat_widget_review_mode";
 	final ChatWidgetTranscriptHistory = "chat_widget_transcript_history";
@@ -157,6 +158,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "line_truncation": LineTruncation;
 			case "markdown_text_merge": MarkdownTextMerge;
 			case "text_formatting": TextFormatting;
+			case "live_wrap": LiveWrap;
 			case "chat_widget_goal_menu": ChatWidgetGoalMenu;
 			case "chat_widget_review_mode": ChatWidgetReviewMode;
 			case "chat_widget_transcript_history": ChatWidgetTranscriptHistory;

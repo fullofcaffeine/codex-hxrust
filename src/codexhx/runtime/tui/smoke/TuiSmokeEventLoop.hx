@@ -18,6 +18,18 @@ private typedef TuiSmokeParsedQuotedValue = {
 	final rest:String;
 }
 
+private typedef TuiSmokeLiveWrapState = {
+	var targetWidth:Int;
+	var currentLine:String;
+	var rows:Array<TuiSmokeLiveWrapRow>;
+}
+
+private typedef TuiSmokeLiveWrapPrefix = {
+	final prefix:String;
+	final suffix:String;
+	final width:Int;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -380,6 +392,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.TextFormatting:
 					if (!traceTextFormatting(event.textFormatting, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.LiveWrap:
+					if (!traceLiveWrap(event.liveWrap, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -3833,6 +3850,260 @@ class TuiSmokeEventLoop {
 
 	static function ellipsis():String {
 		return String.fromCharCode(0x2026);
+	}
+
+	static function traceLiveWrap(plan:TuiSmokeLiveWrapPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowFilesystemMutation || plan.allowNetwork || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.live_wrap.rejected=live_or_missing");
+			return false;
+		}
+		final state = liveWrapState(1);
+		trace.push("tui.live_wrap.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeLiveWrapActionKind.Reset:
+					liveWrapReset(state, action.width);
+					trace.push("tui.live_wrap.reset=" + action.name + ":width=" + state.targetWidth);
+				case TuiSmokeLiveWrapActionKind.Push:
+					liveWrapPushFragment(state, action.fragment);
+					trace.push("tui.live_wrap.push=" + action.name + ":fragment=" + traceText(action.fragment) + ":display="
+						+ liveWrapRowTrace(liveWrapDisplayRows(state)));
+				case TuiSmokeLiveWrapActionKind.EndLine:
+					liveWrapFlushCurrentLine(state, true);
+					if (!liveWrapRowsExpected(action, liveWrapDisplayRows(state), trace, "end_line"))
+						return false;
+					trace.push("tui.live_wrap.end_line=" + action.name + ":display=" + liveWrapRowTrace(liveWrapDisplayRows(state)));
+				case TuiSmokeLiveWrapActionKind.Rows:
+					if (!liveWrapRowsExpected(action, state.rows, trace, "rows"))
+						return false;
+					trace.push("tui.live_wrap.rows=" + action.name + ":rows=" + liveWrapRowTrace(state.rows));
+				case TuiSmokeLiveWrapActionKind.Display:
+					final rows = liveWrapDisplayRows(state);
+					if (!liveWrapRowsExpected(action, rows, trace, "display"))
+						return false;
+					trace.push("tui.live_wrap.display=" + action.name + ":rows=" + liveWrapRowTrace(rows));
+				case TuiSmokeLiveWrapActionKind.SetWidth:
+					liveWrapSetWidth(state, action.width);
+					final rows = liveWrapDisplayRows(state);
+					if (!liveWrapRowsExpected(action, rows, trace, "set_width"))
+						return false;
+					trace.push("tui.live_wrap.set_width=" + action.name + ":width=" + state.targetWidth + ":display=" + liveWrapRowTrace(rows));
+				case TuiSmokeLiveWrapActionKind.Drain:
+					final drained = liveWrapDrainCommitReady(state, action.maxKeep);
+					final remaining = liveWrapDisplayRows(state);
+					if (!liveWrapRowsExpected(action, drained, trace, "drain"))
+						return false;
+					if (!liveWrapRowsMatch(remaining, action.expectedRemainingRows)) {
+						trace.push("tui.live_wrap.drain_remaining_mismatch=" + action.name + ":expected=" + liveWrapRowTrace(action.expectedRemainingRows)
+							+ ":actual=" + liveWrapRowTrace(remaining));
+						return false;
+					}
+					trace.push("tui.live_wrap.drain=" + action.name + ":max_keep=" + action.maxKeep + ":drained=" + liveWrapRowTrace(drained)
+						+ ":remaining=" + liveWrapRowTrace(remaining));
+				case TuiSmokeLiveWrapActionKind.Prefix:
+					final result = liveWrapTakePrefixByWidth(action.text, action.maxCols);
+					if (result.prefix != action.expectedPrefix
+						|| result.suffix != action.expectedSuffix
+						|| result.width != action.expectedWidth) {
+						trace.push("tui.live_wrap.prefix_mismatch=" + action.name + ":expected=" + traceText(action.expectedPrefix) + "/"
+							+ traceText(action.expectedSuffix) + "/" + action.expectedWidth + ":actual=" + traceText(result.prefix) + "/"
+							+ traceText(result.suffix) + "/" + result.width);
+						return false;
+					}
+					trace.push("tui.live_wrap.prefix=" + action.name + ":max=" + action.maxCols + ":prefix=" + traceText(result.prefix) + ":suffix="
+						+ traceText(result.suffix) + ":width=" + result.width);
+				case TuiSmokeLiveWrapActionKind.Failure:
+					trace.push("tui.live_wrap.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_fs="
+						+ action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.live_wrap.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function liveWrapState(width:Int):TuiSmokeLiveWrapState {
+		return {
+			targetWidth: intMax(1, width),
+			currentLine: "",
+			rows: []
+		};
+	}
+
+	static function liveWrapReset(state:TuiSmokeLiveWrapState, width:Int):Void {
+		state.targetWidth = intMax(1, width);
+		state.currentLine = "";
+		state.rows = [];
+	}
+
+	static function liveWrapSetWidth(state:TuiSmokeLiveWrapState, width:Int):Void {
+		state.targetWidth = intMax(1, width);
+		var all = "";
+		for (row in state.rows) {
+			all += row.text;
+			if (row.explicitBreak)
+				all += "\n";
+		}
+		all += state.currentLine;
+		state.rows = [];
+		state.currentLine = "";
+		liveWrapPushFragment(state, all);
+	}
+
+	static function liveWrapPushFragment(state:TuiSmokeLiveWrapState, fragment:String):Void {
+		if (fragment == "")
+			return;
+		var start = 0;
+		var index = 0;
+		while (index < fragment.length) {
+			if (fragment.charAt(index) == "\n") {
+				if (start < index)
+					state.currentLine = state.currentLine + fragment.substr(start, index - start);
+				liveWrapFlushCurrentLine(state, true);
+				start = index + 1;
+			}
+			index++;
+		}
+		if (start < fragment.length) {
+			state.currentLine = state.currentLine + fragment.substr(start);
+			liveWrapWrapCurrentLine(state);
+		}
+	}
+
+	static function liveWrapFlushCurrentLine(state:TuiSmokeLiveWrapState, explicitBreak:Bool):Void {
+		liveWrapWrapCurrentLine(state);
+		if (explicitBreak) {
+			if (state.currentLine == "") {
+				state.rows.push(liveWrapRow("", true));
+			} else {
+				state.rows.push(liveWrapRow(state.currentLine, true));
+			}
+		}
+		state.currentLine = "";
+	}
+
+	static function liveWrapWrapCurrentLine(state:TuiSmokeLiveWrapState):Void {
+		while (state.currentLine != "") {
+			final result = liveWrapTakePrefixByWidth(state.currentLine, state.targetWidth);
+			if (result.width == 0) {
+				final first = state.currentLine.charAt(0);
+				state.rows.push(liveWrapRow(first, false));
+				state.currentLine = state.currentLine.substr(1);
+			} else if (result.suffix == "") {
+				break;
+			} else {
+				state.rows.push(liveWrapRow(result.prefix, false));
+				state.currentLine = result.suffix;
+			}
+		}
+	}
+
+	static function liveWrapDisplayRows(state:TuiSmokeLiveWrapState):Array<TuiSmokeLiveWrapRow> {
+		final out:Array<TuiSmokeLiveWrapRow> = [];
+		for (row in state.rows)
+			out.push(liveWrapRow(row.text, row.explicitBreak));
+		if (state.currentLine != "")
+			out.push(liveWrapRow(state.currentLine, false));
+		return out;
+	}
+
+	static function liveWrapDrainCommitReady(state:TuiSmokeLiveWrapState, maxKeep:Int):Array<TuiSmokeLiveWrapRow> {
+		final displayCount = state.rows.length + (state.currentLine == "" ? 0 : 1);
+		if (displayCount <= maxKeep)
+			return [];
+		final toCommit = displayCount - maxKeep;
+		final commitCount = intMin(toCommit, state.rows.length);
+		final drained:Array<TuiSmokeLiveWrapRow> = [];
+		for (_ in 0...commitCount) {
+			drained.push(state.rows[0]);
+			state.rows.splice(0, 1);
+		}
+		return drained;
+	}
+
+	static function liveWrapTakePrefixByWidth(text:String, maxCols:Int):TuiSmokeLiveWrapPrefix {
+		if (maxCols <= 0 || text == "")
+			return {
+				prefix: "",
+				suffix: text,
+				width: 0
+			};
+		var cols = 0;
+		var endIndex = 0;
+		var index = 0;
+		while (index < text.length) {
+			final ch = text.charAt(index);
+			final chWidth = liveWrapCharWidth(ch);
+			if (cols + chWidth > maxCols)
+				break;
+			cols += chWidth;
+			endIndex = index + 1;
+			if (cols == maxCols)
+				break;
+			index++;
+		}
+		return {
+			prefix: text.substr(0, endIndex),
+			suffix: text.substr(endIndex),
+			width: cols
+		};
+	}
+
+	static function liveWrapCharWidth(ch:String):Int {
+		if (ch == "")
+			return 0;
+		return ch.charCodeAt(0) == 0x754c ? 2 : 1;
+	}
+
+	static function liveWrapRowsExpected(action:TuiSmokeLiveWrapAction, actual:Array<TuiSmokeLiveWrapRow>, trace:Array<String>, label:String):Bool {
+		if (liveWrapRowsMatch(actual, action.expectedRows))
+			return true;
+		trace.push("tui.live_wrap." + label + "_mismatch=" + action.name + ":expected=" + liveWrapRowTrace(action.expectedRows) + ":actual="
+			+ liveWrapRowTrace(actual));
+		return false;
+	}
+
+	static function liveWrapRowsMatch(left:Array<TuiSmokeLiveWrapRow>, right:Array<TuiSmokeLiveWrapRow>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (index in 0...left.length) {
+			if (liveWrapRowKey(left[index]) != liveWrapRowKey(right[index]))
+				return false;
+		}
+		return true;
+	}
+
+	static function liveWrapRowTrace(rows:Array<TuiSmokeLiveWrapRow>):String {
+		if (rows.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (row in rows)
+			out.push(traceText(row.text) + (row.explicitBreak ? "!" : "~") + ":" + row.width);
+		return out.join("|");
+	}
+
+	static function liveWrapRowKey(row:TuiSmokeLiveWrapRow):String {
+		return row.text + "\t" + row.explicitBreak + "\t" + row.width;
+	}
+
+	static function liveWrapRow(text:String, explicitBreak:Bool):TuiSmokeLiveWrapRow {
+		return new TuiSmokeLiveWrapRow({
+			text: text,
+			explicitBreak: explicitBreak,
+			width: liveWrapTextWidth(text)
+		});
+	}
+
+	static function liveWrapTextWidth(text:String):Int {
+		var width = 0;
+		var index = 0;
+		while (index < text.length) {
+			width += liveWrapCharWidth(text.charAt(index));
+			index++;
+		}
+		return width;
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {
