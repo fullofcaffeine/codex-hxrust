@@ -18,6 +18,7 @@ enum abstract TuiSmokeComposerEditingActionKind(String) to String {
 	final ImagePlaceholderEdit = "image_placeholder_edit";
 	final ImagePathPaste = "image_path_paste";
 	final FilePopupSelect = "file_popup_select";
+	final MentionsV2FileSelect = "mentions_v2_file_select";
 	final PasteBurstFlush = "paste_burst_flush";
 	final ReconcileElements = "reconcile_elements";
 	final ShortcutOverlay = "shortcut_overlay";
@@ -44,6 +45,7 @@ enum abstract TuiSmokeComposerEditingActionKind(String) to String {
 			case "image_placeholder_edit": ImagePlaceholderEdit;
 			case "image_path_paste": ImagePathPaste;
 			case "file_popup_select": FilePopupSelect;
+			case "mentions_v2_file_select": MentionsV2FileSelect;
 			case "paste_burst_flush": PasteBurstFlush;
 			case "reconcile_elements": ReconcileElements;
 			case "shortcut_overlay": ShortcutOverlay;
