@@ -126,6 +126,7 @@ class TuiSmokeFixtureLoader {
 				actionRequiredTitle: optionalActionRequiredTitlePlan(value, "actionRequiredTitle"),
 				popupConsts: optionalPopupConstsPlan(value, "popupConsts"),
 				statusLineStyle: optionalStatusLineStylePlan(value, "statusLineStyle"),
+				statusSurfacePreview: optionalStatusSurfacePreviewPlan(value, "statusSurfacePreview"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -786,6 +787,49 @@ class TuiSmokeFixtureLoader {
 			out.push(new TuiSmokeStatusLineStyleSegment({
 				item: optionalStringField(value, "item", ""),
 				text: optionalStringField(value, "text", "")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalStatusSurfacePreviewPlan(object:Value, name:String):Null<TuiSmokeStatusSurfacePreviewPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeStatusSurfacePreviewPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: statusSurfacePreviewActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function statusSurfacePreviewActions(values:Array<Value>):Array<TuiSmokeStatusSurfacePreviewAction> {
+		final out:Array<TuiSmokeStatusSurfacePreviewAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeStatusSurfacePreviewAction({
+				kind: TuiSmokeStatusSurfacePreviewActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				item: optionalStringField(value, "item", ""),
+				value: optionalStringField(value, "value", ""),
+				items: optionalStringArrayField(value, "items"),
+				expected: optionalStringField(value, "expected", ""),
+				expectedPresent: optionalBoolField(value, "expectedPresent", false),
+				expectedCount: optionalIntField(value, "expectedCount", 0),
+				fallbackName: optionalStringField(value, "fallbackName", ""),
+				fallbackDescription: optionalStringField(value, "fallbackDescription", ""),
+				expectedName: optionalStringField(value, "expectedName", ""),
+				expectedDescription: optionalStringField(value, "expectedDescription", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;

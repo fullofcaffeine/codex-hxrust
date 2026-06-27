@@ -35,6 +35,12 @@ private typedef TuiSmokeScrollState = {
 	var scrollTop:Int;
 }
 
+private typedef TuiSmokeStatusSurfacePreviewEntry = {
+	final item:String;
+	var text:String;
+	var isPlaceholder:Bool;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -432,6 +438,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.StatusLineStyle:
 					if (!traceStatusLineStyle(event.statusLineStyle, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.StatusSurfacePreview:
+					if (!traceStatusSurfacePreview(event.statusSurfacePreview, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -5166,6 +5177,304 @@ class TuiSmokeEventLoop {
 		for (item in items)
 			out.push(traceText(item));
 		return out.join("|");
+	}
+
+	static function traceStatusSurfacePreview(plan:TuiSmokeStatusSurfacePreviewPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.status_surface_preview.rejected=live_or_missing");
+			return false;
+		}
+		final state = statusSurfacePreviewDefaultState();
+		trace.push("tui.status_surface_preview.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeStatusSurfacePreviewActionKind.Defaults:
+					final actual = statusSurfacePreviewValuesTrace(state, action.items);
+					if (actual != action.expected) {
+						trace.push("tui.status_surface_preview.defaults_mismatch=" + action.name + ":expected=" + traceText(action.expected) + ":actual="
+							+ traceText(actual));
+						return false;
+					}
+					trace.push("tui.status_surface_preview.defaults=" + action.name + ":values=" + traceText(actual));
+				case TuiSmokeStatusSurfacePreviewActionKind.SetLive:
+					statusSurfacePreviewSetLive(state, action.item, action.value);
+					final actual = statusSurfacePreviewValueTrace(state, action.item);
+					if (actual != action.expected) {
+						trace.push("tui.status_surface_preview.set_live_mismatch=" + action.name + ":expected=" + traceText(action.expected) + ":actual="
+							+ traceText(actual));
+						return false;
+					}
+					trace.push("tui.status_surface_preview.set_live=" + action.name + ":item=" + action.item + ":value=" + traceText(actual));
+				case TuiSmokeStatusSurfacePreviewActionKind.SetPlaceholder:
+					statusSurfacePreviewSetPlaceholder(state, action.item, action.value);
+					final actual = statusSurfacePreviewValueTrace(state, action.item);
+					if (actual != action.expected) {
+						trace.push("tui.status_surface_preview.set_placeholder_mismatch=" + action.name + ":expected=" + traceText(action.expected)
+							+ ":actual=" + traceText(actual));
+						return false;
+					}
+					trace.push("tui.status_surface_preview.set_placeholder=" + action.name + ":item=" + action.item + ":value=" + traceText(actual));
+				case TuiSmokeStatusSurfacePreviewActionKind.SuppressPlaceholder:
+					statusSurfacePreviewSuppressPlaceholder(state, action.item);
+					final actualPresent = statusSurfacePreviewValueFor(state, action.item) != null;
+					if (actualPresent != action.expectedPresent) {
+						trace.push("tui.status_surface_preview.suppress_mismatch=" + action.name + ":expected_present=" + action.expectedPresent
+							+ ":actual_present=" + actualPresent);
+						return false;
+					}
+					trace.push("tui.status_surface_preview.suppress=" + action.name + ":item=" + action.item + ":present=" + actualPresent);
+				case TuiSmokeStatusSurfacePreviewActionKind.ValueFor:
+					final actualValue = statusSurfacePreviewValueFor(state, action.item);
+					final actualPresent = actualValue != null;
+					final actual = actualPresent ? actualValue : "";
+					if (actualPresent != action.expectedPresent || actual != action.expected) {
+						trace.push("tui.status_surface_preview.value_mismatch=" + action.name + ":expected_present=" + action.expectedPresent
+							+ ":actual_present=" + actualPresent + ":actual=" + traceText(actual));
+						return false;
+					}
+					trace.push("tui.status_surface_preview.value=" + action.name + ":item=" + action.item + ":present=" + actualPresent + ":value="
+						+ traceText(actual));
+				case TuiSmokeStatusSurfacePreviewActionKind.StatusLine:
+					final actualLine = statusSurfacePreviewStatusLine(state, action.items);
+					final actualCount = statusSurfacePreviewStatusLineCount(state, action.items);
+					if (actualLine != action.expected || actualCount != action.expectedCount) {
+						trace.push("tui.status_surface_preview.status_line_mismatch=" + action.name + ":expected=" + traceText(action.expected) + ":actual="
+							+ traceText(actualLine) + ":count=" + actualCount);
+						return false;
+					}
+					trace.push("tui.status_surface_preview.status_line=" + action.name + ":items=" + statusSurfacePreviewListTrace(action.items) + ":line="
+						+ traceText(actualLine) + ":count=" + actualCount);
+				case TuiSmokeStatusSurfacePreviewActionKind.RateLimitCopy:
+					final copy = statusSurfacePreviewRateLimitCopy(action.value, action.fallbackName, action.fallbackDescription);
+					if (copy.name != action.expectedName || copy.description != action.expectedDescription) {
+						trace.push("tui.status_surface_preview.rate_limit_mismatch=" + action.name + ":name=" + copy.name + ":description="
+							+ traceText(copy.description));
+						return false;
+					}
+					trace.push("tui.status_surface_preview.rate_limit=" + action.name + ":value=" + traceText(action.value) + ":name=" + copy.name
+						+ ":description=" + traceText(copy.description));
+				case TuiSmokeStatusSurfacePreviewActionKind.Failure:
+					trace.push("tui.status_surface_preview.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.status_surface_preview.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function statusSurfacePreviewDefaultState():Array<TuiSmokeStatusSurfacePreviewEntry> {
+		final out:Array<TuiSmokeStatusSurfacePreviewEntry> = [];
+		for (item in statusSurfacePreviewItems())
+			out.push({item: item, text: statusSurfacePreviewPlaceholder(item), isPlaceholder: true});
+		return out;
+	}
+
+	static function statusSurfacePreviewItems():Array<String> {
+		return [
+			"app-name",
+			"project-name",
+			"project-root",
+			"current-dir",
+			"status",
+			"thread-title",
+			"git-branch",
+			"pull-request-number",
+			"branch-changes",
+			"permissions",
+			"approval-mode",
+			"context-remaining",
+			"context-used",
+			"five-hour-limit",
+			"weekly-limit",
+			"codex-version",
+			"context-window-size",
+			"used-tokens",
+			"total-input-tokens",
+			"total-output-tokens",
+			"session-id",
+			"fast-mode",
+			"raw-output",
+			"model",
+			"model-with-reasoning",
+			"reasoning",
+			"task-progress"
+		];
+	}
+
+	static function statusSurfacePreviewPlaceholder(item:String):String {
+		return switch item {
+			case "app-name": "codex";
+			case "project-name": "my-project";
+			case "project-root": "my-project";
+			case "current-dir": "~/my-project/subdir";
+			case "status": "Working";
+			case "thread-title": "thread title";
+			case "git-branch": "feat/awesome-feature";
+			case "pull-request-number": "PR #123";
+			case "branch-changes": "+12 -3";
+			case "permissions": "Workspace";
+			case "approval-mode": "on-request";
+			case "context-remaining": "Context 0% left";
+			case "context-used": "Context 0% used";
+			case "five-hour-limit": "primary 0%";
+			case "weekly-limit": "secondary 0%";
+			case "codex-version": "0.0.0";
+			case "context-window-size": "0 window";
+			case "used-tokens": "0 used";
+			case "total-input-tokens": "0 in";
+			case "total-output-tokens": "0 out";
+			case "session-id": "550e8400-e29b-41d4";
+			case "fast-mode": "Fast on";
+			case "raw-output": "raw output";
+			case "model": "gpt-5.2-codex";
+			case "model-with-reasoning": "gpt-5.2-codex medium";
+			case "reasoning": "medium";
+			case "task-progress": "Tasks 0/0";
+			case _: "";
+		}
+	}
+
+	static function statusSurfacePreviewFind(state:Array<TuiSmokeStatusSurfacePreviewEntry>, item:String):Int {
+		for (idx in 0...state.length) {
+			if (state[idx].item == item)
+				return idx;
+		}
+		return -1;
+	}
+
+	static function statusSurfacePreviewSetLive(state:Array<TuiSmokeStatusSurfacePreviewEntry>, item:String, value:String):Void {
+		final idx = statusSurfacePreviewFind(state, item);
+		if (idx >= 0) {
+			state[idx].text = value;
+			state[idx].isPlaceholder = false;
+		} else {
+			state.push({item: item, text: value, isPlaceholder: false});
+		}
+	}
+
+	static function statusSurfacePreviewSetPlaceholder(state:Array<TuiSmokeStatusSurfacePreviewEntry>, item:String, value:String):Void {
+		final idx = statusSurfacePreviewFind(state, item);
+		if (idx >= 0) {
+			if (!state[idx].isPlaceholder)
+				return;
+			state[idx].text = value;
+			state[idx].isPlaceholder = true;
+		} else {
+			state.push({item: item, text: value, isPlaceholder: true});
+		}
+	}
+
+	static function statusSurfacePreviewSuppressPlaceholder(state:Array<TuiSmokeStatusSurfacePreviewEntry>, item:String):Void {
+		final idx = statusSurfacePreviewFind(state, item);
+		if (idx >= 0 && state[idx].isPlaceholder)
+			state.splice(idx, 1);
+	}
+
+	static function statusSurfacePreviewValueFor(state:Array<TuiSmokeStatusSurfacePreviewEntry>, item:String):Null<String> {
+		final idx = statusSurfacePreviewFind(state, item);
+		if (idx < 0)
+			return null;
+		return state[idx].text;
+	}
+
+	static function statusSurfacePreviewValueTrace(state:Array<TuiSmokeStatusSurfacePreviewEntry>, item:String):String {
+		final idx = statusSurfacePreviewFind(state, item);
+		if (idx < 0)
+			return "<missing>";
+		return state[idx].text + (state[idx].isPlaceholder ? ":placeholder" : ":live");
+	}
+
+	static function statusSurfacePreviewValuesTrace(state:Array<TuiSmokeStatusSurfacePreviewEntry>, items:Array<String>):String {
+		final out:Array<String> = [];
+		for (item in items)
+			out.push(item + "=" + statusSurfacePreviewValueTrace(state, item));
+		return out.join("|");
+	}
+
+	static function statusSurfacePreviewStatusLine(state:Array<TuiSmokeStatusSurfacePreviewEntry>, items:Array<String>):String {
+		final out:Array<String> = [];
+		for (item in items) {
+			final value = statusSurfacePreviewValueFor(state, statusSurfacePreviewPreviewItemForStatusLine(item));
+			if (value != null)
+				out.push(value);
+		}
+		return out.join(" · ");
+	}
+
+	static function statusSurfacePreviewStatusLineCount(state:Array<TuiSmokeStatusSurfacePreviewEntry>, items:Array<String>):Int {
+		var count = 0;
+		for (item in items) {
+			final value = statusSurfacePreviewValueFor(state, statusSurfacePreviewPreviewItemForStatusLine(item));
+			if (value != null)
+				count++;
+		}
+		return count;
+	}
+
+	static function statusSurfacePreviewPreviewItemForStatusLine(item:String):String {
+		return switch item {
+			case "model-name": "model";
+			case "model-with-reasoning": "model-with-reasoning";
+			case "reasoning": "reasoning";
+			case "current-dir": "current-dir";
+			case "project-root": "project-root";
+			case "git-branch": "git-branch";
+			case "pull-request": "pull-request-number";
+			case "branch-changes": "branch-changes";
+			case "status": "status";
+			case "context-remaining": "context-remaining";
+			case "context-used": "context-used";
+			case "context-window-size": "context-window-size";
+			case "used-tokens": "used-tokens";
+			case "total-input-tokens": "total-input-tokens";
+			case "total-output-tokens": "total-output-tokens";
+			case "five-hour-limit": "five-hour-limit";
+			case "weekly-limit": "weekly-limit";
+			case "codex-version": "codex-version";
+			case "session-id": "session-id";
+			case "fast-mode": "fast-mode";
+			case "raw-output": "raw-output";
+			case "permissions": "permissions";
+			case "approval-mode": "approval-mode";
+			case "thread-title": "thread-title";
+			case "task-progress": "task-progress";
+			case _: item;
+		}
+	}
+
+	static function statusSurfacePreviewRateLimitCopy(value:String, fallbackName:String, fallbackDescription:String):{name:String, description:String} {
+		final trimmed = StringTools.ltrim(value);
+		if (StringTools.startsWith(trimmed, "secondary usage "))
+			return {
+				name: "secondary-usage-limit",
+				description: "Remaining usage on the secondary usage limit (omitted when unavailable)"
+			};
+		if (StringTools.startsWith(trimmed, "usage "))
+			return {name: "usage-limit", description: "Remaining usage on the primary usage limit (omitted when unavailable)"};
+		if (StringTools.startsWith(trimmed, "5h "))
+			return {name: "five-hour-limit", description: "Remaining usage on the 5-hour usage limit (omitted when unavailable)"};
+		if (StringTools.startsWith(trimmed, "daily "))
+			return {name: "daily-limit", description: "Remaining usage on the daily usage limit (omitted when unavailable)"};
+		if (StringTools.startsWith(trimmed, "weekly "))
+			return {name: "weekly-limit", description: "Remaining usage on the weekly usage limit (omitted when unavailable)"};
+		if (StringTools.startsWith(trimmed, "monthly "))
+			return {name: "monthly-limit", description: "Remaining usage on the monthly usage limit (omitted when unavailable)"};
+		if (StringTools.startsWith(trimmed, "annual "))
+			return {name: "annual-limit", description: "Remaining usage on the annual usage limit (omitted when unavailable)"};
+		return {name: fallbackName, description: fallbackDescription};
+	}
+
+	static function statusSurfacePreviewListTrace(items:Array<String>):String {
+		if (items.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (item in items)
+			out.push(traceText(item));
+		return out.join(",");
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

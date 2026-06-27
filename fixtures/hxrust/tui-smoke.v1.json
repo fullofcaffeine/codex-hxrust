@@ -58,6 +58,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/action_required_title.rs",
       "../codex/codex-rs/tui/src/bottom_pane/popup_consts.rs",
       "../codex/codex-rs/tui/src/bottom_pane/status_line_style.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/status_surface_preview.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -19852,6 +19853,214 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.status_line_style.plan=headless\ntui.status_line_style.line=ordered-fallback:theme=true:present=true:text=gpt-5 · /repo · main:spans=gpt-5:cyan| · :dim|/repo:green| · :dim|main:magenta\ntui.status_line_style.line=fallback-families:theme=true:present=true:text=Working · Context 12% used · primary 40% · 0.0.0 · Fast on · thread title · Tasks 1/2:spans=Working:cyan| · :dim|Context 12% used:green| · :dim|primary 40%:magenta| · :dim|0.0.0:cyan| · :dim|Fast on:cyan| · :dim|thread title:magenta| · :dim|Tasks 1/2:green\ntui.status_line_style.line=theme-override:theme=true:present=true:text=gpt-5 · Context 12% used:spans=gpt-5:red| · :dim|Context 12% used:green\ntui.status_line_style.line=rgb-soften:theme=true:present=true:text=gpt-5:spans=gpt-5:rgb(228,11,11)\ntui.status_line_style.line=theme-disabled:theme=false:present=true:text=gpt-5 · Context 12% used:spans=gpt-5:dim| · :dim|Context 12% used:dim\ntui.status_line_style.line=pull-request-underline:theme=false:present=true:text=PR #20252:spans=PR #20252:dim+underline\ntui.status_line_style.line=empty-none:theme=true:present=false:text=<empty>:spans=<none>\ntui.status_line_style.failure=live_status_line_style_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> status line style boundary\ninput> \ntrace:\ntui.status_line_style.plan=headless\ntui.status_line_style.line=ordered-fallback:theme=true:present=true:text=gpt-5 · /repo · main:spans=gpt-5:cyan| · :dim|/repo:green| · :dim|main:magenta\ntui.status_line_style.line=fallback-families:theme=true:present=true:text=Working · Context 12% used · primary 40% · 0.0.0 · Fast on · thread title · Tasks 1/2:spans=Working:cyan| · :dim|Context 12% used:green| · :dim|primary 40%:magenta| · :dim|0.0.0:cyan| · :dim|Fast on:cyan| · :dim|thread title:magenta| · :dim|Tasks 1/2:green\ntui.status_line_style.line=theme-override:theme=true:present=true:text=gpt-5 · Context 12% used:spans=gpt-5:red| · :dim|Context 12% used:green\ntui.status_line_style.line=rgb-soften:theme=true:present=true:text=gpt-5:spans=gpt-5:rgb(228,11,11)\ntui.status_line_style.line=theme-disabled:theme=false:present=true:text=gpt-5 · Context 12% used:spans=gpt-5:dim| · :dim|Context 12% used:dim\ntui.status_line_style.line=pull-request-underline:theme=false:present=true:text=PR #20252:spans=PR #20252:dim+underline\ntui.status_line_style.line=empty-none:theme=true:present=false:text=<empty>:spans=<none>\ntui.status_line_style.failure=live_status_line_style_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "status-surface-preview-headless",
+      "frame": {
+        "name": "status-surface-preview-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "status surface preview data"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "status_surface_preview",
+          "statusSurfacePreview": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "defaults",
+                "name": "representative-placeholders",
+                "items": [
+                  "app-name",
+                  "project-name",
+                  "model",
+                  "weekly-limit"
+                ],
+                "expected": "app-name=codex:placeholder|project-name=my-project:placeholder|model=gpt-5.2-codex:placeholder|weekly-limit=secondary 0%:placeholder"
+              },
+              {
+                "kind": "set_live",
+                "name": "live-project",
+                "item": "project-name",
+                "value": "codex-hxrust",
+                "expected": "codex-hxrust:live"
+              },
+              {
+                "kind": "set_placeholder",
+                "name": "preserve-live",
+                "item": "project-name",
+                "value": "ignored-placeholder",
+                "expected": "codex-hxrust:live"
+              },
+              {
+                "kind": "set_placeholder",
+                "name": "replace-placeholder",
+                "item": "status",
+                "value": "Ready",
+                "expected": "Ready:placeholder"
+              },
+              {
+                "kind": "suppress_placeholder",
+                "name": "suppress-status",
+                "item": "status",
+                "expectedPresent": false
+              },
+              {
+                "kind": "value_for",
+                "name": "missing-after-suppress",
+                "item": "status",
+                "expectedPresent": false,
+                "expected": ""
+              },
+              {
+                "kind": "suppress_placeholder",
+                "name": "suppress-model",
+                "item": "model",
+                "expectedPresent": false
+              },
+              {
+                "kind": "set_live",
+                "name": "live-branch",
+                "item": "git-branch",
+                "value": "main",
+                "expected": "main:live"
+              },
+              {
+                "kind": "set_live",
+                "name": "live-pr",
+                "item": "pull-request-number",
+                "value": "PR #42",
+                "expected": "PR #42:live"
+              },
+              {
+                "kind": "status_line",
+                "name": "filtered-order",
+                "items": [
+                  "model-name",
+                  "project-root",
+                  "git-branch",
+                  "pull-request",
+                  "status"
+                ],
+                "expected": "my-project · main · PR #42",
+                "expectedCount": 3
+              },
+              {
+                "kind": "rate_limit_copy",
+                "name": "secondary-usage",
+                "value": "secondary usage 95%",
+                "fallbackName": "fallback-name",
+                "fallbackDescription": "fallback description",
+                "expectedName": "secondary-usage-limit",
+                "expectedDescription": "Remaining usage on the secondary usage limit (omitted when unavailable)"
+              },
+              {
+                "kind": "rate_limit_copy",
+                "name": "usage",
+                "value": "usage 70%",
+                "fallbackName": "fallback-name",
+                "fallbackDescription": "fallback description",
+                "expectedName": "usage-limit",
+                "expectedDescription": "Remaining usage on the primary usage limit (omitted when unavailable)"
+              },
+              {
+                "kind": "rate_limit_copy",
+                "name": "five-hour",
+                "value": "5h 80%",
+                "fallbackName": "fallback-name",
+                "fallbackDescription": "fallback description",
+                "expectedName": "five-hour-limit",
+                "expectedDescription": "Remaining usage on the 5-hour usage limit (omitted when unavailable)"
+              },
+              {
+                "kind": "rate_limit_copy",
+                "name": "daily",
+                "value": "daily 12%",
+                "fallbackName": "fallback-name",
+                "fallbackDescription": "fallback description",
+                "expectedName": "daily-limit",
+                "expectedDescription": "Remaining usage on the daily usage limit (omitted when unavailable)"
+              },
+              {
+                "kind": "rate_limit_copy",
+                "name": "weekly",
+                "value": "weekly 30%",
+                "fallbackName": "fallback-name",
+                "fallbackDescription": "fallback description",
+                "expectedName": "weekly-limit",
+                "expectedDescription": "Remaining usage on the weekly usage limit (omitted when unavailable)"
+              },
+              {
+                "kind": "rate_limit_copy",
+                "name": "monthly",
+                "value": "monthly 44%",
+                "fallbackName": "fallback-name",
+                "fallbackDescription": "fallback description",
+                "expectedName": "monthly-limit",
+                "expectedDescription": "Remaining usage on the monthly usage limit (omitted when unavailable)"
+              },
+              {
+                "kind": "rate_limit_copy",
+                "name": "annual",
+                "value": "annual 55%",
+                "fallbackName": "fallback-name",
+                "fallbackDescription": "fallback description",
+                "expectedName": "annual-limit",
+                "expectedDescription": "Remaining usage on the annual usage limit (omitted when unavailable)"
+              },
+              {
+                "kind": "rate_limit_copy",
+                "name": "fallback",
+                "value": "mystery 10%",
+                "fallbackName": "fallback-name",
+                "fallbackDescription": "fallback description",
+                "expectedName": "fallback-name",
+                "expectedDescription": "fallback description"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_status_surface_preview_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.status_surface_preview.plan=headless\ntui.status_surface_preview.defaults=representative-placeholders:values=app-name=codex:placeholder|project-name=my-project:placeholder|model=gpt-5.2-codex:placeholder|weekly-limit=secondary 0%:placeholder\ntui.status_surface_preview.set_live=live-project:item=project-name:value=codex-hxrust:live\ntui.status_surface_preview.set_placeholder=preserve-live:item=project-name:value=codex-hxrust:live\ntui.status_surface_preview.set_placeholder=replace-placeholder:item=status:value=Ready:placeholder\ntui.status_surface_preview.suppress=suppress-status:item=status:present=false\ntui.status_surface_preview.value=missing-after-suppress:item=status:present=false:value=<empty>\ntui.status_surface_preview.suppress=suppress-model:item=model:present=false\ntui.status_surface_preview.set_live=live-branch:item=git-branch:value=main:live\ntui.status_surface_preview.set_live=live-pr:item=pull-request-number:value=PR #42:live\ntui.status_surface_preview.status_line=filtered-order:items=model-name,project-root,git-branch,pull-request,status:line=my-project · main · PR #42:count=3\ntui.status_surface_preview.rate_limit=secondary-usage:value=secondary usage 95%:name=secondary-usage-limit:description=Remaining usage on the secondary usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=usage:value=usage 70%:name=usage-limit:description=Remaining usage on the primary usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=five-hour:value=5h 80%:name=five-hour-limit:description=Remaining usage on the 5-hour usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=daily:value=daily 12%:name=daily-limit:description=Remaining usage on the daily usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=weekly:value=weekly 30%:name=weekly-limit:description=Remaining usage on the weekly usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=monthly:value=monthly 44%:name=monthly-limit:description=Remaining usage on the monthly usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=annual:value=annual 55%:name=annual-limit:description=Remaining usage on the annual usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=fallback:value=mystery 10%:name=fallback-name:description=fallback description\ntui.status_surface_preview.failure=live_status_surface_preview_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> status surface preview data\ninput> \ntrace:\ntui.status_surface_preview.plan=headless\ntui.status_surface_preview.defaults=representative-placeholders:values=app-name=codex:placeholder|project-name=my-project:placeholder|model=gpt-5.2-codex:placeholder|weekly-limit=secondary 0%:placeholder\ntui.status_surface_preview.set_live=live-project:item=project-name:value=codex-hxrust:live\ntui.status_surface_preview.set_placeholder=preserve-live:item=project-name:value=codex-hxrust:live\ntui.status_surface_preview.set_placeholder=replace-placeholder:item=status:value=Ready:placeholder\ntui.status_surface_preview.suppress=suppress-status:item=status:present=false\ntui.status_surface_preview.value=missing-after-suppress:item=status:present=false:value=<empty>\ntui.status_surface_preview.suppress=suppress-model:item=model:present=false\ntui.status_surface_preview.set_live=live-branch:item=git-branch:value=main:live\ntui.status_surface_preview.set_live=live-pr:item=pull-request-number:value=PR #42:live\ntui.status_surface_preview.status_line=filtered-order:items=model-name,project-root,git-branch,pull-request,status:line=my-project · main · PR #42:count=3\ntui.status_surface_preview.rate_limit=secondary-usage:value=secondary usage 95%:name=secondary-usage-limit:description=Remaining usage on the secondary usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=usage:value=usage 70%:name=usage-limit:description=Remaining usage on the primary usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=five-hour:value=5h 80%:name=five-hour-limit:description=Remaining usage on the 5-hour usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=daily:value=daily 12%:name=daily-limit:description=Remaining usage on the daily usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=weekly:value=weekly 30%:name=weekly-limit:description=Remaining usage on the weekly usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=monthly:value=monthly 44%:name=monthly-limit:description=Remaining usage on the monthly usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=annual:value=annual 55%:name=annual-limit:description=Remaining usage on the annual usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=fallback:value=mystery 10%:name=fallback-name:description=fallback description\ntui.status_surface_preview.failure=live_status_surface_preview_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

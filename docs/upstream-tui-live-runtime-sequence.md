@@ -3939,6 +3939,10 @@ Status: HXCX-TUI-267 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-268 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/status_line_style.rs`. The fixture preserves status-line segment order and separator insertion, fallback accent colors for model/path/branch/state/usage/limit/metadata/mode/thread/progress item families, theme resolver override before fallback, RGB softening math, dimmed non-theme styling, pull-request underline intent, empty-segment none output, and no-live rejection evidence. This is deterministic status-line text and style-intent evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
 
+### HXCX-TUI-269 Headless Raw Codex Status Surface Preview
+
+Status: HXCX-TUI-269 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/status_surface_preview.rs`. The fixture preserves representative default placeholders, live-value override of placeholders, placeholder updates preserving live values, placeholder suppression and missing `value_for`, status-line item filtering with order preservation, rate-limit preview copy names/descriptions for secondary usage, usage, 5h, daily, weekly, monthly, annual, fallback behavior, and no-live rejection evidence. This is deterministic preview-data evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
