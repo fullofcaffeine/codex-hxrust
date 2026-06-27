@@ -57,6 +57,19 @@ private typedef TuiSmokeFileSearchPopupState = {
 	var scrollTop:Int;
 }
 
+private typedef TuiSmokeSkillPopupState = {
+	var query:String;
+	var mentions:Array<TuiSmokeSkillPopupMention>;
+	var selectedIndex:Int;
+	var scrollTop:Int;
+}
+
+private typedef TuiSmokeSkillPopupMatch = {
+	final index:Int;
+	final display:Bool;
+	final score:Int;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -484,6 +497,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.FileSearchPopup:
 					if (!traceFileSearchPopup(event.fileSearchPopup, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.SkillPopup:
+					if (!traceSkillPopup(event.skillPopup, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -6114,6 +6132,295 @@ class TuiSmokeEventLoop {
 		for (path in matches)
 			out.push(traceText(path));
 		return out.join(",");
+	}
+
+	static function traceSkillPopup(plan:TuiSmokeSkillPopupPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.skill_popup.rejected=live_or_missing");
+			return false;
+		}
+		final state = skillPopupInitialState();
+		trace.push("tui.skill_popup.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeSkillPopupActionKind.Snapshot:
+				case TuiSmokeSkillPopupActionKind.SetMentions:
+					skillPopupSetMentions(state, action.mentions);
+				case TuiSmokeSkillPopupActionKind.SetQuery:
+					skillPopupSetQuery(state, action.query);
+				case TuiSmokeSkillPopupActionKind.MoveUp:
+					skillPopupMoveUp(state);
+				case TuiSmokeSkillPopupActionKind.MoveDown:
+					skillPopupMoveDown(state);
+				case TuiSmokeSkillPopupActionKind.Failure:
+					trace.push("tui.skill_popup.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+					continue;
+				case _:
+					trace.push("tui.skill_popup.unknown");
+					return false;
+			}
+			if (!skillPopupMatchesExpectation(state, action)) {
+				trace.push("tui.skill_popup.state_mismatch=" + action.name + ":" + skillPopupStateTrace(state));
+				return false;
+			}
+			trace.push("tui.skill_popup." + action.kind + "=" + action.name + ":" + skillPopupStateTrace(state));
+		}
+		return true;
+	}
+
+	static function skillPopupInitialState():TuiSmokeSkillPopupState {
+		return {
+			query: "",
+			mentions: [],
+			selectedIndex: -1,
+			scrollTop: 0
+		};
+	}
+
+	static function skillPopupSetMentions(state:TuiSmokeSkillPopupState, mentions:Array<TuiSmokeSkillPopupMention>):Void {
+		state.mentions = mentions.copy();
+		skillPopupClampSelection(state);
+		skillPopupEnsureVisible(state);
+	}
+
+	static function skillPopupSetQuery(state:TuiSmokeSkillPopupState, query:String):Void {
+		state.query = query;
+		skillPopupClampSelection(state);
+		skillPopupEnsureVisible(state);
+	}
+
+	static function skillPopupMoveUp(state:TuiSmokeSkillPopupState):Void {
+		final count = skillPopupFilteredIndices(state).length;
+		if (count == 0) {
+			state.selectedIndex = -1;
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIndex > 0) {
+			state.selectedIndex--;
+		} else if (state.selectedIndex == 0) {
+			state.selectedIndex = count - 1;
+		} else {
+			state.selectedIndex = 0;
+		}
+		skillPopupEnsureVisible(state);
+	}
+
+	static function skillPopupMoveDown(state:TuiSmokeSkillPopupState):Void {
+		final count = skillPopupFilteredIndices(state).length;
+		if (count == 0) {
+			state.selectedIndex = -1;
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIndex >= 0 && state.selectedIndex + 1 < count) {
+			state.selectedIndex++;
+		} else {
+			state.selectedIndex = 0;
+		}
+		skillPopupEnsureVisible(state);
+	}
+
+	static function skillPopupFilteredIndices(state:TuiSmokeSkillPopupState):Array<Int> {
+		if (state.query == "") {
+			final indices:Array<Int> = [];
+			for (idx in 0...state.mentions.length)
+				indices.push(idx);
+			indices.sort(function(left, right) {
+				return skillPopupCompareMentions(state.mentions[left], state.mentions[right]);
+			});
+			return indices;
+		}
+		final matches:Array<TuiSmokeSkillPopupMatch> = [];
+		for (idx in 0...state.mentions.length) {
+			final match = skillPopupMatch(state.mentions[idx], state.query);
+			if (match.score >= 0)
+				matches.push({index: idx, display: match.display, score: match.score});
+		}
+		matches.sort(function(left, right) {
+			if (left.display != right.display)
+				return left.display ? -1 : 1;
+			if (left.score != right.score)
+				return left.score - right.score;
+			return skillPopupCompareMentions(state.mentions[left.index], state.mentions[right.index]);
+		});
+		final out:Array<Int> = [];
+		for (match in matches)
+			out.push(match.index);
+		return out;
+	}
+
+	static function skillPopupMatch(mention:TuiSmokeSkillPopupMention, query:String):TuiSmokeSkillPopupMatch {
+		final normalizedQuery = query.toLowerCase();
+		final displayName = mention.displayName.toLowerCase();
+		final displayIndex = displayName.indexOf(normalizedQuery);
+		if (displayIndex >= 0)
+			return {index: -1, display: true, score: displayIndex * 100 + displayName.length};
+		var best = -1;
+		for (term in mention.searchTerms) {
+			final normalizedTerm = term.toLowerCase();
+			if (normalizedTerm == displayName)
+				continue;
+			final termIndex = normalizedTerm.indexOf(normalizedQuery);
+			if (termIndex >= 0) {
+				final score = termIndex * 100 + normalizedTerm.length;
+				if (best < 0 || score < best)
+					best = score;
+			}
+		}
+		if (best >= 0)
+			return {index: -1, display: false, score: best};
+		return {index: -1, display: false, score: -1};
+	}
+
+	static function skillPopupCompareMentions(left:TuiSmokeSkillPopupMention, right:TuiSmokeSkillPopupMention):Int {
+		if (left.sortRank != right.sortRank)
+			return left.sortRank - right.sortRank;
+		return compareStrings(left.displayName, right.displayName);
+	}
+
+	static function skillPopupClampSelection(state:TuiSmokeSkillPopupState):Void {
+		final count = skillPopupFilteredIndices(state).length;
+		if (count == 0) {
+			state.selectedIndex = -1;
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIndex < 0) {
+			state.selectedIndex = 0;
+		} else if (state.selectedIndex >= count) {
+			state.selectedIndex = count - 1;
+		}
+	}
+
+	static function skillPopupEnsureVisible(state:TuiSmokeSkillPopupState):Void {
+		final count = skillPopupFilteredIndices(state).length;
+		final visible = count < 8 ? count : 8;
+		if (count == 0 || visible == 0) {
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIndex < state.scrollTop) {
+			state.scrollTop = state.selectedIndex;
+		} else {
+			final bottom = state.scrollTop + visible - 1;
+			if (state.selectedIndex > bottom)
+				state.scrollTop = state.selectedIndex + 1 - visible;
+		}
+	}
+
+	static function skillPopupMatchesExpectation(state:TuiSmokeSkillPopupState, action:TuiSmokeSkillPopupAction):Bool {
+		final indices = skillPopupFilteredIndices(state);
+		return stringArraysEqual(skillPopupOrder(state, indices), action.expectedOrder)
+			&& stringArraysEqual(skillPopupRows(state, indices), action.expectedRows)
+			&& skillPopupRequiredHeight(indices) == action.expectedHeight
+			&& skillPopupSelectedName(state, indices) == action.expectedSelectedName
+			&& skillPopupSelectedInsertText(state, indices) == action.expectedSelectedInsertText
+			&& skillPopupSelectedPath(state, indices) == action.expectedSelectedPath
+			&& state.selectedIndex == action.expectedSelectedIndex
+			&& state.scrollTop == action.expectedScrollTop;
+	}
+
+	static function skillPopupRequiredHeight(indices:Array<Int>):Int {
+		var visible = indices.length;
+		if (visible < 1)
+			visible = 1;
+		if (visible > 8)
+			visible = 8;
+		return visible + 2;
+	}
+
+	static function skillPopupSelectedMention(state:TuiSmokeSkillPopupState, indices:Array<Int>):Null<TuiSmokeSkillPopupMention> {
+		if (state.selectedIndex < 0 || state.selectedIndex >= indices.length)
+			return null;
+		return state.mentions[indices[state.selectedIndex]];
+	}
+
+	static function skillPopupSelectedName(state:TuiSmokeSkillPopupState, indices:Array<Int>):String {
+		final mention = skillPopupSelectedMention(state, indices);
+		return mention == null ? "" : mention.displayName;
+	}
+
+	static function skillPopupSelectedInsertText(state:TuiSmokeSkillPopupState, indices:Array<Int>):String {
+		final mention = skillPopupSelectedMention(state, indices);
+		return mention == null ? "" : mention.insertText;
+	}
+
+	static function skillPopupSelectedPath(state:TuiSmokeSkillPopupState, indices:Array<Int>):String {
+		final mention = skillPopupSelectedMention(state, indices);
+		return mention == null ? "" : mention.path;
+	}
+
+	static function skillPopupOrder(state:TuiSmokeSkillPopupState, indices:Array<Int>):Array<String> {
+		final out:Array<String> = [];
+		for (index in indices)
+			out.push(state.mentions[index].displayName);
+		return out;
+	}
+
+	static function skillPopupRows(state:TuiSmokeSkillPopupState, indices:Array<Int>):Array<String> {
+		final out:Array<String> = [];
+		final limit = indices.length > 8 ? 8 : indices.length;
+		for (idx in 0...limit) {
+			final mention = state.mentions[indices[idx]];
+			out.push(skillPopupTruncateName(mention.displayName) + ">" + skillPopupDescription(mention));
+		}
+		return out;
+	}
+
+	static function skillPopupTruncateName(value:String):String {
+		if (value.length <= 28)
+			return value;
+		return value.substr(0, 25) + "...";
+	}
+
+	static function skillPopupDescription(mention:TuiSmokeSkillPopupMention):String {
+		final hasTag = mention.categoryTag != "";
+		final hasDescription = mention.description != "";
+		if (hasTag && hasDescription)
+			return mention.categoryTag + " " + mention.description;
+		if (hasTag)
+			return mention.categoryTag;
+		if (hasDescription)
+			return mention.description;
+		return "";
+	}
+
+	static function skillPopupStateTrace(state:TuiSmokeSkillPopupState):String {
+		final indices = skillPopupFilteredIndices(state);
+		return "query=" + traceText(state.query) + ":order=" + skillPopupListTrace(skillPopupOrder(state, indices)) + ":rows="
+			+ skillPopupRowsTrace(skillPopupRows(state, indices)) + ":height=" + skillPopupRequiredHeight(indices) + ":selected="
+			+ traceText(skillPopupSelectedName(state, indices)) + ":insert=" + traceText(skillPopupSelectedInsertText(state, indices)) + ":path="
+			+ traceText(skillPopupSelectedPath(state, indices)) + ":selected_idx=" + state.selectedIndex + ":scroll_top=" + state.scrollTop;
+	}
+
+	static function skillPopupListTrace(values:Array<String>):String {
+		if (values.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (value in values)
+			out.push(traceText(value));
+		return out.join(",");
+	}
+
+	static function skillPopupRowsTrace(values:Array<String>):String {
+		if (values.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (value in values)
+			out.push(traceText(value));
+		return out.join("|");
+	}
+
+	static function compareStrings(left:String, right:String):Int {
+		if (left < right)
+			return -1;
+		if (left > right)
+			return 1;
+		return 0;
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

@@ -132,6 +132,7 @@ class TuiSmokeFixtureLoader {
 				promptArgs: optionalPromptArgsPlan(value, "promptArgs"),
 				unifiedExecFooter: optionalUnifiedExecFooterPlan(value, "unifiedExecFooter"),
 				fileSearchPopup: optionalFileSearchPopupPlan(value, "fileSearchPopup"),
+				skillPopup: optionalSkillPopupPlan(value, "skillPopup"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -1039,6 +1040,65 @@ class TuiSmokeFixtureLoader {
 				noNetwork: optionalBoolField(value, "noNetwork", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalSkillPopupPlan(object:Value, name:String):Null<TuiSmokeSkillPopupPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSkillPopupPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: skillPopupActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function skillPopupActions(values:Array<Value>):Array<TuiSmokeSkillPopupAction> {
+		final out:Array<TuiSmokeSkillPopupAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSkillPopupAction({
+				kind: TuiSmokeSkillPopupActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				query: optionalStringField(value, "query", ""),
+				mentions: skillPopupMentions(optionalArrayField(value, "mentions")),
+				expectedOrder: optionalStringArrayField(value, "expectedOrder"),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				expectedHeight: optionalIntField(value, "expectedHeight", 3),
+				expectedSelectedName: optionalStringField(value, "expectedSelectedName", ""),
+				expectedSelectedInsertText: optionalStringField(value, "expectedSelectedInsertText", ""),
+				expectedSelectedPath: optionalStringField(value, "expectedSelectedPath", ""),
+				expectedSelectedIndex: optionalIntField(value, "expectedSelectedIndex", -1),
+				expectedScrollTop: optionalIntField(value, "expectedScrollTop", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function skillPopupMentions(values:Array<Value>):Array<TuiSmokeSkillPopupMention> {
+		final out:Array<TuiSmokeSkillPopupMention> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSkillPopupMention({
+				displayName: optionalStringField(value, "displayName", ""),
+				description: optionalStringField(value, "description", ""),
+				insertText: optionalStringField(value, "insertText", ""),
+				searchTerms: optionalStringArrayField(value, "searchTerms"),
+				path: optionalStringField(value, "path", ""),
+				categoryTag: optionalStringField(value, "categoryTag", ""),
+				sortRank: optionalIntField(value, "sortRank", 1)
 			}));
 		}
 		return out;

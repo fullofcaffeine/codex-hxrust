@@ -64,6 +64,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/prompt_args.rs",
       "../codex/codex-rs/tui/src/bottom_pane/unified_exec_footer.rs",
       "../codex/codex-rs/tui/src/bottom_pane/file_search_popup.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/skill_popup.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -20960,6 +20961,315 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.file_search_popup.plan=headless\ntui.file_search_popup.snapshot=initial-waiting:display=<empty>:pending=<empty>:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-file:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-file-idempotent:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=stale-results-ignored:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=empty-results:display=file:pending=file:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=same-query-after-results:display=file:pending=file:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-src:display=file:pending=src:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=accept-first-page:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.move_down=move-down:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_01.rs:empty_message=no matches:selected_idx=1:scroll_top=0\ntui.file_search_popup.move_up=move-up:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.move_up=move-up-wrap:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_07.rs:empty_message=no matches:selected_idx=7:scroll_top=0\ntui.file_search_popup.move_down=move-down-wrap:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.empty_prompt=empty-prompt-reset:display=<empty>:pending=<empty>:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.failure=live_file_search_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> file search popup\ninput> \ntrace:\ntui.file_search_popup.plan=headless\ntui.file_search_popup.snapshot=initial-waiting:display=<empty>:pending=<empty>:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-file:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-file-idempotent:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=stale-results-ignored:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=empty-results:display=file:pending=file:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=same-query-after-results:display=file:pending=file:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-src:display=file:pending=src:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=accept-first-page:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.move_down=move-down:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_01.rs:empty_message=no matches:selected_idx=1:scroll_top=0\ntui.file_search_popup.move_up=move-up:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.move_up=move-up-wrap:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_07.rs:empty_message=no matches:selected_idx=7:scroll_top=0\ntui.file_search_popup.move_down=move-down-wrap:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.empty_prompt=empty-prompt-reset:display=<empty>:pending=<empty>:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.failure=live_file_search_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "skill-popup-headless",
+      "frame": {
+        "name": "skill-popup-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "skill popup"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "skill_popup",
+          "skillPopup": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "set_mentions",
+                "name": "initial-mentions",
+                "mentions": [
+                  {
+                    "displayName": "Plugin Creator",
+                    "description": "Build local plugins",
+                    "insertText": "$plugin-creator",
+                    "searchTerms": [
+                      "plugin-creator",
+                      "Plugin Creator"
+                    ],
+                    "path": "skill://plugin-creator",
+                    "categoryTag": "[Skill]",
+                    "sortRank": 1
+                  },
+                  {
+                    "displayName": "Build Helper With Absurdly Long Display Name",
+                    "description": "",
+                    "insertText": "$build-helper",
+                    "searchTerms": [
+                      "build-helper",
+                      "Build Helper With Absurdly Long Display Name"
+                    ],
+                    "path": "skill://build-helper",
+                    "categoryTag": "[Skill]",
+                    "sortRank": 2
+                  },
+                  {
+                    "displayName": "GitHub",
+                    "description": "Pull request workflows",
+                    "insertText": "$github",
+                    "searchTerms": [
+                      "github",
+                      "pull requests",
+                      "pr"
+                    ],
+                    "path": "plugin://github",
+                    "categoryTag": "[Plugin]",
+                    "sortRank": 0
+                  },
+                  {
+                    "displayName": "PR Babysitter",
+                    "description": "Review pull requests",
+                    "insertText": "$pr-babysitter",
+                    "searchTerms": [
+                      "babysit-pr",
+                      "PR Babysitter"
+                    ],
+                    "path": "skill://pr-babysitter",
+                    "categoryTag": "[Skill]",
+                    "sortRank": 1
+                  },
+                  {
+                    "displayName": "Docs Only",
+                    "description": "Documentation helper",
+                    "insertText": "$docs",
+                    "searchTerms": [
+                      "docs"
+                    ],
+                    "path": "",
+                    "categoryTag": "",
+                    "sortRank": 3
+                  }
+                ],
+                "expectedOrder": [
+                  "GitHub",
+                  "PR Babysitter",
+                  "Plugin Creator",
+                  "Build Helper With Absurdly Long Display Name",
+                  "Docs Only"
+                ],
+                "expectedRows": [
+                  "GitHub>[Plugin] Pull request workflows",
+                  "PR Babysitter>[Skill] Review pull requests",
+                  "Plugin Creator>[Skill] Build local plugins",
+                  "Build Helper With Absurdl...>[Skill]",
+                  "Docs Only>Documentation helper"
+                ],
+                "expectedHeight": 7,
+                "expectedSelectedName": "GitHub",
+                "expectedSelectedInsertText": "$github",
+                "expectedSelectedPath": "plugin://github",
+                "expectedSelectedIndex": 0
+              },
+              {
+                "kind": "set_query",
+                "name": "query-build-display",
+                "query": "build",
+                "expectedOrder": [
+                  "Build Helper With Absurdly Long Display Name"
+                ],
+                "expectedRows": [
+                  "Build Helper With Absurdl...>[Skill]"
+                ],
+                "expectedHeight": 3,
+                "expectedSelectedName": "Build Helper With Absurdly Long Display Name",
+                "expectedSelectedInsertText": "$build-helper",
+                "expectedSelectedPath": "skill://build-helper",
+                "expectedSelectedIndex": 0
+              },
+              {
+                "kind": "set_query",
+                "name": "query-pr-display-before-search-term",
+                "query": "pr",
+                "expectedOrder": [
+                  "PR Babysitter",
+                  "GitHub"
+                ],
+                "expectedRows": [
+                  "PR Babysitter>[Skill] Review pull requests",
+                  "GitHub>[Plugin] Pull request workflows"
+                ],
+                "expectedHeight": 4,
+                "expectedSelectedName": "PR Babysitter",
+                "expectedSelectedInsertText": "$pr-babysitter",
+                "expectedSelectedPath": "skill://pr-babysitter",
+                "expectedSelectedIndex": 0
+              },
+              {
+                "kind": "move_down",
+                "name": "move-down-to-search-term",
+                "expectedOrder": [
+                  "PR Babysitter",
+                  "GitHub"
+                ],
+                "expectedRows": [
+                  "PR Babysitter>[Skill] Review pull requests",
+                  "GitHub>[Plugin] Pull request workflows"
+                ],
+                "expectedHeight": 4,
+                "expectedSelectedName": "GitHub",
+                "expectedSelectedInsertText": "$github",
+                "expectedSelectedPath": "plugin://github",
+                "expectedSelectedIndex": 1
+              },
+              {
+                "kind": "move_down",
+                "name": "move-down-wrap",
+                "expectedOrder": [
+                  "PR Babysitter",
+                  "GitHub"
+                ],
+                "expectedRows": [
+                  "PR Babysitter>[Skill] Review pull requests",
+                  "GitHub>[Plugin] Pull request workflows"
+                ],
+                "expectedHeight": 4,
+                "expectedSelectedName": "PR Babysitter",
+                "expectedSelectedInsertText": "$pr-babysitter",
+                "expectedSelectedPath": "skill://pr-babysitter",
+                "expectedSelectedIndex": 0
+              },
+              {
+                "kind": "set_query",
+                "name": "query-no-match",
+                "query": "zzz",
+                "expectedHeight": 3,
+                "expectedSelectedIndex": -1
+              },
+              {
+                "kind": "set_query",
+                "name": "query-empty-restores-rank-order",
+                "query": "",
+                "expectedOrder": [
+                  "GitHub",
+                  "PR Babysitter",
+                  "Plugin Creator",
+                  "Build Helper With Absurdly Long Display Name",
+                  "Docs Only"
+                ],
+                "expectedRows": [
+                  "GitHub>[Plugin] Pull request workflows",
+                  "PR Babysitter>[Skill] Review pull requests",
+                  "Plugin Creator>[Skill] Build local plugins",
+                  "Build Helper With Absurdl...>[Skill]",
+                  "Docs Only>Documentation helper"
+                ],
+                "expectedHeight": 7,
+                "expectedSelectedName": "GitHub",
+                "expectedSelectedInsertText": "$github",
+                "expectedSelectedPath": "plugin://github",
+                "expectedSelectedIndex": 0
+              },
+              {
+                "kind": "move_up",
+                "name": "move-up-wrap",
+                "expectedOrder": [
+                  "GitHub",
+                  "PR Babysitter",
+                  "Plugin Creator",
+                  "Build Helper With Absurdly Long Display Name",
+                  "Docs Only"
+                ],
+                "expectedRows": [
+                  "GitHub>[Plugin] Pull request workflows",
+                  "PR Babysitter>[Skill] Review pull requests",
+                  "Plugin Creator>[Skill] Build local plugins",
+                  "Build Helper With Absurdl...>[Skill]",
+                  "Docs Only>Documentation helper"
+                ],
+                "expectedHeight": 7,
+                "expectedSelectedName": "Docs Only",
+                "expectedSelectedInsertText": "$docs",
+                "expectedSelectedPath": "",
+                "expectedSelectedIndex": 4
+              },
+              {
+                "kind": "set_mentions",
+                "name": "set-mentions-clamps-selection",
+                "mentions": [
+                  {
+                    "displayName": "GitHub",
+                    "description": "Pull request workflows",
+                    "insertText": "$github",
+                    "searchTerms": [
+                      "github",
+                      "pull requests",
+                      "pr"
+                    ],
+                    "path": "plugin://github",
+                    "categoryTag": "[Plugin]",
+                    "sortRank": 0
+                  },
+                  {
+                    "displayName": "Plugin Creator",
+                    "description": "Build local plugins",
+                    "insertText": "$plugin-creator",
+                    "searchTerms": [
+                      "plugin-creator",
+                      "Plugin Creator"
+                    ],
+                    "path": "skill://plugin-creator",
+                    "categoryTag": "[Skill]",
+                    "sortRank": 1
+                  }
+                ],
+                "expectedOrder": [
+                  "GitHub",
+                  "Plugin Creator"
+                ],
+                "expectedRows": [
+                  "GitHub>[Plugin] Pull request workflows",
+                  "Plugin Creator>[Skill] Build local plugins"
+                ],
+                "expectedHeight": 4,
+                "expectedSelectedName": "Plugin Creator",
+                "expectedSelectedInsertText": "$plugin-creator",
+                "expectedSelectedPath": "skill://plugin-creator",
+                "expectedSelectedIndex": 1
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_skill_popup_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.skill_popup.plan=headless\ntui.skill_popup.set_mentions=initial-mentions:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=GitHub:insert=$github:path=plugin://github:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-build-display:query=build:order=Build Helper With Absurdly Long Display Name:rows=Build Helper With Absurdl...>[Skill]:height=3:selected=Build Helper With Absurdly Long Display Name:insert=$build-helper:path=skill://build-helper:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-pr-display-before-search-term:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=PR Babysitter:insert=$pr-babysitter:path=skill://pr-babysitter:selected_idx=0:scroll_top=0\ntui.skill_popup.move_down=move-down-to-search-term:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=GitHub:insert=$github:path=plugin://github:selected_idx=1:scroll_top=0\ntui.skill_popup.move_down=move-down-wrap:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=PR Babysitter:insert=$pr-babysitter:path=skill://pr-babysitter:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-no-match:query=zzz:order=<none>:rows=<none>:height=3:selected=<empty>:insert=<empty>:path=<empty>:selected_idx=-1:scroll_top=0\ntui.skill_popup.set_query=query-empty-restores-rank-order:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=GitHub:insert=$github:path=plugin://github:selected_idx=0:scroll_top=0\ntui.skill_popup.move_up=move-up-wrap:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=Docs Only:insert=$docs:path=<empty>:selected_idx=4:scroll_top=0\ntui.skill_popup.set_mentions=set-mentions-clamps-selection:query=<empty>:order=GitHub,Plugin Creator:rows=GitHub>[Plugin] Pull request workflows|Plugin Creator>[Skill] Build local plugins:height=4:selected=Plugin Creator:insert=$plugin-creator:path=skill://plugin-creator:selected_idx=1:scroll_top=0\ntui.skill_popup.failure=live_skill_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> skill popup\ninput> \ntrace:\ntui.skill_popup.plan=headless\ntui.skill_popup.set_mentions=initial-mentions:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=GitHub:insert=$github:path=plugin://github:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-build-display:query=build:order=Build Helper With Absurdly Long Display Name:rows=Build Helper With Absurdl...>[Skill]:height=3:selected=Build Helper With Absurdly Long Display Name:insert=$build-helper:path=skill://build-helper:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-pr-display-before-search-term:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=PR Babysitter:insert=$pr-babysitter:path=skill://pr-babysitter:selected_idx=0:scroll_top=0\ntui.skill_popup.move_down=move-down-to-search-term:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=GitHub:insert=$github:path=plugin://github:selected_idx=1:scroll_top=0\ntui.skill_popup.move_down=move-down-wrap:query=pr:order=PR Babysitter,GitHub:rows=PR Babysitter>[Skill] Review pull requests|GitHub>[Plugin] Pull request workflows:height=4:selected=PR Babysitter:insert=$pr-babysitter:path=skill://pr-babysitter:selected_idx=0:scroll_top=0\ntui.skill_popup.set_query=query-no-match:query=zzz:order=<none>:rows=<none>:height=3:selected=<empty>:insert=<empty>:path=<empty>:selected_idx=-1:scroll_top=0\ntui.skill_popup.set_query=query-empty-restores-rank-order:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=GitHub:insert=$github:path=plugin://github:selected_idx=0:scroll_top=0\ntui.skill_popup.move_up=move-up-wrap:query=<empty>:order=GitHub,PR Babysitter,Plugin Creator,Build Helper With Absurdly Long Display Name,Docs Only:rows=GitHub>[Plugin] Pull request workflows|PR Babysitter>[Skill] Review pull requests|Plugin Creator>[Skill] Build local plugins|Build Helper With Absurdl...>[Skill]|Docs Only>Documentation helper:height=7:selected=Docs Only:insert=$docs:path=<empty>:selected_idx=4:scroll_top=0\ntui.skill_popup.set_mentions=set-mentions-clamps-selection:query=<empty>:order=GitHub,Plugin Creator:rows=GitHub>[Plugin] Pull request workflows|Plugin Creator>[Skill] Build local plugins:height=4:selected=Plugin Creator:insert=$plugin-creator:path=skill://plugin-creator:selected_idx=1:scroll_top=0\ntui.skill_popup.failure=live_skill_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",
