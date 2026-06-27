@@ -8737,6 +8737,191 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer image path paste admission\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.image_path_paste=admitted-image-path:paste=/tmp/codex_tui_test_paste_image.png:text=->[Image #1] :placeholder=->[Image #1]:local=0->1:remote=0->0:elements=0->1:payloads=[Image #1]:redraw=true:burst_clear=true:sync=true:cursor=0->11\ntui.composer_editing.image_path_paste=non-image-path-fallback:paste=/Users/example/project/src/main.rs:text=->/Users/example/project/src/main.rs:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:redraw=true:burst_clear=true:sync=true:cursor=0->34\ntui.composer_editing.image_path_paste=missing-image-path-fallback:paste=/tmp/missing-image.png:text=->/tmp/missing-image.png:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:redraw=true:burst_clear=true:sync=true:cursor=0->22\ntui.composer_editing.image_path_paste=multibyte-fallback-stable:paste=日本語/readme.txt:text=->日本語/readme.txt:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:redraw=true:burst_clear=true:sync=true:cursor=0->20\ntui.composer_editing.image_path_paste=placeholder-adjacent-admitted:paste=/tmp/adjacent.png:text=[Image #1]->[Image #1][Image #2] :placeholder=[Image #1]->[Image #2]:local=1->2:remote=0->0:elements=1->2:payloads=[Image #1],[Image #2]:redraw=true:burst_clear=true:sync=true:cursor=10->21\ntui.composer_editing.image_path_paste=remote-offset-admitted:paste=/tmp/local.png:text=->[Image #3] :placeholder=->[Image #3]:local=0->1:remote=2->2:elements=0->1:payloads=[Image #3]:redraw=true:burst_clear=true:sync=true:cursor=0->11\ntui.composer_editing.failure=live_composer_image_path_paste_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-file-popup-image-selection-headless",
+      "frame": {
+        "name": "composer-file-popup-image-selection-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer file popup image selection"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "file_popup_select",
+                "keyName": "enter-image-replaces-token",
+                "inputText": "open @img please",
+                "outputText": "open [Image #1]  please",
+                "selectedPath": "/tmp/selected.png",
+                "tokenBefore": "@img",
+                "tokenAfter": "<image>",
+                "placeholderAfter": "[Image #1]",
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "localImageBefore": 0,
+                "localImageAfter": 1,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "needsRedraw": true,
+                "cursorBefore": 7,
+                "cursorAfter": 16
+              },
+              {
+                "kind": "file_popup_select",
+                "keyName": "multibyte-image-token-boundary",
+                "inputText": "日本語 @画像.png 次",
+                "outputText": "日本語 [Image #1]  次",
+                "selectedPath": "/tmp/画像.png",
+                "tokenBefore": "@画像.png",
+                "tokenAfter": "<image>",
+                "placeholderAfter": "[Image #1]",
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "localImageBefore": 0,
+                "localImageAfter": 1,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "needsRedraw": true,
+                "cursorBefore": 14,
+                "cursorAfter": 21,
+                "cursorClamped": true
+              },
+              {
+                "kind": "file_popup_select",
+                "keyName": "unreadable-image-falls-back",
+                "inputText": "open @missing please",
+                "outputText": "open /tmp/missing.png  please",
+                "selectedPath": "/tmp/missing.png",
+                "tokenBefore": "@missing",
+                "tokenAfter": "/tmp/missing.png",
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "localImageBefore": 0,
+                "localImageAfter": 0,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 0,
+                "elementAfter": 0,
+                "elementPayloads": "",
+                "needsRedraw": true,
+                "cursorBefore": 10,
+                "cursorAfter": 22
+              },
+              {
+                "kind": "file_popup_select",
+                "keyName": "non-image-whitespace-path-quotes",
+                "inputText": "@doc",
+                "outputText": "\"docs/My File.md\" ",
+                "selectedPath": "docs/My File.md",
+                "tokenBefore": "@doc",
+                "tokenAfter": "\"docs/My File.md\"",
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "localImageBefore": 0,
+                "localImageAfter": 0,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 0,
+                "elementAfter": 0,
+                "elementPayloads": "",
+                "needsRedraw": true,
+                "cursorBefore": 4,
+                "cursorAfter": 18
+              },
+              {
+                "kind": "file_popup_select",
+                "keyName": "large-paste-element-retained",
+                "inputText": "[Pasted Content 105 chars] @ma",
+                "outputText": "[Pasted Content 105 chars] src/main.rs ",
+                "selectedPath": "src/main.rs",
+                "tokenBefore": "@ma",
+                "tokenAfter": "src/main.rs",
+                "placeholderBefore": "[Pasted Content 105 chars]",
+                "placeholderAfter": "[Pasted Content 105 chars]",
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "pendingPasteBefore": 1,
+                "pendingPasteAfter": 1,
+                "localImageBefore": 0,
+                "localImageAfter": 0,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Pasted Content 105 chars]",
+                "needsRedraw": true,
+                "attachmentsRetained": true,
+                "cursorBefore": 30,
+                "cursorAfter": 39
+              },
+              {
+                "kind": "file_popup_select",
+                "keyName": "remote-offset-image-selection",
+                "inputText": "@local",
+                "outputText": "[Image #3] ",
+                "selectedPath": "/tmp/local.png",
+                "tokenBefore": "@local",
+                "tokenAfter": "<image>",
+                "placeholderAfter": "[Image #3]",
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "localImageBefore": 0,
+                "localImageAfter": 1,
+                "remoteImageBefore": 2,
+                "remoteImageAfter": 2,
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #3]",
+                "needsRedraw": true,
+                "cursorBefore": 6,
+                "cursorAfter": 11
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_composer_file_popup_image_selection_effects_rejected",
+                "noLiveInput": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.file_popup_select=enter-image-replaces-token:selected=/tmp/selected.png:token=@img-><image>:text=open @img please->open [Image #1]  please:placeholder=->[Image #1]:local=0->1:remote=0->0:elements=0->1:payloads=[Image #1]:popup=file->none:redraw=true:cursor=7->16:clamped=false:retained=false\ntui.composer_editing.file_popup_select=multibyte-image-token-boundary:selected=/tmp/画像.png:token=@画像.png-><image>:text=日本語 @画像.png 次->日本語 [Image #1]  次:placeholder=->[Image #1]:local=0->1:remote=0->0:elements=0->1:payloads=[Image #1]:popup=file->none:redraw=true:cursor=14->21:clamped=true:retained=false\ntui.composer_editing.file_popup_select=unreadable-image-falls-back:selected=/tmp/missing.png:token=@missing->/tmp/missing.png:text=open @missing please->open /tmp/missing.png  please:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:popup=file->none:redraw=true:cursor=10->22:clamped=false:retained=false\ntui.composer_editing.file_popup_select=non-image-whitespace-path-quotes:selected=docs/My File.md:token=@doc->\"docs/My File.md\":text=@doc->\"docs/My File.md\" :placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:popup=file->none:redraw=true:cursor=4->18:clamped=false:retained=false\ntui.composer_editing.file_popup_select=large-paste-element-retained:selected=src/main.rs:token=@ma->src/main.rs:text=[Pasted Content 105 chars] @ma->[Pasted Content 105 chars] src/main.rs :placeholder=[Pasted Content 105 chars]->[Pasted Content 105 chars]:local=0->0:remote=0->0:elements=1->1:payloads=[Pasted Content 105 chars]:popup=file->none:redraw=true:cursor=30->39:clamped=false:retained=true\ntui.composer_editing.file_popup_select=remote-offset-image-selection:selected=/tmp/local.png:token=@local-><image>:text=@local->[Image #3] :placeholder=->[Image #3]:local=0->1:remote=2->2:elements=0->1:payloads=[Image #3]:popup=file->none:redraw=true:cursor=6->11:clamped=false:retained=false\ntui.composer_editing.failure=live_composer_file_popup_image_selection_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer file popup image selection\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.file_popup_select=enter-image-replaces-token:selected=/tmp/selected.png:token=@img-><image>:text=open @img please->open [Image #1]  please:placeholder=->[Image #1]:local=0->1:remote=0->0:elements=0->1:payloads=[Image #1]:popup=file->none:redraw=true:cursor=7->16:clamped=false:retained=false\ntui.composer_editing.file_popup_select=multibyte-image-token-boundary:selected=/tmp/画像.png:token=@画像.png-><image>:text=日本語 @画像.png 次->日本語 [Image #1]  次:placeholder=->[Image #1]:local=0->1:remote=0->0:elements=0->1:payloads=[Image #1]:popup=file->none:redraw=true:cursor=14->21:clamped=true:retained=false\ntui.composer_editing.file_popup_select=unreadable-image-falls-back:selected=/tmp/missing.png:token=@missing->/tmp/missing.png:text=open @missing please->open /tmp/missing.png  please:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:popup=file->none:redraw=true:cursor=10->22:clamped=false:retained=false\ntui.composer_editing.file_popup_select=non-image-whitespace-path-quotes:selected=docs/My File.md:token=@doc->\"docs/My File.md\":text=@doc->\"docs/My File.md\" :placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:popup=file->none:redraw=true:cursor=4->18:clamped=false:retained=false\ntui.composer_editing.file_popup_select=large-paste-element-retained:selected=src/main.rs:token=@ma->src/main.rs:text=[Pasted Content 105 chars] @ma->[Pasted Content 105 chars] src/main.rs :placeholder=[Pasted Content 105 chars]->[Pasted Content 105 chars]:local=0->0:remote=0->0:elements=1->1:payloads=[Pasted Content 105 chars]:popup=file->none:redraw=true:cursor=30->39:clamped=false:retained=true\ntui.composer_editing.file_popup_select=remote-offset-image-selection:selected=/tmp/local.png:token=@local-><image>:text=@local->[Image #3] :placeholder=->[Image #3]:local=0->1:remote=2->2:elements=0->1:payloads=[Image #3]:popup=file->none:redraw=true:cursor=6->11:clamped=false:retained=false\ntui.composer_editing.failure=live_composer_file_popup_image_selection_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-popup-sync-suppression-clears",
       "frame": {
         "name": "composer-popup-sync-suppression-clears",

@@ -11384,6 +11384,13 @@ class TuiSmokeEventLoop {
 						+ ":local=" + action.localImageTransitionText() + ":remote=" + action.remoteImageBefore + "->" + action.remoteImageAfter
 						+ ":elements=" + action.elementTransitionText() + ":payloads=" + action.elementPayloads + ":redraw=" + action.needsRedraw
 						+ ":burst_clear=" + action.burstWindowCleared + ":sync=" + action.popupSynced + ":cursor=" + action.cursorTransitionText());
+				case TuiSmokeComposerEditingActionKind.FilePopupSelect:
+					trace.push("tui.composer_editing.file_popup_select=" + action.keyName + ":selected=" + action.selectedPath + ":token="
+						+ action.tokenBefore + "->" + action.tokenAfter + ":text=" + action.inputText + "->" + action.outputText + ":placeholder="
+						+ action.placeholderBefore + "->" + action.placeholderAfter + ":local=" + action.localImageTransitionText() + ":remote="
+						+ action.remoteImageBefore + "->" + action.remoteImageAfter + ":elements=" + action.elementTransitionText() + ":payloads="
+						+ action.elementPayloads + ":popup=" + action.popupTransitionText() + ":redraw=" + action.needsRedraw + ":cursor="
+						+ action.cursorTransitionText() + ":clamped=" + action.cursorClamped + ":retained=" + action.attachmentsRetained);
 				case TuiSmokeComposerEditingActionKind.PasteBurstFlush:
 					trace.push("tui.composer_editing.burst_flush=" + action.keyName + ":active=" + action.pasteBurstActiveBefore + "->"
 						+ action.pasteBurstActiveAfter + ":flushed=" + action.pasteBurstFlushed + ":newline=" + action.newlineCaptured + ":window_cleared="

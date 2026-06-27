@@ -13,6 +13,9 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final canonicalText:String;
 	final textareaText:String;
 	final submissionText:String;
+	final selectedPath:String;
+	final tokenBefore:String;
+	final tokenAfter:String;
 	final placeholderBefore:String;
 	final placeholderAfter:String;
 	final elementPayloads:String;
@@ -87,6 +90,9 @@ class TuiSmokeComposerEditingAction {
 	public final canonicalText:String;
 	public final textareaText:String;
 	public final submissionText:String;
+	public final selectedPath:String;
+	public final tokenBefore:String;
+	public final tokenAfter:String;
 	public final placeholderBefore:String;
 	public final placeholderAfter:String;
 	public final elementPayloads:String;
