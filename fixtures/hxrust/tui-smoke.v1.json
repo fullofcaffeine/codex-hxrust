@@ -7673,6 +7673,188 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer history basic reconcile\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.history=up:handled=true:applied=true:cursor=0->12\ntui.composer_editing.basic_input=char-h:text=->h:cursor=0->1:pending=0->0:redraw=true\ntui.composer_editing.basic_input=bang:text=->!:cursor=0->0:pending=0->0:redraw=true\ntui.composer_editing.reconcile=backspace:elements=2->1:pending=1->0:local=1->0:pending_pruned=true:locals_pruned=true\ntui.composer_editing.shortcut_overlay=?:handled=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-textarea-input-routing-headless",
+      "frame": {
+        "name": "composer-textarea-input-routing-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer textarea input routing"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "textarea_route",
+                "keyName": "disabled-char",
+                "inputEnabled": false,
+                "releaseIgnored": false,
+                "popupBefore": "none",
+                "popupAfter": "none",
+                "inputText": "draft",
+                "outputText": "draft",
+                "cursorBefore": 5,
+                "cursorAfter": 5,
+                "modeBefore": "insert",
+                "modeAfter": "insert",
+                "textareaDelegated": false,
+                "pasteBurstDelegated": false,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "popupSynced": false,
+                "vimReset": false,
+                "submissionReadyPreserved": true,
+                "needsRedraw": false
+              },
+              {
+                "kind": "textarea_route",
+                "keyName": "release-char",
+                "inputEnabled": true,
+                "releaseIgnored": true,
+                "popupBefore": "none",
+                "popupAfter": "none",
+                "inputText": "draft",
+                "outputText": "draft",
+                "cursorBefore": 5,
+                "cursorAfter": 5,
+                "modeBefore": "insert",
+                "modeAfter": "insert",
+                "textareaDelegated": false,
+                "pasteBurstDelegated": false,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "popupSynced": false,
+                "vimReset": false,
+                "submissionReadyPreserved": true,
+                "needsRedraw": false
+              },
+              {
+                "kind": "textarea_route",
+                "keyName": "char-a",
+                "inputEnabled": true,
+                "releaseIgnored": false,
+                "popupBefore": "none",
+                "popupAfter": "none",
+                "inputText": "",
+                "outputText": "a",
+                "cursorBefore": 0,
+                "cursorAfter": 1,
+                "modeBefore": "insert",
+                "modeAfter": "insert",
+                "textareaDelegated": true,
+                "pasteBurstDelegated": false,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "popupSynced": true,
+                "vimReset": false,
+                "submissionReadyPreserved": true,
+                "needsRedraw": true
+              },
+              {
+                "kind": "textarea_route",
+                "keyName": "ime-char",
+                "inputEnabled": true,
+                "releaseIgnored": false,
+                "popupBefore": "none",
+                "popupAfter": "none",
+                "inputText": "ab",
+                "outputText": "ab你",
+                "cursorBefore": 2,
+                "cursorAfter": 5,
+                "modeBefore": "insert",
+                "modeAfter": "insert",
+                "textareaDelegated": true,
+                "pasteBurstDelegated": true,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "popupSynced": true,
+                "vimReset": false,
+                "submissionReadyPreserved": true,
+                "needsRedraw": true
+              },
+              {
+                "kind": "textarea_route",
+                "keyName": "file-popup-esc",
+                "inputEnabled": true,
+                "releaseIgnored": false,
+                "popupBefore": "file",
+                "popupAfter": "none",
+                "inputText": "@docs",
+                "outputText": "@docs",
+                "cursorBefore": 5,
+                "cursorAfter": 5,
+                "modeBefore": "insert",
+                "modeAfter": "insert",
+                "textareaDelegated": false,
+                "pasteBurstDelegated": false,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "popupSynced": true,
+                "vimReset": false,
+                "submissionReadyPreserved": true,
+                "needsRedraw": true
+              },
+              {
+                "kind": "textarea_route",
+                "keyName": "submit-resets-vim",
+                "inputEnabled": true,
+                "releaseIgnored": false,
+                "popupBefore": "none",
+                "popupAfter": "none",
+                "inputText": "/diff",
+                "outputText": "",
+                "cursorBefore": 4,
+                "cursorAfter": 0,
+                "modeBefore": "normal",
+                "modeAfter": "insert",
+                "textareaDelegated": false,
+                "pasteBurstDelegated": false,
+                "pendingPasteBefore": 0,
+                "pendingPasteAfter": 0,
+                "popupSynced": true,
+                "vimReset": true,
+                "submissionReadyPreserved": true,
+                "needsRedraw": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_composer_textarea_input_effects_rejected",
+                "noLiveInput": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.textarea_route=disabled-char:input_enabled=false:release_ignored=false:popup=none->none:text=draft->draft:cursor=5->5:mode=insert->insert:textarea=false:paste_burst=false:pending=0->0:sync=false:vim_reset=false:ready_preserved=true:redraw=false\ntui.composer_editing.textarea_route=release-char:input_enabled=true:release_ignored=true:popup=none->none:text=draft->draft:cursor=5->5:mode=insert->insert:textarea=false:paste_burst=false:pending=0->0:sync=false:vim_reset=false:ready_preserved=true:redraw=false\ntui.composer_editing.textarea_route=char-a:input_enabled=true:release_ignored=false:popup=none->none:text=->a:cursor=0->1:mode=insert->insert:textarea=true:paste_burst=false:pending=0->0:sync=true:vim_reset=false:ready_preserved=true:redraw=true\ntui.composer_editing.textarea_route=ime-char:input_enabled=true:release_ignored=false:popup=none->none:text=ab->ab你:cursor=2->5:mode=insert->insert:textarea=true:paste_burst=true:pending=0->0:sync=true:vim_reset=false:ready_preserved=true:redraw=true\ntui.composer_editing.textarea_route=file-popup-esc:input_enabled=true:release_ignored=false:popup=file->none:text=@docs->@docs:cursor=5->5:mode=insert->insert:textarea=false:paste_burst=false:pending=0->0:sync=true:vim_reset=false:ready_preserved=true:redraw=true\ntui.composer_editing.textarea_route=submit-resets-vim:input_enabled=true:release_ignored=false:popup=none->none:text=/diff->:cursor=4->0:mode=normal->insert:textarea=false:paste_burst=false:pending=0->0:sync=true:vim_reset=true:ready_preserved=true:redraw=true\ntui.composer_editing.failure=live_composer_textarea_input_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer textarea input routing\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.textarea_route=disabled-char:input_enabled=false:release_ignored=false:popup=none->none:text=draft->draft:cursor=5->5:mode=insert->insert:textarea=false:paste_burst=false:pending=0->0:sync=false:vim_reset=false:ready_preserved=true:redraw=false\ntui.composer_editing.textarea_route=release-char:input_enabled=true:release_ignored=true:popup=none->none:text=draft->draft:cursor=5->5:mode=insert->insert:textarea=false:paste_burst=false:pending=0->0:sync=false:vim_reset=false:ready_preserved=true:redraw=false\ntui.composer_editing.textarea_route=char-a:input_enabled=true:release_ignored=false:popup=none->none:text=->a:cursor=0->1:mode=insert->insert:textarea=true:paste_burst=false:pending=0->0:sync=true:vim_reset=false:ready_preserved=true:redraw=true\ntui.composer_editing.textarea_route=ime-char:input_enabled=true:release_ignored=false:popup=none->none:text=ab->ab你:cursor=2->5:mode=insert->insert:textarea=true:paste_burst=true:pending=0->0:sync=true:vim_reset=false:ready_preserved=true:redraw=true\ntui.composer_editing.textarea_route=file-popup-esc:input_enabled=true:release_ignored=false:popup=file->none:text=@docs->@docs:cursor=5->5:mode=insert->insert:textarea=false:paste_burst=false:pending=0->0:sync=true:vim_reset=false:ready_preserved=true:redraw=true\ntui.composer_editing.textarea_route=submit-resets-vim:input_enabled=true:release_ignored=false:popup=none->none:text=/diff->:cursor=4->0:mode=normal->insert:textarea=false:paste_burst=false:pending=0->0:sync=true:vim_reset=true:ready_preserved=true:redraw=true\ntui.composer_editing.failure=live_composer_textarea_input_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-popup-sync-suppression-clears",
       "frame": {
         "name": "composer-popup-sync-suppression-clears",

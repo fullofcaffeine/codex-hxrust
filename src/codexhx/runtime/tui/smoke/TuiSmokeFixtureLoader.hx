@@ -5091,6 +5091,8 @@ class TuiSmokeFixtureLoader {
 				result: TuiSmokeComposerEditingResultKind.fromString(optionalStringField(value, "result", "unknown")),
 				modeBefore: TuiSmokeComposerEditingModeKind.fromString(optionalStringField(value, "modeBefore", "unknown")),
 				modeAfter: TuiSmokeComposerEditingModeKind.fromString(optionalStringField(value, "modeAfter", "unknown")),
+				popupBefore: TuiSmokeComposerPopupKind.fromString(optionalStringField(value, "popupBefore", "unknown")),
+				popupAfter: TuiSmokeComposerPopupKind.fromString(optionalStringField(value, "popupAfter", "unknown")),
 				keyName: optionalStringField(value, "keyName", ""),
 				inputText: optionalStringField(value, "inputText", ""),
 				outputText: optionalStringField(value, "outputText", ""),
@@ -5130,6 +5132,12 @@ class TuiSmokeFixtureLoader {
 				historyApplied: optionalBoolField(value, "historyApplied", false),
 				pendingPastePruned: optionalBoolField(value, "pendingPastePruned", false),
 				localImagesPruned: optionalBoolField(value, "localImagesPruned", false),
+				inputEnabled: optionalBoolField(value, "inputEnabled", true),
+				textareaDelegated: optionalBoolField(value, "textareaDelegated", false),
+				pasteBurstDelegated: optionalBoolField(value, "pasteBurstDelegated", false),
+				popupSynced: optionalBoolField(value, "popupSynced", false),
+				vimReset: optionalBoolField(value, "vimReset", false),
+				submissionReadyPreserved: optionalBoolField(value, "submissionReadyPreserved", false),
 				noLiveInput: optionalBoolField(value, "noLiveInput", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));

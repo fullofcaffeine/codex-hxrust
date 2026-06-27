@@ -5,6 +5,8 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final result:TuiSmokeComposerEditingResultKind;
 	final modeBefore:TuiSmokeComposerEditingModeKind;
 	final modeAfter:TuiSmokeComposerEditingModeKind;
+	final popupBefore:TuiSmokeComposerPopupKind;
+	final popupAfter:TuiSmokeComposerPopupKind;
 	final keyName:String;
 	final inputText:String;
 	final outputText:String;
@@ -44,6 +46,12 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final historyApplied:Bool;
 	final pendingPastePruned:Bool;
 	final localImagesPruned:Bool;
+	final inputEnabled:Bool;
+	final textareaDelegated:Bool;
+	final pasteBurstDelegated:Bool;
+	final popupSynced:Bool;
+	final vimReset:Bool;
+	final submissionReadyPreserved:Bool;
 	final noLiveInput:Bool;
 	final unsupportedRejected:Bool;
 }
@@ -54,6 +62,8 @@ class TuiSmokeComposerEditingAction {
 	public final result:TuiSmokeComposerEditingResultKind;
 	public final modeBefore:TuiSmokeComposerEditingModeKind;
 	public final modeAfter:TuiSmokeComposerEditingModeKind;
+	public final popupBefore:TuiSmokeComposerPopupKind;
+	public final popupAfter:TuiSmokeComposerPopupKind;
 	public final keyName:String;
 	public final inputText:String;
 	public final outputText:String;
@@ -93,6 +103,12 @@ class TuiSmokeComposerEditingAction {
 	public final historyApplied:Bool;
 	public final pendingPastePruned:Bool;
 	public final localImagesPruned:Bool;
+	public final inputEnabled:Bool;
+	public final textareaDelegated:Bool;
+	public final pasteBurstDelegated:Bool;
+	public final popupSynced:Bool;
+	public final vimReset:Bool;
+	public final submissionReadyPreserved:Bool;
 	public final noLiveInput:Bool;
 	public final unsupportedRejected:Bool;
 
@@ -118,5 +134,9 @@ class TuiSmokeComposerEditingAction {
 
 	public function selectedRemoteTransitionText():String {
 		return selectedRemoteBefore + "->" + selectedRemoteAfter;
+	}
+
+	public function popupTransitionText():String {
+		return popupBefore + "->" + popupAfter;
 	}
 }
