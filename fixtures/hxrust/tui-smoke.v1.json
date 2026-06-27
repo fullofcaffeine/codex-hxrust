@@ -57,6 +57,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/selection_tabs.rs",
       "../codex/codex-rs/tui/src/bottom_pane/action_required_title.rs",
       "../codex/codex-rs/tui/src/bottom_pane/popup_consts.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/status_line_style.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -19624,6 +19625,233 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.popup_consts.plan=headless\ntui.popup_consts.max_rows=shared-limit:expected=8:actual=8\ntui.popup_consts.standard_hint=default-enter-esc:hint=Press enter to confirm or esc to go back\ntui.popup_consts.keymap_hint=first-bindings:accept=ctrl + a|shift + b:cancel=esc|ctrl + c:hint=Press ctrl + a to confirm or esc to go back\ntui.popup_consts.accept_cancel=accept-only:accept=enter:cancel=<none>:hint=Press enter to apply\ntui.popup_consts.accept_cancel=cancel-only:accept=<none>:cancel=esc:hint=Press esc to close\ntui.popup_consts.accept_cancel=empty-bindings:accept=<none>:cancel=<none>:hint=<empty>\ntui.popup_consts.failure=live_popup_consts_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> popup constants and hints\ninput> \ntrace:\ntui.popup_consts.plan=headless\ntui.popup_consts.max_rows=shared-limit:expected=8:actual=8\ntui.popup_consts.standard_hint=default-enter-esc:hint=Press enter to confirm or esc to go back\ntui.popup_consts.keymap_hint=first-bindings:accept=ctrl + a|shift + b:cancel=esc|ctrl + c:hint=Press ctrl + a to confirm or esc to go back\ntui.popup_consts.accept_cancel=accept-only:accept=enter:cancel=<none>:hint=Press enter to apply\ntui.popup_consts.accept_cancel=cancel-only:accept=<none>:cancel=esc:hint=Press esc to close\ntui.popup_consts.accept_cancel=empty-bindings:accept=<none>:cancel=<none>:hint=<empty>\ntui.popup_consts.failure=live_popup_consts_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "status-line-style-headless",
+      "frame": {
+        "name": "status-line-style-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "status line style boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "status_line_style",
+          "statusLineStyle": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "line",
+                "name": "ordered-fallback",
+                "useThemeColors": true,
+                "segments": [
+                  {
+                    "item": "model-name",
+                    "text": "gpt-5"
+                  },
+                  {
+                    "item": "current-dir",
+                    "text": "/repo"
+                  },
+                  {
+                    "item": "git-branch",
+                    "text": "main"
+                  }
+                ],
+                "expectedPresent": true,
+                "expectedText": "gpt-5 · /repo · main",
+                "expectedSpans": [
+                  "gpt-5:cyan",
+                  " · :dim",
+                  "/repo:green",
+                  " · :dim",
+                  "main:magenta"
+                ]
+              },
+              {
+                "kind": "line",
+                "name": "fallback-families",
+                "useThemeColors": true,
+                "segments": [
+                  {
+                    "item": "status",
+                    "text": "Working"
+                  },
+                  {
+                    "item": "context-used",
+                    "text": "Context 12% used"
+                  },
+                  {
+                    "item": "five-hour-limit",
+                    "text": "primary 40%"
+                  },
+                  {
+                    "item": "codex-version",
+                    "text": "0.0.0"
+                  },
+                  {
+                    "item": "fast-mode",
+                    "text": "Fast on"
+                  },
+                  {
+                    "item": "thread-title",
+                    "text": "thread title"
+                  },
+                  {
+                    "item": "task-progress",
+                    "text": "Tasks 1/2"
+                  }
+                ],
+                "expectedPresent": true,
+                "expectedText": "Working · Context 12% used · primary 40% · 0.0.0 · Fast on · thread title · Tasks 1/2",
+                "expectedSpans": [
+                  "Working:cyan",
+                  " · :dim",
+                  "Context 12% used:green",
+                  " · :dim",
+                  "primary 40%:magenta",
+                  " · :dim",
+                  "0.0.0:cyan",
+                  " · :dim",
+                  "Fast on:cyan",
+                  " · :dim",
+                  "thread title:magenta",
+                  " · :dim",
+                  "Tasks 1/2:green"
+                ]
+              },
+              {
+                "kind": "line",
+                "name": "theme-override",
+                "useThemeColors": true,
+                "themeAccent": "model",
+                "themeColor": "red",
+                "segments": [
+                  {
+                    "item": "model-name",
+                    "text": "gpt-5"
+                  },
+                  {
+                    "item": "context-used",
+                    "text": "Context 12% used"
+                  }
+                ],
+                "expectedPresent": true,
+                "expectedText": "gpt-5 · Context 12% used",
+                "expectedSpans": [
+                  "gpt-5:red",
+                  " · :dim",
+                  "Context 12% used:green"
+                ]
+              },
+              {
+                "kind": "line",
+                "name": "rgb-soften",
+                "useThemeColors": true,
+                "themeAccent": "model",
+                "themeColor": "rgb(255,0,0)",
+                "segments": [
+                  {
+                    "item": "model-name",
+                    "text": "gpt-5"
+                  }
+                ],
+                "expectedPresent": true,
+                "expectedText": "gpt-5",
+                "expectedSpans": [
+                  "gpt-5:rgb(228,11,11)"
+                ]
+              },
+              {
+                "kind": "line",
+                "name": "theme-disabled",
+                "useThemeColors": false,
+                "segments": [
+                  {
+                    "item": "model-name",
+                    "text": "gpt-5"
+                  },
+                  {
+                    "item": "context-used",
+                    "text": "Context 12% used"
+                  }
+                ],
+                "expectedPresent": true,
+                "expectedText": "gpt-5 · Context 12% used",
+                "expectedSpans": [
+                  "gpt-5:dim",
+                  " · :dim",
+                  "Context 12% used:dim"
+                ]
+              },
+              {
+                "kind": "line",
+                "name": "pull-request-underline",
+                "useThemeColors": false,
+                "segments": [
+                  {
+                    "item": "pull-request",
+                    "text": "PR #20252"
+                  }
+                ],
+                "expectedPresent": true,
+                "expectedText": "PR #20252",
+                "expectedSpans": [
+                  "PR #20252:dim+underline"
+                ]
+              },
+              {
+                "kind": "line",
+                "name": "empty-none",
+                "useThemeColors": true,
+                "segments": [],
+                "expectedPresent": false,
+                "expectedText": "",
+                "expectedSpans": []
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_status_line_style_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.status_line_style.plan=headless\ntui.status_line_style.line=ordered-fallback:theme=true:present=true:text=gpt-5 · /repo · main:spans=gpt-5:cyan| · :dim|/repo:green| · :dim|main:magenta\ntui.status_line_style.line=fallback-families:theme=true:present=true:text=Working · Context 12% used · primary 40% · 0.0.0 · Fast on · thread title · Tasks 1/2:spans=Working:cyan| · :dim|Context 12% used:green| · :dim|primary 40%:magenta| · :dim|0.0.0:cyan| · :dim|Fast on:cyan| · :dim|thread title:magenta| · :dim|Tasks 1/2:green\ntui.status_line_style.line=theme-override:theme=true:present=true:text=gpt-5 · Context 12% used:spans=gpt-5:red| · :dim|Context 12% used:green\ntui.status_line_style.line=rgb-soften:theme=true:present=true:text=gpt-5:spans=gpt-5:rgb(228,11,11)\ntui.status_line_style.line=theme-disabled:theme=false:present=true:text=gpt-5 · Context 12% used:spans=gpt-5:dim| · :dim|Context 12% used:dim\ntui.status_line_style.line=pull-request-underline:theme=false:present=true:text=PR #20252:spans=PR #20252:dim+underline\ntui.status_line_style.line=empty-none:theme=true:present=false:text=<empty>:spans=<none>\ntui.status_line_style.failure=live_status_line_style_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> status line style boundary\ninput> \ntrace:\ntui.status_line_style.plan=headless\ntui.status_line_style.line=ordered-fallback:theme=true:present=true:text=gpt-5 · /repo · main:spans=gpt-5:cyan| · :dim|/repo:green| · :dim|main:magenta\ntui.status_line_style.line=fallback-families:theme=true:present=true:text=Working · Context 12% used · primary 40% · 0.0.0 · Fast on · thread title · Tasks 1/2:spans=Working:cyan| · :dim|Context 12% used:green| · :dim|primary 40%:magenta| · :dim|0.0.0:cyan| · :dim|Fast on:cyan| · :dim|thread title:magenta| · :dim|Tasks 1/2:green\ntui.status_line_style.line=theme-override:theme=true:present=true:text=gpt-5 · Context 12% used:spans=gpt-5:red| · :dim|Context 12% used:green\ntui.status_line_style.line=rgb-soften:theme=true:present=true:text=gpt-5:spans=gpt-5:rgb(228,11,11)\ntui.status_line_style.line=theme-disabled:theme=false:present=true:text=gpt-5 · Context 12% used:spans=gpt-5:dim| · :dim|Context 12% used:dim\ntui.status_line_style.line=pull-request-underline:theme=false:present=true:text=PR #20252:spans=PR #20252:dim+underline\ntui.status_line_style.line=empty-none:theme=true:present=false:text=<empty>:spans=<none>\ntui.status_line_style.failure=live_status_line_style_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

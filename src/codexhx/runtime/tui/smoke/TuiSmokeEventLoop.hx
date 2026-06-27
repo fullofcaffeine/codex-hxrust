@@ -430,6 +430,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.StatusLineStyle:
+					if (!traceStatusLineStyle(event.statusLineStyle, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -5017,6 +5022,149 @@ class TuiSmokeEventLoop {
 		final out:Array<String> = [];
 		for (binding in bindings)
 			out.push(traceText(binding));
+		return out.join("|");
+	}
+
+	static function traceStatusLineStyle(plan:TuiSmokeStatusLineStylePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.status_line_style.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.status_line_style.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeStatusLineStyleActionKind.Line:
+					final actualPresent = action.segments.length > 0;
+					final actualText = statusLineStyleText(action.segments);
+					final actualSpans = statusLineStyleSpans(action);
+					if (actualPresent != action.expectedPresent
+						|| actualText != action.expectedText
+						|| actualSpans.join("|") != action.expectedSpans.join("|")) {
+						trace.push("tui.status_line_style.line_mismatch=" + action.name + ":present=" + actualPresent + ":text=" + traceText(actualText)
+							+ ":spans=" + statusLineStyleListTrace(actualSpans));
+						return false;
+					}
+					trace.push("tui.status_line_style.line=" + action.name + ":theme=" + action.useThemeColors + ":present=" + actualPresent + ":text="
+						+ traceText(actualText) + ":spans=" + statusLineStyleListTrace(actualSpans));
+				case TuiSmokeStatusLineStyleActionKind.Failure:
+					trace.push("tui.status_line_style.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.status_line_style.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function statusLineStyleText(segments:Array<TuiSmokeStatusLineStyleSegment>):String {
+		final parts:Array<String> = [];
+		for (segment in segments)
+			parts.push(segment.text);
+		return parts.join(" · ");
+	}
+
+	static function statusLineStyleSpans(action:TuiSmokeStatusLineStyleAction):Array<String> {
+		final out:Array<String> = [];
+		var first = true;
+		for (segment in action.segments) {
+			if (!first)
+				out.push(" · :dim");
+			first = false;
+			out.push(segment.text + ":" + statusLineStyleStyleFor(segment.item, action.useThemeColors, action.themeAccent, action.themeColor));
+		}
+		return out;
+	}
+
+	static function statusLineStyleStyleFor(item:String, useThemeColors:Bool, themeAccent:String, themeColor:String):String {
+		var style = "dim";
+		if (useThemeColors) {
+			final accent = statusLineStyleAccentFor(item);
+			style = accent == themeAccent
+				&& themeColor != "" ? statusLineStyleSoftenColor(themeColor) : statusLineStyleFallbackColor(accent);
+		}
+		if (item == "pull-request")
+			style += "+underline";
+		return style;
+	}
+
+	static function statusLineStyleAccentFor(item:String):String {
+		return switch item {
+			case "model-name" | "model-with-reasoning" | "reasoning": "model";
+			case "current-dir" | "project-root": "path";
+			case "git-branch" | "pull-request" | "branch-changes": "branch";
+			case "status": "state";
+			case "context-remaining" | "context-used" | "context-window-size" | "used-tokens" | "total-input-tokens" | "total-output-tokens": "usage";
+			case "five-hour-limit" | "weekly-limit": "limit";
+			case "codex-version" | "session-id": "metadata";
+			case "fast-mode" | "raw-output" | "permissions" | "approval-mode": "mode";
+			case "thread-title": "thread";
+			case "task-progress": "progress";
+			case _: "metadata";
+		}
+	}
+
+	static function statusLineStyleFallbackColor(accent:String):String {
+		return switch accent {
+			case "model" | "state" | "metadata" | "mode": "cyan";
+			case "path" | "usage" | "progress": "green";
+			case "branch" | "limit" | "thread": "magenta";
+			case _: "cyan";
+		}
+	}
+
+	static function statusLineStyleSoftenColor(color:String):String {
+		if (color == "light-red")
+			return "red";
+		if (color == "light-green")
+			return "green";
+		if (color == "light-yellow")
+			return "yellow";
+		if (color == "light-blue")
+			return "blue";
+		if (color == "light-magenta")
+			return "magenta";
+		if (color == "light-cyan")
+			return "cyan";
+		if (color == "white")
+			return "gray";
+		if (StringTools.startsWith(color, "rgb(") && StringTools.endsWith(color, ")")) {
+			final body = color.substr(4, color.length - 5);
+			final parts = body.split(",");
+			if (parts.length == 3) {
+				final r = Std.parseInt(StringTools.trim(parts[0]));
+				final g = Std.parseInt(StringTools.trim(parts[1]));
+				final b = Std.parseInt(StringTools.trim(parts[2]));
+				if (r != null && g != null && b != null)
+					return "rgb("
+						+ statusLineStyleSoftenRgbChannel(r, statusLineStyleWeightedLuma(r, g, b))
+						+ ","
+						+ statusLineStyleSoftenRgbChannel(g, statusLineStyleWeightedLuma(r, g, b))
+						+ ","
+						+ statusLineStyleSoftenRgbChannel(b, statusLineStyleWeightedLuma(r, g, b))
+						+ ")";
+			}
+		}
+		return color;
+	}
+
+	static function statusLineStyleWeightedLuma(r:Int, g:Int, b:Int):Int {
+		return Std.int((77 * r + 150 * g + 29 * b) / 256);
+	}
+
+	static function statusLineStyleSoftenRgbChannel(channel:Int, luma:Int):Int {
+		final softened = Std.int((channel * 85 + luma * 15 + 50) / 100);
+		return Std.int((softened * 100 + 50) / 100);
+	}
+
+	static function statusLineStyleListTrace(items:Array<String>):String {
+		if (items.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (item in items)
+			out.push(traceText(item));
 		return out.join("|");
 	}
 

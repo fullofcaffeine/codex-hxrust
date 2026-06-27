@@ -125,6 +125,7 @@ class TuiSmokeFixtureLoader {
 				selectionTabs: optionalSelectionTabsPlan(value, "selectionTabs"),
 				actionRequiredTitle: optionalActionRequiredTitlePlan(value, "actionRequiredTitle"),
 				popupConsts: optionalPopupConstsPlan(value, "popupConsts"),
+				statusLineStyle: optionalStatusLineStylePlan(value, "statusLineStyle"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -734,6 +735,57 @@ class TuiSmokeFixtureLoader {
 				noNetwork: optionalBoolField(value, "noNetwork", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalStatusLineStylePlan(object:Value, name:String):Null<TuiSmokeStatusLineStylePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeStatusLineStylePlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: statusLineStyleActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function statusLineStyleActions(values:Array<Value>):Array<TuiSmokeStatusLineStyleAction> {
+		final out:Array<TuiSmokeStatusLineStyleAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeStatusLineStyleAction({
+				kind: TuiSmokeStatusLineStyleActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				useThemeColors: optionalBoolField(value, "useThemeColors", true),
+				themeAccent: optionalStringField(value, "themeAccent", ""),
+				themeColor: optionalStringField(value, "themeColor", ""),
+				segments: statusLineStyleSegments(optionalArrayField(value, "segments")),
+				expectedPresent: optionalBoolField(value, "expectedPresent", false),
+				expectedText: optionalStringField(value, "expectedText", ""),
+				expectedSpans: optionalStringArrayField(value, "expectedSpans"),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function statusLineStyleSegments(values:Array<Value>):Array<TuiSmokeStatusLineStyleSegment> {
+		final out:Array<TuiSmokeStatusLineStyleSegment> = [];
+		for (value in values) {
+			out.push(new TuiSmokeStatusLineStyleSegment({
+				item: optionalStringField(value, "item", ""),
+				text: optionalStringField(value, "text", "")
 			}));
 		}
 		return out;
