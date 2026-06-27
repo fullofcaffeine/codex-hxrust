@@ -141,6 +141,48 @@ private typedef TuiSmokeMutableMultiSelectItem = {
 	final sectionBreakAfter:Bool;
 }
 
+private typedef TuiSmokeAppLinkViewState = {
+	final appId:String;
+	final title:String;
+	final description:String;
+	final instructions:String;
+	final suggestReason:String;
+	final url:String;
+	final isInstalled:Bool;
+	var isEnabled:Bool;
+	final suggestionType:String;
+	final hasTarget:Bool;
+	final targetServerName:String;
+	final targetRequestId:String;
+	var screen:String;
+	var selectedIndex:Int;
+	var complete:Bool;
+}
+
+private typedef TuiSmokeAppLinkViewResult = {
+	final labels:Array<String>;
+	final rows:Array<String>;
+	final selectedIndex:Int;
+	final screen:String;
+	final enabled:Bool;
+	final complete:Bool;
+	final events:Array<String>;
+	final dismissed:Bool;
+	final requiresTitleAction:Bool;
+	final height:Int;
+	final trace:String;
+}
+
+private typedef TuiSmokeAppLinkViewParamsResult = {
+	final admitted:Bool;
+	final summary:String;
+}
+
+private typedef TuiSmokeParsedAppLinkUrl = {
+	final ok:Bool;
+	final host:String;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -593,6 +635,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.MultiSelectPicker:
 					if (!traceMultiSelectPicker(event.multiSelectPicker, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.AppLinkView:
+					if (!traceAppLinkView(event.appLinkView, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -7287,6 +7334,381 @@ class TuiSmokeEventLoop {
 		for (item in items)
 			out.push(item.id);
 		return out;
+	}
+
+	static function traceAppLinkView(plan:TuiSmokeAppLinkViewPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowBrowserLaunch || plan.allowAppServerDelivery
+			|| plan.allowFilesystemMutation || plan.allowClipboardMutation || plan.allowNetwork || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.app_link_view.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.app_link_view.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeAppLinkViewActionKind.Params:
+					final result = appLinkViewParams(action);
+					if (result.admitted != action.expectedAdmitted || result.summary != action.expectedSummary) {
+						trace.push("tui.app_link_view.params_mismatch=" + action.name + ":admitted=" + result.admitted + ":summary=" + result.summary);
+						return false;
+					}
+					trace.push("tui.app_link_view.params=" + action.name + ":admitted=" + result.admitted + ":summary=" + result.summary);
+				case TuiSmokeAppLinkViewActionKind.Labels, TuiSmokeAppLinkViewActionKind.Move, TuiSmokeAppLinkViewActionKind.Activate,
+					TuiSmokeAppLinkViewActionKind.Dismiss, TuiSmokeAppLinkViewActionKind.Height:
+					final result = appLinkViewActionTrace(action);
+					if (!stringArraysEqual(result.labels, action.expectedLabels)
+						|| !stringArraysEqual(result.rows, action.expectedRows)
+						|| result.selectedIndex != action.expectedSelectedIndex
+						|| result.screen != action.expectedScreen
+						|| result.enabled != action.expectedEnabled
+						|| result.complete != action.expectedComplete
+						|| !stringArraysEqual(result.events, action.expectedEvents)
+						|| result.dismissed != action.expectedDismissed
+						|| result.requiresTitleAction != action.expectedRequiresTitleAction
+						|| result.height != action.expectedHeight) {
+						trace.push("tui.app_link_view." + action.kind + "_mismatch=" + action.name + ":" + result.trace);
+						return false;
+					}
+					trace.push("tui.app_link_view." + action.kind + "=" + action.name + ":" + result.trace);
+				case TuiSmokeAppLinkViewActionKind.Failure:
+					trace.push("tui.app_link_view.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_browser=" + action.noBrowserLaunch + ":no_app_server=" + action.noAppServerDelivery + ":no_fs="
+						+ action.noFilesystemMutation + ":no_clipboard=" + action.noClipboardMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.app_link_view.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function appLinkViewParams(action:TuiSmokeAppLinkViewAction):TuiSmokeAppLinkViewParamsResult {
+		final requireChatgptHost = action.serverName == "codex_apps";
+		final parsed = appLinkViewParseUrl(action.url, requireChatgptHost);
+		if (!parsed.ok)
+			return {admitted: false, summary: "rejected_url"};
+		if (requireChatgptHost) {
+			if (!action.hasAuthMeta || !action.authFailure)
+				return {admitted: false, summary: "rejected_auth_meta"};
+			final appId = StringTools.trim(action.connectorId) != "" ? StringTools.trim(action.connectorId) : action.elicitationId;
+			final title = StringTools.trim(action.connectorName) != "" ? StringTools.trim(action.connectorName) : appId;
+			return {admitted: true,
+				summary: "app="
+				+ traceText(appId)
+				+ ":title="
+				+ traceText(title)
+				+ ":url="
+				+ traceText(action.url)
+				+ ":suggestion=auth:target="
+				+ action.serverName
+				+ "/"
+				+ action.requestId};
+		}
+		return {admitted: true,
+			summary: "app="
+			+ traceText(action.elicitationId)
+			+ ":title=Action required:desc=Server: "
+			+ traceText(action.serverName)
+			+ ":url="
+			+ traceText(action.url)
+			+ ":suggestion=external_action:target="
+			+ action.serverName
+			+ "/"
+			+ action.requestId};
+	}
+
+	static function appLinkViewParseUrl(url:String, requireChatgptHost:Bool):TuiSmokeParsedAppLinkUrl {
+		if (!StringTools.startsWith(url, "https://"))
+			return {ok: false, host: ""};
+		final rest = url.substr("https://".length);
+		var end = rest.length;
+		for (marker in ["/", "?", "#"]) {
+			final at = rest.indexOf(marker);
+			if (at >= 0 && at < end)
+				end = at;
+		}
+		final authority = rest.substr(0, end);
+		if (authority == "" || authority.indexOf("@") >= 0)
+			return {ok: false, host: ""};
+		var host = authority;
+		final colon = host.indexOf(":");
+		if (colon >= 0)
+			host = host.substr(0, colon);
+		host = host.toLowerCase();
+		if (host == "")
+			return {ok: false, host: ""};
+		if (requireChatgptHost && !appLinkViewAllowedChatgptHost(host))
+			return {ok: false, host: host};
+		return {ok: true, host: host};
+	}
+
+	static function appLinkViewAllowedChatgptHost(host:String):Bool {
+		return host == "chatgpt.com"
+			|| host == "chatgpt-staging.com"
+			|| StringTools.endsWith(host, ".chatgpt.com")
+			|| StringTools.endsWith(host, ".chatgpt-staging.com");
+	}
+
+	static function appLinkViewActionTrace(action:TuiSmokeAppLinkViewAction):TuiSmokeAppLinkViewResult {
+		final state = appLinkViewState(action);
+		final events:Array<String> = [];
+		var dismissed = false;
+		if (action.kind == TuiSmokeAppLinkViewActionKind.Move) {
+			for (_ in 0...intMax(1, action.moveCount)) {
+				if (action.direction == "prev")
+					state.selectedIndex = intMax(0, state.selectedIndex - 1);
+				else
+					state.selectedIndex = intMin(appLinkViewLabels(state).length - 1, state.selectedIndex + 1);
+			}
+		} else if (action.kind == TuiSmokeAppLinkViewActionKind.Activate) {
+			appLinkViewActivate(state, events);
+		} else if (action.kind == TuiSmokeAppLinkViewActionKind.Dismiss) {
+			dismissed = state.hasTarget
+				&& state.targetServerName == action.dismissServerName
+				&& state.targetRequestId == action.dismissRequestId;
+			if (dismissed)
+				state.complete = true;
+		}
+		final labels = appLinkViewLabels(state);
+		state.selectedIndex = labels.length == 0 ? 0 : intClamp(state.selectedIndex, 0, labels.length - 1);
+		final rows = appLinkViewRows(labels, state.selectedIndex);
+		final height = appLinkViewDesiredHeight(state, action.width);
+		final requiresTitleAction = state.hasTarget;
+		return {labels: labels,
+			rows: rows,
+			selectedIndex: state.selectedIndex,
+			screen: state.screen,
+			enabled: state.isEnabled,
+			complete: state.complete,
+			events: events,
+			dismissed: dismissed,
+			requiresTitleAction: requiresTitleAction,
+			height: height,
+			trace: "screen="
+			+ state.screen
+			+ ":selected="
+			+ state.selectedIndex
+			+ ":labels="
+			+ stringListTrace(labels, "|")
+			+ ":rows="
+			+ stringListTrace(rows, "|")
+			+ ":enabled="
+			+ state.isEnabled
+			+ ":complete="
+			+ state.complete
+			+ ":events="
+			+ stringListTrace(events, ",")
+			+ ":dismissed="
+			+ dismissed
+			+ ":title_action="
+			+ requiresTitleAction
+			+ ":height="
+			+ height};
+	}
+
+	static function appLinkViewState(action:TuiSmokeAppLinkViewAction):TuiSmokeAppLinkViewState {
+		final targetServer = action.serverName != "" ? action.serverName : "codex_apps";
+		final targetRequest = action.requestId != "" ? action.requestId : "request-1";
+		return {
+			appId: action.appId,
+			title: action.title,
+			description: action.description,
+			instructions: action.instructions,
+			suggestReason: action.message,
+			url: action.url,
+			isInstalled: action.isInstalled,
+			isEnabled: action.isEnabled,
+			suggestionType: action.suggestionType,
+			hasTarget: action.hasTarget,
+			targetServerName: targetServer,
+			targetRequestId: targetRequest,
+			screen: action.screen,
+			selectedIndex: action.selectedIndex,
+			complete: false
+		};
+	}
+
+	static function appLinkViewLabels(state:TuiSmokeAppLinkViewState):Array<String> {
+		if (appLinkViewIsAuthSuggestion(state))
+			return state.screen == "confirmation" ? ["I already signed in", "Back"] : ["Open sign-in URL", "Back"];
+		if (appLinkViewIsExternalActionSuggestion(state))
+			return state.screen == "confirmation" ? ["I finished", "Back"] : ["Open link", "Back"];
+		if (state.screen == "confirmation")
+			return ["I already Installed it", "Back"];
+		if (state.isInstalled)
+			return ["Manage on ChatGPT", state.isEnabled ? "Disable app" : "Enable app", "Back"];
+		return ["Install on ChatGPT", "Back"];
+	}
+
+	static function appLinkViewRows(labels:Array<String>, selected:Int):Array<String> {
+		final out:Array<String> = [];
+		for (idx in 0...labels.length)
+			out.push((idx == selected ? ">" : "-") + " " + (idx + 1) + ". " + labels[idx]);
+		return out;
+	}
+
+	static function appLinkViewActivate(state:TuiSmokeAppLinkViewState, events:Array<String>):Void {
+		final labels = appLinkViewLabels(state);
+		state.selectedIndex = labels.length == 0 ? 0 : intClamp(state.selectedIndex, 0, labels.length - 1);
+		if (state.hasTarget) {
+			if (state.suggestionType == "enable") {
+				if (state.screen == "link") {
+					if (state.selectedIndex == 0)
+						appLinkViewOpenExternal(state, events);
+					else if (state.selectedIndex == 1 && state.isInstalled)
+						appLinkViewToggleEnabled(state, events);
+					else
+						appLinkViewDecline(state, events);
+				} else if (state.selectedIndex == 0) {
+					appLinkViewCompleteExternal(state, events);
+				} else {
+					appLinkViewDecline(state, events);
+				}
+				return;
+			}
+			if (state.screen == "link") {
+				if (state.selectedIndex == 0)
+					appLinkViewOpenExternal(state, events);
+				else
+					appLinkViewDecline(state, events);
+			} else if (state.selectedIndex == 0) {
+				appLinkViewCompleteExternal(state, events);
+			} else {
+				appLinkViewDecline(state, events);
+			}
+			return;
+		}
+		if (state.screen == "link") {
+			if (state.selectedIndex == 0)
+				appLinkViewOpenExternal(state, events);
+			else if (state.selectedIndex == 1 && state.isInstalled)
+				appLinkViewToggleEnabled(state, events);
+			else
+				state.complete = true;
+		} else if (state.selectedIndex == 0) {
+			appLinkViewCompleteExternal(state, events);
+		} else {
+			state.screen = "link";
+			state.selectedIndex = 0;
+		}
+	}
+
+	static function appLinkViewOpenExternal(state:TuiSmokeAppLinkViewState, events:Array<String>):Void {
+		events.push("open_url=" + state.url);
+		if (!state.isInstalled || appLinkViewIsBrowserActionSuggestion(state)) {
+			state.screen = "confirmation";
+			state.selectedIndex = 0;
+		}
+	}
+
+	static function appLinkViewCompleteExternal(state:TuiSmokeAppLinkViewState, events:Array<String>):Void {
+		if (!state.hasTarget || state.targetServerName == "codex_apps")
+			events.push("refresh_connectors=true");
+		if (state.hasTarget)
+			events.push("resolve_accept=" + state.targetServerName + "/" + state.targetRequestId);
+		state.complete = true;
+	}
+
+	static function appLinkViewToggleEnabled(state:TuiSmokeAppLinkViewState, events:Array<String>):Void {
+		state.isEnabled = !state.isEnabled;
+		events.push("set_app_enabled=" + state.appId + ":" + state.isEnabled);
+		if (state.hasTarget) {
+			events.push("resolve_accept=" + state.targetServerName + "/" + state.targetRequestId);
+			state.complete = true;
+		}
+	}
+
+	static function appLinkViewDecline(state:TuiSmokeAppLinkViewState, events:Array<String>):Void {
+		if (state.hasTarget)
+			events.push("resolve_decline=" + state.targetServerName + "/" + state.targetRequestId);
+		state.complete = true;
+	}
+
+	static function appLinkViewIsToolSuggestion(state:TuiSmokeAppLinkViewState):Bool {
+		return state.hasTarget;
+	}
+
+	static function appLinkViewIsAuthSuggestion(state:TuiSmokeAppLinkViewState):Bool {
+		return appLinkViewIsToolSuggestion(state) && state.suggestionType == "auth";
+	}
+
+	static function appLinkViewIsExternalActionSuggestion(state:TuiSmokeAppLinkViewState):Bool {
+		return appLinkViewIsToolSuggestion(state) && state.suggestionType == "external_action";
+	}
+
+	static function appLinkViewIsBrowserActionSuggestion(state:TuiSmokeAppLinkViewState):Bool {
+		return appLinkViewIsAuthSuggestion(state) || appLinkViewIsExternalActionSuggestion(state);
+	}
+
+	static function appLinkViewDesiredHeight(state:TuiSmokeAppLinkViewState, width:Int):Int {
+		final contentWidth = intMax(1, width - 4);
+		return appLinkViewContentRows(state, contentWidth) + appLinkViewLabels(state).length + 3;
+	}
+
+	static function appLinkViewContentRows(state:TuiSmokeAppLinkViewState, width:Int):Int {
+		var rows = 0;
+		if (state.screen == "confirmation") {
+			rows += appLinkViewWrappedRows(appLinkViewConfirmationTitle(state), width);
+			rows++;
+			if (appLinkViewIsAuthSuggestion(state)) {
+				rows += appLinkViewWrappedRows(state.targetServerName == "codex_apps" ? "Sign in to the app on ChatGPT in the browser window that just opened." : "Complete authentication in the browser window that just opened.",
+					width);
+				rows += appLinkViewWrappedRows("Then return here and select \"I already signed in\".", width);
+			} else if (appLinkViewIsExternalActionSuggestion(state)) {
+				rows += appLinkViewWrappedRows("Complete the requested action in the browser window that just opened.", width);
+				rows += appLinkViewWrappedRows("Then return here and select \"I finished\".", width);
+			} else {
+				rows += appLinkViewWrappedRows("Complete app setup on ChatGPT in the browser window that just opened.", width);
+				rows += appLinkViewWrappedRows("Sign in there if needed, then return here and select \"I already Installed it\".", width);
+			}
+			rows++;
+			rows += appLinkViewWrappedRows(appLinkViewIsAuthSuggestion(state) ? "Sign-in URL:" : (appLinkViewIsExternalActionSuggestion(state) ? "Link:" : "Setup URL:"),
+				width);
+			rows += appLinkViewWrappedRows(state.url, width);
+			return rows;
+		}
+		rows += appLinkViewWrappedRows(state.title, width);
+		if (StringTools.trim(state.description) != "")
+			rows += appLinkViewWrappedRows(state.description, width);
+		rows++;
+		if (StringTools.trim(state.suggestReason) != "") {
+			rows += appLinkViewWrappedRows(state.suggestReason, width);
+			rows++;
+		}
+		if (state.isInstalled && !appLinkViewIsBrowserActionSuggestion(state)) {
+			rows += appLinkViewWrappedRows("Use $ to insert this app into the prompt.", width);
+			rows++;
+		}
+		if (appLinkViewIsBrowserActionSuggestion(state)) {
+			rows += appLinkViewWrappedRows("URL", width);
+			rows += appLinkViewWrappedRows(state.url, width);
+			rows++;
+		}
+		if (StringTools.trim(state.instructions) != "") {
+			rows += appLinkViewWrappedRows(state.instructions, width);
+			if (!appLinkViewIsBrowserActionSuggestion(state)) {
+				rows += appLinkViewWrappedRows("Newly installed apps can take a few minutes to appear in /apps.", width);
+				if (!state.isInstalled)
+					rows += appLinkViewWrappedRows("After installed, use $ to insert this app into the prompt.", width);
+			}
+			rows++;
+		}
+		return rows;
+	}
+
+	static function appLinkViewWrappedRows(text:String, width:Int):Int {
+		final value = StringTools.trim(text);
+		if (value == "")
+			return 1;
+		return intMax(1, Std.int((value.length + intMax(1, width) - 1) / intMax(1, width)));
+	}
+
+	static function appLinkViewConfirmationTitle(state:TuiSmokeAppLinkViewState):String {
+		if (appLinkViewIsAuthSuggestion(state))
+			return state.targetServerName == "codex_apps" ? "Finish App Sign In" : "Finish Authentication";
+		if (appLinkViewIsExternalActionSuggestion(state))
+			return "Finish in Browser";
+		return "Finish App Setup";
 	}
 
 	static function traceSelectionPopupCommon(plan:TuiSmokeSelectionPopupCommonPlan, trace:Array<String>):Bool {

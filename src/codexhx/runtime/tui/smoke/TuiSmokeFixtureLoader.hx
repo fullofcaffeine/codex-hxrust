@@ -137,6 +137,7 @@ class TuiSmokeFixtureLoader {
 				listSelectionView: optionalListSelectionPlan(value, "listSelectionView"),
 				commandPopup: optionalCommandPopupPlan(value, "commandPopup"),
 				multiSelectPicker: optionalMultiSelectPlan(value, "multiSelectPicker"),
+				appLinkView: optionalAppLinkViewPlan(value, "appLinkView"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -1402,6 +1403,82 @@ class TuiSmokeFixtureLoader {
 				noNetwork: optionalBoolField(value, "noNetwork", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppEventDelivery: optionalBoolField(value, "noAppEventDelivery", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalAppLinkViewPlan(object:Value, name:String):Null<TuiSmokeAppLinkViewPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAppLinkViewPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowBrowserLaunch: optionalBoolField(value, "allowBrowserLaunch", false),
+					allowAppServerDelivery: optionalBoolField(value, "allowAppServerDelivery", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowClipboardMutation: optionalBoolField(value, "allowClipboardMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: appLinkViewActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function appLinkViewActions(values:Array<Value>):Array<TuiSmokeAppLinkViewAction> {
+		final out:Array<TuiSmokeAppLinkViewAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeAppLinkViewAction({
+				kind: TuiSmokeAppLinkViewActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				serverName: optionalStringField(value, "serverName", ""),
+				requestId: optionalStringField(value, "requestId", ""),
+				threadId: optionalStringField(value, "threadId", ""),
+				url: optionalStringField(value, "url", ""),
+				elicitationId: optionalStringField(value, "elicitationId", ""),
+				message: optionalStringField(value, "message", ""),
+				hasAuthMeta: optionalBoolField(value, "hasAuthMeta", false),
+				authFailure: optionalBoolField(value, "authFailure", false),
+				connectorId: optionalStringField(value, "connectorId", ""),
+				connectorName: optionalStringField(value, "connectorName", ""),
+				appId: optionalStringField(value, "appId", ""),
+				title: optionalStringField(value, "title", ""),
+				description: optionalStringField(value, "description", ""),
+				instructions: optionalStringField(value, "instructions", ""),
+				isInstalled: optionalBoolField(value, "isInstalled", false),
+				isEnabled: optionalBoolField(value, "isEnabled", false),
+				suggestionType: optionalStringField(value, "suggestionType", ""),
+				hasTarget: optionalBoolField(value, "hasTarget", false),
+				screen: optionalStringField(value, "screen", "link"),
+				selectedIndex: optionalIntField(value, "selectedIndex", 0),
+				direction: optionalStringField(value, "direction", "next"),
+				moveCount: optionalIntField(value, "moveCount", 1),
+				dismissServerName: optionalStringField(value, "dismissServerName", ""),
+				dismissRequestId: optionalStringField(value, "dismissRequestId", ""),
+				width: optionalIntField(value, "width", 72),
+				expectedAdmitted: optionalBoolField(value, "expectedAdmitted", false),
+				expectedSummary: optionalStringField(value, "expectedSummary", ""),
+				expectedLabels: optionalStringArrayField(value, "expectedLabels"),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				expectedSelectedIndex: optionalIntField(value, "expectedSelectedIndex", 0),
+				expectedScreen: optionalStringField(value, "expectedScreen", "link"),
+				expectedEnabled: optionalBoolField(value, "expectedEnabled", false),
+				expectedComplete: optionalBoolField(value, "expectedComplete", false),
+				expectedEvents: optionalStringArrayField(value, "expectedEvents"),
+				expectedDismissed: optionalBoolField(value, "expectedDismissed", false),
+				expectedRequiresTitleAction: optionalBoolField(value, "expectedRequiresTitleAction", false),
+				expectedHeight: optionalIntField(value, "expectedHeight", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noBrowserLaunch: optionalBoolField(value, "noBrowserLaunch", false),
+				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noClipboardMutation: optionalBoolField(value, "noClipboardMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
