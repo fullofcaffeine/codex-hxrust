@@ -11372,6 +11372,12 @@ class TuiSmokeEventLoop {
 						+ action.elementTransitionText() + ":payloads=" + action.elementPayloads + ":submitted=" + action.submissionSubmitted + ":history="
 						+ action.historyApplied + ":renumbered=" + action.placeholdersRenumbered + ":remote_clear=" + action.remoteSelectionCleared
 						+ ":cursor=" + action.cursorTransitionText());
+				case TuiSmokeComposerEditingActionKind.ImagePlaceholderEdit:
+					trace.push("tui.composer_editing.image_placeholder_edit=" + action.keyName + ":text=" + action.inputText + "->" + action.outputText
+						+ ":placeholder=" + action.placeholderBefore + "->" + action.placeholderAfter + ":local=" + action.localImageTransitionText()
+						+ ":elements=" + action.elementTransitionText() + ":payloads=" + action.elementPayloads + ":renumbered="
+						+ action.placeholdersRenumbered + ":pruned=" + action.localImagesPruned + ":rebuilt=" + action.elementsRebuilt + ":cursor="
+						+ action.cursorTransitionText() + ":cursor_end=" + action.cursorAtEnd);
 				case TuiSmokeComposerEditingActionKind.PasteBurstFlush:
 					trace.push("tui.composer_editing.burst_flush=" + action.keyName + ":active=" + action.pasteBurstActiveBefore + "->"
 						+ action.pasteBurstActiveAfter + ":flushed=" + action.pasteBurstFlushed + ":newline=" + action.newlineCaptured + ":window_cleared="

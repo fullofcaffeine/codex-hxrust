@@ -8411,6 +8411,170 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer image submission\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.image_submit=local-image-text-submit:text=[Image #1] hi:placeholder=[Image #1]->[Image #1]:local=1->1:remote=0->0:selected=-1->-1:elements=1->1:payloads=[Image #1]:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=13->0\ntui.composer_editing.image_submit=local-image-only-submit:text=[Image #1]:placeholder=[Image #1]->:local=1->0:remote=0->0:selected=-1->-1:elements=1->1:payloads=[Image #1]:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=10->0\ntui.composer_editing.image_submit=remote-only-empty-text:text=:placeholder=->:local=0->0:remote=2->2:selected=-1->-1:elements=0->0:payloads=:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=0->0\ntui.composer_editing.image_submit=remote-offset-local-submit:text=[Image #2] hello:placeholder=[Image #2]->[Image #2]:local=1->1:remote=1->1:selected=-1->-1:elements=1->1:payloads=[Image #2]:submitted=true:history=true:renumbered=false:remote_clear=false:cursor=16->0\ntui.composer_editing.image_submit=history-restore-remote-local:text=[Image #2]:placeholder=[Image #2]->[Image #2]:local=0->1:remote=0->1:selected=-1->-1:elements=0->1:payloads=[Image #2]:submitted=false:history=true:renumbered=false:remote_clear=false:cursor=0->10\ntui.composer_editing.image_submit=delete-remote-relabels-local:text=[Image #1]:placeholder=[Image #3]->[Image #1]:local=1->1:remote=2->0:selected=1->-1:elements=1->1:payloads=[Image #1]:submitted=false:history=false:renumbered=true:remote_clear=true:cursor=0->10\ntui.composer_editing.failure=live_composer_image_submission_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-image-placeholder-editing-headless",
+      "frame": {
+        "name": "composer-image-placeholder-editing-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer image placeholder editing"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "image_placeholder_edit",
+                "keyName": "duplicate-numbering",
+                "inputText": "[Image #1] [Image #2]",
+                "outputText": "[Image #1] [Image #2]",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "[Image #2]",
+                "localImageBefore": 2,
+                "localImageAfter": 2,
+                "elementBefore": 2,
+                "elementAfter": 2,
+                "elementPayloads": "[Image #1],[Image #2]",
+                "placeholdersRenumbered": false,
+                "localImagesPruned": false,
+                "elementsRebuilt": true,
+                "cursorBefore": 21,
+                "cursorAfter": 21,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "image_placeholder_edit",
+                "keyName": "backspace-removes-single",
+                "inputText": "[Image #1]",
+                "outputText": "",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "",
+                "localImageBefore": 1,
+                "localImageAfter": 0,
+                "elementBefore": 1,
+                "elementAfter": 0,
+                "elementPayloads": "",
+                "placeholdersRenumbered": false,
+                "localImagesPruned": true,
+                "elementsRebuilt": true,
+                "cursorBefore": 10,
+                "cursorAfter": 0,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "image_placeholder_edit",
+                "keyName": "inside-element-protected",
+                "inputText": "[Image #1]",
+                "outputText": "[Image #1]",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 1,
+                "localImageAfter": 1,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "placeholdersRenumbered": false,
+                "localImagesPruned": false,
+                "elementsRebuilt": false,
+                "cursorBefore": 5,
+                "cursorAfter": 0,
+                "cursorAtEnd": false
+              },
+              {
+                "kind": "image_placeholder_edit",
+                "keyName": "multibyte-adjacent-backspace",
+                "inputText": "[Image #1]日本語",
+                "outputText": "[Image #1]日本",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 1,
+                "localImageAfter": 1,
+                "elementBefore": 1,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "placeholdersRenumbered": false,
+                "localImagesPruned": false,
+                "elementsRebuilt": false,
+                "cursorBefore": 19,
+                "cursorAfter": 16,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "image_placeholder_edit",
+                "keyName": "delete-first-renumbers",
+                "inputText": "[Image #1][Image #2]",
+                "outputText": "[Image #1]",
+                "placeholderBefore": "[Image #2]",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 2,
+                "localImageAfter": 1,
+                "elementBefore": 2,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "placeholdersRenumbered": true,
+                "localImagesPruned": true,
+                "elementsRebuilt": true,
+                "cursorBefore": 0,
+                "cursorAfter": 0,
+                "cursorAtEnd": false
+              },
+              {
+                "kind": "image_placeholder_edit",
+                "keyName": "reordered-delete-renumbers",
+                "inputText": "Test [Image #2] test [Image #1]",
+                "outputText": "Test [Image #1] test ",
+                "placeholderBefore": "[Image #2]",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 2,
+                "localImageAfter": 1,
+                "elementBefore": 2,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "placeholdersRenumbered": true,
+                "localImagesPruned": true,
+                "elementsRebuilt": true,
+                "cursorBefore": 31,
+                "cursorAfter": 21,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_composer_image_placeholder_editing_effects_rejected",
+                "noLiveInput": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.image_placeholder_edit=duplicate-numbering:text=[Image #1] [Image #2]->[Image #1] [Image #2]:placeholder=[Image #1]->[Image #2]:local=2->2:elements=2->2:payloads=[Image #1],[Image #2]:renumbered=false:pruned=false:rebuilt=true:cursor=21->21:cursor_end=true\ntui.composer_editing.image_placeholder_edit=backspace-removes-single:text=[Image #1]->:placeholder=[Image #1]->:local=1->0:elements=1->0:payloads=:renumbered=false:pruned=true:rebuilt=true:cursor=10->0:cursor_end=true\ntui.composer_editing.image_placeholder_edit=inside-element-protected:text=[Image #1]->[Image #1]:placeholder=[Image #1]->[Image #1]:local=1->1:elements=1->1:payloads=[Image #1]:renumbered=false:pruned=false:rebuilt=false:cursor=5->0:cursor_end=false\ntui.composer_editing.image_placeholder_edit=multibyte-adjacent-backspace:text=[Image #1]日本語->[Image #1]日本:placeholder=[Image #1]->[Image #1]:local=1->1:elements=1->1:payloads=[Image #1]:renumbered=false:pruned=false:rebuilt=false:cursor=19->16:cursor_end=true\ntui.composer_editing.image_placeholder_edit=delete-first-renumbers:text=[Image #1][Image #2]->[Image #1]:placeholder=[Image #2]->[Image #1]:local=2->1:elements=2->1:payloads=[Image #1]:renumbered=true:pruned=true:rebuilt=true:cursor=0->0:cursor_end=false\ntui.composer_editing.image_placeholder_edit=reordered-delete-renumbers:text=Test [Image #2] test [Image #1]->Test [Image #1] test :placeholder=[Image #2]->[Image #1]:local=2->1:elements=2->1:payloads=[Image #1]:renumbered=true:pruned=true:rebuilt=true:cursor=31->21:cursor_end=true\ntui.composer_editing.failure=live_composer_image_placeholder_editing_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer image placeholder editing\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.image_placeholder_edit=duplicate-numbering:text=[Image #1] [Image #2]->[Image #1] [Image #2]:placeholder=[Image #1]->[Image #2]:local=2->2:elements=2->2:payloads=[Image #1],[Image #2]:renumbered=false:pruned=false:rebuilt=true:cursor=21->21:cursor_end=true\ntui.composer_editing.image_placeholder_edit=backspace-removes-single:text=[Image #1]->:placeholder=[Image #1]->:local=1->0:elements=1->0:payloads=:renumbered=false:pruned=true:rebuilt=true:cursor=10->0:cursor_end=true\ntui.composer_editing.image_placeholder_edit=inside-element-protected:text=[Image #1]->[Image #1]:placeholder=[Image #1]->[Image #1]:local=1->1:elements=1->1:payloads=[Image #1]:renumbered=false:pruned=false:rebuilt=false:cursor=5->0:cursor_end=false\ntui.composer_editing.image_placeholder_edit=multibyte-adjacent-backspace:text=[Image #1]日本語->[Image #1]日本:placeholder=[Image #1]->[Image #1]:local=1->1:elements=1->1:payloads=[Image #1]:renumbered=false:pruned=false:rebuilt=false:cursor=19->16:cursor_end=true\ntui.composer_editing.image_placeholder_edit=delete-first-renumbers:text=[Image #1][Image #2]->[Image #1]:placeholder=[Image #2]->[Image #1]:local=2->1:elements=2->1:payloads=[Image #1]:renumbered=true:pruned=true:rebuilt=true:cursor=0->0:cursor_end=false\ntui.composer_editing.image_placeholder_edit=reordered-delete-renumbers:text=Test [Image #2] test [Image #1]->Test [Image #1] test :placeholder=[Image #2]->[Image #1]:local=2->1:elements=2->1:payloads=[Image #1]:renumbered=true:pruned=true:rebuilt=true:cursor=31->21:cursor_end=true\ntui.composer_editing.failure=live_composer_image_placeholder_editing_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-popup-sync-suppression-clears",
       "frame": {
         "name": "composer-popup-sync-suppression-clears",
