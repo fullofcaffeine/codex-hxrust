@@ -3947,6 +3947,10 @@ Status: HXCX-TUI-269 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-270 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/pending_input_preview.rs`. The fixture preserves empty and narrow-width suppression, queued follow-up section rows with default and remapped edit hints, pending steer/rejected steer/queued-message section order, default and remapped interrupt hints, multiline and width-wrapped three-row truncation with ellipsis, URL-like long-token no-ellipsis behavior, and no-live rejection evidence. This is deterministic pending-input preview row evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
 
+### HXCX-TUI-271 Headless Raw Codex Pending Thread Approvals
+
+Status: HXCX-TUI-271 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/pending_thread_approvals.rs`. The fixture preserves `set_threads` changed/unchanged and empty-state behavior, empty and narrow-width suppression, single and multiple inactive-thread approval rows, overflow after the third thread, stable wrapping indentation for long thread labels, the `/agent` switch hint, and no-live rejection evidence. This is deterministic pending-thread-approval row evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

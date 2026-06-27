@@ -60,6 +60,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/status_line_style.rs",
       "../codex/codex-rs/tui/src/bottom_pane/status_surface_preview.rs",
       "../codex/codex-rs/tui/src/bottom_pane/pending_input_preview.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/pending_thread_approvals.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -20259,6 +20260,160 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.pending_input_preview.plan=headless\ntui.pending_input_preview.render=empty:width=40:height=0:rows=<none>:no_ellipsis=true\ntui.pending_input_preview.render=narrow:width=3:height=0:rows=<none>:no_ellipsis=true\ntui.pending_input_preview.render=queued-default-hint:width=40:height=3:rows=• Queued follow-up inputs|  ↳ Hello, world!|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=queued-shift-left-hint:width=40:height=3:rows=• Queued follow-up inputs|  ↳ Hello, world!|    shift + ← edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=section-order:width=80:height=10:rows=• Messages to be submitted after next tool call (press esc to interrupt and send immediately)|  ↳ Please continue.|  ↳ Check output.|<empty>|• Messages to be submitted at end of turn|  ↳ Retry later.|<empty>|• Queued follow-up inputs|  ↳ Queued question|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=interrupt-remap:width=80:height=2:rows=• Messages to be submitted after next tool call (press f12 to interrupt and send immediately)|  ↳ Please continue.:no_ellipsis=true\ntui.pending_input_preview.render=multiline-truncated:width=48:height=5:rows=• Messages to be submitted after next tool call (press esc to interrupt and send immediately)|  ↳ First line|    Second line|    Third line|    …:no_ellipsis=false\ntui.pending_input_preview.render=wrapped-truncated:width=20:height=6:rows=• Queued follow-up inputs|  ↳ alpha beta gamma|    delta epsilon|    zeta eta theta|    …|    alt + ↑ edit last queued message:no_ellipsis=false\ntui.pending_input_preview.render=url-no-ellipsis:width=36:height=3:rows=• Queued follow-up inputs|  ↳ example.test/api/v1/projects/alpha-team/releases/2026-02-17/builds/1234567890/artifacts|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.failure=live_pending_input_preview_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> pending input preview rows\ninput> \ntrace:\ntui.pending_input_preview.plan=headless\ntui.pending_input_preview.render=empty:width=40:height=0:rows=<none>:no_ellipsis=true\ntui.pending_input_preview.render=narrow:width=3:height=0:rows=<none>:no_ellipsis=true\ntui.pending_input_preview.render=queued-default-hint:width=40:height=3:rows=• Queued follow-up inputs|  ↳ Hello, world!|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=queued-shift-left-hint:width=40:height=3:rows=• Queued follow-up inputs|  ↳ Hello, world!|    shift + ← edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=section-order:width=80:height=10:rows=• Messages to be submitted after next tool call (press esc to interrupt and send immediately)|  ↳ Please continue.|  ↳ Check output.|<empty>|• Messages to be submitted at end of turn|  ↳ Retry later.|<empty>|• Queued follow-up inputs|  ↳ Queued question|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=interrupt-remap:width=80:height=2:rows=• Messages to be submitted after next tool call (press f12 to interrupt and send immediately)|  ↳ Please continue.:no_ellipsis=true\ntui.pending_input_preview.render=multiline-truncated:width=48:height=5:rows=• Messages to be submitted after next tool call (press esc to interrupt and send immediately)|  ↳ First line|    Second line|    Third line|    …:no_ellipsis=false\ntui.pending_input_preview.render=wrapped-truncated:width=20:height=6:rows=• Queued follow-up inputs|  ↳ alpha beta gamma|    delta epsilon|    zeta eta theta|    …|    alt + ↑ edit last queued message:no_ellipsis=false\ntui.pending_input_preview.render=url-no-ellipsis:width=36:height=3:rows=• Queued follow-up inputs|  ↳ example.test/api/v1/projects/alpha-team/releases/2026-02-17/builds/1234567890/artifacts|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.failure=live_pending_input_preview_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "pending-thread-approvals-headless",
+      "frame": {
+        "name": "pending-thread-approvals-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "pending thread approval rows"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "pending_thread_approvals",
+          "pendingThreadApprovals": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "set_threads",
+                "name": "initial-empty",
+                "threads": [],
+                "expectedChanged": false,
+                "expectedEmpty": true
+              },
+              {
+                "kind": "render",
+                "name": "empty",
+                "width": 40,
+                "expectedHeight": 0,
+                "expectedRows": []
+              },
+              {
+                "kind": "set_threads",
+                "name": "single-thread",
+                "threads": [
+                  "Robie [explorer]"
+                ],
+                "expectedChanged": true,
+                "expectedEmpty": false
+              },
+              {
+                "kind": "render",
+                "name": "single-thread",
+                "width": 40,
+                "expectedHeight": 2,
+                "expectedRows": [
+                  "  ! Approval needed in Robie [explorer]",
+                  "    /agent to switch threads"
+                ]
+              },
+              {
+                "kind": "set_threads",
+                "name": "same-single-thread",
+                "threads": [
+                  "Robie [explorer]"
+                ],
+                "expectedChanged": false,
+                "expectedEmpty": false
+              },
+              {
+                "kind": "render",
+                "name": "narrow",
+                "width": 3,
+                "expectedHeight": 0,
+                "expectedRows": []
+              },
+              {
+                "kind": "set_threads",
+                "name": "multiple-with-overflow",
+                "threads": [
+                  "Main [default]",
+                  "Robie [explorer]",
+                  "Inspector",
+                  "Extra agent"
+                ],
+                "expectedChanged": true,
+                "expectedEmpty": false
+              },
+              {
+                "kind": "render",
+                "name": "multiple-with-overflow",
+                "width": 44,
+                "expectedHeight": 5,
+                "expectedRows": [
+                  "  ! Approval needed in Main [default]",
+                  "  ! Approval needed in Robie [explorer]",
+                  "  ! Approval needed in Inspector",
+                  "    ...",
+                  "    /agent to switch threads"
+                ]
+              },
+              {
+                "kind": "set_threads",
+                "name": "wrapped-long-thread",
+                "threads": [
+                  "Long review thread label with many words for wrapping"
+                ],
+                "expectedChanged": true,
+                "expectedEmpty": false
+              },
+              {
+                "kind": "render",
+                "name": "wrapped-long-thread",
+                "width": 26,
+                "expectedHeight": 5,
+                "expectedRows": [
+                  "  ! Approval needed in",
+                  "    Long review thread",
+                  "    label with many words",
+                  "    for wrapping",
+                  "    /agent to switch threads"
+                ]
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_pending_thread_approvals_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.pending_thread_approvals.plan=headless\ntui.pending_thread_approvals.set=initial-empty:changed=false:empty=true:threads=<none>\ntui.pending_thread_approvals.render=empty:width=40:height=0:rows=<none>\ntui.pending_thread_approvals.set=single-thread:changed=true:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=single-thread:width=40:height=2:rows=  ! Approval needed in Robie [explorer]|    /agent to switch threads\ntui.pending_thread_approvals.set=same-single-thread:changed=false:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=narrow:width=3:height=0:rows=<none>\ntui.pending_thread_approvals.set=multiple-with-overflow:changed=true:empty=false:threads=Main [default],Robie [explorer],Inspector,Extra agent\ntui.pending_thread_approvals.render=multiple-with-overflow:width=44:height=5:rows=  ! Approval needed in Main [default]|  ! Approval needed in Robie [explorer]|  ! Approval needed in Inspector|    ...|    /agent to switch threads\ntui.pending_thread_approvals.set=wrapped-long-thread:changed=true:empty=false:threads=Long review thread label with many words for wrapping\ntui.pending_thread_approvals.render=wrapped-long-thread:width=26:height=5:rows=  ! Approval needed in|    Long review thread|    label with many words|    for wrapping|    /agent to switch threads\ntui.pending_thread_approvals.failure=live_pending_thread_approvals_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> pending thread approval rows\ninput> \ntrace:\ntui.pending_thread_approvals.plan=headless\ntui.pending_thread_approvals.set=initial-empty:changed=false:empty=true:threads=<none>\ntui.pending_thread_approvals.render=empty:width=40:height=0:rows=<none>\ntui.pending_thread_approvals.set=single-thread:changed=true:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=single-thread:width=40:height=2:rows=  ! Approval needed in Robie [explorer]|    /agent to switch threads\ntui.pending_thread_approvals.set=same-single-thread:changed=false:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=narrow:width=3:height=0:rows=<none>\ntui.pending_thread_approvals.set=multiple-with-overflow:changed=true:empty=false:threads=Main [default],Robie [explorer],Inspector,Extra agent\ntui.pending_thread_approvals.render=multiple-with-overflow:width=44:height=5:rows=  ! Approval needed in Main [default]|  ! Approval needed in Robie [explorer]|  ! Approval needed in Inspector|    ...|    /agent to switch threads\ntui.pending_thread_approvals.set=wrapped-long-thread:changed=true:empty=false:threads=Long review thread label with many words for wrapping\ntui.pending_thread_approvals.render=wrapped-long-thread:width=26:height=5:rows=  ! Approval needed in|    Long review thread|    label with many words|    for wrapping|    /agent to switch threads\ntui.pending_thread_approvals.failure=live_pending_thread_approvals_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

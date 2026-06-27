@@ -128,6 +128,7 @@ class TuiSmokeFixtureLoader {
 				statusLineStyle: optionalStatusLineStylePlan(value, "statusLineStyle"),
 				statusSurfacePreview: optionalStatusSurfacePreviewPlan(value, "statusSurfacePreview"),
 				pendingInputPreview: optionalPendingInputPreviewPlan(value, "pendingInputPreview"),
+				pendingThreadApprovals: optionalPendingThreadApprovalsPlan(value, "pendingThreadApprovals"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -866,6 +867,45 @@ class TuiSmokeFixtureLoader {
 				expectedHeight: optionalIntField(value, "expectedHeight", 0),
 				expectedRows: optionalStringArrayField(value, "expectedRows"),
 				expectedNoEllipsis: optionalBoolField(value, "expectedNoEllipsis", false),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalPendingThreadApprovalsPlan(object:Value, name:String):Null<TuiSmokePendingThreadApprovalsPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokePendingThreadApprovalsPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: pendingThreadApprovalsActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function pendingThreadApprovalsActions(values:Array<Value>):Array<TuiSmokePendingThreadApprovalsAction> {
+		final out:Array<TuiSmokePendingThreadApprovalsAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokePendingThreadApprovalsAction({
+				kind: TuiSmokePendingThreadApprovalsActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				width: optionalIntField(value, "width", 0),
+				threads: optionalStringArrayField(value, "threads"),
+				expectedChanged: optionalBoolField(value, "expectedChanged", false),
+				expectedEmpty: optionalBoolField(value, "expectedEmpty", false),
+				expectedHeight: optionalIntField(value, "expectedHeight", 0),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
 				failureCode: optionalStringField(value, "failureCode", ""),
 				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
 				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),

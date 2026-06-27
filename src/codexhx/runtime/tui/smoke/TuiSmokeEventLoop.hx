@@ -451,6 +451,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.PendingThreadApprovals:
+					if (!tracePendingThreadApprovals(event.pendingThreadApprovals, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -5608,6 +5613,105 @@ class TuiSmokeEventLoop {
 	}
 
 	static function pendingInputPreviewRowsTrace(rows:Array<String>):String {
+		if (rows.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (row in rows)
+			out.push(traceText(row));
+		return out.join("|");
+	}
+
+	static function tracePendingThreadApprovals(plan:TuiSmokePendingThreadApprovalsPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.pending_thread_approvals.rejected=live_or_missing");
+			return false;
+		}
+		final threads:Array<String> = [];
+		trace.push("tui.pending_thread_approvals.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokePendingThreadApprovalsActionKind.SetThreads:
+					final changed = !stringArraysEqual(threads, action.threads);
+					threads.resize(0);
+					for (thread in action.threads)
+						threads.push(thread);
+					final empty = threads.length == 0;
+					if (changed != action.expectedChanged || empty != action.expectedEmpty) {
+						trace.push("tui.pending_thread_approvals.set_mismatch=" + action.name + ":changed=" + changed + ":empty=" + empty + ":threads="
+							+ pendingThreadApprovalsThreadsTrace(threads));
+						return false;
+					}
+					trace.push("tui.pending_thread_approvals.set=" + action.name + ":changed=" + changed + ":empty=" + empty + ":threads="
+						+ pendingThreadApprovalsThreadsTrace(threads));
+				case TuiSmokePendingThreadApprovalsActionKind.Render:
+					final rows = pendingThreadApprovalsRows(threads, action.width);
+					final height = rows.length;
+					if (height != action.expectedHeight || rows.join("|") != action.expectedRows.join("|")) {
+						trace.push("tui.pending_thread_approvals.render_mismatch=" + action.name + ":width=" + action.width + ":height=" + height + ":rows="
+							+ pendingThreadApprovalsRowsTrace(rows));
+						return false;
+					}
+					trace.push("tui.pending_thread_approvals.render=" + action.name + ":width=" + action.width + ":height=" + height + ":rows="
+						+ pendingThreadApprovalsRowsTrace(rows));
+				case TuiSmokePendingThreadApprovalsActionKind.Failure:
+					trace.push("tui.pending_thread_approvals.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.pending_thread_approvals.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function pendingThreadApprovalsRows(threads:Array<String>, width:Int):Array<String> {
+		final rows:Array<String> = [];
+		if (threads.length == 0 || width < 4)
+			return rows;
+		final limit = threads.length > 3 ? 3 : threads.length;
+		for (idx in 0...limit)
+			pendingThreadApprovalsPushWrappedLine(rows, "  ! ", "Approval needed in " + threads[idx], width);
+		if (threads.length > 3)
+			rows.push("    ...");
+		rows.push("    /agent to switch threads");
+		return rows;
+	}
+
+	static function pendingThreadApprovalsPushWrappedLine(out:Array<String>, prefix:String, line:String, width:Int):Void {
+		final maxText = width - prefix.length;
+		if (maxText <= 0 || line.length <= maxText) {
+			out.push(prefix + line);
+			return;
+		}
+		var current = "";
+		var currentPrefix = prefix;
+		for (word in line.split(" ")) {
+			if (current == "") {
+				current = word;
+			} else if (current.length + 1 + word.length <= maxText) {
+				current += " " + word;
+			} else {
+				out.push(currentPrefix + current);
+				currentPrefix = "    ";
+				current = word;
+			}
+		}
+		if (current != "")
+			out.push(currentPrefix + current);
+	}
+
+	static function pendingThreadApprovalsThreadsTrace(threads:Array<String>):String {
+		if (threads.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (thread in threads)
+			out.push(traceText(thread));
+		return out.join(",");
+	}
+
+	static function pendingThreadApprovalsRowsTrace(rows:Array<String>):String {
 		if (rows.length == 0)
 			return "<none>";
 		final out:Array<String> = [];
