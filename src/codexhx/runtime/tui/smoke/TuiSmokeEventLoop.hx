@@ -77,6 +77,28 @@ private typedef TuiSmokeSelectionPopupCommonRect = {
 	final height:Int;
 }
 
+private typedef TuiSmokeListSelectionLayoutResult = {
+	final contentWidth:Int;
+	final sideLayout:String;
+	final hasSideBySide:Bool;
+	final listWidth:Int;
+	final sideWidth:Int;
+	final desiredHeight:Int;
+	final trace:String;
+}
+
+private typedef TuiSmokeListSelectionResult = {
+	final filtered:Array<Int>;
+	final selectedVisibleIndex:Int;
+	final selectedActualIndex:Int;
+	final scrollTop:Int;
+	final rows:Array<String>;
+	final accepted:Bool;
+	final cancelled:Bool;
+	final lastSelectedActual:Int;
+	final trace:String;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -514,6 +536,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.SelectionPopupCommon:
 					if (!traceSelectionPopupCommon(event.selectionPopupCommon, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.ListSelectionView:
+					if (!traceListSelectionView(event.listSelectionView, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -6435,6 +6462,299 @@ class TuiSmokeEventLoop {
 		return 0;
 	}
 
+	static function traceListSelectionView(plan:TuiSmokeListSelectionPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowClipboardMutation
+			|| plan.allowNetwork || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.list_selection_view.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.list_selection_view.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeListSelectionActionKind.Layout:
+					final layout = listSelectionLayoutTrace(action);
+					if (layout.contentWidth != action.expectedContentWidth
+						|| layout.sideLayout != action.expectedSideLayout
+						|| layout.desiredHeight != action.expectedDesiredHeight) {
+						trace.push("tui.list_selection_view.layout_mismatch=" + action.name + ":" + layout.trace);
+						return false;
+					}
+					trace.push("tui.list_selection_view.layout=" + action.name + ":" + layout.trace);
+				case TuiSmokeListSelectionActionKind.Filter, TuiSmokeListSelectionActionKind.MoveDown, TuiSmokeListSelectionActionKind.MoveUp,
+					TuiSmokeListSelectionActionKind.Accept:
+					final result = listSelectionActionTrace(action);
+					if (!intArraysEqual(result.filtered, action.expectedFilteredIndices)
+						|| result.selectedVisibleIndex != action.expectedSelectedVisibleIndex
+						|| result.selectedActualIndex != action.expectedSelectedActualIndex
+						|| result.scrollTop != action.expectedScrollTop
+						|| !stringArraysEqual(result.rows, action.expectedRows)
+						|| result.accepted != action.expectedAccepted
+						|| result.cancelled != action.expectedCancelled
+						|| result.lastSelectedActual != action.expectedLastSelectedActual) {
+						trace.push("tui.list_selection_view." + action.kind + "_mismatch=" + action.name + ":" + result.trace);
+						return false;
+					}
+					trace.push("tui.list_selection_view." + action.kind + "=" + action.name + ":" + result.trace);
+				case TuiSmokeListSelectionActionKind.Failure:
+					trace.push("tui.list_selection_view.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_clipboard=" + action.noClipboardMutation + ":no_network="
+						+ action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.list_selection_view.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function listSelectionLayoutTrace(action:TuiSmokeListSelectionAction):TuiSmokeListSelectionLayoutResult {
+		final contentWidth = intMax(0, action.width - 4);
+		final side = listSelectionSideLayout(contentWidth, action.sideWidthKind, action.sideWidth, action.sideMinWidth);
+		final rowCount = action.items.length;
+		final rowsHeight = action.rowDisplay == TuiSmokeListSelectionRowDisplay.SingleLine ? intClamp(rowCount, 1,
+			listSelectionMaxVisibleRows(action.maxVisibleRows,
+				rowCount)) : listSelectionWrappedRowsHeight(action.items, side.hasSideBySide ? side.listWidth : intMax(0, action.width - 2));
+		final tabHeight = action.tabCount > 0 ? 1 : 0;
+		var desiredHeight = action.headerHeight + tabHeight + (tabHeight > 0 ? 1 : 0) + rowsHeight + 3;
+		if (action.isSearchable)
+			desiredHeight += 1;
+		if (!side.hasSideBySide && action.sideContentHeight > 0)
+			desiredHeight += 1 + action.sideContentHeight;
+		desiredHeight += action.footerNoteLines;
+		if (action.footerHintPresent)
+			desiredHeight += 1;
+		final rowDisplay = action.rowDisplay == TuiSmokeListSelectionRowDisplay.Wrapped ? "wrapped" : "single_line";
+		return {contentWidth: contentWidth,
+			sideLayout: side.layout,
+			hasSideBySide: side.hasSideBySide,
+			listWidth: side.listWidth,
+			sideWidth: side.sideWidth,
+			desiredHeight: desiredHeight,
+			trace: "content="
+			+ contentWidth
+			+ ":side="
+			+ side.layout
+			+ ":row_display="
+			+ rowDisplay
+			+ ":desired_height="
+			+ desiredHeight};
+	}
+
+	static function listSelectionSideLayout(contentWidth:Int, kind:TuiSmokeListSelectionSideWidthKind, fixedWidth:Int, minWidth:Int):{
+		final layout:String;
+		final hasSideBySide:Bool;
+		final listWidth:Int;
+		final sideWidth:Int;
+	} {
+		final sideWidth = switch kind {
+			case TuiSmokeListSelectionSideWidthKind.Fixed:
+				fixedWidth;
+			case TuiSmokeListSelectionSideWidthKind.Half:
+				Std.int(intMax(0, contentWidth - 2) / 2);
+			case _:
+				0;
+		};
+		if (sideWidth <= 0 || sideWidth < minWidth)
+			return {
+				layout: "none",
+				hasSideBySide: false,
+				listWidth: contentWidth,
+				sideWidth: 0
+			};
+		final listWidth = intMax(0, contentWidth - 2 - sideWidth);
+		if (listWidth < 40)
+			return {
+				layout: "none",
+				hasSideBySide: false,
+				listWidth: contentWidth,
+				sideWidth: 0
+			};
+		return {
+			layout: listWidth + "," + sideWidth,
+			hasSideBySide: true,
+			listWidth: listWidth,
+			sideWidth: sideWidth
+		};
+	}
+
+	static function listSelectionActionTrace(action:TuiSmokeListSelectionAction):TuiSmokeListSelectionResult {
+		final selectedHint = action.previousSelectedActual >= 0 ? action.previousSelectedActual : action.initialSelectedActual;
+		var filtered = listSelectionFilteredIndices(action.items, action.isSearchable, action.query);
+		var selectedVisible = listSelectionSelectVisible(action.items, filtered, selectedHint, action.isSearchable, action.initialSelectedActual);
+		var scrollTop = listSelectionEnsureVisible(action.scrollTop, selectedVisible, filtered.length, action.maxVisibleRows);
+		if (action.kind == TuiSmokeListSelectionActionKind.MoveDown) {
+			selectedVisible = listSelectionMove(action.items, filtered, selectedVisible, 1);
+			scrollTop = listSelectionEnsureVisible(scrollTop, selectedVisible, filtered.length, action.maxVisibleRows);
+		} else if (action.kind == TuiSmokeListSelectionActionKind.MoveUp) {
+			selectedVisible = listSelectionMove(action.items, filtered, selectedVisible, -1);
+			scrollTop = listSelectionEnsureVisible(scrollTop, selectedVisible, filtered.length, action.maxVisibleRows);
+		}
+		final selectedActual = selectedVisible >= 0 && selectedVisible < filtered.length ? filtered[selectedVisible] : -1;
+		var accepted = false;
+		var cancelled = false;
+		var lastSelectedActual = -1;
+		if (action.kind == TuiSmokeListSelectionActionKind.Accept) {
+			if (selectedActual < 0) {
+				cancelled = true;
+			} else if (listSelectionItemEnabled(action.items[selectedActual])) {
+				accepted = action.items[selectedActual].dismissOnSelect;
+				lastSelectedActual = selectedActual;
+			}
+		}
+		final rows = listSelectionRows(action.items, filtered, selectedVisible, action.isSearchable);
+		return {filtered: filtered,
+			selectedVisibleIndex: selectedVisible,
+			selectedActualIndex: selectedActual,
+			scrollTop: scrollTop,
+			rows: rows,
+			accepted: accepted,
+			cancelled: cancelled,
+			lastSelectedActual: lastSelectedActual,
+			trace: "query="
+			+ traceText(action.query)
+			+ ":filtered="
+			+ intListTrace(filtered)
+			+ ":selected_visible="
+			+ selectedVisible
+			+ ":selected_actual="
+			+ selectedActual
+			+ ":scroll="
+			+ scrollTop
+			+ ":rows="
+			+ stringListTrace(rows, "|")
+			+ ":accepted="
+			+ accepted
+			+ ":cancelled="
+			+ cancelled
+			+ ":last="
+			+ lastSelectedActual};
+	}
+
+	static function listSelectionFilteredIndices(items:Array<TuiSmokeListSelectionItem>, searchable:Bool, query:String):Array<Int> {
+		final out:Array<Int> = [];
+		final normalized = query.toLowerCase();
+		for (idx in 0...items.length) {
+			if (searchable && normalized != "") {
+				if (items[idx].searchValue != "" && items[idx].searchValue.toLowerCase().indexOf(normalized) >= 0)
+					out.push(idx);
+			} else {
+				out.push(idx);
+			}
+		}
+		return out;
+	}
+
+	static function listSelectionSelectVisible(items:Array<TuiSmokeListSelectionItem>, filtered:Array<Int>, selectedHint:Int, searchable:Bool,
+			initialSelectedActual:Int):Int {
+		final candidates:Array<Int> = [];
+		if (selectedHint >= 0)
+			candidates.push(selectedHint);
+		if (!searchable) {
+			final current = listSelectionCurrentIndex(items);
+			if (current >= 0)
+				candidates.push(current);
+		}
+		if (initialSelectedActual >= 0)
+			candidates.push(initialSelectedActual);
+		for (candidate in candidates) {
+			final visible = listSelectionVisibleIndex(filtered, candidate);
+			if (visible >= 0 && candidate >= 0 && candidate < items.length && listSelectionItemEnabled(items[candidate]))
+				return visible;
+		}
+		for (visible in 0...filtered.length) {
+			final actual = filtered[visible];
+			if (actual >= 0 && actual < items.length && listSelectionItemEnabled(items[actual]))
+				return visible;
+		}
+		return filtered.length > 0 ? 0 : -1;
+	}
+
+	static function listSelectionCurrentIndex(items:Array<TuiSmokeListSelectionItem>):Int {
+		for (idx in 0...items.length) {
+			if (items[idx].isCurrent && listSelectionItemEnabled(items[idx]))
+				return idx;
+		}
+		return -1;
+	}
+
+	static function listSelectionVisibleIndex(filtered:Array<Int>, actual:Int):Int {
+		for (idx in 0...filtered.length) {
+			if (filtered[idx] == actual)
+				return idx;
+		}
+		return -1;
+	}
+
+	static function listSelectionMove(items:Array<TuiSmokeListSelectionItem>, filtered:Array<Int>, selectedVisible:Int, direction:Int):Int {
+		if (filtered.length == 0)
+			return -1;
+		var next = selectedVisible < 0 ? 0 : selectedVisible;
+		for (_ in 0...filtered.length) {
+			next = (next + direction + filtered.length) % filtered.length;
+			final actual = filtered[next];
+			if (actual >= 0 && actual < items.length && listSelectionItemEnabled(items[actual]))
+				return next;
+		}
+		return selectedVisible;
+	}
+
+	static function listSelectionEnsureVisible(scrollTop:Int, selectedVisible:Int, rowCount:Int, maxRows:Int):Int {
+		if (rowCount == 0 || selectedVisible < 0)
+			return 0;
+		final visibleRows = listSelectionMaxVisibleRows(maxRows, rowCount);
+		var start = intClamp(scrollTop, 0, intMax(0, rowCount - 1));
+		if (selectedVisible < start)
+			start = selectedVisible;
+		final bottom = start + visibleRows - 1;
+		if (selectedVisible > bottom)
+			start = selectedVisible + 1 - visibleRows;
+		return intClamp(start, 0, intMax(0, rowCount - visibleRows));
+	}
+
+	static function listSelectionMaxVisibleRows(maxRows:Int, rowCount:Int):Int {
+		return intMin(intMax(1, maxRows), intMax(1, rowCount));
+	}
+
+	static function listSelectionRows(items:Array<TuiSmokeListSelectionItem>, filtered:Array<Int>, selectedVisible:Int, searchable:Bool):Array<String> {
+		final out:Array<String> = [];
+		var enabledNumber = 0;
+		for (visible in 0...filtered.length) {
+			final actual = filtered[visible];
+			if (actual < 0 || actual >= items.length)
+				continue;
+			final item = items[actual];
+			final enabled = listSelectionItemEnabled(item);
+			final marker = visible == selectedVisible ? ">" : "-";
+			var prefix = marker + " ";
+			if (!searchable && enabled) {
+				enabledNumber += 1;
+				prefix += enabledNumber + ". ";
+			}
+			var label = item.name;
+			if (item.isCurrent)
+				label += " (current)";
+			else if (item.isDefault)
+				label += " (default)";
+			final description = visible == selectedVisible && item.selectedDescription != "" ? item.selectedDescription : item.description;
+			out.push(prefix + label + "{desc=" + traceText(description) + ",actual=" + actual + ",enabled=" + enabled + "}");
+		}
+		return out;
+	}
+
+	static function listSelectionWrappedRowsHeight(items:Array<TuiSmokeListSelectionItem>, width:Int):Int {
+		var total = 0;
+		final effectiveWidth = intMax(1, width);
+		for (item in items) {
+			final text = item.name + (item.description == "" ? "" : " " + item.description);
+			total += intMax(1, Std.int((text.length + effectiveWidth - 1) / effectiveWidth));
+		}
+		return intMax(1, total);
+	}
+
+	static function listSelectionItemEnabled(item:TuiSmokeListSelectionItem):Bool {
+		return item != null && !item.isDisabled && item.disabledReason == "";
+	}
+
 	static function traceSelectionPopupCommon(plan:TuiSmokeSelectionPopupCommonPlan, trace:Array<String>):Bool {
 		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
 			|| plan.allowModelCall || !plan.enabled()) {
@@ -8793,6 +9113,34 @@ class TuiSmokeEventLoop {
 				return false;
 		}
 		return true;
+	}
+
+	static function intArraysEqual(left:Array<Int>, right:Array<Int>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (i in 0...left.length) {
+			if (left[i] != right[i])
+				return false;
+		}
+		return true;
+	}
+
+	static function intListTrace(values:Array<Int>):String {
+		if (values.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (value in values)
+			out.push(Std.string(value));
+		return out.join(",");
+	}
+
+	static function stringListTrace(values:Array<String>, delimiter:String):String {
+		if (values.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (value in values)
+			out.push(traceText(value));
+		return out.join(delimiter);
 	}
 
 	static function rejected(code:String):TuiSmokeLoopOutcome {

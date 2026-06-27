@@ -134,6 +134,7 @@ class TuiSmokeFixtureLoader {
 				fileSearchPopup: optionalFileSearchPopupPlan(value, "fileSearchPopup"),
 				skillPopup: optionalSkillPopupPlan(value, "skillPopup"),
 				selectionPopupCommon: optionalSelectionPopupCommonPlan(value, "selectionPopupCommon"),
+				listSelectionView: optionalListSelectionPlan(value, "listSelectionView"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -1173,6 +1174,88 @@ class TuiSmokeFixtureLoader {
 				disabledReason: optionalStringField(value, "disabledReason", ""),
 				isDisabled: optionalBoolField(value, "isDisabled", false),
 				wrapIndent: optionalIntField(value, "wrapIndent", -1)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalListSelectionPlan(object:Value, name:String):Null<TuiSmokeListSelectionPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeListSelectionPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowClipboardMutation: optionalBoolField(value, "allowClipboardMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: listSelectionActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function listSelectionActions(values:Array<Value>):Array<TuiSmokeListSelectionAction> {
+		final out:Array<TuiSmokeListSelectionAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeListSelectionAction({
+				kind: TuiSmokeListSelectionActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				items: listSelectionItems(optionalArrayField(value, "items")),
+				isSearchable: optionalBoolField(value, "isSearchable", true),
+				query: optionalStringField(value, "query", ""),
+				previousSelectedActual: optionalIntField(value, "previousSelectedActual", -1),
+				initialSelectedActual: optionalIntField(value, "initialSelectedActual", -1),
+				selectedVisibleIndex: optionalIntField(value, "selectedVisibleIndex", -1),
+				scrollTop: optionalIntField(value, "scrollTop", 0),
+				maxVisibleRows: optionalIntField(value, "maxVisibleRows", 8),
+				width: optionalIntField(value, "width", 0),
+				sideWidthKind: TuiSmokeListSelectionSideWidthKind.fromString(optionalStringField(value, "sideWidthKind", "disabled")),
+				sideWidth: optionalIntField(value, "sideWidth", 0),
+				sideMinWidth: optionalIntField(value, "sideMinWidth", 0),
+				rowDisplay: TuiSmokeListSelectionRowDisplay.fromString(optionalStringField(value, "rowDisplay", "single_line")),
+				headerHeight: optionalIntField(value, "headerHeight", 0),
+				tabCount: optionalIntField(value, "tabCount", 0),
+				footerNoteLines: optionalIntField(value, "footerNoteLines", 0),
+				footerHintPresent: optionalBoolField(value, "footerHintPresent", false),
+				sideContentHeight: optionalIntField(value, "sideContentHeight", 0),
+				expectedContentWidth: optionalIntField(value, "expectedContentWidth", 0),
+				expectedSideLayout: optionalStringField(value, "expectedSideLayout", ""),
+				expectedDesiredHeight: optionalIntField(value, "expectedDesiredHeight", 0),
+				expectedFilteredIndices: optionalIntArrayField(value, "expectedFilteredIndices"),
+				expectedSelectedVisibleIndex: optionalIntField(value, "expectedSelectedVisibleIndex", -1),
+				expectedSelectedActualIndex: optionalIntField(value, "expectedSelectedActualIndex", -1),
+				expectedScrollTop: optionalIntField(value, "expectedScrollTop", 0),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				expectedAccepted: optionalBoolField(value, "expectedAccepted", false),
+				expectedCancelled: optionalBoolField(value, "expectedCancelled", false),
+				expectedLastSelectedActual: optionalIntField(value, "expectedLastSelectedActual", -1),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noClipboardMutation: optionalBoolField(value, "noClipboardMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function listSelectionItems(values:Array<Value>):Array<TuiSmokeListSelectionItem> {
+		final out:Array<TuiSmokeListSelectionItem> = [];
+		for (value in values) {
+			out.push(new TuiSmokeListSelectionItem({
+				name: optionalStringField(value, "name", ""),
+				description: optionalStringField(value, "description", ""),
+				selectedDescription: optionalStringField(value, "selectedDescription", ""),
+				searchValue: optionalStringField(value, "searchValue", ""),
+				isCurrent: optionalBoolField(value, "isCurrent", false),
+				isDefault: optionalBoolField(value, "isDefault", false),
+				isDisabled: optionalBoolField(value, "isDisabled", false),
+				disabledReason: optionalStringField(value, "disabledReason", ""),
+				dismissOnSelect: optionalBoolField(value, "dismissOnSelect", true)
 			}));
 		}
 		return out;

@@ -66,6 +66,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/file_search_popup.rs",
       "../codex/codex-rs/tui/src/bottom_pane/skill_popup.rs",
       "../codex/codex-rs/tui/src/bottom_pane/selection_popup_common.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/list_selection_view.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -21497,6 +21498,535 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.selection_popup_common.plan=headless\ntui.selection_popup_common.menu_surface=inset-padding:inset=12,5,36,6:padding_height=2\ntui.selection_popup_common.single_line=auto-visible-window:mode=auto_visible:width=50:height=3:max=3:start=0:desc_col=28:rendered=3:rows=-Short                       Alpha|*Longer Label                Beta description  [Co…|-Disabled Option (disabled)  Gamma (disabled: poli…\ntui.selection_popup_common.single_line=auto-all-rows-stable-column:mode=auto_all_rows:width=50:height=3:max=3:start=0:desc_col=32:rendered=3:rows=-Short                           Alpha|*Longer Label                    Beta description …|-Disabled Option (disabled)      Gamma (disabled: …\ntui.selection_popup_common.single_line=fixed-column-mode:mode=fixed:width=50:height=3:max=3:start=0:desc_col=15:rendered=3:rows=-Short          Alpha|*Longer Label   Beta description  [Core]|-Disabled Opti… (disabled)Gamma (disabled: policy)\ntui.selection_popup_common.measure_wrapped=wrapped-measure-selected-visible:mode=auto_visible:width=30:content_width=29:max=2:start=0:desc_col=20:measured=3:visible_selected=true\ntui.selection_popup_common.wrap_indent=explicit-indent-clamped:row=0:desc_col=4:width=6:indent=5\ntui.selection_popup_common.failure=live_selection_popup_common_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> selection popup common\ninput> \ntrace:\ntui.selection_popup_common.plan=headless\ntui.selection_popup_common.menu_surface=inset-padding:inset=12,5,36,6:padding_height=2\ntui.selection_popup_common.single_line=auto-visible-window:mode=auto_visible:width=50:height=3:max=3:start=0:desc_col=28:rendered=3:rows=-Short                       Alpha|*Longer Label                Beta description  [Co…|-Disabled Option (disabled)  Gamma (disabled: poli…\ntui.selection_popup_common.single_line=auto-all-rows-stable-column:mode=auto_all_rows:width=50:height=3:max=3:start=0:desc_col=32:rendered=3:rows=-Short                           Alpha|*Longer Label                    Beta description …|-Disabled Option (disabled)      Gamma (disabled: …\ntui.selection_popup_common.single_line=fixed-column-mode:mode=fixed:width=50:height=3:max=3:start=0:desc_col=15:rendered=3:rows=-Short          Alpha|*Longer Label   Beta description  [Core]|-Disabled Opti… (disabled)Gamma (disabled: policy)\ntui.selection_popup_common.measure_wrapped=wrapped-measure-selected-visible:mode=auto_visible:width=30:content_width=29:max=2:start=0:desc_col=20:measured=3:visible_selected=true\ntui.selection_popup_common.wrap_indent=explicit-indent-clamped:row=0:desc_col=4:width=6:indent=5\ntui.selection_popup_common.failure=live_selection_popup_common_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "list-selection-view-headless",
+      "frame": {
+        "name": "list-selection-view-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "list selection view"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "list_selection_view",
+          "listSelectionView": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowClipboardMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "layout",
+                "name": "wide-half",
+                "width": 90,
+                "isSearchable": true,
+                "sideWidthKind": "half",
+                "sideMinWidth": 20,
+                "rowDisplay": "single_line",
+                "headerHeight": 2,
+                "tabCount": 2,
+                "footerNoteLines": 2,
+                "footerHintPresent": true,
+                "maxVisibleRows": 8,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc",
+                    "selectedDescription": "Selected alpha",
+                    "searchValue": "alpha first current",
+                    "isCurrent": true
+                  },
+                  {
+                    "name": "Beta Disabled",
+                    "description": "Beta desc",
+                    "searchValue": "beta disabled",
+                    "isDisabled": true
+                  },
+                  {
+                    "name": "Gamma",
+                    "description": "Gamma desc",
+                    "searchValue": "plugin gamma",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Delta Locked",
+                    "description": "Delta desc",
+                    "searchValue": "delta locked",
+                    "disabledReason": "policy"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc",
+                    "selectedDescription": "Selected plugin",
+                    "searchValue": "plugin helper"
+                  }
+                ],
+                "expectedContentWidth": 86,
+                "expectedSideLayout": "42,42",
+                "expectedDesiredHeight": 16
+              },
+              {
+                "kind": "layout",
+                "name": "fixed-side-wrapped",
+                "width": 80,
+                "isSearchable": false,
+                "sideWidthKind": "fixed",
+                "sideWidth": 20,
+                "sideMinWidth": 12,
+                "rowDisplay": "wrapped",
+                "items": [
+                  {
+                    "name": "Short",
+                    "description": "one"
+                  },
+                  {
+                    "name": "Second",
+                    "description": "two"
+                  }
+                ],
+                "expectedContentWidth": 76,
+                "expectedSideLayout": "54,20",
+                "expectedDesiredHeight": 5
+              },
+              {
+                "kind": "layout",
+                "name": "stacked-disabled-side",
+                "width": 50,
+                "isSearchable": true,
+                "sideWidthKind": "disabled",
+                "sideContentHeight": 3,
+                "rowDisplay": "single_line",
+                "headerHeight": 1,
+                "maxVisibleRows": 8,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc"
+                  },
+                  {
+                    "name": "Beta Disabled",
+                    "description": "Beta desc"
+                  },
+                  {
+                    "name": "Gamma",
+                    "description": "Gamma desc"
+                  },
+                  {
+                    "name": "Delta Locked",
+                    "description": "Delta desc"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc"
+                  }
+                ],
+                "expectedContentWidth": 46,
+                "expectedSideLayout": "none",
+                "expectedDesiredHeight": 14
+              },
+              {
+                "kind": "layout",
+                "name": "half-too-narrow",
+                "width": 50,
+                "isSearchable": true,
+                "sideWidthKind": "half",
+                "sideMinWidth": 20,
+                "sideContentHeight": 3,
+                "rowDisplay": "single_line",
+                "headerHeight": 1,
+                "maxVisibleRows": 8,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc"
+                  },
+                  {
+                    "name": "Beta Disabled",
+                    "description": "Beta desc"
+                  },
+                  {
+                    "name": "Gamma",
+                    "description": "Gamma desc"
+                  },
+                  {
+                    "name": "Delta Locked",
+                    "description": "Delta desc"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc"
+                  }
+                ],
+                "expectedContentWidth": 46,
+                "expectedSideLayout": "none",
+                "expectedDesiredHeight": 14
+              },
+              {
+                "kind": "filter",
+                "name": "query-plugin",
+                "query": "plugin",
+                "isSearchable": true,
+                "initialSelectedActual": 0,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc",
+                    "selectedDescription": "Selected alpha",
+                    "searchValue": "alpha first current",
+                    "isCurrent": true
+                  },
+                  {
+                    "name": "Beta Disabled",
+                    "description": "Beta desc",
+                    "searchValue": "beta disabled",
+                    "isDisabled": true
+                  },
+                  {
+                    "name": "Gamma",
+                    "description": "Gamma desc",
+                    "searchValue": "plugin gamma",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Delta Locked",
+                    "description": "Delta desc",
+                    "searchValue": "delta locked",
+                    "disabledReason": "policy"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc",
+                    "selectedDescription": "Selected plugin",
+                    "searchValue": "plugin helper"
+                  }
+                ],
+                "expectedFilteredIndices": [2, 4],
+                "expectedSelectedVisibleIndex": 0,
+                "expectedSelectedActualIndex": 2,
+                "expectedScrollTop": 0,
+                "expectedRows": [
+                  "> Gamma (default){desc=Gamma desc,actual=2,enabled=true}",
+                  "- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}"
+                ]
+              },
+              {
+                "kind": "filter",
+                "name": "preserve-selected-plugin",
+                "query": "plugin",
+                "isSearchable": true,
+                "previousSelectedActual": 4,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc",
+                    "selectedDescription": "Selected alpha",
+                    "searchValue": "alpha first current",
+                    "isCurrent": true
+                  },
+                  {
+                    "name": "Beta Disabled",
+                    "description": "Beta desc",
+                    "searchValue": "beta disabled",
+                    "isDisabled": true
+                  },
+                  {
+                    "name": "Gamma",
+                    "description": "Gamma desc",
+                    "searchValue": "plugin gamma",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Delta Locked",
+                    "description": "Delta desc",
+                    "searchValue": "delta locked",
+                    "disabledReason": "policy"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc",
+                    "selectedDescription": "Selected plugin",
+                    "searchValue": "plugin helper"
+                  }
+                ],
+                "expectedFilteredIndices": [2, 4],
+                "expectedSelectedVisibleIndex": 1,
+                "expectedSelectedActualIndex": 4,
+                "expectedScrollTop": 0,
+                "expectedRows": [
+                  "- Gamma (default){desc=Gamma desc,actual=2,enabled=true}",
+                  "> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}"
+                ]
+              },
+              {
+                "kind": "move_down",
+                "name": "skip-disabled-down",
+                "query": "",
+                "isSearchable": true,
+                "previousSelectedActual": 0,
+                "selectedVisibleIndex": 0,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc",
+                    "selectedDescription": "Selected alpha",
+                    "searchValue": "alpha first current",
+                    "isCurrent": true
+                  },
+                  {
+                    "name": "Beta Disabled",
+                    "description": "Beta desc",
+                    "searchValue": "beta disabled",
+                    "isDisabled": true
+                  },
+                  {
+                    "name": "Gamma",
+                    "description": "Gamma desc",
+                    "searchValue": "plugin gamma",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Delta Locked",
+                    "description": "Delta desc",
+                    "searchValue": "delta locked",
+                    "disabledReason": "policy"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc",
+                    "selectedDescription": "Selected plugin",
+                    "searchValue": "plugin helper"
+                  }
+                ],
+                "expectedFilteredIndices": [0, 1, 2, 3, 4],
+                "expectedSelectedVisibleIndex": 2,
+                "expectedSelectedActualIndex": 2,
+                "expectedScrollTop": 0,
+                "expectedRows": [
+                  "- Alpha (current){desc=Alpha desc,actual=0,enabled=true}",
+                  "- Beta Disabled{desc=Beta desc,actual=1,enabled=false}",
+                  "> Gamma (default){desc=Gamma desc,actual=2,enabled=true}",
+                  "- Delta Locked{desc=Delta desc,actual=3,enabled=false}",
+                  "- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}"
+                ]
+              },
+              {
+                "kind": "move_down",
+                "name": "query-plugin-next",
+                "query": "plugin",
+                "isSearchable": true,
+                "previousSelectedActual": 2,
+                "selectedVisibleIndex": 0,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc",
+                    "selectedDescription": "Selected alpha",
+                    "searchValue": "alpha first current",
+                    "isCurrent": true
+                  },
+                  {
+                    "name": "Beta Disabled",
+                    "description": "Beta desc",
+                    "searchValue": "beta disabled",
+                    "isDisabled": true
+                  },
+                  {
+                    "name": "Gamma",
+                    "description": "Gamma desc",
+                    "searchValue": "plugin gamma",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Delta Locked",
+                    "description": "Delta desc",
+                    "searchValue": "delta locked",
+                    "disabledReason": "policy"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc",
+                    "selectedDescription": "Selected plugin",
+                    "searchValue": "plugin helper"
+                  }
+                ],
+                "expectedFilteredIndices": [2, 4],
+                "expectedSelectedVisibleIndex": 1,
+                "expectedSelectedActualIndex": 4,
+                "expectedScrollTop": 0,
+                "expectedRows": [
+                  "- Gamma (default){desc=Gamma desc,actual=2,enabled=true}",
+                  "> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}"
+                ]
+              },
+              {
+                "kind": "accept",
+                "name": "disabled-rejected",
+                "query": "delta",
+                "isSearchable": true,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc",
+                    "selectedDescription": "Selected alpha",
+                    "searchValue": "alpha first current",
+                    "isCurrent": true
+                  },
+                  {
+                    "name": "Beta Disabled",
+                    "description": "Beta desc",
+                    "searchValue": "beta disabled",
+                    "isDisabled": true
+                  },
+                  {
+                    "name": "Gamma",
+                    "description": "Gamma desc",
+                    "searchValue": "plugin gamma",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Delta Locked",
+                    "description": "Delta desc",
+                    "searchValue": "delta locked",
+                    "disabledReason": "policy"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc",
+                    "selectedDescription": "Selected plugin",
+                    "searchValue": "plugin helper"
+                  }
+                ],
+                "expectedFilteredIndices": [3],
+                "expectedSelectedVisibleIndex": 0,
+                "expectedSelectedActualIndex": 3,
+                "expectedScrollTop": 0,
+                "expectedRows": [
+                  "> Delta Locked{desc=Delta desc,actual=3,enabled=false}"
+                ],
+                "expectedAccepted": false,
+                "expectedCancelled": false,
+                "expectedLastSelectedActual": -1
+              },
+              {
+                "kind": "accept",
+                "name": "enabled-accepts",
+                "query": "plugin",
+                "isSearchable": true,
+                "previousSelectedActual": 4,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc",
+                    "selectedDescription": "Selected alpha",
+                    "searchValue": "alpha first current",
+                    "isCurrent": true
+                  },
+                  {
+                    "name": "Beta Disabled",
+                    "description": "Beta desc",
+                    "searchValue": "beta disabled",
+                    "isDisabled": true
+                  },
+                  {
+                    "name": "Gamma",
+                    "description": "Gamma desc",
+                    "searchValue": "plugin gamma",
+                    "isDefault": true
+                  },
+                  {
+                    "name": "Delta Locked",
+                    "description": "Delta desc",
+                    "searchValue": "delta locked",
+                    "disabledReason": "policy"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc",
+                    "selectedDescription": "Selected plugin",
+                    "searchValue": "plugin helper"
+                  }
+                ],
+                "expectedFilteredIndices": [2, 4],
+                "expectedSelectedVisibleIndex": 1,
+                "expectedSelectedActualIndex": 4,
+                "expectedScrollTop": 0,
+                "expectedRows": [
+                  "- Gamma (default){desc=Gamma desc,actual=2,enabled=true}",
+                  "> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}"
+                ],
+                "expectedAccepted": true,
+                "expectedCancelled": false,
+                "expectedLastSelectedActual": 4
+              },
+              {
+                "kind": "accept",
+                "name": "no-selection-cancels",
+                "query": "zzz",
+                "isSearchable": true,
+                "items": [
+                  {
+                    "name": "Alpha",
+                    "description": "Alpha desc",
+                    "searchValue": "alpha first current"
+                  },
+                  {
+                    "name": "Plugin Helper",
+                    "description": "Plugin desc",
+                    "searchValue": "plugin helper"
+                  }
+                ],
+                "expectedFilteredIndices": [],
+                "expectedSelectedVisibleIndex": -1,
+                "expectedSelectedActualIndex": -1,
+                "expectedScrollTop": 0,
+                "expectedRows": [],
+                "expectedAccepted": false,
+                "expectedCancelled": true,
+                "expectedLastSelectedActual": -1
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_list_selection_view_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noClipboardMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.list_selection_view.plan=headless\ntui.list_selection_view.layout=wide-half:content=86:side=42,42:row_display=single_line:desired_height=16\ntui.list_selection_view.layout=fixed-side-wrapped:content=76:side=54,20:row_display=wrapped:desired_height=5\ntui.list_selection_view.layout=stacked-disabled-side:content=46:side=none:row_display=single_line:desired_height=14\ntui.list_selection_view.layout=half-too-narrow:content=46:side=none:row_display=single_line:desired_height=14\ntui.list_selection_view.filter=query-plugin:query=plugin:filtered=2,4:selected_visible=0:selected_actual=2:scroll=0:rows=> Gamma (default){desc=Gamma desc,actual=2,enabled=true}|- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.filter=preserve-selected-plugin:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.move_down=skip-disabled-down:query=<empty>:filtered=0,1,2,3,4:selected_visible=2:selected_actual=2:scroll=0:rows=- Alpha (current){desc=Alpha desc,actual=0,enabled=true}|- Beta Disabled{desc=Beta desc,actual=1,enabled=false}|> Gamma (default){desc=Gamma desc,actual=2,enabled=true}|- Delta Locked{desc=Delta desc,actual=3,enabled=false}|- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.move_down=query-plugin-next:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.accept=disabled-rejected:query=delta:filtered=3:selected_visible=0:selected_actual=3:scroll=0:rows=> Delta Locked{desc=Delta desc,actual=3,enabled=false}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.accept=enabled-accepts:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=true:cancelled=false:last=4\ntui.list_selection_view.accept=no-selection-cancels:query=zzz:filtered=<none>:selected_visible=-1:selected_actual=-1:scroll=0:rows=<none>:accepted=false:cancelled=true:last=-1\ntui.list_selection_view.failure=live_list_selection_view_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> list selection view\ninput> \ntrace:\ntui.list_selection_view.plan=headless\ntui.list_selection_view.layout=wide-half:content=86:side=42,42:row_display=single_line:desired_height=16\ntui.list_selection_view.layout=fixed-side-wrapped:content=76:side=54,20:row_display=wrapped:desired_height=5\ntui.list_selection_view.layout=stacked-disabled-side:content=46:side=none:row_display=single_line:desired_height=14\ntui.list_selection_view.layout=half-too-narrow:content=46:side=none:row_display=single_line:desired_height=14\ntui.list_selection_view.filter=query-plugin:query=plugin:filtered=2,4:selected_visible=0:selected_actual=2:scroll=0:rows=> Gamma (default){desc=Gamma desc,actual=2,enabled=true}|- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.filter=preserve-selected-plugin:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.move_down=skip-disabled-down:query=<empty>:filtered=0,1,2,3,4:selected_visible=2:selected_actual=2:scroll=0:rows=- Alpha (current){desc=Alpha desc,actual=0,enabled=true}|- Beta Disabled{desc=Beta desc,actual=1,enabled=false}|> Gamma (default){desc=Gamma desc,actual=2,enabled=true}|- Delta Locked{desc=Delta desc,actual=3,enabled=false}|- Plugin Helper{desc=Plugin desc,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.move_down=query-plugin-next:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.accept=disabled-rejected:query=delta:filtered=3:selected_visible=0:selected_actual=3:scroll=0:rows=> Delta Locked{desc=Delta desc,actual=3,enabled=false}:accepted=false:cancelled=false:last=-1\ntui.list_selection_view.accept=enabled-accepts:query=plugin:filtered=2,4:selected_visible=1:selected_actual=4:scroll=0:rows=- Gamma (default){desc=Gamma desc,actual=2,enabled=true}|> Plugin Helper{desc=Selected plugin,actual=4,enabled=true}:accepted=true:cancelled=false:last=4\ntui.list_selection_view.accept=no-selection-cancels:query=zzz:filtered=<none>:selected_visible=-1:selected_actual=-1:scroll=0:rows=<none>:accepted=false:cancelled=true:last=-1\ntui.list_selection_view.failure=live_list_selection_view_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

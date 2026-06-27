@@ -3971,6 +3971,10 @@ Status: HXCX-TUI-275 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-276 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/selection_popup_common.rs`. The fixture preserves menu-surface inset and vertical padding facts, `ColumnWidthMode::AutoVisible`, `AutoAllRows`, and `Fixed` description-column behavior, off-screen row influence on stable all-row columns, disabled row metadata, category tag carry-through, single-line overflow ellipsis, wrapped-height measurement, selected-row visibility under wrapped rows, explicit wrap-indent clamping for narrow widths, and no-live rejection evidence. This is deterministic shared popup layout evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
 
+### HXCX-TUI-277 Headless Raw Codex List Selection View
+
+Status: HXCX-TUI-277 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/list_selection_view.rs`. The fixture preserves `popup_content_width` shared inset math, `SideContentWidth::Fixed`, `Half`, disabled, and too-narrow side-by-side layout decisions, `SelectionRowDisplay` wrapped versus single-line intent, searchable filtering over normalized `search_value`, filtered-index-to-source-item mapping, enabled selection preservation across filters, disabled-row navigation skip behavior, disabled accept rejection, enabled accept and empty-filter cancellation outcomes, header/tab/footer/side-content height accounting where deterministic, and no-live rejection evidence. This is deterministic list-selection state/layout evidence only, not live terminal mutation, ratatui buffer ownership, filesystem or clipboard mutation, network traffic, model traffic, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
