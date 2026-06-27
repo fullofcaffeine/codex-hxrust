@@ -52,6 +52,7 @@
       "../codex/codex-rs/tui/src/markdown_text_merge.rs",
       "../codex/codex-rs/tui/src/text_formatting.rs",
       "../codex/codex-rs/tui/src/live_wrap.rs",
+      "../codex/codex-rs/tui/src/wrapping.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -18676,6 +18677,240 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.live_wrap.plan=headless\ntui.live_wrap.reset=ascii-builder:width=10\ntui.live_wrap.push=long-ascii:fragment=hello whirl this is a test:display=hello whir~:10|l this is ~:10|a test~:6\ntui.live_wrap.rows=hard-wrap-rows:rows=hello whir~:10|l this is ~:10\ntui.live_wrap.display=partial-display:rows=hello whir~:10|l this is ~:10|a test~:6\ntui.live_wrap.reset=newline-builder:width=10\ntui.live_wrap.push=newline:fragment=hello\\nworld:display=hello!:5|world~:5\ntui.live_wrap.display=newline-display:rows=hello!:5|world~:5\ntui.live_wrap.end_line=explicit-end:display=hello!:5|world!:5\ntui.live_wrap.reset=rewrap-builder:width=10\ntui.live_wrap.push=rewrap-source:fragment=abcdefghijK:display=abcdefghij~:10|K~:1\ntui.live_wrap.set_width=narrower:width=5:display=abcde~:5|fghij~:5|K~:1\ntui.live_wrap.drain=commit-ready:max_keep=1:drained=abcde~:5|fghij~:5:remaining=K~:1\ntui.live_wrap.prefix=ascii-prefix:max=3:prefix=ABC:suffix=DEF:width=3\ntui.live_wrap.prefix=wide-overflow:max=2:prefix=a:suffix=\u754cb:width=1\ntui.live_wrap.prefix=wide-fit:max=3:prefix=a\u754c:suffix=b:width=3\ntui.live_wrap.failure=live_wrap_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> live wrap row builder boundary\ninput> \ntrace:\ntui.live_wrap.plan=headless\ntui.live_wrap.reset=ascii-builder:width=10\ntui.live_wrap.push=long-ascii:fragment=hello whirl this is a test:display=hello whir~:10|l this is ~:10|a test~:6\ntui.live_wrap.rows=hard-wrap-rows:rows=hello whir~:10|l this is ~:10\ntui.live_wrap.display=partial-display:rows=hello whir~:10|l this is ~:10|a test~:6\ntui.live_wrap.reset=newline-builder:width=10\ntui.live_wrap.push=newline:fragment=hello\\nworld:display=hello!:5|world~:5\ntui.live_wrap.display=newline-display:rows=hello!:5|world~:5\ntui.live_wrap.end_line=explicit-end:display=hello!:5|world!:5\ntui.live_wrap.reset=rewrap-builder:width=10\ntui.live_wrap.push=rewrap-source:fragment=abcdefghijK:display=abcdefghij~:10|K~:1\ntui.live_wrap.set_width=narrower:width=5:display=abcde~:5|fghij~:5|K~:1\ntui.live_wrap.drain=commit-ready:max_keep=1:drained=abcde~:5|fghij~:5:remaining=K~:1\ntui.live_wrap.prefix=ascii-prefix:max=3:prefix=ABC:suffix=DEF:width=3\ntui.live_wrap.prefix=wide-overflow:max=2:prefix=a:suffix=\u754cb:width=1\ntui.live_wrap.prefix=wide-fit:max=3:prefix=a\u754c:suffix=b:width=3\ntui.live_wrap.failure=live_wrap_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "url-aware-wrapping-headless",
+      "frame": {
+        "name": "url-aware-wrapping-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "url aware wrapping boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "wrapping",
+          "wrapping": {
+            "allowTerminalMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "contains_url",
+                "name": "absolute",
+                "text": "https://example.com/a/b",
+                "expectedBool": true
+              },
+              {
+                "kind": "contains_url",
+                "name": "custom-scheme",
+                "text": "myapp://open/some/path",
+                "expectedBool": true
+              },
+              {
+                "kind": "contains_url",
+                "name": "wrapped-parens",
+                "text": "(https://example.com/wrapped-in-parens)",
+                "expectedBool": true
+              },
+              {
+                "kind": "contains_url",
+                "name": "localhost",
+                "text": "localhost:3000/api",
+                "expectedBool": true
+              },
+              {
+                "kind": "contains_url",
+                "name": "relative-path",
+                "text": "src/main.rs",
+                "expectedBool": false
+              },
+              {
+                "kind": "contains_url",
+                "name": "dotted-word",
+                "text": "hello.world",
+                "expectedBool": false
+              },
+              {
+                "kind": "contains_url",
+                "name": "bad-port",
+                "text": "localhost:99999/path",
+                "expectedBool": false
+              },
+              {
+                "kind": "line_contains_url",
+                "name": "split-spans",
+                "spans": [
+                  {
+                    "text": "see "
+                  },
+                  {
+                    "text": "https://example.com/a/very/long/path"
+                  },
+                  {
+                    "text": " for details"
+                  }
+                ],
+                "expectedBool": true
+              },
+              {
+                "kind": "mixed",
+                "name": "prose-and-url",
+                "spans": [
+                  {
+                    "text": "see https://example.com/path for details"
+                  }
+                ],
+                "expectedBool": true
+              },
+              {
+                "kind": "mixed",
+                "name": "pipe-url-only",
+                "spans": [
+                  {
+                    "text": "  | "
+                  },
+                  {
+                    "text": "https://example.com/path"
+                  }
+                ],
+                "expectedBool": false
+              },
+              {
+                "kind": "mixed",
+                "name": "ordered-url-only",
+                "spans": [
+                  {
+                    "text": "1. https://example.com/path"
+                  }
+                ],
+                "expectedBool": false
+              },
+              {
+                "kind": "adaptive_wrap",
+                "name": "long-url-preserved",
+                "text": "example.test/a-very-long-path-with-many-segments-and-query?x=1&y=2",
+                "width": 20,
+                "expectedLines": [
+                  "example.test/a-very-long-path-with-many-segments-and-query?x=1&y=2"
+                ]
+              },
+              {
+                "kind": "adaptive_wrap",
+                "name": "non-url-fallback",
+                "text": "a_very_long_token_without_spaces_to_force_wrapping",
+                "width": 20,
+                "expectedLines": [
+                  "a_very_long_token_wi",
+                  "thout_spaces_to_forc",
+                  "e_wrapping"
+                ]
+              },
+              {
+                "kind": "adaptive_wrap",
+                "name": "mixed-prose-url",
+                "text": "see https://example.com/path and keep strikethrough intact while wrapping prose",
+                "width": 36,
+                "expectedLines": [
+                  "see https://example.com/path and",
+                  "keep strikethrough intact while",
+                  "wrapping prose"
+                ]
+              },
+              {
+                "kind": "adaptive_wrap",
+                "name": "leading-spaces-subsequent-indent",
+                "text": "      abcdefgh",
+                "width": 10,
+                "subsequentIndent": "      ",
+                "expectedLines": [
+                  "      abcd",
+                  "      efgh"
+                ]
+              },
+              {
+                "kind": "adaptive_wrap",
+                "name": "long-token-subsequent-indent",
+                "text": "abcdefghijklmnopqrst https://x.co",
+                "width": 10,
+                "subsequentIndent": "    ",
+                "expectedLines": [
+                  "abcdefghij",
+                  "    klmnop",
+                  "    qrst",
+                  "    https://x.co"
+                ]
+              },
+              {
+                "kind": "range_trim",
+                "name": "word-boundaries",
+                "text": "hello world",
+                "width": 5,
+                "expectedRanges": [
+                  {
+                    "start": 0,
+                    "end": 5
+                  },
+                  {
+                    "start": 6,
+                    "end": 11
+                  }
+                ]
+              },
+              {
+                "kind": "range_trim",
+                "name": "long-token-chunks",
+                "text": "abcdef",
+                "width": 3,
+                "expectedRanges": [
+                  {
+                    "start": 0,
+                    "end": 3
+                  },
+                  {
+                    "start": 3,
+                    "end": 6
+                  }
+                ]
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_wrapping_effects_rejected",
+                "noTerminalMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.wrapping.plan=headless\ntui.wrapping.contains_url=absolute:value=true:text=https://example.com/a/b\ntui.wrapping.contains_url=custom-scheme:value=true:text=myapp://open/some/path\ntui.wrapping.contains_url=wrapped-parens:value=true:text=(https://example.com/wrapped-in-parens)\ntui.wrapping.contains_url=localhost:value=true:text=localhost:3000/api\ntui.wrapping.contains_url=relative-path:value=false:text=src/main.rs\ntui.wrapping.contains_url=dotted-word:value=false:text=hello.world\ntui.wrapping.contains_url=bad-port:value=false:text=localhost:99999/path\ntui.wrapping.line_contains_url=split-spans:value=true:spans=see |https://example.com/a/very/long/path| for details\ntui.wrapping.mixed=prose-and-url:value=true:spans=see https://example.com/path for details\ntui.wrapping.mixed=pipe-url-only:value=false:spans=  | |https://example.com/path\ntui.wrapping.mixed=ordered-url-only:value=false:spans=1. https://example.com/path\ntui.wrapping.adaptive=long-url-preserved:width=20:lines=example.test/a-very-long-path-with-many-segments-and-query?x=1&y=2\ntui.wrapping.adaptive=non-url-fallback:width=20:lines=a_very_long_token_wi|thout_spaces_to_forc|e_wrapping\ntui.wrapping.adaptive=mixed-prose-url:width=36:lines=see https://example.com/path and|keep strikethrough intact while|wrapping prose\ntui.wrapping.adaptive=leading-spaces-subsequent-indent:width=10:lines=      abcd|      efgh\ntui.wrapping.adaptive=long-token-subsequent-indent:width=10:lines=abcdefghij|    klmnop|    qrst|    https://x.co\ntui.wrapping.range_trim=word-boundaries:width=5:ranges=0..5|6..11\ntui.wrapping.range_trim=long-token-chunks:width=3:ranges=0..3|3..6\ntui.wrapping.failure=live_wrapping_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> url aware wrapping boundary\ninput> \ntrace:\ntui.wrapping.plan=headless\ntui.wrapping.contains_url=absolute:value=true:text=https://example.com/a/b\ntui.wrapping.contains_url=custom-scheme:value=true:text=myapp://open/some/path\ntui.wrapping.contains_url=wrapped-parens:value=true:text=(https://example.com/wrapped-in-parens)\ntui.wrapping.contains_url=localhost:value=true:text=localhost:3000/api\ntui.wrapping.contains_url=relative-path:value=false:text=src/main.rs\ntui.wrapping.contains_url=dotted-word:value=false:text=hello.world\ntui.wrapping.contains_url=bad-port:value=false:text=localhost:99999/path\ntui.wrapping.line_contains_url=split-spans:value=true:spans=see |https://example.com/a/very/long/path| for details\ntui.wrapping.mixed=prose-and-url:value=true:spans=see https://example.com/path for details\ntui.wrapping.mixed=pipe-url-only:value=false:spans=  | |https://example.com/path\ntui.wrapping.mixed=ordered-url-only:value=false:spans=1. https://example.com/path\ntui.wrapping.adaptive=long-url-preserved:width=20:lines=example.test/a-very-long-path-with-many-segments-and-query?x=1&y=2\ntui.wrapping.adaptive=non-url-fallback:width=20:lines=a_very_long_token_wi|thout_spaces_to_forc|e_wrapping\ntui.wrapping.adaptive=mixed-prose-url:width=36:lines=see https://example.com/path and|keep strikethrough intact while|wrapping prose\ntui.wrapping.adaptive=leading-spaces-subsequent-indent:width=10:lines=      abcd|      efgh\ntui.wrapping.adaptive=long-token-subsequent-indent:width=10:lines=abcdefghij|    klmnop|    qrst|    https://x.co\ntui.wrapping.range_trim=word-boundaries:width=5:ranges=0..5|6..11\ntui.wrapping.range_trim=long-token-chunks:width=3:ranges=0..3|3..6\ntui.wrapping.failure=live_wrapping_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

@@ -400,6 +400,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.Wrapping:
+					if (!traceWrapping(event.wrapping, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4104,6 +4109,417 @@ class TuiSmokeEventLoop {
 			index++;
 		}
 		return width;
+	}
+
+	static function traceWrapping(plan:TuiSmokeWrappingPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowFilesystemMutation || plan.allowNetwork || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.wrapping.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.wrapping.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeWrappingActionKind.ContainsUrl:
+					final actual = wrappingTextContainsUrl(action.text);
+					if (actual != action.expectedBool) {
+						trace.push("tui.wrapping.contains_url_mismatch=" + action.name + ":expected=" + action.expectedBool + ":actual=" + actual);
+						return false;
+					}
+					trace.push("tui.wrapping.contains_url=" + action.name + ":value=" + actual + ":text=" + traceText(action.text));
+				case TuiSmokeWrappingActionKind.LineContainsUrl:
+					final actual = wrappingTextContainsUrl(wrappingSpanText(action.spans));
+					if (actual != action.expectedBool) {
+						trace.push("tui.wrapping.line_contains_url_mismatch=" + action.name + ":expected=" + action.expectedBool + ":actual=" + actual);
+						return false;
+					}
+					trace.push("tui.wrapping.line_contains_url=" + action.name + ":value=" + actual + ":spans=" + wrappingSpanTrace(action.spans));
+				case TuiSmokeWrappingActionKind.Mixed:
+					final actual = wrappingLineHasMixedUrlAndNonUrlTokens(wrappingSpanText(action.spans));
+					if (actual != action.expectedBool) {
+						trace.push("tui.wrapping.mixed_mismatch=" + action.name + ":expected=" + action.expectedBool + ":actual=" + actual);
+						return false;
+					}
+					trace.push("tui.wrapping.mixed=" + action.name + ":value=" + actual + ":spans=" + wrappingSpanTrace(action.spans));
+				case TuiSmokeWrappingActionKind.AdaptiveWrap:
+					final lines = wrappingAdaptiveLines(action.text, action.width, action.subsequentIndent);
+					if (!wrappingLinesMatch(lines, action.expectedLines)) {
+						trace.push("tui.wrapping.adaptive_mismatch=" + action.name + ":expected=" + wrappingLineTrace(action.expectedLines) + ":actual="
+							+ wrappingLineTrace(lines));
+						return false;
+					}
+					trace.push("tui.wrapping.adaptive=" + action.name + ":width=" + action.width + ":lines=" + wrappingLineTrace(lines));
+				case TuiSmokeWrappingActionKind.RangeTrim:
+					final ranges = wrappingTrimRanges(action.text, action.width);
+					if (!wrappingRangesMatch(ranges, action.expectedRanges)) {
+						trace.push("tui.wrapping.range_trim_mismatch=" + action.name + ":expected=" + wrappingRangeTrace(action.expectedRanges) + ":actual="
+							+ wrappingRangeTrace(ranges));
+						return false;
+					}
+					trace.push("tui.wrapping.range_trim=" + action.name + ":width=" + action.width + ":ranges=" + wrappingRangeTrace(ranges));
+				case TuiSmokeWrappingActionKind.Failure:
+					trace.push("tui.wrapping.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_fs="
+						+ action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.wrapping.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function wrappingTextContainsUrl(text:String):Bool {
+		final tokens = text.split(" ");
+		for (token in tokens) {
+			if (wrappingTokenIsUrlLike(token))
+				return true;
+		}
+		return false;
+	}
+
+	static function wrappingLineHasMixedUrlAndNonUrlTokens(text:String):Bool {
+		var sawUrl = false;
+		var sawNonUrl = false;
+		final tokens = text.split(" ");
+		for (token in tokens) {
+			if (wrappingTokenIsUrlLike(token)) {
+				sawUrl = true;
+			} else if (wrappingTokenIsSubstantiveNonUrl(token)) {
+				sawNonUrl = true;
+			}
+			if (sawUrl && sawNonUrl)
+				return true;
+		}
+		return false;
+	}
+
+	static function wrappingTokenIsUrlLike(raw:String):Bool {
+		final token = wrappingTrimUrlToken(raw);
+		if (token == "")
+			return false;
+		final schemeIndex = token.indexOf("://");
+		if (schemeIndex > 0) {
+			final scheme = token.substr(0, schemeIndex);
+			final rest = token.substr(schemeIndex + 3);
+			return wrappingValidScheme(scheme) && rest != "";
+		}
+		return wrappingBareTokenIsUrlLike(token);
+	}
+
+	static function wrappingBareTokenIsUrlLike(token:String):Bool {
+		final split = wrappingFirstUrlPathSeparator(token);
+		if (split < 0)
+			return false;
+		var host = token.substr(0, split);
+		if (host == "")
+			return false;
+		final colon = host.lastIndexOf(":");
+		if (colon >= 0) {
+			final portText = host.substr(colon + 1);
+			if (!wrappingValidPort(portText))
+				return false;
+			host = host.substr(0, colon);
+		}
+		if (host == "localhost")
+			return colon >= 0;
+		if (wrappingHostIsIpv4(host))
+			return true;
+		if (StringTools.startsWith(host, "www.") && host.indexOf(".", 4) > 4)
+			return wrappingHostIsDomain(host);
+		return wrappingHostIsDomain(host);
+	}
+
+	static function wrappingValidScheme(value:String):Bool {
+		if (value == "" || !wrappingIsAsciiAlpha(value.charCodeAt(0)))
+			return false;
+		var index = 1;
+		while (index < value.length) {
+			final code = value.charCodeAt(index);
+			if (!wrappingIsAsciiAlphaNumeric(code) && code != 43 && code != 45 && code != 46)
+				return false;
+			index++;
+		}
+		return true;
+	}
+
+	static function wrappingFirstUrlPathSeparator(value:String):Int {
+		var best = -1;
+		for (ch in ["/", "?", "#"]) {
+			final found = value.indexOf(ch);
+			if (found >= 0 && (best < 0 || found < best))
+				best = found;
+		}
+		return best;
+	}
+
+	static function wrappingHostIsDomain(host:String):Bool {
+		final dot = host.lastIndexOf(".");
+		if (dot <= 0 || dot == host.length - 1)
+			return false;
+		final labels = host.split(".");
+		for (label in labels) {
+			if (label == "" || !wrappingDomainLabelOk(label))
+				return false;
+		}
+		return true;
+	}
+
+	static function wrappingDomainLabelOk(label:String):Bool {
+		var index = 0;
+		while (index < label.length) {
+			final code = label.charCodeAt(index);
+			if (!wrappingIsAsciiAlphaNumeric(code) && code != 45)
+				return false;
+			index++;
+		}
+		return true;
+	}
+
+	static function wrappingHostIsIpv4(host:String):Bool {
+		final parts = host.split(".");
+		if (parts.length != 4)
+			return false;
+		for (part in parts) {
+			if (part == "" || !wrappingAllDigits(part))
+				return false;
+			final parsed = Std.parseInt(part);
+			if (parsed == null || parsed < 0 || parsed > 255)
+				return false;
+		}
+		return true;
+	}
+
+	static function wrappingValidPort(value:String):Bool {
+		if (value == "" || !wrappingAllDigits(value))
+			return false;
+		final parsed = Std.parseInt(value);
+		return parsed != null && parsed >= 1 && parsed <= 65535;
+	}
+
+	static function wrappingAllDigits(value:String):Bool {
+		var index = 0;
+		while (index < value.length) {
+			final code = value.charCodeAt(index);
+			if (code < 48 || code > 57)
+				return false;
+			index++;
+		}
+		return true;
+	}
+
+	static function wrappingIsAsciiAlpha(code:Int):Bool {
+		return (code >= 65 && code <= 90) || (code >= 97 && code <= 122);
+	}
+
+	static function wrappingIsAsciiAlphaNumeric(code:Int):Bool {
+		return wrappingIsAsciiAlpha(code) || (code >= 48 && code <= 57);
+	}
+
+	static function wrappingTrimUrlToken(raw:String):String {
+		var start = 0;
+		var end = raw.length;
+		while (start < end && wrappingIsTrimPunctuation(raw.charAt(start)))
+			start++;
+		while (end > start && wrappingIsTrimPunctuation(raw.charAt(end - 1)))
+			end--;
+		return raw.substr(start, end - start);
+	}
+
+	static function wrappingIsTrimPunctuation(ch:String):Bool {
+		return ch == "(" || ch == ")" || ch == "[" || ch == "]" || ch == "{" || ch == "}" || ch == "<" || ch == ">" || ch == "," || ch == "." || ch == ";"
+			|| ch == "!" || ch == "\"" || ch == "'";
+	}
+
+	static function wrappingTokenIsSubstantiveNonUrl(raw:String):Bool {
+		final token = StringTools.trim(raw);
+		if (token == "" || wrappingIsOrderedMarker(token) || wrappingIsDecorativeMarker(token))
+			return false;
+		final stripped = wrappingTrimUrlToken(token);
+		var index = 0;
+		while (index < stripped.length) {
+			if (wrappingIsAsciiAlphaNumeric(stripped.charCodeAt(index)))
+				return true;
+			index++;
+		}
+		return false;
+	}
+
+	static function wrappingIsOrderedMarker(token:String):Bool {
+		if (token.length < 2)
+			return false;
+		final last = token.charAt(token.length - 1);
+		if (last != "." && last != ")")
+			return false;
+		return wrappingAllDigits(token.substr(0, token.length - 1));
+	}
+
+	static function wrappingIsDecorativeMarker(token:String):Bool {
+		var index = 0;
+		while (index < token.length) {
+			final ch = token.charAt(index);
+			if (ch != "-" && ch != "*" && ch != "+" && ch != "|" && ch != ">")
+				return false;
+			index++;
+		}
+		return token.length > 0;
+	}
+
+	static function wrappingAdaptiveLines(text:String, width:Int, subsequentIndent:String):Array<String> {
+		final effectiveWidth = intMax(1, width);
+		if (wrappingTextContainsUrl(text) && !wrappingLineHasMixedUrlAndNonUrlTokens(text))
+			return [text];
+		final trimmedStart = StringTools.ltrim(text);
+		final tokens = wrappingSplitTokens(trimmedStart);
+		final leading = text.substr(0, text.length - trimmedStart.length);
+		final lines:Array<String> = [];
+		var current = leading;
+		for (token in tokens)
+			current = wrappingAppendToken(lines, token, effectiveWidth, subsequentIndent, current);
+		if (current != "")
+			lines.push(current);
+		return lines;
+	}
+
+	static function wrappingAppendToken(lines:Array<String>, token:String, width:Int, indent:String, current:String):String {
+		final hasWord = StringTools.trim(current) != "";
+		final separator = hasWord ? " " : "";
+		final projected = current + separator + token;
+		if (liveWrapTextWidth(projected) <= width) {
+			current = projected;
+		} else {
+			if (hasWord) {
+				lines.push(current);
+				current = indent;
+			}
+			current = wrappingPlaceToken(lines, current, token, width, indent);
+		}
+		return current;
+	}
+
+	static function wrappingPlaceToken(lines:Array<String>, current:String, token:String, width:Int, indent:String):String {
+		if (wrappingTokenIsUrlLike(token)) {
+			if (StringTools.trim(current) != "")
+				lines.push(current);
+			return indent + token;
+		}
+		var remaining = token;
+		var out = current;
+		while (remaining != "") {
+			final available = intMax(1, width - liveWrapTextWidth(out));
+			if (liveWrapTextWidth(remaining) <= available) {
+				out += remaining;
+				remaining = "";
+			} else {
+				final prefix = liveWrapTakePrefixByWidth(remaining, available);
+				out += prefix.prefix;
+				lines.push(out);
+				out = indent;
+				remaining = prefix.suffix;
+			}
+		}
+		return out;
+	}
+
+	static function wrappingSplitTokens(text:String):Array<String> {
+		final out:Array<String> = [];
+		var start = -1;
+		var index = 0;
+		while (index < text.length) {
+			final ch = text.charAt(index);
+			if (ch == " " || ch == "\t") {
+				if (start >= 0) {
+					out.push(text.substr(start, index - start));
+					start = -1;
+				}
+			} else if (start < 0) {
+				start = index;
+			}
+			index++;
+		}
+		if (start >= 0)
+			out.push(text.substr(start));
+		return out;
+	}
+
+	static function wrappingTrimRanges(text:String, width:Int):Array<TuiSmokeWrappingRange> {
+		final ranges:Array<TuiSmokeWrappingRange> = [];
+		final effectiveWidth = intMax(1, width);
+		var index = 0;
+		while (index < text.length) {
+			while (index < text.length && text.charAt(index) == " ")
+				index++;
+			if (index >= text.length)
+				break;
+			final start = index;
+			while (index < text.length && text.charAt(index) != " " && index - start < effectiveWidth)
+				index++;
+			ranges.push(new TuiSmokeWrappingRange({
+				start: start,
+				end: index
+			}));
+			while (index < text.length && text.charAt(index) != " " && index - start >= effectiveWidth) {
+				final chunkStart = index;
+				while (index < text.length && text.charAt(index) != " " && index - chunkStart < effectiveWidth)
+					index++;
+				ranges.push(new TuiSmokeWrappingRange({
+					start: chunkStart,
+					end: index
+				}));
+			}
+		}
+		return ranges;
+	}
+
+	static function wrappingSpanText(spans:Array<TuiSmokeWrappingSpan>):String {
+		var out = "";
+		for (span in spans)
+			out += span.text;
+		return out;
+	}
+
+	static function wrappingSpanTrace(spans:Array<TuiSmokeWrappingSpan>):String {
+		final out:Array<String> = [];
+		for (span in spans)
+			out.push(traceText(span.text));
+		return out.join("|");
+	}
+
+	static function wrappingLinesMatch(left:Array<String>, right:Array<String>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (index in 0...left.length) {
+			if (left[index] != right[index])
+				return false;
+		}
+		return true;
+	}
+
+	static function wrappingLineTrace(lines:Array<String>):String {
+		if (lines.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (line in lines)
+			out.push(traceText(line));
+		return out.join("|");
+	}
+
+	static function wrappingRangesMatch(left:Array<TuiSmokeWrappingRange>, right:Array<TuiSmokeWrappingRange>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (index in 0...left.length) {
+			if (left[index].start != right[index].start || left[index].end != right[index].end)
+				return false;
+		}
+		return true;
+	}
+
+	static function wrappingRangeTrace(ranges:Array<TuiSmokeWrappingRange>):String {
+		if (ranges.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (range in ranges)
+			out.push(range.start + ".." + range.end);
+		return out.join("|");
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

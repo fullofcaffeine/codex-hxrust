@@ -120,6 +120,7 @@ class TuiSmokeFixtureLoader {
 				markdownTextMerge: optionalMarkdownTextMergePlan(value, "markdownTextMerge"),
 				textFormatting: optionalTextFormattingPlan(value, "textFormatting"),
 				liveWrap: optionalLiveWrapPlan(value, "liveWrap"),
+				wrapping: optionalWrappingPlan(value, "wrapping"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -494,6 +495,65 @@ class TuiSmokeFixtureLoader {
 				text: optionalStringField(value, "text", ""),
 				explicitBreak: optionalBoolField(value, "explicitBreak", false),
 				width: optionalIntField(value, "width", 0)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalWrappingPlan(object:Value, name:String):Null<TuiSmokeWrappingPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeWrappingPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: wrappingActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function wrappingActions(values:Array<Value>):Array<TuiSmokeWrappingAction> {
+		final out:Array<TuiSmokeWrappingAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeWrappingAction({
+				kind: TuiSmokeWrappingActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				text: optionalStringField(value, "text", ""),
+				spans: wrappingSpans(optionalArrayField(value, "spans")),
+				width: optionalIntField(value, "width", 0),
+				subsequentIndent: optionalStringField(value, "subsequentIndent", ""),
+				expectedBool: optionalBoolField(value, "expectedBool", false),
+				expectedLines: optionalStringArrayField(value, "expectedLines"),
+				expectedRanges: wrappingRanges(optionalArrayField(value, "expectedRanges")),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function wrappingSpans(values:Array<Value>):Array<TuiSmokeWrappingSpan> {
+		final out:Array<TuiSmokeWrappingSpan> = [];
+		for (value in values) {
+			out.push(new TuiSmokeWrappingSpan({
+				text: optionalStringField(value, "text", "")
+			}));
+		}
+		return out;
+	}
+
+	static function wrappingRanges(values:Array<Value>):Array<TuiSmokeWrappingRange> {
+		final out:Array<TuiSmokeWrappingRange> = [];
+		for (value in values) {
+			out.push(new TuiSmokeWrappingRange({
+				start: optionalIntField(value, "start", 0),
+				end: optionalIntField(value, "end", 0)
 			}));
 		}
 		return out;
