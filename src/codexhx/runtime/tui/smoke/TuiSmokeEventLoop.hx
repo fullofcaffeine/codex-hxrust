@@ -114,6 +114,33 @@ private typedef TuiSmokeCommandPopupResult = {
 	final trace:String;
 }
 
+private typedef TuiSmokeMultiSelectResult = {
+	final query:String;
+	final filtered:Array<Int>;
+	final order:Array<String>;
+	final enabledIds:Array<String>;
+	final rows:Array<String>;
+	final selectedIndex:Int;
+	final selectedActual:Int;
+	final scrollTop:Int;
+	final changeCount:Int;
+	final confirmedIds:Array<String>;
+	final cancelled:Bool;
+	final complete:Bool;
+	final preview:String;
+	final height:Int;
+	final trace:String;
+}
+
+private typedef TuiSmokeMutableMultiSelectItem = {
+	final id:String;
+	final name:String;
+	final description:String;
+	var enabled:Bool;
+	final orderable:Bool;
+	final sectionBreakAfter:Bool;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -561,6 +588,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.CommandPopup:
 					if (!traceCommandPopup(event.commandPopup, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.MultiSelectPicker:
+					if (!traceMultiSelectPicker(event.multiSelectPicker, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -6999,6 +7031,262 @@ class TuiSmokeEventLoop {
 		for (idx in 0...visible)
 			total += intMax(1, Std.int((rows[idx].length + effectiveWidth - 1) / effectiveWidth));
 		return total;
+	}
+
+	static function traceMultiSelectPicker(plan:TuiSmokeMultiSelectPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowClipboardMutation
+			|| plan.allowNetwork || plan.allowModelCall || plan.allowAppEventDelivery || !plan.enabled()) {
+			trace.push("tui.multi_select_picker.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.multi_select_picker.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeMultiSelectActionKind.Filter, TuiSmokeMultiSelectActionKind.MoveDown, TuiSmokeMultiSelectActionKind.MoveUp,
+					TuiSmokeMultiSelectActionKind.Toggle, TuiSmokeMultiSelectActionKind.ReorderUp, TuiSmokeMultiSelectActionKind.ReorderDown,
+					TuiSmokeMultiSelectActionKind.Confirm, TuiSmokeMultiSelectActionKind.Cancel, TuiSmokeMultiSelectActionKind.Height:
+					final result = multiSelectActionTrace(action, plan.items);
+					if (result.query != action.expectedQuery
+						|| !intArraysEqual(result.filtered, action.expectedFilteredIndices)
+						|| !stringArraysEqual(result.order, action.expectedOrder)
+						|| !stringArraysEqual(result.enabledIds, action.expectedEnabledIds)
+						|| !stringArraysEqual(result.rows, action.expectedRows)
+						|| result.selectedIndex != action.expectedSelectedIndex
+						|| result.selectedActual != action.expectedSelectedActual
+						|| result.scrollTop != action.expectedScrollTop
+						|| result.changeCount != action.expectedChangeCount
+						|| !stringArraysEqual(result.confirmedIds, action.expectedConfirmedIds)
+						|| result.cancelled != action.expectedCancelled
+						|| result.complete != action.expectedComplete
+						|| result.preview != action.expectedPreview
+						|| result.height != action.expectedHeight) {
+						trace.push("tui.multi_select_picker." + action.kind + "_mismatch=" + action.name + ":" + result.trace);
+						return false;
+					}
+					trace.push("tui.multi_select_picker." + action.kind + "=" + action.name + ":" + result.trace);
+				case TuiSmokeMultiSelectActionKind.Failure:
+					trace.push("tui.multi_select_picker.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_clipboard=" + action.noClipboardMutation + ":no_network="
+						+ action.noNetwork + ":no_model=" + action.noModelCall + ":no_app_event=" + action.noAppEventDelivery + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.multi_select_picker.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function multiSelectActionTrace(action:TuiSmokeMultiSelectAction, planItems:Array<TuiSmokeMultiSelectItem>):TuiSmokeMultiSelectResult {
+		var items = multiSelectCloneItems(action.items.length > 0 ? action.items : planItems);
+		var query = StringTools.trim(action.query);
+		var filtered = multiSelectFilteredIndices(items, query);
+		var selected = filtered.length == 0 ? -1 : intClamp(action.selectedIndex, 0, filtered.length - 1);
+		var scrollTop = multiSelectEnsureVisible(action.scrollTop, selected, filtered.length, action.maxVisibleRows);
+		var changeCount = 0;
+		var confirmedIds:Array<String> = [];
+		var cancelled = false;
+		var complete = false;
+		if (action.kind == TuiSmokeMultiSelectActionKind.MoveDown) {
+			for (_ in 0...intMax(1, action.moveCount))
+				selected = multiSelectMove(selected, filtered.length, 1);
+			scrollTop = multiSelectEnsureVisible(scrollTop, selected, filtered.length, action.maxVisibleRows);
+		} else if (action.kind == TuiSmokeMultiSelectActionKind.MoveUp) {
+			for (_ in 0...intMax(1, action.moveCount))
+				selected = multiSelectMove(selected, filtered.length, -1);
+			scrollTop = multiSelectEnsureVisible(scrollTop, selected, filtered.length, action.maxVisibleRows);
+		} else if (action.kind == TuiSmokeMultiSelectActionKind.Toggle) {
+			final actual = selected >= 0 && selected < filtered.length ? filtered[selected] : -1;
+			if (actual >= 0 && actual < items.length) {
+				items[actual].enabled = !items[actual].enabled;
+				changeCount = 1;
+			}
+		} else if (action.kind == TuiSmokeMultiSelectActionKind.ReorderUp || action.kind == TuiSmokeMultiSelectActionKind.ReorderDown) {
+			final direction = action.kind == TuiSmokeMultiSelectActionKind.ReorderUp ? -1 : 1;
+			final moved = multiSelectReorder(items, filtered, selected, query, action.orderingEnabled, direction);
+			if (moved >= 0) {
+				changeCount = 1;
+				filtered = multiSelectFilteredIndices(items, query);
+				selected = multiSelectVisibleIndex(filtered, moved);
+				scrollTop = multiSelectEnsureVisible(scrollTop, selected, filtered.length, action.maxVisibleRows);
+			}
+		} else if (action.kind == TuiSmokeMultiSelectActionKind.Confirm) {
+			complete = true;
+			confirmedIds = multiSelectEnabledIds(items);
+		} else if (action.kind == TuiSmokeMultiSelectActionKind.Cancel) {
+			complete = true;
+			cancelled = true;
+		}
+		final selectedActual = selected >= 0 && selected < filtered.length ? filtered[selected] : -1;
+		final rows = multiSelectRows(items, filtered, selected);
+		final enabled = multiSelectEnabledIds(items);
+		final order = multiSelectOrder(items);
+		final preview = action.hasPreview ? "enabled=" + stringListTrace(enabled, ",") : "";
+		final height = action.headerHeight + intClamp(rows.length, 1, action.maxVisibleRows) + 6 + (action.hasPreview ? 1 : 0);
+		return {query: query,
+			filtered: filtered,
+			order: order,
+			enabledIds: enabled,
+			rows: rows,
+			selectedIndex: selected,
+			selectedActual: selectedActual,
+			scrollTop: scrollTop,
+			changeCount: changeCount,
+			confirmedIds: confirmedIds,
+			cancelled: cancelled,
+			complete: complete,
+			preview: preview,
+			height: height,
+			trace: "query="
+			+ traceText(query)
+			+ ":filtered="
+			+ intListTrace(filtered)
+			+ ":order="
+			+ stringListTrace(order, ",")
+			+ ":enabled="
+			+ stringListTrace(enabled, ",")
+			+ ":selected="
+			+ selected
+			+ ":selected_actual="
+			+ selectedActual
+			+ ":scroll="
+			+ scrollTop
+			+ ":rows="
+			+ stringListTrace(rows, "|")
+			+ ":changes="
+			+ changeCount
+			+ ":confirmed="
+			+ stringListTrace(confirmedIds, ",")
+			+ ":cancelled="
+			+ cancelled
+			+ ":complete="
+			+ complete
+			+ ":preview="
+			+ traceText(preview)
+			+ ":height="
+			+ height};
+	}
+
+	static function multiSelectCloneItems(items:Array<TuiSmokeMultiSelectItem>):Array<TuiSmokeMutableMultiSelectItem> {
+		final out:Array<TuiSmokeMutableMultiSelectItem> = [];
+		for (item in items) {
+			out.push({
+				id: item.id,
+				name: item.name,
+				description: item.description,
+				enabled: item.enabled,
+				orderable: item.orderable,
+				sectionBreakAfter: item.sectionBreakAfter
+			});
+		}
+		return out;
+	}
+
+	static function multiSelectFilteredIndices(items:Array<TuiSmokeMutableMultiSelectItem>, query:String):Array<Int> {
+		final out:Array<Int> = [];
+		final normalized = query.toLowerCase();
+		if (normalized == "") {
+			for (idx in 0...items.length)
+				out.push(idx);
+			return out;
+		}
+		final scored:Array<{final idx:Int; final score:Int; final name:String;}> = [];
+		for (idx in 0...items.length) {
+			final name = items[idx].name.toLowerCase();
+			final at = name.indexOf(normalized);
+			if (at >= 0)
+				scored.push({idx: idx, score: at, name: items[idx].name});
+		}
+		scored.sort(function(left, right) {
+			if (left.score != right.score)
+				return left.score - right.score;
+			return compareStrings(left.name, right.name);
+		});
+		for (match in scored)
+			out.push(match.idx);
+		return out;
+	}
+
+	static function multiSelectRows(items:Array<TuiSmokeMutableMultiSelectItem>, filtered:Array<Int>, selected:Int):Array<String> {
+		final out:Array<String> = [];
+		for (visible in 0...filtered.length) {
+			final actual = filtered[visible];
+			final item = items[actual];
+			final prefix = visible == selected ? ">" : "-";
+			final marker = item.enabled ? "x" : " ";
+			out.push(prefix + " [" + marker + "] " + multiSelectTruncateName(item.name) + "{id=" + item.id + ",actual=" + actual + ",desc="
+				+ traceText(item.description) + "}");
+			if (item.sectionBreakAfter && visible + 1 < filtered.length)
+				out.push("- section-break");
+		}
+		return out;
+	}
+
+	static function multiSelectTruncateName(name:String):String {
+		if (name.length <= 21)
+			return name;
+		return name.substr(0, 20) + ellipsis();
+	}
+
+	static function multiSelectMove(selected:Int, length:Int, direction:Int):Int {
+		if (length == 0)
+			return -1;
+		if (selected < 0)
+			return 0;
+		return (selected + direction + length) % length;
+	}
+
+	static function multiSelectEnsureVisible(scrollTop:Int, selected:Int, length:Int, maxRows:Int):Int {
+		if (length == 0 || selected < 0)
+			return 0;
+		final visibleRows = intMin(intMax(1, maxRows), length);
+		var start = intClamp(scrollTop, 0, intMax(0, length - visibleRows));
+		if (selected < start)
+			start = selected;
+		final bottom = start + visibleRows - 1;
+		if (selected > bottom)
+			start = selected + 1 - visibleRows;
+		return intClamp(start, 0, intMax(0, length - visibleRows));
+	}
+
+	static function multiSelectReorder(items:Array<TuiSmokeMutableMultiSelectItem>, filtered:Array<Int>, selected:Int, query:String, orderingEnabled:Bool,
+			direction:Int):Int {
+		if (!orderingEnabled || query != "" || selected < 0 || selected >= filtered.length)
+			return -1;
+		final actual = filtered[selected];
+		final target = actual + direction;
+		if (actual < 0 || actual >= items.length || target < 0 || target >= items.length)
+			return -1;
+		if (!items[actual].orderable || !items[target].orderable)
+			return -1;
+		final temp = items[actual];
+		items[actual] = items[target];
+		items[target] = temp;
+		return target;
+	}
+
+	static function multiSelectVisibleIndex(filtered:Array<Int>, actual:Int):Int {
+		for (idx in 0...filtered.length) {
+			if (filtered[idx] == actual)
+				return idx;
+		}
+		return -1;
+	}
+
+	static function multiSelectEnabledIds(items:Array<TuiSmokeMutableMultiSelectItem>):Array<String> {
+		final out:Array<String> = [];
+		for (item in items) {
+			if (item.enabled)
+				out.push(item.id);
+		}
+		return out;
+	}
+
+	static function multiSelectOrder(items:Array<TuiSmokeMutableMultiSelectItem>):Array<String> {
+		final out:Array<String> = [];
+		for (item in items)
+			out.push(item.id);
+		return out;
 	}
 
 	static function traceSelectionPopupCommon(plan:TuiSmokeSelectionPopupCommonPlan, trace:Array<String>):Bool {

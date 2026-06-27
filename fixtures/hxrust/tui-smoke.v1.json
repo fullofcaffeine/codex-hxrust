@@ -70,6 +70,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/command_popup.rs",
       "../codex/codex-rs/tui/src/bottom_pane/slash_commands.rs",
       "../codex/codex-rs/tui/src/slash_command.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/multi_select_picker.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -22352,6 +22353,353 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.command_popup.plan=headless\ntui.command_popup.filter=empty-filter-hides-aliases-and-gated:filter=<empty>:commands=model,memories,mention,mcp,init,compact,status,stop:selected=0:selected_command=model:scroll=0:height=15:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=none}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=none}|- /mention{kind=builtin,id=<empty>,desc=mention a file,match=none}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=none}|- /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=none}|- /compact{kind=builtin,id=<empty>,desc=summarize conversation to prevent hitting the context limit,match=none}|- /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=none}|- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=none}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=exact-init-first-token:filter=init:commands=init:selected=0:selected_command=init:scroll=0:height=2:rows=> /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=1-4}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=model-prefix:filter=mo:commands=model:selected=0:selected_command=model:scroll=0:height=2:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=m-prefix-presentation-order:filter=m:commands=model,memories,mention,mcp:selected=0:selected_command=model:scroll=0:height=7:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}|- /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.move_down=m-prefix-move-to-mention:filter=m:commands=model,memories,mention,mcp:selected=2:selected_command=mention:scroll=0:height=7:rows=- /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}|> /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.accept=service-tier-accepts-catalog-id:filter=fa:commands=fast:selected=0:selected_command=fast:scroll=0:height=2:rows=> /fast{kind=service_tier,id=priority,desc=Fastest inference with increased plan usage,match=1-2}:accepted=true:cancelled=false:accepted_kind=service_tier:accepted_id=priority\ntui.command_popup.filter=filter-change-resets-scrolled-selection:filter=st:commands=status,stop:selected=0:selected_command=status:scroll=0:height=4:rows=> /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=1-2}|- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=alias-hidden-empty-shown-prefix:filter=qu:commands=quit:selected=0:selected_command=quit:scroll=0:height=1:rows=> /quit{kind=builtin,id=<empty>,desc=exit Codex,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=ac-prefix-excludes-compact:filter=ac:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=plan-hidden-when-collaboration-disabled:filter=plan:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=plan-visible-when-collaboration-enabled:filter=plan:commands=plan:selected=0:selected_command=plan:scroll=0:height=1:rows=> /plan{kind=builtin,id=<empty>,desc=switch to Plan mode,match=1-4}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.accept=no-match-cancels:filter=zzz:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=true:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.failure=live_command_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> command popup\ninput> \ntrace:\ntui.command_popup.plan=headless\ntui.command_popup.filter=empty-filter-hides-aliases-and-gated:filter=<empty>:commands=model,memories,mention,mcp,init,compact,status,stop:selected=0:selected_command=model:scroll=0:height=15:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=none}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=none}|- /mention{kind=builtin,id=<empty>,desc=mention a file,match=none}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=none}|- /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=none}|- /compact{kind=builtin,id=<empty>,desc=summarize conversation to prevent hitting the context limit,match=none}|- /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=none}|- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=none}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=exact-init-first-token:filter=init:commands=init:selected=0:selected_command=init:scroll=0:height=2:rows=> /init{kind=builtin,id=<empty>,desc=create an AGENTS.md file with instructions for Codex,match=1-4}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=model-prefix:filter=mo:commands=model:selected=0:selected_command=model:scroll=0:height=2:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=m-prefix-presentation-order:filter=m:commands=model,memories,mention,mcp:selected=0:selected_command=model:scroll=0:height=7:rows=> /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}|- /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.move_down=m-prefix-move-to-mention:filter=m:commands=model,memories,mention,mcp:selected=2:selected_command=mention:scroll=0:height=7:rows=- /model{kind=builtin,id=<empty>,desc=choose what model and reasoning effort to use,match=1-1}|- /memories{kind=builtin,id=<empty>,desc=configure memory use and generation,match=1-1}|> /mention{kind=builtin,id=<empty>,desc=mention a file,match=1-1}|- /mcp{kind=builtin,id=<empty>,desc=list configured MCP tools; use /mcp verbose for details,match=1-1}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.accept=service-tier-accepts-catalog-id:filter=fa:commands=fast:selected=0:selected_command=fast:scroll=0:height=2:rows=> /fast{kind=service_tier,id=priority,desc=Fastest inference with increased plan usage,match=1-2}:accepted=true:cancelled=false:accepted_kind=service_tier:accepted_id=priority\ntui.command_popup.filter=filter-change-resets-scrolled-selection:filter=st:commands=status,stop:selected=0:selected_command=status:scroll=0:height=4:rows=> /status{kind=builtin,id=<empty>,desc=show current session configuration and token usage,match=1-2}|- /stop{kind=builtin,id=<empty>,desc=stop all background terminals,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=alias-hidden-empty-shown-prefix:filter=qu:commands=quit:selected=0:selected_command=quit:scroll=0:height=1:rows=> /quit{kind=builtin,id=<empty>,desc=exit Codex,match=1-2}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=ac-prefix-excludes-compact:filter=ac:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=plan-hidden-when-collaboration-disabled:filter=plan:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.filter=plan-visible-when-collaboration-enabled:filter=plan:commands=plan:selected=0:selected_command=plan:scroll=0:height=1:rows=> /plan{kind=builtin,id=<empty>,desc=switch to Plan mode,match=1-4}:accepted=false:cancelled=false:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.accept=no-match-cancels:filter=zzz:commands=<none>:selected=-1:selected_command=<empty>:scroll=0:height=1:rows=<none>:accepted=false:cancelled=true:accepted_kind=<empty>:accepted_id=<empty>\ntui.command_popup.failure=live_command_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "multi-select-picker-headless",
+      "frame": {
+        "name": "multi-select-picker-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "multi select picker"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "multi_select_picker",
+          "multiSelectPicker": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowClipboardMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "allowAppEventDelivery": false,
+            "items": [
+              {
+                "id": "theme-colors",
+                "name": "Theme Colors",
+                "description": "UI palette",
+                "enabled": false,
+                "orderable": false,
+                "sectionBreakAfter": true
+              },
+              {
+                "id": "model",
+                "name": "Model",
+                "description": "Model picker",
+                "enabled": true,
+                "orderable": true
+              },
+              {
+                "id": "branch",
+                "name": "Branch",
+                "description": "Branch selector",
+                "enabled": false,
+                "orderable": true
+              },
+              {
+                "id": "jupiter",
+                "name": "Jupiter",
+                "description": "Planet option",
+                "enabled": false,
+                "orderable": true
+              },
+              {
+                "id": "alpha-long",
+                "name": "Alpha Long Display Name Overflow",
+                "description": "Long label",
+                "enabled": false,
+                "orderable": true
+              }
+            ],
+            "actions": [
+              {
+                "kind": "filter",
+                "name": "initial-all",
+                "hasPreview": true,
+                "expectedQuery": "",
+                "expectedFilteredIndices": [0, 1, 2, 3, 4],
+                "expectedOrder": ["theme-colors", "model", "branch", "jupiter", "alpha-long"],
+                "expectedEnabledIds": ["model"],
+                "expectedRows": [
+                  "> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}",
+                  "- section-break",
+                  "- [x] Model{id=model,actual=1,desc=Model picker}",
+                  "- [ ] Branch{id=branch,actual=2,desc=Branch selector}",
+                  "- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}",
+                  "- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedActual": 0,
+                "expectedScrollTop": 0,
+                "expectedPreview": "enabled=model",
+                "expectedHeight": 14
+              },
+              {
+                "kind": "filter",
+                "name": "query-j-character",
+                "query": "j",
+                "hasPreview": true,
+                "expectedQuery": "j",
+                "expectedFilteredIndices": [3],
+                "expectedOrder": ["theme-colors", "model", "branch", "jupiter", "alpha-long"],
+                "expectedEnabledIds": ["model"],
+                "expectedRows": [
+                  "> [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedActual": 3,
+                "expectedScrollTop": 0,
+                "expectedPreview": "enabled=model",
+                "expectedHeight": 9
+              },
+              {
+                "kind": "move_down",
+                "name": "move-down-skips-section-row",
+                "selectedIndex": 0,
+                "moveCount": 2,
+                "hasPreview": true,
+                "expectedQuery": "",
+                "expectedFilteredIndices": [0, 1, 2, 3, 4],
+                "expectedOrder": ["theme-colors", "model", "branch", "jupiter", "alpha-long"],
+                "expectedEnabledIds": ["model"],
+                "expectedRows": [
+                  "- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}",
+                  "- section-break",
+                  "- [x] Model{id=model,actual=1,desc=Model picker}",
+                  "> [ ] Branch{id=branch,actual=2,desc=Branch selector}",
+                  "- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}",
+                  "- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}"
+                ],
+                "expectedSelectedIndex": 2,
+                "expectedSelectedActual": 2,
+                "expectedScrollTop": 0,
+                "expectedPreview": "enabled=model",
+                "expectedHeight": 14
+              },
+              {
+                "kind": "toggle",
+                "name": "toggle-branch-updates-preview",
+                "selectedIndex": 2,
+                "hasPreview": true,
+                "expectedQuery": "",
+                "expectedFilteredIndices": [0, 1, 2, 3, 4],
+                "expectedOrder": ["theme-colors", "model", "branch", "jupiter", "alpha-long"],
+                "expectedEnabledIds": ["model", "branch"],
+                "expectedRows": [
+                  "- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}",
+                  "- section-break",
+                  "- [x] Model{id=model,actual=1,desc=Model picker}",
+                  "> [x] Branch{id=branch,actual=2,desc=Branch selector}",
+                  "- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}",
+                  "- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}"
+                ],
+                "expectedSelectedIndex": 2,
+                "expectedSelectedActual": 2,
+                "expectedScrollTop": 0,
+                "expectedChangeCount": 1,
+                "expectedPreview": "enabled=model,branch",
+                "expectedHeight": 14
+              },
+              {
+                "kind": "reorder_down",
+                "name": "reorder-orderable-down",
+                "selectedIndex": 1,
+                "orderingEnabled": true,
+                "hasPreview": true,
+                "expectedQuery": "",
+                "expectedFilteredIndices": [0, 1, 2, 3, 4],
+                "expectedOrder": ["theme-colors", "branch", "model", "jupiter", "alpha-long"],
+                "expectedEnabledIds": ["model"],
+                "expectedRows": [
+                  "- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}",
+                  "- section-break",
+                  "- [ ] Branch{id=branch,actual=1,desc=Branch selector}",
+                  "> [x] Model{id=model,actual=2,desc=Model picker}",
+                  "- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}",
+                  "- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}"
+                ],
+                "expectedSelectedIndex": 2,
+                "expectedSelectedActual": 2,
+                "expectedScrollTop": 0,
+                "expectedChangeCount": 1,
+                "expectedPreview": "enabled=model",
+                "expectedHeight": 14
+              },
+              {
+                "kind": "reorder_up",
+                "name": "reorder-blocked-by-non-orderable-target",
+                "selectedIndex": 1,
+                "orderingEnabled": true,
+                "hasPreview": true,
+                "expectedQuery": "",
+                "expectedFilteredIndices": [0, 1, 2, 3, 4],
+                "expectedOrder": ["theme-colors", "model", "branch", "jupiter", "alpha-long"],
+                "expectedEnabledIds": ["model"],
+                "expectedRows": [
+                  "- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}",
+                  "- section-break",
+                  "> [x] Model{id=model,actual=1,desc=Model picker}",
+                  "- [ ] Branch{id=branch,actual=2,desc=Branch selector}",
+                  "- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}",
+                  "- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}"
+                ],
+                "expectedSelectedIndex": 1,
+                "expectedSelectedActual": 1,
+                "expectedScrollTop": 0,
+                "expectedPreview": "enabled=model",
+                "expectedHeight": 14
+              },
+              {
+                "kind": "confirm",
+                "name": "confirm-enabled-in-current-order",
+                "hasPreview": true,
+                "items": [
+                  {
+                    "id": "theme-colors",
+                    "name": "Theme Colors",
+                    "description": "UI palette",
+                    "enabled": false,
+                    "orderable": false,
+                    "sectionBreakAfter": true
+                  },
+                  {
+                    "id": "model",
+                    "name": "Model",
+                    "description": "Model picker",
+                    "enabled": true,
+                    "orderable": true
+                  },
+                  {
+                    "id": "branch",
+                    "name": "Branch",
+                    "description": "Branch selector",
+                    "enabled": true,
+                    "orderable": true
+                  },
+                  {
+                    "id": "jupiter",
+                    "name": "Jupiter",
+                    "description": "Planet option",
+                    "enabled": false,
+                    "orderable": true
+                  },
+                  {
+                    "id": "alpha-long",
+                    "name": "Alpha Long Display Name Overflow",
+                    "description": "Long label",
+                    "enabled": false,
+                    "orderable": true
+                  }
+                ],
+                "expectedQuery": "",
+                "expectedFilteredIndices": [0, 1, 2, 3, 4],
+                "expectedOrder": ["theme-colors", "model", "branch", "jupiter", "alpha-long"],
+                "expectedEnabledIds": ["model", "branch"],
+                "expectedRows": [
+                  "> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}",
+                  "- section-break",
+                  "- [x] Model{id=model,actual=1,desc=Model picker}",
+                  "- [x] Branch{id=branch,actual=2,desc=Branch selector}",
+                  "- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}",
+                  "- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedActual": 0,
+                "expectedScrollTop": 0,
+                "expectedConfirmedIds": ["model", "branch"],
+                "expectedComplete": true,
+                "expectedPreview": "enabled=model,branch",
+                "expectedHeight": 14
+              },
+              {
+                "kind": "cancel",
+                "name": "cancel-completes-without-selection",
+                "hasPreview": true,
+                "expectedQuery": "",
+                "expectedFilteredIndices": [0, 1, 2, 3, 4],
+                "expectedOrder": ["theme-colors", "model", "branch", "jupiter", "alpha-long"],
+                "expectedEnabledIds": ["model"],
+                "expectedRows": [
+                  "> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}",
+                  "- section-break",
+                  "- [x] Model{id=model,actual=1,desc=Model picker}",
+                  "- [ ] Branch{id=branch,actual=2,desc=Branch selector}",
+                  "- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}",
+                  "- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedActual": 0,
+                "expectedScrollTop": 0,
+                "expectedCancelled": true,
+                "expectedComplete": true,
+                "expectedPreview": "enabled=model",
+                "expectedHeight": 14
+              },
+              {
+                "kind": "height",
+                "name": "height-clamps-visible-rows-with-preview",
+                "headerHeight": 2,
+                "maxVisibleRows": 4,
+                "hasPreview": true,
+                "expectedQuery": "",
+                "expectedFilteredIndices": [0, 1, 2, 3, 4],
+                "expectedOrder": ["theme-colors", "model", "branch", "jupiter", "alpha-long"],
+                "expectedEnabledIds": ["model"],
+                "expectedRows": [
+                  "> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}",
+                  "- section-break",
+                  "- [x] Model{id=model,actual=1,desc=Model picker}",
+                  "- [ ] Branch{id=branch,actual=2,desc=Branch selector}",
+                  "- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}",
+                  "- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}"
+                ],
+                "expectedSelectedIndex": 0,
+                "expectedSelectedActual": 0,
+                "expectedScrollTop": 0,
+                "expectedPreview": "enabled=model",
+                "expectedHeight": 13
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_multi_select_picker_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noClipboardMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "noAppEventDelivery": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.multi_select_picker.plan=headless\ntui.multi_select_picker.filter=initial-all:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=0:selected_actual=0:scroll=0:rows=> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|- [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=14\ntui.multi_select_picker.filter=query-j-character:query=j:filtered=3:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=0:selected_actual=3:scroll=0:rows=> [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=9\ntui.multi_select_picker.move_down=move-down-skips-section-row:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=2:selected_actual=2:scroll=0:rows=- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|> [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=14\ntui.multi_select_picker.toggle=toggle-branch-updates-preview:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model,branch:selected=2:selected_actual=2:scroll=0:rows=- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|> [x] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=1:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model,branch:height=14\ntui.multi_select_picker.reorder_down=reorder-orderable-down:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,branch,model,jupiter,alpha-long:enabled=model:selected=2:selected_actual=2:scroll=0:rows=- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [ ] Branch{id=branch,actual=1,desc=Branch selector}|> [x] Model{id=model,actual=2,desc=Model picker}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=1:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=14\ntui.multi_select_picker.reorder_up=reorder-blocked-by-non-orderable-target:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=1:selected_actual=1:scroll=0:rows=- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|> [x] Model{id=model,actual=1,desc=Model picker}|- [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=14\ntui.multi_select_picker.confirm=confirm-enabled-in-current-order:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model,branch:selected=0:selected_actual=0:scroll=0:rows=> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|- [x] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=model,branch:cancelled=false:complete=true:preview=enabled=model,branch:height=14\ntui.multi_select_picker.cancel=cancel-completes-without-selection:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=0:selected_actual=0:scroll=0:rows=> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|- [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=true:complete=true:preview=enabled=model:height=14\ntui.multi_select_picker.height=height-clamps-visible-rows-with-preview:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=0:selected_actual=0:scroll=0:rows=> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|- [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=13\ntui.multi_select_picker.failure=live_multi_select_picker_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:no_app_event=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> multi select picker\ninput> \ntrace:\ntui.multi_select_picker.plan=headless\ntui.multi_select_picker.filter=initial-all:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=0:selected_actual=0:scroll=0:rows=> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|- [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=14\ntui.multi_select_picker.filter=query-j-character:query=j:filtered=3:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=0:selected_actual=3:scroll=0:rows=> [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=9\ntui.multi_select_picker.move_down=move-down-skips-section-row:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=2:selected_actual=2:scroll=0:rows=- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|> [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=14\ntui.multi_select_picker.toggle=toggle-branch-updates-preview:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model,branch:selected=2:selected_actual=2:scroll=0:rows=- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|> [x] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=1:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model,branch:height=14\ntui.multi_select_picker.reorder_down=reorder-orderable-down:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,branch,model,jupiter,alpha-long:enabled=model:selected=2:selected_actual=2:scroll=0:rows=- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [ ] Branch{id=branch,actual=1,desc=Branch selector}|> [x] Model{id=model,actual=2,desc=Model picker}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=1:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=14\ntui.multi_select_picker.reorder_up=reorder-blocked-by-non-orderable-target:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=1:selected_actual=1:scroll=0:rows=- [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|> [x] Model{id=model,actual=1,desc=Model picker}|- [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=14\ntui.multi_select_picker.confirm=confirm-enabled-in-current-order:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model,branch:selected=0:selected_actual=0:scroll=0:rows=> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|- [x] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=model,branch:cancelled=false:complete=true:preview=enabled=model,branch:height=14\ntui.multi_select_picker.cancel=cancel-completes-without-selection:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=0:selected_actual=0:scroll=0:rows=> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|- [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=true:complete=true:preview=enabled=model:height=14\ntui.multi_select_picker.height=height-clamps-visible-rows-with-preview:query=<empty>:filtered=0,1,2,3,4:order=theme-colors,model,branch,jupiter,alpha-long:enabled=model:selected=0:selected_actual=0:scroll=0:rows=> [ ] Theme Colors{id=theme-colors,actual=0,desc=UI palette}|- section-break|- [x] Model{id=model,actual=1,desc=Model picker}|- [ ] Branch{id=branch,actual=2,desc=Branch selector}|- [ ] Jupiter{id=jupiter,actual=3,desc=Planet option}|- [ ] Alpha Long Display N…{id=alpha-long,actual=4,desc=Long label}:changes=0:confirmed=<none>:cancelled=false:complete=false:preview=enabled=model:height=13\ntui.multi_select_picker.failure=live_multi_select_picker_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_clipboard=true:no_network=true:no_model=true:no_app_event=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

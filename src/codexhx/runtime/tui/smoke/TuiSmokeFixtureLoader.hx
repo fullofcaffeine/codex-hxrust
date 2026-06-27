@@ -136,6 +136,7 @@ class TuiSmokeFixtureLoader {
 				selectionPopupCommon: optionalSelectionPopupCommonPlan(value, "selectionPopupCommon"),
 				listSelectionView: optionalListSelectionPlan(value, "listSelectionView"),
 				commandPopup: optionalCommandPopupPlan(value, "commandPopup"),
+				multiSelectPicker: optionalMultiSelectPlan(value, "multiSelectPicker"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -1340,6 +1341,83 @@ class TuiSmokeFixtureLoader {
 				isApps: optionalBoolField(value, "isApps", false),
 				requiresFlag: optionalStringField(value, "requiresFlag", ""),
 				availableInSideConversation: optionalBoolField(value, "availableInSideConversation", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalMultiSelectPlan(object:Value, name:String):Null<TuiSmokeMultiSelectPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeMultiSelectPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowClipboardMutation: optionalBoolField(value, "allowClipboardMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppEventDelivery: optionalBoolField(value, "allowAppEventDelivery", false),
+					items: multiSelectItems(optionalArrayField(value, "items")),
+					actions: multiSelectActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function multiSelectActions(values:Array<Value>):Array<TuiSmokeMultiSelectAction> {
+		final out:Array<TuiSmokeMultiSelectAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeMultiSelectAction({
+				kind: TuiSmokeMultiSelectActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				items: multiSelectItems(optionalArrayField(value, "items")),
+				query: optionalStringField(value, "query", ""),
+				selectedIndex: optionalIntField(value, "selectedIndex", 0),
+				scrollTop: optionalIntField(value, "scrollTop", 0),
+				maxVisibleRows: optionalIntField(value, "maxVisibleRows", 8),
+				width: optionalIntField(value, "width", 72),
+				headerHeight: optionalIntField(value, "headerHeight", 1),
+				hasPreview: optionalBoolField(value, "hasPreview", false),
+				orderingEnabled: optionalBoolField(value, "orderingEnabled", false),
+				moveCount: optionalIntField(value, "moveCount", 1),
+				expectedQuery: optionalStringField(value, "expectedQuery", ""),
+				expectedFilteredIndices: optionalIntArrayField(value, "expectedFilteredIndices"),
+				expectedOrder: optionalStringArrayField(value, "expectedOrder"),
+				expectedEnabledIds: optionalStringArrayField(value, "expectedEnabledIds"),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				expectedSelectedIndex: optionalIntField(value, "expectedSelectedIndex", -1),
+				expectedSelectedActual: optionalIntField(value, "expectedSelectedActual", -1),
+				expectedScrollTop: optionalIntField(value, "expectedScrollTop", 0),
+				expectedChangeCount: optionalIntField(value, "expectedChangeCount", 0),
+				expectedConfirmedIds: optionalStringArrayField(value, "expectedConfirmedIds"),
+				expectedCancelled: optionalBoolField(value, "expectedCancelled", false),
+				expectedComplete: optionalBoolField(value, "expectedComplete", false),
+				expectedPreview: optionalStringField(value, "expectedPreview", ""),
+				expectedHeight: optionalIntField(value, "expectedHeight", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noClipboardMutation: optionalBoolField(value, "noClipboardMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppEventDelivery: optionalBoolField(value, "noAppEventDelivery", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function multiSelectItems(values:Array<Value>):Array<TuiSmokeMultiSelectItem> {
+		final out:Array<TuiSmokeMultiSelectItem> = [];
+		for (value in values) {
+			out.push(new TuiSmokeMultiSelectItem({
+				id: optionalStringField(value, "id", ""),
+				name: optionalStringField(value, "name", ""),
+				description: optionalStringField(value, "description", ""),
+				enabled: optionalBoolField(value, "enabled", false),
+				orderable: optionalBoolField(value, "orderable", true),
+				sectionBreakAfter: optionalBoolField(value, "sectionBreakAfter", false)
 			}));
 		}
 		return out;
