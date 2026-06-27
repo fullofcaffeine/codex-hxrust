@@ -8441,6 +8441,12 @@ class TuiSmokeEventLoop {
 				textAreaCursorMoveTrace(action);
 			case TuiSmokeTextAreaActionKind.VimEditing:
 				textAreaVimEditingTrace();
+			case TuiSmokeTextAreaActionKind.VimTextObjects:
+				textAreaVimTextObjectsTrace();
+			case TuiSmokeTextAreaActionKind.VimTextObjectGuards:
+				textAreaVimTextObjectGuardsTrace();
+			case TuiSmokeTextAreaActionKind.VimWordEnd:
+				textAreaVimWordEndTrace();
 			case _:
 				"unknown";
 		}
@@ -8568,6 +8574,18 @@ class TuiSmokeEventLoop {
 		textAreaReplaceRange(state, state.cursor, target, "");
 	}
 
+	static function textAreaDeleteForwardKill(state:TuiSmokeTextAreaState, count:Int):Void {
+		if (count <= 0 || state.cursor >= textAreaByteLen(state.text))
+			return;
+		var target = state.cursor;
+		for (_ in 0...count) {
+			target = textAreaNextAtomicBoundary(state, target);
+			if (target >= textAreaByteLen(state.text))
+				break;
+		}
+		textAreaKillRange(state, state.cursor, target, "characterwise");
+	}
+
 	static function textAreaWordDeleteTrace():String {
 		final back = textAreaState("path/to/file", "path/to/file".length, "", false, "insert");
 		textAreaDeleteBackwardWord(back);
@@ -8677,6 +8695,83 @@ class TuiSmokeEventLoop {
 		return "insert_escape=" + insertTrace + ":arrows=" + right + "," + down + "," + left + "," + up + ":change_eol=" + textAreaSummary(change)
 			+ ":kill=" + traceText(change.killBuffer) + ":mode=" + change.vimMode + ":vim_eol_noop=" + textAreaSummary(atEol) + ":kill="
 			+ traceText(atEol.killBuffer) + ":mode=" + atEol.vimMode;
+	}
+
+	static function textAreaVimTextObjectsTrace():String {
+		final dw = textAreaState("hello world", 0, "", true, "normal");
+		textAreaKillRange(dw, 0, "hello ".length, "characterwise");
+		final ciw = textAreaState("hello world", "hello ".length, "", true, "normal");
+		textAreaKillRange(ciw, "hello ".length, "hello world".length, "characterwise");
+		textAreaEnterVimInsertMode(ciw);
+		final yaw = textAreaState("hello world", 1, "", true, "normal");
+		textAreaYankRange(yaw, 0, "hello ".length, "characterwise");
+		final diBigWord = textAreaState("foo.bar/baz qux", "foo.".length, "", true, "normal");
+		textAreaKillRange(diBigWord, 0, "foo.bar/baz".length, "characterwise");
+		final dawAtEnd = textAreaState("hello world", "hello".length, "", true, "normal");
+		textAreaKillRange(dawAtEnd, 0, "hello ".length, "characterwise");
+		final ciBigWordFinal = textAreaState("foo bar", "foo bar".length, "", true, "normal");
+		textAreaKillRange(ciBigWordFinal, "foo ".length, "foo bar".length, "characterwise");
+		textAreaEnterVimInsertMode(ciBigWordFinal);
+		return "dw=" + textAreaSummary(dw) + ":kill=" + traceText(dw.killBuffer) + ":ciw=" + textAreaSummary(ciw) + ":kill=" + traceText(ciw.killBuffer)
+			+ ":mode=" + ciw.vimMode + ":yaw=" + textAreaSummary(yaw) + ":kill=" + traceText(yaw.killBuffer) + ":diW=" + textAreaSummary(diBigWord)
+			+ ":kill=" + traceText(diBigWord.killBuffer) + ":daw_end=" + textAreaSummary(dawAtEnd) + ":kill=" + traceText(dawAtEnd.killBuffer)
+			+ ":ciW_final=" + textAreaSummary(ciBigWordFinal) + ":kill=" + traceText(ciBigWordFinal.killBuffer) + ":mode=" + ciBigWordFinal.vimMode;
+	}
+
+	static function textAreaVimTextObjectGuardsTrace():String {
+		final innerParen = textAreaState("a(b(c)d)e", "a(b(".length, "", true, "normal");
+		textAreaKillRange(innerParen, "a(b(".length, "a(b(c".length, "characterwise");
+		textAreaEnterVimInsertMode(innerParen);
+		final outerBracket = textAreaState("a [b] c", "a [".length, "", true, "normal");
+		textAreaKillRange(outerBracket, "a ".length, "a [b]".length, "characterwise");
+		final emptyParen = textAreaState("call()", "call(".length, "", true, "normal");
+		textAreaEnterVimInsertMode(emptyParen);
+		final emptyQuote = textAreaState("say \"\" now", "say \"".length, "", true, "normal");
+		textAreaEnterVimInsertMode(emptyQuote);
+		final escapedQuote = textAreaState("say \"a \\\"b\\\" c\" now", "say \"a \\".length, "", true, "normal");
+		textAreaKillRange(escapedQuote, "say \"".length, "say \"a \\\"b\\\" c".length, "characterwise");
+		textAreaEnterVimInsertMode(escapedQuote);
+		final lineLocalQuote = textAreaState("one \"two\nthree\" four", "one \"two\n".length, "", true, "normal");
+		final cancelled = textAreaState("hello world", 1, "", true, "normal");
+		final invalid = textAreaState("hello", 0, "", true, "normal");
+		return "cib=" + textAreaSummary(innerParen) + ":kill=" + traceText(innerParen.killBuffer) + ":mode=" + innerParen.vimMode + ":da_bracket="
+			+ textAreaSummary(outerBracket) + ":kill=" + traceText(outerBracket.killBuffer) + ":empty_paren=" + textAreaSummary(emptyParen) + ":kill="
+			+ traceText(emptyParen.killBuffer) + ":mode=" + emptyParen.vimMode + ":empty_quote=" + textAreaSummary(emptyQuote) + ":kill="
+			+ traceText(emptyQuote.killBuffer) + ":mode=" + emptyQuote.vimMode + ":quote_escape=" + textAreaSummary(escapedQuote) + ":kill="
+			+ traceText(escapedQuote.killBuffer) + ":mode=" + escapedQuote.vimMode + ":quote_line_local=" + textAreaSummary(lineLocalQuote) + ":kill="
+			+ traceText(lineLocalQuote.killBuffer) + ":cancelled=" + textAreaSummary(cancelled) + ":pending=false:invalid=" + textAreaSummary(invalid)
+			+ ":pending=false";
+	}
+
+	static function textAreaVimWordEndTrace():String {
+		final e = textAreaState("abc", 0, "", true, "normal");
+		textAreaSetCursor(e, textAreaVimWordEndCursor(e));
+		final eCursor = e.cursor;
+		textAreaDeleteForwardKill(e, 1);
+		final deleteEnd = textAreaState("alpha beta gamma", "alph".length, "", true, "normal");
+		final deEnd = textAreaVimWordEndExclusive(deleteEnd);
+		textAreaKillRange(deleteEnd, deleteEnd.cursor, deEnd, "characterwise");
+		final trailing = textAreaState("alpha   ", "alph".length, "", true, "normal");
+		textAreaSetCursor(trailing, textAreaVimWordEndCursor(trailing));
+		final atom = textAreaState("alpha <element> gamma", "alph".length, "", true, "normal");
+		textAreaSetTextWithElements(atom, atom.text, [
+			new TuiSmokeTextAreaElement({
+				start: "alpha ".length,
+				end: "alpha <element>".length,
+				name: "element"
+			})
+		]);
+		textAreaSetCursor(atom, "alph".length);
+		textAreaSetCursor(atom, textAreaVimWordEndCursor(atom));
+		final atomFirst = atom.cursor;
+		textAreaSetCursor(atom, "alpha <element> gamm".length);
+		final dollar = textAreaState("abc\n123", 1, "", true, "normal");
+		textAreaSetCursor(dollar, intMax(textAreaBeginningOfCurrentLine(dollar), textAreaEndOfCurrentLine(dollar) - 1));
+		final dollarCursor = dollar.cursor;
+		textAreaDeleteForwardKill(dollar, 1);
+		return "e_cursor=" + eCursor + ":after_x=" + textAreaSummary(e) + ":kill=" + traceText(e.killBuffer) + ":de=" + textAreaSummary(deleteEnd)
+			+ ":kill=" + traceText(deleteEnd.killBuffer) + ":trailing=" + textAreaSummary(trailing) + ":atom=" + atomFirst + "," + atom.cursor
+			+ ":dollar_cursor=" + dollarCursor + ":after_x=" + textAreaSummary(dollar) + ":kill=" + traceText(dollar.killBuffer);
 	}
 
 	static function textAreaKillRange(state:TuiSmokeTextAreaState, start:Int, end:Int, kind:String):Void {
@@ -8853,6 +8948,43 @@ class TuiSmokeEventLoop {
 			pos = textAreaNextBoundary(state.text, pos);
 		}
 		return textAreaAdjustPosOutOfElements(state, pos, false);
+	}
+
+	static function textAreaBeginningOfNextWord(state:TuiSmokeTextAreaState):Int {
+		var pos = state.cursor;
+		final len = textAreaByteLen(state.text);
+		if (pos < len && !textAreaIsWhitespaceAt(state.text, pos)) {
+			final first = textAreaCharAtByte(state.text, pos);
+			final separator = textAreaIsWordSeparator(first);
+			while (pos < len) {
+				final ch = textAreaCharAtByte(state.text, pos);
+				if (StringTools.isSpace(ch, 0) || textAreaIsWordSeparator(ch) != separator)
+					break;
+				pos = textAreaNextBoundary(state.text, pos);
+			}
+		}
+		while (pos < len && textAreaIsWhitespaceAt(state.text, pos))
+			pos = textAreaNextBoundary(state.text, pos);
+		return textAreaAdjustPosOutOfElements(state, pos, true);
+	}
+
+	static function textAreaVimWordEndExclusive(state:TuiSmokeTextAreaState):Int {
+		final end = textAreaEndOfNextWord(state);
+		var target = end;
+		if ((target == state.cursor || (target > state.cursor && textAreaPrevAtomicBoundary(state, target) == state.cursor))
+			&& end < textAreaByteLen(state.text)) {
+			final nextState = textAreaState(state.text, end, state.killBuffer, state.vimEnabled, state.vimMode);
+			nextState.elements = state.elements;
+			target = textAreaEndOfNextWord(nextState);
+		}
+		return target;
+	}
+
+	static function textAreaVimWordEndCursor(state:TuiSmokeTextAreaState):Int {
+		final end = textAreaVimWordEndExclusive(state);
+		if (end > state.cursor)
+			return textAreaPrevAtomicBoundary(state, end);
+		return state.cursor;
 	}
 
 	static function textAreaBeginningOfCurrentLine(state:TuiSmokeTextAreaState):Int {

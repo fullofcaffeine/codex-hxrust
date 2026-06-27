@@ -4003,6 +4003,10 @@ Status: HXCX-TUI-283 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-284 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for upstream `../codex/codex-rs/tui/src/bottom_pane/textarea.rs` editing tests. The fixture preserves backward/forward delete edge behavior, atomic element deletion at the left edge, separator-aware backward and forward word deletion, kill-to-line-start/end behavior, linewise whole-line kill/yank and paste-below facts, characterwise yank restoration, multi-byte cursor left/right movement, logical vertical cursor movement, and Vim insert/normal movement/change-to-line-end facts. This is deterministic textarea editing state evidence only, not live keyboard input, terminal mutation, ratatui buffer ownership, real clipboard mutation, filesystem mutation, network traffic, model traffic, app-server delivery, or adapter-specific behavior.
 
+### HXCX-TUI-285 Headless Raw Codex TextArea Vim Text Objects
+
+Status: HXCX-TUI-285 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for upstream `../codex/codex-rs/tui/src/bottom_pane/textarea.rs` Vim operator and text-object tests. The fixture preserves `dw`, `ciw`, `yaw`, `diW`, word-end `daw`, final-word `ciW`, delimiter aliases including `cib` and `da]`, empty inner text-object change no-op facts, quote text-object escape and line-local behavior, cancellation and invalid-motion consumption facts, `e` and `de` word-end behavior, `$` line-end/delete behavior, and atomic-element word-end movement. This is deterministic Vim textarea state evidence only, not live keyboard input, terminal mutation, ratatui buffer ownership, real clipboard mutation, filesystem mutation, network traffic, model traffic, app-server delivery, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

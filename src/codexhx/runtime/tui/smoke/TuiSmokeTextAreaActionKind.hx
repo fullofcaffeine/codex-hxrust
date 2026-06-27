@@ -15,6 +15,9 @@ enum abstract TuiSmokeTextAreaActionKind(String) to String {
 	final YankRestore = "yank_restore";
 	final CursorMove = "cursor_move";
 	final VimEditing = "vim_editing";
+	final VimTextObjects = "vim_text_objects";
+	final VimTextObjectGuards = "vim_text_object_guards";
+	final VimWordEnd = "vim_word_end";
 	final Failure = "failure";
 	final Unknown = "unknown";
 
@@ -34,6 +37,9 @@ enum abstract TuiSmokeTextAreaActionKind(String) to String {
 			case "yank_restore": YankRestore;
 			case "cursor_move": CursorMove;
 			case "vim_editing": VimEditing;
+			case "vim_text_objects": VimTextObjects;
+			case "vim_text_object_guards": VimTextObjectGuards;
+			case "vim_word_end": VimWordEnd;
 			case "failure": Failure;
 			case _: Unknown;
 		}

@@ -23664,6 +23664,83 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> textarea editing state\ninput> \ntrace:\ntui.textarea.plan=headless\ntui.textarea.delete_edges=delete-backward-forward-edges:backward=text=bc:cursor=0:elements=<none>:backward_start=text=bc:cursor=0:elements=<none>:forward=text=b:cursor=1:elements=<none>:forward_end=text=b:cursor=1:elements=<none>\ntui.textarea.element_delete=delete-forward-removes-atomic-element:text=ab:cursor=1:elements=<none>\ntui.textarea.word_delete=word-delete-separators-and-whitespace:back1=text=path/to/:cursor=8:elements=<none>:back2=text=path/to:cursor=7:elements=<none>:back_space=text=foo:cursor=3:elements=<none>:forward1=text=/to/file:cursor=0:elements=<none>:forward2=text=to/file:cursor=0:elements=<none>:forward_space=text=foo:cursor=0:elements=<none>\ntui.textarea.kill_line=kill-line-start-end-and-linewise:end_mid=text=a\\ndef:cursor=1:elements=<none>:kill=bc:end_eol=text=abcdef:cursor=3:elements=<none>:kill=\\n:start_mid=text=abc\\nef:cursor=4:elements=<none>:kill=d:start_bol=text=abcdef:cursor=3:elements=<none>:kill=\\n:whole=text=abc\\nghi:cursor=4:elements=<none>:kill=def\\n:kind=linewise\ntui.textarea.yank_restore=yank-restores-characterwise-and-linewise-kills:after_kill=text=<empty>:cursor=0:elements=<none>:after_yank=text=hello:cursor=5:elements=<none>:word_kill=text=hello :cursor=6:elements=<none>:kill=world:word_yank=text=hello world:cursor=11:elements=<none>:linewise=text=abc\\nabc\\n123\\nxyz:cursor=4:elements=<none>:kill=abc\\n:kind=linewise\ntui.textarea.cursor_move=cursor-left-right-and-vertical-movement:lefts=4,1,0:right_end=5:vertical=1,5,9\ntui.textarea.vim_editing=vim-insert-normal-movement-and-change:insert_escape=text=h:cursor=0:elements=<none>:mode=normal:arrows=2,5,4,1:change_eol=text=hello \\nnext line:cursor=6:elements=<none>:kill=world:mode=insert:vim_eol_noop=text=hello\\nworld:cursor=5:elements=<none>:kill=<empty>:mode=normal\ntui.textarea.failure=live_textarea_editing_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "textarea-vim-text-objects-headless",
+      "frame": {
+        "name": "textarea-vim-text-objects-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "textarea vim text objects"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "textarea",
+          "textArea": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowClipboardMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "allowAppServerDelivery": false,
+            "actions": [
+              {
+                "kind": "vim_text_objects",
+                "name": "vim-word-and-big-word-operators",
+                "expectedTrace": "dw=text=world:cursor=0:elements=<none>:kill=hello :ciw=text=hello :cursor=6:elements=<none>:kill=world:mode=insert:yaw=text=hello world:cursor=1:elements=<none>:kill=hello :diW=text= qux:cursor=0:elements=<none>:kill=foo.bar/baz:daw_end=text=world:cursor=0:elements=<none>:kill=hello :ciW_final=text=foo :cursor=4:elements=<none>:kill=bar:mode=insert"
+              },
+              {
+                "kind": "vim_text_object_guards",
+                "name": "vim-delimiter-quote-cancel-invalid-guards",
+                "expectedTrace": "cib=text=a(b()d)e:cursor=4:elements=<none>:kill=c:mode=insert:da_bracket=text=a  c:cursor=2:elements=<none>:kill=[b]:empty_paren=text=call():cursor=5:elements=<none>:kill=<empty>:mode=insert:empty_quote=text=say \"\" now:cursor=5:elements=<none>:kill=<empty>:mode=insert:quote_escape=text=say \"\" now:cursor=5:elements=<none>:kill=a \\\\\"b\\\\\" c:mode=insert:quote_line_local=text=one \"two\\nthree\" four:cursor=9:elements=<none>:kill=<empty>:cancelled=text=hello world:cursor=1:elements=<none>:pending=false:invalid=text=hello:cursor=0:elements=<none>:pending=false"
+              },
+              {
+                "kind": "vim_word_end",
+                "name": "vim-word-end-dollar-and-atomic-element-motion",
+                "expectedTrace": "e_cursor=2:after_x=text=ab:cursor=2:elements=<none>:kill=c:de=text=alph gamma:cursor=4:elements=<none>:kill=a beta:trailing=text=alpha   :cursor=7:elements=<none>:atom=6,20:dollar_cursor=2:after_x=text=ab\\n123:cursor=2:elements=<none>:kill=c"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_textarea_vim_text_object_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noClipboardMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "noAppServerDelivery": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.textarea.plan=headless\ntui.textarea.vim_text_objects=vim-word-and-big-word-operators:dw=text=world:cursor=0:elements=<none>:kill=hello :ciw=text=hello :cursor=6:elements=<none>:kill=world:mode=insert:yaw=text=hello world:cursor=1:elements=<none>:kill=hello :diW=text= qux:cursor=0:elements=<none>:kill=foo.bar/baz:daw_end=text=world:cursor=0:elements=<none>:kill=hello :ciW_final=text=foo :cursor=4:elements=<none>:kill=bar:mode=insert\ntui.textarea.vim_text_object_guards=vim-delimiter-quote-cancel-invalid-guards:cib=text=a(b()d)e:cursor=4:elements=<none>:kill=c:mode=insert:da_bracket=text=a  c:cursor=2:elements=<none>:kill=[b]:empty_paren=text=call():cursor=5:elements=<none>:kill=<empty>:mode=insert:empty_quote=text=say \"\" now:cursor=5:elements=<none>:kill=<empty>:mode=insert:quote_escape=text=say \"\" now:cursor=5:elements=<none>:kill=a \\\\\"b\\\\\" c:mode=insert:quote_line_local=text=one \"two\\nthree\" four:cursor=9:elements=<none>:kill=<empty>:cancelled=text=hello world:cursor=1:elements=<none>:pending=false:invalid=text=hello:cursor=0:elements=<none>:pending=false\ntui.textarea.vim_word_end=vim-word-end-dollar-and-atomic-element-motion:e_cursor=2:after_x=text=ab:cursor=2:elements=<none>:kill=c:de=text=alph gamma:cursor=4:elements=<none>:kill=a beta:trailing=text=alpha   :cursor=7:elements=<none>:atom=6,20:dollar_cursor=2:after_x=text=ab\\n123:cursor=2:elements=<none>:kill=c\ntui.textarea.failure=live_textarea_vim_text_object_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> textarea vim text objects\ninput> \ntrace:\ntui.textarea.plan=headless\ntui.textarea.vim_text_objects=vim-word-and-big-word-operators:dw=text=world:cursor=0:elements=<none>:kill=hello :ciw=text=hello :cursor=6:elements=<none>:kill=world:mode=insert:yaw=text=hello world:cursor=1:elements=<none>:kill=hello :diW=text= qux:cursor=0:elements=<none>:kill=foo.bar/baz:daw_end=text=world:cursor=0:elements=<none>:kill=hello :ciW_final=text=foo :cursor=4:elements=<none>:kill=bar:mode=insert\ntui.textarea.vim_text_object_guards=vim-delimiter-quote-cancel-invalid-guards:cib=text=a(b()d)e:cursor=4:elements=<none>:kill=c:mode=insert:da_bracket=text=a  c:cursor=2:elements=<none>:kill=[b]:empty_paren=text=call():cursor=5:elements=<none>:kill=<empty>:mode=insert:empty_quote=text=say \"\" now:cursor=5:elements=<none>:kill=<empty>:mode=insert:quote_escape=text=say \"\" now:cursor=5:elements=<none>:kill=a \\\\\"b\\\\\" c:mode=insert:quote_line_local=text=one \"two\\nthree\" four:cursor=9:elements=<none>:kill=<empty>:cancelled=text=hello world:cursor=1:elements=<none>:pending=false:invalid=text=hello:cursor=0:elements=<none>:pending=false\ntui.textarea.vim_word_end=vim-word-end-dollar-and-atomic-element-motion:e_cursor=2:after_x=text=ab:cursor=2:elements=<none>:kill=c:de=text=alph gamma:cursor=4:elements=<none>:kill=a beta:trailing=text=alpha   :cursor=7:elements=<none>:atom=6,20:dollar_cursor=2:after_x=text=ab\\n123:cursor=2:elements=<none>:kill=c\ntui.textarea.failure=live_textarea_vim_text_object_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-goal-menu-headless",
       "frame": {
         "name": "chatwidget-goal-menu-headless",
