@@ -63,6 +63,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/pending_thread_approvals.rs",
       "../codex/codex-rs/tui/src/bottom_pane/prompt_args.rs",
       "../codex/codex-rs/tui/src/bottom_pane/unified_exec_footer.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/file_search_popup.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -20700,6 +20701,265 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.unified_exec_footer.plan=headless\ntui.unified_exec_footer.set=initial-empty:changed=false:empty=true:processes=<none>\ntui.unified_exec_footer.summary=empty-summary:present=false:text=<empty>\ntui.unified_exec_footer.render=empty-render:width=40:height=0:rows=<none>\ntui.unified_exec_footer.set=one-process:changed=true:empty=false:processes=rg \"foo\" src\ntui.unified_exec_footer.summary=one-process-summary:present=true:text=1 background terminal running · /ps to view · /stop to close\ntui.unified_exec_footer.render=one-process-full:width=72:height=1:rows=  1 background terminal running · /ps to view · /stop to close\ntui.unified_exec_footer.render=one-process-narrow:width=3:height=0:rows=<none>\ntui.unified_exec_footer.render=one-process-truncated:width=20:height=1:rows=  1 background termi\ntui.unified_exec_footer.set=same-one-process:changed=false:empty=false:processes=rg \"foo\" src\ntui.unified_exec_footer.set=many-processes:changed=true:empty=false:processes=cmd 0,cmd 1,cmd 2,cmd 3\ntui.unified_exec_footer.summary=many-processes-summary:present=true:text=4 background terminals running · /ps to view · /stop to close\ntui.unified_exec_footer.render=many-processes-truncated:width=20:height=1:rows=  4 background termi\ntui.unified_exec_footer.failure=live_unified_exec_footer_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> unified exec footer\ninput> \ntrace:\ntui.unified_exec_footer.plan=headless\ntui.unified_exec_footer.set=initial-empty:changed=false:empty=true:processes=<none>\ntui.unified_exec_footer.summary=empty-summary:present=false:text=<empty>\ntui.unified_exec_footer.render=empty-render:width=40:height=0:rows=<none>\ntui.unified_exec_footer.set=one-process:changed=true:empty=false:processes=rg \"foo\" src\ntui.unified_exec_footer.summary=one-process-summary:present=true:text=1 background terminal running · /ps to view · /stop to close\ntui.unified_exec_footer.render=one-process-full:width=72:height=1:rows=  1 background terminal running · /ps to view · /stop to close\ntui.unified_exec_footer.render=one-process-narrow:width=3:height=0:rows=<none>\ntui.unified_exec_footer.render=one-process-truncated:width=20:height=1:rows=  1 background termi\ntui.unified_exec_footer.set=same-one-process:changed=false:empty=false:processes=rg \"foo\" src\ntui.unified_exec_footer.set=many-processes:changed=true:empty=false:processes=cmd 0,cmd 1,cmd 2,cmd 3\ntui.unified_exec_footer.summary=many-processes-summary:present=true:text=4 background terminals running · /ps to view · /stop to close\ntui.unified_exec_footer.render=many-processes-truncated:width=20:height=1:rows=  4 background termi\ntui.unified_exec_footer.failure=live_unified_exec_footer_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "file-search-popup-headless",
+      "frame": {
+        "name": "file-search-popup-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "file search popup"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "file_search_popup",
+          "fileSearchPopup": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "snapshot",
+                "name": "initial-waiting",
+                "expectedWaiting": true,
+                "expectedHeight": 1,
+                "expectedEmptyMessage": "loading...",
+                "expectedSelectedIndex": -1
+              },
+              {
+                "kind": "set_query",
+                "name": "query-file",
+                "query": "file",
+                "expectedPendingQuery": "file",
+                "expectedWaiting": true,
+                "expectedHeight": 1,
+                "expectedEmptyMessage": "loading...",
+                "expectedSelectedIndex": -1
+              },
+              {
+                "kind": "set_query",
+                "name": "query-file-idempotent",
+                "query": "file",
+                "expectedPendingQuery": "file",
+                "expectedWaiting": true,
+                "expectedHeight": 1,
+                "expectedEmptyMessage": "loading...",
+                "expectedSelectedIndex": -1
+              },
+              {
+                "kind": "set_matches",
+                "name": "stale-results-ignored",
+                "query": "other",
+                "paths": [
+                  "src/stale.rs"
+                ],
+                "expectedPendingQuery": "file",
+                "expectedWaiting": true,
+                "expectedHeight": 1,
+                "expectedEmptyMessage": "loading...",
+                "expectedSelectedIndex": -1
+              },
+              {
+                "kind": "set_matches",
+                "name": "empty-results",
+                "query": "file",
+                "paths": [],
+                "expectedDisplayQuery": "file",
+                "expectedPendingQuery": "file",
+                "expectedWaiting": false,
+                "expectedHeight": 1,
+                "expectedEmptyMessage": "no matches",
+                "expectedSelectedIndex": -1
+              },
+              {
+                "kind": "set_query",
+                "name": "same-query-after-results",
+                "query": "file",
+                "expectedDisplayQuery": "file",
+                "expectedPendingQuery": "file",
+                "expectedWaiting": false,
+                "expectedHeight": 1,
+                "expectedEmptyMessage": "no matches",
+                "expectedSelectedIndex": -1
+              },
+              {
+                "kind": "set_query",
+                "name": "query-src",
+                "query": "src",
+                "expectedDisplayQuery": "file",
+                "expectedPendingQuery": "src",
+                "expectedWaiting": true,
+                "expectedHeight": 1,
+                "expectedEmptyMessage": "loading...",
+                "expectedSelectedIndex": -1
+              },
+              {
+                "kind": "set_matches",
+                "name": "accept-first-page",
+                "query": "src",
+                "paths": [
+                  "src/file_00.rs",
+                  "src/file_01.rs",
+                  "src/file_02.rs",
+                  "src/file_03.rs",
+                  "src/file_04.rs",
+                  "src/file_05.rs",
+                  "src/file_06.rs",
+                  "src/file_07.rs",
+                  "src/file_08.rs",
+                  "src/file_09.rs"
+                ],
+                "expectedDisplayQuery": "src",
+                "expectedPendingQuery": "src",
+                "expectedWaiting": false,
+                "expectedMatches": [
+                  "src/file_00.rs",
+                  "src/file_01.rs",
+                  "src/file_02.rs",
+                  "src/file_03.rs",
+                  "src/file_04.rs",
+                  "src/file_05.rs",
+                  "src/file_06.rs",
+                  "src/file_07.rs"
+                ],
+                "expectedHeight": 8,
+                "expectedSelectedPath": "src/file_00.rs",
+                "expectedEmptyMessage": "no matches",
+                "expectedSelectedIndex": 0
+              },
+              {
+                "kind": "move_down",
+                "name": "move-down",
+                "expectedDisplayQuery": "src",
+                "expectedPendingQuery": "src",
+                "expectedWaiting": false,
+                "expectedMatches": [
+                  "src/file_00.rs",
+                  "src/file_01.rs",
+                  "src/file_02.rs",
+                  "src/file_03.rs",
+                  "src/file_04.rs",
+                  "src/file_05.rs",
+                  "src/file_06.rs",
+                  "src/file_07.rs"
+                ],
+                "expectedHeight": 8,
+                "expectedSelectedPath": "src/file_01.rs",
+                "expectedEmptyMessage": "no matches",
+                "expectedSelectedIndex": 1
+              },
+              {
+                "kind": "move_up",
+                "name": "move-up",
+                "expectedDisplayQuery": "src",
+                "expectedPendingQuery": "src",
+                "expectedWaiting": false,
+                "expectedMatches": [
+                  "src/file_00.rs",
+                  "src/file_01.rs",
+                  "src/file_02.rs",
+                  "src/file_03.rs",
+                  "src/file_04.rs",
+                  "src/file_05.rs",
+                  "src/file_06.rs",
+                  "src/file_07.rs"
+                ],
+                "expectedHeight": 8,
+                "expectedSelectedPath": "src/file_00.rs",
+                "expectedEmptyMessage": "no matches",
+                "expectedSelectedIndex": 0
+              },
+              {
+                "kind": "move_up",
+                "name": "move-up-wrap",
+                "expectedDisplayQuery": "src",
+                "expectedPendingQuery": "src",
+                "expectedWaiting": false,
+                "expectedMatches": [
+                  "src/file_00.rs",
+                  "src/file_01.rs",
+                  "src/file_02.rs",
+                  "src/file_03.rs",
+                  "src/file_04.rs",
+                  "src/file_05.rs",
+                  "src/file_06.rs",
+                  "src/file_07.rs"
+                ],
+                "expectedHeight": 8,
+                "expectedSelectedPath": "src/file_07.rs",
+                "expectedEmptyMessage": "no matches",
+                "expectedSelectedIndex": 7
+              },
+              {
+                "kind": "move_down",
+                "name": "move-down-wrap",
+                "expectedDisplayQuery": "src",
+                "expectedPendingQuery": "src",
+                "expectedWaiting": false,
+                "expectedMatches": [
+                  "src/file_00.rs",
+                  "src/file_01.rs",
+                  "src/file_02.rs",
+                  "src/file_03.rs",
+                  "src/file_04.rs",
+                  "src/file_05.rs",
+                  "src/file_06.rs",
+                  "src/file_07.rs"
+                ],
+                "expectedHeight": 8,
+                "expectedSelectedPath": "src/file_00.rs",
+                "expectedEmptyMessage": "no matches",
+                "expectedSelectedIndex": 0
+              },
+              {
+                "kind": "empty_prompt",
+                "name": "empty-prompt-reset",
+                "expectedWaiting": false,
+                "expectedHeight": 1,
+                "expectedEmptyMessage": "no matches",
+                "expectedSelectedIndex": -1
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_file_search_popup_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.file_search_popup.plan=headless\ntui.file_search_popup.snapshot=initial-waiting:display=<empty>:pending=<empty>:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-file:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-file-idempotent:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=stale-results-ignored:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=empty-results:display=file:pending=file:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=same-query-after-results:display=file:pending=file:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-src:display=file:pending=src:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=accept-first-page:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.move_down=move-down:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_01.rs:empty_message=no matches:selected_idx=1:scroll_top=0\ntui.file_search_popup.move_up=move-up:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.move_up=move-up-wrap:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_07.rs:empty_message=no matches:selected_idx=7:scroll_top=0\ntui.file_search_popup.move_down=move-down-wrap:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.empty_prompt=empty-prompt-reset:display=<empty>:pending=<empty>:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.failure=live_file_search_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> file search popup\ninput> \ntrace:\ntui.file_search_popup.plan=headless\ntui.file_search_popup.snapshot=initial-waiting:display=<empty>:pending=<empty>:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-file:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-file-idempotent:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=stale-results-ignored:display=<empty>:pending=file:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=empty-results:display=file:pending=file:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=same-query-after-results:display=file:pending=file:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_query=query-src:display=file:pending=src:waiting=true:matches=<none>:height=1:selected=<empty>:empty_message=loading...:selected_idx=-1:scroll_top=0\ntui.file_search_popup.set_matches=accept-first-page:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.move_down=move-down:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_01.rs:empty_message=no matches:selected_idx=1:scroll_top=0\ntui.file_search_popup.move_up=move-up:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.move_up=move-up-wrap:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_07.rs:empty_message=no matches:selected_idx=7:scroll_top=0\ntui.file_search_popup.move_down=move-down-wrap:display=src:pending=src:waiting=false:matches=src/file_00.rs,src/file_01.rs,src/file_02.rs,src/file_03.rs,src/file_04.rs,src/file_05.rs,src/file_06.rs,src/file_07.rs:height=8:selected=src/file_00.rs:empty_message=no matches:selected_idx=0:scroll_top=0\ntui.file_search_popup.empty_prompt=empty-prompt-reset:display=<empty>:pending=<empty>:waiting=false:matches=<none>:height=1:selected=<empty>:empty_message=no matches:selected_idx=-1:scroll_top=0\ntui.file_search_popup.failure=live_file_search_popup_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

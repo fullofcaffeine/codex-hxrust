@@ -131,6 +131,7 @@ class TuiSmokeFixtureLoader {
 				pendingThreadApprovals: optionalPendingThreadApprovalsPlan(value, "pendingThreadApprovals"),
 				promptArgs: optionalPromptArgsPlan(value, "promptArgs"),
 				unifiedExecFooter: optionalUnifiedExecFooterPlan(value, "unifiedExecFooter"),
+				fileSearchPopup: optionalFileSearchPopupPlan(value, "fileSearchPopup"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -987,6 +988,50 @@ class TuiSmokeFixtureLoader {
 				expectedSummary: optionalStringField(value, "expectedSummary", ""),
 				expectedHeight: optionalIntField(value, "expectedHeight", 0),
 				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalFileSearchPopupPlan(object:Value, name:String):Null<TuiSmokeFileSearchPopupPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeFileSearchPopupPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: fileSearchPopupActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function fileSearchPopupActions(values:Array<Value>):Array<TuiSmokeFileSearchPopupAction> {
+		final out:Array<TuiSmokeFileSearchPopupAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeFileSearchPopupAction({
+				kind: TuiSmokeFileSearchPopupActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				query: optionalStringField(value, "query", ""),
+				paths: optionalStringArrayField(value, "paths"),
+				expectedDisplayQuery: optionalStringField(value, "expectedDisplayQuery", ""),
+				expectedPendingQuery: optionalStringField(value, "expectedPendingQuery", ""),
+				expectedWaiting: optionalBoolField(value, "expectedWaiting", false),
+				expectedMatches: optionalStringArrayField(value, "expectedMatches"),
+				expectedHeight: optionalIntField(value, "expectedHeight", 1),
+				expectedSelectedPath: optionalStringField(value, "expectedSelectedPath", ""),
+				expectedEmptyMessage: optionalStringField(value, "expectedEmptyMessage", ""),
+				expectedSelectedIndex: optionalIntField(value, "expectedSelectedIndex", -1),
+				expectedScrollTop: optionalIntField(value, "expectedScrollTop", 0),
 				failureCode: optionalStringField(value, "failureCode", ""),
 				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
 				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),

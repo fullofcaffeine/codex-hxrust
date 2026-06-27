@@ -3959,6 +3959,10 @@ Status: HXCX-TUI-272 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-273 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/unified_exec_footer.rs`. The fixture preserves `set_processes` changed/unchanged and empty-state behavior, absent summary text for no processes, singular and plural background-terminal summary grammar, narrow-width render suppression, stable two-space render prefix, width-driven truncation, and no-live rejection evidence. This is deterministic unified-exec footer summary evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
 
+### HXCX-TUI-274 Headless Raw Codex File Search Popup
+
+Status: HXCX-TUI-274 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/file_search_popup.rs`. The fixture preserves initial waiting state, idempotent query updates, empty-prompt reset, stale result rejection, matching-result acceptance, first-page truncation to `MAX_POPUP_ROWS`, required-height clamping, waiting versus no-match empty messages, move-up/down wrapping, selected path lookup, and no-live rejection evidence. This is deterministic file-search popup state evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

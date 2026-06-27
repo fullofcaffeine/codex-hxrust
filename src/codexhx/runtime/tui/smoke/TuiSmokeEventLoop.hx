@@ -48,6 +48,15 @@ private typedef TuiSmokePromptArgsResult = {
 	final restOffset:Int;
 }
 
+private typedef TuiSmokeFileSearchPopupState = {
+	var displayQuery:String;
+	var pendingQuery:String;
+	var waiting:Bool;
+	var matches:Array<String>;
+	var selectedIndex:Int;
+	var scrollTop:Int;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -470,6 +479,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.UnifiedExecFooter:
 					if (!traceUnifiedExecFooter(event.unifiedExecFooter, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.FileSearchPopup:
+					if (!traceFileSearchPopup(event.fileSearchPopup, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -5915,6 +5929,191 @@ class TuiSmokeEventLoop {
 		for (row in rows)
 			out.push(traceText(row));
 		return out.join("|");
+	}
+
+	static function traceFileSearchPopup(plan:TuiSmokeFileSearchPopupPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.file_search_popup.rejected=live_or_missing");
+			return false;
+		}
+		final state = fileSearchPopupInitialState();
+		trace.push("tui.file_search_popup.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeFileSearchPopupActionKind.Snapshot:
+				case TuiSmokeFileSearchPopupActionKind.SetQuery:
+					fileSearchPopupSetQuery(state, action.query);
+				case TuiSmokeFileSearchPopupActionKind.EmptyPrompt:
+					fileSearchPopupSetEmptyPrompt(state);
+				case TuiSmokeFileSearchPopupActionKind.SetMatches:
+					fileSearchPopupSetMatches(state, action.query, action.paths);
+				case TuiSmokeFileSearchPopupActionKind.MoveUp:
+					fileSearchPopupMoveUp(state);
+				case TuiSmokeFileSearchPopupActionKind.MoveDown:
+					fileSearchPopupMoveDown(state);
+				case TuiSmokeFileSearchPopupActionKind.Failure:
+					trace.push("tui.file_search_popup.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+					continue;
+				case _:
+					trace.push("tui.file_search_popup.unknown");
+					return false;
+			}
+			if (!fileSearchPopupMatchesExpectation(state, action)) {
+				trace.push("tui.file_search_popup.state_mismatch=" + action.name + ":" + fileSearchPopupStateTrace(state));
+				return false;
+			}
+			trace.push("tui.file_search_popup." + action.kind + "=" + action.name + ":" + fileSearchPopupStateTrace(state));
+		}
+		return true;
+	}
+
+	static function fileSearchPopupInitialState():TuiSmokeFileSearchPopupState {
+		return {
+			displayQuery: "",
+			pendingQuery: "",
+			waiting: true,
+			matches: [],
+			selectedIndex: -1,
+			scrollTop: 0
+		};
+	}
+
+	static function fileSearchPopupSetQuery(state:TuiSmokeFileSearchPopupState, query:String):Void {
+		if (query == state.pendingQuery)
+			return;
+		state.pendingQuery = query;
+		state.waiting = true;
+	}
+
+	static function fileSearchPopupSetEmptyPrompt(state:TuiSmokeFileSearchPopupState):Void {
+		state.displayQuery = "";
+		state.pendingQuery = "";
+		state.waiting = false;
+		state.matches.resize(0);
+		state.selectedIndex = -1;
+		state.scrollTop = 0;
+	}
+
+	static function fileSearchPopupSetMatches(state:TuiSmokeFileSearchPopupState, query:String, paths:Array<String>):Void {
+		if (query != state.pendingQuery)
+			return;
+		state.displayQuery = query;
+		state.matches.resize(0);
+		final limit = paths.length > 8 ? 8 : paths.length;
+		for (idx in 0...limit)
+			state.matches.push(paths[idx]);
+		state.waiting = false;
+		fileSearchPopupClampSelection(state);
+		fileSearchPopupEnsureVisible(state);
+	}
+
+	static function fileSearchPopupMoveUp(state:TuiSmokeFileSearchPopupState):Void {
+		final len = state.matches.length;
+		if (len == 0) {
+			state.selectedIndex = -1;
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIndex > 0) {
+			state.selectedIndex--;
+		} else if (state.selectedIndex == 0) {
+			state.selectedIndex = len - 1;
+		} else {
+			state.selectedIndex = 0;
+		}
+		fileSearchPopupEnsureVisible(state);
+	}
+
+	static function fileSearchPopupMoveDown(state:TuiSmokeFileSearchPopupState):Void {
+		final len = state.matches.length;
+		if (len == 0) {
+			state.selectedIndex = -1;
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIndex >= 0 && state.selectedIndex + 1 < len) {
+			state.selectedIndex++;
+		} else {
+			state.selectedIndex = 0;
+		}
+		fileSearchPopupEnsureVisible(state);
+	}
+
+	static function fileSearchPopupClampSelection(state:TuiSmokeFileSearchPopupState):Void {
+		final len = state.matches.length;
+		if (len == 0) {
+			state.selectedIndex = -1;
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIndex < 0) {
+			state.selectedIndex = 0;
+		} else if (state.selectedIndex >= len) {
+			state.selectedIndex = len - 1;
+		}
+	}
+
+	static function fileSearchPopupEnsureVisible(state:TuiSmokeFileSearchPopupState):Void {
+		final len = state.matches.length;
+		final visible = len < 8 ? len : 8;
+		if (len == 0 || visible == 0) {
+			state.scrollTop = 0;
+			return;
+		}
+		if (state.selectedIndex < state.scrollTop) {
+			state.scrollTop = state.selectedIndex;
+		} else {
+			final bottom = state.scrollTop + visible - 1;
+			if (state.selectedIndex > bottom)
+				state.scrollTop = state.selectedIndex + 1 - visible;
+		}
+	}
+
+	static function fileSearchPopupMatchesExpectation(state:TuiSmokeFileSearchPopupState, action:TuiSmokeFileSearchPopupAction):Bool {
+		return state.displayQuery == action.expectedDisplayQuery
+			&& state.pendingQuery == action.expectedPendingQuery
+			&& state.waiting == action.expectedWaiting
+			&& stringArraysEqual(state.matches, action.expectedMatches)
+			&& fileSearchPopupRequiredHeight(state) == action.expectedHeight
+			&& fileSearchPopupSelectedPath(state) == action.expectedSelectedPath
+			&& fileSearchPopupEmptyMessage(state) == action.expectedEmptyMessage
+			&& state.selectedIndex == action.expectedSelectedIndex
+			&& state.scrollTop == action.expectedScrollTop;
+	}
+
+	static function fileSearchPopupRequiredHeight(state:TuiSmokeFileSearchPopupState):Int {
+		if (state.matches.length < 1)
+			return 1;
+		return state.matches.length > 8 ? 8 : state.matches.length;
+	}
+
+	static function fileSearchPopupSelectedPath(state:TuiSmokeFileSearchPopupState):String {
+		if (state.selectedIndex < 0 || state.selectedIndex >= state.matches.length)
+			return "";
+		return state.matches[state.selectedIndex];
+	}
+
+	static function fileSearchPopupEmptyMessage(state:TuiSmokeFileSearchPopupState):String {
+		return state.waiting ? "loading..." : "no matches";
+	}
+
+	static function fileSearchPopupStateTrace(state:TuiSmokeFileSearchPopupState):String {
+		return "display=" + traceText(state.displayQuery) + ":pending=" + traceText(state.pendingQuery) + ":waiting=" + state.waiting + ":matches="
+			+ fileSearchPopupMatchesTrace(state.matches) + ":height=" + fileSearchPopupRequiredHeight(state) + ":selected="
+			+ traceText(fileSearchPopupSelectedPath(state)) + ":empty_message=" + traceText(fileSearchPopupEmptyMessage(state)) + ":selected_idx="
+			+ state.selectedIndex + ":scroll_top=" + state.scrollTop;
+	}
+
+	static function fileSearchPopupMatchesTrace(matches:Array<String>):String {
+		if (matches.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (path in matches)
+			out.push(traceText(path));
+		return out.join(",");
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {
