@@ -130,6 +130,7 @@ class TuiSmokeFixtureLoader {
 				pendingInputPreview: optionalPendingInputPreviewPlan(value, "pendingInputPreview"),
 				pendingThreadApprovals: optionalPendingThreadApprovalsPlan(value, "pendingThreadApprovals"),
 				promptArgs: optionalPromptArgsPlan(value, "promptArgs"),
+				unifiedExecFooter: optionalUnifiedExecFooterPlan(value, "unifiedExecFooter"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -945,6 +946,47 @@ class TuiSmokeFixtureLoader {
 				expectedName: optionalStringField(value, "expectedName", ""),
 				expectedRest: optionalStringField(value, "expectedRest", ""),
 				expectedRestOffset: optionalIntField(value, "expectedRestOffset", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalUnifiedExecFooterPlan(object:Value, name:String):Null<TuiSmokeUnifiedExecFooterPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeUnifiedExecFooterPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: unifiedExecFooterActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function unifiedExecFooterActions(values:Array<Value>):Array<TuiSmokeUnifiedExecFooterAction> {
+		final out:Array<TuiSmokeUnifiedExecFooterAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeUnifiedExecFooterAction({
+				kind: TuiSmokeUnifiedExecFooterActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				width: optionalIntField(value, "width", 0),
+				processes: optionalStringArrayField(value, "processes"),
+				expectedChanged: optionalBoolField(value, "expectedChanged", false),
+				expectedEmpty: optionalBoolField(value, "expectedEmpty", false),
+				expectedPresent: optionalBoolField(value, "expectedPresent", false),
+				expectedSummary: optionalStringField(value, "expectedSummary", ""),
+				expectedHeight: optionalIntField(value, "expectedHeight", 0),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
 				failureCode: optionalStringField(value, "failureCode", ""),
 				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
 				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),

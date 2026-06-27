@@ -74,6 +74,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final PendingInputPreview = "pending_input_preview";
 	final PendingThreadApprovals = "pending_thread_approvals";
 	final PromptArgs = "prompt_args";
+	final UnifiedExecFooter = "unified_exec_footer";
 	final ChatWidgetGoalMenu = "chat_widget_goal_menu";
 	final ChatWidgetReviewMode = "chat_widget_review_mode";
 	final ChatWidgetTranscriptHistory = "chat_widget_transcript_history";
@@ -179,6 +180,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "pending_input_preview": PendingInputPreview;
 			case "pending_thread_approvals": PendingThreadApprovals;
 			case "prompt_args": PromptArgs;
+			case "unified_exec_footer": UnifiedExecFooter;
 			case "chat_widget_goal_menu": ChatWidgetGoalMenu;
 			case "chat_widget_review_mode": ChatWidgetReviewMode;
 			case "chat_widget_transcript_history": ChatWidgetTranscriptHistory;

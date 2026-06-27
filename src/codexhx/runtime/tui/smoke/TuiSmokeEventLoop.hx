@@ -468,6 +468,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.UnifiedExecFooter:
+					if (!traceUnifiedExecFooter(event.unifiedExecFooter, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -5806,6 +5811,110 @@ class TuiSmokeEventLoop {
 
 	static function utf8ByteLength(value:String):Int {
 		return haxe.io.Bytes.ofString(value).length;
+	}
+
+	static function traceUnifiedExecFooter(plan:TuiSmokeUnifiedExecFooterPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.unified_exec_footer.rejected=live_or_missing");
+			return false;
+		}
+		final processes:Array<String> = [];
+		trace.push("tui.unified_exec_footer.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeUnifiedExecFooterActionKind.SetProcesses:
+					final changed = !stringArraysEqual(processes, action.processes);
+					processes.resize(0);
+					for (process in action.processes)
+						processes.push(process);
+					final empty = processes.length == 0;
+					if (changed != action.expectedChanged || empty != action.expectedEmpty) {
+						trace.push("tui.unified_exec_footer.set_mismatch=" + action.name + ":changed=" + changed + ":empty=" + empty + ":processes="
+							+ unifiedExecFooterProcessesTrace(processes));
+						return false;
+					}
+					trace.push("tui.unified_exec_footer.set=" + action.name + ":changed=" + changed + ":empty=" + empty + ":processes="
+						+ unifiedExecFooterProcessesTrace(processes));
+				case TuiSmokeUnifiedExecFooterActionKind.Summary:
+					final summary = unifiedExecFooterSummary(processes);
+					final present = summary != null;
+					final text = present ? summary : "";
+					if (present != action.expectedPresent || text != action.expectedSummary) {
+						trace.push("tui.unified_exec_footer.summary_mismatch=" + action.name + ":present=" + present + ":text=" + traceText(text));
+						return false;
+					}
+					trace.push("tui.unified_exec_footer.summary=" + action.name + ":present=" + present + ":text=" + traceText(text));
+				case TuiSmokeUnifiedExecFooterActionKind.Render:
+					final rows = unifiedExecFooterRows(processes, action.width);
+					final height = rows.length;
+					if (height != action.expectedHeight || rows.join("|") != action.expectedRows.join("|")) {
+						trace.push("tui.unified_exec_footer.render_mismatch=" + action.name + ":width=" + action.width + ":height=" + height + ":rows="
+							+ unifiedExecFooterRowsTrace(rows));
+						return false;
+					}
+					trace.push("tui.unified_exec_footer.render=" + action.name + ":width=" + action.width + ":height=" + height + ":rows="
+						+ unifiedExecFooterRowsTrace(rows));
+				case TuiSmokeUnifiedExecFooterActionKind.Failure:
+					trace.push("tui.unified_exec_footer.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.unified_exec_footer.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function unifiedExecFooterSummary(processes:Array<String>):Null<String> {
+		if (processes.length == 0)
+			return null;
+		return unifiedExecFooterSummaryText(processes.length);
+	}
+
+	static function unifiedExecFooterSummaryText(count:Int):String {
+		final plural = count == 1 ? "" : "s";
+		return count + " background terminal" + plural + " running · /ps to view · /stop to close";
+	}
+
+	static function unifiedExecFooterRows(processes:Array<String>, width:Int):Array<String> {
+		final rows:Array<String> = [];
+		if (width < 4 || processes.length == 0)
+			return rows;
+		final summary = unifiedExecFooterSummaryText(processes.length);
+		rows.push(takePrefixByCodepointWidth("  " + summary, width));
+		return rows;
+	}
+
+	static function takePrefixByCodepointWidth(value:String, width:Int):String {
+		if (width <= 0)
+			return "";
+		var out = "";
+		var index = 0;
+		while (index < value.length && index < width) {
+			out += value.charAt(index);
+			index++;
+		}
+		return out;
+	}
+
+	static function unifiedExecFooterProcessesTrace(processes:Array<String>):String {
+		if (processes.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (process in processes)
+			out.push(traceText(process));
+		return out.join(",");
+	}
+
+	static function unifiedExecFooterRowsTrace(rows:Array<String>):String {
+		if (rows.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (row in rows)
+			out.push(traceText(row));
+		return out.join("|");
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

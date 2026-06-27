@@ -62,6 +62,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/pending_input_preview.rs",
       "../codex/codex-rs/tui/src/bottom_pane/pending_thread_approvals.rs",
       "../codex/codex-rs/tui/src/bottom_pane/prompt_args.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/unified_exec_footer.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -20545,6 +20546,160 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.prompt_args.plan=headless\ntui.prompt_args.parse=missing-slash:line=hello world:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=empty-name:line=/:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=slash-space-empty-name:line=/ ask:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=name-only:line=/help:present=true:name=help:rest=<empty>:offset=5\ntui.prompt_args.parse=simple-rest:line=/foo bar baz:present=true:name=foo:rest=bar baz:offset=5\ntui.prompt_args.parse=trim-leading-rest-spaces:line=/foo   bar:present=true:name=foo:rest=bar:offset=7\ntui.prompt_args.parse=tab-split:line=/foo\\tbar:present=true:name=foo:rest=bar:offset=5\ntui.prompt_args.parse=newline-split:line=/foo\\nbar:present=true:name=foo:rest=bar:offset=5\ntui.prompt_args.parse=unicode-name-byte-offset:line=/こんにちは  世界:present=true:name=こんにちは:rest=世界:offset=18\ntui.prompt_args.failure=live_prompt_args_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> prompt args parser\ninput> \ntrace:\ntui.prompt_args.plan=headless\ntui.prompt_args.parse=missing-slash:line=hello world:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=empty-name:line=/:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=slash-space-empty-name:line=/ ask:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=name-only:line=/help:present=true:name=help:rest=<empty>:offset=5\ntui.prompt_args.parse=simple-rest:line=/foo bar baz:present=true:name=foo:rest=bar baz:offset=5\ntui.prompt_args.parse=trim-leading-rest-spaces:line=/foo   bar:present=true:name=foo:rest=bar:offset=7\ntui.prompt_args.parse=tab-split:line=/foo\\tbar:present=true:name=foo:rest=bar:offset=5\ntui.prompt_args.parse=newline-split:line=/foo\\nbar:present=true:name=foo:rest=bar:offset=5\ntui.prompt_args.parse=unicode-name-byte-offset:line=/こんにちは  世界:present=true:name=こんにちは:rest=世界:offset=18\ntui.prompt_args.failure=live_prompt_args_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "unified-exec-footer-headless",
+      "frame": {
+        "name": "unified-exec-footer-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "unified exec footer"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "unified_exec_footer",
+          "unifiedExecFooter": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "set_processes",
+                "name": "initial-empty",
+                "processes": [],
+                "expectedChanged": false,
+                "expectedEmpty": true
+              },
+              {
+                "kind": "summary",
+                "name": "empty-summary",
+                "expectedPresent": false,
+                "expectedSummary": ""
+              },
+              {
+                "kind": "render",
+                "name": "empty-render",
+                "width": 40,
+                "expectedHeight": 0,
+                "expectedRows": []
+              },
+              {
+                "kind": "set_processes",
+                "name": "one-process",
+                "processes": [
+                  "rg \"foo\" src"
+                ],
+                "expectedChanged": true,
+                "expectedEmpty": false
+              },
+              {
+                "kind": "summary",
+                "name": "one-process-summary",
+                "expectedPresent": true,
+                "expectedSummary": "1 background terminal running · /ps to view · /stop to close"
+              },
+              {
+                "kind": "render",
+                "name": "one-process-full",
+                "width": 72,
+                "expectedHeight": 1,
+                "expectedRows": [
+                  "  1 background terminal running · /ps to view · /stop to close"
+                ]
+              },
+              {
+                "kind": "render",
+                "name": "one-process-narrow",
+                "width": 3,
+                "expectedHeight": 0,
+                "expectedRows": []
+              },
+              {
+                "kind": "render",
+                "name": "one-process-truncated",
+                "width": 20,
+                "expectedHeight": 1,
+                "expectedRows": [
+                  "  1 background termi"
+                ]
+              },
+              {
+                "kind": "set_processes",
+                "name": "same-one-process",
+                "processes": [
+                  "rg \"foo\" src"
+                ],
+                "expectedChanged": false,
+                "expectedEmpty": false
+              },
+              {
+                "kind": "set_processes",
+                "name": "many-processes",
+                "processes": [
+                  "cmd 0",
+                  "cmd 1",
+                  "cmd 2",
+                  "cmd 3"
+                ],
+                "expectedChanged": true,
+                "expectedEmpty": false
+              },
+              {
+                "kind": "summary",
+                "name": "many-processes-summary",
+                "expectedPresent": true,
+                "expectedSummary": "4 background terminals running · /ps to view · /stop to close"
+              },
+              {
+                "kind": "render",
+                "name": "many-processes-truncated",
+                "width": 20,
+                "expectedHeight": 1,
+                "expectedRows": [
+                  "  4 background termi"
+                ]
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_unified_exec_footer_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.unified_exec_footer.plan=headless\ntui.unified_exec_footer.set=initial-empty:changed=false:empty=true:processes=<none>\ntui.unified_exec_footer.summary=empty-summary:present=false:text=<empty>\ntui.unified_exec_footer.render=empty-render:width=40:height=0:rows=<none>\ntui.unified_exec_footer.set=one-process:changed=true:empty=false:processes=rg \"foo\" src\ntui.unified_exec_footer.summary=one-process-summary:present=true:text=1 background terminal running · /ps to view · /stop to close\ntui.unified_exec_footer.render=one-process-full:width=72:height=1:rows=  1 background terminal running · /ps to view · /stop to close\ntui.unified_exec_footer.render=one-process-narrow:width=3:height=0:rows=<none>\ntui.unified_exec_footer.render=one-process-truncated:width=20:height=1:rows=  1 background termi\ntui.unified_exec_footer.set=same-one-process:changed=false:empty=false:processes=rg \"foo\" src\ntui.unified_exec_footer.set=many-processes:changed=true:empty=false:processes=cmd 0,cmd 1,cmd 2,cmd 3\ntui.unified_exec_footer.summary=many-processes-summary:present=true:text=4 background terminals running · /ps to view · /stop to close\ntui.unified_exec_footer.render=many-processes-truncated:width=20:height=1:rows=  4 background termi\ntui.unified_exec_footer.failure=live_unified_exec_footer_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> unified exec footer\ninput> \ntrace:\ntui.unified_exec_footer.plan=headless\ntui.unified_exec_footer.set=initial-empty:changed=false:empty=true:processes=<none>\ntui.unified_exec_footer.summary=empty-summary:present=false:text=<empty>\ntui.unified_exec_footer.render=empty-render:width=40:height=0:rows=<none>\ntui.unified_exec_footer.set=one-process:changed=true:empty=false:processes=rg \"foo\" src\ntui.unified_exec_footer.summary=one-process-summary:present=true:text=1 background terminal running · /ps to view · /stop to close\ntui.unified_exec_footer.render=one-process-full:width=72:height=1:rows=  1 background terminal running · /ps to view · /stop to close\ntui.unified_exec_footer.render=one-process-narrow:width=3:height=0:rows=<none>\ntui.unified_exec_footer.render=one-process-truncated:width=20:height=1:rows=  1 background termi\ntui.unified_exec_footer.set=same-one-process:changed=false:empty=false:processes=rg \"foo\" src\ntui.unified_exec_footer.set=many-processes:changed=true:empty=false:processes=cmd 0,cmd 1,cmd 2,cmd 3\ntui.unified_exec_footer.summary=many-processes-summary:present=true:text=4 background terminals running · /ps to view · /stop to close\ntui.unified_exec_footer.render=many-processes-truncated:width=20:height=1:rows=  4 background termi\ntui.unified_exec_footer.failure=live_unified_exec_footer_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",
