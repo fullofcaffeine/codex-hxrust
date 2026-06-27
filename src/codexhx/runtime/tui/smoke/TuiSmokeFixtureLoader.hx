@@ -123,6 +123,7 @@ class TuiSmokeFixtureLoader {
 				wrapping: optionalWrappingPlan(value, "wrapping"),
 				scrollState: optionalScrollStatePlan(value, "scrollState"),
 				selectionTabs: optionalSelectionTabsPlan(value, "selectionTabs"),
+				actionRequiredTitle: optionalActionRequiredTitlePlan(value, "actionRequiredTitle"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -643,6 +644,56 @@ class TuiSmokeFixtureLoader {
 			out.push(new TuiSmokeSelectionTab({
 				id: optionalStringField(value, "id", ""),
 				label: optionalStringField(value, "label", "")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalActionRequiredTitlePlan(object:Value, name:String):Null<TuiSmokeActionRequiredTitlePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeActionRequiredTitlePlan({
+					allowTerminalTitleMutation: optionalBoolField(value, "allowTerminalTitleMutation", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: actionRequiredTitleActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function actionRequiredTitleActions(values:Array<Value>):Array<TuiSmokeActionRequiredTitleAction> {
+		final out:Array<TuiSmokeActionRequiredTitleAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeActionRequiredTitleAction({
+				kind: TuiSmokeActionRequiredTitleActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				prefix: optionalStringField(value, "prefix", ""),
+				items: optionalStringArrayField(value, "items"),
+				excludedItems: optionalStringArrayField(value, "excludedItems"),
+				values: actionRequiredTitleValues(optionalArrayField(value, "values")),
+				expected: optionalStringField(value, "expected", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalTitleMutation: optionalBoolField(value, "noTerminalTitleMutation", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function actionRequiredTitleValues(values:Array<Value>):Array<TuiSmokeActionRequiredTitleValue> {
+		final out:Array<TuiSmokeActionRequiredTitleValue> = [];
+		for (value in values) {
+			out.push(new TuiSmokeActionRequiredTitleValue({
+				item: optionalStringField(value, "item", ""),
+				value: optionalStringField(value, "value", ""),
+				present: optionalBoolField(value, "present", true)
 			}));
 		}
 		return out;

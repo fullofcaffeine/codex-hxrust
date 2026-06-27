@@ -420,6 +420,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ActionRequiredTitle:
+					if (!traceActionRequiredTitle(event.actionRequiredTitle, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4855,6 +4860,74 @@ class TuiSmokeEventLoop {
 		for (line in lines)
 			out.push(traceText(line));
 		return out.join("|");
+	}
+
+	static function traceActionRequiredTitle(plan:TuiSmokeActionRequiredTitlePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalTitleMutation || plan.allowRatatuiRender || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.action_required_title.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.action_required_title.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeActionRequiredTitleActionKind.Build:
+					final actual = actionRequiredTitleBuild(action.prefix, action.items, action.excludedItems, action.values);
+					if (actual != action.expected) {
+						trace.push("tui.action_required_title.build_mismatch=" + action.name + ":expected=" + traceText(action.expected) + ":actual="
+							+ traceText(actual));
+						return false;
+					}
+					trace.push("tui.action_required_title.build=" + action.name + ":items=" + actionRequiredTitleListTrace(action.items) + ":excluded="
+						+ actionRequiredTitleListTrace(action.excludedItems) + ":result=" + traceText(actual));
+				case TuiSmokeActionRequiredTitleActionKind.Failure:
+					trace.push("tui.action_required_title.failure=" + action.failureCode + ":no_title=" + action.noTerminalTitleMutation + ":no_render="
+						+ action.noRatatuiRender + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.action_required_title.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function actionRequiredTitleBuild(prefix:String, items:Array<String>, excludedItems:Array<String>,
+			values:Array<TuiSmokeActionRequiredTitleValue>):String {
+		final parts:Array<String> = [prefix];
+		for (item in items) {
+			if (item == "spinner" || actionRequiredTitleContains(excludedItems, item))
+				continue;
+			final value = actionRequiredTitleValueFor(item, values);
+			if (value != null)
+				parts.push(value);
+		}
+		return parts.join(" | ");
+	}
+
+	static function actionRequiredTitleContains(items:Array<String>, item:String):Bool {
+		for (candidate in items) {
+			if (candidate == item)
+				return true;
+		}
+		return false;
+	}
+
+	static function actionRequiredTitleValueFor(item:String, values:Array<TuiSmokeActionRequiredTitleValue>):Null<String> {
+		for (entry in values) {
+			if (entry.item == item)
+				return entry.present ? entry.value : null;
+		}
+		return null;
+	}
+
+	static function actionRequiredTitleListTrace(items:Array<String>):String {
+		if (items.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (item in items)
+			out.push(traceText(item));
+		return out.join(",");
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

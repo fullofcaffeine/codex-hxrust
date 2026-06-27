@@ -55,6 +55,7 @@
       "../codex/codex-rs/tui/src/wrapping.rs",
       "../codex/codex-rs/tui/src/bottom_pane/scroll_state.rs",
       "../codex/codex-rs/tui/src/bottom_pane/selection_tabs.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/action_required_title.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -19354,6 +19355,160 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.selection_tabs.plan=headless\ntui.selection_tabs.height=empty:active=0:width=20:height=0\ntui.selection_tabs.lines=single-line:active=1:width=30:lines=dim[Files]  accent[Search]  dim[History]\ntui.selection_tabs.height=wrapped-height:active=0:width=12:height=2\ntui.selection_tabs.lines=wrapped-lines:active=0:width=12:lines=accent[Alpha]|dim[Beta]  dim[Gamma]\ntui.selection_tabs.lines=active-change:active=2:width=24:lines=dim[Alpha]  dim[Beta]  accent[Gamma]\ntui.selection_tabs.lines=width-min-one:active=0:width=0:lines=accent[A]|dim[B]\ntui.selection_tabs.render=height-truncated:active=0:width=8:height=2:lines=accent[Alpha]|dim[Beta]\ntui.selection_tabs.render=zero-height-render:active=0:width=8:height=0:lines=<none>\ntui.selection_tabs.failure=live_selection_tabs_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> selection tabs layout boundary\ninput> \ntrace:\ntui.selection_tabs.plan=headless\ntui.selection_tabs.height=empty:active=0:width=20:height=0\ntui.selection_tabs.lines=single-line:active=1:width=30:lines=dim[Files]  accent[Search]  dim[History]\ntui.selection_tabs.height=wrapped-height:active=0:width=12:height=2\ntui.selection_tabs.lines=wrapped-lines:active=0:width=12:lines=accent[Alpha]|dim[Beta]  dim[Gamma]\ntui.selection_tabs.lines=active-change:active=2:width=24:lines=dim[Alpha]  dim[Beta]  accent[Gamma]\ntui.selection_tabs.lines=width-min-one:active=0:width=0:lines=accent[A]|dim[B]\ntui.selection_tabs.render=height-truncated:active=0:width=8:height=2:lines=accent[Alpha]|dim[Beta]\ntui.selection_tabs.render=zero-height-render:active=0:width=8:height=0:lines=<none>\ntui.selection_tabs.failure=live_selection_tabs_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "action-required-title-headless",
+      "frame": {
+        "name": "action-required-title-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "action required title composition"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "action_required_title",
+          "actionRequiredTitle": {
+            "allowTerminalTitleMutation": false,
+            "allowRatatuiRender": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "build",
+                "name": "prefix-only",
+                "prefix": "[ ! ] Action Required",
+                "items": [],
+                "excludedItems": [],
+                "values": [],
+                "expected": "[ ! ] Action Required"
+              },
+              {
+                "kind": "build",
+                "name": "ordered-values",
+                "prefix": "[ ! ] Action Required",
+                "items": [
+                  "project",
+                  "status",
+                  "thread"
+                ],
+                "excludedItems": [],
+                "values": [
+                  {
+                    "item": "project",
+                    "value": "my-project"
+                  },
+                  {
+                    "item": "status",
+                    "value": "Working"
+                  },
+                  {
+                    "item": "thread",
+                    "value": "thread title"
+                  }
+                ],
+                "expected": "[ ! ] Action Required | my-project | Working | thread title"
+              },
+              {
+                "kind": "build",
+                "name": "skip-spinner-excluded-missing",
+                "prefix": "[ . ] Action Required",
+                "items": [
+                  "spinner",
+                  "project",
+                  "status",
+                  "thread",
+                  "git_branch"
+                ],
+                "excludedItems": [
+                  "status"
+                ],
+                "values": [
+                  {
+                    "item": "spinner",
+                    "value": "braille-frame"
+                  },
+                  {
+                    "item": "project",
+                    "value": "project"
+                  },
+                  {
+                    "item": "status",
+                    "value": "Waiting"
+                  },
+                  {
+                    "item": "thread",
+                    "value": "ignored missing",
+                    "present": false
+                  },
+                  {
+                    "item": "git_branch",
+                    "value": "feat/title"
+                  }
+                ],
+                "expected": "[ . ] Action Required | project | feat/title"
+              },
+              {
+                "kind": "build",
+                "name": "duplicate-preserved",
+                "prefix": "[ ! ] Action Required",
+                "items": [
+                  "project",
+                  "project",
+                  "model"
+                ],
+                "excludedItems": [],
+                "values": [
+                  {
+                    "item": "project",
+                    "value": "codex"
+                  },
+                  {
+                    "item": "model",
+                    "value": "gpt-5.2-codex"
+                  }
+                ],
+                "expected": "[ ! ] Action Required | codex | codex | gpt-5.2-codex"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_action_required_title_effects_rejected",
+                "noTerminalTitleMutation": true,
+                "noRatatuiRender": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.action_required_title.plan=headless\ntui.action_required_title.build=prefix-only:items=<none>:excluded=<none>:result=[ ! ] Action Required\ntui.action_required_title.build=ordered-values:items=project,status,thread:excluded=<none>:result=[ ! ] Action Required | my-project | Working | thread title\ntui.action_required_title.build=skip-spinner-excluded-missing:items=spinner,project,status,thread,git_branch:excluded=status:result=[ . ] Action Required | project | feat/title\ntui.action_required_title.build=duplicate-preserved:items=project,project,model:excluded=<none>:result=[ ! ] Action Required | codex | codex | gpt-5.2-codex\ntui.action_required_title.failure=live_action_required_title_effects_rejected:no_title=true:no_render=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> action required title composition\ninput> \ntrace:\ntui.action_required_title.plan=headless\ntui.action_required_title.build=prefix-only:items=<none>:excluded=<none>:result=[ ! ] Action Required\ntui.action_required_title.build=ordered-values:items=project,status,thread:excluded=<none>:result=[ ! ] Action Required | my-project | Working | thread title\ntui.action_required_title.build=skip-spinner-excluded-missing:items=spinner,project,status,thread,git_branch:excluded=status:result=[ . ] Action Required | project | feat/title\ntui.action_required_title.build=duplicate-preserved:items=project,project,model:excluded=<none>:result=[ ! ] Action Required | codex | codex | gpt-5.2-codex\ntui.action_required_title.failure=live_action_required_title_effects_rejected:no_title=true:no_render=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

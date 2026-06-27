@@ -3927,6 +3927,10 @@ Status: HXCX-TUI-264 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-265 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/selection_tabs.rs`. The fixture preserves empty tab height, active tab bracket/accent intent, inactive tab dim intent, two-column tab gaps, width-driven wrapping, active-index changes, width clamping to at least one column, and render-area height truncation. This is deterministic tab layout evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, or model traffic.
 
+### HXCX-TUI-266 Headless Raw Codex Action-Required Title
+
+Status: HXCX-TUI-266 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/action_required_title.rs`. The fixture preserves `build_action_required_title_text`-style prefix-only output, ordered item value composition, spinner omission, caller-supplied exclusion filtering, missing-value suppression, duplicate item preservation, and no-live rejection evidence. This is deterministic action-required title-string evidence only, not live terminal title mutation, ratatui ownership, filesystem mutation, network traffic, or model traffic.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
