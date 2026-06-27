@@ -8575,6 +8575,168 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer image placeholder editing\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.image_placeholder_edit=duplicate-numbering:text=[Image #1] [Image #2]->[Image #1] [Image #2]:placeholder=[Image #1]->[Image #2]:local=2->2:elements=2->2:payloads=[Image #1],[Image #2]:renumbered=false:pruned=false:rebuilt=true:cursor=21->21:cursor_end=true\ntui.composer_editing.image_placeholder_edit=backspace-removes-single:text=[Image #1]->:placeholder=[Image #1]->:local=1->0:elements=1->0:payloads=:renumbered=false:pruned=true:rebuilt=true:cursor=10->0:cursor_end=true\ntui.composer_editing.image_placeholder_edit=inside-element-protected:text=[Image #1]->[Image #1]:placeholder=[Image #1]->[Image #1]:local=1->1:elements=1->1:payloads=[Image #1]:renumbered=false:pruned=false:rebuilt=false:cursor=5->0:cursor_end=false\ntui.composer_editing.image_placeholder_edit=multibyte-adjacent-backspace:text=[Image #1]日本語->[Image #1]日本:placeholder=[Image #1]->[Image #1]:local=1->1:elements=1->1:payloads=[Image #1]:renumbered=false:pruned=false:rebuilt=false:cursor=19->16:cursor_end=true\ntui.composer_editing.image_placeholder_edit=delete-first-renumbers:text=[Image #1][Image #2]->[Image #1]:placeholder=[Image #2]->[Image #1]:local=2->1:elements=2->1:payloads=[Image #1]:renumbered=true:pruned=true:rebuilt=true:cursor=0->0:cursor_end=false\ntui.composer_editing.image_placeholder_edit=reordered-delete-renumbers:text=Test [Image #2] test [Image #1]->Test [Image #1] test :placeholder=[Image #2]->[Image #1]:local=2->1:elements=2->1:payloads=[Image #1]:renumbered=true:pruned=true:rebuilt=true:cursor=31->21:cursor_end=true\ntui.composer_editing.failure=live_composer_image_placeholder_editing_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-image-path-paste-admission-headless",
+      "frame": {
+        "name": "composer-image-path-paste-admission-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer image path paste admission"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "image_path_paste",
+                "keyName": "admitted-image-path",
+                "inputText": "/tmp/codex_tui_test_paste_image.png",
+                "outputText": "[Image #1] ",
+                "placeholderAfter": "[Image #1]",
+                "localImageBefore": 0,
+                "localImageAfter": 1,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #1]",
+                "needsRedraw": true,
+                "burstWindowCleared": true,
+                "popupSynced": true,
+                "cursorBefore": 0,
+                "cursorAfter": 11
+              },
+              {
+                "kind": "image_path_paste",
+                "keyName": "non-image-path-fallback",
+                "inputText": "/Users/example/project/src/main.rs",
+                "outputText": "/Users/example/project/src/main.rs",
+                "localImageBefore": 0,
+                "localImageAfter": 0,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 0,
+                "elementAfter": 0,
+                "elementPayloads": "",
+                "needsRedraw": true,
+                "burstWindowCleared": true,
+                "popupSynced": true,
+                "cursorBefore": 0,
+                "cursorAfter": 34
+              },
+              {
+                "kind": "image_path_paste",
+                "keyName": "missing-image-path-fallback",
+                "inputText": "/tmp/missing-image.png",
+                "outputText": "/tmp/missing-image.png",
+                "localImageBefore": 0,
+                "localImageAfter": 0,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 0,
+                "elementAfter": 0,
+                "elementPayloads": "",
+                "needsRedraw": true,
+                "burstWindowCleared": true,
+                "popupSynced": true,
+                "cursorBefore": 0,
+                "cursorAfter": 22
+              },
+              {
+                "kind": "image_path_paste",
+                "keyName": "multibyte-fallback-stable",
+                "inputText": "日本語/readme.txt",
+                "outputText": "日本語/readme.txt",
+                "localImageBefore": 0,
+                "localImageAfter": 0,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 0,
+                "elementAfter": 0,
+                "elementPayloads": "",
+                "needsRedraw": true,
+                "burstWindowCleared": true,
+                "popupSynced": true,
+                "cursorBefore": 0,
+                "cursorAfter": 20
+              },
+              {
+                "kind": "image_path_paste",
+                "keyName": "placeholder-adjacent-admitted",
+                "inputText": "/tmp/adjacent.png",
+                "outputText": "[Image #1][Image #2] ",
+                "placeholderBefore": "[Image #1]",
+                "placeholderAfter": "[Image #2]",
+                "localImageBefore": 1,
+                "localImageAfter": 2,
+                "remoteImageBefore": 0,
+                "remoteImageAfter": 0,
+                "elementBefore": 1,
+                "elementAfter": 2,
+                "elementPayloads": "[Image #1],[Image #2]",
+                "needsRedraw": true,
+                "burstWindowCleared": true,
+                "popupSynced": true,
+                "cursorBefore": 10,
+                "cursorAfter": 21
+              },
+              {
+                "kind": "image_path_paste",
+                "keyName": "remote-offset-admitted",
+                "inputText": "/tmp/local.png",
+                "outputText": "[Image #3] ",
+                "placeholderAfter": "[Image #3]",
+                "localImageBefore": 0,
+                "localImageAfter": 1,
+                "remoteImageBefore": 2,
+                "remoteImageAfter": 2,
+                "elementBefore": 0,
+                "elementAfter": 1,
+                "elementPayloads": "[Image #3]",
+                "needsRedraw": true,
+                "burstWindowCleared": true,
+                "popupSynced": true,
+                "cursorBefore": 0,
+                "cursorAfter": 11
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_composer_image_path_paste_effects_rejected",
+                "noLiveInput": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.image_path_paste=admitted-image-path:paste=/tmp/codex_tui_test_paste_image.png:text=->[Image #1] :placeholder=->[Image #1]:local=0->1:remote=0->0:elements=0->1:payloads=[Image #1]:redraw=true:burst_clear=true:sync=true:cursor=0->11\ntui.composer_editing.image_path_paste=non-image-path-fallback:paste=/Users/example/project/src/main.rs:text=->/Users/example/project/src/main.rs:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:redraw=true:burst_clear=true:sync=true:cursor=0->34\ntui.composer_editing.image_path_paste=missing-image-path-fallback:paste=/tmp/missing-image.png:text=->/tmp/missing-image.png:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:redraw=true:burst_clear=true:sync=true:cursor=0->22\ntui.composer_editing.image_path_paste=multibyte-fallback-stable:paste=日本語/readme.txt:text=->日本語/readme.txt:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:redraw=true:burst_clear=true:sync=true:cursor=0->20\ntui.composer_editing.image_path_paste=placeholder-adjacent-admitted:paste=/tmp/adjacent.png:text=[Image #1]->[Image #1][Image #2] :placeholder=[Image #1]->[Image #2]:local=1->2:remote=0->0:elements=1->2:payloads=[Image #1],[Image #2]:redraw=true:burst_clear=true:sync=true:cursor=10->21\ntui.composer_editing.image_path_paste=remote-offset-admitted:paste=/tmp/local.png:text=->[Image #3] :placeholder=->[Image #3]:local=0->1:remote=2->2:elements=0->1:payloads=[Image #3]:redraw=true:burst_clear=true:sync=true:cursor=0->11\ntui.composer_editing.failure=live_composer_image_path_paste_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer image path paste admission\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.image_path_paste=admitted-image-path:paste=/tmp/codex_tui_test_paste_image.png:text=->[Image #1] :placeholder=->[Image #1]:local=0->1:remote=0->0:elements=0->1:payloads=[Image #1]:redraw=true:burst_clear=true:sync=true:cursor=0->11\ntui.composer_editing.image_path_paste=non-image-path-fallback:paste=/Users/example/project/src/main.rs:text=->/Users/example/project/src/main.rs:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:redraw=true:burst_clear=true:sync=true:cursor=0->34\ntui.composer_editing.image_path_paste=missing-image-path-fallback:paste=/tmp/missing-image.png:text=->/tmp/missing-image.png:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:redraw=true:burst_clear=true:sync=true:cursor=0->22\ntui.composer_editing.image_path_paste=multibyte-fallback-stable:paste=日本語/readme.txt:text=->日本語/readme.txt:placeholder=->:local=0->0:remote=0->0:elements=0->0:payloads=:redraw=true:burst_clear=true:sync=true:cursor=0->20\ntui.composer_editing.image_path_paste=placeholder-adjacent-admitted:paste=/tmp/adjacent.png:text=[Image #1]->[Image #1][Image #2] :placeholder=[Image #1]->[Image #2]:local=1->2:remote=0->0:elements=1->2:payloads=[Image #1],[Image #2]:redraw=true:burst_clear=true:sync=true:cursor=10->21\ntui.composer_editing.image_path_paste=remote-offset-admitted:paste=/tmp/local.png:text=->[Image #3] :placeholder=->[Image #3]:local=0->1:remote=2->2:elements=0->1:payloads=[Image #3]:redraw=true:burst_clear=true:sync=true:cursor=0->11\ntui.composer_editing.failure=live_composer_image_path_paste_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-popup-sync-suppression-clears",
       "frame": {
         "name": "composer-popup-sync-suppression-clears",
