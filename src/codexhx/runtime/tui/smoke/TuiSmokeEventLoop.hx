@@ -415,6 +415,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.SelectionTabs:
+					if (!traceSelectionTabs(event.selectionTabs, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4733,6 +4738,123 @@ class TuiSmokeEventLoop {
 
 	static function scrollStateTraceValues(selectedIdx:Int, scrollTop:Int):String {
 		return "selected=" + (selectedIdx < 0 ? "none" : Std.string(selectedIdx)) + ":scroll=" + scrollTop;
+	}
+
+	static function traceSelectionTabs(plan:TuiSmokeSelectionTabsPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.selection_tabs.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.selection_tabs.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeSelectionTabsActionKind.Lines:
+					final lines = selectionTabLines(action.tabs, action.activeIdx, action.width);
+					if (!selectionTabLinesMatch(lines, action.expectedLines)) {
+						trace.push("tui.selection_tabs.lines_mismatch=" + action.name + ":expected=" + selectionTabLineTrace(action.expectedLines)
+							+ ":actual=" + selectionTabLineTrace(lines));
+						return false;
+					}
+					trace.push("tui.selection_tabs.lines=" + action.name + ":active=" + action.activeIdx + ":width=" + action.width + ":lines="
+						+ selectionTabLineTrace(lines));
+				case TuiSmokeSelectionTabsActionKind.Height:
+					final height = selectionTabLines(action.tabs, action.activeIdx, action.width).length;
+					if (height != action.expectedHeight) {
+						trace.push("tui.selection_tabs.height_mismatch=" + action.name + ":expected=" + action.expectedHeight + ":actual=" + height);
+						return false;
+					}
+					trace.push("tui.selection_tabs.height="
+						+ action.name
+						+ ":active="
+						+ action.activeIdx
+						+ ":width="
+						+ action.width
+						+ ":height="
+						+ height);
+				case TuiSmokeSelectionTabsActionKind.Render:
+					final rendered = selectionTabRenderedLines(action.tabs, action.activeIdx, action.width, action.areaHeight);
+					if (!selectionTabLinesMatch(rendered, action.expectedLines)) {
+						trace.push("tui.selection_tabs.render_mismatch=" + action.name + ":expected=" + selectionTabLineTrace(action.expectedLines)
+							+ ":actual=" + selectionTabLineTrace(rendered));
+						return false;
+					}
+					trace.push("tui.selection_tabs.render=" + action.name + ":active=" + action.activeIdx + ":width=" + action.width + ":height="
+						+ action.areaHeight + ":lines=" + selectionTabLineTrace(rendered));
+				case TuiSmokeSelectionTabsActionKind.Failure:
+					trace.push("tui.selection_tabs.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.selection_tabs.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function selectionTabLines(tabs:Array<TuiSmokeSelectionTab>, activeIdx:Int, width:Int):Array<String> {
+		final lines:Array<String> = [];
+		if (tabs.length == 0)
+			return lines;
+		final maxWidth = intMax(1, width);
+		var currentUnits:Array<String> = [];
+		var currentWidth = 0;
+		for (idx in 0...tabs.length) {
+			final tab = tabs[idx];
+			final active = idx == activeIdx;
+			final unit = selectionTabUnitTrace(tab.label, active);
+			final unitWidth = selectionTabUnitWidth(tab.label, active);
+			final gapWidth = currentUnits.length == 0 ? 0 : 2;
+			if (currentUnits.length > 0 && currentWidth + gapWidth + unitWidth > maxWidth) {
+				lines.push(currentUnits.join("  "));
+				currentUnits = [];
+				currentWidth = 0;
+			}
+			if (currentUnits.length > 0)
+				currentWidth += 2;
+			currentUnits.push(unit);
+			currentWidth += unitWidth;
+		}
+		if (currentUnits.length > 0)
+			lines.push(currentUnits.join("  "));
+		return lines;
+	}
+
+	static function selectionTabRenderedLines(tabs:Array<TuiSmokeSelectionTab>, activeIdx:Int, width:Int, areaHeight:Int):Array<String> {
+		final lines = selectionTabLines(tabs, activeIdx, width);
+		final rendered:Array<String> = [];
+		final limit = intMax(0, areaHeight);
+		for (idx in 0...intMin(lines.length, limit))
+			rendered.push(lines[idx]);
+		return rendered;
+	}
+
+	static function selectionTabUnitTrace(label:String, active:Bool):String {
+		return active ? "accent[" + label + "]" : "dim[" + label + "]";
+	}
+
+	static function selectionTabUnitWidth(label:String, active:Bool):Int {
+		return label.length + (active ? 2 : 0);
+	}
+
+	static function selectionTabLinesMatch(left:Array<String>, right:Array<String>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (idx in 0...left.length) {
+			if (left[idx] != right[idx])
+				return false;
+		}
+		return true;
+	}
+
+	static function selectionTabLineTrace(lines:Array<String>):String {
+		if (lines.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (line in lines)
+			out.push(traceText(line));
+		return out.join("|");
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

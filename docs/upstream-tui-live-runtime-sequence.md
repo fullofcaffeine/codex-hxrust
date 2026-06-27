@@ -3923,6 +3923,10 @@ Status: HXCX-TUI-263 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-264 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/scroll_state.rs`. The fixture preserves optional selection reset, empty-list clearing, clamp-selection defaulting and out-of-range behavior, wrap-around up/down movement, page-up/page-down clamping, jump top/bottom, and `ensure_visible` scroll-window repair including zero visible-row and no-selection cases. This is deterministic list state evidence only, not live terminal mutation, ratatui rendering, filesystem mutation, network traffic, or model traffic.
 
+### HXCX-TUI-265 Headless Raw Codex Selection Tabs
+
+Status: HXCX-TUI-265 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/selection_tabs.rs`. The fixture preserves empty tab height, active tab bracket/accent intent, inactive tab dim intent, two-column tab gaps, width-driven wrapping, active-index changes, width clamping to at least one column, and render-area height truncation. This is deterministic tab layout evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, or model traffic.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

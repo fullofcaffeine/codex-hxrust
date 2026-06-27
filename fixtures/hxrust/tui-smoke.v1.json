@@ -54,6 +54,7 @@
       "../codex/codex-rs/tui/src/live_wrap.rs",
       "../codex/codex-rs/tui/src/wrapping.rs",
       "../codex/codex-rs/tui/src/bottom_pane/scroll_state.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/selection_tabs.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -19137,6 +19138,222 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.scroll_state.plan=headless\ntui.scroll_state.reset=new:state=selected=none:scroll=0\ntui.scroll_state.clamp=default-first:len=10:state=selected=0:scroll=0\ntui.scroll_state.ensure_visible=initial-visible:len=10:visible=5:state=selected=0:scroll=0\ntui.scroll_state.move_up=wrap-to-bottom:len=10:state=selected=9:scroll=0\ntui.scroll_state.ensure_visible=wrapped-bottom-visible:len=10:visible=5:state=selected=9:scroll=5\ntui.scroll_state.move_down=wrap-to-top:len=10:state=selected=0:scroll=5\ntui.scroll_state.ensure_visible=wrapped-top-visible:len=10:visible=5:state=selected=0:scroll=0\ntui.scroll_state.set=out-of-range:state=selected=99:scroll=3\ntui.scroll_state.clamp=clamp-out-of-range:len=10:state=selected=9:scroll=3\ntui.scroll_state.set=none-with-scroll:state=selected=none:scroll=7\ntui.scroll_state.ensure_visible=none-resets-scroll:len=10:visible=5:state=selected=none:scroll=0\ntui.scroll_state.set=paging-start:state=selected=0:scroll=0\ntui.scroll_state.page_down=first-page:len=10:visible=4:state=selected=4:scroll=1\ntui.scroll_state.page_down=second-page:len=10:visible=4:state=selected=8:scroll=5\ntui.scroll_state.page_down=last-page:len=10:visible=4:state=selected=9:scroll=6\ntui.scroll_state.page_up=page-up:len=10:visible=4:state=selected=5:scroll=5\ntui.scroll_state.jump_top=top:len=10:visible=4:state=selected=0:scroll=0\ntui.scroll_state.jump_bottom=bottom:len=10:visible=4:state=selected=9:scroll=6\ntui.scroll_state.set=zero-visible-window:state=selected=2:scroll=4\ntui.scroll_state.ensure_visible=zero-visible-reset:len=10:visible=0:state=selected=2:scroll=0\ntui.scroll_state.set=clear-empty-source:state=selected=3:scroll=2\ntui.scroll_state.move_down=empty-clear:len=0:state=selected=none:scroll=0\ntui.scroll_state.failure=live_scroll_state_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> scroll state selection boundary\ninput> \ntrace:\ntui.scroll_state.plan=headless\ntui.scroll_state.reset=new:state=selected=none:scroll=0\ntui.scroll_state.clamp=default-first:len=10:state=selected=0:scroll=0\ntui.scroll_state.ensure_visible=initial-visible:len=10:visible=5:state=selected=0:scroll=0\ntui.scroll_state.move_up=wrap-to-bottom:len=10:state=selected=9:scroll=0\ntui.scroll_state.ensure_visible=wrapped-bottom-visible:len=10:visible=5:state=selected=9:scroll=5\ntui.scroll_state.move_down=wrap-to-top:len=10:state=selected=0:scroll=5\ntui.scroll_state.ensure_visible=wrapped-top-visible:len=10:visible=5:state=selected=0:scroll=0\ntui.scroll_state.set=out-of-range:state=selected=99:scroll=3\ntui.scroll_state.clamp=clamp-out-of-range:len=10:state=selected=9:scroll=3\ntui.scroll_state.set=none-with-scroll:state=selected=none:scroll=7\ntui.scroll_state.ensure_visible=none-resets-scroll:len=10:visible=5:state=selected=none:scroll=0\ntui.scroll_state.set=paging-start:state=selected=0:scroll=0\ntui.scroll_state.page_down=first-page:len=10:visible=4:state=selected=4:scroll=1\ntui.scroll_state.page_down=second-page:len=10:visible=4:state=selected=8:scroll=5\ntui.scroll_state.page_down=last-page:len=10:visible=4:state=selected=9:scroll=6\ntui.scroll_state.page_up=page-up:len=10:visible=4:state=selected=5:scroll=5\ntui.scroll_state.jump_top=top:len=10:visible=4:state=selected=0:scroll=0\ntui.scroll_state.jump_bottom=bottom:len=10:visible=4:state=selected=9:scroll=6\ntui.scroll_state.set=zero-visible-window:state=selected=2:scroll=4\ntui.scroll_state.ensure_visible=zero-visible-reset:len=10:visible=0:state=selected=2:scroll=0\ntui.scroll_state.set=clear-empty-source:state=selected=3:scroll=2\ntui.scroll_state.move_down=empty-clear:len=0:state=selected=none:scroll=0\ntui.scroll_state.failure=live_scroll_state_effects_rejected:no_terminal=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "selection-tabs-headless",
+      "frame": {
+        "name": "selection-tabs-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "selection tabs layout boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "selection_tabs",
+          "selectionTabs": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "height",
+                "name": "empty",
+                "tabs": [],
+                "activeIdx": 0,
+                "width": 20,
+                "expectedHeight": 0
+              },
+              {
+                "kind": "lines",
+                "name": "single-line",
+                "tabs": [
+                  {
+                    "id": "files",
+                    "label": "Files"
+                  },
+                  {
+                    "id": "search",
+                    "label": "Search"
+                  },
+                  {
+                    "id": "history",
+                    "label": "History"
+                  }
+                ],
+                "activeIdx": 1,
+                "width": 30,
+                "expectedLines": [
+                  "dim[Files]  accent[Search]  dim[History]"
+                ]
+              },
+              {
+                "kind": "height",
+                "name": "wrapped-height",
+                "tabs": [
+                  {
+                    "id": "alpha",
+                    "label": "Alpha"
+                  },
+                  {
+                    "id": "beta",
+                    "label": "Beta"
+                  },
+                  {
+                    "id": "gamma",
+                    "label": "Gamma"
+                  }
+                ],
+                "activeIdx": 0,
+                "width": 12,
+                "expectedHeight": 2
+              },
+              {
+                "kind": "lines",
+                "name": "wrapped-lines",
+                "tabs": [
+                  {
+                    "id": "alpha",
+                    "label": "Alpha"
+                  },
+                  {
+                    "id": "beta",
+                    "label": "Beta"
+                  },
+                  {
+                    "id": "gamma",
+                    "label": "Gamma"
+                  }
+                ],
+                "activeIdx": 0,
+                "width": 12,
+                "expectedLines": [
+                  "accent[Alpha]",
+                  "dim[Beta]  dim[Gamma]"
+                ]
+              },
+              {
+                "kind": "lines",
+                "name": "active-change",
+                "tabs": [
+                  {
+                    "id": "alpha",
+                    "label": "Alpha"
+                  },
+                  {
+                    "id": "beta",
+                    "label": "Beta"
+                  },
+                  {
+                    "id": "gamma",
+                    "label": "Gamma"
+                  }
+                ],
+                "activeIdx": 2,
+                "width": 24,
+                "expectedLines": [
+                  "dim[Alpha]  dim[Beta]  accent[Gamma]"
+                ]
+              },
+              {
+                "kind": "lines",
+                "name": "width-min-one",
+                "tabs": [
+                  {
+                    "id": "a",
+                    "label": "A"
+                  },
+                  {
+                    "id": "b",
+                    "label": "B"
+                  }
+                ],
+                "activeIdx": 0,
+                "width": 0,
+                "expectedLines": [
+                  "accent[A]",
+                  "dim[B]"
+                ]
+              },
+              {
+                "kind": "render",
+                "name": "height-truncated",
+                "tabs": [
+                  {
+                    "id": "alpha",
+                    "label": "Alpha"
+                  },
+                  {
+                    "id": "beta",
+                    "label": "Beta"
+                  },
+                  {
+                    "id": "gamma",
+                    "label": "Gamma"
+                  }
+                ],
+                "activeIdx": 0,
+                "width": 8,
+                "areaHeight": 2,
+                "expectedLines": [
+                  "accent[Alpha]",
+                  "dim[Beta]"
+                ]
+              },
+              {
+                "kind": "render",
+                "name": "zero-height-render",
+                "tabs": [
+                  {
+                    "id": "alpha",
+                    "label": "Alpha"
+                  }
+                ],
+                "activeIdx": 0,
+                "width": 8,
+                "areaHeight": 0,
+                "expectedLines": []
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_selection_tabs_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.selection_tabs.plan=headless\ntui.selection_tabs.height=empty:active=0:width=20:height=0\ntui.selection_tabs.lines=single-line:active=1:width=30:lines=dim[Files]  accent[Search]  dim[History]\ntui.selection_tabs.height=wrapped-height:active=0:width=12:height=2\ntui.selection_tabs.lines=wrapped-lines:active=0:width=12:lines=accent[Alpha]|dim[Beta]  dim[Gamma]\ntui.selection_tabs.lines=active-change:active=2:width=24:lines=dim[Alpha]  dim[Beta]  accent[Gamma]\ntui.selection_tabs.lines=width-min-one:active=0:width=0:lines=accent[A]|dim[B]\ntui.selection_tabs.render=height-truncated:active=0:width=8:height=2:lines=accent[Alpha]|dim[Beta]\ntui.selection_tabs.render=zero-height-render:active=0:width=8:height=0:lines=<none>\ntui.selection_tabs.failure=live_selection_tabs_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> selection tabs layout boundary\ninput> \ntrace:\ntui.selection_tabs.plan=headless\ntui.selection_tabs.height=empty:active=0:width=20:height=0\ntui.selection_tabs.lines=single-line:active=1:width=30:lines=dim[Files]  accent[Search]  dim[History]\ntui.selection_tabs.height=wrapped-height:active=0:width=12:height=2\ntui.selection_tabs.lines=wrapped-lines:active=0:width=12:lines=accent[Alpha]|dim[Beta]  dim[Gamma]\ntui.selection_tabs.lines=active-change:active=2:width=24:lines=dim[Alpha]  dim[Beta]  accent[Gamma]\ntui.selection_tabs.lines=width-min-one:active=0:width=0:lines=accent[A]|dim[B]\ntui.selection_tabs.render=height-truncated:active=0:width=8:height=2:lines=accent[Alpha]|dim[Beta]\ntui.selection_tabs.render=zero-height-render:active=0:width=8:height=0:lines=<none>\ntui.selection_tabs.failure=live_selection_tabs_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

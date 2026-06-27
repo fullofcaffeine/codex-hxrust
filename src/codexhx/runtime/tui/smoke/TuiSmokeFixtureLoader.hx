@@ -122,6 +122,7 @@ class TuiSmokeFixtureLoader {
 				liveWrap: optionalLiveWrapPlan(value, "liveWrap"),
 				wrapping: optionalWrappingPlan(value, "wrapping"),
 				scrollState: optionalScrollStatePlan(value, "scrollState"),
+				selectionTabs: optionalSelectionTabsPlan(value, "selectionTabs"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -592,6 +593,56 @@ class TuiSmokeFixtureLoader {
 				noNetwork: optionalBoolField(value, "noNetwork", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalSelectionTabsPlan(object:Value, name:String):Null<TuiSmokeSelectionTabsPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSelectionTabsPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: selectionTabsActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function selectionTabsActions(values:Array<Value>):Array<TuiSmokeSelectionTabsAction> {
+		final out:Array<TuiSmokeSelectionTabsAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSelectionTabsAction({
+				kind: TuiSmokeSelectionTabsActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				tabs: selectionTabs(optionalArrayField(value, "tabs")),
+				activeIdx: optionalIntField(value, "activeIdx", 0),
+				width: optionalIntField(value, "width", 0),
+				areaHeight: optionalIntField(value, "areaHeight", 0),
+				expectedHeight: optionalIntField(value, "expectedHeight", 0),
+				expectedLines: optionalStringArrayField(value, "expectedLines"),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function selectionTabs(values:Array<Value>):Array<TuiSmokeSelectionTab> {
+		final out:Array<TuiSmokeSelectionTab> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSelectionTab({
+				id: optionalStringField(value, "id", ""),
+				label: optionalStringField(value, "label", "")
 			}));
 		}
 		return out;
