@@ -3931,6 +3931,10 @@ Status: HXCX-TUI-265 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-266 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/action_required_title.rs`. The fixture preserves `build_action_required_title_text`-style prefix-only output, ordered item value composition, spinner omission, caller-supplied exclusion filtering, missing-value suppression, duplicate item preservation, and no-live rejection evidence. This is deterministic action-required title-string evidence only, not live terminal title mutation, ratatui ownership, filesystem mutation, network traffic, or model traffic.
 
+### HXCX-TUI-267 Headless Raw Codex Popup Constants
+
+Status: HXCX-TUI-267 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/popup_consts.rs`. The fixture preserves the shared `MAX_POPUP_ROWS` limit, standard Enter/Esc hint text, keymap-sourced primary accept/cancel bindings, accept-only hint text, cancel-only hint text, empty no-binding output, and no-live rejection evidence. This is deterministic popup constant and hint-string evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

@@ -425,6 +425,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.PopupConsts:
+					if (!tracePopupConsts(event.popupConsts, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -4928,6 +4933,91 @@ class TuiSmokeEventLoop {
 		for (item in items)
 			out.push(traceText(item));
 		return out.join(",");
+	}
+
+	static function tracePopupConsts(plan:TuiSmokePopupConstsPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.popup_consts.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.popup_consts.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokePopupConstsActionKind.MaxRows:
+					final actual = popupConstsMaxRows();
+					if (actual != action.expectedMaxRows) {
+						trace.push("tui.popup_consts.max_rows_mismatch=" + action.name + ":expected=" + action.expectedMaxRows + ":actual=" + actual);
+						return false;
+					}
+					trace.push("tui.popup_consts.max_rows=" + action.name + ":expected=" + action.expectedMaxRows + ":actual=" + actual);
+				case TuiSmokePopupConstsActionKind.StandardHint:
+					final actual = popupConstsStandardHintLine();
+					if (actual != action.expected) {
+						trace.push("tui.popup_consts.standard_hint_mismatch=" + action.name + ":expected=" + traceText(action.expected) + ":actual="
+							+ traceText(actual));
+						return false;
+					}
+					trace.push("tui.popup_consts.standard_hint=" + action.name + ":hint=" + traceText(actual));
+				case TuiSmokePopupConstsActionKind.KeymapHint:
+					final actual = popupConstsAcceptCancelHint(action.acceptBindings, action.acceptLabel, action.cancelBindings, action.cancelLabel);
+					if (actual != action.expected) {
+						trace.push("tui.popup_consts.keymap_hint_mismatch=" + action.name + ":expected=" + traceText(action.expected) + ":actual="
+							+ traceText(actual));
+						return false;
+					}
+					trace.push("tui.popup_consts.keymap_hint=" + action.name + ":accept=" + popupConstsBindingListTrace(action.acceptBindings) + ":cancel="
+						+ popupConstsBindingListTrace(action.cancelBindings) + ":hint=" + traceText(actual));
+				case TuiSmokePopupConstsActionKind.AcceptCancel:
+					final actual = popupConstsAcceptCancelHint(action.acceptBindings, action.acceptLabel, action.cancelBindings, action.cancelLabel);
+					if (actual != action.expected) {
+						trace.push("tui.popup_consts.accept_cancel_mismatch=" + action.name + ":expected=" + traceText(action.expected) + ":actual="
+							+ traceText(actual));
+						return false;
+					}
+					trace.push("tui.popup_consts.accept_cancel=" + action.name + ":accept=" + popupConstsBindingListTrace(action.acceptBindings)
+						+ ":cancel=" + popupConstsBindingListTrace(action.cancelBindings) + ":hint=" + traceText(actual));
+				case TuiSmokePopupConstsActionKind.Failure:
+					trace.push("tui.popup_consts.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.popup_consts.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function popupConstsMaxRows():Int {
+		return 8;
+	}
+
+	static function popupConstsStandardHintLine():String {
+		return popupConstsAcceptCancelHint(["enter"], "to confirm", ["esc"], "to go back");
+	}
+
+	static function popupConstsAcceptCancelHint(acceptBindings:Array<String>, acceptLabel:String, cancelBindings:Array<String>, cancelLabel:String):String {
+		final hasAccept = acceptBindings.length > 0;
+		final hasCancel = cancelBindings.length > 0;
+		final accept = hasAccept ? acceptBindings[0] : "";
+		final cancel = hasCancel ? cancelBindings[0] : "";
+		if (hasAccept && hasCancel)
+			return "Press " + accept + " " + acceptLabel + " or " + cancel + " " + cancelLabel;
+		if (hasAccept)
+			return "Press " + accept + " " + acceptLabel;
+		if (hasCancel)
+			return "Press " + cancel + " " + cancelLabel;
+		return "";
+	}
+
+	static function popupConstsBindingListTrace(bindings:Array<String>):String {
+		if (bindings.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (binding in bindings)
+			out.push(traceText(binding));
+		return out.join("|");
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {

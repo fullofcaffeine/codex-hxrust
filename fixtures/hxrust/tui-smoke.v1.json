@@ -56,6 +56,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/scroll_state.rs",
       "../codex/codex-rs/tui/src/bottom_pane/selection_tabs.rs",
       "../codex/codex-rs/tui/src/bottom_pane/action_required_title.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/popup_consts.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -19509,6 +19510,120 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.action_required_title.plan=headless\ntui.action_required_title.build=prefix-only:items=<none>:excluded=<none>:result=[ ! ] Action Required\ntui.action_required_title.build=ordered-values:items=project,status,thread:excluded=<none>:result=[ ! ] Action Required | my-project | Working | thread title\ntui.action_required_title.build=skip-spinner-excluded-missing:items=spinner,project,status,thread,git_branch:excluded=status:result=[ . ] Action Required | project | feat/title\ntui.action_required_title.build=duplicate-preserved:items=project,project,model:excluded=<none>:result=[ ! ] Action Required | codex | codex | gpt-5.2-codex\ntui.action_required_title.failure=live_action_required_title_effects_rejected:no_title=true:no_render=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> action required title composition\ninput> \ntrace:\ntui.action_required_title.plan=headless\ntui.action_required_title.build=prefix-only:items=<none>:excluded=<none>:result=[ ! ] Action Required\ntui.action_required_title.build=ordered-values:items=project,status,thread:excluded=<none>:result=[ ! ] Action Required | my-project | Working | thread title\ntui.action_required_title.build=skip-spinner-excluded-missing:items=spinner,project,status,thread,git_branch:excluded=status:result=[ . ] Action Required | project | feat/title\ntui.action_required_title.build=duplicate-preserved:items=project,project,model:excluded=<none>:result=[ ! ] Action Required | codex | codex | gpt-5.2-codex\ntui.action_required_title.failure=live_action_required_title_effects_rejected:no_title=true:no_render=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "popup-consts-headless",
+      "frame": {
+        "name": "popup-consts-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "popup constants and hints"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "popup_consts",
+          "popupConsts": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "max_rows",
+                "name": "shared-limit",
+                "expectedMaxRows": 8
+              },
+              {
+                "kind": "standard_hint",
+                "name": "default-enter-esc",
+                "expected": "Press enter to confirm or esc to go back"
+              },
+              {
+                "kind": "keymap_hint",
+                "name": "first-bindings",
+                "acceptBindings": [
+                  "ctrl + a",
+                  "shift + b"
+                ],
+                "acceptLabel": "to confirm",
+                "cancelBindings": [
+                  "esc",
+                  "ctrl + c"
+                ],
+                "cancelLabel": "to go back",
+                "expected": "Press ctrl + a to confirm or esc to go back"
+              },
+              {
+                "kind": "accept_cancel",
+                "name": "accept-only",
+                "acceptBindings": [
+                  "enter"
+                ],
+                "acceptLabel": "to apply",
+                "cancelBindings": [],
+                "cancelLabel": "to close",
+                "expected": "Press enter to apply"
+              },
+              {
+                "kind": "accept_cancel",
+                "name": "cancel-only",
+                "acceptBindings": [],
+                "acceptLabel": "to apply",
+                "cancelBindings": [
+                  "esc"
+                ],
+                "cancelLabel": "to close",
+                "expected": "Press esc to close"
+              },
+              {
+                "kind": "accept_cancel",
+                "name": "empty-bindings",
+                "acceptBindings": [],
+                "acceptLabel": "to apply",
+                "cancelBindings": [],
+                "cancelLabel": "to close",
+                "expected": ""
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_popup_consts_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.popup_consts.plan=headless\ntui.popup_consts.max_rows=shared-limit:expected=8:actual=8\ntui.popup_consts.standard_hint=default-enter-esc:hint=Press enter to confirm or esc to go back\ntui.popup_consts.keymap_hint=first-bindings:accept=ctrl + a|shift + b:cancel=esc|ctrl + c:hint=Press ctrl + a to confirm or esc to go back\ntui.popup_consts.accept_cancel=accept-only:accept=enter:cancel=<none>:hint=Press enter to apply\ntui.popup_consts.accept_cancel=cancel-only:accept=<none>:cancel=esc:hint=Press esc to close\ntui.popup_consts.accept_cancel=empty-bindings:accept=<none>:cancel=<none>:hint=<empty>\ntui.popup_consts.failure=live_popup_consts_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> popup constants and hints\ninput> \ntrace:\ntui.popup_consts.plan=headless\ntui.popup_consts.max_rows=shared-limit:expected=8:actual=8\ntui.popup_consts.standard_hint=default-enter-esc:hint=Press enter to confirm or esc to go back\ntui.popup_consts.keymap_hint=first-bindings:accept=ctrl + a|shift + b:cancel=esc|ctrl + c:hint=Press ctrl + a to confirm or esc to go back\ntui.popup_consts.accept_cancel=accept-only:accept=enter:cancel=<none>:hint=Press enter to apply\ntui.popup_consts.accept_cancel=cancel-only:accept=<none>:cancel=esc:hint=Press esc to close\ntui.popup_consts.accept_cancel=empty-bindings:accept=<none>:cancel=<none>:hint=<empty>\ntui.popup_consts.failure=live_popup_consts_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

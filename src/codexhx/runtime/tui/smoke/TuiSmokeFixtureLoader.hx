@@ -124,6 +124,7 @@ class TuiSmokeFixtureLoader {
 				scrollState: optionalScrollStatePlan(value, "scrollState"),
 				selectionTabs: optionalSelectionTabsPlan(value, "selectionTabs"),
 				actionRequiredTitle: optionalActionRequiredTitlePlan(value, "actionRequiredTitle"),
+				popupConsts: optionalPopupConstsPlan(value, "popupConsts"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -694,6 +695,45 @@ class TuiSmokeFixtureLoader {
 				item: optionalStringField(value, "item", ""),
 				value: optionalStringField(value, "value", ""),
 				present: optionalBoolField(value, "present", true)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalPopupConstsPlan(object:Value, name:String):Null<TuiSmokePopupConstsPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokePopupConstsPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: popupConstsActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function popupConstsActions(values:Array<Value>):Array<TuiSmokePopupConstsAction> {
+		final out:Array<TuiSmokePopupConstsAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokePopupConstsAction({
+				kind: TuiSmokePopupConstsActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				acceptBindings: optionalStringArrayField(value, "acceptBindings"),
+				acceptLabel: optionalStringField(value, "acceptLabel", ""),
+				cancelBindings: optionalStringArrayField(value, "cancelBindings"),
+				cancelLabel: optionalStringField(value, "cancelLabel", ""),
+				expected: optionalStringField(value, "expected", ""),
+				expectedMaxRows: optionalIntField(value, "expectedMaxRows", 0),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
