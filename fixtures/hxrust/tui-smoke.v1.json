@@ -61,6 +61,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/status_surface_preview.rs",
       "../codex/codex-rs/tui/src/bottom_pane/pending_input_preview.rs",
       "../codex/codex-rs/tui/src/bottom_pane/pending_thread_approvals.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/prompt_args.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -20414,6 +20415,136 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.pending_thread_approvals.plan=headless\ntui.pending_thread_approvals.set=initial-empty:changed=false:empty=true:threads=<none>\ntui.pending_thread_approvals.render=empty:width=40:height=0:rows=<none>\ntui.pending_thread_approvals.set=single-thread:changed=true:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=single-thread:width=40:height=2:rows=  ! Approval needed in Robie [explorer]|    /agent to switch threads\ntui.pending_thread_approvals.set=same-single-thread:changed=false:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=narrow:width=3:height=0:rows=<none>\ntui.pending_thread_approvals.set=multiple-with-overflow:changed=true:empty=false:threads=Main [default],Robie [explorer],Inspector,Extra agent\ntui.pending_thread_approvals.render=multiple-with-overflow:width=44:height=5:rows=  ! Approval needed in Main [default]|  ! Approval needed in Robie [explorer]|  ! Approval needed in Inspector|    ...|    /agent to switch threads\ntui.pending_thread_approvals.set=wrapped-long-thread:changed=true:empty=false:threads=Long review thread label with many words for wrapping\ntui.pending_thread_approvals.render=wrapped-long-thread:width=26:height=5:rows=  ! Approval needed in|    Long review thread|    label with many words|    for wrapping|    /agent to switch threads\ntui.pending_thread_approvals.failure=live_pending_thread_approvals_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> pending thread approval rows\ninput> \ntrace:\ntui.pending_thread_approvals.plan=headless\ntui.pending_thread_approvals.set=initial-empty:changed=false:empty=true:threads=<none>\ntui.pending_thread_approvals.render=empty:width=40:height=0:rows=<none>\ntui.pending_thread_approvals.set=single-thread:changed=true:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=single-thread:width=40:height=2:rows=  ! Approval needed in Robie [explorer]|    /agent to switch threads\ntui.pending_thread_approvals.set=same-single-thread:changed=false:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=narrow:width=3:height=0:rows=<none>\ntui.pending_thread_approvals.set=multiple-with-overflow:changed=true:empty=false:threads=Main [default],Robie [explorer],Inspector,Extra agent\ntui.pending_thread_approvals.render=multiple-with-overflow:width=44:height=5:rows=  ! Approval needed in Main [default]|  ! Approval needed in Robie [explorer]|  ! Approval needed in Inspector|    ...|    /agent to switch threads\ntui.pending_thread_approvals.set=wrapped-long-thread:changed=true:empty=false:threads=Long review thread label with many words for wrapping\ntui.pending_thread_approvals.render=wrapped-long-thread:width=26:height=5:rows=  ! Approval needed in|    Long review thread|    label with many words|    for wrapping|    /agent to switch threads\ntui.pending_thread_approvals.failure=live_pending_thread_approvals_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "prompt-args-headless",
+      "frame": {
+        "name": "prompt-args-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "prompt args parser"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "prompt_args",
+          "promptArgs": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "parse",
+                "name": "missing-slash",
+                "line": "hello world",
+                "expectedPresent": false
+              },
+              {
+                "kind": "parse",
+                "name": "empty-name",
+                "line": "/",
+                "expectedPresent": false
+              },
+              {
+                "kind": "parse",
+                "name": "slash-space-empty-name",
+                "line": "/ ask",
+                "expectedPresent": false
+              },
+              {
+                "kind": "parse",
+                "name": "name-only",
+                "line": "/help",
+                "expectedPresent": true,
+                "expectedName": "help",
+                "expectedRest": "",
+                "expectedRestOffset": 5
+              },
+              {
+                "kind": "parse",
+                "name": "simple-rest",
+                "line": "/foo bar baz",
+                "expectedPresent": true,
+                "expectedName": "foo",
+                "expectedRest": "bar baz",
+                "expectedRestOffset": 5
+              },
+              {
+                "kind": "parse",
+                "name": "trim-leading-rest-spaces",
+                "line": "/foo   bar",
+                "expectedPresent": true,
+                "expectedName": "foo",
+                "expectedRest": "bar",
+                "expectedRestOffset": 7
+              },
+              {
+                "kind": "parse",
+                "name": "tab-split",
+                "line": "/foo\tbar",
+                "expectedPresent": true,
+                "expectedName": "foo",
+                "expectedRest": "bar",
+                "expectedRestOffset": 5
+              },
+              {
+                "kind": "parse",
+                "name": "newline-split",
+                "line": "/foo\nbar",
+                "expectedPresent": true,
+                "expectedName": "foo",
+                "expectedRest": "bar",
+                "expectedRestOffset": 5
+              },
+              {
+                "kind": "parse",
+                "name": "unicode-name-byte-offset",
+                "line": "/こんにちは  世界",
+                "expectedPresent": true,
+                "expectedName": "こんにちは",
+                "expectedRest": "世界",
+                "expectedRestOffset": 18
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_prompt_args_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.prompt_args.plan=headless\ntui.prompt_args.parse=missing-slash:line=hello world:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=empty-name:line=/:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=slash-space-empty-name:line=/ ask:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=name-only:line=/help:present=true:name=help:rest=<empty>:offset=5\ntui.prompt_args.parse=simple-rest:line=/foo bar baz:present=true:name=foo:rest=bar baz:offset=5\ntui.prompt_args.parse=trim-leading-rest-spaces:line=/foo   bar:present=true:name=foo:rest=bar:offset=7\ntui.prompt_args.parse=tab-split:line=/foo\\tbar:present=true:name=foo:rest=bar:offset=5\ntui.prompt_args.parse=newline-split:line=/foo\\nbar:present=true:name=foo:rest=bar:offset=5\ntui.prompt_args.parse=unicode-name-byte-offset:line=/こんにちは  世界:present=true:name=こんにちは:rest=世界:offset=18\ntui.prompt_args.failure=live_prompt_args_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> prompt args parser\ninput> \ntrace:\ntui.prompt_args.plan=headless\ntui.prompt_args.parse=missing-slash:line=hello world:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=empty-name:line=/:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=slash-space-empty-name:line=/ ask:present=false:name=<empty>:rest=<empty>:offset=0\ntui.prompt_args.parse=name-only:line=/help:present=true:name=help:rest=<empty>:offset=5\ntui.prompt_args.parse=simple-rest:line=/foo bar baz:present=true:name=foo:rest=bar baz:offset=5\ntui.prompt_args.parse=trim-leading-rest-spaces:line=/foo   bar:present=true:name=foo:rest=bar:offset=7\ntui.prompt_args.parse=tab-split:line=/foo\\tbar:present=true:name=foo:rest=bar:offset=5\ntui.prompt_args.parse=newline-split:line=/foo\\nbar:present=true:name=foo:rest=bar:offset=5\ntui.prompt_args.parse=unicode-name-byte-offset:line=/こんにちは  世界:present=true:name=こんにちは:rest=世界:offset=18\ntui.prompt_args.failure=live_prompt_args_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

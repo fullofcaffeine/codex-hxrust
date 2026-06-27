@@ -129,6 +129,7 @@ class TuiSmokeFixtureLoader {
 				statusSurfacePreview: optionalStatusSurfacePreviewPlan(value, "statusSurfacePreview"),
 				pendingInputPreview: optionalPendingInputPreviewPlan(value, "pendingInputPreview"),
 				pendingThreadApprovals: optionalPendingThreadApprovalsPlan(value, "pendingThreadApprovals"),
+				promptArgs: optionalPromptArgsPlan(value, "promptArgs"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -906,6 +907,44 @@ class TuiSmokeFixtureLoader {
 				expectedEmpty: optionalBoolField(value, "expectedEmpty", false),
 				expectedHeight: optionalIntField(value, "expectedHeight", 0),
 				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalPromptArgsPlan(object:Value, name:String):Null<TuiSmokePromptArgsPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokePromptArgsPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: promptArgsActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function promptArgsActions(values:Array<Value>):Array<TuiSmokePromptArgsAction> {
+		final out:Array<TuiSmokePromptArgsAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokePromptArgsAction({
+				kind: TuiSmokePromptArgsActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				line: optionalStringField(value, "line", ""),
+				expectedPresent: optionalBoolField(value, "expectedPresent", false),
+				expectedName: optionalStringField(value, "expectedName", ""),
+				expectedRest: optionalStringField(value, "expectedRest", ""),
+				expectedRestOffset: optionalIntField(value, "expectedRestOffset", 0),
 				failureCode: optionalStringField(value, "failureCode", ""),
 				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
 				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),

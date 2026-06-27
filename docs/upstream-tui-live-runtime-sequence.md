@@ -3951,6 +3951,10 @@ Status: HXCX-TUI-270 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-271 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/pending_thread_approvals.rs`. The fixture preserves `set_threads` changed/unchanged and empty-state behavior, empty and narrow-width suppression, single and multiple inactive-thread approval rows, overflow after the third thread, stable wrapping indentation for long thread labels, the `/agent` switch hint, and no-live rejection evidence. This is deterministic pending-thread-approval row evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
 
+### HXCX-TUI-272 Headless Raw Codex Prompt Args
+
+Status: HXCX-TUI-272 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/prompt_args.rs`. The fixture preserves `parse_slash_name` rejection for missing slash and empty command names, name-only commands with empty rest, whitespace-trimmed rest text, byte `rest_offset` behavior, tab and newline whitespace splitting, Unicode command-name byte offsets, and no-live rejection evidence. This is deterministic prompt-argument parser evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

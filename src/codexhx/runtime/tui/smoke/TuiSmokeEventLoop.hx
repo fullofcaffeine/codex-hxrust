@@ -41,6 +41,13 @@ private typedef TuiSmokeStatusSurfacePreviewEntry = {
 	var isPlaceholder:Bool;
 }
 
+private typedef TuiSmokePromptArgsResult = {
+	final present:Bool;
+	final name:String;
+	final rest:String;
+	final restOffset:Int;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -453,6 +460,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.PendingThreadApprovals:
 					if (!tracePendingThreadApprovals(event.pendingThreadApprovals, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.PromptArgs:
+					if (!tracePromptArgs(event.promptArgs, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -5718,6 +5730,82 @@ class TuiSmokeEventLoop {
 		for (row in rows)
 			out.push(traceText(row));
 		return out.join("|");
+	}
+
+	static function tracePromptArgs(plan:TuiSmokePromptArgsPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.prompt_args.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.prompt_args.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokePromptArgsActionKind.Parse:
+					final parsed = parsePromptSlashName(action.line);
+					if (parsed.present != action.expectedPresent
+						|| parsed.name != action.expectedName
+						|| parsed.rest != action.expectedRest
+						|| parsed.restOffset != action.expectedRestOffset) {
+						trace.push("tui.prompt_args.parse_mismatch=" + action.name + ":present=" + parsed.present + ":name=" + traceText(parsed.name)
+							+ ":rest=" + traceText(parsed.rest) + ":offset=" + parsed.restOffset);
+						return false;
+					}
+					trace.push("tui.prompt_args.parse=" + action.name + ":line=" + traceText(action.line) + ":present=" + parsed.present + ":name="
+						+ traceText(parsed.name) + ":rest=" + traceText(parsed.rest) + ":offset=" + parsed.restOffset);
+				case TuiSmokePromptArgsActionKind.Failure:
+					trace.push("tui.prompt_args.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.prompt_args.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function parsePromptSlashName(line:String):TuiSmokePromptArgsResult {
+		if (line.length == 0 || line.charAt(0) != "/")
+			return promptArgsNone();
+		final stripped = line.substr(1);
+		var nameEnd = stripped.length;
+		var idx = 0;
+		while (idx < stripped.length) {
+			if (StringTools.isSpace(stripped, idx)) {
+				nameEnd = idx;
+				break;
+			}
+			idx++;
+		}
+		final name = stripped.substr(0, nameEnd);
+		if (name == "")
+			return promptArgsNone();
+		final restUntrimmed = stripped.substr(nameEnd);
+		var restStart = 0;
+		while (restStart < restUntrimmed.length && StringTools.isSpace(restUntrimmed, restStart))
+			restStart++;
+		final rest = restUntrimmed.substr(restStart);
+		final restOffset = 1 + utf8ByteLength(stripped.substr(0, nameEnd)) + utf8ByteLength(restUntrimmed.substr(0, restStart));
+		return {
+			present: true,
+			name: name,
+			rest: rest,
+			restOffset: restOffset
+		};
+	}
+
+	static function promptArgsNone():TuiSmokePromptArgsResult {
+		return {
+			present: false,
+			name: "",
+			rest: "",
+			restOffset: 0
+		};
+	}
+
+	static function utf8ByteLength(value:String):Int {
+		return haxe.io.Bytes.ofString(value).length;
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {
