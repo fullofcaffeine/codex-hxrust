@@ -114,6 +114,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetPermissionSelection: optionalPermissionSelectionPlan(value, "chatWidgetPermissionSelection"),
 				chatWidgetModelSettings: optionalModelSettingsPlan(value, "chatWidgetModelSettings"),
 				goalDisplay: optionalGoalDisplayPlan(value, "goalDisplay"),
+				gitActionDirectives: optionalGitActionDirectivePlan(value, "gitActionDirectives"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -180,6 +181,58 @@ class TuiSmokeFixtureLoader {
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalGitActionDirectivePlan(object:Value, name:String):Null<TuiSmokeGitActionDirectivePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeGitActionDirectivePlan({
+					allowGitMutation: optionalBoolField(value, "allowGitMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowGithubCall: optionalBoolField(value, "allowGithubCall", false),
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					actions: gitActionDirectiveActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function gitActionDirectiveActions(values:Array<Value>):Array<TuiSmokeGitActionDirectiveAction> {
+		final out:Array<TuiSmokeGitActionDirectiveAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeGitActionDirectiveAction({
+				kind: TuiSmokeGitActionDirectiveActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				cwd: optionalStringField(value, "cwd", ""),
+				markdown: optionalStringField(value, "markdown", ""),
+				expectedVisibleMarkdown: optionalStringField(value, "expectedVisibleMarkdown", ""),
+				expectedLastCreatedBranchCwd: optionalStringField(value, "expectedLastCreatedBranchCwd", ""),
+				expectedDirectives: gitActionDirectiveExpectations(optionalArrayField(value, "expectedDirectives")),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noGitMutation: optionalBoolField(value, "noGitMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noGithubCall: optionalBoolField(value, "noGithubCall", false),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function gitActionDirectiveExpectations(values:Array<Value>):Array<TuiSmokeGitActionDirectiveExpectation> {
+		final out:Array<TuiSmokeGitActionDirectiveExpectation> = [];
+		for (value in values) {
+			out.push(new TuiSmokeGitActionDirectiveExpectation({
+				kind: optionalStringField(value, "kind", ""),
+				cwd: optionalStringField(value, "cwd", ""),
+				branch: optionalStringField(value, "branch", ""),
+				url: optionalStringField(value, "url", ""),
+				isDraft: optionalBoolField(value, "isDraft", false)
 			}));
 		}
 		return out;

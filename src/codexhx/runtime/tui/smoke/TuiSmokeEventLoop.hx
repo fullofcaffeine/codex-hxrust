@@ -1,5 +1,21 @@
 package codexhx.runtime.tui.smoke;
 
+private typedef TuiSmokeParsedGitActionMarkdown = {
+	final visibleMarkdown:String;
+	final directives:Array<TuiSmokeGitActionDirectiveExpectation>;
+	final lastCreatedBranchCwd:String;
+}
+
+private typedef TuiSmokeStrippedGitActionLine = {
+	final visible:String;
+	final directives:Array<TuiSmokeGitActionDirectiveExpectation>;
+}
+
+private typedef TuiSmokeParsedQuotedValue = {
+	final value:String;
+	final rest:String;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -337,6 +353,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.GoalDisplay:
 					if (!traceGoalDisplay(event.goalDisplay, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.GitActionDirectives:
+					if (!traceGitActionDirectives(event.gitActionDirectives, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -3076,6 +3097,419 @@ class TuiSmokeEventLoop {
 			}
 		}
 		return true;
+	}
+
+	static function traceGitActionDirectives(plan:TuiSmokeGitActionDirectivePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowGitMutation || plan.allowFilesystemMutation || plan.allowNetwork || plan.allowGithubCall
+			|| plan.allowTerminalMutation || !plan.enabled()) {
+			trace.push("tui.git_action_directives.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.git_action_directives.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeGitActionDirectiveActionKind.Parse:
+					final parsed = parseAssistantMarkdownDirectives(action.markdown, action.cwd);
+					if (parsed.visibleMarkdown != action.expectedVisibleMarkdown) {
+						trace.push("tui.git_action_directives.visible_mismatch=" + action.name + ":expected=" + traceText(action.expectedVisibleMarkdown)
+							+ ":actual=" + traceText(parsed.visibleMarkdown));
+						return false;
+					}
+					if (!gitActionDirectivesMatch(parsed.directives, action.expectedDirectives)) {
+						trace.push("tui.git_action_directives.action_mismatch=" + action.name + ":expected="
+							+ gitActionDirectiveTrace(action.expectedDirectives) + ":actual=" + gitActionDirectiveTrace(parsed.directives));
+						return false;
+					}
+					if (parsed.lastCreatedBranchCwd != action.expectedLastCreatedBranchCwd) {
+						trace.push("tui.git_action_directives.last_branch_mismatch=" + action.name + ":expected=" + action.expectedLastCreatedBranchCwd
+							+ ":actual=" + parsed.lastCreatedBranchCwd);
+						return false;
+					}
+					trace.push("tui.git_action_directives.parse=" + action.name + ":visible=" + traceText(parsed.visibleMarkdown) + ":actions="
+						+ gitActionDirectiveTrace(parsed.directives) + ":last_branch=" + parsed.lastCreatedBranchCwd);
+				case TuiSmokeGitActionDirectiveActionKind.Failure:
+					trace.push("tui.git_action_directives.failure=" + action.failureCode + ":no_git=" + action.noGitMutation + ":no_fs="
+						+ action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_github=" + action.noGithubCall + ":no_terminal="
+						+ action.noTerminalMutation + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.git_action_directives.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {
+		final directives:Array<TuiSmokeGitActionDirectiveExpectation> = [];
+		final seen:Map<String, Bool> = new Map();
+		final visibleLines:Array<String> = [];
+		final lines = markdown.split("\n");
+		for (line in lines) {
+			final rewritten = rewriteCodeCommentLine(line, cwd);
+			if (rewritten != null) {
+				visibleLines.push(StringTools.rtrim(rewritten));
+				continue;
+			}
+			final stripped = stripLineDirectives(line);
+			for (directive in stripped.directives) {
+				final key = gitActionDirectiveKey(directive);
+				if (!seen.exists(key)) {
+					seen.set(key, true);
+					directives.push(directive);
+				}
+			}
+			visibleLines.push(StringTools.rtrim(stripped.visible));
+		}
+		while (visibleLines.length > 0 && visibleLines[visibleLines.length - 1] == "")
+			visibleLines.pop();
+		return {
+			visibleMarkdown: visibleLines.join("\n"),
+			directives: directives,
+			lastCreatedBranchCwd: lastCreatedBranchCwd(directives)
+		};
+	}
+
+	static function rewriteCodeCommentLine(line:String, cwd:String):Null<String> {
+		final content = trimStartTabsAndSpaces(line);
+		final indent = line.substr(0, line.length - content.length);
+		var markerLength = 0;
+		while (markerLength < content.length && content.charAt(markerLength) == ":")
+			markerLength++;
+		if (markerLength < 1 || markerLength > 3)
+			return null;
+		final afterMarker = content.substr(markerLength);
+		if (!StringTools.startsWith(afterMarker, "code-comment{"))
+			return null;
+		final directive = afterMarker.substr("code-comment{".length);
+		final closeBrace = directive.lastIndexOf("}");
+		if (closeBrace < 0)
+			return null;
+		final attrs = parseCodeCommentAttributes(directive.substr(0, closeBrace));
+		if (attrs == null)
+			return null;
+		final titleRaw = mapGet(attrs, "title");
+		final bodyRaw = mapGet(attrs, "body");
+		final fileRaw = mapGet(attrs, "file");
+		if (titleRaw == null || bodyRaw == null || fileRaw == null)
+			return null;
+		final title = StringTools.trim(titleRaw);
+		final body = StringTools.trim(bodyRaw);
+		final file = StringTools.trim(fileRaw);
+		if (title == "" || body == "" || file == "")
+			return null;
+		final start = intMax(optionalDirectiveInteger(attrs, "start", 1), 1);
+		final end = intMax(optionalDirectiveInteger(attrs, "end", start), start);
+		final priority = directiveInteger(attrs, "priority");
+		final renderedTitle = if (titleHasPriority(title) || priority == null || priority < 0 || priority > 3) {
+			title;
+		} else {
+			"[P" + priority + "] " + title;
+		}
+		final relativeFile = cwdRelativeFile(file, cwd);
+		final location = start == end ? relativeFile + ":" + start : relativeFile + ":" + start + "-" + end;
+		final suffix = directive.substr(closeBrace + 1);
+		return indent
+			+ "- "
+			+ renderedTitle
+			+ " "
+			+ String.fromCharCode(0x2014)
+			+ " "
+			+ location
+			+ "\n"
+			+ indent
+			+ "  "
+			+ body
+			+ suffix;
+	}
+
+	static function stripLineDirectives(line:String):TuiSmokeStrippedGitActionLine {
+		var visible = "";
+		final directives:Array<TuiSmokeGitActionDirectiveExpectation> = [];
+		var remaining = line;
+		while (true) {
+			final start = remaining.indexOf("::git-");
+			if (start < 0)
+				break;
+			visible += remaining.substr(0, start);
+			final directive = remaining.substr(start + 2);
+			final openBrace = directive.indexOf("{");
+			if (openBrace < 0) {
+				visible += remaining.substr(start);
+				return {visible: visible, directives: directives};
+			}
+			final closeFromOpen = directive.indexOf("}", openBrace + 1);
+			if (closeFromOpen < 0) {
+				visible += remaining.substr(start);
+				return {visible: visible, directives: directives};
+			}
+			final name = directive.substr(0, openBrace);
+			final attributes = directive.substr(openBrace + 1, closeFromOpen - openBrace - 1);
+			final parsed = parseGitAction(name, attributes);
+			if (parsed != null)
+				directives.push(parsed);
+			remaining = directive.substr(closeFromOpen + 1);
+		}
+		visible += remaining;
+		return {visible: visible, directives: directives};
+	}
+
+	static function parseGitAction(name:String, attributes:String):Null<TuiSmokeGitActionDirectiveExpectation> {
+		final attrs = parseGitAttributes(attributes);
+		if (attrs == null)
+			return null;
+		final cwd = mapGet(attrs, "cwd");
+		if (cwd == null)
+			return null;
+		return switch name {
+			case "git-stage":
+				new TuiSmokeGitActionDirectiveExpectation({
+					kind: "Stage",
+					cwd: cwd,
+					branch: "",
+					url: "",
+					isDraft: false
+				});
+			case "git-commit":
+				new TuiSmokeGitActionDirectiveExpectation({
+					kind: "Commit",
+					cwd: cwd,
+					branch: "",
+					url: "",
+					isDraft: false
+				});
+			case "git-create-branch":
+				final branch = mapGet(attrs, "branch");
+				branch == null ? null : new TuiSmokeGitActionDirectiveExpectation({
+					kind: "CreateBranch",
+					cwd: cwd,
+					branch: branch,
+					url: "",
+					isDraft: false
+				});
+			case "git-push":
+				final branch = mapGet(attrs, "branch");
+				branch == null ? null : new TuiSmokeGitActionDirectiveExpectation({
+					kind: "Push",
+					cwd: cwd,
+					branch: branch,
+					url: "",
+					isDraft: false
+				});
+			case "git-create-pr":
+				final branch = mapGet(attrs, "branch");
+				branch == null ? null : new TuiSmokeGitActionDirectiveExpectation({
+					kind: "CreatePr",
+					cwd: cwd,
+					branch: branch,
+					url: mapGetDefault(attrs, "url", ""),
+					isDraft: mapGetDefault(attrs, "isDraft", "") == "true"
+				});
+			case _:
+				null;
+		}
+	}
+
+	static function parseGitAttributes(input:String):Null<Map<String, String>> {
+		final attrs:Map<String, String> = new Map();
+		var rest = StringTools.trim(input);
+		while (rest != "") {
+			final eq = rest.indexOf("=");
+			if (eq < 0)
+				return null;
+			final key = StringTools.trim(rest.substr(0, eq));
+			if (key == "")
+				return null;
+			rest = trimStartTabsAndSpaces(rest.substr(eq + 1));
+			if (StringTools.startsWith(rest, "\"")) {
+				final quoted = rest.substr(1);
+				final end = quoted.indexOf("\"");
+				if (end < 0)
+					return null;
+				attrs.set(key, quoted.substr(0, end));
+				rest = trimStartTabsAndSpaces(quoted.substr(end + 1));
+			} else {
+				final end = firstWhitespaceIndex(rest);
+				attrs.set(key, rest.substr(0, end));
+				rest = trimStartTabsAndSpaces(rest.substr(end));
+			}
+		}
+		return attrs;
+	}
+
+	static function parseCodeCommentAttributes(input:String):Null<Map<String, String>> {
+		final attrs:Map<String, String> = new Map();
+		var rest = StringTools.trim(input);
+		while (rest != "") {
+			final eq = rest.indexOf("=");
+			if (eq < 0)
+				return null;
+			final name = StringTools.trim(rest.substr(0, eq));
+			if (name == "")
+				return null;
+			rest = trimStartTabsAndSpaces(rest.substr(eq + 1));
+			if (StringTools.startsWith(rest, "\"")) {
+				final parsed = parseEscapedQuotedValue(rest.substr(1));
+				if (parsed == null)
+					return null;
+				attrs.set(name, parsed.value);
+				rest = trimStartTabsAndSpaces(parsed.rest);
+			} else {
+				final end = firstWhitespaceIndex(rest);
+				attrs.set(name, rest.substr(0, end));
+				rest = trimStartTabsAndSpaces(rest.substr(end));
+			}
+		}
+		return attrs;
+	}
+
+	static function parseEscapedQuotedValue(input:String):Null<TuiSmokeParsedQuotedValue> {
+		var value = "";
+		var index = 0;
+		while (index < input.length) {
+			final character = input.charAt(index);
+			if (character == "\"")
+				return {value: value, rest: input.substr(index + 1)};
+			if (character == "\\" && index + 1 < input.length && input.charAt(index + 1) == "\"") {
+				value += "\"";
+				index += 2;
+				continue;
+			}
+			value += character;
+			index++;
+		}
+		return null;
+	}
+
+	static function directiveInteger(attributes:Map<String, String>, name:String):Null<Int> {
+		final value = mapGet(attributes, name);
+		if (value == null)
+			return null;
+		var trimmed = StringTools.trim(value);
+		if (StringTools.startsWith(trimmed, "P") || StringTools.startsWith(trimmed, "p"))
+			trimmed = trimmed.substr(1);
+		return Std.parseInt(trimmed);
+	}
+
+	static function optionalDirectiveInteger(attributes:Map<String, String>, name:String, fallback:Int):Int {
+		final value = directiveInteger(attributes, name);
+		return value == null ? fallback : value;
+	}
+
+	static function titleHasPriority(title:String):Bool {
+		final trimmed = StringTools.ltrim(title);
+		if (trimmed.length < 4)
+			return false;
+		final digit = trimmed.charCodeAt(2);
+		return trimmed.charAt(0) == "["
+			&& (trimmed.charAt(1) == "P" || trimmed.charAt(1) == "p")
+			&& digit >= 48
+			&& digit <= 57
+			&& trimmed.charAt(3) == "]";
+	}
+
+	static function cwdRelativeFile(file:String, cwd:String):String {
+		var out = file;
+		if (cwd != "") {
+			if (out == cwd) {
+				out = "";
+			} else if (StringTools.startsWith(out, cwd + "/")) {
+				out = out.substr(cwd.length + 1);
+			}
+		}
+		return StringTools.replace(out, "\\", "/");
+	}
+
+	static function lastCreatedBranchCwd(directives:Array<TuiSmokeGitActionDirectiveExpectation>):String {
+		var index = directives.length - 1;
+		while (index >= 0) {
+			final directive = directives[index];
+			if (directive.kind == "CreateBranch")
+				return directive.cwd;
+			index--;
+		}
+		return "";
+	}
+
+	static function gitActionDirectivesMatch(left:Array<TuiSmokeGitActionDirectiveExpectation>, right:Array<TuiSmokeGitActionDirectiveExpectation>):Bool {
+		if (left.length != right.length)
+			return false;
+		for (index in 0...left.length) {
+			if (gitActionDirectiveKey(left[index]) != gitActionDirectiveKey(right[index]))
+				return false;
+		}
+		return true;
+	}
+
+	static function gitActionDirectiveTrace(directives:Array<TuiSmokeGitActionDirectiveExpectation>):String {
+		if (directives.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (directive in directives) {
+			switch directive.kind {
+				case "Stage":
+					out.push("Stage(cwd=" + directive.cwd + ")");
+				case "Commit":
+					out.push("Commit(cwd=" + directive.cwd + ")");
+				case "CreateBranch":
+					out.push("CreateBranch(cwd=" + directive.cwd + ",branch=" + directive.branch + ")");
+				case "Push":
+					out.push("Push(cwd=" + directive.cwd + ",branch=" + directive.branch + ")");
+				case "CreatePr":
+					out.push("CreatePr(cwd="
+						+ directive.cwd
+						+ ",branch="
+						+ directive.branch
+						+ ",url="
+						+ directive.url
+						+ ",draft="
+						+ directive.isDraft
+						+ ")");
+				case _:
+					out.push(directive.kind + "(cwd=" + directive.cwd + ")");
+			}
+		}
+		return out.join("|");
+	}
+
+	static function gitActionDirectiveKey(directive:TuiSmokeGitActionDirectiveExpectation):String {
+		return directive.kind + "\t" + directive.cwd + "\t" + directive.branch + "\t" + directive.url + "\t" + directive.isDraft;
+	}
+
+	static function traceText(value:String):String {
+		var out = StringTools.replace(value, "\\", "\\\\");
+		out = StringTools.replace(out, "\n", "\\n");
+		out = StringTools.replace(out, "\t", "\\t");
+		return out == "" ? "<empty>" : out;
+	}
+
+	static function trimStartTabsAndSpaces(value:String):String {
+		var index = 0;
+		while (index < value.length && (value.charAt(index) == " " || value.charAt(index) == "\t"))
+			index++;
+		return value.substr(index);
+	}
+
+	static function firstWhitespaceIndex(value:String):Int {
+		var index = 0;
+		while (index < value.length) {
+			final character = value.charAt(index);
+			if (character == " " || character == "\t" || character == "\n" || character == "\r")
+				return index;
+			index++;
+		}
+		return value.length;
+	}
+
+	static function mapGet(map:Map<String, String>, key:String):Null<String> {
+		return map.exists(key) ? map.get(key) : null;
+	}
+
+	static function mapGetDefault(map:Map<String, String>, key:String, fallback:String):String {
+		return map.exists(key) ? map.get(key) : fallback;
+	}
+
+	static function intMax(left:Int, right:Int):Int {
+		return left > right ? left : right;
 	}
 
 	static function formatGoalElapsedSeconds(seconds:Int):String {

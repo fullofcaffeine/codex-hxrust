@@ -46,6 +46,7 @@
       "../codex/codex-rs/tui/src/chatwidget/status_state.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/status_command_tests.rs",
       "../codex/codex-rs/tui/src/goal_display.rs",
+      "../codex/codex-rs/tui/src/git_action_directives.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -17456,6 +17457,122 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.goal_display.plan=headless\ntui.goal_display.elapsed=seconds=-5:label=0s\ntui.goal_display.elapsed=seconds=59:label=59s\ntui.goal_display.elapsed=seconds=60:label=1m\ntui.goal_display.elapsed=seconds=5400:label=1h 30m\ntui.goal_display.elapsed=seconds=7200:label=2h\ntui.goal_display.elapsed=seconds=86399:label=23h 59m\ntui.goal_display.elapsed=seconds=86400:label=1d 0h 0m\ntui.goal_display.elapsed=seconds=258120:label=2d 23h 42m\ntui.goal_display.status=Active:label=active\ntui.goal_display.status=Paused:label=paused\ntui.goal_display.status=Blocked:label=blocked\ntui.goal_display.status=UsageLimited:label=usage limited\ntui.goal_display.status=BudgetLimited:label=limited by budget\ntui.goal_display.status=Complete:label=complete\ntui.goal_display.summary=BudgetLimited:time=120:budget=true:tokens=63876/50000:text=Objective: Complete the task described in ../gameboy-long-running-prompt5.txt Time: 2m. Tokens: 63.9K/50K.\ntui.goal_display.summary=Active:time=0:budget=false:tokens=0/0:text=Objective: ship codexhx\ntui.goal_display.summary=Complete:time=36720:budget=false:tokens=0/0:text=Objective: archive parity notes Time: 10h 12m.\ntui.goal_display.failure=live_goal_display_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> goal display helper boundary\ninput> \ntrace:\ntui.goal_display.plan=headless\ntui.goal_display.elapsed=seconds=-5:label=0s\ntui.goal_display.elapsed=seconds=59:label=59s\ntui.goal_display.elapsed=seconds=60:label=1m\ntui.goal_display.elapsed=seconds=5400:label=1h 30m\ntui.goal_display.elapsed=seconds=7200:label=2h\ntui.goal_display.elapsed=seconds=86399:label=23h 59m\ntui.goal_display.elapsed=seconds=86400:label=1d 0h 0m\ntui.goal_display.elapsed=seconds=258120:label=2d 23h 42m\ntui.goal_display.status=Active:label=active\ntui.goal_display.status=Paused:label=paused\ntui.goal_display.status=Blocked:label=blocked\ntui.goal_display.status=UsageLimited:label=usage limited\ntui.goal_display.status=BudgetLimited:label=limited by budget\ntui.goal_display.status=Complete:label=complete\ntui.goal_display.summary=BudgetLimited:time=120:budget=true:tokens=63876/50000:text=Objective: Complete the task described in ../gameboy-long-running-prompt5.txt Time: 2m. Tokens: 63.9K/50K.\ntui.goal_display.summary=Active:time=0:budget=false:tokens=0/0:text=Objective: ship codexhx\ntui.goal_display.summary=Complete:time=36720:budget=false:tokens=0/0:text=Objective: archive parity notes Time: 10h 12m.\ntui.goal_display.failure=live_goal_display_effects_rejected:no_render=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "git-action-directives-headless",
+      "frame": {
+        "name": "git-action-directives-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "git action directive parser boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "git_action_directives",
+          "gitActionDirectives": {
+            "allowGitMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowGithubCall": false,
+            "allowTerminalMutation": false,
+            "actions": [
+              {
+                "kind": "parse",
+                "name": "git-actions",
+                "cwd": "/repo",
+                "markdown": "Done\n\n::git-stage{cwd=\"/repo\"} ::git-push{cwd=\"/repo\" branch=\"feat/x\"} ::git-stage{cwd=\"/repo\"}\n::git-create-branch{cwd=\"/first\" branch=\"first\"}\n::git-commit{cwd=\"/repo\"} ::git-create-pr{cwd=\"/repo\" branch=\"feat/x\" url=\"https://example.test/pr/7\" isDraft=true}\n::git-create-branch{cwd=\"/second\" branch=\"second\"}",
+                "expectedVisibleMarkdown": "Done",
+                "expectedLastCreatedBranchCwd": "/second",
+                "expectedDirectives": [
+                  {
+                    "kind": "Stage",
+                    "cwd": "/repo"
+                  },
+                  {
+                    "kind": "Push",
+                    "cwd": "/repo",
+                    "branch": "feat/x"
+                  },
+                  {
+                    "kind": "CreateBranch",
+                    "cwd": "/first",
+                    "branch": "first"
+                  },
+                  {
+                    "kind": "Commit",
+                    "cwd": "/repo"
+                  },
+                  {
+                    "kind": "CreatePr",
+                    "cwd": "/repo",
+                    "branch": "feat/x",
+                    "url": "https://example.test/pr/7",
+                    "isDraft": true
+                  },
+                  {
+                    "kind": "CreateBranch",
+                    "cwd": "/second",
+                    "branch": "second"
+                  }
+                ]
+              },
+              {
+                "kind": "parse",
+                "name": "malformed",
+                "cwd": "/repo",
+                "markdown": "Done ::git-push{cwd=\"/repo\"}\nVisible ::git-commit",
+                "expectedVisibleMarkdown": "Done\nVisible ::git-commit",
+                "expectedLastCreatedBranchCwd": "",
+                "expectedDirectives": []
+              },
+              {
+                "kind": "parse",
+                "name": "code-comments",
+                "cwd": "/repo",
+                "markdown": "Found two issues.\n\n  ::code-comment{title=\"Fix body= parsing\" body=\"Keep role=\\\"tab\\\", ::git-stage{cwd=/tmp}, file=, and literal.\" file=\"/repo/src/app.ts\" start=10 end=12 priority=\"P2\"}\n\t:::code-comment{title=\"[P1] Clamp the range\" body=\"The line range should match the App.\" file=\"codex/src/range.ts\" start=8 end=2 priority=3}",
+                "expectedVisibleMarkdown": "Found two issues.\n\n  - [P2] Fix body= parsing \u2014 src/app.ts:10-12\n    Keep role=\"tab\", ::git-stage{cwd=/tmp}, file=, and literal.\n\t- [P1] Clamp the range \u2014 codex/src/range.ts:8\n\t  The line range should match the App.",
+                "expectedLastCreatedBranchCwd": "",
+                "expectedDirectives": []
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_git_action_directive_effects_rejected",
+                "noGitMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noGithubCall": true,
+                "noTerminalMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.git_action_directives.plan=headless\ntui.git_action_directives.parse=git-actions:visible=Done:actions=Stage(cwd=/repo)|Push(cwd=/repo,branch=feat/x)|CreateBranch(cwd=/first,branch=first)|Commit(cwd=/repo)|CreatePr(cwd=/repo,branch=feat/x,url=https://example.test/pr/7,draft=true)|CreateBranch(cwd=/second,branch=second):last_branch=/second\ntui.git_action_directives.parse=malformed:visible=Done\\nVisible ::git-commit:actions=<none>:last_branch=\ntui.git_action_directives.parse=code-comments:visible=Found two issues.\\n\\n  - [P2] Fix body= parsing \u2014 src/app.ts:10-12\\n    Keep role=\"tab\", ::git-stage{cwd=/tmp}, file=, and literal.\\n\\t- [P1] Clamp the range \u2014 codex/src/range.ts:8\\n\\t  The line range should match the App.:actions=<none>:last_branch=\ntui.git_action_directives.failure=live_git_action_directive_effects_rejected:no_git=true:no_fs=true:no_network=true:no_github=true:no_terminal=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> git action directive parser boundary\ninput> \ntrace:\ntui.git_action_directives.plan=headless\ntui.git_action_directives.parse=git-actions:visible=Done:actions=Stage(cwd=/repo)|Push(cwd=/repo,branch=feat/x)|CreateBranch(cwd=/first,branch=first)|Commit(cwd=/repo)|CreatePr(cwd=/repo,branch=feat/x,url=https://example.test/pr/7,draft=true)|CreateBranch(cwd=/second,branch=second):last_branch=/second\ntui.git_action_directives.parse=malformed:visible=Done\\nVisible ::git-commit:actions=<none>:last_branch=\ntui.git_action_directives.parse=code-comments:visible=Found two issues.\\n\\n  - [P2] Fix body= parsing \u2014 src/app.ts:10-12\\n    Keep role=\"tab\", ::git-stage{cwd=/tmp}, file=, and literal.\\n\\t- [P1] Clamp the range \u2014 codex/src/range.ts:8\\n\\t  The line range should match the App.:actions=<none>:last_branch=\ntui.git_action_directives.failure=live_git_action_directive_effects_rejected:no_git=true:no_fs=true:no_network=true:no_github=true:no_terminal=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

@@ -3891,6 +3891,10 @@ Status: HXCX-TUI-255 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-256 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/goal_display.rs`. The fixture preserves compact elapsed labels with negative-time clamping, status-label strings for every `ThreadGoalStatus`, rounded compact token usage in `goal_usage_summary`, optional time and budget sentence assembly, and no-live rejection evidence. This is deterministic goal display helper evidence only, not live ratatui rendering, app-server mutation, model traffic, filesystem mutation, terminal mutation, or Cafex behavior.
 
+### HXCX-TUI-257 Headless Raw Codex Git Action Directives
+
+Status: HXCX-TUI-257 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/git_action_directives.rs`. The fixture preserves visible-markdown stripping for `::git-*{...}` assistant directives, full directive identity and insertion-order dedupe for stage/commit/create-branch/push/create-pr rows, quoted attribute parsing, malformed required-attribute directive hiding, unclosed directive text preservation, `last_created_branch_cwd` selection, and code-comment fallback markdown with cwd-relative file locations. This is deterministic assistant-markdown parser evidence only, not live git mutation, filesystem mutation, GitHub/network calls, terminal mutation, model traffic, or Cafex behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:
