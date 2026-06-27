@@ -21,6 +21,7 @@ enum abstract TuiSmokeTextAreaActionKind(String) to String {
 	final ElementMutation = "element_mutation";
 	final ElementRange = "element_range";
 	final ElementBoundary = "element_boundary";
+	final ElementInvariants = "element_invariants";
 	final Failure = "failure";
 	final Unknown = "unknown";
 
@@ -46,6 +47,7 @@ enum abstract TuiSmokeTextAreaActionKind(String) to String {
 			case "element_mutation": ElementMutation;
 			case "element_range": ElementRange;
 			case "element_boundary": ElementBoundary;
+			case "element_invariants": ElementInvariants;
 			case "failure": Failure;
 			case _: Unknown;
 		}

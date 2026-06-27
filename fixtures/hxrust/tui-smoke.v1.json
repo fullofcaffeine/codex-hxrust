@@ -23818,6 +23818,73 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> textarea element mutation state\ninput> \ntrace:\ntui.textarea.plan=headless\ntui.textarea.element_mutation=named-element-insert-update-and-replace:inserted=text=pre <tool>post:cursor=10:elements=4-10:tool-call:payloads=<tool>:named_before=4-10:replace_payload=true:after_payload=text=pre <done>post:cursor=10:elements=4-10:tool-call:update_named=true:after_update=text=pre [done]post:cursor=10:elements=4-10:tool-call:named_after=4-10:replace_by_id=true:after_replace_id=text=pre donepost:cursor=8:elements=<none>\ntui.textarea.element_range=add-remove-range-sorts-and-rejects-overlap:added=true,true:duplicate=false:overlap=false:clamped=false:ordered=0-2:early|6-8:late:removed=true:missing=false:after=text=ab cd ef:cursor=0:elements=6-8:late\ntui.textarea.element_boundary=cursor-insert-and-replace-expand-atomic-elements:cursor=1:after_insert=text=a<el>Xb:cursor=1:elements=1-5:atom:prev=1:next=5:replace_expand=text=abZd:cursor=0:elements=<none>\ntui.textarea.failure=live_textarea_element_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "textarea-element-invariants-headless",
+      "frame": {
+        "name": "textarea-element-invariants-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "textarea element invariants"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "textarea",
+          "textArea": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowClipboardMutation": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "allowAppServerDelivery": false,
+            "actions": [
+              {
+                "kind": "element_invariants",
+                "name": "deterministic-edit-sequence-preserves-element-invariants",
+                "expectedTrace": "initial=ok=true:len=16:cursor=0:elements=2-7:one|9-14:two:payloads=one=<one>|two=<two>:lines=3:screen=0,0:atomic=true:cursor_clamp=ok=true:len=16:cursor=2:elements=2-7:one|9-14:two:payloads=one=<one>|two=<two>:lines=3:screen=2,0:atomic=true:after_insert=ok=true:len=17:cursor=2:elements=2-7:one|10-15:two:payloads=one=<one>|two=<two>:lines=3:screen=2,0:atomic=true:after_move=ok=true:len=17:cursor=7:elements=2-7:one|10-15:two:payloads=one=<one>|two=<two>:lines=3:screen=1,1:atomic=true:after_delete=ok=true:len=16:cursor=7:elements=2-7:one|9-14:two:payloads=one=<one>|two=<two>:lines=3:screen=1,1:atomic=true:after_replace=ok=true:len=14:cursor=7:elements=2-7:one:payloads=one=<one>:lines=3:screen=1,1:atomic=true:after_kill=ok=true:len=9:cursor=2:elements=<none>:payloads=<none>:lines=2:screen=2,0:atomic=true:after_yank=ok=true:len=8:cursor=4:elements=4-7:y:payloads=y=<y>:lines=2:screen=4,0:atomic=true"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_textarea_element_invariant_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noClipboardMutation": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "noAppServerDelivery": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.textarea.plan=headless\ntui.textarea.element_invariants=deterministic-edit-sequence-preserves-element-invariants:initial=ok=true:len=16:cursor=0:elements=2-7:one|9-14:two:payloads=one=<one>|two=<two>:lines=3:screen=0,0:atomic=true:cursor_clamp=ok=true:len=16:cursor=2:elements=2-7:one|9-14:two:payloads=one=<one>|two=<two>:lines=3:screen=2,0:atomic=true:after_insert=ok=true:len=17:cursor=2:elements=2-7:one|10-15:two:payloads=one=<one>|two=<two>:lines=3:screen=2,0:atomic=true:after_move=ok=true:len=17:cursor=7:elements=2-7:one|10-15:two:payloads=one=<one>|two=<two>:lines=3:screen=1,1:atomic=true:after_delete=ok=true:len=16:cursor=7:elements=2-7:one|9-14:two:payloads=one=<one>|two=<two>:lines=3:screen=1,1:atomic=true:after_replace=ok=true:len=14:cursor=7:elements=2-7:one:payloads=one=<one>:lines=3:screen=1,1:atomic=true:after_kill=ok=true:len=9:cursor=2:elements=<none>:payloads=<none>:lines=2:screen=2,0:atomic=true:after_yank=ok=true:len=8:cursor=4:elements=4-7:y:payloads=y=<y>:lines=2:screen=4,0:atomic=true\ntui.textarea.failure=live_textarea_element_invariant_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> textarea element invariants\ninput> \ntrace:\ntui.textarea.plan=headless\ntui.textarea.element_invariants=deterministic-edit-sequence-preserves-element-invariants:initial=ok=true:len=16:cursor=0:elements=2-7:one|9-14:two:payloads=one=<one>|two=<two>:lines=3:screen=0,0:atomic=true:cursor_clamp=ok=true:len=16:cursor=2:elements=2-7:one|9-14:two:payloads=one=<one>|two=<two>:lines=3:screen=2,0:atomic=true:after_insert=ok=true:len=17:cursor=2:elements=2-7:one|10-15:two:payloads=one=<one>|two=<two>:lines=3:screen=2,0:atomic=true:after_move=ok=true:len=17:cursor=7:elements=2-7:one|10-15:two:payloads=one=<one>|two=<two>:lines=3:screen=1,1:atomic=true:after_delete=ok=true:len=16:cursor=7:elements=2-7:one|9-14:two:payloads=one=<one>|two=<two>:lines=3:screen=1,1:atomic=true:after_replace=ok=true:len=14:cursor=7:elements=2-7:one:payloads=one=<one>:lines=3:screen=1,1:atomic=true:after_kill=ok=true:len=9:cursor=2:elements=<none>:payloads=<none>:lines=2:screen=2,0:atomic=true:after_yank=ok=true:len=8:cursor=4:elements=4-7:y:payloads=y=<y>:lines=2:screen=4,0:atomic=true\ntui.textarea.failure=live_textarea_element_invariant_effects_rejected:no_terminal=true:no_buffer=true:no_clipboard=true:no_fs=true:no_network=true:no_model=true:no_app_server=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-goal-menu-headless",
       "frame": {
         "name": "chatwidget-goal-menu-headless",
