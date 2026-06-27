@@ -208,6 +208,21 @@ private typedef TuiSmokeCustomPromptResult = {
 	final trace:String;
 }
 
+private typedef TuiSmokePasteBurstState = {
+	var lastPlainCharTime:Int;
+	var consecutivePlainCharBurst:Int;
+	var burstWindowUntil:Int;
+	var buffer:String;
+	var active:Bool;
+	var pendingFirstChar:String;
+	var pendingFirstCharTime:Int;
+}
+
+private typedef TuiSmokeRetroGrab = {
+	final startByte:Int;
+	final grabbed:String;
+}
+
 class TuiSmokeEventLoop {
 	public static function run(request:TuiSmokeLoopRequest):TuiSmokeLoopOutcome {
 		if (request == null || request.frame == null)
@@ -670,6 +685,11 @@ class TuiSmokeEventLoop {
 					}
 				case TuiSmokeEventKind.CustomPromptView:
 					if (!traceCustomPromptView(event.customPromptView, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
+				case TuiSmokeEventKind.PasteBurst:
+					if (!tracePasteBurst(event.pasteBurst, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
@@ -7939,6 +7959,364 @@ class TuiSmokeEventLoop {
 
 	static function customPromptRowTrace(rows:Array<String>):String {
 		return rows.length == 0 ? "<none>" : rows.join("|");
+	}
+
+	static function tracePasteBurst(plan:TuiSmokePasteBurstPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowTextareaMutation || plan.allowRatatuiBuffer || plan.allowClipboardMutation
+			|| plan.allowFilesystemMutation || plan.allowNetwork || plan.allowModelCall || plan.allowAppServerDelivery || !plan.enabled()) {
+			trace.push("tui.paste_burst.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.paste_burst.plan=headless:char_interval=8ms:active_idle=8ms:enter_window=120ms:min_chars=3");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokePasteBurstActionKind.Failure:
+					trace.push("tui.paste_burst.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_textarea="
+						+ action.noTextareaMutation + ":no_buffer=" + action.noRatatuiBuffer + ":no_clipboard=" + action.noClipboardMutation + ":no_fs="
+						+ action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model=" + action.noModelCall + ":no_app_server="
+						+ action.noAppServerDelivery + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					final actual = pasteBurstActionTrace(action);
+					if (actual != action.expectedTrace) {
+						trace.push("tui.paste_burst." + action.kind + "_mismatch=" + action.name + ":" + actual);
+						return false;
+					}
+					trace.push("tui.paste_burst." + action.kind + "=" + action.name + ":" + actual);
+			}
+		}
+		return true;
+	}
+
+	static function pasteBurstActionTrace(action:TuiSmokePasteBurstAction):String {
+		return switch action.kind {
+			case TuiSmokePasteBurstActionKind.AsciiHoldFlush:
+				final state = pasteBurstState();
+				final first = pasteBurstOnPlainChar(state, pasteBurstChar(action.firstChar, "a"), 0);
+				final flush = pasteBurstFlushIfDue(state, 10);
+				"decision="
+				+ first
+				+ ":flush="
+				+ flush
+				+ ":active="
+				+ pasteBurstIsActive(state)
+				+ ":pending="
+				+ traceText(state.pendingFirstChar);
+			case TuiSmokePasteBurstActionKind.AsciiFastBufferFlush:
+				final state = pasteBurstState();
+				final first = pasteBurstOnPlainChar(state, pasteBurstChar(action.firstChar, "a"), 0);
+				final second = pasteBurstOnPlainChar(state, pasteBurstChar(action.secondChar, "b"), 1);
+				pasteBurstAppendCharToBuffer(state, pasteBurstChar(action.secondChar, "b"), 1);
+				final flush = pasteBurstFlushIfDue(state, 11);
+				"decisions="
+				+ first
+				+ ","
+				+ second
+				+ ":flush="
+				+ flush
+				+ ":buffer="
+				+ traceText(state.buffer)
+				+ ":active="
+				+ pasteBurstIsActive(state);
+			case TuiSmokePasteBurstActionKind.FlushBeforeModified:
+				final state = pasteBurstState();
+				final first = pasteBurstOnPlainChar(state, pasteBurstChar(action.firstChar, "a"), 0);
+				final flushed = pasteBurstFlushBeforeModifiedInput(state);
+				"decision="
+				+ first
+				+ ":flushed="
+				+ traceText(flushed)
+				+ ":active="
+				+ pasteBurstIsActive(state);
+			case TuiSmokePasteBurstActionKind.RetroDecision:
+				final state = pasteBurstState();
+				final grab = pasteBurstDecideBeginBuffer(state, 0, action.beforeText, action.retroChars);
+				"before="
+				+ traceText(action.beforeText)
+				+ ":retro="
+				+ action.retroChars
+				+ ":start="
+				+ (grab == null ? pasteBurstRetroStartIndex(action.beforeText, action.retroChars) : grab.startByte)
+				+ ":grabbed="
+				+ (grab == null ? "<none>" : traceText(grab.grabbed))
+				+ ":buffer="
+				+ traceText(state.buffer)
+				+ ":active="
+				+ pasteBurstIsActive(state);
+			case TuiSmokePasteBurstActionKind.SuppressionWindow:
+				final state = pasteBurstState();
+				final first = pasteBurstOnPlainChar(state, "a", 0);
+				final second = pasteBurstOnPlainChar(state, "b", 1);
+				pasteBurstAppendCharToBuffer(state, "b", 1);
+				final flush = pasteBurstFlushIfDue(state, 11);
+				final inWindow = pasteBurstNewlineShouldInsert(state, 11);
+				final afterWindow = pasteBurstNewlineShouldInsert(state, 122);
+				"decisions="
+				+ first
+				+ ","
+				+ second
+				+ ":flush="
+				+ flush
+				+ ":in_window="
+				+ inWindow
+				+ ":after_window="
+				+ afterWindow
+				+ ":active="
+				+ pasteBurstIsActive(state);
+			case TuiSmokePasteBurstActionKind.DirectInsertWindow:
+				final state = pasteBurstState();
+				final first = pasteBurstOnPlainCharNoHold(state, 0);
+				final immediate = pasteBurstDirectInsertNewlineShouldInsert(state, 1);
+				pasteBurstExtendWindow(state, 1);
+				final keptAlive = pasteBurstDirectInsertNewlineShouldInsert(state, 121);
+				final expired = pasteBurstDirectInsertNewlineShouldInsert(state, 122);
+				"no_hold="
+				+ first
+				+ ":direct_1ms="
+				+ immediate
+				+ ":kept_alive_121ms="
+				+ keptAlive
+				+ ":expired_122ms="
+				+ expired;
+			case TuiSmokePasteBurstActionKind.ActiveAppendClear:
+				final state = pasteBurstState();
+				final first = pasteBurstOnPlainChar(state, "a", 0);
+				final second = pasteBurstOnPlainChar(state, "b", 1);
+				pasteBurstAppendCharToBuffer(state, "b", 1);
+				final newline = pasteBurstAppendNewlineIfActive(state, 2);
+				final tryAppend = pasteBurstTryAppendCharIfActive(state, pasteBurstChar(action.thirdChar, "c"), 3);
+				final beforeClear = pasteBurstStateTrace(state);
+				pasteBurstClearWindowAfterNonChar(state);
+				final afterWindowClear = pasteBurstStateTrace(state);
+				final flushed = pasteBurstFlushBeforeModifiedInput(state);
+				pasteBurstClearAfterExplicitPaste(state);
+				final afterExplicitClear = pasteBurstStateTrace(state);
+				"decisions="
+				+ first
+				+ ","
+				+ second
+				+ ":newline="
+				+ newline
+				+ ":try_append="
+				+ tryAppend
+				+ ":before_clear="
+				+ beforeClear
+				+ ":after_window_clear="
+				+ afterWindowClear
+				+ ":flushed_after_clear="
+				+ traceText(flushed)
+				+ ":after_explicit_clear="
+				+ afterExplicitClear;
+			case TuiSmokePasteBurstActionKind.NoHoldPath:
+				final state = pasteBurstState();
+				final first = pasteBurstOnPlainCharNoHold(state, 0);
+				final second = pasteBurstOnPlainCharNoHold(state, 1);
+				final third = pasteBurstOnPlainCharNoHold(state, 2);
+				if (third == "begin_buffer(retro=2)") {
+					final grab = pasteBurstDecideBeginBuffer(state, 2, action.beforeText, action.retroChars);
+					if (grab != null)
+						pasteBurstAppendCharToBuffer(state, pasteBurstChar(action.thirdChar, "z"), 2);
+				}
+				final flush = pasteBurstFlushIfDue(state, 12);
+				"decisions="
+				+ first
+				+ ","
+				+ second
+				+ ","
+				+ third
+				+ ":before="
+				+ traceText(action.beforeText)
+				+ ":flush="
+				+ flush
+				+ ":active="
+				+ pasteBurstIsActive(state);
+			case _:
+				"unknown";
+		}
+	}
+
+	static function pasteBurstState():TuiSmokePasteBurstState {
+		return {
+			lastPlainCharTime: -1,
+			consecutivePlainCharBurst: 0,
+			burstWindowUntil: -1,
+			buffer: "",
+			active: false,
+			pendingFirstChar: "",
+			pendingFirstCharTime: -1
+		};
+	}
+
+	static function pasteBurstOnPlainChar(state:TuiSmokePasteBurstState, ch:String, now:Int):String {
+		pasteBurstNotePlainChar(state, now);
+		if (state.active) {
+			state.burstWindowUntil = now + 120;
+			return "buffer_append";
+		}
+		if (state.pendingFirstChar != "" && now - state.pendingFirstCharTime <= 8) {
+			state.active = true;
+			state.buffer = state.buffer + state.pendingFirstChar;
+			state.pendingFirstChar = "";
+			state.pendingFirstCharTime = -1;
+			state.burstWindowUntil = now + 120;
+			return "begin_from_pending";
+		}
+		if (state.consecutivePlainCharBurst >= 3)
+			return "begin_buffer(retro=" + intMax(0, state.consecutivePlainCharBurst - 1) + ")";
+		state.pendingFirstChar = ch;
+		state.pendingFirstCharTime = now;
+		return "retain_first_char";
+	}
+
+	static function pasteBurstOnPlainCharNoHold(state:TuiSmokePasteBurstState, now:Int):String {
+		pasteBurstNotePlainChar(state, now);
+		if (state.active) {
+			state.burstWindowUntil = now + 120;
+			return "buffer_append";
+		}
+		if (state.consecutivePlainCharBurst >= 3)
+			return "begin_buffer(retro=" + intMax(0, state.consecutivePlainCharBurst - 1) + ")";
+		return "none";
+	}
+
+	static function pasteBurstNotePlainChar(state:TuiSmokePasteBurstState, now:Int):Void {
+		if (state.lastPlainCharTime >= 0 && now - state.lastPlainCharTime <= 8)
+			state.consecutivePlainCharBurst++;
+		else
+			state.consecutivePlainCharBurst = 1;
+		state.lastPlainCharTime = now;
+	}
+
+	static function pasteBurstFlushIfDue(state:TuiSmokePasteBurstState, now:Int):String {
+		final timeout = pasteBurstIsActiveInternal(state) ? 8 : 8;
+		final timedOut = state.lastPlainCharTime >= 0 && now - state.lastPlainCharTime > timeout;
+		if (timedOut && pasteBurstIsActiveInternal(state)) {
+			state.active = false;
+			final out = state.buffer;
+			state.buffer = "";
+			return "paste(" + traceText(out) + ")";
+		}
+		if (timedOut && state.pendingFirstChar != "") {
+			final out = state.pendingFirstChar;
+			state.pendingFirstChar = "";
+			state.pendingFirstCharTime = -1;
+			return "typed(" + traceText(out) + ")";
+		}
+		return "none";
+	}
+
+	static function pasteBurstAppendNewlineIfActive(state:TuiSmokePasteBurstState, now:Int):Bool {
+		if (!pasteBurstIsActive(state))
+			return false;
+		state.buffer = state.buffer + "\n";
+		state.burstWindowUntil = now + 120;
+		return true;
+	}
+
+	static function pasteBurstNewlineShouldInsert(state:TuiSmokePasteBurstState, now:Int):Bool {
+		return pasteBurstIsActive(state) || (state.burstWindowUntil >= 0 && now <= state.burstWindowUntil);
+	}
+
+	static function pasteBurstDirectInsertNewlineShouldInsert(state:TuiSmokePasteBurstState, now:Int):Bool {
+		return pasteBurstNewlineShouldInsert(state, now) || (state.lastPlainCharTime >= 0 && now - state.lastPlainCharTime <= 8);
+	}
+
+	static function pasteBurstExtendWindow(state:TuiSmokePasteBurstState, now:Int):Void {
+		state.burstWindowUntil = now + 120;
+	}
+
+	static function pasteBurstBeginWithRetroGrabbed(state:TuiSmokePasteBurstState, grabbed:String, now:Int):Void {
+		if (grabbed != "")
+			state.buffer = state.buffer + grabbed;
+		state.active = true;
+		state.burstWindowUntil = now + 120;
+	}
+
+	static function pasteBurstAppendCharToBuffer(state:TuiSmokePasteBurstState, ch:String, now:Int):Void {
+		state.buffer = state.buffer + ch;
+		state.burstWindowUntil = now + 120;
+	}
+
+	static function pasteBurstTryAppendCharIfActive(state:TuiSmokePasteBurstState, ch:String, now:Int):Bool {
+		if (state.active || state.buffer != "") {
+			pasteBurstAppendCharToBuffer(state, ch, now);
+			return true;
+		}
+		return false;
+	}
+
+	static function pasteBurstDecideBeginBuffer(state:TuiSmokePasteBurstState, now:Int, before:String, retroChars:Int):Null<TuiSmokeRetroGrab> {
+		final start = pasteBurstRetroStartIndex(before, retroChars);
+		final grabbed = before.substr(start);
+		final looksPastey = pasteBurstHasWhitespace(grabbed) || grabbed.length >= 16;
+		if (!looksPastey)
+			return null;
+		pasteBurstBeginWithRetroGrabbed(state, grabbed, now);
+		return {startByte: start, grabbed: grabbed};
+	}
+
+	static function pasteBurstFlushBeforeModifiedInput(state:TuiSmokePasteBurstState):String {
+		if (!pasteBurstIsActive(state))
+			return "";
+		state.active = false;
+		var out = state.buffer;
+		state.buffer = "";
+		if (state.pendingFirstChar != "") {
+			out += state.pendingFirstChar;
+			state.pendingFirstChar = "";
+			state.pendingFirstCharTime = -1;
+		}
+		return out;
+	}
+
+	static function pasteBurstClearWindowAfterNonChar(state:TuiSmokePasteBurstState):Void {
+		state.consecutivePlainCharBurst = 0;
+		state.lastPlainCharTime = -1;
+		state.burstWindowUntil = -1;
+		state.active = false;
+		state.pendingFirstChar = "";
+		state.pendingFirstCharTime = -1;
+	}
+
+	static function pasteBurstClearAfterExplicitPaste(state:TuiSmokePasteBurstState):Void {
+		state.lastPlainCharTime = -1;
+		state.consecutivePlainCharBurst = 0;
+		state.burstWindowUntil = -1;
+		state.active = false;
+		state.buffer = "";
+		state.pendingFirstChar = "";
+		state.pendingFirstCharTime = -1;
+	}
+
+	static function pasteBurstIsActive(state:TuiSmokePasteBurstState):Bool {
+		return pasteBurstIsActiveInternal(state) || state.pendingFirstChar != "";
+	}
+
+	static function pasteBurstIsActiveInternal(state:TuiSmokePasteBurstState):Bool {
+		return state.active || state.buffer != "";
+	}
+
+	static function pasteBurstRetroStartIndex(before:String, retroChars:Int):Int {
+		if (retroChars <= 0)
+			return before.length;
+		return intMax(0, before.length - retroChars);
+	}
+
+	static function pasteBurstHasWhitespace(value:String):Bool {
+		for (idx in 0...value.length) {
+			final ch = value.charAt(idx);
+			if (ch == " " || ch == "\t" || ch == "\n" || ch == "\r")
+				return true;
+		}
+		return false;
+	}
+
+	static function pasteBurstStateTrace(state:TuiSmokePasteBurstState):String {
+		return "active=" + state.active + ",buffer=" + traceText(state.buffer) + ",pending=" + traceText(state.pendingFirstChar) + ",is_active="
+			+ pasteBurstIsActive(state);
+	}
+
+	static function pasteBurstChar(value:String, fallback:String):String {
+		return value == "" ? fallback : value.substr(0, 1);
 	}
 
 	static function traceSelectionPopupCommon(plan:TuiSmokeSelectionPopupCommonPlan, trace:Array<String>):Bool {

@@ -139,6 +139,7 @@ class TuiSmokeFixtureLoader {
 				multiSelectPicker: optionalMultiSelectPlan(value, "multiSelectPicker"),
 				appLinkView: optionalAppLinkViewPlan(value, "appLinkView"),
 				customPromptView: optionalCustomPromptPlan(value, "customPromptView"),
+				pasteBurst: optionalPasteBurstPlan(value, "pasteBurst"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -1548,6 +1549,51 @@ class TuiSmokeFixtureLoader {
 				text: optionalStringField(value, "text", ""),
 				modifiers: optionalStringField(value, "modifiers", "none"),
 				elapsedMs: optionalIntField(value, "elapsedMs", 0)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalPasteBurstPlan(object:Value, name:String):Null<TuiSmokePasteBurstPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokePasteBurstPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowTextareaMutation: optionalBoolField(value, "allowTextareaMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowClipboardMutation: optionalBoolField(value, "allowClipboardMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowAppServerDelivery: optionalBoolField(value, "allowAppServerDelivery", false),
+					actions: pasteBurstActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function pasteBurstActions(values:Array<Value>):Array<TuiSmokePasteBurstAction> {
+		final out:Array<TuiSmokePasteBurstAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokePasteBurstAction({
+				kind: TuiSmokePasteBurstActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				beforeText: optionalStringField(value, "beforeText", ""),
+				retroChars: optionalIntField(value, "retroChars", 0),
+				firstChar: optionalStringField(value, "firstChar", "a"),
+				secondChar: optionalStringField(value, "secondChar", "b"),
+				thirdChar: optionalStringField(value, "thirdChar", "c"),
+				expectedTrace: optionalStringField(value, "expectedTrace", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noTextareaMutation: optionalBoolField(value, "noTextareaMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noClipboardMutation: optionalBoolField(value, "noClipboardMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
