@@ -127,6 +127,7 @@ class TuiSmokeFixtureLoader {
 				popupConsts: optionalPopupConstsPlan(value, "popupConsts"),
 				statusLineStyle: optionalStatusLineStylePlan(value, "statusLineStyle"),
 				statusSurfacePreview: optionalStatusSurfacePreviewPlan(value, "statusSurfacePreview"),
+				pendingInputPreview: optionalPendingInputPreviewPlan(value, "pendingInputPreview"),
 				chatWidgetGoalMenu: optionalGoalMenuPlan(value, "chatWidgetGoalMenu"),
 				chatWidgetReviewMode: optionalReviewModePlan(value, "chatWidgetReviewMode"),
 				chatWidgetTranscriptHistory: optionalTranscriptHistoryPlan(value, "chatWidgetTranscriptHistory"),
@@ -823,6 +824,48 @@ class TuiSmokeFixtureLoader {
 				fallbackDescription: optionalStringField(value, "fallbackDescription", ""),
 				expectedName: optionalStringField(value, "expectedName", ""),
 				expectedDescription: optionalStringField(value, "expectedDescription", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalPendingInputPreviewPlan(object:Value, name:String):Null<TuiSmokePendingInputPreviewPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokePendingInputPreviewPlan({
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: pendingInputPreviewActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function pendingInputPreviewActions(values:Array<Value>):Array<TuiSmokePendingInputPreviewAction> {
+		final out:Array<TuiSmokePendingInputPreviewAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokePendingInputPreviewAction({
+				kind: TuiSmokePendingInputPreviewActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				width: optionalIntField(value, "width", 0),
+				pendingSteers: optionalStringArrayField(value, "pendingSteers"),
+				rejectedSteers: optionalStringArrayField(value, "rejectedSteers"),
+				queuedMessages: optionalStringArrayField(value, "queuedMessages"),
+				editBinding: optionalStringField(value, "editBinding", "alt + ↑"),
+				interruptBinding: optionalStringField(value, "interruptBinding", "esc"),
+				expectedHeight: optionalIntField(value, "expectedHeight", 0),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				expectedNoEllipsis: optionalBoolField(value, "expectedNoEllipsis", false),
 				failureCode: optionalStringField(value, "failureCode", ""),
 				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
 				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),

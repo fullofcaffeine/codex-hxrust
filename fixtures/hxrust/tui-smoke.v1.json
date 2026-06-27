@@ -59,6 +59,7 @@
       "../codex/codex-rs/tui/src/bottom_pane/popup_consts.rs",
       "../codex/codex-rs/tui/src/bottom_pane/status_line_style.rs",
       "../codex/codex-rs/tui/src/bottom_pane/status_surface_preview.rs",
+      "../codex/codex-rs/tui/src/bottom_pane/pending_input_preview.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/common.rs",
       "../codex/codex-rs/app-server-protocol/src/protocol/v2/thread.rs",
       "../codex/codex-rs/tui/src/chatwidget/exec_state.rs",
@@ -20061,6 +20062,203 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.status_surface_preview.plan=headless\ntui.status_surface_preview.defaults=representative-placeholders:values=app-name=codex:placeholder|project-name=my-project:placeholder|model=gpt-5.2-codex:placeholder|weekly-limit=secondary 0%:placeholder\ntui.status_surface_preview.set_live=live-project:item=project-name:value=codex-hxrust:live\ntui.status_surface_preview.set_placeholder=preserve-live:item=project-name:value=codex-hxrust:live\ntui.status_surface_preview.set_placeholder=replace-placeholder:item=status:value=Ready:placeholder\ntui.status_surface_preview.suppress=suppress-status:item=status:present=false\ntui.status_surface_preview.value=missing-after-suppress:item=status:present=false:value=<empty>\ntui.status_surface_preview.suppress=suppress-model:item=model:present=false\ntui.status_surface_preview.set_live=live-branch:item=git-branch:value=main:live\ntui.status_surface_preview.set_live=live-pr:item=pull-request-number:value=PR #42:live\ntui.status_surface_preview.status_line=filtered-order:items=model-name,project-root,git-branch,pull-request,status:line=my-project · main · PR #42:count=3\ntui.status_surface_preview.rate_limit=secondary-usage:value=secondary usage 95%:name=secondary-usage-limit:description=Remaining usage on the secondary usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=usage:value=usage 70%:name=usage-limit:description=Remaining usage on the primary usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=five-hour:value=5h 80%:name=five-hour-limit:description=Remaining usage on the 5-hour usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=daily:value=daily 12%:name=daily-limit:description=Remaining usage on the daily usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=weekly:value=weekly 30%:name=weekly-limit:description=Remaining usage on the weekly usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=monthly:value=monthly 44%:name=monthly-limit:description=Remaining usage on the monthly usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=annual:value=annual 55%:name=annual-limit:description=Remaining usage on the annual usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=fallback:value=mystery 10%:name=fallback-name:description=fallback description\ntui.status_surface_preview.failure=live_status_surface_preview_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> status surface preview data\ninput> \ntrace:\ntui.status_surface_preview.plan=headless\ntui.status_surface_preview.defaults=representative-placeholders:values=app-name=codex:placeholder|project-name=my-project:placeholder|model=gpt-5.2-codex:placeholder|weekly-limit=secondary 0%:placeholder\ntui.status_surface_preview.set_live=live-project:item=project-name:value=codex-hxrust:live\ntui.status_surface_preview.set_placeholder=preserve-live:item=project-name:value=codex-hxrust:live\ntui.status_surface_preview.set_placeholder=replace-placeholder:item=status:value=Ready:placeholder\ntui.status_surface_preview.suppress=suppress-status:item=status:present=false\ntui.status_surface_preview.value=missing-after-suppress:item=status:present=false:value=<empty>\ntui.status_surface_preview.suppress=suppress-model:item=model:present=false\ntui.status_surface_preview.set_live=live-branch:item=git-branch:value=main:live\ntui.status_surface_preview.set_live=live-pr:item=pull-request-number:value=PR #42:live\ntui.status_surface_preview.status_line=filtered-order:items=model-name,project-root,git-branch,pull-request,status:line=my-project · main · PR #42:count=3\ntui.status_surface_preview.rate_limit=secondary-usage:value=secondary usage 95%:name=secondary-usage-limit:description=Remaining usage on the secondary usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=usage:value=usage 70%:name=usage-limit:description=Remaining usage on the primary usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=five-hour:value=5h 80%:name=five-hour-limit:description=Remaining usage on the 5-hour usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=daily:value=daily 12%:name=daily-limit:description=Remaining usage on the daily usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=weekly:value=weekly 30%:name=weekly-limit:description=Remaining usage on the weekly usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=monthly:value=monthly 44%:name=monthly-limit:description=Remaining usage on the monthly usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=annual:value=annual 55%:name=annual-limit:description=Remaining usage on the annual usage limit (omitted when unavailable)\ntui.status_surface_preview.rate_limit=fallback:value=mystery 10%:name=fallback-name:description=fallback description\ntui.status_surface_preview.failure=live_status_surface_preview_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "pending-input-preview-headless",
+      "frame": {
+        "name": "pending-input-preview-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "pending input preview rows"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "pending_input_preview",
+          "pendingInputPreview": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "render",
+                "name": "empty",
+                "width": 40,
+                "pendingSteers": [],
+                "rejectedSteers": [],
+                "queuedMessages": [],
+                "expectedHeight": 0,
+                "expectedRows": []
+              },
+              {
+                "kind": "render",
+                "name": "narrow",
+                "width": 3,
+                "queuedMessages": [
+                  "Hello"
+                ],
+                "expectedHeight": 0,
+                "expectedRows": []
+              },
+              {
+                "kind": "render",
+                "name": "queued-default-hint",
+                "width": 40,
+                "queuedMessages": [
+                  "Hello, world!"
+                ],
+                "expectedHeight": 3,
+                "expectedRows": [
+                  "• Queued follow-up inputs",
+                  "  ↳ Hello, world!",
+                  "    alt + ↑ edit last queued message"
+                ]
+              },
+              {
+                "kind": "render",
+                "name": "queued-shift-left-hint",
+                "width": 40,
+                "queuedMessages": [
+                  "Hello, world!"
+                ],
+                "editBinding": "shift + ←",
+                "expectedHeight": 3,
+                "expectedRows": [
+                  "• Queued follow-up inputs",
+                  "  ↳ Hello, world!",
+                  "    shift + ← edit last queued message"
+                ]
+              },
+              {
+                "kind": "render",
+                "name": "section-order",
+                "width": 80,
+                "pendingSteers": [
+                  "Please continue.",
+                  "Check output."
+                ],
+                "rejectedSteers": [
+                  "Retry later."
+                ],
+                "queuedMessages": [
+                  "Queued question"
+                ],
+                "expectedHeight": 10,
+                "expectedRows": [
+                  "• Messages to be submitted after next tool call (press esc to interrupt and send immediately)",
+                  "  ↳ Please continue.",
+                  "  ↳ Check output.",
+                  "",
+                  "• Messages to be submitted at end of turn",
+                  "  ↳ Retry later.",
+                  "",
+                  "• Queued follow-up inputs",
+                  "  ↳ Queued question",
+                  "    alt + ↑ edit last queued message"
+                ]
+              },
+              {
+                "kind": "render",
+                "name": "interrupt-remap",
+                "width": 80,
+                "pendingSteers": [
+                  "Please continue."
+                ],
+                "interruptBinding": "f12",
+                "expectedHeight": 2,
+                "expectedRows": [
+                  "• Messages to be submitted after next tool call (press f12 to interrupt and send immediately)",
+                  "  ↳ Please continue."
+                ]
+              },
+              {
+                "kind": "render",
+                "name": "multiline-truncated",
+                "width": 48,
+                "pendingSteers": [
+                  "First line\nSecond line\nThird line\nFourth line"
+                ],
+                "expectedHeight": 5,
+                "expectedRows": [
+                  "• Messages to be submitted after next tool call (press esc to interrupt and send immediately)",
+                  "  ↳ First line",
+                  "    Second line",
+                  "    Third line",
+                  "    …"
+                ]
+              },
+              {
+                "kind": "render",
+                "name": "wrapped-truncated",
+                "width": 20,
+                "queuedMessages": [
+                  "alpha beta gamma delta epsilon zeta eta theta iota"
+                ],
+                "expectedHeight": 6,
+                "expectedRows": [
+                  "• Queued follow-up inputs",
+                  "  ↳ alpha beta gamma",
+                  "    delta epsilon",
+                  "    zeta eta theta",
+                  "    …",
+                  "    alt + ↑ edit last queued message"
+                ]
+              },
+              {
+                "kind": "render",
+                "name": "url-no-ellipsis",
+                "width": 36,
+                "queuedMessages": [
+                  "example.test/api/v1/projects/alpha-team/releases/2026-02-17/builds/1234567890/artifacts"
+                ],
+                "expectedHeight": 3,
+                "expectedRows": [
+                  "• Queued follow-up inputs",
+                  "  ↳ example.test/api/v1/projects/alpha-team/releases/2026-02-17/builds/1234567890/artifacts",
+                  "    alt + ↑ edit last queued message"
+                ],
+                "expectedNoEllipsis": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_pending_input_preview_effects_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.pending_input_preview.plan=headless\ntui.pending_input_preview.render=empty:width=40:height=0:rows=<none>:no_ellipsis=true\ntui.pending_input_preview.render=narrow:width=3:height=0:rows=<none>:no_ellipsis=true\ntui.pending_input_preview.render=queued-default-hint:width=40:height=3:rows=• Queued follow-up inputs|  ↳ Hello, world!|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=queued-shift-left-hint:width=40:height=3:rows=• Queued follow-up inputs|  ↳ Hello, world!|    shift + ← edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=section-order:width=80:height=10:rows=• Messages to be submitted after next tool call (press esc to interrupt and send immediately)|  ↳ Please continue.|  ↳ Check output.|<empty>|• Messages to be submitted at end of turn|  ↳ Retry later.|<empty>|• Queued follow-up inputs|  ↳ Queued question|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=interrupt-remap:width=80:height=2:rows=• Messages to be submitted after next tool call (press f12 to interrupt and send immediately)|  ↳ Please continue.:no_ellipsis=true\ntui.pending_input_preview.render=multiline-truncated:width=48:height=5:rows=• Messages to be submitted after next tool call (press esc to interrupt and send immediately)|  ↳ First line|    Second line|    Third line|    …:no_ellipsis=false\ntui.pending_input_preview.render=wrapped-truncated:width=20:height=6:rows=• Queued follow-up inputs|  ↳ alpha beta gamma|    delta epsilon|    zeta eta theta|    …|    alt + ↑ edit last queued message:no_ellipsis=false\ntui.pending_input_preview.render=url-no-ellipsis:width=36:height=3:rows=• Queued follow-up inputs|  ↳ example.test/api/v1/projects/alpha-team/releases/2026-02-17/builds/1234567890/artifacts|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.failure=live_pending_input_preview_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> pending input preview rows\ninput> \ntrace:\ntui.pending_input_preview.plan=headless\ntui.pending_input_preview.render=empty:width=40:height=0:rows=<none>:no_ellipsis=true\ntui.pending_input_preview.render=narrow:width=3:height=0:rows=<none>:no_ellipsis=true\ntui.pending_input_preview.render=queued-default-hint:width=40:height=3:rows=• Queued follow-up inputs|  ↳ Hello, world!|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=queued-shift-left-hint:width=40:height=3:rows=• Queued follow-up inputs|  ↳ Hello, world!|    shift + ← edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=section-order:width=80:height=10:rows=• Messages to be submitted after next tool call (press esc to interrupt and send immediately)|  ↳ Please continue.|  ↳ Check output.|<empty>|• Messages to be submitted at end of turn|  ↳ Retry later.|<empty>|• Queued follow-up inputs|  ↳ Queued question|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.render=interrupt-remap:width=80:height=2:rows=• Messages to be submitted after next tool call (press f12 to interrupt and send immediately)|  ↳ Please continue.:no_ellipsis=true\ntui.pending_input_preview.render=multiline-truncated:width=48:height=5:rows=• Messages to be submitted after next tool call (press esc to interrupt and send immediately)|  ↳ First line|    Second line|    Third line|    …:no_ellipsis=false\ntui.pending_input_preview.render=wrapped-truncated:width=20:height=6:rows=• Queued follow-up inputs|  ↳ alpha beta gamma|    delta epsilon|    zeta eta theta|    …|    alt + ↑ edit last queued message:no_ellipsis=false\ntui.pending_input_preview.render=url-no-ellipsis:width=36:height=3:rows=• Queued follow-up inputs|  ↳ example.test/api/v1/projects/alpha-team/releases/2026-02-17/builds/1234567890/artifacts|    alt + ↑ edit last queued message:no_ellipsis=true\ntui.pending_input_preview.failure=live_pending_input_preview_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-goal-menu-headless",

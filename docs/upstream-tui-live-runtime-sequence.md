@@ -3943,6 +3943,10 @@ Status: HXCX-TUI-268 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-269 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/status_surface_preview.rs`. The fixture preserves representative default placeholders, live-value override of placeholders, placeholder updates preserving live values, placeholder suppression and missing `value_for`, status-line item filtering with order preservation, rate-limit preview copy names/descriptions for secondary usage, usage, 5h, daily, weekly, monthly, annual, fallback behavior, and no-live rejection evidence. This is deterministic preview-data evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
 
+### HXCX-TUI-270 Headless Raw Codex Pending Input Preview
+
+Status: HXCX-TUI-270 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for `../codex/codex-rs/tui/src/bottom_pane/pending_input_preview.rs`. The fixture preserves empty and narrow-width suppression, queued follow-up section rows with default and remapped edit hints, pending steer/rejected steer/queued-message section order, default and remapped interrupt hints, multiline and width-wrapped three-row truncation with ellipsis, URL-like long-token no-ellipsis behavior, and no-live rejection evidence. This is deterministic pending-input preview row evidence only, not live terminal mutation, ratatui buffer ownership, filesystem mutation, network traffic, model traffic, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

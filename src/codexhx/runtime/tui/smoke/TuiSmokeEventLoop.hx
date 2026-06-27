@@ -446,6 +446,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.PendingInputPreview:
+					if (!tracePendingInputPreview(event.pendingInputPreview, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetGoalMenu:
 					if (!traceGoalMenu(event.chatWidgetGoalMenu, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -5475,6 +5480,140 @@ class TuiSmokeEventLoop {
 		for (item in items)
 			out.push(traceText(item));
 		return out.join(",");
+	}
+
+	static function tracePendingInputPreview(plan:TuiSmokePendingInputPreviewPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowTerminalMutation || plan.allowRatatuiBuffer || plan.allowFilesystemMutation || plan.allowNetwork
+			|| plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.pending_input_preview.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.pending_input_preview.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokePendingInputPreviewActionKind.Render:
+					final rows = pendingInputPreviewRows(action);
+					final height = rows.length;
+					final noEllipsis = !pendingInputPreviewContainsEllipsis(rows);
+					if (height != action.expectedHeight
+						|| rows.join("|") != action.expectedRows.join("|")
+						|| (action.expectedNoEllipsis && !noEllipsis)) {
+						trace.push("tui.pending_input_preview.render_mismatch=" + action.name + ":height=" + height + ":rows="
+							+ pendingInputPreviewRowsTrace(rows) + ":no_ellipsis=" + noEllipsis);
+						return false;
+					}
+					trace.push("tui.pending_input_preview.render=" + action.name + ":width=" + action.width + ":height=" + height + ":rows="
+						+ pendingInputPreviewRowsTrace(rows) + ":no_ellipsis=" + noEllipsis);
+				case TuiSmokePendingInputPreviewActionKind.Failure:
+					trace.push("tui.pending_input_preview.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
+						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
+						+ action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.pending_input_preview.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function pendingInputPreviewRows(action:TuiSmokePendingInputPreviewAction):Array<String> {
+		final rows:Array<String> = [];
+		if (action.width < 4
+			|| (action.pendingSteers.length == 0 && action.rejectedSteers.length == 0 && action.queuedMessages.length == 0))
+			return rows;
+		if (action.pendingSteers.length > 0) {
+			var header = "• Messages to be submitted after next tool call";
+			if (action.interruptBinding != "")
+				header += " (press " + action.interruptBinding + " to interrupt and send immediately)";
+			rows.push(header);
+			pendingInputPreviewPushPreviews(rows, action.pendingSteers, action.width);
+		}
+		if (action.rejectedSteers.length > 0) {
+			if (rows.length > 0)
+				rows.push("");
+			rows.push("• Messages to be submitted at end of turn");
+			pendingInputPreviewPushPreviews(rows, action.rejectedSteers, action.width);
+		}
+		if (action.queuedMessages.length > 0) {
+			if (rows.length > 0)
+				rows.push("");
+			rows.push("• Queued follow-up inputs");
+			pendingInputPreviewPushPreviews(rows, action.queuedMessages, action.width);
+			if (action.editBinding != "")
+				rows.push("    " + action.editBinding + " edit last queued message");
+		}
+		return rows;
+	}
+
+	static function pendingInputPreviewPushPreviews(rows:Array<String>, messages:Array<String>, width:Int):Void {
+		for (message in messages) {
+			final wrapped = pendingInputPreviewPreviewRows(message, width);
+			final limit = wrapped.length > 3 ? 3 : wrapped.length;
+			for (idx in 0...limit)
+				rows.push(wrapped[idx]);
+			if (wrapped.length > 3)
+				rows.push("    …");
+		}
+	}
+
+	static function pendingInputPreviewPreviewRows(message:String, width:Int):Array<String> {
+		final out:Array<String> = [];
+		final lines = message.split("\n");
+		var first = true;
+		for (line in lines) {
+			final prefix = first ? "  ↳ " : "    ";
+			first = false;
+			if (pendingInputPreviewLooksUrlLike(line)) {
+				out.push(prefix + line);
+			} else {
+				pendingInputPreviewPushWrappedLine(out, prefix, line, width);
+			}
+		}
+		return out;
+	}
+
+	static function pendingInputPreviewPushWrappedLine(out:Array<String>, prefix:String, line:String, width:Int):Void {
+		final maxText = width - prefix.length;
+		if (maxText <= 0 || line.length <= maxText) {
+			out.push(prefix + line);
+			return;
+		}
+		var current = "";
+		var currentPrefix = prefix;
+		for (word in line.split(" ")) {
+			if (current == "") {
+				current = word;
+			} else if (current.length + 1 + word.length <= maxText) {
+				current += " " + word;
+			} else {
+				out.push(currentPrefix + current);
+				currentPrefix = "    ";
+				current = word;
+			}
+		}
+		if (current != "")
+			out.push(currentPrefix + current);
+	}
+
+	static function pendingInputPreviewLooksUrlLike(value:String):Bool {
+		return value.indexOf("/") >= 0 && value.indexOf(" ") < 0;
+	}
+
+	static function pendingInputPreviewContainsEllipsis(rows:Array<String>):Bool {
+		for (row in rows) {
+			if (row.indexOf("…") >= 0)
+				return true;
+		}
+		return false;
+	}
+
+	static function pendingInputPreviewRowsTrace(rows:Array<String>):String {
+		if (rows.length == 0)
+			return "<none>";
+		final out:Array<String> = [];
+		for (row in rows)
+			out.push(traceText(row));
+		return out.join("|");
 	}
 
 	static function parseAssistantMarkdownDirectives(markdown:String, cwd:String):TuiSmokeParsedGitActionMarkdown {
