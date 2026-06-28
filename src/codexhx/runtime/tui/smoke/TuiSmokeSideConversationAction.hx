@@ -5,11 +5,15 @@ typedef TuiSmokeSideConversationActionFields = {
 	final handoffMode:TuiSmokeAppThreadInputHandoffMode;
 	final replayRoute:TuiSmokeThreadSnapshotReplayRoute;
 	final activeEventKind:TuiSmokeActiveThreadEventKind;
+	final shutdownRoute:TuiSmokeActiveThreadShutdownRoute;
 	final parentThreadId:String;
 	final childThreadId:String;
 	final targetThreadId:String;
 	final activeThreadId:String;
 	final sourceThreadId:String;
+	final primaryThreadId:String;
+	final closedThreadId:String;
+	final pendingShutdownThreadId:String;
 	final status:String;
 	final statusChange:String;
 	final label:String;
@@ -102,6 +106,17 @@ typedef TuiSmokeSideConversationActionFields = {
 	final activeReceiverDrained:Bool;
 	final activeReceiverRestored:Bool;
 	final receiverDisconnected:Bool;
+	final shutdownNotification:Bool;
+	final nonPrimaryActive:Bool;
+	final failoverEligible:Bool;
+	final failoverSelectedPrimary:Bool;
+	final failoverDiscardedSide:Bool;
+	final failoverInfoMessage:Bool;
+	final failoverErrorMessage:Bool;
+	final pendingShutdownMatched:Bool;
+	final pendingShutdownCleared:Bool;
+	final ordinaryEventForwarded:Bool;
+	final appExitRequested:Bool;
 	final requestRedraw:Bool;
 	final noLiveTerminal:Bool;
 	final noRatatuiRender:Bool;
@@ -119,11 +134,16 @@ class TuiSmokeSideConversationAction {
 	public final replayRoute:TuiSmokeThreadSnapshotReplayRoute;
 	@:recordDefault(TuiSmokeActiveThreadEventKind.Unknown)
 	public final activeEventKind:TuiSmokeActiveThreadEventKind;
+	@:recordDefault(TuiSmokeActiveThreadShutdownRoute.Unknown)
+	public final shutdownRoute:TuiSmokeActiveThreadShutdownRoute;
 	public final parentThreadId:String;
 	public final childThreadId:String;
 	public final targetThreadId:String;
 	public final activeThreadId:String;
 	public final sourceThreadId:String;
+	public final primaryThreadId:String;
+	public final closedThreadId:String;
+	public final pendingShutdownThreadId:String;
 	public final status:String;
 	public final statusChange:String;
 	public final label:String;
@@ -216,6 +236,17 @@ class TuiSmokeSideConversationAction {
 	public final activeReceiverDrained:Bool;
 	public final activeReceiverRestored:Bool;
 	public final receiverDisconnected:Bool;
+	public final shutdownNotification:Bool;
+	public final nonPrimaryActive:Bool;
+	public final failoverEligible:Bool;
+	public final failoverSelectedPrimary:Bool;
+	public final failoverDiscardedSide:Bool;
+	public final failoverInfoMessage:Bool;
+	public final failoverErrorMessage:Bool;
+	public final pendingShutdownMatched:Bool;
+	public final pendingShutdownCleared:Bool;
+	public final ordinaryEventForwarded:Bool;
+	public final appExitRequested:Bool;
 	public final requestRedraw:Bool;
 	public final noLiveTerminal:Bool;
 	public final noRatatuiRender:Bool;

@@ -14796,6 +14796,143 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> active thread event dispatch\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.active_thread_event=thread=main:kind=notification:event=turn-started:notification=true:collab=true:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=true:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=notification:event=token-usage-updated:notification=true:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=true:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=request:event=req-pending:notification=false:collab=false:pending_request=true:request=true:skip=false:history=false:feedback=false:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=request:event=req-stale:notification=false:collab=false:pending_request=false:request=false:skip=true:history=false:feedback=false:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=history_entry_response:event=history-1:notification=false:collab=false:pending_request=false:request=false:skip=false:history=true:feedback=false:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=feedback_submission:event=feedback-1:notification=false:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=true:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=rollback_cleanup:event=rollback-main:notification=false:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=false:rollback_store=true:drained=true:receiver_restored=true:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=side-1:kind=rollback_cleanup:event=rollback-side-disconnected:notification=false:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=false:rollback_store=true:drained=true:receiver_restored=false:disconnected=true:active_cleared=true\ntui.side_conversation.failure=live_active_thread_event_dispatch_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "active-thread-shutdown-routing",
+      "frame": {
+        "name": "active-thread-shutdown-routing",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "active thread shutdown routing"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "active_thread_shutdown_routing",
+                "shutdownRoute": "non_primary_failover",
+                "activeThreadId": "side-1",
+                "primaryThreadId": "main",
+                "closedThreadId": "side-1",
+                "pendingShutdownThreadId": "",
+                "shutdownNotification": true,
+                "nonPrimaryActive": true,
+                "failoverEligible": true,
+                "failoverSelectedPrimary": true,
+                "failoverDiscardedSide": true,
+                "failoverInfoMessage": true,
+                "ordinaryEventForwarded": false,
+                "activeReceiverDrained": true,
+                "activeReceiverRestored": false,
+                "activeThreadCleared": false
+              },
+              {
+                "kind": "active_thread_shutdown_routing",
+                "shutdownRoute": "pending_exit_completion",
+                "activeThreadId": "side-1",
+                "primaryThreadId": "main",
+                "closedThreadId": "side-1",
+                "pendingShutdownThreadId": "side-1",
+                "shutdownNotification": true,
+                "nonPrimaryActive": true,
+                "failoverEligible": false,
+                "pendingShutdownMatched": true,
+                "pendingShutdownCleared": true,
+                "ordinaryEventForwarded": true,
+                "appExitRequested": true,
+                "activeReceiverDrained": true,
+                "activeReceiverRestored": false,
+                "activeThreadCleared": false
+              },
+              {
+                "kind": "active_thread_shutdown_routing",
+                "shutdownRoute": "primary_closed_no_failover",
+                "activeThreadId": "main",
+                "primaryThreadId": "main",
+                "closedThreadId": "main",
+                "pendingShutdownThreadId": "",
+                "shutdownNotification": true,
+                "nonPrimaryActive": false,
+                "failoverEligible": false,
+                "ordinaryEventForwarded": true,
+                "activeReceiverDrained": false,
+                "activeReceiverRestored": true,
+                "activeThreadCleared": false
+              },
+              {
+                "kind": "active_thread_shutdown_routing",
+                "shutdownRoute": "stale_shutdown_ignored",
+                "activeThreadId": "main",
+                "primaryThreadId": "main",
+                "closedThreadId": "side-2",
+                "pendingShutdownThreadId": "side-1",
+                "shutdownNotification": true,
+                "nonPrimaryActive": false,
+                "failoverEligible": false,
+                "pendingShutdownMatched": false,
+                "pendingShutdownCleared": false,
+                "ordinaryEventForwarded": true,
+                "activeReceiverDrained": false,
+                "activeReceiverRestored": true,
+                "activeThreadCleared": false
+              },
+              {
+                "kind": "active_thread_shutdown_routing",
+                "shutdownRoute": "non_shutdown_pass_through",
+                "activeThreadId": "side-1",
+                "primaryThreadId": "main",
+                "closedThreadId": "",
+                "pendingShutdownThreadId": "",
+                "shutdownNotification": false,
+                "nonPrimaryActive": true,
+                "failoverEligible": false,
+                "ordinaryEventForwarded": true,
+                "activeReceiverDrained": false,
+                "activeReceiverRestored": true,
+                "activeThreadCleared": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_active_thread_shutdown_routing_rejected",
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.active_thread_shutdown=route=non_primary_failover:active=side-1:primary=main:closed=side-1:pending=:shutdown=true:non_primary=true:eligible=true:selected_primary=true:discarded_side=true:info=true:error=false:pending_match=false:pending_clear=false:forwarded=false:exit=false:receiver_cleanup=true/false:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=pending_exit_completion:active=side-1:primary=main:closed=side-1:pending=side-1:shutdown=true:non_primary=true:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=true:pending_clear=true:forwarded=true:exit=true:receiver_cleanup=true/false:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=primary_closed_no_failover:active=main:primary=main:closed=main:pending=:shutdown=true:non_primary=false:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=false:pending_clear=false:forwarded=true:exit=false:receiver_cleanup=false/true:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=stale_shutdown_ignored:active=main:primary=main:closed=side-2:pending=side-1:shutdown=true:non_primary=false:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=false:pending_clear=false:forwarded=true:exit=false:receiver_cleanup=false/true:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=non_shutdown_pass_through:active=side-1:primary=main:closed=:pending=:shutdown=false:non_primary=true:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=false:pending_clear=false:forwarded=true:exit=false:receiver_cleanup=false/true:active_cleared=false\ntui.side_conversation.failure=live_active_thread_shutdown_routing_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> active thread shutdown routing\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.active_thread_shutdown=route=non_primary_failover:active=side-1:primary=main:closed=side-1:pending=:shutdown=true:non_primary=true:eligible=true:selected_primary=true:discarded_side=true:info=true:error=false:pending_match=false:pending_clear=false:forwarded=false:exit=false:receiver_cleanup=true/false:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=pending_exit_completion:active=side-1:primary=main:closed=side-1:pending=side-1:shutdown=true:non_primary=true:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=true:pending_clear=true:forwarded=true:exit=true:receiver_cleanup=true/false:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=primary_closed_no_failover:active=main:primary=main:closed=main:pending=:shutdown=true:non_primary=false:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=false:pending_clear=false:forwarded=true:exit=false:receiver_cleanup=false/true:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=stale_shutdown_ignored:active=main:primary=main:closed=side-2:pending=side-1:shutdown=true:non_primary=false:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=false:pending_clear=false:forwarded=true:exit=false:receiver_cleanup=false/true:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=non_shutdown_pass_through:active=side-1:primary=main:closed=:pending=:shutdown=false:non_primary=true:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=false:pending_clear=false:forwarded=true:exit=false:receiver_cleanup=false/true:active_cleared=false\ntui.side_conversation.failure=live_active_thread_shutdown_routing_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "side-conversation-start-block-restores-composer",
       "frame": {
         "name": "side-conversation-start-block-restores-composer",

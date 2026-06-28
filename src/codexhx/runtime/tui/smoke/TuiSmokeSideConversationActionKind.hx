@@ -13,6 +13,7 @@ enum abstract TuiSmokeSideConversationActionKind(String) to String {
 	final RestoreInputHandoff = "restore_input_handoff";
 	final ReplaySnapshotBoundary = "replay_snapshot_boundary";
 	final ActiveThreadEventDispatch = "active_thread_event_dispatch";
+	final ActiveThreadShutdownRouting = "active_thread_shutdown_routing";
 	final DiscardSide = "discard_side";
 	final Failure = "failure";
 	final Unknown = "unknown";
@@ -31,6 +32,7 @@ enum abstract TuiSmokeSideConversationActionKind(String) to String {
 			case "restore_input_handoff": RestoreInputHandoff;
 			case "replay_snapshot_boundary": ReplaySnapshotBoundary;
 			case "active_thread_event_dispatch": ActiveThreadEventDispatch;
+			case "active_thread_shutdown_routing": ActiveThreadShutdownRouting;
 			case "discard_side": DiscardSide;
 			case "failure": Failure;
 			case _: Unknown;
