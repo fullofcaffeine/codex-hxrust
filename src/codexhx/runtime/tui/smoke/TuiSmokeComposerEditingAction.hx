@@ -7,9 +7,11 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final modeAfter:TuiSmokeComposerEditingModeKind;
 	final popupBefore:TuiSmokeComposerPopupKind;
 	final popupAfter:TuiSmokeComposerPopupKind;
+	final direction:TuiSmokeHistorySearchDirectionKind;
 	final keyName:String;
 	final inputText:String;
 	final outputText:String;
+	final recalledText:String;
 	final canonicalText:String;
 	final textareaText:String;
 	final submissionText:String;
@@ -25,6 +27,8 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final cursorBefore:Int;
 	final cursorAfter:Int;
 	final historyCursor:Int;
+	final persistentOffset:Int;
+	final logId:Int;
 	final pendingPasteBefore:Int;
 	final pendingPasteAfter:Int;
 	final elementBefore:Int;
@@ -66,6 +70,20 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final popupSynced:Bool;
 	final vimReset:Bool;
 	final submissionReadyPreserved:Bool;
+	final navigationEligible:Bool;
+	final cursorBoundary:Bool;
+	final textMatchesLastHistory:Bool;
+	final lookupRequested:Bool;
+	final lookupResponded:Bool;
+	final staleIgnored:Bool;
+	final cacheHit:Bool;
+	final cacheInserted:Bool;
+	final duplicateSkipped:Bool;
+	final navigationReset:Bool;
+	final vimNormalMode:Bool;
+	final operatorPending:Bool;
+	final remapped:Bool;
+	final fallbackSuppressed:Bool;
 	final elementsShifted:Bool;
 	final cursorClamped:Bool;
 	final pendingExpanded:Bool;
@@ -88,9 +106,11 @@ class TuiSmokeComposerEditingAction {
 	public final modeAfter:TuiSmokeComposerEditingModeKind;
 	public final popupBefore:TuiSmokeComposerPopupKind;
 	public final popupAfter:TuiSmokeComposerPopupKind;
+	public final direction:TuiSmokeHistorySearchDirectionKind;
 	public final keyName:String;
 	public final inputText:String;
 	public final outputText:String;
+	public final recalledText:String;
 	public final canonicalText:String;
 	public final textareaText:String;
 	public final submissionText:String;
@@ -106,6 +126,8 @@ class TuiSmokeComposerEditingAction {
 	public final cursorBefore:Int;
 	public final cursorAfter:Int;
 	public final historyCursor:Int;
+	public final persistentOffset:Int;
+	public final logId:Int;
 	public final pendingPasteBefore:Int;
 	public final pendingPasteAfter:Int;
 	public final elementBefore:Int;
@@ -147,6 +169,20 @@ class TuiSmokeComposerEditingAction {
 	public final popupSynced:Bool;
 	public final vimReset:Bool;
 	public final submissionReadyPreserved:Bool;
+	public final navigationEligible:Bool;
+	public final cursorBoundary:Bool;
+	public final textMatchesLastHistory:Bool;
+	public final lookupRequested:Bool;
+	public final lookupResponded:Bool;
+	public final staleIgnored:Bool;
+	public final cacheHit:Bool;
+	public final cacheInserted:Bool;
+	public final duplicateSkipped:Bool;
+	public final navigationReset:Bool;
+	public final vimNormalMode:Bool;
+	public final operatorPending:Bool;
+	public final remapped:Bool;
+	public final fallbackSuppressed:Bool;
 	public final elementsShifted:Bool;
 	public final cursorClamped:Bool;
 	public final pendingExpanded:Bool;
@@ -190,5 +226,30 @@ class TuiSmokeComposerEditingAction {
 
 	public function popupTransitionText():String {
 		return popupBefore + "->" + popupAfter;
+	}
+
+	public function hasDetailedHistoryNavigation():Bool {
+		return direction != TuiSmokeHistorySearchDirectionKind.Unknown
+			|| recalledText != ""
+			|| persistentOffset != 0
+			|| logId != 0
+			|| navigationEligible
+			|| cursorBoundary
+			|| textMatchesLastHistory
+			|| lookupRequested
+			|| lookupResponded
+			|| staleIgnored
+			|| cacheHit
+			|| cacheInserted
+			|| duplicateSkipped
+			|| navigationReset
+			|| vimNormalMode
+			|| operatorPending
+			|| remapped
+			|| fallbackSuppressed
+			|| localImageAfter != 0
+			|| remoteImageAfter != 0
+			|| elementAfter != 0
+			|| pendingPasteAfter != 0;
 	}
 }

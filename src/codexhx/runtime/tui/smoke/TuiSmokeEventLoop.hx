@@ -11369,8 +11369,21 @@ class TuiSmokeEventLoop {
 					trace.push("tui.composer_editing.submit_key=" + action.keyName + ":queue_submissions=" + action.queueSubmissions + ":submitted="
 						+ action.submissionSubmitted + ":queued=" + action.submissionQueued);
 				case TuiSmokeComposerEditingActionKind.HistoryNavigate:
-					trace.push("tui.composer_editing.history=" + action.keyName + ":handled=" + action.historyHandled + ":applied=" + action.historyApplied
-						+ ":cursor=" + action.cursorTransitionText());
+					if (action.hasDetailedHistoryNavigation()) {
+						trace.push("tui.composer_editing.history=" + action.keyName + ":direction=" + action.direction + ":eligible="
+							+ action.navigationEligible + ":handled=" + action.historyHandled + ":applied=" + action.historyApplied + ":text="
+							+ action.recalledText + ":cursor=" + action.cursorTransitionText() + ":history_cursor=" + action.historyCursor + ":boundary="
+							+ action.cursorBoundary + ":match_last=" + action.textMatchesLastHistory + ":lookup=" + action.lookupRequested + ":response="
+							+ action.lookupResponded + ":offset=" + action.persistentOffset + ":log=" + action.logId + ":stale=" + action.staleIgnored
+							+ ":cache_hit=" + action.cacheHit + ":cache_insert=" + action.cacheInserted + ":duplicate_skip=" + action.duplicateSkipped
+							+ ":reset=" + action.navigationReset + ":vim=" + action.vimNormalMode + ":operator=" + action.operatorPending + ":remapped="
+							+ action.remapped + ":fallback_suppressed=" + action.fallbackSuppressed + ":elements=" + action.elementTransitionText()
+							+ ":local=" + action.localImageTransitionText() + ":remote=" + action.remoteImageTransitionText() + ":pending="
+							+ action.pendingPasteTransitionText());
+					} else {
+						trace.push("tui.composer_editing.history=" + action.keyName + ":handled=" + action.historyHandled + ":applied="
+							+ action.historyApplied + ":cursor=" + action.cursorTransitionText());
+					}
 				case TuiSmokeComposerEditingActionKind.BasicInput:
 					trace.push("tui.composer_editing.basic_input=" + action.keyName + ":text=" + action.inputText + "->" + action.outputText + ":cursor="
 						+ action.cursorTransitionText() + ":pending=" + action.pendingPasteTransitionText() + ":redraw=" + action.needsRedraw);
@@ -11455,7 +11468,12 @@ class TuiSmokeEventLoop {
 						+ ":redraw="
 						+ action.needsRedraw);
 				case TuiSmokeComposerEditingActionKind.Failure:
-					trace.push("tui.composer_editing.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected);
+					if (action.noLiveInput && action.failureCode == "live_history_navigation_effects_rejected") {
+						trace.push("tui.composer_editing.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected + ":no_live="
+							+ action.noLiveInput);
+					} else {
+						trace.push("tui.composer_editing.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected);
+					}
 				case _:
 					trace.push("tui.composer_editing.unknown");
 					return false;
