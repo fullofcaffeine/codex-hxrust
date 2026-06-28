@@ -3432,6 +3432,7 @@ class TuiSmokeFixtureLoader {
 		for (value in values) {
 			out.push(new TuiSmokeChatWidgetInterruptedRestoreAction({
 				kind: TuiSmokeChatWidgetInterruptedRestoreActionKind.fromString(stringField(value, "kind", "")),
+				threadInputStateMode: TuiSmokeChatWidgetThreadInputStateMode.fromString(optionalStringField(value, "threadInputStateMode", "unknown")),
 				reason: optionalStringField(value, "reason", ""),
 				noticeMode: optionalStringField(value, "noticeMode", ""),
 				noticeText: optionalStringField(value, "noticeText", ""),
@@ -3497,6 +3498,10 @@ class TuiSmokeFixtureLoader {
 				composerRestored: optionalBoolField(value, "composerRestored", false),
 				historyFallback: optionalBoolField(value, "historyFallback", false),
 				historyOverrideApplied: optionalBoolField(value, "historyOverrideApplied", false),
+				historyRecordsResized: optionalBoolField(value, "historyRecordsResized", false),
+				compareKeyFallbackUsed: optionalBoolField(value, "compareKeyFallbackUsed", false),
+				pendingSteersPreserved: optionalBoolField(value, "pendingSteersPreserved", false),
+				queuedDraftsPreserved: optionalBoolField(value, "queuedDraftsPreserved", false),
 				inputStatePresent: optionalBoolField(value, "inputStatePresent", false),
 				inputStateCleared: optionalBoolField(value, "inputStateCleared", false),
 				collaborationModeRestored: optionalBoolField(value, "collaborationModeRestored", false),

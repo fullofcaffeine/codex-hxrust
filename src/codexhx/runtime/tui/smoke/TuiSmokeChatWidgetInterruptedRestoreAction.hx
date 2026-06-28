@@ -2,6 +2,7 @@ package codexhx.runtime.tui.smoke;
 
 typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 	final kind:TuiSmokeChatWidgetInterruptedRestoreActionKind;
+	final threadInputStateMode:TuiSmokeChatWidgetThreadInputStateMode;
 	final reason:String;
 	final noticeMode:String;
 	final noticeText:String;
@@ -67,6 +68,10 @@ typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 	final composerRestored:Bool;
 	final historyFallback:Bool;
 	final historyOverrideApplied:Bool;
+	final historyRecordsResized:Bool;
+	final compareKeyFallbackUsed:Bool;
+	final pendingSteersPreserved:Bool;
+	final queuedDraftsPreserved:Bool;
 	final inputStatePresent:Bool;
 	final inputStateCleared:Bool;
 	final collaborationModeRestored:Bool;
@@ -103,6 +108,7 @@ typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 @:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final kind:TuiSmokeChatWidgetInterruptedRestoreActionKind;
+	public final threadInputStateMode:TuiSmokeChatWidgetThreadInputStateMode;
 	public final reason:String;
 	public final noticeMode:String;
 	public final noticeText:String;
@@ -168,6 +174,10 @@ class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final composerRestored:Bool;
 	public final historyFallback:Bool;
 	public final historyOverrideApplied:Bool;
+	public final historyRecordsResized:Bool;
+	public final compareKeyFallbackUsed:Bool;
+	public final pendingSteersPreserved:Bool;
+	public final queuedDraftsPreserved:Bool;
 	public final inputStatePresent:Bool;
 	public final inputStateCleared:Bool;
 	public final collaborationModeRestored:Bool;

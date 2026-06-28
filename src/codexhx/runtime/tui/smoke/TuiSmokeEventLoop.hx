@@ -2638,7 +2638,11 @@ class TuiSmokeEventLoop {
 						+ action.pendingSteersBefore + "->" + action.pendingSteersAfter + ":rejected=" + action.rejectedSteersBefore + "->"
 						+ action.rejectedSteersAfter + ":history=" + action.rejectedSteerHistoryRecords + ":preview=" + action.pendingPreviewRefreshed);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.CaptureThreadInputState:
+					final captureModePart = action.threadInputStateMode == TuiSmokeChatWidgetThreadInputStateMode.Unknown ? "" : "mode_kind="
+						+ action.threadInputStateMode
+						+ ":";
 					trace.push("tui.chat_widget_interrupted_restore.capture_thread_input="
+						+ captureModePart
 						+ "composer="
 						+ action.composerText
 						+ ":remote_images="
@@ -2678,6 +2682,16 @@ class TuiSmokeEventLoop {
 						+ ":sleep="
 						+ action.sleepInhibitorRunningBefore);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RestoreThreadInputState:
+					final restoreModePart = action.threadInputStateMode == TuiSmokeChatWidgetThreadInputStateMode.Unknown ? "" : ":mode_kind="
+						+ action.threadInputStateMode;
+					final preservationPart = action.threadInputStateMode == TuiSmokeChatWidgetThreadInputStateMode.Unknown ? "" : ":history_resized="
+						+ action.historyRecordsResized
+						+ ":compare_fallback="
+						+ action.compareKeyFallbackUsed
+						+ ":pending_preserved="
+						+ action.pendingSteersPreserved
+						+ ":queued_preserved="
+						+ action.queuedDraftsPreserved;
 					trace.push("tui.chat_widget_interrupted_restore.restore_thread_input="
 						+ "present="
 						+ action.inputStatePresent
@@ -2740,7 +2754,9 @@ class TuiSmokeEventLoop {
 						+ ":preview="
 						+ action.pendingPreviewRefreshed
 						+ ":redraw="
-						+ action.requestRedraw);
+						+ action.requestRedraw
+						+ restoreModePart
+						+ preservationPart);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.DrainPendingMessages:
 					final mergeOrderPart = action.mergeOrder == TuiSmokeChatWidgetRestoreMergeOrder.Unknown ? "" : ":order=" + action.mergeOrder;
 					final composerPart = action.composerText == "" ? "" : ":composer=" + action.composerText;

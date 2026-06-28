@@ -17830,6 +17830,161 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget thread input state restore\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.capture_thread_input=composer=draft with @workspace:remote_images=1:local_images=2:elements=3:mentions=1:pastes=1:pending=2:pending_history=1:compare_keys=1:rejected=1:rejected_history=0:queued=2:queued_history=1:user_turn_pending=true:mode=plan:active_mode=plan:task=true:agent=true:sleep=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=true:cleared=false:composer=->draft with @workspace:pending=0->2:pending_history=2:compare_keys=2:rejected=0->1:rejected_history=1:queued=0->2:queued_history=2:user_turn_pending=false->true:mode=plan:active_mode=plan:mode_restored=true:agent=false->true:task=false->true:sleep=false->true:remote_cleared=false:pastes_cleared=false:model_surfaces=true:status_surfaces=true:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=false:cleared=true:composer=draft with @workspace->:pending=2->0:pending_history=0:compare_keys=0:rejected=1->0:rejected_history=0:queued=2->0:queued_history=0:user_turn_pending=true->false:mode=:active_mode=:mode_restored=false:agent=true->false:task=true->false:sleep=true->false:remote_cleared=true:pastes_cleared=true:model_surfaces=false:status_surfaces=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.failure=live_thread_input_restore_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chat-widget-thread-input-restore-modes",
+      "frame": {
+        "name": "chat-widget-thread-input-restore-modes",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget thread input restore modes"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupted_restore",
+          "chatWidgetInterruptedRestore": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "capture_thread_input_state",
+                "threadInputStateMode": "capture",
+                "composerText": "draft with @workspace",
+                "remoteImageCount": 1,
+                "localImageCount": 1,
+                "textElementCount": 2,
+                "mentionBindingCount": 1,
+                "pendingPasteCount": 1,
+                "pendingSteersBefore": 1,
+                "pendingSteerHistoryRecords": 0,
+                "pendingSteerCompareKeys": 0,
+                "rejectedSteersBefore": 1,
+                "rejectedSteerHistoryRecords": 0,
+                "queuedMessagesBefore": 1,
+                "queuedUserMessageHistoryRecords": 0,
+                "userTurnPendingBefore": true,
+                "currentCollaborationMode": "plan",
+                "activeCollaborationMode": "plan",
+                "taskRunningBefore": true,
+                "agentTurnRunningBefore": true,
+                "sleepInhibitorRunningBefore": true
+              },
+              {
+                "kind": "restore_thread_input_state",
+                "threadInputStateMode": "restore_some",
+                "inputStatePresent": true,
+                "inputStateCleared": false,
+                "composerText": "",
+                "restoredText": "draft with @workspace",
+                "pendingSteersBefore": 0,
+                "pendingSteersAfter": 1,
+                "pendingSteerHistoryRecords": 1,
+                "pendingSteerCompareKeys": 1,
+                "rejectedSteersBefore": 0,
+                "rejectedSteersAfter": 1,
+                "rejectedSteerHistoryRecords": 1,
+                "queuedMessagesBefore": 0,
+                "queuedMessagesAfter": 1,
+                "queuedUserMessageHistoryRecords": 1,
+                "userTurnPendingBefore": false,
+                "userTurnPendingAfter": true,
+                "currentCollaborationMode": "plan",
+                "activeCollaborationMode": "plan",
+                "collaborationModeRestored": true,
+                "agentTurnRunningBefore": false,
+                "agentTurnRunningAfter": true,
+                "taskRunningBefore": false,
+                "taskRunningAfter": true,
+                "sleepInhibitorRunningBefore": false,
+                "sleepInhibitorRunningAfter": true,
+                "remoteImagesCleared": false,
+                "pendingPastesCleared": false,
+                "modelSurfacesRefreshed": true,
+                "statusSurfacesRefreshed": true,
+                "pendingPreviewRefreshed": true,
+                "requestRedraw": true,
+                "historyRecordsResized": true,
+                "compareKeyFallbackUsed": true,
+                "pendingSteersPreserved": true,
+                "queuedDraftsPreserved": true
+              },
+              {
+                "kind": "restore_thread_input_state",
+                "threadInputStateMode": "restore_none",
+                "inputStatePresent": false,
+                "inputStateCleared": true,
+                "composerText": "draft with @workspace",
+                "restoredText": "",
+                "pendingSteersBefore": 1,
+                "pendingSteersAfter": 0,
+                "pendingSteerHistoryRecords": 0,
+                "pendingSteerCompareKeys": 0,
+                "rejectedSteersBefore": 1,
+                "rejectedSteersAfter": 0,
+                "rejectedSteerHistoryRecords": 0,
+                "queuedMessagesBefore": 1,
+                "queuedMessagesAfter": 0,
+                "queuedUserMessageHistoryRecords": 0,
+                "userTurnPendingBefore": true,
+                "userTurnPendingAfter": false,
+                "currentCollaborationMode": "",
+                "activeCollaborationMode": "",
+                "collaborationModeRestored": false,
+                "agentTurnRunningBefore": true,
+                "agentTurnRunningAfter": false,
+                "taskRunningBefore": true,
+                "taskRunningAfter": false,
+                "sleepInhibitorRunningBefore": true,
+                "sleepInhibitorRunningAfter": false,
+                "remoteImagesCleared": true,
+                "pendingPastesCleared": true,
+                "modelSurfacesRefreshed": false,
+                "statusSurfacesRefreshed": false,
+                "pendingPreviewRefreshed": true,
+                "requestRedraw": true,
+                "historyRecordsResized": false,
+                "compareKeyFallbackUsed": false,
+                "pendingSteersPreserved": false,
+                "queuedDraftsPreserved": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_thread_input_restore_modes_rejected",
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.capture_thread_input=mode_kind=capture:composer=draft with @workspace:remote_images=1:local_images=1:elements=2:mentions=1:pastes=1:pending=1:pending_history=0:compare_keys=0:rejected=1:rejected_history=0:queued=1:queued_history=0:user_turn_pending=true:mode=plan:active_mode=plan:task=true:agent=true:sleep=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=true:cleared=false:composer=->draft with @workspace:pending=0->1:pending_history=1:compare_keys=1:rejected=0->1:rejected_history=1:queued=0->1:queued_history=1:user_turn_pending=false->true:mode=plan:active_mode=plan:mode_restored=true:agent=false->true:task=false->true:sleep=false->true:remote_cleared=false:pastes_cleared=false:model_surfaces=true:status_surfaces=true:preview=true:redraw=true:mode_kind=restore_some:history_resized=true:compare_fallback=true:pending_preserved=true:queued_preserved=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=false:cleared=true:composer=draft with @workspace->:pending=1->0:pending_history=0:compare_keys=0:rejected=1->0:rejected_history=0:queued=1->0:queued_history=0:user_turn_pending=true->false:mode=:active_mode=:mode_restored=false:agent=true->false:task=true->false:sleep=true->false:remote_cleared=true:pastes_cleared=true:model_surfaces=false:status_surfaces=false:preview=true:redraw=true:mode_kind=restore_none:history_resized=false:compare_fallback=false:pending_preserved=false:queued_preserved=false\ntui.chat_widget_interrupted_restore.failure=live_thread_input_restore_modes_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget thread input restore modes\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.capture_thread_input=mode_kind=capture:composer=draft with @workspace:remote_images=1:local_images=1:elements=2:mentions=1:pastes=1:pending=1:pending_history=0:compare_keys=0:rejected=1:rejected_history=0:queued=1:queued_history=0:user_turn_pending=true:mode=plan:active_mode=plan:task=true:agent=true:sleep=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=true:cleared=false:composer=->draft with @workspace:pending=0->1:pending_history=1:compare_keys=1:rejected=0->1:rejected_history=1:queued=0->1:queued_history=1:user_turn_pending=false->true:mode=plan:active_mode=plan:mode_restored=true:agent=false->true:task=false->true:sleep=false->true:remote_cleared=false:pastes_cleared=false:model_surfaces=true:status_surfaces=true:preview=true:redraw=true:mode_kind=restore_some:history_resized=true:compare_fallback=true:pending_preserved=true:queued_preserved=true\ntui.chat_widget_interrupted_restore.restore_thread_input=present=false:cleared=true:composer=draft with @workspace->:pending=1->0:pending_history=0:compare_keys=0:rejected=1->0:rejected_history=0:queued=1->0:queued_history=0:user_turn_pending=true->false:mode=:active_mode=:mode_restored=false:agent=true->false:task=true->false:sleep=true->false:remote_cleared=true:pastes_cleared=true:model_surfaces=false:status_surfaces=false:preview=true:redraw=true:mode_kind=restore_none:history_resized=false:compare_fallback=false:pending_preserved=false:queued_preserved=false\ntui.chat_widget_interrupted_restore.failure=live_thread_input_restore_modes_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-mcp-startup-status-headless",
       "frame": {
         "name": "chatwidget-mcp-startup-status-headless",
