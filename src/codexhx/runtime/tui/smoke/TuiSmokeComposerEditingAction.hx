@@ -59,6 +59,16 @@ typedef TuiSmokeComposerEditingActionFields = {
 	final interruptSuppressed:Bool;
 	final quitSuppressed:Bool;
 	final historySearchCancelled:Bool;
+	final composerEmpty:Bool;
+	final modalOrPopupActive:Bool;
+	final historySearchActive:Bool;
+	final doublePressEnabled:Bool;
+	final quitShortcutActive:Bool;
+	final quitShortcutArmed:Bool;
+	final quitShortcutCleared:Bool;
+	final quitRequested:Bool;
+	final bottomPaneNotHandled:Bool;
+	final fallsThrough:Bool;
 	final pasteBurstActiveBefore:Bool;
 	final pasteBurstActiveAfter:Bool;
 	final pasteBurstFlushed:Bool;
@@ -168,6 +178,16 @@ class TuiSmokeComposerEditingAction {
 	public final interruptSuppressed:Bool;
 	public final quitSuppressed:Bool;
 	public final historySearchCancelled:Bool;
+	public final composerEmpty:Bool;
+	public final modalOrPopupActive:Bool;
+	public final historySearchActive:Bool;
+	public final doublePressEnabled:Bool;
+	public final quitShortcutActive:Bool;
+	public final quitShortcutArmed:Bool;
+	public final quitShortcutCleared:Bool;
+	public final quitRequested:Bool;
+	public final bottomPaneNotHandled:Bool;
+	public final fallsThrough:Bool;
 	public final pasteBurstActiveBefore:Bool;
 	public final pasteBurstActiveAfter:Bool;
 	public final pasteBurstFlushed:Bool;
@@ -271,5 +291,10 @@ class TuiSmokeComposerEditingAction {
 			|| remoteImageAfter != 0
 			|| elementAfter != 0
 			|| pendingPasteAfter != 0;
+	}
+
+	public function hasDetailedCtrlD():Bool {
+		return keyName != "" || composerEmpty || modalOrPopupActive || historySearchActive || doublePressEnabled || quitShortcutActive || quitShortcutArmed
+			|| quitShortcutCleared || quitRequested || bottomPaneNotHandled || bottomPaneConsumed || chatWidgetConsumed || quitHintShown || fallsThrough;
 	}
 }

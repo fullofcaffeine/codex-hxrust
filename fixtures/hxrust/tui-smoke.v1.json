@@ -8432,6 +8432,156 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer ctrl-c clear history capture\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.ctrl_c_clear=empty:input=:output=:cleared=false:noop=true:history=false:append=false:elements=0->0:local=0->0:remote=0->0:pending=0->0:mentions=0->0:nav_reset=false:bottom_consumed=false:widget_consumed=false:quit_hint=false:history_search_cancelled=false:interrupt_suppressed=false:quit_suppressed=false:redraw=false\ntui.composer_editing.ctrl_c_clear=history-search:input=draft:output=draft:cleared=false:noop=false:history=false:append=false:elements=0->0:local=0->0:remote=0->0:pending=0->0:mentions=0->0:nav_reset=false:bottom_consumed=true:widget_consumed=true:quit_hint=false:history_search_cancelled=true:interrupt_suppressed=true:quit_suppressed=true:redraw=true\ntui.composer_editing.ctrl_c_clear=rich-draft:input=[Image #2] draft [Pasted Content 64 chars]:output=:cleared=true:noop=false:history=true:append=true:elements=2->0:local=1->0:remote=1->0:pending=1->0:mentions=1->0:nav_reset=true:bottom_consumed=true:widget_consumed=true:quit_hint=true:history_search_cancelled=false:interrupt_suppressed=true:quit_suppressed=true:redraw=true\ntui.composer_editing.failure=live_ctrl_c_clear_effects_rejected:unsupported=true:no_live=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-ctrl-d-quit-boundary-headless",
+      "frame": {
+        "name": "composer-ctrl-d-quit-boundary-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer ctrl-d quit boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "ctrl_d",
+                "keyName": "empty-arm",
+                "inputText": "",
+                "result": "none",
+                "composerEmpty": true,
+                "modalOrPopupActive": false,
+                "historySearchActive": false,
+                "doublePressEnabled": true,
+                "quitShortcutActive": false,
+                "bottomPaneNotHandled": true,
+                "bottomPaneConsumed": false,
+                "chatWidgetConsumed": true,
+                "quitShortcutArmed": true,
+                "quitRequested": false,
+                "quitShortcutCleared": false,
+                "quitHintShown": true,
+                "fallsThrough": false,
+                "needsRedraw": true
+              },
+              {
+                "kind": "ctrl_d",
+                "keyName": "empty-confirm",
+                "inputText": "",
+                "result": "none",
+                "composerEmpty": true,
+                "modalOrPopupActive": false,
+                "historySearchActive": false,
+                "doublePressEnabled": true,
+                "quitShortcutActive": true,
+                "bottomPaneNotHandled": true,
+                "bottomPaneConsumed": false,
+                "chatWidgetConsumed": true,
+                "quitShortcutArmed": false,
+                "quitRequested": true,
+                "quitShortcutCleared": true,
+                "quitHintShown": false,
+                "fallsThrough": false,
+                "needsRedraw": true
+              },
+              {
+                "kind": "ctrl_d",
+                "keyName": "non-empty-suppressed",
+                "inputText": "draft",
+                "result": "none",
+                "composerEmpty": false,
+                "modalOrPopupActive": false,
+                "historySearchActive": false,
+                "doublePressEnabled": true,
+                "quitShortcutActive": false,
+                "bottomPaneNotHandled": true,
+                "bottomPaneConsumed": false,
+                "chatWidgetConsumed": false,
+                "quitShortcutArmed": false,
+                "quitRequested": false,
+                "quitShortcutCleared": true,
+                "quitHintShown": false,
+                "fallsThrough": true,
+                "needsRedraw": false
+              },
+              {
+                "kind": "ctrl_d",
+                "keyName": "modal-popup-exclusion",
+                "inputText": "",
+                "result": "none",
+                "composerEmpty": true,
+                "modalOrPopupActive": true,
+                "historySearchActive": false,
+                "doublePressEnabled": true,
+                "quitShortcutActive": false,
+                "bottomPaneNotHandled": true,
+                "bottomPaneConsumed": false,
+                "chatWidgetConsumed": false,
+                "quitShortcutArmed": false,
+                "quitRequested": false,
+                "quitShortcutCleared": true,
+                "quitHintShown": false,
+                "fallsThrough": true,
+                "needsRedraw": false
+              },
+              {
+                "kind": "ctrl_d",
+                "keyName": "history-search-exclusion",
+                "inputText": "",
+                "result": "none",
+                "composerEmpty": true,
+                "modalOrPopupActive": true,
+                "historySearchActive": true,
+                "doublePressEnabled": true,
+                "quitShortcutActive": false,
+                "bottomPaneNotHandled": false,
+                "bottomPaneConsumed": true,
+                "chatWidgetConsumed": false,
+                "quitShortcutArmed": false,
+                "quitRequested": false,
+                "quitShortcutCleared": false,
+                "quitHintShown": false,
+                "fallsThrough": false,
+                "needsRedraw": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_ctrl_d_quit_boundary_effects_rejected",
+                "unsupportedRejected": true,
+                "noLiveInput": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.ctrl_d_quit=empty-arm:input=:empty=true:modal_or_popup=false:history_search=false:double_press=true:shortcut_active=false:bottom_not_handled=true:bottom_consumed=false:widget_consumed=true:armed=true:quit_requested=false:shortcut_cleared=false:quit_hint=true:falls_through=false:result=none:redraw=true\ntui.composer_editing.ctrl_d_quit=empty-confirm:input=:empty=true:modal_or_popup=false:history_search=false:double_press=true:shortcut_active=true:bottom_not_handled=true:bottom_consumed=false:widget_consumed=true:armed=false:quit_requested=true:shortcut_cleared=true:quit_hint=false:falls_through=false:result=none:redraw=true\ntui.composer_editing.ctrl_d_quit=non-empty-suppressed:input=draft:empty=false:modal_or_popup=false:history_search=false:double_press=true:shortcut_active=false:bottom_not_handled=true:bottom_consumed=false:widget_consumed=false:armed=false:quit_requested=false:shortcut_cleared=true:quit_hint=false:falls_through=true:result=none:redraw=false\ntui.composer_editing.ctrl_d_quit=modal-popup-exclusion:input=:empty=true:modal_or_popup=true:history_search=false:double_press=true:shortcut_active=false:bottom_not_handled=true:bottom_consumed=false:widget_consumed=false:armed=false:quit_requested=false:shortcut_cleared=true:quit_hint=false:falls_through=true:result=none:redraw=false\ntui.composer_editing.ctrl_d_quit=history-search-exclusion:input=:empty=true:modal_or_popup=true:history_search=true:double_press=true:shortcut_active=false:bottom_not_handled=false:bottom_consumed=true:widget_consumed=false:armed=false:quit_requested=false:shortcut_cleared=false:quit_hint=false:falls_through=false:result=none:redraw=true\ntui.composer_editing.failure=live_ctrl_d_quit_boundary_effects_rejected:unsupported=true:no_live=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer ctrl-d quit boundary\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.ctrl_d_quit=empty-arm:input=:empty=true:modal_or_popup=false:history_search=false:double_press=true:shortcut_active=false:bottom_not_handled=true:bottom_consumed=false:widget_consumed=true:armed=true:quit_requested=false:shortcut_cleared=false:quit_hint=true:falls_through=false:result=none:redraw=true\ntui.composer_editing.ctrl_d_quit=empty-confirm:input=:empty=true:modal_or_popup=false:history_search=false:double_press=true:shortcut_active=true:bottom_not_handled=true:bottom_consumed=false:widget_consumed=true:armed=false:quit_requested=true:shortcut_cleared=true:quit_hint=false:falls_through=false:result=none:redraw=true\ntui.composer_editing.ctrl_d_quit=non-empty-suppressed:input=draft:empty=false:modal_or_popup=false:history_search=false:double_press=true:shortcut_active=false:bottom_not_handled=true:bottom_consumed=false:widget_consumed=false:armed=false:quit_requested=false:shortcut_cleared=true:quit_hint=false:falls_through=true:result=none:redraw=false\ntui.composer_editing.ctrl_d_quit=modal-popup-exclusion:input=:empty=true:modal_or_popup=true:history_search=false:double_press=true:shortcut_active=false:bottom_not_handled=true:bottom_consumed=false:widget_consumed=false:armed=false:quit_requested=false:shortcut_cleared=true:quit_hint=false:falls_through=true:result=none:redraw=false\ntui.composer_editing.ctrl_d_quit=history-search-exclusion:input=:empty=true:modal_or_popup=true:history_search=true:double_press=true:shortcut_active=false:bottom_not_handled=false:bottom_consumed=true:widget_consumed=false:armed=false:quit_requested=false:shortcut_cleared=false:quit_hint=false:falls_through=false:result=none:redraw=true\ntui.composer_editing.failure=live_ctrl_d_quit_boundary_effects_rejected:unsupported=true:no_live=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-textarea-input-routing-headless",
       "frame": {
         "name": "composer-textarea-input-routing-headless",

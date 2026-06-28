@@ -11469,17 +11469,22 @@ class TuiSmokeEventLoop {
 					trace.push("tui.composer_editing.shortcut_overlay=" + action.keyName + ":handled=" + action.shortcutOverlayHandled + ":redraw="
 						+ action.needsRedraw);
 				case TuiSmokeComposerEditingActionKind.CtrlD:
-					trace.push("tui.composer_editing.ctrl_d="
-						+ "empty="
-						+ action.inputText
-						+ ":result="
-						+ action.result
-						+ ":redraw="
-						+ action.needsRedraw);
+					if (action.hasDetailedCtrlD()) {
+						trace.push("tui.composer_editing.ctrl_d_quit=" + action.keyName + ":input=" + action.inputText + ":empty=" + action.composerEmpty
+							+ ":modal_or_popup=" + action.modalOrPopupActive + ":history_search=" + action.historySearchActive + ":double_press="
+							+ action.doublePressEnabled + ":shortcut_active=" + action.quitShortcutActive + ":bottom_not_handled="
+							+ action.bottomPaneNotHandled + ":bottom_consumed=" + action.bottomPaneConsumed + ":widget_consumed=" + action.chatWidgetConsumed
+							+ ":armed=" + action.quitShortcutArmed + ":quit_requested=" + action.quitRequested + ":shortcut_cleared="
+							+ action.quitShortcutCleared + ":quit_hint=" + action.quitHintShown + ":falls_through=" + action.fallsThrough + ":result="
+							+ action.result + ":redraw=" + action.needsRedraw);
+					} else {
+						trace.push("tui.composer_editing.ctrl_d=" + "empty=" + action.inputText + ":result=" + action.result + ":redraw=" + action.needsRedraw);
+					}
 				case TuiSmokeComposerEditingActionKind.Failure:
 					if (action.noLiveInput
 						&& (action.failureCode == "live_history_navigation_effects_rejected"
-							|| action.failureCode == "live_ctrl_c_clear_effects_rejected")) {
+							|| action.failureCode == "live_ctrl_c_clear_effects_rejected"
+							|| action.failureCode == "live_ctrl_d_quit_boundary_effects_rejected")) {
 						trace.push("tui.composer_editing.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected + ":no_live="
 							+ action.noLiveInput);
 					} else {
