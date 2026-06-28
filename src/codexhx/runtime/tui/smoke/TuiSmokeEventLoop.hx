@@ -2568,6 +2568,13 @@ class TuiSmokeEventLoop {
 						+ ":suppressed=" + action.noticesSuppressed + ":initial_release=" + action.initialSubmitReleased + ":initial_submit="
 						+ action.pendingInitialSubmitSubmitted + ":resume_queue=" + action.resumeRestoredQueue + ":drain=" + action.queuedInputDrained
 						+ ":status=" + action.statusSurfacesRefreshed);
+				case TuiSmokeSideConversationActionKind.ActiveThreadEventDispatch:
+					trace.push("tui.side_conversation.active_thread_event=" + "thread=" + action.activeThreadId + ":kind=" + action.activeEventKind
+						+ ":event=" + action.eventId + ":notification=" + action.notificationDelivered + ":collab=" + action.collabReceiverCached
+						+ ":pending_request=" + action.pendingRequestRegistered + ":request=" + action.requestDelivered + ":skip=" + action.requestSkipped
+						+ ":history=" + action.historyEntryRouted + ":feedback=" + action.feedbackRouted + ":refresh=" + action.statusSurfacesRefreshed
+						+ ":rollback_store=" + action.rollbackStoreApplied + ":drained=" + action.activeReceiverDrained + ":receiver_restored="
+						+ action.activeReceiverRestored + ":disconnected=" + action.receiverDisconnected + ":active_cleared=" + action.activeThreadCleared);
 				case TuiSmokeSideConversationActionKind.DiscardSide:
 					trace.push("tui.side_conversation.discard=" + "child=" + action.childThreadId + ":interrupt=" + action.interruptSubmitted + ":startup="
 						+ action.startupInterruptUsed + ":turn=" + action.turnInterruptUsed + ":unsubscribe=" + action.threadUnsubscribed + ":local="

@@ -14670,6 +14670,132 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> thread snapshot replay boundary\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.replay_snapshot_boundary=thread=main:route=normal:resize=true:turns=1:events=2:buffer=true->true:pending_interactive=false:session=true:autosend=true->false:input=true:turn_replay=true:event_replay=true:notices=0/0:suppressed=false:initial_release=true:initial_submit=true:resume_queue=true:drain=true:status=true\ntui.side_conversation.replay_snapshot_boundary=thread=main:route=quiet_pending_interactive:resize=true:turns=0:events=2:buffer=true->true:pending_interactive=true:session=true:autosend=true->false:input=true:turn_replay=false:event_replay=true:notices=1/1:suppressed=true:initial_release=true:initial_submit=false:resume_queue=false:drain=false:status=true\ntui.side_conversation.replay_snapshot_boundary=thread=side-1:route=side_thread:resize=false:turns=1:events=0:buffer=false->false:pending_interactive=false:session=true:autosend=true->false:input=true:turn_replay=true:event_replay=false:notices=0/0:suppressed=false:initial_release=true:initial_submit=false:resume_queue=false:drain=false:status=true\ntui.side_conversation.failure=live_thread_snapshot_replay_boundary_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "active-thread-event-dispatch",
+      "frame": {
+        "name": "active-thread-event-dispatch",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "active thread event dispatch"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "active_thread_event_dispatch",
+                "activeEventKind": "notification",
+                "activeThreadId": "main",
+                "eventId": "turn-started",
+                "notificationDelivered": true,
+                "collabReceiverCached": true,
+                "statusSurfacesRefreshed": true
+              },
+              {
+                "kind": "active_thread_event_dispatch",
+                "activeEventKind": "notification",
+                "activeThreadId": "main",
+                "eventId": "token-usage-updated",
+                "notificationDelivered": true,
+                "collabReceiverCached": false,
+                "statusSurfacesRefreshed": true
+              },
+              {
+                "kind": "active_thread_event_dispatch",
+                "activeEventKind": "request",
+                "activeThreadId": "main",
+                "eventId": "req-pending",
+                "pendingRequestRegistered": true,
+                "requestDelivered": true,
+                "requestSkipped": false
+              },
+              {
+                "kind": "active_thread_event_dispatch",
+                "activeEventKind": "request",
+                "activeThreadId": "main",
+                "eventId": "req-stale",
+                "pendingRequestRegistered": false,
+                "requestDelivered": false,
+                "requestSkipped": true
+              },
+              {
+                "kind": "active_thread_event_dispatch",
+                "activeEventKind": "history_entry_response",
+                "activeThreadId": "main",
+                "eventId": "history-1",
+                "historyEntryRouted": true
+              },
+              {
+                "kind": "active_thread_event_dispatch",
+                "activeEventKind": "feedback_submission",
+                "activeThreadId": "main",
+                "eventId": "feedback-1",
+                "feedbackRouted": true
+              },
+              {
+                "kind": "active_thread_event_dispatch",
+                "activeEventKind": "rollback_cleanup",
+                "activeThreadId": "main",
+                "eventId": "rollback-main",
+                "rollbackStoreApplied": true,
+                "activeReceiverDrained": true,
+                "activeReceiverRestored": true,
+                "receiverDisconnected": false,
+                "activeThreadCleared": false
+              },
+              {
+                "kind": "active_thread_event_dispatch",
+                "activeEventKind": "rollback_cleanup",
+                "activeThreadId": "side-1",
+                "eventId": "rollback-side-disconnected",
+                "rollbackStoreApplied": true,
+                "activeReceiverDrained": true,
+                "activeReceiverRestored": false,
+                "receiverDisconnected": true,
+                "activeThreadCleared": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_active_thread_event_dispatch_rejected",
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.active_thread_event=thread=main:kind=notification:event=turn-started:notification=true:collab=true:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=true:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=notification:event=token-usage-updated:notification=true:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=true:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=request:event=req-pending:notification=false:collab=false:pending_request=true:request=true:skip=false:history=false:feedback=false:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=request:event=req-stale:notification=false:collab=false:pending_request=false:request=false:skip=true:history=false:feedback=false:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=history_entry_response:event=history-1:notification=false:collab=false:pending_request=false:request=false:skip=false:history=true:feedback=false:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=feedback_submission:event=feedback-1:notification=false:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=true:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=rollback_cleanup:event=rollback-main:notification=false:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=false:rollback_store=true:drained=true:receiver_restored=true:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=side-1:kind=rollback_cleanup:event=rollback-side-disconnected:notification=false:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=false:rollback_store=true:drained=true:receiver_restored=false:disconnected=true:active_cleared=true\ntui.side_conversation.failure=live_active_thread_event_dispatch_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> active thread event dispatch\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.active_thread_event=thread=main:kind=notification:event=turn-started:notification=true:collab=true:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=true:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=notification:event=token-usage-updated:notification=true:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=true:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=request:event=req-pending:notification=false:collab=false:pending_request=true:request=true:skip=false:history=false:feedback=false:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=request:event=req-stale:notification=false:collab=false:pending_request=false:request=false:skip=true:history=false:feedback=false:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=history_entry_response:event=history-1:notification=false:collab=false:pending_request=false:request=false:skip=false:history=true:feedback=false:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=feedback_submission:event=feedback-1:notification=false:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=true:refresh=false:rollback_store=false:drained=false:receiver_restored=false:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=main:kind=rollback_cleanup:event=rollback-main:notification=false:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=false:rollback_store=true:drained=true:receiver_restored=true:disconnected=false:active_cleared=false\ntui.side_conversation.active_thread_event=thread=side-1:kind=rollback_cleanup:event=rollback-side-disconnected:notification=false:collab=false:pending_request=false:request=false:skip=false:history=false:feedback=false:refresh=false:rollback_store=true:drained=true:receiver_restored=false:disconnected=true:active_cleared=true\ntui.side_conversation.failure=live_active_thread_event_dispatch_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "side-conversation-start-block-restores-composer",
       "frame": {
         "name": "side-conversation-start-block-restores-composer",

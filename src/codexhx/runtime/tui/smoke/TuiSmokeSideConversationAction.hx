@@ -4,6 +4,7 @@ typedef TuiSmokeSideConversationActionFields = {
 	final kind:TuiSmokeSideConversationActionKind;
 	final handoffMode:TuiSmokeAppThreadInputHandoffMode;
 	final replayRoute:TuiSmokeThreadSnapshotReplayRoute;
+	final activeEventKind:TuiSmokeActiveThreadEventKind;
 	final parentThreadId:String;
 	final childThreadId:String;
 	final targetThreadId:String;
@@ -16,6 +17,7 @@ typedef TuiSmokeSideConversationActionFields = {
 	final failureCode:String;
 	final userMessageText:String;
 	final errorMessage:String;
+	final eventId:String;
 	final sideThreadsBefore:Int;
 	final sideThreadsAfter:Int;
 	final pendingInputCount:Int;
@@ -89,6 +91,17 @@ typedef TuiSmokeSideConversationActionFields = {
 	final pendingInitialSubmitSubmitted:Bool;
 	final resumeRestoredQueue:Bool;
 	final queuedInputDrained:Bool;
+	final pendingRequestRegistered:Bool;
+	final notificationDelivered:Bool;
+	final requestDelivered:Bool;
+	final requestSkipped:Bool;
+	final historyEntryRouted:Bool;
+	final feedbackRouted:Bool;
+	final collabReceiverCached:Bool;
+	final rollbackStoreApplied:Bool;
+	final activeReceiverDrained:Bool;
+	final activeReceiverRestored:Bool;
+	final receiverDisconnected:Bool;
 	final requestRedraw:Bool;
 	final noLiveTerminal:Bool;
 	final noRatatuiRender:Bool;
@@ -104,6 +117,8 @@ class TuiSmokeSideConversationAction {
 	public final handoffMode:TuiSmokeAppThreadInputHandoffMode;
 	@:recordDefault(TuiSmokeThreadSnapshotReplayRoute.Unknown)
 	public final replayRoute:TuiSmokeThreadSnapshotReplayRoute;
+	@:recordDefault(TuiSmokeActiveThreadEventKind.Unknown)
+	public final activeEventKind:TuiSmokeActiveThreadEventKind;
 	public final parentThreadId:String;
 	public final childThreadId:String;
 	public final targetThreadId:String;
@@ -116,6 +131,7 @@ class TuiSmokeSideConversationAction {
 	public final failureCode:String;
 	public final userMessageText:String;
 	public final errorMessage:String;
+	public final eventId:String;
 	public final sideThreadsBefore:Int;
 	public final sideThreadsAfter:Int;
 	public final pendingInputCount:Int;
@@ -189,6 +205,17 @@ class TuiSmokeSideConversationAction {
 	public final pendingInitialSubmitSubmitted:Bool;
 	public final resumeRestoredQueue:Bool;
 	public final queuedInputDrained:Bool;
+	public final pendingRequestRegistered:Bool;
+	public final notificationDelivered:Bool;
+	public final requestDelivered:Bool;
+	public final requestSkipped:Bool;
+	public final historyEntryRouted:Bool;
+	public final feedbackRouted:Bool;
+	public final collabReceiverCached:Bool;
+	public final rollbackStoreApplied:Bool;
+	public final activeReceiverDrained:Bool;
+	public final activeReceiverRestored:Bool;
+	public final receiverDisconnected:Bool;
 	public final requestRedraw:Bool;
 	public final noLiveTerminal:Bool;
 	public final noRatatuiRender:Bool;
