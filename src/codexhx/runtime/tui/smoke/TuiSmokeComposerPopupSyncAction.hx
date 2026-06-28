@@ -21,11 +21,27 @@ typedef TuiSmokeComposerPopupSyncActionFields = {
 	final searchTermCount:Int;
 	final directMatchCount:Int;
 	final searchTermMatchCount:Int;
+	final requiredHeight:Int;
+	final maxPopupRows:Int;
+	final areaHeight:Int;
+	final listHeight:Int;
+	final hintHeight:Int;
+	final leftInset:Int;
+	final footerLeftInset:Int;
+	final primaryColumnWidth:Int;
+	final visibleStartIndex:Int;
+	final visibleEndIndex:Int;
+	final renderedLineCount:Int;
+	final footerLeftWidth:Int;
+	final footerRightWidth:Int;
 	final searchMode:TuiSmokeMentionSearchModeKind;
 	final candidateKind:TuiSmokeMentionCandidateKind;
 	final catalogSummary:String;
 	final rowSummary:String;
 	final selectionSummary:String;
+	final footerHintSummary:String;
+	final footerModeSummary:String;
+	final activeModeLabel:String;
 	final emptyMessage:String;
 	final popupsEnabled:Bool;
 	final slashCommandsEnabled:Bool;
@@ -59,6 +75,13 @@ typedef TuiSmokeComposerPopupSyncActionFields = {
 	final modeFiltered:Bool;
 	final selectionClamped:Bool;
 	final queryTrimmed:Bool;
+	final selectedVisible:Bool;
+	final selectedBold:Bool;
+	final secondaryDimmed:Bool;
+	final fileNameProjected:Bool;
+	final pathProjected:Bool;
+	final tagProjected:Bool;
+	final truncationApplied:Bool;
 	final unsupportedRejected:Bool;
 }
 
@@ -84,11 +107,27 @@ class TuiSmokeComposerPopupSyncAction {
 	public final searchTermCount:Int;
 	public final directMatchCount:Int;
 	public final searchTermMatchCount:Int;
+	public final requiredHeight:Int;
+	public final maxPopupRows:Int;
+	public final areaHeight:Int;
+	public final listHeight:Int;
+	public final hintHeight:Int;
+	public final leftInset:Int;
+	public final footerLeftInset:Int;
+	public final primaryColumnWidth:Int;
+	public final visibleStartIndex:Int;
+	public final visibleEndIndex:Int;
+	public final renderedLineCount:Int;
+	public final footerLeftWidth:Int;
+	public final footerRightWidth:Int;
 	public final searchMode:TuiSmokeMentionSearchModeKind;
 	public final candidateKind:TuiSmokeMentionCandidateKind;
 	public final catalogSummary:String;
 	public final rowSummary:String;
 	public final selectionSummary:String;
+	public final footerHintSummary:String;
+	public final footerModeSummary:String;
+	public final activeModeLabel:String;
 	public final emptyMessage:String;
 	public final popupsEnabled:Bool;
 	public final slashCommandsEnabled:Bool;
@@ -122,6 +161,13 @@ class TuiSmokeComposerPopupSyncAction {
 	public final modeFiltered:Bool;
 	public final selectionClamped:Bool;
 	public final queryTrimmed:Bool;
+	public final selectedVisible:Bool;
+	public final selectedBold:Bool;
+	public final secondaryDimmed:Bool;
+	public final fileNameProjected:Bool;
+	public final pathProjected:Bool;
+	public final tagProjected:Bool;
+	public final truncationApplied:Bool;
 	public final unsupportedRejected:Bool;
 
 	public function popupTransitionText():String {

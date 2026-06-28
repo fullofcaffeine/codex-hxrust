@@ -13,6 +13,8 @@ enum abstract TuiSmokeComposerPopupSyncActionKind(String) to String {
 	final MentionsV2Filter = "mentions_v2_filter";
 	final MentionsV2FileMatches = "mentions_v2_file_matches";
 	final MentionsV2Selection = "mentions_v2_selection";
+	final MentionsV2Render = "mentions_v2_render";
+	final MentionsV2Footer = "mentions_v2_footer";
 	final ClearFileSearch = "clear_file_search";
 	final DismissedToken = "dismissed_token";
 	final ClearInactivePopup = "clear_inactive_popup";
@@ -33,6 +35,8 @@ enum abstract TuiSmokeComposerPopupSyncActionKind(String) to String {
 			case "mentions_v2_filter": MentionsV2Filter;
 			case "mentions_v2_file_matches": MentionsV2FileMatches;
 			case "mentions_v2_selection": MentionsV2Selection;
+			case "mentions_v2_render": MentionsV2Render;
+			case "mentions_v2_footer": MentionsV2Footer;
 			case "clear_file_search": ClearFileSearch;
 			case "dismissed_token": DismissedToken;
 			case "clear_inactive_popup": ClearInactivePopup;

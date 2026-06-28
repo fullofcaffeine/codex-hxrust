@@ -1562,6 +1562,18 @@ class TuiSmokeEventLoop {
 					trace.push("tui.composer_popup_sync.mentions_v2_selection=" + action.query + ":mode=" + action.searchMode + ":index="
 						+ action.selectedIndex + ":scroll=" + action.scrollTop + ":candidate=" + action.candidateKind + ":selection="
 						+ action.selectionSummary + ":clamped=" + action.selectionClamped);
+				case TuiSmokeComposerPopupSyncActionKind.MentionsV2Render:
+					trace.push("tui.composer_popup_sync.mentions_v2_render=" + action.query + ":mode=" + action.searchMode + ":height="
+						+ action.requiredHeight + ":max_rows=" + action.maxPopupRows + ":area=" + action.areaHeight + ":list=" + action.listHeight + ":hint="
+						+ action.hintHeight + ":left_inset=" + action.leftInset + ":visible=" + action.visibleStartIndex + "-" + action.visibleEndIndex
+						+ ":lines=" + action.renderedLineCount + ":selected=" + action.selectedIndex + ":selected_visible=" + action.selectedVisible
+						+ ":bold=" + action.selectedBold + ":dim_secondary=" + action.secondaryDimmed + ":file_name=" + action.fileNameProjected + ":path="
+						+ action.pathProjected + ":tag=" + action.tagProjected + ":truncated=" + action.truncationApplied + ":primary_width="
+						+ action.primaryColumnWidth + ":empty=" + action.emptyMessage + ":rows=" + action.rowSummary);
+				case TuiSmokeComposerPopupSyncActionKind.MentionsV2Footer:
+					trace.push("tui.composer_popup_sync.mentions_v2_footer=" + action.searchMode + ":footer_inset=" + action.footerLeftInset
+						+ ":left_width=" + action.footerLeftWidth + ":right_width=" + action.footerRightWidth + ":active=" + action.activeModeLabel
+						+ ":hint=" + action.footerHintSummary + ":modes=" + action.footerModeSummary + ":truncated=" + action.truncationApplied);
 				case TuiSmokeComposerPopupSyncActionKind.ClearFileSearch:
 					trace.push("tui.composer_popup_sync.clear_file_search=" + "current=" + action.currentFileQueryTransitionText() + ":sent="
 						+ action.fileSearchCleared + ":popup=" + action.popupTransitionText());

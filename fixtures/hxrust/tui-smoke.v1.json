@@ -9931,6 +9931,134 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer mentions-v2 catalog filter\ninput> \ntrace:\ntui.composer_popup_sync.plan=headless\ntui.composer_popup_sync.mentions_v2_catalog=:mode=all:catalog=4:plugins=2:skills=2:terms=9:rows=plugin:GitHub>@github>plugin://github|plugin:MCP Search>@MCP-Search>plugin://mcp-search@market|skill:PR Babysitter>$pr-babysitter>.codex/skills/pr/SKILL.md|skill:Docs Helper>$docs>.codex/skills/docs/SKILL.md\ntui.composer_popup_sync.mentions_v2_filter= github :mode=all:visible=1:plugins=1:skills=0:files=0:direct=1:terms=0:indices=6:trimmed=true:mode_filtered=false:rows=plugin:GitHub score=88 direct=true\ntui.composer_popup_sync.mentions_v2_filter=market:mode=tools:visible=1:plugins=1:skills=0:files=0:direct=0:terms=1:indices=0:trimmed=false:mode_filtered=true:rows=plugin:MCP Search score=72 term=market\ntui.composer_popup_sync.mentions_v2_filter=src:mode=files:visible=2:plugins=0:skills=0:files=2:direct=2:terms=0:indices=6:trimmed=false:mode_filtered=true:rows=file:src/main.rs score=91|directory:src/runtime score=80\ntui.composer_popup_sync.mentions_v2_files=src:shown=true:stale=false:waiting=false:files=12:visible=10:truncated=true:empty=no matches:rows=file:src/main.rs|directory:src/runtime|file:src/tui.rs\ntui.composer_popup_sync.mentions_v2_files=old:shown=false:stale=true:waiting=false:files=0:visible=0:truncated=false:empty=no matches:rows=\ntui.composer_popup_sync.mentions_v2_files=pending:shown=false:stale=false:waiting=true:files=0:visible=0:truncated=false:empty=loading...:rows=\ntui.composer_popup_sync.mentions_v2_selection=market:mode=tools:index=0:scroll=0:candidate=plugin:selection=tool:@MCP-Search:plugin://mcp-search@market:clamped=true\ntui.composer_popup_sync.mentions_v2_filter=zzz:mode=all:visible=0:plugins=0:skills=0:files=0:direct=0:terms=0:indices=0:trimmed=false:mode_filtered=false:rows=\ntui.composer_popup_sync.failure=live_mentions_v2_catalog_filter_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-mentions-v2-render-footer-headless",
+      "frame": {
+        "name": "composer-mentions-v2-render-footer-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer mentions-v2 render footer"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_popup_sync",
+          "composerPopupSync": {
+            "allowLiveFileSearch": false,
+            "actions": [
+              {
+                "kind": "mentions_v2_render",
+                "query": "src",
+                "searchMode": "files",
+                "requiredHeight": 12,
+                "maxPopupRows": 10,
+                "areaHeight": 12,
+                "listHeight": 10,
+                "hintHeight": 1,
+                "leftInset": 2,
+                "visibleStartIndex": 3,
+                "visibleEndIndex": 12,
+                "renderedLineCount": 10,
+                "selectedIndex": 12,
+                "scrollTop": 3,
+                "selectedVisible": true,
+                "selectedBold": true,
+                "secondaryDimmed": true,
+                "fileNameProjected": true,
+                "pathProjected": true,
+                "tagProjected": true,
+                "truncationApplied": true,
+                "primaryColumnWidth": 22,
+                "emptyMessage": "no matches",
+                "rowSummary": "file:main.rs path=src/ tag=File|directory:runtime path=src/ tag=Directory|selected:file-name-with-ellipsis... tag=File"
+              },
+              {
+                "kind": "mentions_v2_footer",
+                "searchMode": "files",
+                "footerLeftInset": 2,
+                "footerLeftWidth": 33,
+                "footerRightWidth": 37,
+                "activeModeLabel": "Filesystem Only",
+                "footerHintSummary": "Enter insert|Esc close|Left/Right switch search modes",
+                "footerModeSummary": "All Results|[Filesystem Only]|Plugins"
+              },
+              {
+                "kind": "mentions_v2_render",
+                "query": "pending",
+                "searchMode": "all",
+                "requiredHeight": 12,
+                "maxPopupRows": 10,
+                "areaHeight": 12,
+                "listHeight": 10,
+                "hintHeight": 1,
+                "leftInset": 2,
+                "visibleStartIndex": 0,
+                "visibleEndIndex": 0,
+                "renderedLineCount": 1,
+                "emptyMessage": "loading...",
+                "rowSummary": "empty:loading..."
+              },
+              {
+                "kind": "mentions_v2_render",
+                "query": "zzz",
+                "searchMode": "tools",
+                "requiredHeight": 12,
+                "maxPopupRows": 10,
+                "areaHeight": 12,
+                "listHeight": 10,
+                "hintHeight": 1,
+                "leftInset": 2,
+                "visibleStartIndex": 0,
+                "visibleEndIndex": 0,
+                "renderedLineCount": 1,
+                "emptyMessage": "no matches",
+                "rowSummary": "empty:no matches"
+              },
+              {
+                "kind": "mentions_v2_footer",
+                "searchMode": "tools",
+                "footerLeftInset": 2,
+                "footerLeftWidth": 47,
+                "footerRightWidth": 23,
+                "activeModeLabel": "Plugins",
+                "footerHintSummary": "Enter insert|Esc close|Left/Right switch search modes",
+                "footerModeSummary": "All Results|Filesystem Only|[Plugins]",
+                "truncationApplied": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_mentions_v2_render_footer_effects_rejected",
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_popup_sync.plan=headless\ntui.composer_popup_sync.mentions_v2_render=src:mode=files:height=12:max_rows=10:area=12:list=10:hint=1:left_inset=2:visible=3-12:lines=10:selected=12:selected_visible=true:bold=true:dim_secondary=true:file_name=true:path=true:tag=true:truncated=true:primary_width=22:empty=no matches:rows=file:main.rs path=src/ tag=File|directory:runtime path=src/ tag=Directory|selected:file-name-with-ellipsis... tag=File\ntui.composer_popup_sync.mentions_v2_footer=files:footer_inset=2:left_width=33:right_width=37:active=Filesystem Only:hint=Enter insert|Esc close|Left/Right switch search modes:modes=All Results|[Filesystem Only]|Plugins:truncated=false\ntui.composer_popup_sync.mentions_v2_render=pending:mode=all:height=12:max_rows=10:area=12:list=10:hint=1:left_inset=2:visible=0-0:lines=1:selected=0:selected_visible=false:bold=false:dim_secondary=false:file_name=false:path=false:tag=false:truncated=false:primary_width=0:empty=loading...:rows=empty:loading...\ntui.composer_popup_sync.mentions_v2_render=zzz:mode=tools:height=12:max_rows=10:area=12:list=10:hint=1:left_inset=2:visible=0-0:lines=1:selected=0:selected_visible=false:bold=false:dim_secondary=false:file_name=false:path=false:tag=false:truncated=false:primary_width=0:empty=no matches:rows=empty:no matches\ntui.composer_popup_sync.mentions_v2_footer=tools:footer_inset=2:left_width=47:right_width=23:active=Plugins:hint=Enter insert|Esc close|Left/Right switch search modes:modes=All Results|Filesystem Only|[Plugins]:truncated=true\ntui.composer_popup_sync.failure=live_mentions_v2_render_footer_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer mentions-v2 render footer\ninput> \ntrace:\ntui.composer_popup_sync.plan=headless\ntui.composer_popup_sync.mentions_v2_render=src:mode=files:height=12:max_rows=10:area=12:list=10:hint=1:left_inset=2:visible=3-12:lines=10:selected=12:selected_visible=true:bold=true:dim_secondary=true:file_name=true:path=true:tag=true:truncated=true:primary_width=22:empty=no matches:rows=file:main.rs path=src/ tag=File|directory:runtime path=src/ tag=Directory|selected:file-name-with-ellipsis... tag=File\ntui.composer_popup_sync.mentions_v2_footer=files:footer_inset=2:left_width=33:right_width=37:active=Filesystem Only:hint=Enter insert|Esc close|Left/Right switch search modes:modes=All Results|[Filesystem Only]|Plugins:truncated=false\ntui.composer_popup_sync.mentions_v2_render=pending:mode=all:height=12:max_rows=10:area=12:list=10:hint=1:left_inset=2:visible=0-0:lines=1:selected=0:selected_visible=false:bold=false:dim_secondary=false:file_name=false:path=false:tag=false:truncated=false:primary_width=0:empty=loading...:rows=empty:loading...\ntui.composer_popup_sync.mentions_v2_render=zzz:mode=tools:height=12:max_rows=10:area=12:list=10:hint=1:left_inset=2:visible=0-0:lines=1:selected=0:selected_visible=false:bold=false:dim_secondary=false:file_name=false:path=false:tag=false:truncated=false:primary_width=0:empty=no matches:rows=empty:no matches\ntui.composer_popup_sync.mentions_v2_footer=tools:footer_inset=2:left_width=47:right_width=23:active=Plugins:hint=Enter insert|Esc close|Left/Right switch search modes:modes=All Results|Filesystem Only|[Plugins]:truncated=true\ntui.composer_popup_sync.failure=live_mentions_v2_render_footer_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-popup-key-command-dispatch",
       "frame": {
         "name": "composer-popup-key-command-dispatch",
