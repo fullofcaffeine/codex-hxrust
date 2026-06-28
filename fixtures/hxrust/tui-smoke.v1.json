@@ -9796,6 +9796,141 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer mentions v2 dismissed\ninput> \ntrace:\ntui.composer_popup_sync.plan=headless\ntui.composer_popup_sync.mentions_v2=:token=:popup=none->mention_v2:search=true:files=0:catalog=4\ntui.composer_popup_sync.mentions_v2=src:token=src:popup=mention_v2->mention_v2:search=true:files=2:catalog=4\ntui.composer_popup_sync.dismissed=src:file_match=false:mention_match=true:popup=mention_v2->mention_v2\ntui.composer_popup_sync.clear_inactive=mention_v2->none:file_token=false:mention_token=false:mentions_v2_token=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-mentions-v2-catalog-filter-headless",
+      "frame": {
+        "name": "composer-mentions-v2-catalog-filter-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer mentions-v2 catalog filter"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_popup_sync",
+          "composerPopupSync": {
+            "allowLiveFileSearch": false,
+            "actions": [
+              {
+                "kind": "mentions_v2_catalog",
+                "query": "",
+                "searchMode": "all",
+                "candidateCount": 4,
+                "pluginCandidateCount": 2,
+                "skillCandidateCount": 2,
+                "searchTermCount": 9,
+                "catalogSummary": "plugin:GitHub>@github>plugin://github|plugin:MCP Search>@MCP-Search>plugin://mcp-search@market|skill:PR Babysitter>$pr-babysitter>.codex/skills/pr/SKILL.md|skill:Docs Helper>$docs>.codex/skills/docs/SKILL.md"
+              },
+              {
+                "kind": "mentions_v2_filter",
+                "query": " github ",
+                "searchMode": "all",
+                "visibleRowCount": 1,
+                "candidateCount": 1,
+                "pluginCandidateCount": 1,
+                "directMatchCount": 1,
+                "matchIndexCount": 6,
+                "queryTrimmed": true,
+                "displayNameMatched": true,
+                "rowSummary": "plugin:GitHub score=88 direct=true"
+              },
+              {
+                "kind": "mentions_v2_filter",
+                "query": "market",
+                "searchMode": "tools",
+                "visibleRowCount": 1,
+                "candidateCount": 1,
+                "pluginCandidateCount": 1,
+                "searchTermMatchCount": 1,
+                "modeFiltered": true,
+                "searchTermMatched": true,
+                "rowSummary": "plugin:MCP Search score=72 term=market"
+              },
+              {
+                "kind": "mentions_v2_filter",
+                "query": "src",
+                "searchMode": "files",
+                "visibleRowCount": 2,
+                "candidateCount": 2,
+                "fileCandidateCount": 2,
+                "directMatchCount": 2,
+                "matchIndexCount": 6,
+                "modeFiltered": true,
+                "fileMatchesShown": true,
+                "rowSummary": "file:src/main.rs score=91|directory:src/runtime score=80"
+              },
+              {
+                "kind": "mentions_v2_file_matches",
+                "query": "src",
+                "visibleRowCount": 10,
+                "fileCandidateCount": 12,
+                "fileMatchesShown": true,
+                "fileMatchesTruncated": true,
+                "emptyMessage": "no matches",
+                "rowSummary": "file:src/main.rs|directory:src/runtime|file:src/tui.rs"
+              },
+              {
+                "kind": "mentions_v2_file_matches",
+                "query": "old",
+                "staleFileMatchesRejected": true,
+                "emptyMessage": "no matches"
+              },
+              {
+                "kind": "mentions_v2_file_matches",
+                "query": "pending",
+                "waitingForFileSearch": true,
+                "emptyMessage": "loading..."
+              },
+              {
+                "kind": "mentions_v2_selection",
+                "query": "market",
+                "searchMode": "tools",
+                "candidateKind": "plugin",
+                "selectedIndex": 0,
+                "scrollTop": 0,
+                "selectionClamped": true,
+                "selectionSummary": "tool:@MCP-Search:plugin://mcp-search@market"
+              },
+              {
+                "kind": "mentions_v2_filter",
+                "query": "zzz",
+                "searchMode": "all",
+                "emptyMessage": "no matches"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_mentions_v2_catalog_filter_effects_rejected",
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_popup_sync.plan=headless\ntui.composer_popup_sync.mentions_v2_catalog=:mode=all:catalog=4:plugins=2:skills=2:terms=9:rows=plugin:GitHub>@github>plugin://github|plugin:MCP Search>@MCP-Search>plugin://mcp-search@market|skill:PR Babysitter>$pr-babysitter>.codex/skills/pr/SKILL.md|skill:Docs Helper>$docs>.codex/skills/docs/SKILL.md\ntui.composer_popup_sync.mentions_v2_filter= github :mode=all:visible=1:plugins=1:skills=0:files=0:direct=1:terms=0:indices=6:trimmed=true:mode_filtered=false:rows=plugin:GitHub score=88 direct=true\ntui.composer_popup_sync.mentions_v2_filter=market:mode=tools:visible=1:plugins=1:skills=0:files=0:direct=0:terms=1:indices=0:trimmed=false:mode_filtered=true:rows=plugin:MCP Search score=72 term=market\ntui.composer_popup_sync.mentions_v2_filter=src:mode=files:visible=2:plugins=0:skills=0:files=2:direct=2:terms=0:indices=6:trimmed=false:mode_filtered=true:rows=file:src/main.rs score=91|directory:src/runtime score=80\ntui.composer_popup_sync.mentions_v2_files=src:shown=true:stale=false:waiting=false:files=12:visible=10:truncated=true:empty=no matches:rows=file:src/main.rs|directory:src/runtime|file:src/tui.rs\ntui.composer_popup_sync.mentions_v2_files=old:shown=false:stale=true:waiting=false:files=0:visible=0:truncated=false:empty=no matches:rows=\ntui.composer_popup_sync.mentions_v2_files=pending:shown=false:stale=false:waiting=true:files=0:visible=0:truncated=false:empty=loading...:rows=\ntui.composer_popup_sync.mentions_v2_selection=market:mode=tools:index=0:scroll=0:candidate=plugin:selection=tool:@MCP-Search:plugin://mcp-search@market:clamped=true\ntui.composer_popup_sync.mentions_v2_filter=zzz:mode=all:visible=0:plugins=0:skills=0:files=0:direct=0:terms=0:indices=0:trimmed=false:mode_filtered=false:rows=\ntui.composer_popup_sync.failure=live_mentions_v2_catalog_filter_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer mentions-v2 catalog filter\ninput> \ntrace:\ntui.composer_popup_sync.plan=headless\ntui.composer_popup_sync.mentions_v2_catalog=:mode=all:catalog=4:plugins=2:skills=2:terms=9:rows=plugin:GitHub>@github>plugin://github|plugin:MCP Search>@MCP-Search>plugin://mcp-search@market|skill:PR Babysitter>$pr-babysitter>.codex/skills/pr/SKILL.md|skill:Docs Helper>$docs>.codex/skills/docs/SKILL.md\ntui.composer_popup_sync.mentions_v2_filter= github :mode=all:visible=1:plugins=1:skills=0:files=0:direct=1:terms=0:indices=6:trimmed=true:mode_filtered=false:rows=plugin:GitHub score=88 direct=true\ntui.composer_popup_sync.mentions_v2_filter=market:mode=tools:visible=1:plugins=1:skills=0:files=0:direct=0:terms=1:indices=0:trimmed=false:mode_filtered=true:rows=plugin:MCP Search score=72 term=market\ntui.composer_popup_sync.mentions_v2_filter=src:mode=files:visible=2:plugins=0:skills=0:files=2:direct=2:terms=0:indices=6:trimmed=false:mode_filtered=true:rows=file:src/main.rs score=91|directory:src/runtime score=80\ntui.composer_popup_sync.mentions_v2_files=src:shown=true:stale=false:waiting=false:files=12:visible=10:truncated=true:empty=no matches:rows=file:src/main.rs|directory:src/runtime|file:src/tui.rs\ntui.composer_popup_sync.mentions_v2_files=old:shown=false:stale=true:waiting=false:files=0:visible=0:truncated=false:empty=no matches:rows=\ntui.composer_popup_sync.mentions_v2_files=pending:shown=false:stale=false:waiting=true:files=0:visible=0:truncated=false:empty=loading...:rows=\ntui.composer_popup_sync.mentions_v2_selection=market:mode=tools:index=0:scroll=0:candidate=plugin:selection=tool:@MCP-Search:plugin://mcp-search@market:clamped=true\ntui.composer_popup_sync.mentions_v2_filter=zzz:mode=all:visible=0:plugins=0:skills=0:files=0:direct=0:terms=0:indices=0:trimmed=false:mode_filtered=false:rows=\ntui.composer_popup_sync.failure=live_mentions_v2_catalog_filter_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-popup-key-command-dispatch",
       "frame": {
         "name": "composer-popup-key-command-dispatch",

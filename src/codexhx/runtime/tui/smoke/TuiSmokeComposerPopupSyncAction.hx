@@ -13,6 +13,20 @@ typedef TuiSmokeComposerPopupSyncActionFields = {
 	final skillCandidateCount:Int;
 	final pluginCandidateCount:Int;
 	final appCandidateCount:Int;
+	final visibleRowCount:Int;
+	final selectedIndex:Int;
+	final scrollTop:Int;
+	final score:Int;
+	final matchIndexCount:Int;
+	final searchTermCount:Int;
+	final directMatchCount:Int;
+	final searchTermMatchCount:Int;
+	final searchMode:TuiSmokeMentionSearchModeKind;
+	final candidateKind:TuiSmokeMentionCandidateKind;
+	final catalogSummary:String;
+	final rowSummary:String;
+	final selectionSummary:String;
+	final emptyMessage:String;
 	final popupsEnabled:Bool;
 	final slashCommandsEnabled:Bool;
 	final bashMode:Bool;
@@ -36,6 +50,15 @@ typedef TuiSmokeComposerPopupSyncActionFields = {
 	final dismissedMentionTokenCleared:Bool;
 	final popupCleared:Bool;
 	final noLiveFileSearch:Bool;
+	final fileMatchesShown:Bool;
+	final fileMatchesTruncated:Bool;
+	final staleFileMatchesRejected:Bool;
+	final waitingForFileSearch:Bool;
+	final displayNameMatched:Bool;
+	final searchTermMatched:Bool;
+	final modeFiltered:Bool;
+	final selectionClamped:Bool;
+	final queryTrimmed:Bool;
 	final unsupportedRejected:Bool;
 }
 
@@ -53,6 +76,20 @@ class TuiSmokeComposerPopupSyncAction {
 	public final skillCandidateCount:Int;
 	public final pluginCandidateCount:Int;
 	public final appCandidateCount:Int;
+	public final visibleRowCount:Int;
+	public final selectedIndex:Int;
+	public final scrollTop:Int;
+	public final score:Int;
+	public final matchIndexCount:Int;
+	public final searchTermCount:Int;
+	public final directMatchCount:Int;
+	public final searchTermMatchCount:Int;
+	public final searchMode:TuiSmokeMentionSearchModeKind;
+	public final candidateKind:TuiSmokeMentionCandidateKind;
+	public final catalogSummary:String;
+	public final rowSummary:String;
+	public final selectionSummary:String;
+	public final emptyMessage:String;
 	public final popupsEnabled:Bool;
 	public final slashCommandsEnabled:Bool;
 	public final bashMode:Bool;
@@ -76,6 +113,15 @@ class TuiSmokeComposerPopupSyncAction {
 	public final dismissedMentionTokenCleared:Bool;
 	public final popupCleared:Bool;
 	public final noLiveFileSearch:Bool;
+	public final fileMatchesShown:Bool;
+	public final fileMatchesTruncated:Bool;
+	public final staleFileMatchesRejected:Bool;
+	public final waitingForFileSearch:Bool;
+	public final displayNameMatched:Bool;
+	public final searchTermMatched:Bool;
+	public final modeFiltered:Bool;
+	public final selectionClamped:Bool;
+	public final queryTrimmed:Bool;
 	public final unsupportedRejected:Bool;
 
 	public function popupTransitionText():String {

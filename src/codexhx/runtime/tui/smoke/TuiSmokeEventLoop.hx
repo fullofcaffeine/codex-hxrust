@@ -1544,6 +1544,24 @@ class TuiSmokeEventLoop {
 				case TuiSmokeComposerPopupSyncActionKind.MentionsV2Popup:
 					trace.push("tui.composer_popup_sync.mentions_v2=" + action.query + ":token=" + action.token + ":popup=" + action.popupTransitionText()
 						+ ":search=" + action.fileSearchStarted + ":files=" + action.fileCandidateCount + ":catalog=" + action.candidateCount);
+				case TuiSmokeComposerPopupSyncActionKind.MentionsV2Catalog:
+					trace.push("tui.composer_popup_sync.mentions_v2_catalog=" + action.query + ":mode=" + action.searchMode + ":catalog="
+						+ action.candidateCount + ":plugins=" + action.pluginCandidateCount + ":skills=" + action.skillCandidateCount + ":terms="
+						+ action.searchTermCount + ":rows=" + action.catalogSummary);
+				case TuiSmokeComposerPopupSyncActionKind.MentionsV2Filter:
+					trace.push("tui.composer_popup_sync.mentions_v2_filter=" + action.query + ":mode=" + action.searchMode + ":visible="
+						+ action.visibleRowCount + ":plugins=" + action.pluginCandidateCount + ":skills=" + action.skillCandidateCount + ":files="
+						+ action.fileCandidateCount + ":direct=" + action.directMatchCount + ":terms=" + action.searchTermMatchCount + ":indices="
+						+ action.matchIndexCount + ":trimmed=" + action.queryTrimmed + ":mode_filtered=" + action.modeFiltered + ":rows=" + action.rowSummary);
+				case TuiSmokeComposerPopupSyncActionKind.MentionsV2FileMatches:
+					trace.push("tui.composer_popup_sync.mentions_v2_files=" + action.query + ":shown=" + action.fileMatchesShown + ":stale="
+						+ action.staleFileMatchesRejected + ":waiting=" + action.waitingForFileSearch + ":files=" + action.fileCandidateCount + ":visible="
+						+ action.visibleRowCount + ":truncated=" + action.fileMatchesTruncated + ":empty=" + action.emptyMessage + ":rows=" +
+						action.rowSummary);
+				case TuiSmokeComposerPopupSyncActionKind.MentionsV2Selection:
+					trace.push("tui.composer_popup_sync.mentions_v2_selection=" + action.query + ":mode=" + action.searchMode + ":index="
+						+ action.selectedIndex + ":scroll=" + action.scrollTop + ":candidate=" + action.candidateKind + ":selection="
+						+ action.selectionSummary + ":clamped=" + action.selectionClamped);
 				case TuiSmokeComposerPopupSyncActionKind.ClearFileSearch:
 					trace.push("tui.composer_popup_sync.clear_file_search=" + "current=" + action.currentFileQueryTransitionText() + ":sent="
 						+ action.fileSearchCleared + ":popup=" + action.popupTransitionText());
