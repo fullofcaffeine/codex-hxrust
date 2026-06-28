@@ -1656,9 +1656,11 @@ class TuiSmokeEventLoop {
 						+ action.modalOrPopupActive + ":shortcut=" + action.quitShortcutActiveBefore + "->" + action.quitShortcutActiveAfter + ":matched="
 						+ action.quitShortcutKeyMatched + ":exit=" + action.appExitSent);
 				case TuiSmokeChatWidgetInterruptQuitActionKind.InterruptKey:
-					trace.push("tui.chat_widget_interrupt_quit.interrupt_key=" + action.key + ":route=" + action.route + ":pending_steers="
-						+ action.pendingSteersBefore + "->" + action.pendingSteersAfter + ":submit_after=" + action.submitPendingSteersAfterInterrupt
-						+ ":review=" + action.reviewMode + ":task=" + action.taskRunning + ":submitted=" + action.interruptSubmitted);
+					trace.push("tui.chat_widget_interrupt_quit.interrupt_key=" + action.key + ":route=" + action.interruptKeyRoute + ":binding="
+						+ action.interruptBindingMatched + ":pending_steers=" + action.pendingSteersBefore + "->" + action.pendingSteersAfter
+						+ ":submit_after=" + action.submitPendingSteersAfterInterrupt + ":review=" + action.reviewMode + ":task=" + action.taskRunning
+						+ ":warning=" + action.reviewWarningInserted + ":queued_after=" + action.queuedSteerSubmittedAfterInterrupt + ":cancel_edit="
+						+ action.cancelEditCleared + ":redraw=" + action.requestRedraw + ":submitted=" + action.interruptSubmitted);
 				case TuiSmokeChatWidgetInterruptQuitActionKind.ArmQuitShortcut:
 					trace.push("tui.chat_widget_interrupt_quit.arm_shortcut=" + action.key + ":active=" + action.quitShortcutActiveBefore + "->"
 						+ action.quitShortcutActiveAfter + ":hint=" + action.quitShortcutHintShown + ":expired=" + action.quitShortcutExpired + ":redraw="
@@ -1685,7 +1687,8 @@ class TuiSmokeEventLoop {
 						+ action.pendingSteersBefore + "->" + action.pendingSteersAfter + ":redraw=" + action.requestRedraw);
 				case TuiSmokeChatWidgetInterruptQuitActionKind.Failure:
 					if (action.failureCode == "live_chat_widget_quit_shortcut_state_effects_rejected"
-						|| action.failureCode == "live_chat_widget_ctrl_c_precedence_effects_rejected") {
+						|| action.failureCode == "live_chat_widget_ctrl_c_precedence_effects_rejected"
+						|| action.failureCode == "live_chat_widget_interrupt_key_routing_effects_rejected") {
 						trace.push("tui.chat_widget_interrupt_quit.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected
 							+ ":no_terminal=" + action.noLiveTerminal + ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall);
 					} else {

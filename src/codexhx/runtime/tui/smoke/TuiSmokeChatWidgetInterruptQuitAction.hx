@@ -3,6 +3,7 @@ package codexhx.runtime.tui.smoke;
 typedef TuiSmokeChatWidgetInterruptQuitActionFields = {
 	final kind:TuiSmokeChatWidgetInterruptQuitActionKind;
 	final ctrlCPrecedence:TuiSmokeChatWidgetCtrlCPrecedenceKind;
+	final interruptKeyRoute:TuiSmokeChatWidgetInterruptKeyRouteKind;
 	final shortcutTransition:TuiSmokeChatWidgetQuitShortcutTransitionKind;
 	final key:String;
 	final activeShortcutKeyBefore:String;
@@ -28,9 +29,12 @@ typedef TuiSmokeChatWidgetInterruptQuitActionFields = {
 	final quitShortcutExpired:Bool;
 	final interruptSubmitted:Bool;
 	final interruptRestoresPrompt:Bool;
+	final interruptBindingMatched:Bool;
 	final pendingSteersBefore:Int;
 	final pendingSteersAfter:Int;
 	final submitPendingSteersAfterInterrupt:Bool;
+	final queuedSteerSubmittedAfterInterrupt:Bool;
+	final reviewWarningInserted:Bool;
 	final activeGoalPaused:Bool;
 	final streamQueueCleared:Bool;
 	final planStreamQueueCleared:Bool;
@@ -55,6 +59,7 @@ typedef TuiSmokeChatWidgetInterruptQuitActionFields = {
 class TuiSmokeChatWidgetInterruptQuitAction {
 	public final kind:TuiSmokeChatWidgetInterruptQuitActionKind;
 	public final ctrlCPrecedence:TuiSmokeChatWidgetCtrlCPrecedenceKind;
+	public final interruptKeyRoute:TuiSmokeChatWidgetInterruptKeyRouteKind;
 	public final shortcutTransition:TuiSmokeChatWidgetQuitShortcutTransitionKind;
 	public final key:String;
 	public final activeShortcutKeyBefore:String;
@@ -80,9 +85,12 @@ class TuiSmokeChatWidgetInterruptQuitAction {
 	public final quitShortcutExpired:Bool;
 	public final interruptSubmitted:Bool;
 	public final interruptRestoresPrompt:Bool;
+	public final interruptBindingMatched:Bool;
 	public final pendingSteersBefore:Int;
 	public final pendingSteersAfter:Int;
 	public final submitPendingSteersAfterInterrupt:Bool;
+	public final queuedSteerSubmittedAfterInterrupt:Bool;
+	public final reviewWarningInserted:Bool;
 	public final activeGoalPaused:Bool;
 	public final streamQueueCleared:Bool;
 	public final planStreamQueueCleared:Bool;

@@ -13510,6 +13510,7 @@
                 "kind": "interrupt_key",
                 "key": "esc",
                 "route": "pending_steers_interrupt",
+                "interruptBindingMatched": true,
                 "pendingSteersBefore": 2,
                 "pendingSteersAfter": 2,
                 "submitPendingSteersAfterInterrupt": true,
@@ -13544,8 +13545,128 @@
         }
       ],
       "expectedExit": "quit",
-      "expectedTrace": "tui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.interrupt_key=esc:route=pending_steers_interrupt:pending_steers=2->2:submit_after=true:review=false:task=true:submitted=true\ntui.chat_widget_interrupt_quit.cancel_edit=cleared=true:pending_steers=2->0:redraw=true\ntui.chat_widget_interrupt_quit.failure=live_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
-      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupt quit cancel edit no live\ninput> \ntrace:\ntui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.interrupt_key=esc:route=pending_steers_interrupt:pending_steers=2->2:submit_after=true:review=false:task=true:submitted=true\ntui.chat_widget_interrupt_quit.cancel_edit=cleared=true:pending_steers=2->0:redraw=true\ntui.chat_widget_interrupt_quit.failure=live_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+      "expectedTrace": "tui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.interrupt_key=esc:route=pending_steers_interrupt:binding=true:pending_steers=2->2:submit_after=true:review=false:task=true:warning=false:queued_after=false:cancel_edit=false:redraw=false:submitted=true\ntui.chat_widget_interrupt_quit.cancel_edit=cleared=true:pending_steers=2->0:redraw=true\ntui.chat_widget_interrupt_quit.failure=live_effects_rejected:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupt quit cancel edit no live\ninput> \ntrace:\ntui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.interrupt_key=esc:route=pending_steers_interrupt:binding=true:pending_steers=2->2:submit_after=true:review=false:task=true:warning=false:queued_after=false:cancel_edit=false:redraw=false:submitted=true\ntui.chat_widget_interrupt_quit.cancel_edit=cleared=true:pending_steers=2->0:redraw=true\ntui.chat_widget_interrupt_quit.failure=live_effects_rejected:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chat-widget-interrupt-key-routing",
+      "frame": {
+        "name": "chat-widget-interrupt-key-routing",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget interrupt key routing"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupt_quit",
+          "chatWidgetInterruptQuit": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "interrupt_key",
+                "key": "esc",
+                "interruptKeyRoute": "remapped_binding_ignored",
+                "interruptBindingMatched": false,
+                "pendingSteersBefore": 2,
+                "pendingSteersAfter": 2,
+                "submitPendingSteersAfterInterrupt": false,
+                "reviewMode": false,
+                "taskRunning": true,
+                "interruptSubmitted": false
+              },
+              {
+                "kind": "interrupt_key",
+                "key": "f12",
+                "interruptKeyRoute": "pending_steers_interrupt",
+                "interruptBindingMatched": true,
+                "pendingSteersBefore": 2,
+                "pendingSteersAfter": 2,
+                "submitPendingSteersAfterInterrupt": true,
+                "reviewMode": false,
+                "taskRunning": true,
+                "requestRedraw": true,
+                "interruptSubmitted": true
+              },
+              {
+                "kind": "interrupt_key",
+                "key": "f12",
+                "interruptKeyRoute": "review_queued_steers_warning",
+                "interruptBindingMatched": true,
+                "pendingSteersBefore": 1,
+                "pendingSteersAfter": 1,
+                "submitPendingSteersAfterInterrupt": false,
+                "reviewMode": true,
+                "taskRunning": true,
+                "reviewWarningInserted": true,
+                "requestRedraw": true,
+                "interruptSubmitted": false
+              },
+              {
+                "kind": "interrupt_key",
+                "key": "f12",
+                "interruptKeyRoute": "no_pending_steers_passthrough",
+                "interruptBindingMatched": true,
+                "pendingSteersBefore": 0,
+                "pendingSteersAfter": 0,
+                "submitPendingSteersAfterInterrupt": false,
+                "reviewMode": false,
+                "taskRunning": true,
+                "interruptSubmitted": false
+              },
+              {
+                "kind": "interrupt_key",
+                "key": "f12",
+                "interruptKeyRoute": "pending_steers_interrupt",
+                "interruptBindingMatched": true,
+                "pendingSteersBefore": 2,
+                "pendingSteersAfter": 0,
+                "submitPendingSteersAfterInterrupt": false,
+                "queuedSteerSubmittedAfterInterrupt": true,
+                "reviewMode": false,
+                "taskRunning": false,
+                "cancelEditCleared": true,
+                "requestRedraw": true,
+                "interruptSubmitted": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_chat_widget_interrupt_key_routing_effects_rejected",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.interrupt_key=esc:route=remapped_binding_ignored:binding=false:pending_steers=2->2:submit_after=false:review=false:task=true:warning=false:queued_after=false:cancel_edit=false:redraw=false:submitted=false\ntui.chat_widget_interrupt_quit.interrupt_key=f12:route=pending_steers_interrupt:binding=true:pending_steers=2->2:submit_after=true:review=false:task=true:warning=false:queued_after=false:cancel_edit=false:redraw=true:submitted=true\ntui.chat_widget_interrupt_quit.interrupt_key=f12:route=review_queued_steers_warning:binding=true:pending_steers=1->1:submit_after=false:review=true:task=true:warning=true:queued_after=false:cancel_edit=false:redraw=true:submitted=false\ntui.chat_widget_interrupt_quit.interrupt_key=f12:route=no_pending_steers_passthrough:binding=true:pending_steers=0->0:submit_after=false:review=false:task=true:warning=false:queued_after=false:cancel_edit=false:redraw=false:submitted=false\ntui.chat_widget_interrupt_quit.interrupt_key=f12:route=pending_steers_interrupt:binding=true:pending_steers=2->0:submit_after=false:review=false:task=false:warning=false:queued_after=true:cancel_edit=true:redraw=true:submitted=true\ntui.chat_widget_interrupt_quit.failure=live_chat_widget_interrupt_key_routing_effects_rejected:unsupported=true:no_terminal=true:no_render=true:no_model=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupt key routing\ninput> \ntrace:\ntui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.interrupt_key=esc:route=remapped_binding_ignored:binding=false:pending_steers=2->2:submit_after=false:review=false:task=true:warning=false:queued_after=false:cancel_edit=false:redraw=false:submitted=false\ntui.chat_widget_interrupt_quit.interrupt_key=f12:route=pending_steers_interrupt:binding=true:pending_steers=2->2:submit_after=true:review=false:task=true:warning=false:queued_after=false:cancel_edit=false:redraw=true:submitted=true\ntui.chat_widget_interrupt_quit.interrupt_key=f12:route=review_queued_steers_warning:binding=true:pending_steers=1->1:submit_after=false:review=true:task=true:warning=true:queued_after=false:cancel_edit=false:redraw=true:submitted=false\ntui.chat_widget_interrupt_quit.interrupt_key=f12:route=no_pending_steers_passthrough:binding=true:pending_steers=0->0:submit_after=false:review=false:task=true:warning=false:queued_after=false:cancel_edit=false:redraw=false:submitted=false\ntui.chat_widget_interrupt_quit.interrupt_key=f12:route=pending_steers_interrupt:binding=true:pending_steers=2->0:submit_after=false:review=false:task=false:warning=false:queued_after=true:cancel_edit=true:redraw=true:submitted=true\ntui.chat_widget_interrupt_quit.failure=live_chat_widget_interrupt_key_routing_effects_rejected:unsupported=true:no_terminal=true:no_render=true:no_model=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chat-widget-interrupted-restore-default-notice",
