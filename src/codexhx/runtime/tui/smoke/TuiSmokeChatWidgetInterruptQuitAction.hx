@@ -2,7 +2,10 @@ package codexhx.runtime.tui.smoke;
 
 typedef TuiSmokeChatWidgetInterruptQuitActionFields = {
 	final kind:TuiSmokeChatWidgetInterruptQuitActionKind;
+	final shortcutTransition:TuiSmokeChatWidgetQuitShortcutTransitionKind;
 	final key:String;
+	final activeShortcutKeyBefore:String;
+	final activeShortcutKeyAfter:String;
 	final route:String;
 	final exitMode:String;
 	final failureCode:String;
@@ -48,7 +51,10 @@ typedef TuiSmokeChatWidgetInterruptQuitActionFields = {
 @:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetInterruptQuitAction {
 	public final kind:TuiSmokeChatWidgetInterruptQuitActionKind;
+	public final shortcutTransition:TuiSmokeChatWidgetQuitShortcutTransitionKind;
 	public final key:String;
+	public final activeShortcutKeyBefore:String;
+	public final activeShortcutKeyAfter:String;
 	public final route:String;
 	public final exitMode:String;
 	public final failureCode:String;

@@ -3755,7 +3755,10 @@ class TuiSmokeFixtureLoader {
 		for (value in values) {
 			out.push(new TuiSmokeChatWidgetInterruptQuitAction({
 				kind: TuiSmokeChatWidgetInterruptQuitActionKind.fromString(stringField(value, "kind", "")),
+				shortcutTransition: TuiSmokeChatWidgetQuitShortcutTransitionKind.fromString(optionalStringField(value, "shortcutTransition", "unknown")),
 				key: optionalStringField(value, "key", ""),
+				activeShortcutKeyBefore: optionalStringField(value, "activeShortcutKeyBefore", ""),
+				activeShortcutKeyAfter: optionalStringField(value, "activeShortcutKeyAfter", ""),
 				route: optionalStringField(value, "route", ""),
 				exitMode: optionalStringField(value, "exitMode", ""),
 				failureCode: optionalStringField(value, "failureCode", ""),

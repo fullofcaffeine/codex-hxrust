@@ -1656,6 +1656,12 @@ class TuiSmokeEventLoop {
 					trace.push("tui.chat_widget_interrupt_quit.arm_shortcut=" + action.key + ":active=" + action.quitShortcutActiveBefore + "->"
 						+ action.quitShortcutActiveAfter + ":hint=" + action.quitShortcutHintShown + ":expired=" + action.quitShortcutExpired + ":redraw="
 						+ action.requestRedraw);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.ShortcutState:
+					trace.push("tui.chat_widget_interrupt_quit.shortcut_state=" + action.shortcutTransition + ":pressed=" + action.key + ":key="
+						+ action.activeShortcutKeyBefore + "->" + action.activeShortcutKeyAfter + ":active=" + action.quitShortcutActiveBefore + "->"
+						+ action.quitShortcutActiveAfter + ":matched=" + action.quitShortcutKeyMatched + ":expired=" + action.quitShortcutExpired + ":hint="
+						+ action.quitShortcutHintShown + ":cleared=" + action.quitShortcutHintCleared + ":redraw=" + action.requestRedraw + ":exit="
+						+ action.appExitSent);
 				case TuiSmokeChatWidgetInterruptQuitActionKind.RequestQuit:
 					trace.push("tui.chat_widget_interrupt_quit.request_quit=" + action.exitMode + ":shortcut=" + action.quitShortcutActiveBefore + "->"
 						+ action.quitShortcutActiveAfter + ":cleared=" + action.quitShortcutHintCleared + ":app_exit=" + action.appExitSent);
@@ -1671,7 +1677,12 @@ class TuiSmokeEventLoop {
 					trace.push("tui.chat_widget_interrupt_quit.cancel_edit=" + "cleared=" + action.cancelEditCleared + ":pending_steers="
 						+ action.pendingSteersBefore + "->" + action.pendingSteersAfter + ":redraw=" + action.requestRedraw);
 				case TuiSmokeChatWidgetInterruptQuitActionKind.Failure:
-					trace.push("tui.chat_widget_interrupt_quit.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected);
+					if (action.failureCode == "live_chat_widget_quit_shortcut_state_effects_rejected") {
+						trace.push("tui.chat_widget_interrupt_quit.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected
+							+ ":no_terminal=" + action.noLiveTerminal + ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall);
+					} else {
+						trace.push("tui.chat_widget_interrupt_quit.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected);
+					}
 				case _:
 					trace.push("tui.chat_widget_interrupt_quit.unknown");
 					return false;

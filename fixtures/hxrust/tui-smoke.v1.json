@@ -13028,6 +13028,173 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupt quit double press\ninput> \ntrace:\ntui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.arm_shortcut=ctrl-c:active=false->true:hint=true:expired=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c=quit_shortcut_second_press:double_press=true:bottom_pane=false:task=false:work=false:shortcut=true->false:hint=false:interrupt=false:exit=true\ntui.chat_widget_interrupt_quit.request_quit=shutdown_first:shortcut=true->false:cleared=true:app_exit=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chat-widget-quit-shortcut-state-machine",
+      "frame": {
+        "name": "chat-widget-quit-shortcut-state-machine",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget quit shortcut state machine"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupt_quit",
+          "chatWidgetInterruptQuit": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "shortcut_state",
+                "shortcutTransition": "arm",
+                "key": "ctrl-c",
+                "activeShortcutKeyBefore": "none",
+                "activeShortcutKeyAfter": "ctrl-c",
+                "quitShortcutActiveBefore": false,
+                "quitShortcutActiveAfter": true,
+                "quitShortcutKeyMatched": false,
+                "quitShortcutExpired": false,
+                "quitShortcutHintShown": true,
+                "quitShortcutHintCleared": false,
+                "requestRedraw": true,
+                "appExitSent": false
+              },
+              {
+                "kind": "shortcut_state",
+                "shortcutTransition": "replace",
+                "key": "ctrl-d",
+                "activeShortcutKeyBefore": "ctrl-c",
+                "activeShortcutKeyAfter": "ctrl-d",
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": true,
+                "quitShortcutKeyMatched": false,
+                "quitShortcutExpired": false,
+                "quitShortcutHintShown": true,
+                "quitShortcutHintCleared": false,
+                "requestRedraw": true,
+                "appExitSent": false
+              },
+              {
+                "kind": "shortcut_state",
+                "shortcutTransition": "match",
+                "key": "ctrl-d",
+                "activeShortcutKeyBefore": "ctrl-d",
+                "activeShortcutKeyAfter": "none",
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutKeyMatched": true,
+                "quitShortcutExpired": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": true,
+                "requestRedraw": true,
+                "appExitSent": true
+              },
+              {
+                "kind": "shortcut_state",
+                "shortcutTransition": "clear_unrelated_press",
+                "key": "char-x",
+                "activeShortcutKeyBefore": "ctrl-c",
+                "activeShortcutKeyAfter": "none",
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutKeyMatched": false,
+                "quitShortcutExpired": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": true,
+                "requestRedraw": true,
+                "appExitSent": false
+              },
+              {
+                "kind": "shortcut_state",
+                "shortcutTransition": "clear_reasoning_shortcut",
+                "key": "reasoning-down",
+                "activeShortcutKeyBefore": "ctrl-c",
+                "activeShortcutKeyAfter": "none",
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutKeyMatched": false,
+                "quitShortcutExpired": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": true,
+                "requestRedraw": true,
+                "appExitSent": false
+              },
+              {
+                "kind": "shortcut_state",
+                "shortcutTransition": "clear_copy_shortcut",
+                "key": "copy-last-response",
+                "activeShortcutKeyBefore": "ctrl-d",
+                "activeShortcutKeyAfter": "none",
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutKeyMatched": false,
+                "quitShortcutExpired": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": true,
+                "requestRedraw": true,
+                "appExitSent": false
+              },
+              {
+                "kind": "shortcut_state",
+                "shortcutTransition": "expired",
+                "key": "ctrl-c",
+                "activeShortcutKeyBefore": "ctrl-c",
+                "activeShortcutKeyAfter": "ctrl-c",
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutKeyMatched": false,
+                "quitShortcutExpired": true,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": false,
+                "requestRedraw": true,
+                "appExitSent": false
+              },
+              {
+                "kind": "request_quit",
+                "exitMode": "shutdown_first",
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutHintCleared": true,
+                "appExitSent": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_chat_widget_quit_shortcut_state_effects_rejected",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.shortcut_state=arm:pressed=ctrl-c:key=none->ctrl-c:active=false->true:matched=false:expired=false:hint=true:cleared=false:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=replace:pressed=ctrl-d:key=ctrl-c->ctrl-d:active=true->true:matched=false:expired=false:hint=true:cleared=false:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=match:pressed=ctrl-d:key=ctrl-d->none:active=true->false:matched=true:expired=false:hint=false:cleared=true:redraw=true:exit=true\ntui.chat_widget_interrupt_quit.shortcut_state=clear_unrelated_press:pressed=char-x:key=ctrl-c->none:active=true->false:matched=false:expired=false:hint=false:cleared=true:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=clear_reasoning_shortcut:pressed=reasoning-down:key=ctrl-c->none:active=true->false:matched=false:expired=false:hint=false:cleared=true:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=clear_copy_shortcut:pressed=copy-last-response:key=ctrl-d->none:active=true->false:matched=false:expired=false:hint=false:cleared=true:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=expired:pressed=ctrl-c:key=ctrl-c->ctrl-c:active=true->false:matched=false:expired=true:hint=false:cleared=false:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.request_quit=shutdown_first:shortcut=true->false:cleared=true:app_exit=true\ntui.chat_widget_interrupt_quit.failure=live_chat_widget_quit_shortcut_state_effects_rejected:unsupported=true:no_terminal=true:no_render=true:no_model=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget quit shortcut state machine\ninput> \ntrace:\ntui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.shortcut_state=arm:pressed=ctrl-c:key=none->ctrl-c:active=false->true:matched=false:expired=false:hint=true:cleared=false:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=replace:pressed=ctrl-d:key=ctrl-c->ctrl-d:active=true->true:matched=false:expired=false:hint=true:cleared=false:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=match:pressed=ctrl-d:key=ctrl-d->none:active=true->false:matched=true:expired=false:hint=false:cleared=true:redraw=true:exit=true\ntui.chat_widget_interrupt_quit.shortcut_state=clear_unrelated_press:pressed=char-x:key=ctrl-c->none:active=true->false:matched=false:expired=false:hint=false:cleared=true:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=clear_reasoning_shortcut:pressed=reasoning-down:key=ctrl-c->none:active=true->false:matched=false:expired=false:hint=false:cleared=true:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=clear_copy_shortcut:pressed=copy-last-response:key=ctrl-d->none:active=true->false:matched=false:expired=false:hint=false:cleared=true:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.shortcut_state=expired:pressed=ctrl-c:key=ctrl-c->ctrl-c:active=true->false:matched=false:expired=true:hint=false:cleared=false:redraw=true:exit=false\ntui.chat_widget_interrupt_quit.request_quit=shutdown_first:shortcut=true->false:cleared=true:app_exit=true\ntui.chat_widget_interrupt_quit.failure=live_chat_widget_quit_shortcut_state_effects_rejected:unsupported=true:no_terminal=true:no_render=true:no_model=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chat-widget-interrupt-quit-shutdown-first",
       "frame": {
         "name": "chat-widget-interrupt-quit-shutdown-first",
