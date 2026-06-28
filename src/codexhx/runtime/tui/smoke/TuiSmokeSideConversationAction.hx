@@ -6,6 +6,7 @@ typedef TuiSmokeSideConversationActionFields = {
 	final replayRoute:TuiSmokeThreadSnapshotReplayRoute;
 	final activeEventKind:TuiSmokeActiveThreadEventKind;
 	final shutdownRoute:TuiSmokeActiveThreadShutdownRoute;
+	final skillsListRoute:TuiSmokeSkillsListResponseRoute;
 	final parentThreadId:String;
 	final childThreadId:String;
 	final targetThreadId:String;
@@ -14,6 +15,7 @@ typedef TuiSmokeSideConversationActionFields = {
 	final primaryThreadId:String;
 	final closedThreadId:String;
 	final pendingShutdownThreadId:String;
+	final cwd:String;
 	final status:String;
 	final statusChange:String;
 	final label:String;
@@ -29,6 +31,11 @@ typedef TuiSmokeSideConversationActionFields = {
 	final replayEventCount:Int;
 	final replayNoticeCount:Int;
 	final replaySuppressedNoticeCount:Int;
+	final skillCount:Int;
+	final cwdSkillErrorCount:Int;
+	final newlyActiveWarningCount:Int;
+	final cachedWarningCount:Int;
+	final emittedWarningEventCount:Int;
 	final remoteImageCount:Int;
 	final localImageCount:Int;
 	final mentionBindingCount:Int;
@@ -117,6 +124,14 @@ typedef TuiSmokeSideConversationActionFields = {
 	final pendingShutdownCleared:Bool;
 	final ordinaryEventForwarded:Bool;
 	final appExitRequested:Bool;
+	final cwdScopedErrors:Bool;
+	final newlyActiveFiltered:Bool;
+	final duplicateWarningsSuppressed:Bool;
+	final warningStateCleared:Bool;
+	final warningAppEventEmitted:Bool;
+	final responseForwardedToChatWidget:Bool;
+	final skillsAppliedToChatWidget:Bool;
+	final filesystemReadAvoided:Bool;
 	final requestRedraw:Bool;
 	final noLiveTerminal:Bool;
 	final noRatatuiRender:Bool;
@@ -136,6 +151,8 @@ class TuiSmokeSideConversationAction {
 	public final activeEventKind:TuiSmokeActiveThreadEventKind;
 	@:recordDefault(TuiSmokeActiveThreadShutdownRoute.Unknown)
 	public final shutdownRoute:TuiSmokeActiveThreadShutdownRoute;
+	@:recordDefault(TuiSmokeSkillsListResponseRoute.Unknown)
+	public final skillsListRoute:TuiSmokeSkillsListResponseRoute;
 	public final parentThreadId:String;
 	public final childThreadId:String;
 	public final targetThreadId:String;
@@ -144,6 +161,7 @@ class TuiSmokeSideConversationAction {
 	public final primaryThreadId:String;
 	public final closedThreadId:String;
 	public final pendingShutdownThreadId:String;
+	public final cwd:String;
 	public final status:String;
 	public final statusChange:String;
 	public final label:String;
@@ -159,6 +177,11 @@ class TuiSmokeSideConversationAction {
 	public final replayEventCount:Int;
 	public final replayNoticeCount:Int;
 	public final replaySuppressedNoticeCount:Int;
+	public final skillCount:Int;
+	public final cwdSkillErrorCount:Int;
+	public final newlyActiveWarningCount:Int;
+	public final cachedWarningCount:Int;
+	public final emittedWarningEventCount:Int;
 	public final remoteImageCount:Int;
 	public final localImageCount:Int;
 	public final mentionBindingCount:Int;
@@ -247,6 +270,14 @@ class TuiSmokeSideConversationAction {
 	public final pendingShutdownCleared:Bool;
 	public final ordinaryEventForwarded:Bool;
 	public final appExitRequested:Bool;
+	public final cwdScopedErrors:Bool;
+	public final newlyActiveFiltered:Bool;
+	public final duplicateWarningsSuppressed:Bool;
+	public final warningStateCleared:Bool;
+	public final warningAppEventEmitted:Bool;
+	public final responseForwardedToChatWidget:Bool;
+	public final skillsAppliedToChatWidget:Bool;
+	public final filesystemReadAvoided:Bool;
 	public final requestRedraw:Bool;
 	public final noLiveTerminal:Bool;
 	public final noRatatuiRender:Bool;

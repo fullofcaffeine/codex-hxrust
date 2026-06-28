@@ -2584,6 +2584,14 @@ class TuiSmokeEventLoop {
 						+ ":pending_clear=" + action.pendingShutdownCleared + ":forwarded=" + action.ordinaryEventForwarded + ":exit="
 						+ action.appExitRequested + ":receiver_cleanup=" + action.activeReceiverDrained + "/" + action.activeReceiverRestored
 						+ ":active_cleared=" + action.activeThreadCleared);
+				case TuiSmokeSideConversationActionKind.SkillsListResponseRouting:
+					trace.push("tui.side_conversation.skills_list_response=" + "route=" + action.skillsListRoute + ":cwd=" + action.cwd + ":skills="
+						+ action.skillCount + ":errors=" + action.cwdSkillErrorCount + ":new=" + action.newlyActiveWarningCount + ":cached="
+						+ action.cachedWarningCount + ":emitted=" + action.emittedWarningEventCount + ":cwd_scoped=" + action.cwdScopedErrors + ":filtered="
+						+ action.newlyActiveFiltered + ":duplicate=" + action.duplicateWarningsSuppressed + ":state_cleared=" + action.warningStateCleared
+						+ ":warning_event=" + action.warningAppEventEmitted + ":forwarded=" + action.responseForwardedToChatWidget + ":applied="
+						+ action.skillsAppliedToChatWidget + ":no_live=" + action.noLiveTerminal + ":no_render=" + action.noRatatuiRender + ":no_model="
+						+ action.noModelCall + ":no_fs=" + action.filesystemReadAvoided + ":unsupported=" + action.unsupportedRejected);
 				case TuiSmokeSideConversationActionKind.DiscardSide:
 					trace.push("tui.side_conversation.discard=" + "child=" + action.childThreadId + ":interrupt=" + action.interruptSubmitted + ":startup="
 						+ action.startupInterruptUsed + ":turn=" + action.turnInterruptUsed + ":unsubscribe=" + action.threadUnsubscribed + ":local="

@@ -14933,6 +14933,162 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> active thread shutdown routing\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.active_thread_shutdown=route=non_primary_failover:active=side-1:primary=main:closed=side-1:pending=:shutdown=true:non_primary=true:eligible=true:selected_primary=true:discarded_side=true:info=true:error=false:pending_match=false:pending_clear=false:forwarded=false:exit=false:receiver_cleanup=true/false:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=pending_exit_completion:active=side-1:primary=main:closed=side-1:pending=side-1:shutdown=true:non_primary=true:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=true:pending_clear=true:forwarded=true:exit=true:receiver_cleanup=true/false:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=primary_closed_no_failover:active=main:primary=main:closed=main:pending=:shutdown=true:non_primary=false:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=false:pending_clear=false:forwarded=true:exit=false:receiver_cleanup=false/true:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=stale_shutdown_ignored:active=main:primary=main:closed=side-2:pending=side-1:shutdown=true:non_primary=false:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=false:pending_clear=false:forwarded=true:exit=false:receiver_cleanup=false/true:active_cleared=false\ntui.side_conversation.active_thread_shutdown=route=non_shutdown_pass_through:active=side-1:primary=main:closed=:pending=:shutdown=false:non_primary=true:eligible=false:selected_primary=false:discarded_side=false:info=false:error=false:pending_match=false:pending_clear=false:forwarded=true:exit=false:receiver_cleanup=false/true:active_cleared=false\ntui.side_conversation.failure=live_active_thread_shutdown_routing_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "skills-list-response-routing",
+      "frame": {
+        "name": "skills-list-response-routing",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "skills list response routing"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "skills_list_response_routing",
+                "skillsListRoute": "cwd_new_warnings",
+                "cwd": "/workspace/main",
+                "skillCount": 3,
+                "cwdSkillErrorCount": 2,
+                "newlyActiveWarningCount": 2,
+                "cachedWarningCount": 0,
+                "emittedWarningEventCount": 3,
+                "cwdScopedErrors": true,
+                "newlyActiveFiltered": true,
+                "duplicateWarningsSuppressed": false,
+                "warningStateCleared": false,
+                "warningAppEventEmitted": true,
+                "responseForwardedToChatWidget": true,
+                "skillsAppliedToChatWidget": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "filesystemReadAvoided": true,
+                "unsupportedRejected": false
+              },
+              {
+                "kind": "skills_list_response_routing",
+                "skillsListRoute": "duplicate_suppressed",
+                "cwd": "/workspace/main",
+                "skillCount": 3,
+                "cwdSkillErrorCount": 2,
+                "newlyActiveWarningCount": 0,
+                "cachedWarningCount": 2,
+                "emittedWarningEventCount": 0,
+                "cwdScopedErrors": true,
+                "newlyActiveFiltered": true,
+                "duplicateWarningsSuppressed": true,
+                "warningStateCleared": false,
+                "warningAppEventEmitted": false,
+                "responseForwardedToChatWidget": true,
+                "skillsAppliedToChatWidget": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "filesystemReadAvoided": true,
+                "unsupportedRejected": false
+              },
+              {
+                "kind": "skills_list_response_routing",
+                "skillsListRoute": "cwd_missing_no_errors",
+                "cwd": "/workspace/missing",
+                "skillCount": 0,
+                "cwdSkillErrorCount": 0,
+                "newlyActiveWarningCount": 0,
+                "cachedWarningCount": 0,
+                "emittedWarningEventCount": 0,
+                "cwdScopedErrors": true,
+                "newlyActiveFiltered": true,
+                "duplicateWarningsSuppressed": false,
+                "warningStateCleared": false,
+                "warningAppEventEmitted": false,
+                "responseForwardedToChatWidget": true,
+                "skillsAppliedToChatWidget": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "filesystemReadAvoided": true,
+                "unsupportedRejected": false
+              },
+              {
+                "kind": "skills_list_response_routing",
+                "skillsListRoute": "cleared_reemitted",
+                "cwd": "/workspace/main",
+                "skillCount": 3,
+                "cwdSkillErrorCount": 1,
+                "newlyActiveWarningCount": 1,
+                "cachedWarningCount": 0,
+                "emittedWarningEventCount": 2,
+                "cwdScopedErrors": true,
+                "newlyActiveFiltered": true,
+                "duplicateWarningsSuppressed": false,
+                "warningStateCleared": true,
+                "warningAppEventEmitted": true,
+                "responseForwardedToChatWidget": true,
+                "skillsAppliedToChatWidget": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "filesystemReadAvoided": true,
+                "unsupportedRejected": false
+              },
+              {
+                "kind": "skills_list_response_routing",
+                "skillsListRoute": "live_boundary_rejected",
+                "cwd": "/workspace/main",
+                "skillCount": 0,
+                "cwdSkillErrorCount": 0,
+                "newlyActiveWarningCount": 0,
+                "cachedWarningCount": 0,
+                "emittedWarningEventCount": 0,
+                "cwdScopedErrors": false,
+                "newlyActiveFiltered": false,
+                "duplicateWarningsSuppressed": false,
+                "warningStateCleared": false,
+                "warningAppEventEmitted": false,
+                "responseForwardedToChatWidget": false,
+                "skillsAppliedToChatWidget": false,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "filesystemReadAvoided": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.skills_list_response=route=cwd_new_warnings:cwd=/workspace/main:skills=3:errors=2:new=2:cached=0:emitted=3:cwd_scoped=true:filtered=true:duplicate=false:state_cleared=false:warning_event=true:forwarded=true:applied=true:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=false\ntui.side_conversation.skills_list_response=route=duplicate_suppressed:cwd=/workspace/main:skills=3:errors=2:new=0:cached=2:emitted=0:cwd_scoped=true:filtered=true:duplicate=true:state_cleared=false:warning_event=false:forwarded=true:applied=true:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=false\ntui.side_conversation.skills_list_response=route=cwd_missing_no_errors:cwd=/workspace/missing:skills=0:errors=0:new=0:cached=0:emitted=0:cwd_scoped=true:filtered=true:duplicate=false:state_cleared=false:warning_event=false:forwarded=true:applied=true:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=false\ntui.side_conversation.skills_list_response=route=cleared_reemitted:cwd=/workspace/main:skills=3:errors=1:new=1:cached=0:emitted=2:cwd_scoped=true:filtered=true:duplicate=false:state_cleared=true:warning_event=true:forwarded=true:applied=true:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=false\ntui.side_conversation.skills_list_response=route=live_boundary_rejected:cwd=/workspace/main:skills=0:errors=0:new=0:cached=0:emitted=0:cwd_scoped=false:filtered=false:duplicate=false:state_cleared=false:warning_event=false:forwarded=false:applied=false:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> skills list response routing\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.skills_list_response=route=cwd_new_warnings:cwd=/workspace/main:skills=3:errors=2:new=2:cached=0:emitted=3:cwd_scoped=true:filtered=true:duplicate=false:state_cleared=false:warning_event=true:forwarded=true:applied=true:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=false\ntui.side_conversation.skills_list_response=route=duplicate_suppressed:cwd=/workspace/main:skills=3:errors=2:new=0:cached=2:emitted=0:cwd_scoped=true:filtered=true:duplicate=true:state_cleared=false:warning_event=false:forwarded=true:applied=true:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=false\ntui.side_conversation.skills_list_response=route=cwd_missing_no_errors:cwd=/workspace/missing:skills=0:errors=0:new=0:cached=0:emitted=0:cwd_scoped=true:filtered=true:duplicate=false:state_cleared=false:warning_event=false:forwarded=true:applied=true:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=false\ntui.side_conversation.skills_list_response=route=cleared_reemitted:cwd=/workspace/main:skills=3:errors=1:new=1:cached=0:emitted=2:cwd_scoped=true:filtered=true:duplicate=false:state_cleared=true:warning_event=true:forwarded=true:applied=true:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=false\ntui.side_conversation.skills_list_response=route=live_boundary_rejected:cwd=/workspace/main:skills=0:errors=0:new=0:cached=0:emitted=0:cwd_scoped=false:filtered=false:duplicate=false:state_cleared=false:warning_event=false:forwarded=false:applied=false:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "side-conversation-start-block-restores-composer",
       "frame": {
         "name": "side-conversation-start-block-restores-composer",
