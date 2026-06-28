@@ -8320,6 +8320,118 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer history navigation persistent remap\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.history=up-local-attachments:direction=older:eligible=true:handled=true:applied=true:text=second:cursor=0->6:history_cursor=1:boundary=true:match_last=false:lookup=false:response=false:offset=0:log=0:stale=false:cache_hit=false:cache_insert=false:duplicate_skip=false:reset=false:vim=false:operator=false:remapped=false:fallback_suppressed=false:elements=0->1:local=0->1:remote=0->1:pending=0->1\ntui.composer_editing.history=up-first:direction=older:eligible=true:handled=true:applied=true:text=first:cursor=6->5:history_cursor=0:boundary=true:match_last=true:lookup=false:response=false:offset=0:log=0:stale=false:cache_hit=false:cache_insert=false:duplicate_skip=false:reset=false:vim=false:operator=false:remapped=false:fallback_suppressed=false:elements=1->0:local=1->0:remote=1->0:pending=1->0\ntui.composer_editing.history=down-second:direction=newer:eligible=true:handled=true:applied=true:text=second:cursor=5->6:history_cursor=1:boundary=true:match_last=true:lookup=false:response=false:offset=0:log=0:stale=false:cache_hit=false:cache_insert=false:duplicate_skip=false:reset=false:vim=false:operator=false:remapped=false:fallback_suppressed=false:elements=0->1:local=0->1:remote=0->1:pending=0->1\ntui.composer_editing.history=down-clear:direction=newer:eligible=true:handled=true:applied=true:text=:cursor=6->0:history_cursor=-1:boundary=true:match_last=true:lookup=false:response=false:offset=0:log=0:stale=false:cache_hit=false:cache_insert=false:duplicate_skip=false:reset=true:vim=false:operator=false:remapped=false:fallback_suppressed=false:elements=1->0:local=1->0:remote=1->0:pending=1->0\ntui.composer_editing.history=up-persistent-request:direction=older:eligible=true:handled=true:applied=false:text=:cursor=0->0:history_cursor=2:boundary=true:match_last=false:lookup=true:response=false:offset=2:log=7:stale=false:cache_hit=false:cache_insert=false:duplicate_skip=false:reset=false:vim=false:operator=false:remapped=false:fallback_suppressed=false:elements=0->0:local=0->0:remote=0->0:pending=0->0\ntui.composer_editing.history=response-stale:direction=older:eligible=false:handled=false:applied=false:text=:cursor=0->0:history_cursor=2:boundary=false:match_last=false:lookup=false:response=true:offset=2:log=99:stale=true:cache_hit=false:cache_insert=false:duplicate_skip=false:reset=false:vim=false:operator=false:remapped=false:fallback_suppressed=false:elements=0->0:local=0->0:remote=0->0:pending=0->0\ntui.composer_editing.history=response-found:direction=older:eligible=false:handled=true:applied=true:text=persisted command:cursor=0->17:history_cursor=2:boundary=false:match_last=false:lookup=false:response=true:offset=2:log=7:stale=false:cache_hit=false:cache_insert=true:duplicate_skip=false:reset=false:vim=false:operator=false:remapped=false:fallback_suppressed=false:elements=0->0:local=0->0:remote=0->0:pending=0->0\ntui.composer_editing.history=up-cache:direction=older:eligible=true:handled=true:applied=true:text=cached oldest:cursor=17->13:history_cursor=0:boundary=true:match_last=true:lookup=false:response=false:offset=0:log=7:stale=false:cache_hit=true:cache_insert=false:duplicate_skip=false:reset=false:vim=false:operator=false:remapped=false:fallback_suppressed=false:elements=0->0:local=0->0:remote=0->0:pending=0->0\ntui.composer_editing.history=vim-k-remapped:direction=older:eligible=false:handled=false:applied=false:text=:cursor=0->0:history_cursor=-1:boundary=true:match_last=false:lookup=false:response=false:offset=0:log=0:stale=false:cache_hit=false:cache_insert=false:duplicate_skip=false:reset=false:vim=true:operator=false:remapped=true:fallback_suppressed=true:elements=0->0:local=0->0:remote=0->0:pending=0->0\ntui.composer_editing.history=vim-f2-remap:direction=older:eligible=true:handled=true:applied=true:text=first:cursor=0->4:history_cursor=0:boundary=true:match_last=false:lookup=false:response=false:offset=0:log=0:stale=false:cache_hit=false:cache_insert=false:duplicate_skip=false:reset=false:vim=true:operator=false:remapped=true:fallback_suppressed=false:elements=0->0:local=0->0:remote=0->0:pending=0->0\ntui.composer_editing.history=vim-operator-k:direction=older:eligible=false:handled=false:applied=false:text=:cursor=4->4:history_cursor=0:boundary=false:match_last=false:lookup=false:response=false:offset=0:log=0:stale=false:cache_hit=false:cache_insert=false:duplicate_skip=false:reset=false:vim=true:operator=true:remapped=false:fallback_suppressed=false:elements=0->0:local=0->0:remote=0->0:pending=0->0\ntui.composer_editing.failure=live_history_navigation_effects_rejected:unsupported=true:no_live=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-ctrl-c-clear-history-capture",
+      "frame": {
+        "name": "composer-ctrl-c-clear-history-capture",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer ctrl-c clear history capture"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_editing",
+          "composerEditing": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "ctrl_c_clear",
+                "keyName": "empty",
+                "inputText": "",
+                "outputText": "",
+                "composerCleared": false,
+                "emptyNoop": true,
+                "historyRecorded": false,
+                "appHistoryAppended": false,
+                "bottomPaneConsumed": false,
+                "chatWidgetConsumed": false,
+                "quitHintShown": false,
+                "historySearchCancelled": false,
+                "interruptSuppressed": false,
+                "quitSuppressed": false,
+                "needsRedraw": false
+              },
+              {
+                "kind": "ctrl_c_clear",
+                "keyName": "history-search",
+                "inputText": "draft",
+                "outputText": "draft",
+                "composerCleared": false,
+                "emptyNoop": false,
+                "historyRecorded": false,
+                "appHistoryAppended": false,
+                "bottomPaneConsumed": true,
+                "chatWidgetConsumed": true,
+                "quitHintShown": false,
+                "historySearchCancelled": true,
+                "interruptSuppressed": true,
+                "quitSuppressed": true,
+                "needsRedraw": true
+              },
+              {
+                "kind": "ctrl_c_clear",
+                "keyName": "rich-draft",
+                "inputText": "[Image #2] draft [Pasted Content 64 chars]",
+                "outputText": "",
+                "composerCleared": true,
+                "emptyNoop": false,
+                "historyRecorded": true,
+                "appHistoryAppended": true,
+                "elementBefore": 2,
+                "elementAfter": 0,
+                "localImageBefore": 1,
+                "localImageAfter": 0,
+                "remoteImageBefore": 1,
+                "remoteImageAfter": 0,
+                "pendingPasteBefore": 1,
+                "pendingPasteAfter": 0,
+                "mentionBindingBefore": 1,
+                "mentionBindingAfter": 0,
+                "navigationReset": true,
+                "bottomPaneConsumed": true,
+                "chatWidgetConsumed": true,
+                "quitHintShown": true,
+                "historySearchCancelled": false,
+                "interruptSuppressed": true,
+                "quitSuppressed": true,
+                "needsRedraw": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_ctrl_c_clear_effects_rejected",
+                "unsupportedRejected": true,
+                "noLiveInput": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_editing.plan=headless\ntui.composer_editing.ctrl_c_clear=empty:input=:output=:cleared=false:noop=true:history=false:append=false:elements=0->0:local=0->0:remote=0->0:pending=0->0:mentions=0->0:nav_reset=false:bottom_consumed=false:widget_consumed=false:quit_hint=false:history_search_cancelled=false:interrupt_suppressed=false:quit_suppressed=false:redraw=false\ntui.composer_editing.ctrl_c_clear=history-search:input=draft:output=draft:cleared=false:noop=false:history=false:append=false:elements=0->0:local=0->0:remote=0->0:pending=0->0:mentions=0->0:nav_reset=false:bottom_consumed=true:widget_consumed=true:quit_hint=false:history_search_cancelled=true:interrupt_suppressed=true:quit_suppressed=true:redraw=true\ntui.composer_editing.ctrl_c_clear=rich-draft:input=[Image #2] draft [Pasted Content 64 chars]:output=:cleared=true:noop=false:history=true:append=true:elements=2->0:local=1->0:remote=1->0:pending=1->0:mentions=1->0:nav_reset=true:bottom_consumed=true:widget_consumed=true:quit_hint=true:history_search_cancelled=false:interrupt_suppressed=true:quit_suppressed=true:redraw=true\ntui.composer_editing.failure=live_ctrl_c_clear_effects_rejected:unsupported=true:no_live=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer ctrl-c clear history capture\ninput> \ntrace:\ntui.composer_editing.plan=headless\ntui.composer_editing.ctrl_c_clear=empty:input=:output=:cleared=false:noop=true:history=false:append=false:elements=0->0:local=0->0:remote=0->0:pending=0->0:mentions=0->0:nav_reset=false:bottom_consumed=false:widget_consumed=false:quit_hint=false:history_search_cancelled=false:interrupt_suppressed=false:quit_suppressed=false:redraw=false\ntui.composer_editing.ctrl_c_clear=history-search:input=draft:output=draft:cleared=false:noop=false:history=false:append=false:elements=0->0:local=0->0:remote=0->0:pending=0->0:mentions=0->0:nav_reset=false:bottom_consumed=true:widget_consumed=true:quit_hint=false:history_search_cancelled=true:interrupt_suppressed=true:quit_suppressed=true:redraw=true\ntui.composer_editing.ctrl_c_clear=rich-draft:input=[Image #2] draft [Pasted Content 64 chars]:output=:cleared=true:noop=false:history=true:append=true:elements=2->0:local=1->0:remote=1->0:pending=1->0:mentions=1->0:nav_reset=true:bottom_consumed=true:widget_consumed=true:quit_hint=true:history_search_cancelled=false:interrupt_suppressed=true:quit_suppressed=true:redraw=true\ntui.composer_editing.failure=live_ctrl_c_clear_effects_rejected:unsupported=true:no_live=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-textarea-input-routing-headless",
       "frame": {
         "name": "composer-textarea-input-routing-headless",

@@ -11384,6 +11384,15 @@ class TuiSmokeEventLoop {
 						trace.push("tui.composer_editing.history=" + action.keyName + ":handled=" + action.historyHandled + ":applied="
 							+ action.historyApplied + ":cursor=" + action.cursorTransitionText());
 					}
+				case TuiSmokeComposerEditingActionKind.CtrlCClear:
+					trace.push("tui.composer_editing.ctrl_c_clear=" + action.keyName + ":input=" + action.inputText + ":output=" + action.outputText
+						+ ":cleared=" + action.composerCleared + ":noop=" + action.emptyNoop + ":history=" + action.historyRecorded + ":append="
+						+ action.appHistoryAppended + ":elements=" + action.elementTransitionText() + ":local=" + action.localImageTransitionText()
+						+ ":remote=" + action.remoteImageTransitionText() + ":pending=" + action.pendingPasteTransitionText() + ":mentions="
+						+ action.mentionBindingTransitionText() + ":nav_reset=" + action.navigationReset + ":bottom_consumed=" + action.bottomPaneConsumed
+						+ ":widget_consumed=" + action.chatWidgetConsumed + ":quit_hint=" + action.quitHintShown + ":history_search_cancelled="
+						+ action.historySearchCancelled + ":interrupt_suppressed=" + action.interruptSuppressed + ":quit_suppressed=" + action.quitSuppressed
+						+ ":redraw=" + action.needsRedraw);
 				case TuiSmokeComposerEditingActionKind.BasicInput:
 					trace.push("tui.composer_editing.basic_input=" + action.keyName + ":text=" + action.inputText + "->" + action.outputText + ":cursor="
 						+ action.cursorTransitionText() + ":pending=" + action.pendingPasteTransitionText() + ":redraw=" + action.needsRedraw);
@@ -11468,7 +11477,9 @@ class TuiSmokeEventLoop {
 						+ ":redraw="
 						+ action.needsRedraw);
 				case TuiSmokeComposerEditingActionKind.Failure:
-					if (action.noLiveInput && action.failureCode == "live_history_navigation_effects_rejected") {
+					if (action.noLiveInput
+						&& (action.failureCode == "live_history_navigation_effects_rejected"
+							|| action.failureCode == "live_ctrl_c_clear_effects_rejected")) {
 						trace.push("tui.composer_editing.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected + ":no_live="
 							+ action.noLiveInput);
 					} else {

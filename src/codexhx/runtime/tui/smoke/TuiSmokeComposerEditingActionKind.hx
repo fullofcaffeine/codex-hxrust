@@ -10,6 +10,7 @@ enum abstract TuiSmokeComposerEditingActionKind(String) to String {
 	final QueueKey = "queue_key";
 	final SubmitKey = "submit_key";
 	final HistoryNavigate = "history_navigate";
+	final CtrlCClear = "ctrl_c_clear";
 	final BasicInput = "basic_input";
 	final TextareaRoute = "textarea_route";
 	final CurrentImport = "current_import";
@@ -38,6 +39,7 @@ enum abstract TuiSmokeComposerEditingActionKind(String) to String {
 			case "queue_key": QueueKey;
 			case "submit_key": SubmitKey;
 			case "history_navigate": HistoryNavigate;
+			case "ctrl_c_clear": CtrlCClear;
 			case "basic_input": BasicInput;
 			case "textarea_route": TextareaRoute;
 			case "current_import": CurrentImport;
