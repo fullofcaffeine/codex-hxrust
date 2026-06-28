@@ -4896,6 +4896,13 @@ class TuiSmokeFixtureLoader {
 				statusHyperlinkActive: optionalBoolField(value, "statusHyperlinkActive", false),
 				escBacktrackHint: optionalBoolField(value, "escBacktrackHint", false),
 				ctrlCQuitHint: optionalBoolField(value, "ctrlCQuitHint", false),
+				ctrlDQuitHint: optionalBoolField(value, "ctrlDQuitHint", false),
+				quitShortcutKeyMatched: optionalBoolField(value, "quitShortcutKeyMatched", false),
+				quitShortcutHintCleared: optionalBoolField(value, "quitShortcutHintCleared", false),
+				expiryRedrawScheduled: optionalBoolField(value, "expiryRedrawScheduled", false),
+				activityClearsHint: optionalBoolField(value, "activityClearsHint", false),
+				requestRedraw: optionalBoolField(value, "requestRedraw", false),
+				reminderText: optionalStringField(value, "reminderText", ""),
 				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)

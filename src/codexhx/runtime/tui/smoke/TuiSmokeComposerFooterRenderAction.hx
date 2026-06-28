@@ -32,6 +32,13 @@ typedef TuiSmokeComposerFooterRenderActionFields = {
 	final statusHyperlinkActive:Bool;
 	final escBacktrackHint:Bool;
 	final ctrlCQuitHint:Bool;
+	final ctrlDQuitHint:Bool;
+	final quitShortcutKeyMatched:Bool;
+	final quitShortcutHintCleared:Bool;
+	final expiryRedrawScheduled:Bool;
+	final activityClearsHint:Bool;
+	final requestRedraw:Bool;
+	final reminderText:String;
 	final noLiveTerminal:Bool;
 	final noRatatuiRender:Bool;
 	final unsupportedRejected:Bool;
@@ -70,6 +77,13 @@ class TuiSmokeComposerFooterRenderAction {
 	public final statusHyperlinkActive:Bool;
 	public final escBacktrackHint:Bool;
 	public final ctrlCQuitHint:Bool;
+	public final ctrlDQuitHint:Bool;
+	public final quitShortcutKeyMatched:Bool;
+	public final quitShortcutHintCleared:Bool;
+	public final expiryRedrawScheduled:Bool;
+	public final activityClearsHint:Bool;
+	public final requestRedraw:Bool;
+	public final reminderText:String;
 	public final noLiveTerminal:Bool;
 	public final noRatatuiRender:Bool;
 	public final unsupportedRejected:Bool;

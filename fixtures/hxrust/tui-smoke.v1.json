@@ -11542,6 +11542,139 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer footer quit esc\ninput> \ntrace:\ntui.composer_footer_render.plan=headless\ntui.composer_footer_render.quit=composer_empty->quit_shortcut_reminder:key=ctrl-c:visible=true:expired=false:ctrl_c=true\ntui.composer_footer_render.quit=quit_shortcut_reminder->composer_has_draft:key=ctrl-c:visible=false:expired=true:ctrl_c=false\ntui.composer_footer_render.esc=composer_has_draft->esc_hint:key=escape:backtrack=true\ntui.composer_footer_render.fallback=esc_hint:lines=1:hints=0:shortcuts=false:queue=false:cycle=false:terminal=false:ratatui=false\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "composer-footer-quit-shortcut-reminder-lifecycle",
+      "frame": {
+        "name": "composer-footer-quit-shortcut-reminder-lifecycle",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "composer footer quit shortcut reminder lifecycle"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "composer_footer_render",
+          "composerFooterRender": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "actions": [
+              {
+                "kind": "quit_shortcut",
+                "modeBefore": "composer_empty",
+                "modeAfter": "quit_shortcut_reminder",
+                "keyName": "ctrl-c",
+                "quitHintVisible": true,
+                "quitHintExpired": false,
+                "ctrlCQuitHint": true,
+                "ctrlDQuitHint": false,
+                "quitShortcutKeyMatched": true,
+                "quitShortcutHintCleared": false,
+                "expiryRedrawScheduled": true,
+                "activityClearsHint": false,
+                "requestRedraw": true,
+                "reminderText": "ctrl-c again to quit"
+              },
+              {
+                "kind": "quit_shortcut",
+                "modeBefore": "composer_empty",
+                "modeAfter": "quit_shortcut_reminder",
+                "keyName": "ctrl-d",
+                "quitHintVisible": true,
+                "quitHintExpired": false,
+                "ctrlCQuitHint": false,
+                "ctrlDQuitHint": true,
+                "quitShortcutKeyMatched": true,
+                "quitShortcutHintCleared": false,
+                "expiryRedrawScheduled": true,
+                "activityClearsHint": false,
+                "requestRedraw": true,
+                "reminderText": "ctrl-d again to quit"
+              },
+              {
+                "kind": "quit_shortcut",
+                "modeBefore": "quit_shortcut_reminder",
+                "modeAfter": "quit_shortcut_reminder",
+                "keyName": "ctrl-d",
+                "quitHintVisible": true,
+                "quitHintExpired": false,
+                "ctrlCQuitHint": false,
+                "ctrlDQuitHint": true,
+                "quitShortcutKeyMatched": false,
+                "quitShortcutHintCleared": false,
+                "expiryRedrawScheduled": true,
+                "activityClearsHint": false,
+                "requestRedraw": true,
+                "reminderText": "ctrl-d again to quit"
+              },
+              {
+                "kind": "quit_shortcut",
+                "modeBefore": "quit_shortcut_reminder",
+                "modeAfter": "composer_empty",
+                "keyName": "char-x",
+                "quitHintVisible": false,
+                "quitHintExpired": false,
+                "ctrlCQuitHint": false,
+                "ctrlDQuitHint": false,
+                "quitShortcutKeyMatched": false,
+                "quitShortcutHintCleared": true,
+                "expiryRedrawScheduled": false,
+                "activityClearsHint": true,
+                "requestRedraw": true,
+                "reminderText": ""
+              },
+              {
+                "kind": "quit_shortcut",
+                "modeBefore": "quit_shortcut_reminder",
+                "modeAfter": "composer_has_draft",
+                "keyName": "ctrl-d",
+                "quitHintVisible": false,
+                "quitHintExpired": true,
+                "ctrlCQuitHint": false,
+                "ctrlDQuitHint": true,
+                "quitShortcutKeyMatched": false,
+                "quitShortcutHintCleared": false,
+                "expiryRedrawScheduled": false,
+                "activityClearsHint": false,
+                "requestRedraw": false,
+                "inputEmpty": false,
+                "reminderText": ""
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_quit_shortcut_footer_reminder_effects_rejected",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.composer_footer_render.plan=headless\ntui.composer_footer_render.quit_detail=composer_empty->quit_shortcut_reminder:key=ctrl-c:visible=true:expired=false:ctrl_c=true:ctrl_d=false:matched=true:cleared=false:expiry_redraw=true:activity_clear=false:redraw=true:text=ctrl-c again to quit\ntui.composer_footer_render.quit_detail=composer_empty->quit_shortcut_reminder:key=ctrl-d:visible=true:expired=false:ctrl_c=false:ctrl_d=true:matched=true:cleared=false:expiry_redraw=true:activity_clear=false:redraw=true:text=ctrl-d again to quit\ntui.composer_footer_render.quit_detail=quit_shortcut_reminder->quit_shortcut_reminder:key=ctrl-d:visible=true:expired=false:ctrl_c=false:ctrl_d=true:matched=false:cleared=false:expiry_redraw=true:activity_clear=false:redraw=true:text=ctrl-d again to quit\ntui.composer_footer_render.quit_detail=quit_shortcut_reminder->composer_empty:key=char-x:visible=false:expired=false:ctrl_c=false:ctrl_d=false:matched=false:cleared=true:expiry_redraw=false:activity_clear=true:redraw=true:text=\ntui.composer_footer_render.quit_detail=quit_shortcut_reminder->composer_has_draft:key=ctrl-d:visible=false:expired=true:ctrl_c=false:ctrl_d=true:matched=false:cleared=false:expiry_redraw=false:activity_clear=false:redraw=false:text=\ntui.composer_footer_render.failure=live_quit_shortcut_footer_reminder_effects_rejected:unsupported=true:no_terminal=true:no_render=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> composer footer quit shortcut reminder lifecycle\ninput> \ntrace:\ntui.composer_footer_render.plan=headless\ntui.composer_footer_render.quit_detail=composer_empty->quit_shortcut_reminder:key=ctrl-c:visible=true:expired=false:ctrl_c=true:ctrl_d=false:matched=true:cleared=false:expiry_redraw=true:activity_clear=false:redraw=true:text=ctrl-c again to quit\ntui.composer_footer_render.quit_detail=composer_empty->quit_shortcut_reminder:key=ctrl-d:visible=true:expired=false:ctrl_c=false:ctrl_d=true:matched=true:cleared=false:expiry_redraw=true:activity_clear=false:redraw=true:text=ctrl-d again to quit\ntui.composer_footer_render.quit_detail=quit_shortcut_reminder->quit_shortcut_reminder:key=ctrl-d:visible=true:expired=false:ctrl_c=false:ctrl_d=true:matched=false:cleared=false:expiry_redraw=true:activity_clear=false:redraw=true:text=ctrl-d again to quit\ntui.composer_footer_render.quit_detail=quit_shortcut_reminder->composer_empty:key=char-x:visible=false:expired=false:ctrl_c=false:ctrl_d=false:matched=false:cleared=true:expiry_redraw=false:activity_clear=true:redraw=true:text=\ntui.composer_footer_render.quit_detail=quit_shortcut_reminder->composer_has_draft:key=ctrl-d:visible=false:expired=true:ctrl_c=false:ctrl_d=true:matched=false:cleared=false:expiry_redraw=false:activity_clear=false:redraw=false:text=\ntui.composer_footer_render.failure=live_quit_shortcut_footer_reminder_effects_rejected:unsupported=true:no_terminal=true:no_render=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "composer-textarea-render-layout-remote-reserve",
       "frame": {
         "name": "composer-textarea-render-layout-remote-reserve",

@@ -11249,8 +11249,17 @@ class TuiSmokeEventLoop {
 						+ action.shortcutOverlayActive + ":paste_burst=" + action.pasteBurstActive + ":shortcuts=" + action.showShortcutsHint + ":cycle="
 						+ action.showCycleHint);
 				case TuiSmokeComposerFooterRenderActionKind.QuitShortcut:
-					trace.push("tui.composer_footer_render.quit=" + action.modeTransitionText() + ":key=" + action.keyName + ":visible="
-						+ action.quitHintVisible + ":expired=" + action.quitHintExpired + ":ctrl_c=" + action.ctrlCQuitHint);
+					if (action.reminderText != "" || action.ctrlDQuitHint || action.quitShortcutKeyMatched || action.quitShortcutHintCleared
+						|| action.expiryRedrawScheduled || action.activityClearsHint || action.requestRedraw) {
+						trace.push("tui.composer_footer_render.quit_detail=" + action.modeTransitionText() + ":key=" + action.keyName + ":visible="
+							+ action.quitHintVisible + ":expired=" + action.quitHintExpired + ":ctrl_c=" + action.ctrlCQuitHint + ":ctrl_d="
+							+ action.ctrlDQuitHint + ":matched=" + action.quitShortcutKeyMatched + ":cleared=" + action.quitShortcutHintCleared
+							+ ":expiry_redraw=" + action.expiryRedrawScheduled + ":activity_clear=" + action.activityClearsHint + ":redraw="
+							+ action.requestRedraw + ":text=" + action.reminderText);
+					} else {
+						trace.push("tui.composer_footer_render.quit=" + action.modeTransitionText() + ":key=" + action.keyName + ":visible="
+							+ action.quitHintVisible + ":expired=" + action.quitHintExpired + ":ctrl_c=" + action.ctrlCQuitHint);
+					}
 				case TuiSmokeComposerFooterRenderActionKind.EscHint:
 					trace.push("tui.composer_footer_render.esc=" + action.modeTransitionText() + ":key=" + action.keyName + ":backtrack="
 						+ action.escBacktrackHint);
@@ -11259,7 +11268,12 @@ class TuiSmokeEventLoop {
 						+ ":shortcuts=" + action.showShortcutsHint + ":queue=" + action.showQueueHint + ":cycle=" + action.showCycleHint + ":terminal="
 						+ !action.noLiveTerminal + ":ratatui=" + !action.noRatatuiRender);
 				case TuiSmokeComposerFooterRenderActionKind.Failure:
-					trace.push("tui.composer_footer_render.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected);
+					if (action.noLiveTerminal || action.noRatatuiRender) {
+						trace.push("tui.composer_footer_render.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected
+							+ ":no_terminal=" + action.noLiveTerminal + ":no_render=" + action.noRatatuiRender);
+					} else {
+						trace.push("tui.composer_footer_render.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected);
+					}
 				case _:
 					trace.push("tui.composer_footer_render.unknown");
 					return false;
