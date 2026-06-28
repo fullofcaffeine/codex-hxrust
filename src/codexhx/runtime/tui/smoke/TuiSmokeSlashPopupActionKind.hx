@@ -8,6 +8,10 @@ enum abstract TuiSmokeSlashPopupActionKind(String) to String {
 	final MoveSelection = "move_selection";
 	final Complete = "complete";
 	final Dispatch = "dispatch";
+	final InlineDispatch = "inline_dispatch";
+	final StageHistory = "stage_history";
+	final Queue = "queue";
+	final Elementize = "elementize";
 	final RejectUnavailable = "reject_unavailable";
 	final Dismiss = "dismiss";
 	final Hide = "hide";
@@ -24,6 +28,10 @@ enum abstract TuiSmokeSlashPopupActionKind(String) to String {
 			case "move_selection": MoveSelection;
 			case "complete": Complete;
 			case "dispatch": Dispatch;
+			case "inline_dispatch": InlineDispatch;
+			case "stage_history": StageHistory;
+			case "queue": Queue;
+			case "elementize": Elementize;
 			case "reject_unavailable": RejectUnavailable;
 			case "dismiss": Dismiss;
 			case "hide": Hide;

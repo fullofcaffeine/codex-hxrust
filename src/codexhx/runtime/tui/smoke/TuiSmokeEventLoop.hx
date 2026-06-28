@@ -11850,6 +11850,23 @@ class TuiSmokeEventLoop {
 					trace.push("tui.slash_popup.dispatch=" + action.commandName + ":kind=" + action.commandKind + ":command=" + action.commandDispatched
 						+ ":service_tier=" + action.serviceTierDispatched + ":history=" + action.historyStaged + "->" + action.historyRecorded
 						+ ":text_cleared=" + action.textCleared);
+				case TuiSmokeSlashPopupActionKind.InlineDispatch:
+					trace.push("tui.slash_popup.inline_dispatch=" + action.commandName + ":args=" + action.inlineArgs + ":elements="
+						+ action.textElementCount + ":trimmed=" + action.inlineArgsTrimmed + ":history=" + action.historyStaged + "->"
+						+ action.historyRecorded + ":text_cleared=" + action.textCleared);
+				case TuiSmokeSlashPopupActionKind.StageHistory:
+					trace.push("tui.slash_popup.history=" + action.commandName + ":canonical=" + action.canonicalCommandText + ":recalled="
+						+ action.recalledText + ":staged=" + action.historyStaged + ":recorded=" + action.historyRecorded + ":elements="
+						+ action.textElementCount + ":local=" + action.localImageCount + ":remote=" + action.remoteImageCount + ":pending="
+						+ action.pendingPasteCount);
+				case TuiSmokeSlashPopupActionKind.Queue:
+					trace.push("tui.slash_popup.queue=" + action.inputText + ":action=" + action.queuedAction + ":task_running=" + action.taskRunning
+						+ ":leading_space=" + action.leadingSpaceInput + ":defer_slash=" + action.slashValidationDeferred + ":queued=" + action.queued
+						+ ":text_cleared=" + action.textCleared + ":event=" + action.appEventEmitted);
+				case TuiSmokeSlashPopupActionKind.Elementize:
+					trace.push("tui.slash_popup.element=" + action.commandName + ":stored=" + action.commandElementStored + ":removed="
+						+ action.commandElementRemoved + ":cursor=" + action.cursorBefore + "->" + action.cursorAfter + ":cursor_end=" + action.cursorAtEnd
+						+ ":elements=" + action.textElementCount);
 				case TuiSmokeSlashPopupActionKind.RejectUnavailable:
 					trace.push("tui.slash_popup.unavailable=" + action.commandName + ":task_running=" + action.taskRunning + ":rejected="
 						+ action.unsupportedRejected + ":history=" + action.historyStaged + "->" + action.historyRecorded);

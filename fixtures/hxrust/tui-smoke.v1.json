@@ -6171,6 +6171,146 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: running | model: gpt-5.2-codex\nsystem> slash popup hide unavailable dismiss\ninput> \ntrace:\ntui.slash_popup.plan=headless\ntui.slash_popup.sync=/ test:filter=:active=false->false:file_query_cleared=false:redraw=true\ntui.slash_popup.hide=/ test:active=false->false:reason=slash_space_history_input\ntui.slash_popup.sync=/zzz:filter=zzz:active=false->false:file_query_cleared=false:redraw=true\ntui.slash_popup.hide=/zzz:active=false->false:reason=no_slash_command_prefix\ntui.slash_popup.unavailable=clear:task_running=true:rejected=true:history=true->true\ntui.slash_popup.dismiss=re:active=true->false:dismissed=true:draft_preserved=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "slash-popup-dispatch-history-queue",
+      "frame": {
+        "name": "slash-popup-dispatch-history-queue",
+        "title": "Codex TUI Smoke Replay",
+        "status": "running",
+        "model": "gpt-5.2-codex",
+        "width": 64,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "slash popup dispatch history queue"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "slash_command_popup",
+          "slashCommandPopup": {
+            "allowLiveInput": false,
+            "actions": [
+              {
+                "kind": "complete",
+                "commandName": "model",
+                "commandKind": "builtin",
+                "completionKind": "text",
+                "inputText": "/mo",
+                "taskRunning": true,
+                "textCleared": false,
+                "cursorBefore": 3,
+                "cursorAfter": 7,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "dispatch",
+                "commandName": "diff",
+                "commandKind": "builtin",
+                "commandDispatched": true,
+                "historyStaged": true,
+                "historyRecorded": true,
+                "textCleared": true
+              },
+              {
+                "kind": "stage_history",
+                "commandName": "diff",
+                "canonicalCommandText": "/diff",
+                "recalledText": "/diff",
+                "historyStaged": true,
+                "historyRecorded": true
+              },
+              {
+                "kind": "inline_dispatch",
+                "commandName": "plan",
+                "commandKind": "builtin",
+                "inlineArgs": "investigate this",
+                "textElementCount": 0,
+                "inlineArgsTrimmed": true,
+                "historyStaged": true,
+                "historyRecorded": true,
+                "textCleared": false
+              },
+              {
+                "kind": "stage_history",
+                "commandName": "plan",
+                "canonicalCommandText": "/plan investigate this",
+                "recalledText": "/plan investigate this",
+                "historyStaged": true,
+                "historyRecorded": true,
+                "textElementCount": 1,
+                "pendingPasteCount": 1
+              },
+              {
+                "kind": "queue",
+                "inputText": "/review check regressions",
+                "queuedAction": "parse_slash",
+                "taskRunning": true,
+                "slashValidationDeferred": true,
+                "queued": true,
+                "textCleared": true,
+                "appEventEmitted": false
+              },
+              {
+                "kind": "queue",
+                "inputText": " /does-not-exist",
+                "queuedAction": "plain",
+                "taskRunning": true,
+                "leadingSpaceInput": true,
+                "slashValidationDeferred": false,
+                "queued": true,
+                "textCleared": true,
+                "appEventEmitted": false
+              },
+              {
+                "kind": "elementize",
+                "commandName": "review",
+                "commandElementStored": true,
+                "commandElementRemoved": false,
+                "cursorBefore": 7,
+                "cursorAfter": 8,
+                "cursorAtEnd": true,
+                "textElementCount": 1
+              },
+              {
+                "kind": "elementize",
+                "commandName": "review",
+                "commandElementStored": false,
+                "commandElementRemoved": true,
+                "cursorBefore": 0,
+                "cursorAfter": 0,
+                "cursorAtEnd": false,
+                "textElementCount": 0
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_slash_command_dispatch_queue_effects_rejected",
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.slash_popup.plan=headless\ntui.slash_popup.complete=model:kind=builtin:completion=text:draft_preserved=false:text_cleared=false\ntui.slash_popup.dispatch=diff:kind=builtin:command=true:service_tier=false:history=true->true:text_cleared=true\ntui.slash_popup.history=diff:canonical=/diff:recalled=/diff:staged=true:recorded=true:elements=0:local=0:remote=0:pending=0\ntui.slash_popup.inline_dispatch=plan:args=investigate this:elements=0:trimmed=true:history=true->true:text_cleared=false\ntui.slash_popup.history=plan:canonical=/plan investigate this:recalled=/plan investigate this:staged=true:recorded=true:elements=1:local=0:remote=0:pending=1\ntui.slash_popup.queue=/review check regressions:action=parse_slash:task_running=true:leading_space=false:defer_slash=true:queued=true:text_cleared=true:event=false\ntui.slash_popup.queue= /does-not-exist:action=plain:task_running=true:leading_space=true:defer_slash=false:queued=true:text_cleared=true:event=false\ntui.slash_popup.element=review:stored=true:removed=false:cursor=7->8:cursor_end=true:elements=1\ntui.slash_popup.element=review:stored=false:removed=true:cursor=0->0:cursor_end=false:elements=0\ntui.slash_popup.failure=live_slash_command_dispatch_queue_effects_rejected:rejected=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: running | model: gpt-5.2-codex\nsystem> slash popup dispatch history queue\ninput> \ntrace:\ntui.slash_popup.plan=headless\ntui.slash_popup.complete=model:kind=builtin:completion=text:draft_preserved=false:text_cleared=false\ntui.slash_popup.dispatch=diff:kind=builtin:command=true:service_tier=false:history=true->true:text_cleared=true\ntui.slash_popup.history=diff:canonical=/diff:recalled=/diff:staged=true:recorded=true:elements=0:local=0:remote=0:pending=0\ntui.slash_popup.inline_dispatch=plan:args=investigate this:elements=0:trimmed=true:history=true->true:text_cleared=false\ntui.slash_popup.history=plan:canonical=/plan investigate this:recalled=/plan investigate this:staged=true:recorded=true:elements=1:local=0:remote=0:pending=1\ntui.slash_popup.queue=/review check regressions:action=parse_slash:task_running=true:leading_space=false:defer_slash=true:queued=true:text_cleared=true:event=false\ntui.slash_popup.queue= /does-not-exist:action=plain:task_running=true:leading_space=true:defer_slash=false:queued=true:text_cleared=true:event=false\ntui.slash_popup.element=review:stored=true:removed=false:cursor=7->8:cursor_end=true:elements=1\ntui.slash_popup.element=review:stored=false:removed=true:cursor=0->0:cursor_end=false:elements=0\ntui.slash_popup.failure=live_slash_command_dispatch_queue_effects_rejected:rejected=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "file-mention-popup-file-search-insert",
       "frame": {
         "name": "file-mention-popup-file-search-insert",
