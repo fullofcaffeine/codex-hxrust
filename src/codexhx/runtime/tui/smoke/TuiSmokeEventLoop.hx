@@ -1644,6 +1644,13 @@ class TuiSmokeEventLoop {
 						+ action.bottomPaneHandled + ":task=" + action.taskRunning + ":work=" + action.cancellableWorkActive + ":shortcut="
 						+ action.quitShortcutActiveBefore + "->" + action.quitShortcutActiveAfter + ":hint=" + action.quitShortcutHintShown + ":interrupt="
 						+ action.interruptSubmitted + ":exit=" + action.appExitSent);
+				case TuiSmokeChatWidgetInterruptQuitActionKind.CtrlCPrecedence:
+					trace.push("tui.chat_widget_interrupt_quit.ctrl_c_precedence=" + action.ctrlCPrecedence + ":realtime=" + action.realtimeLive + "->"
+						+ action.realtimeStopped + ":bottom_attempted=" + action.bottomPaneAttempted + ":bottom_handled=" + action.bottomPaneHandled
+						+ ":modal=" + action.modalOrPopupActive + ":double_press=" + action.doublePressEnabled + ":work=" + action.cancellableWorkActive
+						+ ":shortcut=" + action.quitShortcutActiveBefore + "->" + action.quitShortcutActiveAfter + ":hint_shown="
+						+ action.quitShortcutHintShown + ":hint_cleared=" + action.quitShortcutHintCleared + ":goal_paused=" + action.activeGoalPaused
+						+ ":interrupt=" + action.interruptSubmitted + ":exit=" + action.appExitSent + ":redraw=" + action.requestRedraw);
 				case TuiSmokeChatWidgetInterruptQuitActionKind.CtrlD:
 					trace.push("tui.chat_widget_interrupt_quit.ctrl_d=" + action.route + ":composer_empty=" + action.composerEmpty + ":modal="
 						+ action.modalOrPopupActive + ":shortcut=" + action.quitShortcutActiveBefore + "->" + action.quitShortcutActiveAfter + ":matched="
@@ -1677,7 +1684,8 @@ class TuiSmokeEventLoop {
 					trace.push("tui.chat_widget_interrupt_quit.cancel_edit=" + "cleared=" + action.cancelEditCleared + ":pending_steers="
 						+ action.pendingSteersBefore + "->" + action.pendingSteersAfter + ":redraw=" + action.requestRedraw);
 				case TuiSmokeChatWidgetInterruptQuitActionKind.Failure:
-					if (action.failureCode == "live_chat_widget_quit_shortcut_state_effects_rejected") {
+					if (action.failureCode == "live_chat_widget_quit_shortcut_state_effects_rejected"
+						|| action.failureCode == "live_chat_widget_ctrl_c_precedence_effects_rejected") {
 						trace.push("tui.chat_widget_interrupt_quit.failure=" + action.failureCode + ":unsupported=" + action.unsupportedRejected
 							+ ":no_terminal=" + action.noLiveTerminal + ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall);
 					} else {

@@ -2,6 +2,7 @@ package codexhx.runtime.tui.smoke;
 
 typedef TuiSmokeChatWidgetInterruptQuitActionFields = {
 	final kind:TuiSmokeChatWidgetInterruptQuitActionKind;
+	final ctrlCPrecedence:TuiSmokeChatWidgetCtrlCPrecedenceKind;
 	final shortcutTransition:TuiSmokeChatWidgetQuitShortcutTransitionKind;
 	final key:String;
 	final activeShortcutKeyBefore:String;
@@ -11,7 +12,9 @@ typedef TuiSmokeChatWidgetInterruptQuitActionFields = {
 	final failureCode:String;
 	final doublePressEnabled:Bool;
 	final realtimeLive:Bool;
+	final realtimeStopped:Bool;
 	final modalOrPopupActive:Bool;
+	final bottomPaneAttempted:Bool;
 	final bottomPaneHandled:Bool;
 	final cancellableWorkActive:Bool;
 	final taskRunning:Bool;
@@ -51,6 +54,7 @@ typedef TuiSmokeChatWidgetInterruptQuitActionFields = {
 @:build(codexhx.macros.FieldRecordConstructor.build())
 class TuiSmokeChatWidgetInterruptQuitAction {
 	public final kind:TuiSmokeChatWidgetInterruptQuitActionKind;
+	public final ctrlCPrecedence:TuiSmokeChatWidgetCtrlCPrecedenceKind;
 	public final shortcutTransition:TuiSmokeChatWidgetQuitShortcutTransitionKind;
 	public final key:String;
 	public final activeShortcutKeyBefore:String;
@@ -60,7 +64,9 @@ class TuiSmokeChatWidgetInterruptQuitAction {
 	public final failureCode:String;
 	public final doublePressEnabled:Bool;
 	public final realtimeLive:Bool;
+	public final realtimeStopped:Bool;
 	public final modalOrPopupActive:Bool;
+	public final bottomPaneAttempted:Bool;
 	public final bottomPaneHandled:Bool;
 	public final cancellableWorkActive:Bool;
 	public final taskRunning:Bool;

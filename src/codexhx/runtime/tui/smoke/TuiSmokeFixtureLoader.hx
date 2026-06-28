@@ -3755,6 +3755,7 @@ class TuiSmokeFixtureLoader {
 		for (value in values) {
 			out.push(new TuiSmokeChatWidgetInterruptQuitAction({
 				kind: TuiSmokeChatWidgetInterruptQuitActionKind.fromString(stringField(value, "kind", "")),
+				ctrlCPrecedence: TuiSmokeChatWidgetCtrlCPrecedenceKind.fromString(optionalStringField(value, "ctrlCPrecedence", "unknown")),
 				shortcutTransition: TuiSmokeChatWidgetQuitShortcutTransitionKind.fromString(optionalStringField(value, "shortcutTransition", "unknown")),
 				key: optionalStringField(value, "key", ""),
 				activeShortcutKeyBefore: optionalStringField(value, "activeShortcutKeyBefore", ""),
@@ -3764,7 +3765,9 @@ class TuiSmokeFixtureLoader {
 				failureCode: optionalStringField(value, "failureCode", ""),
 				doublePressEnabled: optionalBoolField(value, "doublePressEnabled", false),
 				realtimeLive: optionalBoolField(value, "realtimeLive", false),
+				realtimeStopped: optionalBoolField(value, "realtimeStopped", false),
 				modalOrPopupActive: optionalBoolField(value, "modalOrPopupActive", false),
+				bottomPaneAttempted: optionalBoolField(value, "bottomPaneAttempted", false),
 				bottomPaneHandled: optionalBoolField(value, "bottomPaneHandled", false),
 				cancellableWorkActive: optionalBoolField(value, "cancellableWorkActive", false),
 				taskRunning: optionalBoolField(value, "taskRunning", false),

@@ -2,6 +2,7 @@ package codexhx.runtime.tui.smoke;
 
 enum abstract TuiSmokeChatWidgetInterruptQuitActionKind(String) to String {
 	final CtrlC = "ctrl_c";
+	final CtrlCPrecedence = "ctrl_c_precedence";
 	final CtrlD = "ctrl_d";
 	final InterruptKey = "interrupt_key";
 	final ArmQuitShortcut = "arm_quit_shortcut";
@@ -16,6 +17,7 @@ enum abstract TuiSmokeChatWidgetInterruptQuitActionKind(String) to String {
 	public static function fromString(value:String):TuiSmokeChatWidgetInterruptQuitActionKind {
 		return switch value {
 			case "ctrl_c": CtrlC;
+			case "ctrl_c_precedence": CtrlCPrecedence;
 			case "ctrl_d": CtrlD;
 			case "interrupt_key": InterruptKey;
 			case "arm_quit_shortcut": ArmQuitShortcut;

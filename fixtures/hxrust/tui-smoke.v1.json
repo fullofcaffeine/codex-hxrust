@@ -12952,6 +12952,220 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupt quit active ctrl c\ninput> \ntrace:\ntui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.ctrl_c=interrupt_active_work:double_press=false:bottom_pane=false:task=true:work=true:shortcut=false->false:hint=false:interrupt=true:exit=false\ntui.chat_widget_interrupt_quit.prepare_interrupt=restore_prompt=true:cancel_edit=false->true:stream_queue=true:plan_queue=true:tail=true:redraw=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chat-widget-ctrl-c-precedence",
+      "frame": {
+        "name": "chat-widget-ctrl-c-precedence",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget ctrl-c precedence"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupt_quit",
+          "chatWidgetInterruptQuit": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "ctrl_c_precedence",
+                "ctrlCPrecedence": "realtime_stop",
+                "realtimeLive": true,
+                "realtimeStopped": true,
+                "bottomPaneAttempted": false,
+                "bottomPaneHandled": false,
+                "modalOrPopupActive": false,
+                "doublePressEnabled": true,
+                "cancellableWorkActive": false,
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": true,
+                "activeGoalPaused": false,
+                "interruptSubmitted": false,
+                "appExitSent": false,
+                "requestRedraw": true
+              },
+              {
+                "kind": "ctrl_c_precedence",
+                "ctrlCPrecedence": "bottom_pane_modal",
+                "realtimeLive": false,
+                "realtimeStopped": false,
+                "bottomPaneAttempted": true,
+                "bottomPaneHandled": true,
+                "modalOrPopupActive": true,
+                "doublePressEnabled": true,
+                "cancellableWorkActive": false,
+                "quitShortcutActiveBefore": false,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": true,
+                "activeGoalPaused": false,
+                "interruptSubmitted": false,
+                "appExitSent": false,
+                "requestRedraw": true
+              },
+              {
+                "kind": "ctrl_c_precedence",
+                "ctrlCPrecedence": "bottom_pane_history_search",
+                "realtimeLive": false,
+                "realtimeStopped": false,
+                "bottomPaneAttempted": true,
+                "bottomPaneHandled": true,
+                "modalOrPopupActive": true,
+                "doublePressEnabled": true,
+                "cancellableWorkActive": false,
+                "quitShortcutActiveBefore": false,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": true,
+                "activeGoalPaused": false,
+                "interruptSubmitted": false,
+                "appExitSent": false,
+                "requestRedraw": true
+              },
+              {
+                "kind": "ctrl_c_precedence",
+                "ctrlCPrecedence": "bottom_pane_composer_clear",
+                "realtimeLive": false,
+                "realtimeStopped": false,
+                "bottomPaneAttempted": true,
+                "bottomPaneHandled": true,
+                "modalOrPopupActive": false,
+                "doublePressEnabled": true,
+                "cancellableWorkActive": false,
+                "quitShortcutActiveBefore": false,
+                "quitShortcutActiveAfter": true,
+                "quitShortcutHintShown": true,
+                "quitShortcutHintCleared": false,
+                "activeGoalPaused": false,
+                "interruptSubmitted": false,
+                "appExitSent": false,
+                "requestRedraw": true
+              },
+              {
+                "kind": "ctrl_c_precedence",
+                "ctrlCPrecedence": "disabled_interrupt",
+                "realtimeLive": false,
+                "realtimeStopped": false,
+                "bottomPaneAttempted": true,
+                "bottomPaneHandled": false,
+                "modalOrPopupActive": false,
+                "doublePressEnabled": false,
+                "cancellableWorkActive": true,
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": true,
+                "activeGoalPaused": true,
+                "interruptSubmitted": true,
+                "appExitSent": false,
+                "requestRedraw": true
+              },
+              {
+                "kind": "ctrl_c_precedence",
+                "ctrlCPrecedence": "disabled_quit",
+                "realtimeLive": false,
+                "realtimeStopped": false,
+                "bottomPaneAttempted": true,
+                "bottomPaneHandled": false,
+                "modalOrPopupActive": false,
+                "doublePressEnabled": false,
+                "cancellableWorkActive": false,
+                "quitShortcutActiveBefore": false,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": false,
+                "activeGoalPaused": false,
+                "interruptSubmitted": false,
+                "appExitSent": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "ctrl_c_precedence",
+                "ctrlCPrecedence": "enabled_arm_and_interrupt",
+                "realtimeLive": false,
+                "realtimeStopped": false,
+                "bottomPaneAttempted": true,
+                "bottomPaneHandled": false,
+                "modalOrPopupActive": false,
+                "doublePressEnabled": true,
+                "cancellableWorkActive": true,
+                "quitShortcutActiveBefore": false,
+                "quitShortcutActiveAfter": true,
+                "quitShortcutHintShown": true,
+                "quitShortcutHintCleared": false,
+                "activeGoalPaused": true,
+                "interruptSubmitted": true,
+                "appExitSent": false,
+                "requestRedraw": true
+              },
+              {
+                "kind": "ctrl_c_precedence",
+                "ctrlCPrecedence": "enabled_shortcut_match",
+                "realtimeLive": false,
+                "realtimeStopped": false,
+                "bottomPaneAttempted": true,
+                "bottomPaneHandled": false,
+                "modalOrPopupActive": false,
+                "doublePressEnabled": true,
+                "cancellableWorkActive": false,
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutHintShown": false,
+                "quitShortcutHintCleared": true,
+                "activeGoalPaused": false,
+                "interruptSubmitted": false,
+                "appExitSent": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "request_quit",
+                "exitMode": "shutdown_first",
+                "quitShortcutActiveBefore": true,
+                "quitShortcutActiveAfter": false,
+                "quitShortcutHintCleared": true,
+                "appExitSent": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_chat_widget_ctrl_c_precedence_effects_rejected",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=realtime_stop:realtime=true->true:bottom_attempted=false:bottom_handled=false:modal=false:double_press=true:work=false:shortcut=true->false:hint_shown=false:hint_cleared=true:goal_paused=false:interrupt=false:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=bottom_pane_modal:realtime=false->false:bottom_attempted=true:bottom_handled=true:modal=true:double_press=true:work=false:shortcut=false->false:hint_shown=false:hint_cleared=true:goal_paused=false:interrupt=false:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=bottom_pane_history_search:realtime=false->false:bottom_attempted=true:bottom_handled=true:modal=true:double_press=true:work=false:shortcut=false->false:hint_shown=false:hint_cleared=true:goal_paused=false:interrupt=false:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=bottom_pane_composer_clear:realtime=false->false:bottom_attempted=true:bottom_handled=true:modal=false:double_press=true:work=false:shortcut=false->true:hint_shown=true:hint_cleared=false:goal_paused=false:interrupt=false:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=disabled_interrupt:realtime=false->false:bottom_attempted=true:bottom_handled=false:modal=false:double_press=false:work=true:shortcut=true->false:hint_shown=false:hint_cleared=true:goal_paused=true:interrupt=true:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=disabled_quit:realtime=false->false:bottom_attempted=true:bottom_handled=false:modal=false:double_press=false:work=false:shortcut=false->false:hint_shown=false:hint_cleared=false:goal_paused=false:interrupt=false:exit=true:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=enabled_arm_and_interrupt:realtime=false->false:bottom_attempted=true:bottom_handled=false:modal=false:double_press=true:work=true:shortcut=false->true:hint_shown=true:hint_cleared=false:goal_paused=true:interrupt=true:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=enabled_shortcut_match:realtime=false->false:bottom_attempted=true:bottom_handled=false:modal=false:double_press=true:work=false:shortcut=true->false:hint_shown=false:hint_cleared=true:goal_paused=false:interrupt=false:exit=true:redraw=true\ntui.chat_widget_interrupt_quit.request_quit=shutdown_first:shortcut=true->false:cleared=true:app_exit=true\ntui.chat_widget_interrupt_quit.failure=live_chat_widget_ctrl_c_precedence_effects_rejected:unsupported=true:no_terminal=true:no_render=true:no_model=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget ctrl-c precedence\ninput> \ntrace:\ntui.chat_widget_interrupt_quit.plan=headless\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=realtime_stop:realtime=true->true:bottom_attempted=false:bottom_handled=false:modal=false:double_press=true:work=false:shortcut=true->false:hint_shown=false:hint_cleared=true:goal_paused=false:interrupt=false:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=bottom_pane_modal:realtime=false->false:bottom_attempted=true:bottom_handled=true:modal=true:double_press=true:work=false:shortcut=false->false:hint_shown=false:hint_cleared=true:goal_paused=false:interrupt=false:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=bottom_pane_history_search:realtime=false->false:bottom_attempted=true:bottom_handled=true:modal=true:double_press=true:work=false:shortcut=false->false:hint_shown=false:hint_cleared=true:goal_paused=false:interrupt=false:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=bottom_pane_composer_clear:realtime=false->false:bottom_attempted=true:bottom_handled=true:modal=false:double_press=true:work=false:shortcut=false->true:hint_shown=true:hint_cleared=false:goal_paused=false:interrupt=false:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=disabled_interrupt:realtime=false->false:bottom_attempted=true:bottom_handled=false:modal=false:double_press=false:work=true:shortcut=true->false:hint_shown=false:hint_cleared=true:goal_paused=true:interrupt=true:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=disabled_quit:realtime=false->false:bottom_attempted=true:bottom_handled=false:modal=false:double_press=false:work=false:shortcut=false->false:hint_shown=false:hint_cleared=false:goal_paused=false:interrupt=false:exit=true:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=enabled_arm_and_interrupt:realtime=false->false:bottom_attempted=true:bottom_handled=false:modal=false:double_press=true:work=true:shortcut=false->true:hint_shown=true:hint_cleared=false:goal_paused=true:interrupt=true:exit=false:redraw=true\ntui.chat_widget_interrupt_quit.ctrl_c_precedence=enabled_shortcut_match:realtime=false->false:bottom_attempted=true:bottom_handled=false:modal=false:double_press=true:work=false:shortcut=true->false:hint_shown=false:hint_cleared=true:goal_paused=false:interrupt=false:exit=true:redraw=true\ntui.chat_widget_interrupt_quit.request_quit=shutdown_first:shortcut=true->false:cleared=true:app_exit=true\ntui.chat_widget_interrupt_quit.failure=live_chat_widget_ctrl_c_precedence_effects_rejected:unsupported=true:no_terminal=true:no_render=true:no_model=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chat-widget-interrupt-quit-double-press",
       "frame": {
         "name": "chat-widget-interrupt-quit-double-press",
