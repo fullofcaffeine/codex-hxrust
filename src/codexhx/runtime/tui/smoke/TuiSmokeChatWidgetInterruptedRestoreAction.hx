@@ -12,6 +12,7 @@ typedef TuiSmokeChatWidgetInterruptedRestoreActionFields = {
 	final composerText:String;
 	final queueSource:String;
 	final popOrder:String;
+	final mergeOrder:TuiSmokeChatWidgetRestoreMergeOrder;
 	final historyRecord:String;
 	final currentStatusHeader:String;
 	final retryStatusHeaderBefore:String;
@@ -112,6 +113,7 @@ class TuiSmokeChatWidgetInterruptedRestoreAction {
 	public final composerText:String;
 	public final queueSource:String;
 	public final popOrder:String;
+	public final mergeOrder:TuiSmokeChatWidgetRestoreMergeOrder;
 	public final historyRecord:String;
 	public final currentStatusHeader:String;
 	public final retryStatusHeaderBefore:String;

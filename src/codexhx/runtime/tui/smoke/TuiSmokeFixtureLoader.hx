@@ -3442,6 +3442,7 @@ class TuiSmokeFixtureLoader {
 				composerText: optionalStringField(value, "composerText", ""),
 				queueSource: optionalStringField(value, "queueSource", ""),
 				popOrder: optionalStringField(value, "popOrder", ""),
+				mergeOrder: TuiSmokeChatWidgetRestoreMergeOrder.fromString(optionalStringField(value, "mergeOrder", "unknown")),
 				historyRecord: optionalStringField(value, "historyRecord", ""),
 				currentStatusHeader: optionalStringField(value, "currentStatusHeader", ""),
 				retryStatusHeaderBefore: optionalStringField(value, "retryStatusHeaderBefore", ""),

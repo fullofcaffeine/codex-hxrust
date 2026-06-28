@@ -13955,6 +13955,136 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupted restore queued input\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=1->0:queued=1->0:rejected=0->0:pending_merged=true:queued_merged=true:composer_merged=true:text=steer guidance | queued follow-up | draft note\ntui.chat_widget_interrupted_restore.restore_composer=text=steer guidance | queued follow-up | draft note:remote_images=1:local_images=1:mentions=1:restored=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chat-widget-interrupted-restore-merge-order",
+      "frame": {
+        "name": "chat-widget-interrupted-restore-merge-order",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chat widget interrupted restore merge order"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_interrupted_restore",
+          "chatWidgetInterruptedRestore": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "interrupted_turn",
+                "reason": "interrupted",
+                "finalizedTurn": true,
+                "sendPendingSteersImmediately": false,
+                "submitPendingSteersAfterInterruptBefore": false,
+                "submitPendingSteersAfterInterruptAfter": false,
+                "noticeInserted": true,
+                "noticeSuppressed": false,
+                "pendingPreviewRefreshed": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "drain_pending_messages",
+                "mergeOrder": "rejected_pending_queued_composer",
+                "pendingSteersBefore": 2,
+                "pendingSteersAfter": 0,
+                "queuedMessagesBefore": 1,
+                "queuedMessagesAfter": 0,
+                "rejectedSteersBefore": 1,
+                "rejectedSteersAfter": 0,
+                "pendingMerged": true,
+                "queuedMerged": true,
+                "composerMerged": true,
+                "composerText": "current draft",
+                "restoredText": "rejected restore\npending steer one\npending steer two\nqueued follow-up\ncurrent draft"
+              },
+              {
+                "kind": "restore_message_shape",
+                "restoredText": "remote [Image #2] first\n[Image #3] second @workspace",
+                "remoteImageCount": 1,
+                "localImageCount": 2,
+                "localImageLabelsBefore": "[Image #1],[Image #2]",
+                "localImageLabelsAfter": "[Image #2],[Image #3]",
+                "localPlaceholdersRemapped": true,
+                "textElementCount": 3,
+                "textElementRanges": "7..17,24..34,42..52",
+                "textElementsRebased": true,
+                "mentionBindingCount": 1,
+                "cursorAtEnd": true
+              },
+              {
+                "kind": "restore_composer",
+                "restoredText": "rejected restore\npending steer one\npending steer two\nqueued follow-up\ncurrent draft",
+                "remoteImageCount": 1,
+                "localImageCount": 2,
+                "mentionBindingCount": 1,
+                "composerRestored": true
+              },
+              {
+                "kind": "interrupted_turn",
+                "reason": "interrupted",
+                "finalizedTurn": true,
+                "sendPendingSteersImmediately": true,
+                "submitPendingSteersAfterInterruptBefore": true,
+                "submitPendingSteersAfterInterruptAfter": false,
+                "noticeInserted": true,
+                "noticeSuppressed": false,
+                "pendingPreviewRefreshed": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "drain_pending_messages",
+                "mergeOrder": "pending_only_submit",
+                "pendingSteersBefore": 2,
+                "pendingSteersAfter": 0,
+                "queuedMessagesBefore": 1,
+                "queuedMessagesAfter": 1,
+                "rejectedSteersBefore": 0,
+                "rejectedSteersAfter": 0,
+                "pendingMerged": true,
+                "queuedMerged": false,
+                "composerMerged": false,
+                "composerText": "still editing",
+                "restoredText": "first pending steer\nsecond pending steer"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_interrupted_restore_merge_effects_rejected",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=2->0:queued=1->0:rejected=1->0:pending_merged=true:queued_merged=true:composer_merged=true:order=rejected_pending_queued_composer:composer=current draft:text=rejected restore\npending steer one\npending steer two\nqueued follow-up\ncurrent draft\ntui.chat_widget_interrupted_restore.restore_shape=text=remote [Image #2] first\n[Image #3] second @workspace:remote_images=1:local_images=2:labels=[Image #1],[Image #2]->[Image #2],[Image #3]:remapped=true:elements=3:ranges=7..17,24..34,42..52:rebased=true:mentions=1:cursor_end=true\ntui.chat_widget_interrupted_restore.restore_composer=text=rejected restore\npending steer one\npending steer two\nqueued follow-up\ncurrent draft:remote_images=1:local_images=2:mentions=1:restored=true\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=true:submit_after=true->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=2->0:queued=1->1:rejected=0->0:pending_merged=true:queued_merged=false:composer_merged=false:order=pending_only_submit:composer=still editing:text=first pending steer\nsecond pending steer\ntui.chat_widget_interrupted_restore.failure=live_interrupted_restore_merge_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chat widget interrupted restore merge order\ninput> \ntrace:\ntui.chat_widget_interrupted_restore.plan=headless\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=false:submit_after=false->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=2->0:queued=1->0:rejected=1->0:pending_merged=true:queued_merged=true:composer_merged=true:order=rejected_pending_queued_composer:composer=current draft:text=rejected restore\npending steer one\npending steer two\nqueued follow-up\ncurrent draft\ntui.chat_widget_interrupted_restore.restore_shape=text=remote [Image #2] first\n[Image #3] second @workspace:remote_images=1:local_images=2:labels=[Image #1],[Image #2]->[Image #2],[Image #3]:remapped=true:elements=3:ranges=7..17,24..34,42..52:rebased=true:mentions=1:cursor_end=true\ntui.chat_widget_interrupted_restore.restore_composer=text=rejected restore\npending steer one\npending steer two\nqueued follow-up\ncurrent draft:remote_images=1:local_images=2:mentions=1:restored=true\ntui.chat_widget_interrupted_restore.interrupted=interrupted:finalized=true:send_pending=true:submit_after=true->false:notice=true:suppressed=false:preview=true:redraw=true\ntui.chat_widget_interrupted_restore.drain_pending=pending=2->0:queued=1->1:rejected=0->0:pending_merged=true:queued_merged=false:composer_merged=false:order=pending_only_submit:composer=still editing:text=first pending steer\nsecond pending steer\ntui.chat_widget_interrupted_restore.failure=live_interrupted_restore_merge_effects_rejected:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chat-widget-interrupted-restore-submit-pending-no-live",
       "frame": {
         "name": "chat-widget-interrupted-restore-submit-pending-no-live",

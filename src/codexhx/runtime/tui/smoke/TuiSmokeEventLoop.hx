@@ -2742,10 +2742,12 @@ class TuiSmokeEventLoop {
 						+ ":redraw="
 						+ action.requestRedraw);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.DrainPendingMessages:
+					final mergeOrderPart = action.mergeOrder == TuiSmokeChatWidgetRestoreMergeOrder.Unknown ? "" : ":order=" + action.mergeOrder;
+					final composerPart = action.composerText == "" ? "" : ":composer=" + action.composerText;
 					trace.push("tui.chat_widget_interrupted_restore.drain_pending=" + "pending=" + action.pendingSteersBefore + "->"
 						+ action.pendingSteersAfter + ":queued=" + action.queuedMessagesBefore + "->" + action.queuedMessagesAfter + ":rejected="
 						+ action.rejectedSteersBefore + "->" + action.rejectedSteersAfter + ":pending_merged=" + action.pendingMerged + ":queued_merged="
-						+ action.queuedMerged + ":composer_merged=" + action.composerMerged + ":text=" + action.restoredText);
+						+ action.queuedMerged + ":composer_merged=" + action.composerMerged + mergeOrderPart + composerPart + ":text=" + action.restoredText);
 				case TuiSmokeChatWidgetInterruptedRestoreActionKind.RestoreComposer:
 					trace.push("tui.chat_widget_interrupted_restore.restore_composer=" + "text=" + action.restoredText + ":remote_images="
 						+ action.remoteImageCount + ":local_images=" + action.localImageCount + ":mentions=" + action.mentionBindingCount + ":restored="
