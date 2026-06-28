@@ -2478,8 +2478,16 @@ class TuiSmokeEventLoop {
 					trace.push("tui.resume_fork.lookup=" + "id_or_name=" + action.idOrName + ":requested=" + action.lookupRequested + ":success="
 						+ action.lookupSucceeded + ":target=" + action.threadId);
 				case TuiSmokeResumeForkActionKind.StartupGate:
-					trace.push("tui.resume_fork.startup_gate=" + "wait_initial=" + action.waitForInitialSession + ":active_events="
-						+ action.activeEventsAllowed + ":paused_goal_prompt=" + action.pausedGoalPromptEligible);
+					if (hasDetailedStartupGateTrace(action)) {
+						trace.push("tui.resume_fork.startup_gate=" + "selection=" + action.selection + ":wait_initial=" + action.waitForInitialSession
+							+ ":primary=" + action.primaryThreadId + ":stop_wait=" + action.stopWaitingForInitialSession + ":receiver="
+							+ action.activeReceiverPresent + ":active_events=" + action.activeEventsAllowed + ":queued=" + action.queuedActiveThreadEvent
+							+ ":dispatch=" + action.activeEventDispatched + ":frame=" + action.frameScheduled + ":paused_goal_prompt="
+							+ action.pausedGoalPromptEligible);
+					} else {
+						trace.push("tui.resume_fork.startup_gate=" + "wait_initial=" + action.waitForInitialSession + ":active_events="
+							+ action.activeEventsAllowed + ":paused_goal_prompt=" + action.pausedGoalPromptEligible);
+					}
 				case TuiSmokeResumeForkActionKind.ResumeRequest:
 					trace.push("tui.resume_fork.resume_request=" + "target=" + action.threadId + ":path=" + action.targetPath + ":cwd=" + action.cwdResolved
 						+ ":config_reload=" + action.configReloaded + ":settings=" + action.configRebuilt + ":requested=" + action.resumeRequested);
@@ -2509,6 +2517,11 @@ class TuiSmokeEventLoop {
 			}
 		}
 		return true;
+	}
+
+	static function hasDetailedStartupGateTrace(action:TuiSmokeResumeForkAction):Bool {
+		return action.selection != "" || action.primaryThreadId != "" || action.activeReceiverPresent || action.stopWaitingForInitialSession
+			|| action.queuedActiveThreadEvent || action.activeEventDispatched || action.frameScheduled;
 	}
 
 	static function traceSideConversation(plan:TuiSmokeSideConversationPlan, trace:Array<String>):Bool {

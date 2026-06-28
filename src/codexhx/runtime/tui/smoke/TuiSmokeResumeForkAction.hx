@@ -10,6 +10,7 @@ typedef TuiSmokeResumeForkActionFields = {
 	final threadId:String;
 	final parentThreadId:String;
 	final childThreadId:String;
+	final primaryThreadId:String;
 	final expandedThreadId:String;
 	final targetLabel:String;
 	final targetPath:String;
@@ -105,6 +106,10 @@ typedef TuiSmokeResumeForkActionFields = {
 	final threadReadRequested:Bool;
 	final waitForInitialSession:Bool;
 	final activeEventsAllowed:Bool;
+	final activeReceiverPresent:Bool;
+	final stopWaitingForInitialSession:Bool;
+	final queuedActiveThreadEvent:Bool;
+	final activeEventDispatched:Bool;
 	final pausedGoalPromptEligible:Bool;
 	final sameThreadActive:Bool;
 	final ignored:Bool;
@@ -149,6 +154,7 @@ class TuiSmokeResumeForkAction {
 	public final threadId:String;
 	public final parentThreadId:String;
 	public final childThreadId:String;
+	public final primaryThreadId:String;
 	public final expandedThreadId:String;
 	public final targetLabel:String;
 	public final targetPath:String;
@@ -244,6 +250,10 @@ class TuiSmokeResumeForkAction {
 	public final threadReadRequested:Bool;
 	public final waitForInitialSession:Bool;
 	public final activeEventsAllowed:Bool;
+	public final activeReceiverPresent:Bool;
+	public final stopWaitingForInitialSession:Bool;
+	public final queuedActiveThreadEvent:Bool;
+	public final activeEventDispatched:Bool;
 	public final pausedGoalPromptEligible:Bool;
 	public final sameThreadActive:Bool;
 	public final ignored:Bool;

@@ -16948,6 +16948,117 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> resume fork missing target refusal\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.lookup=id_or_name=missing-thread:requested=true:success=false:target=\ntui.resume_fork.failure=session_not_found:error=No saved chat found matching missing-thread.:source=slash_resume:target=missing-thread:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "resume-fork-initial-session-wait-routing",
+      "frame": {
+        "name": "resume-fork-initial-session-wait-routing",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "initial session wait gate"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "resume_fork",
+          "resumeFork": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "startup_gate",
+                "selection": "start_fresh",
+                "waitForInitialSession": true,
+                "activeReceiverPresent": true,
+                "activeEventsAllowed": false,
+                "queuedActiveThreadEvent": true,
+                "frameScheduled": true,
+                "pausedGoalPromptEligible": false
+              },
+              {
+                "kind": "startup_gate",
+                "selection": "start_fresh",
+                "primaryThreadId": "thread-primary",
+                "waitForInitialSession": true,
+                "activeReceiverPresent": true,
+                "stopWaitingForInitialSession": true,
+                "activeEventsAllowed": true,
+                "activeEventDispatched": true,
+                "frameScheduled": true,
+                "pausedGoalPromptEligible": false
+              },
+              {
+                "kind": "startup_gate",
+                "selection": "exit",
+                "waitForInitialSession": true,
+                "activeReceiverPresent": false,
+                "activeEventsAllowed": false,
+                "pausedGoalPromptEligible": false
+              },
+              {
+                "kind": "startup_gate",
+                "selection": "resume",
+                "primaryThreadId": "thread-resume",
+                "waitForInitialSession": false,
+                "activeReceiverPresent": true,
+                "activeEventsAllowed": true,
+                "activeEventDispatched": true,
+                "frameScheduled": true,
+                "pausedGoalPromptEligible": true
+              },
+              {
+                "kind": "startup_gate",
+                "selection": "fork",
+                "primaryThreadId": "thread-fork",
+                "waitForInitialSession": false,
+                "activeReceiverPresent": true,
+                "activeEventsAllowed": true,
+                "activeEventDispatched": true,
+                "frameScheduled": true,
+                "pausedGoalPromptEligible": false
+              },
+              {
+                "kind": "failure",
+                "source": "app_run",
+                "idOrName": "initial_session",
+                "failureCode": "live_initial_session_wait_gate_rejected",
+                "errorMessage": "initial session wait routing requires live App::run channels and active thread receiver polling",
+                "unsupportedRejected": true,
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.resume_fork.plan=headless\ntui.resume_fork.startup_gate=selection=start_fresh:wait_initial=true:primary=:stop_wait=false:receiver=true:active_events=false:queued=true:dispatch=false:frame=true:paused_goal_prompt=false\ntui.resume_fork.startup_gate=selection=start_fresh:wait_initial=true:primary=thread-primary:stop_wait=true:receiver=true:active_events=true:queued=false:dispatch=true:frame=true:paused_goal_prompt=false\ntui.resume_fork.startup_gate=selection=exit:wait_initial=true:primary=:stop_wait=false:receiver=false:active_events=false:queued=false:dispatch=false:frame=false:paused_goal_prompt=false\ntui.resume_fork.startup_gate=selection=resume:wait_initial=false:primary=thread-resume:stop_wait=false:receiver=true:active_events=true:queued=false:dispatch=true:frame=true:paused_goal_prompt=true\ntui.resume_fork.startup_gate=selection=fork:wait_initial=false:primary=thread-fork:stop_wait=false:receiver=true:active_events=true:queued=false:dispatch=true:frame=true:paused_goal_prompt=false\ntui.resume_fork.failure=live_initial_session_wait_gate_rejected:error=initial session wait routing requires live App::run channels and active thread receiver polling:source=app_run:target=initial_session:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> initial session wait gate\ninput> \ntrace:\ntui.resume_fork.plan=headless\ntui.resume_fork.startup_gate=selection=start_fresh:wait_initial=true:primary=:stop_wait=false:receiver=true:active_events=false:queued=true:dispatch=false:frame=true:paused_goal_prompt=false\ntui.resume_fork.startup_gate=selection=start_fresh:wait_initial=true:primary=thread-primary:stop_wait=true:receiver=true:active_events=true:queued=false:dispatch=true:frame=true:paused_goal_prompt=false\ntui.resume_fork.startup_gate=selection=exit:wait_initial=true:primary=:stop_wait=false:receiver=false:active_events=false:queued=false:dispatch=false:frame=false:paused_goal_prompt=false\ntui.resume_fork.startup_gate=selection=resume:wait_initial=false:primary=thread-resume:stop_wait=false:receiver=true:active_events=true:queued=false:dispatch=true:frame=true:paused_goal_prompt=true\ntui.resume_fork.startup_gate=selection=fork:wait_initial=false:primary=thread-fork:stop_wait=false:receiver=true:active_events=true:queued=false:dispatch=true:frame=true:paused_goal_prompt=false\ntui.resume_fork.failure=live_initial_session_wait_gate_rejected:error=initial session wait routing requires live App::run channels and active thread receiver polling:source=app_run:target=initial_session:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "terminal-capability-gate-restore-order",
       "frame": {
         "name": "terminal-capability-gate-restore-order",
