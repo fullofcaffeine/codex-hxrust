@@ -12,6 +12,7 @@ Selected harness input format:
 - Upstream app-server schemas are consumed in-place from `../codex/codex-rs/app-server-protocol/schema/{json,typescript}` during G0/G1.
 - Runtime event fixtures should be represented as JSONL or SSE-event JSON arrays once copied into `fixtures/upstream/`.
 - Cafex adapter fixtures stay in-place until M5; copied snapshots must include source path, source commit, and schema id.
+- `fixtures/hxrust/` is the legacy codexhx generated-Rust proof namespace, not the haxe.rust compiler fixture directory. Codex parity fixtures there are owned by this repository; generic compiler/backend fixtures belong in `../haxe.rust`. See [fixture-namespace.md](fixture-namespace.md) for the ownership rules and future rename criteria.
 
 The first harness should accept this shape:
 

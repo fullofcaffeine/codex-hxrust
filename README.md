@@ -11,7 +11,7 @@ Public-readiness scaffolding includes repo-managed hooks, Haxe formatting, stage
 Current Beads-based completion snapshot:
 
 ```text
-[#######################################-] 99% (618/619 non-epic Beads closed)
+[########################################] 100% (619/619 non-epic Beads closed)
 ```
 
 This is an unweighted planning and throughput indicator, not a whole-Codex parity claim. The port has many small deterministic gates, including generated-Rust protocol/runtime/TUI slices, but a runnable interactive Codex TUI still needs live terminal ownership, app-server JSON-RPC integration, async task/channel boundaries, state DB persistence, tool execution, and broader upstream widget/runtime parity.
@@ -47,6 +47,8 @@ bash harness/check-tui-smoke.sh
 `haxe_libraries/reflaxe.rust.hxml` points at the sibling `../haxe.rust` checkout so local builds do not depend on global `haxelib dev` state. This is a live path dependency: edits in `../haxe.rust/src`, `../haxe.rust/std`, or its vendored Reflaxe tree are reflected immediately by this repo's `haxe`/haxe.rust builds, even before the haxe.rust change is committed.
 
 `reference/haxe-rust.pin.json` is reproducibility metadata, not what local scoped builds use to choose compiler files. Update the pin only after a haxe.rust change has been committed, pushed, and validated as the known-good compiler revision for codex-hxrust. haxe.rust itself still owns haxelib package/dev-checkout smoke tests, and pin updates here must keep `scripts/check-generated-cargo.sh` green.
+
+`fixtures/hxrust/` is a legacy codexhx fixture namespace for deterministic Haxe interpreter and haxe.rust-generated Rust proof gates. It is not the sibling compiler repository's fixture directory; generic backend fixtures belong in `../haxe.rust`. See [docs/fixture-namespace.md](docs/fixture-namespace.md) for the ownership rules.
 
 ## Public Readiness And Hooks
 

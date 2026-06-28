@@ -1,21 +1,17 @@
-# haxe.rust Fixtures
+# codexhx Generated-Rust Fixtures
 
-Current fixtures:
+`fixtures/hxrust/` is a legacy codexhx namespace for deterministic fixtures
+that are consumed by Haxe interpreter and haxe.rust-generated Rust gates. It is
+not the haxe.rust compiler fixture directory.
 
-- `doctor-shape.v1.jq` validates the minimal doctor command shape.
-- `diagnostics-output.v1.jsonl` validates redacted diagnostic logs and fixture-bearing failure reports.
-- `headless-jsonl-adapter-input.v1.jsonl` and `headless-jsonl-adapter-output.v1.jsonl` validate the debug JSONL adapter.
-- `thread-goal-active.v1.json` validates the HXCX-5.3 `ThreadGoal` DTO shape.
-- `thread-goal-transition.v1.jsonl` validates the HXCX-5.3 in-memory goal lifecycle slice.
-- `goal-tool-output.v1.jsonl` validates the HXCX-5.3 `get_goal`, `create_goal`, and `update_goal` tool subset.
-- `apply-patch-dry-run-input.v1.patch` covers add, update, and delete hunks without mutating the filesystem.
-- `apply-patch-dry-run-output.v1.jsonl` covers successful dry-run output plus deterministic mutation-disabled, invalid-header, and unsafe-path failures.
-- `process-exec-output.v1.jsonl` validates denied-by-default process execution, exact approval, sandbox marker proof, stdout/stderr truncation, and non-zero exit mapping.
-- `sandbox-gate-output.v1.jsonl` validates unsupported-platform fail-closed behavior, sandbox policy decisions, absent bypass path, and security-sensitive denials.
+Most fixtures here model upstream Codex protocol, runtime, tool, state, and TUI
+parity for this repository. Generic haxe.rust compiler/backend fixtures belong
+in the sibling `../haxe.rust` repository. Local compiler pressure fixtures may
+live here only when they are codexhx-owned consumer evidence and explain that
+ownership.
 
-haxe.rust capability and compiler smoke fixtures go here if the port needs local copies.
-
-The haxe.rust source remains an external pinned checkout.
+See `../../docs/fixture-namespace.md` for the namespace decision, ownership
+rules, and criteria for any future rename.
 
 Current fixtures:
 
