@@ -3,6 +3,7 @@ package codexhx.runtime.tui.smoke;
 typedef TuiSmokeSideConversationActionFields = {
 	final kind:TuiSmokeSideConversationActionKind;
 	final handoffMode:TuiSmokeAppThreadInputHandoffMode;
+	final replayRoute:TuiSmokeThreadSnapshotReplayRoute;
 	final parentThreadId:String;
 	final childThreadId:String;
 	final targetThreadId:String;
@@ -18,6 +19,10 @@ typedef TuiSmokeSideConversationActionFields = {
 	final sideThreadsBefore:Int;
 	final sideThreadsAfter:Int;
 	final pendingInputCount:Int;
+	final replayTurnCount:Int;
+	final replayEventCount:Int;
+	final replayNoticeCount:Int;
+	final replaySuppressedNoticeCount:Int;
 	final remoteImageCount:Int;
 	final localImageCount:Int;
 	final mentionBindingCount:Int;
@@ -68,6 +73,22 @@ typedef TuiSmokeSideConversationActionFields = {
 	final currentThreadTarget:Bool;
 	final pendingInputPreserved:Bool;
 	final statusSurfacesRefreshed:Bool;
+	final resizeReflowEnabled:Bool;
+	final snapshotHasTurns:Bool;
+	final snapshotHasEvents:Bool;
+	final bufferReplayStarted:Bool;
+	final bufferReplayEnded:Bool;
+	final pendingInteractiveRequest:Bool;
+	final sessionHandled:Bool;
+	final queueAutosendSuppressedBefore:Bool;
+	final queueAutosendSuppressedAfter:Bool;
+	final turnsReplayed:Bool;
+	final eventsReplayed:Bool;
+	final noticesSuppressed:Bool;
+	final initialSubmitReleased:Bool;
+	final pendingInitialSubmitSubmitted:Bool;
+	final resumeRestoredQueue:Bool;
+	final queuedInputDrained:Bool;
 	final requestRedraw:Bool;
 	final noLiveTerminal:Bool;
 	final noRatatuiRender:Bool;
@@ -81,6 +102,8 @@ class TuiSmokeSideConversationAction {
 	public final kind:TuiSmokeSideConversationActionKind;
 	@:recordDefault(TuiSmokeAppThreadInputHandoffMode.Unknown)
 	public final handoffMode:TuiSmokeAppThreadInputHandoffMode;
+	@:recordDefault(TuiSmokeThreadSnapshotReplayRoute.Unknown)
+	public final replayRoute:TuiSmokeThreadSnapshotReplayRoute;
 	public final parentThreadId:String;
 	public final childThreadId:String;
 	public final targetThreadId:String;
@@ -96,6 +119,10 @@ class TuiSmokeSideConversationAction {
 	public final sideThreadsBefore:Int;
 	public final sideThreadsAfter:Int;
 	public final pendingInputCount:Int;
+	public final replayTurnCount:Int;
+	public final replayEventCount:Int;
+	public final replayNoticeCount:Int;
+	public final replaySuppressedNoticeCount:Int;
 	public final remoteImageCount:Int;
 	public final localImageCount:Int;
 	public final mentionBindingCount:Int;
@@ -146,6 +173,22 @@ class TuiSmokeSideConversationAction {
 	public final currentThreadTarget:Bool;
 	public final pendingInputPreserved:Bool;
 	public final statusSurfacesRefreshed:Bool;
+	public final resizeReflowEnabled:Bool;
+	public final snapshotHasTurns:Bool;
+	public final snapshotHasEvents:Bool;
+	public final bufferReplayStarted:Bool;
+	public final bufferReplayEnded:Bool;
+	public final pendingInteractiveRequest:Bool;
+	public final sessionHandled:Bool;
+	public final queueAutosendSuppressedBefore:Bool;
+	public final queueAutosendSuppressedAfter:Bool;
+	public final turnsReplayed:Bool;
+	public final eventsReplayed:Bool;
+	public final noticesSuppressed:Bool;
+	public final initialSubmitReleased:Bool;
+	public final pendingInitialSubmitSubmitted:Bool;
+	public final resumeRestoredQueue:Bool;
+	public final queuedInputDrained:Bool;
 	public final requestRedraw:Bool;
 	public final noLiveTerminal:Bool;
 	public final noRatatuiRender:Bool;

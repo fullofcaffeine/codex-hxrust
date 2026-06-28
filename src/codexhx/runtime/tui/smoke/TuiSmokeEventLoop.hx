@@ -2558,6 +2558,16 @@ class TuiSmokeEventLoop {
 						+ ":restored=" + action.restoredIntoTarget + ":fallback=" + action.missingSnapshotFallback + ":side=" + action.sideThreadTarget
 						+ ":current=" + action.currentThreadTarget + ":pending=" + action.pendingInputCount + ":preserved=" + action.pendingInputPreserved
 						+ ":status=" + action.statusSurfacesRefreshed + ":redraw=" + action.requestRedraw);
+				case TuiSmokeSideConversationActionKind.ReplaySnapshotBoundary:
+					trace.push("tui.side_conversation.replay_snapshot_boundary=" + "thread=" + action.targetThreadId + ":route=" + action.replayRoute
+						+ ":resize=" + action.resizeReflowEnabled + ":turns=" + action.replayTurnCount + ":events=" + action.replayEventCount + ":buffer="
+						+ action.bufferReplayStarted + "->" + action.bufferReplayEnded + ":pending_interactive=" + action.pendingInteractiveRequest
+						+ ":session=" + action.sessionHandled + ":autosend=" + action.queueAutosendSuppressedBefore + "->"
+						+ action.queueAutosendSuppressedAfter + ":input=" + action.inputStateCaptured + ":turn_replay=" + action.turnsReplayed
+						+ ":event_replay=" + action.eventsReplayed + ":notices=" + action.replaySuppressedNoticeCount + "/" + action.replayNoticeCount
+						+ ":suppressed=" + action.noticesSuppressed + ":initial_release=" + action.initialSubmitReleased + ":initial_submit="
+						+ action.pendingInitialSubmitSubmitted + ":resume_queue=" + action.resumeRestoredQueue + ":drain=" + action.queuedInputDrained
+						+ ":status=" + action.statusSurfacesRefreshed);
 				case TuiSmokeSideConversationActionKind.DiscardSide:
 					trace.push("tui.side_conversation.discard=" + "child=" + action.childThreadId + ":interrupt=" + action.interruptSubmitted + ":startup="
 						+ action.startupInterruptUsed + ":turn=" + action.turnInterruptUsed + ":unsubscribe=" + action.threadUnsubscribed + ":local="
