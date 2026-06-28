@@ -15,7 +15,7 @@ class TuiSmokeHarness {
 			assertEquals(request.expectedSnapshot, outcome.snapshot);
 		}
 		final loopCases = TuiSmokeFixtureLoader.loadLoops(FixturePath);
-		assertEquals("248", Std.string(loopCases.length));
+		assertEquals("249", Std.string(loopCases.length));
 		for (request in loopCases) {
 			final outcome = TuiSmokeEventLoop.run(request);
 			if (!outcome.ok)

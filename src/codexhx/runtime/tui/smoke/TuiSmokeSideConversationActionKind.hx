@@ -9,6 +9,8 @@ enum abstract TuiSmokeSideConversationActionKind(String) to String {
 	final ParentStatusChange = "parent_status_change";
 	final MaybeReturn = "maybe_return";
 	final RestoreUserMessage = "restore_user_message";
+	final StoreInputHandoff = "store_input_handoff";
+	final RestoreInputHandoff = "restore_input_handoff";
 	final DiscardSide = "discard_side";
 	final Failure = "failure";
 	final Unknown = "unknown";
@@ -23,6 +25,8 @@ enum abstract TuiSmokeSideConversationActionKind(String) to String {
 			case "parent_status_change": ParentStatusChange;
 			case "maybe_return": MaybeReturn;
 			case "restore_user_message": RestoreUserMessage;
+			case "store_input_handoff": StoreInputHandoff;
+			case "restore_input_handoff": RestoreInputHandoff;
 			case "discard_side": DiscardSide;
 			case "failure": Failure;
 			case _: Unknown;

@@ -14409,6 +14409,132 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> side conversation return discards side\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.maybe_return=overlay=false:modal=false:composer_empty=true:requested=true:returned=true\ntui.side_conversation.switch=target=main:child=false:parent=true:submitted_initial=false:redraw=true\ntui.side_conversation.discard=child=side-1:interrupt=true:startup=false:turn=true:unsubscribe=true:local=true:listener=true:channel=true:navigation=true:active_cleared=false:approvals=true\ntui.side_conversation.sync_ui=active=true->false:notice_suppressed=true->false:rename_blocked=true->false:parent_main=true:status=:label=\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "app-thread-input-handoff",
+      "frame": {
+        "name": "app-thread-input-handoff",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "app thread input handoff"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "store_input_handoff",
+                "handoffMode": "store_active",
+                "activeThreadId": "",
+                "activeThreadPresent": false,
+                "activeThreadStored": false,
+                "receiverStored": false,
+                "inputStateCaptured": false,
+                "snapshotStored": false,
+                "pendingInputCount": 0,
+                "approvalsRefreshed": false
+              },
+              {
+                "kind": "store_input_handoff",
+                "handoffMode": "store_active",
+                "activeThreadId": "main",
+                "activeThreadPresent": true,
+                "activeThreadStored": true,
+                "receiverStored": true,
+                "inputStateCaptured": true,
+                "snapshotStored": true,
+                "pendingInputCount": 2,
+                "approvalsRefreshed": true
+              },
+              {
+                "kind": "restore_input_handoff",
+                "handoffMode": "restore_snapshot",
+                "sourceThreadId": "main",
+                "targetThreadId": "side-1",
+                "snapshotInputStatePresent": true,
+                "targetActivated": true,
+                "restoredIntoTarget": true,
+                "missingSnapshotFallback": false,
+                "sideThreadTarget": true,
+                "currentThreadTarget": false,
+                "pendingInputCount": 2,
+                "pendingInputPreserved": true,
+                "statusSurfacesRefreshed": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "restore_input_handoff",
+                "handoffMode": "restore_snapshot",
+                "sourceThreadId": "side-1",
+                "targetThreadId": "main",
+                "snapshotInputStatePresent": true,
+                "targetActivated": true,
+                "restoredIntoTarget": true,
+                "missingSnapshotFallback": false,
+                "sideThreadTarget": false,
+                "currentThreadTarget": true,
+                "pendingInputCount": 1,
+                "pendingInputPreserved": true,
+                "statusSurfacesRefreshed": true,
+                "requestRedraw": true
+              },
+              {
+                "kind": "restore_input_handoff",
+                "handoffMode": "missing_snapshot_fallback",
+                "sourceThreadId": "missing-thread",
+                "targetThreadId": "main",
+                "snapshotInputStatePresent": false,
+                "targetActivated": false,
+                "restoredIntoTarget": false,
+                "missingSnapshotFallback": true,
+                "sideThreadTarget": false,
+                "currentThreadTarget": true,
+                "pendingInputCount": 0,
+                "pendingInputPreserved": false,
+                "statusSurfacesRefreshed": false,
+                "requestRedraw": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_app_thread_input_handoff_rejected",
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.store_input_handoff=mode=store_active:active=:present=false:stored=false:receiver=false:input=false:snapshot=false:pending=0:approvals=false\ntui.side_conversation.store_input_handoff=mode=store_active:active=main:present=true:stored=true:receiver=true:input=true:snapshot=true:pending=2:approvals=true\ntui.side_conversation.restore_input_handoff=mode=restore_snapshot:source=main:target=side-1:snapshot_input=true:activated=true:restored=true:fallback=false:side=true:current=false:pending=2:preserved=true:status=true:redraw=true\ntui.side_conversation.restore_input_handoff=mode=restore_snapshot:source=side-1:target=main:snapshot_input=true:activated=true:restored=true:fallback=false:side=false:current=true:pending=1:preserved=true:status=true:redraw=true\ntui.side_conversation.restore_input_handoff=mode=missing_snapshot_fallback:source=missing-thread:target=main:snapshot_input=false:activated=false:restored=false:fallback=true:side=false:current=true:pending=0:preserved=false:status=false:redraw=false\ntui.side_conversation.failure=live_app_thread_input_handoff_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> app thread input handoff\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.store_input_handoff=mode=store_active:active=:present=false:stored=false:receiver=false:input=false:snapshot=false:pending=0:approvals=false\ntui.side_conversation.store_input_handoff=mode=store_active:active=main:present=true:stored=true:receiver=true:input=true:snapshot=true:pending=2:approvals=true\ntui.side_conversation.restore_input_handoff=mode=restore_snapshot:source=main:target=side-1:snapshot_input=true:activated=true:restored=true:fallback=false:side=true:current=false:pending=2:preserved=true:status=true:redraw=true\ntui.side_conversation.restore_input_handoff=mode=restore_snapshot:source=side-1:target=main:snapshot_input=true:activated=true:restored=true:fallback=false:side=false:current=true:pending=1:preserved=true:status=true:redraw=true\ntui.side_conversation.restore_input_handoff=mode=missing_snapshot_fallback:source=missing-thread:target=main:snapshot_input=false:activated=false:restored=false:fallback=true:side=false:current=true:pending=0:preserved=false:status=false:redraw=false\ntui.side_conversation.failure=live_app_thread_input_handoff_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "side-conversation-start-block-restores-composer",
       "frame": {
         "name": "side-conversation-start-block-restores-composer",

@@ -2,9 +2,12 @@ package codexhx.runtime.tui.smoke;
 
 typedef TuiSmokeSideConversationActionFields = {
 	final kind:TuiSmokeSideConversationActionKind;
+	final handoffMode:TuiSmokeAppThreadInputHandoffMode;
 	final parentThreadId:String;
 	final childThreadId:String;
 	final targetThreadId:String;
+	final activeThreadId:String;
+	final sourceThreadId:String;
 	final status:String;
 	final statusChange:String;
 	final label:String;
@@ -14,6 +17,7 @@ typedef TuiSmokeSideConversationActionFields = {
 	final errorMessage:String;
 	final sideThreadsBefore:Int;
 	final sideThreadsAfter:Int;
+	final pendingInputCount:Int;
 	final remoteImageCount:Int;
 	final localImageCount:Int;
 	final mentionBindingCount:Int;
@@ -51,6 +55,19 @@ typedef TuiSmokeSideConversationActionFields = {
 	final activeThreadCleared:Bool;
 	final approvalsRefreshed:Bool;
 	final statusSynced:Bool;
+	final activeThreadPresent:Bool;
+	final activeThreadStored:Bool;
+	final receiverStored:Bool;
+	final inputStateCaptured:Bool;
+	final snapshotStored:Bool;
+	final snapshotInputStatePresent:Bool;
+	final targetActivated:Bool;
+	final restoredIntoTarget:Bool;
+	final missingSnapshotFallback:Bool;
+	final sideThreadTarget:Bool;
+	final currentThreadTarget:Bool;
+	final pendingInputPreserved:Bool;
+	final statusSurfacesRefreshed:Bool;
 	final requestRedraw:Bool;
 	final noLiveTerminal:Bool;
 	final noRatatuiRender:Bool;
@@ -62,9 +79,13 @@ typedef TuiSmokeSideConversationActionFields = {
 class TuiSmokeSideConversationAction {
 	@:recordDefault(TuiSmokeSideConversationActionKind.Unknown)
 	public final kind:TuiSmokeSideConversationActionKind;
+	@:recordDefault(TuiSmokeAppThreadInputHandoffMode.Unknown)
+	public final handoffMode:TuiSmokeAppThreadInputHandoffMode;
 	public final parentThreadId:String;
 	public final childThreadId:String;
 	public final targetThreadId:String;
+	public final activeThreadId:String;
+	public final sourceThreadId:String;
 	public final status:String;
 	public final statusChange:String;
 	public final label:String;
@@ -74,6 +95,7 @@ class TuiSmokeSideConversationAction {
 	public final errorMessage:String;
 	public final sideThreadsBefore:Int;
 	public final sideThreadsAfter:Int;
+	public final pendingInputCount:Int;
 	public final remoteImageCount:Int;
 	public final localImageCount:Int;
 	public final mentionBindingCount:Int;
@@ -111,6 +133,19 @@ class TuiSmokeSideConversationAction {
 	public final activeThreadCleared:Bool;
 	public final approvalsRefreshed:Bool;
 	public final statusSynced:Bool;
+	public final activeThreadPresent:Bool;
+	public final activeThreadStored:Bool;
+	public final receiverStored:Bool;
+	public final inputStateCaptured:Bool;
+	public final snapshotStored:Bool;
+	public final snapshotInputStatePresent:Bool;
+	public final targetActivated:Bool;
+	public final restoredIntoTarget:Bool;
+	public final missingSnapshotFallback:Bool;
+	public final sideThreadTarget:Bool;
+	public final currentThreadTarget:Bool;
+	public final pendingInputPreserved:Bool;
+	public final statusSurfacesRefreshed:Bool;
 	public final requestRedraw:Bool;
 	public final noLiveTerminal:Bool;
 	public final noRatatuiRender:Bool;

@@ -2547,6 +2547,17 @@ class TuiSmokeEventLoop {
 					trace.push("tui.side_conversation.restore_user_message=" + "text=" + action.userMessageText + ":remote_images="
 						+ action.remoteImageCount + ":local_images=" + action.localImageCount + ":mentions=" + action.mentionBindingCount + ":restored="
 						+ action.restoredComposer);
+				case TuiSmokeSideConversationActionKind.StoreInputHandoff:
+					trace.push("tui.side_conversation.store_input_handoff=" + "mode=" + action.handoffMode + ":active=" + action.activeThreadId
+						+ ":present=" + action.activeThreadPresent + ":stored=" + action.activeThreadStored + ":receiver=" + action.receiverStored
+						+ ":input=" + action.inputStateCaptured + ":snapshot=" + action.snapshotStored + ":pending=" + action.pendingInputCount
+						+ ":approvals=" + action.approvalsRefreshed);
+				case TuiSmokeSideConversationActionKind.RestoreInputHandoff:
+					trace.push("tui.side_conversation.restore_input_handoff=" + "mode=" + action.handoffMode + ":source=" + action.sourceThreadId
+						+ ":target=" + action.targetThreadId + ":snapshot_input=" + action.snapshotInputStatePresent + ":activated=" + action.targetActivated
+						+ ":restored=" + action.restoredIntoTarget + ":fallback=" + action.missingSnapshotFallback + ":side=" + action.sideThreadTarget
+						+ ":current=" + action.currentThreadTarget + ":pending=" + action.pendingInputCount + ":preserved=" + action.pendingInputPreserved
+						+ ":status=" + action.statusSurfacesRefreshed + ":redraw=" + action.requestRedraw);
 				case TuiSmokeSideConversationActionKind.DiscardSide:
 					trace.push("tui.side_conversation.discard=" + "child=" + action.childThreadId + ":interrupt=" + action.interruptSubmitted + ":startup="
 						+ action.startupInterruptUsed + ":turn=" + action.turnInterruptUsed + ":unsubscribe=" + action.threadUnsubscribed + ":local="
