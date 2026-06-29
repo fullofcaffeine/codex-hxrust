@@ -4272,6 +4272,10 @@ Status: TUI-LIVE-6 adds `TuiAppServerEventPump`, `TuiAppServerPumpPolicy`, and `
 
 Status: TUI-LIVE-7 adds `TuiPromptSubmitEnvelope`, `TuiPromptSubmitStatus`, `TuiPromptSubmitResult`, and `TuiPromptSubmitInteraction` as the typed bridge from composer Enter to fake app-server request admission. `TuiAppServerEventPump.submitComposerInput()` applies `TerminalInputEvent` to the ChatWidget shell, turns `PromptSubmitted(text)` into a request envelope with `RequestId`, `SessionId`, `ThreadId`, and prompt text, and lets the fake app-server enqueue deterministic status/assistant echo/status notifications before draining them through the redraw path. Empty and unattached submissions are typed refusals, not trace strings. The metal haxe.rust harness `harness/check-tui-prompt-submit-envelope.sh` proves typed text entry, prompt envelope fields, deterministic echo, empty/unattached refusal states, redraw coalescing, headless/live backend draw/restore, and generated Cargo check/test/run without credentials. This still does not open a socket, call a model provider, persist state, execute tools, stream real responses, or implement the full upstream submit lifecycle.
 
+### ARCH-1 TUI Smoke Quarantine And Import Guard
+
+Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Full Interactive TUI
 
 After the minimal live shell proves terminal ownership, typed input, redraw scheduling, and fake app-server attach:
