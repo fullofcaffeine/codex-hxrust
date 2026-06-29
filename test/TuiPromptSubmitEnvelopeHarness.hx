@@ -10,6 +10,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcMethod;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcRequest;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcResponse;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
@@ -87,6 +88,18 @@ class TuiPromptSubmitEnvelopeHarness {
 		final protocol = AppProtocol.parseFixtureItem(parsed);
 		assertTrue(protocol.ok, "json-rpc request parses through app protocol: " + protocol.errorCode);
 		assertStringEquals("request:turn/start", protocol.message.summary, "json-rpc protocol summary");
+
+		final response = expectJsonRpcResponse(transport.lastResponse(), "json-rpc response recorded");
+		assertStringEquals("78", response.requestId.toString(), "json-rpc response id");
+		assertStringEquals(TuiPromptJsonRpcMethod.TurnStart.text(), response.methodText(), "json-rpc response method");
+		assertStringEquals("{\"turn\":{\"id\":\"turn-78\",\"items\":[],\"itemsView\":\"full\",\"status\":\"inProgress\"}}", response.resultJson(),
+			"json-rpc result");
+		assertStringEquals("{\"id\":78,\"jsonrpc\":\"2.0\",\"result\":{\"turn\":{\"id\":\"turn-78\",\"items\":[],\"itemsView\":\"full\",\"status\":\"inProgress\"}}}",
+			response.messageJson(), "json-rpc response message");
+		final responseParsed = expectJson(CodexJson.parse(response.fixtureJson("prompt-json-rpc-response")));
+		final responseProtocol = AppProtocol.parseFixtureItem(responseParsed);
+		assertTrue(responseProtocol.ok, "json-rpc response parses through app protocol: " + responseProtocol.errorCode);
+		assertStringEquals("turn", responseProtocol.message.summary, "json-rpc response summary");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
 	}
 
@@ -220,6 +233,12 @@ class TuiPromptSubmitEnvelopeHarness {
 		if (request == null)
 			throw label;
 		return request;
+	}
+
+	static function expectJsonRpcResponse(response:Null<TuiPromptJsonRpcResponse>, label:String):TuiPromptJsonRpcResponse {
+		if (response == null)
+			throw label;
+		return response;
 	}
 
 	static function expectJson(outcome:JsonParseOutcome):haxe.json.Value {

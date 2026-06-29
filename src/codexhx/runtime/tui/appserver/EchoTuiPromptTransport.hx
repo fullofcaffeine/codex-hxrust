@@ -13,7 +13,8 @@ class EchoTuiPromptTransport implements TuiPromptTransport {
 	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
 		if (envelope == null)
 			return TuiPromptTransportOutcome.rejected("missing_envelope");
-		return TuiPromptTransportOutcome.accepted([
+		final response = TuiPromptTurnStartResponse.fromEnvelope(envelope);
+		return TuiPromptTransportOutcome.acceptedWithResponse(response, [
 			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Working("submitted")),
 			TuiAppServerEvent.AssistantDelta(envelope.threadId, "echo: " + envelope.promptText),
 			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Ready("ready"))
