@@ -61,6 +61,7 @@ Profile policy for the scaffold:
 | `tui-resize-redraw-scheduler.hxml` | Compile the TUI-LIVE-2 typed resize/redraw scheduler and headless/live backend path through metal haxe.rust. |
 | `tui-live-input-backend.hxml` | Compile the TUI-LIVE-3 typed live/headless input mapper and composer-state harness through metal haxe.rust. |
 | `tui-chatwidget-shell.hxml` | Compile the TUI-LIVE-4 minimal ChatWidget shell state/render harness through metal haxe.rust. |
+| `tui-fake-app-server-session.hxml` | Compile the TUI-LIVE-5 fake app-server session attach harness through metal haxe.rust. |
 | `resume-picker-kernel.hxml` | Compile the HXCX-TUI-103 resume picker pure state/effect kernel harness through portable haxe.rust. |
 | `resume-picker-host-facade.hxml` | Compile the HXCX-TUI-104 resume picker runtime-neutral host facade harness through portable haxe.rust. |
 | `resume-picker-no-credential-gate.hxml` | Compile the HXCX-TUI-105 resume picker no-credential app-server/render/config gate through portable haxe.rust. |

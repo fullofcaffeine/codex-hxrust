@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=metal
+-D rust_output=generated/tui-fake-app-server-session
+-D rust_crate=codex_hxrust_tui_fake_app_server_session
+-D rust_cargo_subcommand=check
+-main TuiFakeAppServerSessionHarness

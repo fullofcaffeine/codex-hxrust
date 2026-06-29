@@ -27,4 +27,4 @@ The gate asserts typed reducer effects, transcript state, frame lines/cursor fac
 
 ## Still Not Proven
 
-This is not upstream ChatWidget completeness. It does not stream assistant deltas, attach app-server transport, execute tools, render ratatui history cells, display overlays/popups, or persist conversation state. `TUI-LIVE-5` should attach this shell to a fake app-server session so typed notifications can update the rendered transcript.
+This is not upstream ChatWidget completeness. It does not open live app-server transport, execute tools, render ratatui history cells, display overlays/popups, or persist conversation state. `TUI-LIVE-5` attaches this shell to a fake app-server session so typed notifications can update the rendered transcript; `TUI-LIVE-6` should pump those events through the live redraw path.
