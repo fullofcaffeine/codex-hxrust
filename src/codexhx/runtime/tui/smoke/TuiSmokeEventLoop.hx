@@ -3699,7 +3699,9 @@ class TuiSmokeEventLoop {
 						+ action.queuedBefore + "->" + action.queuedAfter);
 				case TuiSmokeSessionFlowActionKind.ForkedThreadEvent:
 					trace.push("tui.chat_widget_session_flow.fork_notice=" + action.forkedFromId + ":title=" + action.forkParentTitle + ":inserted="
-						+ action.forkNoticeInserted + ":display=" + action.display);
+						+ action.forkNoticeInserted + ":display=" + action.display + ":source=" + action.forkNoticeTitleSource + ":effective="
+						+ action.effectiveForkTitle + ":local=" + action.localSessionTitle + ":lookup=" + action.localSessionLookupAttempted
+						+ ":stale_ignored=" + action.staleLocalTitleIgnored + ":id_only=" + action.idOnlyForkFallback);
 				case TuiSmokeSessionFlowActionKind.ThreadNameUpdated:
 					trace.push("tui.chat_widget_session_flow.thread_name=" + action.threadId + ":matched=" + action.threadMatched + ":name="
 						+ action.threadName + ":confirm=" + action.renameConfirmationInserted + ":surfaces=" + action.statusSurfacesRefreshed + ":redraw="

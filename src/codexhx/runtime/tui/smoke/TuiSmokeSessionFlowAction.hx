@@ -8,6 +8,9 @@ typedef TuiSmokeSessionFlowActionFields = {
 	final threadName:String;
 	final forkedFromId:String;
 	final forkParentTitle:String;
+	final forkNoticeTitleSource:TuiSmokeForkNoticeTitleSourceKind;
+	final effectiveForkTitle:String;
+	final localSessionTitle:String;
 	final logId:String;
 	final cwd:String;
 	final workspaceRoots:String;
@@ -64,6 +67,9 @@ typedef TuiSmokeSessionFlowActionFields = {
 	final initialMessageSuppressed:Bool;
 	final elevatedSandboxBlocked:Bool;
 	final forkNoticeInserted:Bool;
+	final localSessionLookupAttempted:Bool;
+	final staleLocalTitleIgnored:Bool;
+	final idOnlyForkFallback:Bool;
 	final requestRedraw:Bool;
 	final suppressRedraw:Bool;
 	final threadMatched:Bool;
@@ -85,6 +91,9 @@ class TuiSmokeSessionFlowAction {
 	public final threadName:String;
 	public final forkedFromId:String;
 	public final forkParentTitle:String;
+	public final forkNoticeTitleSource:TuiSmokeForkNoticeTitleSourceKind;
+	public final effectiveForkTitle:String;
+	public final localSessionTitle:String;
 	public final logId:String;
 	public final cwd:String;
 	public final workspaceRoots:String;
@@ -141,6 +150,9 @@ class TuiSmokeSessionFlowAction {
 	public final initialMessageSuppressed:Bool;
 	public final elevatedSandboxBlocked:Bool;
 	public final forkNoticeInserted:Bool;
+	public final localSessionLookupAttempted:Bool;
+	public final staleLocalTitleIgnored:Bool;
+	public final idOnlyForkFallback:Bool;
 	public final requestRedraw:Bool;
 	public final suppressRedraw:Bool;
 	public final threadMatched:Bool;
