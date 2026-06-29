@@ -8,6 +8,8 @@ import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchange;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchangeOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcMethod;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcRequest;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcResponse;
@@ -30,6 +32,7 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function main():Void {
 		testPromptSubmitEnvelopeEchoAndRedraw();
 		testPromptSubmitBuildsJsonRpcTurnStartEnvelope();
+		testJsonRpcExchangeRejectedSubmitIsTypedRefusal();
 		testEmptySubmitIsTypedRefusal();
 		testUnattachedSubmitIsTypedRefusal();
 		testTransportRejectedSubmitIsTypedRefusal();
@@ -101,6 +104,23 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertTrue(responseProtocol.ok, "json-rpc response parses through app protocol: " + responseProtocol.errorCode);
 		assertStringEquals("turn", responseProtocol.message.summary, "json-rpc response summary");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
+	}
+
+	static function testJsonRpcExchangeRejectedSubmitIsTypedRefusal():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005557");
+		final transport = new JsonRpcTuiPromptTransport(new RejectingPromptJsonRpcExchange("exchange_offline"));
+		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
+		final result = facade.submitPrompt(RequestId.fromInteger(79), "json rpc blocked");
+		assertFalse(result.acceptedPrompt(), "json-rpc exchange rejection refused");
+		assertStringEquals("79", result.requestIdText(), "json-rpc exchange rejection request id");
+		assertStringEquals("json rpc blocked", result.promptText(), "json-rpc exchange rejection prompt");
+
+		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc rejected request recorded");
+		assertStringEquals("79", request.requestId.toString(), "json-rpc rejected request id");
+		if (transport.lastResponse() != null)
+			throw "json-rpc rejected exchange should not record response";
+		assertIntEquals(0, facade.queuedCount(), "json-rpc exchange rejection queues no fake events");
 	}
 
 	static function testEmptySubmitIsTypedRefusal():Void {
@@ -279,5 +299,17 @@ class RejectingPromptTransport implements TuiPromptTransport {
 		if (envelope == null)
 			return TuiPromptTransportOutcome.rejected("missing_envelope");
 		return TuiPromptTransportOutcome.rejected(code);
+	}
+}
+
+class RejectingPromptJsonRpcExchange implements TuiPromptJsonRpcExchange {
+	final code:String;
+
+	public function new(code:String) {
+		this.code = code;
+	}
+
+	public function send(_request:TuiPromptJsonRpcRequest, _envelope:TuiPromptSubmitEnvelope):TuiPromptJsonRpcExchangeOutcome {
+		return TuiPromptJsonRpcExchangeOutcome.rejected(code);
 	}
 }

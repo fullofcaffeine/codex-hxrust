@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -9,9 +9,10 @@ validation and still defaults to fake echo behavior, but it now asks a
 `TuiAppServerEvent` values.
 
 The default `JsonRpcTuiPromptTransport` records an outbound JSON-RPC
-`turn/start` request before delegating to the fake response transport. The
-request keeps a typed `RequestId`, typed method, and typed `turn/start` params
-with the active `ThreadId` plus one text user-input entry:
+`turn/start` request and sends it through a credential-free
+`TuiPromptJsonRpcExchange`. The request keeps a typed `RequestId`, typed method,
+and typed `turn/start` params with the active `ThreadId` plus one text
+user-input entry:
 
 ```json
 {
@@ -51,8 +52,8 @@ upstream-shaped `TurnStartResponse` result:
 The harness parses that response through the same app-protocol gate. The
 response is recorded on `JsonRpcTuiPromptTransport` for tests and later socket
 transport work; the live shell still consumes the queued fake events for its
-visible behavior. `EchoTuiPromptTransport` remains the default fake response
-delegate and preserves the prior behavior:
+visible behavior. `EchoTuiPromptJsonRpcExchange` remains the default fake
+response exchange and preserves the prior behavior:
 
 - working status
 - assistant echo delta
@@ -61,6 +62,10 @@ delegate and preserves the prior behavior:
 Tests can inject another transport to prove refusal behavior. A rejected
 transport preserves the prompt envelope and request-registration effects, but
 does not enqueue fake assistant/status events.
+
+Tests can also inject a rejecting JSON-RPC exchange. That path records the
+outbound request, records no response, returns a typed transport rejection, and
+queues no fake events.
 
 Validation:
 
