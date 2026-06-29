@@ -27,4 +27,4 @@ The gate asserts stale attach response rejection, active attach acceptance, acti
 
 ## Still Not Proven
 
-This is not a live socket transport, async stream pump, prompt submission envelope, real app-server process, model traffic, persistent state, tool execution, or full upstream ChatWidget parity. `TUI-LIVE-6` should connect the typed event queue to the live shell scheduler so app-server events request frames through the same redraw path as terminal/input events.
+This is not a live socket transport, real app-server process, prompt submission envelope, model traffic, persistent state, tool execution, or full upstream ChatWidget parity. `TUI-LIVE-6` connects the typed event queue to the live shell scheduler so app-server events request frames through the same redraw path as terminal/input events.

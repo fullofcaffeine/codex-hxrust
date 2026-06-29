@@ -11,12 +11,12 @@ Public-readiness scaffolding includes repo-managed hooks, Haxe formatting, stage
 Current Beads-based completion snapshot:
 
 ```text
-[#######################################-] 99% (647/651 non-epic Beads closed)
+[#######################################-] 99% (648/651 non-epic Beads closed)
 ```
 
 This is an unweighted planning and throughput indicator, not a whole-Codex parity claim. The port has many small deterministic gates, including generated-Rust protocol/runtime/TUI slices, but a runnable interactive Codex TUI still needs live terminal ownership, app-server JSON-RPC integration, async task/channel boundaries, state DB persistence, tool execution, and broader upstream widget/runtime parity.
 
-The current queue is intentionally pivoted toward a minimal live TUI shell. `TUI-LIVE-0` / `codex-hxrust-nvs9` defines the production `TerminalBackend` contract, `TUI-LIVE-1` / `codex-hxrust-3ddw` adds the first generated crossterm/ratatui restore gate, `TUI-LIVE-2` / `codex-hxrust-8072` adds typed resize/redraw scheduling, `TUI-LIVE-3` / `codex-hxrust-k92m` maps live/headless key input into typed composer state, `TUI-LIVE-4` / `codex-hxrust-59op` adds minimal ChatWidget shell state and render, and `TUI-LIVE-5` / `codex-hxrust-ppp3` attaches that shell to a fake app-server session. The next ready milestone is `TUI-LIVE-6` / `codex-hxrust-6pzd`: pump app-server events into the live shell, still without credentials or model traffic.
+The current queue is intentionally pivoted toward a minimal live TUI shell. `TUI-LIVE-0` / `codex-hxrust-nvs9` defines the production `TerminalBackend` contract, `TUI-LIVE-1` / `codex-hxrust-3ddw` adds the first generated crossterm/ratatui restore gate, `TUI-LIVE-2` / `codex-hxrust-8072` adds typed resize/redraw scheduling, `TUI-LIVE-3` / `codex-hxrust-k92m` maps live/headless key input into typed composer state, `TUI-LIVE-4` / `codex-hxrust-59op` adds minimal ChatWidget shell state and render, `TUI-LIVE-5` / `codex-hxrust-ppp3` attaches that shell to a fake app-server session, and `TUI-LIVE-6` / `codex-hxrust-6pzd` pumps fake app-server events through the live redraw path. The next ready milestone is `TUI-LIVE-7` / `codex-hxrust-mvwx`: emit a prompt submit envelope from the live composer, still without credentials or model traffic.
 
 The strategy is upstream-first:
 

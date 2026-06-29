@@ -119,10 +119,16 @@ class FakeTuiAppServerFacade {
 		return queue.length;
 	}
 
+	public function shiftQueued():Null<TuiAppServerEvent> {
+		if (queue.length == 0)
+			return null;
+		return queue.shift();
+	}
+
 	public function drainQueued():Array<TuiAppServerShellEffect> {
 		final effects:Array<TuiAppServerShellEffect> = [];
 		while (queue.length > 0) {
-			final event = queue.shift();
+			final event = shiftQueued();
 			if (event != null)
 				appendEffects(effects, receive(event));
 		}
