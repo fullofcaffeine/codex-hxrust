@@ -16,6 +16,9 @@ import codexhx.runtime.tui.appserver.TuiPromptAgentMessageStartedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchange;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchangeOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrame;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameDirection;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameKind;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameRecord;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcMethod;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotificationMethod;
@@ -229,6 +232,29 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStreamFrame(transport.lastFrameAt(9), completion.methodText(), completion.messageJson(), "json-rpc turn completed frame");
 		assertStreamFrame(transport.lastFrameAt(10), TuiPromptJsonRpcNotificationMethod.ThreadStatusChanged.text(), idleStatus.messageJson(),
 			"json-rpc idle status frame");
+		assertIntEquals(11, transport.lastWireRecordCount(), "json-rpc wire record count");
+		assertWireRecord(transport.lastWireRecordAt(0), 0, TuiPromptJsonRpcFrameDirection.Outbound, TuiPromptJsonRpcFrameKind.Request, request.methodText(),
+			request.messageJson(), "json-rpc request wire record");
+		assertWireRecord(transport.lastWireRecordAt(1), 1, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Response, response.methodText(),
+			response.messageJson(), "json-rpc response wire record");
+		assertWireRecord(transport.lastWireRecordAt(2), 2, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Notification,
+			activeStatus.methodText(), activeStatus.messageJson(), "json-rpc active status wire record");
+		assertWireRecord(transport.lastWireRecordAt(10), 10, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Notification,
+			idleStatus.methodText(), idleStatus.messageJson(), "json-rpc idle status wire record");
+		final expectedWireLines = [
+			request.messageJson(),
+			response.messageJson(),
+			activeStatus.messageJson(),
+			notification.messageJson(),
+			userCompleted.messageJson(),
+			itemStarted.messageJson(),
+			delta.messageJson(),
+			rawCompleted.messageJson(),
+			itemCompleted.messageJson(),
+			completion.messageJson(),
+			idleStatus.messageJson()
+		].join("\n") + "\n";
+		assertStringEquals(expectedWireLines, transport.lastWireJsonLines(), "json-rpc wire json lines");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
 	}
 
@@ -266,6 +292,10 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(0, transport.lastStreamNotificationCount(), "json-rpc rejected exchange should not record stream notifications");
 		assertIntEquals(1, transport.lastFrameCount(), "json-rpc rejected exchange should record outbound frame only");
 		assertRequestFrame(transport.lastFrameAt(0), request, "json-rpc rejected request frame");
+		assertIntEquals(1, transport.lastWireRecordCount(), "json-rpc rejected exchange should record outbound wire record only");
+		assertWireRecord(transport.lastWireRecordAt(0), 0, TuiPromptJsonRpcFrameDirection.Outbound, TuiPromptJsonRpcFrameKind.Request, request.methodText(),
+			request.messageJson(), "json-rpc rejected request wire record");
+		assertStringEquals(request.messageJson() + "\n", transport.lastWireJsonLines(), "json-rpc rejected wire json lines");
 		assertIntEquals(0, facade.queuedCount(), "json-rpc exchange rejection queues no fake events");
 	}
 
@@ -456,6 +486,23 @@ class TuiPromptSubmitEnvelopeHarness {
 		if (frame == null)
 			throw label;
 		return frame;
+	}
+
+	static function assertWireRecord(record:Null<TuiPromptJsonRpcFrameRecord>, expectedSequence:Int, expectedDirection:TuiPromptJsonRpcFrameDirection,
+			expectedKind:TuiPromptJsonRpcFrameKind, expectedMethod:String, expectedMessage:String, label:String):Void {
+		final concrete = expectWireRecord(record, label);
+		assertIntEquals(expectedSequence, concrete.sequence, label + " sequence");
+		assertStringEquals(expectedDirection.text(), concrete.directionText(), label + " direction");
+		assertStringEquals(expectedKind.text(), concrete.kindText(), label + " kind");
+		assertStringEquals(expectedMethod, concrete.methodText(), label + " method");
+		assertStringEquals(expectedMessage, concrete.messageJson(), label + " message");
+		assertStringEquals(expectedMessage + "\n", concrete.lineText(), label + " line");
+	}
+
+	static function expectWireRecord(record:Null<TuiPromptJsonRpcFrameRecord>, label:String):TuiPromptJsonRpcFrameRecord {
+		if (record == null)
+			throw label;
+		return record;
 	}
 
 	static function streamNotificationMethodText(notification:TuiPromptJsonRpcStreamNotification):String {

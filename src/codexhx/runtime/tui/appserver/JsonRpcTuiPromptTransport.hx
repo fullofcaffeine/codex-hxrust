@@ -11,6 +11,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	var lastNotificationsValue:Array<TuiPromptJsonRpcNotification>;
 	var lastStreamNotificationsValue:Array<TuiPromptJsonRpcStreamNotification>;
 	var lastFramesValue:Array<TuiPromptJsonRpcFrame>;
+	var lastWireRecordsValue:Array<TuiPromptJsonRpcFrameRecord>;
 
 	public function new(?exchange:TuiPromptJsonRpcExchange) {
 		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
@@ -19,6 +20,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		this.lastNotificationsValue = [];
 		this.lastStreamNotificationsValue = [];
 		this.lastFramesValue = [];
+		this.lastWireRecordsValue = [];
 	}
 
 	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
@@ -29,7 +31,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		lastResponseValue = null;
 		lastNotificationsValue = [];
 		lastStreamNotificationsValue = [];
-		lastFramesValue = [TuiPromptJsonRpcFrame.Request(request)];
+		replaceLastFrames([TuiPromptJsonRpcFrame.Request(request)]);
 		final exchangeOutcome = exchange.send(request, envelope);
 		if (exchangeOutcome == null || !exchangeOutcome.isAccepted())
 			return TuiPromptTransportOutcome.rejected(exchangeOutcome == null ? "missing_exchange_outcome" : exchangeOutcome.code());
@@ -42,7 +44,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		final frames = [TuiPromptJsonRpcFrame.Request(request), TuiPromptJsonRpcFrame.Response(response)];
 		for (notification in lastStreamNotificationsValue)
 			frames.push(TuiPromptJsonRpcFrame.StreamNotification(notification));
-		lastFramesValue = frames;
+		replaceLastFrames(frames);
 		return TuiPromptTransportOutcome.acceptedWithResponse(response.result,
 			TuiPromptJsonRpcNotificationProjector.projectWithStreamNotifications(lastStreamNotificationsValue, exchangeOutcome.events()));
 	}
@@ -95,5 +97,28 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 
 	public function lastFrames():Array<TuiPromptJsonRpcFrame> {
 		return lastFramesValue.copy();
+	}
+
+	public function lastWireRecordCount():Int {
+		return lastWireRecordsValue.length;
+	}
+
+	public function lastWireRecordAt(index:Int):Null<TuiPromptJsonRpcFrameRecord> {
+		if (index < 0 || index >= lastWireRecordsValue.length)
+			return null;
+		return lastWireRecordsValue[index];
+	}
+
+	public function lastWireRecords():Array<TuiPromptJsonRpcFrameRecord> {
+		return lastWireRecordsValue.copy();
+	}
+
+	public function lastWireJsonLines():String {
+		return TuiPromptJsonRpcFrameCodec.jsonLines(lastWireRecordsValue);
+	}
+
+	function replaceLastFrames(frames:Array<TuiPromptJsonRpcFrame>):Void {
+		lastFramesValue = frames;
+		lastWireRecordsValue = TuiPromptJsonRpcFrameCodec.records(frames);
 	}
 }

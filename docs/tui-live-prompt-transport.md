@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`, `TUI-LIVE-26` / `codex-hxrust-6rza`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`, `TUI-LIVE-26` / `codex-hxrust-6rza`, `TUI-LIVE-27` / `codex-hxrust-notn`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -233,13 +233,23 @@ small enum instead of text trace lines, so later socket work can replace the
 fake exchange with a real reader/writer while keeping request/response/stream
 ordering assertions tied to typed protocol objects.
 
+The frame log can be viewed as newline-delimited JSON-RPC wire records through
+`TuiPromptJsonRpcFrameCodec` and `TuiPromptJsonRpcFrameRecord`. Each record
+keeps a typed sequence number, direction, kind, and source frame, then derives
+the JSON-RPC method, message JSON, and line text only at the process-transport
+boundary. This mirrors the upstream app-server test-client shape, where
+requests are written and notifications/responses are read as JSON-RPC lines,
+without replacing typed protocol values with trace strings inside the TUI
+runtime.
+
 Tests can inject another transport to prove refusal behavior. A rejected
 transport preserves the prompt envelope and request-registration effects, but
 does not enqueue fake assistant/status events.
 
 Tests can also inject a rejecting JSON-RPC exchange. That path records the
-outbound request and its request frame, records no response or stream frames,
-returns a typed transport rejection, and queues no fake events.
+outbound request, its request frame, and its outbound wire record, records no
+response or stream frames, returns a typed transport rejection, and queues no
+fake events.
 
 Validation:
 
