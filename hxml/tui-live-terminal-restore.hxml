@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=metal
+-D rust_output=generated/tui-live-terminal-restore
+-D rust_crate=codex_hxrust_tui_live_terminal_restore
+-D rust_cargo_subcommand=check
+-main TuiLiveTerminalRestoreHarness

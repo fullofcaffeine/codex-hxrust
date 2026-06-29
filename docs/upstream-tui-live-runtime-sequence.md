@@ -4244,6 +4244,10 @@ The first acceptance target is credential-free: a Haxe-authored, haxe.rust-gener
 
 Status: TUI-LIVE-0 adds `codexhx.runtime.tui.terminal` as the production terminal seam outside `runtime/tui/smoke`. The contract defines typed setup, frame, size, event, key, exit, operation, and restore-report values plus a `TerminalBackend` interface and CI-safe `HeadlessTerminalBackend`. The focused harness `test/TuiTerminalBackendHarness.hx` and generated gate `harness/check-tui-terminal-contract.sh` prove setup, draw, poll/read event, resize, exit, restore, live-mode rejection, invalid-size rejection, and inactive-operation behavior through the Haxe interpreter and portable haxe.rust-generated Cargo path. This is the hook for TUI-LIVE-1's real crossterm/ratatui backend; it still does not take over a live terminal, attach app-server transport, perform model traffic, mutate persistent state, or render full upstream widgets.
 
+### TUI-LIVE-1 Generated Live Terminal Restore Gate
+
+Status: TUI-LIVE-1 adds `LiveTerminalBackend`, `NativeLiveTerminalProbe`, and `native/src/live_terminal_probe.rs` as the first generated crossterm/ratatui terminal ownership gate. The metal haxe.rust harness `harness/check-tui-live-terminal-restore.sh` proves setup, one-frame ratatui draw, nonblocking q/Esc/Ctrl-C exit polling, normal restore, and caught-error restore through the Haxe interpreter and generated Cargo check/test/run path. In non-TTY CI, the native probe reports a typed `SkippedNoTty` outcome so no terminal is taken and restore safety remains explicit; when run from a real TTY, the same generated binary attempts raw mode and alternate screen. This still does not attach app-server transport, run a full input loop, handle resize coalescing, persist state, call models, or render upstream widgets.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Full Interactive TUI
 
 After the minimal live shell proves terminal ownership, typed input, redraw scheduling, and fake app-server attach:

@@ -11,12 +11,12 @@ Public-readiness scaffolding includes repo-managed hooks, Haxe formatting, stage
 Current Beads-based completion snapshot:
 
 ```text
-[#######################################-] 98% (642/651 non-epic Beads closed)
+[#######################################-] 98% (643/651 non-epic Beads closed)
 ```
 
 This is an unweighted planning and throughput indicator, not a whole-Codex parity claim. The port has many small deterministic gates, including generated-Rust protocol/runtime/TUI slices, but a runnable interactive Codex TUI still needs live terminal ownership, app-server JSON-RPC integration, async task/channel boundaries, state DB persistence, tool execution, and broader upstream widget/runtime parity.
 
-The current queue is intentionally pivoted toward a minimal live TUI shell. `TUI-LIVE-0` / `codex-hxrust-nvs9` now defines the production `TerminalBackend` contract before more deterministic smoke expansion. The next ready milestone is `TUI-LIVE-1` / `codex-hxrust-3ddw`: a generated Rust binary that can own a terminal session, draw a minimal Codex shell frame, process basic input/resize events, and restore terminal state without credentials or model traffic.
+The current queue is intentionally pivoted toward a minimal live TUI shell. `TUI-LIVE-0` / `codex-hxrust-nvs9` defines the production `TerminalBackend` contract, and `TUI-LIVE-1` / `codex-hxrust-3ddw` adds the first generated crossterm/ratatui restore gate. The next ready milestone is `TUI-LIVE-2` / `codex-hxrust-8072`: typed resize/redraw scheduling on top of the live terminal backend, still without credentials or model traffic.
 
 The strategy is upstream-first:
 

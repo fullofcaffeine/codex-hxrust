@@ -27,4 +27,4 @@ The gate runs the Haxe interpreter harness, compiles the harness through portabl
 
 ## Next Hook
 
-`TUI-LIVE-1` should add a live backend beside `HeadlessTerminalBackend`. That backend should map the same `TerminalBackend` contract onto Rust-native crossterm/ratatui terminal ownership, prove raw/alternate-screen setup, draw one frame, exit on q/Esc/Ctrl-C, and restore terminal state. It should not add model traffic, production SQLite, or full app-server transport.
+`TUI-LIVE-1` adds `LiveTerminalBackend` beside `HeadlessTerminalBackend`. It maps the same `TerminalBackend` contract onto a narrow crossterm/ratatui native probe, proves one-frame draw plus normal/error restore, and keeps CI safe with a typed no-TTY fallback. `TUI-LIVE-2` should build resize/redraw scheduling on top of that backend without adding model traffic, production SQLite, or full app-server transport.

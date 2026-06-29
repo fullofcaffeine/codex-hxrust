@@ -12,6 +12,10 @@ Rules:
 
 The full policy lives in `../../../docs/interop-boundary-policy.md`.
 
+## Terminal
+
+`codexhx.native.terminal` owns the TUI-LIVE-1 native crossterm/ratatui pressure facade. It binds `native/src/live_terminal_probe.rs` through a tiny extern surface and reports typed setup/draw/poll/restore facts back to `codexhx.runtime.tui.terminal.LiveTerminalBackend`. The generated gate is `harness/check-tui-live-terminal-restore.sh`, and the slice is documented in `docs/tui-live-terminal-restore.md`.
+
 ## State
 
 `codexhx.native.state` owns the HXCX-4.14 and HXCX-4.15 native SQLite pressure facades. It uses metal haxe.rust and `sys.db.Sqlite` to prove credential-free thread metadata upsert/readback plus a typed reconcile/query adapter boundary without opening upstream Codex state files or adding Codex-specific compiler behavior.

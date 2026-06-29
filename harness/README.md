@@ -25,6 +25,7 @@ Keep harness inputs credential-free.
 Current harnesses:
 
 - `check-doctor-json.sh` regenerates portable and metal crates, runs each generated binary, and validates the doctor JSON shape with `fixtures/hxrust/doctor-shape.v1.jq`.
+- `check-tui-live-terminal-restore.sh` validates the TUI-LIVE-1 live terminal restore gate, including the typed `TerminalBackend` live implementation, crossterm/ratatui native setup/draw/poll/restore bridge, CI no-TTY fallback, normal restore, caught-error restore, metal haxe.rust generation, and generated Cargo check/test/run.
 - `check-diagnostics.sh` validates the HXCX-4.6 diagnostic log redaction and failure-report fixture IDs through Haxe, haxe.rust, and generated Cargo.
 - `check-protocol-ids.sh` runs the Haxe ID round-trip harness and compiles the same harness through haxe.rust.
 - `check-json-boundary.sh` validates typed JSON boundary helpers and the serde bridge facade.
