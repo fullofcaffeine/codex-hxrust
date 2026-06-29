@@ -29,6 +29,7 @@ class TuiPromptJsonRpcNotificationProjector {
 		switch notification {
 			case Turn(turnNotification):
 				appendTurnNotification(events, turnNotification);
+			case AgentMessageStarted(_):
 			case AgentMessageDelta(deltaNotification):
 				events.push(TuiAppServerEvent.AssistantDelta(deltaNotification.threadId, deltaNotification.delta));
 			case AgentMessageCompleted(_):
