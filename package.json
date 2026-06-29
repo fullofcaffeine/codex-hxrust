@@ -26,6 +26,7 @@
     "hooks:install": "bash scripts/hooks/install.sh",
     "public:precommit": "npm run format:haxe:check && npm run lint:source-names && npm run security:gitleaks",
     "test:generated-cargo": "bash scripts/check-generated-cargo.sh",
-    "test:tui-smoke": "bash harness/check-tui-smoke.sh"
+    "test:tui-smoke": "bash harness/check-tui-smoke.sh",
+    "test:tui-terminal-contract": "bash harness/check-tui-terminal-contract.sh"
   }
 }

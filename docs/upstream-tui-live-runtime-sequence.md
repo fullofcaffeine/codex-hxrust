@@ -4240,6 +4240,10 @@ Status: after the external architecture review, the default next work pivots fro
 
 The first acceptance target is credential-free: a Haxe-authored, haxe.rust-generated binary that can own a terminal session, draw a minimal Codex shell frame, process basic key/resize/exit events, and restore terminal state. It should use typed production state/effects, not a giant nullable fixture event record or `expectedTrace` as the primary proof.
 
+### TUI-LIVE-0 Production TerminalBackend Contract
+
+Status: TUI-LIVE-0 adds `codexhx.runtime.tui.terminal` as the production terminal seam outside `runtime/tui/smoke`. The contract defines typed setup, frame, size, event, key, exit, operation, and restore-report values plus a `TerminalBackend` interface and CI-safe `HeadlessTerminalBackend`. The focused harness `test/TuiTerminalBackendHarness.hx` and generated gate `harness/check-tui-terminal-contract.sh` prove setup, draw, poll/read event, resize, exit, restore, live-mode rejection, invalid-size rejection, and inactive-operation behavior through the Haxe interpreter and portable haxe.rust-generated Cargo path. This is the hook for TUI-LIVE-1's real crossterm/ratatui backend; it still does not take over a live terminal, attach app-server transport, perform model traffic, mutate persistent state, or render full upstream widgets.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Full Interactive TUI
 
 After the minimal live shell proves terminal ownership, typed input, redraw scheduling, and fake app-server attach:
