@@ -22,6 +22,10 @@ class TuiPromptSubmitResult {
 		return new TuiPromptSubmitResult(TuiPromptSubmitStatus.Accepted, envelope, effects);
 	}
 
+	public static function transportRejected(envelope:TuiPromptSubmitEnvelope, effects:Array<TuiAppServerShellEffect>):TuiPromptSubmitResult {
+		return new TuiPromptSubmitResult(TuiPromptSubmitStatus.TransportRejected, envelope, effects);
+	}
+
 	public function status():TuiPromptSubmitStatus {
 		return statusValue;
 	}

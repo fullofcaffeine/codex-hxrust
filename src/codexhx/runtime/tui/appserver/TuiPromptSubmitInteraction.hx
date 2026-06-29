@@ -88,6 +88,8 @@ class TuiPromptSubmitInteraction {
 				"missing-session";
 			case MissingThread:
 				"missing-thread";
+			case TransportRejected:
+				"transport-rejected";
 		}
 	}
 }

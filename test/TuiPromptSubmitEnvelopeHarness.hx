@@ -4,7 +4,10 @@ import codexhx.protocol.ThreadId;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
+import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
+import codexhx.runtime.tui.appserver.TuiPromptTransport;
+import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.chatwidget.ChatWidgetStatusKind;
 import codexhx.runtime.tui.terminal.HeadlessTerminalBackend;
@@ -21,6 +24,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testPromptSubmitEnvelopeEchoAndRedraw();
 		testEmptySubmitIsTypedRefusal();
 		testUnattachedSubmitIsTypedRefusal();
+		testTransportRejectedSubmitIsTypedRefusal();
 		testLiveBackendSubmitEchoDrawsShell();
 		Sys.println("tui-prompt-submit-envelope ok");
 	}
@@ -86,6 +90,29 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(0, facade.queuedCount(), "unattached queue");
 	}
 
+	static function testTransportRejectedSubmitIsTypedRefusal():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000006777");
+		final facade = attachedFacadeWithTransport(shell, activeThread, new RejectingPromptTransport("offline"));
+		final backend = new HeadlessTerminalBackend([]);
+		assertTrue(backend.setup(TerminalSetup.headless(TerminalSize.of(80, 12))).ok, "reject setup");
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(80, 12)), backend);
+
+		pump.submitComposerInput(TerminalInputEvent.Text("blocked"), RequestId.fromInteger(76), TuiAppServerPumpPolicy.lossless());
+		final submit = pump.submitComposerInput(TerminalInputEvent.Submit, RequestId.fromInteger(77), TuiAppServerPumpPolicy.lossless());
+
+		assertFalse(submit.submitAccepted(), "transport rejection refused");
+		assertStringEquals("transport-rejected", submit.submitStatusText(), "transport status");
+		assertStringEquals("77", submit.submitRequestIdText(), "transport request id preserved");
+		assertStringEquals("blocked", submit.submitPromptText(), "transport prompt preserved");
+		assertIntEquals(1, submit.registeredPromptRequestCount(), "transport registered prompt");
+		assertIntEquals(0, submit.pumpOutcome().eventsDrained(), "transport rejection queues no fake events");
+		assertIntEquals(0, facade.queuedCount(), "transport queue empty");
+		assertStringEquals("user> blocked", shell.transcriptAt(1).renderText(), "user row still records submitted prompt");
+		assertStringEquals("Codex | model: gpt-live | status: session started", backend.currentFrame().lineAt(0), "status unchanged after rejection");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
 	static function testLiveBackendSubmitEchoDrawsShell():Void {
 		final shell = ChatWidgetShellState.initial("pending");
 		final activeThread = thread("00000000-0000-0000-0000-000000007777");
@@ -105,7 +132,11 @@ class TuiPromptSubmitEnvelopeHarness {
 	}
 
 	static function attachedFacade(shell:ChatWidgetShellState, activeThread:ThreadId):FakeTuiAppServerFacade {
-		final facade = new FakeTuiAppServerFacade(shell);
+		return attachedFacadeWithTransport(shell, activeThread, null);
+	}
+
+	static function attachedFacadeWithTransport(shell:ChatWidgetShellState, activeThread:ThreadId, transport:Null<TuiPromptTransport>):FakeTuiAppServerFacade {
+		final facade = new FakeTuiAppServerFacade(shell, transport);
 		final request = RequestId.fromInteger(10);
 		facade.startSessionAttach(request, session("00000000-0000-0000-0000-000000009999"), activeThread, "gpt-live");
 		facade.completeSessionAttach(request);
@@ -146,6 +177,8 @@ class TuiPromptSubmitEnvelopeHarness {
 				"missing-session";
 			case MissingThread:
 				"missing-thread";
+			case TransportRejected:
+				"transport-rejected";
 		}
 	}
 
@@ -171,5 +204,19 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function assertFalse(value:Bool, label:String):Void {
 		if (value)
 			throw label;
+	}
+}
+
+class RejectingPromptTransport implements TuiPromptTransport {
+	final code:String;
+
+	public function new(code:String) {
+		this.code = code;
+	}
+
+	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
+		if (envelope == null)
+			return TuiPromptTransportOutcome.rejected("missing_envelope");
+		return TuiPromptTransportOutcome.rejected(code);
 	}
 }

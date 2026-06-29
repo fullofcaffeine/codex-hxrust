@@ -8,4 +8,5 @@ enum TuiPromptSubmitStatus {
 	EmptyPrompt;
 	MissingSession;
 	MissingThread;
+	TransportRejected;
 }

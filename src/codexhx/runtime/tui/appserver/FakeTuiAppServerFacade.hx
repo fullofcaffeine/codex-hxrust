@@ -22,6 +22,7 @@ import haxe.ds.StringMap;
 class FakeTuiAppServerFacade {
 	final shellValue:ChatWidgetShellState;
 	final agentNavigationValue:AgentNavigationState;
+	final promptTransport:TuiPromptTransport;
 	// StringMap forces string keys; only this facade converts RequestId at the map boundary.
 	final pending:StringMap<TuiAppServerPendingRequest>;
 	final queue:Array<TuiAppServerEvent>;
@@ -30,9 +31,10 @@ class FakeTuiAppServerFacade {
 	var activeThreadValue:Null<ThreadId>;
 	var latestAttachGeneration:Int;
 
-	public function new(shell:ChatWidgetShellState) {
+	public function new(shell:ChatWidgetShellState, ?promptTransport:TuiPromptTransport) {
 		this.shellValue = shell == null ? ChatWidgetShellState.initial("model pending") : shell;
 		this.agentNavigationValue = new AgentNavigationState();
+		this.promptTransport = promptTransport == null ? new EchoTuiPromptTransport() : promptTransport;
 		this.pending = new StringMap<TuiAppServerPendingRequest>();
 		this.queue = [];
 		this.activeSessionValue = null;
@@ -103,9 +105,11 @@ class FakeTuiAppServerFacade {
 			TuiAppServerShellEffect.RequestRegistered(requestId, TuiAppServerRequestMethod.PromptSubmit),
 			TuiAppServerShellEffect.PromptSubmitSent(envelope)
 		];
-		enqueue(TuiAppServerEvent.ThreadStatus(activeThreadValue, TuiAppServerThreadStatus.Working("submitted")));
-		enqueue(TuiAppServerEvent.AssistantDelta(activeThreadValue, "echo: " + text));
-		enqueue(TuiAppServerEvent.ThreadStatus(activeThreadValue, TuiAppServerThreadStatus.Ready("ready")));
+		final transportOutcome = promptTransport.submitPrompt(envelope);
+		if (transportOutcome == null || !transportOutcome.isAccepted())
+			return TuiPromptSubmitResult.transportRejected(envelope, effects);
+		for (event in transportOutcome.events())
+			enqueue(event);
 		return TuiPromptSubmitResult.accepted(envelope, effects);
 	}
 
