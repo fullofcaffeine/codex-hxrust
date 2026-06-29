@@ -8,5 +8,6 @@ enum TuiPromptJsonRpcStreamNotification {
 	UserMessageCompleted(notification:TuiPromptUserMessageCompletedNotification);
 	AgentMessageStarted(notification:TuiPromptAgentMessageStartedNotification);
 	AgentMessageDelta(notification:TuiPromptAgentMessageDeltaNotification);
+	RawResponseItemCompleted(notification:TuiPromptRawResponseItemCompletedNotification);
 	AgentMessageCompleted(notification:TuiPromptAgentMessageCompletedNotification);
 }
