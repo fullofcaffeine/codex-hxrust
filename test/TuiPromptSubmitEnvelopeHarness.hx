@@ -6,8 +6,10 @@ import codexhx.protocol.json.CodexJson;
 import codexhx.protocol.json.JsonParseOutcome;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
+import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchange;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchangeOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcMethod;
@@ -34,6 +36,7 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function main():Void {
 		testPromptSubmitEnvelopeEchoAndRedraw();
 		testPromptSubmitBuildsJsonRpcTurnStartEnvelope();
+		testJsonRpcNotificationsProjectToTransportEvents();
 		testJsonRpcExchangeRejectedSubmitIsTypedRefusal();
 		testEmptySubmitIsTypedRefusal();
 		testUnattachedSubmitIsTypedRefusal();
@@ -128,6 +131,22 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertTrue(completionProtocol.ok, "json-rpc completion parses through app protocol: " + completionProtocol.errorCode);
 		assertStringEquals("turn", completionProtocol.message.summary, "json-rpc completion summary");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
+	}
+
+	static function testJsonRpcNotificationsProjectToTransportEvents():Void {
+		final transport = new JsonRpcTuiPromptTransport();
+		final threadId = thread("00000000-0000-0000-0000-000000005558");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(80), session("00000000-0000-0000-0000-000000009998"), threadId, "projected ask");
+		final outcome = transport.submitPrompt(envelope);
+		assertTrue(outcome.isAccepted(), "projected transport accepted");
+		assertIntEquals(2, transport.lastNotificationCount(), "projected notification count");
+		assertIntEquals(3, outcome.eventCount(), "projected event count");
+		assertThreadStatusEvent(expectAppServerEvent(outcome.eventAt(0), "projected start event"), threadId, TuiAppServerThreadStatus.Working("submitted"),
+			"projected start status");
+		assertAssistantDeltaEvent(expectAppServerEvent(outcome.eventAt(1), "projected assistant event"), threadId, "echo: projected ask",
+			"projected assistant delta");
+		assertThreadStatusEvent(expectAppServerEvent(outcome.eventAt(2), "projected completion event"), threadId, TuiAppServerThreadStatus.Ready("ready"),
+			"projected completion status");
 	}
 
 	static function testJsonRpcExchangeRejectedSubmitIsTypedRefusal():Void {
@@ -296,6 +315,43 @@ class TuiPromptSubmitEnvelopeHarness {
 		if (!outcome.ok)
 			throw "json parse failed: " + outcome.errorCode + " " + outcome.errorPath;
 		return outcome.value;
+	}
+
+	static function expectAppServerEvent(event:Null<TuiAppServerEvent>, label:String):TuiAppServerEvent {
+		if (event == null)
+			throw label;
+		return event;
+	}
+
+	static function assertThreadStatusEvent(event:TuiAppServerEvent, expectedThread:ThreadId, expectedStatus:TuiAppServerThreadStatus, label:String):Void {
+		switch event {
+			case TuiAppServerEvent.ThreadStatus(threadId, status):
+				assertTrue(threadId.equals(expectedThread), label + " thread");
+				assertStringEquals(threadStatusText(expectedStatus), threadStatusText(status), label + " status");
+			case _:
+				throw label + ": expected thread status event";
+		}
+	}
+
+	static function assertAssistantDeltaEvent(event:TuiAppServerEvent, expectedThread:ThreadId, expectedDelta:String, label:String):Void {
+		switch event {
+			case TuiAppServerEvent.AssistantDelta(threadId, delta):
+				assertTrue(threadId.equals(expectedThread), label + " thread");
+				assertStringEquals(expectedDelta, delta, label + " delta");
+			case _:
+				throw label + ": expected assistant delta event";
+		}
+	}
+
+	static function threadStatusText(status:TuiAppServerThreadStatus):String {
+		return switch status {
+			case Ready(text):
+				"ready:" + text;
+			case Working(text):
+				"working:" + text;
+			case Failed(text):
+				"failed:" + text;
+		}
 	}
 
 	static function assertStringEquals(expected:String, actual:String, label:String):Void {

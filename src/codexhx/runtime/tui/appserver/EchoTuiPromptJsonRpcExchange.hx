@@ -16,9 +16,7 @@ class EchoTuiPromptJsonRpcExchange implements TuiPromptJsonRpcExchange {
 		final started = TuiPromptJsonRpcNotification.turnStarted(envelope, turn);
 		final completed = TuiPromptJsonRpcNotification.turnCompleted(envelope, turn);
 		return TuiPromptJsonRpcExchangeOutcome.accepted(response, [started, completed], [
-			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Working("submitted")),
-			TuiAppServerEvent.AssistantDelta(envelope.threadId, "echo: " + envelope.promptText),
-			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Ready("ready"))
+			TuiAppServerEvent.AssistantDelta(envelope.threadId, "echo: " + envelope.promptText)
 		]);
 	}
 }

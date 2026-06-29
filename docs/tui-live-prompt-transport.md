@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -80,12 +80,18 @@ The exchange also records a matching `turn/completed` notification with the same
 turn id and `completed` status, and the harness parses that notification through
 the same app-protocol gate.
 
-The live shell still consumes the existing queued fake events for visible
-behavior:
+`JsonRpcTuiPromptTransport` now projects those typed notifications into the
+shell-facing event stream with `TuiPromptJsonRpcNotificationProjector`. The fake
+assistant echo remains an in-process stream event, but the working and ready
+status transitions come from the JSON-RPC turn notifications:
 
-- working status
+- `turn/started` to working status
 - assistant echo delta
-- ready status
+- `turn/completed` to ready status
+
+This keeps the generated live demo behavior unchanged while making the prompt
+transport consume the same notification objects that later socket transport can
+read from the real app-server stream.
 
 Tests can inject another transport to prove refusal behavior. A rejected
 transport preserves the prompt envelope and request-registration effects, but
@@ -103,5 +109,5 @@ bash harness/check-tui-prompt-submit-envelope.sh
 
 This is still not app-server socket ownership, credentialed model traffic, tool
 execution, or persistent state. It is the shell-facing JSON-RPC
-request/response/notification seam those later transports can implement without
-changing ChatWidget or terminal-loop code.
+request/response/notification-to-event seam those later transports can
+implement without changing ChatWidget or terminal-loop code.

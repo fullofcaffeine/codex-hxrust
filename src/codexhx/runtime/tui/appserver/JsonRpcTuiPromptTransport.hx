@@ -32,7 +32,8 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 			return TuiPromptTransportOutcome.rejected("missing_exchange_response");
 		lastResponseValue = response;
 		lastNotificationsValue = exchangeOutcome.notifications();
-		return TuiPromptTransportOutcome.acceptedWithResponse(response.result, exchangeOutcome.events());
+		return TuiPromptTransportOutcome.acceptedWithResponse(response.result,
+			TuiPromptJsonRpcNotificationProjector.projectWithStreamEvents(lastNotificationsValue, exchangeOutcome.events()));
 	}
 
 	public function lastRequest():Null<TuiPromptJsonRpcRequest> {
