@@ -36,3 +36,5 @@ The guard scans `src/codexhx/runtime/**/*.hx` outside `src/codexhx/runtime/tui/s
 ## Staged Migration
 
 This slice intentionally does not move the giant smoke package yet. Existing smoke gates continue to run from the old namespace to avoid high-churn fixture breakage while the live TUI packages mature. The quarantine rule is the immediate architectural fence; later cleanup can move fixture-only smoke code under `codexhx.validation.tui.smoke` once production-worthy pieces such as agent navigation have been promoted.
+
+`TUI-LIVE-8` applies that rule to agent navigation: `codexhx.runtime.tui.agent` now owns the typed state and picker formatting, while `TuiSmokeAgentNavigationState` only adapts legacy fixture string IDs and smoke direction values to the production module.

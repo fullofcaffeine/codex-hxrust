@@ -64,6 +64,7 @@ Profile policy for the scaffold:
 | `tui-fake-app-server-session.hxml` | Compile the TUI-LIVE-5 fake app-server session attach harness through metal haxe.rust. |
 | `tui-app-server-event-pump.hxml` | Compile the TUI-LIVE-6 app-server event pump harness through metal haxe.rust. |
 | `tui-prompt-submit-envelope.hxml` | Compile the TUI-LIVE-7 prompt submit envelope harness through metal haxe.rust. |
+| `tui-agent-navigation.hxml` | Compile the TUI-LIVE-8 production agent navigation state harness through portable haxe.rust. |
 | `resume-picker-kernel.hxml` | Compile the HXCX-TUI-103 resume picker pure state/effect kernel harness through portable haxe.rust. |
 | `resume-picker-host-facade.hxml` | Compile the HXCX-TUI-104 resume picker runtime-neutral host facade harness through portable haxe.rust. |
 | `resume-picker-no-credential-gate.hxml` | Compile the HXCX-TUI-105 resume picker no-credential app-server/render/config gate through portable haxe.rust. |

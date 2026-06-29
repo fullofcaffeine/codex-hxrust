@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=portable
+-D rust_output=generated/tui-agent-navigation
+-D rust_crate=codex_hxrust_tui_agent_navigation
+-D rust_cargo_subcommand=check
+-main TuiAgentNavigationHarness

@@ -1,167 +1,93 @@
 package codexhx.runtime.tui.smoke;
 
+import codexhx.protocol.ThreadId;
+import codexhx.runtime.tui.agent.AgentNavigationDirection;
+import codexhx.runtime.tui.agent.AgentNavigationState;
+
+/**
+	Validation adapter that preserves legacy smoke fixture string IDs while the
+	production agent navigation behavior lives in `runtime.tui.agent`.
+**/
 class TuiSmokeAgentNavigationState {
-	final entries:Array<TuiSmokeAgentNavigationEntry>;
-	final order:Array<String>;
+	final state:AgentNavigationState;
 
 	public function new() {
-		entries = [];
-		order = [];
+		state = new AgentNavigationState();
 	}
 
 	public function upsert(threadId:String, agentNickname:String, agentRole:String, isClosed:Bool):Void {
-		final index = indexOf(threadId);
-		if (index < 0) {
-			order.push(threadId);
-			entries.push(new TuiSmokeAgentNavigationEntry({
-				threadId: threadId,
-				agentNickname: agentNickname,
-				agentRole: agentRole,
-				agentPath: "",
-				isRunning: false,
-				isClosed: isClosed
-			}));
-		} else {
-			entries[index] = entries[index].withMetadata(agentNickname, agentRole, isClosed);
-		}
+		state.upsert(thread(threadId), agentNickname, agentRole, isClosed);
 	}
 
 	public function recordActivity(threadId:String, agentPath:String, isRunning:Bool):Void {
-		final index = indexOf(threadId);
-		if (index < 0) {
-			order.push(threadId);
-			entries.push(new TuiSmokeAgentNavigationEntry({
-				threadId: threadId,
-				agentNickname: "",
-				agentRole: "",
-				agentPath: agentPath,
-				isRunning: isRunning,
-				isClosed: false
-			}));
-		} else {
-			entries[index] = entries[index].withActivity(agentPath, isRunning);
-		}
+		state.recordActivity(thread(threadId), agentPath, isRunning);
 	}
 
 	public function setRunning(threadId:String, isRunning:Bool):Void {
-		final index = indexOf(threadId);
-		if (index >= 0)
-			entries[index] = entries[index].withRunning(isRunning);
+		state.setRunning(thread(threadId), isRunning);
 	}
 
 	public function setAgentPath(threadId:String, agentPath:String):Void {
-		final trimmed = StringTools.trim(agentPath);
-		final index = indexOf(threadId);
-		if (index >= 0 && trimmed != "")
-			entries[index] = entries[index].withAgentPath(agentPath);
+		state.setAgentPath(thread(threadId), agentPath);
 	}
 
 	public function markClosed(threadId:String):Void {
-		final index = indexOf(threadId);
-		if (index >= 0) {
-			entries[index] = entries[index].closed();
-		} else {
-			upsert(threadId, "", "", true);
-		}
+		state.markClosed(thread(threadId));
 	}
 
 	public function remove(threadId:String):Void {
-		final index = indexOf(threadId);
-		if (index >= 0)
-			entries.splice(index, 1);
-		var i = order.length - 1;
-		while (i >= 0) {
-			if (order[i] == threadId)
-				order.splice(i, 1);
-			i = i - 1;
-		}
+		state.remove(thread(threadId));
 	}
 
 	public function clear():Void {
-		entries.splice(0, entries.length);
-		order.splice(0, order.length);
+		state.clear();
 	}
 
 	public function orderedThreadIds():Array<String> {
 		final out:Array<String> = [];
-		for (threadId in order) {
-			if (indexOf(threadId) >= 0)
-				out.push(threadId);
-		}
+		for (threadId in state.orderedThreadIds())
+			out.push(threadId.toString());
 		return out;
 	}
 
 	public function adjacentThreadId(currentThreadId:String, direction:TuiSmokeAgentNavigationDirectionKind):String {
-		final ids = orderedThreadIds();
-		if (ids.length < 2 || currentThreadId == "")
+		final runtimeDirection = directionFromSmoke(direction);
+		if (currentThreadId == "" || runtimeDirection == null)
 			return "";
-		var currentIndex = -1;
-		for (i in 0...ids.length) {
-			if (ids[i] == currentThreadId)
-				currentIndex = i;
-		}
-		if (currentIndex < 0)
-			return "";
-		final nextIndex = switch direction {
-			case TuiSmokeAgentNavigationDirectionKind.Next:
-				(currentIndex + 1) % ids.length;
-			case TuiSmokeAgentNavigationDirectionKind.Previous:
-				currentIndex == 0 ? ids.length - 1 : currentIndex - 1;
-			case _:
-				-1;
-		}
-		return nextIndex < 0 ? "" : ids[nextIndex];
+		final adjacent = state.adjacentThreadId(thread(currentThreadId), runtimeDirection);
+		return adjacent == null ? "" : adjacent.toString();
 	}
 
 	public function activeAgentLabel(currentThreadId:String, primaryThreadId:String):String {
-		if (entries.length <= 1 || currentThreadId == "")
+		if (currentThreadId == "")
 			return "";
-		final isPrimary = primaryThreadId == currentThreadId;
-		final entry = get(currentThreadId);
-		if (entry == null)
-			return formatAgentPickerItemName("", "", isPrimary);
-		final trimmedPath = StringTools.trim(entry.agentPath);
-		if (!isPrimary && trimmedPath != "")
-			return "`" + entry.agentPath + "`";
-		return formatAgentPickerItemName(entry.agentNickname, entry.agentRole, isPrimary);
+		return state.activeAgentLabel(thread(currentThreadId), thread(primaryThreadId));
 	}
 
 	public function hasNonPrimaryThread(primaryThreadId:String):Bool {
-		for (entry in entries) {
-			if (entry.threadId != primaryThreadId)
-				return true;
-		}
-		return false;
+		return state.hasNonPrimaryThread(thread(primaryThreadId));
 	}
 
 	public static function pickerSubtitle():String {
-		return "Select an agent to watch. Alt+Left previous, Alt+Right next.";
-	}
-
-	function get(threadId:String):Null<TuiSmokeAgentNavigationEntry> {
-		final index = indexOf(threadId);
-		return index < 0 ? null : entries[index];
-	}
-
-	function indexOf(threadId:String):Int {
-		for (i in 0...entries.length) {
-			if (entries[i].threadId == threadId)
-				return i;
-		}
-		return -1;
+		return AgentNavigationState.pickerSubtitle();
 	}
 
 	public static function formatAgentPickerItemName(agentNickname:String, agentRole:String, isPrimary:Bool):String {
-		if (isPrimary)
-			return "Main [default]";
-		final nickname = StringTools.trim(agentNickname);
-		final role = StringTools.trim(agentRole);
-		if (nickname != "" && role != "")
-			return nickname + " [" + role + "]";
-		if (nickname != "")
-			return nickname;
-		if (role != "")
-			return "[" + role + "]";
-		return "Agent";
+		return AgentNavigationState.formatAgentPickerItemName(agentNickname, agentRole, isPrimary);
+	}
+
+	static function thread(value:String):ThreadId {
+		return ThreadId.unsafeAssumeValid(value);
+	}
+
+	static function directionFromSmoke(direction:TuiSmokeAgentNavigationDirectionKind):Null<AgentNavigationDirection> {
+		return switch direction {
+			case TuiSmokeAgentNavigationDirectionKind.Next:
+				Next;
+			case TuiSmokeAgentNavigationDirectionKind.Previous:
+				Previous;
+			case _:
+				null;
+		}
 	}
 }

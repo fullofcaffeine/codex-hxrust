@@ -11,12 +11,12 @@ Public-readiness scaffolding includes repo-managed hooks, Haxe formatting, stage
 Current Beads-based completion snapshot:
 
 ```text
-[#######################################-] 99% (650/651 non-epic Beads closed)
+[########################################] 100% (651/651 non-epic Beads closed)
 ```
 
 This is an unweighted planning and throughput indicator, not a whole-Codex parity claim. The port has many small deterministic gates, including generated-Rust protocol/runtime/TUI slices, but a runnable interactive Codex TUI still needs live terminal ownership, app-server JSON-RPC integration, async task/channel boundaries, state DB persistence, tool execution, and broader upstream widget/runtime parity.
 
-The current queue is intentionally pivoted toward a minimal live TUI shell. `TUI-LIVE-0` / `codex-hxrust-nvs9` defines the production `TerminalBackend` contract, `TUI-LIVE-1` / `codex-hxrust-3ddw` adds the first generated crossterm/ratatui restore gate, `TUI-LIVE-2` / `codex-hxrust-8072` adds typed resize/redraw scheduling, `TUI-LIVE-3` / `codex-hxrust-k92m` maps live/headless key input into typed composer state, `TUI-LIVE-4` / `codex-hxrust-59op` adds minimal ChatWidget shell state and render, `TUI-LIVE-5` / `codex-hxrust-ppp3` attaches that shell to a fake app-server session, `TUI-LIVE-6` / `codex-hxrust-6pzd` pumps fake app-server events through the live redraw path, `TUI-LIVE-7` / `codex-hxrust-mvwx` emits prompt submit envelopes from the live composer, and `ARCH-1` / `codex-hxrust-f512` fences the smoke validation package with an import-boundary guard. The next ready milestone is `TUI-LIVE-8` / `codex-hxrust-4dnm`: promote agent navigation state out of smoke.
+The current queue is intentionally pivoted toward a minimal live TUI shell. `TUI-LIVE-0` / `codex-hxrust-nvs9` defines the production `TerminalBackend` contract, `TUI-LIVE-1` / `codex-hxrust-3ddw` adds the first generated crossterm/ratatui restore gate, `TUI-LIVE-2` / `codex-hxrust-8072` adds typed resize/redraw scheduling, `TUI-LIVE-3` / `codex-hxrust-k92m` maps live/headless key input into typed composer state, `TUI-LIVE-4` / `codex-hxrust-59op` adds minimal ChatWidget shell state and render, `TUI-LIVE-5` / `codex-hxrust-ppp3` attaches that shell to a fake app-server session, `TUI-LIVE-6` / `codex-hxrust-6pzd` pumps fake app-server events through the live redraw path, `TUI-LIVE-7` / `codex-hxrust-mvwx` emits prompt submit envelopes from the live composer, `ARCH-1` / `codex-hxrust-f512` fences the smoke validation package with an import-boundary guard, and `TUI-LIVE-8` / `codex-hxrust-4dnm` promotes agent navigation state into a production `runtime.tui.agent` package with a smoke wrapper over it. No non-epic Beads are currently ready after this slice; the next step is to file/select the next raw upstream live-TUI or app-server runtime milestone rather than returning to trace-only smoke expansion.
 
 The strategy is upstream-first:
 
