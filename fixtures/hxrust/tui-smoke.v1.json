@@ -26344,6 +26344,88 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> inactive thread started missing path\ninput> \ntrace:\ntui.thread_started_session.plan=headless\ntui.thread_started_session.init=missing-path-primary-model:primary=00000000-0000-0000-0000-000000000301:agent=00000000-0000-0000-0000-000000000302:name=agent thread:model=gpt-primary:provider=agent-provider:approval=on_request:cwd=/tmp/agent:roots=/tmp/agent:rollout=:nav=Robie [explorer]:running=false:closed=false\ntui.thread_started_session.failure=live_thread_started_missing_path_rejected:no_app_server=true:no_fs=true:no_terminal=true:no_buffer=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "thread-read-session-permission-fallback-headless",
+      "frame": {
+        "name": "thread-read-session-permission-fallback-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "thread read permission fallback"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "thread_read_session",
+          "threadReadSession": {
+            "allowAppServerMutation": false,
+            "allowFilesystemMutation": false,
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "infer",
+                "name": "read-thread-widget-permissions",
+                "primaryThreadId": "00000000-0000-0000-0000-000000000401",
+                "readThreadId": "00000000-0000-0000-0000-000000000402",
+                "primaryCwd": "/tmp/main",
+                "readCwd": "/tmp/read",
+                "threadName": "read thread",
+                "modelProviderId": "read-provider",
+                "primaryPermissionProfile": "workspace_write",
+                "widgetPermissionProfile": "default_widget_permissions",
+                "primaryRuntimeWorkspaceRoots": [
+                  "/tmp/main"
+                ],
+                "expectedThreadId": "00000000-0000-0000-0000-000000000402",
+                "expectedCwd": "/tmp/read",
+                "expectedRuntimeWorkspaceRoots": [
+                  "/tmp/read"
+                ],
+                "expectedPermissionProfile": "default_widget_permissions",
+                "expectedPrimaryProfileReused": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_thread_read_session_rejected",
+                "noAppServerMutation": true,
+                "noFilesystemMutation": true,
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.thread_read_session.plan=headless\ntui.thread_read_session.infer=read-thread-widget-permissions:primary=00000000-0000-0000-0000-000000000401:read=00000000-0000-0000-0000-000000000402:name=read thread:provider=read-provider:cwd=/tmp/read:roots=/tmp/read:permission=default_widget_permissions:primary_permission=workspace_write:primary_reused=false\ntui.thread_read_session.failure=live_thread_read_session_rejected:no_app_server=true:no_fs=true:no_terminal=true:no_buffer=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> thread read permission fallback\ninput> \ntrace:\ntui.thread_read_session.plan=headless\ntui.thread_read_session.infer=read-thread-widget-permissions:primary=00000000-0000-0000-0000-000000000401:read=00000000-0000-0000-0000-000000000402:name=read thread:provider=read-provider:cwd=/tmp/read:roots=/tmp/read:permission=default_widget_permissions:primary_permission=workspace_write:primary_reused=false\ntui.thread_read_session.failure=live_thread_read_session_rejected:no_app_server=true:no_fs=true:no_terminal=true:no_buffer=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "prompt-args-headless",
       "frame": {
         "name": "prompt-args-headless",

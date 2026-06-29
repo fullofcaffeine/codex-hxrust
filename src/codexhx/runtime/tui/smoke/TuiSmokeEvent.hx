@@ -114,6 +114,7 @@ typedef TuiSmokeEventFields = {
 	final loadedThreads:Null<TuiSmokeLoadedThreadsPlan>;
 	final initialHistoryReplay:Null<TuiSmokeInitialHistoryReplayPlan>;
 	final threadStartedSession:Null<TuiSmokeThreadStartedSessionPlan>;
+	final threadReadSession:Null<TuiSmokeThreadReadSessionPlan>;
 	final desktopNotification:Null<TuiSmokeDesktopNotificationPlan>;
 	final terminalHyperlink:Null<TuiSmokeTerminalHyperlinkPlan>;
 	final terminalPalette:Null<TuiSmokeTerminalPalettePlan>;
@@ -240,6 +241,7 @@ class TuiSmokeEvent {
 	public final loadedThreads:Null<TuiSmokeLoadedThreadsPlan>;
 	public final initialHistoryReplay:Null<TuiSmokeInitialHistoryReplayPlan>;
 	public final threadStartedSession:Null<TuiSmokeThreadStartedSessionPlan>;
+	public final threadReadSession:Null<TuiSmokeThreadReadSessionPlan>;
 	public final desktopNotification:Null<TuiSmokeDesktopNotificationPlan>;
 	public final terminalHyperlink:Null<TuiSmokeTerminalHyperlinkPlan>;
 	public final terminalPalette:Null<TuiSmokeTerminalPalettePlan>;

@@ -870,6 +870,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ThreadReadSession:
+					if (!traceThreadReadSession(event.threadReadSession, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.DesktopNotification:
 					if (!traceDesktopNotification(event.desktopNotification, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -2577,6 +2582,55 @@ class TuiSmokeEventLoop {
 		if (role != "")
 			return "[" + role + "]";
 		return "";
+	}
+
+	static function traceThreadReadSession(plan:TuiSmokeThreadReadSessionPlan, trace:Array<String>):Bool {
+		if (plan == null || !plan.enabled() || plan.allowAppServerMutation || plan.allowFilesystemMutation || plan.allowTerminalMutation
+			|| plan.allowRatatuiBuffer || plan.allowNetwork || plan.allowModelCall) {
+			trace.push("tui.thread_read_session.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.thread_read_session.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeThreadReadSessionActionKind.Infer:
+					final inferredRoots = threadReadSessionRoots(action.primaryRuntimeWorkspaceRoots, action.readCwd);
+					final inferredPermissionProfile = action.widgetPermissionProfile;
+					final primaryProfileReused = inferredPermissionProfile == action.primaryPermissionProfile;
+					if (action.readThreadId != action.expectedThreadId
+						|| action.readCwd != action.expectedCwd
+						|| !stringArraysEqual(inferredRoots, action.expectedRuntimeWorkspaceRoots)
+						|| inferredPermissionProfile != action.expectedPermissionProfile
+						|| primaryProfileReused != action.expectedPrimaryProfileReused) {
+						trace.push("tui.thread_read_session.infer_mismatch=" + action.name + ":thread=" + action.readThreadId + ":cwd=" + action.readCwd
+							+ ":roots=" + inferredRoots.join("|") + ":permission=" + inferredPermissionProfile + ":primary_reused=" + primaryProfileReused);
+						return false;
+					}
+					trace.push("tui.thread_read_session.infer=" + action.name + ":primary=" + action.primaryThreadId + ":read=" + action.readThreadId
+						+ ":name=" + action.threadName + ":provider=" + action.modelProviderId + ":cwd=" + action.readCwd + ":roots="
+						+ inferredRoots.join("|") + ":permission=" + inferredPermissionProfile + ":primary_permission=" + action.primaryPermissionProfile
+						+ ":primary_reused=" + primaryProfileReused);
+				case TuiSmokeThreadReadSessionActionKind.Failure:
+					trace.push("tui.thread_read_session.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerMutation + ":no_fs="
+						+ action.noFilesystemMutation + ":no_terminal=" + action.noTerminalMutation + ":no_buffer=" + action.noRatatuiBuffer + ":no_network="
+						+ action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.thread_read_session.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function threadReadSessionRoots(primaryRoots:Array<String>, readCwd:String):Array<String> {
+		final out:Array<String> = [];
+		for (_ in primaryRoots) {
+			if (out.indexOf(readCwd) == -1)
+				out.push(readCwd);
+		}
+		if (out.length == 0)
+			out.push(readCwd);
+		return out;
 	}
 
 	static function trimReplayRows(rows:Array<String>, maxRows:Int):Int {

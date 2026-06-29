@@ -171,6 +171,7 @@ class TuiSmokeFixtureLoader {
 				loadedThreads: optionalLoadedThreadsPlan(value, "loadedThreads"),
 				initialHistoryReplay: optionalInitialHistoryReplayPlan(value, "initialHistoryReplay"),
 				threadStartedSession: optionalThreadStartedSessionPlan(value, "threadStartedSession"),
+				threadReadSession: optionalThreadReadSessionPlan(value, "threadReadSession"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
@@ -3398,6 +3399,55 @@ class TuiSmokeFixtureLoader {
 				expectedNavigationLabel: optionalStringField(value, "expectedNavigationLabel", ""),
 				expectedNavigationRunning: optionalBoolField(value, "expectedNavigationRunning", false),
 				expectedNavigationClosed: optionalBoolField(value, "expectedNavigationClosed", false),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalThreadReadSessionPlan(object:Value, name:String):Null<TuiSmokeThreadReadSessionPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeThreadReadSessionPlan({
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: threadReadSessionActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function threadReadSessionActions(values:Array<Value>):Array<TuiSmokeThreadReadSessionAction> {
+		final out:Array<TuiSmokeThreadReadSessionAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeThreadReadSessionAction({
+				kind: TuiSmokeThreadReadSessionActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				primaryThreadId: optionalStringField(value, "primaryThreadId", ""),
+				readThreadId: optionalStringField(value, "readThreadId", ""),
+				primaryCwd: optionalStringField(value, "primaryCwd", ""),
+				readCwd: optionalStringField(value, "readCwd", ""),
+				threadName: optionalStringField(value, "threadName", ""),
+				modelProviderId: optionalStringField(value, "modelProviderId", ""),
+				primaryPermissionProfile: optionalStringField(value, "primaryPermissionProfile", ""),
+				widgetPermissionProfile: optionalStringField(value, "widgetPermissionProfile", ""),
+				primaryRuntimeWorkspaceRoots: optionalStringArrayField(value, "primaryRuntimeWorkspaceRoots"),
+				expectedThreadId: optionalStringField(value, "expectedThreadId", ""),
+				expectedCwd: optionalStringField(value, "expectedCwd", ""),
+				expectedRuntimeWorkspaceRoots: optionalStringArrayField(value, "expectedRuntimeWorkspaceRoots"),
+				expectedPermissionProfile: optionalStringField(value, "expectedPermissionProfile", ""),
+				expectedPrimaryProfileReused: optionalBoolField(value, "expectedPrimaryProfileReused", false),
 				failureCode: optionalStringField(value, "failureCode", ""),
 				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
 				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
