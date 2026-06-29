@@ -30,6 +30,7 @@
     "test:tui-terminal-contract": "bash harness/check-tui-terminal-contract.sh",
     "test:tui-live-terminal-restore": "bash harness/check-tui-live-terminal-restore.sh",
     "test:tui-resize-redraw-scheduler": "bash harness/check-tui-resize-redraw-scheduler.sh",
-    "test:tui-live-input-backend": "bash harness/check-tui-live-input-backend.sh"
+    "test:tui-live-input-backend": "bash harness/check-tui-live-input-backend.sh",
+    "test:tui-chatwidget-shell": "bash harness/check-tui-chatwidget-shell.sh"
   }
 }

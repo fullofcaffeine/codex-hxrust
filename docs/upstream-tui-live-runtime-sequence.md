@@ -4256,6 +4256,10 @@ Status: TUI-LIVE-2 adds `TerminalSchedulerEvent`, `TerminalRedrawScheduler`, `Te
 
 Status: TUI-LIVE-3 adds `TerminalInputEvent`, `TerminalInputMapper`, `TerminalComposerState`, and `TerminalComposerEffect` as the first strict input/composer reducer for the minimal live shell. The native terminal probe now maps crossterm key events into scalar poll codes plus latest-character text, and Haxe turns those facts into typed `TerminalEvent.Key` and semantic composer inputs for text, Enter, Esc, Ctrl-C, Backspace, and arrow keys. The metal haxe.rust harness `harness/check-tui-live-input-backend.sh` proves fake native poll-code mapping, headless queued-key composer mutations, submitted-history navigation, typed exit effects, live backend nonblocking polling, terminal restore, and generated Cargo check/test/run without credentials. This still does not render a ChatWidget shell, attach app-server transport, persist state, call models, or run a full production event loop.
 
+### TUI-LIVE-4 Minimal ChatWidget Shell State And Render
+
+Status: TUI-LIVE-4 adds `codexhx.runtime.tui.chatwidget` as the first production-shaped ChatWidget package outside smoke validation. `ChatWidgetShellState` owns transcript rows, model/status labels, revision, and the typed composer state from TUI-LIVE-3; `ChatWidgetShellRenderer` renders those facts into a `TerminalFrame` with header, transcript body, footer, and composer line. The metal haxe.rust harness `harness/check-tui-chatwidget-shell.sh` proves typed reducer effects, transcript state, rendered frame facts, viewport truncation, headless backend draw state, live backend draw/restore, and generated Cargo check/test/run without credentials. This still does not attach app-server transport, stream assistant deltas, persist state, execute tools, or render full upstream ratatui history cells.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Full Interactive TUI
 
 After the minimal live shell proves terminal ownership, typed input, redraw scheduling, and fake app-server attach:

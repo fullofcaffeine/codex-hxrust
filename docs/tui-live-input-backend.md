@@ -26,4 +26,4 @@ The gate runs typed native-code mapping assertions, headless queued-key composer
 
 ## Still Not Proven
 
-This is not a full TUI loop or ChatWidget. It does not render upstream widgets, attach app-server transport, submit prompts to a model, or persist state. `TUI-LIVE-4` should build the minimal ChatWidget shell state and render surface on top of this input/composer foundation.
+This is not a full TUI loop or ChatWidget. It does not render upstream widgets, attach app-server transport, submit prompts to a model, or persist state. `TUI-LIVE-4` builds the minimal ChatWidget shell state and render surface on top of this input/composer foundation.
