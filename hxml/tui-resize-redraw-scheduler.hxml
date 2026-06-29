@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=metal
+-D rust_output=generated/tui-resize-redraw-scheduler
+-D rust_crate=codex_hxrust_tui_resize_redraw_scheduler
+-D rust_cargo_subcommand=check
+-main TuiResizeRedrawSchedulerHarness

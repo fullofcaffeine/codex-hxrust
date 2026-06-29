@@ -4248,6 +4248,10 @@ Status: TUI-LIVE-0 adds `codexhx.runtime.tui.terminal` as the production termina
 
 Status: TUI-LIVE-1 adds `LiveTerminalBackend`, `NativeLiveTerminalProbe`, and `native/src/live_terminal_probe.rs` as the first generated crossterm/ratatui terminal ownership gate. The metal haxe.rust harness `harness/check-tui-live-terminal-restore.sh` proves setup, one-frame ratatui draw, nonblocking q/Esc/Ctrl-C exit polling, normal restore, and caught-error restore through the Haxe interpreter and generated Cargo check/test/run path. In non-TTY CI, the native probe reports a typed `SkippedNoTty` outcome so no terminal is taken and restore safety remains explicit; when run from a real TTY, the same generated binary attempts raw mode and alternate screen. This still does not attach app-server transport, run a full input loop, handle resize coalescing, persist state, call models, or render upstream widgets.
 
+### TUI-LIVE-2 Live Resize Redraw Scheduler
+
+Status: TUI-LIVE-2 adds `TerminalSchedulerEvent`, `TerminalRedrawScheduler`, `TerminalSchedulerEffect`, and `TerminalSchedulerRunner` as the first production redraw scheduler over `TerminalBackend`. The scheduler accepts typed `Resize`, `DrawRequested`, `Tick`, and `AppExit` events, coalesces repeated resize inputs until flush, emits typed backend effects instead of trace strings, and shares the same reducer between headless and live backends. The metal haxe.rust harness `harness/check-tui-resize-redraw-scheduler.sh` proves direct scheduler state/effect assertions, one coalesced resized frame path through `HeadlessTerminalBackend`, and the same resized frame path through `LiveTerminalBackend` with the existing no-TTY fallback. This still does not map live key events, run the full input loop, attach app-server transport, persist state, call models, or render upstream widgets.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Full Interactive TUI
 
 After the minimal live shell proves terminal ownership, typed input, redraw scheduling, and fake app-server attach:
