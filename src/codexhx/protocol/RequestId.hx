@@ -1,5 +1,7 @@
 package codexhx.protocol;
 
+import haxe.json.Value;
+
 class RequestId {
 	final value:String;
 	final integer:Bool;
@@ -28,5 +30,9 @@ class RequestId {
 
 	public function toJsonScalar():String {
 		return integer ? value : JsonScalar.quote(value);
+	}
+
+	public function toJsonValue():Value {
+		return integer ? JNumber(Std.parseFloat(value)) : JString(value);
 	}
 }

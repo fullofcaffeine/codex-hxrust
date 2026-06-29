@@ -34,7 +34,7 @@ class FakeTuiAppServerFacade {
 	public function new(shell:ChatWidgetShellState, ?promptTransport:TuiPromptTransport) {
 		this.shellValue = shell == null ? ChatWidgetShellState.initial("model pending") : shell;
 		this.agentNavigationValue = new AgentNavigationState();
-		this.promptTransport = promptTransport == null ? new EchoTuiPromptTransport() : promptTransport;
+		this.promptTransport = promptTransport == null ? new JsonRpcTuiPromptTransport() : promptTransport;
 		this.pending = new StringMap<TuiAppServerPendingRequest>();
 		this.queue = [];
 		this.activeSessionValue = null;

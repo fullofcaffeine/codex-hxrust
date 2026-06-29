@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Bead:** `TUI-LIVE-13` / `codex-hxrust-0gms`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -8,7 +8,28 @@ validation and still defaults to fake echo behavior, but it now asks a
 `TuiPromptTransport` to turn a `TuiPromptSubmitEnvelope` into queued
 `TuiAppServerEvent` values.
 
-The default `EchoTuiPromptTransport` preserves the prior behavior:
+The default `JsonRpcTuiPromptTransport` records an outbound JSON-RPC
+`turn/start` request before delegating to the fake response transport. The
+request keeps a typed `RequestId`, typed method, and typed `turn/start` params
+with the active `ThreadId` plus one text user-input entry:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 78,
+  "method": "turn/start",
+  "params": {
+    "threadId": "00000000-0000-0000-0000-000000005556",
+    "input": [{ "type": "text", "text": "json rpc ask" }]
+  }
+}
+```
+
+The prompt-submit harness parses that fixture-shaped request through
+`AppProtocol.parseFixtureItem`, so the shell submit path is checked against the
+same selected upstream `turn/start` subset as the rest of the app-protocol
+gates. `EchoTuiPromptTransport` remains the default fake response delegate and
+preserves the prior behavior:
 
 - working status
 - assistant echo delta
@@ -24,6 +45,7 @@ Validation:
 bash harness/check-tui-prompt-submit-envelope.sh
 ```
 
-This is still not real app-server JSON-RPC, socket ownership, model traffic,
-tool execution, or persistent state. It is the shell-facing seam those later
-transports can implement without changing ChatWidget or terminal-loop code.
+This is still not app-server socket ownership, credentialed model traffic, tool
+execution, or persistent state. It is the shell-facing JSON-RPC request seam
+those later transports can implement without changing ChatWidget or
+terminal-loop code.

@@ -1,9 +1,15 @@
 import codexhx.protocol.RequestId;
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
+import codexhx.protocol.app.AppProtocol;
+import codexhx.protocol.json.CodexJson;
+import codexhx.protocol.json.JsonParseOutcome;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
+import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcMethod;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcRequest;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
@@ -22,6 +28,7 @@ import codexhx.runtime.tui.terminal.TerminalSize;
 class TuiPromptSubmitEnvelopeHarness {
 	static function main():Void {
 		testPromptSubmitEnvelopeEchoAndRedraw();
+		testPromptSubmitBuildsJsonRpcTurnStartEnvelope();
 		testEmptySubmitIsTypedRefusal();
 		testUnattachedSubmitIsTypedRefusal();
 		testTransportRejectedSubmitIsTypedRefusal();
@@ -58,6 +65,29 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals("assistant> echo: hello", backend.currentFrame().lineAt(4), "drawn echo row");
 		assertIntEquals(2, backend.drawCount(), "typing plus submit draw count");
 		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testPromptSubmitBuildsJsonRpcTurnStartEnvelope():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005556");
+		final transport = new JsonRpcTuiPromptTransport();
+		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
+		final result = facade.submitPrompt(RequestId.fromInteger(78), "json rpc ask");
+		assertTrue(result.acceptedPrompt(), "json-rpc submit accepted");
+
+		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc request recorded");
+		assertStringEquals("78", request.requestId.toString(), "json-rpc request id");
+		assertStringEquals(TuiPromptJsonRpcMethod.TurnStart.text(), request.methodText(), "json-rpc method");
+		assertStringEquals("{\"input\":[{\"text\":\"json rpc ask\",\"type\":\"text\"}],\"threadId\":\"00000000-0000-0000-0000-000000005556\"}",
+			request.paramsJson(), "json-rpc params");
+		assertStringEquals("{\"id\":78,\"jsonrpc\":\"2.0\",\"method\":\"turn/start\",\"params\":{\"input\":[{\"text\":\"json rpc ask\",\"type\":\"text\"}],\"threadId\":\"00000000-0000-0000-0000-000000005556\"}}",
+			request.messageJson(), "json-rpc message");
+
+		final parsed = expectJson(CodexJson.parse(request.fixtureJson("prompt-json-rpc")));
+		final protocol = AppProtocol.parseFixtureItem(parsed);
+		assertTrue(protocol.ok, "json-rpc request parses through app protocol: " + protocol.errorCode);
+		assertStringEquals("request:turn/start", protocol.message.summary, "json-rpc protocol summary");
+		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
 	}
 
 	static function testEmptySubmitIsTypedRefusal():Void {
@@ -184,6 +214,18 @@ class TuiPromptSubmitEnvelopeHarness {
 
 	static function assertStatusKindEquals(expected:ChatWidgetStatusKind, actual:ChatWidgetStatusKind, label:String):Void {
 		assertStringEquals(ChatWidgetShellState.statusKindText(expected), ChatWidgetShellState.statusKindText(actual), label);
+	}
+
+	static function expectJsonRpcRequest(request:Null<TuiPromptJsonRpcRequest>, label:String):TuiPromptJsonRpcRequest {
+		if (request == null)
+			throw label;
+		return request;
+	}
+
+	static function expectJson(outcome:JsonParseOutcome):haxe.json.Value {
+		if (!outcome.ok)
+			throw "json parse failed: " + outcome.errorCode + " " + outcome.errorPath;
+		return outcome.value;
 	}
 
 	static function assertStringEquals(expected:String, actual:String, label:String):Void {
