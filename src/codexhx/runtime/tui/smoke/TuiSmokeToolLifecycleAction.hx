@@ -50,6 +50,9 @@ typedef TuiSmokeToolLifecycleActionFields = {
 	final promptPreserved:Bool;
 	final modelPreserved:Bool;
 	final reasoningEffortPreserved:Bool;
+	final completionModelPresent:Bool;
+	final completionReasoningEffortPresent:Bool;
+	final requestedSettingsFromCache:Bool;
 	final activeCellFlushed:Bool;
 	final answerStreamFlushed:Bool;
 	final historyInserted:Bool;
@@ -120,6 +123,9 @@ class TuiSmokeToolLifecycleAction {
 	public final promptPreserved:Bool;
 	public final modelPreserved:Bool;
 	public final reasoningEffortPreserved:Bool;
+	public final completionModelPresent:Bool;
+	public final completionReasoningEffortPresent:Bool;
+	public final requestedSettingsFromCache:Bool;
 	public final activeCellFlushed:Bool;
 	public final answerStreamFlushed:Bool;
 	public final historyInserted:Bool;

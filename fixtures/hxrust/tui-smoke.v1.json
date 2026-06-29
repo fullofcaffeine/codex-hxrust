@@ -19956,6 +19956,89 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server collab agent history\ninput> \ntrace:\ntui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.collab_wait_history=wait-1:receivers=2:labels=Robie [explorer]|Ada [reviewer]:statuses=completed|running:messages=Done|:completed=1:running=1:metadata=true:history=2\ntui.chat_widget_tool_lifecycle.collab_spawn_history=spawn-1:receiver=019cff70-2599-75e2-af72-b91781b41a8e:prompt=Explore the repo:model=gpt-5:effort=high:status=pending_init:prompt_preserved=true:model_preserved=true:effort_preserved=true:history=2\ntui.chat_widget_tool_lifecycle.failure=live_app_server_collab_agent_history_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chatwidget-app-server-collab-spawn-cached-settings",
+      "frame": {
+        "name": "chatwidget-app-server-collab-spawn-cached-settings",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget app-server collab spawn cached settings"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_tool_lifecycle",
+          "chatWidgetToolLifecycle": {
+            "allowLiveToolExecution": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "app_server_collab_spawn_cached_history",
+                "callId": "call-spawn",
+                "collabTool": "spawn_agent",
+                "collabStatus": "completed",
+                "receiverThreadIds": "019cff70-2599-75e2-af72-b91781b41a8e",
+                "receiverLabels": "Robie [explorer]",
+                "receiverStatuses": "pending_init",
+                "revisedPrompt": "Explore the repo",
+                "requestedModel": "gpt-5",
+                "requestedReasoningEffort": "high",
+                "historyCellCount": 1,
+                "pendingSpawnCountBefore": 1,
+                "pendingSpawnCountAfter": 0,
+                "completionModelPresent": false,
+                "completionReasoningEffortPresent": false,
+                "requestedSettingsFromCache": true,
+                "receiverMetadataPreserved": true,
+                "promptPreserved": true,
+                "modelPreserved": true,
+                "reasoningEffortPreserved": true,
+                "spawnRequestCached": true,
+                "spawnRequestRemoved": true,
+                "historyInserted": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_app_server_collab_spawn_cached_settings_rejected",
+                "noLiveToolExecution": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.collab_spawn_cached_history=call-spawn:receiver=019cff70-2599-75e2-af72-b91781b41a8e:label=Robie [explorer]:prompt=Explore the repo:model=gpt-5:effort=high:status=pending_init:completion_model=false:completion_effort=false:from_cache=true:cache=1->0:removed=true:history=1\ntui.chat_widget_tool_lifecycle.failure=live_app_server_collab_spawn_cached_settings_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server collab spawn cached settings\ninput> \ntrace:\ntui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.collab_spawn_cached_history=call-spawn:receiver=019cff70-2599-75e2-af72-b91781b41a8e:label=Robie [explorer]:prompt=Explore the repo:model=gpt-5:effort=high:status=pending_init:completion_model=false:completion_effort=false:from_cache=true:cache=1->0:removed=true:history=1\ntui.chat_widget_tool_lifecycle.failure=live_app_server_collab_spawn_cached_settings_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-hook-lifecycle-headless",
       "frame": {
         "name": "chatwidget-hook-lifecycle-headless",
