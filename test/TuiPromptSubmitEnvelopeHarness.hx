@@ -10,6 +10,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
 import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
+import codexhx.runtime.tui.appserver.TuiPromptAgentMessageDeltaNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchange;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchangeOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcMethod;
@@ -17,6 +18,7 @@ import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotificationMethod;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcRequest;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcResponse;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcStreamNotification;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
@@ -130,6 +132,21 @@ class TuiPromptSubmitEnvelopeHarness {
 		final completionProtocol = AppProtocol.parseFixtureItem(completionParsed);
 		assertTrue(completionProtocol.ok, "json-rpc completion parses through app protocol: " + completionProtocol.errorCode);
 		assertStringEquals("turn", completionProtocol.message.summary, "json-rpc completion summary");
+		assertIntEquals(3, transport.lastStreamNotificationCount(), "json-rpc stream notification count");
+		assertTurnStreamNotification(expectStreamNotification(transport.lastStreamNotificationAt(0), "json-rpc stream started"), notification,
+			"json-rpc stream started");
+		final delta = expectAgentMessageDeltaStreamNotification(transport.lastStreamNotificationAt(1), "json-rpc stream delta");
+		assertStringEquals(TuiPromptJsonRpcNotificationMethod.AgentMessageDelta.text(), delta.methodText(), "json-rpc delta method");
+		assertStringEquals("{\"delta\":\"echo: json rpc ask\",\"itemId\":\"item-78\",\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turnId\":\"turn-78\"}",
+			delta.paramsJson(), "json-rpc delta params");
+		assertStringEquals("{\"jsonrpc\":\"2.0\",\"method\":\"item/agentMessage/delta\",\"params\":{\"delta\":\"echo: json rpc ask\",\"itemId\":\"item-78\",\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turnId\":\"turn-78\"}}",
+			delta.messageJson(), "json-rpc delta message");
+		final deltaParsed = expectJson(CodexJson.parse(delta.fixtureJson("prompt-json-rpc-agent-message-delta")));
+		final deltaProtocol = AppProtocol.parseFixtureItem(deltaParsed);
+		assertTrue(deltaProtocol.ok, "json-rpc delta parses through app protocol: " + deltaProtocol.errorCode);
+		assertStringEquals("notification:item/agentMessage/delta", deltaProtocol.message.summary, "json-rpc delta summary");
+		assertTurnStreamNotification(expectStreamNotification(transport.lastStreamNotificationAt(2), "json-rpc stream completed"), completion,
+			"json-rpc stream completed");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
 	}
 
@@ -164,6 +181,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		if (transport.lastResponse() != null)
 			throw "json-rpc rejected exchange should not record response";
 		assertIntEquals(0, transport.lastNotificationCount(), "json-rpc rejected exchange should not record notifications");
+		assertIntEquals(0, transport.lastStreamNotificationCount(), "json-rpc rejected exchange should not record stream notifications");
 		assertIntEquals(0, facade.queuedCount(), "json-rpc exchange rejection queues no fake events");
 	}
 
@@ -309,6 +327,34 @@ class TuiPromptSubmitEnvelopeHarness {
 		if (notification == null)
 			throw label;
 		return notification;
+	}
+
+	static function expectStreamNotification(notification:Null<TuiPromptJsonRpcStreamNotification>, label:String):TuiPromptJsonRpcStreamNotification {
+		if (notification == null)
+			throw label;
+		return notification;
+	}
+
+	static function expectAgentMessageDeltaStreamNotification(notification:Null<TuiPromptJsonRpcStreamNotification>,
+			label:String):TuiPromptAgentMessageDeltaNotification {
+		final streamNotification = expectStreamNotification(notification, label);
+		return switch streamNotification {
+			case TuiPromptJsonRpcStreamNotification.AgentMessageDelta(delta):
+				delta;
+			case _:
+				throw label + ": expected agent message delta stream notification";
+		}
+	}
+
+	static function assertTurnStreamNotification(streamNotification:TuiPromptJsonRpcStreamNotification, expected:TuiPromptJsonRpcNotification,
+			label:String):Void {
+		switch streamNotification {
+			case TuiPromptJsonRpcStreamNotification.Turn(actual):
+				assertStringEquals(expected.methodText(), actual.methodText(), label + " method");
+				assertStringEquals(expected.paramsJson(), actual.paramsJson(), label + " params");
+			case _:
+				throw label + ": expected turn stream notification";
+		}
 	}
 
 	static function expectJson(outcome:JsonParseOutcome):haxe.json.Value {

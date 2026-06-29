@@ -14,9 +14,12 @@ class EchoTuiPromptJsonRpcExchange implements TuiPromptJsonRpcExchange {
 		final turn = TuiPromptTurnStartResponse.fromEnvelope(envelope);
 		final response = TuiPromptJsonRpcResponse.turnStart(request, turn);
 		final started = TuiPromptJsonRpcNotification.turnStarted(envelope, turn);
+		final delta = TuiPromptAgentMessageDeltaNotification.fromEnvelope(envelope, turn);
 		final completed = TuiPromptJsonRpcNotification.turnCompleted(envelope, turn);
 		return TuiPromptJsonRpcExchangeOutcome.accepted(response, [started, completed], [
-			TuiAppServerEvent.AssistantDelta(envelope.threadId, "echo: " + envelope.promptText)
-		]);
+			TuiPromptJsonRpcStreamNotification.Turn(started),
+			TuiPromptJsonRpcStreamNotification.AgentMessageDelta(delta),
+			TuiPromptJsonRpcStreamNotification.Turn(completed)
+		], []);
 	}
 }

@@ -9,12 +9,14 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	var lastRequestValue:Null<TuiPromptJsonRpcRequest>;
 	var lastResponseValue:Null<TuiPromptJsonRpcResponse>;
 	var lastNotificationsValue:Array<TuiPromptJsonRpcNotification>;
+	var lastStreamNotificationsValue:Array<TuiPromptJsonRpcStreamNotification>;
 
 	public function new(?exchange:TuiPromptJsonRpcExchange) {
 		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
 		this.lastRequestValue = null;
 		this.lastResponseValue = null;
 		this.lastNotificationsValue = [];
+		this.lastStreamNotificationsValue = [];
 	}
 
 	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
@@ -24,6 +26,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		lastRequestValue = request;
 		lastResponseValue = null;
 		lastNotificationsValue = [];
+		lastStreamNotificationsValue = [];
 		final exchangeOutcome = exchange.send(request, envelope);
 		if (exchangeOutcome == null || !exchangeOutcome.isAccepted())
 			return TuiPromptTransportOutcome.rejected(exchangeOutcome == null ? "missing_exchange_outcome" : exchangeOutcome.code());
@@ -32,8 +35,9 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 			return TuiPromptTransportOutcome.rejected("missing_exchange_response");
 		lastResponseValue = response;
 		lastNotificationsValue = exchangeOutcome.notifications();
+		lastStreamNotificationsValue = exchangeOutcome.streamNotifications();
 		return TuiPromptTransportOutcome.acceptedWithResponse(response.result,
-			TuiPromptJsonRpcNotificationProjector.projectWithStreamEvents(lastNotificationsValue, exchangeOutcome.events()));
+			TuiPromptJsonRpcNotificationProjector.projectWithStreamNotifications(lastStreamNotificationsValue, exchangeOutcome.events()));
 	}
 
 	public function lastRequest():Null<TuiPromptJsonRpcRequest> {
@@ -56,5 +60,19 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 
 	public function lastNotifications():Array<TuiPromptJsonRpcNotification> {
 		return lastNotificationsValue.copy();
+	}
+
+	public function lastStreamNotificationCount():Int {
+		return lastStreamNotificationsValue.length;
+	}
+
+	public function lastStreamNotificationAt(index:Int):Null<TuiPromptJsonRpcStreamNotification> {
+		if (index < 0 || index >= lastStreamNotificationsValue.length)
+			return null;
+		return lastStreamNotificationsValue[index];
+	}
+
+	public function lastStreamNotifications():Array<TuiPromptJsonRpcStreamNotification> {
+		return lastStreamNotificationsValue.copy();
 	}
 }

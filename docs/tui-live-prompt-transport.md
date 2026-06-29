@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -80,13 +80,30 @@ The exchange also records a matching `turn/completed` notification with the same
 turn id and `completed` status, and the harness parses that notification through
 the same app-protocol gate.
 
-`JsonRpcTuiPromptTransport` now projects those typed notifications into the
-shell-facing event stream with `TuiPromptJsonRpcNotificationProjector`. The fake
-assistant echo remains an in-process stream event, but the working and ready
-status transitions come from the JSON-RPC turn notifications:
+The exchange also emits the assistant echo as an upstream-shaped
+`item/agentMessage/delta` stream notification:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "item/agentMessage/delta",
+  "params": {
+    "threadId": "00000000-0000-0000-0000-000000005556",
+    "turnId": "turn-78",
+    "itemId": "item-78",
+    "delta": "echo: json rpc ask"
+  }
+}
+```
+
+`JsonRpcTuiPromptTransport` records both the turn-only notification list and the
+ordered stream notification list. The stream list is represented as a typed enum
+so `turn/*` and `item/agentMessage/delta` payloads do not share nullable fields.
+The harness parses the delta notification through `AppProtocol.parseFixtureItem`
+and proves the shell-facing event order:
 
 - `turn/started` to working status
-- assistant echo delta
+- `item/agentMessage/delta` to assistant echo delta
 - `turn/completed` to ready status
 
 This keeps the generated live demo behavior unchanged while making the prompt

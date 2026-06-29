@@ -14,6 +14,33 @@ class TuiPromptJsonRpcNotificationProjector {
 		return events;
 	}
 
+	public static function projectWithStreamNotifications(notifications:Array<TuiPromptJsonRpcStreamNotification>,
+			streamEvents:Array<TuiAppServerEvent>):Array<TuiAppServerEvent> {
+		final events:Array<TuiAppServerEvent> = [];
+		if (notifications != null) {
+			for (notification in notifications)
+				appendStreamNotification(events, notification);
+		}
+		appendEvents(events, streamEvents);
+		return events;
+	}
+
+	static function appendStreamNotification(events:Array<TuiAppServerEvent>, notification:TuiPromptJsonRpcStreamNotification):Void {
+		switch notification {
+			case Turn(turnNotification):
+				appendTurnNotification(events, turnNotification);
+			case AgentMessageDelta(deltaNotification):
+				events.push(TuiAppServerEvent.AssistantDelta(deltaNotification.threadId, deltaNotification.delta));
+		}
+	}
+
+	static function appendTurnNotification(events:Array<TuiAppServerEvent>, notification:TuiPromptJsonRpcNotification):Void {
+		if (notification.method == TuiPromptJsonRpcNotificationMethod.TurnStarted)
+			events.push(TuiAppServerEvent.ThreadStatus(notification.threadId, TuiAppServerThreadStatus.Working("submitted")));
+		if (notification.method == TuiPromptJsonRpcNotificationMethod.TurnCompleted)
+			events.push(TuiAppServerEvent.ThreadStatus(notification.threadId, TuiAppServerThreadStatus.Ready("ready")));
+	}
+
 	static function appendStarted(events:Array<TuiAppServerEvent>, notifications:Array<TuiPromptJsonRpcNotification>):Void {
 		if (notifications == null)
 			return;

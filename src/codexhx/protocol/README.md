@@ -13,7 +13,7 @@ Cafex DTOs do not live here unless they become upstream-compatible core concepts
 Implemented G2.1 ID/newtype slice:
 
 - `SessionId` and `ThreadId` are UUID-string wrappers following upstream Codex's serde shape.
-- `TurnId`, `ToolCallId`, `ModelId`, and `PathLikeId` are non-empty string wrappers for fields that upstream currently models as `String`.
+- `TurnId`, `ItemId`, `ToolCallId`, `ModelId`, and `PathLikeId` are non-empty string wrappers for fields that upstream currently models as `String`.
 - `RequestId` preserves JSON-RPC/MCP's string-or-integer scalar shape.
 - `fromString(...)` returns `Null<T>` for invalid values without throwing or using broad `Dynamic`.
 
