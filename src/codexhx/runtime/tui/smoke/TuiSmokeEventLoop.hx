@@ -570,6 +570,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetThreadSettings:
+					if (!traceThreadSettings(event.chatWidgetThreadSettings, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetAppServerError:
 					if (!traceAppServerError(event.chatWidgetAppServerError, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -11327,6 +11332,40 @@ class TuiSmokeEventLoop {
 						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.chat_widget_safety_buffering.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceThreadSettings(plan:TuiSmokeThreadSettingsPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowAppServerDelivery || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_thread_settings.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_thread_settings.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeThreadSettingsActionKind.VisibleUpdate:
+					trace.push("tui.chat_widget_thread_settings.visible=thread=" + action.threadId + ":model=" + action.previousModel + "->"
+						+ action.finalModel + ":incoming=" + action.incomingModel + ":effort=" + action.finalReasoningEffort + ":service="
+						+ action.serviceTier + ":approval=" + action.approvalPolicy + ":reviewer=" + action.approvalsReviewer + ":profile="
+						+ action.permissionProfile + ":personality=" + action.personality + ":mode=" + action.activeCollaborationMode + ":history="
+						+ action.transcriptHistoryInserted);
+				case TuiSmokeThreadSettingsActionKind.WrongThreadIgnored:
+					trace.push("tui.chat_widget_thread_settings.ignored=current=" + action.threadId + ":incoming=" + action.incomingThreadId + ":model="
+						+ action.previousModel + "->" + action.finalModel + ":ignored=" + action.ignored);
+				case TuiSmokeThreadSettingsActionKind.PlanDefaultPreserved:
+					trace.push("tui.chat_widget_thread_settings.plan_default=thread=" + action.threadId + ":session=" + action.previousModel + "/"
+						+ action.previousReasoningEffort + ":incoming=" + action.incomingModel + "/" + action.incomingReasoningEffort + ":active_mode="
+						+ action.activeCollaborationMode + ":default_mode=" + action.defaultCollaborationMode + ":default_preserved="
+						+ action.defaultPreserved + ":mask_mode=" + action.maskCollaborationMode + ":restored=" + action.restoredModel + "/"
+						+ action.restoredReasoningEffort + ":mask_restored=" + action.defaultMaskRestored);
+				case TuiSmokeThreadSettingsActionKind.Failure:
+					trace.push("tui.chat_widget_thread_settings.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerDelivery
+						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.chat_widget_thread_settings.unknown");
 					return false;
 			}
 		}

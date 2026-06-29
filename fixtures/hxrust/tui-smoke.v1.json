@@ -22000,6 +22000,99 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server safety buffering\ninput> \ntrace:\ntui.chat_widget_safety_buffering.plan=headless\ntui.chat_widget_safety_buffering.retry_prompt=turn=turn-safety-buffering:model=faster-model:captured=true:shown=true:previous=false:message=This request requires additional safety checks, which can take extra time. You can retry with a faster model for a quicker response, though it may be less capable of handling complex requests.:rendered=Additional safety checks / Retry with a faster model / Keep waiting\ntui.chat_widget_safety_buffering.retry_confirmed=thread=123e4567-e89b-12d3-a456-426614174000:turn=turn-safety-buffering:model=faster-model:event=true:cleared=true\ntui.chat_widget_safety_buffering.agent_started=turn=turn-safety-buffering:before=true:started=true:after=false\ntui.chat_widget_safety_buffering.no_retry=turn=turn-safety-buffering:status=true:short=true:prompt=false:message=This request requires additional safety checks, which can take extra time.:rendered=Working (0s • esc to interrupt)\ntui.chat_widget_safety_buffering.ignored=turn=turn-safety-buffering:replay=ResumeInitialMessages:hidden=true:stale=true:historical=true:prompt=false\ntui.chat_widget_safety_buffering.hidden_clear=turn=turn-safety-buffering:cleared=true:status_details=true:prompt=false\ntui.chat_widget_safety_buffering.failure=live_safety_buffering_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chatwidget-thread-settings-updates",
+      "frame": {
+        "name": "chatwidget-thread-settings-updates",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget thread settings updates"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_thread_settings",
+          "chatWidgetThreadSettings": {
+            "allowAppServerDelivery": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "visible_update",
+                "threadId": "123e4567-e89b-12d3-a456-426614174001",
+                "previousModel": "gpt-5.3-codex",
+                "incomingModel": "gpt-5.4",
+                "finalModel": "gpt-5.4",
+                "incomingReasoningEffort": "high",
+                "finalReasoningEffort": "high",
+                "serviceTier": "fast",
+                "approvalPolicy": "on-request",
+                "approvalsReviewer": "auto-review",
+                "permissionProfile": "read-only",
+                "personality": "pragmatic",
+                "activeCollaborationMode": "plan",
+                "transcriptHistoryInserted": false
+              },
+              {
+                "kind": "wrong_thread_ignored",
+                "threadId": "123e4567-e89b-12d3-a456-426614174001",
+                "incomingThreadId": "123e4567-e89b-12d3-a456-426614174002",
+                "previousModel": "gpt-5.4",
+                "finalModel": "gpt-5.4",
+                "ignored": true
+              },
+              {
+                "kind": "plan_default_preserved",
+                "threadId": "123e4567-e89b-12d3-a456-426614174001",
+                "previousModel": "gpt-default",
+                "previousReasoningEffort": "low",
+                "incomingModel": "gpt-plan",
+                "incomingReasoningEffort": "high",
+                "activeCollaborationMode": "plan",
+                "defaultCollaborationMode": "default",
+                "maskCollaborationMode": "default",
+                "restoredModel": "gpt-default",
+                "restoredReasoningEffort": "low",
+                "defaultPreserved": true,
+                "defaultMaskRestored": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_thread_settings_rejected",
+                "noAppServerDelivery": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_thread_settings.plan=headless\ntui.chat_widget_thread_settings.visible=thread=123e4567-e89b-12d3-a456-426614174001:model=gpt-5.3-codex->gpt-5.4:incoming=gpt-5.4:effort=high:service=fast:approval=on-request:reviewer=auto-review:profile=read-only:personality=pragmatic:mode=plan:history=false\ntui.chat_widget_thread_settings.ignored=current=123e4567-e89b-12d3-a456-426614174001:incoming=123e4567-e89b-12d3-a456-426614174002:model=gpt-5.4->gpt-5.4:ignored=true\ntui.chat_widget_thread_settings.plan_default=thread=123e4567-e89b-12d3-a456-426614174001:session=gpt-default/low:incoming=gpt-plan/high:active_mode=plan:default_mode=default:default_preserved=true:mask_mode=default:restored=gpt-default/low:mask_restored=true\ntui.chat_widget_thread_settings.failure=live_thread_settings_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget thread settings updates\ninput> \ntrace:\ntui.chat_widget_thread_settings.plan=headless\ntui.chat_widget_thread_settings.visible=thread=123e4567-e89b-12d3-a456-426614174001:model=gpt-5.3-codex->gpt-5.4:incoming=gpt-5.4:effort=high:service=fast:approval=on-request:reviewer=auto-review:profile=read-only:personality=pragmatic:mode=plan:history=false\ntui.chat_widget_thread_settings.ignored=current=123e4567-e89b-12d3-a456-426614174001:incoming=123e4567-e89b-12d3-a456-426614174002:model=gpt-5.4->gpt-5.4:ignored=true\ntui.chat_widget_thread_settings.plan_default=thread=123e4567-e89b-12d3-a456-426614174001:session=gpt-default/low:incoming=gpt-plan/high:active_mode=plan:default_mode=default:default_preserved=true:mask_mode=default:restored=gpt-default/low:mask_restored=true\ntui.chat_widget_thread_settings.failure=live_thread_settings_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-windows-sandbox-headless",
       "frame": {
         "name": "chatwidget-windows-sandbox-headless",

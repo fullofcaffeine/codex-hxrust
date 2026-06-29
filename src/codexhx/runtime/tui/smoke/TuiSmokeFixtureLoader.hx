@@ -111,6 +111,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetReplayProtocol: optionalReplayProtocolPlan(value, "chatWidgetReplayProtocol"),
 				chatWidgetRateLimit: optionalRateLimitPlan(value, "chatWidgetRateLimit"),
 				chatWidgetSafetyBuffering: optionalSafetyBufferingPlan(value, "chatWidgetSafetyBuffering"),
+				chatWidgetThreadSettings: optionalThreadSettingsPlan(value, "chatWidgetThreadSettings"),
 				chatWidgetAppServerError: optionalAppServerErrorPlan(value, "chatWidgetAppServerError"),
 				chatWidgetAppServerLifecycle: optionalAppServerLifecyclePlan(value, "chatWidgetAppServerLifecycle"),
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
@@ -2410,6 +2411,56 @@ class TuiSmokeFixtureLoader {
 				ignoredHistorical: optionalBoolField(value, "ignoredHistorical", false),
 				hiddenCleared: optionalBoolField(value, "hiddenCleared", false),
 				statusDetailsCleared: optionalBoolField(value, "statusDetailsCleared", false),
+				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalThreadSettingsPlan(object:Value, name:String):Null<TuiSmokeThreadSettingsPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeThreadSettingsPlan({
+					allowAppServerDelivery: optionalBoolField(value, "allowAppServerDelivery", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: threadSettingsActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function threadSettingsActions(values:Array<Value>):Array<TuiSmokeThreadSettingsAction> {
+		final out:Array<TuiSmokeThreadSettingsAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeThreadSettingsAction({
+				kind: TuiSmokeThreadSettingsActionKind.fromString(stringField(value, "kind", "")),
+				threadId: optionalStringField(value, "threadId", ""),
+				incomingThreadId: optionalStringField(value, "incomingThreadId", ""),
+				previousModel: optionalStringField(value, "previousModel", ""),
+				incomingModel: optionalStringField(value, "incomingModel", ""),
+				finalModel: optionalStringField(value, "finalModel", ""),
+				previousReasoningEffort: optionalStringField(value, "previousReasoningEffort", ""),
+				incomingReasoningEffort: optionalStringField(value, "incomingReasoningEffort", ""),
+				finalReasoningEffort: optionalStringField(value, "finalReasoningEffort", ""),
+				serviceTier: optionalStringField(value, "serviceTier", ""),
+				approvalPolicy: optionalStringField(value, "approvalPolicy", ""),
+				approvalsReviewer: optionalStringField(value, "approvalsReviewer", ""),
+				permissionProfile: optionalStringField(value, "permissionProfile", ""),
+				personality: optionalStringField(value, "personality", ""),
+				activeCollaborationMode: optionalStringField(value, "activeCollaborationMode", ""),
+				defaultCollaborationMode: optionalStringField(value, "defaultCollaborationMode", ""),
+				maskCollaborationMode: optionalStringField(value, "maskCollaborationMode", ""),
+				restoredModel: optionalStringField(value, "restoredModel", ""),
+				restoredReasoningEffort: optionalStringField(value, "restoredReasoningEffort", ""),
+				transcriptHistoryInserted: optionalBoolField(value, "transcriptHistoryInserted", false),
+				ignored: optionalBoolField(value, "ignored", false),
+				defaultPreserved: optionalBoolField(value, "defaultPreserved", false),
+				defaultMaskRestored: optionalBoolField(value, "defaultMaskRestored", false),
+				failureCode: optionalStringField(value, "failureCode", ""),
 				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
