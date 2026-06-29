@@ -26,6 +26,8 @@ import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotificationMethod;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcRequest;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcResponse;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcStreamScopeReport;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcStreamScopeStatus;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcStreamNotification;
 import codexhx.runtime.tui.appserver.TuiPromptRawResponseItemCompletedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
@@ -53,6 +55,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testJsonRpcNotificationsProjectToTransportEvents();
 		testJsonRpcExchangeRejectedSubmitIsTypedRefusal();
 		testJsonRpcMismatchedResponseIsTypedRefusal();
+		testJsonRpcWrongThreadStreamIsTypedRefusal();
+		testJsonRpcWrongTurnStreamIsTypedRefusal();
 		testEmptySubmitIsTypedRefusal();
 		testUnattachedSubmitIsTypedRefusal();
 		testTransportRejectedSubmitIsTypedRefusal();
@@ -246,6 +250,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertWireRecord(transport.lastWireRecordAt(10), 10, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Notification,
 			idleStatus.methodText(), idleStatus.messageJson(), "json-rpc idle status wire record");
 		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.Complete, "78", "78", 9, "json-rpc matched correlation");
+		assertStreamScope(transport.lastStreamScope(), TuiPromptJsonRpcStreamScopeStatus.Complete, "00000000-0000-0000-0000-000000005556", "turn-78",
+			"00000000-0000-0000-0000-000000005556", "turn-78", 9, -1, "json-rpc matched stream scope");
 		final expectedWireLines = [
 			request.messageJson(),
 			response.messageJson(),
@@ -301,6 +307,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertWireRecord(transport.lastWireRecordAt(0), 0, TuiPromptJsonRpcFrameDirection.Outbound, TuiPromptJsonRpcFrameKind.Request, request.methodText(),
 			request.messageJson(), "json-rpc rejected request wire record");
 		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.RequestOnly, "79", "", 0, "json-rpc rejected correlation");
+		assertStreamScope(transport.lastStreamScope(), TuiPromptJsonRpcStreamScopeStatus.Empty, "", "", "", "", 0, -1, "json-rpc rejected stream scope");
 		assertStringEquals(request.messageJson() + "\n", transport.lastWireJsonLines(), "json-rpc rejected wire json lines");
 		assertIntEquals(0, facade.queuedCount(), "json-rpc exchange rejection queues no fake events");
 	}
@@ -332,9 +339,58 @@ class TuiPromptSubmitEnvelopeHarness {
 			responseFrame.methodText(), responseFrame.messageJson(), "json-rpc mismatched response wire record");
 		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.ResponseIdMismatch, "81", "9081", 0,
 			"json-rpc mismatched response correlation");
+		assertStreamScope(transport.lastStreamScope(), TuiPromptJsonRpcStreamScopeStatus.Empty, "00000000-0000-0000-0000-000000005559", "turn-81", "", "", 0,
+			-1, "json-rpc mismatched response stream scope");
 		assertStringEquals(request.messageJson() + "\n" + responseFrame.messageJson() + "\n", transport.lastWireJsonLines(),
 			"json-rpc mismatched wire json lines");
 		assertIntEquals(0, facade.queuedCount(), "json-rpc mismatched response queues no fake events");
+	}
+
+	static function testJsonRpcWrongThreadStreamIsTypedRefusal():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005560");
+		final wrongThread = thread("00000000-0000-0000-0000-000000009560");
+		final transport = new JsonRpcTuiPromptTransport(new WrongThreadStreamPromptJsonRpcExchange(wrongThread));
+		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
+		final result = facade.submitPrompt(RequestId.fromInteger(82), "json rpc wrong thread");
+		assertFalse(result.acceptedPrompt(), "json-rpc wrong-thread stream refused");
+		assertStringEquals("82", result.requestIdText(), "json-rpc wrong-thread request id");
+		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc wrong-thread request recorded");
+		if (transport.lastResponse() != null)
+			throw "json-rpc wrong-thread stream should not record accepted response";
+		assertIntEquals(0, transport.lastStreamNotificationCount(), "json-rpc wrong-thread stream should not record accepted notifications");
+		assertIntEquals(3, transport.lastFrameCount(), "json-rpc wrong-thread diagnostic frame count");
+		assertRequestFrame(transport.lastFrameAt(0), request, "json-rpc wrong-thread request frame");
+		final responseFrame = expectResponseFrame(transport.lastFrameAt(1), "json-rpc wrong-thread response frame");
+		assertStringEquals("82", responseFrame.requestId.toString(), "json-rpc wrong-thread response id");
+		final wrongStatus = expectThreadStatusChangedStreamNotification(expectStreamFrame(transport.lastFrameAt(2), "json-rpc wrong-thread stream frame"),
+			"json-rpc wrong-thread diagnostic stream notification");
+		assertStringEquals(wrongThread.toString(), wrongStatus.threadId.toString(), "json-rpc wrong-thread actual thread");
+		assertStreamScope(transport.lastStreamScope(), TuiPromptJsonRpcStreamScopeStatus.ThreadMismatch, activeThread.toString(), "turn-82",
+			wrongThread.toString(), "", 1, 0, "json-rpc wrong-thread stream scope");
+		assertIntEquals(0, facade.queuedCount(), "json-rpc wrong-thread queues no fake events");
+	}
+
+	static function testJsonRpcWrongTurnStreamIsTypedRefusal():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005561");
+		final transport = new JsonRpcTuiPromptTransport(new WrongTurnStreamPromptJsonRpcExchange());
+		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
+		final result = facade.submitPrompt(RequestId.fromInteger(83), "json rpc wrong turn");
+		assertFalse(result.acceptedPrompt(), "json-rpc wrong-turn stream refused");
+		assertStringEquals("83", result.requestIdText(), "json-rpc wrong-turn request id");
+		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc wrong-turn request recorded");
+		if (transport.lastResponse() != null)
+			throw "json-rpc wrong-turn stream should not record accepted response";
+		assertIntEquals(0, transport.lastStreamNotificationCount(), "json-rpc wrong-turn stream should not record accepted notifications");
+		assertIntEquals(3, transport.lastFrameCount(), "json-rpc wrong-turn diagnostic frame count");
+		assertRequestFrame(transport.lastFrameAt(0), request, "json-rpc wrong-turn request frame");
+		final wrongDelta = expectAgentMessageDeltaStreamNotification(expectStreamFrame(transport.lastFrameAt(2), "json-rpc wrong-turn stream frame"),
+			"json-rpc wrong-turn diagnostic stream notification");
+		assertStringEquals("turn-stale-83", wrongDelta.turnId.toString(), "json-rpc wrong-turn actual turn");
+		assertStreamScope(transport.lastStreamScope(), TuiPromptJsonRpcStreamScopeStatus.TurnMismatch, activeThread.toString(), "turn-83",
+			activeThread.toString(), "turn-stale-83", 1, 0, "json-rpc wrong-turn stream scope");
+		assertIntEquals(0, facade.queuedCount(), "json-rpc wrong-turn queues no fake events");
 	}
 
 	static function testEmptySubmitIsTypedRefusal():Void {
@@ -530,6 +586,16 @@ class TuiPromptSubmitEnvelopeHarness {
 		}
 	}
 
+	static function expectStreamFrame(frame:Null<TuiPromptJsonRpcFrame>, label:String):TuiPromptJsonRpcStreamNotification {
+		final concrete = expectFrame(frame, label);
+		return switch concrete {
+			case TuiPromptJsonRpcFrame.StreamNotification(notification):
+				notification;
+			case _:
+				throw label + ": expected stream notification frame";
+		}
+	}
+
 	static function expectFrame(frame:Null<TuiPromptJsonRpcFrame>, label:String):TuiPromptJsonRpcFrame {
 		if (frame == null)
 			throw label;
@@ -564,6 +630,17 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals(expectedRequestId, correlation.requestIdText, label + " request");
 		assertStringEquals(expectedResponseId, correlation.responseIdText, label + " response");
 		assertIntEquals(expectedStreamCount, correlation.streamNotificationCount, label + " stream count");
+	}
+
+	static function assertStreamScope(scope:TuiPromptJsonRpcStreamScopeReport, expectedStatus:TuiPromptJsonRpcStreamScopeStatus, expectedThreadId:String,
+			expectedTurnId:String, actualThreadId:String, actualTurnId:String, expectedCheckedCount:Int, expectedFirstMismatchIndex:Int, label:String):Void {
+		assertStringEquals(expectedStatus.text(), scope.statusText(), label + " status");
+		assertStringEquals(expectedThreadId, scope.expectedThreadIdText, label + " expected thread");
+		assertStringEquals(expectedTurnId, scope.expectedTurnIdText, label + " expected turn");
+		assertStringEquals(actualThreadId, scope.actualThreadIdText, label + " actual thread");
+		assertStringEquals(actualTurnId, scope.actualTurnIdText, label + " actual turn");
+		assertIntEquals(expectedCheckedCount, scope.checkedNotificationCount, label + " checked count");
+		assertIntEquals(expectedFirstMismatchIndex, scope.firstMismatchIndex, label + " mismatch index");
 	}
 
 	static function streamNotificationMethodText(notification:TuiPromptJsonRpcStreamNotification):String {
@@ -778,6 +855,40 @@ class MismatchedResponsePromptJsonRpcExchange implements TuiPromptJsonRpcExchang
 		final turn = TuiPromptTurnStartResponse.fromEnvelope(envelope);
 		final staleRequest = new TuiPromptJsonRpcRequest(RequestId.fromInteger(9081), request.method, request.params);
 		return TuiPromptJsonRpcExchangeOutcome.accepted(TuiPromptJsonRpcResponse.turnStart(staleRequest, turn), [], [],
+			[TuiAppServerEvent.AssistantDelta(envelope.threadId, "should not queue")]);
+	}
+}
+
+class WrongThreadStreamPromptJsonRpcExchange implements TuiPromptJsonRpcExchange {
+	final wrongThread:codexhx.protocol.ThreadId;
+
+	public function new(wrongThread:codexhx.protocol.ThreadId) {
+		this.wrongThread = wrongThread;
+	}
+
+	public function send(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiPromptJsonRpcExchangeOutcome {
+		final turn = TuiPromptTurnStartResponse.fromEnvelope(envelope);
+		final response = TuiPromptJsonRpcResponse.turnStart(request, turn);
+		final wrongStatus = TuiPromptThreadStatusChangedNotification.active(wrongThread);
+		return TuiPromptJsonRpcExchangeOutcome.accepted(response, [], [TuiPromptJsonRpcStreamNotification.ThreadStatusChanged(wrongStatus)],
+			[TuiAppServerEvent.AssistantDelta(wrongThread, "should not queue")]);
+	}
+}
+
+class WrongTurnStreamPromptJsonRpcExchange implements TuiPromptJsonRpcExchange {
+	public function new() {}
+
+	public function send(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiPromptJsonRpcExchangeOutcome {
+		final turn = TuiPromptTurnStartResponse.fromEnvelope(envelope);
+		final response = TuiPromptJsonRpcResponse.turnStart(request, turn);
+		final staleTurn = codexhx.protocol.TurnId.fromString("turn-stale-" + envelope.requestId.toString());
+		if (staleTurn == null)
+			return TuiPromptJsonRpcExchangeOutcome.rejected("bad_stale_turn");
+		final itemId = codexhx.protocol.ItemId.fromString("item-stale-" + envelope.requestId.toString());
+		if (itemId == null)
+			return TuiPromptJsonRpcExchangeOutcome.rejected("bad_stale_item");
+		final wrongDelta = new TuiPromptAgentMessageDeltaNotification(envelope.threadId, staleTurn, itemId, "wrong turn delta");
+		return TuiPromptJsonRpcExchangeOutcome.accepted(response, [], [TuiPromptJsonRpcStreamNotification.AgentMessageDelta(wrongDelta)],
 			[TuiAppServerEvent.AssistantDelta(envelope.threadId, "should not queue")]);
 	}
 }

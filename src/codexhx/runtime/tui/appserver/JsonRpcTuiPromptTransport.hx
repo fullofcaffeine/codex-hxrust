@@ -13,6 +13,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	var lastFramesValue:Array<TuiPromptJsonRpcFrame>;
 	var lastWireRecordsValue:Array<TuiPromptJsonRpcFrameRecord>;
 	var lastCorrelationValue:TuiPromptJsonRpcFrameCorrelation;
+	var lastStreamScopeValue:TuiPromptJsonRpcStreamScopeReport;
 
 	public function new(?exchange:TuiPromptJsonRpcExchange) {
 		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
@@ -23,6 +24,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		this.lastFramesValue = [];
 		this.lastWireRecordsValue = [];
 		this.lastCorrelationValue = TuiPromptJsonRpcFrameCorrelation.fromFrames([]);
+		this.lastStreamScopeValue = TuiPromptJsonRpcStreamScopeReport.fromNotifications(null, null, []);
 	}
 
 	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
@@ -46,10 +48,19 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 			replaceLastFrames(responseFrames);
 			return TuiPromptTransportOutcome.rejected(responseCorrelation.code());
 		}
+		final exchangeStreamNotifications = exchangeOutcome.streamNotifications();
+		final streamFrames = responseFrames.copy();
+		for (notification in exchangeStreamNotifications)
+			streamFrames.push(TuiPromptJsonRpcFrame.StreamNotification(notification));
+		final streamScope = TuiPromptJsonRpcStreamScopeReport.fromNotifications(envelope.threadId, response.result.turnId, exchangeStreamNotifications);
+		if (!streamScope.isAccepted()) {
+			replaceLastFrames(streamFrames);
+			return TuiPromptTransportOutcome.rejected(streamScope.code());
+		}
 		lastResponseValue = response;
 		lastNotificationsValue = exchangeOutcome.notifications();
-		lastStreamNotificationsValue = exchangeOutcome.streamNotifications();
-		final frames = [TuiPromptJsonRpcFrame.Request(request), TuiPromptJsonRpcFrame.Response(response)];
+		lastStreamNotificationsValue = exchangeStreamNotifications;
+		final frames = responseFrames.copy();
 		for (notification in lastStreamNotificationsValue)
 			frames.push(TuiPromptJsonRpcFrame.StreamNotification(notification));
 		replaceLastFrames(frames);
@@ -129,9 +140,56 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		return lastCorrelationValue;
 	}
 
+	public function lastStreamScope():TuiPromptJsonRpcStreamScopeReport {
+		return lastStreamScopeValue;
+	}
+
 	function replaceLastFrames(frames:Array<TuiPromptJsonRpcFrame>):Void {
 		lastFramesValue = frames;
 		lastWireRecordsValue = TuiPromptJsonRpcFrameCodec.records(frames);
 		lastCorrelationValue = TuiPromptJsonRpcFrameCorrelation.fromFrames(frames);
+		final response = firstResponse(frames);
+		lastStreamScopeValue = response == null ? TuiPromptJsonRpcStreamScopeReport.fromNotifications(null, null,
+			[]) : TuiPromptJsonRpcStreamScopeReport.fromNotifications(firstRequestThreadId(frames), response.result.turnId, streamNotifications(frames));
+	}
+
+	function firstResponse(frames:Array<TuiPromptJsonRpcFrame>):Null<TuiPromptJsonRpcResponse> {
+		if (frames == null)
+			return null;
+		for (frame in frames) {
+			switch frame {
+				case TuiPromptJsonRpcFrame.Response(response):
+					return response;
+				case _:
+			}
+		}
+		return null;
+	}
+
+	function firstRequestThreadId(frames:Array<TuiPromptJsonRpcFrame>):Null<codexhx.protocol.ThreadId> {
+		if (frames == null)
+			return null;
+		for (frame in frames) {
+			switch frame {
+				case TuiPromptJsonRpcFrame.Request(request):
+					return request.params.threadId;
+				case _:
+			}
+		}
+		return null;
+	}
+
+	function streamNotifications(frames:Array<TuiPromptJsonRpcFrame>):Array<TuiPromptJsonRpcStreamNotification> {
+		final out:Array<TuiPromptJsonRpcStreamNotification> = [];
+		if (frames == null)
+			return out;
+		for (frame in frames) {
+			switch frame {
+				case TuiPromptJsonRpcFrame.StreamNotification(notification):
+					out.push(notification);
+				case _:
+			}
+		}
+		return out;
 	}
 }
