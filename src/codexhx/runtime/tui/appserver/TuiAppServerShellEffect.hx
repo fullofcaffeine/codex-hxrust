@@ -11,6 +11,7 @@ enum TuiAppServerShellEffect {
 	RequestRegistered(requestId:RequestId, method:TuiAppServerRequestMethod);
 	StaleResponseRejected(requestId:RequestId, method:TuiAppServerRequestMethod);
 	SessionAttached(sessionId:SessionId, threadId:ThreadId);
+	PromptSubmitSent(envelope:TuiPromptSubmitEnvelope);
 	AppServerEventApplied(event:TuiAppServerEvent);
 	AppServerEventIgnored(event:TuiAppServerEvent);
 	Disconnected(message:String);

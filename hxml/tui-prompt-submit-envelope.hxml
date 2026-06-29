@@ -1,0 +1,8 @@
+-cp src
+-cp test
+-lib reflaxe.rust
+-D reflaxe_rust_profile=metal
+-D rust_output=generated/tui-prompt-submit-envelope
+-D rust_crate=codex_hxrust_tui_prompt_submit_envelope
+-D rust_cargo_subcommand=check
+-main TuiPromptSubmitEnvelopeHarness

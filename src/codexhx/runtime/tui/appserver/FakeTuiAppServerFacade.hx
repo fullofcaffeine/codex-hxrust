@@ -75,6 +75,26 @@ class FakeTuiAppServerFacade {
 		return effects;
 	}
 
+	public function submitPrompt(requestId:RequestId, promptText:String):TuiPromptSubmitResult {
+		final text = normalized(promptText, "");
+		if (text.length == 0)
+			return TuiPromptSubmitResult.refused(TuiPromptSubmitStatus.EmptyPrompt);
+		if (activeSessionValue == null)
+			return TuiPromptSubmitResult.refused(TuiPromptSubmitStatus.MissingSession);
+		if (activeThreadValue == null)
+			return TuiPromptSubmitResult.refused(TuiPromptSubmitStatus.MissingThread);
+
+		final envelope = new TuiPromptSubmitEnvelope(requestId, activeSessionValue, activeThreadValue, text);
+		final effects:Array<TuiAppServerShellEffect> = [
+			TuiAppServerShellEffect.RequestRegistered(requestId, TuiAppServerRequestMethod.PromptSubmit),
+			TuiAppServerShellEffect.PromptSubmitSent(envelope)
+		];
+		enqueue(TuiAppServerEvent.ThreadStatus(activeThreadValue, TuiAppServerThreadStatus.Working("submitted")));
+		enqueue(TuiAppServerEvent.AssistantDelta(activeThreadValue, "echo: " + text));
+		enqueue(TuiAppServerEvent.ThreadStatus(activeThreadValue, TuiAppServerThreadStatus.Ready("ready")));
+		return TuiPromptSubmitResult.accepted(envelope, effects);
+	}
+
 	public function receive(event:TuiAppServerEvent):Array<TuiAppServerShellEffect> {
 		final effects:Array<TuiAppServerShellEffect> = [];
 		switch event {

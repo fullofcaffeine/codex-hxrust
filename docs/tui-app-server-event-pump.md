@@ -27,4 +27,4 @@ The gate asserts assistant delta, status update, disconnect handling, queued red
 
 ## Still Not Proven
 
-This is not an async app-server stream, socket transport, prompt submission, model traffic, persistent state, tool execution, or full upstream event loop. `TUI-LIVE-7` should turn composer submit effects into typed app-server request envelopes so the shell can send work into the fake app-server facade.
+This is not an async app-server stream, socket transport, model traffic, persistent state, tool execution, or full upstream event loop. `TUI-LIVE-7` turns composer submit effects into typed app-server request envelopes so the shell can send work into the fake app-server facade.

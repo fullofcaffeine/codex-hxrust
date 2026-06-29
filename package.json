@@ -33,6 +33,7 @@
     "test:tui-live-input-backend": "bash harness/check-tui-live-input-backend.sh",
     "test:tui-chatwidget-shell": "bash harness/check-tui-chatwidget-shell.sh",
     "test:tui-fake-app-server-session": "bash harness/check-tui-fake-app-server-session.sh",
-    "test:tui-app-server-event-pump": "bash harness/check-tui-app-server-event-pump.sh"
+    "test:tui-app-server-event-pump": "bash harness/check-tui-app-server-event-pump.sh",
+    "test:tui-prompt-submit-envelope": "bash harness/check-tui-prompt-submit-envelope.sh"
   }
 }
