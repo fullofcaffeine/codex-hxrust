@@ -4223,15 +4223,32 @@ Status: HXCX-TUI-338 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-339 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for app-level side fork config guardrails. Upstream anchor is `../codex/codex-rs/tui/src/app/tests.rs` `side_fork_config_is_ephemeral_and_appends_developer_guardrails` plus `../codex/codex-rs/tui/src/app/side.rs` `side_fork_config` and side developer-instruction constants. The fixture preserves ephemeral fork config, approval-policy inheritance, sandbox-policy inheritance, side-conversation developer guardrails, inherited-history-as-reference semantics, side-boundary-only instruction activation, inherited task/tool non-continuation, non-mutating inspection allowance, mutation/escalation restrictions, empty transcript preservation, and no-live/no-ratatui/no-model rejection evidence. This is deterministic fork-config evidence only, not live thread/fork transport, thread/inject_items, live app-server mutation, terminal mutation, ratatui rendering, persistent DB access, network traffic, model traffic, realtime transport, or adapter-specific behavior.
 
-### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
+### TUI-LIVE Pivot: Minimal Live Shell Before More Smoke Expansion
 
-Only after the above are green:
+Status: after the external architecture review, the default next work pivots from additional deterministic trace slices to a minimal live TUI shell. The smoke binary remains valuable as a regression scaffold, but it must not become the production event loop or the main architecture. The new Beads queue is:
+
+- `TUI-LIVE-0` / `codex-hxrust-nvs9`: production `TerminalBackend` contract;
+- `TUI-LIVE-1` / `codex-hxrust-3ddw`: generated live terminal restore gate;
+- `TUI-LIVE-2` / `codex-hxrust-8072`: live resize redraw scheduler;
+- `TUI-LIVE-3` / `codex-hxrust-k92m`: typed live input backend;
+- `TUI-LIVE-4` / `codex-hxrust-59op`: minimal ChatWidget shell state and render;
+- `TUI-LIVE-5` / `codex-hxrust-ppp3`: fake app-server session attach;
+- `TUI-LIVE-6` / `codex-hxrust-6pzd`: app-server event pump into live shell;
+- `TUI-LIVE-7` / `codex-hxrust-mvwx`: prompt submit envelope from live composer;
+- `TUI-LIVE-8` / `codex-hxrust-4dnm`: promote agent navigation state out of smoke;
+- `ARCH-1` / `codex-hxrust-f512`: quarantine TUI smoke validation package and add an import guard.
+
+The first acceptance target is credential-free: a Haxe-authored, haxe.rust-generated binary that can own a terminal session, draw a minimal Codex shell frame, process basic key/resize/exit events, and restore terminal state. It should use typed production state/effects, not a giant nullable fixture event record or `expectedTrace` as the primary proof.
+
+### HXCX-4.143+: Credentialed Runtime, Realtime, And Full Interactive TUI
+
+After the minimal live shell proves terminal ownership, typed input, redraw scheduling, and fake app-server attach:
 
 - broader SQLite/log DB adapter implementation for persistent session/runtime state through generic metal/native Rust boundaries;
 - credentialed provider integration and explicit no-credential test mode;
 - realtime audio/WebRTC transport;
-- full crossterm alternate-screen ownership;
-- interactive input, popups, slash commands, status surfaces, and multi-agent affordances.
+- full app-server transport/session attach;
+- complete interactive popups, slash commands, status surfaces, multi-agent affordances, and upstream widget parity.
 
 ## haxe.rust Pressure Points
 
