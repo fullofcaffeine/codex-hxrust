@@ -14249,6 +14249,76 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> side conversation start success\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.fork=parent=main:child=side-1:side_threads=0->1:ephemeral=true:developer=true:model=true:tier=true\ntui.side_conversation.inject_boundary=child=side-1:hidden=true:injected=true\ntui.side_conversation.switch=target=side-1:child=true:parent=false:submitted_initial=true:redraw=true\ntui.side_conversation.sync_ui=active=false->true:notice_suppressed=false->true:rename_blocked=false->true:parent_main=true:status=:label=Side from main thread | Ctrl+C to return\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "side-fork-config-guardrails",
+      "frame": {
+        "name": "side-fork-config-guardrails",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "side fork config guardrails"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "side_conversation",
+          "sideConversation": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "fork_config",
+                "forkConfigEphemeral": true,
+                "approvalPolicyInherited": true,
+                "sandboxPolicyInherited": true,
+                "developerInstructionsAdded": true,
+                "mainThreadGuardrail": true,
+                "inheritedHistoryReferenceOnly": true,
+                "boundaryInstructionsOnly": true,
+                "noInheritedTaskContinuation": true,
+                "toolHistoryReferenceOnly": true,
+                "nonMutatingInspectionAllowed": true,
+                "mutationRequiresSideRequest": true,
+                "escalatedPermissionBlocked": true,
+                "transcriptEmpty": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_side_fork_config_rejected",
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.side_conversation.plan=headless\ntui.side_conversation.fork_config=ephemeral=true:approval_policy=true:sandbox=true:developer=true:main_guardrail=true:history_reference=true:boundary_only=true:no_continue=true:tool_reference=true:non_mutating=true:mutation_requires_side_request=true:no_escalation=true:transcript_empty=true\ntui.side_conversation.failure=live_side_fork_config_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> side fork config guardrails\ninput> \ntrace:\ntui.side_conversation.plan=headless\ntui.side_conversation.fork_config=ephemeral=true:approval_policy=true:sandbox=true:developer=true:main_guardrail=true:history_reference=true:boundary_only=true:no_continue=true:tool_reference=true:non_mutating=true:mutation_requires_side_request=true:no_escalation=true:transcript_empty=true\ntui.side_conversation.failure=live_side_fork_config_rejected:error=:no_live=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "side-conversation-parent-status-suppresses-interrupt-notice",
       "frame": {
         "name": "side-conversation-parent-status-suppresses-interrupt-notice",

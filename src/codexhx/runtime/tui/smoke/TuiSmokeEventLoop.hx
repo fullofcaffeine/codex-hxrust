@@ -2880,6 +2880,14 @@ class TuiSmokeEventLoop {
 				case TuiSmokeSideConversationActionKind.StartBlock:
 					trace.push("tui.side_conversation.start_block=" + action.blockMessage + ":side_threads=" + action.sideThreadsBefore + "->"
 						+ action.sideThreadsAfter + ":restored=" + action.restoredComposer);
+				case TuiSmokeSideConversationActionKind.ForkConfig:
+					trace.push("tui.side_conversation.fork_config=" + "ephemeral=" + action.forkConfigEphemeral + ":approval_policy="
+						+ action.approvalPolicyInherited + ":sandbox=" + action.sandboxPolicyInherited + ":developer=" + action.developerInstructionsAdded
+						+ ":main_guardrail=" + action.mainThreadGuardrail + ":history_reference=" + action.inheritedHistoryReferenceOnly + ":boundary_only="
+						+ action.boundaryInstructionsOnly + ":no_continue=" + action.noInheritedTaskContinuation + ":tool_reference="
+						+ action.toolHistoryReferenceOnly + ":non_mutating=" + action.nonMutatingInspectionAllowed + ":mutation_requires_side_request="
+						+ action.mutationRequiresSideRequest + ":no_escalation=" + action.escalatedPermissionBlocked + ":transcript_empty="
+						+ action.transcriptEmpty);
 				case TuiSmokeSideConversationActionKind.ForkThread:
 					trace.push("tui.side_conversation.fork=" + "parent=" + action.parentThreadId + ":child=" + action.childThreadId + ":side_threads="
 						+ action.sideThreadsBefore + "->" + action.sideThreadsAfter + ":ephemeral=" + action.forkConfigEphemeral + ":developer="

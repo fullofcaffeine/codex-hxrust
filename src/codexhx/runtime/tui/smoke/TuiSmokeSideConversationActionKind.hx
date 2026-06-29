@@ -3,6 +3,7 @@ package codexhx.runtime.tui.smoke;
 enum abstract TuiSmokeSideConversationActionKind(String) to String {
 	final SyncUi = "sync_ui";
 	final StartBlock = "start_block";
+	final ForkConfig = "fork_config";
 	final ForkThread = "fork_thread";
 	final InjectBoundary = "inject_boundary";
 	final SwitchThread = "switch_thread";
@@ -23,6 +24,7 @@ enum abstract TuiSmokeSideConversationActionKind(String) to String {
 		return switch value {
 			case "sync_ui": SyncUi;
 			case "start_block": StartBlock;
+			case "fork_config": ForkConfig;
 			case "fork_thread": ForkThread;
 			case "inject_boundary": InjectBoundary;
 			case "switch_thread": SwitchThread;
