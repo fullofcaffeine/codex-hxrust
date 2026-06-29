@@ -39,9 +39,10 @@ class LiveTerminalBackend implements TerminalBackend {
 	var drawCountValue:Int;
 	var exitCountValue:Int;
 	var restoreCountValue:Int;
+	var pollTimeoutMsValue:Int;
 	var report:LiveTerminalProbeReport;
 
-	public function new() {
+	public function new(?pollTimeoutMs:Int) {
 		this.active = false;
 		this.restored = false;
 		this.lastSize = TerminalSize.of(80, 24);
@@ -53,6 +54,7 @@ class LiveTerminalBackend implements TerminalBackend {
 		this.drawCountValue = 0;
 		this.exitCountValue = 0;
 		this.restoreCountValue = 0;
+		this.pollTimeoutMsValue = sanitizePollTimeout(pollTimeoutMs);
 		this.report = simulatedReport(LiveTerminalProbeStatus.Inactive, false, false, false, false, false, false, "live terminal inactive");
 	}
 
@@ -101,6 +103,11 @@ class LiveTerminalBackend implements TerminalBackend {
 		if (!active)
 			return TerminalEvent.NoEvent;
 		return pollNativeEvent();
+	}
+
+	public function withPollTimeoutMs(timeoutMs:Int):LiveTerminalBackend {
+		pollTimeoutMsValue = sanitizePollTimeout(timeoutMs);
+		return this;
 	}
 
 	public function resize(size:TerminalSize):TerminalOperation {
@@ -173,6 +180,10 @@ class LiveTerminalBackend implements TerminalBackend {
 		return restoreCountValue;
 	}
 
+	public function pollTimeoutMs():Int {
+		return pollTimeoutMsValue;
+	}
+
 	public function lastReport():LiveTerminalProbeReport {
 		return report;
 	}
@@ -195,7 +206,7 @@ class LiveTerminalBackend implements TerminalBackend {
 
 	function pollNativeEvent():TerminalEvent {
 		#if reflaxe_rust_profile
-		final code = NativeLiveTerminalProbe.pollLive(0);
+		final code = NativeLiveTerminalProbe.pollLive(pollTimeoutMsValue);
 		return TerminalInputMapper.terminalEventFromNativePoll(code, NativeLiveTerminalProbe.lastInputText());
 		#else
 		return TerminalEvent.NoEvent;
@@ -254,5 +265,13 @@ class LiveTerminalBackend implements TerminalBackend {
 		if (reason == TerminalRestoreReason.PanicFallback)
 			return 3;
 		return 1;
+	}
+
+	static function sanitizePollTimeout(value:Null<Int>):Int {
+		if (value == null || value < 0)
+			return 0;
+		if (value > 1000)
+			return 1000;
+		return value;
 	}
 }

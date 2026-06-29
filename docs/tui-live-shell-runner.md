@@ -25,3 +25,6 @@ The harness runs through the Haxe interpreter and haxe.rust-generated metal
 Cargo check/test/run. Headless events provide deterministic CI coverage while
 `LiveTerminalBackend` keeps the same no-TTY-safe generated Rust boundary used by
 the earlier live-terminal restore gate.
+
+For the user-runnable generated binary, see
+[tui-live-shell-demo.md](tui-live-shell-demo.md).
