@@ -113,6 +113,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetSafetyBuffering: optionalSafetyBufferingPlan(value, "chatWidgetSafetyBuffering"),
 				chatWidgetThreadSettings: optionalThreadSettingsPlan(value, "chatWidgetThreadSettings"),
 				chatWidgetAppServerTurnState: optionalAppServerTurnStatePlan(value, "chatWidgetAppServerTurnState"),
+				chatWidgetAppServerElicitation: optionalAppServerElicitationPlan(value, "chatWidgetAppServerElicitation"),
 				chatWidgetAppServerError: optionalAppServerErrorPlan(value, "chatWidgetAppServerError"),
 				chatWidgetAppServerLifecycle: optionalAppServerLifecyclePlan(value, "chatWidgetAppServerLifecycle"),
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
@@ -2513,6 +2514,54 @@ class TuiSmokeFixtureLoader {
 				includeLogs: optionalBoolField(value, "includeLogs", false),
 				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalAppServerElicitationPlan(object:Value, name:String):Null<TuiSmokeAppServerElicitationPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAppServerElicitationPlan({
+					allowAppLinkView: optionalBoolField(value, "allowAppLinkView", false),
+					allowBrowserLaunch: optionalBoolField(value, "allowBrowserLaunch", false),
+					allowAppServerDelivery: optionalBoolField(value, "allowAppServerDelivery", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: appServerElicitationActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function appServerElicitationActions(values:Array<Value>):Array<TuiSmokeAppServerElicitationAction> {
+		final out:Array<TuiSmokeAppServerElicitationAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeAppServerElicitationAction({
+				kind: TuiSmokeAppServerElicitationActionKind.fromString(stringField(value, "kind", "")),
+				visibleThreadId: optionalStringField(value, "visibleThreadId", ""),
+				requestThreadId: optionalStringField(value, "requestThreadId", ""),
+				turnId: optionalStringField(value, "turnId", ""),
+				serverName: optionalStringField(value, "serverName", ""),
+				requestId: optionalIntField(value, "requestId", 0),
+				url: optionalStringField(value, "url", ""),
+				elicitationId: optionalStringField(value, "elicitationId", ""),
+				message: optionalStringField(value, "message", ""),
+				appEventKind: optionalStringField(value, "appEventKind", ""),
+				opKind: optionalStringField(value, "opKind", ""),
+				decision: optionalStringField(value, "decision", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				invalidUrlRejected: optionalBoolField(value, "invalidUrlRejected", false),
+				targetedRequestThread: optionalBoolField(value, "targetedRequestThread", false),
+				visibleThreadMutated: optionalBoolField(value, "visibleThreadMutated", false),
+				contentEmpty: optionalBoolField(value, "contentEmpty", false),
+				metaEmpty: optionalBoolField(value, "metaEmpty", false),
+				noAppLinkView: optionalBoolField(value, "noAppLinkView", false),
+				noBrowserLaunch: optionalBoolField(value, "noBrowserLaunch", false),
+				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));

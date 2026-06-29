@@ -580,6 +580,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetAppServerElicitation:
+					if (!traceAppServerElicitation(event.chatWidgetAppServerElicitation, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetAppServerError:
 					if (!traceAppServerError(event.chatWidgetAppServerError, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -11429,6 +11434,62 @@ class TuiSmokeEventLoop {
 						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.chat_widget_app_server_turn_state.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceAppServerElicitation(plan:TuiSmokeAppServerElicitationPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowAppLinkView || plan.allowBrowserLaunch || plan.allowAppServerDelivery || plan.allowNetwork || plan.allowModelCall
+			|| !plan.enabled()) {
+			trace.push("tui.chat_widget_app_server_elicitation.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_app_server_elicitation.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeAppServerElicitationActionKind.InvalidUrlDecline:
+					trace.push("tui.chat_widget_app_server_elicitation.invalid_url=visible="
+						+ action.visibleThreadId
+						+ ":target="
+						+ action.requestThreadId
+						+ ":server="
+						+ action.serverName
+						+ ":request="
+						+ action.requestId
+						+ ":turn="
+						+ action.turnId
+						+ ":url="
+						+ action.url
+						+ ":elicitation="
+						+ action.elicitationId
+						+ ":rejected="
+						+ action.invalidUrlRejected
+						+ ":event="
+						+ action.appEventKind
+						+ ":op="
+						+ action.opKind
+						+ ":decision="
+						+ action.decision
+						+ ":targeted="
+						+ action.targetedRequestThread
+						+ ":visible_mutated="
+						+ action.visibleThreadMutated
+						+ ":content_empty="
+						+ action.contentEmpty
+						+ ":meta_empty="
+						+ action.metaEmpty
+						+ ":view="
+						+ !action.noAppLinkView
+						+ ":browser="
+						+ !action.noBrowserLaunch);
+				case TuiSmokeAppServerElicitationActionKind.Failure:
+					trace.push("tui.chat_widget_app_server_elicitation.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerDelivery
+						+ ":no_network=" + action.noNetwork + ":no_browser=" + action.noBrowserLaunch + ":no_model=" + action.noModelCall + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.chat_widget_app_server_elicitation.unknown");
 					return false;
 			}
 		}
