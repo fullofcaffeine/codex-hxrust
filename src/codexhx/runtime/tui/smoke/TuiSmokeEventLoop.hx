@@ -865,6 +865,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ThreadStartedSession:
+					if (!traceThreadStartedSession(event.threadStartedSession, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.DesktopNotification:
 					if (!traceDesktopNotification(event.desktopNotification, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -2506,6 +2511,72 @@ class TuiSmokeEventLoop {
 			}
 		}
 		return true;
+	}
+
+	static function traceThreadStartedSession(plan:TuiSmokeThreadStartedSessionPlan, trace:Array<String>):Bool {
+		if (plan == null || !plan.enabled() || plan.allowAppServerMutation || plan.allowFilesystemMutation || plan.allowTerminalMutation
+			|| plan.allowRatatuiBuffer || plan.allowNetwork || plan.allowModelCall) {
+			trace.push("tui.thread_started_session.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.thread_started_session.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeThreadStartedSessionActionKind.Initialize:
+					final inferredModel = action.rolloutModel == "" ? action.primaryModel : action.rolloutModel;
+					final inferredRoots = threadStartedSessionRoots(action.primaryRuntimeWorkspaceRoots, action.primaryCwd, action.agentCwd);
+					final inferredLabel = threadStartedSessionAgentLabel(action.agentNickname, action.agentRole);
+					if (action.agentThreadId != action.expectedThreadId
+						|| action.threadName != action.expectedThreadName
+						|| inferredModel != action.expectedModel
+						|| action.modelProviderId != action.expectedModelProviderId
+						|| action.primaryApprovalPolicy != action.expectedApprovalPolicy
+						|| action.agentCwd != action.expectedCwd
+						|| !stringArraysEqual(inferredRoots, action.expectedRuntimeWorkspaceRoots)
+						|| action.rolloutPath != action.expectedRolloutPath
+						|| inferredLabel != action.expectedNavigationLabel
+						|| action.expectedNavigationRunning
+						|| action.expectedNavigationClosed) {
+						trace.push("tui.thread_started_session.init_mismatch=" + action.name + ":thread=" + action.agentThreadId + ":model=" + inferredModel
+							+ ":roots=" + inferredRoots.join("|") + ":label=" + inferredLabel);
+						return false;
+					}
+					trace.push("tui.thread_started_session.init=" + action.name + ":primary=" + action.primaryThreadId + ":agent=" + action.agentThreadId
+						+ ":name=" + action.threadName + ":model=" + inferredModel + ":provider=" + action.modelProviderId + ":approval="
+						+ action.primaryApprovalPolicy + ":cwd=" + action.agentCwd + ":roots=" + inferredRoots.join("|") + ":rollout=" + action.rolloutPath
+						+ ":nav=" + inferredLabel + ":running=" + action.expectedNavigationRunning + ":closed=" + action.expectedNavigationClosed);
+				case TuiSmokeThreadStartedSessionActionKind.Failure:
+					trace.push("tui.thread_started_session.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerMutation + ":no_fs="
+						+ action.noFilesystemMutation + ":no_terminal=" + action.noTerminalMutation + ":no_buffer=" + action.noRatatuiBuffer + ":no_network="
+						+ action.noNetwork + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.thread_started_session.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function threadStartedSessionRoots(primaryRoots:Array<String>, primaryCwd:String, agentCwd:String):Array<String> {
+		final out:Array<String> = [];
+		for (root in primaryRoots) {
+			final next = root == primaryCwd ? agentCwd : root;
+			if (out.indexOf(next) == -1)
+				out.push(next);
+		}
+		if (out.length == 0)
+			out.push(agentCwd);
+		return out;
+	}
+
+	static function threadStartedSessionAgentLabel(nickname:String, role:String):String {
+		if (nickname != "" && role != "")
+			return nickname + " [" + role + "]";
+		if (nickname != "")
+			return nickname;
+		if (role != "")
+			return "[" + role + "]";
+		return "";
 	}
 
 	static function trimReplayRows(rows:Array<String>, maxRows:Int):Int {

@@ -170,6 +170,7 @@ class TuiSmokeFixtureLoader {
 				agentNavigation: optionalAgentNavigationPlan(value, "agentNavigation"),
 				loadedThreads: optionalLoadedThreadsPlan(value, "loadedThreads"),
 				initialHistoryReplay: optionalInitialHistoryReplayPlan(value, "initialHistoryReplay"),
+				threadStartedSession: optionalThreadStartedSessionPlan(value, "threadStartedSession"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
@@ -3345,6 +3346,65 @@ class TuiSmokeFixtureLoader {
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalThreadStartedSessionPlan(object:Value, name:String):Null<TuiSmokeThreadStartedSessionPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeThreadStartedSessionPlan({
+					allowAppServerMutation: optionalBoolField(value, "allowAppServerMutation", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					allowTerminalMutation: optionalBoolField(value, "allowTerminalMutation", false),
+					allowRatatuiBuffer: optionalBoolField(value, "allowRatatuiBuffer", false),
+					allowNetwork: optionalBoolField(value, "allowNetwork", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: threadStartedSessionActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function threadStartedSessionActions(values:Array<Value>):Array<TuiSmokeThreadStartedSessionAction> {
+		final out:Array<TuiSmokeThreadStartedSessionAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeThreadStartedSessionAction({
+				kind: TuiSmokeThreadStartedSessionActionKind.fromString(stringField(value, "kind", "")),
+				name: optionalStringField(value, "name", ""),
+				primaryThreadId: optionalStringField(value, "primaryThreadId", ""),
+				agentThreadId: optionalStringField(value, "agentThreadId", ""),
+				primaryCwd: optionalStringField(value, "primaryCwd", ""),
+				agentCwd: optionalStringField(value, "agentCwd", ""),
+				primaryModel: optionalStringField(value, "primaryModel", ""),
+				rolloutModel: optionalStringField(value, "rolloutModel", ""),
+				modelProviderId: optionalStringField(value, "modelProviderId", ""),
+				primaryApprovalPolicy: optionalStringField(value, "primaryApprovalPolicy", ""),
+				threadName: optionalStringField(value, "threadName", ""),
+				rolloutPath: optionalStringField(value, "rolloutPath", ""),
+				primaryRuntimeWorkspaceRoots: optionalStringArrayField(value, "primaryRuntimeWorkspaceRoots"),
+				expectedThreadId: optionalStringField(value, "expectedThreadId", ""),
+				expectedThreadName: optionalStringField(value, "expectedThreadName", ""),
+				expectedModel: optionalStringField(value, "expectedModel", ""),
+				expectedModelProviderId: optionalStringField(value, "expectedModelProviderId", ""),
+				expectedApprovalPolicy: optionalStringField(value, "expectedApprovalPolicy", ""),
+				expectedCwd: optionalStringField(value, "expectedCwd", ""),
+				expectedRuntimeWorkspaceRoots: optionalStringArrayField(value, "expectedRuntimeWorkspaceRoots"),
+				expectedRolloutPath: optionalStringField(value, "expectedRolloutPath", ""),
+				agentNickname: optionalStringField(value, "agentNickname", ""),
+				agentRole: optionalStringField(value, "agentRole", ""),
+				expectedNavigationLabel: optionalStringField(value, "expectedNavigationLabel", ""),
+				expectedNavigationRunning: optionalBoolField(value, "expectedNavigationRunning", false),
+				expectedNavigationClosed: optionalBoolField(value, "expectedNavigationClosed", false),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noAppServerMutation: optionalBoolField(value, "noAppServerMutation", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				noTerminalMutation: optionalBoolField(value, "noTerminalMutation", false),
+				noRatatuiBuffer: optionalBoolField(value, "noRatatuiBuffer", false),
+				noNetwork: optionalBoolField(value, "noNetwork", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}

@@ -26158,6 +26158,100 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> inactive approval badge clear\ninput> \ntrace:\ntui.pending_thread_approvals.plan=headless\ntui.pending_thread_approvals.set=inactive-agent-approval:changed=true:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.clear_after_turn=matching-turn-completed:main=00000000-0000-0000-0000-000000000101:agent=00000000-0000-0000-0000-000000000202:label=Robie [explorer]:request=exec_approval/call-approval:turn=turn-approval:pending=1->0:matched=true:active_preserved=true:cleared=true\ntui.pending_thread_approvals.failure=live_inactive_approval_badge_clear_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "inactive-thread-started-session-headless",
+      "frame": {
+        "name": "inactive-thread-started-session-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "inactive thread started session"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "thread_started_session",
+          "threadStartedSession": {
+            "allowAppServerMutation": false,
+            "allowFilesystemMutation": false,
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "initialize",
+                "name": "rollout-backed-agent",
+                "primaryThreadId": "00000000-0000-0000-0000-000000000101",
+                "agentThreadId": "00000000-0000-0000-0000-000000000202",
+                "primaryCwd": "/tmp/main",
+                "agentCwd": "/tmp/agent",
+                "primaryModel": "gpt-primary",
+                "rolloutModel": "gpt-agent",
+                "modelProviderId": "agent-provider",
+                "primaryApprovalPolicy": "on_request",
+                "threadName": "agent thread",
+                "rolloutPath": "/tmp/agent-rollout.jsonl",
+                "primaryRuntimeWorkspaceRoots": [
+                  "/tmp/main",
+                  "/tmp/shared"
+                ],
+                "expectedThreadId": "00000000-0000-0000-0000-000000000202",
+                "expectedThreadName": "agent thread",
+                "expectedModel": "gpt-agent",
+                "expectedModelProviderId": "agent-provider",
+                "expectedApprovalPolicy": "on_request",
+                "expectedCwd": "/tmp/agent",
+                "expectedRuntimeWorkspaceRoots": [
+                  "/tmp/agent",
+                  "/tmp/shared"
+                ],
+                "expectedRolloutPath": "/tmp/agent-rollout.jsonl",
+                "agentNickname": "Robie",
+                "agentRole": "explorer",
+                "expectedNavigationLabel": "Robie [explorer]",
+                "expectedNavigationRunning": false,
+                "expectedNavigationClosed": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_thread_started_session_rejected",
+                "noAppServerMutation": true,
+                "noFilesystemMutation": true,
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.thread_started_session.plan=headless\ntui.thread_started_session.init=rollout-backed-agent:primary=00000000-0000-0000-0000-000000000101:agent=00000000-0000-0000-0000-000000000202:name=agent thread:model=gpt-agent:provider=agent-provider:approval=on_request:cwd=/tmp/agent:roots=/tmp/agent|/tmp/shared:rollout=/tmp/agent-rollout.jsonl:nav=Robie [explorer]:running=false:closed=false\ntui.thread_started_session.failure=live_thread_started_session_rejected:no_app_server=true:no_fs=true:no_terminal=true:no_buffer=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> inactive thread started session\ninput> \ntrace:\ntui.thread_started_session.plan=headless\ntui.thread_started_session.init=rollout-backed-agent:primary=00000000-0000-0000-0000-000000000101:agent=00000000-0000-0000-0000-000000000202:name=agent thread:model=gpt-agent:provider=agent-provider:approval=on_request:cwd=/tmp/agent:roots=/tmp/agent|/tmp/shared:rollout=/tmp/agent-rollout.jsonl:nav=Robie [explorer]:running=false:closed=false\ntui.thread_started_session.failure=live_thread_started_session_rejected:no_app_server=true:no_fs=true:no_terminal=true:no_buffer=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "prompt-args-headless",
       "frame": {
         "name": "prompt-args-headless",
