@@ -11286,6 +11286,10 @@ class TuiSmokeEventLoop {
 				case TuiSmokeAppServerErrorActionKind.ModelVerificationWarning:
 					trace.push("tui.chat_widget_app_server_error.verification=" + action.verification + ":message=" + action.renderedMessage + ":history="
 						+ action.warningHistoryCells);
+				case TuiSmokeAppServerErrorActionKind.ConfigErrorWrapping:
+					trace.push("tui.chat_widget_app_server_error.config_wrap=width=" + action.width + ":history=" + action.firstHistoryCells + ":wrapped="
+						+ action.wrappedLineCount + ":prefix=" + action.prefixPreserved + ":method=" + action.methodFragmentPreserved + ":invalid_config="
+						+ action.invalidConfigFragmentPreserved + ":message=" + action.renderedMessage);
 				case TuiSmokeAppServerErrorActionKind.Failure:
 					trace.push("tui.chat_widget_app_server_error.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerDelivery
 						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);

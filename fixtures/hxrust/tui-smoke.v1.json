@@ -45,6 +45,7 @@
       "../codex/codex-rs/tui/src/chatwidget/status_controls.rs",
       "../codex/codex-rs/tui/src/chatwidget/status_state.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/status_command_tests.rs",
+      "../codex/codex-rs/tui/src/chatwidget/tests/config_errors_tests.rs",
       "../codex/codex-rs/tui/src/goal_display.rs",
       "../codex/codex-rs/tui/src/git_action_directives.rs",
       "../codex/codex-rs/tui/src/thread_transcript.rs",
@@ -21427,6 +21428,73 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.no_duplicate=turn-denied:error=permission denied:first_history=1:second_history=0:suppressed=true:task=true->false\ntui.chat_widget_app_server_error.consolidate=turn-stream:item=item-patch:source=diff:+streamed patch:events=1:active_stream=true\ntui.chat_widget_app_server_error.retry_status=turn-retry:message=Reconnecting... 1/5:will_retry=true:stored=true:header=Reconnecting->Working:cleared=true\ntui.chat_widget_app_server_error.overloaded=turn-overloaded:message=server overloaded:history=1:task=true->false\ntui.chat_widget_app_server_error.cyber=turn-cyber:dedicated=true:fallback_suppressed=true:message=This content can't be shown; extra caution with cybersecurity requests:task=true->false\ntui.chat_widget_app_server_error.safety_access=safety_access:dedicated=true:fallback_suppressed=true:message=This content can't be shown; biological research safety notice:history=1\ntui.chat_widget_app_server_error.verification=TrustedAccessForCyber:message=multiple flags for possible cybersecurity risk; extra safety checks are on; https://chatgpt.com/cyber:history=1\ntui.chat_widget_app_server_error.failure=live_app_server_error_history_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server error history\ninput> \ntrace:\ntui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.no_duplicate=turn-denied:error=permission denied:first_history=1:second_history=0:suppressed=true:task=true->false\ntui.chat_widget_app_server_error.consolidate=turn-stream:item=item-patch:source=diff:+streamed patch:events=1:active_stream=true\ntui.chat_widget_app_server_error.retry_status=turn-retry:message=Reconnecting... 1/5:will_retry=true:stored=true:header=Reconnecting->Working:cleared=true\ntui.chat_widget_app_server_error.overloaded=turn-overloaded:message=server overloaded:history=1:task=true->false\ntui.chat_widget_app_server_error.cyber=turn-cyber:dedicated=true:fallback_suppressed=true:message=This content can't be shown; extra caution with cybersecurity requests:task=true->false\ntui.chat_widget_app_server_error.safety_access=safety_access:dedicated=true:fallback_suppressed=true:message=This content can't be shown; biological research safety notice:history=1\ntui.chat_widget_app_server_error.verification=TrustedAccessForCyber:message=multiple flags for possible cybersecurity risk; extra safety checks are on; https://chatgpt.com/cyber:history=1\ntui.chat_widget_app_server_error.failure=live_app_server_error_history_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-config-error-history-wrapping-boundary",
+      "frame": {
+        "name": "chatwidget-config-error-history-wrapping-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget config error history wrapping"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_app_server_error",
+          "chatWidgetAppServerError": {
+            "allowAppServerDelivery": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "config_error_wrapping",
+                "errorMessage": "Failed to save default model: config/batchWrite failed in TUI: Invalid configuration: features.fast_mode=true is not supported; allowed set [fast_mode=false]",
+                "renderedMessage": "Failed to save default model: config/batchWrite failed in TUI: Invalid configuration: features.fast_mode=true is not supported; allowed set [fast_mode=false]",
+                "methodFragment": "config/batchWrite",
+                "invalidConfigFragment": "Invalid configuration: features.fast_mode=true is not supported; allowed set [fast_mode=false]",
+                "width": 56,
+                "wrappedLineCount": 4,
+                "firstHistoryCells": 1,
+                "prefixPreserved": true,
+                "methodFragmentPreserved": true,
+                "invalidConfigFragmentPreserved": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_config_error_history_rejected",
+                "noAppServerDelivery": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.config_wrap=width=56:history=1:wrapped=4:prefix=true:method=true:invalid_config=true:message=Failed to save default model: config/batchWrite failed in TUI: Invalid configuration: features.fast_mode=true is not supported; allowed set [fast_mode=false]\ntui.chat_widget_app_server_error.failure=live_config_error_history_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget config error history wrapping\ninput> \ntrace:\ntui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.config_wrap=width=56:history=1:wrapped=4:prefix=true:method=true:invalid_config=true:message=Failed to save default model: config/batchWrite failed in TUI: Invalid configuration: features.fast_mode=true is not supported; allowed set [fast_mode=false]\ntui.chat_widget_app_server_error.failure=live_config_error_history_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-app-server-thread-closed-exit-boundary",
