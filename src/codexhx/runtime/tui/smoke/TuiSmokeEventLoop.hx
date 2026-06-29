@@ -830,6 +830,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.InitialHistoryReplay:
+					if (!traceInitialHistoryReplay(event.initialHistoryReplay, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.DesktopNotification:
 					if (!traceDesktopNotification(event.desktopNotification, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -2310,6 +2315,147 @@ class TuiSmokeEventLoop {
 		trace.push("tui.loaded_threads.failure=" + plan.failureCode + ":no_model=" + plan.noModelCall + ":no_app_server=" + plan.noAppServerRequest
 			+ ":no_fs=" + plan.noFilesystemMutation + ":unsupported=" + plan.unsupportedRejected);
 		return true;
+	}
+
+	static function traceInitialHistoryReplay(plan:TuiSmokeInitialHistoryReplayPlan, trace:Array<String>):Bool {
+		if (plan == null || !plan.enabled()) {
+			trace.push("tui.initial_history_replay.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.initial_history_replay.plan=headless");
+		var bufferActive = false;
+		var renderFromTranscriptTail = false;
+		var overlayActive = false;
+		var maxRows = -1;
+		var retained:Array<String> = [];
+		var inserted:Array<String> = [];
+		var deferred:Array<String> = [];
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeInitialHistoryReplayActionKind.SessionStart:
+					final emitted = action.turnCount > 0;
+					if (emitted != action.expectedBeginEmitted || emitted != action.expectedEndEmitted) {
+						trace.push("tui.initial_history_replay.session_mismatch=turns:" + action.turnCount + ":begin:" + emitted + ":end:" + emitted);
+						return false;
+					}
+					trace.push("tui.initial_history_replay.session="
+						+ action.label
+						+ ":turns="
+						+ action.turnCount
+						+ ":begin="
+						+ emitted
+						+ ":end="
+						+ emitted);
+				case TuiSmokeInitialHistoryReplayActionKind.Begin:
+					overlayActive = action.overlayActive;
+					renderFromTranscriptTail = action.renderFromTranscriptTail;
+					maxRows = action.maxRows;
+					bufferActive = !overlayActive;
+					retained = [];
+					trace.push("tui.initial_history_replay.begin=" + action.label + ":overlay=" + overlayActive + ":active=" + bufferActive + ":tail="
+						+ renderFromTranscriptTail + ":max_rows=" + maxRows);
+				case TuiSmokeInitialHistoryReplayActionKind.Insert:
+					if (bufferActive && renderFromTranscriptTail) {
+						if (!stringArraysEqual(retained, action.expectedRows)) {
+							trace.push("tui.initial_history_replay.tail_skip_mismatch=expected:"
+								+ action.expectedRowsSummary()
+								+ ":actual:"
+								+ TuiSmokeInitialHistoryReplayAction.linesSummary(retained));
+							return false;
+						}
+						trace.push("tui.initial_history_replay.insert=" + action.label + ":lines=" + action.displayLines.length
+							+ ":tail_skip=true:retained=" + TuiSmokeInitialHistoryReplayAction.linesSummary(retained));
+					} else if (bufferActive) {
+						for (line in action.displayLines) {
+							retained.push(line);
+						}
+						final dropped = trimReplayRows(retained, maxRows);
+						if (!stringArraysEqual(retained, action.expectedRows)) {
+							trace.push("tui.initial_history_replay.retain_mismatch=expected:" + action.expectedRowsSummary() + ":actual:"
+								+ TuiSmokeInitialHistoryReplayAction.linesSummary(retained));
+							return false;
+						}
+						trace.push("tui.initial_history_replay.insert="
+							+ action.label
+							+ ":lines="
+							+ action.displayLines.length
+							+ ":retained="
+							+ TuiSmokeInitialHistoryReplayAction.linesSummary(retained)
+							+ ":dropped="
+							+ dropped);
+					} else if (overlayActive) {
+						for (line in action.displayLines) {
+							deferred.push(line);
+						}
+						if (!stringArraysEqual(deferred, action.expectedDeferred)) {
+							trace.push("tui.initial_history_replay.defer_mismatch=expected:" + action.expectedDeferredSummary() + ":actual:"
+								+ TuiSmokeInitialHistoryReplayAction.linesSummary(deferred));
+							return false;
+						}
+						trace.push("tui.initial_history_replay.insert=" + action.label + ":lines=" + action.displayLines.length + ":deferred="
+							+ TuiSmokeInitialHistoryReplayAction.linesSummary(deferred));
+					} else {
+						for (line in action.displayLines) {
+							inserted.push(line);
+						}
+						if (!stringArraysEqual(inserted, action.expectedInserted)) {
+							trace.push("tui.initial_history_replay.direct_mismatch=expected:" + action.expectedInsertedSummary() + ":actual:"
+								+ TuiSmokeInitialHistoryReplayAction.linesSummary(inserted));
+							return false;
+						}
+						trace.push("tui.initial_history_replay.insert=" + action.label + ":lines=" + action.displayLines.length + ":direct="
+							+ TuiSmokeInitialHistoryReplayAction.linesSummary(inserted));
+					}
+				case TuiSmokeInitialHistoryReplayActionKind.Finish:
+					if (bufferActive) {
+						if (retained.length == 0 && renderFromTranscriptTail) {
+							for (line in action.transcriptTailLines) {
+								inserted.push(line);
+							}
+						} else {
+							for (line in retained) {
+								inserted.push(line);
+							}
+						}
+						bufferActive = false;
+						retained = [];
+					}
+					if (!stringArraysEqual(inserted, action.expectedInserted) || !stringArraysEqual(deferred, action.expectedDeferred)) {
+						trace.push("tui.initial_history_replay.finish_mismatch=inserted:"
+							+ TuiSmokeInitialHistoryReplayAction.linesSummary(inserted)
+							+ ":deferred:"
+							+ TuiSmokeInitialHistoryReplayAction.linesSummary(deferred));
+						return false;
+					}
+					trace.push("tui.initial_history_replay.finish="
+						+ action.label
+						+ ":inserted="
+						+ TuiSmokeInitialHistoryReplayAction.linesSummary(inserted)
+						+ ":deferred="
+						+ TuiSmokeInitialHistoryReplayAction.linesSummary(deferred)
+						+ ":buffer_active="
+						+ bufferActive);
+				case TuiSmokeInitialHistoryReplayActionKind.Failure:
+					trace.push("tui.initial_history_replay.failure=" + action.failureCode + ":no_live=" + action.noLiveTerminal + ":no_render="
+						+ action.noRatatuiRender + ":no_model=" + action.noModelCall + ":no_fs=" + action.noFilesystemMutation + ":unsupported="
+						+ action.unsupportedRejected);
+				case _:
+					trace.push("tui.initial_history_replay.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function trimReplayRows(rows:Array<String>, maxRows:Int):Int {
+		if (maxRows < 0)
+			return 0;
+		var dropped = 0;
+		while (rows.length > maxRows) {
+			rows.shift();
+			dropped = dropped + 1;
+		}
+		return dropped;
 	}
 
 	static function traceTerminalTitle(plan:TuiSmokeTerminalTitlePlan, trace:Array<String>):Bool {

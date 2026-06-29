@@ -106,6 +106,7 @@ typedef TuiSmokeEventFields = {
 	final agentStatus:Null<TuiSmokeAgentStatusPlan>;
 	final agentNavigation:Null<TuiSmokeAgentNavigationPlan>;
 	final loadedThreads:Null<TuiSmokeLoadedThreadsPlan>;
+	final initialHistoryReplay:Null<TuiSmokeInitialHistoryReplayPlan>;
 	final desktopNotification:Null<TuiSmokeDesktopNotificationPlan>;
 	final terminalHyperlink:Null<TuiSmokeTerminalHyperlinkPlan>;
 	final terminalPalette:Null<TuiSmokeTerminalPalettePlan>;
@@ -224,6 +225,7 @@ class TuiSmokeEvent {
 	public final agentStatus:Null<TuiSmokeAgentStatusPlan>;
 	public final agentNavigation:Null<TuiSmokeAgentNavigationPlan>;
 	public final loadedThreads:Null<TuiSmokeLoadedThreadsPlan>;
+	public final initialHistoryReplay:Null<TuiSmokeInitialHistoryReplayPlan>;
 	public final desktopNotification:Null<TuiSmokeDesktopNotificationPlan>;
 	public final terminalHyperlink:Null<TuiSmokeTerminalHyperlinkPlan>;
 	public final terminalPalette:Null<TuiSmokeTerminalPalettePlan>;

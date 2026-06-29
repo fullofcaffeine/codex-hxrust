@@ -31740,6 +31740,177 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.loaded_threads.plan=headless\ntui.loaded_threads.primary=00000000-0000-0000-0000-000000000001:discovered=00000000-0000-0000-0000-000000000002:Scout:explorer:/tmp/scout|00000000-0000-0000-0000-000000000003:Atlas:worker:/tmp/scout/atlas\ntui.loaded_threads.skipped=invalid:1:unrelated:1:non_spawn:1\ntui.loaded_threads.failure=live_loaded_threads_request_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> loaded subagent thread discovery boundary\ninput> \ntrace:\ntui.loaded_threads.plan=headless\ntui.loaded_threads.primary=00000000-0000-0000-0000-000000000001:discovered=00000000-0000-0000-0000-000000000002:Scout:explorer:/tmp/scout|00000000-0000-0000-0000-000000000003:Atlas:worker:/tmp/scout/atlas\ntui.loaded_threads.skipped=invalid:1:unrelated:1:non_spawn:1\ntui.loaded_threads.failure=live_loaded_threads_request_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "initial-history-replay-buffer-boundary",
+      "frame": {
+        "name": "initial-history-replay-buffer-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 80,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "initial history replay buffer boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "initial_history_replay",
+          "initialHistoryReplay": {
+            "allowLiveTerminal": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "session_start",
+                "label": "empty",
+                "turnCount": 0,
+                "expectedBeginEmitted": false,
+                "expectedEndEmitted": false
+              },
+              {
+                "kind": "session_start",
+                "label": "resume",
+                "turnCount": 3,
+                "expectedBeginEmitted": true,
+                "expectedEndEmitted": true
+              },
+              {
+                "kind": "begin",
+                "label": "capped",
+                "maxRows": 3
+              },
+              {
+                "kind": "insert",
+                "label": "first",
+                "displayLines": [
+                  "a1",
+                  "a2"
+                ],
+                "expectedRows": [
+                  "a1",
+                  "a2"
+                ]
+              },
+              {
+                "kind": "insert",
+                "label": "second",
+                "displayLines": [
+                  "b1",
+                  "b2"
+                ],
+                "expectedRows": [
+                  "a2",
+                  "b1",
+                  "b2"
+                ]
+              },
+              {
+                "kind": "finish",
+                "label": "capped",
+                "expectedInserted": [
+                  "a2",
+                  "b1",
+                  "b2"
+                ]
+              },
+              {
+                "kind": "begin",
+                "label": "tail",
+                "maxRows": 2,
+                "renderFromTranscriptTail": true
+              },
+              {
+                "kind": "insert",
+                "label": "tail-skip",
+                "displayLines": [
+                  "skip-me"
+                ],
+                "expectedRows": []
+              },
+              {
+                "kind": "finish",
+                "label": "tail",
+                "transcriptTailLines": [
+                  "tail1",
+                  "tail2"
+                ],
+                "expectedInserted": [
+                  "a2",
+                  "b1",
+                  "b2",
+                  "tail1",
+                  "tail2"
+                ]
+              },
+              {
+                "kind": "begin",
+                "label": "overlay",
+                "overlayActive": true,
+                "maxRows": 2
+              },
+              {
+                "kind": "insert",
+                "label": "overlay",
+                "displayLines": [
+                  "ov1",
+                  "ov2"
+                ],
+                "expectedDeferred": [
+                  "ov1",
+                  "ov2"
+                ]
+              },
+              {
+                "kind": "finish",
+                "label": "overlay",
+                "expectedInserted": [
+                  "a2",
+                  "b1",
+                  "b2",
+                  "tail1",
+                  "tail2"
+                ],
+                "expectedDeferred": [
+                  "ov1",
+                  "ov2"
+                ]
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_initial_history_replay_rejected",
+                "noLiveTerminal": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "noFilesystemMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.initial_history_replay.plan=headless\ntui.initial_history_replay.session=empty:turns=0:begin=false:end=false\ntui.initial_history_replay.session=resume:turns=3:begin=true:end=true\ntui.initial_history_replay.begin=capped:overlay=false:active=true:tail=false:max_rows=3\ntui.initial_history_replay.insert=first:lines=2:retained=a1|a2:dropped=0\ntui.initial_history_replay.insert=second:lines=2:retained=a2|b1|b2:dropped=1\ntui.initial_history_replay.finish=capped:inserted=a2|b1|b2:deferred=-:buffer_active=false\ntui.initial_history_replay.begin=tail:overlay=false:active=true:tail=true:max_rows=2\ntui.initial_history_replay.insert=tail-skip:lines=1:tail_skip=true:retained=-\ntui.initial_history_replay.finish=tail:inserted=a2|b1|b2|tail1|tail2:deferred=-:buffer_active=false\ntui.initial_history_replay.begin=overlay:overlay=true:active=false:tail=false:max_rows=2\ntui.initial_history_replay.insert=overlay:lines=2:deferred=ov1|ov2\ntui.initial_history_replay.finish=overlay:inserted=a2|b1|b2|tail1|tail2:deferred=ov1|ov2:buffer_active=false\ntui.initial_history_replay.failure=live_initial_history_replay_rejected:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> initial history replay buffer boundary\ninput> \ntrace:\ntui.initial_history_replay.plan=headless\ntui.initial_history_replay.session=empty:turns=0:begin=false:end=false\ntui.initial_history_replay.session=resume:turns=3:begin=true:end=true\ntui.initial_history_replay.begin=capped:overlay=false:active=true:tail=false:max_rows=3\ntui.initial_history_replay.insert=first:lines=2:retained=a1|a2:dropped=0\ntui.initial_history_replay.insert=second:lines=2:retained=a2|b1|b2:dropped=1\ntui.initial_history_replay.finish=capped:inserted=a2|b1|b2:deferred=-:buffer_active=false\ntui.initial_history_replay.begin=tail:overlay=false:active=true:tail=true:max_rows=2\ntui.initial_history_replay.insert=tail-skip:lines=1:tail_skip=true:retained=-\ntui.initial_history_replay.finish=tail:inserted=a2|b1|b2|tail1|tail2:deferred=-:buffer_active=false\ntui.initial_history_replay.begin=overlay:overlay=true:active=false:tail=false:max_rows=2\ntui.initial_history_replay.insert=overlay:lines=2:deferred=ov1|ov2\ntui.initial_history_replay.finish=overlay:inserted=a2|b1|b2|tail1|tail2:deferred=ov1|ov2:buffer_active=false\ntui.initial_history_replay.failure=live_initial_history_replay_rejected:no_live=true:no_render=true:no_model=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     }
   ]
 }

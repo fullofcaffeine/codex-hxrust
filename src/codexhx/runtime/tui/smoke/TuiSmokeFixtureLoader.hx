@@ -163,6 +163,7 @@ class TuiSmokeFixtureLoader {
 				agentStatus: optionalAgentStatusPlan(value, "agentStatus"),
 				agentNavigation: optionalAgentNavigationPlan(value, "agentNavigation"),
 				loadedThreads: optionalLoadedThreadsPlan(value, "loadedThreads"),
+				initialHistoryReplay: optionalInitialHistoryReplayPlan(value, "initialHistoryReplay"),
 				desktopNotification: optionalDesktopNotificationPlan(value, "desktopNotification"),
 				terminalHyperlink: optionalTerminalHyperlinkPlan(value, "terminalHyperlink"),
 				terminalPalette: optionalTerminalPalettePlan(value, "terminalPalette"),
@@ -2970,6 +2971,48 @@ class TuiSmokeFixtureLoader {
 				agentNickname: optionalStringField(value, "agentNickname", ""),
 				agentRole: optionalStringField(value, "agentRole", ""),
 				agentPath: optionalStringField(value, "agentPath", "")
+			}));
+		}
+		return out;
+	}
+
+	static function optionalInitialHistoryReplayPlan(object:Value, name:String):Null<TuiSmokeInitialHistoryReplayPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeInitialHistoryReplayPlan({
+					allowLiveTerminal: optionalBoolField(value, "allowLiveTerminal", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					allowFilesystemMutation: optionalBoolField(value, "allowFilesystemMutation", false),
+					actions: initialHistoryReplayActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function initialHistoryReplayActions(values:Array<Value>):Array<TuiSmokeInitialHistoryReplayAction> {
+		final out:Array<TuiSmokeInitialHistoryReplayAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeInitialHistoryReplayAction({
+				kind: TuiSmokeInitialHistoryReplayActionKind.fromString(stringField(value, "kind", "")),
+				label: optionalStringField(value, "label", ""),
+				turnCount: optionalIntField(value, "turnCount", 0),
+				overlayActive: optionalBoolField(value, "overlayActive", false),
+				maxRows: optionalIntField(value, "maxRows", -1),
+				renderFromTranscriptTail: optionalBoolField(value, "renderFromTranscriptTail", false),
+				displayLines: optionalStringArrayField(value, "displayLines"),
+				transcriptTailLines: optionalStringArrayField(value, "transcriptTailLines"),
+				expectedRows: optionalStringArrayField(value, "expectedRows"),
+				expectedDeferred: optionalStringArrayField(value, "expectedDeferred"),
+				expectedInserted: optionalStringArrayField(value, "expectedInserted"),
+				expectedBeginEmitted: optionalBoolField(value, "expectedBeginEmitted", false),
+				expectedEndEmitted: optionalBoolField(value, "expectedEndEmitted", false),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				noLiveTerminal: optionalBoolField(value, "noLiveTerminal", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				noFilesystemMutation: optionalBoolField(value, "noFilesystemMutation", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
 			}));
 		}
 		return out;
