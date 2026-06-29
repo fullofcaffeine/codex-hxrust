@@ -15,6 +15,7 @@ import codexhx.runtime.tui.appserver.TuiPromptAgentMessageDeltaNotification;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageStartedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchange;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchangeOutcome;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrame;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcMethod;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotificationMethod;
@@ -214,6 +215,20 @@ class TuiPromptSubmitEnvelopeHarness {
 		final idleStatusProtocol = AppProtocol.parseFixtureItem(idleStatusParsed);
 		assertTrue(idleStatusProtocol.ok, "json-rpc idle status parses through app protocol: " + idleStatusProtocol.errorCode);
 		assertStringEquals("status:idle", idleStatusProtocol.message.summary, "json-rpc idle status summary");
+		assertIntEquals(11, transport.lastFrameCount(), "json-rpc ordered frame count");
+		assertRequestFrame(transport.lastFrameAt(0), request, "json-rpc request frame");
+		assertResponseFrame(transport.lastFrameAt(1), response, "json-rpc response frame");
+		assertStreamFrame(transport.lastFrameAt(2), TuiPromptJsonRpcNotificationMethod.ThreadStatusChanged.text(), activeStatus.messageJson(),
+			"json-rpc active status frame");
+		assertStreamFrame(transport.lastFrameAt(3), notification.methodText(), notification.messageJson(), "json-rpc turn started frame");
+		assertStreamFrame(transport.lastFrameAt(4), userCompleted.methodText(), userCompleted.messageJson(), "json-rpc user completed frame");
+		assertStreamFrame(transport.lastFrameAt(5), itemStarted.methodText(), itemStarted.messageJson(), "json-rpc item started frame");
+		assertStreamFrame(transport.lastFrameAt(6), delta.methodText(), delta.messageJson(), "json-rpc delta frame");
+		assertStreamFrame(transport.lastFrameAt(7), rawCompleted.methodText(), rawCompleted.messageJson(), "json-rpc raw response item frame");
+		assertStreamFrame(transport.lastFrameAt(8), itemCompleted.methodText(), itemCompleted.messageJson(), "json-rpc item completed frame");
+		assertStreamFrame(transport.lastFrameAt(9), completion.methodText(), completion.messageJson(), "json-rpc turn completed frame");
+		assertStreamFrame(transport.lastFrameAt(10), TuiPromptJsonRpcNotificationMethod.ThreadStatusChanged.text(), idleStatus.messageJson(),
+			"json-rpc idle status frame");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
 	}
 
@@ -249,6 +264,8 @@ class TuiPromptSubmitEnvelopeHarness {
 			throw "json-rpc rejected exchange should not record response";
 		assertIntEquals(0, transport.lastNotificationCount(), "json-rpc rejected exchange should not record notifications");
 		assertIntEquals(0, transport.lastStreamNotificationCount(), "json-rpc rejected exchange should not record stream notifications");
+		assertIntEquals(1, transport.lastFrameCount(), "json-rpc rejected exchange should record outbound frame only");
+		assertRequestFrame(transport.lastFrameAt(0), request, "json-rpc rejected request frame");
 		assertIntEquals(0, facade.queuedCount(), "json-rpc exchange rejection queues no fake events");
 	}
 
@@ -400,6 +417,83 @@ class TuiPromptSubmitEnvelopeHarness {
 		if (notification == null)
 			throw label;
 		return notification;
+	}
+
+	static function assertRequestFrame(frame:Null<TuiPromptJsonRpcFrame>, expected:TuiPromptJsonRpcRequest, label:String):Void {
+		final concrete = expectFrame(frame, label);
+		switch concrete {
+			case TuiPromptJsonRpcFrame.Request(actual):
+				assertStringEquals(expected.methodText(), actual.methodText(), label + " method");
+				assertStringEquals(expected.messageJson(), actual.messageJson(), label + " message");
+			case _:
+				throw label + ": expected request frame";
+		}
+	}
+
+	static function assertResponseFrame(frame:Null<TuiPromptJsonRpcFrame>, expected:TuiPromptJsonRpcResponse, label:String):Void {
+		final concrete = expectFrame(frame, label);
+		switch concrete {
+			case TuiPromptJsonRpcFrame.Response(actual):
+				assertStringEquals(expected.methodText(), actual.methodText(), label + " method");
+				assertStringEquals(expected.messageJson(), actual.messageJson(), label + " message");
+			case _:
+				throw label + ": expected response frame";
+		}
+	}
+
+	static function assertStreamFrame(frame:Null<TuiPromptJsonRpcFrame>, expectedMethod:String, expectedMessage:String, label:String):Void {
+		final concrete = expectFrame(frame, label);
+		switch concrete {
+			case TuiPromptJsonRpcFrame.StreamNotification(notification):
+				assertStringEquals(expectedMethod, streamNotificationMethodText(notification), label + " method");
+				assertStringEquals(expectedMessage, streamNotificationMessageJson(notification), label + " message");
+			case _:
+				throw label + ": expected stream notification frame";
+		}
+	}
+
+	static function expectFrame(frame:Null<TuiPromptJsonRpcFrame>, label:String):TuiPromptJsonRpcFrame {
+		if (frame == null)
+			throw label;
+		return frame;
+	}
+
+	static function streamNotificationMethodText(notification:TuiPromptJsonRpcStreamNotification):String {
+		return switch notification {
+			case TuiPromptJsonRpcStreamNotification.ThreadStatusChanged(status):
+				status.methodText();
+			case TuiPromptJsonRpcStreamNotification.Turn(turn):
+				turn.methodText();
+			case TuiPromptJsonRpcStreamNotification.UserMessageCompleted(completed):
+				completed.methodText();
+			case TuiPromptJsonRpcStreamNotification.AgentMessageStarted(started):
+				started.methodText();
+			case TuiPromptJsonRpcStreamNotification.AgentMessageDelta(delta):
+				delta.methodText();
+			case TuiPromptJsonRpcStreamNotification.RawResponseItemCompleted(completed):
+				completed.methodText();
+			case TuiPromptJsonRpcStreamNotification.AgentMessageCompleted(completed):
+				completed.methodText();
+		}
+	}
+
+	static function streamNotificationMessageJson(notification:TuiPromptJsonRpcStreamNotification):String {
+		return switch notification {
+			case TuiPromptJsonRpcStreamNotification.ThreadStatusChanged(status):
+				status.messageJson();
+			case TuiPromptJsonRpcStreamNotification.Turn(turn):
+				turn.messageJson();
+			case TuiPromptJsonRpcStreamNotification.UserMessageCompleted(completed):
+				completed.messageJson();
+			case TuiPromptJsonRpcStreamNotification.AgentMessageStarted(started):
+				started.messageJson();
+			case TuiPromptJsonRpcStreamNotification.AgentMessageDelta(delta):
+				delta.messageJson();
+			case TuiPromptJsonRpcStreamNotification.RawResponseItemCompleted(completed):
+				completed.messageJson();
+			case TuiPromptJsonRpcStreamNotification.AgentMessageCompleted(completed):
+				completed.messageJson();
+		}
 	}
 
 	static function expectAgentMessageDeltaStreamNotification(notification:Null<TuiPromptJsonRpcStreamNotification>,

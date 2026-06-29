@@ -10,6 +10,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	var lastResponseValue:Null<TuiPromptJsonRpcResponse>;
 	var lastNotificationsValue:Array<TuiPromptJsonRpcNotification>;
 	var lastStreamNotificationsValue:Array<TuiPromptJsonRpcStreamNotification>;
+	var lastFramesValue:Array<TuiPromptJsonRpcFrame>;
 
 	public function new(?exchange:TuiPromptJsonRpcExchange) {
 		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
@@ -17,6 +18,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		this.lastResponseValue = null;
 		this.lastNotificationsValue = [];
 		this.lastStreamNotificationsValue = [];
+		this.lastFramesValue = [];
 	}
 
 	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
@@ -27,6 +29,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		lastResponseValue = null;
 		lastNotificationsValue = [];
 		lastStreamNotificationsValue = [];
+		lastFramesValue = [TuiPromptJsonRpcFrame.Request(request)];
 		final exchangeOutcome = exchange.send(request, envelope);
 		if (exchangeOutcome == null || !exchangeOutcome.isAccepted())
 			return TuiPromptTransportOutcome.rejected(exchangeOutcome == null ? "missing_exchange_outcome" : exchangeOutcome.code());
@@ -36,6 +39,10 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		lastResponseValue = response;
 		lastNotificationsValue = exchangeOutcome.notifications();
 		lastStreamNotificationsValue = exchangeOutcome.streamNotifications();
+		final frames = [TuiPromptJsonRpcFrame.Request(request), TuiPromptJsonRpcFrame.Response(response)];
+		for (notification in lastStreamNotificationsValue)
+			frames.push(TuiPromptJsonRpcFrame.StreamNotification(notification));
+		lastFramesValue = frames;
 		return TuiPromptTransportOutcome.acceptedWithResponse(response.result,
 			TuiPromptJsonRpcNotificationProjector.projectWithStreamNotifications(lastStreamNotificationsValue, exchangeOutcome.events()));
 	}
@@ -74,5 +81,19 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 
 	public function lastStreamNotifications():Array<TuiPromptJsonRpcStreamNotification> {
 		return lastStreamNotificationsValue.copy();
+	}
+
+	public function lastFrameCount():Int {
+		return lastFramesValue.length;
+	}
+
+	public function lastFrameAt(index:Int):Null<TuiPromptJsonRpcFrame> {
+		if (index < 0 || index >= lastFramesValue.length)
+			return null;
+		return lastFramesValue[index];
+	}
+
+	public function lastFrames():Array<TuiPromptJsonRpcFrame> {
+		return lastFramesValue.copy();
 	}
 }

@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`, `TUI-LIVE-26` / `codex-hxrust-6rza`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -226,13 +226,20 @@ This keeps the generated live demo behavior unchanged while making the prompt
 transport consume the same notification objects that later socket transport can
 read from the real app-server stream.
 
+`JsonRpcTuiPromptTransport` also records an ordered typed JSON-RPC frame log:
+the outbound request, the inbound response, and each inbound stream
+notification in delivery order. The frame log is intentionally modeled as a
+small enum instead of text trace lines, so later socket work can replace the
+fake exchange with a real reader/writer while keeping request/response/stream
+ordering assertions tied to typed protocol objects.
+
 Tests can inject another transport to prove refusal behavior. A rejected
 transport preserves the prompt envelope and request-registration effects, but
 does not enqueue fake assistant/status events.
 
 Tests can also inject a rejecting JSON-RPC exchange. That path records the
-outbound request, records no response, returns a typed transport rejection, and
-queues no fake events.
+outbound request and its request frame, records no response or stream frames,
+returns a typed transport rejection, and queues no fake events.
 
 Validation:
 
