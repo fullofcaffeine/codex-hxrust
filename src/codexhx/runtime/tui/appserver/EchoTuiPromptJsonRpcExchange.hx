@@ -13,8 +13,9 @@ class EchoTuiPromptJsonRpcExchange implements TuiPromptJsonRpcExchange {
 			return TuiPromptJsonRpcExchangeOutcome.rejected("missing_envelope");
 		final turn = TuiPromptTurnStartResponse.fromEnvelope(envelope);
 		final response = TuiPromptJsonRpcResponse.turnStart(request, turn);
-		final notification = TuiPromptJsonRpcNotification.turnStarted(envelope, turn);
-		return TuiPromptJsonRpcExchangeOutcome.accepted(response, [notification], [
+		final started = TuiPromptJsonRpcNotification.turnStarted(envelope, turn);
+		final completed = TuiPromptJsonRpcNotification.turnCompleted(envelope, turn);
+		return TuiPromptJsonRpcExchangeOutcome.accepted(response, [started, completed], [
 			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Working("submitted")),
 			TuiAppServerEvent.AssistantDelta(envelope.threadId, "echo: " + envelope.promptText),
 			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Ready("ready"))

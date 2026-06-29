@@ -106,7 +106,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertTrue(responseProtocol.ok, "json-rpc response parses through app protocol: " + responseProtocol.errorCode);
 		assertStringEquals("turn", responseProtocol.message.summary, "json-rpc response summary");
 
-		assertIntEquals(1, transport.lastNotificationCount(), "json-rpc notification count");
+		assertIntEquals(2, transport.lastNotificationCount(), "json-rpc notification count");
 		final notification = expectJsonRpcNotification(transport.lastNotificationAt(0), "json-rpc turn-started notification recorded");
 		assertStringEquals(TuiPromptJsonRpcNotificationMethod.TurnStarted.text(), notification.methodText(), "json-rpc notification method");
 		assertStringEquals("{\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turn\":{\"id\":\"turn-78\",\"items\":[],\"itemsView\":\"full\",\"status\":\"inProgress\"}}",
@@ -117,6 +117,16 @@ class TuiPromptSubmitEnvelopeHarness {
 		final notificationProtocol = AppProtocol.parseFixtureItem(notificationParsed);
 		assertTrue(notificationProtocol.ok, "json-rpc notification parses through app protocol: " + notificationProtocol.errorCode);
 		assertStringEquals("turn", notificationProtocol.message.summary, "json-rpc notification summary");
+		final completion = expectJsonRpcNotification(transport.lastNotificationAt(1), "json-rpc turn-completed notification recorded");
+		assertStringEquals(TuiPromptJsonRpcNotificationMethod.TurnCompleted.text(), completion.methodText(), "json-rpc completion method");
+		assertStringEquals("{\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turn\":{\"id\":\"turn-78\",\"items\":[],\"itemsView\":\"full\",\"status\":\"completed\"}}",
+			completion.paramsJson(), "json-rpc completion params");
+		assertStringEquals("{\"jsonrpc\":\"2.0\",\"method\":\"turn/completed\",\"params\":{\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turn\":{\"id\":\"turn-78\",\"items\":[],\"itemsView\":\"full\",\"status\":\"completed\"}}}",
+			completion.messageJson(), "json-rpc completion message");
+		final completionParsed = expectJson(CodexJson.parse(completion.fixtureJson("prompt-json-rpc-turn-completed")));
+		final completionProtocol = AppProtocol.parseFixtureItem(completionParsed);
+		assertTrue(completionProtocol.ok, "json-rpc completion parses through app protocol: " + completionProtocol.errorCode);
+		assertStringEquals("turn", completionProtocol.message.summary, "json-rpc completion summary");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
 	}
 

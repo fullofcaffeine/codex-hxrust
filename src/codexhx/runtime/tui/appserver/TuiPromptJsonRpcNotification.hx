@@ -22,6 +22,11 @@ class TuiPromptJsonRpcNotification {
 		return new TuiPromptJsonRpcNotification(TuiPromptJsonRpcNotificationMethod.TurnStarted, envelope.threadId, turn);
 	}
 
+	public static function turnCompleted(envelope:TuiPromptSubmitEnvelope, turn:TuiPromptTurnStartResponse):TuiPromptJsonRpcNotification {
+		return new TuiPromptJsonRpcNotification(TuiPromptJsonRpcNotificationMethod.TurnCompleted, envelope.threadId,
+			turn.withStatus(TuiPromptTurnStatus.Completed));
+	}
+
 	public function methodText():String {
 		return method.text();
 	}

@@ -20,6 +20,10 @@ class TuiPromptTurnStartResponse {
 		return new TuiPromptTurnStartResponse(makeTurnId(envelope.requestId.toString()), TuiPromptTurnStatus.InProgress);
 	}
 
+	public function withStatus(status:TuiPromptTurnStatus):TuiPromptTurnStartResponse {
+		return new TuiPromptTurnStartResponse(turnId, status);
+	}
+
 	public function statusText():String {
 		return status.text();
 	}

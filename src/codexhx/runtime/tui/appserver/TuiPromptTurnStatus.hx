@@ -5,6 +5,7 @@ package codexhx.runtime.tui.appserver;
 **/
 enum abstract TuiPromptTurnStatus(String) to String {
 	final InProgress = "inProgress";
+	final Completed = "completed";
 
 	public function text():String {
 		return this;

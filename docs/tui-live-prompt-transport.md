@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -55,8 +55,8 @@ transport work; the live shell still consumes the queued fake events for its
 visible behavior. `EchoTuiPromptJsonRpcExchange` remains the default fake
 response exchange and preserves the prior behavior:
 
-Accepted fake submissions also record the first stream-shaped app-server
-notification, `turn/started`, with the active thread id and the same typed turn
+Accepted fake submissions also record stream-shaped app-server notifications.
+The first is `turn/started`, with the active thread id and the same typed turn
 payload as the response:
 
 ```json
@@ -76,6 +76,10 @@ payload as the response:
 ```
 
 The harness parses that notification through `AppProtocol.parseFixtureItem`.
+The exchange also records a matching `turn/completed` notification with the same
+turn id and `completed` status, and the harness parses that notification through
+the same app-protocol gate.
+
 The live shell still consumes the existing queued fake events for visible
 behavior:
 
