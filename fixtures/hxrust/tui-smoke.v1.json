@@ -26075,6 +26075,89 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> pending thread approval rows\ninput> \ntrace:\ntui.pending_thread_approvals.plan=headless\ntui.pending_thread_approvals.set=initial-empty:changed=false:empty=true:threads=<none>\ntui.pending_thread_approvals.render=empty:width=40:height=0:rows=<none>\ntui.pending_thread_approvals.set=single-thread:changed=true:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=single-thread:width=40:height=2:rows=  ! Approval needed in Robie [explorer]|    /agent to switch threads\ntui.pending_thread_approvals.set=same-single-thread:changed=false:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.render=narrow:width=3:height=0:rows=<none>\ntui.pending_thread_approvals.set=multiple-with-overflow:changed=true:empty=false:threads=Main [default],Robie [explorer],Inspector,Extra agent\ntui.pending_thread_approvals.render=multiple-with-overflow:width=44:height=5:rows=  ! Approval needed in Main [default]|  ! Approval needed in Robie [explorer]|  ! Approval needed in Inspector|    ...|    /agent to switch threads\ntui.pending_thread_approvals.set=wrapped-long-thread:changed=true:empty=false:threads=Long review thread label with many words for wrapping\ntui.pending_thread_approvals.render=wrapped-long-thread:width=26:height=5:rows=  ! Approval needed in|    Long review thread|    label with many words|    for wrapping|    /agent to switch threads\ntui.pending_thread_approvals.failure=live_pending_thread_approvals_effects_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "inactive-approval-badge-clear-headless",
+      "frame": {
+        "name": "inactive-approval-badge-clear-headless",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "inactive approval badge clear"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "pending_thread_approvals",
+          "pendingThreadApprovals": {
+            "allowTerminalMutation": false,
+            "allowRatatuiBuffer": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "set_threads",
+                "name": "inactive-agent-approval",
+                "threads": [
+                  "Robie [explorer]"
+                ],
+                "expectedChanged": true,
+                "expectedEmpty": false
+              },
+              {
+                "kind": "clear_after_turn_completion",
+                "name": "matching-turn-completed",
+                "mainThreadId": "00000000-0000-0000-0000-000000000101",
+                "agentThreadId": "00000000-0000-0000-0000-000000000202",
+                "agentLabel": "Robie [explorer]",
+                "requestKind": "exec_approval",
+                "turnId": "turn-approval",
+                "callId": "call-approval",
+                "pendingBefore": 1,
+                "pendingAfter": 0,
+                "turnCompletedMatched": true,
+                "inactiveThread": true,
+                "activeThreadPreserved": true,
+                "badgeCleared": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_inactive_approval_badge_clear_rejected",
+                "noTerminalMutation": true,
+                "noRatatuiBuffer": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.pending_thread_approvals.plan=headless\ntui.pending_thread_approvals.set=inactive-agent-approval:changed=true:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.clear_after_turn=matching-turn-completed:main=00000000-0000-0000-0000-000000000101:agent=00000000-0000-0000-0000-000000000202:label=Robie [explorer]:request=exec_approval/call-approval:turn=turn-approval:pending=1->0:matched=true:active_preserved=true:cleared=true\ntui.pending_thread_approvals.failure=live_inactive_approval_badge_clear_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> inactive approval badge clear\ninput> \ntrace:\ntui.pending_thread_approvals.plan=headless\ntui.pending_thread_approvals.set=inactive-agent-approval:changed=true:empty=false:threads=Robie [explorer]\ntui.pending_thread_approvals.clear_after_turn=matching-turn-completed:main=00000000-0000-0000-0000-000000000101:agent=00000000-0000-0000-0000-000000000202:label=Robie [explorer]:request=exec_approval/call-approval:turn=turn-approval:pending=1->0:matched=true:active_preserved=true:cleared=true\ntui.pending_thread_approvals.failure=live_inactive_approval_badge_clear_rejected:no_terminal=true:no_buffer=true:no_fs=true:no_network=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "prompt-args-headless",
       "frame": {
         "name": "prompt-args-headless",

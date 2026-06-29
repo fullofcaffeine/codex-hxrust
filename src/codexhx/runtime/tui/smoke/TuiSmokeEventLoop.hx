@@ -6313,6 +6313,30 @@ class TuiSmokeEventLoop {
 					}
 					trace.push("tui.pending_thread_approvals.render=" + action.name + ":width=" + action.width + ":height=" + height + ":rows="
 						+ pendingThreadApprovalsRowsTrace(rows));
+				case TuiSmokePendingThreadApprovalsActionKind.ClearAfterTurnCompletion:
+					final pendingBefore = threads.length;
+					final matched = action.turnCompletedMatched && action.inactiveThread && action.activeThreadPreserved;
+					if (matched)
+						threads.resize(0);
+					final pendingAfter = threads.length;
+					final cleared = pendingBefore > 0 && pendingAfter == 0;
+					if (pendingBefore != action.pendingBefore || pendingAfter != action.pendingAfter || cleared != action.badgeCleared) {
+						trace.push("tui.pending_thread_approvals.clear_after_turn_mismatch="
+							+ action.name
+							+ ":pending="
+							+ pendingBefore
+							+ "->"
+							+ pendingAfter
+							+ ":matched="
+							+ matched
+							+ ":cleared="
+							+ cleared);
+						return false;
+					}
+					trace.push("tui.pending_thread_approvals.clear_after_turn=" + action.name + ":main=" + action.mainThreadId + ":agent="
+						+ action.agentThreadId + ":label=" + action.agentLabel + ":request=" + action.requestKind + "/" + action.callId + ":turn="
+						+ action.turnId + ":pending=" + pendingBefore + "->" + pendingAfter + ":matched=" + matched + ":active_preserved="
+						+ action.activeThreadPreserved + ":cleared=" + cleared);
 				case TuiSmokePendingThreadApprovalsActionKind.Failure:
 					trace.push("tui.pending_thread_approvals.failure=" + action.failureCode + ":no_terminal=" + action.noTerminalMutation + ":no_buffer="
 						+ action.noRatatuiBuffer + ":no_fs=" + action.noFilesystemMutation + ":no_network=" + action.noNetwork + ":no_model="
