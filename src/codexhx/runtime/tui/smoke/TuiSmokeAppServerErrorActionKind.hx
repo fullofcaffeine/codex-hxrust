@@ -10,6 +10,9 @@ enum abstract TuiSmokeAppServerErrorActionKind(String) to String {
 	final SafetyAccessNotice = "safety_access_notice";
 	final ModelVerificationWarning = "model_verification_warning";
 	final ConfigErrorWrapping = "config_error_wrapping";
+	final WarningNotification = "warning_notification";
+	final GuardianWarningNotification = "guardian_warning_notification";
+	final ConfigWarningNotification = "config_warning_notification";
 	final Failure = "failure";
 	final Unknown = "unknown";
 
@@ -23,6 +26,9 @@ enum abstract TuiSmokeAppServerErrorActionKind(String) to String {
 			case "safety_access_notice": SafetyAccessNotice;
 			case "model_verification_warning": ModelVerificationWarning;
 			case "config_error_wrapping": ConfigErrorWrapping;
+			case "warning_notification": WarningNotification;
+			case "guardian_warning_notification": GuardianWarningNotification;
+			case "config_warning_notification": ConfigWarningNotification;
 			case "failure": Failure;
 			case _: Unknown;
 		}

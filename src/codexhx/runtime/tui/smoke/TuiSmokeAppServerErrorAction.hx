@@ -2,11 +2,14 @@ package codexhx.runtime.tui.smoke;
 
 typedef TuiSmokeAppServerErrorActionFields = {
 	final kind:TuiSmokeAppServerErrorActionKind;
+	final threadId:String;
 	final turnId:String;
 	final itemId:String;
 	final errorKind:String;
 	final errorMessage:String;
 	final renderedMessage:String;
+	final summaryFragment:String;
+	final guidanceFragment:String;
 	final streamSource:String;
 	final statusHeaderBefore:String;
 	final statusHeaderAfter:String;
@@ -30,6 +33,8 @@ typedef TuiSmokeAppServerErrorActionFields = {
 	final fallbackMessageSuppressed:Bool;
 	final dedicatedNotice:Bool;
 	final prefixPreserved:Bool;
+	final summaryPreserved:Bool;
+	final guidancePreserved:Bool;
 	final methodFragmentPreserved:Bool;
 	final invalidConfigFragmentPreserved:Bool;
 	final noAppServerDelivery:Bool;
@@ -42,11 +47,14 @@ typedef TuiSmokeAppServerErrorActionFields = {
 /** Typed headless evidence for one upstream ChatWidget app-server error behavior. */
 class TuiSmokeAppServerErrorAction {
 	public final kind:TuiSmokeAppServerErrorActionKind;
+	public final threadId:String;
 	public final turnId:String;
 	public final itemId:String;
 	public final errorKind:String;
 	public final errorMessage:String;
 	public final renderedMessage:String;
+	public final summaryFragment:String;
+	public final guidanceFragment:String;
 	public final streamSource:String;
 	public final statusHeaderBefore:String;
 	public final statusHeaderAfter:String;
@@ -70,6 +78,8 @@ class TuiSmokeAppServerErrorAction {
 	public final fallbackMessageSuppressed:Bool;
 	public final dedicatedNotice:Bool;
 	public final prefixPreserved:Bool;
+	public final summaryPreserved:Bool;
+	public final guidancePreserved:Bool;
 	public final methodFragmentPreserved:Bool;
 	public final invalidConfigFragmentPreserved:Bool;
 	public final noAppServerDelivery:Bool;

@@ -11290,6 +11290,31 @@ class TuiSmokeEventLoop {
 					trace.push("tui.chat_widget_app_server_error.config_wrap=width=" + action.width + ":history=" + action.firstHistoryCells + ":wrapped="
 						+ action.wrappedLineCount + ":prefix=" + action.prefixPreserved + ":method=" + action.methodFragmentPreserved + ":invalid_config="
 						+ action.invalidConfigFragmentPreserved + ":message=" + action.renderedMessage);
+				case TuiSmokeAppServerErrorActionKind.WarningNotification:
+					trace.push("tui.chat_widget_app_server_error.warning_notification=history="
+						+ action.warningHistoryCells
+						+ ":summary="
+						+ action.summaryPreserved
+						+ ":guidance="
+						+ action.guidancePreserved
+						+ ":message="
+						+ action.renderedMessage);
+				case TuiSmokeAppServerErrorActionKind.GuardianWarningNotification:
+					trace.push("tui.chat_widget_app_server_error.guardian_warning=thread="
+						+ action.threadId
+						+ ":history="
+						+ action.warningHistoryCells
+						+ ":summary="
+						+ action.summaryPreserved
+						+ ":message="
+						+ action.renderedMessage);
+				case TuiSmokeAppServerErrorActionKind.ConfigWarningNotification:
+					trace.push("tui.chat_widget_app_server_error.config_warning=history="
+						+ action.warningHistoryCells
+						+ ":summary="
+						+ action.summaryPreserved
+						+ ":message="
+						+ action.renderedMessage);
 				case TuiSmokeAppServerErrorActionKind.Failure:
 					trace.push("tui.chat_widget_app_server_error.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerDelivery
 						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);

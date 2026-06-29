@@ -2387,11 +2387,14 @@ class TuiSmokeFixtureLoader {
 		for (value in values) {
 			out.push(new TuiSmokeAppServerErrorAction({
 				kind: TuiSmokeAppServerErrorActionKind.fromString(stringField(value, "kind", "")),
+				threadId: optionalStringField(value, "threadId", ""),
 				turnId: optionalStringField(value, "turnId", ""),
 				itemId: optionalStringField(value, "itemId", ""),
 				errorKind: optionalStringField(value, "errorKind", ""),
 				errorMessage: optionalStringField(value, "errorMessage", ""),
 				renderedMessage: optionalStringField(value, "renderedMessage", ""),
+				summaryFragment: optionalStringField(value, "summaryFragment", ""),
+				guidanceFragment: optionalStringField(value, "guidanceFragment", ""),
 				streamSource: optionalStringField(value, "streamSource", ""),
 				statusHeaderBefore: optionalStringField(value, "statusHeaderBefore", ""),
 				statusHeaderAfter: optionalStringField(value, "statusHeaderAfter", ""),
@@ -2415,6 +2418,8 @@ class TuiSmokeFixtureLoader {
 				fallbackMessageSuppressed: optionalBoolField(value, "fallbackMessageSuppressed", false),
 				dedicatedNotice: optionalBoolField(value, "dedicatedNotice", false),
 				prefixPreserved: optionalBoolField(value, "prefixPreserved", false),
+				summaryPreserved: optionalBoolField(value, "summaryPreserved", false),
+				guidancePreserved: optionalBoolField(value, "guidancePreserved", false),
 				methodFragmentPreserved: optionalBoolField(value, "methodFragmentPreserved", false),
 				invalidConfigFragmentPreserved: optionalBoolField(value, "invalidConfigFragmentPreserved", false),
 				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),

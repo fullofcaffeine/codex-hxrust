@@ -34,6 +34,7 @@
       "../codex/codex-rs/tui/src/chatwidget/notifications.rs",
       "../codex/codex-rs/tui/src/chatwidget/rate_limits.rs",
       "../codex/codex-rs/tui/src/chatwidget/tests/history_replay.rs",
+      "../codex/codex-rs/tui/src/chatwidget/tests/app_server.rs",
       "../codex/codex-rs/tui/src/chatwidget/protocol.rs",
       "../codex/codex-rs/tui/src/chatwidget/input_restore.rs",
       "../codex/codex-rs/tui/src/chatwidget/streaming.rs",
@@ -21428,6 +21429,84 @@
       "expectedExit": "quit",
       "expectedTrace": "tui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.no_duplicate=turn-denied:error=permission denied:first_history=1:second_history=0:suppressed=true:task=true->false\ntui.chat_widget_app_server_error.consolidate=turn-stream:item=item-patch:source=diff:+streamed patch:events=1:active_stream=true\ntui.chat_widget_app_server_error.retry_status=turn-retry:message=Reconnecting... 1/5:will_retry=true:stored=true:header=Reconnecting->Working:cleared=true\ntui.chat_widget_app_server_error.overloaded=turn-overloaded:message=server overloaded:history=1:task=true->false\ntui.chat_widget_app_server_error.cyber=turn-cyber:dedicated=true:fallback_suppressed=true:message=This content can't be shown; extra caution with cybersecurity requests:task=true->false\ntui.chat_widget_app_server_error.safety_access=safety_access:dedicated=true:fallback_suppressed=true:message=This content can't be shown; biological research safety notice:history=1\ntui.chat_widget_app_server_error.verification=TrustedAccessForCyber:message=multiple flags for possible cybersecurity risk; extra safety checks are on; https://chatgpt.com/cyber:history=1\ntui.chat_widget_app_server_error.failure=live_app_server_error_history_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server error history\ninput> \ntrace:\ntui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.no_duplicate=turn-denied:error=permission denied:first_history=1:second_history=0:suppressed=true:task=true->false\ntui.chat_widget_app_server_error.consolidate=turn-stream:item=item-patch:source=diff:+streamed patch:events=1:active_stream=true\ntui.chat_widget_app_server_error.retry_status=turn-retry:message=Reconnecting... 1/5:will_retry=true:stored=true:header=Reconnecting->Working:cleared=true\ntui.chat_widget_app_server_error.overloaded=turn-overloaded:message=server overloaded:history=1:task=true->false\ntui.chat_widget_app_server_error.cyber=turn-cyber:dedicated=true:fallback_suppressed=true:message=This content can't be shown; extra caution with cybersecurity requests:task=true->false\ntui.chat_widget_app_server_error.safety_access=safety_access:dedicated=true:fallback_suppressed=true:message=This content can't be shown; biological research safety notice:history=1\ntui.chat_widget_app_server_error.verification=TrustedAccessForCyber:message=multiple flags for possible cybersecurity risk; extra safety checks are on; https://chatgpt.com/cyber:history=1\ntui.chat_widget_app_server_error.failure=live_app_server_error_history_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
+      "name": "chatwidget-app-server-warning-notifications-boundary",
+      "frame": {
+        "name": "chatwidget-app-server-warning-notifications-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget app-server warning notifications"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_app_server_error",
+          "chatWidgetAppServerError": {
+            "allowAppServerDelivery": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "warning_notification",
+                "renderedMessage": "Exceeded skills context budget of 2%. All skill descriptions were removed and 2 additional skills were not included in the model-visible skills list.",
+                "summaryFragment": "Exceeded skills context budget of 2%.",
+                "guidanceFragment": "All skill descriptions were removed and 2 additional skills were not included in the model-visible skills list.",
+                "warningHistoryCells": 1,
+                "summaryPreserved": true,
+                "guidancePreserved": true
+              },
+              {
+                "kind": "guardian_warning_notification",
+                "threadId": "thread-1",
+                "renderedMessage": "Automatic approval review denied the requested action.",
+                "summaryFragment": "Automatic approval review denied the requested action.",
+                "warningHistoryCells": 1,
+                "summaryPreserved": true
+              },
+              {
+                "kind": "config_warning_notification",
+                "renderedMessage": "Invalid configuration; using defaults.",
+                "summaryFragment": "Invalid configuration; using defaults.",
+                "warningHistoryCells": 1,
+                "summaryPreserved": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_app_server_warning_notifications_rejected",
+                "noAppServerDelivery": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.warning_notification=history=1:summary=true:guidance=true:message=Exceeded skills context budget of 2%. All skill descriptions were removed and 2 additional skills were not included in the model-visible skills list.\ntui.chat_widget_app_server_error.guardian_warning=thread=thread-1:history=1:summary=true:message=Automatic approval review denied the requested action.\ntui.chat_widget_app_server_error.config_warning=history=1:summary=true:message=Invalid configuration; using defaults.\ntui.chat_widget_app_server_error.failure=live_app_server_warning_notifications_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server warning notifications\ninput> \ntrace:\ntui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.warning_notification=history=1:summary=true:guidance=true:message=Exceeded skills context budget of 2%. All skill descriptions were removed and 2 additional skills were not included in the model-visible skills list.\ntui.chat_widget_app_server_error.guardian_warning=thread=thread-1:history=1:summary=true:message=Automatic approval review denied the requested action.\ntui.chat_widget_app_server_error.config_warning=history=1:summary=true:message=Invalid configuration; using defaults.\ntui.chat_widget_app_server_error.failure=live_app_server_warning_notifications_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
       "name": "chatwidget-config-error-history-wrapping-boundary",
