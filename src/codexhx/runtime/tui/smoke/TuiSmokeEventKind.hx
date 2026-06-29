@@ -56,6 +56,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 	final ChatWidgetRateLimit = "chat_widget_rate_limit";
 	final ChatWidgetSafetyBuffering = "chat_widget_safety_buffering";
 	final ChatWidgetThreadSettings = "chat_widget_thread_settings";
+	final ChatWidgetAppServerTurnState = "chat_widget_app_server_turn_state";
 	final ChatWidgetAppServerError = "chat_widget_app_server_error";
 	final ChatWidgetAppServerLifecycle = "chat_widget_app_server_lifecycle";
 	final ChatWidgetWindowsSandbox = "chat_widget_windows_sandbox";
@@ -177,6 +178,7 @@ enum abstract TuiSmokeEventKind(String) to String {
 			case "chat_widget_rate_limit": ChatWidgetRateLimit;
 			case "chat_widget_safety_buffering": ChatWidgetSafetyBuffering;
 			case "chat_widget_thread_settings": ChatWidgetThreadSettings;
+			case "chat_widget_app_server_turn_state": ChatWidgetAppServerTurnState;
 			case "chat_widget_app_server_error": ChatWidgetAppServerError;
 			case "chat_widget_app_server_lifecycle": ChatWidgetAppServerLifecycle;
 			case "chat_widget_windows_sandbox": ChatWidgetWindowsSandbox;

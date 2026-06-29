@@ -575,6 +575,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetAppServerTurnState:
+					if (!traceAppServerTurnState(event.chatWidgetAppServerTurnState, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetAppServerError:
 					if (!traceAppServerError(event.chatWidgetAppServerError, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -11366,6 +11371,64 @@ class TuiSmokeEventLoop {
 						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.chat_widget_thread_settings.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceAppServerTurnState(plan:TuiSmokeAppServerTurnStatePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowAppServerDelivery || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_app_server_turn_state.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_app_server_turn_state.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeAppServerTurnStateActionKind.UserMessageDedupe:
+					trace.push("tui.chat_widget_app_server_turn_state.user_dedupe=thread="
+						+ action.threadId
+						+ ":item="
+						+ action.itemId
+						+ ":text="
+						+ action.userText
+						+ ":submitted="
+						+ action.composerSubmitted
+						+ ":op="
+						+ action.userTurnOpQueued
+						+ ":history="
+						+ action.localPromptHistoryCells
+						+ "->"
+						+ action.incomingPromptHistoryCells
+						+ ":suppressed="
+						+ action.duplicateSuppressed);
+				case TuiSmokeAppServerTurnStateActionKind.AnswerCompletionStatus:
+					trace.push("tui.chat_widget_app_server_turn_state.answer_complete=turn="
+						+ action.turnId
+						+ ":started="
+						+ action.turnStarted
+						+ ":status="
+						+ action.statusHeaderBefore
+						+ "->"
+						+ action.statusHeaderAfter
+						+ ":answer="
+						+ action.answerText
+						+ ":history="
+						+ action.answerHistoryCells
+						+ ":task="
+						+ action.taskRunningBefore
+						+ "->"
+						+ action.taskRunningAfter
+						+ ":status_cleared="
+						+ action.statusWidgetCleared);
+				case TuiSmokeAppServerTurnStateActionKind.FeedbackTurnId:
+					trace.push("tui.chat_widget_app_server_turn_state.feedback=turn=" + action.turnId + ":category=" + action.feedbackCategory
+						+ ":submitted=" + action.feedbackSubmitted + ":submitted_turn=" + action.submittedTurnId + ":logs=" + action.includeLogs);
+				case TuiSmokeAppServerTurnStateActionKind.Failure:
+					trace.push("tui.chat_widget_app_server_turn_state.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerDelivery
+						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.chat_widget_app_server_turn_state.unknown");
 					return false;
 			}
 		}

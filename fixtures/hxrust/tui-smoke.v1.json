@@ -22093,6 +22093,95 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget thread settings updates\ninput> \ntrace:\ntui.chat_widget_thread_settings.plan=headless\ntui.chat_widget_thread_settings.visible=thread=123e4567-e89b-12d3-a456-426614174001:model=gpt-5.3-codex->gpt-5.4:incoming=gpt-5.4:effort=high:service=fast:approval=on-request:reviewer=auto-review:profile=read-only:personality=pragmatic:mode=plan:history=false\ntui.chat_widget_thread_settings.ignored=current=123e4567-e89b-12d3-a456-426614174001:incoming=123e4567-e89b-12d3-a456-426614174002:model=gpt-5.4->gpt-5.4:ignored=true\ntui.chat_widget_thread_settings.plan_default=thread=123e4567-e89b-12d3-a456-426614174001:session=gpt-default/low:incoming=gpt-plan/high:active_mode=plan:default_mode=default:default_preserved=true:mask_mode=default:restored=gpt-default/low:mask_restored=true\ntui.chat_widget_thread_settings.failure=live_thread_settings_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chatwidget-app-server-turn-state",
+      "frame": {
+        "name": "chatwidget-app-server-turn-state",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget app-server turn state"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_app_server_turn_state",
+          "chatWidgetAppServerTurnState": {
+            "allowAppServerDelivery": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "user_message_dedupe",
+                "threadId": "thread-1",
+                "turnId": "turn-1",
+                "itemId": "user-1",
+                "userText": "Hi, are you there?",
+                "composerSubmitted": true,
+                "userTurnOpQueued": true,
+                "localPromptHistoryCells": 1,
+                "incomingPromptHistoryCells": 0,
+                "duplicateSuppressed": true
+              },
+              {
+                "kind": "answer_completion_status",
+                "threadId": "thread-1",
+                "turnId": "turn-1",
+                "itemId": "msg-1",
+                "answerText": "Yes. What do you need?",
+                "turnStarted": true,
+                "statusHeaderBefore": "Working",
+                "statusHeaderAfter": "",
+                "answerHistoryCells": 1,
+                "taskRunningBefore": true,
+                "taskRunningAfter": false,
+                "statusWidgetCleared": true
+              },
+              {
+                "kind": "feedback_turn_id",
+                "threadId": "thread-1",
+                "turnId": "turn-1",
+                "feedbackCategory": "Bug",
+                "feedbackSubmitted": true,
+                "submittedTurnId": "turn-1",
+                "includeLogs": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_app_server_turn_state_rejected",
+                "noAppServerDelivery": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_app_server_turn_state.plan=headless\ntui.chat_widget_app_server_turn_state.user_dedupe=thread=thread-1:item=user-1:text=Hi, are you there?:submitted=true:op=true:history=1->0:suppressed=true\ntui.chat_widget_app_server_turn_state.answer_complete=turn=turn-1:started=true:status=Working->:answer=Yes. What do you need?:history=1:task=true->false:status_cleared=true\ntui.chat_widget_app_server_turn_state.feedback=turn=turn-1:category=Bug:submitted=true:submitted_turn=turn-1:logs=false\ntui.chat_widget_app_server_turn_state.failure=live_app_server_turn_state_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server turn state\ninput> \ntrace:\ntui.chat_widget_app_server_turn_state.plan=headless\ntui.chat_widget_app_server_turn_state.user_dedupe=thread=thread-1:item=user-1:text=Hi, are you there?:submitted=true:op=true:history=1->0:suppressed=true\ntui.chat_widget_app_server_turn_state.answer_complete=turn=turn-1:started=true:status=Working->:answer=Yes. What do you need?:history=1:task=true->false:status_cleared=true\ntui.chat_widget_app_server_turn_state.feedback=turn=turn-1:category=Bug:submitted=true:submitted_turn=turn-1:logs=false\ntui.chat_widget_app_server_turn_state.failure=live_app_server_turn_state_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-windows-sandbox-headless",
       "frame": {
         "name": "chatwidget-windows-sandbox-headless",

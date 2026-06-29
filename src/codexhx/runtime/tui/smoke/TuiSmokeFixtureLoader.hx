@@ -112,6 +112,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetRateLimit: optionalRateLimitPlan(value, "chatWidgetRateLimit"),
 				chatWidgetSafetyBuffering: optionalSafetyBufferingPlan(value, "chatWidgetSafetyBuffering"),
 				chatWidgetThreadSettings: optionalThreadSettingsPlan(value, "chatWidgetThreadSettings"),
+				chatWidgetAppServerTurnState: optionalAppServerTurnStatePlan(value, "chatWidgetAppServerTurnState"),
 				chatWidgetAppServerError: optionalAppServerErrorPlan(value, "chatWidgetAppServerError"),
 				chatWidgetAppServerLifecycle: optionalAppServerLifecyclePlan(value, "chatWidgetAppServerLifecycle"),
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
@@ -2461,6 +2462,55 @@ class TuiSmokeFixtureLoader {
 				defaultPreserved: optionalBoolField(value, "defaultPreserved", false),
 				defaultMaskRestored: optionalBoolField(value, "defaultMaskRestored", false),
 				failureCode: optionalStringField(value, "failureCode", ""),
+				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalAppServerTurnStatePlan(object:Value, name:String):Null<TuiSmokeAppServerTurnStatePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAppServerTurnStatePlan({
+					allowAppServerDelivery: optionalBoolField(value, "allowAppServerDelivery", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: appServerTurnStateActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function appServerTurnStateActions(values:Array<Value>):Array<TuiSmokeAppServerTurnStateAction> {
+		final out:Array<TuiSmokeAppServerTurnStateAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeAppServerTurnStateAction({
+				kind: TuiSmokeAppServerTurnStateActionKind.fromString(stringField(value, "kind", "")),
+				threadId: optionalStringField(value, "threadId", ""),
+				turnId: optionalStringField(value, "turnId", ""),
+				itemId: optionalStringField(value, "itemId", ""),
+				userText: optionalStringField(value, "userText", ""),
+				answerText: optionalStringField(value, "answerText", ""),
+				feedbackCategory: optionalStringField(value, "feedbackCategory", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				composerSubmitted: optionalBoolField(value, "composerSubmitted", false),
+				userTurnOpQueued: optionalBoolField(value, "userTurnOpQueued", false),
+				localPromptHistoryCells: optionalIntField(value, "localPromptHistoryCells", 0),
+				incomingPromptHistoryCells: optionalIntField(value, "incomingPromptHistoryCells", 0),
+				duplicateSuppressed: optionalBoolField(value, "duplicateSuppressed", false),
+				turnStarted: optionalBoolField(value, "turnStarted", false),
+				statusHeaderBefore: optionalStringField(value, "statusHeaderBefore", ""),
+				statusHeaderAfter: optionalStringField(value, "statusHeaderAfter", ""),
+				answerHistoryCells: optionalIntField(value, "answerHistoryCells", 0),
+				taskRunningBefore: optionalBoolField(value, "taskRunningBefore", false),
+				taskRunningAfter: optionalBoolField(value, "taskRunningAfter", false),
+				statusWidgetCleared: optionalBoolField(value, "statusWidgetCleared", false),
+				feedbackSubmitted: optionalBoolField(value, "feedbackSubmitted", false),
+				submittedTurnId: optionalStringField(value, "submittedTurnId", ""),
+				includeLogs: optionalBoolField(value, "includeLogs", false),
 				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
