@@ -53,6 +53,7 @@ typedef TuiSmokeEventFields = {
 	final chatWidgetSessionFlow:Null<TuiSmokeSessionFlowPlan>;
 	final chatWidgetReplayProtocol:Null<TuiSmokeReplayProtocolPlan>;
 	final chatWidgetRateLimit:Null<TuiSmokeRateLimitPlan>;
+	final chatWidgetAppServerError:Null<TuiSmokeAppServerErrorPlan>;
 	final chatWidgetWindowsSandbox:Null<TuiSmokeWindowsSandboxPlan>;
 	final chatWidgetPermissionSelection:Null<TuiSmokePermissionSelectionPlan>;
 	final chatWidgetModelSettings:Null<TuiSmokeModelSettingsPlan>;
@@ -172,6 +173,7 @@ class TuiSmokeEvent {
 	public final chatWidgetSessionFlow:Null<TuiSmokeSessionFlowPlan>;
 	public final chatWidgetReplayProtocol:Null<TuiSmokeReplayProtocolPlan>;
 	public final chatWidgetRateLimit:Null<TuiSmokeRateLimitPlan>;
+	public final chatWidgetAppServerError:Null<TuiSmokeAppServerErrorPlan>;
 	public final chatWidgetWindowsSandbox:Null<TuiSmokeWindowsSandboxPlan>;
 	public final chatWidgetPermissionSelection:Null<TuiSmokePermissionSelectionPlan>;
 	public final chatWidgetModelSettings:Null<TuiSmokeModelSettingsPlan>;

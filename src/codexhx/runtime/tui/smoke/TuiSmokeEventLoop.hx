@@ -565,6 +565,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetAppServerError:
+					if (!traceAppServerError(event.chatWidgetAppServerError, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetWindowsSandbox:
 					if (!traceWindowsSandbox(event.chatWidgetWindowsSandbox, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -11237,6 +11242,50 @@ class TuiSmokeEventLoop {
 						+ action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.chat_widget_windows_sandbox.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceAppServerError(plan:TuiSmokeAppServerErrorPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowAppServerDelivery || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_app_server_error.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_app_server_error.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeAppServerErrorActionKind.NonDuplicateFailedTurn:
+					trace.push("tui.chat_widget_app_server_error.no_duplicate=" + action.turnId + ":error=" + action.errorMessage + ":first_history="
+						+ action.firstHistoryCells + ":second_history=" + action.secondHistoryCells + ":suppressed=" + action.duplicateSuppressed + ":task="
+						+ action.taskRunningBefore + "->" + action.taskRunningAfter);
+				case TuiSmokeAppServerErrorActionKind.ConsolidateStreamedAnswer:
+					trace.push("tui.chat_widget_app_server_error.consolidate=" + action.turnId + ":item=" + action.itemId + ":source=" + action.streamSource
+						+ ":events=" + action.consolidateEvents + ":active_stream=" + action.activeStreamConsolidated);
+				case TuiSmokeAppServerErrorActionKind.RetryStatusRecovery:
+					trace.push("tui.chat_widget_app_server_error.retry_status=" + action.turnId + ":message=" + action.errorMessage + ":will_retry="
+						+ action.willRetry + ":stored=" + action.retryStatusStored + ":header=" + action.statusHeaderBefore + "->" + action.statusHeaderAfter
+						+ ":cleared=" + action.retryStatusCleared);
+				case TuiSmokeAppServerErrorActionKind.ServerOverloadedWarning:
+					trace.push("tui.chat_widget_app_server_error.overloaded=" + action.turnId + ":message=" + action.renderedMessage + ":history="
+						+ action.warningHistoryCells + ":task=" + action.taskRunningBefore + "->" + action.taskRunningAfter);
+				case TuiSmokeAppServerErrorActionKind.CyberPolicyNotice:
+					trace.push("tui.chat_widget_app_server_error.cyber=" + action.turnId + ":dedicated=" + action.dedicatedNotice + ":fallback_suppressed="
+						+ action.fallbackMessageSuppressed + ":message=" + action.renderedMessage + ":task=" + action.taskRunningBefore + "->"
+						+ action.taskRunningAfter);
+				case TuiSmokeAppServerErrorActionKind.SafetyAccessNotice:
+					trace.push("tui.chat_widget_app_server_error.safety_access=" + action.errorKind + ":dedicated=" + action.dedicatedNotice
+						+ ":fallback_suppressed=" + action.fallbackMessageSuppressed + ":message=" + action.renderedMessage + ":history="
+						+ action.warningHistoryCells);
+				case TuiSmokeAppServerErrorActionKind.ModelVerificationWarning:
+					trace.push("tui.chat_widget_app_server_error.verification=" + action.verification + ":message=" + action.renderedMessage + ":history="
+						+ action.warningHistoryCells);
+				case TuiSmokeAppServerErrorActionKind.Failure:
+					trace.push("tui.chat_widget_app_server_error.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerDelivery
+						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.chat_widget_app_server_error.unknown");
 					return false;
 			}
 		}

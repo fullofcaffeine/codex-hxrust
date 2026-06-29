@@ -21314,6 +21314,121 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget rate limits\ninput> \ntrace:\ntui.chat_widget_rate_limit.plan=headless\ntui.chat_widget_rate_limit.duration=window=300:label=5h:fallback=:secondary=false\ntui.chat_widget_rate_limit.duration=window=17:label=:fallback=secondary usage:secondary=true\ntui.chat_widget_rate_limit.warning=primary:used=92:threshold=90:remaining=10:warnings=1:primary=0->2:secondary=0->0:cap=false:emitted=true\ntui.chat_widget_rate_limit.warning=secondary:used=100:threshold=95:remaining=0:warnings=0:primary=2->2:secondary=0->0:cap=true:emitted=false\ntui.chat_widget_rate_limit.snapshot=rolling:limit=codex:entries=1->1:credits=true:individual=true:plan=Team->Team:plan_preserved=true:reached=WorkspaceMemberCreditsDepleted:codex_reached=true\ntui.chat_widget_rate_limit.entries=images:entries=1->2:label=image generation:non_codex=true\ntui.chat_widget_rate_limit.switch_prompt=Idle->Pending:model=gpt-5.4:nudge=gpt-5.4-mini:used=90:pending=true:shown=false:hidden=false:lower_cost=false:non_codex=false:task=true:deferred=true:once=false\ntui.chat_widget_rate_limit.switch_prompt=Pending->Shown:model=gpt-5.4:nudge=gpt-5.4-mini:used=95:pending=false:shown=true:hidden=false:lower_cost=false:non_codex=false:task=false:deferred=false:once=true\ntui.chat_widget_rate_limit.switch_prompt=Idle->Idle:model=gpt-5.4-mini:nudge=gpt-5.4-mini:used=95:pending=false:shown=false:hidden=false:lower_cost=true:non_codex=false:task=false:deferred=false:once=false\ntui.chat_widget_rate_limit.switch_prompt=Idle->Idle:model=gpt-5.4:nudge=gpt-5.4-mini:used=95:pending=false:shown=false:hidden=true:lower_cost=false:non_codex=false:task=false:deferred=false:once=false\ntui.chat_widget_rate_limit.member_prompt=WorkspaceMemberCreditsDepleted:error=UsageLimit:popup=true:refresh=true:stale_remap=false:owner_suppressed=false:missing_suppressed=false\ntui.chat_widget_rate_limit.member_prompt=WorkspaceMemberCreditsDepleted:error=UsageLimit:popup=true:refresh=true:stale_remap=true:owner_suppressed=false:missing_suppressed=false\ntui.chat_widget_rate_limit.member_prompt=WorkspaceOwnerUsageLimitReached:error=UsageLimit:popup=false:refresh=false:stale_remap=false:owner_suppressed=true:missing_suppressed=false\ntui.chat_widget_rate_limit.member_prompt=:error=UsageLimit:popup=false:refresh=false:stale_remap=false:owner_suppressed=false:missing_suppressed=true\ntui.chat_widget_rate_limit.error_kind=ServerOverloaded:message=server overloaded:classified=true:cyber=false\ntui.chat_widget_rate_limit.error_kind=Generic:message=response too many failed attempts 429:classified=true:cyber=false\ntui.chat_widget_rate_limit.error_kind=CyberPolicy:message=cyber policy:classified=false:cyber=true\ntui.chat_widget_rate_limit.failure=live_rate_limit_effects_rejected:no_account=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chatwidget-app-server-error-history-boundary",
+      "frame": {
+        "name": "chatwidget-app-server-error-history-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget app-server error history"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_app_server_error",
+          "chatWidgetAppServerError": {
+            "allowAppServerDelivery": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "non_duplicate_failed_turn",
+                "turnId": "turn-denied",
+                "errorMessage": "permission denied",
+                "firstHistoryCells": 1,
+                "secondHistoryCells": 0,
+                "duplicateSuppressed": true,
+                "taskRunningBefore": true,
+                "taskRunningAfter": false
+              },
+              {
+                "kind": "consolidate_streamed_answer",
+                "turnId": "turn-stream",
+                "itemId": "item-patch",
+                "streamSource": "diff:+streamed patch",
+                "consolidateEvents": 1,
+                "activeStreamConsolidated": true
+              },
+              {
+                "kind": "retry_status_recovery",
+                "turnId": "turn-retry",
+                "errorMessage": "Reconnecting... 1/5",
+                "willRetry": true,
+                "retryStatusStored": true,
+                "statusHeaderBefore": "Reconnecting",
+                "statusHeaderAfter": "Working",
+                "retryStatusCleared": true
+              },
+              {
+                "kind": "server_overloaded_warning",
+                "turnId": "turn-overloaded",
+                "renderedMessage": "server overloaded",
+                "warningHistoryCells": 1,
+                "taskRunningBefore": true,
+                "taskRunningAfter": false
+              },
+              {
+                "kind": "cyber_policy_notice",
+                "turnId": "turn-cyber",
+                "errorMessage": "server fallback message",
+                "renderedMessage": "This content can't be shown; extra caution with cybersecurity requests",
+                "dedicatedNotice": true,
+                "fallbackMessageSuppressed": true,
+                "taskRunningBefore": true,
+                "taskRunningAfter": false
+              },
+              {
+                "kind": "safety_access_notice",
+                "errorKind": "safety_access",
+                "errorMessage": "Invalid prompt: we've limited access to this content for safety reasons.",
+                "renderedMessage": "This content can't be shown; biological research safety notice",
+                "warningHistoryCells": 1,
+                "dedicatedNotice": true,
+                "fallbackMessageSuppressed": true
+              },
+              {
+                "kind": "model_verification_warning",
+                "verification": "TrustedAccessForCyber",
+                "renderedMessage": "multiple flags for possible cybersecurity risk; extra safety checks are on; https://chatgpt.com/cyber",
+                "warningHistoryCells": 1
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_app_server_error_history_rejected",
+                "noAppServerDelivery": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.no_duplicate=turn-denied:error=permission denied:first_history=1:second_history=0:suppressed=true:task=true->false\ntui.chat_widget_app_server_error.consolidate=turn-stream:item=item-patch:source=diff:+streamed patch:events=1:active_stream=true\ntui.chat_widget_app_server_error.retry_status=turn-retry:message=Reconnecting... 1/5:will_retry=true:stored=true:header=Reconnecting->Working:cleared=true\ntui.chat_widget_app_server_error.overloaded=turn-overloaded:message=server overloaded:history=1:task=true->false\ntui.chat_widget_app_server_error.cyber=turn-cyber:dedicated=true:fallback_suppressed=true:message=This content can't be shown; extra caution with cybersecurity requests:task=true->false\ntui.chat_widget_app_server_error.safety_access=safety_access:dedicated=true:fallback_suppressed=true:message=This content can't be shown; biological research safety notice:history=1\ntui.chat_widget_app_server_error.verification=TrustedAccessForCyber:message=multiple flags for possible cybersecurity risk; extra safety checks are on; https://chatgpt.com/cyber:history=1\ntui.chat_widget_app_server_error.failure=live_app_server_error_history_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server error history\ninput> \ntrace:\ntui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.no_duplicate=turn-denied:error=permission denied:first_history=1:second_history=0:suppressed=true:task=true->false\ntui.chat_widget_app_server_error.consolidate=turn-stream:item=item-patch:source=diff:+streamed patch:events=1:active_stream=true\ntui.chat_widget_app_server_error.retry_status=turn-retry:message=Reconnecting... 1/5:will_retry=true:stored=true:header=Reconnecting->Working:cleared=true\ntui.chat_widget_app_server_error.overloaded=turn-overloaded:message=server overloaded:history=1:task=true->false\ntui.chat_widget_app_server_error.cyber=turn-cyber:dedicated=true:fallback_suppressed=true:message=This content can't be shown; extra caution with cybersecurity requests:task=true->false\ntui.chat_widget_app_server_error.safety_access=safety_access:dedicated=true:fallback_suppressed=true:message=This content can't be shown; biological research safety notice:history=1\ntui.chat_widget_app_server_error.verification=TrustedAccessForCyber:message=multiple flags for possible cybersecurity risk; extra safety checks are on; https://chatgpt.com/cyber:history=1\ntui.chat_widget_app_server_error.failure=live_app_server_error_history_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-windows-sandbox-headless",
       "frame": {
         "name": "chatwidget-windows-sandbox-headless",

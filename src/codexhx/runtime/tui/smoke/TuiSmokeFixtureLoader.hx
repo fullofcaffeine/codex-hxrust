@@ -110,6 +110,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetSessionFlow: optionalSessionFlowPlan(value, "chatWidgetSessionFlow"),
 				chatWidgetReplayProtocol: optionalReplayProtocolPlan(value, "chatWidgetReplayProtocol"),
 				chatWidgetRateLimit: optionalRateLimitPlan(value, "chatWidgetRateLimit"),
+				chatWidgetAppServerError: optionalAppServerErrorPlan(value, "chatWidgetAppServerError"),
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
 				chatWidgetPermissionSelection: optionalPermissionSelectionPlan(value, "chatWidgetPermissionSelection"),
 				chatWidgetModelSettings: optionalModelSettingsPlan(value, "chatWidgetModelSettings"),
@@ -2359,6 +2360,56 @@ class TuiSmokeFixtureLoader {
 				warningShown: optionalBoolField(value, "warningShown", false),
 				rememberedWarning: optionalBoolField(value, "rememberedWarning", false),
 				noOsSandboxMutation: optionalBoolField(value, "noOsSandboxMutation", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalAppServerErrorPlan(object:Value, name:String):Null<TuiSmokeAppServerErrorPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAppServerErrorPlan({
+					allowAppServerDelivery: optionalBoolField(value, "allowAppServerDelivery", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: appServerErrorActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function appServerErrorActions(values:Array<Value>):Array<TuiSmokeAppServerErrorAction> {
+		final out:Array<TuiSmokeAppServerErrorAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeAppServerErrorAction({
+				kind: TuiSmokeAppServerErrorActionKind.fromString(stringField(value, "kind", "")),
+				turnId: optionalStringField(value, "turnId", ""),
+				itemId: optionalStringField(value, "itemId", ""),
+				errorKind: optionalStringField(value, "errorKind", ""),
+				errorMessage: optionalStringField(value, "errorMessage", ""),
+				renderedMessage: optionalStringField(value, "renderedMessage", ""),
+				streamSource: optionalStringField(value, "streamSource", ""),
+				statusHeaderBefore: optionalStringField(value, "statusHeaderBefore", ""),
+				statusHeaderAfter: optionalStringField(value, "statusHeaderAfter", ""),
+				verification: optionalStringField(value, "verification", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				firstHistoryCells: optionalIntField(value, "firstHistoryCells", 0),
+				secondHistoryCells: optionalIntField(value, "secondHistoryCells", 0),
+				warningHistoryCells: optionalIntField(value, "warningHistoryCells", 0),
+				consolidateEvents: optionalIntField(value, "consolidateEvents", 0),
+				taskRunningBefore: optionalBoolField(value, "taskRunningBefore", false),
+				taskRunningAfter: optionalBoolField(value, "taskRunningAfter", false),
+				willRetry: optionalBoolField(value, "willRetry", false),
+				retryStatusStored: optionalBoolField(value, "retryStatusStored", false),
+				retryStatusCleared: optionalBoolField(value, "retryStatusCleared", false),
+				duplicateSuppressed: optionalBoolField(value, "duplicateSuppressed", false),
+				activeStreamConsolidated: optionalBoolField(value, "activeStreamConsolidated", false),
+				fallbackMessageSuppressed: optionalBoolField(value, "fallbackMessageSuppressed", false),
+				dedicatedNotice: optionalBoolField(value, "dedicatedNotice", false),
+				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
