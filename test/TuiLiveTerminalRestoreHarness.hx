@@ -3,6 +3,7 @@ import codexhx.runtime.tui.terminal.LiveTerminalProbeStatus;
 import codexhx.runtime.tui.terminal.TerminalEvent;
 import codexhx.runtime.tui.terminal.TerminalExitReason;
 import codexhx.runtime.tui.terminal.TerminalFrame;
+import codexhx.runtime.tui.terminal.TerminalKey;
 import codexhx.runtime.tui.terminal.TerminalOperationKind;
 import codexhx.runtime.tui.terminal.TerminalRestoreReason;
 import codexhx.runtime.tui.terminal.TerminalSetup;
@@ -72,15 +73,33 @@ class TuiLiveTerminalRestoreHarness {
 		final event = backend.pollEvent();
 		switch event {
 			case TerminalEvent.NoEvent:
+			case TerminalEvent.Key(key):
+				assertKnownKey(key);
 			case TerminalEvent.Exit(reason):
 				assertTrue(reason == TerminalExitReason.Requested
 					|| reason == TerminalExitReason.Escape
 					|| reason == TerminalExitReason.CtrlC,
-					"exit event should be q/Esc/Ctrl-C");
+					"legacy exit event should preserve q/Esc/Ctrl-C");
 			case _:
 				fail("unexpected live terminal event: " + Std.string(event));
 		}
 		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function assertKnownKey(key:TerminalKey):Void {
+		switch key {
+			case TerminalKey.Character(_):
+			case TerminalKey.Enter:
+			case TerminalKey.Escape:
+			case TerminalKey.CtrlC:
+			case TerminalKey.Backspace:
+			case TerminalKey.ArrowUp:
+			case TerminalKey.ArrowDown:
+			case TerminalKey.ArrowLeft:
+			case TerminalKey.ArrowRight:
+			case _:
+				fail("unknown terminal key");
+		}
 	}
 
 	static function assertStatusAccepted(status:LiveTerminalProbeStatus, label:String):Void {

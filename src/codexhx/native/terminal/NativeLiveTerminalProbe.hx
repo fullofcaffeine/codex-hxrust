@@ -72,6 +72,9 @@ extern class NativeLiveTerminalProbe {
 	@:native("last_exit_reason")
 	public static function lastExitReason():Int;
 
+	@:native("last_input_text")
+	public static function lastInputText():String;
+
 	@:native("last_message")
 	public static function lastMessage():String;
 }

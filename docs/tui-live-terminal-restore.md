@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This slice is the first generated Rust gate that crosses from typed Haxe TUI code into real terminal ownership machinery. It adds a `LiveTerminalBackend` implementation of the production `TerminalBackend` contract and a narrow native Rust probe for crossterm raw mode, alternate screen, ratatui frame drawing, nonblocking q/Esc/Ctrl-C polling, and terminal restoration.
+This slice is the first generated Rust gate that crosses from typed Haxe TUI code into real terminal ownership machinery. It adds a `LiveTerminalBackend` implementation of the production `TerminalBackend` contract and a narrow native Rust probe for crossterm raw mode, alternate screen, ratatui frame drawing, nonblocking typed-key polling, and terminal restoration.
 
 ## Shape
 
@@ -21,7 +21,7 @@ Run:
 bash harness/check-tui-live-terminal-restore.sh
 ```
 
-The gate runs the interpreter harness, compiles through metal haxe.rust, checks/tests the generated Cargo crate, and runs the generated binary. In CI or other non-TTY environments, the native probe returns `SkippedNoTty`; this is an accepted credential-free fallback because no terminal was taken and restoration is therefore vacuously safe. When the generated binary is run from a real TTY, the same backend attempts raw mode plus alternate screen, draws one ratatui frame, polls q/Esc/Ctrl-C without blocking, and restores terminal state on normal and forced-error paths.
+The gate runs the interpreter harness, compiles through metal haxe.rust, checks/tests the generated Cargo crate, and runs the generated binary. In CI or other non-TTY environments, the native probe returns `SkippedNoTty`; this is an accepted credential-free fallback because no terminal was taken and restoration is therefore vacuously safe. When the generated binary is run from a real TTY, the same backend attempts raw mode plus alternate screen, draws one ratatui frame, polls typed keys without blocking, and restores terminal state on normal and forced-error paths.
 
 ## Still Not Proven
 

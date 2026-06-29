@@ -59,6 +59,7 @@ Profile policy for the scaffold:
 | `tui-terminal-contract.hxml` | Compile the TUI-LIVE-0 production `TerminalBackend` contract and headless backend harness through portable haxe.rust. |
 | `tui-live-terminal-restore.hxml` | Compile the TUI-LIVE-1 live crossterm/ratatui terminal restore gate through metal haxe.rust. |
 | `tui-resize-redraw-scheduler.hxml` | Compile the TUI-LIVE-2 typed resize/redraw scheduler and headless/live backend path through metal haxe.rust. |
+| `tui-live-input-backend.hxml` | Compile the TUI-LIVE-3 typed live/headless input mapper and composer-state harness through metal haxe.rust. |
 | `resume-picker-kernel.hxml` | Compile the HXCX-TUI-103 resume picker pure state/effect kernel harness through portable haxe.rust. |
 | `resume-picker-host-facade.hxml` | Compile the HXCX-TUI-104 resume picker runtime-neutral host facade harness through portable haxe.rust. |
 | `resume-picker-no-credential-gate.hxml` | Compile the HXCX-TUI-105 resume picker no-credential app-server/render/config gate through portable haxe.rust. |

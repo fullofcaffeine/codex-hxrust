@@ -4252,6 +4252,10 @@ Status: TUI-LIVE-1 adds `LiveTerminalBackend`, `NativeLiveTerminalProbe`, and `n
 
 Status: TUI-LIVE-2 adds `TerminalSchedulerEvent`, `TerminalRedrawScheduler`, `TerminalSchedulerEffect`, and `TerminalSchedulerRunner` as the first production redraw scheduler over `TerminalBackend`. The scheduler accepts typed `Resize`, `DrawRequested`, `Tick`, and `AppExit` events, coalesces repeated resize inputs until flush, emits typed backend effects instead of trace strings, and shares the same reducer between headless and live backends. The metal haxe.rust harness `harness/check-tui-resize-redraw-scheduler.sh` proves direct scheduler state/effect assertions, one coalesced resized frame path through `HeadlessTerminalBackend`, and the same resized frame path through `LiveTerminalBackend` with the existing no-TTY fallback. This still does not map live key events, run the full input loop, attach app-server transport, persist state, call models, or render upstream widgets.
 
+### TUI-LIVE-3 Typed Live Input Backend
+
+Status: TUI-LIVE-3 adds `TerminalInputEvent`, `TerminalInputMapper`, `TerminalComposerState`, and `TerminalComposerEffect` as the first strict input/composer reducer for the minimal live shell. The native terminal probe now maps crossterm key events into scalar poll codes plus latest-character text, and Haxe turns those facts into typed `TerminalEvent.Key` and semantic composer inputs for text, Enter, Esc, Ctrl-C, Backspace, and arrow keys. The metal haxe.rust harness `harness/check-tui-live-input-backend.sh` proves fake native poll-code mapping, headless queued-key composer mutations, submitted-history navigation, typed exit effects, live backend nonblocking polling, terminal restore, and generated Cargo check/test/run without credentials. This still does not render a ChatWidget shell, attach app-server transport, persist state, call models, or run a full production event loop.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Full Interactive TUI
 
 After the minimal live shell proves terminal ownership, typed input, redraw scheduling, and fake app-server attach:

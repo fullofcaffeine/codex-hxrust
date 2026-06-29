@@ -22,8 +22,8 @@ import codexhx.native.terminal.NativeLiveTerminalProbe;
 	  stdin/stdout are TTYs. In CI, the native probe returns `SkippedNoTty`.
 	- `draw` renders one minimal frame through ratatui when live, or records the
 	  frame in fallback mode.
-	- `pollEvent` maps q/Esc/Ctrl-C into typed `TerminalEvent.Exit` values for
-	  manual live runs.
+	- `pollEvent` maps live crossterm key facts into typed `TerminalEvent.Key`
+	  values for the minimal input backend.
 	- `restore` must be called by normal and error paths; it always produces a
 	  `TerminalRestoreReport` and exposes the latest native report for tests.
 **/
@@ -195,12 +195,8 @@ class LiveTerminalBackend implements TerminalBackend {
 
 	function pollNativeEvent():TerminalEvent {
 		#if reflaxe_rust_profile
-		return switch NativeLiveTerminalProbe.pollLive(0) {
-			case 1: TerminalEvent.Exit(TerminalExitReason.Requested);
-			case 2: TerminalEvent.Exit(TerminalExitReason.Escape);
-			case 3: TerminalEvent.Exit(TerminalExitReason.CtrlC);
-			case _: TerminalEvent.NoEvent;
-		}
+		final code = NativeLiveTerminalProbe.pollLive(0);
+		return TerminalInputMapper.terminalEventFromNativePoll(code, NativeLiveTerminalProbe.lastInputText());
 		#else
 		return TerminalEvent.NoEvent;
 		#end

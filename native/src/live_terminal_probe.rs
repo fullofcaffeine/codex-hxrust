@@ -18,6 +18,17 @@ const STATUS_DRAW_FAILED: i32 = 3;
 const STATUS_RESTORE_FAILED: i32 = 4;
 const STATUS_INACTIVE: i32 = 5;
 
+const POLL_NONE: i32 = 0;
+const POLL_CHARACTER: i32 = 1;
+const POLL_ENTER: i32 = 2;
+const POLL_ESCAPE: i32 = 3;
+const POLL_CTRL_C: i32 = 4;
+const POLL_BACKSPACE: i32 = 5;
+const POLL_ARROW_UP: i32 = 6;
+const POLL_ARROW_DOWN: i32 = 7;
+const POLL_ARROW_LEFT: i32 = 8;
+const POLL_ARROW_RIGHT: i32 = 9;
+
 #[derive(Clone, Debug)]
 struct ProbeState {
     interactive: bool,
@@ -32,6 +43,7 @@ struct ProbeState {
     restore_count: i32,
     last_status: i32,
     last_exit_reason: i32,
+    last_input_text: String,
     raw_enabled: bool,
     alternate_screen_enabled: bool,
     message: String,
@@ -52,6 +64,7 @@ impl Default for ProbeState {
             restore_count: 0,
             last_status: STATUS_INACTIVE,
             last_exit_reason: 0,
+            last_input_text: String::new(),
             raw_enabled: false,
             alternate_screen_enabled: false,
             message: "live terminal probe inactive".to_string(),
@@ -190,7 +203,7 @@ pub fn draw_live(
                 Paragraph::new(body).block(Block::default().title(title).borders(Borders::ALL));
             frame.render_widget(body, chunks[1]);
             let footer =
-                Paragraph::new("q/Esc/Ctrl-C request exit; restore is automatic in the gate");
+                Paragraph::new("typed keys feed Haxe input; restore is automatic in the gate");
             frame.render_widget(footer, chunks[2]);
         }) {
             Ok(_) => finish_status(
@@ -213,23 +226,32 @@ pub fn draw_live(
 
 pub fn poll_live(timeout_ms: i32) -> i32 {
     if !last_interactive() || !last_active() {
-        return 0;
+        return POLL_NONE;
     }
 
     let timeout = Duration::from_millis(timeout_ms.max(0) as u64);
     if !event::poll(timeout).unwrap_or(false) {
-        return 0;
+        return POLL_NONE;
     }
 
     match event::read() {
         Ok(Event::Key(key)) => match key.code {
-            KeyCode::Char('q') => 1,
-            KeyCode::Esc => 2,
-            KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => 3,
-            _ => 0,
+            KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => POLL_CTRL_C,
+            KeyCode::Char(ch) => {
+                set_last_input_text(ch.to_string());
+                POLL_CHARACTER
+            }
+            KeyCode::Enter => POLL_ENTER,
+            KeyCode::Esc => POLL_ESCAPE,
+            KeyCode::Backspace => POLL_BACKSPACE,
+            KeyCode::Up => POLL_ARROW_UP,
+            KeyCode::Down => POLL_ARROW_DOWN,
+            KeyCode::Left => POLL_ARROW_LEFT,
+            KeyCode::Right => POLL_ARROW_RIGHT,
+            _ => POLL_NONE,
         },
-        Ok(_) => 0,
-        Err(_) => 0,
+        Ok(_) => POLL_NONE,
+        Err(_) => POLL_NONE,
     }
 }
 
@@ -343,6 +365,10 @@ pub fn last_exit_reason() -> i32 {
     STATE.with(|state| state.borrow().last_exit_reason)
 }
 
+pub fn last_input_text() -> String {
+    STATE.with(|state| state.borrow().last_input_text.clone())
+}
+
 pub fn last_message() -> String {
     STATE.with(|state| state.borrow().message.clone())
 }
@@ -416,4 +442,10 @@ fn last_draw_attempted() -> bool {
 
 fn last_restored() -> bool {
     STATE.with(|state| state.borrow().restored)
+}
+
+fn set_last_input_text(value: String) {
+    STATE.with(|state| {
+        state.borrow_mut().last_input_text = value;
+    });
 }
