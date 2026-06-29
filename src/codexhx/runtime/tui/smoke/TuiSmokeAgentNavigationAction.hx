@@ -16,6 +16,11 @@ typedef TuiSmokeAgentNavigationActionFields = {
 	final expectedSubtitle:String;
 	final expectedOrder:Array<String>;
 	final expectedHasNonPrimary:Bool;
+	final loadedThreads:Array<TuiSmokeLoadedThread>;
+	final lastBackfillPrimaryThreadId:String;
+	final expectedBackfillAttempted:Bool;
+	final expectedBackfillSucceeded:Bool;
+	final expectedLastBackfillPrimaryThreadId:String;
 	final failureCode:String;
 	final noModelCall:Bool;
 	final noAppServerMutation:Bool;
@@ -42,6 +47,11 @@ class TuiSmokeAgentNavigationAction {
 	public final expectedSubtitle:String;
 	public final expectedOrder:Array<String>;
 	public final expectedHasNonPrimary:Bool;
+	public final loadedThreads:Array<TuiSmokeLoadedThread>;
+	public final lastBackfillPrimaryThreadId:String;
+	public final expectedBackfillAttempted:Bool;
+	public final expectedBackfillSucceeded:Bool;
+	public final expectedLastBackfillPrimaryThreadId:String;
 	public final failureCode:String;
 	public final noModelCall:Bool;
 	public final noAppServerMutation:Bool;

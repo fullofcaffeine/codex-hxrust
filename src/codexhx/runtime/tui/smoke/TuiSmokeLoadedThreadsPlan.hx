@@ -39,6 +39,10 @@ class TuiSmokeLoadedThreadsPlan {
 	}
 
 	public function discovered():Array<TuiSmokeLoadedSubagentThread> {
+		return discover(primaryThreadId, threads);
+	}
+
+	public static function discover(primaryThreadId:String, threads:Array<TuiSmokeLoadedThread>):Array<TuiSmokeLoadedSubagentThread> {
 		final included:Array<String> = [];
 		final pending:Array<String> = [primaryThreadId];
 		while (pending.length > 0) {
@@ -57,7 +61,7 @@ class TuiSmokeLoadedThreadsPlan {
 
 		final out:Array<TuiSmokeLoadedSubagentThread> = [];
 		for (threadId in included) {
-			final thread = getThread(threadId);
+			final thread = getThread(threads, threadId);
 			if (thread != null) {
 				out.push(new TuiSmokeLoadedSubagentThread({
 					threadId: thread.threadId,
@@ -118,7 +122,7 @@ class TuiSmokeLoadedThreadsPlan {
 		return parts.join("|");
 	}
 
-	function getThread(threadId:String):Null<TuiSmokeLoadedThread> {
+	static function getThread(threads:Array<TuiSmokeLoadedThread>, threadId:String):Null<TuiSmokeLoadedThread> {
 		for (thread in threads) {
 			if (thread.threadId == threadId)
 				return thread;

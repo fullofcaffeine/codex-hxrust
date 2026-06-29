@@ -31632,6 +31632,179 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> agent navigation state boundary\ninput> \ntrace:\ntui.agent_navigation.plan=headless\ntui.agent_navigation.upsert=main-thread:closed=false:order=main-thread\ntui.agent_navigation.upsert=agent-one:closed=false:order=main-thread|agent-one\ntui.agent_navigation.upsert=agent-two:closed=false:order=main-thread|agent-one|agent-two\ntui.agent_navigation.upsert=agent-one:closed=true:order=main-thread|agent-one|agent-two\ntui.agent_navigation.order=main-thread|agent-one|agent-two\ntui.agent_navigation.adjacent=agent-two:next=>main-thread\ntui.agent_navigation.adjacent=agent-two:previous=>agent-one\ntui.agent_navigation.label=agent-one:primary=main-thread:label=Robie [worker]\ntui.agent_navigation.label=main-thread:primary=main-thread:label=Main [default]\ntui.agent_navigation.activity=agent-path:path=/root/child:running=true\ntui.agent_navigation.label=agent-path:primary=main-thread:label=`/root/child`\ntui.agent_navigation.non_primary=true:primary=main-thread\ntui.agent_navigation.subtitle=Select an agent to watch. Alt+Left previous, Alt+Right next.\ntui.agent_navigation.remove=agent-two:order=main-thread|agent-one|agent-path\ntui.agent_navigation.order=main-thread|agent-one|agent-path\ntui.agent_navigation.clear=order=\ntui.agent_navigation.order=\ntui.agent_navigation.failure=live_agent_navigation_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "agent-navigation-backfill-boundary",
+      "frame": {
+        "name": "agent-navigation-backfill-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 80,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "agent navigation backfill boundary"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "agent_navigation",
+          "agentNavigation": {
+            "allowModelCall": false,
+            "allowAppServerMutation": false,
+            "allowFilesystemMutation": false,
+            "actions": [
+              {
+                "kind": "upsert",
+                "threadId": "lonely-thread"
+              },
+              {
+                "kind": "adjacent_with_backfill",
+                "currentThreadId": "lonely-thread",
+                "direction": "next",
+                "expectedThreadId": "",
+                "expectedOrder": [
+                  "lonely-thread"
+                ],
+                "expectedBackfillAttempted": false,
+                "expectedBackfillSucceeded": false,
+                "expectedLastBackfillPrimaryThreadId": ""
+              },
+              {
+                "kind": "clear"
+              },
+              {
+                "kind": "upsert",
+                "threadId": "main-thread"
+              },
+              {
+                "kind": "adjacent_with_backfill",
+                "currentThreadId": "main-thread",
+                "primaryThreadId": "main-thread",
+                "direction": "next",
+                "loadedThreads": [
+                  {
+                    "threadId": "main-thread",
+                    "source": "cli"
+                  },
+                  {
+                    "threadId": "agent-one",
+                    "source": "thread_spawn",
+                    "parentThreadId": "main-thread",
+                    "agentNickname": "Scout",
+                    "agentRole": "explorer",
+                    "agentPath": "/agents/one"
+                  },
+                  {
+                    "threadId": "agent-two",
+                    "source": "thread_spawn",
+                    "parentThreadId": "agent-one",
+                    "agentNickname": "Atlas",
+                    "agentRole": "worker",
+                    "agentPath": "/agents/one/two"
+                  },
+                  {
+                    "threadId": "unrelated-agent",
+                    "source": "thread_spawn",
+                    "parentThreadId": "other-thread",
+                    "agentNickname": "Other",
+                    "agentRole": "researcher"
+                  }
+                ],
+                "expectedThreadId": "agent-one",
+                "expectedOrder": [
+                  "main-thread",
+                  "agent-one",
+                  "agent-two"
+                ],
+                "expectedBackfillAttempted": true,
+                "expectedBackfillSucceeded": true,
+                "expectedLastBackfillPrimaryThreadId": "main-thread"
+              },
+              {
+                "kind": "active_label",
+                "currentThreadId": "agent-two",
+                "primaryThreadId": "main-thread",
+                "expectedLabel": "`/agents/one/two`"
+              },
+              {
+                "kind": "adjacent_with_backfill",
+                "currentThreadId": "agent-two",
+                "primaryThreadId": "main-thread",
+                "direction": "next",
+                "expectedThreadId": "main-thread",
+                "expectedOrder": [
+                  "main-thread",
+                  "agent-one",
+                  "agent-two"
+                ],
+                "expectedBackfillAttempted": false,
+                "expectedBackfillSucceeded": false,
+                "expectedLastBackfillPrimaryThreadId": "main-thread"
+              },
+              {
+                "kind": "clear"
+              },
+              {
+                "kind": "upsert",
+                "threadId": "main-thread"
+              },
+              {
+                "kind": "adjacent_with_backfill",
+                "currentThreadId": "main-thread",
+                "primaryThreadId": "main-thread",
+                "direction": "previous",
+                "lastBackfillPrimaryThreadId": "main-thread",
+                "loadedThreads": [
+                  {
+                    "threadId": "agent-late",
+                    "source": "thread_spawn",
+                    "parentThreadId": "main-thread",
+                    "agentNickname": "Late",
+                    "agentRole": "worker",
+                    "agentPath": "/agents/late"
+                  }
+                ],
+                "expectedThreadId": "",
+                "expectedOrder": [
+                  "main-thread"
+                ],
+                "expectedBackfillAttempted": false,
+                "expectedBackfillSucceeded": false,
+                "expectedLastBackfillPrimaryThreadId": "main-thread"
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_agent_navigation_backfill_rejected",
+                "noModelCall": true,
+                "noAppServerMutation": true,
+                "noFilesystemMutation": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.agent_navigation.plan=headless\ntui.agent_navigation.upsert=lonely-thread:closed=false:order=lonely-thread\ntui.agent_navigation.backfill_adjacent=lonely-thread:primary=:next=>:attempted=false:succeeded=false:last=:order=lonely-thread\ntui.agent_navigation.clear=order=\ntui.agent_navigation.upsert=main-thread:closed=false:order=main-thread\ntui.agent_navigation.backfill_adjacent=main-thread:primary=main-thread:next=>agent-one:attempted=true:succeeded=true:last=main-thread:order=main-thread|agent-one|agent-two\ntui.agent_navigation.label=agent-two:primary=main-thread:label=`/agents/one/two`\ntui.agent_navigation.backfill_adjacent=agent-two:primary=main-thread:next=>main-thread:attempted=false:succeeded=false:last=main-thread:order=main-thread|agent-one|agent-two\ntui.agent_navigation.clear=order=\ntui.agent_navigation.upsert=main-thread:closed=false:order=main-thread\ntui.agent_navigation.backfill_adjacent=main-thread:primary=main-thread:previous=>:attempted=false:succeeded=false:last=main-thread:order=main-thread\ntui.agent_navigation.failure=live_agent_navigation_backfill_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> agent navigation backfill boundary\ninput> \ntrace:\ntui.agent_navigation.plan=headless\ntui.agent_navigation.upsert=lonely-thread:closed=false:order=lonely-thread\ntui.agent_navigation.backfill_adjacent=lonely-thread:primary=:next=>:attempted=false:succeeded=false:last=:order=lonely-thread\ntui.agent_navigation.clear=order=\ntui.agent_navigation.upsert=main-thread:closed=false:order=main-thread\ntui.agent_navigation.backfill_adjacent=main-thread:primary=main-thread:next=>agent-one:attempted=true:succeeded=true:last=main-thread:order=main-thread|agent-one|agent-two\ntui.agent_navigation.label=agent-two:primary=main-thread:label=`/agents/one/two`\ntui.agent_navigation.backfill_adjacent=agent-two:primary=main-thread:next=>main-thread:attempted=false:succeeded=false:last=main-thread:order=main-thread|agent-one|agent-two\ntui.agent_navigation.clear=order=\ntui.agent_navigation.upsert=main-thread:closed=false:order=main-thread\ntui.agent_navigation.backfill_adjacent=main-thread:primary=main-thread:previous=>:attempted=false:succeeded=false:last=main-thread:order=main-thread\ntui.agent_navigation.failure=live_agent_navigation_backfill_rejected:no_model=true:no_app_server=true:no_fs=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "loaded-subagent-thread-discovery-boundary",
       "frame": {
         "name": "loaded-subagent-thread-discovery-boundary",

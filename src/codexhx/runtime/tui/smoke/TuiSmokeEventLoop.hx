@@ -2209,6 +2209,7 @@ class TuiSmokeEventLoop {
 			return false;
 		}
 		final state = new TuiSmokeAgentNavigationState();
+		var lastBackfillPrimaryThreadId = "";
 		trace.push("tui.agent_navigation.plan=headless");
 		for (action in plan.actions) {
 			switch action.kind {
@@ -2248,6 +2249,36 @@ class TuiSmokeEventLoop {
 						return false;
 					}
 					trace.push("tui.agent_navigation.adjacent=" + action.currentThreadId + ":" + action.direction + "=>" + actual);
+				case TuiSmokeAgentNavigationActionKind.AdjacentWithBackfill:
+					if (action.lastBackfillPrimaryThreadId != "")
+						lastBackfillPrimaryThreadId = action.lastBackfillPrimaryThreadId;
+					var attempted = false;
+					var succeeded = false;
+					var actual = state.adjacentThreadId(action.currentThreadId, action.direction);
+					if (actual == "" && action.primaryThreadId != "" && lastBackfillPrimaryThreadId != action.primaryThreadId) {
+						attempted = true;
+						final discovered = TuiSmokeLoadedThreadsPlan.discover(action.primaryThreadId, action.loadedThreads);
+						for (thread in discovered) {
+							state.upsert(thread.threadId, thread.agentNickname, thread.agentRole, false);
+							state.setAgentPath(thread.threadId, thread.agentPath);
+						}
+						succeeded = discovered.length > 0;
+						if (succeeded)
+							lastBackfillPrimaryThreadId = action.primaryThreadId;
+						actual = state.adjacentThreadId(action.currentThreadId, action.direction);
+					}
+					if (actual != action.expectedThreadId
+						|| attempted != action.expectedBackfillAttempted
+						|| succeeded != action.expectedBackfillSucceeded
+						|| lastBackfillPrimaryThreadId != action.expectedLastBackfillPrimaryThreadId
+						|| !stringArraysEqual(state.orderedThreadIds(), action.expectedOrder)) {
+						trace.push("tui.agent_navigation.backfill_mismatch=expected:" + action.expectedThreadId + ":actual:" + actual + ":attempted="
+							+ attempted + ":succeeded=" + succeeded + ":last=" + lastBackfillPrimaryThreadId + ":order=" + state.orderedThreadIds().join("|"));
+						return false;
+					}
+					trace.push("tui.agent_navigation.backfill_adjacent=" + action.currentThreadId + ":primary=" + action.primaryThreadId + ":"
+						+ action.direction + "=>" + actual + ":attempted=" + attempted + ":succeeded=" + succeeded + ":last=" + lastBackfillPrimaryThreadId
+						+ ":order=" + state.orderedThreadIds().join("|"));
 				case TuiSmokeAgentNavigationActionKind.ActiveLabel:
 					final actual = state.activeAgentLabel(action.currentThreadId, action.primaryThreadId);
 					if (actual != action.expectedLabel) {

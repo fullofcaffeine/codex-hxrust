@@ -10,6 +10,7 @@ enum abstract TuiSmokeAgentNavigationActionKind(String) to String {
 	final Clear = "clear";
 	final Ordered = "ordered";
 	final Adjacent = "adjacent";
+	final AdjacentWithBackfill = "adjacent_with_backfill";
 	final ActiveLabel = "active_label";
 	final HasNonPrimary = "has_non_primary";
 	final Subtitle = "subtitle";
@@ -27,6 +28,7 @@ enum abstract TuiSmokeAgentNavigationActionKind(String) to String {
 			case "clear": Clear;
 			case "ordered": Ordered;
 			case "adjacent": Adjacent;
+			case "adjacent_with_backfill": AdjacentWithBackfill;
 			case "active_label": ActiveLabel;
 			case "has_non_primary": HasNonPrimary;
 			case "subtitle": Subtitle;
