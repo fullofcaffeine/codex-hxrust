@@ -21818,6 +21818,83 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server thread closed exit\ninput> \ntrace:\ntui.chat_widget_app_server_lifecycle.plan=headless\ntui.chat_widget_app_server_lifecycle.thread_closed=thread-1:live=true:queued=true:exit=immediate:immediate=true\ntui.chat_widget_app_server_lifecycle.replay_suppressed=thread-replay:kind=ThreadSnapshot:suppressed=true:queued=false\ntui.chat_widget_app_server_lifecycle.failure=live_app_server_thread_closed_exit_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chatwidget-app-server-thread-name-update-boundary",
+      "frame": {
+        "name": "chatwidget-app-server-thread-name-update-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget app-server thread name update"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_app_server_lifecycle",
+          "chatWidgetAppServerLifecycle": {
+            "allowAppServerDelivery": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "thread_name_invalid_ignored",
+                "threadId": "123e4567-e89b-12d3-a456-426614174000",
+                "incomingThreadId": "not-a-thread-id",
+                "originalThreadName": "original name",
+                "incomingThreadName": "bad update",
+                "finalThreadName": "original name",
+                "invalidThreadIdRejected": true,
+                "threadIdPreserved": true,
+                "threadNamePreserved": true
+              },
+              {
+                "kind": "thread_name_resume_hint",
+                "threadId": "123e4567-e89b-12d3-a456-426614174000",
+                "incomingThreadId": "123e4567-e89b-12d3-a456-426614174000",
+                "incomingThreadName": "review-fix",
+                "finalThreadName": "review-fix",
+                "resumeCommand": "codex resume 123e4567-e89b-12d3-a456-426614174000",
+                "renderedHint": "• Session renamed to review-fix. To resume this session run codex resume, then select review-fix (123e4567-e89b-12d3-a456-426614174000)",
+                "historyCellCount": 1,
+                "threadNameUpdated": true,
+                "resumeHintInserted": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_app_server_thread_name_update_rejected",
+                "noAppServerDelivery": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_app_server_lifecycle.plan=headless\ntui.chat_widget_app_server_lifecycle.thread_name_invalid=incoming=not-a-thread-id:current=123e4567-e89b-12d3-a456-426614174000:name=original name->original name:incoming_name=bad update:invalid_rejected=true:id_preserved=true:name_preserved=true\ntui.chat_widget_app_server_lifecycle.thread_name_resume_hint=thread=123e4567-e89b-12d3-a456-426614174000:name=review-fix:history=1:updated=true:hint=true:resume=codex resume 123e4567-e89b-12d3-a456-426614174000:rendered=• Session renamed to review-fix. To resume this session run codex resume, then select review-fix (123e4567-e89b-12d3-a456-426614174000)\ntui.chat_widget_app_server_lifecycle.failure=live_app_server_thread_name_update_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server thread name update\ninput> \ntrace:\ntui.chat_widget_app_server_lifecycle.plan=headless\ntui.chat_widget_app_server_lifecycle.thread_name_invalid=incoming=not-a-thread-id:current=123e4567-e89b-12d3-a456-426614174000:name=original name->original name:incoming_name=bad update:invalid_rejected=true:id_preserved=true:name_preserved=true\ntui.chat_widget_app_server_lifecycle.thread_name_resume_hint=thread=123e4567-e89b-12d3-a456-426614174000:name=review-fix:history=1:updated=true:hint=true:resume=codex resume 123e4567-e89b-12d3-a456-426614174000:rendered=• Session renamed to review-fix. To resume this session run codex resume, then select review-fix (123e4567-e89b-12d3-a456-426614174000)\ntui.chat_widget_app_server_lifecycle.failure=live_app_server_thread_name_update_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-windows-sandbox-headless",
       "frame": {
         "name": "chatwidget-windows-sandbox-headless",

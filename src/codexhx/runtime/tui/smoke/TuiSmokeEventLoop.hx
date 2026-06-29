@@ -11366,6 +11366,38 @@ class TuiSmokeEventLoop {
 				case TuiSmokeAppServerLifecycleActionKind.ThreadClosedImmediateExit:
 					trace.push("tui.chat_widget_app_server_lifecycle.thread_closed=" + action.threadId + ":live=" + action.liveNotification + ":queued="
 						+ action.appEventQueued + ":exit=" + action.exitMode + ":immediate=" + action.immediateExit);
+				case TuiSmokeAppServerLifecycleActionKind.ThreadNameInvalidIgnored:
+					trace.push("tui.chat_widget_app_server_lifecycle.thread_name_invalid=incoming="
+						+ action.incomingThreadId
+						+ ":current="
+						+ action.threadId
+						+ ":name="
+						+ action.originalThreadName
+						+ "->"
+						+ action.finalThreadName
+						+ ":incoming_name="
+						+ action.incomingThreadName
+						+ ":invalid_rejected="
+						+ action.invalidThreadIdRejected
+						+ ":id_preserved="
+						+ action.threadIdPreserved
+						+ ":name_preserved="
+						+ action.threadNamePreserved);
+				case TuiSmokeAppServerLifecycleActionKind.ThreadNameResumeHint:
+					trace.push("tui.chat_widget_app_server_lifecycle.thread_name_resume_hint=thread="
+						+ action.threadId
+						+ ":name="
+						+ action.finalThreadName
+						+ ":history="
+						+ action.historyCellCount
+						+ ":updated="
+						+ action.threadNameUpdated
+						+ ":hint="
+						+ action.resumeHintInserted
+						+ ":resume="
+						+ action.resumeCommand
+						+ ":rendered="
+						+ action.renderedHint);
 				case TuiSmokeAppServerLifecycleActionKind.ReplaySuppressed:
 					trace.push("tui.chat_widget_app_server_lifecycle.replay_suppressed="
 						+ action.threadId
