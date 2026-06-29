@@ -19783,6 +19783,89 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget tool lifecycle\ninput> \ntrace:\ntui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.patch_begin=changes=2:history=true:activity=true\ntui.chat_widget_tool_lifecycle.file_change=success:failure_history=false:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.file_change=failed:failure_history=true:work=true:queued_completed=true\ntui.chat_widget_tool_lifecycle.view_image=example.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.image_generation=call-image-generation:prompt=A tiny blue square:path=/tmp/ig-1.png:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_start=mcp-1:server=filesystem:tool=read_file:active=exec->mcp:answer_flush=true:flushed=true:redraw=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-1:result=ok:matched=true:duration_ms=42:error=:flushed=true:extra=false:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-2:result=error:matched=false:duration_ms=7:error=permission denied:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.mcp_complete=mcp-3:result=missing_result:matched=false:duration_ms=0:error=MCP tool call completed without a result:flushed=true:extra=true:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=begin:matched=false:active=none->web_search:history=false:redraw=true:work=false\ntui.chat_widget_tool_lifecycle.web_search=web-1:query=haxe rust:action=end_matched:matched=true:active=web_search->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.web_search=web-2:query=codex tui:action=end_unmatched:matched=false:active=none->none:history=true:redraw=false:work=true\ntui.chat_widget_tool_lifecycle.collab_event=collab cell:answer_flush=true:history=true:redraw=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=in_progress:spawn_cache=0->1:cached=true:removed=false:history=true\ntui.chat_widget_tool_lifecycle.collab_agent_tool=spawn-1:tool=spawn_agent:status=completed:spawn_cache=1->0:cached=false:removed=true:history=true\ntui.chat_widget_tool_lifecycle.sub_agent=thread-child:summary=sub-agent reported progress:history=true\ntui.chat_widget_tool_lifecycle.queued_dispatch=mcp_tool_call:started=true:completed=true:started_count=1:completed_count=1\ntui.chat_widget_tool_lifecycle.failure=live_tool_lifecycle_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chatwidget-app-server-item-history-boundary",
+      "frame": {
+        "name": "chatwidget-app-server-item-history-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget app-server item history"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_tool_lifecycle",
+          "chatWidgetToolLifecycle": {
+            "allowLiveToolExecution": false,
+            "allowFilesystemMutation": false,
+            "allowNetwork": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "app_server_file_change_started",
+                "callId": "patch-1",
+                "path": "foo.txt",
+                "changeKind": "add",
+                "status": "in_progress",
+                "summary": "Added foo.txt",
+                "historyCellCount": 1,
+                "pathPreserved": true,
+                "historyInserted": true
+              },
+              {
+                "kind": "app_server_command_shell_wrapper",
+                "callId": "cmd-1",
+                "originalCommand": "/bin/zsh -lc 'python3 -c '\\''print(\"Hello, world!\")'\\'''",
+                "displayCommand": "python3 -c 'print(\"Hello, world!\")'",
+                "outputFragment": "Hello, world!",
+                "exitCode": 0,
+                "durationMs": 5,
+                "historyCellCount": 1,
+                "shellWrapperStripped": true,
+                "outputPreserved": true,
+                "historyInserted": true,
+                "hadWorkActivity": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_app_server_item_history_rejected",
+                "noLiveToolExecution": true,
+                "noFilesystemMutation": true,
+                "noNetwork": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.app_server_file_change_started=patch-1:path=foo.txt:kind=add:status=in_progress:history=1:path_preserved=true:summary=Added foo.txt\ntui.chat_widget_tool_lifecycle.command_shell_wrapper=cmd-1:display=python3 -c 'print(\"Hello, world!\")':stripped=true:history=1:exit=0:duration_ms=5:output=true\ntui.chat_widget_tool_lifecycle.failure=live_app_server_item_history_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server item history\ninput> \ntrace:\ntui.chat_widget_tool_lifecycle.plan=headless\ntui.chat_widget_tool_lifecycle.app_server_file_change_started=patch-1:path=foo.txt:kind=add:status=in_progress:history=1:path_preserved=true:summary=Added foo.txt\ntui.chat_widget_tool_lifecycle.command_shell_wrapper=cmd-1:display=python3 -c 'print(\"Hello, world!\")':stripped=true:history=1:exit=0:duration_ms=5:output=true\ntui.chat_widget_tool_lifecycle.failure=live_app_server_item_history_rejected:no_tool=true:no_fs=true:no_network=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-hook-lifecycle-headless",
       "frame": {
         "name": "chatwidget-hook-lifecycle-headless",

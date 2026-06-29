@@ -3,6 +3,8 @@ package codexhx.runtime.tui.smoke;
 enum abstract TuiSmokeToolLifecycleActionKind(String) to String {
 	final PatchApplyBegin = "patch_apply_begin";
 	final FileChangeCompleted = "file_change_completed";
+	final AppServerFileChangeStarted = "app_server_file_change_started";
+	final AppServerCommandShellWrapper = "app_server_command_shell_wrapper";
 	final ViewImage = "view_image";
 	final ImageGeneration = "image_generation";
 	final McpToolStarted = "mcp_tool_started";
@@ -19,6 +21,8 @@ enum abstract TuiSmokeToolLifecycleActionKind(String) to String {
 		return switch value {
 			case "patch_apply_begin": PatchApplyBegin;
 			case "file_change_completed": FileChangeCompleted;
+			case "app_server_file_change_started": AppServerFileChangeStarted;
+			case "app_server_command_shell_wrapper": AppServerCommandShellWrapper;
 			case "view_image": ViewImage;
 			case "image_generation": ImageGeneration;
 			case "mcp_tool_started": McpToolStarted;

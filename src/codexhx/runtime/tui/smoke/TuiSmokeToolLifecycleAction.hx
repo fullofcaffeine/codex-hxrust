@@ -8,6 +8,10 @@ typedef TuiSmokeToolLifecycleActionFields = {
 	final server:String;
 	final tool:String;
 	final path:String;
+	final changeKind:String;
+	final originalCommand:String;
+	final displayCommand:String;
+	final outputFragment:String;
 	final query:String;
 	final action:String;
 	final resultKind:String;
@@ -20,6 +24,8 @@ typedef TuiSmokeToolLifecycleActionFields = {
 	final summary:String;
 	final failureCode:String;
 	final changeCount:Int;
+	final historyCellCount:Int;
+	final exitCode:Int;
 	final durationMs:Int;
 	final queuedStartedCount:Int;
 	final queuedCompletedCount:Int;
@@ -28,6 +34,9 @@ typedef TuiSmokeToolLifecycleActionFields = {
 	final activeCellBefore:String;
 	final activeCellAfter:String;
 	final activeCellMatched:Bool;
+	final pathPreserved:Bool;
+	final shellWrapperStripped:Bool;
+	final outputPreserved:Bool;
 	final activeCellFlushed:Bool;
 	final answerStreamFlushed:Bool;
 	final historyInserted:Bool;
@@ -56,6 +65,10 @@ class TuiSmokeToolLifecycleAction {
 	public final server:String;
 	public final tool:String;
 	public final path:String;
+	public final changeKind:String;
+	public final originalCommand:String;
+	public final displayCommand:String;
+	public final outputFragment:String;
 	public final query:String;
 	public final action:String;
 	public final resultKind:String;
@@ -68,6 +81,8 @@ class TuiSmokeToolLifecycleAction {
 	public final summary:String;
 	public final failureCode:String;
 	public final changeCount:Int;
+	public final historyCellCount:Int;
+	public final exitCode:Int;
 	public final durationMs:Int;
 	public final queuedStartedCount:Int;
 	public final queuedCompletedCount:Int;
@@ -76,6 +91,9 @@ class TuiSmokeToolLifecycleAction {
 	public final activeCellBefore:String;
 	public final activeCellAfter:String;
 	public final activeCellMatched:Bool;
+	public final pathPreserved:Bool;
+	public final shellWrapperStripped:Bool;
+	public final outputPreserved:Bool;
 	public final activeCellFlushed:Bool;
 	public final answerStreamFlushed:Bool;
 	public final historyInserted:Bool;

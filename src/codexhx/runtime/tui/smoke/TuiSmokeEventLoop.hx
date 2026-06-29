@@ -3418,6 +3418,25 @@ class TuiSmokeEventLoop {
 				case TuiSmokeToolLifecycleActionKind.FileChangeCompleted:
 					trace.push("tui.chat_widget_tool_lifecycle.file_change=" + action.status + ":failure_history=" + action.historyInserted + ":work="
 						+ action.hadWorkActivity + ":queued_completed=" + action.queuedToCompleted);
+				case TuiSmokeToolLifecycleActionKind.AppServerFileChangeStarted:
+					trace.push("tui.chat_widget_tool_lifecycle.app_server_file_change_started="
+						+ action.callId
+						+ ":path="
+						+ action.path
+						+ ":kind="
+						+ action.changeKind
+						+ ":status="
+						+ action.status
+						+ ":history="
+						+ action.historyCellCount
+						+ ":path_preserved="
+						+ action.pathPreserved
+						+ ":summary="
+						+ action.summary);
+				case TuiSmokeToolLifecycleActionKind.AppServerCommandShellWrapper:
+					trace.push("tui.chat_widget_tool_lifecycle.command_shell_wrapper=" + action.callId + ":display=" + action.displayCommand + ":stripped="
+						+ action.shellWrapperStripped + ":history=" + action.historyCellCount + ":exit=" + action.exitCode + ":duration_ms="
+						+ action.durationMs + ":output=" + action.outputPreserved);
 				case TuiSmokeToolLifecycleActionKind.ViewImage:
 					trace.push("tui.chat_widget_tool_lifecycle.view_image=" + action.path + ":answer_flush=" + action.answerStreamFlushed + ":history="
 						+ action.historyInserted + ":redraw=" + action.requestRedraw);
