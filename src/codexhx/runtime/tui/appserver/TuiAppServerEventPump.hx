@@ -7,6 +7,7 @@ import codexhx.runtime.tui.terminal.TerminalBackend;
 import codexhx.runtime.tui.terminal.TerminalInputEvent;
 import codexhx.runtime.tui.terminal.TerminalRedrawScheduler;
 import codexhx.runtime.tui.terminal.TerminalSchedulerEvent;
+import codexhx.runtime.tui.terminal.TerminalSchedulerEffect;
 import codexhx.runtime.tui.terminal.TerminalSchedulerRunner;
 import codexhx.runtime.tui.terminal.TerminalSize;
 import codexhx.protocol.RequestId;
@@ -60,8 +61,10 @@ class TuiAppServerEventPump {
 			return new TuiPromptSubmitInteraction([], null, navigationOutcome);
 		final shellEffects = facade.shell().applyInput(input);
 		final submitResult = submitPromptFromShellEffects(shellEffects, requestId, input);
-		requestShellDraws(shellEffects);
+		final immediateSchedulerEffects = requestShellDraws(shellEffects);
 		final outcome = drain(policy);
+		outcome.recordSchedulerEffects(immediateSchedulerEffects);
+		outcome.recordTerminalOperations(TerminalSchedulerRunner.applyEffects(backend, immediateSchedulerEffects));
 		return new TuiPromptSubmitInteraction(shellEffects, submitResult, outcome);
 	}
 
@@ -91,18 +94,20 @@ class TuiAppServerEventPump {
 		return null;
 	}
 
-	function requestShellDraws(effects:Array<ChatWidgetShellEffect>):Void {
+	function requestShellDraws(effects:Array<ChatWidgetShellEffect>):Array<TerminalSchedulerEffect> {
+		final immediate:Array<TerminalSchedulerEffect> = [];
 		if (effects == null)
-			return;
+			return immediate;
 		for (effect in effects) {
 			switch effect {
 				case ChatWidgetShellEffect.DrawRequested:
-					scheduler.handle(TerminalSchedulerEvent.DrawRequested);
+					appendSchedulerEffects(immediate, scheduler.handle(TerminalSchedulerEvent.DrawRequested));
 				case ChatWidgetShellEffect.ExitRequested(reason):
-					scheduler.handle(TerminalSchedulerEvent.AppExit(reason));
+					appendSchedulerEffects(immediate, scheduler.handle(TerminalSchedulerEvent.AppExit(reason)));
 				case _:
 			}
 		}
+		return immediate;
 	}
 
 	function requestDraws(effects:Array<TuiAppServerShellEffect>):Void {
@@ -146,5 +151,10 @@ class TuiAppServerEventPump {
 			case _:
 				null;
 		}
+	}
+
+	static function appendSchedulerEffects(target:Array<TerminalSchedulerEffect>, source:Array<TerminalSchedulerEffect>):Void {
+		for (effect in source)
+			target.push(effect);
 	}
 }
