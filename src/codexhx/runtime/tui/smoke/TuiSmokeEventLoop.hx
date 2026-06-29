@@ -11513,6 +11513,62 @@ class TuiSmokeEventLoop {
 						+ !action.noAppLinkView
 						+ ":browser="
 						+ !action.noBrowserLaunch);
+				case TuiSmokeAppServerElicitationActionKind.InactiveUrlAppLink:
+					trace.push("tui.chat_widget_app_server_elicitation.inactive_url_app_link=thread="
+						+ action.requestThreadId
+						+ ":server="
+						+ action.serverName
+						+ ":request="
+						+ action.requestId
+						+ ":turn="
+						+ action.turnId
+						+ ":url="
+						+ action.url
+						+ ":elicitation="
+						+ action.elicitationId
+						+ ":kind="
+						+ action.interactiveRequestKind
+						+ ":title="
+						+ action.title
+						+ ":description="
+						+ action.description
+						+ ":returned="
+						+ action.requestReturned
+						+ ":target="
+						+ action.appLinkTargetPresent
+						+ ":browser="
+						+ !action.noBrowserLaunch);
+				case TuiSmokeAppServerElicitationActionKind.InactiveInvalidUrlDecline:
+					trace.push("tui.chat_widget_app_server_elicitation.inactive_invalid_url=thread="
+						+ action.requestThreadId
+						+ ":server="
+						+ action.serverName
+						+ ":request="
+						+ action.requestId
+						+ ":turn="
+						+ action.turnId
+						+ ":url="
+						+ action.url
+						+ ":elicitation="
+						+ action.elicitationId
+						+ ":returned="
+						+ action.requestReturned
+						+ ":rejected="
+						+ action.invalidUrlRejected
+						+ ":event="
+						+ action.appEventKind
+						+ ":op="
+						+ action.opKind
+						+ ":decision="
+						+ action.decision
+						+ ":targeted="
+						+ action.targetedRequestThread
+						+ ":content_empty="
+						+ action.contentEmpty
+						+ ":meta_empty="
+						+ action.metaEmpty
+						+ ":view="
+						+ !action.noAppLinkView);
 				case TuiSmokeAppServerElicitationActionKind.Failure:
 					trace.push("tui.chat_widget_app_server_elicitation.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerDelivery
 						+ ":no_network=" + action.noNetwork + ":no_browser=" + action.noBrowserLaunch + ":no_model=" + action.noModelCall + ":unsupported="

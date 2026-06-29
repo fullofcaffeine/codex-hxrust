@@ -22343,6 +22343,99 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server invalid url elicitation\ninput> \ntrace:\ntui.chat_widget_app_server_elicitation.plan=headless\ntui.chat_widget_app_server_elicitation.invalid_url=visible=123e4567-e89b-12d3-a456-426614174010:target=123e4567-e89b-12d3-a456-426614174011:server=payments:request=9:turn=turn-auth:url=http://payments.example/checkout/123:elicitation=payment-123:rejected=true:event=SubmitThreadOp:op=ResolveElicitation:decision=Decline:targeted=true:visible_mutated=false:content_empty=true:meta_empty=true:view=false:browser=false\ntui.chat_widget_app_server_elicitation.failure=live_app_server_elicitation_rejected:no_app_server=true:no_network=true:no_browser=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "app-inactive-thread-url-elicitation-routing",
+      "frame": {
+        "name": "app-inactive-thread-url-elicitation-routing",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "app inactive thread url elicitation routing"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_app_server_elicitation",
+          "chatWidgetAppServerElicitation": {
+            "allowAppLinkView": false,
+            "allowBrowserLaunch": false,
+            "allowAppServerDelivery": false,
+            "allowNetwork": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "inactive_url_app_link",
+                "requestThreadId": "123e4567-e89b-12d3-a456-426614174020",
+                "turnId": "turn-auth",
+                "serverName": "payments",
+                "requestId": 9,
+                "url": "https://payments.example/checkout/123",
+                "elicitationId": "payment-123",
+                "message": "Review the payment details to continue.",
+                "title": "Action required",
+                "description": "Server: payments",
+                "interactiveRequestKind": "AppLink",
+                "requestReturned": true,
+                "appLinkTargetPresent": true,
+                "noBrowserLaunch": true
+              },
+              {
+                "kind": "inactive_invalid_url_decline",
+                "requestThreadId": "123e4567-e89b-12d3-a456-426614174020",
+                "turnId": "turn-auth",
+                "serverName": "payments",
+                "requestId": 10,
+                "url": "http://payments.example/checkout/123",
+                "elicitationId": "payment-123",
+                "message": "Review the payment details to continue.",
+                "appEventKind": "SubmitThreadOp",
+                "opKind": "ResolveElicitation",
+                "decision": "Decline",
+                "requestReturned": false,
+                "invalidUrlRejected": true,
+                "targetedRequestThread": true,
+                "visibleThreadMutated": false,
+                "contentEmpty": true,
+                "metaEmpty": true,
+                "noAppLinkView": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_inactive_app_server_elicitation_rejected",
+                "noAppServerDelivery": true,
+                "noNetwork": true,
+                "noBrowserLaunch": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_app_server_elicitation.plan=headless\ntui.chat_widget_app_server_elicitation.inactive_url_app_link=thread=123e4567-e89b-12d3-a456-426614174020:server=payments:request=9:turn=turn-auth:url=https://payments.example/checkout/123:elicitation=payment-123:kind=AppLink:title=Action required:description=Server: payments:returned=true:target=true:browser=false\ntui.chat_widget_app_server_elicitation.inactive_invalid_url=thread=123e4567-e89b-12d3-a456-426614174020:server=payments:request=10:turn=turn-auth:url=http://payments.example/checkout/123:elicitation=payment-123:returned=false:rejected=true:event=SubmitThreadOp:op=ResolveElicitation:decision=Decline:targeted=true:content_empty=true:meta_empty=true:view=false\ntui.chat_widget_app_server_elicitation.failure=live_inactive_app_server_elicitation_rejected:no_app_server=true:no_network=true:no_browser=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> app inactive thread url elicitation routing\ninput> \ntrace:\ntui.chat_widget_app_server_elicitation.plan=headless\ntui.chat_widget_app_server_elicitation.inactive_url_app_link=thread=123e4567-e89b-12d3-a456-426614174020:server=payments:request=9:turn=turn-auth:url=https://payments.example/checkout/123:elicitation=payment-123:kind=AppLink:title=Action required:description=Server: payments:returned=true:target=true:browser=false\ntui.chat_widget_app_server_elicitation.inactive_invalid_url=thread=123e4567-e89b-12d3-a456-426614174020:server=payments:request=10:turn=turn-auth:url=http://payments.example/checkout/123:elicitation=payment-123:returned=false:rejected=true:event=SubmitThreadOp:op=ResolveElicitation:decision=Decline:targeted=true:content_empty=true:meta_empty=true:view=false\ntui.chat_widget_app_server_elicitation.failure=live_inactive_app_server_elicitation_rejected:no_app_server=true:no_network=true:no_browser=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-windows-sandbox-headless",
       "frame": {
         "name": "chatwidget-windows-sandbox-headless",
