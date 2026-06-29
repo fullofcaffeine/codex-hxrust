@@ -7,6 +7,7 @@ enum abstract TuiPromptJsonRpcNotificationMethod(String) to String {
 	final TurnStarted = "turn/started";
 	final TurnCompleted = "turn/completed";
 	final AgentMessageDelta = "item/agentMessage/delta";
+	final ItemCompleted = "item/completed";
 
 	public function text():String {
 		return this;

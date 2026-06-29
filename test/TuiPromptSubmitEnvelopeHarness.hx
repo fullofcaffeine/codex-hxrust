@@ -10,6 +10,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
 import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
 import codexhx.runtime.tui.appserver.TuiAppServerThreadStatus;
+import codexhx.runtime.tui.appserver.TuiPromptAgentMessageCompletedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageDeltaNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchange;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchangeOutcome;
@@ -132,7 +133,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		final completionProtocol = AppProtocol.parseFixtureItem(completionParsed);
 		assertTrue(completionProtocol.ok, "json-rpc completion parses through app protocol: " + completionProtocol.errorCode);
 		assertStringEquals("turn", completionProtocol.message.summary, "json-rpc completion summary");
-		assertIntEquals(3, transport.lastStreamNotificationCount(), "json-rpc stream notification count");
+		assertIntEquals(4, transport.lastStreamNotificationCount(), "json-rpc stream notification count");
 		assertTurnStreamNotification(expectStreamNotification(transport.lastStreamNotificationAt(0), "json-rpc stream started"), notification,
 			"json-rpc stream started");
 		final delta = expectAgentMessageDeltaStreamNotification(transport.lastStreamNotificationAt(1), "json-rpc stream delta");
@@ -145,7 +146,17 @@ class TuiPromptSubmitEnvelopeHarness {
 		final deltaProtocol = AppProtocol.parseFixtureItem(deltaParsed);
 		assertTrue(deltaProtocol.ok, "json-rpc delta parses through app protocol: " + deltaProtocol.errorCode);
 		assertStringEquals("notification:item/agentMessage/delta", deltaProtocol.message.summary, "json-rpc delta summary");
-		assertTurnStreamNotification(expectStreamNotification(transport.lastStreamNotificationAt(2), "json-rpc stream completed"), completion,
+		final itemCompleted = expectAgentMessageCompletedStreamNotification(transport.lastStreamNotificationAt(2), "json-rpc stream item completed");
+		assertStringEquals(TuiPromptJsonRpcNotificationMethod.ItemCompleted.text(), itemCompleted.methodText(), "json-rpc item completed method");
+		assertStringEquals("{\"completedAtMs\":2000,\"item\":{\"id\":\"item-78\",\"text\":\"echo: json rpc ask\",\"type\":\"agentMessage\"},\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turnId\":\"turn-78\"}",
+			itemCompleted.paramsJson(), "json-rpc item completed params");
+		assertStringEquals("{\"jsonrpc\":\"2.0\",\"method\":\"item/completed\",\"params\":{\"completedAtMs\":2000,\"item\":{\"id\":\"item-78\",\"text\":\"echo: json rpc ask\",\"type\":\"agentMessage\"},\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turnId\":\"turn-78\"}}",
+			itemCompleted.messageJson(), "json-rpc item completed message");
+		final itemCompletedParsed = expectJson(CodexJson.parse(itemCompleted.fixtureJson("prompt-json-rpc-agent-message-completed")));
+		final itemCompletedProtocol = AppProtocol.parseFixtureItem(itemCompletedParsed);
+		assertTrue(itemCompletedProtocol.ok, "json-rpc item completed parses through app protocol: " + itemCompletedProtocol.errorCode);
+		assertStringEquals("notification:item/completed", itemCompletedProtocol.message.summary, "json-rpc item completed summary");
+		assertTurnStreamNotification(expectStreamNotification(transport.lastStreamNotificationAt(3), "json-rpc stream completed"), completion,
 			"json-rpc stream completed");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
 	}
@@ -343,6 +354,17 @@ class TuiPromptSubmitEnvelopeHarness {
 				delta;
 			case _:
 				throw label + ": expected agent message delta stream notification";
+		}
+	}
+
+	static function expectAgentMessageCompletedStreamNotification(notification:Null<TuiPromptJsonRpcStreamNotification>,
+			label:String):TuiPromptAgentMessageCompletedNotification {
+		final streamNotification = expectStreamNotification(notification, label);
+		return switch streamNotification {
+			case TuiPromptJsonRpcStreamNotification.AgentMessageCompleted(completed):
+				completed;
+			case _:
+				throw label + ": expected agent message completed stream notification";
 		}
 	}
 

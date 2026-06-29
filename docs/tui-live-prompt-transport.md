@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -81,7 +81,8 @@ turn id and `completed` status, and the harness parses that notification through
 the same app-protocol gate.
 
 The exchange also emits the assistant echo as an upstream-shaped
-`item/agentMessage/delta` stream notification:
+`item/agentMessage/delta` stream notification and then closes the assistant
+message item with `item/completed`:
 
 ```json
 {
@@ -96,14 +97,33 @@ The exchange also emits the assistant echo as an upstream-shaped
 }
 ```
 
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "item/completed",
+  "params": {
+    "threadId": "00000000-0000-0000-0000-000000005556",
+    "turnId": "turn-78",
+    "item": {
+      "id": "item-78",
+      "type": "agentMessage",
+      "text": "echo: json rpc ask"
+    },
+    "completedAtMs": 2000
+  }
+}
+```
+
 `JsonRpcTuiPromptTransport` records both the turn-only notification list and the
 ordered stream notification list. The stream list is represented as a typed enum
-so `turn/*` and `item/agentMessage/delta` payloads do not share nullable fields.
-The harness parses the delta notification through `AppProtocol.parseFixtureItem`
-and proves the shell-facing event order:
+so `turn/*`, `item/agentMessage/delta`, and `item/completed` payloads do not
+share nullable fields. The harness parses the delta and completed-item
+notifications through `AppProtocol.parseFixtureItem` and proves the shell-facing
+event order:
 
 - `turn/started` to working status
 - `item/agentMessage/delta` to assistant echo delta
+- `item/completed` as a shell no-op
 - `turn/completed` to ready status
 
 This keeps the generated live demo behavior unchanged while making the prompt

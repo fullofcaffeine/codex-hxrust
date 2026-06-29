@@ -6,4 +6,5 @@ package codexhx.runtime.tui.appserver;
 enum TuiPromptJsonRpcStreamNotification {
 	Turn(notification:TuiPromptJsonRpcNotification);
 	AgentMessageDelta(notification:TuiPromptAgentMessageDeltaNotification);
+	AgentMessageCompleted(notification:TuiPromptAgentMessageCompletedNotification);
 }
