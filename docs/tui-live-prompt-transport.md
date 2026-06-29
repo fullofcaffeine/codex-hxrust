@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -56,8 +56,22 @@ visible behavior. `EchoTuiPromptJsonRpcExchange` remains the default fake
 response exchange and preserves the prior behavior:
 
 Accepted fake submissions also record stream-shaped app-server notifications.
-The first is `turn/started`, with the active thread id and the same typed turn
-payload as the response:
+The first is `thread/status/changed`, marking the thread active with the
+selected upstream active flag shape:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "thread/status/changed",
+  "params": {
+    "status": { "activeFlags": ["turnRunning"], "type": "active" },
+    "threadId": "00000000-0000-0000-0000-000000005556"
+  }
+}
+```
+
+The next turn-level notification is `turn/started`, with the active thread id
+and the same typed turn payload as the response:
 
 ```json
 {
@@ -71,6 +85,22 @@ payload as the response:
       "itemsView": "full",
       "items": []
     }
+  }
+}
+```
+
+After `turn/completed`, the exchange records a final `thread/status/changed`
+idle notification. The projector treats both thread-status stream notifications
+as shell no-ops because `turn/started` and `turn/completed` already drive the
+visible working/ready status for this minimal shell:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "thread/status/changed",
+  "params": {
+    "status": { "type": "idle" },
+    "threadId": "00000000-0000-0000-0000-000000005556"
   }
 }
 ```
@@ -175,12 +205,14 @@ transport/protocol event only for now:
 
 `JsonRpcTuiPromptTransport` records both the turn-only notification list and the
 ordered stream notification list. The stream list is represented as a typed enum
-so `turn/*`, `item/started`, `item/agentMessage/delta`, `item/completed`, and
+so `thread/status/changed`, `turn/*`, `item/started`,
+`item/agentMessage/delta`, `item/completed`, and
 `rawResponseItem/completed` payloads do not share nullable fields. The harness
-parses the started-item, delta, raw-response-item, completed-agent-item, and
-completed-user-item notifications through `AppProtocol.parseFixtureItem` and
-proves the shell-facing event order:
+parses the thread-status, started-item, delta, raw-response-item,
+completed-agent-item, and completed-user-item notifications through
+`AppProtocol.parseFixtureItem` and proves the shell-facing event order:
 
+- active `thread/status/changed` as a shell no-op
 - `turn/started` to working status
 - user `item/completed` as a shell no-op
 - `item/started` as a shell no-op
@@ -188,6 +220,7 @@ proves the shell-facing event order:
 - `rawResponseItem/completed` as a shell no-op
 - `item/completed` as a shell no-op
 - `turn/completed` to ready status
+- idle `thread/status/changed` as a shell no-op
 
 This keeps the generated live demo behavior unchanged while making the prompt
 transport consume the same notification objects that later socket transport can

@@ -4,6 +4,7 @@ package codexhx.runtime.tui.appserver;
 	Ordered stream notifications emitted by the fake prompt JSON-RPC exchange.
 **/
 enum TuiPromptJsonRpcStreamNotification {
+	ThreadStatusChanged(notification:TuiPromptThreadStatusChangedNotification);
 	Turn(notification:TuiPromptJsonRpcNotification);
 	UserMessageCompleted(notification:TuiPromptUserMessageCompletedNotification);
 	AgentMessageStarted(notification:TuiPromptAgentMessageStartedNotification);

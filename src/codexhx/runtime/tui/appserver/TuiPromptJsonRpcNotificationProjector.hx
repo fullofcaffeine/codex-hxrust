@@ -27,6 +27,7 @@ class TuiPromptJsonRpcNotificationProjector {
 
 	static function appendStreamNotification(events:Array<TuiAppServerEvent>, notification:TuiPromptJsonRpcStreamNotification):Void {
 		switch notification {
+			case ThreadStatusChanged(_):
 			case Turn(turnNotification):
 				appendTurnNotification(events, turnNotification);
 			case UserMessageCompleted(_):
