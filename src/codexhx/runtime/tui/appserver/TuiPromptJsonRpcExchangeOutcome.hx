@@ -7,21 +7,25 @@ class TuiPromptJsonRpcExchangeOutcome {
 	final acceptedValue:Bool;
 	final codeValue:String;
 	final responseValue:Null<TuiPromptJsonRpcResponse>;
+	final notificationsValue:Array<TuiPromptJsonRpcNotification>;
 	final eventsValue:Array<TuiAppServerEvent>;
 
-	public function new(accepted:Bool, code:String, response:Null<TuiPromptJsonRpcResponse>, events:Array<TuiAppServerEvent>) {
+	public function new(accepted:Bool, code:String, response:Null<TuiPromptJsonRpcResponse>, notifications:Array<TuiPromptJsonRpcNotification>,
+			events:Array<TuiAppServerEvent>) {
 		this.acceptedValue = accepted;
 		this.codeValue = normalize(code, accepted ? "accepted" : "rejected");
 		this.responseValue = response;
+		this.notificationsValue = notifications == null ? [] : notifications.copy();
 		this.eventsValue = events == null ? [] : events.copy();
 	}
 
-	public static function accepted(response:TuiPromptJsonRpcResponse, events:Array<TuiAppServerEvent>):TuiPromptJsonRpcExchangeOutcome {
-		return new TuiPromptJsonRpcExchangeOutcome(true, "accepted", response, events);
+	public static function accepted(response:TuiPromptJsonRpcResponse, notifications:Array<TuiPromptJsonRpcNotification>,
+			events:Array<TuiAppServerEvent>):TuiPromptJsonRpcExchangeOutcome {
+		return new TuiPromptJsonRpcExchangeOutcome(true, "accepted", response, notifications, events);
 	}
 
 	public static function rejected(code:String):TuiPromptJsonRpcExchangeOutcome {
-		return new TuiPromptJsonRpcExchangeOutcome(false, code, null, []);
+		return new TuiPromptJsonRpcExchangeOutcome(false, code, null, [], []);
 	}
 
 	public function isAccepted():Bool {
@@ -38,6 +42,20 @@ class TuiPromptJsonRpcExchangeOutcome {
 
 	public function eventCount():Int {
 		return eventsValue.length;
+	}
+
+	public function notificationCount():Int {
+		return notificationsValue.length;
+	}
+
+	public function notificationAt(index:Int):Null<TuiPromptJsonRpcNotification> {
+		if (index < 0 || index >= notificationsValue.length)
+			return null;
+		return notificationsValue[index];
+	}
+
+	public function notifications():Array<TuiPromptJsonRpcNotification> {
+		return notificationsValue.copy();
 	}
 
 	public function eventAt(index:Int):Null<TuiAppServerEvent> {

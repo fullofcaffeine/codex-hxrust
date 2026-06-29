@@ -11,6 +11,8 @@ import codexhx.runtime.tui.appserver.TuiAppServerPumpPolicy;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchange;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchangeOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcMethod;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotification;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotificationMethod;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcRequest;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcResponse;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
@@ -103,6 +105,18 @@ class TuiPromptSubmitEnvelopeHarness {
 		final responseProtocol = AppProtocol.parseFixtureItem(responseParsed);
 		assertTrue(responseProtocol.ok, "json-rpc response parses through app protocol: " + responseProtocol.errorCode);
 		assertStringEquals("turn", responseProtocol.message.summary, "json-rpc response summary");
+
+		assertIntEquals(1, transport.lastNotificationCount(), "json-rpc notification count");
+		final notification = expectJsonRpcNotification(transport.lastNotificationAt(0), "json-rpc turn-started notification recorded");
+		assertStringEquals(TuiPromptJsonRpcNotificationMethod.TurnStarted.text(), notification.methodText(), "json-rpc notification method");
+		assertStringEquals("{\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turn\":{\"id\":\"turn-78\",\"items\":[],\"itemsView\":\"full\",\"status\":\"inProgress\"}}",
+			notification.paramsJson(), "json-rpc notification params");
+		assertStringEquals("{\"jsonrpc\":\"2.0\",\"method\":\"turn/started\",\"params\":{\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turn\":{\"id\":\"turn-78\",\"items\":[],\"itemsView\":\"full\",\"status\":\"inProgress\"}}}",
+			notification.messageJson(), "json-rpc notification message");
+		final notificationParsed = expectJson(CodexJson.parse(notification.fixtureJson("prompt-json-rpc-turn-started")));
+		final notificationProtocol = AppProtocol.parseFixtureItem(notificationParsed);
+		assertTrue(notificationProtocol.ok, "json-rpc notification parses through app protocol: " + notificationProtocol.errorCode);
+		assertStringEquals("turn", notificationProtocol.message.summary, "json-rpc notification summary");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
 	}
 
@@ -120,6 +134,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals("79", request.requestId.toString(), "json-rpc rejected request id");
 		if (transport.lastResponse() != null)
 			throw "json-rpc rejected exchange should not record response";
+		assertIntEquals(0, transport.lastNotificationCount(), "json-rpc rejected exchange should not record notifications");
 		assertIntEquals(0, facade.queuedCount(), "json-rpc exchange rejection queues no fake events");
 	}
 
@@ -259,6 +274,12 @@ class TuiPromptSubmitEnvelopeHarness {
 		if (response == null)
 			throw label;
 		return response;
+	}
+
+	static function expectJsonRpcNotification(notification:Null<TuiPromptJsonRpcNotification>, label:String):TuiPromptJsonRpcNotification {
+		if (notification == null)
+			throw label;
+		return notification;
 	}
 
 	static function expectJson(outcome:JsonParseOutcome):haxe.json.Value {

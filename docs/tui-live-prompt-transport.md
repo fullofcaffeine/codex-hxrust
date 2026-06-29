@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -55,6 +55,30 @@ transport work; the live shell still consumes the queued fake events for its
 visible behavior. `EchoTuiPromptJsonRpcExchange` remains the default fake
 response exchange and preserves the prior behavior:
 
+Accepted fake submissions also record the first stream-shaped app-server
+notification, `turn/started`, with the active thread id and the same typed turn
+payload as the response:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "turn/started",
+  "params": {
+    "threadId": "00000000-0000-0000-0000-000000005556",
+    "turn": {
+      "id": "turn-78",
+      "status": "inProgress",
+      "itemsView": "full",
+      "items": []
+    }
+  }
+}
+```
+
+The harness parses that notification through `AppProtocol.parseFixtureItem`.
+The live shell still consumes the existing queued fake events for visible
+behavior:
+
 - working status
 - assistant echo delta
 - ready status
@@ -74,6 +98,6 @@ bash harness/check-tui-prompt-submit-envelope.sh
 ```
 
 This is still not app-server socket ownership, credentialed model traffic, tool
-execution, or persistent state. It is the shell-facing JSON-RPC request/response
-seam those later transports can implement without changing ChatWidget or
-terminal-loop code.
+execution, or persistent state. It is the shell-facing JSON-RPC
+request/response/notification seam those later transports can implement without
+changing ChatWidget or terminal-loop code.
