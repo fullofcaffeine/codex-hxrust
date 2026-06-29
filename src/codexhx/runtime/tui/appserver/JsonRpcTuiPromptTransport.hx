@@ -14,6 +14,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	var lastWireRecordsValue:Array<TuiPromptJsonRpcFrameRecord>;
 	var lastCorrelationValue:TuiPromptJsonRpcFrameCorrelation;
 	var lastStreamScopeValue:TuiPromptJsonRpcStreamScopeReport;
+	var lastTurnLifecycleValue:TuiPromptTurnLifecycleReport;
 
 	public function new(?exchange:TuiPromptJsonRpcExchange) {
 		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
@@ -25,6 +26,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		this.lastWireRecordsValue = [];
 		this.lastCorrelationValue = TuiPromptJsonRpcFrameCorrelation.fromFrames([]);
 		this.lastStreamScopeValue = TuiPromptJsonRpcStreamScopeReport.fromNotifications(null, null, []);
+		this.lastTurnLifecycleValue = TuiPromptTurnLifecycleReport.fromNotifications(null, []);
 	}
 
 	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
@@ -56,6 +58,11 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		if (!streamScope.isAccepted()) {
 			replaceLastFrames(streamFrames);
 			return TuiPromptTransportOutcome.rejected(streamScope.code());
+		}
+		final turnLifecycle = TuiPromptTurnLifecycleReport.fromNotifications(response.result.turnId, exchangeStreamNotifications);
+		if (!turnLifecycle.isComplete()) {
+			replaceLastFrames(streamFrames);
+			return TuiPromptTransportOutcome.rejected(turnLifecycle.code());
 		}
 		lastResponseValue = response;
 		lastNotificationsValue = exchangeOutcome.notifications();
@@ -144,6 +151,10 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		return lastStreamScopeValue;
 	}
 
+	public function lastTurnLifecycle():TuiPromptTurnLifecycleReport {
+		return lastTurnLifecycleValue;
+	}
+
 	function replaceLastFrames(frames:Array<TuiPromptJsonRpcFrame>):Void {
 		lastFramesValue = frames;
 		lastWireRecordsValue = TuiPromptJsonRpcFrameCodec.records(frames);
@@ -151,6 +162,8 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		final response = firstResponse(frames);
 		lastStreamScopeValue = response == null ? TuiPromptJsonRpcStreamScopeReport.fromNotifications(null, null,
 			[]) : TuiPromptJsonRpcStreamScopeReport.fromNotifications(firstRequestThreadId(frames), response.result.turnId, streamNotifications(frames));
+		lastTurnLifecycleValue = response == null ? TuiPromptTurnLifecycleReport.fromNotifications(null,
+			[]) : TuiPromptTurnLifecycleReport.fromNotifications(response.result.turnId, streamNotifications(frames));
 	}
 
 	function firstResponse(frames:Array<TuiPromptJsonRpcFrame>):Null<TuiPromptJsonRpcResponse> {
