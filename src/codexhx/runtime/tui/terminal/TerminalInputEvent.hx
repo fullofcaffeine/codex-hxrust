@@ -13,4 +13,6 @@ enum TerminalInputEvent {
 	MoveRight;
 	HistoryPrevious;
 	HistoryNext;
+	AgentPrevious;
+	AgentNext;
 }

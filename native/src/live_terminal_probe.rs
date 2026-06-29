@@ -28,6 +28,8 @@ const POLL_ARROW_UP: i32 = 6;
 const POLL_ARROW_DOWN: i32 = 7;
 const POLL_ARROW_LEFT: i32 = 8;
 const POLL_ARROW_RIGHT: i32 = 9;
+const POLL_AGENT_PREVIOUS: i32 = 10;
+const POLL_AGENT_NEXT: i32 = 11;
 
 #[derive(Clone, Debug)]
 struct ProbeState {
@@ -246,6 +248,8 @@ pub fn poll_live(timeout_ms: i32) -> i32 {
             KeyCode::Backspace => POLL_BACKSPACE,
             KeyCode::Up => POLL_ARROW_UP,
             KeyCode::Down => POLL_ARROW_DOWN,
+            KeyCode::Left if key.modifiers.contains(KeyModifiers::ALT) => POLL_AGENT_PREVIOUS,
+            KeyCode::Right if key.modifiers.contains(KeyModifiers::ALT) => POLL_AGENT_NEXT,
             KeyCode::Left => POLL_ARROW_LEFT,
             KeyCode::Right => POLL_ARROW_RIGHT,
             _ => POLL_NONE,

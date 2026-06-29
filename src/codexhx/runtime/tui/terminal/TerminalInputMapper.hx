@@ -14,6 +14,8 @@ class TerminalInputMapper {
 	public static inline final PollArrowDown:Int = 7;
 	public static inline final PollArrowLeft:Int = 8;
 	public static inline final PollArrowRight:Int = 9;
+	public static inline final PollAgentPrevious:Int = 10;
+	public static inline final PollAgentNext:Int = 11;
 
 	public static function terminalEventFromNativePoll(code:Int, text:String):TerminalEvent {
 		return switch code {
@@ -35,6 +37,10 @@ class TerminalInputMapper {
 				TerminalEvent.Key(TerminalKey.ArrowLeft);
 			case PollArrowRight:
 				TerminalEvent.Key(TerminalKey.ArrowRight);
+			case PollAgentPrevious:
+				TerminalEvent.Key(TerminalKey.AgentPrevious);
+			case PollAgentNext:
+				TerminalEvent.Key(TerminalKey.AgentNext);
 			case _:
 				TerminalEvent.NoEvent;
 		}
@@ -60,6 +66,10 @@ class TerminalInputMapper {
 				TerminalInputEvent.MoveLeft;
 			case ArrowRight:
 				TerminalInputEvent.MoveRight;
+			case AgentPrevious:
+				TerminalInputEvent.AgentPrevious;
+			case AgentNext:
+				TerminalInputEvent.AgentNext;
 		}
 	}
 }

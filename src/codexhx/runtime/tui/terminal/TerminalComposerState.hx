@@ -46,6 +46,10 @@ class TerminalComposerState {
 				historyPrevious();
 			case HistoryNext:
 				historyNext();
+			case AgentPrevious:
+				[];
+			case AgentNext:
+				[];
 		}
 	}
 

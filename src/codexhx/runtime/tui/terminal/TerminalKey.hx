@@ -13,4 +13,6 @@ enum TerminalKey {
 	ArrowDown;
 	ArrowLeft;
 	ArrowRight;
+	AgentPrevious;
+	AgentNext;
 }

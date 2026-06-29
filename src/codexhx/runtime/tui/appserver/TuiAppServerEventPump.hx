@@ -2,6 +2,7 @@ package codexhx.runtime.tui.appserver;
 
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellRenderer;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellEffect;
+import codexhx.runtime.tui.agent.AgentNavigationDirection;
 import codexhx.runtime.tui.terminal.TerminalBackend;
 import codexhx.runtime.tui.terminal.TerminalInputEvent;
 import codexhx.runtime.tui.terminal.TerminalRedrawScheduler;
@@ -54,11 +55,26 @@ class TuiAppServerEventPump {
 	}
 
 	public function submitComposerInput(input:TerminalInputEvent, requestId:RequestId, policy:TuiAppServerPumpPolicy):TuiPromptSubmitInteraction {
+		final navigationOutcome = handleAgentNavigationInput(input);
+		if (navigationOutcome != null)
+			return new TuiPromptSubmitInteraction([], null, navigationOutcome);
 		final shellEffects = facade.shell().applyInput(input);
 		final submitResult = submitPromptFromShellEffects(shellEffects, requestId, input);
 		requestShellDraws(shellEffects);
 		final outcome = drain(policy);
 		return new TuiPromptSubmitInteraction(shellEffects, submitResult, outcome);
+	}
+
+	function handleAgentNavigationInput(input:TerminalInputEvent):Null<TuiAppServerPumpOutcome> {
+		final direction = agentNavigationDirection(input);
+		if (direction == null)
+			return null;
+		final outcome = new TuiAppServerPumpOutcome();
+		final effects = facade.activateAdjacentAgent(direction);
+		outcome.recordEvent(effects);
+		requestDraws(effects);
+		flushFrame(outcome);
+		return outcome;
 	}
 
 	function submitPromptFromShellEffects(shellEffects:Array<ChatWidgetShellEffect>, requestId:RequestId,
@@ -118,6 +134,17 @@ class TuiAppServerEventPump {
 				true;
 			case _:
 				false;
+		}
+	}
+
+	static function agentNavigationDirection(input:TerminalInputEvent):Null<AgentNavigationDirection> {
+		return switch input {
+			case TerminalInputEvent.AgentPrevious:
+				Previous;
+			case TerminalInputEvent.AgentNext:
+				Next;
+			case _:
+				null;
 		}
 	}
 }

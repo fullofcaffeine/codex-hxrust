@@ -35,6 +35,10 @@ class TuiLiveInputBackendHarness {
 		assertTerminalKey(TerminalKey.ArrowDown, TerminalInputMapper.terminalEventFromNativePoll(TerminalInputMapper.PollArrowDown, ""), "down native poll");
 		assertTerminalKey(TerminalKey.ArrowLeft, TerminalInputMapper.terminalEventFromNativePoll(TerminalInputMapper.PollArrowLeft, ""), "left native poll");
 		assertTerminalKey(TerminalKey.ArrowRight, TerminalInputMapper.terminalEventFromNativePoll(TerminalInputMapper.PollArrowRight, ""), "right native poll");
+		assertTerminalKey(TerminalKey.AgentPrevious, TerminalInputMapper.terminalEventFromNativePoll(TerminalInputMapper.PollAgentPrevious, ""),
+			"agent previous native poll");
+		assertTerminalKey(TerminalKey.AgentNext, TerminalInputMapper.terminalEventFromNativePoll(TerminalInputMapper.PollAgentNext, ""),
+			"agent next native poll");
 		switch TerminalInputMapper.terminalEventFromNativePoll(TerminalInputMapper.PollNone, "") {
 			case TerminalEvent.NoEvent:
 			case _:
@@ -153,6 +157,8 @@ class TuiLiveInputBackendHarness {
 			case TerminalKey.ArrowDown:
 			case TerminalKey.ArrowLeft:
 			case TerminalKey.ArrowRight:
+			case TerminalKey.AgentPrevious:
+			case TerminalKey.AgentNext:
 			case _:
 				fail("unknown terminal key");
 		}
@@ -230,6 +236,10 @@ class TuiLiveInputBackendHarness {
 				"ArrowLeft";
 			case ArrowRight:
 				"ArrowRight";
+			case AgentPrevious:
+				"AgentPrevious";
+			case AgentNext:
+				"AgentNext";
 		}
 	}
 

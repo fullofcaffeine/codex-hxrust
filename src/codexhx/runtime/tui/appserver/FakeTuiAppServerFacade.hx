@@ -7,6 +7,7 @@ import codexhx.runtime.tui.chatwidget.ChatWidgetShellEffect;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.chatwidget.ChatWidgetStatusKind;
 import codexhx.runtime.tui.chatwidget.ChatWidgetTranscriptRole;
+import codexhx.runtime.tui.agent.AgentNavigationDirection;
 import codexhx.runtime.tui.agent.AgentNavigationState;
 import haxe.ds.StringMap;
 
@@ -198,6 +199,17 @@ class FakeTuiAppServerFacade {
 			if (event != null)
 				appendEffects(effects, receive(event));
 		}
+		return effects;
+	}
+
+	public function activateAdjacentAgent(direction:AgentNavigationDirection):Array<TuiAppServerShellEffect> {
+		final effects:Array<TuiAppServerShellEffect> = [];
+		final nextThread = agentNavigationValue.adjacentThreadId(activeThreadValue, direction);
+		if (nextThread == null)
+			return effects;
+		activeThreadValue = nextThread;
+		effects.push(TuiAppServerShellEffect.ActiveThreadChanged(nextThread));
+		refreshAgentLabel(effects);
 		return effects;
 	}
 

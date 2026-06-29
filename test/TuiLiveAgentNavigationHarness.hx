@@ -22,6 +22,9 @@ class TuiLiveAgentNavigationHarness {
 	static function main():Void {
 		testAgentEventsRenderActiveLabel();
 		testActiveThreadSwitchTargetsPromptSubmission();
+		testSemanticInputCyclesAgents();
+		testSemanticInputNoopsForSingleton();
+		testComposerInputStillOwnsPlainArrows();
 		testRemovalReturnsToPrimaryThread();
 		testLiveBackendRendersAgentLabel();
 		Sys.println("tui-live-agent-navigation ok");
@@ -69,6 +72,72 @@ class TuiLiveAgentNavigationHarness {
 		assertStringEquals(child.toString(), submit.submitThreadIdText(), "prompt targets active child");
 		assertStringEquals("Robie [worker]", shell.activeAgentLabel(), "metadata label after active switch");
 		assertStringEquals("assistant> echo: side task", backend.currentFrame().lineAt(4), "side prompt echo rendered");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testSemanticInputCyclesAgents():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final primary = thread("00000000-0000-0000-0000-000000050001");
+		final first = thread("00000000-0000-0000-0000-000000050002");
+		final second = thread("00000000-0000-0000-0000-000000050003");
+		final facade = attachedFacade(shell, primary);
+		final backend = setupHeadless();
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(96, 12)), backend);
+		facade.receive(TuiAppServerEvent.AgentThreadUpsert(first, "Robie", "worker", false));
+		facade.receive(TuiAppServerEvent.AgentThreadUpsert(second, "Ari", "reviewer", false));
+
+		final next = pump.submitComposerInput(TerminalInputEvent.AgentNext, RequestId.fromInteger(50), TuiAppServerPumpPolicy.lossless());
+		assertFalse(next.hasSubmitResult(), "agent next should not submit prompt");
+		assertThreadEquals(first, facade.activeThread(), "agent next moves to first child");
+		assertStringEquals("Robie [worker]", shell.activeAgentLabel(), "agent next label");
+		assertStringEquals("Codex | model: gpt-live | status: session started | agent: Robie [worker]", backend.currentFrame().lineAt(0),
+			"agent next rendered header");
+
+		pump.submitComposerInput(TerminalInputEvent.AgentNext, RequestId.fromInteger(51), TuiAppServerPumpPolicy.lossless());
+		assertThreadEquals(second, facade.activeThread(), "agent next moves to second child");
+		assertStringEquals("Ari [reviewer]", shell.activeAgentLabel(), "second child label");
+
+		pump.submitComposerInput(TerminalInputEvent.AgentNext, RequestId.fromInteger(52), TuiAppServerPumpPolicy.lossless());
+		assertThreadEquals(primary, facade.activeThread(), "agent next wraps to primary");
+		assertStringEquals("Main [default]", shell.activeAgentLabel(), "primary label with multiple threads");
+
+		pump.submitComposerInput(TerminalInputEvent.AgentPrevious, RequestId.fromInteger(53), TuiAppServerPumpPolicy.lossless());
+		assertThreadEquals(second, facade.activeThread(), "agent previous wraps to second child");
+		assertStringEquals("Ari [reviewer]", shell.activeAgentLabel(), "previous label");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testSemanticInputNoopsForSingleton():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final primary = thread("00000000-0000-0000-0000-000000060001");
+		final facade = attachedFacade(shell, primary);
+		final backend = setupHeadless();
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(96, 12)), backend);
+
+		final interaction = pump.submitComposerInput(TerminalInputEvent.AgentNext, RequestId.fromInteger(60), TuiAppServerPumpPolicy.lossless());
+		assertFalse(interaction.hasSubmitResult(), "singleton navigation should not submit");
+		assertIntEquals(0, interaction.pumpOutcome().drawRequests(), "singleton navigation no redraw");
+		assertThreadEquals(primary, facade.activeThread(), "singleton stays primary");
+		assertStringEquals("", shell.activeAgentLabel(), "singleton label remains hidden");
+		backend.restore(TerminalRestoreReason.NormalExit);
+	}
+
+	static function testComposerInputStillOwnsPlainArrows():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final primary = thread("00000000-0000-0000-0000-000000070001");
+		final child = thread("00000000-0000-0000-0000-000000070002");
+		final facade = attachedFacade(shell, primary);
+		final backend = setupHeadless();
+		final pump = new TuiAppServerEventPump(facade, new TerminalRedrawScheduler(TerminalSize.of(96, 12)), backend);
+		facade.receive(TuiAppServerEvent.AgentThreadUpsert(child, "Robie", "worker", false));
+
+		pump.submitComposerInput(TerminalInputEvent.Text("ab"), RequestId.fromInteger(70), TuiAppServerPumpPolicy.lossless());
+		pump.submitComposerInput(TerminalInputEvent.MoveLeft, RequestId.fromInteger(71), TuiAppServerPumpPolicy.lossless());
+		pump.submitComposerInput(TerminalInputEvent.Text("c"), RequestId.fromInteger(72), TuiAppServerPumpPolicy.lossless());
+
+		assertThreadEquals(primary, facade.activeThread(), "plain left does not switch agents");
+		assertStringEquals("acb", shell.composer().buffer(), "plain left remains composer movement");
+		assertStringEquals("Main [default]", shell.activeAgentLabel(), "plain arrow keeps primary agent label");
 		backend.restore(TerminalRestoreReason.NormalExit);
 	}
 
@@ -166,6 +235,11 @@ class TuiLiveAgentNavigationHarness {
 
 	static function assertTrue(value:Bool, label:String):Void {
 		if (!value)
+			throw label;
+	}
+
+	static function assertFalse(value:Bool, label:String):Void {
+		if (value)
 			throw label;
 	}
 }

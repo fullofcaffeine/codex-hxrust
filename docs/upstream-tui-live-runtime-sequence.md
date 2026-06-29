@@ -4237,6 +4237,7 @@ Status: after the external architecture review, the default next work pivots fro
 - `TUI-LIVE-7` / `codex-hxrust-mvwx`: prompt submit envelope from live composer;
 - `TUI-LIVE-8` / `codex-hxrust-4dnm`: promote agent navigation state out of smoke;
 - `TUI-LIVE-9` / `codex-hxrust-3v64`: wire agent navigation into live shell session;
+- `TUI-LIVE-10` / `codex-hxrust-dglj`: add semantic previous/next agent input;
 - `ARCH-1` / `codex-hxrust-f512`: quarantine TUI smoke validation package and add an import guard.
 
 The first acceptance target is credential-free: a Haxe-authored, haxe.rust-generated binary that can own a terminal session, draw a minimal Codex shell frame, process basic key/resize/exit events, and restore terminal state. It should use typed production state/effects, not a giant nullable fixture event record or `expectedTrace` as the primary proof.
@@ -4255,7 +4256,7 @@ Status: TUI-LIVE-2 adds `TerminalSchedulerEvent`, `TerminalRedrawScheduler`, `Te
 
 ### TUI-LIVE-3 Typed Live Input Backend
 
-Status: TUI-LIVE-3 adds `TerminalInputEvent`, `TerminalInputMapper`, `TerminalComposerState`, and `TerminalComposerEffect` as the first strict input/composer reducer for the minimal live shell. The native terminal probe now maps crossterm key events into scalar poll codes plus latest-character text, and Haxe turns those facts into typed `TerminalEvent.Key` and semantic composer inputs for text, Enter, Esc, Ctrl-C, Backspace, and arrow keys. The metal haxe.rust harness `harness/check-tui-live-input-backend.sh` proves fake native poll-code mapping, headless queued-key composer mutations, submitted-history navigation, typed exit effects, live backend nonblocking polling, terminal restore, and generated Cargo check/test/run without credentials. This still does not render a ChatWidget shell, attach app-server transport, persist state, call models, or run a full production event loop.
+Status: TUI-LIVE-3 adds `TerminalInputEvent`, `TerminalInputMapper`, `TerminalComposerState`, and `TerminalComposerEffect` as the first strict input/composer reducer for the minimal live shell. The native terminal probe now maps crossterm key events into scalar poll codes plus latest-character text, and Haxe turns those facts into typed `TerminalEvent.Key` and semantic composer inputs for text, Enter, Esc, Ctrl-C, Backspace, and arrow keys. TUI-LIVE-10 extends the same typed vocabulary with semantic `AgentPrevious`/`AgentNext` inputs, preserving plain Left/Right for composer cursor movement while mapping Alt+Left/Alt+Right to agent navigation when the live backend exposes modifiers. The metal haxe.rust harness `harness/check-tui-live-input-backend.sh` proves fake native poll-code mapping, headless queued-key composer mutations, submitted-history navigation, typed exit effects, semantic agent-navigation key mapping, live backend nonblocking polling, terminal restore, and generated Cargo check/test/run without credentials. This still does not attach real app-server transport, persist state, call models, or run a full production event loop.
 
 ### TUI-LIVE-4 Minimal ChatWidget Shell State And Render
 
@@ -4280,6 +4281,10 @@ Status: TUI-LIVE-8 promotes the reusable part of the smoke-only agent navigation
 ### TUI-LIVE-9 Live Shell Agent Navigation Integration
 
 Status: TUI-LIVE-9 wires `AgentNavigationState` into the credential-free live shell path. `FakeTuiAppServerFacade` now owns the promoted state beside session/thread state; typed app-server events update agent metadata, path/running activity, closed state, removal, and active-thread selection; `ChatWidgetShellState` exposes an active agent label that `ChatWidgetShellRenderer` appends to the header only when multi-thread state exists. Prompt submission continues through `TuiPromptSubmitEnvelope`, but now uses the current active `ThreadId` after an agent switch. The metal haxe.rust harness `harness/check-tui-live-agent-navigation.sh` proves queued fake app-server agent events, active-thread switching, prompt target routing, removal fallback to primary, headless/live frame rendering, and generated Cargo check/test/run. This still does not implement loaded-thread backfill, real app-server JSON-RPC transport, upstream picker UI rows, keyboard shortcut dispatch into active-thread switching, or persistent thread/session state.
+
+### TUI-LIVE-10 Semantic Agent Navigation Input
+
+Status: TUI-LIVE-10 adds semantic previous/next agent inputs to the minimal live shell. `TerminalInputEvent` and `TerminalKey` now include `AgentPrevious` and `AgentNext`; `TerminalInputMapper` exposes explicit poll codes for those events; the native crossterm probe maps Alt+Left and Alt+Right before falling back to plain cursor arrows; and `TuiAppServerEventPump` intercepts those semantic events before composer editing. The pump asks `FakeTuiAppServerFacade` to cycle active threads through `AgentNavigationState`, refreshes the ChatWidget agent label, and redraws through the existing scheduler. The existing metal gates `harness/check-tui-live-input-backend.sh` and `harness/check-tui-live-agent-navigation.sh` prove semantic key mapping, previous/next wraparound, singleton no-op behavior, plain-arrow composer coexistence, headless/live frame rendering, and generated Cargo check/test/run. This still does not implement the full upstream picker UI, loaded-thread backfill, or real app-server transport.
 
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 

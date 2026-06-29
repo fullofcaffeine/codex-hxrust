@@ -22,6 +22,12 @@ Run:
 bash harness/check-tui-live-input-backend.sh
 ```
 
+`TUI-LIVE-10` extends the typed input vocabulary with semantic
+`AgentPrevious`/`AgentNext` events. Plain Left/Right remain composer cursor
+movement; Alt+Left/Alt+Right from the native live probe map to agent navigation
+so the app-server pump can switch active threads before composer editing sees
+the event.
+
 The gate runs typed native-code mapping assertions, headless queued-key composer mutations, live backend nonblocking polling, restoration, metal haxe.rust generation, and generated Cargo check/test/run. It remains credential-free and does not require a TTY; non-TTY runs use the existing typed skipped/no-TTY path.
 
 ## Still Not Proven
