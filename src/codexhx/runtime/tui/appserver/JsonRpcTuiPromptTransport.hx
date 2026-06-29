@@ -12,6 +12,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	var lastStreamNotificationsValue:Array<TuiPromptJsonRpcStreamNotification>;
 	var lastFramesValue:Array<TuiPromptJsonRpcFrame>;
 	var lastWireRecordsValue:Array<TuiPromptJsonRpcFrameRecord>;
+	var lastCorrelationValue:TuiPromptJsonRpcFrameCorrelation;
 
 	public function new(?exchange:TuiPromptJsonRpcExchange) {
 		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
@@ -21,6 +22,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		this.lastStreamNotificationsValue = [];
 		this.lastFramesValue = [];
 		this.lastWireRecordsValue = [];
+		this.lastCorrelationValue = TuiPromptJsonRpcFrameCorrelation.fromFrames([]);
 	}
 
 	public function submitPrompt(envelope:TuiPromptSubmitEnvelope):TuiPromptTransportOutcome {
@@ -38,6 +40,12 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		final response = exchangeOutcome.response();
 		if (response == null)
 			return TuiPromptTransportOutcome.rejected("missing_exchange_response");
+		final responseFrames = [TuiPromptJsonRpcFrame.Request(request), TuiPromptJsonRpcFrame.Response(response)];
+		final responseCorrelation = TuiPromptJsonRpcFrameCorrelation.fromFrames(responseFrames);
+		if (!responseCorrelation.isComplete()) {
+			replaceLastFrames(responseFrames);
+			return TuiPromptTransportOutcome.rejected(responseCorrelation.code());
+		}
 		lastResponseValue = response;
 		lastNotificationsValue = exchangeOutcome.notifications();
 		lastStreamNotificationsValue = exchangeOutcome.streamNotifications();
@@ -117,8 +125,13 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		return TuiPromptJsonRpcFrameCodec.jsonLines(lastWireRecordsValue);
 	}
 
+	public function lastCorrelation():TuiPromptJsonRpcFrameCorrelation {
+		return lastCorrelationValue;
+	}
+
 	function replaceLastFrames(frames:Array<TuiPromptJsonRpcFrame>):Void {
 		lastFramesValue = frames;
 		lastWireRecordsValue = TuiPromptJsonRpcFrameCodec.records(frames);
+		lastCorrelationValue = TuiPromptJsonRpcFrameCorrelation.fromFrames(frames);
 	}
 }

@@ -15,7 +15,9 @@ import codexhx.runtime.tui.appserver.TuiPromptAgentMessageDeltaNotification;
 import codexhx.runtime.tui.appserver.TuiPromptAgentMessageStartedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchange;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcExchangeOutcome;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcCorrelationStatus;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrame;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameCorrelation;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameDirection;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameKind;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcFrameRecord;
@@ -31,6 +33,7 @@ import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
 import codexhx.runtime.tui.appserver.TuiPromptThreadStatusChangedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
+import codexhx.runtime.tui.appserver.TuiPromptTurnStartResponse;
 import codexhx.runtime.tui.appserver.TuiPromptUserMessageCompletedNotification;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.chatwidget.ChatWidgetStatusKind;
@@ -49,6 +52,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testPromptSubmitBuildsJsonRpcTurnStartEnvelope();
 		testJsonRpcNotificationsProjectToTransportEvents();
 		testJsonRpcExchangeRejectedSubmitIsTypedRefusal();
+		testJsonRpcMismatchedResponseIsTypedRefusal();
 		testEmptySubmitIsTypedRefusal();
 		testUnattachedSubmitIsTypedRefusal();
 		testTransportRejectedSubmitIsTypedRefusal();
@@ -241,6 +245,7 @@ class TuiPromptSubmitEnvelopeHarness {
 			activeStatus.methodText(), activeStatus.messageJson(), "json-rpc active status wire record");
 		assertWireRecord(transport.lastWireRecordAt(10), 10, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Notification,
 			idleStatus.methodText(), idleStatus.messageJson(), "json-rpc idle status wire record");
+		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.Complete, "78", "78", 9, "json-rpc matched correlation");
 		final expectedWireLines = [
 			request.messageJson(),
 			response.messageJson(),
@@ -295,8 +300,41 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(1, transport.lastWireRecordCount(), "json-rpc rejected exchange should record outbound wire record only");
 		assertWireRecord(transport.lastWireRecordAt(0), 0, TuiPromptJsonRpcFrameDirection.Outbound, TuiPromptJsonRpcFrameKind.Request, request.methodText(),
 			request.messageJson(), "json-rpc rejected request wire record");
+		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.RequestOnly, "79", "", 0, "json-rpc rejected correlation");
 		assertStringEquals(request.messageJson() + "\n", transport.lastWireJsonLines(), "json-rpc rejected wire json lines");
 		assertIntEquals(0, facade.queuedCount(), "json-rpc exchange rejection queues no fake events");
+	}
+
+	static function testJsonRpcMismatchedResponseIsTypedRefusal():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005559");
+		final transport = new JsonRpcTuiPromptTransport(new MismatchedResponsePromptJsonRpcExchange());
+		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
+		final result = facade.submitPrompt(RequestId.fromInteger(81), "json rpc stale response");
+		assertFalse(result.acceptedPrompt(), "json-rpc mismatched response refused");
+		assertStringEquals("81", result.requestIdText(), "json-rpc mismatched response request id");
+		assertStringEquals("json rpc stale response", result.promptText(), "json-rpc mismatched response prompt");
+
+		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc mismatched request recorded");
+		if (transport.lastResponse() != null)
+			throw "json-rpc mismatched response should not record accepted response";
+		assertIntEquals(0, transport.lastNotificationCount(), "json-rpc mismatched response should not record notifications");
+		assertIntEquals(0, transport.lastStreamNotificationCount(), "json-rpc mismatched response should not record stream notifications");
+		assertIntEquals(2, transport.lastFrameCount(), "json-rpc mismatched response should record request and response frames");
+		assertRequestFrame(transport.lastFrameAt(0), request, "json-rpc mismatched request frame");
+		assertStreamFrameIsAbsent(transport.lastFrameAt(2), "json-rpc mismatched response has no stream frame");
+		assertIntEquals(2, transport.lastWireRecordCount(), "json-rpc mismatched response wire record count");
+		assertWireRecord(transport.lastWireRecordAt(0), 0, TuiPromptJsonRpcFrameDirection.Outbound, TuiPromptJsonRpcFrameKind.Request, request.methodText(),
+			request.messageJson(), "json-rpc mismatched request wire record");
+		final responseFrame = expectResponseFrame(transport.lastFrameAt(1), "json-rpc mismatched response frame");
+		assertStringEquals("9081", responseFrame.requestId.toString(), "json-rpc mismatched response id");
+		assertWireRecord(transport.lastWireRecordAt(1), 1, TuiPromptJsonRpcFrameDirection.Inbound, TuiPromptJsonRpcFrameKind.Response,
+			responseFrame.methodText(), responseFrame.messageJson(), "json-rpc mismatched response wire record");
+		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.ResponseIdMismatch, "81", "9081", 0,
+			"json-rpc mismatched response correlation");
+		assertStringEquals(request.messageJson() + "\n" + responseFrame.messageJson() + "\n", transport.lastWireJsonLines(),
+			"json-rpc mismatched wire json lines");
+		assertIntEquals(0, facade.queuedCount(), "json-rpc mismatched response queues no fake events");
 	}
 
 	static function testEmptySubmitIsTypedRefusal():Void {
@@ -471,6 +509,16 @@ class TuiPromptSubmitEnvelopeHarness {
 		}
 	}
 
+	static function expectResponseFrame(frame:Null<TuiPromptJsonRpcFrame>, label:String):TuiPromptJsonRpcResponse {
+		final concrete = expectFrame(frame, label);
+		return switch concrete {
+			case TuiPromptJsonRpcFrame.Response(response):
+				response;
+			case _:
+				throw label + ": expected response frame";
+		}
+	}
+
 	static function assertStreamFrame(frame:Null<TuiPromptJsonRpcFrame>, expectedMethod:String, expectedMessage:String, label:String):Void {
 		final concrete = expectFrame(frame, label);
 		switch concrete {
@@ -488,6 +536,11 @@ class TuiPromptSubmitEnvelopeHarness {
 		return frame;
 	}
 
+	static function assertStreamFrameIsAbsent(frame:Null<TuiPromptJsonRpcFrame>, label:String):Void {
+		if (frame != null)
+			throw label;
+	}
+
 	static function assertWireRecord(record:Null<TuiPromptJsonRpcFrameRecord>, expectedSequence:Int, expectedDirection:TuiPromptJsonRpcFrameDirection,
 			expectedKind:TuiPromptJsonRpcFrameKind, expectedMethod:String, expectedMessage:String, label:String):Void {
 		final concrete = expectWireRecord(record, label);
@@ -503,6 +556,14 @@ class TuiPromptSubmitEnvelopeHarness {
 		if (record == null)
 			throw label;
 		return record;
+	}
+
+	static function assertCorrelation(correlation:TuiPromptJsonRpcFrameCorrelation, expectedStatus:TuiPromptJsonRpcCorrelationStatus,
+			expectedRequestId:String, expectedResponseId:String, expectedStreamCount:Int, label:String):Void {
+		assertStringEquals(expectedStatus.text(), correlation.statusText(), label + " status");
+		assertStringEquals(expectedRequestId, correlation.requestIdText, label + " request");
+		assertStringEquals(expectedResponseId, correlation.responseIdText, label + " response");
+		assertIntEquals(expectedStreamCount, correlation.streamNotificationCount, label + " stream count");
 	}
 
 	static function streamNotificationMethodText(notification:TuiPromptJsonRpcStreamNotification):String {
@@ -707,5 +768,16 @@ class RejectingPromptJsonRpcExchange implements TuiPromptJsonRpcExchange {
 
 	public function send(_request:TuiPromptJsonRpcRequest, _envelope:TuiPromptSubmitEnvelope):TuiPromptJsonRpcExchangeOutcome {
 		return TuiPromptJsonRpcExchangeOutcome.rejected(code);
+	}
+}
+
+class MismatchedResponsePromptJsonRpcExchange implements TuiPromptJsonRpcExchange {
+	public function new() {}
+
+	public function send(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiPromptJsonRpcExchangeOutcome {
+		final turn = TuiPromptTurnStartResponse.fromEnvelope(envelope);
+		final staleRequest = new TuiPromptJsonRpcRequest(RequestId.fromInteger(9081), request.method, request.params);
+		return TuiPromptJsonRpcExchangeOutcome.accepted(TuiPromptJsonRpcResponse.turnStart(staleRequest, turn), [], [],
+			[TuiAppServerEvent.AssistantDelta(envelope.threadId, "should not queue")]);
 	}
 }
