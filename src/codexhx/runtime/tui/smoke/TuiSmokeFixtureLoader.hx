@@ -111,6 +111,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetReplayProtocol: optionalReplayProtocolPlan(value, "chatWidgetReplayProtocol"),
 				chatWidgetRateLimit: optionalRateLimitPlan(value, "chatWidgetRateLimit"),
 				chatWidgetAppServerError: optionalAppServerErrorPlan(value, "chatWidgetAppServerError"),
+				chatWidgetAppServerLifecycle: optionalAppServerLifecyclePlan(value, "chatWidgetAppServerLifecycle"),
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
 				chatWidgetPermissionSelection: optionalPermissionSelectionPlan(value, "chatWidgetPermissionSelection"),
 				chatWidgetModelSettings: optionalModelSettingsPlan(value, "chatWidgetModelSettings"),
@@ -2409,6 +2410,41 @@ class TuiSmokeFixtureLoader {
 				activeStreamConsolidated: optionalBoolField(value, "activeStreamConsolidated", false),
 				fallbackMessageSuppressed: optionalBoolField(value, "fallbackMessageSuppressed", false),
 				dedicatedNotice: optionalBoolField(value, "dedicatedNotice", false),
+				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalAppServerLifecyclePlan(object:Value, name:String):Null<TuiSmokeAppServerLifecyclePlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeAppServerLifecyclePlan({
+					allowAppServerDelivery: optionalBoolField(value, "allowAppServerDelivery", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: appServerLifecycleActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function appServerLifecycleActions(values:Array<Value>):Array<TuiSmokeAppServerLifecycleAction> {
+		final out:Array<TuiSmokeAppServerLifecycleAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeAppServerLifecycleAction({
+				kind: TuiSmokeAppServerLifecycleActionKind.fromString(stringField(value, "kind", "")),
+				threadId: optionalStringField(value, "threadId", ""),
+				replayKind: optionalStringField(value, "replayKind", ""),
+				exitMode: TuiSmokeExitMode.fromString(optionalStringField(value, "exitMode", "unknown")),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				appEventQueued: optionalBoolField(value, "appEventQueued", false),
+				immediateExit: optionalBoolField(value, "immediateExit", false),
+				liveNotification: optionalBoolField(value, "liveNotification", false),
+				replaySuppressed: optionalBoolField(value, "replaySuppressed", false),
 				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),

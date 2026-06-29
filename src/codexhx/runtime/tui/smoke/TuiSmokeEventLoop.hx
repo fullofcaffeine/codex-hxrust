@@ -570,6 +570,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetAppServerLifecycle:
+					if (!traceAppServerLifecycle(event.chatWidgetAppServerLifecycle, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetWindowsSandbox:
 					if (!traceWindowsSandbox(event.chatWidgetWindowsSandbox, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -11286,6 +11291,37 @@ class TuiSmokeEventLoop {
 						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.chat_widget_app_server_error.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceAppServerLifecycle(plan:TuiSmokeAppServerLifecyclePlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowAppServerDelivery || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_app_server_lifecycle.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_app_server_lifecycle.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeAppServerLifecycleActionKind.ThreadClosedImmediateExit:
+					trace.push("tui.chat_widget_app_server_lifecycle.thread_closed=" + action.threadId + ":live=" + action.liveNotification + ":queued="
+						+ action.appEventQueued + ":exit=" + action.exitMode + ":immediate=" + action.immediateExit);
+				case TuiSmokeAppServerLifecycleActionKind.ReplaySuppressed:
+					trace.push("tui.chat_widget_app_server_lifecycle.replay_suppressed="
+						+ action.threadId
+						+ ":kind="
+						+ action.replayKind
+						+ ":suppressed="
+						+ action.replaySuppressed
+						+ ":queued="
+						+ action.appEventQueued);
+				case TuiSmokeAppServerLifecycleActionKind.Failure:
+					trace.push("tui.chat_widget_app_server_lifecycle.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerDelivery
+						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.chat_widget_app_server_lifecycle.unknown");
 					return false;
 			}
 		}

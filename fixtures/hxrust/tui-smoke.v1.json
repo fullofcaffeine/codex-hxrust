@@ -21429,6 +21429,75 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server error history\ninput> \ntrace:\ntui.chat_widget_app_server_error.plan=headless\ntui.chat_widget_app_server_error.no_duplicate=turn-denied:error=permission denied:first_history=1:second_history=0:suppressed=true:task=true->false\ntui.chat_widget_app_server_error.consolidate=turn-stream:item=item-patch:source=diff:+streamed patch:events=1:active_stream=true\ntui.chat_widget_app_server_error.retry_status=turn-retry:message=Reconnecting... 1/5:will_retry=true:stored=true:header=Reconnecting->Working:cleared=true\ntui.chat_widget_app_server_error.overloaded=turn-overloaded:message=server overloaded:history=1:task=true->false\ntui.chat_widget_app_server_error.cyber=turn-cyber:dedicated=true:fallback_suppressed=true:message=This content can't be shown; extra caution with cybersecurity requests:task=true->false\ntui.chat_widget_app_server_error.safety_access=safety_access:dedicated=true:fallback_suppressed=true:message=This content can't be shown; biological research safety notice:history=1\ntui.chat_widget_app_server_error.verification=TrustedAccessForCyber:message=multiple flags for possible cybersecurity risk; extra safety checks are on; https://chatgpt.com/cyber:history=1\ntui.chat_widget_app_server_error.failure=live_app_server_error_history_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chatwidget-app-server-thread-closed-exit-boundary",
+      "frame": {
+        "name": "chatwidget-app-server-thread-closed-exit-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget app-server thread closed exit"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_app_server_lifecycle",
+          "chatWidgetAppServerLifecycle": {
+            "allowAppServerDelivery": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "thread_closed_immediate_exit",
+                "threadId": "thread-1",
+                "exitMode": "immediate",
+                "appEventQueued": true,
+                "immediateExit": true,
+                "liveNotification": true
+              },
+              {
+                "kind": "replay_suppressed",
+                "threadId": "thread-replay",
+                "replayKind": "ThreadSnapshot",
+                "appEventQueued": false,
+                "replaySuppressed": true
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_app_server_thread_closed_exit_rejected",
+                "noAppServerDelivery": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_app_server_lifecycle.plan=headless\ntui.chat_widget_app_server_lifecycle.thread_closed=thread-1:live=true:queued=true:exit=immediate:immediate=true\ntui.chat_widget_app_server_lifecycle.replay_suppressed=thread-replay:kind=ThreadSnapshot:suppressed=true:queued=false\ntui.chat_widget_app_server_lifecycle.failure=live_app_server_thread_closed_exit_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server thread closed exit\ninput> \ntrace:\ntui.chat_widget_app_server_lifecycle.plan=headless\ntui.chat_widget_app_server_lifecycle.thread_closed=thread-1:live=true:queued=true:exit=immediate:immediate=true\ntui.chat_widget_app_server_lifecycle.replay_suppressed=thread-replay:kind=ThreadSnapshot:suppressed=true:queued=false\ntui.chat_widget_app_server_lifecycle.failure=live_app_server_thread_closed_exit_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-windows-sandbox-headless",
       "frame": {
         "name": "chatwidget-windows-sandbox-headless",
