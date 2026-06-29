@@ -12,6 +12,8 @@ enum abstract TuiSmokeToolLifecycleActionKind(String) to String {
 	final WebSearch = "web_search";
 	final CollabEvent = "collab_event";
 	final CollabAgentTool = "collab_agent_tool";
+	final AppServerCollabWaitHistory = "app_server_collab_wait_history";
+	final AppServerCollabSpawnHistory = "app_server_collab_spawn_history";
 	final SubAgentActivity = "sub_agent_activity";
 	final QueuedItemDispatch = "queued_item_dispatch";
 	final Failure = "failure";
@@ -30,6 +32,8 @@ enum abstract TuiSmokeToolLifecycleActionKind(String) to String {
 			case "web_search": WebSearch;
 			case "collab_event": CollabEvent;
 			case "collab_agent_tool": CollabAgentTool;
+			case "app_server_collab_wait_history": AppServerCollabWaitHistory;
+			case "app_server_collab_spawn_history": AppServerCollabSpawnHistory;
 			case "sub_agent_activity": SubAgentActivity;
 			case "queued_item_dispatch": QueuedItemDispatch;
 			case "failure": Failure;

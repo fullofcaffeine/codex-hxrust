@@ -3463,6 +3463,16 @@ class TuiSmokeEventLoop {
 					trace.push("tui.chat_widget_tool_lifecycle.collab_agent_tool=" + action.callId + ":tool=" + action.collabTool + ":status="
 						+ action.collabStatus + ":spawn_cache=" + action.pendingSpawnCountBefore + "->" + action.pendingSpawnCountAfter + ":cached="
 						+ action.spawnRequestCached + ":removed=" + action.spawnRequestRemoved + ":history=" + action.historyInserted);
+				case TuiSmokeToolLifecycleActionKind.AppServerCollabWaitHistory:
+					trace.push("tui.chat_widget_tool_lifecycle.collab_wait_history=" + action.callId + ":receivers=" + action.receiverCount + ":labels="
+						+ action.receiverLabels + ":statuses=" + action.receiverStatuses + ":messages=" + action.receiverMessages + ":completed="
+						+ action.completedReceiverCount + ":running=" + action.runningReceiverCount + ":metadata=" + action.receiverMetadataPreserved
+						+ ":history=" + action.historyCellCount);
+				case TuiSmokeToolLifecycleActionKind.AppServerCollabSpawnHistory:
+					trace.push("tui.chat_widget_tool_lifecycle.collab_spawn_history=" + action.callId + ":receiver=" + action.receiverThreadIds + ":prompt="
+						+ action.revisedPrompt + ":model=" + action.requestedModel + ":effort=" + action.requestedReasoningEffort + ":status="
+						+ action.receiverStatuses + ":prompt_preserved=" + action.promptPreserved + ":model_preserved=" + action.modelPreserved
+						+ ":effort_preserved=" + action.reasoningEffortPreserved + ":history=" + action.historyCellCount);
 				case TuiSmokeToolLifecycleActionKind.SubAgentActivity:
 					trace.push("tui.chat_widget_tool_lifecycle.sub_agent=" + action.threadId + ":summary=" + action.summary + ":history="
 						+ action.historyInserted);
