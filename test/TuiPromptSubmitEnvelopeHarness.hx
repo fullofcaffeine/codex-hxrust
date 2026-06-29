@@ -25,6 +25,7 @@ import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
+import codexhx.runtime.tui.appserver.TuiPromptUserMessageCompletedNotification;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.chatwidget.ChatWidgetStatusKind;
 import codexhx.runtime.tui.terminal.HeadlessTerminalBackend;
@@ -72,6 +73,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals("", shell.composer().buffer(), "composer cleared");
 		assertStatusKindEquals(ChatWidgetStatusKind.Idle, shell.statusKind(), "ready status kind");
 		assertStringEquals("ready", shell.statusText(), "ready status");
+		assertIntEquals(3, shell.transcriptCount(), "submitted prompt plus assistant echo row count");
 		assertStringEquals("user> hello", shell.transcriptAt(1).renderText(), "user row");
 		assertStringEquals("assistant> echo: hello", shell.transcriptAt(2).renderText(), "echo row");
 		assertStringEquals("Codex | model: gpt-live | status: ready", backend.currentFrame().lineAt(0), "drawn ready header");
@@ -134,10 +136,20 @@ class TuiPromptSubmitEnvelopeHarness {
 		final completionProtocol = AppProtocol.parseFixtureItem(completionParsed);
 		assertTrue(completionProtocol.ok, "json-rpc completion parses through app protocol: " + completionProtocol.errorCode);
 		assertStringEquals("turn", completionProtocol.message.summary, "json-rpc completion summary");
-		assertIntEquals(5, transport.lastStreamNotificationCount(), "json-rpc stream notification count");
+		assertIntEquals(6, transport.lastStreamNotificationCount(), "json-rpc stream notification count");
 		assertTurnStreamNotification(expectStreamNotification(transport.lastStreamNotificationAt(0), "json-rpc stream started"), notification,
 			"json-rpc stream started");
-		final itemStarted = expectAgentMessageStartedStreamNotification(transport.lastStreamNotificationAt(1), "json-rpc stream item started");
+		final userCompleted = expectUserMessageCompletedStreamNotification(transport.lastStreamNotificationAt(1), "json-rpc stream user completed");
+		assertStringEquals(TuiPromptJsonRpcNotificationMethod.ItemCompleted.text(), userCompleted.methodText(), "json-rpc user completed method");
+		assertStringEquals("{\"completedAtMs\":500,\"item\":{\"content\":[{\"text\":\"json rpc ask\",\"type\":\"text\"}],\"id\":\"user-turn-78\",\"type\":\"userMessage\"},\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turnId\":\"turn-78\"}",
+			userCompleted.paramsJson(), "json-rpc user completed params");
+		assertStringEquals("{\"jsonrpc\":\"2.0\",\"method\":\"item/completed\",\"params\":{\"completedAtMs\":500,\"item\":{\"content\":[{\"text\":\"json rpc ask\",\"type\":\"text\"}],\"id\":\"user-turn-78\",\"type\":\"userMessage\"},\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turnId\":\"turn-78\"}}",
+			userCompleted.messageJson(), "json-rpc user completed message");
+		final userCompletedParsed = expectJson(CodexJson.parse(userCompleted.fixtureJson("prompt-json-rpc-user-message-completed")));
+		final userCompletedProtocol = AppProtocol.parseFixtureItem(userCompletedParsed);
+		assertTrue(userCompletedProtocol.ok, "json-rpc user completed parses through app protocol: " + userCompletedProtocol.errorCode);
+		assertStringEquals("notification:item/completed", userCompletedProtocol.message.summary, "json-rpc user completed summary");
+		final itemStarted = expectAgentMessageStartedStreamNotification(transport.lastStreamNotificationAt(2), "json-rpc stream item started");
 		assertStringEquals(TuiPromptJsonRpcNotificationMethod.ItemStarted.text(), itemStarted.methodText(), "json-rpc item started method");
 		assertStringEquals("{\"item\":{\"id\":\"item-78\",\"text\":\"echo: json rpc ask\",\"type\":\"agentMessage\"},\"startedAtMs\":1000,\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turnId\":\"turn-78\"}",
 			itemStarted.paramsJson(), "json-rpc item started params");
@@ -147,7 +159,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		final itemStartedProtocol = AppProtocol.parseFixtureItem(itemStartedParsed);
 		assertTrue(itemStartedProtocol.ok, "json-rpc item started parses through app protocol: " + itemStartedProtocol.errorCode);
 		assertStringEquals("notification:item/started", itemStartedProtocol.message.summary, "json-rpc item started summary");
-		final delta = expectAgentMessageDeltaStreamNotification(transport.lastStreamNotificationAt(2), "json-rpc stream delta");
+		final delta = expectAgentMessageDeltaStreamNotification(transport.lastStreamNotificationAt(3), "json-rpc stream delta");
 		assertStringEquals(TuiPromptJsonRpcNotificationMethod.AgentMessageDelta.text(), delta.methodText(), "json-rpc delta method");
 		assertStringEquals("{\"delta\":\"echo: json rpc ask\",\"itemId\":\"item-78\",\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turnId\":\"turn-78\"}",
 			delta.paramsJson(), "json-rpc delta params");
@@ -157,7 +169,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		final deltaProtocol = AppProtocol.parseFixtureItem(deltaParsed);
 		assertTrue(deltaProtocol.ok, "json-rpc delta parses through app protocol: " + deltaProtocol.errorCode);
 		assertStringEquals("notification:item/agentMessage/delta", deltaProtocol.message.summary, "json-rpc delta summary");
-		final itemCompleted = expectAgentMessageCompletedStreamNotification(transport.lastStreamNotificationAt(3), "json-rpc stream item completed");
+		final itemCompleted = expectAgentMessageCompletedStreamNotification(transport.lastStreamNotificationAt(4), "json-rpc stream item completed");
 		assertStringEquals(TuiPromptJsonRpcNotificationMethod.ItemCompleted.text(), itemCompleted.methodText(), "json-rpc item completed method");
 		assertStringEquals("{\"completedAtMs\":2000,\"item\":{\"id\":\"item-78\",\"text\":\"echo: json rpc ask\",\"type\":\"agentMessage\"},\"threadId\":\"00000000-0000-0000-0000-000000005556\",\"turnId\":\"turn-78\"}",
 			itemCompleted.paramsJson(), "json-rpc item completed params");
@@ -167,7 +179,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		final itemCompletedProtocol = AppProtocol.parseFixtureItem(itemCompletedParsed);
 		assertTrue(itemCompletedProtocol.ok, "json-rpc item completed parses through app protocol: " + itemCompletedProtocol.errorCode);
 		assertStringEquals("notification:item/completed", itemCompletedProtocol.message.summary, "json-rpc item completed summary");
-		assertTurnStreamNotification(expectStreamNotification(transport.lastStreamNotificationAt(4), "json-rpc stream completed"), completion,
+		assertTurnStreamNotification(expectStreamNotification(transport.lastStreamNotificationAt(5), "json-rpc stream completed"), completion,
 			"json-rpc stream completed");
 		assertIntEquals(3, facade.queuedCount(), "json-rpc transport still queues fake echo events");
 	}
@@ -376,6 +388,17 @@ class TuiPromptSubmitEnvelopeHarness {
 				started;
 			case _:
 				throw label + ": expected agent message started stream notification";
+		}
+	}
+
+	static function expectUserMessageCompletedStreamNotification(notification:Null<TuiPromptJsonRpcStreamNotification>,
+			label:String):TuiPromptUserMessageCompletedNotification {
+		final streamNotification = expectStreamNotification(notification, label);
+		return switch streamNotification {
+			case TuiPromptJsonRpcStreamNotification.UserMessageCompleted(completed):
+				completed;
+			case _:
+				throw label + ": expected user message completed stream notification";
 		}
 	}
 
