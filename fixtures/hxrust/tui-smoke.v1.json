@@ -21895,6 +21895,111 @@
       "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server thread name update\ninput> \ntrace:\ntui.chat_widget_app_server_lifecycle.plan=headless\ntui.chat_widget_app_server_lifecycle.thread_name_invalid=incoming=not-a-thread-id:current=123e4567-e89b-12d3-a456-426614174000:name=original name->original name:incoming_name=bad update:invalid_rejected=true:id_preserved=true:name_preserved=true\ntui.chat_widget_app_server_lifecycle.thread_name_resume_hint=thread=123e4567-e89b-12d3-a456-426614174000:name=review-fix:history=1:updated=true:hint=true:resume=codex resume 123e4567-e89b-12d3-a456-426614174000:rendered=• Session renamed to review-fix. To resume this session run codex resume, then select review-fix (123e4567-e89b-12d3-a456-426614174000)\ntui.chat_widget_app_server_lifecycle.failure=live_app_server_thread_name_update_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
     },
     {
+      "name": "chatwidget-app-server-safety-buffering-boundary",
+      "frame": {
+        "name": "chatwidget-app-server-safety-buffering-boundary",
+        "title": "Codex TUI Smoke Replay",
+        "status": "idle",
+        "model": "gpt-5.2-codex",
+        "width": 72,
+        "transcript": [
+          {
+            "source": "system",
+            "text": "chatwidget app-server safety buffering"
+          }
+        ],
+        "input": "",
+        "terminalMode": "headless",
+        "key": "none",
+        "expectedExit": "rendered",
+        "allowLiveTerminal": false,
+        "allowNetwork": false,
+        "allowModelCall": false,
+        "expectedSnapshot": ""
+      },
+      "events": [
+        {
+          "kind": "chat_widget_safety_buffering",
+          "chatWidgetSafetyBuffering": {
+            "allowAppServerDelivery": false,
+            "allowRatatuiRender": false,
+            "allowModelCall": false,
+            "actions": [
+              {
+                "kind": "retry_prompt",
+                "threadId": "123e4567-e89b-12d3-a456-426614174000",
+                "turnId": "turn-safety-buffering",
+                "fasterModel": "faster-model",
+                "message": "This request requires additional safety checks, which can take extra time. You can retry with a faster model for a quicker response, though it may be less capable of handling complex requests.",
+                "renderedPopup": "Additional safety checks / Retry with a faster model / Keep waiting",
+                "promptShown": true,
+                "retryPromptShownBefore": false,
+                "turnCaptured": true
+              },
+              {
+                "kind": "retry_confirmed",
+                "threadId": "123e4567-e89b-12d3-a456-426614174000",
+                "turnId": "turn-safety-buffering",
+                "fasterModel": "faster-model",
+                "retryEventQueued": true,
+                "retryClearedPrompt": true
+              },
+              {
+                "kind": "agent_message_started",
+                "turnId": "turn-safety-buffering",
+                "agentMessageStarted": true,
+                "canRetryBefore": true,
+                "canRetryAfter": false
+              },
+              {
+                "kind": "no_retry_status",
+                "turnId": "turn-safety-buffering",
+                "message": "This request requires additional safety checks, which can take extra time.",
+                "renderedPopup": "Working (0s • esc to interrupt)",
+                "statusShown": true,
+                "shortMessage": true,
+                "promptShown": false
+              },
+              {
+                "kind": "ignored_update",
+                "turnId": "turn-safety-buffering",
+                "replayKind": "ResumeInitialMessages",
+                "ignoredHidden": true,
+                "ignoredStale": true,
+                "ignoredHistorical": true,
+                "promptShown": false
+              },
+              {
+                "kind": "hidden_clear",
+                "turnId": "turn-safety-buffering",
+                "hiddenCleared": true,
+                "statusDetailsCleared": true,
+                "promptShown": false
+              },
+              {
+                "kind": "failure",
+                "failureCode": "live_safety_buffering_rejected",
+                "noAppServerDelivery": true,
+                "noRatatuiRender": true,
+                "noModelCall": true,
+                "unsupportedRejected": true
+              }
+            ]
+          }
+        },
+        {
+          "kind": "draw"
+        },
+        {
+          "kind": "key",
+          "key": "q"
+        }
+      ],
+      "expectedExit": "quit",
+      "expectedTrace": "tui.chat_widget_safety_buffering.plan=headless\ntui.chat_widget_safety_buffering.retry_prompt=turn=turn-safety-buffering:model=faster-model:captured=true:shown=true:previous=false:message=This request requires additional safety checks, which can take extra time. You can retry with a faster model for a quicker response, though it may be less capable of handling complex requests.:rendered=Additional safety checks / Retry with a faster model / Keep waiting\ntui.chat_widget_safety_buffering.retry_confirmed=thread=123e4567-e89b-12d3-a456-426614174000:turn=turn-safety-buffering:model=faster-model:event=true:cleared=true\ntui.chat_widget_safety_buffering.agent_started=turn=turn-safety-buffering:before=true:started=true:after=false\ntui.chat_widget_safety_buffering.no_retry=turn=turn-safety-buffering:status=true:short=true:prompt=false:message=This request requires additional safety checks, which can take extra time.:rendered=Working (0s • esc to interrupt)\ntui.chat_widget_safety_buffering.ignored=turn=turn-safety-buffering:replay=ResumeInitialMessages:hidden=true:stale=true:historical=true:prompt=false\ntui.chat_widget_safety_buffering.hidden_clear=turn=turn-safety-buffering:cleared=true:status_details=true:prompt=false\ntui.chat_widget_safety_buffering.failure=live_safety_buffering_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q",
+      "expectedSnapshot": "Codex TUI Smoke Replay\nstatus: idle | model: gpt-5.2-codex\nsystem> chatwidget app-server safety buffering\ninput> \ntrace:\ntui.chat_widget_safety_buffering.plan=headless\ntui.chat_widget_safety_buffering.retry_prompt=turn=turn-safety-buffering:model=faster-model:captured=true:shown=true:previous=false:message=This request requires additional safety checks, which can take extra time. You can retry with a faster model for a quicker response, though it may be less capable of handling complex requests.:rendered=Additional safety checks / Retry with a faster model / Keep waiting\ntui.chat_widget_safety_buffering.retry_confirmed=thread=123e4567-e89b-12d3-a456-426614174000:turn=turn-safety-buffering:model=faster-model:event=true:cleared=true\ntui.chat_widget_safety_buffering.agent_started=turn=turn-safety-buffering:before=true:started=true:after=false\ntui.chat_widget_safety_buffering.no_retry=turn=turn-safety-buffering:status=true:short=true:prompt=false:message=This request requires additional safety checks, which can take extra time.:rendered=Working (0s • esc to interrupt)\ntui.chat_widget_safety_buffering.ignored=turn=turn-safety-buffering:replay=ResumeInitialMessages:hidden=true:stale=true:historical=true:prompt=false\ntui.chat_widget_safety_buffering.hidden_clear=turn=turn-safety-buffering:cleared=true:status_details=true:prompt=false\ntui.chat_widget_safety_buffering.failure=live_safety_buffering_rejected:no_app_server=true:no_render=true:no_model=true:unsupported=true\ntui.draw\ntui.key=q\nexit: quit\nrenders: 1\napp-events: 0\nserver-events: 0\nserver-requests: 0\nserver-rejections: 0\nserver-resolutions: 0\nserver-stale-resolutions: 0\nserver-deliveries: 0\nserver-evictions: 0\nthread-notifications: 0\nthread-notification-deliveries: 0\nthread-notification-evictions: 0\nthread-replays: 0\nthread-replay-requests: 0\nthread-replay-skipped-requests: 0\nthread-replay-suppressed-notices: 0\nthread-replay-turns: 0\nthread-replay-items: 0\nthread-replay-completions: 0\nterminal: restored"
+    },
+    {
       "name": "chatwidget-windows-sandbox-headless",
       "frame": {
         "name": "chatwidget-windows-sandbox-headless",

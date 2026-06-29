@@ -110,6 +110,7 @@ class TuiSmokeFixtureLoader {
 				chatWidgetSessionFlow: optionalSessionFlowPlan(value, "chatWidgetSessionFlow"),
 				chatWidgetReplayProtocol: optionalReplayProtocolPlan(value, "chatWidgetReplayProtocol"),
 				chatWidgetRateLimit: optionalRateLimitPlan(value, "chatWidgetRateLimit"),
+				chatWidgetSafetyBuffering: optionalSafetyBufferingPlan(value, "chatWidgetSafetyBuffering"),
 				chatWidgetAppServerError: optionalAppServerErrorPlan(value, "chatWidgetAppServerError"),
 				chatWidgetAppServerLifecycle: optionalAppServerLifecyclePlan(value, "chatWidgetAppServerLifecycle"),
 				chatWidgetWindowsSandbox: optionalWindowsSandboxPlan(value, "chatWidgetWindowsSandbox"),
@@ -2361,6 +2362,55 @@ class TuiSmokeFixtureLoader {
 				warningShown: optionalBoolField(value, "warningShown", false),
 				rememberedWarning: optionalBoolField(value, "rememberedWarning", false),
 				noOsSandboxMutation: optionalBoolField(value, "noOsSandboxMutation", false),
+				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
+				noModelCall: optionalBoolField(value, "noModelCall", false),
+				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)
+			}));
+		}
+		return out;
+	}
+
+	static function optionalSafetyBufferingPlan(object:Value, name:String):Null<TuiSmokeSafetyBufferingPlan> {
+		return switch optionalField(object, name) {
+			case JNull: null;
+			case value:
+				new TuiSmokeSafetyBufferingPlan({
+					allowAppServerDelivery: optionalBoolField(value, "allowAppServerDelivery", false),
+					allowRatatuiRender: optionalBoolField(value, "allowRatatuiRender", false),
+					allowModelCall: optionalBoolField(value, "allowModelCall", false),
+					actions: safetyBufferingActions(optionalArrayField(value, "actions"))
+				});
+		}
+	}
+
+	static function safetyBufferingActions(values:Array<Value>):Array<TuiSmokeSafetyBufferingAction> {
+		final out:Array<TuiSmokeSafetyBufferingAction> = [];
+		for (value in values) {
+			out.push(new TuiSmokeSafetyBufferingAction({
+				kind: TuiSmokeSafetyBufferingActionKind.fromString(stringField(value, "kind", "")),
+				threadId: optionalStringField(value, "threadId", ""),
+				turnId: optionalStringField(value, "turnId", ""),
+				fasterModel: optionalStringField(value, "fasterModel", ""),
+				replayKind: optionalStringField(value, "replayKind", ""),
+				message: optionalStringField(value, "message", ""),
+				renderedPopup: optionalStringField(value, "renderedPopup", ""),
+				failureCode: optionalStringField(value, "failureCode", ""),
+				promptShown: optionalBoolField(value, "promptShown", false),
+				retryPromptShownBefore: optionalBoolField(value, "retryPromptShownBefore", false),
+				retryEventQueued: optionalBoolField(value, "retryEventQueued", false),
+				retryClearedPrompt: optionalBoolField(value, "retryClearedPrompt", false),
+				turnCaptured: optionalBoolField(value, "turnCaptured", false),
+				agentMessageStarted: optionalBoolField(value, "agentMessageStarted", false),
+				canRetryBefore: optionalBoolField(value, "canRetryBefore", false),
+				canRetryAfter: optionalBoolField(value, "canRetryAfter", false),
+				statusShown: optionalBoolField(value, "statusShown", false),
+				shortMessage: optionalBoolField(value, "shortMessage", false),
+				ignoredHidden: optionalBoolField(value, "ignoredHidden", false),
+				ignoredStale: optionalBoolField(value, "ignoredStale", false),
+				ignoredHistorical: optionalBoolField(value, "ignoredHistorical", false),
+				hiddenCleared: optionalBoolField(value, "hiddenCleared", false),
+				statusDetailsCleared: optionalBoolField(value, "statusDetailsCleared", false),
+				noAppServerDelivery: optionalBoolField(value, "noAppServerDelivery", false),
 				noRatatuiRender: optionalBoolField(value, "noRatatuiRender", false),
 				noModelCall: optionalBoolField(value, "noModelCall", false),
 				unsupportedRejected: optionalBoolField(value, "unsupportedRejected", false)

@@ -565,6 +565,11 @@ class TuiSmokeEventLoop {
 						exit = TuiSmokeExitKind.Rejected;
 						running = false;
 					}
+				case TuiSmokeEventKind.ChatWidgetSafetyBuffering:
+					if (!traceSafetyBuffering(event.chatWidgetSafetyBuffering, trace)) {
+						exit = TuiSmokeExitKind.Rejected;
+						running = false;
+					}
 				case TuiSmokeEventKind.ChatWidgetAppServerError:
 					if (!traceAppServerError(event.chatWidgetAppServerError, trace)) {
 						exit = TuiSmokeExitKind.Rejected;
@@ -11276,6 +11281,52 @@ class TuiSmokeEventLoop {
 						+ action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
 				case _:
 					trace.push("tui.chat_widget_windows_sandbox.unknown");
+					return false;
+			}
+		}
+		return true;
+	}
+
+	static function traceSafetyBuffering(plan:TuiSmokeSafetyBufferingPlan, trace:Array<String>):Bool {
+		if (plan == null || plan.allowAppServerDelivery || plan.allowRatatuiRender || plan.allowModelCall || !plan.enabled()) {
+			trace.push("tui.chat_widget_safety_buffering.rejected=live_or_missing");
+			return false;
+		}
+		trace.push("tui.chat_widget_safety_buffering.plan=headless");
+		for (action in plan.actions) {
+			switch action.kind {
+				case TuiSmokeSafetyBufferingActionKind.RetryPrompt:
+					trace.push("tui.chat_widget_safety_buffering.retry_prompt=turn=" + action.turnId + ":model=" + action.fasterModel + ":captured="
+						+ action.turnCaptured + ":shown=" + action.promptShown + ":previous=" + action.retryPromptShownBefore + ":message=" + action.message
+						+ ":rendered=" + action.renderedPopup);
+				case TuiSmokeSafetyBufferingActionKind.RetryConfirmed:
+					trace.push("tui.chat_widget_safety_buffering.retry_confirmed=thread="
+						+ action.threadId
+						+ ":turn="
+						+ action.turnId
+						+ ":model="
+						+ action.fasterModel
+						+ ":event="
+						+ action.retryEventQueued
+						+ ":cleared="
+						+ action.retryClearedPrompt);
+				case TuiSmokeSafetyBufferingActionKind.AgentMessageStarted:
+					trace.push("tui.chat_widget_safety_buffering.agent_started=turn=" + action.turnId + ":before=" + action.canRetryBefore + ":started="
+						+ action.agentMessageStarted + ":after=" + action.canRetryAfter);
+				case TuiSmokeSafetyBufferingActionKind.NoRetryStatus:
+					trace.push("tui.chat_widget_safety_buffering.no_retry=turn=" + action.turnId + ":status=" + action.statusShown + ":short="
+						+ action.shortMessage + ":prompt=" + action.promptShown + ":message=" + action.message + ":rendered=" + action.renderedPopup);
+				case TuiSmokeSafetyBufferingActionKind.IgnoredUpdate:
+					trace.push("tui.chat_widget_safety_buffering.ignored=turn=" + action.turnId + ":replay=" + action.replayKind + ":hidden="
+						+ action.ignoredHidden + ":stale=" + action.ignoredStale + ":historical=" + action.ignoredHistorical + ":prompt=" + action.promptShown);
+				case TuiSmokeSafetyBufferingActionKind.HiddenClear:
+					trace.push("tui.chat_widget_safety_buffering.hidden_clear=turn=" + action.turnId + ":cleared=" + action.hiddenCleared
+						+ ":status_details=" + action.statusDetailsCleared + ":prompt=" + action.promptShown);
+				case TuiSmokeSafetyBufferingActionKind.Failure:
+					trace.push("tui.chat_widget_safety_buffering.failure=" + action.failureCode + ":no_app_server=" + action.noAppServerDelivery
+						+ ":no_render=" + action.noRatatuiRender + ":no_model=" + action.noModelCall + ":unsupported=" + action.unsupportedRejected);
+				case _:
+					trace.push("tui.chat_widget_safety_buffering.unknown");
 					return false;
 			}
 		}
