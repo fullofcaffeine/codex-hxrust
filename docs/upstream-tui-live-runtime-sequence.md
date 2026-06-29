@@ -4215,6 +4215,10 @@ Status: HXCX-TUI-336 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmoke
 
 Status: HXCX-TUI-337 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for app-level `thread/read` session-state inference. Upstream anchor is `../codex/codex-rs/tui/src/app/tests.rs` `thread_read_session_state_does_not_reuse_primary_permission_profile`. The fixture preserves primary/read thread separation, read-thread cwd and runtime-root rebasing to `/tmp/read`, read provider/name metadata, widget permission-profile fallback, explicit non-reuse of cached primary `workspace_write` permissions, and no-live/no-app-server/no-filesystem/no-terminal/no-ratatui/no-network/no-model rejection evidence. This is deterministic thread/read session-state evidence only, not live app-server transport, rollout JSONL filesystem reads, Tokio channel ownership, terminal mutation, ratatui rendering, persistent DB access, network traffic, model traffic, realtime transport, or adapter-specific behavior.
 
+### HXCX-TUI-338 Headless Raw Codex Agent Picker Item Names
+
+Status: HXCX-TUI-338 extends `fixtures/hxrust/tui-smoke.v1.json`, `test/TuiSmokeHarness.hx`, and `harness/check-tui-smoke.sh` with typed headless evidence for app-level agent picker item-name formatting. Upstream anchor is `../codex/codex-rs/tui/src/app/tests.rs` `agent_picker_item_name_snapshot` plus `../codex/codex-rs/tui/src/multi_agents.rs` `format_agent_picker_item_name`. The fixture preserves primary fallback, nickname+role, nickname-only, role-only, anonymous agent labels, stable thread-id row formatting, and no-live/no-app-server/no-filesystem/no-model rejection evidence. This is deterministic picker-label formatting evidence only, not live app-server transport, thread attach, terminal mutation, ratatui rendering, persistent DB access, network traffic, model traffic, realtime transport, or adapter-specific behavior.
+
 ### HXCX-4.143+: Credentialed Runtime, Realtime, And Interactive TUI
 
 Only after the above are green:

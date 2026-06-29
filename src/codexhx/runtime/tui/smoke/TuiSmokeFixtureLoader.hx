@@ -3234,6 +3234,7 @@ class TuiSmokeFixtureLoader {
 				agentNickname: optionalStringField(value, "agentNickname", ""),
 				agentRole: optionalStringField(value, "agentRole", ""),
 				agentPath: optionalStringField(value, "agentPath", ""),
+				isPrimary: optionalBoolField(value, "isPrimary", false),
 				isRunning: optionalBoolField(value, "isRunning", false),
 				isClosed: optionalBoolField(value, "isClosed", false),
 				currentThreadId: optionalStringField(value, "currentThreadId", ""),

@@ -2326,6 +2326,14 @@ class TuiSmokeEventLoop {
 						return false;
 					}
 					trace.push("tui.agent_navigation.label=" + action.currentThreadId + ":primary=" + action.primaryThreadId + ":label=" + actual);
+				case TuiSmokeAgentNavigationActionKind.PickerItemName:
+					final actual = TuiSmokeAgentNavigationState.formatAgentPickerItemName(action.agentNickname, action.agentRole, action.isPrimary);
+					if (actual != action.expectedLabel) {
+						trace.push("tui.agent_navigation.picker_item_mismatch=expected:" + action.expectedLabel + ":actual:" + actual);
+						return false;
+					}
+					trace.push("tui.agent_navigation.picker_item=" + action.threadId + ":primary=" + action.isPrimary + ":nickname=" + action.agentNickname
+						+ ":role=" + action.agentRole + ":row=" + actual + " | " + action.threadId);
 				case TuiSmokeAgentNavigationActionKind.HasNonPrimary:
 					final actual = state.hasNonPrimaryThread(action.primaryThreadId);
 					if (actual != action.expectedHasNonPrimary) {

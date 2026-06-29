@@ -12,6 +12,7 @@ enum abstract TuiSmokeAgentNavigationActionKind(String) to String {
 	final Adjacent = "adjacent";
 	final AdjacentWithBackfill = "adjacent_with_backfill";
 	final ActiveLabel = "active_label";
+	final PickerItemName = "picker_item_name";
 	final HasNonPrimary = "has_non_primary";
 	final Subtitle = "subtitle";
 	final Failure = "failure";
@@ -30,6 +31,7 @@ enum abstract TuiSmokeAgentNavigationActionKind(String) to String {
 			case "adjacent": Adjacent;
 			case "adjacent_with_backfill": AdjacentWithBackfill;
 			case "active_label": ActiveLabel;
+			case "picker_item_name": PickerItemName;
 			case "has_non_primary": HasNonPrimary;
 			case "subtitle": Subtitle;
 			case "failure": Failure;

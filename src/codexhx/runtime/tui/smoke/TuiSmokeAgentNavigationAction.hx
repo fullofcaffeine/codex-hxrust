@@ -6,6 +6,7 @@ typedef TuiSmokeAgentNavigationActionFields = {
 	final agentNickname:String;
 	final agentRole:String;
 	final agentPath:String;
+	final isPrimary:Bool;
 	final isRunning:Bool;
 	final isClosed:Bool;
 	final currentThreadId:String;
@@ -36,6 +37,7 @@ class TuiSmokeAgentNavigationAction {
 	public final agentNickname:String;
 	public final agentRole:String;
 	public final agentPath:String;
+	public final isPrimary:Bool;
 	public final isRunning:Bool;
 	public final isClosed:Bool;
 	public final currentThreadId:String;

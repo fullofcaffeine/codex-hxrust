@@ -151,7 +151,7 @@ class TuiSmokeAgentNavigationState {
 		return -1;
 	}
 
-	static function formatAgentPickerItemName(agentNickname:String, agentRole:String, isPrimary:Bool):String {
+	public static function formatAgentPickerItemName(agentNickname:String, agentRole:String, isPrimary:Bool):String {
 		if (isPrimary)
 			return "Main [default]";
 		final nickname = StringTools.trim(agentNickname);
