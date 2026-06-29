@@ -30,6 +30,8 @@ class FakeTuiAppServerFacade {
 	var primaryThreadValue:Null<ThreadId>;
 	var activeThreadValue:Null<ThreadId>;
 	var latestAttachGeneration:Int;
+	var latestPromptGeneration:Int;
+	var lastPromptLifecycleValue:TuiPromptPendingRequestLifecycle;
 
 	public function new(shell:ChatWidgetShellState, ?promptTransport:TuiPromptTransport) {
 		this.shellValue = shell == null ? ChatWidgetShellState.initial("model pending") : shell;
@@ -41,6 +43,8 @@ class FakeTuiAppServerFacade {
 		this.primaryThreadValue = null;
 		this.activeThreadValue = null;
 		this.latestAttachGeneration = 0;
+		this.latestPromptGeneration = 0;
+		this.lastPromptLifecycleValue = TuiPromptPendingRequestLifecycle.none();
 	}
 
 	public function shell():ChatWidgetShellState {
@@ -101,13 +105,22 @@ class FakeTuiAppServerFacade {
 			return TuiPromptSubmitResult.refused(TuiPromptSubmitStatus.MissingThread);
 
 		final envelope = new TuiPromptSubmitEnvelope(requestId, activeSessionValue, activeThreadValue, text);
+		latestPromptGeneration = latestPromptGeneration + 1;
+		final pendingBeforeRegister = pendingCount();
+		final pendingRequest = new TuiAppServerPendingRequest(requestId, TuiAppServerRequestMethod.PromptSubmit, activeSessionValue, activeThreadValue,
+			"prompt submit", latestPromptGeneration);
+		pending.set(requestId.toString(), pendingRequest);
+		lastPromptLifecycleValue = TuiPromptPendingRequestLifecycle.registered(requestId, pendingBeforeRegister, pendingCount());
 		final effects:Array<TuiAppServerShellEffect> = [
 			TuiAppServerShellEffect.RequestRegistered(requestId, TuiAppServerRequestMethod.PromptSubmit),
 			TuiAppServerShellEffect.PromptSubmitSent(envelope)
 		];
 		final transportOutcome = promptTransport.submitPrompt(envelope);
-		if (transportOutcome == null || !transportOutcome.isAccepted())
+		if (transportOutcome == null || !transportOutcome.isAccepted()) {
+			resolvePromptPending(requestId, false);
 			return TuiPromptSubmitResult.transportRejected(envelope, effects);
+		}
+		resolvePromptPending(requestId, true);
 		for (event in transportOutcome.events())
 			enqueue(event);
 		return TuiPromptSubmitResult.accepted(envelope, effects);
@@ -222,6 +235,18 @@ class FakeTuiAppServerFacade {
 		for (_ in pending)
 			count = count + 1;
 		return count;
+	}
+
+	public function lastPromptLifecycle():TuiPromptPendingRequestLifecycle {
+		return lastPromptLifecycleValue;
+	}
+
+	function resolvePromptPending(requestId:RequestId, accepted:Bool):Void {
+		final pendingBefore = pendingCount();
+		pending.remove(requestId.toString());
+		final pendingAfter = pendingCount();
+		lastPromptLifecycleValue = accepted ? TuiPromptPendingRequestLifecycle.resolved(requestId, pendingBefore,
+			pendingAfter) : TuiPromptPendingRequestLifecycle.rejected(requestId, pendingBefore, pendingAfter);
 	}
 
 	function activeThreadMatches(threadId:ThreadId):Bool {

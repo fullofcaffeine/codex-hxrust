@@ -29,6 +29,8 @@ import codexhx.runtime.tui.appserver.TuiPromptJsonRpcResponse;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcStreamScopeReport;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcStreamScopeStatus;
 import codexhx.runtime.tui.appserver.TuiPromptJsonRpcStreamNotification;
+import codexhx.runtime.tui.appserver.TuiPromptPendingRequestLifecycle;
+import codexhx.runtime.tui.appserver.TuiPromptPendingRequestStatus;
 import codexhx.runtime.tui.appserver.TuiPromptRawResponseItemCompletedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
@@ -103,6 +105,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		final facade = attachedFacadeWithTransport(shell, activeThread, transport);
 		final result = facade.submitPrompt(RequestId.fromInteger(78), "json rpc ask");
 		assertTrue(result.acceptedPrompt(), "json-rpc submit accepted");
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Resolved, "78", 1, 0, "json-rpc accepted prompt lifecycle");
+		assertIntEquals(0, facade.pendingCount(), "json-rpc accepted prompt leaves no pending request");
 
 		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc request recorded");
 		assertStringEquals("78", request.requestId.toString(), "json-rpc request id");
@@ -294,6 +298,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertFalse(result.acceptedPrompt(), "json-rpc exchange rejection refused");
 		assertStringEquals("79", result.requestIdText(), "json-rpc exchange rejection request id");
 		assertStringEquals("json rpc blocked", result.promptText(), "json-rpc exchange rejection prompt");
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Rejected, "79", 1, 0, "json-rpc rejected prompt lifecycle");
+		assertIntEquals(0, facade.pendingCount(), "json-rpc rejected exchange leaves no pending request");
 
 		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc rejected request recorded");
 		assertStringEquals("79", request.requestId.toString(), "json-rpc rejected request id");
@@ -321,6 +327,9 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertFalse(result.acceptedPrompt(), "json-rpc mismatched response refused");
 		assertStringEquals("81", result.requestIdText(), "json-rpc mismatched response request id");
 		assertStringEquals("json rpc stale response", result.promptText(), "json-rpc mismatched response prompt");
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Rejected, "81", 1, 0,
+			"json-rpc mismatched response prompt lifecycle");
+		assertIntEquals(0, facade.pendingCount(), "json-rpc mismatched response leaves no pending request");
 
 		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc mismatched request recorded");
 		if (transport.lastResponse() != null)
@@ -355,6 +364,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		final result = facade.submitPrompt(RequestId.fromInteger(82), "json rpc wrong thread");
 		assertFalse(result.acceptedPrompt(), "json-rpc wrong-thread stream refused");
 		assertStringEquals("82", result.requestIdText(), "json-rpc wrong-thread request id");
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Rejected, "82", 1, 0, "json-rpc wrong-thread prompt lifecycle");
+		assertIntEquals(0, facade.pendingCount(), "json-rpc wrong-thread leaves no pending request");
 		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc wrong-thread request recorded");
 		if (transport.lastResponse() != null)
 			throw "json-rpc wrong-thread stream should not record accepted response";
@@ -379,6 +390,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		final result = facade.submitPrompt(RequestId.fromInteger(83), "json rpc wrong turn");
 		assertFalse(result.acceptedPrompt(), "json-rpc wrong-turn stream refused");
 		assertStringEquals("83", result.requestIdText(), "json-rpc wrong-turn request id");
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Rejected, "83", 1, 0, "json-rpc wrong-turn prompt lifecycle");
+		assertIntEquals(0, facade.pendingCount(), "json-rpc wrong-turn leaves no pending request");
 		final request = expectJsonRpcRequest(transport.lastRequest(), "json-rpc wrong-turn request recorded");
 		if (transport.lastResponse() != null)
 			throw "json-rpc wrong-turn stream should not record accepted response";
@@ -441,6 +454,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(1, submit.registeredPromptRequestCount(), "transport registered prompt");
 		assertIntEquals(0, submit.pumpOutcome().eventsDrained(), "transport rejection queues no fake events");
 		assertIntEquals(0, facade.queuedCount(), "transport queue empty");
+		assertPromptLifecycle(facade.lastPromptLifecycle(), TuiPromptPendingRequestStatus.Rejected, "77", 1, 0, "transport rejection prompt lifecycle");
+		assertIntEquals(0, facade.pendingCount(), "transport rejection leaves no pending request");
 		assertStringEquals("user> blocked", shell.transcriptAt(1).renderText(), "user row still records submitted prompt");
 		assertStringEquals("Codex | model: gpt-live | status: session started", backend.currentFrame().lineAt(0), "status unchanged after rejection");
 		backend.restore(TerminalRestoreReason.NormalExit);
@@ -630,6 +645,15 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals(expectedRequestId, correlation.requestIdText, label + " request");
 		assertStringEquals(expectedResponseId, correlation.responseIdText, label + " response");
 		assertIntEquals(expectedStreamCount, correlation.streamNotificationCount, label + " stream count");
+	}
+
+	static function assertPromptLifecycle(lifecycle:TuiPromptPendingRequestLifecycle, expectedStatus:TuiPromptPendingRequestStatus, expectedRequestId:String,
+			expectedPendingBefore:Int, expectedPendingAfter:Int, label:String):Void {
+		assertStringEquals(expectedStatus.text(), lifecycle.statusText(), label + " status");
+		assertStringEquals(expectedRequestId, lifecycle.requestIdText(), label + " request");
+		assertStringEquals("prompt_submit", lifecycle.methodText(), label + " method");
+		assertIntEquals(expectedPendingBefore, lifecycle.pendingBefore, label + " pending before");
+		assertIntEquals(expectedPendingAfter, lifecycle.pendingAfter, label + " pending after");
 	}
 
 	static function assertStreamScope(scope:TuiPromptJsonRpcStreamScopeReport, expectedStatus:TuiPromptJsonRpcStreamScopeStatus, expectedThreadId:String,
