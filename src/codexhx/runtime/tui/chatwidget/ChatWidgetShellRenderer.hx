@@ -36,7 +36,9 @@ class ChatWidgetShellRenderer {
 	}
 
 	static function headerLine(state:ChatWidgetShellState):String {
-		return "Codex | model: " + state.modelLabel() + " | status: " + state.statusText();
+		final label = state.activeAgentLabel();
+		final base = "Codex | model: " + state.modelLabel() + " | status: " + state.statusText();
+		return label.length == 0 ? base : base + " | agent: " + label;
 	}
 
 	static function footerLine(state:ChatWidgetShellState):String {

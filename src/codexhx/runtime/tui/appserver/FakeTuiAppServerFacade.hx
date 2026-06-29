@@ -7,6 +7,7 @@ import codexhx.runtime.tui.chatwidget.ChatWidgetShellEffect;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.chatwidget.ChatWidgetStatusKind;
 import codexhx.runtime.tui.chatwidget.ChatWidgetTranscriptRole;
+import codexhx.runtime.tui.agent.AgentNavigationState;
 import haxe.ds.StringMap;
 
 /**
@@ -19,18 +20,22 @@ import haxe.ds.StringMap;
 **/
 class FakeTuiAppServerFacade {
 	final shellValue:ChatWidgetShellState;
+	final agentNavigationValue:AgentNavigationState;
 	// StringMap forces string keys; only this facade converts RequestId at the map boundary.
 	final pending:StringMap<TuiAppServerPendingRequest>;
 	final queue:Array<TuiAppServerEvent>;
 	var activeSessionValue:Null<SessionId>;
+	var primaryThreadValue:Null<ThreadId>;
 	var activeThreadValue:Null<ThreadId>;
 	var latestAttachGeneration:Int;
 
 	public function new(shell:ChatWidgetShellState) {
 		this.shellValue = shell == null ? ChatWidgetShellState.initial("model pending") : shell;
+		this.agentNavigationValue = new AgentNavigationState();
 		this.pending = new StringMap<TuiAppServerPendingRequest>();
 		this.queue = [];
 		this.activeSessionValue = null;
+		this.primaryThreadValue = null;
 		this.activeThreadValue = null;
 		this.latestAttachGeneration = 0;
 	}
@@ -45,6 +50,14 @@ class FakeTuiAppServerFacade {
 
 	public function activeThread():Null<ThreadId> {
 		return activeThreadValue;
+	}
+
+	public function primaryThread():Null<ThreadId> {
+		return primaryThreadValue;
+	}
+
+	public function agentNavigation():AgentNavigationState {
+		return agentNavigationValue;
 	}
 
 	public function startSessionAttach(requestId:RequestId, sessionId:SessionId, threadId:ThreadId, modelLabel:String):Array<TuiAppServerShellEffect> {
@@ -100,10 +113,14 @@ class FakeTuiAppServerFacade {
 		switch event {
 			case TuiAppServerEvent.SessionStarted(sessionId, threadId, modelLabel):
 				activeSessionValue = sessionId;
+				primaryThreadValue = threadId;
 				activeThreadValue = threadId;
+				agentNavigationValue.clear();
+				agentNavigationValue.upsert(threadId, "", "", false);
 				effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
 				appendShellEffects(effects, shellValue.setModelLabel(modelLabel));
 				appendShellEffects(effects, shellValue.setStatus(ChatWidgetStatusKind.Idle, "session started"));
+				refreshAgentLabel(effects);
 				appendShellEffects(effects,
 					shellValue.appendTranscript(ChatWidgetTranscriptRole.System,
 						"session " + sessionId.toString() + " attached to thread " + threadId.toString()));
@@ -121,6 +138,35 @@ class FakeTuiAppServerFacade {
 					effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
 					appendShellEffects(effects, shellValue.appendTranscript(ChatWidgetTranscriptRole.Assistant, delta));
 				}
+			case TuiAppServerEvent.AgentThreadUpsert(threadId, agentNickname, agentRole, isClosed):
+				agentNavigationValue.upsert(threadId, agentNickname, agentRole, isClosed);
+				effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
+				effects.push(TuiAppServerShellEffect.AgentNavigationUpdated(threadId));
+				refreshAgentLabel(effects);
+			case TuiAppServerEvent.AgentThreadActivity(threadId, agentPath, isRunning):
+				agentNavigationValue.recordActivity(threadId, agentPath, isRunning);
+				effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
+				effects.push(TuiAppServerShellEffect.AgentNavigationUpdated(threadId));
+				refreshAgentLabel(effects);
+			case TuiAppServerEvent.AgentThreadClosed(threadId):
+				agentNavigationValue.markClosed(threadId);
+				effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
+				effects.push(TuiAppServerShellEffect.AgentNavigationUpdated(threadId));
+				refreshAgentLabel(effects);
+			case TuiAppServerEvent.AgentThreadRemoved(threadId):
+				agentNavigationValue.remove(threadId);
+				effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
+				effects.push(TuiAppServerShellEffect.AgentNavigationUpdated(threadId));
+				if (activeThreadMatches(threadId) && primaryThreadValue != null) {
+					activeThreadValue = primaryThreadValue;
+					effects.push(TuiAppServerShellEffect.ActiveThreadChanged(primaryThreadValue));
+				}
+				refreshAgentLabel(effects);
+			case TuiAppServerEvent.ActiveThreadChanged(threadId):
+				activeThreadValue = threadId;
+				effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
+				effects.push(TuiAppServerShellEffect.ActiveThreadChanged(threadId));
+				refreshAgentLabel(effects);
 			case TuiAppServerEvent.Disconnected(message):
 				final text = normalized(message, "app-server disconnected");
 				effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
@@ -164,6 +210,10 @@ class FakeTuiAppServerFacade {
 
 	function activeThreadMatches(threadId:ThreadId):Bool {
 		return activeThreadValue != null && activeThreadValue.equals(threadId);
+	}
+
+	function refreshAgentLabel(effects:Array<TuiAppServerShellEffect>):Void {
+		appendShellEffects(effects, shellValue.setActiveAgentLabel(agentNavigationValue.activeAgentLabel(activeThreadValue, primaryThreadValue)));
 	}
 
 	static function appendEffects(target:Array<TuiAppServerShellEffect>, source:Array<TuiAppServerShellEffect>):Void {

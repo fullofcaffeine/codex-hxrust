@@ -4236,6 +4236,7 @@ Status: after the external architecture review, the default next work pivots fro
 - `TUI-LIVE-6` / `codex-hxrust-6pzd`: app-server event pump into live shell;
 - `TUI-LIVE-7` / `codex-hxrust-mvwx`: prompt submit envelope from live composer;
 - `TUI-LIVE-8` / `codex-hxrust-4dnm`: promote agent navigation state out of smoke;
+- `TUI-LIVE-9` / `codex-hxrust-3v64`: wire agent navigation into live shell session;
 - `ARCH-1` / `codex-hxrust-f512`: quarantine TUI smoke validation package and add an import guard.
 
 The first acceptance target is credential-free: a Haxe-authored, haxe.rust-generated binary that can own a terminal session, draw a minimal Codex shell frame, process basic key/resize/exit events, and restore terminal state. It should use typed production state/effects, not a giant nullable fixture event record or `expectedTrace` as the primary proof.
@@ -4275,6 +4276,10 @@ Status: TUI-LIVE-7 adds `TuiPromptSubmitEnvelope`, `TuiPromptSubmitStatus`, `Tui
 ### TUI-LIVE-8 Production Agent Navigation State
 
 Status: TUI-LIVE-8 promotes the reusable part of the smoke-only agent navigation slice into `codexhx.runtime.tui.agent`. `AgentNavigationState` owns typed `ThreadId` order, immutable `AgentNavigationEntry` metadata, `AgentNavigationDirection`, adjacent-thread cycling, primary/non-primary label formatting, picker row formatting, and closed-thread removal. The legacy `TuiSmokeAgentNavigationState` now acts as a validation adapter that converts fixture string IDs at the boundary and delegates behavior to the production state. The portable haxe.rust harness `harness/check-tui-agent-navigation.sh` proves direct state/effect behavior for ordering, metadata updates, adjacency wraparound, missing/singleton refusal, active labels, picker rows, closed-thread tombstones, removal, clear, interpreter execution, and generated Cargo check/test/run. This still does not wire the promoted state into the live shell's real thread router, loaded-thread discovery, active-thread shutdown flow, or full upstream multi-agent UI.
+
+### TUI-LIVE-9 Live Shell Agent Navigation Integration
+
+Status: TUI-LIVE-9 wires `AgentNavigationState` into the credential-free live shell path. `FakeTuiAppServerFacade` now owns the promoted state beside session/thread state; typed app-server events update agent metadata, path/running activity, closed state, removal, and active-thread selection; `ChatWidgetShellState` exposes an active agent label that `ChatWidgetShellRenderer` appends to the header only when multi-thread state exists. Prompt submission continues through `TuiPromptSubmitEnvelope`, but now uses the current active `ThreadId` after an agent switch. The metal haxe.rust harness `harness/check-tui-live-agent-navigation.sh` proves queued fake app-server agent events, active-thread switching, prompt target routing, removal fallback to primary, headless/live frame rendering, and generated Cargo check/test/run. This still does not implement loaded-thread backfill, real app-server JSON-RPC transport, upstream picker UI rows, keyboard shortcut dispatch into active-thread switching, or persistent thread/session state.
 
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 

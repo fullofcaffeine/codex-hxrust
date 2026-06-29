@@ -62,6 +62,10 @@ class TuiPromptSubmitInteraction {
 		return submitResultValue == null ? "" : submitResultValue.requestIdText();
 	}
 
+	public function submitThreadIdText():String {
+		return submitResultValue == null ? "" : submitResultValue.threadIdText();
+	}
+
 	public function submitPromptText():String {
 		return submitResultValue == null ? "" : submitResultValue.promptText();
 	}

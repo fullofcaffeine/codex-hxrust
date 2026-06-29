@@ -17,6 +17,7 @@ class ChatWidgetShellState {
 	var modelLabelValue:String;
 	var statusKindValue:ChatWidgetStatusKind;
 	var statusTextValue:String;
+	var activeAgentLabelValue:String;
 	var revisionValue:Int;
 
 	public function new(modelLabel:String, statusKind:ChatWidgetStatusKind, statusText:String) {
@@ -25,6 +26,7 @@ class ChatWidgetShellState {
 		this.modelLabelValue = normalizeLabel(modelLabel, "model pending");
 		this.statusKindValue = statusKind;
 		this.statusTextValue = normalizeLabel(statusText, "idle");
+		this.activeAgentLabelValue = "";
 		this.revisionValue = 0;
 	}
 
@@ -72,6 +74,15 @@ class ChatWidgetShellState {
 		return [ChatWidgetShellEffect.DrawRequested];
 	}
 
+	public function setActiveAgentLabel(label:String):Array<ChatWidgetShellEffect> {
+		final normalized = label == null ? "" : label;
+		if (activeAgentLabelValue == normalized)
+			return [];
+		activeAgentLabelValue = normalized;
+		revisionValue = revisionValue + 1;
+		return [ChatWidgetShellEffect.DrawRequested];
+	}
+
 	public function composer():TerminalComposerState {
 		return composerState;
 	}
@@ -96,6 +107,10 @@ class ChatWidgetShellState {
 
 	public function statusText():String {
 		return statusTextValue;
+	}
+
+	public function activeAgentLabel():String {
+		return activeAgentLabelValue;
 	}
 
 	public function revision():Int {

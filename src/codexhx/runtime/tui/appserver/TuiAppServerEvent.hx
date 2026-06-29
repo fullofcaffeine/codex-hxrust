@@ -10,5 +10,10 @@ enum TuiAppServerEvent {
 	SessionStarted(sessionId:SessionId, threadId:ThreadId, modelLabel:String);
 	ThreadStatus(threadId:ThreadId, status:TuiAppServerThreadStatus);
 	AssistantDelta(threadId:ThreadId, delta:String);
+	AgentThreadUpsert(threadId:ThreadId, agentNickname:String, agentRole:String, isClosed:Bool);
+	AgentThreadActivity(threadId:ThreadId, agentPath:String, isRunning:Bool);
+	AgentThreadClosed(threadId:ThreadId);
+	AgentThreadRemoved(threadId:ThreadId);
+	ActiveThreadChanged(threadId:ThreadId);
 	Disconnected(message:String);
 }

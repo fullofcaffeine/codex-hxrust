@@ -14,3 +14,5 @@ bash harness/check-tui-agent-navigation.sh
 ```
 
 The gate covers typed ID ordering, metadata updates, record-activity backfill, adjacent navigation, primary/path/fallback labels, picker row formatting, closed-thread tombstones, removal, clear, portable haxe.rust generation, and generated Cargo check/test/run. It does not yet attach the state to the live TUI thread router or app-server events.
+
+`TUI-LIVE-9` adds that first attachment for the minimal live shell: `FakeTuiAppServerFacade` composes `AgentNavigationState`, typed app-server events update agent metadata/activity/closed/removal state, active-thread changes refresh the shell's agent label, and prompt envelopes use the active thread.

@@ -14,6 +14,8 @@ enum TuiAppServerShellEffect {
 	PromptSubmitSent(envelope:TuiPromptSubmitEnvelope);
 	AppServerEventApplied(event:TuiAppServerEvent);
 	AppServerEventIgnored(event:TuiAppServerEvent);
+	AgentNavigationUpdated(threadId:ThreadId);
+	ActiveThreadChanged(threadId:ThreadId);
 	Disconnected(message:String);
 	DrawRequested;
 }
