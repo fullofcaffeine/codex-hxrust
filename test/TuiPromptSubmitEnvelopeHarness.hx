@@ -42,6 +42,9 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessEnvVar;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioLineRunReport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioLineRunStatus;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioLineRunner;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
@@ -103,6 +106,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testLineEndpointOpenIntentsAreTyped();
 		testLineNativeOpenOutcomesAreTyped();
 		testLineTransportAttachesAfterOpen();
+		testStdioLineRunnerSpawnsWritesAndReadsJsonLines();
+		testStdioLineRunnerReportsFailureAndRefusals();
 		testLineConnectorComposesEndpointOpenAndAttachment();
 		testLineConnectorUsesInjectedNativeBoundaries();
 		testLineConnectorPropagatesInjectedNativeOpenRefusal();
@@ -575,6 +580,46 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertLineTransportAttachment(TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(attacher.attach(unsupported)),
 			TuiAppServerJsonRpcLineAttachmentStatus.Refused, "named_pipe", false, "", 0, false, 0, 0, TuiAppServerJsonRpcLineOpenIntentKind.Refuse,
 			TuiAppServerJsonRpcLineEndpointStatus.Unsupported, "unsupported line transport attachment");
+	}
+
+	static function testStdioLineRunnerSpawnsWritesAndReadsJsonLines():Void {
+		final threadId = thread("00000000-0000-0000-0000-000000005586");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(109), session("00000000-0000-0000-0000-000000009977"), threadId,
+			"stdio process ask");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final outboundLine = request.messageJson() + "\n";
+		final expected = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(request, envelope, outboundLine);
+		assertTrue(expected.isAccepted(), "stdio runner expected fake line outcome");
+
+		final plan = stdioEchoPlan(expected.inboundLines());
+		final report = new TuiAppServerJsonRpcStdioLineRunner().run(plan, outboundLine);
+		assertStdioLineRun(report, TuiAppServerJsonRpcStdioLineRunStatus.Succeeded, "ok", 0, "", 1, expected.inboundLineCount(), "stdio line runner success");
+		assertStringEquals(outboundLine, report.transcript().outboundLine(), "stdio line runner outbound transcript");
+		assertStringEquals(expected.inboundLineAt(0), report.inboundLineAt(0), "stdio line runner first inbound line");
+		assertStringEquals(expected.inboundLineAt(expected.inboundLineCount() - 1), report.inboundLineAt(report.inboundLineCount() - 1),
+			"stdio line runner last inbound line");
+	}
+
+	static function testStdioLineRunnerReportsFailureAndRefusals():Void {
+		final runner = new TuiAppServerJsonRpcStdioLineRunner();
+		final failure = runner.run(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", [
+			"-c",
+			"cat >/dev/null; printf '%s\\n' '{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{}}'; echo boom >&2; exit 7"
+		], "",
+			[]), "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"turn/start\",\"params\":{}}\n");
+		assertStdioLineRun(failure, TuiAppServerJsonRpcStdioLineRunStatus.Failed, "exit_nonzero", 7, "boom\n", 1, 1, "stdio line runner nonzero exit");
+		assertStringEquals("{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{}}\n", failure.inboundLineAt(0), "stdio failure inbound line");
+
+		assertStdioLineRun(runner.run(TuiAppServerJsonRpcProcessLaunchPlan.stdio("", [], "", []), "line\n"), TuiAppServerJsonRpcStdioLineRunStatus.Rejected,
+			"missing_command", -1, "", 0, 0, "stdio line runner missing command");
+		assertStdioLineRun(runner.run(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", ["-c", "cat"], "/tmp", []), "line\n"),
+			TuiAppServerJsonRpcStdioLineRunStatus.Rejected, "stdio_cwd_unsupported", -1, "", 0, 0, "stdio line runner cwd refusal");
+		assertStdioLineRun(runner.run(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", ["-c", "cat"], "",
+			[new TuiAppServerJsonRpcProcessEnvVar("CODEX_HOME", "/tmp/codex-home")]),
+			"line\n"),
+			TuiAppServerJsonRpcStdioLineRunStatus.Rejected, "stdio_env_unsupported", -1, "", 0, 0, "stdio line runner env refusal");
+		assertStdioLineRun(runner.run(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", ["-c", "cat"], "", []), ""),
+			TuiAppServerJsonRpcStdioLineRunStatus.Rejected, "missing_outbound_line", -1, "", 0, 0, "stdio line runner missing outbound");
 	}
 
 	static function testLineConnectorComposesEndpointOpenAndAttachment():Void {
@@ -1365,6 +1410,37 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(expectedArgCount, plan.argCount(), label + " arg count");
 		assertStringEquals(expectedCwd, plan.cwd, label + " cwd");
 		assertIntEquals(expectedEnvCount, plan.envCount(), label + " env count");
+	}
+
+	static function stdioEchoPlan(lines:Array<String>):TuiAppServerJsonRpcProcessLaunchPlan {
+		final args = ["-c", "cat >/dev/null; printf '%s\\n' \"$@\"", "codex-hxrust-stdio-echo"];
+		for (line in lines)
+			args.push(withoutTrailingNewline(line));
+		return TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", args, "", []);
+	}
+
+	static function withoutTrailingNewline(line:String):String {
+		if (line == null || line.length == 0)
+			return "";
+		if (StringTools.endsWith(line, "\n"))
+			return line.substr(0, line.length - 1);
+		return line;
+	}
+
+	static function assertStdioLineRun(report:TuiAppServerJsonRpcStdioLineRunReport, expectedStatus:TuiAppServerJsonRpcStdioLineRunStatus,
+			expectedCode:String, expectedExitCode:Int, expectedStderr:String, expectedOutboundLineCount:Int, expectedInboundLineCount:Int, label:String):Void {
+		if (report == null)
+			throw label + ": missing report";
+		assertStringEquals(expectedStatus.text(), report.statusText(), label + " status");
+		assertStringEquals(expectedCode, report.code, label + " code");
+		assertIntEquals(expectedExitCode, report.exitCode, label + " exit code");
+		assertStringEquals(expectedStderr, report.stderrText, label + " stderr");
+		assertIntEquals(expectedOutboundLineCount, report.outboundLineCount(), label + " outbound line count");
+		assertIntEquals(expectedInboundLineCount, report.inboundLineCount(), label + " inbound line count");
+		if (expectedStatus == TuiAppServerJsonRpcStdioLineRunStatus.Succeeded)
+			assertTrue(report.isSucceeded(), label + " succeeded");
+		else
+			assertFalse(report.isSucceeded(), label + " not succeeded");
 	}
 
 	static function assertLineOpenIntent(report:TuiAppServerJsonRpcLineOpenIntentReport, expectedKind:TuiAppServerJsonRpcLineOpenIntentKind,
