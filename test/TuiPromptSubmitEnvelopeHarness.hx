@@ -85,6 +85,7 @@ import codexhx.runtime.tui.appserver.TuiPromptThreadStatusChangedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptTransportShutdownReport;
+import codexhx.runtime.tui.appserver.TuiPromptTurnAcceptanceMode;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptLineOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptOutcome;
@@ -129,6 +130,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testPersistentConnectorBackedTransportReusesOneSession();
 		testPersistentConnectorBackedTransportSendsInterrupt();
 		testPersistentConnectorBackedTransportRejectsMalformedInterrupt();
+		testSubmittedTurnAcceptanceKeepsActiveTurnForInterrupt();
+		testSubmittedTurnAcceptanceRejectsMissingStartedEvidence();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
 		testLineConnectorComposesEndpointOpenAndAttachment();
@@ -964,6 +967,69 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals("json_rpc_error", unsupported.code(), "persistent connector unsupported interrupt code");
 		assertLineCloseReport(errorTransport.close("persistent_unsupported_interrupt_done"), TuiAppServerJsonRpcLineTransportState.Closed,
 			"persistent_unsupported_interrupt_done", 1, 1, "persistent connector unsupported interrupt close");
+	}
+
+	static function testSubmittedTurnAcceptanceKeepsActiveTurnForInterrupt():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005598");
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(222), activeSession, activeThread, "submitted persistent prompt");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final turnId = TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId;
+		final interruptEnvelope = new TuiPromptTurnInterruptEnvelope(RequestId.fromInteger(223), activeSession, activeThread, turnId);
+		final interruptRequest = TuiPromptTurnInterruptRequest.fromEnvelope(interruptEnvelope);
+		final interruptLines = interruptReadyThenResponseLines(interruptRequest, activeThread);
+		final inbound = promptLines.copy();
+		for (line in interruptLines)
+			inbound.push(line);
+
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final facade = attachedFacadeWithTransport(shell, activeThread, promptTransport);
+
+		final submit = facade.submitPrompt(RequestId.fromInteger(222), "submitted persistent prompt");
+		assertTrue(submit.acceptedPrompt(), "submitted persistent prompt accepted");
+		assertStringEquals("submitted", promptTransport.turnAcceptanceModeText(), "submitted persistent mode");
+		assertTurnLifecycle(promptTransport.lastTurnLifecycle(), TuiPromptTurnLifecycleStatus.MissingCompleted, "turn-222", "turn-222", "", 2, 1, 0,
+			"submitted persistent lifecycle");
+		assertStringEquals("turn-222", facade.activeTurnIdText(), "submitted persistent active turn retained");
+		assertStringEquals("", facade.lastCompletedTurnIdText(), "submitted persistent no completed turn");
+
+		final interrupted = facade.interruptActiveTurn(RequestId.fromInteger(223));
+		assertTrue(interrupted.acceptedInterrupt(), "submitted persistent interrupt accepted");
+		assertStringEquals("turn-222", facade.lastInterruptedTurnIdText(), "submitted persistent interrupted turn");
+		assertStringEquals("", facade.activeTurnIdText(), "submitted persistent active turn cleared");
+		assertIntEquals(1, facade.interruptedTurnCount(), "submitted persistent interrupt count");
+		assertIntEquals(0, facade.completedTurnCount(), "submitted persistent completed count");
+		assertStringEquals("accepted", facade.lastInterruptCode(), "submitted persistent interrupt code");
+		assertIntEquals(2, appServerTransport.sendCount(), "submitted persistent send count");
+		assertLineCloseReport(appServerTransport.close("submitted_persistent_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"submitted_persistent_done", 2, promptLines.length + interruptLines.length, "submitted persistent close");
+	}
+
+	static function testSubmittedTurnAcceptanceRejectsMissingStartedEvidence():Void {
+		final activeThread = thread("00000000-0000-0000-0000-000000005599");
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(224), activeSession, activeThread, "missing submitted start");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final response = TuiPromptJsonRpcResponse.turnStart(promptRequest, TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope));
+		final inbound = [
+			response.messageJson() + "\n",
+			TuiPromptThreadStatusChangedNotification.active(activeThread).messageJson() + "\n"
+		];
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			inbound.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final facade = attachedFacadeWithTransport(ChatWidgetShellState.initial("pending"), activeThread, promptTransport);
+
+		final submit = facade.submitPrompt(RequestId.fromInteger(224), "missing submitted start");
+		assertFalse(submit.acceptedPrompt(), "submitted missing started rejected");
+		assertStringEquals("missing_started_and_completed", promptTransport.lastTurnLifecycle().code(), "submitted missing started lifecycle code");
+		assertStringEquals("", facade.activeTurnIdText(), "submitted missing started has no active turn");
+		assertLineCloseReport(appServerTransport.close("submitted_missing_started_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"submitted_missing_started_done", 1, inbound.length, "submitted missing started close");
 	}
 
 	static function testProcessBackedLineConnectorUsesProcessAttacher():Void {
@@ -1872,6 +1938,22 @@ class TuiPromptSubmitEnvelopeHarness {
 		for (line in lines)
 			args.push(withoutTrailingNewline(line));
 		return TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", args, "", []);
+	}
+
+	static function submittedTurnInboundLines(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):Array<String> {
+		final response = TuiPromptJsonRpcResponse.turnStart(request, TuiPromptTurnStartResponse.fromEnvelope(envelope));
+		return [
+			response.messageJson() + "\n",
+			TuiPromptThreadStatusChangedNotification.active(envelope.threadId).messageJson() + "\n",
+			TuiPromptJsonRpcNotification.turnStarted(envelope, response.result).messageJson() + "\n"
+		];
+	}
+
+	static function interruptReadyThenResponseLines(request:TuiPromptTurnInterruptRequest, threadId:ThreadId):Array<String> {
+		return [
+			TuiPromptThreadStatusChangedNotification.idle(threadId).messageJson() + "\n",
+			TuiPromptTurnInterruptResponse.fromRequest(request).messageJson() + "\n"
+		];
 	}
 
 	static function withoutTrailingNewline(line:String):String {

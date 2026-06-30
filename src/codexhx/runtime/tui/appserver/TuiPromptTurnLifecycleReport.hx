@@ -58,6 +58,10 @@ class TuiPromptTurnLifecycleReport {
 		return status == TuiPromptTurnLifecycleStatus.Complete;
 	}
 
+	public function isSubmitted():Bool {
+		return status == TuiPromptTurnLifecycleStatus.MissingCompleted && startedCount > 0 && completedCount == 0;
+	}
+
 	public function statusText():String {
 		return status.text();
 	}

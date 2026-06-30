@@ -6,6 +6,7 @@ package codexhx.runtime.tui.appserver;
 **/
 class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	final appServerTransport:TuiAppServerJsonRpcTransport;
+	final acceptanceMode:TuiPromptTurnAcceptanceMode;
 	var lastRequestValue:Null<TuiPromptJsonRpcRequest>;
 	var lastResponseValue:Null<TuiPromptJsonRpcResponse>;
 	var lastNotificationsValue:Array<TuiPromptJsonRpcNotification>;
@@ -19,8 +20,9 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 	var lastInterruptResponseValue:Null<TuiPromptTurnInterruptResponse>;
 	var lastInterruptOutcomeValue:TuiPromptTurnInterruptOutcome;
 
-	public function new(?appServerTransport:TuiAppServerJsonRpcTransport) {
+	public function new(?appServerTransport:TuiAppServerJsonRpcTransport, ?acceptanceMode:TuiPromptTurnAcceptanceMode) {
 		this.appServerTransport = appServerTransport == null ? new FakeTuiAppServerJsonRpcTransport() : appServerTransport;
+		this.acceptanceMode = acceptanceMode == null ? TuiPromptTurnAcceptanceMode.Complete : acceptanceMode;
 		this.lastRequestValue = null;
 		this.lastResponseValue = null;
 		this.lastNotificationsValue = [];
@@ -68,7 +70,7 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 			return TuiPromptTransportOutcome.rejected(streamScope.code());
 		}
 		final turnLifecycle = TuiPromptTurnLifecycleReport.fromNotifications(response.result.turnId, exchangeStreamNotifications);
-		if (!turnLifecycle.isComplete()) {
+		if (!turnAccepted(turnLifecycle)) {
 			replaceLastFrames(transcriptFrames);
 			return TuiPromptTransportOutcome.rejected(turnLifecycle.code());
 		}
@@ -181,6 +183,10 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		return lastTurnLifecycleValue;
 	}
 
+	public function turnAcceptanceModeText():String {
+		return acceptanceMode.text();
+	}
+
 	public function lastInterruptRequest():Null<TuiPromptTurnInterruptRequest> {
 		return lastInterruptRequestValue;
 	}
@@ -202,6 +208,14 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 			[]) : TuiPromptJsonRpcStreamScopeReport.fromNotifications(firstRequestThreadId(frames), response.result.turnId, streamNotifications(frames));
 		lastTurnLifecycleValue = response == null ? TuiPromptTurnLifecycleReport.fromNotifications(null,
 			[]) : TuiPromptTurnLifecycleReport.fromNotifications(response.result.turnId, streamNotifications(frames));
+	}
+
+	function turnAccepted(lifecycle:TuiPromptTurnLifecycleReport):Bool {
+		if (lifecycle == null)
+			return false;
+		if (lifecycle.isComplete())
+			return true;
+		return acceptanceMode == TuiPromptTurnAcceptanceMode.Submitted && lifecycle.isSubmitted();
 	}
 
 	function firstResponse(frames:Array<TuiPromptJsonRpcFrame>):Null<TuiPromptJsonRpcResponse> {

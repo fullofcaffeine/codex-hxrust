@@ -4549,6 +4549,24 @@ provider abort semantics, or OS process teardown. The deterministic responder
 models the request/response envelope needed before those live cancellation
 effects are attached.
 
+### TUI-LIVE-65 Submitted Turn Acceptance For Persistent Interrupt
+
+Status: TUI-LIVE-65 introduces `TuiPromptTurnAcceptanceMode` so the prompt
+transport can distinguish the existing strict completed-stream contract from an
+opt-in submitted/running-turn contract. `Complete` remains the default and still
+requires scoped response, `turn/started`, and `turn/completed` evidence.
+`Submitted` accepts a correlated `turn/start` response plus scoped
+`turn/started` evidence, leaves facade `activeTurn` populated, and rejects
+missing started evidence with the existing typed lifecycle codes. The runner
+generated gate now proves persistent stdio can submit such a running turn,
+route the next Ctrl-C through persistent `turn/interrupt`, clear active-turn
+state on accepted interrupt, and avoid shell exit or completed-turn accounting.
+
+This is still deterministic and synchronous. It models submitted/running state
+and interrupt request/response routing; it does not own provider streaming,
+Tokio task cancellation, sockets, model calls, tool execution, or process
+teardown.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

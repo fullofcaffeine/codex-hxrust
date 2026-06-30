@@ -11,14 +11,14 @@ Public-readiness scaffolding includes repo-managed hooks, Haxe formatting, stage
 Current Beads-based completion snapshot:
 
 ```text
-[########################################] 100% (708/708 non-epic Beads closed)
+[########################################] 100% (709/709 non-epic Beads closed)
 ```
 
 This is an unweighted planning and throughput indicator, not a whole-Codex parity claim. The port has many small deterministic gates, including generated-Rust protocol/runtime/TUI slices, but a runnable interactive Codex TUI still needs live terminal ownership, app-server JSON-RPC integration, async task/channel boundaries, state DB persistence, tool execution, and broader upstream widget/runtime parity.
 
-The current queue is intentionally pivoted toward a minimal live TUI shell. `TUI-LIVE-0` through `TUI-LIVE-63` move the shell from a terminal backend contract through generated terminal restore, typed input, redraw scheduling, fake app-server attach, JSON-RPC prompt envelopes, connector-backed stdio/process transports, persistent prompt sessions, runner-owned shutdown, active-turn tracking, and a typed active-turn interrupt request path. `TUI-LIVE-64` / `codex-hxrust-q156` routes that interrupt request through the persistent JSONL stdio transport. No non-epic Beads are currently ready after this slice; the next step is to file/select the next raw upstream live-TUI or app-server runtime milestone rather than returning to trace-only smoke expansion.
+The current queue is intentionally pivoted toward a minimal live TUI shell. `TUI-LIVE-0` through `TUI-LIVE-64` move the shell from a terminal backend contract through generated terminal restore, typed input, redraw scheduling, fake app-server attach, JSON-RPC prompt envelopes, connector-backed stdio/process transports, persistent prompt sessions, runner-owned shutdown, active-turn tracking, a typed active-turn interrupt request path, and persistent `turn/interrupt` JSONL transport. `TUI-LIVE-65` / `codex-hxrust-o8lu` adds opt-in submitted/running turn acceptance so a persistent turn can remain active for Ctrl-C interruption. No non-epic Beads are currently ready after this slice; the next step is to file/select the next raw upstream live-TUI or app-server runtime milestone rather than returning to trace-only smoke expansion.
 
-Latest slice: `TUI-LIVE-64` / `codex-hxrust-q156` sends the typed `turn/interrupt` envelope through the persistent stdio JSONL session, decodes the empty-result response with request-id correlation, clears facade active-turn state on accepted interrupt, and rejects malformed/error responses with typed codes. This still does not own async cancellation, sockets, model calls, persistence, or tools; it proves the persistent app-server request/effect surface needed before real cancellation.
+Latest slice: `TUI-LIVE-65` / `codex-hxrust-o8lu` keeps completed prompt streams strict by default, then adds an explicit submitted-turn mode that accepts a scoped `turn/start` response plus `turn/started` evidence without requiring `turn/completed`. The runner can now submit a persistent stdio turn, keep `activeTurn` populated, route Ctrl-C through persistent `turn/interrupt`, and clear active-turn state on accepted interrupt. This still does not own async cancellation, sockets, provider streaming, model calls, persistence, or tools.
 
 The strategy is upstream-first:
 

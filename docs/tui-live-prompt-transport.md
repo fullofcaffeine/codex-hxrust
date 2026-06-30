@@ -260,6 +260,15 @@ transport still reports interrupt unsupported, and this slice still does not
 own async task cancellation, socket sessions, model-provider aborts, or OS
 process teardown.
 
+`TUI-LIVE-65` keeps the default prompt-submit transport strict: ordinary
+completed prompt streams still require scoped response, `turn/started`, and
+`turn/completed` evidence. For persistent live-ish responders,
+`TuiPromptTurnAcceptanceMode.Submitted` accepts the correlated `turn/start`
+response plus scoped `turn/started` evidence without a completed/idle tail,
+leaving facade `activeTurn` populated. The runner harness proves the next
+Ctrl-C routes through the persistent `turn/interrupt` envelope and clears that
+active turn. Missing submitted-start evidence remains a typed rejection.
+
 ```json
 {
   "jsonrpc": "2.0",

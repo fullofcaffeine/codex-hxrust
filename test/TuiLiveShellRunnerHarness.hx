@@ -1,3 +1,4 @@
+import codexhx.protocol.RequestId;
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
@@ -5,6 +6,7 @@ import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineNativeOpener;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineTransportAttacher;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
+import codexhx.runtime.tui.appserver.PersistentTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnector;
@@ -23,8 +25,14 @@ import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptTransportShutdownReport;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcNotification;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcRequest;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcResponse;
+import codexhx.runtime.tui.appserver.TuiPromptThreadStatusChangedNotification;
+import codexhx.runtime.tui.appserver.TuiPromptTurnAcceptanceMode;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptEnvelope;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptOutcome;
+import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptRequest;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptResponse;
 import codexhx.runtime.tui.appserver.TuiPromptTurnStartResponse;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
@@ -45,6 +53,7 @@ class TuiLiveShellRunnerHarness {
 		testInitialDrawAndIdleRestore();
 		testTextSubmitEchoThroughPump();
 		testCtrlCInterruptsActiveTurn();
+		testPersistentSubmittedTurnCtrlCInterrupts();
 		testTextSubmitThroughLineConnectedTransport();
 		testTextSubmitThroughInjectedLineConnector();
 		testAgentNavigationInputRoutesActiveThread();
@@ -115,6 +124,50 @@ class TuiLiveShellRunnerHarness {
 		assertStringEquals("accepted", outcome.lastInterruptCode(), "interrupt code");
 		assertStringEquals("Codex | model: gpt-live | status: interrupted", outcome.finalFrameLineAt(0), "interrupt status rendered");
 		assertTrue(!outcome.exitRequested(), "active turn ctrl-c should not exit");
+	}
+
+	static function testPersistentSubmittedTurnCtrlCInterrupts():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("l")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("v")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.Key(TerminalKey.CtrlC),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final sessionId = session("00000000-0000-0000-0000-000000119999");
+		final threadId = thread("00000000-0000-0000-0000-000000110001");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(6), sessionId, threadId, "live");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptLines = submittedTurnInboundLines(promptRequest, promptEnvelope);
+		final interruptEnvelope = new TuiPromptTurnInterruptEnvelope(RequestId.fromInteger(7), sessionId, threadId,
+			TuiPromptTurnStartResponse.fromEnvelope(promptEnvelope).turnId);
+		final interruptRequest = TuiPromptTurnInterruptRequest.fromEnvelope(interruptEnvelope);
+		final interruptLines = interruptReadyThenResponseLines(interruptRequest, threadId);
+		final inbound = promptLines.copy();
+		for (line in interruptLines)
+			inbound.push(line);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptLines.length);
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport, TuiPromptTurnAcceptanceMode.Submitted);
+		final outcome = TuiLiveShellRunner.run(request(shell, backend, [], TuiLiveShellRunPolicy.bounded(20, 2)).withJsonRpcPromptTransport(promptTransport));
+
+		assertIntEquals(1, outcome.submittedPrompts(), "persistent submitted interrupt submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "persistent submitted interrupt accepted prompts");
+		assertStringEquals("turn-6", outcome.lastStartedTurnIdText(), "persistent submitted interrupt last started");
+		assertStringEquals("", outcome.lastCompletedTurnIdText(), "persistent submitted interrupt last completed");
+		assertStringEquals("turn-6", outcome.lastInterruptedTurnIdText(), "persistent submitted interrupt last interrupted");
+		assertStringEquals("", outcome.activeTurnIdText(), "persistent submitted interrupt active cleared");
+		assertIntEquals(0, outcome.completedTurns(), "persistent submitted interrupt completed count");
+		assertIntEquals(1, outcome.interruptedTurns(), "persistent submitted interrupt count");
+		assertStringEquals("accepted", outcome.lastInterruptCode(), "persistent submitted interrupt code");
+		assertTrue(!outcome.exitRequested(), "persistent submitted ctrl-c should not exit");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "persistent submitted interrupt close recorded");
+		assertIntEquals(2, outcome.promptTransportOutboundLineCount(), "persistent submitted interrupt outbound lines");
+		assertIntEquals(promptLines.length + interruptLines.length, outcome.promptTransportInboundLineCount(), "persistent submitted interrupt inbound lines");
 	}
 
 	static function testTextSubmitThroughLineConnectedTransport():Void {
@@ -269,6 +322,41 @@ class TuiLiveShellRunnerHarness {
 
 	static function thread(value:String):ThreadId {
 		return ThreadId.unsafeAssumeValid(value);
+	}
+
+	static function stdioPersistentPlan(lines:Array<String>):TuiAppServerJsonRpcProcessLaunchPlan {
+		final args = [
+			"-c",
+			"printf '%s\\n' \"$@\"; while IFS= read -r _line; do :; done",
+			"codex-hxrust-runner-session"
+		];
+		for (line in lines)
+			args.push(withoutTrailingNewline(line));
+		return TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", args, "", []);
+	}
+
+	static function submittedTurnInboundLines(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):Array<String> {
+		final response = TuiPromptJsonRpcResponse.turnStart(request, TuiPromptTurnStartResponse.fromEnvelope(envelope));
+		return [
+			response.messageJson() + "\n",
+			TuiPromptThreadStatusChangedNotification.active(envelope.threadId).messageJson() + "\n",
+			TuiPromptJsonRpcNotification.turnStarted(envelope, response.result).messageJson() + "\n"
+		];
+	}
+
+	static function interruptReadyThenResponseLines(request:TuiPromptTurnInterruptRequest, threadId:ThreadId):Array<String> {
+		return [
+			TuiPromptThreadStatusChangedNotification.idle(threadId).messageJson() + "\n",
+			TuiPromptTurnInterruptResponse.fromRequest(request).messageJson() + "\n"
+		];
+	}
+
+	static function withoutTrailingNewline(line:String):String {
+		if (line == null || line.length == 0)
+			return "";
+		if (StringTools.endsWith(line, "\n"))
+			return line.substr(0, line.length - 1);
+		return line;
 	}
 
 	static function assertReasonEquals(expected:TerminalExitReason, actual:TerminalExitReason, label:String):Void {

@@ -1,6 +1,6 @@
 # TUI Live Shell Runner
 
-**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`, `TUI-LIVE-64` / `codex-hxrust-q156`
+**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`, `TUI-LIVE-64` / `codex-hxrust-q156`, `TUI-LIVE-65` / `codex-hxrust-o8lu`
 
 This slice adds the first runnable minimal TUI shell loop. It composes the
 production terminal backend, redraw scheduler, ChatWidget shell state, fake
@@ -61,6 +61,12 @@ process cancellation yet.
 the persistent stdio JSONL transport through the same typed interrupt outcome.
 Harnesses prove accepted persistent interrupts can clear active-turn state, and
 malformed/error interrupt responses fail closed before reaching runner state.
+
+`TUI-LIVE-65` adds an opt-in submitted-turn prompt path for persistent stdio.
+The runner harness now proves a `turn/start` response with scoped
+`turn/started` evidence can leave `activeTurn` populated, the following Ctrl-C
+uses the persistent `turn/interrupt` envelope, and the accepted interrupt clears
+the turn without exiting the shell or incrementing completed-turn count.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
