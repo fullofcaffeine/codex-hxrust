@@ -22,10 +22,12 @@ class TuiLiveShellDemoHarness {
 		testDemoConfigDefaultsToFake();
 		testDemoConfigParsesLineStdio();
 		testDemoConfigParsesProcessStdio();
+		testDemoConfigParsesPersistentStdio();
 		testDemoConfigRejectsInvalidArgs();
 		testNoTtyDemoRunCompletes();
 		testHeadlessDemoLineTransportSubmitsPrompt();
 		testHeadlessDemoProcessTransportSubmitsPrompt();
+		testHeadlessDemoPersistentTransportSubmitsTwoPrompts();
 		Sys.println("tui-live-shell-demo ok");
 	}
 
@@ -75,6 +77,8 @@ class TuiLiveShellDemoHarness {
 				assertEnvEquals(new TuiAppServerJsonRpcProcessEnvVar("CODEX_HOME", "/tmp/codex-home"), plan.envAt(0), "line env");
 			case ProcessStdio(_):
 				throw "line config should not select process transport";
+			case PersistentStdio(_):
+				throw "line config should not select persistent transport";
 		}
 	}
 
@@ -100,6 +104,38 @@ class TuiLiveShellDemoHarness {
 				assertIntEquals(2, plan.argCount(), "process arg count");
 				assertStringEquals("-c", plan.argAt(0), "process arg 0");
 				assertStringEquals("cat >/dev/null", plan.argAt(1), "process arg 1");
+			case PersistentStdio(_):
+				throw "process config should not select persistent transport";
+		}
+	}
+
+	static function testDemoConfigParsesPersistentStdio():Void {
+		final config = TuiLiveShellDemoConfig.parse([
+			"--transport=persistent-stdio",
+			"--line-command=sh",
+			"--line-arg=-c",
+			"--line-arg=cat >/dev/null",
+			"--scripted-prompt=first",
+			"--scripted-prompt=second"
+		]);
+		assertTrue(config.ok, "persistent config ok");
+		assertStringEquals("persistent_stdio", config.transportCode(), "persistent config transport");
+		assertStringEquals("first", config.scriptedPrompt, "persistent first scripted prompt");
+		assertIntEquals(2, config.scriptedPromptCount(), "persistent scripted prompt count");
+		assertStringEquals("second", config.scriptedPromptAt(1), "persistent second scripted prompt");
+		switch config.transportMode {
+			case Fake:
+				throw "persistent config should not select fake transport";
+			case LineStdio(_):
+				throw "persistent config should not select dry-run line transport";
+			case ProcessStdio(_):
+				throw "persistent config should not select one-shot process transport";
+			case PersistentStdio(plan):
+				assertStringEquals("sh", plan.command, "persistent command");
+				assertStringEquals("", plan.cwd, "persistent cwd");
+				assertIntEquals(2, plan.argCount(), "persistent arg count");
+				assertStringEquals("-c", plan.argAt(0), "persistent arg 0");
+				assertStringEquals("cat >/dev/null", plan.argAt(1), "persistent arg 1");
 		}
 	}
 
@@ -159,14 +195,63 @@ class TuiLiveShellDemoHarness {
 		assertStringEquals("assistant> echo: demo", outcome.finalFrameLineAt(4), "process demo assistant echo");
 	}
 
+	static function testHeadlessDemoPersistentTransportSubmitsTwoPrompts():Void {
+		final prompts = ["first", "second"];
+		final configArgs = ["--persistent-stdio", "--line-command=sh"];
+		for (prompt in prompts)
+			configArgs.push("--scripted-prompt=" + prompt);
+		for (arg in stdioPersistentArgs(expectedInboundLinesForPrompts(prompts)))
+			configArgs.push("--line-arg=" + arg);
+		final config = TuiLiveShellDemoConfig.parse(configArgs);
+		final backend = TuiLiveShellDemoMain.scriptedBackendForPrompts(config.scriptedPrompts());
+		final request = config.apply(TuiLiveShellDemoMain.baseRequest(backend, TerminalSetup.headless(TerminalSize.of(96, 16)),
+			TuiLiveShellRunPolicy.bounded(64, 2)));
+		final outcome = TuiLiveShellRunner.run(request);
+
+		assertTrue(config.ok, "persistent demo config ok");
+		assertStringEquals("persistent_stdio", config.transportCode(), "persistent demo transport");
+		assertIntEquals(2, config.scriptedPromptCount(), "persistent demo scripted prompt count");
+		assertIntEquals(2, outcome.acceptedPrompts(), "persistent demo accepted prompts");
+	}
+
 	static function expectedInboundLines(prompt:String):Array<String> {
-		final requestId = RequestId.fromInteger(2 + prompt.length);
+		return expectedInboundLinesFor(prompt, 2 + prompt.length);
+	}
+
+	static function expectedInboundLinesForPrompts(prompts:Array<String>):Array<String> {
+		final lines:Array<String> = [];
+		if (prompts == null)
+			return lines;
+		var nextRequestId = 2;
+		for (prompt in prompts) {
+			final text = prompt == null ? "" : prompt;
+			final requestId = nextRequestId + text.length;
+			for (line in expectedInboundLinesFor(text, requestId))
+				lines.push(line);
+			nextRequestId = requestId + 1;
+		}
+		return lines;
+	}
+
+	static function expectedInboundLinesFor(prompt:String, requestIdValue:Int):Array<String> {
+		final requestId = RequestId.fromInteger(requestIdValue);
 		final sessionId = SessionId.unsafeAssumeValid("00000000-0000-0000-0000-000000120001");
 		final threadId = ThreadId.unsafeAssumeValid("00000000-0000-0000-0000-000000120101");
 		final envelope = new TuiPromptSubmitEnvelope(requestId, sessionId, threadId, prompt);
 		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
 		final outcome = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(request, envelope, request.messageJson() + "\n");
 		return outcome.inboundLines();
+	}
+
+	static function stdioPersistentArgs(lines:Array<String>):Array<String> {
+		final args = [
+			"-c",
+			"printf '%s\\n' \"$@\"; while IFS= read -r _line; do :; done",
+			"codex-hxrust-stdio-session"
+		];
+		for (line in lines)
+			args.push(withoutTrailingNewline(line));
+		return args;
 	}
 
 	static function stdioEchoArgs(lines:Array<String>):Array<String> {

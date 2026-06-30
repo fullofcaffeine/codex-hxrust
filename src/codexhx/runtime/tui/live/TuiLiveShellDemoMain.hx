@@ -48,14 +48,21 @@ class TuiLiveShellDemoMain {
 	}
 
 	public static function scriptedBackend(prompt:String):TerminalBackend {
+		return scriptedBackendForPrompts(prompt == null || prompt.length == 0 ? [] : [prompt]);
+	}
+
+	public static function scriptedBackendForPrompts(prompts:Array<String>):TerminalBackend {
 		final events:Array<TerminalEvent> = [];
-		final text = prompt == null ? "" : prompt;
-		var index = 0;
-		while (index < text.length) {
-			events.push(TerminalEvent.Key(TerminalKey.Character(text.charAt(index))));
-			index++;
+		final concrete = prompts == null ? [] : prompts;
+		for (prompt in concrete) {
+			final text = prompt == null ? "" : prompt;
+			var index = 0;
+			while (index < text.length) {
+				events.push(TerminalEvent.Key(TerminalKey.Character(text.charAt(index))));
+				index++;
+			}
+			events.push(TerminalEvent.Key(TerminalKey.Enter));
 		}
-		events.push(TerminalEvent.Key(TerminalKey.Enter));
 		events.push(TerminalEvent.NoEvent);
 		events.push(TerminalEvent.NoEvent);
 		return new HeadlessTerminalBackend(events);
@@ -63,7 +70,7 @@ class TuiLiveShellDemoMain {
 
 	static function demoBackend(config:TuiLiveShellDemoConfig):TerminalBackend {
 		if (config.hasScriptedPrompt())
-			return scriptedBackend(config.scriptedPrompt);
+			return scriptedBackendForPrompts(config.scriptedPrompts());
 		return new LiveTerminalBackend(PollTimeoutMs);
 	}
 
@@ -76,7 +83,7 @@ class TuiLiveShellDemoMain {
 
 	static function demoPolicy(config:TuiLiveShellDemoConfig):TuiLiveShellRunPolicy {
 		if (config.hasScriptedPrompt())
-			return TuiLiveShellRunPolicy.bounded(128, 3);
+			return TuiLiveShellRunPolicy.bounded(256, 3);
 		return TuiLiveShellRunPolicy.bounded(MaxIterations, IdleEventLimit);
 	}
 

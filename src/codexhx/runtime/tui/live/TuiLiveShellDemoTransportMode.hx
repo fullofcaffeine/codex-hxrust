@@ -9,4 +9,5 @@ enum TuiLiveShellDemoTransportMode {
 	Fake;
 	LineStdio(plan:TuiAppServerJsonRpcProcessLaunchPlan);
 	ProcessStdio(plan:TuiAppServerJsonRpcProcessLaunchPlan);
+	PersistentStdio(plan:TuiAppServerJsonRpcProcessLaunchPlan);
 }

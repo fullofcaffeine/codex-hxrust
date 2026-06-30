@@ -4494,6 +4494,12 @@ Status: TUI-LIVE-59 adds `PersistentStdioTuiAppServerJsonRpcLineTransportAttache
 
 This is still synchronous and bounded. It does not yet own async reader/writer tasks, socket transport, cancellation/backpressure, unbounded streaming, credentialed model calls, persistence, or tools. It is the first app-server prompt transport shape that the live shell can hold across multiple submits instead of respawning or closing after every prompt.
 
+### TUI-LIVE-60 Persistent Stdio Live Shell Demo Mode
+
+Status: TUI-LIVE-60 exposes the persistent connector-backed prompt transport through the user-runnable generated live shell demo. `TuiLiveShellDemoTransportMode` adds `PersistentStdio`, `TuiLiveShellDemoConfig` parses `--persistent-stdio` and repeated `--scripted-prompt=...` values, and `TuiLiveShellDemoMain.scriptedBackendForPrompts()` emits typed key/Enter sequences for each scripted prompt. The generated demo harness and shell smoke prove two scripted prompt submissions through one shell-backed persistent stdio session and the generated binary reports `transport=persistent_stdio` plus `prompts=2`.
+
+This remains a synchronous, credential-free demo boundary. It does not yet own async reader/writer tasks, socket transport, cancellation/backpressure, unbounded app-server streams, credentialed model calls, persistence, or tools. It makes the persistent prompt transport visible in the runnable live-shell path rather than only in prompt-submit harnesses.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

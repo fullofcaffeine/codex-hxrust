@@ -1,6 +1,6 @@
 # TUI Live Shell Demo
 
-**Beads:** `TUI-LIVE-12` / `codex-hxrust-o797`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`, `TUI-LIVE-57` / `codex-hxrust-54gu`
+**Beads:** `TUI-LIVE-12` / `codex-hxrust-o797`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`, `TUI-LIVE-57` / `codex-hxrust-54gu`, `TUI-LIVE-60` / `codex-hxrust-riav`
 
 This slice adds a user-runnable generated Rust demo for the minimal live TUI
 shell. The demo uses `LiveTerminalBackend` with a 50ms native poll timeout and
@@ -14,7 +14,10 @@ feeds typed headless key events into the same runner, letting CI and CLI users
 prove an accepted prompt without interactive terminal input. `TUI-LIVE-57` adds
 an explicit `process_stdio` mode that injects the process-backed line attacher,
 so the generated demo can run that same scripted prompt path through a real
-one-shot child-process JSONL responder.
+one-shot child-process JSONL responder. `TUI-LIVE-60` adds `persistent_stdio`,
+which uses the persistent connector-backed prompt transport and repeated
+scripted prompts to prove two demo-level submissions through one long-lived
+shell-backed stdio session.
 
 Build and run:
 
@@ -52,9 +55,23 @@ cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked -- \
   --scripted-prompt=demo
 ```
 
+Optional persistent scripted prompt mode:
+
+```bash
+cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked -- \
+  --transport=persistent-stdio \
+  --line-command=sh \
+  --line-arg=-c \
+  --line-arg='<persistent JSONL responder script>' \
+  --scripted-prompt=first \
+  --scripted-prompt=second
+```
+
 The process-backed script must print a valid prompt response plus the modeled
-`turn/started`, assistant delta, and `turn/completed` JSONL records. The checked
-example lives in `harness/check-tui-live-shell-demo.sh`.
+`turn/started`, assistant delta, and `turn/completed` JSONL records for one
+request. The persistent script must keep reading request lines and print that
+same response/stream group for each request. The checked examples live in
+`harness/check-tui-live-shell-demo.sh`.
 
 The line-transport mode accepts repeated `--line-arg=...` values, repeated
 `--line-env=NAME=value` values, `--line-cwd=...`, and
@@ -72,9 +89,8 @@ primary thread and the fake demo agent when the terminal sends those modifiers.
 
 In CI or other no-TTY contexts, the native backend reports a typed no-TTY skip,
 draw/restore remain safe, and the demo exits after the bounded idle policy.
-When `--scripted-prompt=...` is provided, the demo intentionally selects the
-headless terminal backend, types the prompt, presses Enter, and exits after a
-small bounded idle window.
-The demo still does not open real app-server JSON-RPC transport, spawn the
-long-lived app-server process, call a model, execute tools, or use SQLite/log
-persistence.
+When one or more `--scripted-prompt=...` values are provided, the demo
+intentionally selects the headless terminal backend, types each prompt, presses
+Enter after each one, and exits after a small bounded idle window.
+The demo still does not open real app-server JSON-RPC transport, own async
+reader/writer tasks, call a model, execute tools, or use SQLite/log persistence.
