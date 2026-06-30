@@ -101,6 +101,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testLineConnectorComposesEndpointOpenAndAttachment();
 		testJsonRpcTransportCanUseLineConnector();
 		testJsonRpcLineConnectorTransportRejectsInvalidEndpoint();
+		testJsonRpcLineConnectorTransportClosesAfterLineRejection();
 		testFakeWireSessionSequencesInboundRecords();
 		testFakeWireSessionRejectsMismatchedInboundLine();
 		testFakeWireSessionRejectsMismatchedOutboundRecord();
@@ -618,6 +619,32 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertTrue(appServerTransport.lastCloseReport() == null, "invalid line-connected transport no close");
 		assertIntEquals(1, transport.lastFrameCount(), "invalid line-connected json-rpc frame count");
 		assertIntEquals(1, transport.lastWireRecordCount(), "invalid line-connected json-rpc wire record count");
+	}
+
+	static function testJsonRpcLineConnectorTransportClosesAfterLineRejection():Void {
+		final appServerTransport = DryRunTuiAppServerJsonRpcLineConnectedTransport.stdioWithRejection(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+			["app-server", "--json-rpc"], "/workspace", [new TuiAppServerJsonRpcProcessEnvVar("CODEX_HOME", "/tmp/codex-home")]),
+			"exchange_offline");
+		final transport = new JsonRpcTuiPromptTransport(appServerTransport);
+		final threadId = thread("00000000-0000-0000-0000-000000005579");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(102), session("00000000-0000-0000-0000-000000009984"), threadId,
+			"line rejected ask");
+		final outcome = transport.submitPrompt(envelope);
+		assertFalse(outcome.isAccepted(), "line-connected post-write rejection refused");
+		assertStringEquals("exchange_offline", outcome.code(), "line-connected post-write rejection code");
+		assertLineConnectReport(appServerTransport.lastConnectReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "stdio:codex", 1, true,
+			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
+			TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, TuiAppServerJsonRpcLineAttachmentStatus.Ready, "line-connected post-write rejection report");
+		final lineOutcome = appServerTransport.lastLineOutcome();
+		assertTrue(lineOutcome != null, "line-connected post-write rejection line outcome");
+		assertFalse(lineOutcome.isAccepted(), "line-connected post-write rejection line refused");
+		assertStringEquals("exchange_offline", lineOutcome.code(), "line-connected post-write rejection line code");
+		assertLineTranscript(lineOutcome.transcript(), TuiPromptJsonRpcRequest.turnStart(envelope).messageJson() + "\n", 0, 1,
+			"line-connected post-write rejection transcript");
+		assertLineCloseReport(appServerTransport.lastCloseReport(), TuiAppServerJsonRpcLineTransportState.Closed, "line_connected_transport_done", 1, 0,
+			"line-connected post-write rejection close report");
+		assertIntEquals(1, transport.lastFrameCount(), "line-connected post-write rejection frame count");
+		assertIntEquals(1, transport.lastWireRecordCount(), "line-connected post-write rejection wire record count");
 	}
 
 	static function testFakeWireSessionSequencesInboundRecords():Void {

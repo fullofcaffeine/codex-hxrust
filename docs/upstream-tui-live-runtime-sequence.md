@@ -4422,6 +4422,10 @@ Status: TUI-LIVE-43 adds `DryRunTuiAppServerJsonRpcLineConnectedTransport`, a `T
 
 Status: TUI-LIVE-44 records cleanup evidence for `DryRunTuiAppServerJsonRpcLineConnectedTransport`. After a connector-materialized fake line transport sends a prompt line, the transport closes it and exposes the typed `TuiAppServerJsonRpcLineCloseReport` without storing the handle. The prompt-submit gate proves accepted cleanup code, closed state, outbound/inbound line counts, invalid endpoint no-send/no-close behavior, generated Rust output inspection, and the existing connector-backed prompt behavior. This still does not open a socket, spawn an app-server process, call a model, persist state, or execute tools.
 
+### TUI-LIVE-45 Connector-Backed Line Rejection Cleanup
+
+Status: TUI-LIVE-45 extends `DryRunTuiAppServerJsonRpcLineConnectedTransport` with a value-shaped rejection-code mode and adds `DryRunRejectingTuiPromptJsonRpcExchange` so the connector-backed path can prove post-write line exchange rejection without storing an exchange trait object. The prompt-submit gate proves typed rejected transport outcome, outbound-only line transcript evidence, close report state/code/counts after rejection, invalid endpoint no-send/no-close behavior, generated Rust output inspection, and the existing connector-backed prompt behavior. This still does not open a socket, spawn an app-server process, call a model, persist state, or execute tools.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.
