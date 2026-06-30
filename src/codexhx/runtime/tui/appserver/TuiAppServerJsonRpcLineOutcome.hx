@@ -11,10 +11,11 @@ class TuiAppServerJsonRpcLineOutcome {
 	final streamNotificationsValue:Array<TuiPromptJsonRpcStreamNotification>;
 	final eventsValue:Array<TuiAppServerEvent>;
 	final inboundLinesValue:Array<String>;
+	final transcriptValue:TuiAppServerJsonRpcLineTranscript;
 
 	public function new(status:TuiAppServerJsonRpcTransportStatus, code:String, response:Null<TuiPromptJsonRpcResponse>,
 			notifications:Array<TuiPromptJsonRpcNotification>, streamNotifications:Array<TuiPromptJsonRpcStreamNotification>, events:Array<TuiAppServerEvent>,
-			inboundLines:Array<String>) {
+			inboundLines:Array<String>, ?transcript:TuiAppServerJsonRpcLineTranscript) {
 		this.status = status;
 		this.codeValue = normalize(code, status.text());
 		this.responseValue = response;
@@ -22,21 +23,23 @@ class TuiAppServerJsonRpcLineOutcome {
 		this.streamNotificationsValue = streamNotifications == null ? [] : streamNotifications.copy();
 		this.eventsValue = events == null ? [] : events.copy();
 		this.inboundLinesValue = inboundLines == null ? [] : inboundLines.copy();
+		this.transcriptValue = transcript == null ? TuiAppServerJsonRpcLineTranscript.empty() : transcript;
 	}
 
 	public static function accepted(response:TuiPromptJsonRpcResponse, notifications:Array<TuiPromptJsonRpcNotification>,
-			streamNotifications:Array<TuiPromptJsonRpcStreamNotification>, events:Array<TuiAppServerEvent>,
-			inboundLines:Array<String>):TuiAppServerJsonRpcLineOutcome {
+			streamNotifications:Array<TuiPromptJsonRpcStreamNotification>, events:Array<TuiAppServerEvent>, inboundLines:Array<String>,
+			?transcript:TuiAppServerJsonRpcLineTranscript):TuiAppServerJsonRpcLineOutcome {
 		return new TuiAppServerJsonRpcLineOutcome(TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", response, notifications, streamNotifications,
-			events, inboundLines);
+			events, inboundLines, transcript);
 	}
 
-	public static function rejected(code:String, ?inboundLines:Array<String>):TuiAppServerJsonRpcLineOutcome {
-		return new TuiAppServerJsonRpcLineOutcome(TuiAppServerJsonRpcTransportStatus.Rejected, code, null, [], [], [], inboundLines);
+	public static function rejected(code:String, ?inboundLines:Array<String>, ?transcript:TuiAppServerJsonRpcLineTranscript):TuiAppServerJsonRpcLineOutcome {
+		return new TuiAppServerJsonRpcLineOutcome(TuiAppServerJsonRpcTransportStatus.Rejected, code, null, [], [], [], inboundLines, transcript);
 	}
 
-	public static function disconnected(code:String, ?inboundLines:Array<String>):TuiAppServerJsonRpcLineOutcome {
-		return new TuiAppServerJsonRpcLineOutcome(TuiAppServerJsonRpcTransportStatus.Disconnected, code, null, [], [], [], inboundLines);
+	public static function disconnected(code:String, ?inboundLines:Array<String>,
+			?transcript:TuiAppServerJsonRpcLineTranscript):TuiAppServerJsonRpcLineOutcome {
+		return new TuiAppServerJsonRpcLineOutcome(TuiAppServerJsonRpcTransportStatus.Disconnected, code, null, [], [], [], inboundLines, transcript);
 	}
 
 	public function isAccepted():Bool {
@@ -79,6 +82,10 @@ class TuiAppServerJsonRpcLineOutcome {
 
 	public function inboundLines():Array<String> {
 		return inboundLinesValue.copy();
+	}
+
+	public function transcript():TuiAppServerJsonRpcLineTranscript {
+		return transcriptValue;
 	}
 
 	static function normalize(value:String, fallback:String):String {

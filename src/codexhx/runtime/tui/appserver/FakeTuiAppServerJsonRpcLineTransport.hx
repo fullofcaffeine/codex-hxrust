@@ -18,25 +18,27 @@ class FakeTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonRpcLineTra
 
 	public function sendPromptLine(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope, outboundLine:String):TuiAppServerJsonRpcLineOutcome {
 		if (!isOpen())
-			return TuiAppServerJsonRpcLineOutcome.disconnected("line_transport_closed");
+			return TuiAppServerJsonRpcLineOutcome.disconnected("line_transport_closed", [], TuiAppServerJsonRpcLineTranscript.empty());
 		if (request == null)
-			return TuiAppServerJsonRpcLineOutcome.rejected("missing_request");
+			return TuiAppServerJsonRpcLineOutcome.rejected("missing_request", [], TuiAppServerJsonRpcLineTranscript.empty());
 		if (outboundLine.length == 0)
-			return TuiAppServerJsonRpcLineOutcome.rejected("missing_outbound_line");
+			return TuiAppServerJsonRpcLineOutcome.rejected("missing_outbound_line", [], TuiAppServerJsonRpcLineTranscript.empty());
 		if (outboundLine != request.messageJson() + "\n")
-			return TuiAppServerJsonRpcLineOutcome.rejected("mismatched_outbound_line");
+			return TuiAppServerJsonRpcLineOutcome.rejected("mismatched_outbound_line", [], TuiAppServerJsonRpcLineTranscript.empty());
+		final outboundTranscript = TuiAppServerJsonRpcLineTranscript.outbound(outboundLine);
 		outboundLines = outboundLines + 1;
 		if (envelope == null)
-			return TuiAppServerJsonRpcLineOutcome.rejected("missing_envelope");
+			return TuiAppServerJsonRpcLineOutcome.rejected("missing_envelope", [], outboundTranscript);
 		final outcome = exchange.send(request, envelope);
 		if (outcome == null)
-			return TuiAppServerJsonRpcLineOutcome.rejected("missing_exchange_outcome");
+			return TuiAppServerJsonRpcLineOutcome.rejected("missing_exchange_outcome", [], outboundTranscript);
 		if (!outcome.isAccepted())
-			return TuiAppServerJsonRpcLineOutcome.rejected(outcome.code());
+			return TuiAppServerJsonRpcLineOutcome.rejected(outcome.code(), [], outboundTranscript);
 		final inboundFrames = inboundFramesFromOutcome(outcome);
-		inboundLines = inboundLines + inboundFrames.length;
-		return TuiAppServerJsonRpcLineOutcome.accepted(outcome.response(), outcome.notifications(), outcome.streamNotifications(), outcome.events(),
-			linesFromFrames(inboundFrames));
+		final lines = linesFromFrames(inboundFrames);
+		inboundLines = inboundLines + lines.length;
+		return TuiAppServerJsonRpcLineOutcome.accepted(outcome.response(), outcome.notifications(), outcome.streamNotifications(), outcome.events(), lines,
+			TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, lines));
 	}
 
 	public function isOpen():Bool {

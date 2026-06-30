@@ -14,6 +14,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportTranscript;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineCloseReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOutcome;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTranscript;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireOutcome;
@@ -74,6 +75,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testFakeLineTransportEmitsInboundJsonLines();
 		testFakeLineTransportTracksLifecycleAndRejectsAfterClose();
 		testFakeLineTransportRejectsMismatchedOutboundLine();
+		testFakeLineTransportRecordsOutboundOnlyPostWriteRejection();
 		testFakeWireSessionSequencesInboundRecords();
 		testFakeWireSessionRejectsMismatchedInboundLine();
 		testFakeWireSessionRejectsMismatchedOutboundRecord();
@@ -348,8 +350,11 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(10, lineTransport.inboundLineCount(), "fake line transport inbound count");
 		final response = expectJsonRpcResponse(outcome.response(), "fake line transport response");
 		assertStringEquals(response.messageJson() + "\n", outcome.inboundLineAt(0), "fake line transport response line");
+		assertLineTranscript(outcome.transcript(), request.messageJson() + "\n", 10, 11, "fake line transport transcript");
+		assertStringEquals(response.messageJson() + "\n", outcome.transcript().lineAt(1), "fake line transport transcript response line");
 		final idle = expectThreadStatusChangedStreamNotification(outcome.streamNotifications()[8], "fake line transport idle stream");
 		assertStringEquals(idle.messageJson() + "\n", outcome.inboundLineAt(9), "fake line transport idle line");
+		assertStringEquals(idle.messageJson() + "\n", outcome.transcript().inboundLineAt(9), "fake line transport transcript idle line");
 	}
 
 	static function testFakeLineTransportTracksLifecycleAndRejectsAfterClose():Void {
@@ -360,6 +365,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
 		final accepted = lineTransport.sendPromptLine(request, envelope, request.messageJson() + "\n");
 		assertTrue(accepted.isAccepted(), "fake line transport lifecycle accepted");
+		assertLineTranscript(accepted.transcript(), request.messageJson() + "\n", 10, 11, "fake line transport lifecycle transcript");
 		final close = lineTransport.close("test_close");
 		assertLineCloseReport(close, TuiAppServerJsonRpcLineTransportState.Closed, "test_close", 1, 10, "fake line transport close report");
 		assertFalse(lineTransport.isOpen(), "fake line transport closed flag");
@@ -368,6 +374,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertFalse(afterClose.isAccepted(), "fake line transport rejects after close");
 		assertStringEquals("disconnected", afterClose.statusText(), "fake line transport after close status");
 		assertStringEquals("line_transport_closed", afterClose.code(), "fake line transport after close code");
+		assertLineTranscript(afterClose.transcript(), "", 0, 0, "fake line transport after close transcript");
 		assertIntEquals(1, lineTransport.outboundLineCount(), "fake line transport outbound count unchanged after close");
 		assertIntEquals(10, lineTransport.inboundLineCount(), "fake line transport inbound count unchanged after close");
 	}
@@ -382,6 +389,20 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals("rejected", outcome.statusText(), "fake line transport mismatched status");
 		assertStringEquals("mismatched_outbound_line", outcome.code(), "fake line transport mismatched code");
 		assertIntEquals(0, outcome.inboundLineCount(), "fake line transport mismatched inbound line count");
+		assertLineTranscript(outcome.transcript(), "", 0, 0, "fake line transport mismatched transcript");
+	}
+
+	static function testFakeLineTransportRecordsOutboundOnlyPostWriteRejection():Void {
+		final lineTransport = new FakeTuiAppServerJsonRpcLineTransport(new RejectingPromptJsonRpcExchange("exchange_offline"));
+		final threadId = thread("00000000-0000-0000-0000-000000005574");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(97), session("00000000-0000-0000-0000-000000009989"), threadId, "line rejected ask");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final outcome = lineTransport.sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertFalse(outcome.isAccepted(), "fake line transport exchange rejection refused");
+		assertStringEquals("exchange_offline", outcome.code(), "fake line transport exchange rejection code");
+		assertLineTranscript(outcome.transcript(), request.messageJson() + "\n", 0, 1, "fake line transport exchange rejection transcript");
+		assertIntEquals(1, lineTransport.outboundLineCount(), "fake line transport exchange rejection outbound count");
+		assertIntEquals(0, lineTransport.inboundLineCount(), "fake line transport exchange rejection inbound count");
 	}
 
 	static function testFakeWireSessionSequencesInboundRecords():Void {
@@ -861,6 +882,18 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(expectedInboundLineCount, report.inboundLineCount, label + " inbound count");
 	}
 
+	static function assertLineTranscript(transcript:TuiAppServerJsonRpcLineTranscript, expectedOutboundLine:String, expectedInboundLineCount:Int,
+			expectedTotalLineCount:Int, label:String):Void {
+		if (transcript == null)
+			throw label + ": missing transcript";
+		assertStringEquals(expectedOutboundLine.length > 0 ? "true" : "false", transcript.hasOutboundLine() ? "true" : "false", label + " outbound flag");
+		assertStringEquals(expectedOutboundLine, transcript.outboundLine(), label + " outbound line");
+		assertIntEquals(expectedInboundLineCount, transcript.inboundLineCount(), label + " inbound count");
+		assertIntEquals(expectedTotalLineCount, transcript.totalLineCount(), label + " total count");
+		if (expectedOutboundLine.length > 0)
+			assertStringEquals(expectedOutboundLine, transcript.lineAt(0), label + " first line");
+	}
+
 	static function expectResponseFrame(frame:Null<TuiPromptJsonRpcFrame>, label:String):TuiPromptJsonRpcResponse {
 		final concrete = expectFrame(frame, label);
 		return switch concrete {
@@ -1215,7 +1248,8 @@ class MismatchedInboundLineTransport implements TuiAppServerJsonRpcLineTransport
 		final lines = outcome.inboundLines();
 		if (lines.length > 0)
 			lines[0] = "{\"jsonrpc\":\"2.0\",\"id\":0,\"result\":{}}\n";
-		return TuiAppServerJsonRpcLineOutcome.accepted(outcome.response(), outcome.notifications(), outcome.streamNotifications(), outcome.events(), lines);
+		return TuiAppServerJsonRpcLineOutcome.accepted(outcome.response(), outcome.notifications(), outcome.streamNotifications(), outcome.events(), lines,
+			TuiAppServerJsonRpcLineTranscript.accepted(outcome.transcript().outboundLine(), lines));
 	}
 
 	public function isOpen():Bool {
