@@ -1,6 +1,6 @@
 # TUI Live Shell Runner
 
-**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`
+**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`, `TUI-LIVE-64` / `codex-hxrust-q156`
 
 This slice adds the first runnable minimal TUI shell loop. It composes the
 production terminal backend, redraw scheduler, ChatWidget shell state, fake
@@ -56,6 +56,11 @@ path. `TuiLiveShellRunOutcome` now records last-interrupted turn ID,
 interrupted-turn count, and the last interrupt code alongside active/completed
 turn evidence. This is app-server request/effect plumbing, not real async
 process cancellation yet.
+
+`TUI-LIVE-64` keeps the runner-facing interrupt contract unchanged while routing
+the persistent stdio JSONL transport through the same typed interrupt outcome.
+Harnesses prove accepted persistent interrupts can clear active-turn state, and
+malformed/error interrupt responses fail closed before reaching runner state.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

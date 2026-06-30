@@ -248,9 +248,17 @@ targets the current active turn, rejects idle interrupts with `no_active_turn`,
 records last-interrupted turn state, clears the active turn, and deliberately
 does not increment completed-turn count. The default fake JSON-RPC transport
 returns an empty-result `turn/interrupt` response and projects a ready
-`interrupted` status. Connector-backed line transports currently reject
-interrupt with typed unsupported codes until the process/socket cancellation
-boundary exists.
+`interrupted` status.
+
+`TUI-LIVE-64` routes the same typed interrupt request through the persistent
+stdio JSONL transport. `TuiAppServerJsonRpcStdioSession` and
+`PersistentTuiAppServerJsonRpcLineConnectedTransport` now write a
+`turn/interrupt` line, decode the empty-result response with request-id
+correlation, surface accepted/rejected line evidence, and keep malformed or
+JSON-RPC error responses fail-closed as typed codes. The one-shot dry-run line
+transport still reports interrupt unsupported, and this slice still does not
+own async task cancellation, socket sessions, model-provider aborts, or OS
+process teardown.
 
 ```json
 {

@@ -5,6 +5,8 @@ package codexhx.runtime.tui.appserver;
 **/
 interface TuiAppServerJsonRpcLineTransport {
 	function sendPromptLine(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope, outboundLine:String):TuiAppServerJsonRpcLineOutcome;
+	function sendInterruptLine(request:TuiPromptTurnInterruptRequest, envelope:TuiPromptTurnInterruptEnvelope,
+		outboundLine:String):TuiPromptTurnInterruptLineOutcome;
 	function isOpen():Bool;
 	function stateText():String;
 	function close(code:String):TuiAppServerJsonRpcLineCloseReport;

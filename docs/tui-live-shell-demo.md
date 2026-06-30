@@ -1,6 +1,6 @@
 # TUI Live Shell Demo
 
-**Beads:** `TUI-LIVE-12` / `codex-hxrust-o797`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`, `TUI-LIVE-57` / `codex-hxrust-54gu`, `TUI-LIVE-60` / `codex-hxrust-riav`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`
+**Beads:** `TUI-LIVE-12` / `codex-hxrust-o797`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`, `TUI-LIVE-57` / `codex-hxrust-54gu`, `TUI-LIVE-60` / `codex-hxrust-riav`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`, `TUI-LIVE-63` / `codex-hxrust-s0fu`, `TUI-LIVE-64` / `codex-hxrust-q156`
 
 This slice adds a user-runnable generated Rust demo for the minimal live TUI
 shell. The demo uses `LiveTerminalBackend` with a 50ms native poll timeout and
@@ -21,9 +21,10 @@ shell-backed stdio session. `TUI-LIVE-61` makes the demo print runner-owned
 prompt-transport shutdown evidence, including persistent line-close state and
 aggregate JSONL counts. `TUI-LIVE-62` adds last/active/completed turn evidence
 to the same generated status line. `TUI-LIVE-63` adds interrupted-turn and
-interrupt-code evidence to that line, while scripted prompt demos still report
-zero interrupts unless a future scripted key path triggers Ctrl-C during an
-active long-running turn.
+interrupt-code evidence to that line. `TUI-LIVE-64` proves the persistent stdio
+transport can carry the typed interrupt envelope in harnesses; scripted prompt
+demos still report zero interrupts unless a future scripted key path triggers
+Ctrl-C during an active long-running turn.
 
 Build and run:
 

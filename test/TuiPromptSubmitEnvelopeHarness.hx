@@ -86,6 +86,7 @@ import codexhx.runtime.tui.appserver.TuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptTransportShutdownReport;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptEnvelope;
+import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptLineOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptRequest;
 import codexhx.runtime.tui.appserver.TuiPromptTurnInterruptResponse;
@@ -123,8 +124,11 @@ class TuiPromptSubmitEnvelopeHarness {
 		testProcessBackedLineTransportFeedsWireSession();
 		testProcessBackedLineTransportReportsFailuresAndClose();
 		testPersistentStdioSessionHandlesTwoPromptLines();
+		testPersistentStdioSessionHandlesInterruptLine();
 		testPersistentStdioSessionReportsRefusalsAndClose();
 		testPersistentConnectorBackedTransportReusesOneSession();
+		testPersistentConnectorBackedTransportSendsInterrupt();
+		testPersistentConnectorBackedTransportRejectsMalformedInterrupt();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
 		testLineConnectorComposesEndpointOpenAndAttachment();
@@ -795,6 +799,26 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals("line_transport_closed", afterClose.code(), "persistent stdio session after close code");
 	}
 
+	static function testPersistentStdioSessionHandlesInterruptLine():Void {
+		final interruptEnvelope = new TuiPromptTurnInterruptEnvelope(RequestId.fromInteger(219), session("00000000-0000-0000-0000-000000009984"),
+			thread("00000000-0000-0000-0000-000000005595"), turn("turn-219"));
+		final interruptRequest = TuiPromptTurnInterruptRequest.fromEnvelope(interruptEnvelope);
+		final expected = new FakeTuiAppServerJsonRpcLineTransport().sendInterruptLine(interruptRequest, interruptEnvelope,
+			interruptRequest.messageJson() + "\n");
+		assertTrue(expected.isAccepted(), "persistent interrupt expected fake line outcome");
+
+		final stdioSession = TuiAppServerJsonRpcStdioSession.withDefaultDecoder(stdioPersistentPlan(expected.inboundLines()), 4);
+		final outcome = stdioSession.sendInterruptLine(interruptRequest, interruptEnvelope, interruptRequest.messageJson() + "\n");
+		assertTrue(outcome.isAccepted(), "persistent stdio interrupt accepted: " + outcome.statusText() + "/" + outcome.code());
+		assertIntEquals(1, outcome.inboundLineCount(), "persistent stdio interrupt inbound count");
+		assertStringEquals(expected.inboundLineAt(0), outcome.inboundLineAt(0), "persistent stdio interrupt response line");
+		assertStringEquals("219", outcome.response().requestId.toString(), "persistent stdio interrupt response id");
+		assertIntEquals(1, stdioSession.outboundLineCount(), "persistent stdio interrupt outbound aggregate");
+		assertIntEquals(1, stdioSession.inboundLineCount(), "persistent stdio interrupt inbound aggregate");
+		assertLineCloseReport(stdioSession.close("persistent_interrupt_done"), TuiAppServerJsonRpcLineTransportState.Closed, "persistent_interrupt_done", 1,
+			1, "persistent stdio interrupt close");
+	}
+
 	static function testPersistentStdioSessionReportsRefusalsAndClose():Void {
 		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(116), session("00000000-0000-0000-0000-000000009983"),
 			thread("00000000-0000-0000-0000-000000005593"), "persistent session refusal");
@@ -872,6 +896,74 @@ class TuiPromptSubmitEnvelopeHarness {
 		final afterClose = appServerTransport.sendPrompt(secondRequest, secondEnvelope);
 		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Disconnected.text(), afterClose.status.text(), "persistent connector after close status");
 		assertStringEquals("line_connected_transport_closed", afterClose.code(), "persistent connector after close code");
+	}
+
+	static function testPersistentConnectorBackedTransportSendsInterrupt():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final activeThread = thread("00000000-0000-0000-0000-000000005596");
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final promptEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(119), activeSession, activeThread, "persistent interrupt prompt");
+		final promptRequest = TuiPromptJsonRpcRequest.turnStart(promptEnvelope);
+		final promptExpected = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(promptRequest, promptEnvelope, promptRequest.messageJson() + "\n");
+		assertTrue(promptExpected.isAccepted(), "persistent interrupt prompt expected fake line outcome");
+		final turnId = promptExpected.response().result.turnId;
+		final interruptEnvelope = new TuiPromptTurnInterruptEnvelope(RequestId.fromInteger(220), activeSession, activeThread, turnId);
+		final interruptRequest = TuiPromptTurnInterruptRequest.fromEnvelope(interruptEnvelope);
+		final interruptExpected = new FakeTuiAppServerJsonRpcLineTransport().sendInterruptLine(interruptRequest, interruptEnvelope,
+			interruptRequest.messageJson() + "\n");
+		assertTrue(interruptExpected.isAccepted(), "persistent interrupt expected fake line outcome");
+		final inbound = promptExpected.inboundLines();
+		for (line in interruptExpected.inboundLines())
+			inbound.push(line);
+
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(inbound)),
+			promptExpected.inboundLineCount());
+		final promptTransport = new JsonRpcTuiPromptTransport(appServerTransport);
+		final facade = attachedFacadeWithTransport(shell, activeThread, promptTransport);
+
+		final submit = facade.submitPrompt(RequestId.fromInteger(119), "persistent interrupt prompt");
+		assertTrue(submit.acceptedPrompt(), "persistent connector interrupt prompt accepted");
+		assertStringEquals(turnId.toString(), facade.activeTurnIdText(), "persistent connector active turn before interrupt");
+		final interrupted = facade.interruptActiveTurn(RequestId.fromInteger(220));
+		assertTrue(interrupted.acceptedInterrupt(), "persistent connector interrupt accepted");
+		assertStringEquals(turnId.toString(), facade.lastInterruptedTurnIdText(), "persistent connector interrupted turn id");
+		assertStringEquals("", facade.activeTurnIdText(), "persistent connector active turn cleared");
+		assertIntEquals(1, facade.interruptedTurnCount(), "persistent connector interrupted count");
+		assertIntEquals(0, facade.completedTurnCount(), "persistent connector completed count");
+		assertStringEquals("accepted", facade.lastInterruptCode(), "persistent connector interrupt code");
+		assertIntEquals(2, appServerTransport.sendCount(), "persistent connector send count includes interrupt");
+		assertTrue(appServerTransport.lastInterruptLineOutcome() != null && appServerTransport.lastInterruptLineOutcome().isAccepted(),
+			"persistent connector interrupt line accepted");
+		assertIntEquals(1, appServerTransport.lastInterruptLineOutcome().inboundLineCount(), "persistent connector interrupt inbound count");
+		assertLineCloseReport(appServerTransport.close("persistent_interrupt_connector_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"persistent_interrupt_connector_done", 2, promptExpected.inboundLineCount() + interruptExpected.inboundLineCount(),
+			"persistent connector interrupt close");
+	}
+
+	static function testPersistentConnectorBackedTransportRejectsMalformedInterrupt():Void {
+		final activeThread = thread("00000000-0000-0000-0000-000000005597");
+		final activeSession = session("00000000-0000-0000-0000-000000009999");
+		final interruptEnvelope = new TuiPromptTurnInterruptEnvelope(RequestId.fromInteger(221), activeSession, activeThread, turn("turn-221"));
+		final interruptRequest = TuiPromptTurnInterruptRequest.fromEnvelope(interruptEnvelope);
+		final appServerTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan(["{\"jsonrpc\":\"2.0\",\"id\":999,\"result\":{}}\n"])),
+			2);
+		final rejected = appServerTransport.sendTurnInterrupt(interruptRequest, interruptEnvelope);
+		assertFalse(rejected.isAccepted(), "persistent connector malformed interrupt rejected");
+		assertStringEquals("response_id_mismatch", rejected.code(), "persistent connector malformed interrupt code");
+		assertTrue(appServerTransport.lastInterruptLineOutcome() != null, "persistent connector malformed line outcome recorded");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Rejected.text(), appServerTransport.lastInterruptLineOutcome().statusText(),
+			"persistent connector malformed line status");
+		assertLineCloseReport(appServerTransport.close("persistent_malformed_interrupt_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"persistent_malformed_interrupt_done", 1, 1, "persistent connector malformed interrupt close");
+
+		final errorTransport = PersistentTuiAppServerJsonRpcLineConnectedTransport.withPersistentStdioSession(TuiAppServerJsonRpcLineEndpoint.Stdio(stdioPersistentPlan([
+			"{\"jsonrpc\":\"2.0\",\"id\":221,\"error\":{\"code\":-32601,\"message\":\"unsupported\"}}\n"
+		])), 2);
+		final unsupported = errorTransport.sendTurnInterrupt(interruptRequest, interruptEnvelope);
+		assertFalse(unsupported.isAccepted(), "persistent connector unsupported interrupt rejected");
+		assertStringEquals("json_rpc_error", unsupported.code(), "persistent connector unsupported interrupt code");
+		assertLineCloseReport(errorTransport.close("persistent_unsupported_interrupt_done"), TuiAppServerJsonRpcLineTransportState.Closed,
+			"persistent_unsupported_interrupt_done", 1, 1, "persistent connector unsupported interrupt close");
 	}
 
 	static function testProcessBackedLineConnectorUsesProcessAttacher():Void {
@@ -2459,6 +2551,11 @@ class MismatchedInboundLineTransport implements TuiAppServerJsonRpcLineTransport
 			lines[0] = "{\"jsonrpc\":\"2.0\",\"id\":0,\"result\":{}}\n";
 		return TuiAppServerJsonRpcLineOutcome.accepted(outcome.response(), outcome.notifications(), outcome.streamNotifications(), outcome.events(), lines,
 			TuiAppServerJsonRpcLineTranscript.accepted(outcome.transcript().outboundLine(), lines));
+	}
+
+	public function sendInterruptLine(request:TuiPromptTurnInterruptRequest, envelope:TuiPromptTurnInterruptEnvelope,
+			outboundLine:String):TuiPromptTurnInterruptLineOutcome {
+		return delegate.sendInterruptLine(request, envelope, outboundLine);
 	}
 
 	public function isOpen():Bool {

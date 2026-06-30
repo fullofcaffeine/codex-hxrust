@@ -25,6 +25,7 @@ import sys.io.Process;
 class TuiAppServerJsonRpcStdioSession implements TuiAppServerJsonRpcLineTransport {
 	final plan:TuiAppServerJsonRpcProcessLaunchPlan;
 	final decoder:TuiPromptJsonRpcInboundLineDecoder;
+	final interruptDecoder:TuiPromptTurnInterruptInboundLineDecoder;
 	final maxInboundLinesPerPrompt:Int;
 
 	var state:TuiAppServerJsonRpcLineTransportState;
@@ -35,6 +36,7 @@ class TuiAppServerJsonRpcStdioSession implements TuiAppServerJsonRpcLineTranspor
 	public function new(plan:TuiAppServerJsonRpcProcessLaunchPlan, maxInboundLinesPerPrompt:Int, decoder:TuiPromptJsonRpcInboundLineDecoder) {
 		this.plan = plan;
 		this.decoder = decoder;
+		this.interruptDecoder = new TuiPromptTurnInterruptInboundLineDecoder();
 		this.maxInboundLinesPerPrompt = maxInboundLinesPerPrompt <= 0 ? 64 : maxInboundLinesPerPrompt;
 		this.state = TuiAppServerJsonRpcLineTransportState.Open;
 		this.process = null;
@@ -102,6 +104,62 @@ class TuiAppServerJsonRpcStdioSession implements TuiAppServerJsonRpcLineTranspor
 				lastRejection = "incomplete_prompt_exchange";
 		}
 		return TuiAppServerJsonRpcLineOutcome.rejected(lastRejection == "" ? "inbound_limit_exceeded" : lastRejection, inbound,
+			TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, inbound));
+	}
+
+	public function sendInterruptLine(request:TuiPromptTurnInterruptRequest, envelope:TuiPromptTurnInterruptEnvelope,
+			outboundLine:String):TuiPromptTurnInterruptLineOutcome {
+		if (!isOpen())
+			return TuiPromptTurnInterruptLineOutcome.disconnected("line_transport_closed", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (request == null)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_request", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (outboundLine == null || outboundLine.length == 0)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_outbound_line", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (outboundLine != request.messageJson() + "\n")
+			return TuiPromptTurnInterruptLineOutcome.rejected("mismatched_outbound_line", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (envelope == null)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_envelope", [], TuiAppServerJsonRpcLineTranscript.outbound(outboundLine));
+
+		final refusal = refusalCode();
+		if (refusal.length > 0)
+			return TuiPromptTurnInterruptLineOutcome.rejected(refusal, [], TuiAppServerJsonRpcLineTranscript.outbound(outboundLine));
+
+		final started = ensureStarted();
+		if (started.length > 0)
+			return TuiPromptTurnInterruptLineOutcome.disconnected(started, [], TuiAppServerJsonRpcLineTranscript.outbound(outboundLine));
+
+		final active = process;
+		if (active == null)
+			return TuiPromptTurnInterruptLineOutcome.disconnected("missing_stdio_process", [], TuiAppServerJsonRpcLineTranscript.outbound(outboundLine));
+
+		try {
+			active.stdin.writeString(outboundLine);
+			active.stdin.flush();
+			outboundLines = outboundLines + 1;
+		} catch (e:haxe.Exception) {
+			return TuiPromptTurnInterruptLineOutcome.disconnected("stdio_write_failed", [], TuiAppServerJsonRpcLineTranscript.outbound(outboundLine));
+		}
+
+		final inbound:Array<String> = [];
+		var lastRejection = "missing_inbound_lines";
+		for (_ in 0...maxInboundLinesPerPrompt) {
+			final line = readInboundLine(active);
+			if (!line.ok)
+				return TuiPromptTurnInterruptLineOutcome.disconnected(line.code, inbound, TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, inbound));
+			inbound.push(line.value);
+			inboundLines = inboundLines + 1;
+			final decoded = interruptDecoder.decode(request, inbound);
+			if (decoded == null)
+				return TuiPromptTurnInterruptLineOutcome.rejected("missing_inbound_decode", inbound,
+					TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, inbound));
+			if (decoded.isAccepted())
+				return TuiPromptTurnInterruptLineOutcome.accepted(decoded.response(), decoded.events(), inbound,
+					TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, inbound));
+			lastRejection = decoded.code();
+			if (isTerminalDecodeRejection(lastRejection))
+				return TuiPromptTurnInterruptLineOutcome.rejected(lastRejection, inbound, TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, inbound));
+		}
+		return TuiPromptTurnInterruptLineOutcome.rejected(lastRejection == "" ? "inbound_limit_exceeded" : lastRejection, inbound,
 			TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, inbound));
 	}
 

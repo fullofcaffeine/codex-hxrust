@@ -41,6 +41,26 @@ class FakeTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonRpcLineTra
 			TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, lines));
 	}
 
+	public function sendInterruptLine(request:TuiPromptTurnInterruptRequest, envelope:TuiPromptTurnInterruptEnvelope,
+			outboundLine:String):TuiPromptTurnInterruptLineOutcome {
+		if (!isOpen())
+			return TuiPromptTurnInterruptLineOutcome.disconnected("line_transport_closed", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (request == null)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_request", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (outboundLine == null || outboundLine.length == 0)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_outbound_line", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (outboundLine != request.messageJson() + "\n")
+			return TuiPromptTurnInterruptLineOutcome.rejected("mismatched_outbound_line", [], TuiAppServerJsonRpcLineTranscript.empty());
+		final outboundTranscript = TuiAppServerJsonRpcLineTranscript.outbound(outboundLine);
+		outboundLines = outboundLines + 1;
+		if (envelope == null)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_envelope", [], outboundTranscript);
+		final response = TuiPromptTurnInterruptResponse.fromRequest(request);
+		final lines = [response.messageJson() + "\n"];
+		inboundLines = inboundLines + lines.length;
+		return TuiPromptTurnInterruptLineOutcome.accepted(response, [], lines, TuiAppServerJsonRpcLineTranscript.accepted(outboundLine, lines));
+	}
+
 	public function isOpen():Bool {
 		return state == TuiAppServerJsonRpcLineTransportState.Open;
 	}

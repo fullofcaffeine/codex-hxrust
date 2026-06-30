@@ -21,6 +21,7 @@ class ProcessBackedTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonR
 	final plan:TuiAppServerJsonRpcProcessLaunchPlan;
 	final runner:TuiAppServerJsonRpcStdioLineRunner;
 	final decoder:TuiPromptJsonRpcInboundLineDecoder;
+	final interruptDecoder:TuiPromptTurnInterruptInboundLineDecoder;
 
 	var state:TuiAppServerJsonRpcLineTransportState;
 	var outboundLines:Int;
@@ -31,6 +32,7 @@ class ProcessBackedTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonR
 		this.plan = plan;
 		this.runner = runner == null ? new TuiAppServerJsonRpcStdioLineRunner() : runner;
 		this.decoder = decoder == null ? new TuiPromptJsonRpcInboundLineDecoder() : decoder;
+		this.interruptDecoder = new TuiPromptTurnInterruptInboundLineDecoder();
 		this.state = TuiAppServerJsonRpcLineTransportState.Open;
 		this.outboundLines = 0;
 		this.inboundLines = 0;
@@ -68,6 +70,39 @@ class ProcessBackedTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonR
 			return TuiAppServerJsonRpcLineOutcome.rejected(decoded.code(), report.transcript().inboundLines(), report.transcript());
 		return TuiAppServerJsonRpcLineOutcome.accepted(decoded.response(), decoded.notifications(), decoded.streamNotifications(), decoded.events(),
 			report.transcript().inboundLines(), report.transcript());
+	}
+
+	public function sendInterruptLine(request:TuiPromptTurnInterruptRequest, envelope:TuiPromptTurnInterruptEnvelope,
+			outboundLine:String):TuiPromptTurnInterruptLineOutcome {
+		lastRunReportValue = null;
+		if (!isOpen())
+			return TuiPromptTurnInterruptLineOutcome.disconnected("line_transport_closed", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (request == null)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_request", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (outboundLine == null || outboundLine.length == 0)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_outbound_line", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (outboundLine != request.messageJson() + "\n")
+			return TuiPromptTurnInterruptLineOutcome.rejected("mismatched_outbound_line", [], TuiAppServerJsonRpcLineTranscript.empty());
+		if (envelope == null)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_envelope", [], TuiAppServerJsonRpcLineTranscript.outbound(outboundLine));
+
+		final report = runner.run(plan, outboundLine);
+		lastRunReportValue = report;
+		if (report == null)
+			return TuiPromptTurnInterruptLineOutcome.disconnected("missing_stdio_run_report", [], TuiAppServerJsonRpcLineTranscript.outbound(outboundLine));
+		outboundLines = outboundLines + report.outboundLineCount();
+		inboundLines = inboundLines + report.inboundLineCount();
+		if (report.status == TuiAppServerJsonRpcStdioLineRunStatus.Rejected)
+			return TuiPromptTurnInterruptLineOutcome.rejected(report.code, report.transcript().inboundLines(), report.transcript());
+		if (report.status == TuiAppServerJsonRpcStdioLineRunStatus.Failed)
+			return TuiPromptTurnInterruptLineOutcome.disconnected(report.code, report.transcript().inboundLines(), report.transcript());
+
+		final decoded = interruptDecoder.decode(request, report.transcript().inboundLines());
+		if (decoded == null)
+			return TuiPromptTurnInterruptLineOutcome.rejected("missing_inbound_decode", report.transcript().inboundLines(), report.transcript());
+		if (!decoded.isAccepted())
+			return TuiPromptTurnInterruptLineOutcome.rejected(decoded.code(), report.transcript().inboundLines(), report.transcript());
+		return TuiPromptTurnInterruptLineOutcome.accepted(decoded.response(), decoded.events(), report.transcript().inboundLines(), report.transcript());
 	}
 
 	public function isOpen():Bool {

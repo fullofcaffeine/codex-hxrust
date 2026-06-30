@@ -4530,6 +4530,25 @@ line transports return typed unsupported interrupt outcomes until a later slice
 owns process/socket cancellation, async reader/writer task coordination, and
 real app-server abort semantics.
 
+### TUI-LIVE-64 Persistent Interrupt Transport Envelope
+
+Status: TUI-LIVE-64 routes the typed `turn/interrupt` request through the
+persistent stdio JSONL transport. The line transport interface now has an
+interrupt-specific send path with `TuiPromptTurnInterruptLineOutcome`, and
+`TuiPromptTurnInterruptInboundLineDecoder` narrows raw JSONL to an empty-result
+interrupt response plus optional projected thread-status events. The persistent
+stdio session writes the interrupt line over the already-open child process,
+correlates the response id, records inbound/outbound line counts, and the
+persistent connector transport converts the accepted/rejected line result back
+into `TuiPromptTurnInterruptOutcome`. The prompt-submit generated gate proves
+accepted interrupt, active-turn clearing, malformed response rejection, and
+JSON-RPC error rejection through interpreter and generated Rust.
+
+This still does not own true async cancellation, socket-backed sessions,
+provider abort semantics, or OS process teardown. The deterministic responder
+models the request/response envelope needed before those live cancellation
+effects are attached.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.
