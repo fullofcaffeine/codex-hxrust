@@ -26,6 +26,7 @@ class TuiLiveShellRunner {
 		final setup = request.backend.setup(request.setup);
 		outcome.recordSetup(setup);
 		if (!setup.ok) {
+			recordTurnState(request, outcome);
 			shutdownPromptTransport(request, outcome, "live_shell_setup_failed");
 			outcome.recordRestore(request.backend.restore(TerminalRestoreReason.ErrorExit));
 			return outcome;
@@ -37,11 +38,13 @@ class TuiLiveShellRunner {
 			enqueueInitialEvents(request);
 			flushCurrentFrame(request, outcome);
 			runLoop(request, pump, outcome);
+			recordTurnState(request, outcome);
 			shutdownPromptTransport(request, outcome, "live_shell_runner_done");
 			outcome.recordRestore(request.backend.restore(TerminalRestoreReason.NormalExit));
 		} catch (message:String) {
 			outcome.recordExit(TerminalExitReason.Error);
 			request.backend.requestExit(TerminalExitReason.Error);
+			recordTurnState(request, outcome);
 			shutdownPromptTransport(request, outcome, "live_shell_runner_error");
 			outcome.recordRestore(request.backend.restore(TerminalRestoreReason.ErrorExit));
 			throw message;
@@ -51,6 +54,11 @@ class TuiLiveShellRunner {
 
 	static function shutdownPromptTransport(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome, code:String):Void {
 		outcome.recordPromptTransportShutdown(request.facade.shutdownPromptTransport(code));
+	}
+
+	static function recordTurnState(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome):Void {
+		outcome.recordTurnState(request.facade.activeTurnIdText(), request.facade.lastStartedTurnIdText(), request.facade.lastCompletedTurnIdText(),
+			request.facade.completedTurnCount());
 	}
 
 	static function attachSession(request:TuiLiveShellRunRequest):Void {

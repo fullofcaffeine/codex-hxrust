@@ -1,6 +1,6 @@
 # TUI Live Shell Runner
 
-**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`
+**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`, `TUI-LIVE-62` / `codex-hxrust-dgl3`
 
 This slice adds the first runnable minimal TUI shell loop. It composes the
 production terminal backend, redraw scheduler, ChatWidget shell state, fake
@@ -41,6 +41,13 @@ a typed `TuiPromptTransportShutdownReport`, and `TuiLiveShellRunner` records it
 before terminal restore on normal, setup-failure, and error exits. Persistent
 stdio shutdown delegates to the underlying line close report so runner/demo
 outcomes can prove aggregate outbound/inbound JSONL counts.
+
+`TUI-LIVE-62` tracks active turn identity through the prompt path. The fake
+app-server facade records the accepted `turn/start` response, exposes active,
+last-started, and last-completed turn IDs, and clears the active turn when the
+projected completion/ready event drains. The runner outcome records those facts
+so the generated demo can report completed turn evidence before the later
+`turn/interrupt` request path exists.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

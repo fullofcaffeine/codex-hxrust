@@ -3,6 +3,7 @@ package codexhx.runtime.tui.appserver;
 import codexhx.protocol.RequestId;
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
+import codexhx.protocol.TurnId;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellEffect;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.chatwidget.ChatWidgetStatusKind;
@@ -29,6 +30,10 @@ class FakeTuiAppServerFacade {
 	var activeSessionValue:Null<SessionId>;
 	var primaryThreadValue:Null<ThreadId>;
 	var activeThreadValue:Null<ThreadId>;
+	var activeTurnValue:Null<TurnId>;
+	var lastStartedTurnValue:Null<TurnId>;
+	var lastCompletedTurnValue:Null<TurnId>;
+	var completedTurnCountValue:Int;
 	var latestAttachGeneration:Int;
 	var latestPromptGeneration:Int;
 	var lastPromptLifecycleValue:TuiPromptPendingRequestLifecycle;
@@ -42,6 +47,10 @@ class FakeTuiAppServerFacade {
 		this.activeSessionValue = null;
 		this.primaryThreadValue = null;
 		this.activeThreadValue = null;
+		this.activeTurnValue = null;
+		this.lastStartedTurnValue = null;
+		this.lastCompletedTurnValue = null;
+		this.completedTurnCountValue = 0;
 		this.latestAttachGeneration = 0;
 		this.latestPromptGeneration = 0;
 		this.lastPromptLifecycleValue = TuiPromptPendingRequestLifecycle.none();
@@ -61,6 +70,26 @@ class FakeTuiAppServerFacade {
 
 	public function primaryThread():Null<ThreadId> {
 		return primaryThreadValue;
+	}
+
+	public function activeTurn():Null<TurnId> {
+		return activeTurnValue;
+	}
+
+	public function activeTurnIdText():String {
+		return turnText(activeTurnValue);
+	}
+
+	public function lastStartedTurnIdText():String {
+		return turnText(lastStartedTurnValue);
+	}
+
+	public function lastCompletedTurnIdText():String {
+		return turnText(lastCompletedTurnValue);
+	}
+
+	public function completedTurnCount():Int {
+		return completedTurnCountValue;
 	}
 
 	public function agentNavigation():AgentNavigationState {
@@ -120,6 +149,7 @@ class FakeTuiAppServerFacade {
 			resolvePromptPending(requestId, false);
 			return TuiPromptSubmitResult.transportRejected(envelope, effects);
 		}
+		recordTurnStarted(transportOutcome.response());
 		resolvePromptPending(requestId, true);
 		for (event in transportOutcome.events())
 			enqueue(event);
@@ -137,6 +167,7 @@ class FakeTuiAppServerFacade {
 				activeSessionValue = sessionId;
 				primaryThreadValue = threadId;
 				activeThreadValue = threadId;
+				clearTurnState();
 				agentNavigationValue.clear();
 				agentNavigationValue.upsert(threadId, "", "", false);
 				effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
@@ -152,6 +183,7 @@ class FakeTuiAppServerFacade {
 				} else {
 					effects.push(TuiAppServerShellEffect.AppServerEventApplied(event));
 					appendShellEffects(effects, shellValue.setStatus(statusKind(status), statusText(status)));
+					recordThreadStatusForTurn(status);
 				}
 			case TuiAppServerEvent.AssistantDelta(threadId, delta):
 				if (!activeThreadMatches(threadId)) {
@@ -253,6 +285,38 @@ class FakeTuiAppServerFacade {
 			pendingAfter) : TuiPromptPendingRequestLifecycle.rejected(requestId, pendingBefore, pendingAfter);
 	}
 
+	function recordTurnStarted(response:TuiPromptTurnStartResponse):Void {
+		if (response == null)
+			return;
+		activeTurnValue = response.turnId;
+		lastStartedTurnValue = response.turnId;
+	}
+
+	function recordThreadStatusForTurn(status:TuiAppServerThreadStatus):Void {
+		switch status {
+			case Ready(_):
+				recordTurnCompleted();
+			case Failed(_):
+				recordTurnCompleted();
+			case Working(_):
+		}
+	}
+
+	function recordTurnCompleted():Void {
+		if (activeTurnValue == null)
+			return;
+		lastCompletedTurnValue = activeTurnValue;
+		activeTurnValue = null;
+		completedTurnCountValue = completedTurnCountValue + 1;
+	}
+
+	function clearTurnState():Void {
+		activeTurnValue = null;
+		lastStartedTurnValue = null;
+		lastCompletedTurnValue = null;
+		completedTurnCountValue = 0;
+	}
+
 	function activeThreadMatches(threadId:ThreadId):Bool {
 		return activeThreadValue != null && activeThreadValue.equals(threadId);
 	}
@@ -303,5 +367,9 @@ class FakeTuiAppServerFacade {
 		if (value == null || value.length == 0)
 			return fallback;
 		return value;
+	}
+
+	static function turnText(turnId:Null<TurnId>):String {
+		return turnId == null ? "" : turnId.toString();
 	}
 }

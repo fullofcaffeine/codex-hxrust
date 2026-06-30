@@ -70,6 +70,10 @@ class TuiLiveShellRunnerHarness {
 
 		assertIntEquals(1, outcome.submittedPrompts(), "submitted prompts");
 		assertIntEquals(1, outcome.acceptedPrompts(), "accepted prompts");
+		assertStringEquals("turn-4", outcome.lastStartedTurnIdText(), "last started turn");
+		assertStringEquals("turn-4", outcome.lastCompletedTurnIdText(), "last completed turn");
+		assertStringEquals("", outcome.activeTurnIdText(), "active turn cleared");
+		assertIntEquals(1, outcome.completedTurns(), "completed turn count");
 		assertTrue(outcome.appServerEvents() >= 3, "fake app-server echo events");
 		assertStringEquals("user> hi", outcome.finalFrameLineAt(3), "user row rendered");
 		assertStringEquals("assistant> echo: hi", outcome.finalFrameLineAt(4), "assistant echo rendered");
@@ -99,6 +103,10 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.promptTransportClosed(), "line-connected prompt transport shutdown");
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "line-connected prompt transport line close");
 		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "line-connected shutdown outbound lines");
+		assertStringEquals("turn-6", outcome.lastStartedTurnIdText(), "line-connected last started turn");
+		assertStringEquals("turn-6", outcome.lastCompletedTurnIdText(), "line-connected last completed turn");
+		assertStringEquals("", outcome.activeTurnIdText(), "line-connected active turn cleared");
+		assertIntEquals(1, outcome.completedTurns(), "line-connected completed turn count");
 		assertStringEquals("assistant> echo: line", outcome.finalFrameLineAt(4), "line-connected assistant echo");
 		assertTrue(attempt != null, "line-connected attempt report");
 		assertStatusEquals(TuiAppServerJsonRpcLineConnectStatus.Ready, attempt.connectStatus, "line-connected connect status");

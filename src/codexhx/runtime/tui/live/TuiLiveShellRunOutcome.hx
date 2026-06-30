@@ -27,6 +27,10 @@ class TuiLiveShellRunOutcome {
 	var exitRequestedValue:Bool;
 	var exitReasonValue:TerminalExitReason;
 	var promptTransportShutdownValue:Null<TuiPromptTransportShutdownReport>;
+	var activeTurnIdValue:String;
+	var lastStartedTurnIdValue:String;
+	var lastCompletedTurnIdValue:String;
+	var completedTurnsValue:Int;
 	final finalFrameLines:Array<String>;
 
 	public function new() {
@@ -45,6 +49,10 @@ class TuiLiveShellRunOutcome {
 		this.exitRequestedValue = false;
 		this.exitReasonValue = TerminalExitReason.Requested;
 		this.promptTransportShutdownValue = null;
+		this.activeTurnIdValue = "";
+		this.lastStartedTurnIdValue = "";
+		this.lastCompletedTurnIdValue = "";
+		this.completedTurnsValue = 0;
 		this.finalFrameLines = [];
 	}
 
@@ -128,6 +136,13 @@ class TuiLiveShellRunOutcome {
 		promptTransportShutdownValue = report;
 	}
 
+	public function recordTurnState(activeTurnId:String, lastStartedTurnId:String, lastCompletedTurnId:String, completedTurns:Int):Void {
+		activeTurnIdValue = normalize(activeTurnId);
+		lastStartedTurnIdValue = normalize(lastStartedTurnId);
+		lastCompletedTurnIdValue = normalize(lastCompletedTurnId);
+		completedTurnsValue = completedTurns < 0 ? 0 : completedTurns;
+	}
+
 	public function setupAccepted():Bool {
 		return setupOperationValue != null && setupOperationValue.ok;
 	}
@@ -208,9 +223,29 @@ class TuiLiveShellRunOutcome {
 		return promptTransportShutdownValue == null ? 0 : promptTransportShutdownValue.inboundLineCount;
 	}
 
+	public function activeTurnIdText():String {
+		return activeTurnIdValue;
+	}
+
+	public function lastStartedTurnIdText():String {
+		return lastStartedTurnIdValue;
+	}
+
+	public function lastCompletedTurnIdText():String {
+		return lastCompletedTurnIdValue;
+	}
+
+	public function completedTurns():Int {
+		return completedTurnsValue;
+	}
+
 	public function finalFrameLineAt(index:Int):String {
 		if (index < 0 || index >= finalFrameLines.length)
 			return "";
 		return finalFrameLines[index];
+	}
+
+	static function normalize(value:String):String {
+		return value == null ? "" : value;
 	}
 }

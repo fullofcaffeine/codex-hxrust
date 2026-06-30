@@ -216,6 +216,10 @@ class TuiLiveShellDemoHarness {
 		assertTrue(outcome.promptTransportLineCloseRecorded(), "persistent demo line close recorded");
 		assertIntEquals(2, outcome.promptTransportOutboundLineCount(), "persistent demo outbound line count");
 		assertIntEquals(20, outcome.promptTransportInboundLineCount(), "persistent demo inbound line count");
+		assertStringEquals("turn-14", outcome.lastStartedTurnIdText(), "persistent demo last started turn");
+		assertStringEquals("turn-14", outcome.lastCompletedTurnIdText(), "persistent demo last completed turn");
+		assertStringEquals("", outcome.activeTurnIdText(), "persistent demo active turn cleared");
+		assertIntEquals(2, outcome.completedTurns(), "persistent demo completed turns");
 	}
 
 	static function expectedInboundLines(prompt:String):Array<String> {

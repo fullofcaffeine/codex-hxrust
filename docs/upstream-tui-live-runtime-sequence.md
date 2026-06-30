@@ -4506,6 +4506,12 @@ Status: TUI-LIVE-61 adds runner-owned shutdown for the prompt transport path. `T
 
 This is still a synchronous shutdown contract, not async task cancellation, socket ownership, background reader/writer joins, credentialed model traffic, persistence, or tools. It makes persistent prompt transport cleanup a live-shell responsibility instead of a test-only manual close.
 
+### TUI-LIVE-62 Active Turn Tracking In Live Shell Prompt Path
+
+Status: TUI-LIVE-62 records accepted `turn/start` responses as live-shell turn state. `FakeTuiAppServerFacade` now tracks the active turn id, last started turn id, last completed turn id, and completed-turn count; projected completion/ready status clears the active turn while retaining completed-turn evidence. `TuiLiveShellRunOutcome` and the generated live-shell demo expose those facts, so the persistent scripted demo reports the second prompt's `lastTurn=turn-14`, an empty active turn after completion, and `completedTurns=2`.
+
+This is not full interrupt/cancellation yet. It does not send `turn/interrupt`, own async cancellation tokens, join background reader/writer tasks, or model provider abort semantics. It gives the live shell the typed active-turn identity needed before Ctrl-C can target a running turn instead of only exiting the shell.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

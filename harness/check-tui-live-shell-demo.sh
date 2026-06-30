@@ -51,7 +51,7 @@ printf "{\"jsonrpc\":\"2.0\",\"method\":\"thread/status/changed\",\"params\":{\"
 done'
 persistent_output="$(cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked --quiet -- --transport=persistent-stdio --line-command=sh --line-arg=-c --line-arg="$persistent_responder" --scripted-prompt=first --scripted-prompt=second)"
 printf '%s\n' "$persistent_output"
-if [[ "$persistent_output" != *"transport=persistent_stdio"* || "$persistent_output" != *"transportClosed=true"* || "$persistent_output" != *"lineClose=true"* || "$persistent_output" != *"outboundLines=2"* || "$persistent_output" != *"inboundLines=20"* || "$persistent_output" != *"prompts=2"* ]]; then
+if [[ "$persistent_output" != *"transport=persistent_stdio"* || "$persistent_output" != *"transportClosed=true"* || "$persistent_output" != *"lineClose=true"* || "$persistent_output" != *"outboundLines=2"* || "$persistent_output" != *"inboundLines=20"* || "$persistent_output" != *"lastTurn=turn-14"* || "$persistent_output" != *"completedTurns=2"* || "$persistent_output" != *"prompts=2"* ]]; then
 	echo "scripted persistent-stdio demo did not report expected accepted prompts" >&2
 	exit 1
 fi
