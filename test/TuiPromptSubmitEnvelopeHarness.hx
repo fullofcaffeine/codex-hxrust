@@ -29,6 +29,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOpenOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOpenOutcomeStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTranscript;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttemptReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachment;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachmentReport;
@@ -597,6 +598,9 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(10, lineOutcome.inboundLineCount(), "line-connected transport inbound line count");
 		assertLineCloseReport(appServerTransport.lastCloseReport(), TuiAppServerJsonRpcLineTransportState.Closed, "line_connected_transport_done", 1, 10,
 			"line-connected transport close report");
+		assertLineTransportAttempt(appServerTransport.lastAttemptReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true,
+			TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", TuiAppServerJsonRpcLineTransportState.Closed, "line_connected_transport_done", 1, 10,
+			"line-connected transport attempt report");
 		assertIntEquals(11, transport.lastFrameCount(), "line-connected json-rpc frame count");
 		assertIntEquals(11, transport.lastWireRecordCount(), "line-connected json-rpc wire record count");
 		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.Complete, "100", "100", 9, "line-connected json-rpc correlation");
@@ -617,6 +621,8 @@ class TuiPromptSubmitEnvelopeHarness {
 			TuiAppServerJsonRpcLineAttachmentStatus.Refused, "invalid line-connected transport report");
 		assertTrue(appServerTransport.lastLineOutcome() == null, "invalid line-connected transport no line send");
 		assertTrue(appServerTransport.lastCloseReport() == null, "invalid line-connected transport no close");
+		assertLineTransportAttempt(appServerTransport.lastAttemptReport(), TuiAppServerJsonRpcLineConnectStatus.Refused, "missing_command", false, null, "",
+			null, "", 0, 0, "invalid line-connected transport attempt report");
 		assertIntEquals(1, transport.lastFrameCount(), "invalid line-connected json-rpc frame count");
 		assertIntEquals(1, transport.lastWireRecordCount(), "invalid line-connected json-rpc wire record count");
 	}
@@ -643,6 +649,9 @@ class TuiPromptSubmitEnvelopeHarness {
 			"line-connected post-write rejection transcript");
 		assertLineCloseReport(appServerTransport.lastCloseReport(), TuiAppServerJsonRpcLineTransportState.Closed, "line_connected_transport_done", 1, 0,
 			"line-connected post-write rejection close report");
+		assertLineTransportAttempt(appServerTransport.lastAttemptReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true,
+			TuiAppServerJsonRpcTransportStatus.Rejected, "exchange_offline", TuiAppServerJsonRpcLineTransportState.Closed, "line_connected_transport_done", 1,
+			0, "line-connected post-write rejection attempt report");
 		assertIntEquals(1, transport.lastFrameCount(), "line-connected post-write rejection frame count");
 		assertIntEquals(1, transport.lastWireRecordCount(), "line-connected post-write rejection wire record count");
 	}
@@ -1122,6 +1131,29 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals(expectedCode, report.code, label + " code");
 		assertIntEquals(expectedOutboundLineCount, report.outboundLineCount, label + " outbound count");
 		assertIntEquals(expectedInboundLineCount, report.inboundLineCount, label + " inbound count");
+	}
+
+	static function assertLineTransportAttempt(report:TuiAppServerJsonRpcLineTransportAttemptReport,
+			expectedConnectStatus:TuiAppServerJsonRpcLineConnectStatus, expectedConnectCode:String, expectedMaterialized:Bool,
+			expectedLineStatus:Null<TuiAppServerJsonRpcTransportStatus>, expectedLineCode:String,
+			expectedCloseState:Null<TuiAppServerJsonRpcLineTransportState>, expectedCloseCode:String, expectedOutboundLineCount:Int,
+			expectedInboundLineCount:Int, label:String):Void {
+		if (report == null)
+			throw label + ": missing attempt report";
+		assertStringEquals(expectedConnectStatus.text(), report.connectStatusText(), label + " connect status");
+		assertStringEquals(expectedConnectCode, report.connectCode(), label + " connect code");
+		if (expectedMaterialized)
+			assertTrue(report.transportMaterialized, label + " materialized");
+		else
+			assertFalse(report.transportMaterialized, label + " not materialized");
+		assertStringEquals(expectedLineStatus == null ? "false" : "true", report.hasLineOutcome() ? "true" : "false", label + " line recorded");
+		assertStringEquals(expectedLineStatus == null ? "" : expectedLineStatus.text(), report.lineStatusText(), label + " line status");
+		assertStringEquals(expectedLineCode, report.lineCode(), label + " line code");
+		assertStringEquals(expectedCloseState == null ? "false" : "true", report.hasCloseReport() ? "true" : "false", label + " close recorded");
+		assertStringEquals(expectedCloseState == null ? "" : expectedCloseState.text(), report.closeStateText(), label + " close state");
+		assertStringEquals(expectedCloseCode, report.closeCode(), label + " close code");
+		assertIntEquals(expectedOutboundLineCount, report.outboundLineCount(), label + " outbound count");
+		assertIntEquals(expectedInboundLineCount, report.inboundLineCount(), label + " inbound count");
 	}
 
 	static function assertLineTranscript(transcript:TuiAppServerJsonRpcLineTranscript, expectedOutboundLine:String, expectedInboundLineCount:Int,

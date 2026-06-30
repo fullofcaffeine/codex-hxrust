@@ -4,7 +4,8 @@ package codexhx.runtime.tui.appserver;
 	Typed result from a line-oriented app-server JSON-RPC exchange.
 **/
 class TuiAppServerJsonRpcLineOutcome {
-	final status:TuiAppServerJsonRpcTransportStatus;
+	public final status:TuiAppServerJsonRpcTransportStatus;
+
 	final codeValue:String;
 	final responseValue:Null<TuiPromptJsonRpcResponse>;
 	final notificationsValue:Array<TuiPromptJsonRpcNotification>;

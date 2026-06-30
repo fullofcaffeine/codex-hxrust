@@ -10,6 +10,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 	var lastConnectReportValue:TuiAppServerJsonRpcLineConnectReport;
 	var lastLineOutcomeValue:TuiAppServerJsonRpcLineOutcome;
 	var lastCloseReportValue:TuiAppServerJsonRpcLineCloseReport;
+	var lastAttemptReportValue:TuiAppServerJsonRpcLineTransportAttemptReport;
 
 	public function new(endpoint:TuiAppServerJsonRpcLineEndpoint, rejectionCode:String) {
 		this.endpoint = endpoint;
@@ -17,6 +18,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 		this.lastConnectReportValue = null;
 		this.lastLineOutcomeValue = null;
 		this.lastCloseReportValue = null;
+		this.lastAttemptReportValue = null;
 	}
 
 	public static function stdio(plan:TuiAppServerJsonRpcProcessLaunchPlan):DryRunTuiAppServerJsonRpcLineConnectedTransport {
@@ -39,6 +41,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 		lastConnectReportValue = null;
 		lastLineOutcomeValue = null;
 		lastCloseReportValue = null;
+		lastAttemptReportValue = null;
 		if (request == null)
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_request");
 		final outbound = TuiAppServerJsonRpcTransportTranscript.outbound(request);
@@ -47,14 +50,19 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 		final connector = new DryRunTuiAppServerJsonRpcLineConnector();
 		final connectReport = connector.connect(endpoint);
 		lastConnectReportValue = connectReport;
-		if (connectReport == null || !connectReport.isReady())
+		if (connectReport == null || !connectReport.isReady()) {
+			recordAttempt(connectReport, null, null, false);
 			return TuiAppServerJsonRpcTransportOutcome.rejected(connectReport == null ? "missing_connect_report" : connectReport.code, outbound);
+		}
 		final lineTransport = materializeLineTransport(connector, connectReport);
-		if (lineTransport == null)
+		if (lineTransport == null) {
+			recordAttempt(connectReport, null, null, false);
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_line_transport", outbound);
+		}
 		final lineOutcome = lineTransport.sendPromptLine(request, envelope, request.messageJson() + "\n");
 		lastLineOutcomeValue = lineOutcome;
 		lastCloseReportValue = lineTransport.close("line_connected_transport_done");
+		recordAttempt(connectReport, lineOutcome, lastCloseReportValue, true);
 		if (lineOutcome == null)
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_line_outcome", outbound);
 		final transcript = new TuiAppServerJsonRpcTransportTranscript(request, inboundFramesFromLineOutcome(lineOutcome));
@@ -77,6 +85,15 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 
 	public function lastCloseReport():TuiAppServerJsonRpcLineCloseReport {
 		return lastCloseReportValue;
+	}
+
+	public function lastAttemptReport():TuiAppServerJsonRpcLineTransportAttemptReport {
+		return lastAttemptReportValue;
+	}
+
+	function recordAttempt(connectReport:TuiAppServerJsonRpcLineConnectReport, lineOutcome:TuiAppServerJsonRpcLineOutcome,
+			closeReport:TuiAppServerJsonRpcLineCloseReport, transportMaterialized:Bool):Void {
+		lastAttemptReportValue = TuiAppServerJsonRpcLineTransportAttemptReport.fromParts(connectReport, lineOutcome, closeReport, transportMaterialized);
 	}
 
 	function materializeLineTransport(connector:DryRunTuiAppServerJsonRpcLineConnector,
