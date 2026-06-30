@@ -13,13 +13,16 @@ class FakeTuiAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransport {
 	public function sendPrompt(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
 		if (request == null)
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_request");
+		final outbound = TuiAppServerJsonRpcTransportTranscript.outbound(request);
 		if (envelope == null)
-			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_envelope");
+			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_envelope", outbound);
 		final outcome = exchange.send(request, envelope);
 		if (outcome == null)
-			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_exchange_outcome");
+			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_exchange_outcome", outbound);
 		if (!outcome.isAccepted())
-			return TuiAppServerJsonRpcTransportOutcome.rejected(outcome.code());
-		return TuiAppServerJsonRpcTransportOutcome.accepted(outcome.response(), outcome.notifications(), outcome.streamNotifications(), outcome.events());
+			return TuiAppServerJsonRpcTransportOutcome.rejected(outcome.code(), outbound);
+		final transcript = TuiAppServerJsonRpcTransportTranscript.accepted(request, outcome.response(), outcome.streamNotifications());
+		return TuiAppServerJsonRpcTransportOutcome.accepted(outcome.response(), outcome.notifications(), outcome.streamNotifications(), outcome.events(),
+			transcript);
 	}
 }

@@ -39,38 +39,37 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 		lastStreamNotificationsValue = [];
 		replaceLastFrames([TuiPromptJsonRpcFrame.Request(request)]);
 		final transportOutcome = appServerTransport.sendPrompt(request, envelope);
-		if (transportOutcome == null || !transportOutcome.isAccepted())
+		final transcript = transportOutcome == null ? TuiAppServerJsonRpcTransportTranscript.outbound(request) : transportOutcome.transcript();
+		if (transportOutcome == null || !transportOutcome.isAccepted()) {
+			replaceLastFrames(transcript.frames());
 			return TuiPromptTransportOutcome.rejected(transportOutcome == null ? "missing_transport_outcome" : transportOutcome.code());
+		}
 		final response = transportOutcome.response();
-		if (response == null)
+		if (response == null) {
+			replaceLastFrames(transcript.frames());
 			return TuiPromptTransportOutcome.rejected("missing_transport_response");
-		final responseFrames = [TuiPromptJsonRpcFrame.Request(request), TuiPromptJsonRpcFrame.Response(response)];
-		final responseCorrelation = TuiPromptJsonRpcFrameCorrelation.fromFrames(responseFrames);
+		}
+		final transcriptFrames = transcript.frames();
+		final responseCorrelation = TuiPromptJsonRpcFrameCorrelation.fromFrames(transcriptFrames);
 		if (!responseCorrelation.isComplete()) {
-			replaceLastFrames(responseFrames);
+			replaceLastFrames(transcriptFrames);
 			return TuiPromptTransportOutcome.rejected(responseCorrelation.code());
 		}
 		final exchangeStreamNotifications = transportOutcome.streamNotifications();
-		final streamFrames = responseFrames.copy();
-		for (notification in exchangeStreamNotifications)
-			streamFrames.push(TuiPromptJsonRpcFrame.StreamNotification(notification));
 		final streamScope = TuiPromptJsonRpcStreamScopeReport.fromNotifications(envelope.threadId, response.result.turnId, exchangeStreamNotifications);
 		if (!streamScope.isAccepted()) {
-			replaceLastFrames(streamFrames);
+			replaceLastFrames(transcriptFrames);
 			return TuiPromptTransportOutcome.rejected(streamScope.code());
 		}
 		final turnLifecycle = TuiPromptTurnLifecycleReport.fromNotifications(response.result.turnId, exchangeStreamNotifications);
 		if (!turnLifecycle.isComplete()) {
-			replaceLastFrames(streamFrames);
+			replaceLastFrames(transcriptFrames);
 			return TuiPromptTransportOutcome.rejected(turnLifecycle.code());
 		}
 		lastResponseValue = response;
 		lastNotificationsValue = transportOutcome.notifications();
 		lastStreamNotificationsValue = exchangeStreamNotifications;
-		final frames = responseFrames.copy();
-		for (notification in lastStreamNotificationsValue)
-			frames.push(TuiPromptJsonRpcFrame.StreamNotification(notification));
-		replaceLastFrames(frames);
+		replaceLastFrames(transcriptFrames);
 		return TuiPromptTransportOutcome.acceptedWithResponse(response.result,
 			TuiPromptJsonRpcNotificationProjector.projectWithStreamNotifications(lastStreamNotificationsValue, transportOutcome.events()));
 	}

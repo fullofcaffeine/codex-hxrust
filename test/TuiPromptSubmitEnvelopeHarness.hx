@@ -9,6 +9,7 @@ import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportTranscript;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.appserver.TuiAppServerEventPump;
@@ -60,6 +61,7 @@ class TuiPromptSubmitEnvelopeHarness {
 	static function main():Void {
 		testPromptSubmitEnvelopeEchoAndRedraw();
 		testPromptSubmitBuildsJsonRpcTurnStartEnvelope();
+		testFakeAppServerJsonRpcTransportOwnsTranscript();
 		testJsonRpcNotificationsProjectToTransportEvents();
 		testJsonRpcExchangeRejectedSubmitIsTypedRefusal();
 		testJsonRpcTransportDisconnectedSubmitIsTypedRefusal();
@@ -299,6 +301,19 @@ class TuiPromptSubmitEnvelopeHarness {
 			"projected assistant delta");
 		assertThreadStatusEvent(expectAppServerEvent(outcome.eventAt(2), "projected completion event"), threadId, TuiAppServerThreadStatus.Ready("ready"),
 			"projected completion status");
+	}
+
+	static function testFakeAppServerJsonRpcTransportOwnsTranscript():Void {
+		final appServerTransport = new FakeTuiAppServerJsonRpcTransport();
+		final threadId = thread("00000000-0000-0000-0000-000000005566");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(88), session("00000000-0000-0000-0000-000000009997"), threadId, "transcript ask");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final outcome = appServerTransport.sendPrompt(request, envelope);
+		assertTrue(outcome.isAccepted(), "fake app-server transport accepted");
+		assertStringEquals("accepted", outcome.code(), "fake app-server transport code");
+		assertTransportTranscript(outcome.transcript(), request.messageJson(), 11, 10, "fake app-server transport transcript");
+		assertResponseFrame(outcome.transcript().frameAt(1), expectJsonRpcResponse(outcome.response(), "fake app-server transport response"),
+			"fake app-server transport response");
 	}
 
 	static function testJsonRpcExchangeRejectedSubmitIsTypedRefusal():Void {
@@ -693,6 +708,17 @@ class TuiPromptSubmitEnvelopeHarness {
 		}
 	}
 
+	static function assertTransportTranscript(transcript:TuiAppServerJsonRpcTransportTranscript, expectedRequestJson:String, expectedFrameCount:Int,
+			expectedInboundFrameCount:Int, label:String):Void {
+		if (transcript == null)
+			throw label + ": missing transcript";
+		final request = expectJsonRpcRequest(transcript.request(), label + " request");
+		assertStringEquals(expectedRequestJson, request.messageJson(), label + " request json");
+		assertIntEquals(expectedFrameCount, transcript.frameCount(), label + " frame count");
+		assertIntEquals(expectedInboundFrameCount, transcript.inboundFrameCount(), label + " inbound frame count");
+		assertRequestFrame(transcript.frameAt(0), request, label + " request frame");
+	}
+
 	static function expectResponseFrame(frame:Null<TuiPromptJsonRpcFrame>, label:String):TuiPromptJsonRpcResponse {
 		final concrete = expectFrame(frame, label);
 		return switch concrete {
@@ -993,7 +1019,7 @@ class DisconnectedAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransp
 	}
 
 	public function sendPrompt(_request:TuiPromptJsonRpcRequest, _envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
-		return TuiAppServerJsonRpcTransportOutcome.disconnected(code);
+		return TuiAppServerJsonRpcTransportOutcome.disconnected(code, TuiAppServerJsonRpcTransportTranscript.outbound(_request));
 	}
 }
 
@@ -1002,7 +1028,7 @@ class MissingResponseAppServerJsonRpcTransport implements TuiAppServerJsonRpcTra
 
 	public function sendPrompt(_request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
 		return new TuiAppServerJsonRpcTransportOutcome(TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", null, [], [],
-			[TuiAppServerEvent.AssistantDelta(envelope.threadId, "should not queue")]);
+			[TuiAppServerEvent.AssistantDelta(envelope.threadId, "should not queue")], TuiAppServerJsonRpcTransportTranscript.outbound(_request));
 	}
 }
 
