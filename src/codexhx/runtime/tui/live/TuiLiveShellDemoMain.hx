@@ -16,9 +16,9 @@ import codexhx.runtime.tui.terminal.TerminalSize;
 
 	The demo intentionally uses the fake app-server facade from the minimal live
 	shell by default. It can also select the dry-run connector-backed JSONL line
-	transport so the same generated binary exercises the app-server-shaped prompt
-	path while keeping model traffic, real processes/sockets, tools, and persistent
-	state out of scope.
+	transport or an explicit one-shot process-backed stdio JSONL transport so the
+	same generated binary exercises the app-server-shaped prompt path while keeping
+	model traffic, sockets, tools, and persistent state out of scope.
 **/
 class TuiLiveShellDemoMain {
 	static inline final PollTimeoutMs:Int = 50;

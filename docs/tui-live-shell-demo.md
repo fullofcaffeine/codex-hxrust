@@ -1,6 +1,6 @@
 # TUI Live Shell Demo
 
-**Beads:** `TUI-LIVE-12` / `codex-hxrust-o797`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`
+**Beads:** `TUI-LIVE-12` / `codex-hxrust-o797`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`, `TUI-LIVE-57` / `codex-hxrust-54gu`
 
 This slice adds a user-runnable generated Rust demo for the minimal live TUI
 shell. The demo uses `LiveTerminalBackend` with a 50ms native poll timeout and
@@ -11,7 +11,10 @@ validated runner. By default it still uses the credential-free fake transport.
 opt into the dry-run connector-backed JSONL line transport without spawning a
 process or opening a socket. `TUI-LIVE-50` adds a scripted prompt mode that
 feeds typed headless key events into the same runner, letting CI and CLI users
-prove an accepted prompt without interactive terminal input.
+prove an accepted prompt without interactive terminal input. `TUI-LIVE-57` adds
+an explicit `process_stdio` mode that injects the process-backed line attacher,
+so the generated demo can run that same scripted prompt path through a real
+one-shot child-process JSONL responder.
 
 Build and run:
 
@@ -38,11 +41,29 @@ cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked -- \
   --scripted-prompt=demo
 ```
 
+Optional process-backed scripted prompt mode:
+
+```bash
+cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked -- \
+  --transport=process-stdio \
+  --line-command=sh \
+  --line-arg=-c \
+  --line-arg='<JSONL responder script>' \
+  --scripted-prompt=demo
+```
+
+The process-backed script must print a valid prompt response plus the modeled
+`turn/started`, assistant delta, and `turn/completed` JSONL records. The checked
+example lives in `harness/check-tui-live-shell-demo.sh`.
+
 The line-transport mode accepts repeated `--line-arg=...` values, repeated
 `--line-env=NAME=value` values, `--line-cwd=...`, and
 `--line-rejection-code=...` for exercising the deterministic rejection path. If
 no line args are provided, the dry-run stdio plan defaults to `codex app-server
---json-rpc`.
+--json-rpc`. `process_stdio` uses the same typed launch plan but actually
+spawns the configured command for a one-shot JSONL exchange, so current process
+mode refuses cwd/env plans until the native process boundary owns those
+attributes.
 
 In a real terminal, the generated binary attempts raw mode and alternate-screen
 ownership. Type text and press Enter to send a fake prompt; press `q` on an
@@ -55,4 +76,5 @@ When `--scripted-prompt=...` is provided, the demo intentionally selects the
 headless terminal backend, types the prompt, presses Enter, and exits after a
 small bounded idle window.
 The demo still does not open real app-server JSON-RPC transport, spawn the
-app-server process, call a model, execute tools, or use SQLite/log persistence.
+long-lived app-server process, call a model, execute tools, or use SQLite/log
+persistence.

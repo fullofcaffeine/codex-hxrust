@@ -1,5 +1,9 @@
+import codexhx.protocol.RequestId;
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
+import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcLineTransport;
+import codexhx.runtime.tui.appserver.TuiPromptJsonRpcRequest;
+import codexhx.runtime.tui.appserver.TuiPromptSubmitEnvelope;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessEnvVar;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.live.TuiLiveShellDemoConfig;
@@ -17,9 +21,11 @@ class TuiLiveShellDemoHarness {
 		testPollTimeoutConfiguration();
 		testDemoConfigDefaultsToFake();
 		testDemoConfigParsesLineStdio();
+		testDemoConfigParsesProcessStdio();
 		testDemoConfigRejectsInvalidArgs();
 		testNoTtyDemoRunCompletes();
 		testHeadlessDemoLineTransportSubmitsPrompt();
+		testHeadlessDemoProcessTransportSubmitsPrompt();
 		Sys.println("tui-live-shell-demo ok");
 	}
 
@@ -67,6 +73,33 @@ class TuiLiveShellDemoHarness {
 				assertStringEquals("--json-rpc", plan.argAt(1), "line arg 1");
 				assertIntEquals(1, plan.envCount(), "line env count");
 				assertEnvEquals(new TuiAppServerJsonRpcProcessEnvVar("CODEX_HOME", "/tmp/codex-home"), plan.envAt(0), "line env");
+			case ProcessStdio(_):
+				throw "line config should not select process transport";
+		}
+	}
+
+	static function testDemoConfigParsesProcessStdio():Void {
+		final config = TuiLiveShellDemoConfig.parse([
+			"--transport=process-stdio",
+			"--line-command=sh",
+			"--line-arg=-c",
+			"--line-arg=cat >/dev/null",
+			"--scripted-prompt=demo prompt"
+		]);
+		assertTrue(config.ok, "process config ok");
+		assertStringEquals("process_stdio", config.transportCode(), "process config transport");
+		assertStringEquals("demo prompt", config.scriptedPrompt, "process scripted prompt");
+		switch config.transportMode {
+			case Fake:
+				throw "process config should not select fake transport";
+			case LineStdio(_):
+				throw "process config should not select dry-run line transport";
+			case ProcessStdio(plan):
+				assertStringEquals("sh", plan.command, "process command");
+				assertStringEquals("", plan.cwd, "process cwd");
+				assertIntEquals(2, plan.argCount(), "process arg count");
+				assertStringEquals("-c", plan.argAt(0), "process arg 0");
+				assertStringEquals("cat >/dev/null", plan.argAt(1), "process arg 1");
 		}
 	}
 
@@ -106,6 +139,49 @@ class TuiLiveShellDemoHarness {
 		assertTrue(config.hasScriptedPrompt(), "line demo scripted prompt");
 		assertIntEquals(1, outcome.acceptedPrompts(), "line demo accepted prompt");
 		assertStringEquals("assistant> echo: demo", outcome.finalFrameLineAt(4), "line demo assistant echo");
+	}
+
+	static function testHeadlessDemoProcessTransportSubmitsPrompt():Void {
+		final prompt = "demo";
+		final configArgs = ["--process-stdio", "--line-command=sh", "--scripted-prompt=" + prompt];
+		for (arg in stdioEchoArgs(expectedInboundLines(prompt)))
+			configArgs.push("--line-arg=" + arg);
+		final config = TuiLiveShellDemoConfig.parse(configArgs);
+		final backend = TuiLiveShellDemoMain.scriptedBackend(config.scriptedPrompt);
+		final request = config.apply(TuiLiveShellDemoMain.baseRequest(backend, TerminalSetup.headless(TerminalSize.of(96, 16)),
+			TuiLiveShellRunPolicy.bounded(24, 2)));
+		final outcome = TuiLiveShellRunner.run(request);
+
+		assertTrue(config.ok, "process demo config ok");
+		assertStringEquals("process_stdio", config.transportCode(), "process demo transport");
+		assertTrue(config.hasScriptedPrompt(), "process demo scripted prompt");
+		assertIntEquals(1, outcome.acceptedPrompts(), "process demo accepted prompt");
+		assertStringEquals("assistant> echo: demo", outcome.finalFrameLineAt(4), "process demo assistant echo");
+	}
+
+	static function expectedInboundLines(prompt:String):Array<String> {
+		final requestId = RequestId.fromInteger(2 + prompt.length);
+		final sessionId = SessionId.unsafeAssumeValid("00000000-0000-0000-0000-000000120001");
+		final threadId = ThreadId.unsafeAssumeValid("00000000-0000-0000-0000-000000120101");
+		final envelope = new TuiPromptSubmitEnvelope(requestId, sessionId, threadId, prompt);
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final outcome = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(request, envelope, request.messageJson() + "\n");
+		return outcome.inboundLines();
+	}
+
+	static function stdioEchoArgs(lines:Array<String>):Array<String> {
+		final args = ["-c", "cat >/dev/null; printf '%s\\n' \"$@\"", "codex-hxrust-stdio-echo"];
+		for (line in lines)
+			args.push(withoutTrailingNewline(line));
+		return args;
+	}
+
+	static function withoutTrailingNewline(line:String):String {
+		if (line == null || line.length == 0)
+			return "";
+		if (StringTools.endsWith(line, "\n"))
+			return line.substr(0, line.length - 1);
+		return line;
 	}
 
 	static function assertEnvEquals(expected:TuiAppServerJsonRpcProcessEnvVar, actual:TuiAppServerJsonRpcProcessEnvVar, label:String):Void {

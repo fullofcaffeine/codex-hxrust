@@ -178,6 +178,15 @@ credential-free, but the generated runner gate now proves a prompt submitted
 through the live shell can travel through the JSONL line connector and still
 return typed close/attempt diagnostics.
 
+`TuiLiveShellDemoConfig` now separates `line_stdio` from `process_stdio`.
+`line_stdio` remains the dry-run safe mode. `process_stdio` injects
+`ProcessBackedTuiAppServerJsonRpcLineTransportAttacher` through
+`TuiLiveShellRunRequest.withProcessBackedLineConnectedPromptTransport()`, so the
+user-runnable generated demo can submit a scripted prompt through a real
+one-shot child-process JSONL responder. This still keeps the long-lived
+app-server child, async stdin/stdout pumps, sockets, credentials, model calls,
+persistence, and tools out of scope.
+
 ```json
 {
   "jsonrpc": "2.0",

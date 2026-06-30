@@ -8,4 +8,5 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
 enum TuiLiveShellDemoTransportMode {
 	Fake;
 	LineStdio(plan:TuiAppServerJsonRpcProcessLaunchPlan);
+	ProcessStdio(plan:TuiAppServerJsonRpcProcessLaunchPlan);
 }

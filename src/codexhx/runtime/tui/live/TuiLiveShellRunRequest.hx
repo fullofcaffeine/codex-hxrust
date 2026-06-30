@@ -2,6 +2,7 @@ package codexhx.runtime.tui.live;
 
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
+import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
@@ -71,6 +72,10 @@ class TuiLiveShellRunRequest {
 			connector:TuiAppServerJsonRpcLineConnector):TuiLiveShellRunRequest {
 		return withJsonRpcPromptTransport(new JsonRpcTuiPromptTransport(DryRunTuiAppServerJsonRpcLineConnectedTransport.withConnector(endpoint,
 			normalize(rejectionCode, ""), connector)));
+	}
+
+	public function withProcessBackedLineConnectedPromptTransport(endpoint:TuiAppServerJsonRpcLineEndpoint, rejectionCode:String = ""):TuiLiveShellRunRequest {
+		return withLineConnectedPromptTransportUsingConnector(endpoint, rejectionCode, DryRunTuiAppServerJsonRpcLineConnector.processBacked());
 	}
 
 	public function withScheduler(scheduler:TerminalRedrawScheduler):TuiLiveShellRunRequest {

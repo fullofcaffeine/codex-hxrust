@@ -48,6 +48,8 @@ class TuiLiveShellDemoConfig {
 				return request;
 			case LineStdio(plan):
 				return request.withLineConnectedPromptTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(plan), rejectionCode);
+			case ProcessStdio(plan):
+				return request.withProcessBackedLineConnectedPromptTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(plan), rejectionCode);
 		}
 	}
 
@@ -55,6 +57,7 @@ class TuiLiveShellDemoConfig {
 		return switch transportMode {
 			case Fake: "fake";
 			case LineStdio(_): "line_stdio";
+			case ProcessStdio(_): "process_stdio";
 		}
 	}
 
@@ -84,7 +87,7 @@ class TuiLiveShellDemoConfigParser {
 		this.args = args == null ? [] : args.copy();
 		this.transport = "fake";
 		this.command = "codex";
-		this.cwd = ".";
+		this.cwd = "";
 		this.stdioArgs = [];
 		this.env = [];
 		this.rejectionCode = "";
@@ -97,14 +100,21 @@ class TuiLiveShellDemoConfigParser {
 			final arg = args[index];
 			if (arg == "--line-stdio") {
 				transport = "line_stdio";
+			} else if (arg == "--process-stdio") {
+				transport = "process_stdio";
 			} else if (arg == "--fake") {
 				transport = "fake";
 			} else if (startsWith(arg, "--transport=")) {
 				final value = afterPrefix(arg, "--transport=");
-				if (value == "fake" || value == "line-stdio" || value == "line_stdio")
-					transport = value == "fake" ? "fake" : "line_stdio";
-				else
+				if (value == "fake") {
+					transport = "fake";
+				} else if (value == "line-stdio" || value == "line_stdio") {
+					transport = "line_stdio";
+				} else if (value == "process-stdio" || value == "process_stdio") {
+					transport = "process_stdio";
+				} else {
 					return invalid("invalid_transport");
+				}
 			} else if (startsWith(arg, "--line-command=")) {
 				command = afterPrefix(arg, "--line-command=");
 			} else if (startsWith(arg, "--line-cwd=")) {
@@ -134,6 +144,8 @@ class TuiLiveShellDemoConfigParser {
 		final plan = TuiAppServerJsonRpcProcessLaunchPlan.stdio(command, stdioArgs, cwd, env);
 		if (!plan.isValid())
 			return invalid(plan.validationCode());
+		if (transport == "process_stdio")
+			return new TuiLiveShellDemoConfig(true, "process_stdio", TuiLiveShellDemoTransportMode.ProcessStdio(plan), rejectionCode, scriptedPrompt);
 		return new TuiLiveShellDemoConfig(true, "line_stdio", TuiLiveShellDemoTransportMode.LineStdio(plan), rejectionCode, scriptedPrompt);
 	}
 
