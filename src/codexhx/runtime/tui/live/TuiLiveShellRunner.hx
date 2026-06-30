@@ -26,6 +26,7 @@ class TuiLiveShellRunner {
 		final setup = request.backend.setup(request.setup);
 		outcome.recordSetup(setup);
 		if (!setup.ok) {
+			shutdownPromptTransport(request, outcome, "live_shell_setup_failed");
 			outcome.recordRestore(request.backend.restore(TerminalRestoreReason.ErrorExit));
 			return outcome;
 		}
@@ -36,14 +37,20 @@ class TuiLiveShellRunner {
 			enqueueInitialEvents(request);
 			flushCurrentFrame(request, outcome);
 			runLoop(request, pump, outcome);
+			shutdownPromptTransport(request, outcome, "live_shell_runner_done");
 			outcome.recordRestore(request.backend.restore(TerminalRestoreReason.NormalExit));
 		} catch (message:String) {
 			outcome.recordExit(TerminalExitReason.Error);
 			request.backend.requestExit(TerminalExitReason.Error);
+			shutdownPromptTransport(request, outcome, "live_shell_runner_error");
 			outcome.recordRestore(request.backend.restore(TerminalRestoreReason.ErrorExit));
 			throw message;
 		}
 		return outcome;
+	}
+
+	static function shutdownPromptTransport(request:TuiLiveShellRunRequest, outcome:TuiLiveShellRunOutcome, code:String):Void {
+		outcome.recordPromptTransportShutdown(request.facade.shutdownPromptTransport(code));
 	}
 
 	static function attachSession(request:TuiLiveShellRunRequest):Void {

@@ -35,8 +35,10 @@ class TuiLiveShellDemoMain {
 		final request = config.apply(baseRequest(demoBackend(config), setup, demoPolicy(config)));
 		final outcome = TuiLiveShellRunner.run(request);
 		Sys.println("codex-hxrust live TUI demo exited: transport=" + config.transportCode() + ", restored=" + boolText(outcome.restored())
-			+ ", iterations=" + Std.string(outcome.iterations()) + ", prompts=" + Std.string(outcome.acceptedPrompts()) + ", exit="
-			+ boolText(outcome.exitRequested()));
+			+ ", transportClosed=" + boolText(outcome.promptTransportClosed()) + ", lineClose=" + boolText(outcome.promptTransportLineCloseRecorded())
+			+ ", outboundLines=" + Std.string(outcome.promptTransportOutboundLineCount()) + ", inboundLines="
+			+ Std.string(outcome.promptTransportInboundLineCount()) + ", iterations=" + Std.string(outcome.iterations()) + ", prompts="
+			+ Std.string(outcome.acceptedPrompts()) + ", exit=" + boolText(outcome.exitRequested()));
 	}
 
 	public static function baseRequest(backend:TerminalBackend, setup:TerminalSetup, policy:TuiLiveShellRunPolicy):TuiLiveShellRunRequest {

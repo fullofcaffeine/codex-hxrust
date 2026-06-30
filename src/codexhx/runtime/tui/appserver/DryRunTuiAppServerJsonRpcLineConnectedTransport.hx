@@ -101,6 +101,12 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 		return lastAttemptReportValue;
 	}
 
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		if (lastCloseReportValue != null)
+			return TuiPromptTransportShutdownReport.fromLineCloseReport(lastCloseReportValue);
+		return TuiPromptTransportShutdownReport.noLineClose(code);
+	}
+
 	function recordAttempt(connectReport:TuiAppServerJsonRpcLineConnectReport, lineOutcome:TuiAppServerJsonRpcLineOutcome,
 			closeReport:TuiAppServerJsonRpcLineCloseReport, transportMaterialized:Bool):Void {
 		lastAttemptReportValue = TuiAppServerJsonRpcLineTransportAttemptReport.fromParts(connectReport, lineOutcome, closeReport, transportMaterialized);

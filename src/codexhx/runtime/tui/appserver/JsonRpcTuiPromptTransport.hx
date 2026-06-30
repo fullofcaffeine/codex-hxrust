@@ -74,6 +74,10 @@ class JsonRpcTuiPromptTransport implements TuiPromptTransport {
 			TuiPromptJsonRpcNotificationProjector.projectWithStreamNotifications(lastStreamNotificationsValue, transportOutcome.events()));
 	}
 
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		return appServerTransport.shutdown(code);
+	}
+
 	public function lastRequest():Null<TuiPromptJsonRpcRequest> {
 		return lastRequestValue;
 	}

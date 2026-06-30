@@ -2,6 +2,7 @@ package codexhx.runtime.tui.live;
 
 import codexhx.runtime.tui.appserver.TuiAppServerPumpOutcome;
 import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
+import codexhx.runtime.tui.appserver.TuiPromptTransportShutdownReport;
 import codexhx.runtime.tui.terminal.TerminalExitReason;
 import codexhx.runtime.tui.terminal.TerminalFrame;
 import codexhx.runtime.tui.terminal.TerminalOperation;
@@ -25,6 +26,7 @@ class TuiLiveShellRunOutcome {
 	var terminalOperationsValue:Int;
 	var exitRequestedValue:Bool;
 	var exitReasonValue:TerminalExitReason;
+	var promptTransportShutdownValue:Null<TuiPromptTransportShutdownReport>;
 	final finalFrameLines:Array<String>;
 
 	public function new() {
@@ -42,6 +44,7 @@ class TuiLiveShellRunOutcome {
 		this.terminalOperationsValue = 0;
 		this.exitRequestedValue = false;
 		this.exitReasonValue = TerminalExitReason.Requested;
+		this.promptTransportShutdownValue = null;
 		this.finalFrameLines = [];
 	}
 
@@ -121,6 +124,10 @@ class TuiLiveShellRunOutcome {
 		restoreReportValue = report;
 	}
 
+	public function recordPromptTransportShutdown(report:TuiPromptTransportShutdownReport):Void {
+		promptTransportShutdownValue = report;
+	}
+
 	public function setupAccepted():Bool {
 		return setupOperationValue != null && setupOperationValue.ok;
 	}
@@ -175,6 +182,30 @@ class TuiLiveShellRunOutcome {
 
 	public function exitReason():TerminalExitReason {
 		return exitReasonValue;
+	}
+
+	public function promptTransportShutdownRecorded():Bool {
+		return promptTransportShutdownValue != null;
+	}
+
+	public function promptTransportClosed():Bool {
+		return promptTransportShutdownValue != null && promptTransportShutdownValue.closed;
+	}
+
+	public function promptTransportShutdownCode():String {
+		return promptTransportShutdownValue == null ? "" : promptTransportShutdownValue.code;
+	}
+
+	public function promptTransportLineCloseRecorded():Bool {
+		return promptTransportShutdownValue != null && promptTransportShutdownValue.lineCloseRecorded;
+	}
+
+	public function promptTransportOutboundLineCount():Int {
+		return promptTransportShutdownValue == null ? 0 : promptTransportShutdownValue.outboundLineCount;
+	}
+
+	public function promptTransportInboundLineCount():Int {
+		return promptTransportShutdownValue == null ? 0 : promptTransportShutdownValue.inboundLineCount;
 	}
 
 	public function finalFrameLineAt(index:Int):String {

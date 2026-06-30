@@ -20,4 +20,8 @@ class EchoTuiPromptTransport implements TuiPromptTransport {
 			TuiAppServerEvent.ThreadStatus(envelope.threadId, TuiAppServerThreadStatus.Ready("ready"))
 		]);
 	}
+
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		return TuiPromptTransportShutdownReport.noLineClose(code);
+	}
 }

@@ -83,6 +83,7 @@ import codexhx.runtime.tui.appserver.TuiPromptSubmitInteraction;
 import codexhx.runtime.tui.appserver.TuiPromptThreadStatusChangedNotification;
 import codexhx.runtime.tui.appserver.TuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiPromptTransportOutcome;
+import codexhx.runtime.tui.appserver.TuiPromptTransportShutdownReport;
 import codexhx.runtime.tui.appserver.TuiPromptTurnLifecycleReport;
 import codexhx.runtime.tui.appserver.TuiPromptTurnLifecycleStatus;
 import codexhx.runtime.tui.appserver.TuiPromptTurnStartResponse;
@@ -2263,6 +2264,10 @@ class RejectingPromptTransport implements TuiPromptTransport {
 			return TuiPromptTransportOutcome.rejected("missing_envelope");
 		return TuiPromptTransportOutcome.rejected(code);
 	}
+
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		return TuiPromptTransportShutdownReport.noLineClose(code);
+	}
 }
 
 class DisconnectedAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransport {
@@ -2275,6 +2280,10 @@ class DisconnectedAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransp
 	public function sendPrompt(_request:TuiPromptJsonRpcRequest, _envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
 		return TuiAppServerJsonRpcTransportOutcome.disconnected(code, TuiAppServerJsonRpcTransportTranscript.outbound(_request));
 	}
+
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		return TuiPromptTransportShutdownReport.noLineClose(code);
+	}
 }
 
 class MissingResponseAppServerJsonRpcTransport implements TuiAppServerJsonRpcTransport {
@@ -2283,6 +2292,10 @@ class MissingResponseAppServerJsonRpcTransport implements TuiAppServerJsonRpcTra
 	public function sendPrompt(_request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
 		return new TuiAppServerJsonRpcTransportOutcome(TuiAppServerJsonRpcTransportStatus.Accepted, "accepted", null, [], [],
 			[TuiAppServerEvent.AssistantDelta(envelope.threadId, "should not queue")], TuiAppServerJsonRpcTransportTranscript.outbound(_request));
+	}
+
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		return TuiPromptTransportShutdownReport.noLineClose(code);
 	}
 }
 

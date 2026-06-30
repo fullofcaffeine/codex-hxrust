@@ -212,6 +212,10 @@ class TuiLiveShellDemoHarness {
 		assertStringEquals("persistent_stdio", config.transportCode(), "persistent demo transport");
 		assertIntEquals(2, config.scriptedPromptCount(), "persistent demo scripted prompt count");
 		assertIntEquals(2, outcome.acceptedPrompts(), "persistent demo accepted prompts");
+		assertTrue(outcome.promptTransportClosed(), "persistent demo prompt transport closed");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "persistent demo line close recorded");
+		assertIntEquals(2, outcome.promptTransportOutboundLineCount(), "persistent demo outbound line count");
+		assertIntEquals(20, outcome.promptTransportInboundLineCount(), "persistent demo inbound line count");
 	}
 
 	static function expectedInboundLines(prompt:String):Array<String> {

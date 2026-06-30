@@ -128,6 +128,10 @@ class PersistentTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServe
 		return lastAttemptReportValue;
 	}
 
+	public function shutdown(code:String):TuiPromptTransportShutdownReport {
+		return TuiPromptTransportShutdownReport.fromLineCloseReport(close(code));
+	}
+
 	function ensureConnected():String {
 		if (lineTransportValue != null)
 			return "";

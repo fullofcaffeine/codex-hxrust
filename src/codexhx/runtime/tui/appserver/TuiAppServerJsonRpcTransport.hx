@@ -5,4 +5,5 @@ package codexhx.runtime.tui.appserver;
 **/
 interface TuiAppServerJsonRpcTransport {
 	function sendPrompt(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome;
+	function shutdown(code:String):TuiPromptTransportShutdownReport;
 }

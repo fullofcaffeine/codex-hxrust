@@ -1,6 +1,6 @@
 # TUI Live Shell Demo
 
-**Beads:** `TUI-LIVE-12` / `codex-hxrust-o797`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`, `TUI-LIVE-57` / `codex-hxrust-54gu`, `TUI-LIVE-60` / `codex-hxrust-riav`
+**Beads:** `TUI-LIVE-12` / `codex-hxrust-o797`, `TUI-LIVE-49` / `codex-hxrust-vued`, `TUI-LIVE-50` / `codex-hxrust-62ls`, `TUI-LIVE-57` / `codex-hxrust-54gu`, `TUI-LIVE-60` / `codex-hxrust-riav`, `TUI-LIVE-61` / `codex-hxrust-9oi7`
 
 This slice adds a user-runnable generated Rust demo for the minimal live TUI
 shell. The demo uses `LiveTerminalBackend` with a 50ms native poll timeout and
@@ -17,7 +17,9 @@ so the generated demo can run that same scripted prompt path through a real
 one-shot child-process JSONL responder. `TUI-LIVE-60` adds `persistent_stdio`,
 which uses the persistent connector-backed prompt transport and repeated
 scripted prompts to prove two demo-level submissions through one long-lived
-shell-backed stdio session.
+shell-backed stdio session. `TUI-LIVE-61` makes the demo print runner-owned
+prompt-transport shutdown evidence, including persistent line-close state and
+aggregate JSONL counts.
 
 Build and run:
 

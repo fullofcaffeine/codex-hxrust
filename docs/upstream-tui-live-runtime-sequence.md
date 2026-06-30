@@ -4500,6 +4500,12 @@ Status: TUI-LIVE-60 exposes the persistent connector-backed prompt transport thr
 
 This remains a synchronous, credential-free demo boundary. It does not yet own async reader/writer tasks, socket transport, cancellation/backpressure, unbounded app-server streams, credentialed model calls, persistence, or tools. It makes the persistent prompt transport visible in the runnable live-shell path rather than only in prompt-submit harnesses.
 
+### TUI-LIVE-61 Prompt Transport Shutdown In Live Shell Runner
+
+Status: TUI-LIVE-61 adds runner-owned shutdown for the prompt transport path. `TuiPromptTransport.shutdown()` and `TuiAppServerJsonRpcTransport.shutdown()` return a typed `TuiPromptTransportShutdownReport`; fake transports report no-line shutdown, dry-run connector transports surface their one-shot close evidence, and `PersistentTuiAppServerJsonRpcLineConnectedTransport` closes the held line/session transport through its existing close report. `TuiLiveShellRunner` records shutdown before terminal restore on normal, setup-failure, and error exits, and `TuiLiveShellRunOutcome` exposes typed shutdown/line-close/count fields. The runner/demo harnesses prove persistent stdio closes after two scripted prompts with two outbound and twenty inbound JSONL lines, and the generated demo reports `transportClosed=true`, `lineClose=true`, `outboundLines=2`, and `inboundLines=20`.
+
+This is still a synchronous shutdown contract, not async task cancellation, socket ownership, background reader/writer joins, credentialed model traffic, persistence, or tools. It makes persistent prompt transport cleanup a live-shell responsibility instead of a test-only manual close.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

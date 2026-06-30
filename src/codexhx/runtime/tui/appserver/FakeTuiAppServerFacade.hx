@@ -126,6 +126,10 @@ class FakeTuiAppServerFacade {
 		return TuiPromptSubmitResult.accepted(envelope, effects);
 	}
 
+	public function shutdownPromptTransport(code:String):TuiPromptTransportShutdownReport {
+		return promptTransport.shutdown(code);
+	}
+
 	public function receive(event:TuiAppServerEvent):Array<TuiAppServerShellEffect> {
 		final effects:Array<TuiAppServerShellEffect> = [];
 		switch event {

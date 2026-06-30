@@ -49,6 +49,9 @@ class TuiLiveShellRunnerHarness {
 
 		assertTrue(outcome.setupAccepted(), "setup accepted");
 		assertTrue(outcome.restored(), "restore");
+		assertTrue(outcome.promptTransportShutdownRecorded(), "prompt transport shutdown recorded");
+		assertTrue(outcome.promptTransportClosed(), "prompt transport closed");
+		assertTrue(!outcome.promptTransportLineCloseRecorded(), "fake prompt transport has no line close");
 		assertTrue(outcome.drawFrames() >= 1, "initial frame drawn");
 		assertStringEquals("Codex | model: gpt-live | status: session started", outcome.finalFrameLineAt(0), "initial header");
 		assertIntEquals(2, outcome.noEvents(), "idle no-event count");
@@ -93,6 +96,9 @@ class TuiLiveShellRunnerHarness {
 
 		assertIntEquals(1, outcome.submittedPrompts(), "line-connected submitted prompts");
 		assertIntEquals(1, outcome.acceptedPrompts(), "line-connected accepted prompts");
+		assertTrue(outcome.promptTransportClosed(), "line-connected prompt transport shutdown");
+		assertTrue(outcome.promptTransportLineCloseRecorded(), "line-connected prompt transport line close");
+		assertIntEquals(1, outcome.promptTransportOutboundLineCount(), "line-connected shutdown outbound lines");
 		assertStringEquals("assistant> echo: line", outcome.finalFrameLineAt(4), "line-connected assistant echo");
 		assertTrue(attempt != null, "line-connected attempt report");
 		assertStatusEquals(TuiAppServerJsonRpcLineConnectStatus.Ready, attempt.connectStatus, "line-connected connect status");

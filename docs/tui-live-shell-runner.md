@@ -1,6 +1,6 @@
 # TUI Live Shell Runner
 
-**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`
+**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`, `TUI-LIVE-61` / `codex-hxrust-9oi7`
 
 This slice adds the first runnable minimal TUI shell loop. It composes the
 production terminal backend, redraw scheduler, ChatWidget shell state, fake
@@ -34,6 +34,13 @@ the connector-backed JSONL line pipeline. The runner harness proves both the
 direct builder path and a diagnostic path that keeps the
 `DryRunTuiAppServerJsonRpcLineConnectedTransport` handle available for typed
 attempt/close reports.
+
+`TUI-LIVE-61` makes prompt-transport shutdown part of the runner contract.
+`TuiPromptTransport.shutdown()` and the JSON-RPC transport shutdown hook return
+a typed `TuiPromptTransportShutdownReport`, and `TuiLiveShellRunner` records it
+before terminal restore on normal, setup-failure, and error exits. Persistent
+stdio shutdown delegates to the underlying line close report so runner/demo
+outcomes can prove aggregate outbound/inbound JSONL counts.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).
