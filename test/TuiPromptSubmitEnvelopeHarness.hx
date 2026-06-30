@@ -4,6 +4,7 @@ import codexhx.protocol.ThreadId;
 import codexhx.protocol.app.AppProtocol;
 import codexhx.protocol.json.CodexJson;
 import codexhx.protocol.json.JsonParseOutcome;
+import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineNativeOpener;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineTransportAttacher;
@@ -98,6 +99,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testLineNativeOpenOutcomesAreTyped();
 		testLineTransportAttachesAfterOpen();
 		testLineConnectorComposesEndpointOpenAndAttachment();
+		testJsonRpcTransportCanUseLineConnector();
+		testJsonRpcLineConnectorTransportRejectsInvalidEndpoint();
 		testFakeWireSessionSequencesInboundRecords();
 		testFakeWireSessionRejectsMismatchedInboundLine();
 		testFakeWireSessionRejectsMismatchedOutboundRecord();
@@ -572,6 +575,46 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertLineConnectReport(unsupported, TuiAppServerJsonRpcLineConnectStatus.Refused, "named_pipe", false, "", 0, false,
 			TuiAppServerJsonRpcLineEndpointStatus.Unsupported, TuiAppServerJsonRpcLineOpenIntentKind.Refuse, TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused,
 			TuiAppServerJsonRpcLineAttachmentStatus.Refused, "unsupported line connector");
+	}
+
+	static function testJsonRpcTransportCanUseLineConnector():Void {
+		final appServerTransport = DryRunTuiAppServerJsonRpcLineConnectedTransport.stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+			["app-server", "--json-rpc"], "/workspace", [new TuiAppServerJsonRpcProcessEnvVar("CODEX_HOME", "/tmp/codex-home")]));
+		final transport = new JsonRpcTuiPromptTransport(appServerTransport);
+		final threadId = thread("00000000-0000-0000-0000-000000005577");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(100), session("00000000-0000-0000-0000-000000009986"), threadId,
+			"line connected ask");
+		final outcome = transport.submitPrompt(envelope);
+		assertTrue(outcome.isAccepted(), "line-connected json-rpc transport accepted");
+		assertStringEquals("accepted", outcome.code(), "line-connected json-rpc transport code");
+		assertIntEquals(3, outcome.eventCount(), "line-connected json-rpc event count");
+		assertLineConnectReport(appServerTransport.lastConnectReport(), TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "stdio:codex", 1, true,
+			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
+			TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, TuiAppServerJsonRpcLineAttachmentStatus.Ready, "line-connected transport report");
+		final lineOutcome = appServerTransport.lastLineOutcome();
+		assertTrue(lineOutcome != null && lineOutcome.isAccepted(), "line-connected transport line outcome accepted");
+		assertIntEquals(10, lineOutcome.inboundLineCount(), "line-connected transport inbound line count");
+		assertIntEquals(11, transport.lastFrameCount(), "line-connected json-rpc frame count");
+		assertIntEquals(11, transport.lastWireRecordCount(), "line-connected json-rpc wire record count");
+		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.Complete, "100", "100", 9, "line-connected json-rpc correlation");
+		assertTurnLifecycle(transport.lastTurnLifecycle(), TuiPromptTurnLifecycleStatus.Complete, "turn-100", "turn-100", "turn-100", 9, 1, 1,
+			"line-connected json-rpc turn lifecycle");
+	}
+
+	static function testJsonRpcLineConnectorTransportRejectsInvalidEndpoint():Void {
+		final appServerTransport = DryRunTuiAppServerJsonRpcLineConnectedTransport.stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("", [], "", []));
+		final transport = new JsonRpcTuiPromptTransport(appServerTransport);
+		final threadId = thread("00000000-0000-0000-0000-000000005578");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(101), session("00000000-0000-0000-0000-000000009985"), threadId, "line invalid ask");
+		final outcome = transport.submitPrompt(envelope);
+		assertFalse(outcome.isAccepted(), "invalid line-connected transport refused");
+		assertStringEquals("missing_command", outcome.code(), "invalid line-connected transport code");
+		assertLineConnectReport(appServerTransport.lastConnectReport(), TuiAppServerJsonRpcLineConnectStatus.Refused, "missing_command", false, "", 0, false,
+			TuiAppServerJsonRpcLineEndpointStatus.Invalid, TuiAppServerJsonRpcLineOpenIntentKind.Refuse, TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused,
+			TuiAppServerJsonRpcLineAttachmentStatus.Refused, "invalid line-connected transport report");
+		assertTrue(appServerTransport.lastLineOutcome() == null, "invalid line-connected transport no line send");
+		assertIntEquals(1, transport.lastFrameCount(), "invalid line-connected json-rpc frame count");
+		assertIntEquals(1, transport.lastWireRecordCount(), "invalid line-connected json-rpc wire record count");
 	}
 
 	static function testFakeWireSessionSequencesInboundRecords():Void {
