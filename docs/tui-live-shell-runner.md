@@ -1,6 +1,6 @@
 # TUI Live Shell Runner
 
-**Bead:** `TUI-LIVE-11` / `codex-hxrust-dww3`
+**Beads:** `TUI-LIVE-11` / `codex-hxrust-dww3`, `TUI-LIVE-48` / `codex-hxrust-5qfz`
 
 This slice adds the first runnable minimal TUI shell loop. It composes the
 production terminal backend, redraw scheduler, ChatWidget shell state, fake
@@ -25,6 +25,15 @@ The harness runs through the Haxe interpreter and haxe.rust-generated metal
 Cargo check/test/run. Headless events provide deterministic CI coverage while
 `LiveTerminalBackend` keeps the same no-TTY-safe generated Rust boundary used by
 the earlier live-terminal restore gate.
+
+`TUI-LIVE-48` lets `TuiLiveShellRunRequest` select a concrete JSON-RPC prompt
+transport without manually constructing a facade. The default request still uses
+the credential-free fake transport, while `withJsonRpcPromptTransport` and
+`withLineConnectedPromptTransport` route live-shell prompt submission through
+the connector-backed JSONL line pipeline. The runner harness proves both the
+direct builder path and a diagnostic path that keeps the
+`DryRunTuiAppServerJsonRpcLineConnectedTransport` handle available for typed
+attempt/close reports.
 
 For the user-runnable generated binary, see
 [tui-live-shell-demo.md](tui-live-shell-demo.md).

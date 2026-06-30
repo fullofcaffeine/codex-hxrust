@@ -2,7 +2,10 @@ package codexhx.runtime.tui.live;
 
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
+import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerFacade;
+import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.terminal.TerminalBackend;
@@ -51,6 +54,16 @@ class TuiLiveShellRunRequest {
 	public function withFacade(facade:FakeTuiAppServerFacade):TuiLiveShellRunRequest {
 		this.facade = facade == null ? new FakeTuiAppServerFacade(this.shell) : facade;
 		return this;
+	}
+
+	public function withJsonRpcPromptTransport(promptTransport:JsonRpcTuiPromptTransport):TuiLiveShellRunRequest {
+		this.facade = new FakeTuiAppServerFacade(this.shell, promptTransport);
+		return this;
+	}
+
+	public function withLineConnectedPromptTransport(endpoint:TuiAppServerJsonRpcLineEndpoint, rejectionCode:String = ""):TuiLiveShellRunRequest {
+		return withJsonRpcPromptTransport(new JsonRpcTuiPromptTransport(new DryRunTuiAppServerJsonRpcLineConnectedTransport(endpoint,
+			normalize(rejectionCode, ""))));
 	}
 
 	public function withScheduler(scheduler:TerminalRedrawScheduler):TuiLiveShellRunRequest {

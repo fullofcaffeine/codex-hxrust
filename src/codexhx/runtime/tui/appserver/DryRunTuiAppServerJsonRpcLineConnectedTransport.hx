@@ -47,7 +47,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 		final outbound = TuiAppServerJsonRpcTransportTranscript.outbound(request);
 		if (envelope == null)
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_envelope", outbound);
-		final connector = new DryRunTuiAppServerJsonRpcLineConnector();
+		final connector:TuiAppServerJsonRpcLineConnector = new DryRunTuiAppServerJsonRpcLineConnector();
 		final connectReport = connector.connect(endpoint);
 		lastConnectReportValue = connectReport;
 		if (connectReport == null || !connectReport.isReady()) {

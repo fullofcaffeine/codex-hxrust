@@ -1,5 +1,12 @@
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
+import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
+import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectStatus;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
 import codexhx.runtime.tui.chatwidget.ChatWidgetShellState;
 import codexhx.runtime.tui.live.TuiLiveShellRunOutcome;
@@ -18,6 +25,7 @@ class TuiLiveShellRunnerHarness {
 	static function main():Void {
 		testInitialDrawAndIdleRestore();
 		testTextSubmitEchoThroughPump();
+		testTextSubmitThroughLineConnectedTransport();
 		testAgentNavigationInputRoutesActiveThread();
 		testEscapeCtrlCAndQExit();
 		testLiveBackendNoTtyRunPath();
@@ -52,6 +60,59 @@ class TuiLiveShellRunnerHarness {
 		assertTrue(outcome.appServerEvents() >= 3, "fake app-server echo events");
 		assertStringEquals("user> hi", outcome.finalFrameLineAt(3), "user row rendered");
 		assertStringEquals("assistant> echo: hi", outcome.finalFrameLineAt(4), "assistant echo rendered");
+	}
+
+	static function testTextSubmitThroughLineConnectedTransport():Void {
+		final shell = ChatWidgetShellState.initial("pending");
+		final backend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("l")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("n")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final appServerTransport = DryRunTuiAppServerJsonRpcLineConnectedTransport.stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+			["app-server", "--json-rpc"], "/workspace", []));
+		final requestValue = request(shell, backend, [],
+			TuiLiveShellRunPolicy.bounded(20, 2)).withJsonRpcPromptTransport(new JsonRpcTuiPromptTransport(appServerTransport));
+		final outcome = TuiLiveShellRunner.run(requestValue);
+		final attempt = appServerTransport.lastAttemptReport();
+		final close = appServerTransport.lastCloseReport();
+
+		assertIntEquals(1, outcome.submittedPrompts(), "line-connected submitted prompts");
+		assertIntEquals(1, outcome.acceptedPrompts(), "line-connected accepted prompts");
+		assertStringEquals("assistant> echo: line", outcome.finalFrameLineAt(4), "line-connected assistant echo");
+		assertTrue(attempt != null, "line-connected attempt report");
+		assertStatusEquals(TuiAppServerJsonRpcLineConnectStatus.Ready, attempt.connectStatus, "line-connected connect status");
+		assertTrue(attempt.transportMaterialized, "line-connected materialized transport");
+		assertTrue(attempt.hasLineOutcome(), "line-connected line outcome");
+		assertTransportStatusEquals(TuiAppServerJsonRpcTransportStatus.Accepted, attempt.lineStatus, "line-connected line status");
+		assertTrue(attempt.hasCloseReport(), "line-connected close report recorded");
+		assertLineTransportStateEquals(TuiAppServerJsonRpcLineTransportState.Closed, attempt.closeState, "line-connected close state");
+		assertIntEquals(1, attempt.outboundLineCount(), "line-connected outbound line count");
+		assertTrue(attempt.inboundLineCount() > 0, "line-connected inbound line count");
+		assertTrue(close != null && close.code == "line_connected_transport_done", "line-connected close code");
+
+		final directShell = ChatWidgetShellState.initial("pending");
+		final directBackend = new HeadlessTerminalBackend([
+			TerminalEvent.Key(TerminalKey.Character("d")),
+			TerminalEvent.Key(TerminalKey.Character("i")),
+			TerminalEvent.Key(TerminalKey.Character("r")),
+			TerminalEvent.Key(TerminalKey.Character("e")),
+			TerminalEvent.Key(TerminalKey.Character("c")),
+			TerminalEvent.Key(TerminalKey.Character("t")),
+			TerminalEvent.Key(TerminalKey.Enter),
+			TerminalEvent.NoEvent,
+			TerminalEvent.NoEvent
+		]);
+		final directOutcome = TuiLiveShellRunner.run(request(directShell, directBackend, [],
+			TuiLiveShellRunPolicy.bounded(24,
+				2)).withLineConnectedPromptTransport(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+				["app-server", "--json-rpc"], "/workspace", []))));
+		assertIntEquals(1, directOutcome.acceptedPrompts(), "direct line-connected accepted prompts");
+		assertStringEquals("assistant> echo: direct", directOutcome.finalFrameLineAt(4), "direct line-connected assistant echo");
 	}
 
 	static function testAgentNavigationInputRoutesActiveThread():Void {
@@ -123,6 +184,22 @@ class TuiLiveShellRunnerHarness {
 	}
 
 	static function assertReasonEquals(expected:TerminalExitReason, actual:TerminalExitReason, label:String):Void {
+		if (expected != actual)
+			throw label + ": expected " + expected + " but got " + actual;
+	}
+
+	static function assertStatusEquals(expected:TuiAppServerJsonRpcLineConnectStatus, actual:TuiAppServerJsonRpcLineConnectStatus, label:String):Void {
+		if (expected != actual)
+			throw label + ": expected " + expected + " but got " + actual;
+	}
+
+	static function assertTransportStatusEquals(expected:TuiAppServerJsonRpcTransportStatus, actual:TuiAppServerJsonRpcTransportStatus, label:String):Void {
+		if (expected != actual)
+			throw label + ": expected " + expected + " but got " + actual;
+	}
+
+	static function assertLineTransportStateEquals(expected:TuiAppServerJsonRpcLineTransportState, actual:TuiAppServerJsonRpcLineTransportState,
+			label:String):Void {
 		if (expected != actual)
 			throw label + ": expected " + expected + " but got " + actual;
 	}

@@ -1,6 +1,6 @@
 # TUI Live Prompt Transport
 
-**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`, `TUI-LIVE-26` / `codex-hxrust-6rza`, `TUI-LIVE-27` / `codex-hxrust-notn`, `TUI-LIVE-28` / `codex-hxrust-6k41`, `TUI-LIVE-29` / `codex-hxrust-4jpd`, `TUI-LIVE-30` / `codex-hxrust-c0wj`, `TUI-LIVE-31` / `codex-hxrust-jb4r`, `TUI-LIVE-32` / `codex-hxrust-5mcs`, `TUI-LIVE-33` / `codex-hxrust-55o0`, `TUI-LIVE-34` / `codex-hxrust-4i2c`, `TUI-LIVE-35` / `codex-hxrust-fcy7`, `TUI-LIVE-36` / `codex-hxrust-vdtr`, `TUI-LIVE-37` / `codex-hxrust-ahkq`, `TUI-LIVE-38` / `codex-hxrust-h9e4`, `TUI-LIVE-39` / `codex-hxrust-swjp`, `TUI-LIVE-40` / `codex-hxrust-1cii`, `TUI-LIVE-41` / `codex-hxrust-0blg`, `TUI-LIVE-42` / `codex-hxrust-urdy`, `TUI-LIVE-43` / `codex-hxrust-pc6f`, `TUI-LIVE-44` / `codex-hxrust-cfmt`, `TUI-LIVE-45` / `codex-hxrust-tf5g`, `TUI-LIVE-46` / `codex-hxrust-85n6`, `TUI-LIVE-47` / `codex-hxrust-9dsd`
+**Beads:** `TUI-LIVE-13` / `codex-hxrust-0gms`, `TUI-LIVE-14` / `codex-hxrust-og2d`, `TUI-LIVE-15` / `codex-hxrust-0l44`, `TUI-LIVE-16` / `codex-hxrust-cjj4`, `TUI-LIVE-17` / `codex-hxrust-xezg`, `TUI-LIVE-18` / `codex-hxrust-0pd9`, `TUI-LIVE-19` / `codex-hxrust-a3lb`, `TUI-LIVE-20` / `codex-hxrust-lt1m`, `TUI-LIVE-21` / `codex-hxrust-183g`, `TUI-LIVE-22` / `codex-hxrust-9iys`, `TUI-LIVE-23` / `codex-hxrust-2e88`, `TUI-LIVE-24` / `codex-hxrust-it36`, `TUI-LIVE-25` / `codex-hxrust-hooe`, `TUI-LIVE-26` / `codex-hxrust-6rza`, `TUI-LIVE-27` / `codex-hxrust-notn`, `TUI-LIVE-28` / `codex-hxrust-6k41`, `TUI-LIVE-29` / `codex-hxrust-4jpd`, `TUI-LIVE-30` / `codex-hxrust-c0wj`, `TUI-LIVE-31` / `codex-hxrust-jb4r`, `TUI-LIVE-32` / `codex-hxrust-5mcs`, `TUI-LIVE-33` / `codex-hxrust-55o0`, `TUI-LIVE-34` / `codex-hxrust-4i2c`, `TUI-LIVE-35` / `codex-hxrust-fcy7`, `TUI-LIVE-36` / `codex-hxrust-vdtr`, `TUI-LIVE-37` / `codex-hxrust-ahkq`, `TUI-LIVE-38` / `codex-hxrust-h9e4`, `TUI-LIVE-39` / `codex-hxrust-swjp`, `TUI-LIVE-40` / `codex-hxrust-1cii`, `TUI-LIVE-41` / `codex-hxrust-0blg`, `TUI-LIVE-42` / `codex-hxrust-urdy`, `TUI-LIVE-43` / `codex-hxrust-pc6f`, `TUI-LIVE-44` / `codex-hxrust-cfmt`, `TUI-LIVE-45` / `codex-hxrust-tf5g`, `TUI-LIVE-46` / `codex-hxrust-85n6`, `TUI-LIVE-47` / `codex-hxrust-9dsd`, `TUI-LIVE-48` / `codex-hxrust-5qfz`
 
 This slice moves prompt-submission response events behind a typed transport
 seam. `FakeTuiAppServerFacade` still owns credential-free session/thread
@@ -134,6 +134,15 @@ This slice exposed and fixed a generic haxe.rust trait-object null-return
 lowering issue in `../haxe.rust` (`bf0a2d17`, `interface_return_null`), while
 keeping codexhx source free of raw Rust, `Dynamic`, `cast`, `Any`, and smoke
 imports.
+
+`TuiLiveShellRunRequest` can now select that connector-backed JSON-RPC line
+pipeline without replacing the whole fake facade. `withJsonRpcPromptTransport`
+accepts the concrete JSON-RPC prompt transport, and
+`withLineConnectedPromptTransport` builds the dry-run connector-backed pipeline
+from a typed line endpoint. The default live shell remains fake and
+credential-free, but the generated runner gate now proves a prompt submitted
+through the live shell can travel through the JSONL line connector and still
+return typed close/attempt diagnostics.
 
 ```json
 {
