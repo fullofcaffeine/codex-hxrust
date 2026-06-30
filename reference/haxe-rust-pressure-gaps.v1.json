@@ -5,39 +5,38 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 22,
-    "resolvedUpstream": 14,
+    "totalGaps": 23,
+    "resolvedUpstream": 15,
     "openUpstream": 8,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 15,
+      "medium": 16,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 11,
+      "runtime_model_session": 12,
       "native_metal_std_boundary": 4,
       "cafex_adapter": 2
     }
   },
   "rawRustPressure": {
-    "sourceFilesScanned": 835,
+    "sourceFilesScanned": 2105,
     "rawEscapeMatches": 0,
     "patterns": [
       "__rust__",
       "rust.metal.Code",
       "@:rustAllowRaw",
-      "@:rust[A-Z]",
       "untyped"
     ],
     "scannedRoots": [
       "src",
       "test"
     ],
-    "policy": "No raw Rust escapes are used in app/test Haxe source for the current pressure-test surface."
+    "policy": "No raw Rust code escapes are used in app/test Haxe source for the current pressure-test surface. Backend metadata such as @:rustCargo and @:rustExtraSrc is tracked as typed native-boundary configuration, not inline raw Rust code."
   },
   "gaps": [
     {
@@ -178,6 +177,26 @@
         "interface_basic snapshot in ../haxe.rust",
         "interface_null_compare snapshot in ../haxe.rust",
         "scripts/update-haxe-rust-pin.sh b3e38c31"
+      ]
+    },
+    {
+      "id": "interface-return-null-trait-object-default",
+      "status": "resolved_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-9dsd",
+      "haxeRustRefs": [
+        "interface_return_null"
+      ],
+      "resolvedBy": "bf0a2d17",
+      "reproduction": "TUI-LIVE-47 promoted line transport materialization onto an interface contract and exposed non-null interface-returned null lowering as Default::default() for Rust trait objects, which do not implement Default.",
+      "workaround": "Resolved generically in haxe.rust by lowering null interface trait-object returns to a typed diverging null access and adding the product-neutral interface_return_null snapshot; codexhx models optional line transport materialization as Null<TuiAppServerJsonRpcLineTransport>.",
+      "validation": [
+        "bash test/run-snapshots.sh --case interface_return_null in ../haxe.rust",
+        "bash test/run-snapshots.sh --case nullable_interface_null in ../haxe.rust",
+        "bash test/run-snapshots.sh --case interface_basic in ../haxe.rust",
+        "haxe -cp src -cp test -main TuiPromptSubmitEnvelopeHarness --interp",
+        "bash harness/check-tui-prompt-submit-envelope.sh"
       ]
     },
     {

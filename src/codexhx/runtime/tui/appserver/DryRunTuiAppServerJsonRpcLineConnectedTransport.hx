@@ -96,8 +96,8 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 		lastAttemptReportValue = TuiAppServerJsonRpcLineTransportAttemptReport.fromParts(connectReport, lineOutcome, closeReport, transportMaterialized);
 	}
 
-	function materializeLineTransport(connector:DryRunTuiAppServerJsonRpcLineConnector,
-			connectReport:TuiAppServerJsonRpcLineConnectReport):FakeTuiAppServerJsonRpcLineTransport {
+	function materializeLineTransport(connector:TuiAppServerJsonRpcLineConnector,
+			connectReport:TuiAppServerJsonRpcLineConnectReport):Null<TuiAppServerJsonRpcLineTransport> {
 		if (rejectionCode.length == 0)
 			return connector.transportFor(connectReport);
 		if (connectReport == null || !connectReport.isReady())

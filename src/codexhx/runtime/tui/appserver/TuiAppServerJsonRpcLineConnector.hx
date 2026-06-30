@@ -5,4 +5,5 @@ package codexhx.runtime.tui.appserver;
 **/
 interface TuiAppServerJsonRpcLineConnector {
 	function connect(endpoint:TuiAppServerJsonRpcLineEndpoint):TuiAppServerJsonRpcLineConnectReport;
+	function transportFor(report:TuiAppServerJsonRpcLineConnectReport):Null<TuiAppServerJsonRpcLineTransport>;
 }

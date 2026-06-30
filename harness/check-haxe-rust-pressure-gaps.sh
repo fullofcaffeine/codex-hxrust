@@ -27,6 +27,7 @@ jq -e '
   .summary.sourceAreas.build_profile_tooling == ([.gaps[] | select(.sourceArea == "build_profile_tooling")] | length)
   and .summary.sourceAreas.protocol_json_dto == ([.gaps[] | select(.sourceArea == "protocol_json_dto")] | length)
   and .summary.sourceAreas.runtime_model_session == ([.gaps[] | select(.sourceArea == "runtime_model_session")] | length)
+  and .summary.sourceAreas.native_metal_std_boundary == ([.gaps[] | select(.sourceArea == "native_metal_std_boundary")] | length)
   and .summary.sourceAreas.cafex_adapter == ([.gaps[] | select(.sourceArea == "cafex_adapter")] | length)
 ' "$LEDGER" >/dev/null
 
@@ -48,7 +49,7 @@ jq -e '
 ' "$LEDGER" >/dev/null
 
 source_files=$(find "$ROOT/src" "$ROOT/test" -type f -name '*.hx' | wc -l | tr -d ' ')
-raw_matches=$({ rg --count-matches '__rust__|rust\.metal\.Code|@:rustAllowRaw|@:rust[A-Z]|untyped' "$ROOT/src" "$ROOT/test" -g '*.hx' || true; } | awk -F: '{sum += $2} END{print sum + 0}')
+raw_matches=$({ rg --count-matches '__rust__|rust\.metal\.Code|@:rustAllowRaw|untyped' "$ROOT/src" "$ROOT/test" -g '*.hx' || true; } | awk -F: '{sum += $2} END{print sum + 0}')
 
 [[ "$(jq -r '.rawRustPressure.sourceFilesScanned' "$LEDGER")" == "$source_files" ]]
 [[ "$(jq -r '.rawRustPressure.rawEscapeMatches' "$LEDGER")" == "$raw_matches" ]]
@@ -57,6 +58,8 @@ jq -e '
   .rawRustPressure.rawEscapeMatches == 0
   and (.gaps[] | select(.id == "nullable-interface-values").status == "resolved_upstream")
   and (.gaps[] | select(.id == "nullable-interface-values").resolvedBy == "b3e38c31")
+  and (.gaps[] | select(.id == "interface-return-null-trait-object-default").status == "resolved_upstream")
+  and (.gaps[] | select(.id == "interface-return-null-trait-object-default").resolvedBy == "bf0a2d17")
   and (.gaps[] | select(.id == "path-directory-lowering").status == "resolved_upstream")
   and (.gaps[] | select(.id == "path-directory-lowering").resolvedBy == "39f20b9e")
   and (.gaps[] | select(.id == "string-last-index-of-lowering").status == "resolved_upstream")

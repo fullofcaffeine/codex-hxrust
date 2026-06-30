@@ -15,7 +15,7 @@ class DryRunTuiAppServerJsonRpcLineConnector implements TuiAppServerJsonRpcLineC
 		return TuiAppServerJsonRpcLineConnectReport.fromParts(endpointReport, openOutcome, attachmentReport);
 	}
 
-	public function transportFor(report:TuiAppServerJsonRpcLineConnectReport):FakeTuiAppServerJsonRpcLineTransport {
+	public function transportFor(report:TuiAppServerJsonRpcLineConnectReport):Null<TuiAppServerJsonRpcLineTransport> {
 		if (report == null || !report.isReady())
 			return null;
 		return new FakeTuiAppServerJsonRpcLineTransport();
