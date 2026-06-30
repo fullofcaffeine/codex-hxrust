@@ -8,10 +8,7 @@ import codexhx.runtime.tui.live.TuiLiveShellDemoTransportMode;
 import codexhx.runtime.tui.live.TuiLiveShellRunPolicy;
 import codexhx.runtime.tui.live.TuiLiveShellRunRequest;
 import codexhx.runtime.tui.live.TuiLiveShellRunner;
-import codexhx.runtime.tui.terminal.HeadlessTerminalBackend;
 import codexhx.runtime.tui.terminal.LiveTerminalBackend;
-import codexhx.runtime.tui.terminal.TerminalEvent;
-import codexhx.runtime.tui.terminal.TerminalKey;
 import codexhx.runtime.tui.terminal.TerminalSetup;
 import codexhx.runtime.tui.terminal.TerminalSize;
 
@@ -40,6 +37,7 @@ class TuiLiveShellDemoHarness {
 		assertTrue(config.ok, "default config ok");
 		assertStringEquals("fake", config.transportCode(), "default transport");
 		assertStringEquals("fake", config.code, "default config code");
+		assertTrue(!config.hasScriptedPrompt(), "default config has no scripted prompt");
 	}
 
 	static function testDemoConfigParsesLineStdio():Void {
@@ -50,11 +48,14 @@ class TuiLiveShellDemoHarness {
 			"--line-arg=app-server",
 			"--line-arg=--json-rpc",
 			"--line-env=CODEX_HOME=/tmp/codex-home",
-			"--line-rejection-code=fixture_reject"
+			"--line-rejection-code=fixture_reject",
+			"--scripted-prompt=demo prompt"
 		]);
 		assertTrue(config.ok, "line config ok");
 		assertStringEquals("line_stdio", config.transportCode(), "line config transport");
 		assertStringEquals("fixture_reject", config.rejectionCode, "line rejection code");
+		assertStringEquals("demo prompt", config.scriptedPrompt, "line scripted prompt");
+		assertTrue(config.hasScriptedPrompt(), "line config has scripted prompt");
 		switch config.transportMode {
 			case Fake:
 				throw "line config should not select fake transport";
@@ -94,22 +95,15 @@ class TuiLiveShellDemoHarness {
 	}
 
 	static function testHeadlessDemoLineTransportSubmitsPrompt():Void {
-		final config = TuiLiveShellDemoConfig.parse(["--line-stdio"]);
-		final backend = new HeadlessTerminalBackend([
-			TerminalEvent.Key(TerminalKey.Character("d")),
-			TerminalEvent.Key(TerminalKey.Character("e")),
-			TerminalEvent.Key(TerminalKey.Character("m")),
-			TerminalEvent.Key(TerminalKey.Character("o")),
-			TerminalEvent.Key(TerminalKey.Enter),
-			TerminalEvent.NoEvent,
-			TerminalEvent.NoEvent
-		]);
+		final config = TuiLiveShellDemoConfig.parse(["--line-stdio", "--scripted-prompt=demo"]);
+		final backend = TuiLiveShellDemoMain.scriptedBackend(config.scriptedPrompt);
 		final request = config.apply(TuiLiveShellDemoMain.baseRequest(backend, TerminalSetup.headless(TerminalSize.of(96, 16)),
 			TuiLiveShellRunPolicy.bounded(24, 2)));
 		final outcome = TuiLiveShellRunner.run(request);
 
 		assertTrue(config.ok, "line demo config ok");
 		assertStringEquals("line_stdio", config.transportCode(), "line demo transport");
+		assertTrue(config.hasScriptedPrompt(), "line demo scripted prompt");
 		assertIntEquals(1, outcome.acceptedPrompts(), "line demo accepted prompt");
 		assertStringEquals("assistant> echo: demo", outcome.finalFrameLineAt(4), "line demo assistant echo");
 	}

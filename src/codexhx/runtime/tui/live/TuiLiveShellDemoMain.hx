@@ -3,8 +3,11 @@ package codexhx.runtime.tui.live;
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
 import codexhx.runtime.tui.appserver.TuiAppServerEvent;
+import codexhx.runtime.tui.terminal.HeadlessTerminalBackend;
 import codexhx.runtime.tui.terminal.LiveTerminalBackend;
 import codexhx.runtime.tui.terminal.TerminalBackend;
+import codexhx.runtime.tui.terminal.TerminalEvent;
+import codexhx.runtime.tui.terminal.TerminalKey;
 import codexhx.runtime.tui.terminal.TerminalSetup;
 import codexhx.runtime.tui.terminal.TerminalSize;
 
@@ -28,8 +31,8 @@ class TuiLiveShellDemoMain {
 			Sys.println("codex-hxrust live TUI demo configuration error: " + config.code);
 			return;
 		}
-		final request = config.apply(baseRequest(new LiveTerminalBackend(PollTimeoutMs), TerminalSetup.live(TerminalSize.of(96, 24)),
-			TuiLiveShellRunPolicy.bounded(MaxIterations, IdleEventLimit)));
+		final setup = demoSetup(config);
+		final request = config.apply(baseRequest(demoBackend(config), setup, demoPolicy(config)));
 		final outcome = TuiLiveShellRunner.run(request);
 		Sys.println("codex-hxrust live TUI demo exited: transport=" + config.transportCode() + ", restored=" + boolText(outcome.restored())
 			+ ", iterations=" + Std.string(outcome.iterations()) + ", prompts=" + Std.string(outcome.acceptedPrompts()) + ", exit="
@@ -42,6 +45,39 @@ class TuiLiveShellDemoMain {
 			"gpt-live-demo").withPolicy(policy == null ? TuiLiveShellRunPolicy.bounded(MaxIterations, IdleEventLimit) : policy).withInitialEvents([
 				TuiAppServerEvent.AgentThreadUpsert(ThreadId.unsafeAssumeValid("00000000-0000-0000-0000-000000120102"), "Demo agent", "worker", false)
 			]);
+	}
+
+	public static function scriptedBackend(prompt:String):HeadlessTerminalBackend {
+		final events:Array<TerminalEvent> = [];
+		final text = prompt == null ? "" : prompt;
+		var index = 0;
+		while (index < text.length) {
+			events.push(TerminalEvent.Key(TerminalKey.Character(text.charAt(index))));
+			index++;
+		}
+		events.push(TerminalEvent.Key(TerminalKey.Enter));
+		events.push(TerminalEvent.NoEvent);
+		events.push(TerminalEvent.NoEvent);
+		return new HeadlessTerminalBackend(events);
+	}
+
+	static function demoBackend(config:TuiLiveShellDemoConfig):TerminalBackend {
+		if (config.hasScriptedPrompt())
+			return scriptedBackend(config.scriptedPrompt);
+		return new LiveTerminalBackend(PollTimeoutMs);
+	}
+
+	static function demoSetup(config:TuiLiveShellDemoConfig):TerminalSetup {
+		final size = TerminalSize.of(96, 24);
+		if (config.hasScriptedPrompt())
+			return TerminalSetup.headless(size);
+		return TerminalSetup.live(size);
+	}
+
+	static function demoPolicy(config:TuiLiveShellDemoConfig):TuiLiveShellRunPolicy {
+		if (config.hasScriptedPrompt())
+			return TuiLiveShellRunPolicy.bounded(128, 3);
+		return TuiLiveShellRunPolicy.bounded(MaxIterations, IdleEventLimit);
 	}
 
 	static function boolText(value:Bool):String {

@@ -15,16 +15,22 @@ class TuiLiveShellDemoConfig {
 	public final code:String;
 	public final transportMode:TuiLiveShellDemoTransportMode;
 	public final rejectionCode:String;
+	public final scriptedPrompt:String;
 
-	public function new(ok:Bool, code:String, transportMode:TuiLiveShellDemoTransportMode, rejectionCode:String) {
+	public function new(ok:Bool, code:String, transportMode:TuiLiveShellDemoTransportMode, rejectionCode:String, scriptedPrompt:String) {
 		this.ok = ok;
 		this.code = normalize(code);
 		this.transportMode = transportMode;
 		this.rejectionCode = normalize(rejectionCode);
+		this.scriptedPrompt = normalize(scriptedPrompt);
 	}
 
 	public static function fake():TuiLiveShellDemoConfig {
-		return new TuiLiveShellDemoConfig(true, "fake", TuiLiveShellDemoTransportMode.Fake, "");
+		return fakeWithPrompt("");
+	}
+
+	public static function fakeWithPrompt(scriptedPrompt:String):TuiLiveShellDemoConfig {
+		return new TuiLiveShellDemoConfig(true, "fake", TuiLiveShellDemoTransportMode.Fake, "", scriptedPrompt);
 	}
 
 	public static function parse(args:Array<String>):TuiLiveShellDemoConfig {
@@ -52,6 +58,10 @@ class TuiLiveShellDemoConfig {
 		}
 	}
 
+	public function hasScriptedPrompt():Bool {
+		return scriptedPrompt.length > 0;
+	}
+
 	static function normalize(value:String):String {
 		return value == null ? "" : value;
 	}
@@ -68,6 +78,7 @@ class TuiLiveShellDemoConfigParser {
 	var stdioArgs:Array<String>;
 	var env:Array<TuiAppServerJsonRpcProcessEnvVar>;
 	var rejectionCode:String;
+	var scriptedPrompt:String;
 
 	public function new(args:Array<String>) {
 		this.args = args == null ? [] : args.copy();
@@ -77,6 +88,7 @@ class TuiLiveShellDemoConfigParser {
 		this.stdioArgs = [];
 		this.env = [];
 		this.rejectionCode = "";
+		this.scriptedPrompt = "";
 	}
 
 	public function parse():TuiLiveShellDemoConfig {
@@ -106,13 +118,15 @@ class TuiLiveShellDemoConfigParser {
 				env.push(parsedEnv);
 			} else if (startsWith(arg, "--line-rejection-code=")) {
 				rejectionCode = afterPrefix(arg, "--line-rejection-code=");
+			} else if (startsWith(arg, "--scripted-prompt=")) {
+				scriptedPrompt = afterPrefix(arg, "--scripted-prompt=");
 			} else {
 				return invalid("unknown_argument");
 			}
 			index++;
 		}
 		if (transport == "fake")
-			return TuiLiveShellDemoConfig.fake();
+			return TuiLiveShellDemoConfig.fakeWithPrompt(scriptedPrompt);
 		if (stdioArgs.length == 0) {
 			stdioArgs.push("app-server");
 			stdioArgs.push("--json-rpc");
@@ -120,11 +134,11 @@ class TuiLiveShellDemoConfigParser {
 		final plan = TuiAppServerJsonRpcProcessLaunchPlan.stdio(command, stdioArgs, cwd, env);
 		if (!plan.isValid())
 			return invalid(plan.validationCode());
-		return new TuiLiveShellDemoConfig(true, "line_stdio", TuiLiveShellDemoTransportMode.LineStdio(plan), rejectionCode);
+		return new TuiLiveShellDemoConfig(true, "line_stdio", TuiLiveShellDemoTransportMode.LineStdio(plan), rejectionCode, scriptedPrompt);
 	}
 
 	function invalid(code:String):TuiLiveShellDemoConfig {
-		return new TuiLiveShellDemoConfig(false, code, TuiLiveShellDemoTransportMode.Fake, "");
+		return new TuiLiveShellDemoConfig(false, code, TuiLiveShellDemoTransportMode.Fake, "", "");
 	}
 
 	static function parseEnv(value:String):Null<TuiAppServerJsonRpcProcessEnvVar> {

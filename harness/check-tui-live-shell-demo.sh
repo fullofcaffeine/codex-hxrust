@@ -14,5 +14,11 @@ haxe hxml/tui-live-shell-demo.hxml
 cargo check --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked
 cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked --quiet
 cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked --quiet -- --transport=line-stdio --line-command=codex --line-arg=app-server --line-arg=--json-rpc
+scripted_output="$(cargo run --manifest-path generated/tui-live-shell-demo/Cargo.toml --locked --quiet -- --transport=line-stdio --scripted-prompt=demo)"
+printf '%s\n' "$scripted_output"
+if [[ "$scripted_output" != *"transport=line_stdio"* || "$scripted_output" != *"prompts=1"* ]]; then
+	echo "scripted line-stdio demo did not report expected accepted prompt" >&2
+	exit 1
+fi
 
 echo "TUI live shell demo harness passed."
