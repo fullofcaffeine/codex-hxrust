@@ -8,11 +8,13 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 
 	var lastConnectReportValue:TuiAppServerJsonRpcLineConnectReport;
 	var lastLineOutcomeValue:TuiAppServerJsonRpcLineOutcome;
+	var lastCloseReportValue:TuiAppServerJsonRpcLineCloseReport;
 
 	public function new(endpoint:TuiAppServerJsonRpcLineEndpoint) {
 		this.endpoint = endpoint;
 		this.lastConnectReportValue = null;
 		this.lastLineOutcomeValue = null;
+		this.lastCloseReportValue = null;
 	}
 
 	public static function stdio(plan:TuiAppServerJsonRpcProcessLaunchPlan):DryRunTuiAppServerJsonRpcLineConnectedTransport {
@@ -26,6 +28,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 	public function sendPrompt(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope):TuiAppServerJsonRpcTransportOutcome {
 		lastConnectReportValue = null;
 		lastLineOutcomeValue = null;
+		lastCloseReportValue = null;
 		if (request == null)
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_request");
 		final outbound = TuiAppServerJsonRpcTransportTranscript.outbound(request);
@@ -41,6 +44,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_line_transport", outbound);
 		final lineOutcome = lineTransport.sendPromptLine(request, envelope, request.messageJson() + "\n");
 		lastLineOutcomeValue = lineOutcome;
+		lastCloseReportValue = lineTransport.close("line_connected_transport_done");
 		if (lineOutcome == null)
 			return TuiAppServerJsonRpcTransportOutcome.rejected("missing_line_outcome", outbound);
 		final transcript = new TuiAppServerJsonRpcTransportTranscript(request, inboundFramesFromLineOutcome(lineOutcome));
@@ -59,6 +63,10 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 
 	public function lastLineOutcome():TuiAppServerJsonRpcLineOutcome {
 		return lastLineOutcomeValue;
+	}
+
+	public function lastCloseReport():TuiAppServerJsonRpcLineCloseReport {
+		return lastCloseReportValue;
 	}
 
 	static function inboundFramesFromLineOutcome(outcome:TuiAppServerJsonRpcLineOutcome):Array<TuiPromptJsonRpcFrame> {

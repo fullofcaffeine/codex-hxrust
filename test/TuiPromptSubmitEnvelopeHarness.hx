@@ -594,6 +594,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		final lineOutcome = appServerTransport.lastLineOutcome();
 		assertTrue(lineOutcome != null && lineOutcome.isAccepted(), "line-connected transport line outcome accepted");
 		assertIntEquals(10, lineOutcome.inboundLineCount(), "line-connected transport inbound line count");
+		assertLineCloseReport(appServerTransport.lastCloseReport(), TuiAppServerJsonRpcLineTransportState.Closed, "line_connected_transport_done", 1, 10,
+			"line-connected transport close report");
 		assertIntEquals(11, transport.lastFrameCount(), "line-connected json-rpc frame count");
 		assertIntEquals(11, transport.lastWireRecordCount(), "line-connected json-rpc wire record count");
 		assertCorrelation(transport.lastCorrelation(), TuiPromptJsonRpcCorrelationStatus.Complete, "100", "100", 9, "line-connected json-rpc correlation");
@@ -613,6 +615,7 @@ class TuiPromptSubmitEnvelopeHarness {
 			TuiAppServerJsonRpcLineEndpointStatus.Invalid, TuiAppServerJsonRpcLineOpenIntentKind.Refuse, TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused,
 			TuiAppServerJsonRpcLineAttachmentStatus.Refused, "invalid line-connected transport report");
 		assertTrue(appServerTransport.lastLineOutcome() == null, "invalid line-connected transport no line send");
+		assertTrue(appServerTransport.lastCloseReport() == null, "invalid line-connected transport no close");
 		assertIntEquals(1, transport.lastFrameCount(), "invalid line-connected json-rpc frame count");
 		assertIntEquals(1, transport.lastWireRecordCount(), "invalid line-connected json-rpc wire record count");
 	}
