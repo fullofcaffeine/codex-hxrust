@@ -5,6 +5,7 @@ import codexhx.protocol.app.AppProtocol;
 import codexhx.protocol.json.CodexJson;
 import codexhx.protocol.json.JsonParseOutcome;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineNativeOpener;
+import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineTransportAttacher;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcLineTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.FakeTuiAppServerJsonRpcWireSession;
@@ -13,6 +14,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportTranscript;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineAttachmentStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineCloseReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpointReport;
@@ -24,6 +26,8 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOpenOutcomeStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTranscript;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachment;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachmentReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireSession;
@@ -89,6 +93,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		testLineEndpointPlansAreTyped();
 		testLineEndpointOpenIntentsAreTyped();
 		testLineNativeOpenOutcomesAreTyped();
+		testLineTransportAttachesAfterOpen();
 		testFakeWireSessionSequencesInboundRecords();
 		testFakeWireSessionRejectsMismatchedInboundLine();
 		testFakeWireSessionRejectsMismatchedOutboundRecord();
@@ -495,6 +500,41 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertLineOpenOutcome(unsupported, TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused, "named_pipe", false, "", 0,
 			TuiAppServerJsonRpcLineOpenIntentKind.Refuse, TuiAppServerJsonRpcLineEndpointStatus.Unsupported, "unsupported native open outcome");
 		assertIntEquals(2, opener.openCount(), "dry-run native opener count");
+	}
+
+	static function testLineTransportAttachesAfterOpen():Void {
+		final opener = new DryRunTuiAppServerJsonRpcLineNativeOpener();
+		final attacher = new DryRunTuiAppServerJsonRpcLineTransportAttacher();
+		final stdio = opener.open(TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+			["app-server", "--json-rpc"], "/workspace", [new TuiAppServerJsonRpcProcessEnvVar("CODEX_HOME", "/tmp/codex-home")]))));
+		final stdioAttachment = attacher.attach(stdio);
+		assertLineTransportAttachment(TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(stdioAttachment),
+			TuiAppServerJsonRpcLineAttachmentStatus.Ready, "opened", true, "stdio:codex", 1, true, 0, 0, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
+			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, "stdio line transport attachment");
+		final transport = expectReadyLineTransport(attacher, stdioAttachment, "stdio line transport attachment");
+		final threadId = thread("00000000-0000-0000-0000-000000005575");
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(98), session("00000000-0000-0000-0000-000000009988"), threadId, "attached line ask");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final outcome = transport.sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertTrue(outcome.isAccepted(), "attached line transport accepted");
+		assertIntEquals(1, transport.outboundLineCount(), "attached line transport outbound count");
+		assertIntEquals(10, transport.inboundLineCount(), "attached line transport inbound count");
+
+		final socket = opener.open(TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(TuiAppServerJsonRpcLineEndpoint.TcpSocket("127.0.0.1", 43817)));
+		assertLineTransportAttachment(TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(attacher.attach(socket)),
+			TuiAppServerJsonRpcLineAttachmentStatus.Ready, "opened", true, "tcp:127.0.0.1", 2, true, 0, 0, TuiAppServerJsonRpcLineOpenIntentKind.ConnectTcp,
+			TuiAppServerJsonRpcLineEndpointStatus.SocketReady, "socket line transport attachment");
+
+		final invalid = opener.open(TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("",
+			[], "", []))));
+		assertLineTransportAttachment(TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(attacher.attach(invalid)),
+			TuiAppServerJsonRpcLineAttachmentStatus.Refused, "missing_command", false, "", 0, false, 0, 0, TuiAppServerJsonRpcLineOpenIntentKind.Refuse,
+			TuiAppServerJsonRpcLineEndpointStatus.Invalid, "invalid line transport attachment");
+
+		final unsupported = opener.open(TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(TuiAppServerJsonRpcLineEndpoint.Unsupported("named_pipe")));
+		assertLineTransportAttachment(TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(attacher.attach(unsupported)),
+			TuiAppServerJsonRpcLineAttachmentStatus.Refused, "named_pipe", false, "", 0, false, 0, 0, TuiAppServerJsonRpcLineOpenIntentKind.Refuse,
+			TuiAppServerJsonRpcLineEndpointStatus.Unsupported, "unsupported line transport attachment");
 	}
 
 	static function testFakeWireSessionSequencesInboundRecords():Void {
@@ -1047,6 +1087,42 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(expectedConnectionIndex, outcome.connectionIndex, label + " connection index");
 		assertStringEquals(expectedIntentKind.text(), outcome.intentKindText(), label + " intent kind");
 		assertStringEquals(expectedEndpointStatus.text(), outcome.endpointStatusText(), label + " endpoint status");
+	}
+
+	static function assertLineTransportAttachment(report:TuiAppServerJsonRpcLineTransportAttachmentReport,
+			expectedStatus:TuiAppServerJsonRpcLineAttachmentStatus, expectedCode:String, expectedReady:Bool, expectedConnectionLabel:String,
+			expectedConnectionIndex:Int, expectedTransportOpen:Bool, expectedOutboundLineCount:Int, expectedInboundLineCount:Int,
+			expectedIntentKind:TuiAppServerJsonRpcLineOpenIntentKind, expectedEndpointStatus:TuiAppServerJsonRpcLineEndpointStatus, label:String):Void {
+		if (report == null)
+			throw label + ": missing report";
+		assertStringEquals(expectedStatus.text(), report.statusText(), label + " status");
+		assertStringEquals(expectedCode, report.code, label + " code");
+		if (expectedReady)
+			assertTrue(report.isReady(), label + " ready");
+		else
+			assertFalse(report.isReady(), label + " refused");
+		assertStringEquals(expectedConnectionLabel, report.connectionLabel, label + " connection label");
+		assertIntEquals(expectedConnectionIndex, report.connectionIndex, label + " connection index");
+		if (expectedTransportOpen)
+			assertTrue(report.transportOpen, label + " transport open");
+		else
+			assertFalse(report.transportOpen, label + " transport closed");
+		assertIntEquals(expectedOutboundLineCount, report.outboundLineCount, label + " outbound line count");
+		assertIntEquals(expectedInboundLineCount, report.inboundLineCount, label + " inbound line count");
+		assertStringEquals(expectedIntentKind.text(), report.intentKindText(), label + " intent kind");
+		assertStringEquals(expectedEndpointStatus.text(), report.endpointStatusText(), label + " endpoint status");
+	}
+
+	static function expectReadyLineTransport(attacher:DryRunTuiAppServerJsonRpcLineTransportAttacher, attachment:TuiAppServerJsonRpcLineTransportAttachment,
+			label:String):TuiAppServerJsonRpcLineTransport {
+		if (attachment == null)
+			throw label + ": missing attachment";
+		if (!attachment.isReady() || !attachment.hasTransport())
+			throw label + ": expected ready attachment";
+		final transport = attacher.transportFor(attachment);
+		if (transport == null)
+			throw label + ": missing transport";
+		return transport;
 	}
 
 	static function expectResponseFrame(frame:Null<TuiPromptJsonRpcFrame>, label:String):TuiPromptJsonRpcResponse {
