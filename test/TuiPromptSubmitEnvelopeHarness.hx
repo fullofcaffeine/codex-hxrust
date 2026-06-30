@@ -24,6 +24,8 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpointReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpointStatus;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineNativeOpener;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOpenIntent;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOpenIntentKind;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOpenIntentReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOpenOutcome;
@@ -32,6 +34,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTranscript;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttemptReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttacher;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachment;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachmentReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
@@ -101,6 +104,9 @@ class TuiPromptSubmitEnvelopeHarness {
 		testLineNativeOpenOutcomesAreTyped();
 		testLineTransportAttachesAfterOpen();
 		testLineConnectorComposesEndpointOpenAndAttachment();
+		testLineConnectorUsesInjectedNativeBoundaries();
+		testLineConnectorPropagatesInjectedNativeOpenRefusal();
+		testLineConnectorReturnsMissingInjectedAttachedTransport();
 		testJsonRpcTransportCanUseLineConnector();
 		testJsonRpcTransportUsesInjectedLineConnector();
 		testJsonRpcLineConnectorTransportRejectsInvalidEndpoint();
@@ -551,7 +557,7 @@ class TuiPromptSubmitEnvelopeHarness {
 	}
 
 	static function testLineConnectorComposesEndpointOpenAndAttachment():Void {
-		final connector = new DryRunTuiAppServerJsonRpcLineConnector();
+		final connector = DryRunTuiAppServerJsonRpcLineConnector.dryRun();
 		final stdio = connector.connect(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
 			["app-server", "--json-rpc"], "/workspace", [new TuiAppServerJsonRpcProcessEnvVar("CODEX_HOME", "/tmp/codex-home")])));
 		assertLineConnectReport(stdio, TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "stdio:codex", 1, true,
@@ -568,7 +574,7 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(10, transport.inboundLineCount(), "connector line transport inbound count");
 
 		final socket = connector.connect(TuiAppServerJsonRpcLineEndpoint.TcpSocket("127.0.0.1", 43817));
-		assertLineConnectReport(socket, TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "tcp:127.0.0.1", 1, true,
+		assertLineConnectReport(socket, TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "tcp:127.0.0.1", 2, true,
 			TuiAppServerJsonRpcLineEndpointStatus.SocketReady, TuiAppServerJsonRpcLineOpenIntentKind.ConnectTcp,
 			TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, TuiAppServerJsonRpcLineAttachmentStatus.Ready, "socket line connector");
 
@@ -581,6 +587,57 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertLineConnectReport(unsupported, TuiAppServerJsonRpcLineConnectStatus.Refused, "named_pipe", false, "", 0, false,
 			TuiAppServerJsonRpcLineEndpointStatus.Unsupported, TuiAppServerJsonRpcLineOpenIntentKind.Refuse, TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused,
 			TuiAppServerJsonRpcLineAttachmentStatus.Refused, "unsupported line connector");
+	}
+
+	static function testLineConnectorUsesInjectedNativeBoundaries():Void {
+		final opener = RecordingLineNativeOpener.accepting();
+		final attacher = RecordingLineTransportAttacher.accepting();
+		final connector = new DryRunTuiAppServerJsonRpcLineConnector(opener, attacher);
+		final report = connector.connect(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+			["app-server", "--json-rpc"], "/workspace", [])));
+		final transport = expectConnectorLineTransport(connector, report, "injected line connector native boundaries");
+
+		assertLineConnectReport(report, TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "stdio:codex", 1, true,
+			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
+			TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, TuiAppServerJsonRpcLineAttachmentStatus.Ready, "injected line connector native boundaries");
+		assertTrue(transport != null, "injected line connector materialized transport");
+		assertIntEquals(1, opener.openCallCount(), "injected native opener call count");
+		assertIntEquals(1, attacher.attachCallCount(), "injected attacher attach count");
+		assertIntEquals(1, attacher.transportCallCount(), "injected attacher transport count");
+	}
+
+	static function testLineConnectorPropagatesInjectedNativeOpenRefusal():Void {
+		final opener = RecordingLineNativeOpener.refusing("spawn_refused");
+		final attacher = RecordingLineTransportAttacher.accepting();
+		final connector = new DryRunTuiAppServerJsonRpcLineConnector(opener, attacher);
+		final report = connector.connect(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+			["app-server", "--json-rpc"], "/workspace", [])));
+		final transport = connector.transportFor(report);
+
+		assertLineConnectReport(report, TuiAppServerJsonRpcLineConnectStatus.Refused, "spawn_refused", false, "", 0, false,
+			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
+			TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused, TuiAppServerJsonRpcLineAttachmentStatus.Refused, "injected native opener refusal");
+		assertTrue(transport == null, "injected native opener refusal transport missing");
+		assertIntEquals(1, opener.openCallCount(), "injected native refusal opener call count");
+		assertIntEquals(1, attacher.attachCallCount(), "injected native refusal attach count");
+		assertIntEquals(0, attacher.transportCallCount(), "injected native refusal transport count");
+	}
+
+	static function testLineConnectorReturnsMissingInjectedAttachedTransport():Void {
+		final opener = RecordingLineNativeOpener.accepting();
+		final attacher = RecordingLineTransportAttacher.missingTransport();
+		final connector = new DryRunTuiAppServerJsonRpcLineConnector(opener, attacher);
+		final report = connector.connect(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("codex",
+			["app-server", "--json-rpc"], "/workspace", [])));
+		final transport = connector.transportFor(report);
+
+		assertLineConnectReport(report, TuiAppServerJsonRpcLineConnectStatus.Ready, "connected", true, "stdio:codex", 1, true,
+			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
+			TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, TuiAppServerJsonRpcLineAttachmentStatus.Ready, "injected missing attached transport");
+		assertTrue(transport == null, "injected missing attached transport missing");
+		assertIntEquals(1, opener.openCallCount(), "injected missing transport opener call count");
+		assertIntEquals(1, attacher.attachCallCount(), "injected missing transport attach count");
+		assertIntEquals(1, attacher.transportCallCount(), "injected missing transport transport count");
 	}
 
 	static function testJsonRpcTransportCanUseLineConnector():Void {
@@ -1658,17 +1715,95 @@ class TuiPromptSubmitEnvelopeHarness {
 	}
 }
 
+class RecordingLineNativeOpener implements TuiAppServerJsonRpcLineNativeOpener {
+	final delegate:DryRunTuiAppServerJsonRpcLineNativeOpener;
+	final refusalCode:String;
+	var openCalls:Int;
+
+	public function new(refusalCode:String) {
+		this.delegate = new DryRunTuiAppServerJsonRpcLineNativeOpener();
+		this.refusalCode = refusalCode == null ? "" : refusalCode;
+		this.openCalls = 0;
+	}
+
+	public static function accepting():RecordingLineNativeOpener {
+		return new RecordingLineNativeOpener("");
+	}
+
+	public static function refusing(code:String):RecordingLineNativeOpener {
+		return new RecordingLineNativeOpener(code);
+	}
+
+	public function open(intent:TuiAppServerJsonRpcLineOpenIntent):TuiAppServerJsonRpcLineOpenOutcome {
+		openCalls = openCalls + 1;
+		if (refusalCode.length == 0)
+			return delegate.open(intent);
+		return new TuiAppServerJsonRpcLineOpenOutcome(TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused, refusalCode, "", 0,
+			TuiAppServerJsonRpcLineOpenIntentReport.fromIntent(intent));
+	}
+
+	public function openCallCount():Int {
+		return openCalls;
+	}
+}
+
+class RecordingLineTransportAttacher implements TuiAppServerJsonRpcLineTransportAttacher {
+	final delegate:DryRunTuiAppServerJsonRpcLineTransportAttacher;
+	final shouldMaterializeTransport:Bool;
+	var attachCalls:Int;
+	var transportCalls:Int;
+
+	public function new(shouldMaterializeTransport:Bool) {
+		this.delegate = new DryRunTuiAppServerJsonRpcLineTransportAttacher();
+		this.shouldMaterializeTransport = shouldMaterializeTransport;
+		this.attachCalls = 0;
+		this.transportCalls = 0;
+	}
+
+	public static function accepting():RecordingLineTransportAttacher {
+		return new RecordingLineTransportAttacher(true);
+	}
+
+	public static function missingTransport():RecordingLineTransportAttacher {
+		return new RecordingLineTransportAttacher(false);
+	}
+
+	public function attach(outcome:TuiAppServerJsonRpcLineOpenOutcome):TuiAppServerJsonRpcLineTransportAttachment {
+		attachCalls = attachCalls + 1;
+		return delegate.attach(outcome);
+	}
+
+	public function transportFor(attachment:TuiAppServerJsonRpcLineTransportAttachment):Null<TuiAppServerJsonRpcLineTransport> {
+		transportCalls = transportCalls + 1;
+		if (!shouldMaterializeTransport)
+			return null;
+		return delegate.transportFor(attachment);
+	}
+
+	public function attachCallCount():Int {
+		return attachCalls;
+	}
+
+	public function transportCallCount():Int {
+		return transportCalls;
+	}
+}
+
 class RecordingLineConnector implements TuiAppServerJsonRpcLineConnector {
-	final delegate:DryRunTuiAppServerJsonRpcLineConnector;
+	final opener:DryRunTuiAppServerJsonRpcLineNativeOpener;
+	final attacher:DryRunTuiAppServerJsonRpcLineTransportAttacher;
 	final refusalCode:String;
 	final shouldMaterializeTransport:Bool;
+	var lastAttachmentValue:TuiAppServerJsonRpcLineTransportAttachment;
 	var connectCalls:Int;
 	var transportCalls:Int;
 
 	public function new(refusalCode:String, shouldMaterializeTransport:Bool) {
-		this.delegate = new DryRunTuiAppServerJsonRpcLineConnector();
+		this.opener = new DryRunTuiAppServerJsonRpcLineNativeOpener();
+		this.attacher = new DryRunTuiAppServerJsonRpcLineTransportAttacher();
 		this.refusalCode = refusalCode == null ? "" : refusalCode;
 		this.shouldMaterializeTransport = shouldMaterializeTransport;
+		this.lastAttachmentValue = null;
 		this.connectCalls = 0;
 		this.transportCalls = 0;
 	}
@@ -1689,14 +1824,20 @@ class RecordingLineConnector implements TuiAppServerJsonRpcLineConnector {
 		connectCalls = connectCalls + 1;
 		if (refusalCode.length > 0)
 			return TuiAppServerJsonRpcLineConnectReport.refused(refusalCode, TuiAppServerJsonRpcLineEndpointReport.inspect(endpoint), null, null);
-		return delegate.connect(endpoint);
+		final endpointReport = TuiAppServerJsonRpcLineEndpointReport.inspect(endpoint);
+		final intent = TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(endpoint);
+		final openOutcome = opener.open(intent);
+		final attachment = attacher.attach(openOutcome);
+		lastAttachmentValue = attachment;
+		return TuiAppServerJsonRpcLineConnectReport.fromParts(endpointReport, openOutcome,
+			TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(attachment));
 	}
 
 	public function transportFor(report:TuiAppServerJsonRpcLineConnectReport):Null<TuiAppServerJsonRpcLineTransport> {
 		transportCalls = transportCalls + 1;
-		if (!shouldMaterializeTransport)
+		if (!shouldMaterializeTransport || report == null || !report.isReady())
 			return null;
-		return delegate.transportFor(report);
+		return attacher.transportFor(lastAttachmentValue);
 	}
 
 	public function connectCallCount():Int {

@@ -5,4 +5,5 @@ package codexhx.runtime.tui.appserver;
 **/
 interface TuiAppServerJsonRpcLineTransportAttacher {
 	function attach(outcome:TuiAppServerJsonRpcLineOpenOutcome):TuiAppServerJsonRpcLineTransportAttachment;
+	function transportFor(attachment:TuiAppServerJsonRpcLineTransportAttachment):Null<TuiAppServerJsonRpcLineTransport>;
 }

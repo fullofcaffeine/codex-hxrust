@@ -135,6 +135,17 @@ lowering issue in `../haxe.rust` (`bf0a2d17`, `interface_return_null`), while
 keeping codexhx source free of raw Rust, `Dynamic`, `cast`, `Any`, and smoke
 imports.
 
+`DryRunTuiAppServerJsonRpcLineConnector` now takes explicit non-null
+`TuiAppServerJsonRpcLineNativeOpener` and
+`TuiAppServerJsonRpcLineTransportAttacher` dependencies, with `dryRun()` as the
+default factory. This keeps dry-run behavior available without baking dry-run
+construction into the connector internals. The attacher interface also owns
+`transportFor`, so a future stdio process or TCP socket boundary can keep open
+handles behind the attachment layer and materialize the line transport there.
+The generated Rust constructor shape uses non-null trait-object inputs rather
+than optional interface guards, which keeps this hot connector path free of
+fresh-upcast `Null Access` checks.
+
 `TuiLiveShellRunRequest` can now select that connector-backed JSON-RPC line
 pipeline without replacing the whole fake facade. `withJsonRpcPromptTransport`
 accepts the concrete JSON-RPC prompt transport, and

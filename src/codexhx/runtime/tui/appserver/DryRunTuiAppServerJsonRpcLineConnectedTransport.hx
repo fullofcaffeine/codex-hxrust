@@ -115,7 +115,7 @@ class DryRunTuiAppServerJsonRpcLineConnectedTransport implements TuiAppServerJso
 	}
 
 	static function defaultConnector():TuiAppServerJsonRpcLineConnector {
-		return new DryRunTuiAppServerJsonRpcLineConnector();
+		return DryRunTuiAppServerJsonRpcLineConnector.dryRun();
 	}
 
 	static function inboundFramesFromLineOutcome(outcome:TuiAppServerJsonRpcLineOutcome):Array<TuiPromptJsonRpcFrame> {

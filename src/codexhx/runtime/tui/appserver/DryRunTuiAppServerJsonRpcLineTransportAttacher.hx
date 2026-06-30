@@ -13,7 +13,7 @@ class DryRunTuiAppServerJsonRpcLineTransportAttacher implements TuiAppServerJson
 		return TuiAppServerJsonRpcLineTransportAttachment.ready(concrete);
 	}
 
-	public function transportFor(attachment:TuiAppServerJsonRpcLineTransportAttachment):FakeTuiAppServerJsonRpcLineTransport {
+	public function transportFor(attachment:TuiAppServerJsonRpcLineTransportAttachment):Null<TuiAppServerJsonRpcLineTransport> {
 		if (attachment == null || !attachment.isReady())
 			return null;
 		return new FakeTuiAppServerJsonRpcLineTransport();

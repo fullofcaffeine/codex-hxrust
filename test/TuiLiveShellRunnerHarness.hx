@@ -1,13 +1,18 @@
 import codexhx.protocol.SessionId;
 import codexhx.protocol.ThreadId;
 import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnectedTransport;
-import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineConnector;
+import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineNativeOpener;
+import codexhx.runtime.tui.appserver.DryRunTuiAppServerJsonRpcLineTransportAttacher;
 import codexhx.runtime.tui.appserver.JsonRpcTuiPromptTransport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnectReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineConnector;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpoint;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineEndpointReport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineOpenIntentReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransport;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachment;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportAttachmentReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcLineTransportState;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcTransportStatus;
@@ -252,24 +257,36 @@ class TuiLiveShellRunnerHarness {
 }
 
 class RunnerRecordingLineConnector implements TuiAppServerJsonRpcLineConnector {
-	final delegate:DryRunTuiAppServerJsonRpcLineConnector;
+	final opener:DryRunTuiAppServerJsonRpcLineNativeOpener;
+	final attacher:DryRunTuiAppServerJsonRpcLineTransportAttacher;
+	var lastAttachmentValue:TuiAppServerJsonRpcLineTransportAttachment;
 	var connectCalls:Int;
 	var transportCalls:Int;
 
 	public function new() {
-		this.delegate = new DryRunTuiAppServerJsonRpcLineConnector();
+		this.opener = new DryRunTuiAppServerJsonRpcLineNativeOpener();
+		this.attacher = new DryRunTuiAppServerJsonRpcLineTransportAttacher();
+		this.lastAttachmentValue = null;
 		this.connectCalls = 0;
 		this.transportCalls = 0;
 	}
 
 	public function connect(endpoint:TuiAppServerJsonRpcLineEndpoint):TuiAppServerJsonRpcLineConnectReport {
 		connectCalls = connectCalls + 1;
-		return delegate.connect(endpoint);
+		final endpointReport = TuiAppServerJsonRpcLineEndpointReport.inspect(endpoint);
+		final intent = TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(endpoint);
+		final openOutcome = opener.open(intent);
+		final attachment = attacher.attach(openOutcome);
+		lastAttachmentValue = attachment;
+		return TuiAppServerJsonRpcLineConnectReport.fromParts(endpointReport, openOutcome,
+			TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(attachment));
 	}
 
 	public function transportFor(report:TuiAppServerJsonRpcLineConnectReport):Null<TuiAppServerJsonRpcLineTransport> {
 		transportCalls = transportCalls + 1;
-		return delegate.transportFor(report);
+		if (report == null || !report.isReady())
+			return null;
+		return attacher.transportFor(lastAttachmentValue);
 	}
 
 	public function connectCallCount():Int {
