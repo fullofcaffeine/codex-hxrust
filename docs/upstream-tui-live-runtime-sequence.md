@@ -4482,6 +4482,12 @@ Status: TUI-LIVE-57 adds an explicit `process_stdio` mode to the user-runnable g
 
 This still does not own a long-lived app-server child, socket transport, async reader/writer tasks, credentials, model calls, persistence, or tools. It proves the generated demo binary can now cross the one-shot process-backed stdio boundary through the same connector seam the live shell prompt path uses.
 
+### TUI-LIVE-58 Persistent Stdio JSONL Session Contract
+
+Status: TUI-LIVE-58 adds `TuiAppServerJsonRpcStdioSession`, a typed synchronous stdio JSONL session that keeps one spawned child process open across multiple prompt exchanges. The session lazily spawns a `TuiAppServerJsonRpcProcessLaunchPlan`, writes and flushes each outbound prompt JSONL line, reads stdout one line at a time into typed transcript evidence, narrows each bounded response group through `TuiPromptJsonRpcInboundLineDecoder`, tracks aggregate outbound/inbound counts, and closes the process explicitly through the existing line close report shape. The prompt-submit harness proves two prompts through one shell-backed process session, cwd refusal before spawn, unknown-method decoder rejection, send-after-close refusal, interpreter execution, generated Rust Cargo checks/tests, generated binary execution, and focused generated-Rust inspection with no raw Rust escapes, dynamic calls, panic/todo stubs, or `Null Access` matches in the new session module.
+
+This is still a bounded synchronous process session, not the final app-server runtime transport. It does not yet own async reader/writer tasks, socket transport, cancellation/backpressure, unbounded streaming, credentialed model calls, persistence, or tools. It moves the live-TUI path from one-shot process proof toward long-lived app-server attachment without overfitting the final async architecture.
+
 ### ARCH-1 TUI Smoke Quarantine And Import Guard
 
 Status: ARCH-1 adds `scripts/lint/import_boundary_guard.sh` and wires `npm run lint:import-boundaries` into `npm run public:precommit`. The guard scans production `src/codexhx/runtime/**/*.hx` outside `runtime/tui/smoke` and fails if those modules import or fully qualify `codexhx.runtime.tui.smoke.*` or `codexhx.validation.*`. The smoke package remains in its legacy namespace for now so `harness/check-tui-smoke.sh` stays low-churn, but docs now mark it as validation-only fixture machinery; production-worthy pieces must be extracted into upstream-domain runtime packages before production code can depend on them. This is a boundary/quarantine gate, not a package move.

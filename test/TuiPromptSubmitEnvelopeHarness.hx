@@ -43,6 +43,7 @@ import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireOutcome;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcWireSession;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessEnvVar;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcProcessLaunchPlan;
+import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioSession;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioLineRunReport;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioLineRunStatus;
 import codexhx.runtime.tui.appserver.TuiAppServerJsonRpcStdioLineRunner;
@@ -112,6 +113,8 @@ class TuiPromptSubmitEnvelopeHarness {
 		testStdioLineRunnerReportsFailureAndRefusals();
 		testProcessBackedLineTransportFeedsWireSession();
 		testProcessBackedLineTransportReportsFailuresAndClose();
+		testPersistentStdioSessionHandlesTwoPromptLines();
+		testPersistentStdioSessionReportsRefusalsAndClose();
 		testProcessBackedLineConnectorUsesProcessAttacher();
 		testProcessBackedLineConnectorPreservesDecoderRejection();
 		testLineConnectorComposesEndpointOpenAndAttachment();
@@ -691,6 +694,82 @@ class TuiPromptSubmitEnvelopeHarness {
 		final afterClose = closed.sendPromptLine(request, envelope, request.messageJson() + "\n");
 		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Disconnected.text(), afterClose.statusText(), "process-backed after close status");
 		assertStringEquals("line_transport_closed", afterClose.code(), "process-backed after close code");
+	}
+
+	static function testPersistentStdioSessionHandlesTwoPromptLines():Void {
+		final firstEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(114), session("00000000-0000-0000-0000-000000009982"),
+			thread("00000000-0000-0000-0000-000000005591"), "persistent session first");
+		final firstRequest = TuiPromptJsonRpcRequest.turnStart(firstEnvelope);
+		final firstExpected = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(firstRequest, firstEnvelope, firstRequest.messageJson() + "\n");
+		assertTrue(firstExpected.isAccepted(), "persistent session first expected fake line outcome");
+
+		final secondEnvelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(115), firstEnvelope.sessionId,
+			thread("00000000-0000-0000-0000-000000005592"), "persistent session second");
+		final secondRequest = TuiPromptJsonRpcRequest.turnStart(secondEnvelope);
+		final secondExpected = new FakeTuiAppServerJsonRpcLineTransport().sendPromptLine(secondRequest, secondEnvelope, secondRequest.messageJson() + "\n");
+		assertTrue(secondExpected.isAccepted(), "persistent session second expected fake line outcome");
+
+		final inbound = firstExpected.inboundLines();
+		for (line in secondExpected.inboundLines())
+			inbound.push(line);
+		final stdioSession = TuiAppServerJsonRpcStdioSession.withDefaultDecoder(stdioPersistentPlan(inbound), firstExpected.inboundLineCount());
+		assertIntEquals(firstExpected.inboundLineCount(), stdioSession.maxInboundLineCountPerPrompt(), "persistent stdio session configured group size");
+
+		final first = stdioSession.sendPromptLine(firstRequest, firstEnvelope, firstRequest.messageJson() + "\n");
+		assertTrue(first.isAccepted(),
+			"persistent stdio session first accepted: "
+			+ first.statusText()
+			+ "/"
+			+ first.code()
+			+ " inbound="
+			+ first.inboundLineCount()
+			+ " expected="
+			+ firstExpected.inboundLineCount());
+		assertIntEquals(firstExpected.inboundLineCount(), first.inboundLineCount(), "persistent stdio session first inbound count");
+		assertStringEquals(firstExpected.inboundLineAt(0), first.inboundLineAt(0), "persistent stdio session first response line");
+		assertLineTranscript(first.transcript(), firstRequest.messageJson() + "\n", firstExpected.inboundLineCount(), firstExpected.inboundLineCount() + 1,
+			"persistent stdio session first transcript");
+
+		final second = stdioSession.sendPromptLine(secondRequest, secondEnvelope, secondRequest.messageJson() + "\n");
+		assertTrue(second.isAccepted(), "persistent stdio session second accepted: " + second.statusText() + "/" + second.code());
+		assertIntEquals(secondExpected.inboundLineCount(), second.inboundLineCount(), "persistent stdio session second inbound count");
+		assertStringEquals(secondExpected.inboundLineAt(0), second.inboundLineAt(0), "persistent stdio session second response line");
+		assertLineTranscript(second.transcript(), secondRequest.messageJson() + "\n", secondExpected.inboundLineCount(),
+			secondExpected.inboundLineCount() + 1, "persistent stdio session second transcript");
+		assertIntEquals(2, stdioSession.outboundLineCount(), "persistent stdio session outbound aggregate");
+		assertIntEquals(firstExpected.inboundLineCount() + secondExpected.inboundLineCount(), stdioSession.inboundLineCount(),
+			"persistent stdio session inbound aggregate");
+
+		assertLineCloseReport(stdioSession.close("persistent_session_done"), TuiAppServerJsonRpcLineTransportState.Closed, "persistent_session_done", 2,
+			firstExpected.inboundLineCount() + secondExpected.inboundLineCount(), "persistent stdio session close");
+		final afterClose = stdioSession.sendPromptLine(secondRequest, secondEnvelope, secondRequest.messageJson() + "\n");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Disconnected.text(), afterClose.statusText(), "persistent stdio session after close status");
+		assertStringEquals("line_transport_closed", afterClose.code(), "persistent stdio session after close code");
+	}
+
+	static function testPersistentStdioSessionReportsRefusalsAndClose():Void {
+		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(116), session("00000000-0000-0000-0000-000000009983"),
+			thread("00000000-0000-0000-0000-000000005593"), "persistent session refusal");
+		final request = TuiPromptJsonRpcRequest.turnStart(envelope);
+		final cwdRefused = TuiAppServerJsonRpcStdioSession.withDefaultDecoder(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", ["-c", "cat"], "/tmp", []), 64);
+		final refused = cwdRefused.sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Rejected.text(), refused.statusText(), "persistent stdio cwd refusal status");
+		assertStringEquals("stdio_cwd_unsupported", refused.code(), "persistent stdio cwd refusal code");
+		assertIntEquals(0, cwdRefused.outboundLineCount(), "persistent stdio cwd refusal outbound count");
+		assertLineCloseReport(cwdRefused.close("cwd_refusal_done"), TuiAppServerJsonRpcLineTransportState.Closed, "cwd_refusal_done", 0, 0,
+			"persistent stdio cwd refusal close");
+
+		final invalidStream = TuiAppServerJsonRpcStdioSession.withDefaultDecoder(TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", [
+			"-c",
+			"printf '%s\\n' '{\"jsonrpc\":\"2.0\",\"method\":\"unknown/event\",\"params\":{}}'; while IFS= read -r _line; do :; done"
+		], "", []), 1);
+		final rejected = invalidStream.sendPromptLine(request, envelope, request.messageJson() + "\n");
+		assertStringEquals(TuiAppServerJsonRpcTransportStatus.Rejected.text(), rejected.statusText(), "persistent stdio invalid stream status");
+		assertStringEquals("unknown_inbound_method", rejected.code(), "persistent stdio invalid stream code");
+		assertIntEquals(1, invalidStream.outboundLineCount(), "persistent stdio invalid stream outbound count");
+		assertIntEquals(1, invalidStream.inboundLineCount(), "persistent stdio invalid stream inbound count");
+		assertLineCloseReport(invalidStream.close("invalid_stream_done"), TuiAppServerJsonRpcLineTransportState.Closed, "invalid_stream_done", 1, 1,
+			"persistent stdio invalid stream close");
 	}
 
 	static function testProcessBackedLineConnectorUsesProcessAttacher():Void {
@@ -1549,6 +1628,17 @@ class TuiPromptSubmitEnvelopeHarness {
 
 	static function stdioEchoPlan(lines:Array<String>):TuiAppServerJsonRpcProcessLaunchPlan {
 		final args = ["-c", "cat >/dev/null; printf '%s\\n' \"$@\"", "codex-hxrust-stdio-echo"];
+		for (line in lines)
+			args.push(withoutTrailingNewline(line));
+		return TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", args, "", []);
+	}
+
+	static function stdioPersistentPlan(lines:Array<String>):TuiAppServerJsonRpcProcessLaunchPlan {
+		final args = [
+			"-c",
+			"printf '%s\\n' \"$@\"; while IFS= read -r _line; do :; done",
+			"codex-hxrust-stdio-session"
+		];
 		for (line in lines)
 			args.push(withoutTrailingNewline(line));
 		return TuiAppServerJsonRpcProcessLaunchPlan.stdio("sh", args, "", []);
