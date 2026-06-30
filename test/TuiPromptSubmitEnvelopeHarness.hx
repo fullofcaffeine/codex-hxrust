@@ -505,19 +505,31 @@ class TuiPromptSubmitEnvelopeHarness {
 			["app-server", "--json-rpc"], "/workspace", [new TuiAppServerJsonRpcProcessEnvVar("CODEX_HOME", "/tmp/codex-home")]))));
 		assertLineOpenOutcome(stdio, TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, "opened", true, "stdio:codex", 1,
 			TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio, TuiAppServerJsonRpcLineEndpointStatus.StdioReady, "stdio native open outcome");
+		assertLineProcessPlan(expectLaunchPlan(stdio.launchPlan(), "stdio native open payload"), "codex", 2, "/workspace", 1, "stdio native open payload");
+		assertStringEquals("app-server", expectLaunchPlan(stdio.launchPlan(), "stdio native open payload").argAt(0), "stdio native open payload first arg");
+		assertStringEquals("--json-rpc", expectLaunchPlan(stdio.launchPlan(), "stdio native open payload").argAt(1), "stdio native open payload second arg");
+		assertEnvVar(expectLaunchPlan(stdio.launchPlan(), "stdio native open payload").envAt(0), "CODEX_HOME", "/tmp/codex-home",
+			"stdio native open payload env");
+		assertFalse(stdio.hasSocketTarget(), "stdio native open payload no socket target");
 
 		final socket = opener.open(TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(TuiAppServerJsonRpcLineEndpoint.TcpSocket("127.0.0.1", 43817)));
 		assertLineOpenOutcome(socket, TuiAppServerJsonRpcLineOpenOutcomeStatus.Opened, "opened", true, "tcp:127.0.0.1", 2,
 			TuiAppServerJsonRpcLineOpenIntentKind.ConnectTcp, TuiAppServerJsonRpcLineEndpointStatus.SocketReady, "socket native open outcome");
+		assertFalse(socket.hasLaunchPlan(), "socket native open payload no launch plan");
+		assertTrue(socket.hasSocketTarget(), "socket native open payload target");
+		assertStringEquals("127.0.0.1", socket.socketHost(), "socket native open payload host");
+		assertIntEquals(43817, socket.socketPort(), "socket native open payload port");
 
 		final invalid = opener.open(TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("",
 			[], "", []))));
 		assertLineOpenOutcome(invalid, TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused, "missing_command", false, "", 0,
 			TuiAppServerJsonRpcLineOpenIntentKind.Refuse, TuiAppServerJsonRpcLineEndpointStatus.Invalid, "invalid native open outcome");
+		assertNoLineOpenPayload(invalid, "invalid native open outcome payload");
 
 		final unsupported = opener.open(TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(TuiAppServerJsonRpcLineEndpoint.Unsupported("named_pipe")));
 		assertLineOpenOutcome(unsupported, TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused, "named_pipe", false, "", 0,
 			TuiAppServerJsonRpcLineOpenIntentKind.Refuse, TuiAppServerJsonRpcLineEndpointStatus.Unsupported, "unsupported native open outcome");
+		assertNoLineOpenPayload(unsupported, "unsupported native open outcome payload");
 		assertIntEquals(2, opener.openCount(), "dry-run native opener count");
 	}
 
@@ -530,6 +542,10 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertLineTransportAttachment(TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(stdioAttachment),
 			TuiAppServerJsonRpcLineAttachmentStatus.Ready, "opened", true, "stdio:codex", 1, true, 0, 0, TuiAppServerJsonRpcLineOpenIntentKind.SpawnStdio,
 			TuiAppServerJsonRpcLineEndpointStatus.StdioReady, "stdio line transport attachment");
+		assertLineProcessPlan(expectLaunchPlan(stdioAttachment.launchPlan(), "stdio line transport attachment payload"), "codex", 2, "/workspace", 1,
+			"stdio line transport attachment payload");
+		assertStringEquals("--json-rpc", expectLaunchPlan(stdioAttachment.launchPlan(), "stdio line transport attachment payload").argAt(1),
+			"stdio line transport attachment payload second arg");
 		final transport = expectReadyLineTransport(attacher, stdioAttachment, "stdio line transport attachment");
 		final threadId = thread("00000000-0000-0000-0000-000000005575");
 		final envelope = new TuiPromptSubmitEnvelope(RequestId.fromInteger(98), session("00000000-0000-0000-0000-000000009988"), threadId, "attached line ask");
@@ -540,9 +556,14 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(10, transport.inboundLineCount(), "attached line transport inbound count");
 
 		final socket = opener.open(TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(TuiAppServerJsonRpcLineEndpoint.TcpSocket("127.0.0.1", 43817)));
-		assertLineTransportAttachment(TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(attacher.attach(socket)),
+		final socketAttachment = attacher.attach(socket);
+		assertLineTransportAttachment(TuiAppServerJsonRpcLineTransportAttachmentReport.fromAttachment(socketAttachment),
 			TuiAppServerJsonRpcLineAttachmentStatus.Ready, "opened", true, "tcp:127.0.0.1", 2, true, 0, 0, TuiAppServerJsonRpcLineOpenIntentKind.ConnectTcp,
 			TuiAppServerJsonRpcLineEndpointStatus.SocketReady, "socket line transport attachment");
+		assertFalse(socketAttachment.hasLaunchPlan(), "socket line transport attachment no launch plan");
+		assertTrue(socketAttachment.hasSocketTarget(), "socket line transport attachment target");
+		assertStringEquals("127.0.0.1", socketAttachment.socketHost(), "socket line transport attachment host");
+		assertIntEquals(43817, socketAttachment.socketPort(), "socket line transport attachment port");
 
 		final invalid = opener.open(TuiAppServerJsonRpcLineOpenIntentReport.intentFromEndpoint(TuiAppServerJsonRpcLineEndpoint.Stdio(TuiAppServerJsonRpcProcessLaunchPlan.stdio("",
 			[], "", []))));
@@ -1330,6 +1351,22 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertStringEquals(expectedValue, env.value, label + " value");
 	}
 
+	static function expectLaunchPlan(plan:Null<TuiAppServerJsonRpcProcessLaunchPlan>, label:String):TuiAppServerJsonRpcProcessLaunchPlan {
+		if (plan == null)
+			throw label + ": missing launch plan";
+		return plan;
+	}
+
+	static function assertLineProcessPlan(plan:TuiAppServerJsonRpcProcessLaunchPlan, expectedCommand:String, expectedArgCount:Int, expectedCwd:String,
+			expectedEnvCount:Int, label:String):Void {
+		if (plan == null)
+			throw label + ": missing plan";
+		assertStringEquals(expectedCommand, plan.command, label + " command");
+		assertIntEquals(expectedArgCount, plan.argCount(), label + " arg count");
+		assertStringEquals(expectedCwd, plan.cwd, label + " cwd");
+		assertIntEquals(expectedEnvCount, plan.envCount(), label + " env count");
+	}
+
 	static function assertLineOpenIntent(report:TuiAppServerJsonRpcLineOpenIntentReport, expectedKind:TuiAppServerJsonRpcLineOpenIntentKind,
 			expectedEndpointStatus:TuiAppServerJsonRpcLineEndpointStatus, expectedCode:String, expectedActionable:Bool, expectedCommand:String,
 			expectedCwd:String, expectedHost:String, expectedPort:Int, expectedArgCount:Int, expectedEnvCount:Int, label:String):Void {
@@ -1365,6 +1402,13 @@ class TuiPromptSubmitEnvelopeHarness {
 		assertIntEquals(expectedConnectionIndex, outcome.connectionIndex, label + " connection index");
 		assertStringEquals(expectedIntentKind.text(), outcome.intentKindText(), label + " intent kind");
 		assertStringEquals(expectedEndpointStatus.text(), outcome.endpointStatusText(), label + " endpoint status");
+	}
+
+	static function assertNoLineOpenPayload(outcome:TuiAppServerJsonRpcLineOpenOutcome, label:String):Void {
+		if (outcome == null)
+			throw label + ": missing outcome";
+		assertFalse(outcome.hasLaunchPlan(), label + " no launch plan");
+		assertFalse(outcome.hasSocketTarget(), label + " no socket target");
 	}
 
 	static function assertLineTransportAttachment(report:TuiAppServerJsonRpcLineTransportAttachmentReport,
@@ -1739,7 +1783,7 @@ class RecordingLineNativeOpener implements TuiAppServerJsonRpcLineNativeOpener {
 		if (refusalCode.length == 0)
 			return delegate.open(intent);
 		return new TuiAppServerJsonRpcLineOpenOutcome(TuiAppServerJsonRpcLineOpenOutcomeStatus.Refused, refusalCode, "", 0,
-			TuiAppServerJsonRpcLineOpenIntentReport.fromIntent(intent));
+			TuiAppServerJsonRpcLineOpenIntentReport.fromIntent(intent), null, "", 0);
 	}
 
 	public function openCallCount():Int {

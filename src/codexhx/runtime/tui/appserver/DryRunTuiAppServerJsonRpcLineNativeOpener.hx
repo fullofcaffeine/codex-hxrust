@@ -15,7 +15,7 @@ class DryRunTuiAppServerJsonRpcLineNativeOpener implements TuiAppServerJsonRpcLi
 		if (!report.isActionable())
 			return TuiAppServerJsonRpcLineOpenOutcome.refused(report);
 		openedCount = openedCount + 1;
-		return TuiAppServerJsonRpcLineOpenOutcome.opened(labelFor(report), openedCount, report);
+		return TuiAppServerJsonRpcLineOpenOutcome.opened(labelFor(report), openedCount, report, intent);
 	}
 
 	public function openCount():Int {

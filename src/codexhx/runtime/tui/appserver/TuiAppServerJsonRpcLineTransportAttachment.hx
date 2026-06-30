@@ -43,6 +43,26 @@ class TuiAppServerJsonRpcLineTransportAttachment {
 		return isReady();
 	}
 
+	public function hasLaunchPlan():Bool {
+		return outcomeValue.hasLaunchPlan();
+	}
+
+	public function launchPlan():Null<TuiAppServerJsonRpcProcessLaunchPlan> {
+		return outcomeValue.launchPlan();
+	}
+
+	public function hasSocketTarget():Bool {
+		return outcomeValue.hasSocketTarget();
+	}
+
+	public function socketHost():String {
+		return outcomeValue.socketHost();
+	}
+
+	public function socketPort():Int {
+		return outcomeValue.socketPort();
+	}
+
 	public function outboundLineCount():Int {
 		return 0;
 	}
