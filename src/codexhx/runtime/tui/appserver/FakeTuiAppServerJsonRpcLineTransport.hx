@@ -5,18 +5,27 @@ package codexhx.runtime.tui.appserver;
 **/
 class FakeTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonRpcLineTransport {
 	final exchange:TuiPromptJsonRpcExchange;
+	var state:TuiAppServerJsonRpcLineTransportState;
+	var outboundLines:Int;
+	var inboundLines:Int;
 
 	public function new(?exchange:TuiPromptJsonRpcExchange) {
 		this.exchange = exchange == null ? new EchoTuiPromptJsonRpcExchange() : exchange;
+		this.state = TuiAppServerJsonRpcLineTransportState.Open;
+		this.outboundLines = 0;
+		this.inboundLines = 0;
 	}
 
 	public function sendPromptLine(request:TuiPromptJsonRpcRequest, envelope:TuiPromptSubmitEnvelope, outboundLine:String):TuiAppServerJsonRpcLineOutcome {
+		if (!isOpen())
+			return TuiAppServerJsonRpcLineOutcome.disconnected("line_transport_closed");
 		if (request == null)
 			return TuiAppServerJsonRpcLineOutcome.rejected("missing_request");
 		if (outboundLine.length == 0)
 			return TuiAppServerJsonRpcLineOutcome.rejected("missing_outbound_line");
 		if (outboundLine != request.messageJson() + "\n")
 			return TuiAppServerJsonRpcLineOutcome.rejected("mismatched_outbound_line");
+		outboundLines = outboundLines + 1;
 		if (envelope == null)
 			return TuiAppServerJsonRpcLineOutcome.rejected("missing_envelope");
 		final outcome = exchange.send(request, envelope);
@@ -25,8 +34,30 @@ class FakeTuiAppServerJsonRpcLineTransport implements TuiAppServerJsonRpcLineTra
 		if (!outcome.isAccepted())
 			return TuiAppServerJsonRpcLineOutcome.rejected(outcome.code());
 		final inboundFrames = inboundFramesFromOutcome(outcome);
+		inboundLines = inboundLines + inboundFrames.length;
 		return TuiAppServerJsonRpcLineOutcome.accepted(outcome.response(), outcome.notifications(), outcome.streamNotifications(), outcome.events(),
 			linesFromFrames(inboundFrames));
+	}
+
+	public function isOpen():Bool {
+		return state == TuiAppServerJsonRpcLineTransportState.Open;
+	}
+
+	public function stateText():String {
+		return state.text();
+	}
+
+	public function close(code:String):TuiAppServerJsonRpcLineCloseReport {
+		state = TuiAppServerJsonRpcLineTransportState.Closed;
+		return TuiAppServerJsonRpcLineCloseReport.closed(code, outboundLines, inboundLines);
+	}
+
+	public function outboundLineCount():Int {
+		return outboundLines;
+	}
+
+	public function inboundLineCount():Int {
+		return inboundLines;
 	}
 
 	static function inboundFramesFromOutcome(outcome:TuiPromptJsonRpcExchangeOutcome):Array<TuiPromptJsonRpcFrame> {
