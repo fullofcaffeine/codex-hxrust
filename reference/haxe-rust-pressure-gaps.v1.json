@@ -5,20 +5,20 @@
   "decisionRecordFeed": "HXCX-7.3",
   "upstreamReproLedger": "reference/haxe-rust-upstream-repros.v1.json",
   "summary": {
-    "totalGaps": 23,
-    "resolvedUpstream": 15,
+    "totalGaps": 24,
+    "resolvedUpstream": 16,
     "openUpstream": 8,
     "localWorkaround": 0,
     "upstreamRepros": 0,
     "severity": {
       "high": 7,
-      "medium": 16,
+      "medium": 17,
       "low": 0
     },
     "sourceAreas": {
       "build_profile_tooling": 2,
       "protocol_json_dto": 3,
-      "runtime_model_session": 12,
+      "runtime_model_session": 13,
       "native_metal_std_boundary": 4,
       "cafex_adapter": 2
     }
@@ -197,6 +197,25 @@
         "bash test/run-snapshots.sh --case interface_basic in ../haxe.rust",
         "haxe -cp src -cp test -main TuiPromptSubmitEnvelopeHarness --interp",
         "bash harness/check-tui-prompt-submit-envelope.sh"
+      ]
+    },
+    {
+      "id": "fresh-concrete-interface-upcast-null-guard",
+      "status": "resolved_upstream",
+      "severity": "medium",
+      "sourceArea": "runtime_model_session",
+      "codexBead": "codex-hxrust-yg1a",
+      "haxeRustRefs": [
+        "interface_basic"
+      ],
+      "resolvedBy": "2577c5b7599fbe144844f0ebfb9c42d92d0ddf3c",
+      "reproduction": "TUI-LIVE-50 exposed generated Rust for fresh concrete Haxe values upcast to interface trait objects emitting an unnecessary nullable as_arc_opt match plus hxrt dynamic Null Access throw.",
+      "workaround": "Resolved generically in haxe.rust by lowering syntactic new Concrete() interface upcasts through direct unwrap/clone while keeping non-fresh and explicitly nullable interface paths on the null-preserving lowering.",
+      "validation": [
+        "bash test/run-snapshots.sh --case interface_basic --clippy in ../haxe.rust",
+        "npm run check:harness in ../haxe.rust",
+        "bash harness/check-tui-live-shell-demo.sh",
+        "generated live-shell demo Rust source inspection"
       ]
     },
     {

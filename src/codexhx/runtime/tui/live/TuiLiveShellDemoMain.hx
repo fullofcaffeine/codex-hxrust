@@ -47,7 +47,7 @@ class TuiLiveShellDemoMain {
 			]);
 	}
 
-	public static function scriptedBackend(prompt:String):HeadlessTerminalBackend {
+	public static function scriptedBackend(prompt:String):TerminalBackend {
 		final events:Array<TerminalEvent> = [];
 		final text = prompt == null ? "" : prompt;
 		var index = 0;
